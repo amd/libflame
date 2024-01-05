@@ -88,7 +88,7 @@
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int slapll_(integer *n, real *x, integer *incx, real *y, integer *incy, real *ssmin)
+void slapll_(integer *n, real *x, integer *incx, real *y, integer *incy, real *ssmin)
 {
     /* System generated locals */
     integer i__1;
@@ -96,10 +96,10 @@ int slapll_(integer *n, real *x, integer *incx, real *y, integer *incy, real *ss
     real c__, a11, a12, a22, tau;
     extern real sdot_(integer *, real *, integer *, real *, integer *);
     extern /* Subroutine */
-    int slas2_(real *, real *, real *, real *, real *) ;
+    void slas2_(real *, real *, real *, real *, real *) ;
     real ssmax;
     extern /* Subroutine */
-    int saxpy_(integer *, real *, real *, integer *, real *, integer *), slarfg_(integer *, real *, real *, integer *, real *);
+    void saxpy_(integer *, real *, real *, integer *, real *, integer *), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -126,7 +126,7 @@ int slapll_(integer *n, real *x, integer *incx, real *y, integer *incy, real *ss
     if (*n <= 1)
     {
         *ssmin = 0.f;
-        return 0;
+        return;
     }
     /* Compute the QR factorization of the N-by-2 matrix ( X Y ) */
     slarfg_(n, &x[1], &x[*incx + 1], incx, &tau);
@@ -140,7 +140,7 @@ int slapll_(integer *n, real *x, integer *incx, real *y, integer *incy, real *ss
     a22 = y[*incy + 1];
     /* Compute the SVD of 2-by-2 Upper triangular matrix. */
     slas2_(&a11, &a12, &a22, ssmin, &ssmax);
-    return 0;
+    return;
     /* End of SLAPLL */
 }
 /* slapll_ */

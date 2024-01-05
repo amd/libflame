@@ -174,7 +174,7 @@ for 1<=i<=N, row i of the */
 /* > \ingroup doubleGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dgerfs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *af, integer *ldaf, integer * ipiv, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal *ferr, doublereal *berr, doublereal *work, integer *iwork, integer *info)
+void dgerfs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *af, integer *ldaf, integer * ipiv, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal *ferr, doublereal *berr, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgerfs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*trans, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
@@ -190,13 +190,13 @@ int dgerfs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda,
     doublereal safe1, safe2;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer isave[3];
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     integer count;
     extern /* Subroutine */
-    int dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
@@ -281,7 +281,7 @@ int dgerfs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda,
         i__1 = -(*info);
         xerbla_("DGERFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
@@ -296,7 +296,7 @@ int dgerfs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda,
             /* L10: */
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (notran)
     {
@@ -501,7 +501,7 @@ L100:
         /* L140: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGERFS */
 }
 /* dgerfs_ */

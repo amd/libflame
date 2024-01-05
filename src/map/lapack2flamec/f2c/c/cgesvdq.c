@@ -429,7 +429,7 @@ the routine */
 /* > \ingroup complexGEsing */
 /* ===================================================================== */
 /* Subroutine */
-int cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer *m, integer *n, complex *a, integer *lda, real *s, complex *u, integer *ldu, complex *v, integer *ldv, integer *numrank, integer *iwork, integer *liwork, complex *cwork, integer *lcwork, real *rwork, integer *lrwork, integer *info)
+void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer *m, integer *n, complex *a, integer *lda, real *s, complex *u, integer *ldu, complex *v, integer *ldv, integer *numrank, integer *iwork, integer *liwork, complex *cwork, integer *lcwork, real *rwork, integer *lrwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -470,24 +470,24 @@ int cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
     integer lwunq;
     logical wntur, wntus, wntvr;
     extern /* Subroutine */
-    int cgeqp3_(integer *, integer *, complex *, integer *, integer *, complex *, complex *, integer *, real *, integer *);
+    void cgeqp3_(integer *, integer *, complex *, integer *, integer *, complex *, complex *, integer *, real *, integer *);
     extern real scnrm2_(integer *, complex *, integer *);
     integer lwsvd2, lwunq2;
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int cgelqf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clascl_( char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
+    void cgelqf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clascl_( char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
     real sconda;
     extern /* Subroutine */
-    int cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), csscal_( integer *, real *, complex *, integer *);
+    void cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), csscal_( integer *, real *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int cgesvd_(char *, char *, integer *, integer *, complex *, integer *, real *, complex *, integer *, complex *, integer *, complex *, integer *, real *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clapmt_(logical *, integer *, integer *, complex *, integer *, integer *), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), cpocon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *, integer * );
+    void cgesvd_(char *, char *, integer *, integer *, complex *, integer *, real *, complex *, integer *, complex *, integer *, complex *, integer *, real *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clapmt_(logical *, integer *, integer *, complex *, integer *, integer *), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), cpocon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *, integer * );
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    int claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    void claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     complex cdummy[1];
     extern /* Subroutine */
-    int cunmlq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *), cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    void cunmlq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *), cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     integer minwrk;
     logical rtrans;
     real rdummy[1];
@@ -948,7 +948,7 @@ int cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
         i__1 = -(*info);
         xerbla_("CGESVDQ", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
@@ -960,14 +960,14 @@ int cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
         cwork[2].i = 0.f; // , expr subst
         rwork[1] = (real) rminwrk;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if the matrix is void. */
     if (*m == 0 || *n == 0)
     {
         /* .. all output is void. */
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     big = slamch_("O");
     ascaled = FALSE_;
@@ -991,7 +991,7 @@ int cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
                 i__2 = -(*info);
                 xerbla_("CGESVDQ", &i__2, (ftnlen)7);
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L1904: */
         }
@@ -1058,7 +1058,7 @@ int cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
             }
             rwork[2] = -1.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         if (rwork[1] > big / sqrt((real) (*m)))
         {
@@ -1084,7 +1084,7 @@ int cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
             i__1 = -(*info);
             xerbla_("CGESVDQ", &i__1, (ftnlen)7);
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         if (rtmp > big / sqrt((real) (*m)))
         {
@@ -2081,7 +2081,7 @@ L4002: /* .. if numerical rank deficiency is detected, the truncated */
     /* full row rank triangular (trapezoidal) factor of A. */
     *numrank = nr;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGESVDQ */
 }
 /* cgesvdq_ */

@@ -24,12 +24,12 @@
   GEQRF computes a QR factorization of a M-by-N matrix A: A = Q * R.
 */
 
-extern int dgeqrf_fla(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *lwork, integer *info);
-extern int sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info);
-extern int sgeqrfp_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info);
-extern int dgeqrfp_fla(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *lwork, integer *info);
-extern int sgeqr2p_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *info);
-extern int dgeqr2p_fla(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *info);
+extern void dgeqrf_fla(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *lwork, integer *info);
+extern void sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info);
+extern void sgeqrfp_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info);
+extern void dgeqrfp_fla(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *lwork, integer *info);
+extern void sgeqr2p_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *info);
+extern void dgeqr2p_fla(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *info);
 
 extern void DTL_Trace(
 		    uint8 ui8LogLevel,
@@ -43,7 +43,7 @@ extern void DTL_Trace(
 
 // GEQRF and GEQR2
 #define LAPACK_geqrf(prefix)                                                          \
-  int F77_ ## prefix ## geqrf(integer* m,                                             \
+  void F77_ ## prefix ## geqrf(integer* m,                                             \
                               integer* n,                                             \
                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_t,                  \
@@ -101,12 +101,12 @@ LAPACK_geqrf(s)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
       sgeqrf_fla(m, n, buff_A, ldim_A, buff_t, buff_w, lwork, info);
       AOCL_DTL_TRACE_LOG_EXIT
-      return 0;
+      return;
     }
 #endif
 }
@@ -130,7 +130,7 @@ LAPACK_geqrf(d)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
       /* Initialize global context data */
@@ -138,7 +138,7 @@ LAPACK_geqrf(d)
 
       dgeqrf_fla(m, n, buff_A, ldim_A, buff_t, buff_w, lwork, info);
       AOCL_DTL_TRACE_LOG_EXIT
-      return 0;
+      return;
     }
 #endif
 }
@@ -163,7 +163,7 @@ LAPACK_geqrf(c)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_geqrf(z)
 {
@@ -184,12 +184,12 @@ LAPACK_geqrf(z)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 
 #define LAPACK_geqr2(prefix)                                                           \
-  int F77_ ## prefix ## geqr2( integer* m,                                             \
+  void F77_ ## prefix ## geqr2( integer* m,                                             \
                                integer* n,                                             \
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_t,                  \
@@ -215,7 +215,7 @@ LAPACK_geqr2(s)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_geqr2(d)
 {
@@ -237,7 +237,7 @@ LAPACK_geqr2(d)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
@@ -261,7 +261,7 @@ LAPACK_geqr2(c)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_geqr2(z)
 {
@@ -282,13 +282,13 @@ LAPACK_geqr2(z)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 
 // GEQRFP and GEQR2P
 #define LAPACK_geqrfp(prefix)                                                          \
-  int F77_ ## prefix ## geqrfp(integer* m,                                             \
+  void F77_ ## prefix ## geqrfp(integer* m,                                             \
                                integer* n,                                             \
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_t,                  \
@@ -314,7 +314,7 @@ LAPACK_geqrfp(s)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
       sgeqrfp_fla( m, n,
@@ -323,7 +323,7 @@ LAPACK_geqrfp(s)
                    buff_w, lwork,
                    info );
       AOCL_DTL_TRACE_LOG_EXIT
-      return 0;
+      return;
     }
 #endif
 }
@@ -347,7 +347,7 @@ LAPACK_geqrfp(d)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
       dgeqrfp_fla( m, n,
@@ -356,7 +356,7 @@ LAPACK_geqrfp(d)
                    buff_w, lwork,
                    info );
       AOCL_DTL_TRACE_LOG_EXIT
-      return 0;
+      return;
     }
 #endif
 }
@@ -381,7 +381,7 @@ LAPACK_geqrfp(c)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_geqrfp(z)
 {
@@ -402,12 +402,12 @@ LAPACK_geqrfp(z)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 
 #define LAPACK_geqr2p(prefix)                                                           \
-  int F77_ ## prefix ## geqr2p( integer* m,                                             \
+  void F77_ ## prefix ## geqr2p( integer* m,                                             \
                                 integer* n,                                             \
                                 PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
                                 PREFIX2LAPACK_TYPEDEF(prefix)* buff_t,                  \
@@ -434,7 +434,7 @@ LAPACK_geqr2p(s)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
         sgeqr2p_fla( m, n,
@@ -443,7 +443,7 @@ LAPACK_geqr2p(s)
                      buff_w,
                      info );
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
 #endif
 }
@@ -468,7 +468,7 @@ LAPACK_geqr2p(d)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 #else
     {
         dgeqr2p_fla(m, n,
@@ -477,7 +477,7 @@ LAPACK_geqr2p(d)
                     buff_w,
                     info);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
 #endif
 }
@@ -502,7 +502,7 @@ LAPACK_geqr2p(c)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_geqr2p(z)
 {
@@ -523,7 +523,7 @@ LAPACK_geqr2p(z)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 

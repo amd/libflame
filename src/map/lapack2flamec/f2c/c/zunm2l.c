@@ -148,7 +148,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zunm2l_(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *info)
+void zunm2l_(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zunm2l inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",*side, *trans, *m, *n, *k, *lda, *ldc);
@@ -164,7 +164,7 @@ int zunm2l_(char *side, char *trans, integer *m, integer *n, integer *k, doublec
     doublecomplex taui;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -242,13 +242,13 @@ int zunm2l_(char *side, char *trans, integer *m, integer *n, integer *k, doublec
         i__1 = -(*info);
         xerbla_("ZUNM2L", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0 || *k == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (left && notran || ! left && ! notran)
     {
@@ -312,7 +312,7 @@ int zunm2l_(char *side, char *trans, integer *m, integer *n, integer *k, doublec
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZUNM2L */
 }
 /* zunm2l_ */

@@ -21,7 +21,7 @@
 */
 
 #define LAPACK_gelqf(prefix)                                            \
-  int F77_ ## prefix ## gelqf( integer* m,                                  \
+  void F77_ ## prefix ## gelqf( integer* m,                                  \
                                integer* n,                                  \
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_t,   \
@@ -78,7 +78,7 @@ LAPACK_gelqf(s)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_gelqf(d)
 {
@@ -99,7 +99,7 @@ LAPACK_gelqf(d)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
@@ -122,7 +122,7 @@ LAPACK_gelqf(c)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_gelqf(z)
 {
@@ -143,12 +143,12 @@ LAPACK_gelqf(z)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 
 #define LAPACK_gelq2(prefix)                                            \
-  int F77_ ## prefix ## gelq2( integer* m,                                  \
+  void F77_ ## prefix ## gelq2( integer* m,                                  \
                                integer* n,                                  \
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_t,   \
@@ -173,7 +173,7 @@ LAPACK_gelq2(s)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_gelq2(d)
 {
@@ -194,7 +194,7 @@ LAPACK_gelq2(d)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
@@ -218,7 +218,7 @@ LAPACK_gelq2(c)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_gelq2(z)
 {
@@ -239,7 +239,7 @@ LAPACK_gelq2(z)
         fla_error=0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 

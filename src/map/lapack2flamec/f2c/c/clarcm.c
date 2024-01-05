@@ -105,7 +105,7 @@ B is M by N and complex;
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int clarcm_(integer *m, integer *n, real *a, integer *lda, complex *b, integer *ldb, complex *c__, integer *ldc, real *rwork)
+void clarcm_(integer *m, integer *n, real *a, integer *lda, complex *b, integer *ldb, complex *c__, integer *ldc, real *rwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -126,7 +126,7 @@ int clarcm_(integer *m, integer *n, real *a, integer *lda, complex *b, integer *
     /* Local variables */
     integer i__, j, l;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -161,7 +161,7 @@ int clarcm_(integer *m, integer *n, real *a, integer *lda, complex *b, integer *
     if (*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     i__1 = *n;
     for (j = 1;
@@ -238,7 +238,7 @@ int clarcm_(integer *m, integer *n, real *a, integer *lda, complex *b, integer *
         /* L80: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLARCM */
 }
 /* clarcm_ */

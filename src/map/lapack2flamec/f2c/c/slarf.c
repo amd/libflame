@@ -114,7 +114,7 @@ static integer c__1 = 1;
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *tau, real *c__, integer *ldc, real *work)
+void slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *tau, real *c__, integer *ldc, real *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -129,11 +129,11 @@ int slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *tau
     integer i__;
     logical applyleft;
     extern /* Subroutine */
-    int sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
+    void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
     extern logical lsame_(char *, char *);
     integer lastc;
     extern /* Subroutine */
-    int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer lastv;
     extern integer ilaslc_(integer *, integer *, real *, integer *), ilaslr_( integer *, integer *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -229,7 +229,7 @@ int slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *tau
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLARF */
 }
 /* slarf_ */

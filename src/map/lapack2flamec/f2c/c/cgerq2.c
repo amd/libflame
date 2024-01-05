@@ -112,7 +112,7 @@ conjg(v(1:n-k+i-1)) is stored on */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cgerq2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *work, integer *info)
+void cgerq2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -130,7 +130,7 @@ int cgerq2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, comp
     integer i__, k;
     complex alpha;
     extern /* Subroutine */
-    int clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), clarfg_(integer *, complex *, complex *, integer *, complex *), clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), clarfg_(integer *, complex *, complex *, integer *, complex *), clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -175,7 +175,7 @@ int cgerq2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, comp
         i__1 = -(*info);
         xerbla_("CGERQ2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     k = fla_min(*m,*n);
     for (i__ = k;
@@ -206,7 +206,7 @@ int cgerq2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, comp
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGERQ2 */
 }
 /* cgerq2_ */

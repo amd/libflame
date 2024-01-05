@@ -164,7 +164,7 @@ the unit diagonal elements of L are not stored. */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int claunhr_col_getrfnp2_(integer *m, integer *n, complex * a, integer *lda, complex *d__, integer *info)
+void claunhr_col_getrfnp2_(integer *m, integer *n, complex * a, integer *lda, complex *d__, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -186,11 +186,11 @@ int claunhr_col_getrfnp2_(integer *m, integer *n, complex * a, integer *lda, com
     /* Local variables */
     integer i__, n1, n2;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cscal_(integer *, complex *, complex *, integer *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     integer iinfo;
     real sfmin;
     extern /* Subroutine */
-    int ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+    void ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -243,13 +243,13 @@ int claunhr_col_getrfnp2_(integer *m, integer *n, complex * a, integer *lda, com
         i__1 = -(*info);
         xerbla_("CLAUNHR_COL_GETRFNP2", &i__1, (ftnlen)20);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*m == 1)
     {
@@ -338,7 +338,7 @@ int claunhr_col_getrfnp2_(integer *m, integer *n, complex * a, integer *lda, com
         claunhr_col_getrfnp2_(&i__1, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &d__[n1 + 1], &iinfo);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAUNHR_COL_GETRFNP2 */
 }
 /* claunhr_col_getrfnp2__ */

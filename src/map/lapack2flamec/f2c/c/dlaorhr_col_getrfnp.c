@@ -140,7 +140,7 @@ the unit diagonal elements of L are not stored. */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int dlaorhr_col_getrfnp_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *d__, integer *info)
+void dlaorhr_col_getrfnp_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *d__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaorhr_col_getrfnp inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
@@ -149,10 +149,10 @@ int dlaorhr_col_getrfnp_(integer *m, integer *n, doublereal *a, integer *lda, do
     /* Local variables */
     integer j, jb, nb;
     extern /* Subroutine */
-    int dlaorhr_col_getrfnp2_(integer *, integer *, doublereal *, integer *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dlaorhr_col_getrfnp2_(integer *, integer *, doublereal *, integer *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer iinfo;
     extern /* Subroutine */
-    int dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -199,13 +199,13 @@ int dlaorhr_col_getrfnp_(integer *m, integer *n, doublereal *a, integer *lda, do
         i__1 = -(*info);
         xerbla_("DLAORHR_COL_GETRFNP", &i__1, (ftnlen)19);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine the block size for this environment. */
     nb = ilaenv_(&c__1, "DLAORHR_COL_GETRFNP", " ", m, n, &c_n1, &c_n1);
@@ -245,7 +245,7 @@ int dlaorhr_col_getrfnp_(integer *m, integer *n, doublereal *a, integer *lda, do
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAORHR_COL_GETRFNP */
 }
 /* dlaorhr_col_getrfnp__ */

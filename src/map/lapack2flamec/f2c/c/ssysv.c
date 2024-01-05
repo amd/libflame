@@ -159,7 +159,7 @@ the routine */
 /* > \ingroup realSYsolve */
 /* ===================================================================== */
 /* Subroutine */
-int ssysv_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, integer *ipiv, real *b, integer *ldb, real *work, integer *lwork, integer *info)
+void ssysv_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, integer *ipiv, real *b, integer *ldb, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ssysv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ipiv %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ipiv, *ldb);
@@ -172,7 +172,7 @@ int ssysv_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, integer
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int ssytrf_(char *, integer *, real *, integer *, integer *, real *, integer *, integer *), ssytrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *), ssytrs2_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *);
+    void ssytrf_(char *, integer *, real *, integer *, integer *, real *, integer *, integer *), ssytrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *), ssytrs2_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -245,12 +245,12 @@ int ssysv_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, integer
         i__1 = -(*info);
         xerbla_("SSYSV ", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the factorization A = U*D*U**T or A = L*D*L**T. */
     ssytrf_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], lwork, info);
@@ -270,7 +270,7 @@ int ssysv_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, integer
     }
     work[1] = (real) lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SSYSV */
 }
 /* ssysv_ */

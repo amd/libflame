@@ -114,7 +114,7 @@ static integer c__1 = 1;
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work)
+void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarf inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *incv, *ldc);
@@ -129,10 +129,10 @@ int dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, dou
 #endif
     logical applyleft;
     extern /* Subroutine */
-    int dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer lastc, lastv;
     extern integer iladlc_(integer *, integer *, doublereal *, integer *), iladlr_(integer *, integer *, doublereal *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -269,7 +269,7 @@ int dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, dou
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARF */
 }
 /* dlarf_ */

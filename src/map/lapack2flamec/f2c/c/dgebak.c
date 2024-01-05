@@ -120,7 +120,7 @@ ILO=1 and IHI=0, if N=0. */
 /* > \ingroup doubleGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doublereal *scale, integer *m, doublereal *v, integer * ldv, integer *info)
+void dgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doublereal *scale, integer *m, doublereal *v, integer * ldv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgebak inputs: job %c, side %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", m %" FLA_IS ", ldv %" FLA_IS "",*job, *side, *n, *ilo, *ihi, *m, *ldv);
@@ -131,10 +131,10 @@ int dgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doubl
     doublereal s;
     integer ii;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical leftv;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -202,23 +202,23 @@ int dgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doubl
         i__1 = -(*info);
         xerbla_("DGEBAK", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*m == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (lsame_(job, "N"))
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*ilo == *ihi)
     {
@@ -312,7 +312,7 @@ L50:
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGEBAK */
 }
 /* dgebak_ */

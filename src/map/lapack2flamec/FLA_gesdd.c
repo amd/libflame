@@ -39,7 +39,7 @@
 */
 
 #define LAPACK_gesdd_real(prefix)                                       \
-  int F77_ ## prefix ## gesdd( char* jobz,                              \
+  void F77_ ## prefix ## gesdd( char* jobz,                              \
                                integer*  m,                                 \
                                integer*  n,                                 \
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_A,  integer* ldim_A, \
@@ -51,7 +51,7 @@
                                integer *info )
 
 #define LAPACK_gesdd_complex(prefix)                                    \
-  int F77_ ## prefix ## gesdd( char* jobz,                              \
+  void F77_ ## prefix ## gesdd( char* jobz,                              \
                                integer*  m,                                 \
                                integer*  n,                                 \
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_A,  integer* ldim_A, \
@@ -195,7 +195,7 @@ LAPACK_gesdd_real(s)
 #endif
 
   AOCL_DTL_TRACE_LOG_EXIT
-  return fla_error;
+  return;
 }
 
 
@@ -267,7 +267,7 @@ LAPACK_gesdd_real(d)
 #endif
 
   AOCL_DTL_TRACE_LOG_EXIT
-  return fla_error;
+  return;
 }
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
@@ -296,7 +296,7 @@ LAPACK_gesdd_complex(c)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_gesdd_complex(z)
 {
@@ -323,7 +323,7 @@ LAPACK_gesdd_complex(z)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 

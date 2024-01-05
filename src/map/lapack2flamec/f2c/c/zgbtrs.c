@@ -131,7 +131,7 @@ for 1 <= i <= N, row i of the matrix was */
 /* > \ingroup complex16GBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, doublecomplex *ab, integer *ldab, integer *ipiv, doublecomplex *b, integer *ldb, integer *info)
+void zgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, doublecomplex *ab, integer *ldab, integer *ipiv, doublecomplex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgbtrs inputs: trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",*trans, *n, *kl, *ku, *nrhs, *ldab, *ldb);
@@ -144,7 +144,7 @@ int zgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, d
     extern logical lsame_(char *, char *);
     logical lnoti;
     extern /* Subroutine */
-    int zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztbsv_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_( integer *, doublecomplex *, integer *);
+    void zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztbsv_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_( integer *, doublecomplex *, integer *);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -211,13 +211,13 @@ int zgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, d
         i__1 = -(*info);
         xerbla_("ZGBTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     kd = *ku + *kl + 1;
     lnoti = *kl > 0;
@@ -337,7 +337,7 @@ int zgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, d
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGBTRS */
 }
 /* zgbtrs_ */

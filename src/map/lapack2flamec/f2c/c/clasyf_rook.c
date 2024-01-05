@@ -175,7 +175,7 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int clasyf_rook_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integer *lda, integer *ipiv, complex *w, integer *ldw, integer *info)
+void clasyf_rook_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integer *lda, integer *ipiv, complex *w, integer *ldw, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -202,16 +202,16 @@ int clasyf_rook_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, i
     integer imax, jmax;
     real alpha;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cscal_(integer *, complex *, complex *, integer *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     real sfmin;
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *);
     integer itemp;
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *);
+    void cswap_(integer *, complex *, integer *, complex *, integer *);
     integer kstep;
     real stemp, absakk;
     extern integer icamax_(integer *, complex *, integer *);
@@ -1002,7 +1002,7 @@ L120:
         *kb = k - 1;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLASYF_ROOK */
 }
 /* clasyf_rook__ */

@@ -267,7 +267,7 @@ ZLAQR3 */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw, doublecomplex *h__, integer *ldh, integer *iloz, integer *ihiz, doublecomplex *z__, integer *ldz, integer *ns, integer *nd, doublecomplex *sh, doublecomplex *v, integer *ldv, integer *nh, doublecomplex *t, integer *ldt, integer *nv, doublecomplex *wv, integer *ldwv, doublecomplex *work, integer *lwork)
+void zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw, doublecomplex *h__, integer *ldh, integer *iloz, integer *ihiz, doublecomplex *z__, integer *ldz, integer *ns, integer *nd, doublecomplex *sh, doublecomplex *v, integer *ldv, integer *nh, doublecomplex *t, integer *ldt, integer *nv, doublecomplex *wv, integer *ldwv, doublecomplex *work, integer *lwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaqr3 inputs: n %" FLA_IS ", ktop %" FLA_IS ", kbot %" FLA_IS ", nw %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS ", ldv %" FLA_IS ", nh %" FLA_IS ", ldt %" FLA_IS ", nv %" FLA_IS ", ldwv %" FLA_IS "",*n, *ktop, *kbot, *nw, *ldh, *iloz, *ihiz, *ldz, *ldv, *nh, *ldt, *nv, *ldwv);
@@ -291,25 +291,25 @@ int zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *
     doublecomplex beta;
     integer kcol, info, nmin, ifst, ilst, ltop, krow;
     extern /* Subroutine */
-    int zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     integer infqr;
     extern /* Subroutine */
-    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     integer kwtop;
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), dlabad_(doublereal *, doublereal *), zlaqr4_(logical *, logical *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer * );
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), dlabad_(doublereal *, doublereal *), zlaqr4_(logical *, logical *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer * );
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     doublereal safmax;
     extern /* Subroutine */
-    int zgehrd_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zlahqr_(logical *, logical *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
+    void zgehrd_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zlahqr_(logical *, logical *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
     doublereal smlnum;
     extern /* Subroutine */
-    int ztrexc_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, integer *);
+    void ztrexc_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, integer *);
     integer lwkopt;
     extern /* Subroutine */
-    int zunmhr_(char *, char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer * );
+    void zunmhr_(char *, char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer * );
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -389,7 +389,7 @@ int zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *
         work[1].r = z__1.r;
         work[1].i = z__1.i; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* ==== Nothing to do ... */
     /* ... for an empty active block ... ==== */
@@ -400,13 +400,13 @@ int zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *
     if (*ktop > *kbot)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* ... nor for an empty deflation window. ==== */
     if (*nw < 1)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* ==== Machine constants ==== */
     safmin = dlamch_("SAFE MINIMUM");
@@ -458,7 +458,7 @@ int zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* ==== Convert to spike-triangular form. (In case of a */
     /* . rare QR failure, this routine continues to do */
@@ -693,6 +693,6 @@ int zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *
     work[1].i = z__1.i; // , expr subst
     /* ==== End of ZLAQR3 ==== */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* zlaqr3_ */

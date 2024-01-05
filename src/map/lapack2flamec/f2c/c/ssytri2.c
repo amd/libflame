@@ -120,7 +120,7 @@ the matrix is singular and its */
 /* > \ingroup realSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ssytri2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real *work, integer *lwork, integer *info)
+void ssytri2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -132,7 +132,7 @@ int ssytri2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
     integer a_dim1, a_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int ssytri2x_(char *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+    void ssytri2x_(char *, integer *, real *, integer *, integer *, real *, integer *, integer *);
     extern logical lsame_(char *, char *);
     integer nbmax;
     logical upper;
@@ -141,7 +141,7 @@ int ssytri2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     logical lquery;
     extern /* Subroutine */
-    int ssytri_(char *, integer *, real *, integer *, integer *, real *, integer *);
+    void ssytri_(char *, integer *, real *, integer *, integer *, real *, integer *);
     integer minsize;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -202,18 +202,18 @@ int ssytri2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
         i__1 = -(*info);
         xerbla_("SSYTRI2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         work[1] = (real) minsize;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (nbmax >= *n)
     {
@@ -224,7 +224,7 @@ int ssytri2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
         ssytri2x_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], &nbmax, info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYTRI2 */
 }
 /* ssytri2_ */

@@ -89,7 +89,7 @@ higher precision or correctly rounded or */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slae2_(real *a, real *b, real *c__, real *rt1, real *rt2)
+void slae2_(real *a, real *b, real *c__, real *rt1, real *rt2)
 {
     /* System generated locals */
     real r__1;
@@ -166,7 +166,7 @@ int slae2_(real *a, real *b, real *c__, real *rt1, real *rt2)
         *rt1 = rt * .5f;
         *rt2 = rt * -.5f;
     }
-    return 0;
+    return;
     /* End of SLAE2 */
 }
 /* slae2_ */

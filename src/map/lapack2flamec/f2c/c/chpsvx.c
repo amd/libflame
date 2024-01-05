@@ -265,7 +265,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int chpsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, complex *afp, integer *ipiv, complex *b, integer * ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, real *rwork, integer *info)
+void chpsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, complex *afp, integer *ipiv, complex *b, integer * ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -283,11 +283,11 @@ int chpsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, com
     extern logical lsame_(char *, char *);
     real anorm;
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *);
     extern real clanhp_(char *, char *, integer *, complex *, real *), slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int chpcon_(char *, integer *, complex *, integer *, real *, real *, complex *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), chprfs_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), chptrf_(char *, integer *, complex *, integer *, integer *), chptrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void chpcon_(char *, integer *, complex *, integer *, real *, real *, complex *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), chprfs_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), chptrf_(char *, integer *, complex *, integer *, integer *), chptrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -355,7 +355,7 @@ int chpsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, com
         i__1 = -(*info);
         xerbla_("CHPSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (nofact)
     {
@@ -368,7 +368,7 @@ int chpsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, com
         {
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -387,7 +387,7 @@ int chpsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, com
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHPSVX */
 }
 /* chpsvx_ */

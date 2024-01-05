@@ -125,7 +125,7 @@
 /* > \ingroup complex16GEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zgeequ_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax, integer *info)
+void zgeequ_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgeequ inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
@@ -192,7 +192,7 @@ int zgeequ_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *
         i__1 = -(*info);
         xerbla_("ZGEEQU", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
@@ -201,7 +201,7 @@ int zgeequ_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *
         *colcnd = 1.;
         *amax = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     smlnum = dlamch_("S");
@@ -266,7 +266,7 @@ int zgeequ_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *
             {
                 *info = i__;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L50: */
         }
@@ -349,7 +349,7 @@ int zgeequ_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *
             {
                 *info = *m + j;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L110: */
         }
@@ -373,7 +373,7 @@ int zgeequ_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *
         *colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGEEQU */
 }
 /* zgeequ_ */

@@ -109,7 +109,7 @@ static integer c__2 = 2;
 /* > \ingroup complexSYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int claesy_(complex *a, complex *b, complex *c__, complex * rt1, complex *rt2, complex *evscal, complex *cs1, complex *sn1)
+void claesy_(complex *a, complex *b, complex *c__, complex * rt1, complex *rt2, complex *evscal, complex *cs1, complex *sn1)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
@@ -262,7 +262,7 @@ int claesy_(complex *a, complex *b, complex *c__, complex * rt1, complex *rt2, c
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAESY */
 }
 /* claesy_ */

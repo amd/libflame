@@ -243,7 +243,7 @@ IHI <= IHIZ <= N. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int claqr4_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, complex *h__, integer *ldh, complex *w, integer *iloz, integer *ihiz, complex *z__, integer *ldz, complex * work, integer *lwork, integer *info)
+void claqr4_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, complex *h__, integer *ldh, complex *w, integer *iloz, integer *ihiz, complex *z__, integer *ldz, complex * work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -274,10 +274,10 @@ int claqr4_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *i
     ;
     integer kacc22, itmax, nsmax, nwmax, kwtop;
     extern /* Subroutine */
-    int claqr2_(logical *, logical *, integer *, integer *, integer *, integer *, complex *, integer *, integer *, integer *, complex *, integer *, integer *, integer *, complex *, complex *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *), claqr5_(logical *, logical *, integer *, integer *, integer *, integer *, integer *, complex *, complex *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, integer *, complex *, integer *);
+    void claqr2_(logical *, logical *, integer *, integer *, integer *, integer *, complex *, integer *, integer *, integer *, complex *, integer *, integer *, integer *, complex *, complex *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *), claqr5_(logical *, logical *, integer *, integer *, integer *, integer *, integer *, complex *, complex *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, integer *, complex *, integer *);
     integer nibble;
     extern /* Subroutine */
-    int clahqr_(logical *, logical *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
+    void clahqr_(logical *, logical *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     char jbcmpz[2];
     complex rtdisc;
@@ -338,7 +338,7 @@ int claqr4_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *i
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n <= 15)
     {
@@ -416,7 +416,7 @@ int claqr4_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *i
             work[1].r = q__1.r;
             work[1].i = q__1.i; // , expr subst
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         /* ==== CLAHQR/CLAQR0 crossover point ==== */
         nmin = ilaenv_(&c__12, "CLAQR4", jbcmpz, n, ilo, ihi, lwork);
@@ -811,6 +811,6 @@ L80:
     work[1].i = q__1.i; // , expr subst
     /* ==== End of CLAQR4 ==== */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* claqr4_ */

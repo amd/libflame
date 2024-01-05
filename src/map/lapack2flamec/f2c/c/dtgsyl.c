@@ -291,7 +291,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dtgsyl_(char *trans, integer *ijob, integer *m, integer * n, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *c__, integer *ldc, doublereal *d__, integer *ldd, doublereal *e, integer *lde, doublereal *f, integer *ldf, doublereal * scale, doublereal *dif, doublereal *work, integer *lwork, integer * iwork, integer *info)
+void dtgsyl_(char *trans, integer *ijob, integer *m, integer * n, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *c__, integer *ldc, doublereal *d__, integer *ldd, doublereal *e, integer *lde, doublereal *f, integer *ldf, doublereal * scale, doublereal *dif, doublereal *work, integer *lwork, integer * iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtgsyl inputs: trans %c, ijob %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS ", ldd %" FLA_IS ", lde %" FLA_IS ", ldf %" FLA_IS ", lwork %" FLA_IS "",*trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf, *lwork);
@@ -304,15 +304,15 @@ int dtgsyl_(char *trans, integer *ijob, integer *m, integer * n, doublereal *a, 
     doublereal dsum;
     integer ppqq;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     integer ifunc, linfo, lwmin;
     doublereal scale2;
     extern /* Subroutine */
-    int dtgsy2_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *);
+    void dtgsy2_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *);
     doublereal dscale, scaloc;
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -446,12 +446,12 @@ int dtgsyl_(char *trans, integer *ijob, integer *m, integer * n, doublereal *a, 
         i__1 = -(*info);
         xerbla_("DTGSYL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
@@ -465,7 +465,7 @@ int dtgsyl_(char *trans, integer *ijob, integer *m, integer * n, doublereal *a, 
             }
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine optimal block sizes MB and NB */
     mb = ilaenv_(&c__2, "DTGSYL", trans, m, n, &c_n1, &c_n1);
@@ -529,7 +529,7 @@ int dtgsyl_(char *trans, integer *ijob, integer *m, integer * n, doublereal *a, 
             /* L30: */
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine block structure of A */
     p = 0;
@@ -812,7 +812,7 @@ L70:
     }
     work[1] = (doublereal) lwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTGSYL */
 }
 /* dtgsyl_ */

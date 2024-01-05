@@ -172,7 +172,7 @@ static integer c__1 = 1;
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-int claqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, complex *a, integer *lda, integer *jpvt, complex * tau, real *vn1, real *vn2, complex *auxv, complex *f, integer *ldf)
+void claqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, complex *a, integer *lda, integer *jpvt, complex * tau, real *vn1, real *vn2, complex *auxv, complex *f, integer *ldf)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -199,11 +199,11 @@ int claqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, c
     integer pvt;
     real temp, temp2, tol3z;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cswap_( integer *, complex *, integer *, complex *, integer *);
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cswap_( integer *, complex *, integer *, complex *, integer *);
     integer itemp;
     extern real scnrm2_(integer *, complex *, integer *);
     extern /* Subroutine */
-    int clarfg_(integer *, complex *, complex *, integer *, complex *);
+    void clarfg_(integer *, complex *, complex *, integer *, complex *);
     extern real slamch_(char *);
     integer lsticc;
     extern integer isamax_(integer *, real *, integer *);
@@ -428,7 +428,7 @@ L60:
         goto L60;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAQPS */
 }
 /* claqps_ */

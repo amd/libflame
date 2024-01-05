@@ -264,7 +264,7 @@ LDQ >= 1 otherwise. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, complex *a, integer *lda, complex *b, integer *ldb, real *tola, real *tolb, integer *k, integer *l, complex *u, integer *ldu, complex *v, integer *ldv, complex *q, integer *ldq, integer *iwork, real *rwork, complex *tau, complex *work, integer * info)
+void cggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, complex *a, integer *lda, complex *b, integer *ldb, real *tola, real *tolb, integer *k, integer *l, complex *u, integer *ldu, complex *v, integer *ldv, complex *q, integer *ldq, integer *iwork, real *rwork, complex *tau, complex *work, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -286,7 +286,7 @@ int cggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer 
     extern logical lsame_(char *, char *);
     logical wantq, wantu, wantv;
     extern /* Subroutine */
-    int cgeqr2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *), cgerq2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *), cung2r_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), cunm2r_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), cunmr2_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), cgeqpf_(integer *, integer *, complex *, integer *, integer *, complex *, complex *, real *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clapmt_(logical *, integer *, integer *, complex *, integer *, integer *);
+    void cgeqr2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *), cgerq2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *), cung2r_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), cunm2r_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), cunmr2_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), cgeqpf_(integer *, integer *, complex *, integer *, integer *, complex *, complex *, real *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clapmt_(logical *, integer *, integer *, complex *, integer *, integer *);
     logical forwrd;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -388,7 +388,7 @@ int cggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer 
         i__1 = -(*info);
         xerbla_("CGGSVP", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* QR with column pivoting of B: B*P = V*( S11 S12 ) */
     /* ( 0 0 ) */
@@ -641,7 +641,7 @@ int cggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer 
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGGSVP */
 }
 /* cggsvp_ */

@@ -209,7 +209,7 @@ v(1:p-k+i-1) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zggqrf_(integer *n, integer *m, integer *p, doublecomplex *a, integer *lda, doublecomplex *taua, doublecomplex *b, integer *ldb, doublecomplex *taub, doublecomplex *work, integer * lwork, integer *info)
+void zggqrf_(integer *n, integer *m, integer *p, doublecomplex *a, integer *lda, doublecomplex *taua, doublecomplex *b, integer *ldb, doublecomplex *taub, doublecomplex *work, integer * lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zggqrf inputs: n %" FLA_IS ", m %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*n, *m, *p, *lda, *ldb);
@@ -221,11 +221,11 @@ int zggqrf_(integer *n, integer *m, integer *p, doublecomplex *a, integer *lda, 
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer * ), zgerqf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
+    void zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer * ), zgerqf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -304,12 +304,12 @@ int zggqrf_(integer *n, integer *m, integer *p, doublecomplex *a, integer *lda, 
         i__1 = -(*info);
         xerbla_("ZGGQRF", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* QR factorization of N-by-M matrix A: A = Q*R */
     zgeqrf_(n, m, &a[a_offset], lda, &taua[1], &work[1], lwork, info);
@@ -330,7 +330,7 @@ int zggqrf_(integer *n, integer *m, integer *p, doublecomplex *a, integer *lda, 
     work[1].r = (doublereal) i__1;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGGQRF */
 }
 /* zggqrf_ */

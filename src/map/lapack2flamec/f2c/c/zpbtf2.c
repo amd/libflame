@@ -132,7 +132,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zpbtf2_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ldab, integer *info)
+void zpbtf2_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ldab, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpbtf2 inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",*uplo, *n, *kd, *ldab);
@@ -147,7 +147,7 @@ int zpbtf2_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *lda
     doublereal ajj;
     integer kld;
     extern /* Subroutine */
-    int zher_(char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zher_(char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
@@ -201,13 +201,13 @@ int zpbtf2_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *lda
         i__1 = -(*info);
         xerbla_("ZPBTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Computing MAX */
     i__1 = 1;
@@ -290,11 +290,11 @@ int zpbtf2_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *lda
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 L30:
     *info = j;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPBTF2 */
 }
 /* zpbtf2_ */

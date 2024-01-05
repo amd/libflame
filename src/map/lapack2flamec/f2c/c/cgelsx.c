@@ -185,7 +185,7 @@ only the remaining */
 /* > \ingroup complexGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int cgelsx_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, complex *b, integer *ldb, integer *jpvt, real *rcond, integer *rank, complex *work, real *rwork, integer *info)
+void cgelsx_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, complex *b, integer *ldb, integer *jpvt, real *rcond, integer *rank, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -210,19 +210,19 @@ int cgelsx_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, co
     real anrm, bnrm, smin, smax;
     integer iascl, ibscl, ismin, ismax;
     extern /* Subroutine */
-    int ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), claic1_(integer *, integer *, complex *, real *, complex *, complex *, real *, complex *, complex *), cunm2r_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), slabad_(real *, real *);
+    void ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), claic1_(integer *, integer *, complex *, real *, complex *, complex *, real *, complex *, complex *), cunm2r_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), slabad_(real *, real *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *), cgeqpf_(integer *, integer *, complex *, integer *, integer *, complex *, complex *, real *, integer *);
+    void clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *), cgeqpf_(integer *, integer *, complex *, integer *, integer *, complex *, complex *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern /* Subroutine */
-    int clatzm_(char *, integer *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, complex *);
+    void clatzm_(char *, integer *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, complex *);
     real sminpr;
     extern /* Subroutine */
-    int ctzrqf_(integer *, integer *, complex *, integer *, complex *, integer *);
+    void ctzrqf_(integer *, integer *, complex *, integer *, complex *, integer *);
     real smaxpr, smlnum;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -290,7 +290,7 @@ int cgelsx_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, co
         i__1 = -(*info);
         xerbla_("CGELSX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     /* Computing MIN */
@@ -299,7 +299,7 @@ int cgelsx_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, co
     {
         *rank = 0;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = slamch_("S") / slamch_("P");
@@ -535,7 +535,7 @@ L70:
     }
 L100:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGELSX */
 }
 /* cgelsx_ */

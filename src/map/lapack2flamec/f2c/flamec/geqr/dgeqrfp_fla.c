@@ -143,21 +143,21 @@
  /* > */
  /* ===================================================================== */
  /* Subroutine */
- int dgeqrfp_fla(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *lwork, integer *info) {
+ void dgeqrfp_fla(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *lwork, integer *info) {
  /* System generated locals */
  integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
  /* Local variables */
  integer i__, k, nbmin, iinfo, ib, nb;
  extern /* Subroutine */
- int dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+ void dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
  integer nx;
  extern /* Subroutine */
- int dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+ void dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
  extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
  integer ldwork, lwkopt;
  logical lquery;
  extern /* Subroutine */
- int dgeqr2p_fla(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+ void dgeqr2p_fla(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
  integer iws;
  /* -- LAPACK computational routine -- */
  /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -204,16 +204,16 @@
  if (*info != 0) {
  i__1 = -(*info);
  xerbla_("DGEQRFP", &i__1, (ftnlen)7);
- return 0;
+ return;
  }
  else if (lquery) {
- return 0;
+ return;
  }
  /* Quick return if possible */
  k = fla_min(*m,*n);
  if (k == 0) {
  work[1] = 1.;
- return 0;
+ return;
  }
  nbmin = 2;
  nx = 0;
@@ -274,7 +274,7 @@
  dgeqr2p_fla(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[ 1], &iinfo);
  }
  work[1] = (doublereal) iws;
- return 0;
+ return;
  /* End of DGEQRFP */
  }
  /* dgeqrfp_ */

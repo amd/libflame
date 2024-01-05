@@ -137,7 +137,7 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doublecomplex *x, integer *incx, doublecomplex * beta, doublecomplex *y, integer *incy)
+void zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doublecomplex *x, integer *incx, doublecomplex * beta, doublecomplex *y, integer *incy)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zspmv inputs: uplo %c, n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*uplo, *n, *incx, *incy);
@@ -196,13 +196,13 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
     {
         xerbla_("ZSPMV ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0 || alpha->r == 0. && alpha->i == 0. && (beta->r == 1. && beta->i == 0.))
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set up the start points in X and Y. */
     if (*incx > 0)
@@ -297,7 +297,7 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
     if (alpha->r == 0. && alpha->i == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     kk = 1;
     if (lsame_(uplo, "U"))
@@ -557,7 +557,7 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSPMV */
 }
 /* zspmv_ */

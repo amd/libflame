@@ -86,7 +86,7 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int clapll_(integer *n, complex *x, integer *incx, complex * y, integer *incy, real *ssmin)
+void clapll_(integer *n, complex *x, integer *incx, complex * y, integer *incy, real *ssmin)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -108,14 +108,14 @@ int clapll_(integer *n, complex *x, integer *incx, complex * y, integer *incy, r
     /* Local variables */
     complex c__, a11, a12, a22, tau;
     extern /* Subroutine */
-    int slas2_(real *, real *, real *, real *, real *) ;
+    void slas2_(real *, real *, real *, real *, real *) ;
     extern /* Complex */
     VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern /* Subroutine */
-    int caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     real ssmax;
     extern /* Subroutine */
-    int clarfg_(integer *, complex *, complex *, integer *, complex *);
+    void clarfg_(integer *, complex *, complex *, integer *, complex *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -145,7 +145,7 @@ int clapll_(integer *n, complex *x, integer *incx, complex * y, integer *incy, r
     {
         *ssmin = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the QR factorization of the N-by-2 matrix ( X Y ) */
     clarfg_(n, &x[1], &x[*incx + 1], incx, &tau);
@@ -175,7 +175,7 @@ int clapll_(integer *n, complex *x, integer *incx, complex * y, integer *incy, r
     r__3 = c_abs(&a22);
     slas2_(&r__1, &r__2, &r__3, ssmin, &ssmax);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAPLL */
 }
 /* clapll_ */

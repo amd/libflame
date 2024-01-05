@@ -176,7 +176,7 @@ that is, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ctpqrt_(integer *m, integer *n, integer *l, integer *nb, complex *a, integer *lda, complex *b, integer *ldb, complex *t, integer *ldt, complex *work, integer *info)
+void ctpqrt_(integer *m, integer *n, integer *l, integer *nb, complex *a, integer *lda, complex *b, integer *ldb, complex *t, integer *ldt, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -256,13 +256,13 @@ int ctpqrt_(integer *m, integer *n, integer *l, integer *nb, complex *a, integer
         i__1 = -(*info);
         xerbla_("CTPQRT", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     i__1 = *n;
     i__2 = *nb;
@@ -294,7 +294,7 @@ int ctpqrt_(integer *m, integer *n, integer *l, integer *nb, complex *a, integer
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTPQRT */
 }
 /* ctpqrt_ */

@@ -383,7 +383,7 @@ V1**T *B13*Q1 = S1*R1, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int stgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, integer *k, integer *l, real *a, integer *lda, real *b, integer *ldb, real *tola, real *tolb, real *alpha, real * beta, real *u, integer *ldu, real *v, integer *ldv, real *q, integer * ldq, real *work, integer *ncycle, integer *info)
+void stgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, integer *k, integer *l, real *a, integer *lda, real *b, integer *ldb, real *tola, real *tolb, real *alpha, real * beta, real *u, integer *ldu, real *v, integer *ldv, real *q, integer * ldq, real *work, integer *ncycle, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("stgsja inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", p %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS ", ldq %" FLA_IS ", ncycle %" FLA_IS "",*jobu, *jobv, *jobq, *m, *p, *n, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq, *ncycle);
@@ -394,16 +394,16 @@ int stgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer 
     integer i__, j;
     real a1, a2, a3, b1, b2, b3, csq, csu, csv, snq, rwk, snu, snv;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     real gamma;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     logical initq, initu, initv, wantq, upper;
     real error, ssmin;
     logical wantu, wantv;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), slags2_(logical *, real *, real *, real *, real *, real *, real *, real *, real *, real *, real *, real *, real *);
+    void scopy_(integer *, real *, integer *, real *, integer *), slags2_(logical *, real *, real *, real *, real *, real *, real *, real *, real *, real *, real *, real *, real *);
     integer kcycle;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slapll_( integer *, real *, integer *, real *, integer *, real *), slartg_( real *, real *, real *, real *, real *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
@@ -505,7 +505,7 @@ int stgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer 
         i__1 = -(*info);
         xerbla_("STGSJA", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize U, V and Q, if necessary */
     if (initu)
@@ -735,7 +735,7 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
 L100:
     *ncycle = kcycle;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of STGSJA */
 }
 /* stgsja_ */

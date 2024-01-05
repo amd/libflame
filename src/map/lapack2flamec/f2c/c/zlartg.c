@@ -114,7 +114,7 @@
 /* >  https://doi.org/10.1145/3061665 */
 /* > */
 /* > \endverbatim */
-int zlartg_(doublecomplex *f, doublecomplex *g, doublereal * c__, doublecomplex *s, doublecomplex *r__)
+void zlartg_(doublecomplex *f, doublecomplex *g, doublereal * c__, doublecomplex *s, doublecomplex *r__)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     doublecomplex z__1, z__2, z__3;
@@ -427,6 +427,6 @@ int zlartg_(doublecomplex *f, doublecomplex *g, doublereal * c__, doublecomplex 
         }
     }
     AOCL_DTL_TRACE_EXIT_INDENT
-    return 0;
+    return;
 }
 /* zlartg_ */

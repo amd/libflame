@@ -188,7 +188,7 @@ elements i+1:ihi of W contain */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, complex *h__, integer *ldh, complex *w, integer *iloz, integer *ihiz, complex *z__, integer *ldz, integer * info)
+void clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, complex *h__, integer *ldh, complex *w, integer *iloz, integer *ihiz, complex *z__, integer *ldz, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -231,11 +231,11 @@ int clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *i
     complex temp;
     integer kdefl;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *);
+    void cscal_(integer *, complex *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *);
     integer itmax;
     real rtemp;
     extern /* Subroutine */
-    int slabad_(real *, real *), clarfg_(integer *, complex *, complex *, integer *, complex *);
+    void slabad_(real *, real *), clarfg_(integer *, complex *, complex *, integer *, complex *);
     extern /* Complex */
     VOID cladiv_f2c_(complex *, complex *, complex *);
     extern real slamch_(char *);
@@ -280,7 +280,7 @@ int clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *i
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*ilo == *ihi)
     {
@@ -289,7 +289,7 @@ int clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *i
         w[i__1].r = h__[i__2].r;
         w[i__1].i = h__[i__2].i; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* ==== clear out the trash ==== */
     i__1 = *ihi - 3;
@@ -872,7 +872,7 @@ L70: /* Single-shift QR step */
     /* Failure to converge in remaining number of iterations */
     *info = i__;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 L140: /* H(I,I-1) is negligible: one eigenvalue has converged. */
     i__1 = i__;
     i__2 = i__ + i__ * h_dim1;
@@ -885,7 +885,7 @@ L140: /* H(I,I-1) is negligible: one eigenvalue has converged. */
     goto L30;
 L150:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAHQR */
 }
 /* clahqr_ */

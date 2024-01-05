@@ -101,7 +101,7 @@
 /* > \ingroup doubleSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dsyconv_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, integer *ipiv, doublereal *e, integer *info)
+void dsyconv_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, integer *ipiv, doublereal *e, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsyconv inputs: uplo %c, way %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *way, *n, *lda);
@@ -162,13 +162,13 @@ int dsyconv_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, in
         i__1 = -(*info);
         xerbla_("DSYCONV", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -413,7 +413,7 @@ int dsyconv_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, in
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYCONV */
 }
 /* dsyconv_ */

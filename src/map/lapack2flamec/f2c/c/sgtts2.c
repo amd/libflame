@@ -116,7 +116,7 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup realGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sgtts2_(integer *itrans, integer *n, integer *nrhs, real *dl, real *d__, real *du, real *du2, integer *ipiv, real *b, integer * ldb)
+void sgtts2_(integer *itrans, integer *n, integer *nrhs, real *dl, real *d__, real *du, real *du2, integer *ipiv, real *b, integer * ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -155,7 +155,7 @@ int sgtts2_(integer *itrans, integer *n, integer *nrhs, real *dl, real *d__, rea
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*itrans == 0)
     {
@@ -318,6 +318,6 @@ L70:
     }
     /* End of SGTTS2 */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* sgtts2_ */

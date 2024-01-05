@@ -148,7 +148,7 @@ v(i+2:n) is stored on exit in AP, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *tau, integer *info)
+void chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *tau, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("chptrd inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
@@ -160,16 +160,16 @@ int chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *ta
     integer i__, i1, ii, i1i1;
     complex taui;
     extern /* Subroutine */
-    int chpr2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *);
+    void chpr2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *);
     complex alpha;
     extern /* Complex */
     VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int chpmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    void chpmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int clarfg_(integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clarfg_(integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -211,13 +211,13 @@ int chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *ta
         i__1 = -(*info);
         xerbla_("CHPTRD", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n <= 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -346,7 +346,7 @@ int chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *ta
         d__[*n] = ap[i__1].r;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CHPTRD */
 }
 /* chptrd_ */

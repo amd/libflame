@@ -125,7 +125,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlatrz_(integer *m, integer *n, integer *l, doublereal * a, integer *lda, doublereal *tau, doublereal *work)
+void dlatrz_(integer *m, integer *n, integer *l, doublereal * a, integer *lda, doublereal *tau, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlatrz inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS "",*m, *n, *l, *lda);
@@ -134,7 +134,7 @@ int dlatrz_(integer *m, integer *n, integer *l, doublereal * a, integer *lda, do
     /* Local variables */
     integer i__;
     extern /* Subroutine */
-    int dlarz_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+    void dlarz_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -163,7 +163,7 @@ int dlatrz_(integer *m, integer *n, integer *l, doublereal * a, integer *lda, do
     if (*m == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*m == *n)
     {
@@ -176,7 +176,7 @@ int dlatrz_(integer *m, integer *n, integer *l, doublereal * a, integer *lda, do
             /* L10: */
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     for (i__ = *m;
             i__ >= 1;
@@ -193,7 +193,7 @@ int dlatrz_(integer *m, integer *n, integer *l, doublereal * a, integer *lda, do
         /* L20: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLATRZ */
 }
 /* dlatrz_ */

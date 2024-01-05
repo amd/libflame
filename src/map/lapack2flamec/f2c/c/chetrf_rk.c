@@ -250,7 +250,7 @@ static integer c__2 = 2;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int chetrf_rk_(char *uplo, integer *n, complex *a, integer * lda, complex *e, integer *ipiv, complex *work, integer *lwork, integer *info)
+void chetrf_rk_(char *uplo, integer *n, complex *a, integer * lda, complex *e, integer *ipiv, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -266,15 +266,15 @@ int chetrf_rk_(char *uplo, integer *n, complex *a, integer * lda, complex *e, in
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
     extern /* Subroutine */
-    int chetf2_rk_(char *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void chetf2_rk_(char *, integer *, complex *, integer *, complex *, integer *, integer *);
     integer i__, k;
     extern /* Subroutine */
-    int clahef_rk_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void clahef_rk_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
     integer kb, nb, ip, iws;
     extern logical lsame_(char *, char *);
     integer nbmin, iinfo;
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *);
+    void cswap_(integer *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -340,12 +340,12 @@ int chetrf_rk_(char *uplo, integer *n, complex *a, integer * lda, complex *e, in
         i__1 = -(*info);
         xerbla_("CHETRF_RK", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     nbmin = 2;
     ldwork = *n;
@@ -512,7 +512,7 @@ L35: /* End Lower */
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHETRF_RK */
 }
 /* chetrf_rk__ */

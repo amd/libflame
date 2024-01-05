@@ -256,7 +256,7 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *a, integer *lda, doublecomplex *e, integer *ipiv, doublecomplex *w, integer *ldw, integer *info)
+void zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *a, integer *lda, doublecomplex *e, integer *ipiv, doublecomplex *w, integer *ldw, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlasyf_rk inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldw %" FLA_IS "",*uplo, *n, *nb, *lda, *ldw);
@@ -277,13 +277,13 @@ int zlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *
     extern logical lsame_(char *, char *);
     doublereal dtemp, sfmin;
     extern /* Subroutine */
-    int zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     integer itemp;
     extern /* Subroutine */
-    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     integer kstep;
     extern /* Subroutine */
-    int zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     doublereal absakk, colmax;
     extern integer izamax_(integer *, doublecomplex *, integer *);
@@ -1062,7 +1062,7 @@ L90: /* Update the lower triangle of A22 (= A(k:n,k:n)) as */
         *kb = k - 1;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLASYF_RK */
 }
 /* zlasyf_rk__ */

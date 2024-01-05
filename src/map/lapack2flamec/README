@@ -193,4 +193,4 @@ LAPACK_geqrf_body(prefix)
   // Assign relavent an info value that is compatible to LAPACK error message.
   *info = 0;                                                    
                                                                 
-  return 0;
+  return;

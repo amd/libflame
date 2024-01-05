@@ -161,7 +161,7 @@ for 1 <= j <= N, column j of the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slatdf_(integer *ijob, integer *n, real *z__, integer * ldz, real *rhs, real *rdsum, real *rdscal, integer *ipiv, integer * jpiv)
+void slatdf_(integer *ijob, integer *n, real *z__, integer * ldz, real *rhs, real *rdsum, real *rdscal, integer *ipiv, integer * jpiv)
 {
     /* System generated locals */
     integer z_dim1, z_offset, i__1, i__2;
@@ -176,16 +176,16 @@ int slatdf_(integer *ijob, integer *n, real *z__, integer * ldz, real *rhs, real
     extern real sdot_(integer *, real *, integer *, real *, integer *);
     real work[32];
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     real pmone;
     extern real sasum_(integer *, real *, integer *);
     real sminu;
     integer iwork[8];
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *);
     real splus;
     extern /* Subroutine */
-    int sgesc2_(integer *, real *, integer *, real *, integer *, integer *, real *), sgecon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), slassq_(integer *, real *, integer *, real *, real *), slaswp_( integer *, real *, integer *, integer *, integer *, integer *, integer *);
+    void sgesc2_(integer *, real *, integer *, real *, integer *, integer *, real *), sgecon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), slassq_(integer *, real *, integer *, real *, real *), slaswp_( integer *, real *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -324,7 +324,7 @@ int slatdf_(integer *ijob, integer *n, real *z__, integer * ldz, real *rhs, real
         /* Compute the sum of squares */
         slassq_(n, &rhs[1], &c__1, rdscal, rdsum);
     }
-    return 0;
+    return;
     /* End of SLATDF */
 }
 /* slatdf_ */

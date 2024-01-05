@@ -67,7 +67,7 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sla_wwaddw_(integer *n, real *x, real *y, real *w)
+void sla_wwaddw_(integer *n, real *x, real *y, real *w)
 {
     /* System generated locals */
     integer i__1;
@@ -102,6 +102,6 @@ int sla_wwaddw_(integer *n, real *x, real *y, real *w)
         x[i__] = s;
         /* L10: */
     }
-    return 0;
+    return;
 }
 /* sla_wwaddw__ */

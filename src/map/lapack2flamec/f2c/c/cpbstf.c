@@ -147,7 +147,7 @@ the diagonal elements of S are real. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, integer *info)
+void cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -169,11 +169,11 @@ int cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, int
     real ajj;
     integer kld;
     extern /* Subroutine */
-    int cher_(char *, integer *, real *, complex *, integer *, complex *, integer *);
+    void cher_(char *, integer *, real *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
-    int clacgv_(integer *, complex *, integer *), csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clacgv_(integer *, complex *, integer *), csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -223,13 +223,13 @@ int cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, int
         i__1 = -(*info);
         xerbla_("CPBSTF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Computing MAX */
     i__1 = 1;
@@ -376,11 +376,11 @@ int cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, int
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 L50:
     *info = j;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPBSTF */
 }
 /* cpbstf_ */

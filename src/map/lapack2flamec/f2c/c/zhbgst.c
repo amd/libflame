@@ -166,7 +166,7 @@ LDX >= 1 otherwise. */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zhbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, doublecomplex *ab, integer *ldab, doublecomplex *bb, integer *ldbb, doublecomplex *x, integer *ldx, doublecomplex *work, doublereal *rwork, integer *info)
+void zhbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, doublecomplex *ab, integer *ldab, doublecomplex *bb, integer *ldbb, doublecomplex *x, integer *ldx, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhbgst inputs: vect %c, uplo %c, n %" FLA_IS ", ka %" FLA_IS ", kb %" FLA_IS ", ldab %" FLA_IS ", ldbb %" FLA_IS ", ldx %" FLA_IS "",*vect, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldx);
@@ -187,19 +187,19 @@ int zhbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, double
     doublereal bii;
     integer kbt, nrt, inca;
     extern /* Subroutine */
-    int zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
+    void zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     logical wantx;
     extern /* Subroutine */
-    int zlar2v_(integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+    void zlar2v_(integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     logical update;
     extern /* Subroutine */
-    int zlacgv_(integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), zlartg_( doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *), zlargv_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *), zlartv_( integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
+    void zlacgv_(integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), zlartg_( doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *), zlargv_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *), zlartv_( integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -277,13 +277,13 @@ int zhbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, double
         i__1 = -(*info);
         xerbla_("ZHBGST", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     inca = *ldab * ka1;
     /* Initialize X to the unit matrix, if needed */
@@ -1393,7 +1393,7 @@ L490:
             if (*ka == 0)
             {
     AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             goto L490;
         }
@@ -1404,7 +1404,7 @@ L490:
         if (i__ < 2)
         {
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     if (i__ < m - kbt)

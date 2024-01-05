@@ -165,7 +165,7 @@ static real c_b9 = 1.f;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int slasyf_(char *uplo, integer *n, integer *nb, integer *kb, real *a, integer *lda, integer *ipiv, real *w, integer *ldw, integer *info)
+void slasyf_(char *uplo, integer *n, integer *nb, integer *kb, real *a, integer *lda, integer *ipiv, real *w, integer *ldw, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -185,10 +185,10 @@ int slasyf_(char *uplo, integer *n, integer *nb, integer *kb, real *a, integer *
     real alpha;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer kstep;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * );
+    void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * );
     real absakk;
     extern integer isamax_(integer *, real *, integer *);
     real colmax, rowmax;
@@ -779,7 +779,7 @@ L120: /* Undo the interchanges (if any) of rows JJ and JP at each */
         *kb = k - 1;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLASYF */
 }
 /* slasyf_ */

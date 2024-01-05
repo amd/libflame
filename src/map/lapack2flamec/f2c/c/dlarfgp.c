@@ -90,7 +90,7 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlarfgp_(integer *n, doublereal *alpha, doublereal *x, integer *incx, doublereal *tau)
+void dlarfgp_(integer *n, doublereal *alpha, doublereal *x, integer *incx, doublereal *tau)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarfgp inputs: n %" FLA_IS ", incx %" FLA_IS "",*n, *incx);
@@ -106,7 +106,7 @@ int dlarfgp_(integer *n, doublereal *alpha, doublereal *x, integer *incx, double
     doublereal beta;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal xnorm;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
     doublereal bignum, smlnum;
@@ -137,7 +137,7 @@ int dlarfgp_(integer *n, doublereal *alpha, doublereal *x, integer *incx, double
     {
         *tau = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *n - 1;
     xnorm = dnrm2_(&i__1, &x[1], incx);
@@ -251,7 +251,7 @@ L10:
         *alpha = beta;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARFGP */
 }
 /* dlarfgp_ */

@@ -91,7 +91,7 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zlacrt_(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy, doublecomplex *c__, doublecomplex * s)
+void zlacrt_(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy, doublecomplex *c__, doublecomplex * s)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlacrt inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*n, *incx, *incy);
@@ -120,7 +120,7 @@ int zlacrt_(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, int
     if (*n <= 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*incx == 1 && *incy == 1)
     {
@@ -171,7 +171,7 @@ int zlacrt_(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, int
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* Code for both increments equal to 1 */
 L20:
     i__1 = *n;
@@ -206,6 +206,6 @@ L20:
         /* L30: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* zlacrt_ */

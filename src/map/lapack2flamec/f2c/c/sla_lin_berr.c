@@ -87,7 +87,7 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sla_lin_berr_(integer *n, integer *nz, integer *nrhs, real *res, real *ayb, real *berr)
+void sla_lin_berr_(integer *n, integer *nz, integer *nrhs, real *res, real *ayb, real *berr)
 {
     /* System generated locals */
     integer ayb_dim1, ayb_offset, res_dim1, res_offset, i__1, i__2;
@@ -148,6 +148,6 @@ int sla_lin_berr_(integer *n, integer *nz, integer *nrhs, real *res, real *ayb, 
             /* the true residual also must be exactly 0.0. */
         }
     }
-    return 0;
+    return;
 }
 /* sla_lin_berr__ */

@@ -163,7 +163,7 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cunmql_(char *side, char *trans, integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau, complex *c__, integer *ldc, complex *work, integer *lwork, integer *info)
+void cunmql_(char *side, char *trans, integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau, complex *c__, integer *ldc, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cunmql inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS ", lwork %" FLA_IS "",*side, *trans, *m, *n, *k, *lda, *ldc, *lwork);
@@ -180,7 +180,7 @@ int cunmql_(char *side, char *trans, integer *m, integer *n, integer *k, complex
     extern logical lsame_(char *, char *);
     integer nbmin, iinfo;
     extern /* Subroutine */
-    int cunm2l_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *), clarft_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void cunm2l_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *), clarft_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     logical notran;
     integer ldwork, lwkopt;
@@ -286,18 +286,18 @@ int cunmql_(char *side, char *trans, integer *m, integer *n, integer *k, complex
         i__1 = -(*info);
         xerbla_("CUNMQL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine the block size */
     nbmin = 2;
@@ -374,7 +374,7 @@ int cunmql_(char *side, char *trans, integer *m, integer *n, integer *k, complex
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst    
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CUNMQL */
 }
 /* cunmql_ */

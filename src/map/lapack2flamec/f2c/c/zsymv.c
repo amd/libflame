@@ -143,7 +143,7 @@
 /* > \ingroup complex16SYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integer *lda, doublecomplex *x, integer *incx, doublecomplex *beta, doublecomplex *y, integer *incy)
+void zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integer *lda, doublecomplex *x, integer *incx, doublecomplex *beta, doublecomplex *y, integer *incy)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsymv inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*uplo, *n, *lda, *incx, *incy);
@@ -210,13 +210,13 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
     {
         xerbla_("ZSYMV ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0 || alpha->r == 0. && alpha->i == 0. && (beta->r == 1. && beta->i == 0.))
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set up the start points in X and Y. */
     if (*incx > 0)
@@ -312,7 +312,7 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
     if (alpha->r == 0. && alpha->i == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (lsame_(uplo, "U"))
     {
@@ -563,7 +563,7 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSYMV */
 }
 /* zsymv_ */

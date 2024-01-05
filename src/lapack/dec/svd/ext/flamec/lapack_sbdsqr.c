@@ -249,28 +249,28 @@ int lapack_sbdsqr(char *uplo, integer *n, integer *ncvt, integer * nru, integer 
     integer isub, iter;
     real unfl, sinl, cosr, smin, smax, sinr;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     integer iterdivn;
     extern /* Subroutine */
-    int slas2_(real *, real *, real *, real *, real *) ;
+    void slas2_(real *, real *, real *, real *, real *) ;
     real f, g, h__;
     integer i__, j, m;
     real r__;
     extern logical lsame_(char *, char *);
     real oldcs;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     integer oldll;
     real shift, sigmn, oldsn, sminl;
     extern /* Subroutine */
-    int slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *);
+    void slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *);
     real sigmx;
     logical lower;
     extern /* Subroutine */
-    int sswap_(integer *, real *, integer *, real *, integer *);
+    void sswap_(integer *, real *, integer *, real *, integer *);
     integer maxitdivn;
     extern /* Subroutine */
-    int slasq1_(integer *, real *, real *, real *, integer *), slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
+    void slasq1_(integer *, real *, real *, real *, integer *), slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
     real cs;
     integer ll;
     real sn, mu;
@@ -279,7 +279,7 @@ int lapack_sbdsqr(char *uplo, integer *n, integer *ncvt, integer * nru, integer 
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real sminoa;
     extern /* Subroutine */
-    int slartg_(real *, real *, real *, real *, real * );
+    void slartg_(real *, real *, real *, real *, real * );
     real thresh;
     logical rotate;
     integer nm1;

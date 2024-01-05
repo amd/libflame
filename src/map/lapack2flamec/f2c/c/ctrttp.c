@@ -92,7 +92,7 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ctrttp_(char *uplo, integer *n, complex *a, integer *lda, complex *ap, integer *info)
+void ctrttp_(char *uplo, integer *n, complex *a, integer *lda, complex *ap, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -156,7 +156,7 @@ int ctrttp_(char *uplo, integer *n, complex *a, integer *lda, complex *ap, integ
         i__1 = -(*info);
         xerbla_("CTRTTP", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (lower)
     {
@@ -201,7 +201,7 @@ int ctrttp_(char *uplo, integer *n, complex *a, integer *lda, complex *ap, integ
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTRTTP */
 }
 /* ctrttp_ */

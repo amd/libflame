@@ -334,7 +334,7 @@ the */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, integer *m, integer *p, integer *q, real *theta, real *phi, complex *u1, integer *ldu1, complex *u2, integer *ldu2, complex *v1t, integer *ldv1t, complex *v2t, integer *ldv2t, real * b11d, real *b11e, real *b12d, real *b12e, real *b21d, real *b21e, real *b22d, real *b22e, real *rwork, integer *lrwork, integer *info)
+void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, integer *m, integer *p, integer *q, real *theta, real *phi, complex *u1, integer *ldu1, complex *u2, integer *ldu2, complex *v1t, integer *ldv1t, complex *v2t, integer *ldv2t, real * b11d, real *b11e, real *b12d, real *b12e, real *b21d, real *b21e, real *b22d, real *b22e, real *rwork, integer *lrwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS ", ldu1 %" FLA_IS ", ldu2 %" FLA_IS ", ldv1t %" FLA_IS ", ldv2t %" FLA_IS "",*jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t);
@@ -356,13 +356,13 @@ int cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
     real unfl, temp;
     integer iu1cs, iu2cs;
     extern /* Subroutine */
-    int slas2_(real *, real *, real *, real *, real *) ;
+    void slas2_(real *, real *, real *, real *, real *) ;
     integer iu1sn, iu2sn;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *);
+    void cscal_(integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int clasr_(char *, char *, char *, integer *, integer *, real *, real *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
+    void clasr_(char *, char *, char *, integer *, integer *, real *, real *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
     integer maxit;
     real dummy;
     integer iv1tcs, iv2tcs;
@@ -378,7 +378,7 @@ int cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
     logical wantv1t, wantv2t;
     real b21bulge, b22bulge;
     extern /* Subroutine */
-    int slartgp_(real *, real *, real *, real *, real *), slartgs_(real *, real *, real *, real *, real *);
+    void slartgp_(real *, real *, real *, real *, real *), slartgs_(real *, real *, real *, real *, real *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -468,7 +468,7 @@ int cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
         lrworkmin = 1;
         rwork[1] = (real) lrworkmin;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute workspace */
     if (*info == 0)
@@ -494,12 +494,12 @@ int cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
         i__1 = -(*info);
         xerbla_("CBBCSD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = slamch_("Epsilon");
@@ -609,7 +609,7 @@ int cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
                 }
             }
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         iter = iter + imax - imin;
         /* Compute shifts */
@@ -1307,7 +1307,7 @@ int cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CBBCSD */
 }
 /* cbbcsd_ */

@@ -155,7 +155,7 @@ static real c_b26 = 0.f;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integer *prmptr, integer *perm, integer *givptr, integer *givcol, real *givnum, real *q, integer *qptr, real *z__, real *ztemp, integer *info)
+void slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integer *prmptr, integer *perm, integer *givptr, integer *givcol, real *givnum, real *q, integer *qptr, real *z__, real *ztemp, integer *info)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -165,10 +165,10 @@ int slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, intege
     /* Local variables */
     integer i__, k, mid, ptr, curr;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     integer bsiz1, bsiz2, psiz1, psiz2, zptr1;
     extern /* Subroutine */
-    int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -208,12 +208,12 @@ int slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, intege
     {
         i__1 = -(*info);
         xerbla_("SLAEDA", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     /* Determine location of first number in second half. */
     mid = *n / 2 + 1;
@@ -318,7 +318,7 @@ int slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, intege
         ptr += pow_ii(&c__2, &i__2);
         /* L70: */
     }
-    return 0;
+    return;
     /* End of SLAEDA */
 }
 /* slaeda_ */

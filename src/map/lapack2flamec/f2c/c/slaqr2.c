@@ -269,7 +269,7 @@ SLAQR2 */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw, real *h__, integer *ldh, integer *iloz, integer *ihiz, real *z__, integer *ldz, integer *ns, integer *nd, real *sr, real *si, real *v, integer *ldv, integer *nh, real *t, integer *ldt, integer *nv, real *wv, integer *ldwv, real * work, integer *lwork)
+void slaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw, real *h__, integer *ldh, integer *iloz, integer *ihiz, real *z__, integer *ldz, integer *ns, integer *nd, real *sr, real *si, real *v, integer *ldv, integer *nh, real *t, integer *ldt, integer *nv, real *wv, integer *ldwv, real * work, integer *lwork)
 {
     /* System generated locals */
     integer h_dim1, h_offset, t_dim1, t_offset, v_dim1, v_offset, wv_dim1, wv_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4;
@@ -288,25 +288,25 @@ int slaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *
     integer kend, kcol, info, ifst, ilst, ltop, krow;
     logical bulge;
     extern /* Subroutine */
-    int slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), sgemm_( char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), sgemm_( char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer infqr;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *);
     integer kwtop;
     extern /* Subroutine */
-    int slanv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *, real *), slabad_(real *, real *) ;
+    void slanv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *, real *), slabad_(real *, real *) ;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int sgehrd_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    void sgehrd_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
     real safmin;
     extern /* Subroutine */
-    int slarfg_(integer *, real *, real *, integer *, real *);
+    void slarfg_(integer *, real *, real *, integer *, real *);
     real safmax;
     extern /* Subroutine */
-    int slahqr_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    void slahqr_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     logical sorted;
     extern /* Subroutine */
-    int strexc_(char *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *), sormhr_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+    void strexc_(char *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *), sormhr_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
     real smlnum;
     integer lwkopt;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -375,7 +375,7 @@ int slaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *
     if (*lwork == -1)
     {
         work[1] = (real) lwkopt;
-        return 0;
+        return;
     }
     /* ==== Nothing to do ... */
     /* ... for an empty active block ... ==== */
@@ -384,12 +384,12 @@ int slaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *
     work[1] = 1.f;
     if (*ktop > *kbot)
     {
-        return 0;
+        return;
     }
     /* ... nor for an empty deflation window. ==== */
     if (*nw < 1)
     {
-        return 0;
+        return;
     }
     /* ==== Machine constants ==== */
     safmin = slamch_("SAFE MINIMUM");
@@ -431,7 +431,7 @@ int slaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *
             }
         }
         work[1] = 1.f;
-        return 0;
+        return;
     }
     /* ==== Convert to spike-triangular form. (In case of a */
     /* . rare QR failure, this routine continues to do */
@@ -757,6 +757,6 @@ L60:
     /* ==== Return optimal workspace. ==== */
     work[1] = (real) lwkopt;
     /* ==== End of SLAQR2 ==== */
-    return 0;
+    return;
 }
 /* slaqr2_ */

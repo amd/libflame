@@ -151,7 +151,7 @@ elements marked */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dgbsv_(integer *n, integer *kl, integer *ku, integer * nrhs, doublereal *ab, integer *ldab, integer *ipiv, doublereal *b, integer *ldb, integer *info)
+void dgbsv_(integer *n, integer *kl, integer *ku, integer * nrhs, doublereal *ab, integer *ldab, integer *ipiv, doublereal *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgbsv inputs: n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",*n, *kl, *ku, *nrhs, *ldab, *ldb);
@@ -159,7 +159,7 @@ int dgbsv_(integer *n, integer *kl, integer *ku, integer * nrhs, doublereal *ab,
     integer ab_dim1, ab_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int dgbtrf_(integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dgbtrs_(char *, integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dgbtrf_(integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dgbtrs_(char *, integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -214,7 +214,7 @@ int dgbsv_(integer *n, integer *kl, integer *ku, integer * nrhs, doublereal *ab,
         i__1 = -(*info);
         xerbla_("DGBSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the LU factorization of the band matrix A. */
     dgbtrf_(n, n, kl, ku, &ab[ab_offset], ldab, &ipiv[1], info);
@@ -224,7 +224,7 @@ int dgbsv_(integer *n, integer *kl, integer *ku, integer * nrhs, doublereal *ab,
         dgbtrs_("No transpose", n, kl, ku, nrhs, &ab[ab_offset], ldab, &ipiv[ 1], &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGBSV */
 }
 /* dgbsv_ */

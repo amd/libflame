@@ -79,7 +79,7 @@ if k < N, the factorization could not */
 /* > \ingroup complex16PTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zpttrf_(integer *n, doublereal *d__, doublecomplex *e, integer *info)
+void zpttrf_(integer *n, doublereal *d__, doublecomplex *e, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpttrf inputs: n %" FLA_IS "",*n);
@@ -125,13 +125,13 @@ int zpttrf_(integer *n, doublereal *d__, doublecomplex *e, integer *info)
         i__1 = -(*info);
         xerbla_("ZPTTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the L*D*L**H (or U**H *D*U) factorization of A. */
     i4 = (*n - 1) % 4;
@@ -242,7 +242,7 @@ int zpttrf_(integer *n, doublereal *d__, doublecomplex *e, integer *info)
     }
 L30:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPTTRF */
 }
 /* zpttrf_ */

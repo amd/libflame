@@ -300,20 +300,20 @@ the routine */
 void apply_grots_q(integer num_swps, integer *rots_per_swp, integer *rcol, doublereal **rots_sptr, doublecomplex *q, integer n, integer ldq);
 void apply_grots_z(integer num_swps, integer *rots_per_swp, integer *rcol, doublereal **rots_sptr, doublecomplex *z, integer n, integer ldz,
                    integer num_scal, integer *scol, doublecomplex *scalv);
-extern int zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
-extern int zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+extern void zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
+extern void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
 
-int zhgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublecomplex *h__, integer *ldh, doublecomplex *t, integer *ldt, doublecomplex *alpha, doublecomplex * beta, doublecomplex *q, integer *ldq, doublecomplex *z__, integer * ldz, doublecomplex *work, integer *lwork, doublereal *rwork, integer * info)
+void zhgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublecomplex *h__, integer *ldh, doublecomplex *t, integer *ldt, doublecomplex *alpha, doublecomplex * beta, doublecomplex *q, integer *ldq, doublecomplex *z__, integer * ldz, doublecomplex *work, integer *lwork, doublereal *rwork, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhgeqz inputs: job %c, compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS "", *job, *compq, *compz, *n, *ilo, *ihi, *ldh, *ldt, *ldq, *ldz);
-    extern int fla_zhgeqz(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublecomplex *h__, integer *ldh, doublecomplex *t, integer *ldt, doublecomplex *alpha, doublecomplex * beta, doublecomplex *q, integer *ldq, doublecomplex *z__, integer * ldz, doublecomplex *work, integer *lwork, doublereal *rwork, integer * info);
-    int ret_val = fla_zhgeqz(job, compq, compz, n, ilo, ihi, h__, ldh, t, ldt, alpha, beta, q, ldq, z__, ldz, work, lwork, rwork, info);
+    extern void fla_zhgeqz(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublecomplex *h__, integer *ldh, doublecomplex *t, integer *ldt, doublecomplex *alpha, doublecomplex * beta, doublecomplex *q, integer *ldq, doublecomplex *z__, integer * ldz, doublecomplex *work, integer *lwork, doublereal *rwork, integer * info);
+    fla_zhgeqz(job, compq, compz, n, ilo, ihi, h__, ldh, t, ldt, alpha, beta, q, ldq, z__, ldz, work, lwork, rwork, info);
     AOCL_DTL_TRACE_LOG_EXIT
-    return ret_val;
+    return;
 }
 
-int fla_zhgeqz(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublecomplex *h__, integer *ldh, doublecomplex *t, integer *ldt, doublecomplex *alpha, doublecomplex * beta, doublecomplex *q, integer *ldq, doublecomplex *z__, integer * ldz, doublecomplex *work, integer *lwork, doublereal *rwork, integer * info)
+void fla_zhgeqz(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublecomplex *h__, integer *ldh, doublecomplex *t, integer *ldt, doublecomplex *alpha, doublecomplex * beta, doublecomplex *q, integer *ldq, doublecomplex *z__, integer * ldz, doublecomplex *work, integer *lwork, doublereal *rwork, integer * info)
 {
    /* System generated locals */
     integer h_dim1, h_offset, q_dim1, q_offset, t_dim1, t_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
@@ -347,7 +347,7 @@ int fla_zhgeqz(char *job, char *compq, char *compz, integer *n, integer *ilo, in
     doublecomplex abi12, abi22;
     doublereal absb, atol, btol, temp;
     extern /* Subroutine */
-    int zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
+    void zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
     doublereal temp2;
     extern logical lsame_(char *, char *);
     doublecomplex ctemp;
@@ -374,10 +374,10 @@ int fla_zhgeqz(char *job, char *compq, char *compz, integer *n, integer *ilo, in
     logical ilazro;
     integer icompz, ifirst;
     extern /* Subroutine */
-    int zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
+    void zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
     integer ifrstm;
     extern /* Subroutine */
-    int zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
+    void zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
     integer istart;
     logical lquery;
     int num_threads, tid;
@@ -574,11 +574,11 @@ int fla_zhgeqz(char *job, char *compq, char *compz, integer *n, integer *ilo, in
     {
         i__1 = -(*info);
         xerbla_("ZHGEQZ", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
     /* WORK( 1 ) = CMPLX( 1 ) */
@@ -586,7 +586,7 @@ int fla_zhgeqz(char *job, char *compq, char *compz, integer *n, integer *ilo, in
     {
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
-        return 0;
+        return;
     }
     /* Initialize Q and Z */
     if (icompq == 3)
@@ -1873,7 +1873,7 @@ L210:
     z__1.i = 0.; // , expr subst
     work[1].r = z__1.r;
     work[1].i = z__1.i; // , expr subst
-    return 0;
+    return;
     /* End of ZHGEQZ */
 }
 /* zhgeqz_ */

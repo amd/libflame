@@ -141,7 +141,7 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cunbdb5_(integer *m1, integer *m2, integer *n, complex * x1, integer *incx1, complex *x2, integer *incx2, complex *q1, integer *ldq1, complex *q2, integer *ldq2, complex *work, integer *lwork, integer *info)
+void cunbdb5_(integer *m1, integer *m2, integer *n, complex * x1, integer *incx1, complex *x2, integer *incx2, complex *q1, integer *ldq1, complex *q2, integer *ldq2, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -231,7 +231,7 @@ int cunbdb5_(integer *m1, integer *m2, integer *n, complex * x1, integer *incx1,
         i__1 = -(*info);
         xerbla_("CUNBDB5", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Project X onto the orthogonal complement of Q */
     cunbdb6_(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1, & q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
@@ -241,7 +241,7 @@ int cunbdb5_(integer *m1, integer *m2, integer *n, complex * x1, integer *incx1,
     if (r__1 != 0.f || r__2 != 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Project each standard basis vector e_1,...,e_M1 in turn, stopping */
     /* when a nonzero projection is found */
@@ -277,7 +277,7 @@ int cunbdb5_(integer *m1, integer *m2, integer *n, complex * x1, integer *incx1,
         if (r__1 != 0.f || r__2 != 0.f)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Project each standard basis vector e_(M1+1),...,e_(M1+M2) in turn, */
@@ -314,11 +314,11 @@ int cunbdb5_(integer *m1, integer *m2, integer *n, complex * x1, integer *incx1,
         if (r__1 != 0.f || r__2 != 0.f)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CUNBDB5 */
 }
 /* cunbdb5_ */

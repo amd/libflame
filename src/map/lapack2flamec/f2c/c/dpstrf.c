@@ -132,7 +132,7 @@ static doublereal c_b24 = 1.;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dpstrf_(char *uplo, integer *n, doublereal *a, integer * lda, integer *piv, integer *rank, doublereal *tol, doublereal *work, integer *info)
+void dpstrf_(char *uplo, integer *n, doublereal *a, integer * lda, integer *piv, integer *rank, doublereal *tol, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpstrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
@@ -146,18 +146,18 @@ int dpstrf_(char *uplo, integer *n, doublereal *a, integer * lda, integer *piv, 
     doublereal ajj;
     integer pvt;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     doublereal dtemp;
     integer itemp;
     extern /* Subroutine */
-    int dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal dstop;
     logical upper;
     extern /* Subroutine */
-    int dsyrk_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), dpstf2_(char *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, integer *);
+    void dsyrk_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), dpstf2_(char *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
@@ -210,13 +210,13 @@ int dpstrf_(char *uplo, integer *n, doublereal *a, integer * lda, integer *piv, 
         i__1 = -(*info);
         xerbla_("DPSTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get block size */
     nb = ilaenv_(&c__1, "DPOTRF", uplo, n, &c_n1, &c_n1, &c_n1);
@@ -480,7 +480,7 @@ L190: /* Rank is the number of steps completed. Set INFO = 1 to signal */
     *info = 1;
     AOCL_DTL_TRACE_LOG_EXIT
 L200:
-    return 0;
+    return;
     /* End of DPSTRF */
 }
 /* dpstrf_ */

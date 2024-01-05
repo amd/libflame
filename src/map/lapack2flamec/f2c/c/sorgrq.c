@@ -120,7 +120,7 @@ the routine */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sorgrq_(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info)
+void sorgrq_(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -133,10 +133,10 @@ int sorgrq_(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau
     /* Local variables */
     integer i__, j, l, ib, nb, ii, kk, nx, iws, nbmin, iinfo;
     extern /* Subroutine */
-    int sorgr2_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *), slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sorgr2_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *), slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
+    void slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -207,18 +207,18 @@ int sorgrq_(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau
         i__1 = -(*info);
         xerbla_("SORGRQ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     nbmin = 2;
     nx = 0;
@@ -330,7 +330,7 @@ int sorgrq_(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau
     }
     work[1] = (real) iws;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SORGRQ */
 }
 /* sorgrq_ */

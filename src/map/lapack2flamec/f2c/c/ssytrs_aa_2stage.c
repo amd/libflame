@@ -130,7 +130,7 @@ static integer c_n1 = -1;
 /* > \ingroup realSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ssytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *tb, integer *ltb, integer *ipiv, integer *ipiv2, real *b, integer *ldb, integer *info)
+void ssytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *tb, integer *ltb, integer *ipiv, integer *ipiv2, real *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -145,7 +145,7 @@ int ssytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, real *a, integer *l
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
-    int strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgbtrs_(char *, integer *, integer *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *), slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
+    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgbtrs_(char *, integer *, integer *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *), slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -207,13 +207,13 @@ int ssytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, real *a, integer *l
         i__1 = -(*info);
         xerbla_("SSYTRS_AA_2STAGE", &i__1, (ftnlen)16);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Read NB and compute LDTB */
     nb = (integer) tb[1];
@@ -267,7 +267,7 @@ int ssytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, real *a, integer *l
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYTRS_AA_2STAGE */
 }
 /* ssytrs_aa_2stage__ */

@@ -295,7 +295,7 @@ if EQUED = 'Y', */
 /* > \ingroup realPOsolve */
 /* ===================================================================== */
 /* Subroutine */
-int sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integer *lda, real *af, integer *ldaf, char *equed, real *s, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork, integer *info)
+void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integer *lda, real *af, integer *ldaf, char *equed, real *s, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -319,11 +319,11 @@ int sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integer
     real bignum;
     integer infequ;
     extern /* Subroutine */
-    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), spocon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
+    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), spocon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
     extern real slansy_(char *, char *, integer *, real *, integer *, real *);
     real smlnum;
     extern /* Subroutine */
-    int slaqsy_(char *, integer *, real *, integer *, real *, real *, real *, char *), spoequ_(integer *, real *, integer *, real *, real *, real *, integer *), sporfs_( char *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), spotrf_(char *, integer *, real *, integer *, integer *), spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
+    void slaqsy_(char *, integer *, real *, integer *, real *, real *, real *, char *), spoequ_(integer *, real *, integer *, real *, real *, real *, integer *), sporfs_( char *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), spotrf_(char *, integer *, real *, integer *, integer *), spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -459,7 +459,7 @@ int sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integer
         i__1 = -(*info);
         xerbla_("SPOSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (equil)
     {
@@ -501,7 +501,7 @@ int sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integer
         {
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -548,7 +548,7 @@ int sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integer
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPOSVX */
 }
 /* sposvx_ */

@@ -99,7 +99,7 @@
 /* > \ingroup complex16POcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zpoequ_(integer *n, doublecomplex *a, integer *lda, doublereal *s, doublereal *scond, doublereal *amax, integer *info)
+void zpoequ_(integer *n, doublecomplex *a, integer *lda, doublereal *s, doublereal *scond, doublereal *amax, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpoequ inputs: n %" FLA_IS ", lda %" FLA_IS "",*n, *lda);
@@ -153,7 +153,7 @@ int zpoequ_(integer *n, doublecomplex *a, integer *lda, doublereal *s, doublerea
         i__1 = -(*info);
         xerbla_("ZPOEQU", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
@@ -161,7 +161,7 @@ int zpoequ_(integer *n, doublecomplex *a, integer *lda, doublereal *s, doublerea
         *scond = 1.;
         *amax = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Find the minimum and maximum diagonal elements. */
     i__1 = a_dim1 + 1;
@@ -197,7 +197,7 @@ int zpoequ_(integer *n, doublecomplex *a, integer *lda, doublereal *s, doublerea
             {
                 *info = i__;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L20: */
         }
@@ -218,7 +218,7 @@ int zpoequ_(integer *n, doublecomplex *a, integer *lda, doublereal *s, doublerea
         *scond = sqrt(smin) / sqrt(*amax);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPOEQU */
 }
 /* zpoequ_ */

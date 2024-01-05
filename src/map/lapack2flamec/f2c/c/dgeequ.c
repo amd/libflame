@@ -124,7 +124,7 @@
 /* > \ingroup doubleGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dgeequ_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax, integer *info)
+void dgeequ_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgeequ inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
@@ -184,7 +184,7 @@ int dgeequ_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *r_
         i__1 = -(*info);
         xerbla_("DGEEQU", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
@@ -193,7 +193,7 @@ int dgeequ_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *r_
         *colcnd = 1.;
         *amax = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     smlnum = dlamch_("S");
@@ -257,7 +257,7 @@ int dgeequ_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *r_
             {
                 *info = i__;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L50: */
         }
@@ -339,7 +339,7 @@ int dgeequ_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *r_
             {
                 *info = *m + j;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L110: */
         }
@@ -363,7 +363,7 @@ int dgeequ_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *r_
         *colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGEEQU */
 }
 /* dgeequ_ */

@@ -145,7 +145,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zlatzm_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv, doublecomplex *tau, doublecomplex * c1, doublecomplex *c2, integer *ldc, doublecomplex *work)
+void zlatzm_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv, doublecomplex *tau, doublecomplex * c1, doublecomplex *c2, integer *ldc, doublecomplex *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlatzm inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *incv, *ldc);
@@ -155,7 +155,7 @@ int zlatzm_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv,
     /* Local variables */
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlacgv_(integer *, doublecomplex *, integer *);
+    void zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -187,7 +187,7 @@ int zlatzm_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv,
     if (fla_min(*m,*n) == 0 || tau->r == 0. && tau->i == 0.)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (lsame_(side, "L"))
     {
@@ -223,7 +223,7 @@ int zlatzm_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv,
         zgerc_(m, &i__1, &z__1, &work[1], &c__1, &v[1], incv, &c2[c2_offset], ldc);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLATZM */
 }
 /* zlatzm_ */

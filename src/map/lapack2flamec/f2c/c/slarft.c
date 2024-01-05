@@ -155,7 +155,7 @@ if DIRECT = 'B', T is */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slarft_(char *direct, char *storev, integer *n, integer * k, real *v, integer *ldv, real *tau, real *t, integer *ldt)
+void slarft_(char *direct, char *storev, integer *n, integer * k, real *v, integer *ldv, real *tau, real *t, integer *ldt)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -170,10 +170,10 @@ int slarft_(char *direct, char *storev, integer *n, integer * k, real *v, intege
     integer i__, j, prevlastv;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer lastv;
     extern /* Subroutine */
-    int strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *), f90_exit_(void);
+    void strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *), f90_exit_(void);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -205,7 +205,7 @@ int slarft_(char *direct, char *storev, integer *n, integer * k, real *v, intege
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (lsame_(direct, "F"))
     {
@@ -393,7 +393,7 @@ int slarft_(char *direct, char *storev, integer *n, integer * k, real *v, intege
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLARFT */
 }
 /* slarft_ */

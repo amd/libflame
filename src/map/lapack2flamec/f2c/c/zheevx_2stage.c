@@ -300,7 +300,7 @@ the routine */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int zheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *abstol, integer *m, doublereal *w, doublecomplex *z__, integer *ldz, doublecomplex * work, integer *lwork, doublereal *rwork, integer *iwork, integer * ifail, integer *info)
+void zheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *abstol, integer *m, doublereal *w, doublecomplex *z__, integer *ldz, doublecomplex * work, integer *lwork, doublereal *rwork, integer *iwork, integer * ifail, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zheevx_2stage inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", vl %lf, vu %lf, abstol %lf, ldz %" FLA_IS ", lwork %" FLA_IS "", *jobz, *range, *uplo, *n, *lda, *il, *iu, *vl, *vu, *abstol, *ldz);
@@ -320,22 +320,22 @@ int zheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, doublecomple
     logical test;
     integer itmp1, indee;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int zhetrd_2stage_(char *, char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zhetrd_2stage_(char *, char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     integer iinfo;
     char order[1];
     integer lhtrd;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer lwmin;
     logical lower;
     integer lwtrd;
     logical wantz;
     extern /* Subroutine */
-    int zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     logical alleig, indeig;
     integer iscale, indibl;
@@ -347,17 +347,17 @@ int zheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, doublecomple
     extern doublereal zlanhe_(char *, char *, integer *, doublecomplex *, integer *, doublereal *);
     integer indiwk, indisp, indtau;
     extern /* Subroutine */
-    int dsterf_(integer *, doublereal *, doublereal *, integer *), dstebz_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dsterf_(integer *, doublereal *, doublereal *, integer *), dstebz_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     integer indrwk, indwrk;
     extern /* Subroutine */
-    int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     integer nsplit, llwork;
     doublereal smlnum;
     extern /* Subroutine */
-    int zstein_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, doublecomplex *, integer *, doublereal *, integer *, integer *, integer *);
+    void zstein_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, doublecomplex *, integer *, doublereal *, integer *, integer *, integer *);
     logical lquery;
     extern /* Subroutine */
-    int zsteqr_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublereal *, integer *), zungtr_(char *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *), zunmtr_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zsteqr_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublereal *, integer *), zungtr_(char *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *), zunmtr_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     integer indhous;
     /* -- LAPACK driver routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -476,19 +476,19 @@ int zheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, doublecomple
         i__1 = -(*info);
         xerbla_("ZHEEVX_2STAGE", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *m = 0;
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -516,7 +516,7 @@ int zheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, doublecomple
             z__[i__1].i = 0.; // , expr subst
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -718,7 +718,7 @@ L40:
     work[1].r = (doublereal) lwmin;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHEEVX_2STAGE */
 }
 /* zheevx_2stage__ */

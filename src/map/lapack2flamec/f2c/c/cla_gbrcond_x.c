@@ -167,7 +167,7 @@ real cla_gbrcond_x_(char *trans, integer *n, integer *kl, integer *ku, complex *
     integer isave[3];
     real anorm;
     extern /* Subroutine */
-    int clacn2_(integer *, complex *, complex *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cgbtrs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cgbtrs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
     real ainvnm;
     logical notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */

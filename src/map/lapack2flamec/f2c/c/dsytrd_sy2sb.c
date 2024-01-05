@@ -240,7 +240,7 @@ v(i+kd+2:n) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dsytrd_sy2sb_(char *uplo, integer *n, integer *kd, doublereal *a, integer *lda, doublereal *ab, integer *ldab, doublereal *tau, doublereal *work, integer *lwork, integer *info)
+void dsytrd_sy2sb_(char *uplo, integer *n, integer *kd, doublereal *a, integer *lda, doublereal *ab, integer *ldab, doublereal *tau, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsytrd_sy2sb inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", lda %" FLA_IS ", ldab %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *kd, *lda, *ldab, *lwork);
@@ -251,17 +251,17 @@ int dsytrd_sy2sb_(char *uplo, integer *n, integer *kd, doublereal *a, integer *l
     extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer tpos, wpos, s1pos, s2pos;
     extern /* Subroutine */
-    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer lwmin;
     extern /* Subroutine */
-    int dsymm_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dsymm_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-    int dsyr2k_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dgelqf_( integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+    void dsyr2k_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dgelqf_( integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     logical lquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -334,13 +334,13 @@ int dsytrd_sy2sb_(char *uplo, integer *n, integer *kd, doublereal *a, integer *l
         i__1 = -(*info);
         xerbla_("DSYTRD_SY2SB", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         work[1] = (doublereal) lwmin;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     /* Copy the upper/lower portion of A into AB */
@@ -377,7 +377,7 @@ int dsytrd_sy2sb_(char *uplo, integer *n, integer *kd, doublereal *a, integer *l
         }
         work[1] = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine the pointer position for the workspace */
     ldt = *kd;
@@ -524,7 +524,7 @@ int dsytrd_sy2sb_(char *uplo, integer *n, integer *kd, doublereal *a, integer *l
     }
     work[1] = (doublereal) lwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYTRD_SY2SB */
 }
 /* dsytrd_sy2sb__ */

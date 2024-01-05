@@ -131,7 +131,7 @@ static doublereal c_b18 = 1.;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dpstf2_(char *uplo, integer *n, doublereal *a, integer * lda, integer *piv, integer *rank, doublereal *tol, doublereal *work, integer *info)
+void dpstf2_(char *uplo, integer *n, doublereal *a, integer * lda, integer *piv, integer *rank, doublereal *tol, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpstf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
@@ -145,14 +145,14 @@ int dpstf2_(char *uplo, integer *n, doublereal *a, integer * lda, integer *piv, 
     doublereal ajj;
     integer pvt;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     doublereal dtemp;
     integer itemp;
     extern /* Subroutine */
-    int dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal dstop;
     logical upper;
     extern doublereal dlamch_(char *);
@@ -207,13 +207,13 @@ int dpstf2_(char *uplo, integer *n, doublereal *a, integer * lda, integer *piv, 
         i__1 = -(*info);
         xerbla_("DPSTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize PIV */
     i__1 = *n;
@@ -417,7 +417,7 @@ L160: /* Rank is number of steps completed. Set INFO = 1 to signal */
     *info = 1;
     AOCL_DTL_TRACE_LOG_EXIT
 L170:
-    return 0;
+    return;
     /* End of DPSTF2 */
 }
 /* dpstf2_ */

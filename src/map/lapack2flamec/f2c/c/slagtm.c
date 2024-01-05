@@ -132,7 +132,7 @@ otherwise, */
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int slagtm_(char *trans, integer *n, integer *nrhs, real * alpha, real *dl, real *d__, real *du, real *x, integer *ldx, real * beta, real *b, integer *ldb)
+void slagtm_(char *trans, integer *n, integer *nrhs, real * alpha, real *dl, real *d__, real *du, real *x, integer *ldx, real * beta, real *b, integer *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -175,7 +175,7 @@ int slagtm_(char *trans, integer *n, integer *nrhs, real * alpha, real *dl, real
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Multiply B by BETA if BETA.NE.1. */
     if (*beta == 0.f)
@@ -333,7 +333,7 @@ int slagtm_(char *trans, integer *n, integer *nrhs, real * alpha, real *dl, real
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLAGTM */
 }
 /* slagtm_ */

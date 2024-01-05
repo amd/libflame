@@ -294,7 +294,7 @@ IBLOCK(i)=1 if eigenvalue */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *iu, real *d__, real *e, real *e2, real *rtol1, real *rtol2, real *spltol, integer *nsplit, integer *isplit, integer * m, real *w, real *werr, real *wgap, integer *iblock, integer *indexw, real *gers, real *pivmin, real *work, integer *iwork, integer *info)
+void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *iu, real *d__, real *e, real *e2, real *rtol1, real *rtol2, real *spltol, integer *nsplit, integer *isplit, integer * m, real *w, real *werr, real *wgap, integer *iblock, integer *indexw, real *gers, real *pivmin, real *work, integer *iwork, integer *info)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -324,7 +324,7 @@ int slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *i
     integer iinfo;
     logical norep;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), slasq2_(integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *), slasq2_(integer *, real *, integer *);
     integer ibegin;
     logical forceb;
     integer irange;
@@ -333,14 +333,14 @@ int slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *i
     integer wbegin;
     real safmin, spdiam;
     extern /* Subroutine */
-    int slarra_(integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *);
+    void slarra_(integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *);
     logical usedqd;
     real clwdth, isleft;
     extern /* Subroutine */
-    int slarrb_(integer *, real *, real *, integer *, integer *, real *, real *, integer *, real *, real *, real *, real *, integer *, real *, real *, integer *, integer *), slarrc_( char *, integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *, integer *), slarrd_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *, real *, real *, real *, real *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *, real *, integer *, integer *), slarrk_(integer *, integer *, real *, real *, real *, real *, real *, real *, real *, real *, integer *);
+    void slarrb_(integer *, real *, real *, integer *, integer *, real *, real *, integer *, real *, real *, real *, real *, integer *, real *, real *, integer *, integer *), slarrc_( char *, integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *, integer *), slarrd_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *, real *, real *, real *, real *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *, real *, integer *, integer *), slarrk_(integer *, integer *, real *, real *, real *, real *, real *, real *, real *, real *, integer *);
     real isrght, bsrtol, dpivot;
     extern /* Subroutine */
-    int slarnv_(integer *, integer *, integer *, real *);
+    void slarnv_(integer *, integer *, integer *, real *);
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -384,7 +384,7 @@ int slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *i
     /* Quick return if possible */
     if (*n <= 0)
     {
-        return 0;
+        return;
     }
     /* Decode RANGE */
     if (lsame_(range, "A"))
@@ -427,7 +427,7 @@ int slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *i
         }
         /* store the shift for the initial RRR, which is zero in this case */
         e[1] = 0.f;
-        return 0;
+        return;
     }
     /* General case: tridiagonal matrix of order > 1 */
     /* Init WERR, WGAP. Compute Gerschgorin intervals and spectral diameter. */
@@ -499,7 +499,7 @@ int slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *i
         if (iinfo != 0)
         {
             *info = -1;
-            return 0;
+            return;
         }
         /* Make sure that the entries M+1 to N in W, WERR, IBLOCK, INDEXW are 0 */
         i__1 = *n;
@@ -630,7 +630,7 @@ L21:
             if (iinfo != 0)
             {
                 *info = -1;
-                return 0;
+                return;
             }
             /* Computing MAX */
             r__2 = gl;
@@ -640,7 +640,7 @@ L21:
             if (iinfo != 0)
             {
                 *info = -1;
-                return 0;
+                return;
             }
             /* Computing MIN */
             r__2 = gu;
@@ -885,7 +885,7 @@ L21:
         /* if the program reaches this point, no base representation could be */
         /* found in MAXTRY iterations. */
         *info = 2;
-        return 0;
+        return;
 L83: /* At this point, we have found an initial base representation */
         /* T - SIGMA I = L D L^T with not too much element growth. */
         /* Store the shift. */
@@ -958,7 +958,7 @@ L83: /* At this point, we have found an initial base representation */
             if (iinfo != 0)
             {
                 *info = -4;
-                return 0;
+                return;
             }
             /* SLARRB computes all gaps correctly except for the last one */
             /* Record distance to VU/GU */
@@ -1011,7 +1011,7 @@ L83: /* At this point, we have found an initial base representation */
                 /* and should be changed. The index is in IWORK(1) and the */
                 /* gap is in WORK(N+1) */
                 *info = -5;
-                return 0;
+                return;
             }
             else
             {
@@ -1024,7 +1024,7 @@ L83: /* At this point, we have found an initial base representation */
                     if (work[i__] < 0.f)
                     {
                         *info = -6;
-                        return 0;
+                        return;
                     }
                     /* L149: */
                 }
@@ -1089,7 +1089,7 @@ L83: /* At this point, we have found an initial base representation */
 L170:
         ;
     }
-    return 0;
+    return;
     /* end of SLARRE */
 }
 /* slarre_ */

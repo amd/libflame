@@ -115,7 +115,7 @@ the matrix is singular and its */
 /* > \ingroup complexSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int csytri_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work, integer *info)
+void csytri_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -140,15 +140,15 @@ int csytri_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, com
     complex akp1, temp, akkp1;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *);
     extern /* Complex */
     VOID cdotu_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *);
+    void cswap_(integer *, complex *, integer *, complex *, integer *);
     integer kstep;
     logical upper;
     extern /* Subroutine */
-    int csymv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void csymv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -196,13 +196,13 @@ int csytri_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, com
         i__1 = -(*info);
         xerbla_("CSYTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if (upper)
@@ -216,7 +216,7 @@ int csytri_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, com
             if (ipiv[*info] > 0 && (a[i__1].r == 0.f && a[i__1].i == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L10: */
         }
@@ -233,7 +233,7 @@ int csytri_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, com
             if (ipiv[*info] > 0 && (a[i__2].r == 0.f && a[i__2].i == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L20: */
         }
@@ -557,7 +557,7 @@ L60:
         ;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSYTRI */
 }
 /* csytri_ */

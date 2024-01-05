@@ -98,7 +98,7 @@ if INFO>0, the content of */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlat2s_(char *uplo, integer *n, doublereal *a, integer * lda, real *sa, integer *ldsa, integer *info)
+void dlat2s_(char *uplo, integer *n, doublereal *a, integer * lda, real *sa, integer *ldsa, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlat2s inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldsa %" FLA_IS "",*uplo, *n, *lda, *ldsa);
@@ -183,7 +183,7 @@ int dlat2s_(char *uplo, integer *n, doublereal *a, integer * lda, real *sa, inte
     }
 L50:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAT2S */
 }
 /* dlat2s_ */

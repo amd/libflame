@@ -220,7 +220,7 @@ i */
 /* > \ingroup complexOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int chbevd_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, real *w, complex *z__, integer *ldz, complex *work, integer *lwork, real *rwork, integer *lrwork, integer * iwork, integer *liwork, integer *info)
+void chbevd_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, real *w, complex *z__, integer *ldz, complex *work, integer *lwork, real *rwork, integer *lrwork, integer * iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -245,12 +245,12 @@ int chbevd_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, intege
     real rmin, rmax;
     integer llwk2;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     real sigma;
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     integer lwmin;
     logical lower;
     integer llrwk;
@@ -259,17 +259,17 @@ int chbevd_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, intege
     extern real clanhb_(char *, char *, integer *, integer *, complex *, integer *, real *);
     integer iscale;
     extern /* Subroutine */
-    int clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *), cstedc_(char *, integer *, real *, real *, complex *, integer *, complex *, integer *, real *, integer *, integer *, integer *, integer *), chbtrd_(char *, char *, integer *, integer *, complex *, integer *, real *, real *, complex *, integer *, complex *, integer *);
+    void clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *), cstedc_(char *, integer *, real *, real *, complex *, integer *, complex *, integer *, real *, integer *, integer *, integer *, integer *), chbtrd_(char *, char *, integer *, integer *, complex *, integer *, real *, real *, complex *, integer *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
+    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
     real safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer indwrk, liwmin;
     extern /* Subroutine */
-    int ssterf_(integer *, real *, real *, integer *);
+    void ssterf_(integer *, real *, real *, integer *);
     integer lrwmin;
     real smlnum;
     logical lquery;
@@ -383,18 +383,18 @@ int chbevd_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, intege
         i__1 = -(*info);
         xerbla_("CHBEVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -407,7 +407,7 @@ int chbevd_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, intege
             z__[i__1].i = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -477,7 +477,7 @@ int chbevd_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, intege
     rwork[1] = (real) lrwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHBEVD */
 }
 /* chbevd_ */

@@ -256,7 +256,7 @@ if RANGE = 'V', the exact value of M */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-int sspgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, real *ap, real *bp, real *vl, real *vu, integer *il, integer *iu, real *abstol, integer *m, real *w, real *z__, integer * ldz, real *work, integer *iwork, integer *ifail, integer *info)
+void sspgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, real *ap, real *bp, real *vl, real *vu, integer *il, integer *iu, real *abstol, integer *m, real *w, real *z__, integer * ldz, real *work, integer *iwork, integer *ifail, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -272,7 +272,7 @@ int sspgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, re
     char trans[1];
     logical upper, wantz;
     extern /* Subroutine */
-    int stpmv_(char *, char *, char *, integer *, real *, real *, integer *), stpsv_(char *, char *, char *, integer *, real *, real *, integer *);
+    void stpmv_(char *, char *, char *, integer *, real *, real *, integer *), stpsv_(char *, char *, char *, integer *, real *, real *, integer *);
     logical alleig, indeig, valeig;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), spptrf_( char *, integer *, real *, integer *), sspgst_(integer *, char *, integer *, real *, real *, integer *), sspevx_( char *, char *, char *, integer *, real *, real *, real *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *) ;
@@ -365,14 +365,14 @@ int sspgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, re
         i__1 = -(*info);
         xerbla_("SSPGVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *m = 0;
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Form a Cholesky factorization of B. */
     spptrf_(uplo, n, &bp[1], info);
@@ -380,7 +380,7 @@ int sspgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, re
     {
         *info = *n + *info;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     sspgst_(itype, uplo, n, &ap[1], &bp[1], info);
@@ -438,7 +438,7 @@ int sspgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, re
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSPGVX */
 }
 /* sspgvx_ */

@@ -245,7 +245,7 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal * a, integer *l
     logical wntqn, wntqo, wntqs;
     integer ie;
     extern /* Subroutine */
-    int dbdsdc_(char *, char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dbdsdc_(char *, char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer il;
     extern /* Subroutine */
     int lapack_dgebrd(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
@@ -254,12 +254,12 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal * a, integer *l
     extern doublereal dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     integer iu;
     extern /* Subroutine */
-    int dgelqf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dorgbr_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
+    void dgelqf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dorgbr_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
     extern logical disnan_(doublereal *);
     doublereal bignum;
     extern /* Subroutine */
     int lapack_dormbr(char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dorglq_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dorgqr_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
-    extern int dgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, void *alpha, void *a, integer *lda, void *b, integer * ldb, void *beta, void *c__, integer *ldc);
+    extern void dgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, void *alpha, void *a, integer *lda, void *b, integer * ldb, void *beta, void *c__, integer *ldc);
     extern doublereal droundup_lwork_(integer *);
 
     integer ldwrkl, ldwrkr, minwrk, ldwrku, maxwrk, ldwkvt;

@@ -127,7 +127,7 @@ i */
 /* > \ingroup realSYeigen */
 /* ===================================================================== */
 /* Subroutine */
-int ssyev_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, real *work, integer *lwork, integer *info)
+void ssyev_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -150,7 +150,7 @@ int ssyev_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, r
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     logical lower, wantz;
     integer iscale;
     extern real slamch_(char *);
@@ -160,17 +160,17 @@ int ssyev_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, r
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
     integer indtau, indwrk;
     extern /* Subroutine */
-    int ssterf_(integer *, real *, real *, integer *);
+    void ssterf_(integer *, real *, real *, integer *);
     extern real slansy_(char *, char *, integer *, real *, integer *, real *);
     integer llwork;
     real smlnum;
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int sorgtr_(char *, integer *, real *, integer *, real *, real *, integer *, integer *), ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *), ssytrd_(char *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *);
+    void sorgtr_(char *, integer *, real *, integer *, real *, real *, integer *, integer *), ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *), ssytrd_(char *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -240,18 +240,18 @@ int ssyev_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, r
         i__1 = -(*info);
         xerbla_("SSYEV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -262,7 +262,7 @@ int ssyev_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, r
             a[a_dim1 + 1] = 1.f;
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -322,7 +322,7 @@ int ssyev_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, r
     /* Set WORK(1) to optimal workspace size. */
     work[1] = (real) lwkopt;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYEV */
 }
 /* ssyev_ */

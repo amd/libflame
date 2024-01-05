@@ -142,7 +142,7 @@ if a diagonal is smaller */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlag2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *safmin, doublereal *scale1, doublereal * scale2, doublereal *wr1, doublereal *wr2, doublereal *wi)
+void dlag2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *safmin, doublereal *scale1, doublereal * scale2, doublereal *wr1, doublereal *wr2, doublereal *wi)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlag2 inputs: lda %" FLA_IS ", ldb %" FLA_IS "",*lda, *ldb);
@@ -415,6 +415,6 @@ int dlag2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal 
     }
     /* End of DLAG2 */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dlag2_ */

@@ -129,7 +129,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv, doublecomplex *tau, doublecomplex *c__, integer * ldc, doublecomplex *work)
+void zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv, doublecomplex *tau, doublecomplex *c__, integer * ldc, doublecomplex *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarf inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *incv, *ldc);
@@ -143,7 +143,7 @@ int zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv, 
     extern logical lsame_(char *, char *);
     integer lastc;
     extern /* Subroutine */
-    int zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    void zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     integer lastv;
     extern integer ilazlc_(integer *, integer *, doublecomplex *, integer *), ilazlr_(integer *, integer *, doublecomplex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -276,7 +276,7 @@ int zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv, 
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLARF */
 }
 /* zlarf_ */

@@ -106,7 +106,7 @@ for 1 <= j <= N, column j of the */
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-int cgetc2_(integer *n, complex *a, integer *lda, integer * ipiv, integer *jpiv, integer *info)
+void cgetc2_(integer *n, complex *a, integer *lda, integer * ipiv, integer *jpiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -131,7 +131,7 @@ int cgetc2_(integer *n, complex *a, integer *lda, integer * ipiv, integer *jpiv,
     integer ipv, jpv;
     real smin, xmax;
     extern /* Subroutine */
-    int cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *), slabad_(real *, real *);
+    void cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *), slabad_(real *, real *);
     extern real slamch_(char *);
     real bignum, smlnum;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
@@ -169,7 +169,7 @@ int cgetc2_(integer *n, complex *a, integer *lda, integer * ipiv, integer *jpiv,
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Set constants to control overflow */
     eps = slamch_("P");
@@ -191,7 +191,7 @@ int cgetc2_(integer *n, complex *a, integer *lda, integer * ipiv, integer *jpiv,
             a[i__1].i = q__1.i; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Factorize A using complete pivoting. */
     /* Set pivots less than SMIN to SMIN */
@@ -279,7 +279,7 @@ int cgetc2_(integer *n, complex *a, integer *lda, integer * ipiv, integer *jpiv,
     ipiv[*n] = *n;
     jpiv[*n] = *n;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGETC2 */
 }
 /* cgetc2_ */

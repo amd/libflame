@@ -107,7 +107,7 @@ real slanst_(char *norm, integer *n, real *d__, real *e)
     real anorm;
     extern logical sisnan_(real *);
     extern /* Subroutine */
-    int slassq_(integer *, real *, integer *, real *, real *);
+    void slassq_(integer *, real *, integer *, real *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

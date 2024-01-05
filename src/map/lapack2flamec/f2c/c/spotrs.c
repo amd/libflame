@@ -99,7 +99,7 @@ static real c_b9 = 1.f;
 /* > \ingroup realPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int spotrs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb, integer *info)
+void spotrs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -113,7 +113,7 @@ int spotrs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
-    int strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -170,13 +170,13 @@ int spotrs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *
         i__1 = -(*info);
         xerbla_("SPOTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -195,7 +195,7 @@ int spotrs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *
         strsm_("Left", "Lower", "Transpose", "Non-unit", n, nrhs, &c_b9, &a[ a_offset], lda, &b[b_offset], ldb);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPOTRS */
 }
 /* spotrs_ */

@@ -294,7 +294,7 @@ static logical c_false = FALSE_;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *s, integer *lds, doublereal *p, integer *ldp, doublereal *vl, integer *ldvl, doublereal *vr, integer *ldvr, integer *mm, integer *m, doublereal *work, integer *info)
+void dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *s, integer *lds, doublereal *p, integer *ldp, doublereal *vl, integer *ldvl, doublereal *vr, integer *ldvr, integer *mm, integer *m, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtgevc inputs: side %c, howmny %c, n %" FLA_IS ", lds %" FLA_IS ", ldp %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",*side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm);
@@ -312,14 +312,14 @@ int dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *s
     , sums[4] /* was [2][2] */
     ;
     extern /* Subroutine */
-    int dlag2_(doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlag2_(doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal cim2a, cim2b, cre2a, cre2b, temp2, bdiag[2], acoef, scale;
     logical ilall;
     integer iside;
     doublereal sbeta;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     logical il2by2;
     integer iinfo;
     doublereal small_val;
@@ -327,10 +327,10 @@ int dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *s
     doublereal anorm, bnorm;
     logical compr;
     extern /* Subroutine */
-    int dlaln2_(logical *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dlaln2_(logical *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     doublereal temp2i;
     extern /* Subroutine */
-    int dlabad_(doublereal *, doublereal *);
+    void dlabad_(doublereal *, doublereal *);
     doublereal temp2r;
     logical ilabad, ilbbad;
     doublereal acoefa, bcoefa, cimaga, cimagb;
@@ -339,7 +339,7 @@ int dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *s
     extern doublereal dlamch_(char *);
     doublereal bcoefr, salfar, safmin;
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal xscale, bignum;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -456,7 +456,7 @@ int dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *s
         i__1 = -(*info);
         xerbla_("DTGEVC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Count the number of eigenvectors to be computed */
     if (! ilall)
@@ -551,14 +551,14 @@ L10:
         i__1 = -(*info);
         xerbla_("DTGEVC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *m = im;
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Machine Constants */
     safmin = dlamch_("Safe minimum");
@@ -772,7 +772,7 @@ L10:
                 {
                     *info = je;
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 /* Scale to avoid over/underflow */
                 acoefa = f2c_dabs(acoef);
@@ -1217,7 +1217,7 @@ L220:
                 {
                     *info = je - 1;
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 /* Scale to avoid over/underflow */
                 acoefa = f2c_dabs(acoef);
@@ -1572,7 +1572,7 @@ L500:
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTGEVC */
 }
 /* dtgevc_ */

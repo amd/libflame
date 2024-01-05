@@ -98,36 +98,35 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zrot_(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy, doublereal *c__, doublecomplex *s)
+void zrot_(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy, doublereal *c__, doublecomplex *s)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zrot inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*n, *incx, *incy);
     extern fla_context global_context;
-    extern int fla_zrot(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy, doublereal *c__, doublecomplex *s);
-    extern int fla_zrot_native(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy, doublereal *c__, doublecomplex *s);
+    extern void fla_zrot(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy, doublereal *c__, doublecomplex *s);
+    extern void fla_zrot_native(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy, doublereal *c__, doublecomplex *s);
 
     /* Initialize global context data */
     aocl_fla_init();
 
-    int retval = 0;
 #ifdef FLA_ENABLE_AMD_OPT
     if (global_context.is_avx2)
     {
-      retval = fla_zrot(n, cx, incx, cy, incy, c__, s);
+      fla_zrot(n, cx, incx, cy, incy, c__, s);
     }
     else
     {
-      retval = fla_zrot_native(n, cx, incx, cy, incy, c__, s);
+      fla_zrot_native(n, cx, incx, cy, incy, c__, s);
     }
 #else
-      retval = fla_zrot_native(n, cx, incx, cy, incy, c__, s);
+      fla_zrot_native(n, cx, incx, cy, incy, c__, s);
 #endif
 
     AOCL_DTL_TRACE_LOG_EXIT
-    return retval;
+    return;
 }
 
-int fla_zrot_native(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy, doublereal *c__, doublecomplex *s)
+void fla_zrot_native(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy, doublereal *c__, doublecomplex *s)
 {
     /* System generated locals */
     integer i__1;
@@ -156,7 +155,7 @@ int fla_zrot_native(integer *n, doublecomplex *cx, integer *incx, doublecomplex 
 
     if (*n <= 0)
     {
-        return 0;
+        return;
     }
     lc  = *c__;
     sr = s->r;
@@ -226,7 +225,7 @@ int fla_zrot_native(integer *n, doublecomplex *cx, integer *incx, doublecomplex 
             ix += *incx;
         }
     }
-    return 0;
+    return;
     /* Code for both increments equal to 1 */
 L20:
     i__1 = *n;
@@ -249,6 +248,6 @@ L20:
         cx[i__].r = z__1.r;
         cx[i__].i = z__1.i; // , expr subst
     }
-    return 0;
+    return;
 }
 /* zrot_ */

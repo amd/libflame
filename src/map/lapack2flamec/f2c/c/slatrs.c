@@ -230,7 +230,7 @@ b(i), i=1,..,n}
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, real *a, integer *lda, real *x, real *scale, real *cnorm, integer *info)
+void slatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, real *a, integer *lda, real *x, real *scale, real *cnorm, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -246,13 +246,13 @@ int slatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, real
     real xmax, grow, sumj;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     real tscal, uscal;
     integer jlast;
     extern real sasum_(integer *, real *, integer *);
     logical upper;
     extern /* Subroutine */
-    int saxpy_(integer *, real *, real *, integer *, real *, integer *), strsv_(char *, char *, char *, integer *, real *, integer *, real *, integer *);
+    void saxpy_(integer *, real *, real *, integer *, real *, integer *), strsv_(char *, char *, char *, integer *, real *, integer *, real *, integer *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -322,13 +322,13 @@ int slatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, real
     {
         i__1 = -(*info);
         xerbla_("SLATRS", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *scale = 1.f;
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     /* Determine machine dependent parameters to control overflow. */
     smlnum = slamch_("Safe minimum") / slamch_("Precision");
@@ -462,7 +462,7 @@ int slatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, real
                 /* At least one entry of A is not a valid floating-point entry. */
                 /* Rely on TRSV to propagate Inf and NaN. */
                 strsv_(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1);
-                return 0;
+                return;
             }
         }
     }
@@ -966,7 +966,7 @@ L135:
         r__1 = 1.f / tscal;
         sscal_(n, &r__1, &cnorm[1], &c__1);
     }
-    return 0;
+    return;
     /* End of SLATRS */
 }
 /* slatrs_ */

@@ -94,7 +94,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlaed5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho, doublereal *dlam)
+void dlaed5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho, doublereal *dlam)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaed5 inputs: i__ %" FLA_IS "",*i__);
@@ -180,7 +180,7 @@ int dlaed5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, d
         delta[2] /= temp;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End OF DLAED5 */
 }
 /* dlaed5_ */

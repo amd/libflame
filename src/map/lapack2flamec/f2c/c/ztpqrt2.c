@@ -173,7 +173,7 @@ that is, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ztpqrt2_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *t, integer *ldt, integer *info)
+void ztpqrt2_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *t, integer *ldt, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztpqrt2 inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldt %" FLA_IS "",*m, *n, *l, *lda, *ldb, *ldt);
@@ -186,7 +186,7 @@ int ztpqrt2_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda,
     integer i__, j, p, mp, np;
     doublecomplex alpha;
     extern /* Subroutine */
-    int zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), ztrmv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    void zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), ztrmv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -247,13 +247,13 @@ int ztpqrt2_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda,
         i__1 = -(*info);
         xerbla_("ZTPQRT2", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *m == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *n;
     for (i__ = 1;
@@ -368,6 +368,6 @@ int ztpqrt2_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda,
     }
     /* End of ZTPQRT2 */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* ztpqrt2_ */

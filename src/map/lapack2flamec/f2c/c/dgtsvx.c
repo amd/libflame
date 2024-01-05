@@ -281,7 +281,7 @@ IPIV(i) = i indicates */
 /* > \ingroup doubleGTsolve */
 /* ===================================================================== */
 /* Subroutine */
-int dgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *dl, doublereal *d__, doublereal *du, doublereal * dlf, doublereal *df, doublereal *duf, doublereal *du2, integer *ipiv, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal * rcond, doublereal *ferr, doublereal *berr, doublereal *work, integer * iwork, integer *info)
+void dgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *dl, doublereal *d__, doublereal *du, doublereal * dlf, doublereal *df, doublereal *duf, doublereal *du2, integer *ipiv, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal * rcond, doublereal *ferr, doublereal *berr, doublereal *work, integer * iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgtsvx inputs: fact %c, trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *trans, *n, *nrhs, *ldb, *ldx);
@@ -292,14 +292,14 @@ int dgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *dl,
     extern logical lsame_(char *, char *);
     doublereal anorm;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *), dlangt_(char *, integer *, doublereal *, doublereal *, doublereal *);
     logical nofact;
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dgtcon_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dgtrfs_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dgttrf_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dgtcon_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dgtrfs_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dgttrf_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
     logical notran;
     extern /* Subroutine */
-    int dgttrs_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dgttrs_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -372,7 +372,7 @@ int dgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *dl,
         i__1 = -(*info);
         xerbla_("DGTSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (nofact)
     {
@@ -391,7 +391,7 @@ int dgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *dl,
         {
             *rcond = 0.;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -418,7 +418,7 @@ int dgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *dl,
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGTSVX */
 }
 /* dgtsvx_ */

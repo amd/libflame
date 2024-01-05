@@ -117,7 +117,7 @@ the routine */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zunghr_(integer *n, integer *ilo, integer *ihi, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex * work, integer *lwork, integer *info)
+void zunghr_(integer *n, integer *ilo, integer *ihi, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex * work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zunghr inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "", *n, *ilo, *ihi, *lda, *lwork);
@@ -131,7 +131,7 @@ int zunghr_(integer *n, integer *ilo, integer *ihi, doublecomplex *a, integer *l
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int zungqr_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
+    void zungqr_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -195,12 +195,12 @@ int zunghr_(integer *n, integer *ilo, integer *ihi, doublecomplex *a, integer *l
         i__1 = -(*info);
         xerbla_("ZUNGHR", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
@@ -208,7 +208,7 @@ int zunghr_(integer *n, integer *ilo, integer *ihi, doublecomplex *a, integer *l
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Shift the vectors which define the elementary reflectors one */
     /* column to the right, and set the first ilo and the last n-ihi */
@@ -299,7 +299,7 @@ int zunghr_(integer *n, integer *ilo, integer *ihi, doublecomplex *a, integer *l
     work[1].r = (doublereal) lwkopt;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZUNGHR */
 }
 /* zunghr_ */

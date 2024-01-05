@@ -170,7 +170,7 @@ the routine */
 /* > \ingroup doubleSYeigen */
 /* ===================================================================== */
 /* Subroutine */
-int dsygv_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *w, doublereal *work, integer *lwork, integer *info)
+void dsygv_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *w, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsygv inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*itype, *jobz, *uplo, *n, *lda, *ldb, *lwork);
@@ -180,22 +180,22 @@ int dsygv_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *a, i
     integer nb, neig;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     char trans[1];
     extern /* Subroutine */
-    int dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-    int dsyev_(char *, char *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
+    void dsyev_(char *, char *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
     logical wantz;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int dpotrf_(char *, integer *, doublereal *, integer *, integer *);
+    void dpotrf_(char *, integer *, doublereal *, integer *, integer *);
     integer lwkmin;
     extern /* Subroutine */
-    int dsygst_(integer *, char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dsygst_(integer *, char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK driver routine (version 3.4.0) -- */
@@ -279,18 +279,18 @@ int dsygv_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *a, i
         i__1 = -(*info);
         xerbla_("DSYGV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Form a Cholesky factorization of B. */
     dpotrf_(uplo, n, &b[b_offset], ldb, info);
@@ -298,7 +298,7 @@ int dsygv_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *a, i
     {
         *info = *n + *info;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     dsygst_(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
@@ -344,7 +344,7 @@ int dsygv_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *a, i
     }
     work[1] = (doublereal) lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYGV */
 }
 /* dsygv_ */

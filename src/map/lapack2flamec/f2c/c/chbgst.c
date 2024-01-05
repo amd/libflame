@@ -166,7 +166,7 @@ LDX >= 1 otherwise. */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int chbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, complex *ab, integer *ldab, complex *bb, integer *ldbb, complex *x, integer *ldx, complex *work, real *rwork, integer *info)
+void chbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, complex *ab, integer *ldab, complex *bb, integer *ldbb, complex *x, integer *ldx, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -195,16 +195,16 @@ int chbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, comple
     real bii;
     integer kbt, nrt, inca;
     extern /* Subroutine */
-    int crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *), cgerc_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *);
+    void crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *), cgerc_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *);
+    void cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *);
     logical upper, wantx;
     extern /* Subroutine */
-    int clar2v_(integer *, complex *, complex *, complex *, integer *, real *, complex *, integer *), clacgv_( integer *, complex *, integer *), csscal_(integer *, real *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), clartg_( complex *, complex *, real *, complex *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clargv_(integer *, complex *, integer *, complex *, integer *, real *, integer *);
+    void clar2v_(integer *, complex *, complex *, complex *, integer *, real *, complex *, integer *), clacgv_( integer *, complex *, integer *), csscal_(integer *, real *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), clartg_( complex *, complex *, real *, complex *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clargv_(integer *, complex *, integer *, complex *, integer *, real *, integer *);
     logical update;
     extern /* Subroutine */
-    int clartv_(integer *, complex *, integer *, complex *, integer *, real *, complex *, integer *);
+    void clartv_(integer *, complex *, integer *, complex *, integer *, real *, complex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -282,13 +282,13 @@ int chbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, comple
         i__1 = -(*info);
         xerbla_("CHBGST", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     inca = *ldab * ka1;
     /* Initialize X to the unit matrix, if needed */
@@ -1398,7 +1398,7 @@ L490:
             if (*ka == 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             goto L490;
         }
@@ -1409,7 +1409,7 @@ L490:
         if (i__ < 2)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     if (i__ < m - kbt)

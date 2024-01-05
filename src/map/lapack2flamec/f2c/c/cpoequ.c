@@ -99,7 +99,7 @@
 /* > \ingroup complexPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cpoequ_(integer *n, complex *a, integer *lda, real *s, real *scond, real *amax, integer *info)
+void cpoequ_(integer *n, complex *a, integer *lda, real *s, real *scond, real *amax, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -160,7 +160,7 @@ int cpoequ_(integer *n, complex *a, integer *lda, real *s, real *scond, real *am
         i__1 = -(*info);
         xerbla_("CPOEQU", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
@@ -168,7 +168,7 @@ int cpoequ_(integer *n, complex *a, integer *lda, real *s, real *scond, real *am
         *scond = 1.f;
         *amax = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Find the minimum and maximum diagonal elements. */
     i__1 = a_dim1 + 1;
@@ -204,7 +204,7 @@ int cpoequ_(integer *n, complex *a, integer *lda, real *s, real *scond, real *am
             {
                 *info = i__;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L20: */
         }
@@ -225,7 +225,7 @@ int cpoequ_(integer *n, complex *a, integer *lda, real *s, real *scond, real *am
         *scond = sqrt(smin) / sqrt(*amax);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPOEQU */
 }
 /* cpoequ_ */

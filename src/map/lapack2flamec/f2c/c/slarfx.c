@@ -108,7 +108,7 @@ static integer c__1 = 1;
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int slarfx_(char *side, integer *m, integer *n, real *v, real *tau, real *c__, integer *ldc, real *work)
+void slarfx_(char *side, integer *m, integer *n, real *v, real *tau, real *c__, integer *ldc, real *work)
 {
     /* System generated locals */
     integer c_dim1, c_offset, i__1;
@@ -117,7 +117,7 @@ int slarfx_(char *side, integer *m, integer *n, real *v, real *tau, real *c__, i
     real t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, v8, v9, t10, v10, sum;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
+    void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -145,7 +145,7 @@ int slarfx_(char *side, integer *m, integer *n, real *v, real *tau, real *c__, i
     /* Function Body */
     if (*tau == 0.f)
     {
-        return 0;
+        return;
     }
     if (lsame_(side, "L"))
     {
@@ -734,7 +734,7 @@ L390: /* Special code for 10 x 10 Householder */
         goto L410;
     }
 L410:
-    return 0;
+    return;
     /* End of SLARFX */
 }
 /* slarfx_ */

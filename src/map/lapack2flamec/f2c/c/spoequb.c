@@ -98,7 +98,7 @@
 /* > \ingroup realPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int spoequb_(integer *n, real *a, integer *lda, real *s, real *scond, real *amax, integer *info)
+void spoequb_(integer *n, real *a, integer *lda, real *s, real *scond, real *amax, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -152,14 +152,14 @@ int spoequb_(integer *n, real *a, integer *lda, real *s, real *scond, real *amax
     {
         i__1 = -(*info);
         xerbla_("SPOEQUB", &i__1, (ftnlen)7);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0)
     {
         *scond = 1.f;
         *amax = 0.f;
-        return 0;
+        return;
     }
     base = slamch_("B");
     tmp = -.5f / log(base);
@@ -194,7 +194,7 @@ int spoequb_(integer *n, real *a, integer *lda, real *s, real *scond, real *amax
             if (s[i__] <= 0.f)
             {
                 *info = i__;
-                return 0;
+                return;
             }
             /* L20: */
         }
@@ -215,7 +215,7 @@ int spoequb_(integer *n, real *a, integer *lda, real *s, real *scond, real *amax
         /* Compute SCOND = fla_min(S(I)) / fla_max(S(I)). */
         *scond = sqrt(smin) / sqrt(*amax);
     }
-    return 0;
+    return;
     /* End of SPOEQUB */
 }
 /* spoequb_ */

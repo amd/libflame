@@ -124,7 +124,7 @@ static complex c_b1 =
 /* > \ingroup complexSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int csytrs2_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, integer *ipiv, complex *b, integer *ldb, complex * work, integer *info)
+void csytrs2_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, integer *ipiv, complex *b, integer *ldb, complex * work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -147,12 +147,12 @@ int csytrs2_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, i
     integer kp;
     complex akm1, bkm1, akm1k;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *);
+    void cscal_(integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     complex denom;
     integer iinfo;
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *), ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+    void cswap_(integer *, complex *, integer *, complex *, integer *), ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), csyconv_( char *, char *, integer *, complex *, integer *, integer *, complex *, integer *);
@@ -213,13 +213,13 @@ int csytrs2_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, i
         i__1 = -(*info);
         xerbla_("CSYTRS2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Convert A */
     csyconv_(uplo, "C", n, &a[a_offset], lda, &ipiv[1], &work[1], &iinfo);
@@ -471,7 +471,7 @@ int csytrs2_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, i
     /* Revert A */
     csyconv_(uplo, "R", n, &a[a_offset], lda, &ipiv[1], &work[1], &iinfo);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSYTRS2 */
 }
 /* csytrs2_ */

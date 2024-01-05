@@ -112,7 +112,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16GEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal *anorm, doublereal *rcond, doublecomplex * work, doublereal *rwork, integer *info)
+void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal *anorm, doublereal *rcond, doublecomplex * work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgecon inputs: norm %c, n %" FLA_IS ", lda %" FLA_IS "",*norm, *n, *lda);
@@ -131,7 +131,7 @@ int zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal *
     extern logical lsame_(char *, char *);
     integer isave[3];
     extern /* Subroutine */
-    int zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
+    void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -139,11 +139,11 @@ int zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal *
     extern integer izamax_(integer *, doublecomplex *, integer *);
     logical onenrm;
     extern /* Subroutine */
-    int zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
+    void zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
     char normin[1];
     doublereal smlnum;
     extern /* Subroutine */
-    int zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, doublereal *, integer *);
+    void zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -201,7 +201,7 @@ int zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal *
         i__1 = -(*info);
         xerbla_("ZGECON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.;
@@ -209,12 +209,12 @@ int zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal *
     {
         *rcond = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*anorm == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     smlnum = dlamch_("Safe minimum");
     /* Estimate the norm of inv(A). */
@@ -269,7 +269,7 @@ L10:
     }
 L20:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGECON */
 }
 /* zgecon_ */

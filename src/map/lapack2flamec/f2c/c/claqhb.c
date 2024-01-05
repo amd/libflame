@@ -127,7 +127,7 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int claqhb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, real *s, real *scond, real *amax, char *equed)
+void claqhb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, real *s, real *scond, real *amax, char *equed)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -178,7 +178,7 @@ int claqhb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, rea
     {
         *(unsigned char *)equed = 'N';
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize LARGE and SMALL. */
     small_val = slamch_("Safe minimum") / slamch_("Precision");
@@ -262,7 +262,7 @@ int claqhb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, rea
         *(unsigned char *)equed = 'Y';
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAQHB */
 }
 /* claqhb_ */

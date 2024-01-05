@@ -179,7 +179,7 @@
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int dlarrb_(integer *n, doublereal *d__, doublereal *lld, integer *ifirst, integer *ilast, doublereal *rtol1, doublereal *rtol2, integer *offset, doublereal *w, doublereal *wgap, doublereal *werr, doublereal *work, integer *iwork, doublereal *pivmin, doublereal * spdiam, integer *twist, integer *info)
+void dlarrb_(integer *n, doublereal *d__, doublereal *lld, integer *ifirst, integer *ilast, doublereal *rtol1, doublereal *rtol2, integer *offset, doublereal *w, doublereal *wgap, doublereal *werr, doublereal *work, integer *iwork, doublereal *pivmin, doublereal * spdiam, integer *twist, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarrb inputs: n %" FLA_IS ", ifirst %" FLA_IS ", ilast %" FLA_IS ", offset %" FLA_IS ", twist %" FLA_IS "",*n, *ifirst, *ilast, *offset, *twist);
@@ -229,7 +229,7 @@ int dlarrb_(integer *n, doublereal *d__, doublereal *lld, integer *ifirst, integ
     if (*n <= 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     maxitr = (integer) ((log(*spdiam + *pivmin) - log(*pivmin)) / log(2.)) + 2;
     mnwdth = *pivmin * 2.;
@@ -432,7 +432,7 @@ L100:
         /* L111: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARRB */
 }
 /* dlarrb_ */

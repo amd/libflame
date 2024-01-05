@@ -135,7 +135,7 @@ if JPVT(i) = 0, */
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-int zlaqp2_(integer *m, integer *n, integer *offset, doublecomplex *a, integer *lda, integer *jpvt, doublecomplex *tau, doublereal *vn1, doublereal *vn2, doublecomplex *work)
+void zlaqp2_(integer *m, integer *n, integer *offset, doublecomplex *a, integer *lda, integer *jpvt, doublecomplex *tau, doublereal *vn1, doublereal *vn2, doublecomplex *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaqp2 inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS ", lda %" FLA_IS "",*m, *n, *offset, *lda);
@@ -154,11 +154,11 @@ int zlaqp2_(integer *m, integer *n, integer *offset, doublecomplex *a, integer *
     doublereal temp, temp2, tol3z;
     integer offpi, itemp;
     extern /* Subroutine */
-    int zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_( char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    void zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -280,7 +280,7 @@ int zlaqp2_(integer *m, integer *n, integer *offset, doublecomplex *a, integer *
         /* L20: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAQP2 */
 }
 /* zlaqp2_ */

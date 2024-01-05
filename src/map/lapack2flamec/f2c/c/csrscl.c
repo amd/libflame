@@ -70,7 +70,7 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int csrscl_(integer *n, real *sa, complex *sx, integer *incx)
+void csrscl_(integer *n, real *sa, complex *sx, integer *incx)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -86,10 +86,10 @@ int csrscl_(integer *n, real *sa, complex *sx, integer *incx)
     logical done;
     real cnum, cden1, cnum1;
     extern /* Subroutine */
-    int slabad_(real *, real *);
+    void slabad_(real *, real *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *);
+    void csscal_(integer *, real *, complex *, integer *);
     real bignum, smlnum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -118,7 +118,7 @@ int csrscl_(integer *n, real *sa, complex *sx, integer *incx)
     if (*n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = slamch_("S");
@@ -157,7 +157,7 @@ L10:
         goto L10;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSRSCL */
 }
 /* csrscl_ */

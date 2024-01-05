@@ -381,7 +381,7 @@ static real c_b21 = -1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slarfb_gett_(char *ident, integer *m, integer *n, integer *k, real *t, integer *ldt, real *a, integer *lda, real *b, integer *ldb, real *work, integer *ldwork)
+void slarfb_gett_(char *ident, integer *m, integer *n, integer *k, real *t, integer *ldt, real *a, integer *lda, real *b, integer *ldb, real *work, integer *ldwork)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, work_dim1, work_offset, i__1, i__2;
@@ -390,7 +390,7 @@ int slarfb_gett_(char *ident, integer *m, integer *n, integer *k, real *t, integ
     logical lnotident;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -425,7 +425,7 @@ int slarfb_gett_(char *ident, integer *m, integer *n, integer *k, real *t, integ
     /* Function Body */
     if (*m < 0 || *n <= 0 || *k == 0 || *k > *n)
     {
-        return 0;
+        return;
     }
     lnotident = ! lsame_(ident, "I");
     /* ------------------------------------------------------------------ */
@@ -584,7 +584,7 @@ int slarfb_gett_(char *ident, integer *m, integer *n, integer *k, real *t, integ
             a[i__ + j * a_dim1] -= work[i__ + j * work_dim1];
         }
     }
-    return 0;
+    return;
     /* End of SLARFB_GETT */
 }
 /* slarfb_gett__ */

@@ -100,7 +100,7 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zungr2_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex * work, integer *info)
+void zungr2_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex * work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zungr2 inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",*m, *n, *k, *lda);
@@ -112,7 +112,7 @@ int zungr2_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, 
     /* Local variables */
     integer i__, j, l, ii;
     extern /* Subroutine */
-    int zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_(integer *, doublecomplex *, integer *);
+    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -161,13 +161,13 @@ int zungr2_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, 
         i__1 = -(*info);
         xerbla_("ZUNGR2", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m <= 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*k < *m)
     {
@@ -239,7 +239,7 @@ int zungr2_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, 
         /* L40: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZUNGR2 */
 }
 /* zungr2_ */

@@ -155,7 +155,7 @@
 /* > \ingroup doubleGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zgemlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integer *mb, doublecomplex *v, integer *ldv, doublecomplex *t, integer *ldt, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *info)
+void zgemlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integer *mb, doublecomplex *v, integer *ldv, doublecomplex *t, integer *ldt, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgemlqt inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", mb %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS ", ldc %" FLA_IS "",*side, *trans, *m, *n, *k, *mb, *ldv, *ldt, *ldc);
@@ -257,13 +257,13 @@ int zgemlqt_(char *side, char *trans, integer *m, integer *n, integer *k, intege
         i__1 = -(*info);
         xerbla_("ZGEMLQT", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* .. Quick return if possible .. */
     if (*m == 0 || *n == 0 || *k == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (left && notran)
     {
@@ -330,7 +330,7 @@ int zgemlqt_(char *side, char *trans, integer *m, integer *n, integer *k, intege
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGEMLQT */
 }
 /* zgemlqt_ */

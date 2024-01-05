@@ -93,7 +93,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int claqr1_(integer *n, complex *h__, integer *ldh, complex * s1, complex *s2, complex *v)
+void claqr1_(integer *n, complex *h__, integer *ldh, complex * s1, complex *s2, complex *v)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -142,7 +142,7 @@ int claqr1_(integer *n, complex *h__, integer *ldh, complex * s1, complex *s2, c
     if (*n != 2 && *n != 3)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 2)
     {
@@ -279,6 +279,6 @@ int claqr1_(integer *n, complex *h__, integer *ldh, complex * s1, complex *s2, c
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* claqr1_ */

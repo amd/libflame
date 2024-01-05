@@ -60,7 +60,7 @@
 /* > \ingroup auxOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlabad_(doublereal *small_val, doublereal *large)
+void dlabad_(doublereal *small_val, doublereal *large)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlabad inputs: small_val %lf, large %lf", *small_val, *large);
@@ -83,7 +83,7 @@ int dlabad_(doublereal *small_val, doublereal *large)
         *large = sqrt(*large);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLABAD */
 }
 /* dlabad_ */

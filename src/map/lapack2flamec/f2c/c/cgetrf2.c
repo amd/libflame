@@ -109,7 +109,7 @@ for 1 <= i <= fla_min(M,N), row i of the */
 /* > \ingroup complexGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cgetrf2_(integer *m, integer *n, complex *a, integer * lda, integer *ipiv, integer *info)
+void cgetrf2_(integer *m, integer *n, complex *a, integer * lda, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -131,11 +131,11 @@ int cgetrf2_(integer *m, integer *n, complex *a, integer * lda, integer *ipiv, i
     integer i__, n1, n2;
     complex temp;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cscal_(integer *, complex *, complex *, integer *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     integer iinfo;
     real sfmin;
     extern /* Subroutine */
-    int ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+    void ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
@@ -189,13 +189,13 @@ int cgetrf2_(integer *m, integer *n, complex *a, integer * lda, integer *ipiv, i
         i__1 = -(*info);
         xerbla_("CGETRF2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*m == 1)
     {
@@ -333,7 +333,7 @@ int cgetrf2_(integer *m, integer *n, complex *a, integer * lda, integer *ipiv, i
         claswp_(&n1, &a[a_dim1 + 1], lda, &i__1, &i__2, &ipiv[1], &c__1);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGETRF2 */
 }
 /* cgetrf2_ */

@@ -170,7 +170,7 @@ doublereal dla_gbrcond_(char *trans, integer *n, integer *kl, integer *ku, doubl
     extern logical lsame_(char *, char *);
     integer isave[3];
     extern /* Subroutine */
-    int dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dgbtrs_(char *, integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dgbtrs_(char *, integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     doublereal ainvnm;
     logical notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */

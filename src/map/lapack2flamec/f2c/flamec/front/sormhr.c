@@ -173,7 +173,7 @@ the routine */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real *tau, real * c__, integer *ldc, real *work, integer *lwork, integer *info)
+void sormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real *tau, real * c__, integer *ldc, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__2;
@@ -192,7 +192,7 @@ int sormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integ
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int sormqr_fla(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+    void sormqr_fla(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -290,17 +290,17 @@ int sormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integ
     {
         i__2 = -(*info);
         xerbla_("SORMHR", &i__2, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0 || nh == 0)
     {
         work[1] = 1.f;
-        return 0;
+        return;
     }
     if (left)
     {
@@ -318,7 +318,7 @@ int sormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integ
     }
     sormqr_fla(side, trans, &mi, &ni, &nh, &a[*ilo + 1 + *ilo * a_dim1], lda, & tau[*ilo], &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
     work[1] = (real) lwkopt;
-    return 0;
+    return;
     /* End of SORMHR */
 }
 /* sormhr_ */

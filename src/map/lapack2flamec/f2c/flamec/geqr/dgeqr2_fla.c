@@ -120,13 +120,13 @@
  /* > */
  /* ===================================================================== */
  /* Subroutine */
- int dgeqr2_fla(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *info) {
+ void dgeqr2_fla(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *info) {
  /* System generated locals */
  integer a_dim1, a_offset, i__1, i__2, i__3;
  /* Local variables */
  integer i__, k;
  extern /* Subroutine */
- int dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+ void dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
  doublereal aii;
  /* -- LAPACK computational routine -- */
  /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -166,7 +166,7 @@
  if (*info != 0) {
  i__1 = -(*info);
  xerbla_("DGEQR2", &i__1, (ftnlen)6);
- return 0;
+ return;
  }
  k = fla_min(*m,*n);
  i__1 = k;
@@ -189,7 +189,7 @@
  }
  /* L10: */
  }
- return 0;
+ return;
  /* End of DGEQR2 */
  }
  /* dgeqr2_ */

@@ -37,7 +37,7 @@
 */
 
 #define LAPACK_trsyl(prefix)                                            \
-  int F77_ ## prefix ## trsyl( char* transa,                            \
+  void F77_ ## prefix ## trsyl( char* transa,                            \
                                char* transb,                            \
                                integer* sgn,                                \
                                integer* m,                                  \
@@ -95,7 +95,7 @@
   else                        *info = 0;                                \
                                                                         \
   AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                  	      \
-  return 0;
+  return;
 
 
 LAPACK_trsyl(s)

@@ -129,7 +129,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *rho, real *dlam, integer *info)
+void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *rho, real *dlam, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaed4 inputs: n %" FLA_IS ", i__ %" FLA_IS "",*n, *i__);
@@ -153,7 +153,7 @@ int slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *r
     integer niter;
     logical swtch;
     extern /* Subroutine */
-    int slaed5_(integer *, real *, real *, real *, real *, real *), slaed6_(integer *, logical *, real *, real *, real *, real *, real *, integer *);
+    void slaed5_(integer *, real *, real *, real *, real *, real *), slaed6_(integer *, logical *, real *, real *, real *, real *, real *, integer *);
     logical swtch3;
     extern real slamch_(char *);
     logical orgati;
@@ -194,13 +194,13 @@ int slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *r
         *dlam = d__[1] + *rho * z__[1] * z__[1];
         delta[1] = 1.f;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 2)
     {
         slaed5_(i__, &d__[1], &z__[1], &delta[1], rho, dlam);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute machine epsilon */
     eps = slamch_("Epsilon");
@@ -1034,7 +1034,7 @@ int slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *r
     }
 L250:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SLAED4 */
 }
 /* slaed4_ */

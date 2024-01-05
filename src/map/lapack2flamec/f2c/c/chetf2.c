@@ -174,7 +174,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int chetf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, integer *info)
+void chetf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -206,19 +206,19 @@ int chetf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, int
     real tt;
     complex wkm1, wkp1;
     extern /* Subroutine */
-    int cher_(char *, integer *, real *, complex *, integer *, complex *, integer *);
+    void cher_(char *, integer *, real *, complex *, integer *, complex *, integer *);
     integer imax, jmax;
     real alpha;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *);
+    void cswap_(integer *, complex *, integer *, complex *, integer *);
     integer kstep;
     logical upper;
     extern real slapy2_(real *, real *);
     real absakk;
     extern integer icamax_(integer *, complex *, integer *);
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real colmax;
     extern logical sisnan_(real *);
     real rowmax;
@@ -274,7 +274,7 @@ int chetf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, int
         i__1 = -(*info);
         xerbla_("CHETF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.f) + 1.f) / 8.f;
@@ -871,7 +871,7 @@ L50: /* If K > N, exit from loop */
     }
 L90:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHETF2 */
 }
 /* chetf2_ */

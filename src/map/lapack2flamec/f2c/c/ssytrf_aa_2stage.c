@@ -155,7 +155,7 @@ the */
 /* > \ingroup realSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ssytrf_aa_2stage_(char *uplo, integer *n, real *a, integer *lda, real *tb, integer *ltb, integer *ipiv, integer *ipiv2, real *work, integer *lwork, integer *info)
+void ssytrf_aa_2stage_(char *uplo, integer *n, real *a, integer *lda, real *tb, integer *ltb, integer *ipiv, integer *ipiv2, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -172,16 +172,16 @@ int ssytrf_aa_2stage_(char *uplo, integer *n, real *a, integer *lda, real *tb, i
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     logical upper;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * ), strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * ), strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int sgbtrf_(integer *, integer *, integer *, integer *, real *, integer *, integer *, integer *), sgetrf_( integer *, integer *, real *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    void sgbtrf_(integer *, integer *, integer *, integer *, real *, integer *, integer *, integer *), sgetrf_( integer *, integer *, real *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     logical tquery, wquery;
     extern /* Subroutine */
-    int ssygst_(integer *, char *, integer *, real *, integer *, real *, integer *, integer *);
+    void ssygst_(integer *, char *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -240,7 +240,7 @@ int ssytrf_aa_2stage_(char *uplo, integer *n, real *a, integer *lda, real *tb, i
         i__1 = -(*info);
         xerbla_("SSYTRF_AA_2STAGE", &i__1, (ftnlen)16);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Answer the query */
     nb = ilaenv_(&c__1, "SSYTRF_AA_2STAGE", uplo, n, &c_n1, &c_n1, &c_n1);
@@ -258,13 +258,13 @@ int ssytrf_aa_2stage_(char *uplo, integer *n, real *a, integer *lda, real *tb, i
     if (tquery || wquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Determine the number of the block size */
     ldtb = *ltb / *n;
@@ -678,7 +678,7 @@ int ssytrf_aa_2stage_(char *uplo, integer *n, real *a, integer *lda, real *tb, i
     /* Factor the band matrix */
     sgbtrf_(n, n, &nb, &nb, &tb[1], &ldtb, &ipiv2[1], info);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYTRF_AA_2STAGE */
 }
 /* ssytrf_aa_2stage__ */

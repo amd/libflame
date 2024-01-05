@@ -90,7 +90,7 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int clapmr_(logical *forwrd, integer *m, integer *n, complex *x, integer *ldx, integer *k)
+void clapmr_(logical *forwrd, integer *m, integer *n, complex *x, integer *ldx, integer *k)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -128,7 +128,7 @@ int clapmr_(logical *forwrd, integer *m, integer *n, complex *x, integer *ldx, i
     if (*m <= 1)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     i__1 = *m;
     for (i__ = 1;
@@ -227,7 +227,7 @@ L80: /* L90: */
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of ZLAPMT */
 }
 /* clapmr_ */

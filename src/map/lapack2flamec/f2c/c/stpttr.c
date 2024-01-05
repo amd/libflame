@@ -91,7 +91,7 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int stpttr_(char *uplo, integer *n, real *ap, real *a, integer *lda, integer *info)
+void stpttr_(char *uplo, integer *n, real *ap, real *a, integer *lda, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -144,7 +144,7 @@ int stpttr_(char *uplo, integer *n, real *ap, real *a, integer *lda, integer *in
     {
         i__1 = -(*info);
         xerbla_("STPTTR", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     if (lower)
     {
@@ -182,7 +182,7 @@ int stpttr_(char *uplo, integer *n, real *ap, real *a, integer *lda, integer *in
             }
         }
     }
-    return 0;
+    return;
     /* End of STPTTR */
 }
 /* stpttr_ */

@@ -168,7 +168,7 @@ static integer c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int chetrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work, integer *lwork, integer *info)
+void chetrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -188,7 +188,7 @@ int chetrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, com
     integer nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
-    int chetf2_(char *, integer *, complex *, integer *, integer *, integer *), clahef_(char *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void chetf2_(char *, integer *, complex *, integer *, integer *, integer *), clahef_(char *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
@@ -250,12 +250,12 @@ int chetrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, com
         i__1 = -(*info);
         xerbla_("CHETRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     nbmin = 2;
     ldwork = *n;
@@ -371,7 +371,7 @@ L40:
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHETRF */
 }
 /* chetrf_ */

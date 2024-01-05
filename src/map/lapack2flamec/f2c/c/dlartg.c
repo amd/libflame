@@ -97,7 +97,7 @@
 /* > \endverbatim */
 static doublereal c_b2 = 1.;
 /* Subroutine */
-int dlartg_(doublereal *f, doublereal *g, doublereal *c__, doublereal *s, doublereal *r__)
+void dlartg_(doublereal *f, doublereal *g, doublereal *c__, doublereal *s, doublereal *r__)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlartg inputs : f %lf, g %lf", *f, *g);
@@ -157,6 +157,6 @@ int dlartg_(doublereal *f, doublereal *g, doublereal *c__, doublereal *s, double
         *r__ *= u;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dlartg_ */

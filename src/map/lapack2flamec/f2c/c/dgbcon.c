@@ -135,7 +135,7 @@ for 1 <= i <= N, row i of the matrix was */
 /* > \ingroup doubleGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dgbcon_(char *norm, integer *n, integer *kl, integer *ku, doublereal *ab, integer *ldab, integer *ipiv, doublereal *anorm, doublereal *rcond, doublereal *work, integer *iwork, integer *info)
+void dgbcon_(char *norm, integer *n, integer *kl, integer *ku, doublereal *ab, integer *ldab, integer *ipiv, doublereal *anorm, doublereal *rcond, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgbcon inputs: norm %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS "",*norm, *n, *kl, *ku, *ldab);
@@ -152,14 +152,14 @@ int dgbcon_(char *norm, integer *n, integer *kl, integer *ku, doublereal *ab, in
     extern logical lsame_(char *, char *);
     integer isave[3];
     extern /* Subroutine */
-    int drscl_(integer *, doublereal *, doublereal *, integer *);
+    void drscl_(integer *, doublereal *, doublereal *, integer *);
     logical lnoti;
     extern /* Subroutine */
-    int daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dlatbs_(char *, char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlatbs_(char *, char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical onenrm;
     char normin[1];
@@ -226,7 +226,7 @@ int dgbcon_(char *norm, integer *n, integer *kl, integer *ku, doublereal *ab, in
         i__1 = -(*info);
         xerbla_("DGBCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.;
@@ -234,12 +234,12 @@ int dgbcon_(char *norm, integer *n, integer *kl, integer *ku, doublereal *ab, in
     {
         *rcond = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*anorm == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     smlnum = dlamch_("Safe minimum");
     /* Estimate the norm of inv(A). */
@@ -338,7 +338,7 @@ L10:
     }
 L40:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGBCON */
 }
 /* dgbcon_ */

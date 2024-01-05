@@ -191,7 +191,7 @@ the corresponding */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, complex *v, integer *ldv, complex *t, integer *ldt, complex *c__, integer *ldc, complex *work, integer *ldwork)
+void clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, complex *v, integer *ldv, complex *t, integer *ldt, complex *c__, integer *ldc, complex *work, integer *ldwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -209,10 +209,10 @@ int clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
     /* Local variables */
     integer i__, j;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *), ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), clacgv_(integer *, complex *, integer *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *), ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), clacgv_(integer *, complex *, integer *);
     char transt[1];
     /* -- LAPACK auxiliary routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -252,7 +252,7 @@ int clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
     if (*m <= 0 || *n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (lsame_(trans, "N"))
     {
@@ -767,7 +767,7 @@ int clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLARFB */
 }
 /* clarfb_ */

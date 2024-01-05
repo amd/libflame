@@ -187,7 +187,7 @@ the least squares solution could not be */
 /* > \ingroup complexGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, integer *lda, complex *b, integer *ldb, complex * work, integer *lwork, integer *info)
+void cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, integer *lda, complex *b, integer *ldb, complex * work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -212,22 +212,22 @@ int cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, inte
     integer wsize;
     real rwork[1];
     extern /* Subroutine */
-    int slabad_(real *, real *);
+    void slabad_(real *, real *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int cgelqf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clascl_( char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
+    void cgelqf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clascl_( char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), claset_( char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), claset_( char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer scllen;
     real bignum;
     extern /* Subroutine */
-    int cunmlq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *), cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    void cunmlq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *), cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     real smlnum;
     logical lquery;
     extern /* Subroutine */
-    int ctrtrs_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void ctrtrs_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -359,12 +359,12 @@ int cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, inte
         i__1 = -(*info);
         xerbla_("CGELS ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     /* Computing MIN */
@@ -374,7 +374,7 @@ int cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, inte
         i__1 = fla_max(*m,*n);
         claset_("Full", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = slamch_("S") / slamch_("P");
@@ -439,7 +439,7 @@ int cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, inte
             if (*info > 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             scllen = *n;
         }
@@ -451,7 +451,7 @@ int cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, inte
             if (*info > 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* B(N+1:M,1:NRHS) = ZERO */
             i__1 = *nrhs;
@@ -492,7 +492,7 @@ int cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, inte
             if (*info > 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* B(M+1:N,1:NRHS) = 0 */
             i__1 = *nrhs;
@@ -530,7 +530,7 @@ int cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, inte
             if (*info > 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             scllen = *m;
         }
@@ -557,7 +557,7 @@ L50:
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGELS */
 }
 /* cgels_ */

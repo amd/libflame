@@ -223,7 +223,7 @@ i off-diagonal elements of an intermediate */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int ssyevd_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+void ssyevd_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -245,12 +245,12 @@ int ssyevd_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, re
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     integer lhtrd, lwmin;
     logical lower;
     integer lwtrd;
     extern /* Subroutine */
-    int ssytrd_2stage_(char *, char *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, integer *, integer *);
+    void ssytrd_2stage_(char *, char *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, integer *, integer *);
     logical wantz;
     integer indwk2, llwrk2, iscale;
     extern real slamch_(char *);
@@ -259,19 +259,19 @@ int ssyevd_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, re
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
     integer indtau;
     extern /* Subroutine */
-    int sstedc_(char *, integer *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    void sstedc_(char *, integer *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     integer indwrk, liwmin;
     extern /* Subroutine */
-    int ssterf_(integer *, real *, real *, integer *);
+    void ssterf_(integer *, real *, real *, integer *);
     extern real slansy_(char *, char *, integer *, real *, integer *, real *);
     integer llwork;
     real smlnum;
     logical lquery;
     extern /* Subroutine */
-    int sormtr_(char *, char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+    void sormtr_(char *, char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
     integer indhous;
     /* -- LAPACK driver routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -364,18 +364,18 @@ int ssyevd_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, re
         i__1 = -(*info);
         xerbla_("SSYEVD_2STAGE", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -385,7 +385,7 @@ int ssyevd_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, re
             a[a_dim1 + 1] = 1.f;
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -433,7 +433,7 @@ int ssyevd_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, re
         /* Not available in this release, and argument checking should not */
         /* let it getting here */
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
         sstedc_("I", n, &w[1], &work[inde], &work[indwrk], n, &work[indwk2], & llwrk2, &iwork[1], liwork, info);
         sormtr_("L", uplo, "N", n, n, &a[a_offset], lda, &work[indtau], &work[ indwrk], n, &work[indwk2], &llwrk2, &iinfo);
         slacpy_("A", n, n, &work[indwrk], n, &a[a_offset], lda);
@@ -447,7 +447,7 @@ int ssyevd_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, re
     work[1] = (real) lwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYEVD_2STAGE */
 }
 /* ssyevd_2stage__ */

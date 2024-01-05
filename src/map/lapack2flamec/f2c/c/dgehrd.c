@@ -165,7 +165,7 @@ v(i+2:ihi) is stored on */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dgehrd_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda, doublereal *tau, doublereal *work, integer *lwork, integer *info)
+void dgehrd_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda, doublereal *tau, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgehrd inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",*n, *ilo, *ihi, *lda, *lwork);
@@ -176,10 +176,10 @@ int dgehrd_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda,
     doublereal ei;
     integer nb, nh, nx, iwt;
     extern /* Subroutine */
-    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer nbmin, iinfo;
     extern /* Subroutine */
-    int dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), daxpy_( integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dgehd2_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlahr2_( integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), daxpy_( integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dgehd2_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlahr2_( integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
@@ -249,12 +249,12 @@ int dgehrd_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda,
         i__1 = -(*info);
         xerbla_("DGEHRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set elements 1:ILO-1 and IHI:N-1 of TAU to zero */
     i__1 = *ilo - 1;
@@ -279,7 +279,7 @@ int dgehrd_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda,
     {
         work[1] = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine the block size */
     /* Computing MIN */
@@ -374,7 +374,7 @@ int dgehrd_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda,
     dgehd2_(n, &i__, ihi, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
     work[1] = (doublereal) lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGEHRD */
 }
 /* dgehrd_ */

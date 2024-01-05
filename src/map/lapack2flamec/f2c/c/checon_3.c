@@ -155,7 +155,7 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int checon_3_(char *uplo, integer *n, complex *a, integer * lda, complex *e, integer *ipiv, real *anorm, real *rcond, complex * work, integer *info)
+void checon_3_(char *uplo, integer *n, complex *a, integer * lda, complex *e, integer *ipiv, real *anorm, real *rcond, complex * work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -175,10 +175,10 @@ int checon_3_(char *uplo, integer *n, complex *a, integer * lda, complex *e, int
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    int clacn2_(integer *, complex *, complex *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     extern /* Subroutine */
-    int chetrs_3_(char *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void chetrs_3_(char *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -233,7 +233,7 @@ int checon_3_(char *uplo, integer *n, complex *a, integer * lda, complex *e, int
         i__1 = -(*info);
         xerbla_("CHECON_3", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.f;
@@ -241,12 +241,12 @@ int checon_3_(char *uplo, integer *n, complex *a, integer * lda, complex *e, int
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (*anorm <= 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if (upper)
@@ -260,7 +260,7 @@ int checon_3_(char *uplo, integer *n, complex *a, integer * lda, complex *e, int
             if (ipiv[i__] > 0 && (a[i__1].r == 0.f && a[i__1].i == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
         }
     }
@@ -276,7 +276,7 @@ int checon_3_(char *uplo, integer *n, complex *a, integer * lda, complex *e, int
             if (ipiv[i__] > 0 && (a[i__2].r == 0.f && a[i__2].i == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
         }
     }
@@ -296,7 +296,7 @@ L30:
         *rcond = 1.f / ainvnm / *anorm;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHECON_3 */
 }
 /* checon_3__ */

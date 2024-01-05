@@ -170,7 +170,7 @@
 /* > \ingroup doubleGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku, doublereal *alpha, doublereal *ab, integer * ldab, doublereal *x, integer *incx, doublereal *beta, doublereal *y, integer *incy)
+void dla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku, doublereal *alpha, doublereal *ab, integer * ldab, doublereal *x, integer *incx, doublereal *beta, doublereal *y, integer *incy)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dla_gbamv inputs: trans %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*trans, *m, *n, *kl, *ku, *ldab, *incx, *incy);
@@ -255,13 +255,13 @@ int dla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku,
     {
         xerbla_("DLA_GBAMV ", &info, (ftnlen)10);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*m == 0 || *n == 0 || *alpha == 0. && *beta == 1.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set LENX and LENY, the lengths of the vectors x and y, and set */
     /* up the start points in X and Y. */
@@ -489,7 +489,7 @@ int dla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku,
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLA_GBAMV */
 }
 /* dla_gbamv__ */

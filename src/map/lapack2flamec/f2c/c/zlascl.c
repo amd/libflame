@@ -131,7 +131,7 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublereal *cto, integer *m, integer *n, doublecomplex *a, integer *lda, integer *info)
+void zlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublereal *cto, integer *m, integer *n, doublecomplex *a, integer *lda, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlascl inputs: type__ %c, kl %" FLA_IS ", ku %" FLA_IS ", cfrom %lf, cto %lf, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*type__, *kl, *ku, *cfrom, *cto, *m, *n, *lda);
@@ -261,13 +261,13 @@ int zlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublerea
         i__1 = -(*info);
         xerbla_("ZLASCL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *m == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = dlamch_("S");
@@ -314,7 +314,7 @@ L10:
             if (mul == 1.)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
     }
@@ -511,7 +511,7 @@ L10:
         goto L10;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLASCL */
 }
 /* zlascl_ */

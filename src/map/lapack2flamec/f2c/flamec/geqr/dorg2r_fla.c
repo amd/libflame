@@ -107,12 +107,11 @@ static integer c__1 = 1;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dorg2r_fla(integer *m, integer *n, integer *k, doublereal * a, integer *lda, doublereal *tau, doublereal *work, integer *info)
+void dorg2r_fla(integer *m, integer *n, integer *k, doublereal * a, integer *lda, doublereal *tau, doublereal *work, integer *info)
 {
     extern fla_context global_context;
-    extern int dorg2r_fla_opt(integer *m, integer *n, integer *k, doublereal * a, integer *lda, doublereal *tau, doublereal *work, integer *info);
-    extern int dorg2r_fla_native(integer *m, integer *n, integer *k, doublereal * a, integer *lda, doublereal *tau, doublereal *work, integer *info);
-    int retval = 0;
+    extern void dorg2r_fla_opt(integer *m, integer *n, integer *k, doublereal * a, integer *lda, doublereal *tau, doublereal *work, integer *info);
+    extern void dorg2r_fla_native(integer *m, integer *n, integer *k, doublereal * a, integer *lda, doublereal *tau, doublereal *work, integer *info);
 
     /* Initialize global context data */
     aocl_fla_init();
@@ -120,21 +119,21 @@ int dorg2r_fla(integer *m, integer *n, integer *k, doublereal * a, integer *lda,
 #if FLA_ENABLE_AMD_OPT
     if (global_context.is_avx2)
     {
-       retval = dorg2r_fla_opt(m, n, k, a, lda, tau, work, info);
+       dorg2r_fla_opt(m, n, k, a, lda, tau, work, info);
     }
     else
     {
-       retval = dorg2r_fla_native(m, n, k, a, lda, tau, work, info);
+       dorg2r_fla_native(m, n, k, a, lda, tau, work, info);
     }
 #else
-    retval = dorg2r_fla_native(m, n, k, a, lda, tau, work, info);
+    dorg2r_fla_native(m, n, k, a, lda, tau, work, info);
 #endif
 
-    return retval;
+    return;
 }
 
 #if FLA_ENABLE_AMD_OPT
-int dorg2r_fla_opt(integer *m, integer *n, integer *k, doublereal * a, integer *lda, doublereal *tau, doublereal *work, integer *info)
+void dorg2r_fla_opt(integer *m, integer *n, integer *k, doublereal * a, integer *lda, doublereal *tau, doublereal *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -142,7 +141,7 @@ int dorg2r_fla_opt(integer *m, integer *n, integer *k, doublereal * a, integer *
     /* Local variables */
     integer i__, j, l;
     extern /* Subroutine */
-    int fla_dscal(integer *, doublereal *, doublereal *, integer *), dscal_(integer *, doublereal *, doublereal *, integer *), dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void fla_dscal(integer *, doublereal *, doublereal *, integer *), dscal_(integer *, doublereal *, doublereal *, integer *), dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* Test the input arguments */
     /* Parameter adjustments */
     a_dim1 = *lda;
@@ -172,12 +171,12 @@ int dorg2r_fla_opt(integer *m, integer *n, integer *k, doublereal * a, integer *
     {
         i__1 = -(*info);
         xerbla_("DORG2R", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n <= 0)
     {
-        return 0;
+        return;
     }
     /* Initialise columns k+1:n to columns of the unit matrix */
     i__1 = *n;
@@ -235,12 +234,12 @@ int dorg2r_fla_opt(integer *m, integer *n, integer *k, doublereal * a, integer *
         }
         /* L40: */
     }
-    return 0;
+    return;
     /* End of DORG2R */
 }
 #endif
 
-int dorg2r_fla_native(integer *m, integer *n, integer *k, doublereal * a, integer *lda, doublereal *tau, doublereal *work, integer *info)
+void dorg2r_fla_native(integer *m, integer *n, integer *k, doublereal * a, integer *lda, doublereal *tau, doublereal *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -248,7 +247,7 @@ int dorg2r_fla_native(integer *m, integer *n, integer *k, doublereal * a, intege
     /* Local variables */
     integer i__, j, l;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *), dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dscal_(integer *, doublereal *, doublereal *, integer *), dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -296,12 +295,12 @@ int dorg2r_fla_native(integer *m, integer *n, integer *k, doublereal * a, intege
     {
         i__1 = -(*info);
         xerbla_("DORG2R", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n <= 0)
     {
-        return 0;
+        return;
     }
     /* Initialise columns k+1:n to columns of the unit matrix */
     i__1 = *n;
@@ -352,7 +351,7 @@ int dorg2r_fla_native(integer *m, integer *n, integer *k, doublereal * a, intege
         }
         /* L40: */
     }
-    return 0;
+    return;
     /* End of DORG2R */
 }
 /* dorg2r_ */

@@ -165,7 +165,7 @@ that is, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dtpqrt2_(integer *m, integer *n, integer *l, doublereal * a, integer *lda, doublereal *b, integer *ldb, doublereal *t, integer * ldt, integer *info)
+void dtpqrt2_(integer *m, integer *n, integer *l, doublereal * a, integer *lda, doublereal *b, integer *ldb, doublereal *t, integer * ldt, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtpqrt2 inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldt %" FLA_IS "",*m, *n, *l, *lda, *ldb, *ldt);
@@ -174,10 +174,10 @@ int dtpqrt2_(integer *m, integer *n, integer *l, doublereal * a, integer *lda, d
     /* Local variables */
     integer i__, j, p, mp, np;
     extern /* Subroutine */
-    int dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal alpha;
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -238,13 +238,13 @@ int dtpqrt2_(integer *m, integer *n, integer *l, doublereal * a, integer *lda, d
         i__1 = -(*info);
         xerbla_("DTPQRT2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *m == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *n;
     for (i__ = 1;
@@ -328,7 +328,7 @@ int dtpqrt2_(integer *m, integer *n, integer *l, doublereal * a, integer *lda, d
     }
     /* End of DTPQRT2 */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dtpqrt2_ */
 

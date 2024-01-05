@@ -45,7 +45,7 @@
 */
 
 #define LAPACK_bdsqr(prefix)                                            \
-  int F77_ ## prefix ## bdsqr( char* uplo,                              \
+  void F77_ ## prefix ## bdsqr( char* uplo,                              \
                                integer*  m_d,                               \
                                integer*  n_Vt,                              \
                                integer*  m_U,                               \
@@ -131,7 +131,7 @@
   *info = 0;                                                            \
                                                                         \
   AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                          \
-  return 0;
+  return;
 
 
 LAPACK_bdsqr(s)

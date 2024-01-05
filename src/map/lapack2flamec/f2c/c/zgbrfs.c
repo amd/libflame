@@ -197,7 +197,7 @@ for 1<=i<=N, row i of the */
 /* > \ingroup complex16GBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, doublecomplex *ab, integer *ldab, doublecomplex * afb, integer *ldafb, integer *ipiv, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *ferr, doublereal *berr, doublecomplex *work, doublereal *rwork, integer *info)
+void zgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, doublecomplex *ab, integer *ldab, doublecomplex * afb, integer *ldafb, integer *ipiv, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *ferr, doublereal *berr, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgbrfs inputs: trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldx);
@@ -220,10 +220,10 @@ int zgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, d
     extern logical lsame_(char *, char *);
     integer isave[3];
     extern /* Subroutine */
-    int zgbmv_(char *, integer *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    void zgbmv_(char *, integer *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     integer count;
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlacn2_( integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlacn2_( integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
@@ -232,7 +232,7 @@ int zgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, d
     char transn[1], transt[1];
     doublereal lstres;
     extern /* Subroutine */
-    int zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+    void zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -322,7 +322,7 @@ int zgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, d
         i__1 = -(*info);
         xerbla_("ZGBRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
@@ -337,7 +337,7 @@ int zgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, d
             /* L10: */
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (notran)
     {
@@ -585,7 +585,7 @@ L100:
         /* L140: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGBRFS */
 }
 /* zgbrfs_ */

@@ -144,7 +144,7 @@ i */
 /* > \ingroup complexOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int chbev_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, real *w, complex *z__, integer *ldz, complex *work, real *rwork, integer *info)
+void chbev_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, real *w, complex *z__, integer *ldz, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -170,12 +170,12 @@ int chbev_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integer
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     logical lower, wantz;
     extern real clanhb_(char *, char *, integer *, integer *, complex *, integer *, real *);
     integer iscale;
     extern /* Subroutine */
-    int clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *), chbtrd_(char *, char *, integer *, integer *, complex *, integer *, real *, real *, complex *, integer *, complex *, integer *);
+    void clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *), chbtrd_(char *, char *, integer *, integer *, complex *, integer *, real *, real *, complex *, integer *, complex *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
@@ -183,7 +183,7 @@ int chbev_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integer
     real bignum;
     integer indrwk;
     extern /* Subroutine */
-    int csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *), ssterf_(integer *, real *, real *, integer *);
+    void csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *), ssterf_(integer *, real *, real *, integer *);
     real smlnum;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -249,13 +249,13 @@ int chbev_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integer
         i__1 = -(*info);
         xerbla_("CHBEV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -276,7 +276,7 @@ int chbev_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integer
             z__[i__1].i = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -337,7 +337,7 @@ int chbev_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integer
         sscal_(&imax, &r__1, &w[1], &c__1);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHBEV */
 }
 /* chbev_ */

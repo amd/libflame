@@ -111,7 +111,7 @@ static integer c__1 = 1;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, doublereal *ab, integer *ldab, doublereal *b, integer *ldb, integer *info)
+void dpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, doublereal *ab, integer *ldab, doublereal *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpbtrs inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *kd, *nrhs, *ldab, *ldb);
@@ -121,7 +121,7 @@ int dpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, doublereal *ab,
     integer j;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dtbsv_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dtbsv_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -183,13 +183,13 @@ int dpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, doublereal *ab,
         i__1 = -(*info);
         xerbla_("DPBTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -222,7 +222,7 @@ int dpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, doublereal *ab,
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPBTRS */
 }
 /* dpbtrs_ */

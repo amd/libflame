@@ -196,7 +196,7 @@ LDC >= 1 if NCC = 0. */
 /* > \ingroup complexGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integer *ku, complex *ab, integer *ldab, real *d__, real *e, complex *q, integer *ldq, complex *pt, integer *ldpt, complex *c__, integer *ldc, complex *work, real *rwork, integer *info)
+void cgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integer *ku, complex *ab, integer *ldab, real *d__, real *e, complex *q, integer *ldq, complex *pt, integer *ldpt, complex *c__, integer *ldc, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -225,13 +225,13 @@ int cgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
     integer kb1, ml0, mu0, klm, kun, nrt, klu1, inca;
     real abst;
     extern /* Subroutine */
-    int crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *), cscal_(integer *, complex *, complex *, integer *);
+    void crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *), cscal_(integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     logical wantb, wantc;
     integer minmn;
     logical wantq;
     extern /* Subroutine */
-    int claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), clartg_(complex *, complex *, real *, complex *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clargv_(integer *, complex *, integer *, complex *, integer *, real *, integer *), clartv_(integer *, complex *, integer *, complex *, integer *, real *, complex *, integer *);
+    void claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), clartg_(complex *, complex *, real *, complex *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clargv_(integer *, complex *, integer *, complex *, integer *, real *, integer *), clartv_(integer *, complex *, integer *, complex *, integer *, real *, complex *, integer *);
     logical wantpt;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -323,7 +323,7 @@ int cgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
         i__1 = -(*info);
         xerbla_("CGBBRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize Q and P**H to the unit matrix, if needed */
     if (wantq)
@@ -338,7 +338,7 @@ int cgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
     if (*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     minmn = fla_min(*m,*n);
     if (*kl + *ku > 1)
@@ -777,7 +777,7 @@ int cgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
         /* L120: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGBBRD */
 }
 /* cgbbrd_ */

@@ -171,7 +171,7 @@ i */
 /* > \ingroup realOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int sspevd_(char *jobz, char *uplo, integer *n, real *ap, real *w, real *z__, integer *ldz, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+void sspevd_(char *jobz, char *uplo, integer *n, real *ap, real *w, real *z__, integer *ldz, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -191,7 +191,7 @@ int sspevd_(char *jobz, char *uplo, integer *n, real *ap, real *w, real *z__, in
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     integer lwmin;
     logical wantz;
     integer iscale;
@@ -202,18 +202,18 @@ int sspevd_(char *jobz, char *uplo, integer *n, real *ap, real *w, real *z__, in
     real bignum;
     integer indtau;
     extern /* Subroutine */
-    int sstedc_(char *, integer *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *);
+    void sstedc_(char *, integer *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *);
     integer indwrk, liwmin;
     extern real slansp_(char *, char *, integer *, real *, real *);
     extern /* Subroutine */
-    int ssterf_(integer *, real *, real *, integer *);
+    void ssterf_(integer *, real *, real *, integer *);
     integer llwork;
     real smlnum;
     extern /* Subroutine */
-    int ssptrd_(char *, integer *, real *, real *, real *, real *, integer *);
+    void ssptrd_(char *, integer *, real *, real *, real *, real *, integer *);
     logical lquery;
     extern /* Subroutine */
-    int sopmtr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *, real *, integer *);
+    void sopmtr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK driver routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -301,18 +301,18 @@ int sspevd_(char *jobz, char *uplo, integer *n, real *ap, real *w, real *z__, in
         i__1 = -(*info);
         xerbla_("SSPEVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -322,7 +322,7 @@ int sspevd_(char *jobz, char *uplo, integer *n, real *ap, real *w, real *z__, in
             z__[z_dim1 + 1] = 1.f;
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -377,7 +377,7 @@ int sspevd_(char *jobz, char *uplo, integer *n, real *ap, real *w, real *z__, in
     work[1] = (real) lwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSPEVD */
 }
 /* sspevd_ */

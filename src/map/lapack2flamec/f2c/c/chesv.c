@@ -161,7 +161,7 @@ the routine */
 /* > \ingroup complexHEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int chesv_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, integer *ipiv, complex *b, integer *ldb, complex *work, integer *lwork, integer *info)
+void chesv_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, integer *ipiv, complex *b, integer *ldb, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -179,14 +179,14 @@ int chesv_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, inte
     integer nb;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int chetrf_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void chetrf_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int chetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+    void chetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int chetrs2_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *);
+    void chetrs2_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -261,12 +261,12 @@ int chesv_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, inte
         i__1 = -(*info);
         xerbla_("CHESV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the factorization A = U*D*U**H or A = L*D*L**H. */
     chetrf_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], lwork, info);
@@ -287,7 +287,7 @@ int chesv_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, inte
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHESV */
 }
 /* chesv_ */

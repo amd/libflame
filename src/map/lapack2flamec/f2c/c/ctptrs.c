@@ -121,7 +121,7 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ctptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, complex *ap, complex *b, integer *ldb, integer *info)
+void ctptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, complex *ap, complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -140,7 +140,7 @@ int ctptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, comp
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
-    int ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -201,13 +201,13 @@ int ctptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, comp
         i__1 = -(*info);
         xerbla_("CTPTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Check for singularity. */
     if (nounit)
@@ -224,7 +224,7 @@ int ctptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, comp
                 if (ap[i__2].r == 0.f && ap[i__2].i == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 jc += *info;
                 /* L10: */
@@ -242,7 +242,7 @@ int ctptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, comp
                 if (ap[i__2].r == 0.f && ap[i__2].i == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 jc = jc + *n - *info + 1;
                 /* L20: */
@@ -260,7 +260,7 @@ int ctptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, comp
         /* L30: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTPTRS */
 }
 /* ctptrs_ */

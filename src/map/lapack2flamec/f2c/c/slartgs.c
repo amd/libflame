@@ -76,13 +76,13 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int slartgs_(real *x, real *y, real *sigma, real *cs, real * sn)
+void slartgs_(real *x, real *y, real *sigma, real *cs, real * sn)
 {
     real r__, s, w, z__;
     extern real slamch_(char *);
     real thresh;
     extern /* Subroutine */
-    int slartgp_(real *, real *, real *, real *, real *);
+    void slartgp_(real *, real *, real *, real *, real *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -143,7 +143,7 @@ int slartgs_(real *x, real *y, real *sigma, real *cs, real * sn)
     /* reordering the arguments ensures that if Z = 0 then the rotation */
     /* is by PI/2. */
     slartgp_(&w, &z__, sn, cs, &r__);
-    return 0;
+    return;
     /* End SLARTGS */
 }
 /* slartgs_ */

@@ -226,7 +226,7 @@ the */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-int chpgvd_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, complex *bp, real *w, complex *z__, integer *ldz, complex *work, integer *lwork, real *rwork, integer *lrwork, integer * iwork, integer *liwork, integer *info)
+void chpgvd_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, complex *bp, real *w, complex *z__, integer *ldz, complex *work, integer *lwork, real *rwork, integer *lrwork, integer * iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("chpgvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "",*itype, *jobz, *uplo, *n, *ldz);
@@ -239,13 +239,13 @@ int chpgvd_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, co
     integer lwmin;
     char trans[1];
     extern /* Subroutine */
-    int ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
+    void ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *);
+    void ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical wantz;
     extern /* Subroutine */
-    int chpevd_(char *, char *, integer *, complex *, real *, complex *, integer *, complex *, integer *, real *, integer *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), chpgst_(integer *, char *, integer *, complex *, complex *, integer *), cpptrf_(char *, integer *, complex *, integer *);
+    void chpevd_(char *, char *, integer *, complex *, real *, complex *, integer *, complex *, integer *, real *, integer *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), chpgst_(integer *, char *, integer *, complex *, complex *, integer *), cpptrf_(char *, integer *, complex *, integer *);
     integer liwmin, lrwmin;
     logical lquery;
     /* -- LAPACK driver routine -- */
@@ -348,18 +348,18 @@ int chpgvd_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, co
         i__1 = -(*info);
         xerbla_("CHPGVD", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Form a Cholesky factorization of B. */
     cpptrf_(uplo, n, &bp[1], info);
@@ -367,7 +367,7 @@ int chpgvd_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, co
     {
         *info = *n + *info;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     chpgst_(itype, uplo, n, &ap[1], &bp[1], info);
@@ -441,7 +441,7 @@ int chpgvd_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, co
     rwork[1] = (real) lrwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CHPGVD */
 }
 /* chpgvd_ */

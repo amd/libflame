@@ -360,7 +360,7 @@ kappa(A*D), where kappa(.) is the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *sva, integer * mv, doublecomplex *v, integer *ldv, doublecomplex *cwork, integer * lwork, doublereal *rwork, integer *lrwork, integer *info)
+void zgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *sva, integer * mv, doublecomplex *v, integer *ldv, doublecomplex *cwork, integer * lwork, doublereal *rwork, integer *lrwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgesvj inputs: joba %c, jobu %c, jobv %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", mv %" FLA_IS ", ldv %" FLA_IS "",*joba, *jobu, *jobv, *m, *n, *lda, *mv, *ldv);
@@ -391,7 +391,7 @@ int zgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubleco
     integer ierr;
     doublecomplex ompq;
     extern /* Subroutine */
-    int zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
+    void zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
     doublereal aapp0, aapq1, temp1, apoaq, aqoap;
     extern logical lsame_(char *, char *);
     doublereal theta, small_val, sfmin;
@@ -402,29 +402,29 @@ int zgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubleco
     VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     logical lower, upper, rotok;
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
     extern /* Subroutine */
-    int zgsvj0_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublecomplex *, integer *, integer *), zgsvj1_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublecomplex *, integer *, integer *);
+    void zgsvj0_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublecomplex *, integer *, integer *), zgsvj1_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublecomplex *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer ijblsk, swband;
     extern /* Subroutine */
-    int zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+    void zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     integer blskip;
     doublereal mxaapq;
     extern /* Subroutine */
-    int zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, integer *);
+    void zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, integer *);
     doublereal thsign;
     extern /* Subroutine */
-    int zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
+    void zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
     doublereal mxsinj;
     extern /* Subroutine */
-    int zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
+    void zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     integer emptsw;
     logical lquery;
     integer notrot, iswrot, lkahead;
@@ -532,7 +532,7 @@ int zgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubleco
         i__1 = -(*info);
         xerbla_("ZGESVJ", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
@@ -541,13 +541,13 @@ int zgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubleco
         cwork[1].i = 0.; // , expr subst
         rwork[1] = (doublereal) fla_max(*n,6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* #:) Quick return for void matrix */
     if (*m == 0 || *n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set numerical parameters */
     /* The stopping criterion for Jacobi rotations is */
@@ -592,7 +592,7 @@ int zgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubleco
         i__1 = -(*info);
         xerbla_("ZGESVJ", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize the right singular vector matrix. */
     if (rsvec)
@@ -634,7 +634,7 @@ int zgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubleco
                 i__2 = -(*info);
                 xerbla_("ZGESVJ", &i__2, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             aaqq = sqrt(aaqq);
             if (aapp < big / aaqq && noscale)
@@ -678,7 +678,7 @@ int zgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubleco
                 i__2 = -(*info);
                 xerbla_("ZGESVJ", &i__2, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             aaqq = sqrt(aaqq);
             if (aapp < big / aaqq && noscale)
@@ -722,7 +722,7 @@ int zgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubleco
                 i__2 = -(*info);
                 xerbla_("ZGESVJ", &i__2, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             aaqq = sqrt(aaqq);
             if (aapp < big / aaqq && noscale)
@@ -790,7 +790,7 @@ int zgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubleco
         rwork[5] = 0.;
         rwork[6] = 0.;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* #:) Quick return for one-column matrix */
     if (*n == 1)
@@ -813,7 +813,7 @@ int zgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubleco
         rwork[5] = 0.;
         rwork[6] = 0.;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Protect small singular values from underflow, and try to */
     /* avoid underflows/overflows in computing Jacobi rotations. */
@@ -1794,7 +1794,7 @@ L1995: /* Sort the singular values and find how many are above */
     /* MXSINJ is the largest absolute value of the sines of Jacobi angles */
     /* in the last sweep */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* .. */
     /* .. END OF ZGESVJ */
     /* .. */

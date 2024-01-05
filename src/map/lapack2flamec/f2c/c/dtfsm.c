@@ -267,7 +267,7 @@ K=N/2. If */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int dtfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integer *m, integer *n, doublereal *alpha, doublereal *a, doublereal *b, integer *ldb)
+void dtfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integer *m, integer *n, doublereal *alpha, doublereal *a, doublereal *b, integer *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtfsm inputs: transr %c, side %c, uplo %c, trans %c, diag %c, m %" FLA_IS ", n %" FLA_IS ", ldb %" FLA_IS "",*transr, *side, *uplo, *trans, *diag, *m, *n, *ldb);
@@ -277,12 +277,12 @@ int dtfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
     integer i__, j, k, m1, m2, n1, n2, info;
     logical normaltransr;
     extern /* Subroutine */
-    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     logical lside;
     extern logical lsame_(char *, char *);
     logical lower;
     extern /* Subroutine */
-    int dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical misodd, nisodd, notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -353,13 +353,13 @@ int dtfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
         i__1 = -info;
         xerbla_("DTFSM ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return when ( (N.EQ.0).OR.(M.EQ.0) ) */
     if (*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return when ALPHA.EQ.(0D+0) */
     if (*alpha == 0.)
@@ -380,7 +380,7 @@ int dtfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
             /* L20: */
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (lside)
     {
@@ -855,7 +855,7 @@ int dtfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTFSM */
 }
 /* dtfsm_ */

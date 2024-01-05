@@ -126,7 +126,7 @@ on exit, D */
 /* ===================================================================== */
 /* Subroutine */
 
-int dsteqr_internal_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal *z__, integer *ldz, doublereal *work, integer *info)
+void dsteqr_internal_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal *z__, integer *ldz, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "",*compz, *n, *ldz);
@@ -146,27 +146,27 @@ int dsteqr_internal_(char *compz, integer *n, doublereal *d__, doublereal *e, do
     doublereal tst, eps2;
     integer lend, jtot;
     extern /* Subroutine */
-    int dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+    void dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal anorm;
     extern /* Subroutine */
-    int dswap_(integer *, doublereal *, integer *, doublereal *, integer *), dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *), dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     integer lendm1, lendp1;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
     integer iscale;
     extern /* Subroutine */
-    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-    int dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal safmax;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
     extern /* Subroutine */
-    int dlasrt_(char *, integer *, doublereal *, integer *);
+    void dlasrt_(char *, integer *, doublereal *, integer *);
     integer lendsv;
     doublereal ssfmin;
     integer nmaxit, icompz;
@@ -234,13 +234,13 @@ int dsteqr_internal_(char *compz, integer *n, doublereal *d__, doublereal *e, do
         i__1 = -(*info);
         xerbla_("DSTEQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -249,7 +249,7 @@ int dsteqr_internal_(char *compz, integer *n, doublereal *d__, doublereal *e, do
             z__[z_dim1 + 1] = 1.;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine the unit roundoff and over/underflow thresholds. */
     eps = dlamch_("E");
@@ -652,7 +652,7 @@ L160:
     }
 L190:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 
     /* End of DSTEQR */
 }

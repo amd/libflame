@@ -138,7 +138,7 @@ static integer c__1 = 1;
 /* > \ingroup doublePTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal *z__, integer *ldz, doublereal *work, integer *info)
+void dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal *z__, integer *ldz, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "",*compz, *n, *ldz);
@@ -155,10 +155,10 @@ int dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal 
     integer nru;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dbdsqr_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dbdsqr_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     integer icompz;
     extern /* Subroutine */
-    int dpttrf_(integer *, doublereal *, doublereal *, integer *);
+    void dpttrf_(integer *, doublereal *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -224,13 +224,13 @@ int dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal 
         i__1 = -(*info);
         xerbla_("DPTEQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -239,7 +239,7 @@ int dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal 
             z__[z_dim1 + 1] = 1.;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (icompz == 2)
     {
@@ -250,7 +250,7 @@ int dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal 
     if (*info != 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *n;
     for (i__ = 1;
@@ -296,7 +296,7 @@ int dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal 
         *info = *n + *info;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPTEQR */
 }
 /* dpteqr_ */

@@ -180,7 +180,7 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int dsytf2_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv, integer *info)
+void dsytf2_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsytf2_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
@@ -197,15 +197,15 @@ int dsytf2_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *i
     logical done;
     integer imax, jmax;
     extern /* Subroutine */
-    int dsyr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dsyr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     doublereal alpha;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     doublereal dtemp, sfmin;
     integer itemp;
     extern /* Subroutine */
-    int dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer kstep;
     logical upper;
     extern doublereal dlamch_(char *);
@@ -262,7 +262,7 @@ int dsytf2_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *i
         i__1 = -(*info);
         xerbla_("DSYTF2_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.) + 1.) / 8.;
@@ -777,7 +777,7 @@ L42: /* Begin pivot search loop body */
     }
 L70:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYTF2_ROOK */
 }
 /* dsytf2_rook__ */

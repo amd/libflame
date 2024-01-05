@@ -160,7 +160,7 @@ the least squares solution could not be */
 /* > \ingroup doubleGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int dgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *work, integer *lwork, integer *info)
+void dgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgetsls inputs: trans %c, m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*trans, *m, *n, *nrhs, *lda, *ldb);
@@ -174,23 +174,23 @@ int dgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a,
     logical tran;
     integer brow, tszm, tszo, info2, iascl, ibscl;
     extern /* Subroutine */
-    int dgelq_(integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dgelq_(integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dgeqr_(integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dgeqr_(integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer maxmn;
     doublereal workq[1];
     extern /* Subroutine */
-    int dlabad_(doublereal *, doublereal *);
+    void dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *), dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
-    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dgemlq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dgemqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dgemlq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dgemqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer scllen;
     doublereal bignum, smlnum;
     integer wsizem, wsizeo;
     logical lquery;
     extern /* Subroutine */
-    int dtrtrs_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dtrtrs_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -309,7 +309,7 @@ int dgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a,
         i__1 = -(*info);
         xerbla_("DGETSLS", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (lquery)
     {
@@ -318,7 +318,7 @@ int dgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a,
             work[1] = (doublereal) wsizem;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*lwork < wsizeo)
     {
@@ -338,7 +338,7 @@ int dgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a,
         i__1 = fla_max(*m,*n);
         dlaset_("FULL", &i__1, nrhs, &c_b23, &c_b23, &b[b_offset], ldb);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = dlamch_("S") / dlamch_("P");
@@ -398,7 +398,7 @@ int dgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a,
             if (*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             scllen = *n;
         }
@@ -410,7 +410,7 @@ int dgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a,
             if (*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* B(N+1:M,1:NRHS) = ZERO */
             i__1 = *nrhs;
@@ -446,7 +446,7 @@ int dgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a,
             if (*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* B(M+1:N,1:NRHS) = 0 */
             i__1 = *nrhs;
@@ -480,7 +480,7 @@ int dgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a,
             if (*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             scllen = *m;
         }
@@ -505,7 +505,7 @@ int dgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublereal *a,
 L50:
     work[1] = (doublereal) (tszo + lwo);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGETSLS */
 }
 /* dgetsls_ */

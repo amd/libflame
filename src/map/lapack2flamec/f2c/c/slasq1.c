@@ -98,7 +98,7 @@ static integer c__0 = 0;
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
+void slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -115,12 +115,12 @@ int slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
     integer i__;
     real eps;
     extern /* Subroutine */
-    int slas2_(real *, real *, real *, real *, real *) ;
+    void slas2_(real *, real *, real *, real *, real *) ;
     real scale;
     integer iinfo;
     real sigmn, sigmx;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), slasq2_(integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *), slasq2_(integer *, real *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
@@ -157,18 +157,18 @@ int slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
         i__1 = -(*info);
         xerbla_("SLASQ1", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (*n == 1)
     {
         d__[1] = f2c_abs(d__[1]);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (*n == 2)
     {
@@ -176,7 +176,7 @@ int slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
         d__[1] = sigmx;
         d__[2] = sigmn;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Estimate the largest singular value. */
     sigmx = 0.f;
@@ -198,7 +198,7 @@ int slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
     {
         slasrt_("D", n, &d__[1], &iinfo);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     i__1 = *n;
     for (i__ = 1;
@@ -263,7 +263,7 @@ int slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
         slascl_("G", &c__0, &c__0, &scale, &sigmx, n, &c__1, &e[1], n, &iinfo);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLASQ1 */
 }
 /* slasq1_ */

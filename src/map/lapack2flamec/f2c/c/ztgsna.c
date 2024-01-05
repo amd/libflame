@@ -317,7 +317,7 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *vl, integer *ldvl, doublecomplex *vr, integer * ldvr, doublereal *s, doublereal *dif, integer *mm, integer *m, doublecomplex *work, integer *lwork, integer *iwork, integer *info)
+void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *vl, integer *ldvl, doublecomplex *vr, integer * ldvr, doublereal *s, doublereal *dif, integer *mm, integer *m, doublecomplex *work, integer *lwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztgsna inputs: job %c, howmny %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS ", m %" FLA_IS "",*job, *howmny, *n, *lda, *ldb, *ldvl, *ldvr, *mm, *m);
@@ -340,12 +340,12 @@ int ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex 
     VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     integer lwmin;
     extern /* Subroutine */
-    int zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    void zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical wants;
     doublecomplex dummy[1];
     extern doublereal dlapy2_(doublereal *, doublereal *);
     extern /* Subroutine */
-    int dlabad_(doublereal *, doublereal *);
+    void dlabad_(doublereal *, doublereal *);
     doublecomplex dummy1[1];
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_( char *);
     extern /* Subroutine */
@@ -353,11 +353,11 @@ int ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex 
     doublereal bignum;
     logical wantbh, wantdf, somcon;
     extern /* Subroutine */
-    int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztgexc_(logical *, logical *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, integer *);
+    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztgexc_(logical *, logical *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, integer *);
     doublereal smlnum;
     logical lquery;
     extern /* Subroutine */
-    int ztgsyl_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, integer *, integer *);
+    void ztgsyl_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -485,18 +485,18 @@ int ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex 
         i__1 = -(*info);
         xerbla_("ZTGSNA", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = dlamch_("P");
@@ -589,7 +589,7 @@ L20:
     work[1].r = (doublereal) lwmin;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTGSNA */
 }
 /* ztgsna_ */

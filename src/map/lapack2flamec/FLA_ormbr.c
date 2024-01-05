@@ -46,11 +46,11 @@
   Here dimenions m and n are defined w.r.t C.
 */
 
-extern int sormbr_fla(char *vect, char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *lwork, integer *info);
-extern int dormbr_fla(char *vect, char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work, integer *lwork, integer *info);
+extern void sormbr_fla(char *vect, char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *lwork, integer *info);
+extern void dormbr_fla(char *vect, char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work, integer *lwork, integer *info);
 
 #define LAPACK_ormbr(prefix, name)                                      \
-  int F77_ ## prefix ## name ## br( char* vect,                         \
+  void F77_ ## prefix ## name ## br( char* vect,                         \
                                     char* side,                         \
                                     char* trans,                        \
                                     integer*  m,                            \
@@ -245,7 +245,7 @@ LAPACK_ormbr(s, orm)
         fla_error = 0;
       }
       AOCL_DTL_TRACE_LOG_EXIT
-      return fla_error;
+      return;
 #else
       {
         sormbr_fla( vect, side, trans,
@@ -256,7 +256,7 @@ LAPACK_ormbr(s, orm)
                     buff_w, lwork,
                     info);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
       }
 #endif
     }
@@ -284,7 +284,7 @@ LAPACK_ormbr(d, orm)
         fla_error = 0;
       }
       AOCL_DTL_TRACE_LOG_EXIT
-      return fla_error;
+      return;
 #else
         *info = 0;
         dormbr_fla( vect, side, trans,
@@ -295,7 +295,7 @@ LAPACK_ormbr(d, orm)
                     buff_w, lwork,
                     info);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
 #endif
   }
 }
@@ -323,7 +323,7 @@ LAPACK_ormbr(c, unm)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_ormbr(z, unm)
 {
@@ -346,7 +346,7 @@ LAPACK_ormbr(z, unm)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 

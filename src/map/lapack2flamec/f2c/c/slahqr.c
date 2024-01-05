@@ -199,7 +199,7 @@ elements i+1:ihi of WR and WI */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, real *h__, integer *ldh, real *wr, real * wi, integer *iloz, integer *ihiz, real *z__, integer *ldz, integer * info)
+void slahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, real *h__, integer *ldh, real *wr, real * wi, integer *iloz, integer *ihiz, real *z__, integer *ldz, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slahqr inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS "",*n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz);
@@ -222,14 +222,14 @@ int slahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *i
     integer its;
     real ulp, sum, tst, rt1i, rt2i, rt1r, rt2r;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     integer kdefl, itmax;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), slanv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *, real *), slabad_(real *, real *);
+    void scopy_(integer *, real *, integer *, real *, integer *), slanv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *, real *), slabad_(real *, real *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int slarfg_(integer *, real *, real *, integer *, real *);
+    void slarfg_(integer *, real *, real *, integer *, real *);
     real safmax, rtdisc, smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -268,14 +268,14 @@ int slahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *i
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*ilo == *ihi)
     {
         wr[*ilo] = h__[*ilo + *ilo * h_dim1];
         wi[*ilo] = 0.f;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* ==== clear out the trash ==== */
     i__1 = *ihi - 3;
@@ -645,7 +645,7 @@ L60: /* Double-shift QR step */
     /* Failure to converge in remaining number of iterations */
     *info = i__;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 L150:
     if (l == i__)
     {
@@ -683,7 +683,7 @@ L150:
     goto L20;
 L160:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SLAHQR */
 }
 /* slahqr_ */

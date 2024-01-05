@@ -121,7 +121,7 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ctpcon_(char *norm, char *uplo, char *diag, integer *n, complex *ap, real *rcond, complex *work, real *rwork, integer *info)
+void ctpcon_(char *norm, char *uplo, char *diag, integer *n, complex *ap, real *rcond, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -146,7 +146,7 @@ int ctpcon_(char *norm, char *uplo, char *diag, integer *n, complex *ap, real *r
     real anorm;
     logical upper;
     extern /* Subroutine */
-    int clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
+    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     real xnorm;
     extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
@@ -154,10 +154,10 @@ int ctpcon_(char *norm, char *uplo, char *diag, integer *n, complex *ap, real *r
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern real clantp_(char *, char *, char *, integer *, complex *, real *);
     extern /* Subroutine */
-    int clatps_(char *, char *, char *, char *, integer *, complex *, complex *, real *, real *, integer *);
+    void clatps_(char *, char *, char *, char *, integer *, complex *, complex *, real *, real *, integer *);
     real ainvnm;
     extern /* Subroutine */
-    int csrscl_(integer *, real *, complex *, integer *);
+    void csrscl_(integer *, real *, complex *, integer *);
     logical onenrm;
     char normin[1];
     real smlnum;
@@ -219,14 +219,14 @@ int ctpcon_(char *norm, char *uplo, char *diag, integer *n, complex *ap, real *r
         i__1 = -(*info);
         xerbla_("CTPCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     *rcond = 0.f;
     smlnum = slamch_("Safe minimum") * (real) fla_max(1,*n);
@@ -284,7 +284,7 @@ L10:
     }
 L20:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTPCON */
 }
 /* ctpcon_ */

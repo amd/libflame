@@ -141,7 +141,7 @@ elements marked */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cgbtf2_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integer *ldab, integer *ipiv, integer *info)
+void cgbtf2_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integer *ldab, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -161,7 +161,7 @@ int cgbtf2_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integ
     /* Local variables */
     integer i__, j, km, jp, ju, kv;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *), cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), cswap_( integer *, complex *, integer *, complex *, integer *);
+    void cscal_(integer *, complex *, complex *, integer *), cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), cswap_( integer *, complex *, integer *, complex *, integer *);
     extern integer icamax_(integer *, complex *, integer *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -225,13 +225,13 @@ int cgbtf2_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integ
         i__1 = -(*info);
         xerbla_("CGBTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     #if AOCL_FLA_PROGRESS_H
         progress_step_count =0;
@@ -346,7 +346,7 @@ int cgbtf2_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integ
         /* L40: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGBTF2 */
 }
 /* cgbtf2_ */

@@ -245,7 +245,7 @@ static integer c__1 = 1;
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-int ctgsy2_(char *trans, integer *ijob, integer *m, integer * n, complex *a, integer *lda, complex *b, integer *ldb, complex *c__, integer *ldc, complex *d__, integer *ldd, complex *e, integer *lde, complex *f, integer *ldf, real *scale, real *rdsum, real *rdscal, integer *info)
+void ctgsy2_(char *trans, integer *ijob, integer *m, integer * n, complex *a, integer *lda, complex *b, integer *ldb, complex *c__, integer *ldc, complex *d__, integer *ldd, complex *e, integer *lde, complex *f, integer *ldf, real *scale, real *rdsum, real *rdscal, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -269,10 +269,10 @@ int ctgsy2_(char *trans, integer *ijob, integer *m, integer * n, complex *a, int
     integer ierr, ipiv[2], jpiv[2];
     complex alpha;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *);
+    void cscal_(integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int caxpy_(integer *, complex *, complex *, integer *, complex *, integer *), cgesc2_(integer *, complex *, integer *, complex *, integer *, integer *, real *), cgetc2_( integer *, complex *, integer *, integer *, integer *, integer *), clatdf_(integer *, integer *, complex *, integer *, complex *, real *, real *, integer *, integer *);
+    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *), cgesc2_(integer *, complex *, integer *, complex *, integer *, integer *, real *), cgetc2_( integer *, complex *, integer *, integer *, integer *, integer *), clatdf_(integer *, integer *, complex *, integer *, complex *, real *, real *, integer *, integer *);
     real scaloc;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -374,7 +374,7 @@ int ctgsy2_(char *trans, integer *ijob, integer *m, integer * n, complex *a, int
         i__1 = -(*info);
         xerbla_("CTGSY2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (notran)
     {
@@ -601,7 +601,7 @@ int ctgsy2_(char *trans, integer *ijob, integer *m, integer * n, complex *a, int
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTGSY2 */
 }
 /* ctgsy2_ */

@@ -121,7 +121,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlacn2_(integer *n, doublereal *v, doublereal *x, integer *isgn, doublereal *est, integer *kase, integer *isave)
+void dlacn2_(integer *n, doublereal *v, doublereal *x, integer *isgn, doublereal *est, integer *kase, integer *isave)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlacn2 inputs: n %" FLA_IS ", isgn %" FLA_IS ", kase %" FLA_IS ", isave %" FLA_IS "",*n, *isgn, *kase, *isave);
@@ -136,7 +136,7 @@ int dlacn2_(integer *n, doublereal *v, doublereal *x, integer *isgn, doublereal 
     extern doublereal dasum_(integer *, doublereal *, integer *);
     integer jlast;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     doublereal altsgn, estold;
     /* -- LAPACK auxiliary routine -- */
@@ -177,7 +177,7 @@ int dlacn2_(integer *n, doublereal *v, doublereal *x, integer *isgn, doublereal 
         *kase = 1;
         isave[1] = 1;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     switch (isave[1])
     {
@@ -222,7 +222,7 @@ L20:
     *kase = 2;
     isave[1] = 2;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* ................ ENTRY (ISAVE( 1 ) = 2) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
 L40:
@@ -242,7 +242,7 @@ L50:
     *kase = 1;
     isave[1] = 3;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* ................ ENTRY (ISAVE( 1 ) = 3) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L70:
@@ -294,7 +294,7 @@ L90: /* TEST FOR CYCLING. */
     *kase = 2;
     isave[1] = 4;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* ................ ENTRY (ISAVE( 1 ) = 4) */
     /* X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
 L110:
@@ -320,7 +320,7 @@ L120:
     *kase = 1;
     isave[1] = 5;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* ................ ENTRY (ISAVE( 1 ) = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L140:
@@ -333,7 +333,7 @@ L140:
 L150:
     *kase = 0;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLACN2 */
 }
 /* dlacn2_ */

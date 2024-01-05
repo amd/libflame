@@ -389,7 +389,7 @@ defaults */
 /* > \ingroup realPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sporfsx_(char *uplo, char *equed, integer *n, integer * nrhs, real *a, integer *lda, real *af, integer *ldaf, real *s, real * b, integer *ldb, real *x, integer *ldx, real *rcond, real *berr, integer *n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer *nparams, real *params, real *work, integer *iwork, integer * info)
+void sporfsx_(char *uplo, char *equed, integer *n, integer * nrhs, real *a, integer *lda, real *af, integer *ldaf, real *s, real * b, integer *ldb, real *x, integer *ldx, real *rcond, real *berr, integer *n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer *nparams, real *params, real *work, integer *iwork, integer * info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1;
@@ -404,7 +404,7 @@ int sporfsx_(char *uplo, char *equed, integer *n, integer * nrhs, real *a, integ
     extern real sla_porcond_(char *, integer *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *);
     real cwise_wrong__;
     extern /* Subroutine */
-    int sla_porfsx_extended_(integer *, char *, integer *, integer *, real *, integer *, real *, integer *, logical *, real *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *, real *, integer *, real *, real *, logical *, integer *);
+    void sla_porfsx_extended_(integer *, char *, integer *, integer *, real *, integer *, real *, integer *, logical *, real *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *, real *, integer *, real *, real *, logical *, integer *);
     char norm[1];
     logical ignore_cwise__;
     extern logical lsame_(char *, char *);
@@ -561,7 +561,7 @@ int sporfsx_(char *uplo, char *equed, integer *n, integer * nrhs, real *a, integ
     {
         i__1 = -(*info);
         xerbla_("SPORFSX", &i__1, (ftnlen)7);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0 || *nrhs == 0)
@@ -589,7 +589,7 @@ int sporfsx_(char *uplo, char *equed, integer *n, integer * nrhs, real *a, integ
                 err_bnds_comp__[j + err_bnds_comp_dim1 * 3] = 1.f;
             }
         }
-        return 0;
+        return;
     }
     /* Default to failure. */
     *rcond = 0.f;
@@ -723,7 +723,7 @@ int sporfsx_(char *uplo, char *equed, integer *n, integer * nrhs, real *a, integ
             }
         }
     }
-    return 0;
+    return;
     /* End of SPORFSX */
 }
 /* sporfsx_ */

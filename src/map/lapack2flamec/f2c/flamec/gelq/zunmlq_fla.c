@@ -164,7 +164,7 @@ the routine */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zunmlq_fla(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *lwork, integer *info)
+void zunmlq_fla(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__4, i__5;
@@ -181,14 +181,14 @@ int zunmlq_fla(char *side, char *trans, integer *m, integer *n, integer *k, doub
     extern logical lsame_(char *, char *);
     integer nbmin, iinfo;
     extern /* Subroutine */
-    int zunml2_fla(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zunml2_fla(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int zlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     logical notran;
     integer ldwork;
     extern /* Subroutine */
-    int zlarft_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    void zlarft_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     char transt[1];
     integer lwkopt;
     logical lquery;
@@ -288,18 +288,18 @@ int zunmlq_fla(char *side, char *trans, integer *m, integer *n, integer *k, doub
     {
         i__1 = -(*info);
         xerbla_("ZUNMLQ", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0 || *k == 0)
     {
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
-        return 0;
+        return;
     }
     nbmin = 2;
     ldwork = nw;
@@ -390,7 +390,7 @@ int zunmlq_fla(char *side, char *trans, integer *m, integer *n, integer *k, doub
     }
     work[1].r = (doublereal) lwkopt;
     work[1].i = 0.; // , expr subst
-    return 0;
+    return;
     /* End of ZUNMLQ */
 }
 /* zunmlq_ */

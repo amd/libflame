@@ -175,7 +175,7 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int zlahef_rook_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *w, integer *ldw, integer *info)
+void zlahef_rook_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *w, integer *ldw, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlahef_rook inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldw %" FLA_IS "",*uplo, *n, *nb, *lda, *ldw);
@@ -198,17 +198,17 @@ int zlahef_rook_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex
     doublereal dtemp, sfmin;
     integer itemp;
     extern /* Subroutine */
-    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     integer kstep;
     extern /* Subroutine */
-    int zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     doublereal absakk;
     extern /* Subroutine */
-    int zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+    void zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal colmax;
     extern /* Subroutine */
-    int zlacgv_(integer *, doublecomplex *, integer *) ;
+    void zlacgv_(integer *, doublecomplex *, integer *) ;
     extern integer izamax_(integer *, doublecomplex *, integer *);
     doublereal rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */
@@ -1304,7 +1304,7 @@ L120: /* Undo the interchanges (if any) of rows J and JP2 */
         *kb = k - 1;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAHEF_ROOK */
 }
 /* zlahef_rook__ */

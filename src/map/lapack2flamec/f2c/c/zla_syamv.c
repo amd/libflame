@@ -164,7 +164,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zla_syamv_(integer *uplo, integer *n, doublereal *alpha, doublecomplex *a, integer *lda, doublecomplex *x, integer *incx, doublereal *beta, doublereal *y, integer *incy)
+void zla_syamv_(integer *uplo, integer *n, doublereal *alpha, doublecomplex *a, integer *lda, doublecomplex *x, integer *incx, doublereal *beta, doublereal *y, integer *incy)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zla_syamv inputs: uplo %" FLA_IS ", n %" FLA_IS ", alpha %lf, lda %" FLA_IS ", incx %" FLA_IS ", beta %lf, incy %" FLA_IS "", *uplo, *n, *alpha, *lda, *incx, *beta, *incy);
@@ -239,13 +239,13 @@ int zla_syamv_(integer *uplo, integer *n, doublereal *alpha, doublecomplex *a, i
     {
         xerbla_("ZLA_SYAMV", &info, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0 || *alpha == 0. && *beta == 1.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set up the start points in X and Y. */
     if (*incx > 0)
@@ -506,7 +506,7 @@ int zla_syamv_(integer *uplo, integer *n, doublereal *alpha, doublecomplex *a, i
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLA_SYAMV */
 }
 /* zla_syamv__ */

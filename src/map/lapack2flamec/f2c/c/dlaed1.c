@@ -151,7 +151,7 @@ static integer c_n1 = -1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlaed1_(integer *n, doublereal *d__, doublereal *q, integer *ldq, integer *indxq, doublereal *rho, integer *cutpnt, doublereal *work, integer *iwork, integer *info)
+void dlaed1_(integer *n, doublereal *d__, doublereal *q, integer *ldq, integer *indxq, doublereal *rho, integer *cutpnt, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaed1 inputs: n %" FLA_IS ", ldq %" FLA_IS ", indxq %" FLA_IS ", cutpnt %" FLA_IS "",*n, *ldq, *indxq, *cutpnt);
@@ -160,13 +160,13 @@ int dlaed1_(integer *n, doublereal *d__, doublereal *q, integer *ldq, integer *i
     /* Local variables */
     integer i__, k, n1, n2, is, iw, iz, iq2, zpp1, indx, indxc;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer indxp;
     extern /* Subroutine */
-    int dlaed2_(integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, integer *), dlaed3_(integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *);
+    void dlaed2_(integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, integer *), dlaed3_(integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *);
     integer idlmda;
     extern /* Subroutine */
-    int dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer coltyp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -218,13 +218,13 @@ int dlaed1_(integer *n, doublereal *d__, doublereal *q, integer *ldq, integer *i
         i__1 = -(*info);
         xerbla_("DLAED1", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* The following values are integer pointers which indicate */
     /* the portion of the workspace */
@@ -276,7 +276,7 @@ int dlaed1_(integer *n, doublereal *d__, doublereal *q, integer *ldq, integer *i
     }
 L20:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAED1 */
 }
 /* dlaed1_ */

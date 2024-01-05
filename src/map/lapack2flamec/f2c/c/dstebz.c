@@ -254,7 +254,7 @@ these eigenvalues are flagged by a */
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *abstol, doublereal *d__, doublereal *e, integer *m, integer *nsplit, doublereal *w, integer *iblock, integer *isplit, doublereal *work, integer *iwork, integer *info)
+void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *abstol, doublereal *d__, doublereal *e, integer *m, integer *nsplit, doublereal *w, integer *iblock, integer *isplit, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dstebz inputs: range %c, order %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS "",*range, *order, *n, *il, *iu);
@@ -285,7 +285,7 @@ int dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu
     extern doublereal dlamch_(char *);
     integer ibegin;
     extern /* Subroutine */
-    int dlaebz_(integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dlaebz_(integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     integer irange, idiscl;
     doublereal safemn;
     integer idumma[1];
@@ -393,7 +393,7 @@ int dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu
         i__1 = -(*info);
         xerbla_("DSTEBZ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize error flags */
     *info = 0;
@@ -404,7 +404,7 @@ int dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Simplifications: */
     if (irange == 3 && *il == 1 && *iu == *n)
@@ -438,7 +438,7 @@ int dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu
             *m = 1;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute Splitting Points */
     *nsplit = 1;
@@ -555,7 +555,7 @@ int dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu
         {
             *info = 4;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     else
@@ -898,7 +898,7 @@ L70:
         *info += 2;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSTEBZ */
 }
 /* dstebz_ */

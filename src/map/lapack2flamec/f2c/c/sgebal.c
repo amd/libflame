@@ -152,7 +152,7 @@ and second, applying a diagonal similarity transformation */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer *ihi, real *scale, integer *info)
+void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer *ihi, real *scale, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -165,7 +165,7 @@ int sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer 
     extern real snrm2_(integer *, real *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer *);
     real sfmin1, sfmin2, sfmax1, sfmax2;
     extern real slamch_(char *);
     extern /* Subroutine */
@@ -217,7 +217,7 @@ int sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer 
     {
         i__1 = -(*info);
         xerbla_("SGEBAL", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     k = 1;
     l = *n;
@@ -401,7 +401,7 @@ L180: /* Computing MIN */
             *info = -3;
             i__2 = -(*info);
             xerbla_("SGEBAL", &i__2, (ftnlen)6);
-            return 0;
+            return;
         }
         f /= 2.f;
         c__ /= 2.f;
@@ -446,7 +446,7 @@ L200:
 L210:
     *ilo = k;
     *ihi = l;
-    return 0;
+    return;
     /* End of SGEBAL */
 }
 /* sgebal_ */

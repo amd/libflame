@@ -99,7 +99,7 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sorgl2_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work, integer *info)
+void sorgl2_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -107,7 +107,7 @@ int sorgl2_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real *
     /* Local variables */
     integer i__, j, l;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sscal_(integer *, real *, real *, integer *), slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -155,12 +155,12 @@ int sorgl2_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real *
     {
         i__1 = -(*info);
         xerbla_("SORGL2", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m <= 0)
     {
-        return 0;
+        return;
     }
     if (*k < *m)
     {
@@ -215,7 +215,7 @@ int sorgl2_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real *
         }
         /* L40: */
     }
-    return 0;
+    return;
     /* End of SORGL2 */
 }
 /* sorgl2_ */

@@ -136,7 +136,7 @@ static integer c__1 = 1;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dtbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integer *nrhs, doublereal *ab, integer *ldab, doublereal *b, integer *ldb, integer *info)
+void dtbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integer *nrhs, doublereal *ab, integer *ldab, doublereal *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtbtrs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",*uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb);
@@ -146,7 +146,7 @@ int dtbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, intege
     integer j;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dtbsv_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dtbsv_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -220,13 +220,13 @@ int dtbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, intege
         i__1 = -(*info);
         xerbla_("DTBTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check for singularity. */
     if (nounit)
@@ -241,7 +241,7 @@ int dtbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, intege
                 if (ab[*kd + 1 + *info * ab_dim1] == 0.)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 /* L10: */
             }
@@ -256,7 +256,7 @@ int dtbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, intege
                 if (ab[*info * ab_dim1 + 1] == 0.)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 /* L20: */
             }
@@ -273,7 +273,7 @@ int dtbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, intege
         /* L30: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTBTRS */
 }
 /* dtbtrs_ */

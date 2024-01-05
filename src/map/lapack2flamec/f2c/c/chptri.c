@@ -105,7 +105,7 @@ the matrix is singular and its */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int chptri_(char *uplo, integer *n, complex *ap, integer * ipiv, complex *work, integer *info)
+void chptri_(char *uplo, integer *n, complex *ap, integer * ipiv, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -135,7 +135,7 @@ int chptri_(char *uplo, integer *n, complex *ap, integer * ipiv, complex *work, 
     VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *), chpmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *), chpmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
     integer kstep;
     logical upper;
     extern /* Subroutine */
@@ -182,13 +182,13 @@ int chptri_(char *uplo, integer *n, complex *ap, integer * ipiv, complex *work, 
         i__1 = -(*info);
         xerbla_("CHPTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if (upper)
@@ -203,7 +203,7 @@ int chptri_(char *uplo, integer *n, complex *ap, integer * ipiv, complex *work, 
             if (ipiv[*info] > 0 && (ap[i__1].r == 0.f && ap[i__1].i == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             kp -= *info;
             /* L10: */
@@ -222,7 +222,7 @@ int chptri_(char *uplo, integer *n, complex *ap, integer * ipiv, complex *work, 
             if (ipiv[*info] > 0 && (ap[i__2].r == 0.f && ap[i__2].i == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             kp = kp + *n - *info + 1;
             /* L20: */
@@ -592,7 +592,7 @@ L80:
         ;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHPTRI */
 }
 /* chptri_ */

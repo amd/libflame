@@ -334,7 +334,7 @@ if EQUED = 'Y', */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int spbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, real *ab, integer *ldab, real *afb, integer *ldafb, char *equed, real *s, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork, integer *info)
+void spbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, real *ab, integer *ldab, real *afb, integer *ldafb, char *equed, real *s, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -352,7 +352,7 @@ int spbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, real
     real scond, anorm;
     logical equil, rcequ, upper;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
@@ -360,13 +360,13 @@ int spbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, real
     real bignum;
     extern real slansb_(char *, char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int spbcon_(char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), slaqsb_(char *, integer *, integer *, real *, integer *, real *, real *, real *, char *);
+    void spbcon_(char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), slaqsb_(char *, integer *, integer *, real *, integer *, real *, real *, real *, char *);
     integer infequ;
     extern /* Subroutine */
-    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), spbequ_(char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *), spbrfs_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), spbtrf_( char *, integer *, integer *, real *, integer *, integer *);
+    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), spbequ_(char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *), spbrfs_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), spbtrf_( char *, integer *, integer *, real *, integer *, integer *);
     real smlnum;
     extern /* Subroutine */
-    int spbtrs_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *);
+    void spbtrs_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -507,7 +507,7 @@ int spbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, real
         i__1 = -(*info);
         xerbla_("SPBSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (equil)
     {
@@ -578,7 +578,7 @@ int spbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, real
         {
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -625,7 +625,7 @@ int spbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, real
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPBSVX */
 }
 /* spbsvx_ */

@@ -346,7 +346,7 @@ the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zheevr_(char *jobz, char *range, char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *abstol, integer *m, doublereal * w, doublecomplex *z__, integer *ldz, integer *isuppz, doublecomplex * work, integer *lwork, doublereal *rwork, integer *lrwork, integer * iwork, integer *liwork, integer *info)
+void zheevr_(char *jobz, char *range, char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *abstol, integer *m, doublereal * w, doublecomplex *z__, integer *ldz, integer *isuppz, doublecomplex * work, integer *lwork, doublereal *rwork, integer *lrwork, integer * iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zheevr inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", vl %lf, vu %lf, abstol %lf, ldz %" FLA_IS ", lwork %" FLA_IS ", lrwork %" FLA_IS ", liwork %" FLA_IS "", *jobz, *range, *uplo, *n, *lda, *il, *iu, *vl, *vu, *abstol, *ldz, *lwork, *lrwork, liwork);
@@ -363,7 +363,7 @@ int zheevr_(char *jobz, char *range, char *uplo, integer *n, doublecomplex *a, i
     logical test;
     integer itmp1;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     integer indrd, indre;
     doublereal sigma;
     extern logical lsame_(char *, char *);
@@ -371,11 +371,11 @@ int zheevr_(char *jobz, char *range, char *uplo, integer *n, doublecomplex *a, i
     char order[1];
     integer indwk;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer lwmin;
     logical lower, wantz;
     extern /* Subroutine */
-    int zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     logical alleig, indeig;
     integer iscale, ieeeok, indibl, indrdd, indifl, indree;
@@ -387,23 +387,23 @@ int zheevr_(char *jobz, char *range, char *uplo, integer *n, doublecomplex *a, i
     doublereal abstll, bignum;
     integer indtau, indisp;
     extern /* Subroutine */
-    int dsterf_(integer *, doublereal *, doublereal *, integer *);
+    void dsterf_(integer *, doublereal *, doublereal *, integer *);
     integer indiwo, indwkn;
     extern /* Subroutine */
-    int dstebz_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dstebz_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     integer indrwk, liwmin;
     extern /* Subroutine */
-    int zhetrd_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublecomplex *, integer *, integer *);
+    void zhetrd_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublecomplex *, integer *, integer *);
     logical tryrac;
     integer lrwmin, llwrkn, llwork, nsplit;
     doublereal smlnum;
     extern /* Subroutine */
-    int zstein_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, doublecomplex *, integer *, doublereal *, integer *, integer *, integer *);
+    void zstein_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, doublecomplex *, integer *, doublereal *, integer *, integer *, integer *);
     logical lquery;
     integer lwkopt;
     extern doublereal zlansy_(char *, char *, integer *, doublecomplex *, integer *, doublereal *);
     extern /* Subroutine */
-    int zstemr_(char *, char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, doublereal *, doublecomplex *, integer *, integer *, integer *, logical *, doublereal *, integer *, integer *, integer *, integer *), zunmtr_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer * );
+    void zstemr_(char *, char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, doublereal *, doublecomplex *, integer *, integer *, integer *, logical *, doublereal *, integer *, integer *, integer *, integer *), zunmtr_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer * );
     integer llrwork;
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -539,12 +539,12 @@ int zheevr_(char *jobz, char *range, char *uplo, integer *n, doublecomplex *a, i
         i__1 = -(*info);
         xerbla_("ZHEEVR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *m = 0;
@@ -553,7 +553,7 @@ int zheevr_(char *jobz, char *range, char *uplo, integer *n, doublecomplex *a, i
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -585,7 +585,7 @@ int zheevr_(char *jobz, char *range, char *uplo, integer *n, doublecomplex *a, i
             isuppz[2] = 1;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -817,7 +817,7 @@ L30:
     rwork[1] = (doublereal) lrwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHEEVR */
 }
 /* zheevr_ */

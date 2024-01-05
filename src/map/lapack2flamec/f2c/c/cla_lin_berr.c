@@ -87,7 +87,7 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cla_lin_berr_(integer *n, integer *nz, integer *nrhs, complex *res, real *ayb, real *berr)
+void cla_lin_berr_(integer *n, integer *nz, integer *nrhs, complex *res, real *ayb, real *berr)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -175,6 +175,6 @@ int cla_lin_berr_(integer *n, integer *nz, integer *nrhs, complex *res, real *ay
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* cla_lin_berr__ */

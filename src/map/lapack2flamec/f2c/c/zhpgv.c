@@ -159,7 +159,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int zhpgv_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex *ap, doublecomplex *bp, doublereal *w, doublecomplex *z__, integer *ldz, doublecomplex *work, doublereal *rwork, integer * info)
+void zhpgv_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex *ap, doublecomplex *bp, doublereal *w, doublecomplex *z__, integer *ldz, doublecomplex *work, doublereal *rwork, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhpgv inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "",*itype, *jobz, *uplo, *n, *ldz);
@@ -171,10 +171,10 @@ int zhpgv_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex *a
     char trans[1];
     logical upper;
     extern /* Subroutine */
-    int zhpev_(char *, char *, integer *, doublecomplex *, doublereal *, doublecomplex *, integer *, doublecomplex *, doublereal *, integer *);
+    void zhpev_(char *, char *, integer *, doublecomplex *, doublereal *, doublecomplex *, integer *, doublecomplex *, doublereal *, integer *);
     logical wantz;
     extern /* Subroutine */
-    int ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zhpgst_(integer *, char *, integer *, doublecomplex *, doublecomplex *, integer *), zpptrf_( char *, integer *, doublecomplex *, integer *);
+    void ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zhpgst_(integer *, char *, integer *, doublecomplex *, doublecomplex *, integer *), zpptrf_( char *, integer *, doublecomplex *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -230,13 +230,13 @@ int zhpgv_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex *a
         i__1 = -(*info);
         xerbla_("ZHPGV ", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Form a Cholesky factorization of B. */
     zpptrf_(uplo, n, &bp[1], info);
@@ -244,7 +244,7 @@ int zhpgv_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex *a
     {
         *info = *n + *info;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     zhpgst_(itype, uplo, n, &ap[1], &bp[1], info);
@@ -303,7 +303,7 @@ int zhpgv_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex *a
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHPGV */
 }
 /* zhpgv_ */

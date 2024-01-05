@@ -131,7 +131,7 @@
 /* > \ingroup OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublereal *cto, integer *m, integer *n, doublereal *a, integer *lda, integer *info)
+void dlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublereal *cto, integer *m, integer *n, doublereal *a, integer *lda, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlascl inputs: type__ %c, kl %" FLA_IS ", ku %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*type__, *kl, *ku, *m, *n, *lda);
@@ -260,13 +260,13 @@ int dlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublerea
         i__1 = -(*info);
         xerbla_("DLASCL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *m == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = dlamch_("S");
@@ -313,7 +313,7 @@ L10:
             if (mul == 1.)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
     }
@@ -475,7 +475,7 @@ L10:
         goto L10;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASCL */
 }
 /* dlascl_ */

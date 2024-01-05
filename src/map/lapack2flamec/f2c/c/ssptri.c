@@ -102,7 +102,7 @@ the matrix is singular and its */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ssptri_(char *uplo, integer *n, real *ap, integer *ipiv, real *work, integer *info)
+void ssptri_(char *uplo, integer *n, real *ap, integer *ipiv, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -125,7 +125,7 @@ int ssptri_(char *uplo, integer *n, real *ap, integer *ipiv, real *work, integer
     integer kstep;
     logical upper;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * ), sspmv_(char *, integer *, real *, real *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * ), sspmv_(char *, integer *, real *, real *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer kcnext;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -168,13 +168,13 @@ int ssptri_(char *uplo, integer *n, real *ap, integer *ipiv, real *work, integer
         i__1 = -(*info);
         xerbla_("SSPTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if (upper)
@@ -188,7 +188,7 @@ int ssptri_(char *uplo, integer *n, real *ap, integer *ipiv, real *work, integer
             if (ipiv[*info] > 0 && ap[kp] == 0.f)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             kp -= *info;
             /* L10: */
@@ -206,7 +206,7 @@ int ssptri_(char *uplo, integer *n, real *ap, integer *ipiv, real *work, integer
             if (ipiv[*info] > 0 && ap[kp] == 0.f)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             kp = kp + *n - *info + 1;
             /* L20: */
@@ -416,7 +416,7 @@ L80:
         ;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSPTRI */
 }
 /* ssptri_ */

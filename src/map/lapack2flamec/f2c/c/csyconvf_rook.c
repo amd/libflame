@@ -191,7 +191,7 @@
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int csyconvf_rook_(char *uplo, char *way, integer *n, complex *a, integer *lda, complex *e, integer *ipiv, integer *info)
+void csyconvf_rook_(char *uplo, char *way, integer *n, complex *a, integer *lda, complex *e, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -209,7 +209,7 @@ int csyconvf_rook_(char *uplo, char *way, integer *n, complex *a, integer *lda, 
     integer i__, ip, ip2;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *);
+    void cswap_(integer *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -261,13 +261,13 @@ int csyconvf_rook_(char *uplo, char *way, integer *n, complex *a, integer *lda, 
         i__1 = -(*info);
         xerbla_("CSYCONVF_ROOK", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -565,7 +565,7 @@ int csyconvf_rook_(char *uplo, char *way, integer *n, complex *a, integer *lda, 
         /* End A is LOWER */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSYCONVF_ROOK */
 }
 /* csyconvf_rook__ */

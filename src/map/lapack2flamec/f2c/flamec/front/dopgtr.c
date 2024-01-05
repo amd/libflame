@@ -101,7 +101,7 @@
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dopgtr_(char *uplo, integer *n, doublereal *ap, doublereal *tau, doublereal *q, integer *ldq, doublereal *work, integer *info)
+void dopgtr_(char *uplo, integer *n, doublereal *ap, doublereal *tau, doublereal *q, integer *ldq, doublereal *work, integer *info)
 {
     /* System generated locals */
     integer q_dim1, q_offset, i__1, i__2, i__3;
@@ -111,7 +111,7 @@ int dopgtr_(char *uplo, integer *n, doublereal *ap, doublereal *tau, doublereal 
     integer iinfo;
     logical upper;
     extern /* Subroutine */
-    int dorg2l_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dorg2r_fla(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dorg2l_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dorg2r_fla(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -159,12 +159,12 @@ int dopgtr_(char *uplo, integer *n, doublereal *ap, doublereal *tau, doublereal 
     {
         i__1 = -(*info);
         xerbla_("DOPGTR", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -249,7 +249,7 @@ int dopgtr_(char *uplo, integer *n, doublereal *ap, doublereal *tau, doublereal 
             dorg2r_fla(&i__1, &i__2, &i__3, &q[(q_dim1 << 1) + 2], ldq, &tau[1], &work[1], &iinfo);
         }
     }
-    return 0;
+    return;
     /* End of DOPGTR */
 }
 /* dopgtr_ */

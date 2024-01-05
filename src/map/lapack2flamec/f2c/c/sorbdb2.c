@@ -189,7 +189,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sorbdb2_(integer *m, integer *p, integer *q, real *x11, integer *ldx11, real *x21, integer *ldx21, real *theta, real *phi, real *taup1, real *taup2, real *tauq1, real *work, integer *lwork, integer *info)
+void sorbdb2_(integer *m, integer *p, integer *q, real *x11, integer *ldx11, real *x21, integer *ldx21, real *theta, real *phi, real *taup1, real *taup2, real *tauq1, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -209,15 +209,15 @@ int sorbdb2_(integer *m, integer *p, integer *q, real *x11, integer *ldx11, real
     real s;
     integer childinfo;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     extern real snrm2_(integer *, real *, integer *);
     integer ilarf, llarf;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sscal_(integer *, real *, real *, integer *), slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     integer iorbdb5, lorbdb5;
     extern /* Subroutine */
-    int sorbdb5_(integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *), slarfgp_(integer *, real *, real *, integer *, real *);
+    void sorbdb5_(integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *), slarfgp_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -308,12 +308,12 @@ int sorbdb2_(integer *m, integer *p, integer *q, real *x11, integer *ldx11, real
         i__1 = -(*info);
         xerbla_("SORBDB2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Reduce rows 1, ..., P of X11 and X21 */
     i__1 = *p;
@@ -383,7 +383,7 @@ int sorbdb2_(integer *m, integer *p, integer *q, real *x11, integer *ldx11, real
         slarf_("L", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], &c__1, &taup2[ i__], &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &work[ilarf]);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SORBDB2 */
 }
 /* sorbdb2_ */

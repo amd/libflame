@@ -208,7 +208,7 @@ V2 is lower trapezoidal, consisting of the first L */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dtpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, integer *mb, doublereal *v, integer *ldv, doublereal *t, integer *ldt, doublereal *a, integer *lda, doublereal * b, integer *ldb, doublereal *work, integer *info)
+void dtpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, integer *mb, doublereal *v, integer *ldv, doublereal *t, integer *ldt, doublereal *a, integer *lda, doublereal * b, integer *ldb, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtpmlqt inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", mb %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*side, *trans, *m, *n, *k, *l, *mb, *ldv, *ldt, *lda, *ldb);
@@ -319,13 +319,13 @@ int dtpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, intege
         i__1 = -(*info);
         xerbla_("DTPMLQT", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* .. Quick return if possible .. */
     if (*m == 0 || *n == 0 || *k == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (left && notran)
     {
@@ -432,7 +432,7 @@ int dtpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, intege
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTPMLQT */
 }
 /* dtpmlqt_ */

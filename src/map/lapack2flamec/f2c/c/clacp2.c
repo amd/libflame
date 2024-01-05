@@ -91,7 +91,7 @@ if UPLO = 'L', only the lower trapezium is */
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int clacp2_(char *uplo, integer *m, integer *n, real *a, integer *lda, complex *b, integer *ldb)
+void clacp2_(char *uplo, integer *m, integer *n, real *a, integer *lda, complex *b, integer *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -196,7 +196,7 @@ int clacp2_(char *uplo, integer *m, integer *n, real *a, integer *lda, complex *
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLACP2 */
 }
 /* clacp2_ */

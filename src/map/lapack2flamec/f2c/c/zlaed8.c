@@ -215,7 +215,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zlaed8_(integer *k, integer *n, integer *qsiz, doublecomplex *q, integer *ldq, doublereal *d__, doublereal *rho, integer *cutpnt, doublereal *z__, doublereal *dlamda, doublecomplex * q2, integer *ldq2, doublereal *w, integer *indxp, integer *indx, integer *indxq, integer *perm, integer *givptr, integer *givcol, doublereal *givnum, integer *info)
+void zlaed8_(integer *k, integer *n, integer *qsiz, doublecomplex *q, integer *ldq, doublereal *d__, doublereal *rho, integer *cutpnt, doublereal *z__, doublereal *dlamda, doublecomplex * q2, integer *ldq2, doublereal *w, integer *indxp, integer *indx, integer *indxq, integer *perm, integer *givptr, integer *givcol, doublereal *givnum, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaed8 inputs: k %" FLA_IS ", n %" FLA_IS ", qsiz %" FLA_IS ", ldq %" FLA_IS ", cutpnt %" FLA_IS ", ldq2 %" FLA_IS "",*k, *n, *qsiz, *ldq, *cutpnt, *ldq2);
@@ -232,11 +232,11 @@ int zlaed8_(integer *k, integer *n, integer *qsiz, doublecomplex *q, integer *ld
     doublereal eps, tau, tol;
     integer jlam, imax, jmax;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), zdrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *), zcopy_( integer *, doublecomplex *, integer *, doublecomplex *, integer *) ;
+    void dscal_(integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), zdrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *), zcopy_( integer *, doublecomplex *, integer *, doublecomplex *, integer *) ;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -303,7 +303,7 @@ int zlaed8_(integer *k, integer *n, integer *qsiz, doublecomplex *q, integer *ld
         i__1 = -(*info);
         xerbla_("ZLAED8", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Need to initialize GIVPTR to O here in case of quick exit */
     /* to prevent an unspecified code behavior (usually sigfault) */
@@ -314,7 +314,7 @@ int zlaed8_(integer *k, integer *n, integer *qsiz, doublecomplex *q, integer *ld
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     n1 = *cutpnt;
     n2 = *n - n1;
@@ -387,7 +387,7 @@ int zlaed8_(integer *k, integer *n, integer *qsiz, doublecomplex *q, integer *ld
         }
         zlacpy_("A", qsiz, n, &q2[q2_dim1 + 1], ldq2, &q[q_dim1 + 1], ldq);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* If there are multiple eigenvalues then the problem deflates. Here */
     /* the number of equal eigenvalues are found. As each equal */
@@ -519,7 +519,7 @@ L100: /* Sort the eigenvalues and corresponding eigenvectors into DLAMDA */
         zlacpy_("A", qsiz, &i__1, &q2[(*k + 1) * q2_dim1 + 1], ldq2, &q[(*k + 1) * q_dim1 + 1], ldq);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAED8 */
 }
 /* zlaed8_ */

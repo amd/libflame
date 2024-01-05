@@ -208,7 +208,7 @@ v(1:p-k+i-1) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sggqrf_(integer *n, integer *m, integer *p, real *a, integer *lda, real *taua, real *b, integer *ldb, real *taub, real * work, integer *lwork, integer *info)
+void sggqrf_(integer *n, integer *m, integer *p, real *a, integer *lda, real *taua, real *b, integer *ldb, real *taub, real * work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sggqrf inputs: n %" FLA_IS ", m %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*n, *m, *p, *lda, *ldb);
@@ -220,11 +220,11 @@ int sggqrf_(integer *n, integer *m, integer *p, real *a, integer *lda, real *tau
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), sgerqf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer * );
+    void sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), sgerqf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer * );
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+    void sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -301,12 +301,12 @@ int sggqrf_(integer *n, integer *m, integer *p, real *a, integer *lda, real *tau
         i__1 = -(*info);
         xerbla_("SGGQRF", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* QR factorization of N-by-M matrix A: A = Q*R */
     sgeqrf_(n, m, &a[a_offset], lda, &taua[1], &work[1], lwork, info);
@@ -325,7 +325,7 @@ int sggqrf_(integer *n, integer *m, integer *p, real *a, integer *lda, real *tau
     i__2 = (integer) work[1]; // , expr subst
     work[1] = (real) fla_max(i__1,i__2);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SGGQRF */
 }
 /* sggqrf_ */

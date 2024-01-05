@@ -107,7 +107,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlaqr1_(integer *n, doublereal *h__, integer *ldh, doublereal *sr1, doublereal *si1, doublereal *sr2, doublereal *si2, doublereal *v)
+void dlaqr1_(integer *n, doublereal *h__, integer *ldh, doublereal *sr1, doublereal *si1, doublereal *sr2, doublereal *si2, doublereal *v)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaqr1 inputs: n %" FLA_IS ", ldh %" FLA_IS "",*n, *ldh);
@@ -142,7 +142,7 @@ int dlaqr1_(integer *n, doublereal *h__, integer *ldh, doublereal *sr1, doublere
     if (*n != 2 && *n != 3)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 2)
     {
@@ -178,6 +178,6 @@ int dlaqr1_(integer *n, doublereal *h__, integer *ldh, doublereal *sr1, doublere
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dlaqr1_ */

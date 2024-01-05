@@ -192,7 +192,7 @@ k=N/2. IF TRANSR = 'T' then RFP is */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
+void spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -202,10 +202,10 @@ int spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
     extern logical lsame_(char *, char *);
     logical lower;
     extern /* Subroutine */
-    int strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     extern /* Subroutine */
-    int spotrf_(char *, integer *, real *, integer *, integer *);
+    void spotrf_(char *, integer *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -245,12 +245,12 @@ int spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
     {
         i__1 = -(*info);
         xerbla_("SPFTRF", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     /* If N is odd, set NISODD = .TRUE. */
     /* If N is even, set K = N/2 and NISODD = .FALSE. */
@@ -289,7 +289,7 @@ int spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
                 spotrf_("L", &n1, a, n, info);
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strsm_("R", "L", "T", "N", &n2, &n1, &c_b12, a, n, &a[n1], n);
                 ssyrk_("U", "N", &n2, &n1, &c_b15, &a[n1], n, &c_b12, &a[*n], n);
@@ -307,7 +307,7 @@ int spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
                 spotrf_("L", &n1, &a[n2], n, info);
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strsm_("L", "L", "N", "N", &n1, &n2, &c_b12, &a[n2], n, a, n);
                 ssyrk_("U", "T", &n2, &n1, &c_b15, a, n, &c_b12, &a[n1], n);
@@ -330,7 +330,7 @@ int spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
                 spotrf_("U", &n1, a, &n1, info);
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strsm_("L", "U", "T", "N", &n1, &n2, &c_b12, a, &n1, &a[n1 * n1], &n1);
                 ssyrk_("L", "T", &n2, &n1, &c_b15, &a[n1 * n1], &n1, &c_b12, & a[1], &n1);
@@ -349,7 +349,7 @@ int spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
                 spotrf_("U", &n1, &a[n2 * n2], &n2, info);
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strsm_("R", "U", "N", "N", &n2, &n1, &c_b12, &a[n2 * n2], &n2, a, &n2);
                 ssyrk_("L", "N", &n2, &n1, &c_b15, a, &n2, &c_b12, &a[n1 * n2], &n2);
@@ -376,7 +376,7 @@ int spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
                 spotrf_("L", &k, &a[1], &i__1, info);
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
@@ -400,7 +400,7 @@ int spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
                 spotrf_("L", &k, &a[k + 1], &i__1, info);
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
@@ -428,7 +428,7 @@ int spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
                 spotrf_("U", &k, &a[k], &k, info);
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strsm_("L", "U", "T", "N", &k, &k, &c_b12, &a[k], &n1, &a[k * (k + 1)], &k);
                 ssyrk_("L", "T", &k, &k, &c_b15, &a[k * (k + 1)], &k, &c_b12, a, &k);
@@ -447,7 +447,7 @@ int spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
                 spotrf_("U", &k, &a[k * (k + 1)], &k, info);
                 if (*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strsm_("R", "U", "N", "N", &k, &k, &c_b12, &a[k * (k + 1)], & k, a, &k);
                 ssyrk_("L", "N", &k, &k, &c_b15, a, &k, &c_b12, &a[k * k], &k);
@@ -459,7 +459,7 @@ int spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
             }
         }
     }
-    return 0;
+    return;
     /* End of SPFTRF */
 }
 /* spftrf_ */

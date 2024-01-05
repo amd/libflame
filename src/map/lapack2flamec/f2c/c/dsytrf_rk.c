@@ -250,7 +250,7 @@ static integer c__2 = 2;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int dsytrf_rk_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *e, integer *ipiv, doublereal *work, integer *lwork, integer *info)
+void dsytrf_rk_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *e, integer *ipiv, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsytrf_rk inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *lda, *lwork);
@@ -259,12 +259,12 @@ int dsytrf_rk_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *
     /* Local variables */
     integer i__, k;
     extern /* Subroutine */
-    int dsytf2_rk_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dlasyf_rk_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dsytf2_rk_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dlasyf_rk_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer kb, nb, ip, iws;
     extern logical lsame_(char *, char *);
     integer nbmin, iinfo;
     extern /* Subroutine */
-    int dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -329,12 +329,12 @@ int dsytrf_rk_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *
         i__1 = -(*info);
         xerbla_("DSYTRF_RK", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     nbmin = 2;
     ldwork = *n;
@@ -500,7 +500,7 @@ L35: /* End Lower */
     }
     work[1] = (doublereal) lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYTRF_RK */
 }
 /* dsytrf_rk__ */

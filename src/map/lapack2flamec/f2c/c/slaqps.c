@@ -165,7 +165,7 @@ static real c_b16 = 0.f;
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-int slaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, real *a, integer *lda, integer *jpvt, real *tau, real *vn1, real *vn2, real *auxv, real *f, integer *ldf)
+void slaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, real *a, integer *lda, integer *jpvt, real *tau, real *vn1, real *vn2, real *auxv, real *f, integer *ldf)
 {
     /* System generated locals */
     integer a_dim1, a_offset, f_dim1, f_offset, i__1, i__2;
@@ -181,13 +181,13 @@ int slaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, r
     extern real snrm2_(integer *, real *, integer *);
     real tol3z;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer itemp;
     extern /* Subroutine */
-    int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer *);
+    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int slarfg_(integer *, real *, real *, integer *, real *);
+    void slarfg_(integer *, real *, real *, integer *, real *);
     integer lsticc;
     extern integer isamax_(integer *, real *, integer *);
     integer lastrk;
@@ -372,7 +372,7 @@ L40:
         lsticc = itemp;
         goto L40;
     }
-    return 0;
+    return;
     /* End of SLAQPS */
 }
 /* slaqps_ */

@@ -178,7 +178,7 @@ the least squares solution could not */
 /* > \ingroup realOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int sggglm_(integer *n, integer *m, integer *p, real *a, integer *lda, real *b, integer *ldb, real *d__, real *x, real *y, real *work, integer *lwork, integer *info)
+void sggglm_(integer *n, integer *m, integer *p, real *a, integer *lda, real *b, integer *ldb, real *d__, real *x, real *y, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sggglm inputs: n %" FLA_IS ", m %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*n, *m, *p, *lda, *ldb);
@@ -187,14 +187,14 @@ int sggglm_(integer *n, integer *m, integer *p, real *a, integer *lda, real *b, 
     /* Local variables */
     integer i__, nb, np, nb1, nb2, nb3, nb4, lopt;
     extern /* Subroutine */
-    int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int sggqrf_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, real *, integer *, integer *);
+    void sggqrf_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, real *, integer *, integer *);
     integer lwkmin, lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), sormrq_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), strtrs_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
+    void sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), sormrq_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), strtrs_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -282,12 +282,12 @@ int sggglm_(integer *n, integer *m, integer *p, real *a, integer *lda, real *b, 
         i__1 = -(*info);
         xerbla_("SGGGLM", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
@@ -307,7 +307,7 @@ int sggglm_(integer *n, integer *m, integer *p, real *a, integer *lda, real *b, 
             y[i__] = 0.f;
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the GQR factorization of matrices A and B: */
     /* Q**T*A = ( R11 ) M, Q**T*B*Z**T = ( T11 T12 ) M */
@@ -337,7 +337,7 @@ int sggglm_(integer *n, integer *m, integer *p, real *a, integer *lda, real *b, 
         {
             *info = 1;
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         i__1 = *n - *m;
         scopy_(&i__1, &d__[*m + 1], &c__1, &y[*m + *p - *n + 1], &c__1);
@@ -362,7 +362,7 @@ int sggglm_(integer *n, integer *m, integer *p, real *a, integer *lda, real *b, 
         {
             *info = 2;
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* Copy D to X */
         scopy_(m, &d__[1], &c__1, &x[1], &c__1);
@@ -379,7 +379,7 @@ int sggglm_(integer *n, integer *m, integer *p, real *a, integer *lda, real *b, 
     i__2 = (integer) work[*m + np + 1]; // , expr subst
     work[1] = (real) (*m + np + fla_max(i__1,i__2));
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SGGGLM */
 }
 /* sggglm_ */

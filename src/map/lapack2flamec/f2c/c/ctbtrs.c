@@ -136,7 +136,7 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ctbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integer *nrhs, complex *ab, integer *ldab, complex *b, integer *ldb, integer *info)
+void ctbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integer *nrhs, complex *ab, integer *ldab, complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -154,7 +154,7 @@ int ctbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, intege
     integer j;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int ctbsv_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *, integer *);
+    void ctbsv_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -228,13 +228,13 @@ int ctbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, intege
         i__1 = -(*info);
         xerbla_("CTBTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Check for singularity. */
     if (nounit)
@@ -250,7 +250,7 @@ int ctbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, intege
                 if (ab[i__2].r == 0.f && ab[i__2].i == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 /* L10: */
             }
@@ -266,7 +266,7 @@ int ctbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, intege
                 if (ab[i__2].r == 0.f && ab[i__2].i == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 /* L20: */
             }
@@ -283,7 +283,7 @@ int ctbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, intege
         /* L30: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTBTRS */
 }
 /* ctbtrs_ */

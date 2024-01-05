@@ -223,7 +223,7 @@ static integer c__1 = 1;
 /* > \ingroup complexGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, integer *lds, complex *p, integer *ldp, complex *vl, integer *ldvl, complex *vr, integer *ldvr, integer *mm, integer *m, complex *work, real *rwork, integer *info)
+void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, integer *lds, complex *p, integer *ldp, complex *vl, integer *ldvl, complex *vr, integer *ldvr, integer *mm, integer *m, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -262,7 +262,7 @@ int ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, i
     real sbeta;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     real small_val;
     logical compl;
     real anorm, bnorm;
@@ -271,7 +271,7 @@ int ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, i
     complex bcoeff;
     logical ilback;
     extern /* Subroutine */
-    int slabad_(real *, real *);
+    void slabad_(real *, real *);
     real ascale, bscale;
     extern /* Complex */
     void cladiv_f2c_(complex *, complex *, complex *);
@@ -397,7 +397,7 @@ int ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, i
         i__1 = -(*info);
         xerbla_("CTGEVC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Count the number of eigenvectors */
     if (! ilall)
@@ -453,14 +453,14 @@ int ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, i
         i__1 = -(*info);
         xerbla_("CTGEVC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *m = im;
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Machine Constants */
     safmin = slamch_("Safe minimum");
@@ -1170,7 +1170,7 @@ L250:
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTGEVC */
 }
 /* ctgevc_ */

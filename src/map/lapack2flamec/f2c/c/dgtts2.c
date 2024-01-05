@@ -116,7 +116,7 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup doubleGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dgtts2_(integer *itrans, integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublereal *du, doublereal *du2, integer *ipiv, doublereal *b, integer *ldb)
+void dgtts2_(integer *itrans, integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublereal *du, doublereal *du2, integer *ipiv, doublereal *b, integer *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgtts2 inputs: itrans %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*itrans, *n, *nrhs, *ldb);
@@ -151,7 +151,7 @@ int dgtts2_(integer *itrans, integer *n, integer *nrhs, doublereal *dl, doublere
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*itrans == 0)
     {
@@ -314,6 +314,6 @@ L70:
     }
     /* End of DGTTS2 */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dgtts2_ */

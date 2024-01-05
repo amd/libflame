@@ -192,7 +192,7 @@ k=N/2. IF TRANSR = 'T' then RFP is */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dpftrf_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
+void dpftrf_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpftrf inputs: transr %c, uplo %c, n %" FLA_IS "",*transr, *uplo, *n);
@@ -204,10 +204,10 @@ int dpftrf_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
     extern logical lsame_(char *, char *);
     logical lower;
     extern /* Subroutine */
-    int dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsyrk_( char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsyrk_( char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     extern /* Subroutine */
-    int dpotrf_(char *, integer *, doublereal *, integer *, integer *);
+    void dpotrf_(char *, integer *, doublereal *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -248,13 +248,13 @@ int dpftrf_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
         i__1 = -(*info);
         xerbla_("DPFTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* If N is odd, set NISODD = .TRUE. */
     /* If N is even, set K = N/2 and NISODD = .FALSE. */
@@ -294,7 +294,7 @@ int dpftrf_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dtrsm_("R", "L", "T", "N", &n2, &n1, &c_b12, a, n, &a[n1], n);
                 dsyrk_("U", "N", &n2, &n1, &c_b15, &a[n1], n, &c_b12, &a[*n], n);
@@ -313,7 +313,7 @@ int dpftrf_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dtrsm_("L", "L", "N", "N", &n1, &n2, &c_b12, &a[n2], n, a, n);
                 dsyrk_("U", "T", &n2, &n1, &c_b15, a, n, &c_b12, &a[n1], n);
@@ -337,7 +337,7 @@ int dpftrf_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dtrsm_("L", "U", "T", "N", &n1, &n2, &c_b12, a, &n1, &a[n1 * n1], &n1);
                 dsyrk_("L", "T", &n2, &n1, &c_b15, &a[n1 * n1], &n1, &c_b12, & a[1], &n1);
@@ -357,7 +357,7 @@ int dpftrf_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dtrsm_("R", "U", "N", "N", &n2, &n1, &c_b12, &a[n2 * n2], &n2, a, &n2);
                 dsyrk_("L", "N", &n2, &n1, &c_b15, a, &n2, &c_b12, &a[n1 * n2], &n2);
@@ -385,7 +385,7 @@ int dpftrf_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
@@ -410,7 +410,7 @@ int dpftrf_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
@@ -439,7 +439,7 @@ int dpftrf_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dtrsm_("L", "U", "T", "N", &k, &k, &c_b12, &a[k], &n1, &a[k * (k + 1)], &k);
                 dsyrk_("L", "T", &k, &k, &c_b15, &a[k * (k + 1)], &k, &c_b12, a, &k);
@@ -459,7 +459,7 @@ int dpftrf_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
                 if (*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dtrsm_("R", "U", "N", "N", &k, &k, &c_b12, &a[k * (k + 1)], & k, a, &k);
                 dsyrk_("L", "N", &k, &k, &c_b15, a, &k, &c_b12, &a[k * k], &k);
@@ -472,7 +472,7 @@ int dpftrf_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPFTRF */
 }
 /* dpftrf_ */

@@ -77,7 +77,7 @@ if INFO = i, then i */
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ssterf_(integer *n, real *d__, real *e, integer *info)
+void ssterf_(integer *n, real *d__, real *e, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -100,7 +100,7 @@ int ssterf_(integer *n, real *d__, real *e, integer *info)
     real eps2, oldc;
     integer lend, jtot;
     extern /* Subroutine */
-    int slae2_(real *, real *, real *, real *, real *) ;
+    void slae2_(real *, real *, real *, real *, real *) ;
     real gamma, alpha, sigma, anorm;
     extern real slapy2_(real *, real *);
     integer iscale;
@@ -111,14 +111,14 @@ int ssterf_(integer *n, real *d__, real *e, integer *info)
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real safmax;
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
     integer lendsv;
     real ssfmin;
     integer nmaxit;
     real ssfmax;
     extern real slanst_(char *, integer *, real *, real *);
     extern /* Subroutine */
-    int slasrt_(char *, integer *, real *, integer *);
+    void slasrt_(char *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -152,12 +152,12 @@ int ssterf_(integer *n, real *d__, real *e, integer *info)
         i__1 = -(*info);
         xerbla_("SSTERF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n <= 1)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Determine the unit roundoff for this environment. */
     eps = slamch_("E");
@@ -484,7 +484,7 @@ L170:
     slasrt_("I", n, &d__[1], info);
 L180:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSTERF */
 }
 /* ssterf_ */

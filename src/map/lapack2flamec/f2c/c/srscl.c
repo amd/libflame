@@ -70,13 +70,13 @@
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int srscl_(integer *n, real *sa, real *sx, integer *incx)
+void srscl_(integer *n, real *sa, real *sx, integer *incx)
 {
     real mul, cden;
     logical done;
     real cnum, cden1, cnum1;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), slabad_(real *, real *);
+    void sscal_(integer *, real *, real *, integer *), slabad_(real *, real *);
     extern real slamch_(char *);
     real bignum, smlnum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -113,7 +113,7 @@ int srscl_(integer *n, real *sa, real *sx, integer *incx)
     if (*n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = slamch_("S");
@@ -152,7 +152,7 @@ L10:
         goto L10;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SRSCL */
 }
 /* srscl_ */

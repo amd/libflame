@@ -224,7 +224,7 @@ the routine */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-int cgelsd_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, complex *b, integer *ldb, real *s, real *rcond, integer *rank, complex *work, integer *lwork, real *rwork, integer * iwork, integer *info)
+void cgelsd_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, complex *b, integer *ldb, real *s, real *rcond, integer *rank, complex *work, integer *lwork, real *rwork, integer * iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -247,20 +247,20 @@ int cgelsd_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, co
     real sfmin;
     integer minmn, maxmn, itaup, itauq, mnthr, nwork;
     extern /* Subroutine */
-    int cgebrd_(integer *, integer *, complex *, integer *, real *, real *, complex *, complex *, complex *, integer *, integer *), slabad_(real *, real *);
+    void cgebrd_(integer *, integer *, complex *, integer *, real *, real *, complex *, complex *, complex *, integer *, integer *), slabad_(real *, real *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int cgelqf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clalsd_( char *, integer *, integer *, integer *, real *, real *, complex *, integer *, real *, integer *, complex *, real *, integer *, integer *), clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *), cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+    void cgelqf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clalsd_( char *, integer *, integer *, integer *, real *, real *, complex *, integer *, real *, integer *, complex *, real *, integer *, integer *), clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *), cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), cunmbr_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *), slaset_( char *, integer *, integer *, real *, real *, real *, integer *), cunmlq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), cunmbr_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *), slaset_( char *, integer *, integer *, real *, real *, real *, integer *), cunmlq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     integer ldwork;
     extern /* Subroutine */
-    int cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    void cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     integer liwork, minwrk, maxwrk;
     real smlnum;
     integer lrwork;
@@ -481,19 +481,19 @@ int cgelsd_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, co
         i__1 = -(*info);
         xerbla_("CGELSD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*m == 0 || *n == 0)
     {
         *rank = 0;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine parameters. */
     eps = slamch_("P");
@@ -718,7 +718,7 @@ L10:
     iwork[1] = liwork;
     rwork[1] = (real) lrwork;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGELSD */
 }
 /* cgelsd_ */

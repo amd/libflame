@@ -121,7 +121,7 @@ static integer c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int stptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, real *ap, real *b, integer *ldb, integer *info)
+void stptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, real *ap, real *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -136,7 +136,7 @@ int stptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, real
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
-    int stpsv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void stpsv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -197,13 +197,13 @@ int stptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, real
         i__1 = -(*info);
         xerbla_("STPTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Check for singularity. */
     if (nounit)
@@ -219,7 +219,7 @@ int stptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, real
                 if (ap[jc + *info - 1] == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 jc += *info;
                 /* L10: */
@@ -236,7 +236,7 @@ int stptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, real
                 if (ap[jc] == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 jc = jc + *n - *info + 1;
                 /* L20: */
@@ -254,7 +254,7 @@ int stptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, real
         /* L30: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of STPTRS */
 }
 /* stptrs_ */

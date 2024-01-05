@@ -90,7 +90,7 @@
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int slargv_(integer *n, real *x, integer *incx, real *y, integer *incy, real *c__, integer *incc)
+void slargv_(integer *n, real *x, integer *incx, real *y, integer *incy, real *c__, integer *incc)
 {
     /* System generated locals */
     integer i__1;
@@ -164,7 +164,7 @@ int slargv_(integer *n, real *x, integer *incx, real *y, integer *incy, real *c_
         ix += *incx;
         /* L10: */
     }
-    return 0;
+    return;
     /* End of SLARGV */
 }
 /* slargv_ */

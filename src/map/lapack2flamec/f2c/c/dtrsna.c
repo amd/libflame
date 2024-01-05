@@ -262,7 +262,7 @@ v**T denotes the transpose of v, and norm(u) */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t, integer *ldt, doublereal *vl, integer * ldvl, doublereal *vr, integer *ldvr, doublereal *s, doublereal *sep, integer *mm, integer *m, doublereal *work, integer *ldwork, integer * iwork, integer *info)
+void dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t, integer *ldt, doublereal *vl, integer * ldvl, doublereal *vr, integer *ldvr, doublereal *s, doublereal *sep, integer *mm, integer *m, doublereal *work, integer *ldwork, integer * iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtrsna inputs: job %c, howmny %c, n %" FLA_IS ", ldt %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS ", ldwork %" FLA_IS "",*job, *howmny, *n, *ldt, *ldvl, *ldvr, *mm, *ldwork);
@@ -293,17 +293,17 @@ int dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t,
     logical wants;
     doublereal dummy[1];
     extern /* Subroutine */
-    int dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     extern doublereal dlapy2_(doublereal *, doublereal *);
     extern /* Subroutine */
-    int dlabad_(doublereal *, doublereal *);
+    void dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical wantbh;
     extern /* Subroutine */
-    int dlaqtr_(logical *, logical *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dtrexc_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *);
+    void dlaqtr_(logical *, logical *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dtrexc_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *);
     logical somcon;
     doublereal smlnum;
     logical wantsp;
@@ -443,13 +443,13 @@ int dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t,
         i__1 = -(*info);
         xerbla_("DTRSNA", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -458,7 +458,7 @@ int dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t,
             if (! select[1])
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
         if (wants)
@@ -470,7 +470,7 @@ int dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t,
             sep[1] = (d__1 = t[t_dim1 + 1], f2c_abs(d__1));
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = dlamch_("P");
@@ -680,7 +680,7 @@ L60:
         ;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTRSNA */
 }
 /* dtrsna_ */

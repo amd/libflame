@@ -214,7 +214,7 @@ static integer c__1 = 1;
 /* > \ingroup doublePTsolve */
 /* ===================================================================== */
 /* Subroutine */
-int dptsvx_(char *fact, integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublereal *df, doublereal *ef, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal * rcond, doublereal *ferr, doublereal *berr, doublereal *work, integer * info)
+void dptsvx_(char *fact, integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublereal *df, doublereal *ef, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal * rcond, doublereal *ferr, doublereal *berr, doublereal *work, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dptsvx inputs: fact %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *n, *nrhs, *ldb, *ldx);
@@ -224,14 +224,14 @@ int dptsvx_(char *fact, integer *n, integer *nrhs, doublereal *d__, doublereal *
     extern logical lsame_(char *, char *);
     doublereal anorm;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
     extern /* Subroutine */
-    int dptcon_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dptrfs_( integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *), dpttrf_( integer *, doublereal *, doublereal *, integer *), dpttrs_( integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+    void dptcon_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dptrfs_( integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *), dpttrf_( integer *, doublereal *, doublereal *, integer *), dpttrs_( integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -295,7 +295,7 @@ int dptsvx_(char *fact, integer *n, integer *nrhs, doublereal *d__, doublereal *
         i__1 = -(*info);
         xerbla_("DPTSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (nofact)
     {
@@ -312,7 +312,7 @@ int dptsvx_(char *fact, integer *n, integer *nrhs, doublereal *d__, doublereal *
         {
             *rcond = 0.;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -331,7 +331,7 @@ int dptsvx_(char *fact, integer *n, integer *nrhs, doublereal *d__, doublereal *
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPTSVX */
 }
 /* dptsvx_ */

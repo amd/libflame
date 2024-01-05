@@ -138,7 +138,7 @@ static integer c__1 = 1;
 /* > \ingroup realPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ldz, real *work, integer *info)
+void spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ldz, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -162,7 +162,7 @@ int spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ldz
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slaset_( char *, integer *, integer *, real *, real *, real *, integer *), sbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
     integer icompz;
     extern /* Subroutine */
-    int spttrf_(integer *, real *, real *, integer *);
+    void spttrf_(integer *, real *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -228,13 +228,13 @@ int spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ldz
         i__1 = -(*info);
         xerbla_("SPTEQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -243,7 +243,7 @@ int spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ldz
             z__[z_dim1 + 1] = 1.f;
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (icompz == 2)
     {
@@ -254,7 +254,7 @@ int spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ldz
     if (*info != 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     i__1 = *n;
     for (i__ = 1;
@@ -300,7 +300,7 @@ int spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ldz
         *info = *n + *info;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPTEQR */
 }
 /* spteqr_ */

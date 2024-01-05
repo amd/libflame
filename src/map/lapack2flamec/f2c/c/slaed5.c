@@ -94,7 +94,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slaed5_(integer *i__, real *d__, real *z__, real *delta, real *rho, real *dlam)
+void slaed5_(integer *i__, real *d__, real *z__, real *delta, real *rho, real *dlam)
 {
     /* System generated locals */
     real r__1;
@@ -177,7 +177,7 @@ int slaed5_(integer *i__, real *d__, real *z__, real *delta, real *rho, real *dl
         delta[1] /= temp;
         delta[2] /= temp;
     }
-    return 0;
+    return;
     /* End OF SLAED5 */
 }
 /* slaed5_ */

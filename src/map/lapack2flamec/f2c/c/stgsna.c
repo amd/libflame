@@ -379,7 +379,7 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int stgsna_(char *job, char *howmny, logical *select, integer *n, real *a, integer *lda, real *b, integer *ldb, real *vl, integer *ldvl, real *vr, integer *ldvr, real *s, real *dif, integer * mm, integer *m, real *work, integer *lwork, integer *iwork, integer * info)
+void stgsna_(char *job, char *howmny, logical *select, integer *n, real *a, integer *lda, real *b, integer *ldb, real *vl, integer *ldvl, real *vr, integer *ldvr, real *s, real *dif, integer * mm, integer *m, real *work, integer *lwork, integer *iwork, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -406,13 +406,13 @@ int stgsna_(char *job, char *howmny, logical *select, integer *n, real *a, integ
     integer ilst;
     real rnrm;
     extern /* Subroutine */
-    int slag2_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *);
+    void slag2_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *);
     extern real snrm2_(integer *, real *, integer *);
     real root1, root2, scale;
     extern logical lsame_(char *, char *);
     real uhavi, uhbvi;
     extern /* Subroutine */
-    int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     real tmpii;
     integer lwmin;
     logical wants;
@@ -424,12 +424,12 @@ int stgsna_(char *job, char *howmny, logical *select, integer *n, real *a, integ
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical wantbh, wantdf;
     extern /* Subroutine */
-    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), stgexc_(logical *, logical *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *);
+    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), stgexc_(logical *, logical *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *);
     logical somcon;
     real alprqt, smlnum;
     logical lquery;
     extern /* Subroutine */
-    int stgsyl_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *, integer *);
+    void stgsyl_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -586,18 +586,18 @@ int stgsna_(char *job, char *howmny, logical *select, integer *n, real *a, integ
         i__1 = -(*info);
         xerbla_("STGSNA", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = slamch_("P");
@@ -789,7 +789,7 @@ L20:
     }
     work[1] = (real) lwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of STGSNA */
 }
 /* stgsna_ */

@@ -219,7 +219,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int chetrd_2stage_(char *vect, char *uplo, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tau, complex * hous2, integer *lhous2, complex *work, integer *lwork, integer *info)
+void chetrd_2stage_(char *vect, char *uplo, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tau, complex * hous2, integer *lhous2, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -236,10 +236,10 @@ int chetrd_2stage_(char *vect, char *uplo, integer *n, complex *a, integer *lda,
     /* Local variables */
     integer ib, kd;
     extern /* Subroutine */
-    int chetrd_he2hb_(char *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+    void chetrd_he2hb_(char *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
     integer ldab;
     extern /* Subroutine */
-    int chetrd_hb2st_(char *, char *, char *, integer *, integer *, complex *, integer *, real *, real *, complex *, integer *, complex *, integer *, integer *);
+    void chetrd_hb2st_(char *, char *, char *, integer *, integer *, complex *, integer *, real *, real *, complex *, integer *, complex *, integer *, integer *);
     extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwrk, wpos;
     extern logical lsame_(char *, char *);
@@ -322,12 +322,12 @@ int chetrd_2stage_(char *vect, char *uplo, integer *n, complex *a, integer *lda,
         i__1 = -(*info);
         xerbla_("CHETRD_2STAGE", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
@@ -335,7 +335,7 @@ int chetrd_2stage_(char *vect, char *uplo, integer *n, complex *a, integer *lda,
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Determine pointer position */
     ldab = kd + 1;
@@ -348,7 +348,7 @@ int chetrd_2stage_(char *vect, char *uplo, integer *n, complex *a, integer *lda,
         i__1 = -(*info);
         xerbla_("CHETRD_HE2HB", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     chetrd_hb2st_("Y", vect, uplo, n, &kd, &work[abpos], &ldab, &d__[1], &e[ 1], &hous2[1], lhous2, &work[wpos], &lwrk, info);
     if (*info != 0)
@@ -356,14 +356,14 @@ int chetrd_2stage_(char *vect, char *uplo, integer *n, complex *a, integer *lda,
         i__1 = -(*info);
         xerbla_("CHETRD_HB2ST", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     hous2[1].r = (real) lhmin;
     hous2[1].i = 0.f; // , expr subst
     work[1].r = (real) lwmin;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHETRD_2STAGE */
 }
 /* chetrd_2stage__ */

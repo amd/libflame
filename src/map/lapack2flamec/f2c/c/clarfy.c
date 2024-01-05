@@ -107,7 +107,7 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int clarfy_(char *uplo, integer *n, complex *v, integer * incv, complex *tau, complex *c__, integer *ldc, complex *work)
+void clarfy_(char *uplo, integer *n, complex *v, integer * incv, complex *tau, complex *c__, integer *ldc, complex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -124,12 +124,12 @@ int clarfy_(char *uplo, integer *n, complex *v, integer * incv, complex *tau, co
     complex q__1, q__2, q__3, q__4;
     /* Local variables */
     extern /* Subroutine */
-    int cher2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *);
+    void cher2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *);
     complex alpha;
     extern /* Complex */
     VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern /* Subroutine */
-    int chemv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * ), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    void chemv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * ), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     /* -- LAPACK test routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -158,7 +158,7 @@ int clarfy_(char *uplo, integer *n, complex *v, integer * incv, complex *tau, co
     if (tau->r == 0.f && tau->i == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Form w:= C * v */
     chemv_(uplo, n, &c_b1, &c__[c_offset], ldc, &v[1], incv, &c_b2, &work[1], &c__1);
@@ -177,7 +177,7 @@ int clarfy_(char *uplo, integer *n, complex *v, integer * incv, complex *tau, co
     q__1.i = -tau->i; // , expr subst
     cher2_(uplo, n, &q__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLARFY */
 }
 /* clarfy_ */

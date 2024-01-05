@@ -127,7 +127,7 @@
 /* > \ingroup complexGEauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int claqge_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, char * equed)
+void claqge_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, char * equed)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -175,7 +175,7 @@ int claqge_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c
     {
         *(unsigned char *)equed = 'N';
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize LARGE and SMALL. */
     small_val = slamch_("Safe minimum") / slamch_("Precision");
@@ -269,7 +269,7 @@ int claqge_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c
         *(unsigned char *)equed = 'B';
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAQGE */
 }
 /* claqge_ */

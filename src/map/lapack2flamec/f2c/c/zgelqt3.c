@@ -125,7 +125,7 @@ the elements below the diagonal are not used. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zgelqt3_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *t, integer *ldt, integer *info)
+void zgelqt3_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *t, integer *ldt, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgelqt3 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS "",*m, *n, *lda, *ldt);
@@ -138,7 +138,7 @@ int zgelqt3_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     /* Local variables */
     integer i__, j, i1, j1, m1, m2, iinfo;
     extern /* Subroutine */
-    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -185,7 +185,7 @@ int zgelqt3_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
         i__1 = -(*info);
         xerbla_("ZGELQT3", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*m == 1)
     {
@@ -290,7 +290,7 @@ int zgelqt3_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
         /* [ A(1:N1,J1:N) L2 ] [ 0 T2] */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGELQT3 */
 }
 /* zgelqt3_ */

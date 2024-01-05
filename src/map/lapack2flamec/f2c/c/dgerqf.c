@@ -133,7 +133,7 @@ v(1:n-k+i-1) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dgerqf_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *lwork, integer *info)
+void dgerqf_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgerqf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",*m, *n, *lda, *lwork);
@@ -142,7 +142,7 @@ int dgerqf_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *ta
     /* Local variables */
     integer i__, k, ib, nb, ki, kk, mu, nu, nx, iws, nbmin, iinfo;
     extern /* Subroutine */
-    int dgerq2_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dgerq2_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
@@ -212,18 +212,18 @@ int dgerqf_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *ta
         i__1 = -(*info);
         xerbla_("DGERQF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (k == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     nbmin = 2;
     nx = 1;
@@ -302,7 +302,7 @@ int dgerqf_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *ta
     }
     work[1] = (doublereal) iws;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGERQF */
 }
 /* dgerqf_ */

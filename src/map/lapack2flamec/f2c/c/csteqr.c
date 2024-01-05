@@ -135,7 +135,7 @@ on exit, D */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int csteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer *ldz, real *work, integer *info)
+void csteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer *ldz, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -162,36 +162,36 @@ int csteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer *
     real tst, eps2;
     integer lend, jtot;
     extern /* Subroutine */
-    int slae2_(real *, real *, real *, real *, real *) ;
+    void slae2_(real *, real *, real *, real *, real *) ;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int clasr_(char *, char *, char *, integer *, integer *, real *, real *, complex *, integer *);
+    void clasr_(char *, char *, char *, integer *, integer *, real *, real *, complex *, integer *);
     real anorm;
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *);
+    void cswap_(integer *, complex *, integer *, complex *, integer *);
     integer lendm1, lendp1;
     extern /* Subroutine */
-    int slaev2_(real *, real *, real *, real *, real *, real *, real *);
+    void slaev2_(real *, real *, real *, real *, real *, real *, real *);
     extern real slapy2_(real *, real *);
     integer iscale;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
+    void claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
     real safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real safmax;
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
     integer lendsv;
     extern /* Subroutine */
-    int slartg_(real *, real *, real *, real *, real * );
+    void slartg_(real *, real *, real *, real *, real * );
     real ssfmin;
     integer nmaxit, icompz;
     real ssfmax;
     extern real slanst_(char *, integer *, real *, real *);
     extern /* Subroutine */
-    int slasrt_(char *, integer *, real *, integer *);
+    void slasrt_(char *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -255,13 +255,13 @@ int csteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer *
         i__1 = -(*info);
         xerbla_("CSTEQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -272,7 +272,7 @@ int csteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer *
             z__[i__1].i = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Determine the unit roundoff and over/underflow thresholds. */
     eps = slamch_("E");
@@ -632,7 +632,7 @@ L140:
             /* L150: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     goto L10;
     /* Order eigenvalues and eigenvectors. */
@@ -675,7 +675,7 @@ L160:
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSTEQR */
 }
 /* csteqr_ */

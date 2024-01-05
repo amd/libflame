@@ -146,7 +146,7 @@
 /* > \ingroup complexGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cgbequb_(integer *m, integer *n, integer *kl, integer * ku, complex *ab, integer *ldab, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, integer *info)
+void cgbequb_(integer *m, integer *n, integer *kl, integer * ku, complex *ab, integer *ldab, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -228,7 +228,7 @@ int cgbequb_(integer *m, integer *n, integer *kl, integer * ku, complex *ab, int
         i__1 = -(*info);
         xerbla_("CGBEQUB", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*m == 0 || *n == 0)
@@ -237,7 +237,7 @@ int cgbequb_(integer *m, integer *n, integer *kl, integer * ku, complex *ab, int
         *colcnd = 1.f;
         *amax = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. Assume SMLNUM is a power of the radix. */
     smlnum = slamch_("S");
@@ -320,7 +320,7 @@ int cgbequb_(integer *m, integer *n, integer *kl, integer * ku, complex *ab, int
             {
                 *info = i__;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L50: */
         }
@@ -412,7 +412,7 @@ int cgbequb_(integer *m, integer *n, integer *kl, integer * ku, complex *ab, int
             {
                 *info = *m + j;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L110: */
         }
@@ -436,7 +436,7 @@ int cgbequb_(integer *m, integer *n, integer *kl, integer * ku, complex *ab, int
         *colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGBEQUB */
 }
 /* cgbequb_ */

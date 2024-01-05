@@ -138,7 +138,7 @@ ILO=1 and IHI=0, if N=0. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zggbak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doublereal *lscale, doublereal *rscale, integer *m, doublecomplex *v, integer *ldv, integer *info)
+void zggbak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doublereal *lscale, doublereal *rscale, integer *m, doublecomplex *v, integer *ldv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zggbak inputs: job %c, side %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", m %" FLA_IS ", ldv %" FLA_IS "",*job, *side, *n, *ilo, *ihi, *m, *ldv);
@@ -149,7 +149,7 @@ int zggbak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doubl
     extern logical lsame_(char *, char *);
     logical leftv;
     extern /* Subroutine */
-    int zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     logical rightv;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -221,23 +221,23 @@ int zggbak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doubl
         i__1 = -(*info);
         xerbla_("ZGGBAK", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*m == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (lsame_(job, "N"))
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*ilo == *ihi)
     {
@@ -359,7 +359,7 @@ L100:
     }
 L110:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGGBAK */
 }
 /* zggbak_ */

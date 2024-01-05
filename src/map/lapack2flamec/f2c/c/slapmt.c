@@ -90,7 +90,7 @@
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int slapmt_(logical *forwrd, integer *m, integer *n, real *x, integer *ldx, integer *k)
+void slapmt_(logical *forwrd, integer *m, integer *n, real *x, integer *ldx, integer *k)
 {
     /* System generated locals */
     integer x_dim1, x_offset, i__1, i__2;
@@ -117,7 +117,7 @@ int slapmt_(logical *forwrd, integer *m, integer *n, real *x, integer *ldx, inte
     /* Function Body */
     if (*n <= 1)
     {
-        return 0;
+        return;
     }
     i__1 = *n;
     for (i__ = 1;
@@ -201,7 +201,7 @@ L100: /* L110: */
             ;
         }
     }
-    return 0;
+    return;
     /* End of SLAPMT */
 }
 /* slapmt_ */

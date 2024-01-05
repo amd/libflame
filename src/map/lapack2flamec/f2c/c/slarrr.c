@@ -79,7 +79,7 @@ E(N) is set to ZERO. */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int slarrr_(integer *n, real *d__, real *e, integer *info)
+void slarrr_(integer *n, real *d__, real *e, integer *info)
 {
     /* System generated locals */
     integer i__1;
@@ -119,7 +119,7 @@ int slarrr_(integer *n, real *d__, real *e, integer *info)
     if (*n <= 0)
     {
         *info = 0;
-        return 0;
+        return;
     }
     /* As a default, do NOT go for relative-accuracy preserving computations. */
     *info = 1;
@@ -183,7 +183,7 @@ L11:
     if (yesrel)
     {
         *info = 0;
-        return 0;
+        return;
     }
     else
     {
@@ -196,7 +196,7 @@ L11:
     /* In this case, the matrix needs to be flipped and, at the end */
     /* of the eigenvector computation, the flip needs to be applied */
     /* to the computed eigenvectors (and the support) */
-    return 0;
+    return;
     /* END OF SLARRR */
 }
 /* slarrr_ */

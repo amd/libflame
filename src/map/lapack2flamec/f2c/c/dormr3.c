@@ -163,7 +163,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dormr3_(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, doublereal *a, integer *lda, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work, integer *info)
+void dormr3_(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, doublereal *a, integer *lda, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dormr3 inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",*side, *trans, *m, *n, *k, *l, *lda, *ldc);
@@ -174,7 +174,7 @@ int dormr3_(char *side, char *trans, integer *m, integer *n, integer *k, integer
     logical left;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dlarz_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlarz_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -254,13 +254,13 @@ int dormr3_(char *side, char *trans, integer *m, integer *n, integer *k, integer
         i__1 = -(*info);
         xerbla_("DORMR3", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0 || *k == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (left && ! notran || ! left && notran)
     {
@@ -309,7 +309,7 @@ int dormr3_(char *side, char *trans, integer *m, integer *n, integer *k, integer
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DORMR3 */
 }
 /* dormr3_ */

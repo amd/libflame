@@ -111,7 +111,7 @@ v(i+1:m) is stored on exit in A(i+1:m,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zgeqr2p_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *work, integer *info)
+void zgeqr2p_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgeqr2p inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
@@ -124,7 +124,7 @@ int zgeqr2p_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     integer i__, k;
     doublecomplex alpha;
     extern /* Subroutine */
-    int zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlarfgp_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlarfgp_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -169,7 +169,7 @@ int zgeqr2p_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
         i__1 = -(*info);
         xerbla_("ZGEQR2P", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     k = fla_min(*m,*n);
     i__1 = k;
@@ -202,7 +202,7 @@ int zgeqr2p_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGEQR2P */
 }
 /* zgeqr2p_ */

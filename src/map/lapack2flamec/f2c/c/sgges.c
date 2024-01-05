@@ -281,7 +281,7 @@ the routine */
 /* > \ingroup realGEeigen */
 /* ===================================================================== */
 /* Subroutine */
-int sgges_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, integer *n, real *a, integer *lda, real *b, integer *ldb, integer *sdim, real *alphar, real *alphai, real *beta, real *vsl, integer *ldvsl, real *vsr, integer *ldvsr, real *work, integer *lwork, logical *bwork, integer *info)
+void sgges_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, integer *n, real *a, integer *lda, real *b, integer *ldb, integer *sdim, real *alphar, real *alphai, real *beta, real *vsl, integer *ldvsl, real *vsr, integer *ldvsr, real *work, integer *lwork, logical *bwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, vsl_dim1, vsl_offset, vsr_dim1, vsr_offset, i__1, i__2;
@@ -301,36 +301,36 @@ int sgges_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, integer *n, re
     integer irows;
     logical lst2sl;
     extern /* Subroutine */
-    int slabad_(real *, real *), sggbak_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, integer *), sggbal_(char *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, real *, real *, integer *);
+    void slabad_(real *, real *), sggbak_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, integer *), sggbal_(char *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, real *, real *, integer *);
     logical ilascl, ilbscl;
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     real safmin;
     extern /* Subroutine */
-    int sgghrd_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
+    void sgghrd_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
     real safmax;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ijobvl, iright;
     extern /* Subroutine */
-    int sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    void sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
     integer ijobvr;
     extern /* Subroutine */
-    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     real anrmto, bnrmto;
     logical lastsl;
     extern /* Subroutine */
-    int shgeqz_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, integer *, real *, integer *, integer *), stgsen_(integer *, logical *, logical *, logical *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, integer *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, integer *);
+    void shgeqz_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, integer *, real *, integer *, integer *), stgsen_(integer *, logical *, logical *, logical *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, integer *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, integer *);
     integer minwrk, maxwrk;
     real smlnum;
     extern /* Subroutine */
-    int sorgqr_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    void sorgqr_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
     logical wantst, lquery;
     extern /* Subroutine */
-    int sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+    void sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -483,17 +483,17 @@ int sgges_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, integer *n, re
     {
         i__1 = -(*info);
         xerbla_("SGGES ", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         *sdim = 0;
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = slamch_("P");
@@ -755,7 +755,7 @@ int sgges_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, integer *n, re
     }
 L40:
     work[1] = (real) maxwrk;
-    return 0;
+    return;
     /* End of SGGES */
 }
 /* sgges_ */

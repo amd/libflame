@@ -163,7 +163,7 @@ IBLOCK(i)=1 if eigenvalue W(i) belongs to */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sstein_(integer *n, real *d__, real *e, integer *m, real *w, integer *iblock, integer *isplit, real *z__, integer *ldz, real * work, integer *iwork, integer *ifail, integer *info)
+void sstein_(integer *n, real *d__, real *e, integer *m, real *w, integer *iblock, integer *isplit, real *z__, integer *ldz, real * work, integer *iwork, integer *ifail, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -185,10 +185,10 @@ int sstein_(integer *n, real *d__, real *e, integer *m, real *w, integer *iblock
     extern real sdot_(integer *, real *, integer *, real *, integer *), snrm2_(integer *, real *, integer *);
     integer iseed[4], gpind, iinfo;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *);
     real ortol;
     extern /* Subroutine */
-    int saxpy_(integer *, real *, real *, integer *, real *, integer *);
+    void saxpy_(integer *, real *, real *, integer *, real *, integer *);
     integer indrv1, indrv2, indrv3, indrv4, indrv5;
     extern real slamch_(char *);
     extern /* Subroutine */
@@ -196,11 +196,11 @@ int sstein_(integer *n, real *d__, real *e, integer *m, real *w, integer *iblock
     integer nrmchk;
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    int slagts_(integer *, integer *, real *, real *, real *, real *, integer *, real *, real *, integer *);
+    void slagts_(integer *, integer *, real *, real *, real *, real *, integer *, real *, real *, integer *);
     integer blksiz;
     real onenrm, pertol;
     extern /* Subroutine */
-    int slarnv_(integer *, integer *, integer *, real *);
+    void slarnv_(integer *, integer *, integer *, real *);
     real stpcrt;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -291,19 +291,19 @@ L30:
         i__1 = -(*info);
         xerbla_("SSTEIN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *m == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (*n == 1)
     {
         z__[z_dim1 + 1] = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     eps = slamch_("Precision");
@@ -503,7 +503,7 @@ L160:
         ;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSTEIN */
 }
 /* sstein_ */

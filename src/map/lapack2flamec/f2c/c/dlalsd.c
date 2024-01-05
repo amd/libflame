@@ -169,7 +169,7 @@ in this case a minimum norm solution is returned. */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-int dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublereal *b, integer *ldb, doublereal *rcond, integer *rank, doublereal *work, integer *iwork, integer *info)
+void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublereal *b, integer *ldb, doublereal *rcond, integer *rank, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlalsd inputs: uplo %c, smlsiz %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", rank %" FLA_IS "",*uplo, *smlsiz, *n, *nrhs, *ldb, *rank);
@@ -193,21 +193,21 @@ int dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal *
     doublereal rcnd;
     integer perm, nsub;
     extern /* Subroutine */
-    int drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+    void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
     integer nlvl, sqre, bxst;
     extern /* Subroutine */
-    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer poles, sizei, nsize, nwork, icmpq1, icmpq2;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlasda_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dlalsa_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dlasda_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dlalsa_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dlasdq_(char *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlasdq_(char *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer givcol;
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
     extern /* Subroutine */
-    int dlasrt_(char *, integer *, doublereal *, integer *);
+    void dlasrt_(char *, integer *, doublereal *, integer *);
     doublereal orgnrm;
     integer givnum, givptr, smlszp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -258,7 +258,7 @@ int dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal *
         i__1 = -(*info);
         xerbla_("DLALSD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     eps = dlamch_("Epsilon");
     /* Set up the tolerance. */
@@ -275,7 +275,7 @@ int dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal *
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*n == 1)
     {
@@ -290,7 +290,7 @@ int dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal *
             d__[1] = f2c_dabs(d__[1]);
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Rotate the matrix if it is lower bidiagonal. */
     if (*(unsigned char *)uplo == 'L')
@@ -343,7 +343,7 @@ int dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal *
     {
         dlaset_("A", n, nrhs, &c_b6, &c_b6, &b[b_offset], ldb);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     dlascl_("G", &c__0, &c__0, &orgnrm, &c_b11, n, &c__1, &d__[1], n, info);
     dlascl_("G", &c__0, &c__0, &orgnrm, &c_b11, &nm1, &c__1, &e[1], &nm1, info);
@@ -357,7 +357,7 @@ int dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal *
         if (*info != 0)
         {
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         tol = rcnd * (d__1 = d__[idamax_(n, &d__[1], &c__1)], f2c_dabs(d__1));
         i__1 = *n;
@@ -383,7 +383,7 @@ int dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal *
         dlasrt_("D", n, &d__[1], info);
         dlascl_("G", &c__0, &c__0, &orgnrm, &c_b11, n, nrhs, &b[b_offset], ldb, info);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Book-keeping and setting up some constants. */
     nlvl = (integer) (log((doublereal) (*n) / (doublereal) (*smlsiz + 1)) / log(2.)) + 1;
@@ -471,7 +471,7 @@ int dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal *
                 if (*info != 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dlacpy_("A", &nsize, nrhs, &b[st + b_dim1], ldb, &work[bx + st1], n);
             }
@@ -482,14 +482,14 @@ int dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal *
                 if (*info != 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 bxst = bx + st1;
                 dlalsa_(&icmpq2, smlsiz, &nsize, nrhs, &b[st + b_dim1], ldb, & work[bxst], n, &work[u + st1], n, &work[vt + st1], & iwork[k + st1], &work[difl + st1], &work[difr + st1], &work[z__ + st1], &work[poles + st1], &iwork[givptr + st1], &iwork[givcol + st1], n, &iwork[perm + st1], & work[givnum + st1], &work[c__ + st1], &work[s + st1], &work[nwork], &iwork[iwk], info);
                 if (*info != 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
             }
             st = i__ + 1;
@@ -542,7 +542,7 @@ int dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal *
             if (*info != 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
         /* L80: */
@@ -552,7 +552,7 @@ int dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal *
     dlasrt_("D", n, &d__[1], info);
     dlascl_("G", &c__0, &c__0, &orgnrm, &c_b11, n, nrhs, &b[b_offset], ldb, info);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLALSD */
 }
 /* dlalsd_ */

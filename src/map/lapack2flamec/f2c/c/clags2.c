@@ -143,7 +143,7 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int clags2_(logical *upper, real *a1, complex *a2, real *a3, real *b1, complex *b2, real *b3, real *csu, complex *snu, real *csv, complex *snv, real *csq, complex *snq)
+void clags2_(logical *upper, real *a1, complex *a2, real *a3, real *b1, complex *b2, real *b3, real *csu, complex *snu, real *csv, complex *snv, real *csq, complex *snq)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
@@ -161,7 +161,7 @@ int clags2_(logical *upper, real *a1, complex *a2, real *a3, real *b1, complex *
     complex ua11, ua12, ua21, ua22, vb11, vb12, vb21, vb22;
     real csl, csr, snl, snr, aua11, aua12, aua21, aua22, avb11, avb12, avb21, avb22, ua11r, ua22r, vb11r, vb22r;
     extern /* Subroutine */
-    int slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *), clartg_(complex *, complex *, real *, complex *, complex *);
+    void slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *), clartg_(complex *, complex *, real *, complex *, complex *);
     /* -- LAPACK auxiliary routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -555,7 +555,7 @@ int clags2_(logical *upper, real *a1, complex *a2, real *a3, real *b1, complex *
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAGS2 */
 }
 /* clags2_ */

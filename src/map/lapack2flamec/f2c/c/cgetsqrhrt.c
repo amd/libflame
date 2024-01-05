@@ -166,7 +166,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2, complex *a, integer *lda, complex *t, integer *ldt, complex *work, integer *lwork, integer *info)
+void cgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2, complex *a, integer *lda, complex *t, integer *ldt, complex *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
@@ -175,16 +175,16 @@ int cgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
     /* Local variables */
     integer lworkopt, i__, j;
     extern /* Subroutine */
-    int cunhr_col_(integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *);
+    void cunhr_col_(integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *);
     integer lw1, lw2, num_all_row_blocks__, lwt, ldwt;
     extern /* Subroutine */
-    int cungtsqr_row_(integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void cungtsqr_row_(integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
     integer iinfo;
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     extern /* Subroutine */
-    int clatsqr_(integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void clatsqr_(integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
     integer nb1local, nb2local;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -301,7 +301,7 @@ int cgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
     {
         i__1 = -(*info);
         xerbla_("CGETSQRHRT", &i__1, (ftnlen)10);
-        return 0;
+        return;
     }
     else if (lquery)
     {
@@ -309,7 +309,7 @@ int cgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
         q__1.i = 0.f; // , expr subst
         work[1].r = q__1.r;
         work[1].i = q__1.i; // , expr subst
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
@@ -318,7 +318,7 @@ int cgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
         q__1.i = 0.f; // , expr subst
         work[1].r = q__1.r;
         work[1].i = q__1.i; // , expr subst
-        return 0;
+        return;
     }
     nb2local = fla_min(*nb2,*n);
     /* (1) Perform TSQR-factorization of the M-by-N matrix A. */
@@ -385,7 +385,7 @@ int cgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
     q__1.i = 0.f; // , expr subst
     work[1].r = q__1.r;
     work[1].i = q__1.i; // , expr subst
-    return 0;
+    return;
     /* End of CGETSQRHRT */
 }
 /* cgetsqrhrt_ */

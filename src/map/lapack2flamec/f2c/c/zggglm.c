@@ -181,7 +181,7 @@ the least squares solution could not */
 /* > \ingroup complex16OTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int zggglm_(integer *n, integer *m, integer *p, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *d__, doublecomplex *x, doublecomplex *y, doublecomplex *work, integer *lwork, integer *info)
+void zggglm_(integer *n, integer *m, integer *p, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *d__, doublecomplex *x, doublecomplex *y, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zggglm inputs: n %" FLA_IS ", m %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*n, *m, *p, *lda, *ldb);
@@ -191,14 +191,14 @@ int zggglm_(integer *n, integer *m, integer *p, doublecomplex *a, integer *lda, 
     /* Local variables */
     integer i__, nb, np, nb1, nb2, nb3, nb4, lopt;
     extern /* Subroutine */
-    int zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int zggqrf_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *) ;
+    void zggqrf_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *) ;
     integer lwkmin, lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zunmrq_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), ztrtrs_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zunmrq_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), ztrtrs_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -287,12 +287,12 @@ int zggglm_(integer *n, integer *m, integer *p, doublecomplex *a, integer *lda, 
         i__1 = -(*info);
         xerbla_("ZGGGLM", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
@@ -316,7 +316,7 @@ int zggglm_(integer *n, integer *m, integer *p, doublecomplex *a, integer *lda, 
             y[i__2].i = 0.; // , expr subst
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the GQR factorization of matrices A and B: */
     /* Q**H*A = ( R11 ) M, Q**H*B*Z**H = ( T11 T12 ) M */
@@ -348,7 +348,7 @@ int zggglm_(integer *n, integer *m, integer *p, doublecomplex *a, integer *lda, 
         {
             *info = 1;
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         i__1 = *n - *m;
         zcopy_(&i__1, &d__[*m + 1], &c__1, &y[*m + *p - *n + 1], &c__1);
@@ -377,7 +377,7 @@ int zggglm_(integer *n, integer *m, integer *p, doublecomplex *a, integer *lda, 
         {
             *info = 2;
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* Copy D to X */
         zcopy_(m, &d__[1], &c__1, &x[1], &c__1);
@@ -397,7 +397,7 @@ int zggglm_(integer *n, integer *m, integer *p, doublecomplex *a, integer *lda, 
     work[1].r = (doublereal) i__1;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGGGLM */
 }
 /* zggglm_ */

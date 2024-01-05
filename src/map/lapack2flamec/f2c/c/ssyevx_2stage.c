@@ -294,7 +294,7 @@ the routine */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int ssyevx_2stage_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *lda, real *vl, real *vu, integer *il, integer *iu, real *abstol, integer *m, real *w, real *z__, integer * ldz, real *work, integer *lwork, integer *iwork, integer *ifail, integer *info)
+void ssyevx_2stage_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *lda, real *vl, real *vu, integer *il, integer *iu, real *abstol, integer *m, real *w, real *z__, integer * ldz, real *work, integer *lwork, integer *iwork, integer *ifail, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -321,13 +321,13 @@ int ssyevx_2stage_(char *jobz, char *range, char *uplo, integer *n, real *a, int
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     char order[1];
     integer lhtrd, lwmin;
     logical lower;
     integer lwtrd;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * ), ssytrd_2stage_(char *, char *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, integer *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * ), ssytrd_2stage_(char *, char *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, integer *, integer *);
     logical wantz, alleig, indeig;
     integer iscale, indibl;
     logical valeig;
@@ -338,18 +338,18 @@ int ssyevx_2stage_(char *jobz, char *range, char *uplo, integer *n, real *a, int
     real abstll, bignum;
     integer indtau, indisp, indiwo, indwkn;
     extern /* Subroutine */
-    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     integer indwrk;
     extern /* Subroutine */
-    int sstein_(integer *, real *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *), ssterf_(integer *, real *, real *, integer *);
+    void sstein_(integer *, real *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *), ssterf_(integer *, real *, real *, integer *);
     integer llwrkn, llwork, nsplit;
     real smlnum;
     extern real slansy_(char *, char *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int sstebz_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *, real *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *), sorgtr_(char *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    void sstebz_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *, real *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *), sorgtr_(char *, integer *, real *, integer *, real *, real *, integer *, integer *);
     logical lquery;
     extern /* Subroutine */
-    int ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *), sormtr_(char *, char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+    void ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *), sormtr_(char *, char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
     integer indhous;
     /* -- LAPACK driver routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -468,19 +468,19 @@ int ssyevx_2stage_(char *jobz, char *range, char *uplo, integer *n, real *a, int
         i__1 = -(*info);
         xerbla_("SSYEVX_2STAGE", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *m = 0;
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -502,7 +502,7 @@ int ssyevx_2stage_(char *jobz, char *range, char *uplo, integer *n, real *a, int
             z__[z_dim1 + 1] = 1.f;
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -704,7 +704,7 @@ L40:
     /* Set WORK(1) to optimal workspace size. */
     work[1] = (real) lwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYEVX_2STAGE */
 }
 /* ssyevx_2stage__ */

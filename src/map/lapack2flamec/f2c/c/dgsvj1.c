@@ -224,7 +224,7 @@ static doublereal c_b35 = 1.;
 /* > Zlatko Drmac (Zagreb, Croatia) and Kresimir Veselic (Hagen, Germany) */
 /* ===================================================================== */
 /* Subroutine */
-int dgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublereal *a, integer *lda, doublereal *d__, doublereal *sva, integer *mv, doublereal *v, integer *ldv, doublereal *eps, doublereal *sfmin, doublereal *tol, integer *nsweep, doublereal *work, integer * lwork, integer *info)
+void dgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublereal *a, integer *lda, doublereal *d__, doublereal *sva, integer *mv, doublereal *v, integer *ldv, doublereal *eps, doublereal *sfmin, doublereal *tol, integer *nsweep, doublereal *work, integer * lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgsvj1 inputs: jobv %c, m %" FLA_IS ", n %" FLA_IS ", n1 %" FLA_IS ", lda %" FLA_IS ", mv %" FLA_IS ", ldv %" FLA_IS ", nsweep %" FLA_IS ", lwork %" FLA_IS "",*jobv, *m, *n, *n1, *lda, *mv, *ldv, *nsweep, *lwork);
@@ -249,23 +249,23 @@ int dgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublereal *a, inte
     extern logical lsame_(char *, char *);
     doublereal theta, small_val;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal fastr[5];
     extern /* Subroutine */
-    int dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical applv, rsvec;
     extern /* Subroutine */
-    int daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), drotm_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *);
+    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), drotm_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *);
     logical rotok;
     extern /* Subroutine */
-    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer ijblsk, swband, blskip;
     doublereal mxaapq;
     extern /* Subroutine */
-    int dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
+    void dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
     doublereal thsign, mxsinj;
     integer emptsw, notrot, iswrot;
     doublereal rootbig, rooteps;
@@ -357,7 +357,7 @@ int dgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublereal *a, inte
         i__1 = -(*info);
         xerbla_("DGSVJ1", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (rsvec)
     {
@@ -856,7 +856,7 @@ L1995: /* Sort the vector D */
         /* L5991: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* .. */
     /* .. END OF DGSVJ1 */
     /* .. */

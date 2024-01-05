@@ -94,7 +94,7 @@ if */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlag2s_(integer *m, integer *n, doublereal *a, integer * lda, real *sa, integer *ldsa, integer *info)
+void dlag2s_(integer *m, integer *n, doublereal *a, integer * lda, real *sa, integer *ldsa, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlag2s inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldsa %" FLA_IS "",*m, *n, *lda, *ldsa);
@@ -151,7 +151,7 @@ int dlag2s_(integer *m, integer *n, doublereal *a, integer * lda, real *sa, inte
     *info = 0;
 L30:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAG2S */
 }
 /* dlag2s_ */

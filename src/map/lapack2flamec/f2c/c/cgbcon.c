@@ -136,7 +136,7 @@ for 1 <= i <= N, row i of the matrix was */
 /* > \ingroup complexGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cgbcon_(char *norm, integer *n, integer *kl, integer *ku, complex *ab, integer *ldab, integer *ipiv, real *anorm, real *rcond, complex *work, real *rwork, integer *info)
+void cgbcon_(char *norm, integer *n, integer *kl, integer *ku, complex *ab, integer *ldab, integer *ipiv, real *anorm, real *rcond, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -164,17 +164,17 @@ int cgbcon_(char *norm, integer *n, integer *kl, integer *ku, complex *ab, integ
     extern logical lsame_(char *, char *);
     integer isave[3];
     extern /* Subroutine */
-    int caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical lnoti;
     extern /* Subroutine */
-    int clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
+    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int clatbs_(char *, char *, char *, char *, integer *, integer *, complex *, integer *, complex *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clatbs_(char *, char *, char *, char *, integer *, integer *, complex *, integer *, complex *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     extern /* Subroutine */
-    int csrscl_(integer *, real *, complex *, integer *);
+    void csrscl_(integer *, real *, complex *, integer *);
     logical onenrm;
     char normin[1];
     real smlnum;
@@ -244,7 +244,7 @@ int cgbcon_(char *norm, integer *n, integer *kl, integer *ku, complex *ab, integ
         i__1 = -(*info);
         xerbla_("CGBCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.f;
@@ -252,12 +252,12 @@ int cgbcon_(char *norm, integer *n, integer *kl, integer *ku, complex *ab, integ
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (*anorm == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     smlnum = slamch_("Safe minimum");
     /* Estimate the norm of inv(A). */
@@ -378,7 +378,7 @@ L10:
     }
 L40:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGBCON */
 }
 /* cgbcon_ */

@@ -139,7 +139,7 @@
 /* > \ingroup complex16GBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab, integer *ldab, doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax, integer * info)
+void zgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab, integer *ldab, doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgbequ inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS "",*m, *n, *kl, *ku, *ldab);
@@ -214,7 +214,7 @@ int zgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab,
         i__1 = -(*info);
         xerbla_("ZGBEQU", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
@@ -223,7 +223,7 @@ int zgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab,
         *colcnd = 1.;
         *amax = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     smlnum = dlamch_("S");
@@ -293,7 +293,7 @@ int zgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab,
             {
                 *info = i__;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L50: */
         }
@@ -381,7 +381,7 @@ int zgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab,
             {
                 *info = *m + j;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L110: */
         }
@@ -405,7 +405,7 @@ int zgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab,
         *colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGBEQU */
 }
 /* zgbequ_ */

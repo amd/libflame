@@ -181,7 +181,7 @@ perturbed */
 /* Angelika Schwarz, Umea University, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-int strsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, real *a, integer *lda, real *b, integer *ldb, real *c__, integer *ldc, real *scale, integer *iwork, integer *liwork, real *swork, integer *ldswork, integer *info)
+void strsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, real *a, integer *lda, real *b, integer *ldb, real *c__, integer *ldc, real *scale, integer *iwork, integer *liwork, real *swork, integer *ldswork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("strsyl3 inputs: trana %c, tranb %c, isgn %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS "",*trana, *tranb, *isgn, *m, *n, *lda, *ldb, *ldc);
@@ -201,7 +201,7 @@ int strsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, re
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     real scaloc;
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     real scamin;
@@ -210,13 +210,13 @@ int strsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, re
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
     extern real slarmm_(real *, real *, real *);
     logical notrna, notrnb;
     real smlnum;
     logical lquery;
     extern /* Subroutine */
-    int strsyl_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
+    void strsyl_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -255,7 +255,7 @@ int strsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, re
     {
         *info = -4;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Function Body */
     notrna = lsame_(trana, "N");
@@ -331,13 +331,13 @@ int strsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, re
         xerbla_("STRSYL3", &i__1, (ftnlen)7);
         free(wnrm);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         free(wnrm);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *scale = 1.f;
@@ -345,7 +345,7 @@ int strsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, re
     {
         free(wnrm);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Use unblocked code for small problems or if insufficient */
     /* workspaces are provided */
@@ -354,7 +354,7 @@ int strsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, re
         strsyl_(trana, tranb, isgn, m, n, &a[a_offset], lda, &b[b_offset], ldb, &c__[c_offset], ldc, scale, info);
         free(wnrm);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set constants to control overflow */
     smlnum = slamch_("S");
@@ -1556,7 +1556,7 @@ int strsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, re
         swork[swork_dim1 + 2] = (real) ((nbb << 1) + nba);
         free(wnrm);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Realize consistent scaling */
     i__1 = nba;
@@ -1639,7 +1639,7 @@ int strsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, re
     swork[swork_dim1 + 2] = (real) ((nbb << 1) + nba);
     free(wnrm);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of STRSYL3 */
 }
 /* strsyl3_ */

@@ -209,7 +209,7 @@
 /* causing few netlib tests to fail */
 #pragma STDC FP_CONTRACT OFF
 
-int slaln2_(logical *ltrans, integer *na, integer *nw, real * smin, real *ca, real *a, integer *lda, real *d1, real *d2, real *b, integer *ldb, real *wr, real *wi, real *x, integer *ldx, real *scale, real *xnorm, integer *info)
+void slaln2_(logical *ltrans, integer *na, integer *nw, real * smin, real *ca, real *a, integer *lda, real *d1, real *d2, real *b, integer *ldb, real *wr, real *wi, real *x, integer *ldx, real *scale, real *xnorm, integer *info)
 {
     /* Initialized data */
     static const logical cswap[4] =
@@ -246,7 +246,7 @@ int slaln2_(logical *ltrans, integer *na, integer *nw, real * smin, real *ca, re
     extern real slamch_(char *);
     real bignum;
     extern /* Subroutine */
-    int sladiv_(real *, real *, real *, real *, real *, real *);
+    void sladiv_(real *, real *, real *, real *, real *, real *);
     real smlnum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -405,7 +405,7 @@ int slaln2_(logical *ltrans, integer *na, integer *nw, real * smin, real *ca, re
                 x[x_dim1 + 2] = temp * b[b_dim1 + 2];
                 *xnorm = temp * bnorm;
                 *info = 1;
-                return 0;
+                return;
             }
             /* Gaussian elimination with complete pivoting. */
             ur11 = crv[icmax - 1];
@@ -514,7 +514,7 @@ int slaln2_(logical *ltrans, integer *na, integer *nw, real * smin, real *ca, re
                 x[(x_dim1 << 1) + 2] = temp * b[(b_dim1 << 1) + 2];
                 *xnorm = temp * bnorm;
                 *info = 1;
-                return 0;
+                return;
             }
             /* Gaussian elimination with complete pivoting. */
             ur11 = crv[icmax - 1];
@@ -639,7 +639,7 @@ int slaln2_(logical *ltrans, integer *na, integer *nw, real * smin, real *ca, re
             }
         }
     }
-    return 0;
+    return;
     /* End of SLALN2 */
 }
 /* slaln2_ */

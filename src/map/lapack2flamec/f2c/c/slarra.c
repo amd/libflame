@@ -122,7 +122,7 @@ E(N) need not be set. */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int slarra_(integer *n, real *d__, real *e, real *e2, real * spltol, real *tnrm, integer *nsplit, integer *isplit, integer *info)
+void slarra_(integer *n, real *d__, real *e, real *e2, real * spltol, real *tnrm, integer *nsplit, integer *isplit, integer *info)
 {
     /* System generated locals */
     integer i__1;
@@ -158,7 +158,7 @@ int slarra_(integer *n, real *d__, real *e, real *e2, real * spltol, real *tnrm,
     /* Quick return if possible */
     if (*n <= 0)
     {
-        return 0;
+        return;
     }
     /* Compute splitting points */
     *nsplit = 1;
@@ -202,7 +202,7 @@ int slarra_(integer *n, real *d__, real *e, real *e2, real * spltol, real *tnrm,
         }
     }
     isplit[*nsplit] = *n;
-    return 0;
+    return;
     /* End of SLARRA */
 }
 /* slarra_ */

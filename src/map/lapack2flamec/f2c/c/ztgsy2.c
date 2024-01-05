@@ -245,7 +245,7 @@ static integer c__1 = 1;
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-int ztgsy2_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *c__, integer *ldc, doublecomplex *d__, integer *ldd, doublecomplex *e, integer *lde, doublecomplex *f, integer *ldf, doublereal *scale, doublereal *rdsum, doublereal *rdscal, integer * info)
+void ztgsy2_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *c__, integer *ldc, doublecomplex *d__, integer *ldd, doublecomplex *e, integer *lde, doublecomplex *f, integer *ldf, doublereal *scale, doublereal *rdsum, doublereal *rdscal, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztgsy2 inputs: trans %c, ijob %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS ", ldd %" FLA_IS ", lde %" FLA_IS ", ldf %" FLA_IS "",*trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf);
@@ -262,7 +262,7 @@ int ztgsy2_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *
     doublecomplex alpha;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zgesc2_( integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublereal *), zgetc2_(integer *, doublecomplex *, integer *, integer *, integer *, integer *);
+    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zgesc2_( integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublereal *), zgetc2_(integer *, doublecomplex *, integer *, integer *, integer *, integer *);
     doublereal scaloc;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlatdf_( integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, doublereal *, integer *, integer *);
@@ -364,7 +364,7 @@ int ztgsy2_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *
         i__1 = -(*info);
         xerbla_("ZTGSY2", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (notran)
     {
@@ -591,7 +591,7 @@ int ztgsy2_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTGSY2 */
 }
 /* ztgsy2_ */

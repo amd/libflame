@@ -102,7 +102,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slasd5_(integer *i__, real *d__, real *z__, real *delta, real *rho, real *dsigma, real *work)
+void slasd5_(integer *i__, real *d__, real *z__, real *delta, real *rho, real *dsigma, real *work)
 {
     /* System generated locals */
     real r__1;
@@ -208,7 +208,7 @@ int slasd5_(integer *i__, real *d__, real *z__, real *delta, real *rho, real *ds
         /* DELTA( 1 ) = DELTA( 1 ) / TEMP */
         /* DELTA( 2 ) = DELTA( 2 ) / TEMP */
     }
-    return 0;
+    return;
     /* End of SLASD5 */
 }
 /* slasd5_ */

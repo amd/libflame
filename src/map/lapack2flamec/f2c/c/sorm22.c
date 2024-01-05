@@ -155,7 +155,7 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integer *n2, real *q, integer *ldq, real *c__, integer * ldc, real *work, integer *lwork, integer *info)
+void sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integer *n2, real *q, integer *ldq, real *c__, integer * ldc, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer q_dim1, q_offset, c_dim1, c_offset, i__1, i__2, i__3, i__4;
@@ -164,7 +164,7 @@ int sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, intege
     logical left;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     logical notran;
     integer ldwork, lwkopt;
     logical lquery;
@@ -262,30 +262,30 @@ int sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, intege
     {
         i__1 = -(*info);
         xerbla_("SORM22", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
     {
         work[1] = 1.f;
-        return 0;
+        return;
     }
     /* Degenerate cases (N1 = 0 or N2 = 0) are handled using STRMM. */
     if (*n1 == 0)
     {
         strmm_(side, "Upper", trans, "Non-Unit", m, n, &c_b10, &q[q_offset], ldq, &c__[c_offset], ldc);
         work[1] = 1.f;
-        return 0;
+        return;
     }
     else if (*n2 == 0)
     {
         strmm_(side, "Lower", trans, "Non-Unit", m, n, &c_b10, &q[q_offset], ldq, &c__[c_offset], ldc);
         work[1] = 1.f;
-        return 0;
+        return;
     }
     /* Compute the largest chunk size available from the workspace. */
     /* Computing MAX */
@@ -407,7 +407,7 @@ int sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, intege
         }
     }
     work[1] = (real) lwkopt;
-    return 0;
+    return;
     /* End of SORM22 */
 }
 /* sorm22_ */

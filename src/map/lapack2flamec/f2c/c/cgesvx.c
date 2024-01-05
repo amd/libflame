@@ -341,7 +341,7 @@ if EQUED = 'N' or 'R', C */
 /* > \ingroup complexGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int cgesvx_(char *fact, char *trans, integer *n, integer * nrhs, complex *a, integer *lda, complex *af, integer *ldaf, integer * ipiv, char *equed, real *r__, real *c__, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, real *rwork, integer *info)
+void cgesvx_(char *fact, char *trans, integer *n, integer * nrhs, complex *a, integer *lda, complex *af, integer *ldaf, integer * ipiv, char *equed, real *r__, real *c__, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -366,20 +366,20 @@ int cgesvx_(char *fact, char *trans, integer *n, integer * nrhs, complex *a, int
     logical equil;
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int claqge_(integer *, integer *, complex *, integer *, real *, real *, real *, real *, real *, char *), cgecon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *);
+    void claqge_(integer *, integer *, complex *, integer *, real *, real *, real *, real *, real *, char *), cgecon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *);
     real colcnd;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int cgeequ_(integer *, integer *, complex *, integer *, real *, real *, real *, real *, real *, integer *);
+    void cgeequ_(integer *, integer *, complex *, integer *, real *, real *, real *, real *, real *, integer *);
     logical nofact;
     extern /* Subroutine */
-    int cgerfs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), cgetrf_(integer *, integer *, complex *, integer *, integer *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void cgerfs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), cgetrf_(integer *, integer *, complex *, integer *, integer *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern real clantr_(char *, char *, char *, integer *, integer *, complex *, integer *, real *);
     integer infequ;
     logical colequ;
     extern /* Subroutine */
-    int cgetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+    void cgetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
     real rowcnd;
     logical notran;
     real smlnum;
@@ -557,7 +557,7 @@ int cgesvx_(char *fact, char *trans, integer *n, integer * nrhs, complex *a, int
         i__1 = -(*info);
         xerbla_("CGESVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (equil)
     {
@@ -645,7 +645,7 @@ int cgesvx_(char *fact, char *trans, integer *n, integer * nrhs, complex *a, int
             rwork[1] = rpvgrw;
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A and the */
@@ -752,7 +752,7 @@ int cgesvx_(char *fact, char *trans, integer *n, integer * nrhs, complex *a, int
     }
     rwork[1] = rpvgrw;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGESVX */
 }
 /* cgesvx_ */

@@ -97,7 +97,7 @@ static real c_b11 = -1.f;
 /* > \ingroup realPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int spotrf2_(char *uplo, integer *n, real *a, integer *lda, integer *info)
+void spotrf2_(char *uplo, integer *n, real *a, integer *lda, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
@@ -110,7 +110,7 @@ int spotrf2_(char *uplo, integer *n, real *a, integer *lda, integer *info)
     integer iinfo;
     logical upper;
     extern /* Subroutine */
-    int strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern logical sisnan_(real *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -156,12 +156,12 @@ int spotrf2_(char *uplo, integer *n, real *a, integer *lda, integer *info)
     {
         i__1 = -(*info);
         xerbla_("SPOTRF2", &i__1, (ftnlen)7);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     /* N=1 case */
     if (*n == 1)
@@ -170,7 +170,7 @@ int spotrf2_(char *uplo, integer *n, real *a, integer *lda, integer *info)
         if (a[a_dim1 + 1] <= 0.f || sisnan_(&a[a_dim1 + 1]))
         {
             *info = 1;
-            return 0;
+            return;
         }
         /* Factor */
         a[a_dim1 + 1] = sqrt(a[a_dim1 + 1]);
@@ -185,7 +185,7 @@ int spotrf2_(char *uplo, integer *n, real *a, integer *lda, integer *info)
         if (iinfo != 0)
         {
             *info = iinfo;
-            return 0;
+            return;
         }
         /* Compute the Cholesky factorization A = U**T*U */
         if (upper)
@@ -198,7 +198,7 @@ int spotrf2_(char *uplo, integer *n, real *a, integer *lda, integer *info)
             if (iinfo != 0)
             {
                 *info = iinfo + n1;
-                return 0;
+                return;
             }
             /* Compute the Cholesky factorization A = L*L**T */
         }
@@ -212,12 +212,12 @@ int spotrf2_(char *uplo, integer *n, real *a, integer *lda, integer *info)
             if (iinfo != 0)
             {
                 *info = iinfo + n1;
-                return 0;
+                return;
             }
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPOTRF2 */
 }
 /* spotrf2_ */

@@ -118,7 +118,7 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int cspr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, complex *ap)
+void cspr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, complex *ap)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -180,13 +180,13 @@ int cspr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, com
     {
         xerbla_("CSPR ", &info, (ftnlen)5);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0 || alpha->r == 0.f && alpha->i == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Set the start point in X if the increment is not unity. */
     if (*incx <= 0)
@@ -429,7 +429,7 @@ int cspr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, com
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSPR */
 }
 /* cspr_ */

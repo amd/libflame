@@ -141,7 +141,7 @@ static integer c__1 = 1;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doublereal *ap, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work, integer *info)
+void dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doublereal *ap, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dopmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",*side, *uplo, *trans, *m, *n, *ldc);
@@ -152,7 +152,7 @@ int dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doubler
     doublereal aii;
     logical left;
     extern /* Subroutine */
-    int dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+    void dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
@@ -229,13 +229,13 @@ int dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doubler
         i__1 = -(*info);
         xerbla_("DOPMTR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -358,7 +358,7 @@ int dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doubler
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DOPMTR */
 }
 /* dopmtr_ */

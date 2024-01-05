@@ -110,7 +110,7 @@ doublereal zlangt_(char *norm, integer *n, doublecomplex *dl, doublecomplex * d_
     doublereal anorm;
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
-    int zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
+    void zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

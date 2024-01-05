@@ -103,7 +103,7 @@ static real c_b11 = 1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slacon_(integer *n, real *v, real *x, integer *isgn, real *est, integer *kase)
+void slacon_(integer *n, real *v, real *x, integer *isgn, real *est, integer *kase)
 {
     /* System generated locals */
     integer i__1;
@@ -120,7 +120,7 @@ int slacon_(integer *n, real *v, real *x, integer *isgn, real *est, integer *kas
     integer jlast;
     extern real sasum_(integer *, real *, integer *);
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *);
     extern integer isamax_(integer *, real *, integer *);
     real altsgn, estold;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -162,7 +162,7 @@ int slacon_(integer *n, real *v, real *x, integer *isgn, real *est, integer *kas
         }
         *kase = 1;
         jump = 1;
-        return 0;
+        return;
     }
     switch (jump)
     {
@@ -201,7 +201,7 @@ L20:
     }
     *kase = 2;
     jump = 2;
-    return 0;
+    return;
     /* ................ ENTRY (JUMP = 2) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
 L40:
@@ -220,7 +220,7 @@ L50:
     x[j] = 1.f;
     *kase = 1;
     jump = 3;
-    return 0;
+    return;
     /* ................ ENTRY (JUMP = 3) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L70:
@@ -257,7 +257,7 @@ L90: /* TEST FOR CYCLING. */
     }
     *kase = 2;
     jump = 4;
-    return 0;
+    return;
     /* ................ ENTRY (JUMP = 4) */
     /* X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
 L110:
@@ -282,7 +282,7 @@ L120:
     }
     *kase = 1;
     jump = 5;
-    return 0;
+    return;
     /* ................ ENTRY (JUMP = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L140:
@@ -294,7 +294,7 @@ L140:
     }
 L150:
     *kase = 0;
-    return 0;
+    return;
     /* End of SLACON */
 }
 /* slacon_ */

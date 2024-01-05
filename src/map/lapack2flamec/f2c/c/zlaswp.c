@@ -101,7 +101,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zlaswp_(integer *n, doublecomplex *a, integer *lda, integer *k1, integer *k2, integer *ipiv, integer *incx)
+void zlaswp_(integer *n, doublecomplex *a, integer *lda, integer *k1, integer *k2, integer *ipiv, integer *incx)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaswp inputs: n %" FLA_IS ", lda %" FLA_IS ", k1 %" FLA_IS ", k2 %" FLA_IS ", incx %" FLA_IS "",*n, *lda, *k1, *k2, *incx);
@@ -148,7 +148,7 @@ int zlaswp_(integer *n, doublecomplex *a, integer *lda, integer *k1, integer *k2
     else
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     n32 = *n / 32 << 5;
     if (n32 != 0)
@@ -228,7 +228,7 @@ int zlaswp_(integer *n, doublecomplex *a, integer *lda, integer *k1, integer *k2
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLASWP */
 }
 /* zlaswp_ */

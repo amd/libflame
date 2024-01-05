@@ -132,7 +132,7 @@ otherwise, */
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doublecomplex *dl, doublecomplex *d__, doublecomplex *du, doublecomplex *x, integer *ldx, doublereal *beta, doublecomplex *b, integer *ldb)
+void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doublecomplex *dl, doublecomplex *d__, doublecomplex *du, doublecomplex *x, integer *ldx, doublereal *beta, doublecomplex *b, integer *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlagtm inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldx %" FLA_IS ", ldb %" FLA_IS "",*trans, *n, *nrhs, *ldx, *ldb);
@@ -176,7 +176,7 @@ int zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doublecom
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Multiply B by BETA if BETA.NE.1. */
     if (*beta == 0.)
@@ -745,7 +745,7 @@ int zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doublecom
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAGTM */
 }
 /* zlagtm_ */

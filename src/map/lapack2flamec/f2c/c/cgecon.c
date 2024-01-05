@@ -112,7 +112,7 @@ static integer c__1 = 1;
 /* > \ingroup complexGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real *rcond, complex *work, real *rwork, integer *info)
+void cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real *rcond, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -138,14 +138,14 @@ int cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real 
     extern logical lsame_(char *, char *);
     integer isave[3];
     extern /* Subroutine */
-    int clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
+    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     extern /* Subroutine */
-    int clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *, real *, integer *), csrscl_(integer *, real *, complex *, integer *);
+    void clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *, real *, integer *), csrscl_(integer *, real *, complex *, integer *);
     logical onenrm;
     char normin[1];
     real smlnum;
@@ -206,7 +206,7 @@ int cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real 
         i__1 = -(*info);
         xerbla_("CGECON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.f;
@@ -214,12 +214,12 @@ int cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real 
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (*anorm == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     smlnum = slamch_("Safe minimum");
     /* Estimate the norm of inv(A). */
@@ -274,7 +274,7 @@ L10:
     }
 L20:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGECON */
 }
 /* cgecon_ */

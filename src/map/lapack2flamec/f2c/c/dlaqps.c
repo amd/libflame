@@ -164,7 +164,7 @@ static doublereal c_b16 = 0.;
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-int dlaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, doublereal *a, integer *lda, integer *jpvt, doublereal *tau, doublereal *vn1, doublereal *vn2, doublereal *auxv, doublereal *f, integer *ldf)
+void dlaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, doublereal *a, integer *lda, integer *jpvt, doublereal *tau, doublereal *vn1, doublereal *vn2, doublereal *auxv, doublereal *f, integer *ldf)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaqps inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldf %" FLA_IS "",*m, *n, *offset, *nb, *lda, *ldf);
@@ -182,13 +182,13 @@ int dlaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, d
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     doublereal temp2, tol3z;
     extern /* Subroutine */
-    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer itemp;
     extern /* Subroutine */
-    int dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+    void dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     extern integer idamax_(integer *, doublereal *, integer *);
     integer lsticc, lastrk;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -373,7 +373,7 @@ L40:
         goto L40;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAQPS */
 }
 /* dlaqps_ */

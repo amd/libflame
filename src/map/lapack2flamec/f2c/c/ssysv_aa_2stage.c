@@ -176,7 +176,7 @@ the */
 /* > \ingroup realSYsolve */
 /* ===================================================================== */
 /* Subroutine */
-int ssysv_aa_2stage_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *tb, integer *ltb, integer *ipiv, integer *ipiv2, real *b, integer *ldb, real *work, integer *lwork, integer * info)
+void ssysv_aa_2stage_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *tb, integer *ltb, integer *ipiv, integer *ipiv2, real *b, integer *ldb, real *work, integer *lwork, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -188,7 +188,7 @@ int ssysv_aa_2stage_(char *uplo, integer *n, integer *nrhs, real *a, integer *ld
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int ssytrf_aa_2stage_(char *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *), ssytrs_aa_2stage_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *);
+    void ssytrf_aa_2stage_(char *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *), ssytrs_aa_2stage_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *);
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
@@ -269,12 +269,12 @@ int ssysv_aa_2stage_(char *uplo, integer *n, integer *nrhs, real *a, integer *ld
         i__1 = -(*info);
         xerbla_("SSYSV_AA_2STAGE", &i__1, (ftnlen)15);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (wquery || tquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the factorization A = U**T*T*U or A = L*T*L**T. */
     ssytrf_aa_2stage_(uplo, n, &a[a_offset], lda, &tb[1], ltb, &ipiv[1], & ipiv2[1], &work[1], lwork, info);
@@ -285,7 +285,7 @@ int ssysv_aa_2stage_(char *uplo, integer *n, integer *nrhs, real *a, integer *ld
     }
     work[1] = (real) lwkopt;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYSV_AA_2STAGE */
 }
 /* ssysv_aa_2stage__ */

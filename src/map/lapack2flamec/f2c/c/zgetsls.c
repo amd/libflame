@@ -164,7 +164,7 @@ the least squares solution could not be */
 /* > \ingroup complex16GEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int zgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *work, integer *lwork, integer *info)
+void zgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgetsls inputs: trans %c, m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*trans, *m, *n, *nrhs, *lda, *ldb);
@@ -184,10 +184,10 @@ int zgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublecomplex 
     extern logical lsame_(char *, char *);
     integer maxmn;
     extern /* Subroutine */
-    int zgelq_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zgeqr_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zgelq_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zgeqr_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     doublecomplex workq[1];
     extern /* Subroutine */
-    int dlabad_(doublereal *, doublereal *);
+    void dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -195,12 +195,12 @@ int zgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublecomplex 
     doublereal bignum;
     extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
     extern /* Subroutine */
-    int zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, integer *), zgemlq_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), zgemqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, integer *), zgemlq_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), zgemqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     doublereal smlnum;
     integer wsizem, wsizeo;
     logical lquery;
     extern /* Subroutine */
-    int ztrtrs_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void ztrtrs_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -321,7 +321,7 @@ int zgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublecomplex 
         i__1 = -(*info);
         xerbla_("ZGETSLS", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (lquery)
     {
@@ -332,7 +332,7 @@ int zgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublecomplex 
             work[1].i = 0.; // , expr subst
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*lwork < wsizeo)
     {
@@ -352,7 +352,7 @@ int zgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublecomplex 
         i__1 = fla_max(*m,*n);
         zlaset_("FULL", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = dlamch_("S") / dlamch_("P");
@@ -412,7 +412,7 @@ int zgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublecomplex 
             if (*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             scllen = *n;
         }
@@ -424,7 +424,7 @@ int zgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublecomplex 
             if (*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* B(N+1:M,1:NRHS) = CZERO */
             i__1 = *nrhs;
@@ -462,7 +462,7 @@ int zgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublecomplex 
             if (*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* B(M+1:N,1:NRHS) = 0 */
             i__1 = *nrhs;
@@ -498,7 +498,7 @@ int zgetsls_(char *trans, integer *m, integer *n, integer * nrhs, doublecomplex 
             if (*info > 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             scllen = *m;
         }
@@ -525,7 +525,7 @@ L50:
     work[1].r = d__1;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGETSLS */
 }
 /* zgetsls_ */

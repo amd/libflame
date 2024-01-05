@@ -159,7 +159,7 @@ if DIRECT = 'B', T is */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int clarft_(char *direct, char *storev, integer *n, integer * k, complex *v, integer *ldv, complex *tau, complex *t, integer *ldt)
+void clarft_(char *direct, char *storev, integer *n, integer * k, complex *v, integer *ldv, complex *tau, complex *t, integer *ldt)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -177,11 +177,11 @@ int clarft_(char *direct, char *storev, integer *n, integer * k, complex *v, int
     /* Local variables */
     integer i__, j, prevlastv;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     integer lastv;
     extern /* Subroutine */
-    int ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), f90_exit_(void);
+    void ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), f90_exit_(void);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -213,7 +213,7 @@ int clarft_(char *direct, char *storev, integer *n, integer * k, complex *v, int
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (lsame_(direct, "F"))
     {
@@ -459,7 +459,7 @@ int clarft_(char *direct, char *storev, integer *n, integer * k, complex *v, int
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLARFT */
 }
 /* clarft_ */

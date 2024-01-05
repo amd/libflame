@@ -110,7 +110,7 @@ the unit diagonal elements of L are not stored. */
 /* > \ingroup complex16GEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int zgesv_(integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *b, integer *ldb, integer * info)
+void zgesv_(integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *b, integer *ldb, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgesv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *lda, *ldb);
@@ -166,7 +166,7 @@ int zgesv_(integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *i
         i__1 = -(*info);
         xerbla_("ZGESV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the LU factorization of A. */
     zgetrf_(n, n, &a[a_offset], lda, &ipiv[1], info);
@@ -176,7 +176,7 @@ int zgesv_(integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *i
         zgetrs_("No transpose", n, nrhs, &a[a_offset], lda, &ipiv[1], &b[ b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGESV */
 }
 /* zgesv_ */

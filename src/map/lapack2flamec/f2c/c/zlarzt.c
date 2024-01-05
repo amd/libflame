@@ -181,7 +181,7 @@ the corresponding */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zlarzt_(char *direct, char *storev, integer *n, integer * k, doublecomplex *v, integer *ldv, doublecomplex *tau, doublecomplex * t, integer *ldt)
+void zlarzt_(char *direct, char *storev, integer *n, integer * k, doublecomplex *v, integer *ldv, doublecomplex *tau, doublecomplex * t, integer *ldt)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarzt inputs: direct %c, storev %c, n %" FLA_IS ", k %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS "",*direct, *storev, *n, *k, *ldv, *ldt);
@@ -193,7 +193,7 @@ int zlarzt_(char *direct, char *storev, integer *n, integer * k, doublecomplex *
     integer i__, j, info;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), ztrmv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_(integer *, doublecomplex *, integer *);
+    void zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), ztrmv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -236,7 +236,7 @@ int zlarzt_(char *direct, char *storev, integer *n, integer * k, doublecomplex *
         i__1 = -info;
         xerbla_("ZLARZT", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     for (i__ = *k;
             i__ >= 1;
@@ -282,7 +282,7 @@ int zlarzt_(char *direct, char *storev, integer *n, integer * k, doublecomplex *
         /* L20: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLARZT */
 }
 /* zlarzt_ */

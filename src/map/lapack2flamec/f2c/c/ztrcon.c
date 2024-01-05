@@ -127,7 +127,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ztrcon_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *a, integer *lda, doublereal *rcond, doublecomplex * work, doublereal *rwork, integer *info)
+void ztrcon_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *a, integer *lda, doublereal *rcond, doublecomplex * work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztrcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "",*norm, *uplo, *diag, *n, *lda);
@@ -145,7 +145,7 @@ int ztrcon_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *a, in
     logical upper;
     doublereal xnorm;
     extern /* Subroutine */
-    int zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
+    void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -153,13 +153,13 @@ int ztrcon_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *a, in
     extern integer izamax_(integer *, doublecomplex *, integer *);
     logical onenrm;
     extern /* Subroutine */
-    int zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
+    void zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
     char normin[1];
     extern doublereal zlantr_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
     doublereal smlnum;
     logical nounit;
     extern /* Subroutine */
-    int zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, doublereal *, integer *);
+    void zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -223,14 +223,14 @@ int ztrcon_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *a, in
         i__1 = -(*info);
         xerbla_("ZTRCON", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         *rcond = 1.;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     *rcond = 0.;
     smlnum = dlamch_("Safe minimum") * (doublereal) fla_max(1,*n);
@@ -288,7 +288,7 @@ L10:
     }
 L20:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTRCON */
 }
 /* ztrcon_ */

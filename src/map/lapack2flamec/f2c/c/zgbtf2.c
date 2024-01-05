@@ -141,7 +141,7 @@ elements marked */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zgbtf2_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab, integer *ldab, integer *ipiv, integer *info)
+void zgbtf2_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab, integer *ldab, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgbtf2 inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS "",*m, *n, *kl, *ku, *ldab);
@@ -154,7 +154,7 @@ int zgbtf2_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab,
     /* Local variables */
     integer i__, j, km, jp, ju, kv;
     extern /* Subroutine */
-    int zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer izamax_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -216,13 +216,13 @@ int zgbtf2_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab,
         i__1 = -(*info);
         xerbla_("ZGBTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     #if AOCL_FLA_PROGRESS_H
         progress_step_count =0;
@@ -337,7 +337,7 @@ int zgbtf2_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab,
         /* L40: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGBTF2 */
 }
 /* zgbtf2_ */

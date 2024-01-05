@@ -116,7 +116,7 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ctrexc_(char *compq, integer *n, complex *t, integer * ldt, complex *q, integer *ldq, integer *ifst, integer *ilst, integer * info)
+void ctrexc_(char *compq, integer *n, complex *t, integer * ldt, complex *q, integer *ldq, integer *ifst, integer *ilst, integer * info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -136,11 +136,11 @@ int ctrexc_(char *compq, integer *n, complex *t, integer * ldt, complex *q, inte
     real cs;
     complex t11, t22, sn, temp;
     extern /* Subroutine */
-    int crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
+    void crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
     extern logical lsame_(char *, char *);
     logical wantq;
     extern /* Subroutine */
-    int clartg_(complex *, complex *, real *, complex *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clartg_(complex *, complex *, real *, complex *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -199,13 +199,13 @@ int ctrexc_(char *compq, integer *n, complex *t, integer * ldt, complex *q, inte
         i__1 = -(*info);
         xerbla_("CTREXC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n <= 1 || *ifst == *ilst)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*ifst < *ilst)
     {
@@ -262,7 +262,7 @@ int ctrexc_(char *compq, integer *n, complex *t, integer * ldt, complex *q, inte
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTREXC */
 }
 /* ctrexc_ */

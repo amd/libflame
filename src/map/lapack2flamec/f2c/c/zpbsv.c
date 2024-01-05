@@ -152,7 +152,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zpbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, doublecomplex *ab, integer *ldab, doublecomplex *b, integer * ldb, integer *info)
+void zpbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, doublecomplex *ab, integer *ldab, doublecomplex *b, integer * ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpbsv inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *kd, *nrhs, *ldab, *ldb);
@@ -218,7 +218,7 @@ int zpbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, doublecomplex *a
         i__1 = -(*info);
         xerbla_("ZPBSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the Cholesky factorization A = U**H *U or A = L*L**H. */
     zpbtrf_(uplo, n, kd, &ab[ab_offset], ldab, info);
@@ -228,7 +228,7 @@ int zpbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, doublecomplex *a
         zpbtrs_(uplo, n, kd, nrhs, &ab[ab_offset], ldab, &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPBSV */
 }
 /* zpbsv_ */

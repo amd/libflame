@@ -198,7 +198,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, integer *info)
+void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -266,13 +266,13 @@ int ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, in
         i__1 = -(*info);
         xerbla_("CTFTTP", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -288,7 +288,7 @@ int ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, in
             ap[0].i = q__1.i; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Set N1 and N2 depending on LOWER */
     if (lower)
@@ -711,7 +711,7 @@ int ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, in
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTFTTP */
 }
 /* ctfttp_ */

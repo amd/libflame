@@ -178,7 +178,7 @@ i */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int dsyev_2stage_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, doublereal *w, doublereal *work, integer *lwork, integer *info)
+void dsyev_2stage_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, doublereal *w, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsyev_2stage inputs: jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",*jobz, *uplo, *n, *lda, *lwork);
@@ -195,12 +195,12 @@ int dsyev_2stage_(char *jobz, char *uplo, integer *n, doublereal *a, integer *ld
     integer imax;
     doublereal anrm, rmin, rmax;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int dsytrd_2stage_(char *, char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dsytrd_2stage_(char *, char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer lhtrd, lwmin;
     logical lower;
     integer lwtrd;
@@ -208,18 +208,18 @@ int dsyev_2stage_(char *jobz, char *uplo, integer *n, doublereal *a, integer *ld
     extern doublereal dlamch_(char *);
     integer iscale;
     extern /* Subroutine */
-    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     doublereal safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     integer indtau;
     extern /* Subroutine */
-    int dsterf_(integer *, doublereal *, doublereal *, integer *);
+    void dsterf_(integer *, doublereal *, doublereal *, integer *);
     extern doublereal dlansy_(char *, char *, integer *, doublereal *, integer *, doublereal *);
     integer indwrk;
     extern /* Subroutine */
-    int dorgtr_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dorgtr_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     integer llwork;
     doublereal smlnum;
     logical lquery;
@@ -290,18 +290,18 @@ int dsyev_2stage_(char *jobz, char *uplo, integer *n, doublereal *a, integer *ld
         i__1 = -(*info);
         xerbla_("DSYEV_2STAGE ", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -312,7 +312,7 @@ int dsyev_2stage_(char *jobz, char *uplo, integer *n, doublereal *a, integer *ld
             a[a_dim1 + 1] = 1.;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -356,7 +356,7 @@ int dsyev_2stage_(char *jobz, char *uplo, integer *n, doublereal *a, integer *ld
         /* Not available in this release, and argument checking should not */
         /* let it getting here */
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
         dorgtr_(uplo, n, &a[a_offset], lda, &work[indtau], &work[indwrk], & llwork, &iinfo);
         dsteqr_(jobz, n, &w[1], &work[inde], &a[a_offset], lda, &work[indtau], info);
     }
@@ -377,7 +377,7 @@ int dsyev_2stage_(char *jobz, char *uplo, integer *n, doublereal *a, integer *ld
     /* Set WORK(1) to optimal workspace size. */
     work[1] = (doublereal) lwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYEV_2STAGE */
 }
 /* dsyev_2stage__ */

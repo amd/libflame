@@ -163,7 +163,7 @@ static integer c__1 = 1;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int dlaed0_(integer *icompq, integer *qsiz, integer *n, doublereal *d__, doublereal *e, doublereal *q, integer *ldq, doublereal *qstore, integer *ldqs, doublereal *work, integer *iwork, integer *info)
+void dlaed0_(integer *icompq, integer *qsiz, integer *n, doublereal *d__, doublereal *e, doublereal *q, integer *ldq, doublereal *qstore, integer *ldqs, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaed0 inputs: icompq %" FLA_IS ", qsiz %" FLA_IS ", n %" FLA_IS ", ldq %" FLA_IS ", ldqs %" FLA_IS "",*icompq, *qsiz, *n, *ldq, *ldqs);
@@ -178,26 +178,26 @@ int dlaed0_(integer *icompq, integer *qsiz, integer *n, doublereal *d__, doubler
     doublereal temp;
     integer curr;
     extern /* Subroutine */
-    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer iperm;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer indxq, iwrem;
     extern /* Subroutine */
-    int dlaed1_(integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dlaed1_(integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer iqptr;
     extern /* Subroutine */
-    int dlaed7_(integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *);
+    void dlaed7_(integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *);
     integer tlvls;
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     integer igivcl;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer igivnm, submat, curprb, subpbs, igivpt;
     extern /* Subroutine */
-    int dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     integer curlvl, matsiz, iprmpt, smlsiz;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -265,13 +265,13 @@ int dlaed0_(integer *icompq, integer *qsiz, integer *n, doublereal *d__, doubler
         i__1 = -(*info);
         xerbla_("DLAED0", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     smlsiz = ilaenv_(&c__9, "DLAED0", " ", &c__0, &c__0, &c__0, &c__0);
     /* Determine the size and placement of the submatrices, and save in */
@@ -510,7 +510,7 @@ L130:
     *info = submat * (*n + 1) + submat + matsiz - 1;
 L140:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAED0 */
 }
 /* dlaed0_ */

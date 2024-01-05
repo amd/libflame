@@ -188,7 +188,7 @@ the corresponding */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, real *v, integer *ldv, real *t, integer *ldt, real *c__, integer *ldc, real *work, integer * ldwork)
+void slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, real *v, integer *ldv, real *t, integer *ldt, real *c__, integer *ldc, real *work, integer * ldwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -202,7 +202,7 @@ int slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
     integer i__, j;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *);
     char transt[1];
     /* -- LAPACK auxiliary routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -240,7 +240,7 @@ int slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
     if (*m <= 0 || *n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (lsame_(trans, "N"))
     {
@@ -675,7 +675,7 @@ int slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLARFB */
 }
 /* slarfb_ */

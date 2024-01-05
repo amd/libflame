@@ -117,7 +117,7 @@ the routine */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sorghr_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info)
+void sorghr_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -127,7 +127,7 @@ int sorghr_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real 
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int sorgqr_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    void sorgqr_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -191,17 +191,17 @@ int sorghr_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real 
     {
         i__1 = -(*info);
         xerbla_("SORGHR", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         work[1] = 1.f;
-        return 0;
+        return;
     }
     /* Shift the vectors which define the elementary reflectors one */
     /* column to the right, and set the first ilo and the last n-ihi */
@@ -275,7 +275,7 @@ int sorghr_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real 
         sorgqr_fla(&nh, &nh, &nh, &a[*ilo + 1 + (*ilo + 1) * a_dim1], lda, &tau[* ilo], &work[1], lwork, &iinfo);
     }
     work[1] = (real) lwkopt;
-    return 0;
+    return;
     /* End of SORGHR */
 }
 /* sorghr_ */

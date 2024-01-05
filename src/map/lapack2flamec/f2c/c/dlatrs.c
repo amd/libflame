@@ -230,7 +230,7 @@ b(i), i=1,..,n}
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, doublereal *a, integer *lda, doublereal *x, doublereal *scale, doublereal *cnorm, integer *info)
+void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, doublereal *a, integer *lda, doublereal *x, doublereal *scale, doublereal *cnorm, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlatrs inputs: uplo %c, trans %c, diag %c, normin %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *trans, *diag, *normin, *n, *lda);
@@ -246,16 +246,16 @@ int dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, doub
     integer imax;
     doublereal tmax, tjjs, xmax, grow, sumj;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     doublereal tscal, uscal;
     extern doublereal dasum_(integer *, doublereal *, integer *);
     integer jlast;
     extern /* Subroutine */
-    int daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-    int dtrsv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dtrsv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *), dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
@@ -326,14 +326,14 @@ int dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, doub
         i__1 = -(*info);
         xerbla_("DLATRS", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *scale = 1.;
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine machine dependent parameters to control overflow. */
     smlnum = dlamch_("Safe minimum") / dlamch_("Precision");
@@ -468,7 +468,7 @@ int dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, doub
                 /* Rely on TRSV to propagate Inf and NaN. */
                 dtrsv_(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1);
     AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
     }
@@ -973,7 +973,7 @@ L150:
         dscal_(n, &d__1, &cnorm[1], &c__1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLATRS */
 }
 /* dlatrs_ */

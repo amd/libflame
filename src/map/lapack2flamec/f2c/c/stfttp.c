@@ -177,7 +177,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int stfttp_(char *transr, char *uplo, integer *n, real *arf, real *ap, integer *info)
+void stfttp_(char *transr, char *uplo, integer *n, real *arf, real *ap, integer *info)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -227,12 +227,12 @@ int stfttp_(char *transr, char *uplo, integer *n, real *arf, real *ap, integer *
     {
         i__1 = -(*info);
         xerbla_("STFTTP", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -244,7 +244,7 @@ int stfttp_(char *transr, char *uplo, integer *n, real *arf, real *ap, integer *
         {
             ap[0] = arf[0];
         }
-        return 0;
+        return;
     }
     /* Size of array ARF(0:NT-1) */
     /* Set N1 and N2 depending on LOWER */
@@ -619,7 +619,7 @@ int stfttp_(char *transr, char *uplo, integer *n, real *arf, real *ap, integer *
             }
         }
     }
-    return 0;
+    return;
     /* End of STFTTP */
 }
 /* stfttp_ */

@@ -119,7 +119,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int clacn2_(integer *n, complex *v, complex *x, real *est, integer *kase, integer *isave)
+void clacn2_(integer *n, complex *v, complex *x, real *est, integer *kase, integer *isave)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -142,7 +142,7 @@ int clacn2_(integer *n, complex *v, complex *x, real *est, integer *kase, intege
     real temp, absxi;
     integer jlast;
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *);
     extern integer icmax1_(integer *, complex *, integer *);
     extern real scsum1_(integer *, complex *, integer *), slamch_(char *);
     real safmin, altsgn, estold;
@@ -190,7 +190,7 @@ int clacn2_(integer *n, complex *v, complex *x, real *est, integer *kase, intege
         *kase = 1;
         isave[1] = 1;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     switch (isave[1])
     {
@@ -245,7 +245,7 @@ L20:
     *kase = 2;
     isave[1] = 2;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* ................ ENTRY (ISAVE( 1 ) = 2) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY CTRANS(A)*X. */
 L40:
@@ -269,7 +269,7 @@ L50:
     *kase = 1;
     isave[1] = 3;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* ................ ENTRY (ISAVE( 1 ) = 3) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L70:
@@ -309,7 +309,7 @@ L70:
     *kase = 2;
     isave[1] = 4;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* ................ ENTRY (ISAVE( 1 ) = 4) */
     /* X HAS BEEN OVERWRITTEN BY CTRANS(A)*X. */
 L90:
@@ -340,7 +340,7 @@ L100:
     *kase = 1;
     isave[1] = 5;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* ................ ENTRY (ISAVE( 1 ) = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L120:
@@ -353,7 +353,7 @@ L120:
 L130:
     *kase = 0;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLACN2 */
 }
 /* clacn2_ */

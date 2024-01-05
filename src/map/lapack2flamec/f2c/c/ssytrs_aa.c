@@ -120,7 +120,7 @@ static integer c__1 = 1;
 /* > \ingroup realSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ssytrs_aa_(char *uplo, integer *n, integer *nrhs, real * a, integer *lda, integer *ipiv, real *b, integer *ldb, real *work, integer *lwork, integer *info)
+void ssytrs_aa_(char *uplo, integer *n, integer *nrhs, real * a, integer *lda, integer *ipiv, real *b, integer *ldb, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -135,7 +135,7 @@ int ssytrs_aa_(char *uplo, integer *n, integer *nrhs, real * a, integer *lda, in
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
-    int sswap_(integer *, real *, integer *, real *, integer *), sgtsv_(integer *, integer *, real *, real *, real *, real *, integer *, integer *), strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    void sswap_(integer *, real *, integer *, real *, integer *), sgtsv_(integer *, integer *, real *, real *, real *, real *, integer *, integer *), strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
@@ -205,20 +205,20 @@ int ssytrs_aa_(char *uplo, integer *n, integer *nrhs, real * a, integer *lda, in
         i__1 = -(*info);
         xerbla_("SSYTRS_AA", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         lwkopt = *n * 3 - 2;
         work[1] = (real) lwkopt;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -329,7 +329,7 @@ int ssytrs_aa_(char *uplo, integer *n, integer *nrhs, real * a, integer *lda, in
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYTRS_AA */
 }
 /* ssytrs_aa__ */

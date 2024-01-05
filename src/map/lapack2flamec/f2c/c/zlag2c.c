@@ -94,7 +94,7 @@ if */
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zlag2c_(integer *m, integer *n, doublecomplex *a, integer *lda, complex *sa, integer *ldsa, integer *info)
+void zlag2c_(integer *m, integer *n, doublecomplex *a, integer *lda, complex *sa, integer *ldsa, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlag2c inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldsa %" FLA_IS "",*m, *n, *lda, *ldsa);
@@ -159,7 +159,7 @@ int zlag2c_(integer *m, integer *n, doublecomplex *a, integer *lda, complex *sa,
     *info = 0;
 L30:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAG2C */
 }
 /* zlag2c_ */

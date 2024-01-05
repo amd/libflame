@@ -127,7 +127,7 @@ static real c_b8 = 1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int stzrqf_(integer *m, integer *n, real *a, integer *lda, real *tau, integer *info)
+void stzrqf_(integer *m, integer *n, real *a, integer *lda, real *tau, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -135,7 +135,7 @@ int stzrqf_(integer *m, integer *n, real *a, integer *lda, real *tau, integer *i
     /* Local variables */
     integer i__, k, m1;
     extern /* Subroutine */
-    int sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
+    void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -178,12 +178,12 @@ int stzrqf_(integer *m, integer *n, real *a, integer *lda, real *tau, integer *i
     {
         i__1 = -(*info);
         xerbla_("STZRQF", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Perform the factorization. */
     if (*m == 0)
     {
-        return 0;
+        return;
     }
     if (*m == *n)
     {
@@ -235,7 +235,7 @@ int stzrqf_(integer *m, integer *n, real *a, integer *lda, real *tau, integer *i
             /* L20: */
         }
     }
-    return 0;
+    return;
     /* End of STZRQF */
 }
 /* stzrqf_ */

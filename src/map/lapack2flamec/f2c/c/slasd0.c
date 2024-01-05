@@ -140,7 +140,7 @@ static integer c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ldu, real *vt, integer *ldvt, integer *smlsiz, integer *iwork, real *work, integer *info)
+void slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ldu, real *vt, integer *ldvt, integer *smlsiz, integer *iwork, real *work, integer *info)
 {
     /* System generated locals */
     integer u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
@@ -153,7 +153,7 @@ int slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ldu
     real alpha;
     integer inode, ndiml, idxqc, ndimr, itemp, sqrei;
     extern /* Subroutine */
-    int slasd1_(integer *, integer *, integer *, real *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slasdq_(char *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer * );
+    void slasd1_(integer *, integer *, integer *, real *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slasdq_(char *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer * );
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -207,13 +207,13 @@ int slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ldu
     {
         i__1 = -(*info);
         xerbla_("SLASD0", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* If the input matrix is too small, call SLASDQ to find the SVD. */
     if (*n <= *smlsiz)
     {
         slasdq_("U", sqre, n, &m, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt, &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
-        return 0;
+        return;
     }
     /* Set up the computation tree. */
     inode = 1;
@@ -248,7 +248,7 @@ int slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ldu
         slasdq_("U", &sqrei, &nl, &nlp1, &nl, &ncc, &d__[nlf], &e[nlf], &vt[ nlf + nlf * vt_dim1], ldvt, &u[nlf + nlf * u_dim1], ldu, &u[ nlf + nlf * u_dim1], ldu, &work[1], info);
         if (*info != 0)
         {
-            return 0;
+            return;
         }
         itemp = idxq + nlf - 2;
         i__2 = nl;
@@ -271,7 +271,7 @@ int slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ldu
         slasdq_("U", &sqrei, &nr, &nrp1, &nr, &ncc, &d__[nrf], &e[nrf], &vt[ nrf + nrf * vt_dim1], ldvt, &u[nrf + nrf * u_dim1], ldu, &u[ nrf + nrf * u_dim1], ldu, &work[1], info);
         if (*info != 0)
         {
-            return 0;
+            return;
         }
         itemp = idxq + ic;
         i__2 = nr;
@@ -326,13 +326,13 @@ int slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ldu
             slasd1_(&nl, &nr, &sqrei, &d__[nlf], &alpha, &beta, &u[nlf + nlf * u_dim1], ldu, &vt[nlf + nlf * vt_dim1], ldvt, &iwork[ idxqc], &iwork[iwk], &work[1], info);
             if (*info != 0)
             {
-                return 0;
+                return;
             }
             /* L40: */
         }
         /* L50: */
     }
-    return 0;
+    return;
     /* End of SLASD0 */
 }
 /* slasd0_ */

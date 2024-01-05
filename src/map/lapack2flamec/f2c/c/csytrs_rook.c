@@ -128,7 +128,7 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int csytrs_rook_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, integer *ipiv, complex *b, integer *ldb, integer *info)
+void csytrs_rook_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, integer *ipiv, complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -151,11 +151,11 @@ int csytrs_rook_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda
     integer kp;
     complex akm1, bkm1, akm1k;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *);
+    void cscal_(integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     complex denom;
     extern /* Subroutine */
-    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
+    void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -215,13 +215,13 @@ int csytrs_rook_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda
         i__1 = -(*info);
         xerbla_("CSYTRS_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -565,7 +565,7 @@ L100:
         ;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSYTRS_ROOK */
 }
 /* csytrs_rook__ */

@@ -151,7 +151,7 @@ the routine */
 /* > \ingroup realSYsolve */
 /* ===================================================================== */
 /* Subroutine */
-int ssysv_aa_(char *uplo, integer *n, integer *nrhs, real * a, integer *lda, integer *ipiv, real *b, integer *ldb, real *work, integer *lwork, integer *info)
+void ssysv_aa_(char *uplo, integer *n, integer *nrhs, real * a, integer *lda, integer *ipiv, real *b, integer *ldb, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -163,7 +163,7 @@ int ssysv_aa_(char *uplo, integer *n, integer *nrhs, real * a, integer *lda, int
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
     extern /* Subroutine */
-    int ssytrf_aa_(char *, integer *, real *, integer *, integer *, real *, integer *, integer *), ssytrs_aa_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *);
+    void ssytrf_aa_(char *, integer *, real *, integer *, integer *, real *, integer *, integer *), ssytrs_aa_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     extern logical lsame_(char *, char *);
     integer lwkopt_sytrf__, lwkopt_sytrs__;
     extern /* Subroutine */
@@ -245,12 +245,12 @@ int ssysv_aa_(char *uplo, integer *n, integer *nrhs, real * a, integer *lda, int
         i__1 = -(*info);
         xerbla_("SSYSV_AA", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the factorization A = U**T*T*U or A = L*T*L**T. */
     ssytrf_aa_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], lwork, info);
@@ -261,7 +261,7 @@ int ssysv_aa_(char *uplo, integer *n, integer *nrhs, real * a, integer *lda, int
     }
     work[1] = (real) lwkopt;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYSV_AA */
 }
 /* ssysv_aa__ */

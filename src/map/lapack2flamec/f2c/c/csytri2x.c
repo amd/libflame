@@ -120,7 +120,7 @@ the matrix is singular and its */
 /* > \ingroup complexSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int csytri2x_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, complex *work, integer *nb, integer *info)
+void csytri2x_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, complex *work, integer *nb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -139,7 +139,7 @@ int csytri2x_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, 
     void c_div(complex *, complex *, complex *);
     /* Local variables */
     extern /* Subroutine */
-    int csyswapr_(char *, integer *, complex *, integer *, integer *, integer *);
+    void csyswapr_(char *, integer *, complex *, integer *, integer *, integer *);
     complex d__;
     integer i__, j, k;
     complex t, ak;
@@ -148,11 +148,11 @@ int csytri2x_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, 
     integer invd;
     complex akkp1;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+    void ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     integer count;
     logical upper;
     complex u01_i_j__, u11_i_j__;
@@ -209,12 +209,12 @@ int csytri2x_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, 
         i__1 = -(*info);
         xerbla_("CSYTRI2X", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Convert A */
     /* Workspace got Non-diag elements of D */
@@ -231,7 +231,7 @@ int csytri2x_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, 
             if (ipiv[*info] > 0 && (a[i__1].r == 0.f && a[i__1].i == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
         }
     }
@@ -247,7 +247,7 @@ int csytri2x_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, 
             if (ipiv[*info] > 0 && (a[i__2].r == 0.f && a[i__2].i == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
         }
     }
@@ -1013,7 +1013,7 @@ int csytri2x_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, 
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSYTRI2X */
 }
 /* csytri2x_ */

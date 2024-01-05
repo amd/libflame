@@ -196,7 +196,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomplex *arf, integer *info)
+void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomplex *arf, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztpttf inputs: transr %c, uplo %c, n %" FLA_IS "",*transr, *uplo, *n);
@@ -253,13 +253,13 @@ int ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecompl
         i__1 = -(*info);
         xerbla_("ZTPTTF", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -275,7 +275,7 @@ int ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecompl
             arf[0].i = z__1.i; // , expr subst
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Size of array ARF(0:NT-1) */
     /* Set N1 and N2 depending on LOWER */
@@ -699,7 +699,7 @@ int ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecompl
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTPTTF */
 }
 /* ztpttf_ */

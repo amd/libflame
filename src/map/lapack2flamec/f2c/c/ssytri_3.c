@@ -163,7 +163,7 @@ the matrix is singular and its */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int ssytri_3_(char *uplo, integer *n, real *a, integer *lda, real *e, integer *ipiv, real *work, integer *lwork, integer *info)
+void ssytri_3_(char *uplo, integer *n, real *a, integer *lda, real *e, integer *ipiv, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -175,7 +175,7 @@ int ssytri_3_(char *uplo, integer *n, real *a, integer *lda, real *e, integer *i
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
     extern /* Subroutine */
-    int ssytri_3x_(char *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
+    void ssytri_3x_(char *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
     integer nb;
     extern logical lsame_(char *, char *);
     logical upper;
@@ -241,24 +241,24 @@ int ssytri_3_(char *uplo, integer *n, real *a, integer *lda, real *e, integer *i
         i__1 = -(*info);
         xerbla_("SSYTRI_3", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         work[1] = (real) lwkopt;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     ssytri_3x_(uplo, n, &a[a_offset], lda, &e[1], &ipiv[1], &work[1], &nb, info);
     work[1] = (real) lwkopt;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYTRI_3 */
 }
 /* ssytri_3__ */

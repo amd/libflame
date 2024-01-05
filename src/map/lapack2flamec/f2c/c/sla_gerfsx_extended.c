@@ -390,7 +390,7 @@ i+1}
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sla_gerfsx_extended_(integer *prec_type__, integer * trans_type__, integer *n, integer *nrhs, real *a, integer *lda, real * af, integer *ldaf, integer *ipiv, logical *colequ, real *c__, real *b, integer *ldb, real *y, integer *ldy, real *berr_out__, integer * n_norms__, real *errs_n__, real *errs_c__, real *res, real *ayb, real *dy, real *y_tail__, real *rcond, integer *ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__, integer *info)
+void sla_gerfsx_extended_(integer *prec_type__, integer * trans_type__, integer *n, integer *nrhs, real *a, integer *lda, real * af, integer *ldaf, integer *ipiv, logical *colequ, real *c__, real *b, integer *ldb, real *y, integer *ldy, real *berr_out__, integer * n_norms__, real *errs_n__, real *errs_c__, real *res, real *ayb, real *dy, real *y_tail__, real *rcond, integer *ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, y_dim1, y_offset, errs_n_dim1, errs_n_offset, errs_c_dim1, errs_c_offset, i__1, i__2, i__3;
@@ -400,30 +400,30 @@ int sla_gerfsx_extended_(integer *prec_type__, integer * trans_type__, integer *
     real dxratmax, dzratmax;
     integer i__, j;
     extern /* Subroutine */
-    int sla_geamv_(integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sla_geamv_(integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     logical incr_prec__;
     real prev_dz_z__, yk, final_dx_x__, final_dz_z__;
     extern /* Subroutine */
-    int sla_wwaddw_(integer *, real *, real *, real * );
+    void sla_wwaddw_(integer *, real *, real *, real * );
     real prevnormdx;
     integer cnt;
     real dyk, eps, incr_thresh__, dx_x__, dz_z__, ymin;
     extern /* Subroutine */
-    int sla_lin_berr_(integer *, integer *, integer *, real *, real *, real *), blas_sgemv_x_(integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    void sla_lin_berr_(integer *, integer *, integer *, real *, real *, real *), blas_sgemv_x_(integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, integer *);
     integer y_prec_state__;
     extern /* Subroutine */
     int blas_sgemv2_x_(integer *, integer *, integer *, real *, real *, integer *, real *, real *, integer *, real *, real *, integer *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     real dxrat, dzrat;
     char trans[1];
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *);
     real normx, normy;
     extern /* Subroutine */
-    int saxpy_(integer *, real *, real *, integer *, real *, integer *);
+    void saxpy_(integer *, real *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     real normdx;
     extern /* Subroutine */
-    int sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+    void sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
     extern /* Character */
     VOID chla_transtype_(char *, integer *);
     real hugeval;
@@ -475,7 +475,7 @@ int sla_gerfsx_extended_(integer *prec_type__, integer * trans_type__, integer *
     /* Function Body */
     if (*info != 0)
     {
-        return 0;
+        return;
     }
     chla_transtype_(ch__1, trans_type__);
     *(unsigned char *)trans = *(unsigned char *)&ch__1[0];
@@ -756,7 +756,7 @@ L666: /* Set final_* when cnt hits ithresh. */
         sla_lin_berr_(n, n, &c__1, &res[1], &ayb[1], &berr_out__[j]);
         /* End of loop for each RHS. */
     }
-    return 0;
+    return;
 }
 /* sla_gerfsx_extended__ */
 #endif

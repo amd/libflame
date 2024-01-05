@@ -161,7 +161,7 @@ for 1 <= j <= N, column j of the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlatdf_(integer *ijob, integer *n, doublereal *z__, integer *ldz, doublereal *rhs, doublereal *rdsum, doublereal *rdscal, integer *ipiv, integer *jpiv)
+void dlatdf_(integer *ijob, integer *n, doublereal *z__, integer *ldz, doublereal *rhs, doublereal *rdsum, doublereal *rdscal, integer *ipiv, integer *jpiv)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlatdf inputs: ijob %" FLA_IS ", n %" FLA_IS ", ldz %" FLA_IS "",*ijob, *n, *ldz);
@@ -177,16 +177,16 @@ int dlatdf_(integer *ijob, integer *n, doublereal *z__, integer *ldz, doublereal
     integer info;
     doublereal temp, work[32];
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     extern doublereal dasum_(integer *, doublereal *, integer *);
     doublereal pmone;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     doublereal sminu;
     integer iwork[8];
     doublereal splus;
     extern /* Subroutine */
-    int dgesc2_(integer *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *), dgecon_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *), dlaswp_( integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
+    void dgesc2_(integer *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *), dgecon_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *), dlaswp_( integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -326,7 +326,7 @@ int dlatdf_(integer *ijob, integer *n, doublereal *z__, integer *ldz, doublereal
         dlassq_(n, &rhs[1], &c__1, rdscal, rdsum);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLATDF */
 }
 /* dlatdf_ */

@@ -171,7 +171,7 @@
 /* > \ingroup complex16GBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku, doublereal *alpha, doublecomplex *ab, integer *ldab, doublecomplex *x, integer *incx, doublereal *beta, doublereal *y, integer *incy)
+void zla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku, doublereal *alpha, doublecomplex *ab, integer *ldab, doublecomplex *x, integer *incx, doublereal *beta, doublereal *y, integer *incy)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zla_gbamv inputs: trans %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "", *trans, *m, *n, *kl, *ku, *ldab, *incx, *incy);
@@ -260,13 +260,13 @@ int zla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku,
     {
         xerbla_("ZLA_GBAMV ", &info, (ftnlen)10);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*m == 0 || *n == 0 || *alpha == 0. && *beta == 1.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set LENX and LENY, the lengths of the vectors x and y, and set */
     /* up the start points in X and Y. */
@@ -506,7 +506,7 @@ int zla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku,
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLA_GBAMV */
 }
 /* zla_gbamv__ */

@@ -145,7 +145,7 @@ v(i+2:n) is stored on exit in AP, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ssptrd_(char *uplo, integer *n, real *ap, real *d__, real *e, real *tau, integer *info)
+void ssptrd_(char *uplo, integer *n, real *ap, real *d__, real *e, real *tau, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -160,12 +160,12 @@ int ssptrd_(char *uplo, integer *n, real *ap, real *d__, real *e, real *tau, int
     real taui;
     extern real sdot_(integer *, real *, integer *, real *, integer *);
     extern /* Subroutine */
-    int sspr2_(char *, integer *, real *, real *, integer *, real *, integer *, real *);
+    void sspr2_(char *, integer *, real *, real *, integer *, real *, integer *, real *);
     real alpha;
     extern logical lsame_(char *, char *);
     logical upper;
     extern /* Subroutine */
-    int saxpy_(integer *, real *, real *, integer *, real *, integer *), sspmv_(char *, integer *, real *, real *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
+    void saxpy_(integer *, real *, real *, integer *, real *, integer *), sspmv_(char *, integer *, real *, real *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -206,13 +206,13 @@ int ssptrd_(char *uplo, integer *n, real *ap, real *d__, real *e, real *tau, int
         i__1 = -(*info);
         xerbla_("SSPTRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -290,7 +290,7 @@ int ssptrd_(char *uplo, integer *n, real *ap, real *d__, real *e, real *tau, int
         d__[*n] = ap[ii];
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSPTRD */
 }
 /* ssptrd_ */

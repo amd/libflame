@@ -173,7 +173,7 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int zungtsqr_(integer *m, integer *n, integer *mb, integer * nb, doublecomplex *a, integer *lda, doublecomplex *t, integer *ldt, doublecomplex *work, integer *lwork, integer *info)
+void zungtsqr_(integer *m, integer *n, integer *mb, integer * nb, doublecomplex *a, integer *lda, doublecomplex *t, integer *ldt, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zungtsqr inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS ", lwork %" FLA_IS "", *m, *n, *mb, *nb, *lda, *ldt, *lwork);
@@ -182,10 +182,10 @@ int zungtsqr_(integer *m, integer *n, integer *mb, integer * nb, doublecomplex *
     doublecomplex z__1;
     /* Local variables */
     extern /* Subroutine */
-    int zlamtsqr_(char *, char *, integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zlamtsqr_(char *, char *, integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     integer lworkopt, j, lc, lw, ldc, iinfo;
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
     logical lquery;
     integer nblocal;
     /* -- LAPACK computational routine (version 3.9.0) -- */
@@ -280,7 +280,7 @@ int zungtsqr_(integer *m, integer *n, integer *mb, integer * nb, doublecomplex *
         i__1 = -(*info);
         xerbla_("ZUNGTSQR", &i__1, (ftnlen)8);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
@@ -289,7 +289,7 @@ int zungtsqr_(integer *m, integer *n, integer *mb, integer * nb, doublecomplex *
         work[1].r = z__1.r;
         work[1].i = z__1.i; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
@@ -299,7 +299,7 @@ int zungtsqr_(integer *m, integer *n, integer *mb, integer * nb, doublecomplex *
         work[1].r = z__1.r;
         work[1].i = z__1.i; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* (1) Form explicitly the tall-skinny M-by-N left submatrix Q1_in */
     /* of M-by-M orthogonal matrix Q_in, which is implicitly stored in */
@@ -330,7 +330,7 @@ int zungtsqr_(integer *m, integer *n, integer *mb, integer * nb, doublecomplex *
     work[1].r = z__1.r;
     work[1].i = z__1.i; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZUNGTSQR */
 }
 /* zungtsqr_ */

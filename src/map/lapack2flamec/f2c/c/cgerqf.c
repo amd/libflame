@@ -133,7 +133,7 @@ conjg(v(1:n-k+i-1)) is stored on */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cgerqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *work, integer *lwork, integer *info)
+void cgerqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -150,7 +150,7 @@ int cgerqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, comp
     /* Local variables */
     integer i__, k, ib, nb, ki, kk, mu, nu, nx, iws, nbmin, iinfo;
     extern /* Subroutine */
-    int cgerq2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *), clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *), clarft_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void cgerq2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *), clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *), clarft_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
@@ -221,18 +221,18 @@ int cgerqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, comp
         i__1 = -(*info);
         xerbla_("CGERQF", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (k == 0)
     {
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     nbmin = 2;
     nx = 1;
@@ -312,7 +312,7 @@ int cgerqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, comp
     work[1].r = (real) iws;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGERQF */
 }
 /* cgerqf_ */

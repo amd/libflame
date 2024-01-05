@@ -337,7 +337,7 @@ the */
 /* > \ingroup complexGEeigen */
 /* ===================================================================== */
 /* Subroutine */
-int cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, integer *n, complex *a, integer *lda, complex *b, integer *ldb, integer *sdim, complex *alpha, complex *beta, complex * vsl, integer *ldvsl, complex *vsr, integer *ldvsr, real *rconde, real *rcondv, complex *work, integer *lwork, real *rwork, integer *iwork, integer *liwork, logical *bwork, integer *info)
+void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, integer *n, complex *a, integer *lda, complex *b, integer *ldb, integer *sdim, complex *alpha, complex *beta, complex * vsl, integer *ldvsl, complex *vsr, integer *ldvsr, real *rconde, real *rcondv, complex *work, integer *lwork, real *rwork, integer *iwork, integer *liwork, logical *bwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -366,30 +366,30 @@ int cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, i
     logical cursl, ilvsl, ilvsr;
     integer irwrk, irows;
     extern /* Subroutine */
-    int cggbak_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, complex *, integer *, integer *), cggbal_(char *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, real *, real *, real *, integer *), slabad_(real *, real *);
+    void cggbak_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, complex *, integer *, integer *), cggbal_(char *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, real *, real *, real *, integer *), slabad_(real *, real *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int cgghrd_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *), clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
+    void cgghrd_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *), clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
     logical ilascl, ilbscl;
     extern /* Subroutine */
-    int cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clacpy_( char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clacpy_( char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern real slamch_(char *);
     real bignum;
     extern /* Subroutine */
-    int chgeqz_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *, integer *), ctgsen_(integer *, logical *, logical *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, complex *, integer *, integer *, real *, real *, real *, complex *, integer *, integer *, integer *, integer *);
+    void chgeqz_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *, integer *), ctgsen_(integer *, logical *, logical *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, complex *, integer *, integer *, real *, real *, real *, complex *, integer *, integer *, integer *, integer *);
     integer ijobvl, iright, ijobvr;
     logical wantsb;
     integer liwmin;
     logical wantse, lastsl;
     real anrmto, bnrmto;
     extern /* Subroutine */
-    int cungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+    void cungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
     integer minwrk, maxwrk;
     logical wantsn;
     real smlnum;
     extern /* Subroutine */
-    int cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    void cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     logical wantst, lquery, wantsv;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -591,19 +591,19 @@ int cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, i
         i__1 = -(*info);
         xerbla_("CGGESX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         *sdim = 0;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = slamch_("P");
@@ -816,7 +816,7 @@ L40:
     work[1].i = 0.f; // , expr subst
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGGESX */
 }
 /* cggesx_ */

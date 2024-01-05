@@ -580,7 +580,7 @@ otherwise the length of IWORK is 2*N. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jobp, integer *m, integer *n, complex *a, integer * lda, real *sva, complex *u, integer *ldu, complex *v, integer *ldv, complex *cwork, integer *lwork, real *rwork, integer *lrwork, integer *iwork, integer *info)
+void cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jobp, integer *m, integer *n, complex *a, integer * lda, real *sva, complex *u, integer *ldu, complex *v, integer *ldv, complex *cwork, integer *lwork, real *rwork, integer *lrwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cgejsv inputs: joba %c, jobu %c, jobv %c, jobr %c, jobt %c, jobp %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS "",*joba, *jobu, *jobv, *jobr, *jobt, *jobp, *m, *n, *lda, *ldu, *ldv);
@@ -607,62 +607,62 @@ int cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jo
     logical jracc;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     complex ctemp;
     real entra, small_val;
     integer iwoff;
     real sfmin;
     logical lsvec;
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
     real epsln;
     logical rsvec;
     integer lwcon, lwlqf;
     extern /* Subroutine */
-    int ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+    void ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     integer lwqrf;
     logical l2aber;
     extern /* Subroutine */
-    int cgeqp3_(integer *, integer *, complex *, integer *, integer *, complex *, complex *, integer *, real *, integer *);
+    void cgeqp3_(integer *, integer *, complex *, integer *, integer *, complex *, complex *, integer *, real *, integer *);
     real condr1, condr2, uscal1, uscal2;
     logical l2kill, l2rank, l2tran;
     extern real scnrm2_(integer *, complex *, integer *);
     logical l2pert;
     integer lrwqp3;
     extern /* Subroutine */
-    int clacgv_(integer *, complex *, integer *), cgelqf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+    void clacgv_(integer *, complex *, integer *), cgelqf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
     extern integer icamax_(integer *, complex *, integer *);
     extern /* Subroutine */
-    int clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
+    void clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
     real scalem, sconda;
     logical goscal;
     real aatmin;
     extern real slamch_(char *);
     real aatmax;
     extern /* Subroutine */
-    int cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clacpy_( char *, integer *, integer *, complex *, integer *, complex *, integer *), clapmr_(logical *, integer *, integer *, complex *, integer *, integer *);
+    void cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clacpy_( char *, integer *, integer *, complex *, integer *, complex *, integer *), clapmr_(logical *, integer *, integer *, complex *, integer *, integer *);
     logical noscal;
     extern /* Subroutine */
-    int claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
+    void claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), cpocon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), csscal_(integer *, real *, complex *, integer *), classq_(integer *, complex *, integer *, real *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cgesvj_(char *, char *, char *, integer *, integer *, complex *, integer *, real *, integer *, complex *, integer *, complex *, integer *, real *, integer *, integer *), claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
+    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), cpocon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), csscal_(integer *, real *, complex *, integer *), classq_(integer *, complex *, integer *, real *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cgesvj_(char *, char *, char *, integer *, integer *, complex *, integer *, real *, integer *, complex *, integer *, complex *, integer *, real *, integer *, integer *), claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
     real entrat;
     logical almort;
     complex cdummy[1];
     extern /* Subroutine */
-    int cungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+    void cungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
     real maxprj;
     extern /* Subroutine */
-    int cunmlq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    void cunmlq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     logical errest;
     integer lrwcon;
     extern /* Subroutine */
-    int slassq_(integer *, real *, integer *, real *, real *);
+    void slassq_(integer *, real *, integer *, real *, real *);
     logical transp;
     integer minwrk, lwsvdj;
     extern /* Subroutine */
-    int cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+    void cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
     real rdummy[1];
     logical lquery, rowpiv;
     integer optwrk;
@@ -1299,7 +1299,7 @@ int cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jo
         i__1 = -(*info);
         xerbla_("CGEJSV", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
@@ -1310,7 +1310,7 @@ int cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jo
         rwork[1] = (real) minrwrk;
         iwork[1] = fla_max(4,miniwrk);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return for void matrix (Y3K safe) */
     /* #:) */
@@ -1329,7 +1329,7 @@ int cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jo
             rwork[i__] = 0.f;
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine whether the matrix U should be M x N or M x M */
     if (lsvec)
@@ -1368,7 +1368,7 @@ int cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jo
             i__2 = -(*info);
             xerbla_("CGEJSV", &i__2, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         aaqq = sqrt(aaqq);
         if (aapp < big / aaqq && noscal)
@@ -1445,7 +1445,7 @@ int cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jo
         iwork[3] = 0;
         iwork[4] = -1;
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Issue warning if denormalized column norms detected. Override the */
     /* high relative accuracy request. Issue licence to kill nonzero columns */
@@ -1523,7 +1523,7 @@ int cgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jo
             rwork[7] = 0.f;
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     transp = FALSE_;
     aatmax = -1.f;
@@ -3264,7 +3264,7 @@ L3302:
         iwork[4] = -1;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* .. */
     /* .. END OF CGEJSV */
     /* .. */

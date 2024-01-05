@@ -105,7 +105,7 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ddisna_(char *job, integer *m, integer *n, doublereal * d__, doublereal *sep, integer *info)
+void ddisna_(char *job, integer *m, integer *n, doublereal * d__, doublereal *sep, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ddisna inputs: job %c, m %" FLA_IS ", n %" FLA_IS "",*job, *m, *n);
@@ -214,13 +214,13 @@ int ddisna_(char *job, integer *m, integer *n, doublereal * d__, doublereal *sep
         i__1 = -(*info);
         xerbla_("DDISNA", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (k == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute reciprocal condition numbers */
     if (k == 1)
@@ -289,7 +289,7 @@ int ddisna_(char *job, integer *m, integer *n, doublereal * d__, doublereal *sep
         /* L30: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DDISNA */
 }
 /* ddisna_ */

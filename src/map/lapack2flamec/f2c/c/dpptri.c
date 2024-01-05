@@ -84,7 +84,7 @@ static integer c__1 = 1;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dpptri_(char *uplo, integer *n, doublereal *ap, integer * info)
+void dpptri_(char *uplo, integer *n, doublereal *ap, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpptri inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
@@ -96,10 +96,10 @@ int dpptri_(char *uplo, integer *n, doublereal *ap, integer * info)
     integer jjn;
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dspr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *), dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dspr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *), dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
+    void dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dtptri_( char *, char *, integer *, doublereal *, integer *);
@@ -140,20 +140,20 @@ int dpptri_(char *uplo, integer *n, doublereal *ap, integer * info)
         i__1 = -(*info);
         xerbla_("DPPTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Invert the triangular Cholesky factor U or L. */
     dtptri_(uplo, "Non-unit", n, &ap[1], info);
     if (*info > 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -198,7 +198,7 @@ int dpptri_(char *uplo, integer *n, doublereal *ap, integer * info)
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPPTRI */
 }
 /* dpptri_ */

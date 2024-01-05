@@ -230,7 +230,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *ilo, integer *ihi, integer *nw, complex *a, integer *lda, complex *b, integer *ldb, complex *q, integer *ldq, complex *z__, integer *ldz, integer *ns, integer *nd, complex *alpha, complex *beta, complex *qc, integer *ldqc, complex *zc, integer *ldzc, complex *work, integer *lwork, real *rwork, integer *rec, integer * info)
+void claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *ilo, integer *ihi, integer *nw, complex *a, integer *lda, complex *b, integer *ldb, complex *q, integer *ldq, complex *z__, integer *ldz, integer *ns, integer *nd, complex *alpha, complex *beta, complex *qc, integer *ldqc, complex *zc, integer *ldzc, complex *work, integer *lwork, real *rwork, integer *rec, integer * info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, qc_dim1, qc_offset, zc_dim1, zc_offset, i__1, i__2, i__3, i__4;
@@ -250,28 +250,28 @@ int claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
     integer ctgexc_info__, ifst;
     complex temp;
     extern /* Subroutine */
-    int crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
+    void crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
     integer ilst;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     complex atemp;
     integer kwbot;
     real tempr;
     integer kwtop;
     extern /* Subroutine */
-    int claqz0_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *, integer *, integer *);
+    void claqz0_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *, integer *, integer *);
     integer qz_small_info__;
     extern /* Subroutine */
-    int claqz1_(logical *, logical *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, complex *, integer *, integer *, integer *, complex *, integer *), slabad_(real *, real *);
+    void claqz1_(logical *, logical *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, complex *, integer *, integer *, integer *, complex *, integer *), slabad_(real *, real *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
+    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
     real safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real safmax;
     extern /* Subroutine */
-    int ctgexc_(logical *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, integer *), clartg_( complex *, complex *, real *, complex *, complex *);
+    void ctgexc_(logical *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, integer *), clartg_( complex *, complex *, real *, complex *, complex *);
     integer istopm;
     real smlnum;
     integer istartm;
@@ -341,7 +341,7 @@ int claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
         /* workspace query, quick return */
         work[1].r = (real) lworkreq;
         work[1].i = 0.f; // , expr subst
-        return 0;
+        return;
     }
     else if (*lwork < lworkreq)
     {
@@ -351,7 +351,7 @@ int claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
     {
         i__1 = -(*info);
         xerbla_("CLAQZ2", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Get machine constants */
     safmin = slamch_("SAFE MINIMUM");
@@ -411,7 +411,7 @@ int claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
         /* Computing 2nd power */
         i__1 = jw;
         clacpy_("ALL", &jw, &jw, &work[i__1 * i__1 + 1], &jw, &b[kwtop + kwtop * b_dim1], ldb);
-        return 0;
+        return;
     }
     /* Deflation detection loop */
     if (kwtop == *ilo || s.r == 0.f && s.i == 0.f)
@@ -578,6 +578,6 @@ int claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
         cgemm_("N", "N", n, &jw, &jw, &c_b2, &z__[kwtop * z_dim1 + 1], ldz, & zc[zc_offset], ldzc, &c_b1, &work[1], n) ;
         clacpy_("ALL", n, &jw, &work[1], n, &z__[kwtop * z_dim1 + 1], ldz);
     }
-    return 0;
+    return;
 }
 /* claqz2_ */

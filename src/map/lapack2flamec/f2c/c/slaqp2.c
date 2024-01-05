@@ -135,7 +135,7 @@ if JPVT(i) = 0, */
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-int slaqp2_(integer *m, integer *n, integer *offset, real *a, integer *lda, integer *jpvt, real *tau, real *vn1, real *vn2, real * work)
+void slaqp2_(integer *m, integer *n, integer *offset, real *a, integer *lda, integer *jpvt, real *tau, real *vn1, real *vn2, real * work)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -151,13 +151,13 @@ int slaqp2_(integer *m, integer *n, integer *offset, real *a, integer *lda, inte
     real tol3z;
     integer offpi;
     extern /* Subroutine */
-    int slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
+    void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
     integer itemp;
     extern /* Subroutine */
-    int sswap_(integer *, real *, integer *, real *, integer *);
+    void sswap_(integer *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int slarfg_(integer *, real *, real *, integer *, real *);
+    void slarfg_(integer *, real *, real *, integer *, real *);
     extern integer isamax_(integer *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -272,7 +272,7 @@ int slaqp2_(integer *m, integer *n, integer *offset, real *a, integer *lda, inte
         }
         /* L20: */
     }
-    return 0;
+    return;
     /* End of SLAQP2 */
 }
 /* slaqp2_ */

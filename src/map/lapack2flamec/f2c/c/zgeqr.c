@@ -169,7 +169,7 @@ static integer c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zgeqr_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *t, integer *tsize, doublecomplex *work, integer * lwork, integer *info)
+void zgeqr_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *t, integer *tsize, doublecomplex *work, integer * lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgeqr inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", tsize %" FLA_IS ", lwork %" FLA_IS "",*m, *n, *lda, *tsize, *lwork);
@@ -184,11 +184,11 @@ int zgeqr_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     logical lminws;
     extern /* Subroutine */
-    int zgeqrt_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zgeqrt_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     logical lquery;
     integer mintsz;
     extern /* Subroutine */
-    int zlatsqr_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zlatsqr_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. -- */
@@ -360,18 +360,18 @@ int zgeqr_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex
         i__1 = -(*info);
         xerbla_("ZGEQR", &i__1, (ftnlen)5);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* The QR Decomposition */
     if (*m <= *n || mb <= *n || mb >= *m)
@@ -389,7 +389,7 @@ int zgeqr_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex
     work[1].r = (doublereal) i__1;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGEQR */
 }
 /* zgeqr_ */

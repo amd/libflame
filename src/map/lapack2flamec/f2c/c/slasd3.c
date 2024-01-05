@@ -216,7 +216,7 @@ the second */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slasd3_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, real *q, integer *ldq, real *dsigma, real *u, integer * ldu, real *u2, integer *ldu2, real *vt, integer *ldvt, real *vt2, integer *ldvt2, integer *idxc, integer *ctot, real *z__, integer * info)
+void slasd3_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, real *q, integer *ldq, real *dsigma, real *u, integer * ldu, real *u2, integer *ldu2, real *vt, integer *ldvt, real *vt2, integer *ldvt2, integer *idxc, integer *ctot, real *z__, integer * info)
 {
     /* System generated locals */
     integer q_dim1, q_offset, u_dim1, u_offset, u2_dim1, u2_offset, vt_dim1, vt_offset, vt2_dim1, vt2_offset, i__1, i__2;
@@ -231,13 +231,13 @@ int slasd3_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, real
     extern real snrm2_(integer *, real *, integer *);
     integer ctemp;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer ktemp;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *);
     extern real slamc3_(real *, real *);
     extern /* Subroutine */
-    int slasd4_(integer *, integer *, real *, real *, real *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    void slasd4_(integer *, integer *, real *, real *, real *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -326,7 +326,7 @@ int slasd3_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, real
     {
         i__1 = -(*info);
         xerbla_("SLASD3", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*k == 1)
@@ -348,7 +348,7 @@ int slasd3_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, real
                 /* L10: */
             }
         }
-        return 0;
+        return;
     }
     /* Modify values DSIGMA(i) to make sure all DSIGMA(i)-DSIGMA(j) can */
     /* be computed with high relative accuracy (barring over/underflow). */
@@ -391,7 +391,7 @@ int slasd3_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, real
         /* If the zero finder fails, the computation is terminated. */
         if (*info != 0)
         {
-            return 0;
+            return;
         }
         /* L30: */
     }
@@ -505,7 +505,7 @@ L100:
     if (*k == 2)
     {
         sgemm_("N", "N", k, &m, k, &c_b13, &q[q_offset], ldq, &vt2[vt2_offset], ldvt2, &c_b26, &vt[vt_offset], ldvt);
-        return 0;
+        return;
     }
     ktemp = ctot[1] + 1;
     sgemm_("N", "N", k, &nlp1, &ktemp, &c_b13, &q[q_dim1 + 1], ldq, &vt2[ vt2_dim1 + 1], ldvt2, &c_b26, &vt[vt_dim1 + 1], ldvt);
@@ -537,7 +537,7 @@ L100:
     }
     ctemp = ctot[2] + 1 + ctot[3];
     sgemm_("N", "N", k, &nrp1, &ctemp, &c_b13, &q[ktemp * q_dim1 + 1], ldq, & vt2[ktemp + nlp2 * vt2_dim1], ldvt2, &c_b26, &vt[nlp2 * vt_dim1 + 1], ldvt);
-    return 0;
+    return;
     /* End of SLASD3 */
 }
 /* slasd3_ */

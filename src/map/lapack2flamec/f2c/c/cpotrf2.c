@@ -102,7 +102,7 @@ static real c_b12 = 1.f;
 /* > \ingroup complexPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cpotrf2_(char *uplo, integer *n, complex *a, integer * lda, integer *info)
+void cpotrf2_(char *uplo, integer *n, complex *a, integer * lda, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -123,11 +123,11 @@ int cpotrf2_(char *uplo, integer *n, complex *a, integer * lda, integer *info)
     integer n1, n2;
     real ajj;
     extern /* Subroutine */
-    int cherk_(char *, char *, integer *, integer *, real *, complex *, integer *, real *, complex *, integer *);
+    void cherk_(char *, char *, integer *, integer *, real *, complex *, integer *, real *, complex *, integer *);
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+    void ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -177,13 +177,13 @@ int cpotrf2_(char *uplo, integer *n, complex *a, integer * lda, integer *info)
         i__1 = -(*info);
         xerbla_("CPOTRF2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* N=1 case */
     if (*n == 1)
@@ -195,7 +195,7 @@ int cpotrf2_(char *uplo, integer *n, complex *a, integer * lda, integer *info)
         {
             *info = 1;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         /* Factor */
         i__1 = a_dim1 + 1;
@@ -214,7 +214,7 @@ int cpotrf2_(char *uplo, integer *n, complex *a, integer * lda, integer *info)
         {
             *info = iinfo;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         /* Compute the Cholesky factorization A = U**H*U */
         if (upper)
@@ -228,7 +228,7 @@ int cpotrf2_(char *uplo, integer *n, complex *a, integer * lda, integer *info)
             {
                 *info = iinfo + n1;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* Compute the Cholesky factorization A = L*L**H */
         }
@@ -243,12 +243,12 @@ int cpotrf2_(char *uplo, integer *n, complex *a, integer * lda, integer *info)
             {
                 *info = iinfo + n1;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPOTRF2 */
 }
 /* cpotrf2_ */

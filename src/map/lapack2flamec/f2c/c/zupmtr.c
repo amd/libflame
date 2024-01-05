@@ -141,7 +141,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doublecomplex *ap, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *info)
+void zupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doublecomplex *ap, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zupmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",*side, *uplo, *trans, *m, *n, *ldc);
@@ -157,7 +157,7 @@ int zupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doublec
     doublecomplex taui;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -233,13 +233,13 @@ int zupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doublec
         i__1 = -(*info);
         xerbla_("ZUPMTR", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -398,7 +398,7 @@ int zupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doublec
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZUPMTR */
 }
 /* zupmtr_ */

@@ -120,7 +120,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ssyequb_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scond, real *amax, real *work, integer *info)
+void ssyequb_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scond, real *amax, real *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -142,7 +142,7 @@ int ssyequb_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scond
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern /* Subroutine */
-    int slassq_(integer *, real *, integer *, real *, real *);
+    void slassq_(integer *, real *, integer *, real *, real *);
     real smlnum;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -189,7 +189,7 @@ int ssyequb_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scond
     {
         i__1 = -(*info);
         xerbla_("SSYEQUB", &i__1, (ftnlen)7);
-        return 0;
+        return;
     }
     up = lsame_(uplo, "U");
     *amax = 0.f;
@@ -197,7 +197,7 @@ int ssyequb_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scond
     if (*n == 0)
     {
         *scond = 1.f;
-        return 0;
+        return;
     }
     i__1 = *n;
     for (i__ = 1;
@@ -373,7 +373,7 @@ int ssyequb_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scond
             if (d__ <= 0.f)
             {
                 *info = -1;
-                return 0;
+                return;
             }
             si = c0 * -2 / (c1 + sqrt(d__));
             d__ = si - s[i__];
@@ -449,6 +449,6 @@ L999:
         smax = fla_max(r__1,r__2);
     }
     *scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
-    return 0;
+    return;
 }
 /* ssyequb_ */

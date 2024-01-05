@@ -137,7 +137,7 @@ ILO=1 and IHI=0, if N=0. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cggbak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real *lscale, real *rscale, integer *m, complex *v, integer *ldv, integer *info)
+void cggbak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real *lscale, real *rscale, integer *m, complex *v, integer *ldv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cggbak inputs: job %c, side %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", m %" FLA_IS ", ldv %" FLA_IS "",*job, *side, *n, *ilo, *ihi, *m, *ldv);
@@ -147,10 +147,10 @@ int cggbak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real 
     integer i__, k;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *);
+    void cswap_(integer *, complex *, integer *, complex *, integer *);
     logical leftv;
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical rightv;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -221,23 +221,23 @@ int cggbak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real 
         i__1 = -(*info);
         xerbla_("CGGBAK", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*m == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (lsame_(job, "N"))
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*ilo == *ihi)
     {
@@ -359,7 +359,7 @@ L100:
     }
 L110:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CGGBAK */
 }
 /* cggbak_ */

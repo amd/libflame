@@ -450,7 +450,7 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dtgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, integer *n, doublereal *a, integer *lda, doublereal * b, integer *ldb, doublereal *alphar, doublereal *alphai, doublereal * beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, integer *m, doublereal *pl, doublereal *pr, doublereal *dif, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+void dtgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, integer *n, doublereal *a, integer *lda, doublereal * b, integer *ldb, doublereal *alphar, doublereal *alphai, doublereal * beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, integer *m, doublereal *pl, doublereal *pr, doublereal *dif, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtgsen inputs: ijob %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*ijob, *n, *lda, *ldb, *ldq, *ldz, *lwork, *liwork);
@@ -468,21 +468,21 @@ int dtgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
     doublereal dsum;
     logical swap;
     extern /* Subroutine */
-    int dlag2_(doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlag2_(doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     integer isave[3];
     logical wantd;
     integer lwmin;
     logical wantp;
     extern /* Subroutine */
-    int dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     logical wantd1, wantd2;
     extern doublereal dlamch_(char *);
     doublereal dscale, rdscal;
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dtgexc_(logical *, logical *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *, integer *), dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
+    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dtgexc_(logical *, logical *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *, integer *), dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
     integer liwmin;
     extern /* Subroutine */
-    int dtgsyl_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *);
+    void dtgsyl_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *);
     doublereal smlnum;
     logical lquery;
     /* -- LAPACK computational routine (version 3.7.1) -- */
@@ -560,7 +560,7 @@ int dtgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
         i__1 = -(*info);
         xerbla_("DTGSEN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = dlamch_("P");
@@ -664,12 +664,12 @@ int dtgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
         i__1 = -(*info);
         xerbla_("DTGSEN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*m == *n || *m == 0)
@@ -932,7 +932,7 @@ L60: /* Compute generalized eigenvalues of reordered pair (A, B) and */
     work[1] = (doublereal) lwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTGSEN */
 }
 /* dtgsen_ */

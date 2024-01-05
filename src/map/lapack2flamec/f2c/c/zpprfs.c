@@ -164,7 +164,7 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zpprfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, doublecomplex *afp, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *ferr, doublereal *berr, doublecomplex *work, doublereal *rwork, integer *info)
+void zpprfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, doublecomplex *afp, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *ferr, doublereal *berr, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpprfs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*uplo, *n, *nrhs, *ldb, *ldx);
@@ -188,14 +188,14 @@ int zpprfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, doublecomp
     integer isave[3], count;
     logical upper;
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zhpmv_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zaxpy_( integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zhpmv_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zaxpy_( integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal lstres;
     extern /* Subroutine */
-    int zpptrs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
+    void zpptrs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -264,7 +264,7 @@ int zpprfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, doublecomp
         i__1 = -(*info);
         xerbla_("ZPPRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
@@ -279,7 +279,7 @@ int zpprfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, doublecomp
             /* L10: */
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* NZ = maximum number of nonzero elements in each row of A, plus 1 */
     nz = *n + 1;
@@ -518,7 +518,7 @@ L100:
         /* L140: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPPRFS */
 }
 /* zpprfs_ */

@@ -129,7 +129,7 @@ static doublereal c_b12 = 1.;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dtrtrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer * ldb, integer *info)
+void dtrtrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer * ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtrtrs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *trans, *diag, *n, *nrhs, *lda, *ldb);
@@ -138,7 +138,7 @@ int dtrtrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, doub
     /* Local variables */
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -204,13 +204,13 @@ int dtrtrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, doub
         i__1 = -(*info);
         xerbla_("DTRTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check for singularity. */
     if (nounit)
@@ -223,7 +223,7 @@ int dtrtrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, doub
             if (a[*info + *info * a_dim1] == 0.)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L10: */
         }
@@ -232,7 +232,7 @@ int dtrtrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, doub
     /* Solve A * x = b or A**T * x = b. */
     dtrsm_("Left", uplo, trans, diag, n, nrhs, &c_b12, &a[a_offset], lda, &b[ b_offset], ldb);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTRTRS */
 }
 /* dtrtrs_ */

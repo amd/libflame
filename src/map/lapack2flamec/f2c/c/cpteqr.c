@@ -146,7 +146,7 @@ static integer c__1 = 1;
 /* > \ingroup complexPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer *ldz, real *work, integer *info)
+void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer *ldz, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -171,10 +171,10 @@ int cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer *
     integer nru;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, complex *, integer *, complex *, integer *, complex *, integer *, real *, integer *);
+    void claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, complex *, integer *, complex *, integer *, complex *, integer *, real *, integer *);
     integer icompz;
     extern /* Subroutine */
-    int spttrf_(integer *, real *, real *, integer *);
+    void spttrf_(integer *, real *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -240,13 +240,13 @@ int cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer *
         i__1 = -(*info);
         xerbla_("CPTEQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -257,7 +257,7 @@ int cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer *
             z__[i__1].i = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (icompz == 2)
     {
@@ -268,7 +268,7 @@ int cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer *
     if (*info != 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     i__1 = *n;
     for (i__ = 1;
@@ -314,7 +314,7 @@ int cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer *
         *info = *n + *info;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPTEQR */
 }
 /* cpteqr_ */

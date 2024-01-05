@@ -157,7 +157,7 @@ static logical c_true = TRUE_;
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, real *b, real *w, real *scale, real *x, real *work, integer *info)
+void slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, real *b, real *w, real *scale, real *x, real *work, integer *info)
 {
     /* System generated locals */
     integer t_dim1, t_offset, i__1, i__2;
@@ -175,18 +175,18 @@ int slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, r
     extern real sdot_(integer *, real *, integer *, real *, integer *);
     real xmax;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     integer jnext;
     extern real sasum_(integer *, real *, integer *);
     real sminw, xnorm;
     extern /* Subroutine */
-    int saxpy_(integer *, real *, real *, integer *, real *, integer *), slaln2_(logical *, integer *, integer *, real *, real *, real *, integer *, real *, real *, real *, integer *, real *, real *, real *, integer *, real *, real *, integer *);
+    void saxpy_(integer *, real *, real *, integer *, real *, integer *), slaln2_(logical *, integer *, integer *, real *, real *, real *, integer *, real *, real *, real *, integer *, real *, real *, real *, integer *, real *, real *, integer *);
     real scaloc;
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     real bignum;
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    int sladiv_(real *, real *, real *, real *, real *, real *);
+    void sladiv_(real *, real *, real *, real *, real *, real *);
     logical notran;
     real smlnum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -225,7 +225,7 @@ int slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, r
     /* Quick return if possible */
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     /* Set constants to control overflow */
     eps = slamch_("P");
@@ -845,7 +845,7 @@ L80:
             }
         }
     }
-    return 0;
+    return;
     /* End of SLAQTR */
 }
 /* slaqtr_ */

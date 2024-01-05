@@ -162,7 +162,7 @@ for 1 <= j <= N, column j of the */
 /* > 1995. */
 /* ===================================================================== */
 /* Subroutine */
-int zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, doublecomplex *rhs, doublereal *rdsum, doublereal * rdscal, integer *ipiv, integer *jpiv)
+void zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, doublecomplex *rhs, doublereal *rdsum, doublereal * rdscal, integer *ipiv, integer *jpiv)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlatdf inputs: ijob %" FLA_IS ", n %" FLA_IS ", ldz %" FLA_IS ", rdsum %lf, rdscal %lf",*ijob, *n, *ldz, *rdsum, *rdscal);
@@ -180,19 +180,19 @@ int zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, doublec
     doublecomplex temp, work[8];
     doublereal scale;
     extern /* Subroutine */
-    int zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     doublecomplex pmone;
     extern /* Double Complex */
     VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     doublereal rtemp, sminu, rwork[2];
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     doublereal splus;
     extern /* Subroutine */
-    int zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zgesc2_( integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublereal *), zgecon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *);
+    void zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zgesc2_( integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublereal *), zgecon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *);
     extern doublereal dzasum_(integer *, doublecomplex *, integer *);
     extern /* Subroutine */
-    int zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *), zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
+    void zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *), zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -381,7 +381,7 @@ int zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, doublec
         /* Compute the sum of squares */
         zlassq_(n, &rhs[1], &c__1, rdscal, rdsum);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* ENTRY IJOB = 2 */
     /* Compute approximate nullvector XM of Z */
@@ -410,7 +410,7 @@ int zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, doublec
     /* Compute the sum of squares */
     zlassq_(n, &rhs[1], &c__1, rdscal, rdsum);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLATDF */
 }
 /* zlatdf_ */

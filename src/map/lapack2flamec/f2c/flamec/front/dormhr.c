@@ -172,7 +172,7 @@ the routine */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda, doublereal * tau, doublereal *c__, integer *ldc, doublereal *work, integer *lwork, integer *info)
+void dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda, doublereal * tau, doublereal *c__, integer *ldc, doublereal *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__2;
@@ -189,7 +189,7 @@ int dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integ
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int dormqr_fla(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dormqr_fla(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -289,17 +289,17 @@ int dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integ
     {
         i__2 = -(*info);
         xerbla_("DORMHR", &i__2, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0 || nh == 0)
     {
         work[1] = 1.;
-        return 0;
+        return;
     }
     if (left)
     {
@@ -317,7 +317,7 @@ int dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integ
     }
     dormqr_fla(side, trans, &mi, &ni, &nh, &a[*ilo + 1 + *ilo * a_dim1], lda, & tau[*ilo], &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
     work[1] = (doublereal) lwkopt;
-    return 0;
+    return;
     /* End of DORMHR */
 }
 /* dormhr_ */

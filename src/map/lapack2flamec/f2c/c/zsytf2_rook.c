@@ -185,7 +185,7 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int zsytf2_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv, integer *info)
+void zsytf2_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsytf2_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
@@ -204,16 +204,16 @@ int zsytf2_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer
     logical done;
     integer imax, jmax;
     extern /* Subroutine */
-    int zsyr_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zsyr_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     doublereal alpha;
     extern logical lsame_(char *, char *);
     doublereal dtemp, sfmin;
     extern /* Subroutine */
-    int zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     integer itemp, kstep;
     logical upper;
     extern /* Subroutine */
-    int zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     doublereal absakk;
     extern /* Subroutine */
@@ -273,7 +273,7 @@ int zsytf2_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer
         i__1 = -(*info);
         xerbla_("ZSYTF2_ROOK", &i__1, (ftnlen)11);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.) + 1.) / 8.;
@@ -958,7 +958,7 @@ L42: /* Begin pivot search loop body */
     }
 L70:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSYTF2_ROOK */
 }
 /* zsytf2_rook__ */

@@ -174,7 +174,7 @@ if STOREV = 'R', LDV >= K. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slarzb_(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, integer *l, real *v, integer *ldv, real *t, integer *ldt, real *c__, integer *ldc, real * work, integer *ldwork)
+void slarzb_(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, integer *l, real *v, integer *ldv, real *t, integer *ldt, real *c__, integer *ldc, real * work, integer *ldwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -188,7 +188,7 @@ int slarzb_(char *side, char *trans, char *direct, char * storev, integer *m, in
     integer i__, j, info;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     char transt[1];
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -226,7 +226,7 @@ int slarzb_(char *side, char *trans, char *direct, char * storev, integer *m, in
     if (*m <= 0 || *n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Check for currently supported options */
     info = 0;
@@ -243,7 +243,7 @@ int slarzb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         i__1 = -info;
         xerbla_("SLARZB", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (lsame_(trans, "N"))
     {
@@ -340,7 +340,7 @@ int slarzb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLARZB */
 }
 /* slarzb_ */

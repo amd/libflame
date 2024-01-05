@@ -316,7 +316,7 @@ S and */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int strsen_(char *job, char *compq, logical *select, integer *n, real *t, integer *ldt, real *q, integer *ldq, real *wr, real *wi, integer *m, real *s, real *sep, real *work, integer *lwork, integer * iwork, integer *liwork, integer *info)
+void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integer *ldt, real *q, integer *ldq, real *wr, real *wi, integer *m, real *s, real *sep, real *work, integer *lwork, integer * iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -342,19 +342,19 @@ int strsen_(char *job, char *compq, logical *select, integer *n, real *t, intege
     logical wantq, wants;
     real rnorm;
     extern /* Subroutine */
-    int slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+    void slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical wantbh;
     extern /* Subroutine */
-    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     integer liwmin;
     extern /* Subroutine */
-    int strexc_(char *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *);
+    void strexc_(char *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *);
     logical wantsp, lquery;
     extern /* Subroutine */
-    int strsyl_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
+    void strsyl_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -504,12 +504,12 @@ int strsen_(char *job, char *compq, logical *select, integer *n, real *t, intege
         i__1 = -(*info);
         xerbla_("STRSEN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*m == *n || *m == 0)
@@ -645,7 +645,7 @@ L40: /* Store the output eigenvalues in WR and WI. */
     work[1] = (real) lwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of STRSEN */
 }
 /* strsen_ */

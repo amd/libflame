@@ -191,7 +191,7 @@ the routine */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int ssysv_rook_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, integer *ipiv, real *b, integer *ldb, real *work, integer *lwork, integer *info)
+void ssysv_rook_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, integer *ipiv, real *b, integer *ldb, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ssysv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb);
@@ -199,7 +199,7 @@ int ssysv_rook_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, in
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int ssytrf_rook_(char *, integer *, real *, integer *, integer *, real *, integer *, integer *), ssytrs_rook_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+    void ssytrf_rook_(char *, integer *, real *, integer *, integer *, real *, integer *, integer *), ssytrs_rook_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -277,12 +277,12 @@ int ssysv_rook_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, in
         i__1 = -(*info);
         xerbla_("SSYSV_ROOK ", &i__1, (ftnlen)11);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the factorization A = U*D*U**T or A = L*D*L**T. */
     ssytrf_rook_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], lwork, info);
@@ -294,7 +294,7 @@ int ssysv_rook_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, in
     }
     work[1] = (real) lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SSYSV_ROOK */
 }
 /* ssysv_rook__ */

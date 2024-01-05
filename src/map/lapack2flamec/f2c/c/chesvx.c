@@ -273,7 +273,7 @@ the routine */
 /* > \ingroup complexHEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int chesvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, integer *lda, complex *af, integer *ldaf, integer * ipiv, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, integer *lwork, real *rwork, integer *info)
+void chesvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, integer *lda, complex *af, integer *ldaf, integer * ipiv, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, integer *lwork, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -293,11 +293,11 @@ int chesvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, inte
     real anorm;
     extern real clanhe_(char *, char *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int checon_(char *, integer *, complex *, integer *, integer *, real *, real *, complex *, integer *);
+    void checon_(char *, integer *, complex *, integer *, integer *, real *, real *, complex *, integer *);
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int cherfs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), chetrf_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), clacpy_( char *, integer *, integer *, complex *, integer *, complex *, integer *);
+    void cherfs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), chetrf_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), clacpy_( char *, integer *, integer *, complex *, integer *, complex *, integer *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), chetrs_( char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
@@ -410,12 +410,12 @@ int chesvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, inte
         i__1 = -(*info);
         xerbla_("CHESVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (nofact)
     {
@@ -427,7 +427,7 @@ int chesvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, inte
         {
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -448,7 +448,7 @@ int chesvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, inte
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHESVX */
 }
 /* chesvx_ */

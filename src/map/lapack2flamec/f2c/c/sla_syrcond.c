@@ -146,14 +146,14 @@ real sla_syrcond_(char *uplo, integer *n, real *a, integer *lda, real *af, integ
     extern logical lsame_(char *, char *);
     integer isave[3];
     extern /* Subroutine */
-    int slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+    void slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     char normin[1];
     extern /* Subroutine */
-    int ssytrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+    void ssytrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

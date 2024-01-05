@@ -205,7 +205,7 @@ the */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-int dspgvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *ap, doublereal *bp, doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+void dspgvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *ap, doublereal *bp, doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dspgvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*itype, *jobz, *uplo, *n, *ldz, *lwork, *liwork);
@@ -219,13 +219,13 @@ int dspgvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *ap,
     char trans[1];
     logical upper;
     extern /* Subroutine */
-    int dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *), dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
+    void dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *), dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
     logical wantz;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dspevd_( char *, char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *);
     integer liwmin;
     extern /* Subroutine */
-    int dpptrf_(char *, integer *, doublereal *, integer *), dspgst_(integer *, char *, integer *, doublereal *, doublereal *, integer *);
+    void dpptrf_(char *, integer *, doublereal *, integer *), dspgst_(integer *, char *, integer *, doublereal *, doublereal *, integer *);
     logical lquery;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -318,18 +318,18 @@ int dspgvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *ap,
         i__1 = -(*info);
         xerbla_("DSPGVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Form a Cholesky factorization of BP. */
     dpptrf_(uplo, n, &bp[1], info);
@@ -337,7 +337,7 @@ int dspgvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *ap,
     {
         *info = *n + *info;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     dspgst_(itype, uplo, n, &ap[1], &bp[1], info);
@@ -405,7 +405,7 @@ int dspgvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *ap,
     work[1] = (doublereal) lwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSPGVD */
 }
 /* dspgvd_ */

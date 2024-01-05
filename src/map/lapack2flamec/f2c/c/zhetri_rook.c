@@ -123,7 +123,7 @@ the matrix is singular and its */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int zhetri_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *work, integer *info)
+void zhetri_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhetri_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "%" FLA_IS "",*uplo, *n, *lda);
@@ -146,10 +146,10 @@ int zhetri_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer
     VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     integer kstep;
     extern /* Subroutine */
-    int zhemv_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    void zhemv_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -197,13 +197,13 @@ int zhetri_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer
         i__1 = -(*info);
         xerbla_("ZHETRI_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if (upper)
@@ -217,7 +217,7 @@ int zhetri_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer
             if (ipiv[*info] > 0 && (a[i__1].r == 0. && a[i__1].i == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L10: */
         }
@@ -234,7 +234,7 @@ int zhetri_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer
             if (ipiv[*info] > 0 && (a[i__2].r == 0. && a[i__2].i == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L20: */
         }
@@ -767,7 +767,7 @@ L120:
         ;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHETRI_ROOK */
 }
 /* zhetri_rook__ */

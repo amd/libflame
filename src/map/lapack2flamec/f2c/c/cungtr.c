@@ -114,7 +114,7 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, complex *work, integer *lwork, integer *info)
+void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -133,7 +133,7 @@ int cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, comp
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int cungql_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), cungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+    void cungql_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), cungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -217,12 +217,12 @@ int cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, comp
         i__1 = -(*info);
         xerbla_("CUNGTR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
@@ -230,7 +230,7 @@ int cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, comp
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -329,7 +329,7 @@ int cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, comp
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CUNGTR */
 }
 /* cungtr_ */

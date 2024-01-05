@@ -70,16 +70,16 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zdrscl_(integer *n, doublereal *sa, doublecomplex *sx, integer *incx)
+void zdrscl_(integer *n, doublereal *sa, doublecomplex *sx, integer *incx)
 {
     doublereal mul, cden;
     logical done;
     doublereal cnum, cden1, cnum1;
     extern /* Subroutine */
-    int dlabad_(doublereal *, doublereal *);
+    void dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+    void zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal bignum, smlnum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -112,7 +112,7 @@ int zdrscl_(integer *n, doublereal *sa, doublecomplex *sx, integer *incx)
     if (*n <= 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = dlamch_("S");
@@ -151,7 +151,7 @@ L10:
         goto L10;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZDRSCL */
 }
 /* zdrscl_ */

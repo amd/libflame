@@ -222,7 +222,7 @@ the routine */
 /* Angelika Schwarz, Umea University, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-int zlatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, integer *nrhs, doublecomplex *a, integer *lda, doublecomplex *x, integer *ldx, doublereal *scale, doublereal *cnorm, doublereal *work, integer *lwork, integer *info)
+void zlatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, integer *nrhs, doublecomplex *a, integer *lda, doublecomplex *x, integer *ldx, doublereal *scale, doublereal *cnorm, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlatrs3 inputs: uplo %c, trans %c, diag %c, normin %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldx %" FLA_IS "",*uplo, *trans, *diag, *normin, *n, *nrhs, *lda, *ldx);
@@ -241,7 +241,7 @@ int zlatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
     doublereal rscal;
     integer lanrm, ilast, jlast;
     extern /* Subroutine */
-    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical upper;
     extern doublereal dlamch_(char *);
     integer lscale;
@@ -253,14 +253,14 @@ int zlatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
     extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
     doublereal bignum;
     extern /* Subroutine */
-    int zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+    void zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     integer ifirst;
     logical notran;
     integer jfirst;
     doublereal smlnum;
     logical nounit;
     extern /* Subroutine */
-    int zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, doublereal *, integer *);
+    void zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, doublereal *, integer *);
     logical lquery;
     /* .. Scalar Arguments .. */
     /* .. */
@@ -371,12 +371,12 @@ int zlatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
         i__1 = -(*info);
         xerbla_("ZLATRS3", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize scaling factors */
     i__1 = *nrhs;
@@ -390,7 +390,7 @@ int zlatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
     if (fla_min(*n,*nrhs) == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine machine dependent constant to control overflow. */
     bignum = dlamch_("Overflow");
@@ -407,7 +407,7 @@ int zlatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
             zlatrs_(uplo, trans, diag, "Y", n, &a[a_offset], lda, &x[k * x_dim1 + 1], &scale[k], &cnorm[1], info);
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute norms of blocks of A excluding diagonal blocks and find */
     /* the block with the largest norm TMAX. */
@@ -474,7 +474,7 @@ int zlatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
             zlatrs_(uplo, trans, diag, "N", n, &a[a_offset], lda, &x[k * x_dim1 + 1], &scale[k], &cnorm[1], info);
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Every right-hand side requires workspace to store NBA local scale */
     /* factors. To save workspace, X is computed successively in block columns */
@@ -827,7 +827,7 @@ int zlatrs3_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLATRS3 */
 }
 /* zlatrs3_ */

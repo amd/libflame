@@ -420,7 +420,7 @@ the routine */
 /* > \ingroup realGEsing */
 /* ===================================================================== */
 /* Subroutine */
-int sgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer *m, integer *n, real *a, integer *lda, real *s, real *u, integer *ldu, real *v, integer *ldv, integer *numrank, integer *iwork, integer *liwork, real *work, integer *lwork, real * rwork, integer *lrwork, integer *info)
+void sgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer *m, integer *n, real *a, integer *lda, real *s, real *u, integer *ldu, real *v, integer *ldv, integer *numrank, integer *iwork, integer *liwork, real *work, integer *lwork, real * rwork, integer *lrwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2;
@@ -440,7 +440,7 @@ int sgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
     logical acclh, acclm, conda;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     integer iwoff;
     logical lsvec;
     real sfmin, epsln;
@@ -451,7 +451,7 @@ int sgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
     integer lworq;
     logical wntva, wntur, wntus, wntvr;
     extern /* Subroutine */
-    int sgeqp3_(integer *, integer *, real *, integer *, integer *, real *, real *, integer *, integer *);
+    void sgeqp3_(integer *, integer *, real *, integer *, integer *, real *, real *, integer *, integer *);
     integer lwsvd2, lworq2;
     real sconda;
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
@@ -459,18 +459,18 @@ int sgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgelqf_( integer *, integer *, real *, integer *, real *, real *, integer *, integer *), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    int sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), sgesvd_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slapmt_(logical *, integer *, integer *, real *, integer *, integer *), spocon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
+    void sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), sgesvd_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slapmt_(logical *, integer *, integer *, real *, integer *, integer *), spocon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
     integer minwrk;
     logical rtrans;
     extern /* Subroutine */
-    int slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
+    void slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
     real rdummy[1];
     extern /* Subroutine */
-    int sormlq_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+    void sormlq_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
     logical lquery;
     integer lwunlq;
     extern /* Subroutine */
-    int sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+    void sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
     integer optwrk;
     logical rowprm;
     integer minwrk2;
@@ -939,7 +939,7 @@ int sgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
     {
         i__1 = -(*info);
         xerbla_("SGESVDQ", &i__1, (ftnlen)7);
-        return 0;
+        return;
     }
     else if (lquery)
     {
@@ -948,13 +948,13 @@ int sgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
         work[1] = (real) optwrk;
         work[2] = (real) minwrk;
         rwork[1] = (real) rminwrk;
-        return 0;
+        return;
     }
     /* Quick return if the matrix is void. */
     if (*m == 0 || *n == 0)
     {
         /* .. all output is void. */
-        return 0;
+        return;
     }
     big = slamch_("O");
     ascaled = FALSE_;
@@ -979,7 +979,7 @@ int sgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
                 *info = -8;
                 i__2 = -(*info);
                 xerbla_("SGESVDQ", &i__2, (ftnlen)7);
-                return 0;
+                return;
             }
             /* L1904: */
         }
@@ -1045,7 +1045,7 @@ int sgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
                 rwork[1] = -1.f;
             }
             rwork[2] = -1.f;
-            return 0;
+            return;
         }
         if (rwork[1] > big / sqrt((real) (*m)))
         {
@@ -1070,7 +1070,7 @@ int sgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer
             *info = -8;
             i__1 = -(*info);
             xerbla_("SGESVDQ", &i__1, (ftnlen)7);
-            return 0;
+            return;
         }
         if (rtmp > big / sqrt((real) (*m)))
         {
@@ -1955,7 +1955,7 @@ L4002: /* .. if numerical rank deficiency is detected, the truncated */
     /* exact zeros in SGESVD() applied to the (possibly truncated) */
     /* full row rank triangular (trapezoidal) factor of A. */
     *numrank = nr;
-    return 0;
+    return;
     /* End of SGESVDQ */
 }
 /* sgesvdq_ */

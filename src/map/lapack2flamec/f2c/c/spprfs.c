@@ -161,7 +161,7 @@ static real c_b14 = 1.f;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int spprfs_(char *uplo, integer *n, integer *nrhs, real *ap, real *afp, real *b, integer *ldb, real *x, integer *ldx, real *ferr, real *berr, real *work, integer *iwork, integer *info)
+void spprfs_(char *uplo, integer *n, integer *nrhs, real *ap, real *afp, real *b, integer *ldb, real *x, integer *ldx, real *ferr, real *berr, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -185,14 +185,14 @@ int spprfs_(char *uplo, integer *n, integer *nrhs, real *ap, real *afp, real *b,
     integer isave[3], count;
     logical upper;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), sspmv_(char *, integer *, real *, real *, real *, integer *, real *, real *, integer *), slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+    void scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), sspmv_(char *, integer *, real *, real *, real *, integer *, real *, real *, integer *), slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real lstres;
     extern /* Subroutine */
-    int spptrs_(char *, integer *, integer *, real *, real *, integer *, integer *);
+    void spptrs_(char *, integer *, integer *, real *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -257,7 +257,7 @@ int spprfs_(char *uplo, integer *n, integer *nrhs, real *ap, real *afp, real *b,
         i__1 = -(*info);
         xerbla_("SPPRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
@@ -272,7 +272,7 @@ int spprfs_(char *uplo, integer *n, integer *nrhs, real *ap, real *afp, real *b,
             /* L10: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* NZ = maximum number of nonzero elements in each row of A, plus 1 */
     nz = *n + 1;
@@ -481,7 +481,7 @@ L100:
         /* L140: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPPRFS */
 }
 /* spprfs_ */

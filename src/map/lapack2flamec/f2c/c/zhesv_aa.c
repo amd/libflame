@@ -151,7 +151,7 @@ the routine */
 /* > \ingroup complex16HEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int zhesv_aa_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *b, integer *ldb, doublecomplex *work, integer *lwork, integer *info)
+void zhesv_aa_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *b, integer *ldb, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhesv_aa inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb, *lwork);
@@ -159,7 +159,7 @@ int zhesv_aa_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
     extern /* Subroutine */
-    int zhetrf_aa_(char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), zhetrs_aa_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zhetrf_aa_(char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), zhetrs_aa_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     integer lwkopt_hetrf__, lwkopt_hetrs__;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
@@ -242,12 +242,12 @@ int zhesv_aa_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
         i__1 = -(*info);
         xerbla_("ZHESV_AA ", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the factorization A = U**H*T*U or A = L*T*L**H. */
     zhetrf_aa_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], lwork, info);
@@ -259,7 +259,7 @@ int zhesv_aa_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
     work[1].r = (doublereal) lwkopt;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHESV_AA */
 }
 /* zhesv_aa__ */

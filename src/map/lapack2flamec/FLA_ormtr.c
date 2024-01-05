@@ -37,7 +37,7 @@
 */
 
 #define LAPACK_ormtr(prefix, name)                                      \
-  int F77_ ## prefix ## name ## tr( char* side,                         \
+  void F77_ ## prefix ## name ## tr( char* side,                         \
                                     char* uplo,                         \
                                     char* trans,                        \
                                     integer*  m,                            \
@@ -154,10 +154,10 @@
   *info = 0;                                                            \
 
 
-extern int sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, real *a,          integer *lda, real *tau,          real *c__,          integer *ldc, real *work,          integer *lwork, integer *info);
-extern int dormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, doublereal *a,    integer *lda, doublereal *tau,    doublereal *c__,    integer *ldc, doublereal *work,    integer *lwork, integer *info);
-extern int cunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, complex *a,       integer *lda, complex *tau,       complex *c__,       integer *ldc, complex *work,       integer *lwork, integer *info);
-extern int zunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *lwork, integer *info);
+extern void sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, real *a,          integer *lda, real *tau,          real *c__,          integer *ldc, real *work,          integer *lwork, integer *info);
+extern void dormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, doublereal *a,    integer *lda, doublereal *tau,    doublereal *c__,    integer *ldc, doublereal *work,    integer *lwork, integer *info);
+extern void cunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, complex *a,       integer *lda, complex *tau,       complex *c__,       integer *ldc, complex *work,       integer *lwork, integer *info);
+extern void zunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *lwork, integer *info);
 
 LAPACK_ormtr(s, orm)
 {
@@ -175,7 +175,7 @@ LAPACK_ormtr(s, orm)
                  buff_w, lwork,
                  info);
       AOCL_DTL_TRACE_LOG_EXIT
-      return 0;
+      return;
     }
   }
   {
@@ -195,7 +195,7 @@ LAPACK_ormtr(s, orm)
         fla_error = 0;
   }
   AOCL_DTL_TRACE_LOG_EXIT
-  return fla_error;
+  return;
 }
 LAPACK_ormtr(d, orm)
 {
@@ -215,7 +215,7 @@ LAPACK_ormtr(d, orm)
                  buff_w, lwork,
                  info);
       AOCL_DTL_TRACE_LOG_EXIT
-      return 0;
+      return;
     }
   }
   {
@@ -235,7 +235,7 @@ LAPACK_ormtr(d, orm)
         fla_error = 0;
   }
   AOCL_DTL_TRACE_LOG_EXIT
-  return fla_error;
+  return;
 }
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
@@ -255,7 +255,7 @@ LAPACK_ormtr(c, unm)
                  (complex *)buff_w, lwork,
                  info);
       AOCL_DTL_TRACE_LOG_EXIT
-      return 0;
+      return;
     }
   }
   {
@@ -275,7 +275,7 @@ LAPACK_ormtr(c, unm)
         fla_error = 0;
   }
   AOCL_DTL_TRACE_LOG_EXIT
-  return fla_error;
+  return;
 }
 LAPACK_ormtr(z, unm)
 {
@@ -293,7 +293,7 @@ LAPACK_ormtr(z, unm)
                  (doublecomplex *)buff_w, lwork,
                  info);
       AOCL_DTL_TRACE_LOG_EXIT
-      return 0;
+      return;
     }
   }
   {
@@ -313,7 +313,7 @@ LAPACK_ormtr(z, unm)
         fla_error = 0;
   }
   AOCL_DTL_TRACE_LOG_EXIT
-  return fla_error;
+  return;
 }
 #endif
 

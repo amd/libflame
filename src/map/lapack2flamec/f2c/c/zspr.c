@@ -118,7 +118,7 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx, doublecomplex *ap)
+void zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx, doublecomplex *ap)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zspr inputs: uplo %c, n %" FLA_IS ", incx %" FLA_IS "",*uplo, *n, *incx);
@@ -173,13 +173,13 @@ int zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, intege
     {
         xerbla_("ZSPR ", &info, (ftnlen)5);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0 || alpha->r == 0. && alpha->i == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set the start point in X if the increment is not unity. */
     if (*incx <= 0)
@@ -422,7 +422,7 @@ int zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, intege
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSPR */
 }
 /* zspr_ */

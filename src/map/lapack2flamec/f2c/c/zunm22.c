@@ -158,7 +158,7 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integer *n2, doublecomplex *q, integer *ldq, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *lwork, integer *info)
+void zunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integer *n2, doublecomplex *q, integer *ldq, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zunm22 inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", n1 %" FLA_IS ", n2 %" FLA_IS ", ldq %" FLA_IS ", ldc %" FLA_IS ", lwork %" FLA_IS "",*side, *trans, *m, *n, *n1, *n2, *ldq, *ldc, *lwork);
@@ -170,11 +170,11 @@ int zunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, intege
     logical left;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     integer ldwork;
     extern /* Subroutine */
-    int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.7.1) -- */
@@ -275,12 +275,12 @@ int zunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, intege
         i__1 = -(*info);
         xerbla_("ZUNM22", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
@@ -288,7 +288,7 @@ int zunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, intege
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Degenerate cases (N1 = 0 or N2 = 0) are handled using ZTRMM. */
     if (*n1 == 0)
@@ -297,7 +297,7 @@ int zunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, intege
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*n2 == 0)
     {
@@ -305,7 +305,7 @@ int zunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, intege
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the largest chunk size available from the workspace. */
     /* Computing MAX */
@@ -431,7 +431,7 @@ int zunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, intege
     work[1].r = z__1.r;
     work[1].i = z__1.i; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZUNM22 */
 }
 /* zunm22_ */

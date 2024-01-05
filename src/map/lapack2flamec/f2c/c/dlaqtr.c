@@ -157,7 +157,7 @@ static logical c_true = TRUE_;
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlaqtr_(logical *ltran, logical *lreal, integer *n, doublereal *t, integer *ldt, doublereal *b, doublereal *w, doublereal *scale, doublereal *x, doublereal *work, integer *info)
+void dlaqtr_(logical *ltran, logical *lreal, integer *n, doublereal *t, integer *ldt, doublereal *b, doublereal *w, doublereal *scale, doublereal *x, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaqtr inputs: n %" FLA_IS ", ldt %" FLA_IS "",*n, *ldt);
@@ -176,19 +176,19 @@ int dlaqtr_(logical *ltran, logical *lreal, integer *n, doublereal *t, integer *
     integer ierr;
     doublereal smin, xmax;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     extern doublereal dasum_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     integer jnext;
     doublereal sminw, xnorm;
     extern /* Subroutine */
-    int dlaln2_(logical *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dlaln2_(logical *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     extern doublereal dlamch_(char *), dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern integer idamax_(integer *, doublereal *, integer *);
     doublereal scaloc;
     extern /* Subroutine */
-    int dladiv_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dladiv_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal bignum;
     logical notran;
     doublereal smlnum;
@@ -229,7 +229,7 @@ int dlaqtr_(logical *ltran, logical *lreal, integer *n, doublereal *t, integer *
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set constants to control overflow */
     eps = dlamch_("P");
@@ -850,7 +850,7 @@ L80:
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAQTR */
 }
 /* dlaqtr_ */

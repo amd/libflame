@@ -160,7 +160,7 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int dsycon_3_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *e, integer *ipiv, doublereal *anorm, doublereal *rcond, doublereal *work, integer *iwork, integer *info)
+void dsycon_3_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *e, integer *ipiv, doublereal *anorm, doublereal *rcond, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsycon_3 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
@@ -168,13 +168,13 @@ int dsycon_3_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *e
     integer a_dim1, a_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int dsytrs_3_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dsytrs_3_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer i__, kase;
     extern logical lsame_(char *, char *);
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    int dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -231,7 +231,7 @@ int dsycon_3_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *e
         i__1 = -(*info);
         xerbla_("DSYCON_3", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.;
@@ -239,12 +239,12 @@ int dsycon_3_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *e
     {
         *rcond = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*anorm <= 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
     if (upper)
@@ -257,7 +257,7 @@ int dsycon_3_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *e
             if (ipiv[i__] > 0 && a[i__ + i__ * a_dim1] == 0.)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
     }
@@ -272,7 +272,7 @@ int dsycon_3_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *e
             if (ipiv[i__] > 0 && a[i__ + i__ * a_dim1] == 0.)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
     }
@@ -292,7 +292,7 @@ L30:
         *rcond = 1. / ainvnm / *anorm;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYCON_3 */
 }
 /* dsycon_3__ */

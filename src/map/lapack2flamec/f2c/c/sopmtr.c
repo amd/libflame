@@ -141,7 +141,7 @@ static integer c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *ap, real *tau, real *c__, integer *ldc, real *work, integer *info)
+void sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *ap, real *tau, real *c__, integer *ldc, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -157,7 +157,7 @@ int sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *a
     logical left;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
+    void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -233,13 +233,13 @@ int sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *a
         i__1 = -(*info);
         xerbla_("SOPMTR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -362,7 +362,7 @@ int sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *a
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SOPMTR */
 }
 /* sopmtr_ */

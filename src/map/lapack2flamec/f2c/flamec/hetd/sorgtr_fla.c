@@ -114,7 +114,7 @@ the routine */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info)
+void sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -127,7 +127,7 @@ int sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *w
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int sorgql_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *), sorgqr_fla( integer *, integer *, integer *, real *, integer *, real *, real * , integer *, integer *);
+    void sorgql_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *), sorgqr_fla( integer *, integer *, integer *, real *, integer *, real *, real * , integer *, integer *);
     logical lquery;
     integer lwkopt;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -209,17 +209,17 @@ int sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *w
     {
         i__1 = -(*info);
         xerbla_("SORGTR", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         work[1] = 1.f;
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -298,7 +298,7 @@ int sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *w
         }
     }
     work[1] = (real) lwkopt;
-    return 0;
+    return;
     /* End of SORGTR */
 }
 /* sorgtr_ */

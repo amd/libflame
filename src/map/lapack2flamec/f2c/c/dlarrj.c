@@ -151,7 +151,7 @@
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int dlarrj_(integer *n, doublereal *d__, doublereal *e2, integer *ifirst, integer *ilast, doublereal *rtol, integer *offset, doublereal *w, doublereal *werr, doublereal *work, integer *iwork, doublereal *pivmin, doublereal *spdiam, integer *info)
+void dlarrj_(integer *n, doublereal *d__, doublereal *e2, integer *ifirst, integer *ilast, doublereal *rtol, integer *offset, doublereal *w, doublereal *werr, doublereal *work, integer *iwork, doublereal *pivmin, doublereal *spdiam, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarrj inputs: n %" FLA_IS ", ifirst %" FLA_IS ", ilast %" FLA_IS ", offset %" FLA_IS "",*n, *ifirst, *ilast, *offset);
@@ -199,7 +199,7 @@ int dlarrj_(integer *n, doublereal *d__, doublereal *e2, integer *ifirst, intege
     if (*n <= 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     maxitr = (integer) ((log(*spdiam + *pivmin) - log(*pivmin)) / log(2.)) + 2;
     /* Initialize unconverged intervals in [ WORK(2*I-1), WORK(2*I) ]. */
@@ -420,7 +420,7 @@ L100:
         /* L110: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARRJ */
 }
 /* dlarrj_ */

@@ -127,7 +127,7 @@ i */
 /* > \ingroup doubleSYeigen */
 /* ===================================================================== */
 /* Subroutine */
-int dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, doublereal *w, doublereal *work, integer *lwork, integer *info)
+void dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, doublereal *w, doublereal *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -142,7 +142,7 @@ int dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, doub
     integer imax;
     doublereal rmin, rmax;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
     extern logical lsame_(char *, char *);
     integer iinfo;
@@ -150,7 +150,7 @@ int dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, doub
     extern doublereal dlamch_(char *);
     integer iscale;
     extern /* Subroutine */
-    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     doublereal safmin;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
@@ -158,11 +158,11 @@ int dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, doub
     doublereal bignum;
     integer indtau;
     extern /* Subroutine */
-    int dsterf_(integer *, doublereal *, doublereal *, integer *);
+    void dsterf_(integer *, doublereal *, doublereal *, integer *);
     extern doublereal dlansy_(char *, char *, integer *, doublereal *, integer *, doublereal *);
     integer indwrk;
     extern /* Subroutine */
-    int dorgtr_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsytrd_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+    void dorgtr_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsytrd_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
     integer llwork;
     doublereal smlnum;
     integer lwkopt;
@@ -240,18 +240,18 @@ int dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, doub
         i__1 = -(*info);
         xerbla_("DSYEV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -262,7 +262,7 @@ int dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, doub
             a[a_dim1 + 1] = 1.;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -322,7 +322,7 @@ int dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, doub
     /* Set WORK(1) to optimal workspace size. */
     work[1] = (doublereal) lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYEV */
 }
 /* dsyev_ */

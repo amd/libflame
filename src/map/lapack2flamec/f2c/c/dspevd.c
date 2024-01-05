@@ -172,7 +172,7 @@ i */
 /* > \ingroup doubleOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int dspevd_(char *jobz, char *uplo, integer *n, doublereal * ap, doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+void dspevd_(char *jobz, char *uplo, integer *n, doublereal * ap, doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dspevd inputs: jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*jobz, *uplo, *n, *ldz, *lwork, *liwork);
@@ -186,7 +186,7 @@ int dspevd_(char *jobz, char *uplo, integer *n, doublereal * ap, doublereal *w, 
     integer inde;
     doublereal anrm, rmin, rmax;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
     extern logical lsame_(char *, char *);
     integer iinfo, lwmin;
@@ -194,7 +194,7 @@ int dspevd_(char *jobz, char *uplo, integer *n, doublereal * ap, doublereal *w, 
     extern doublereal dlamch_(char *);
     integer iscale;
     extern /* Subroutine */
-    int dstedc_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *);
+    void dstedc_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *);
     doublereal safmin;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -202,10 +202,10 @@ int dspevd_(char *jobz, char *uplo, integer *n, doublereal * ap, doublereal *w, 
     extern doublereal dlansp_(char *, char *, integer *, doublereal *, doublereal *);
     integer indtau;
     extern /* Subroutine */
-    int dsterf_(integer *, doublereal *, doublereal *, integer *);
+    void dsterf_(integer *, doublereal *, doublereal *, integer *);
     integer indwrk, liwmin;
     extern /* Subroutine */
-    int dsptrd_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dopmtr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dsptrd_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dopmtr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     integer llwork;
     doublereal smlnum;
     logical lquery;
@@ -296,18 +296,18 @@ int dspevd_(char *jobz, char *uplo, integer *n, doublereal * ap, doublereal *w, 
         i__1 = -(*info);
         xerbla_("DSPEVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -317,7 +317,7 @@ int dspevd_(char *jobz, char *uplo, integer *n, doublereal * ap, doublereal *w, 
             z__[z_dim1 + 1] = 1.;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -372,7 +372,7 @@ int dspevd_(char *jobz, char *uplo, integer *n, doublereal * ap, doublereal *w, 
     work[1] = (doublereal) lwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSPEVD */
 }
 /* dspevd_ */

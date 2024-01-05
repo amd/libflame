@@ -110,7 +110,7 @@ static doublereal c_b16 = -1.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zpptrf_(char *uplo, integer *n, doublecomplex *ap, integer *info)
+void zpptrf_(char *uplo, integer *n, doublecomplex *ap, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpptrf inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
@@ -125,13 +125,13 @@ int zpptrf_(char *uplo, integer *n, doublecomplex *ap, integer *info)
     integer j, jc, jj;
     doublereal ajj;
     extern /* Subroutine */
-    int zhpr_(char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *);
+    void zhpr_(char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *);
     extern logical lsame_(char *, char *);
     extern /* Double Complex */
     VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+    void ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -171,13 +171,13 @@ int zpptrf_(char *uplo, integer *n, doublecomplex *ap, integer *info)
         i__1 = -(*info);
         xerbla_("ZPPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -260,7 +260,7 @@ L30:
     *info = j;
 L40:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPPTRF */
 }
 /* zpptrf_ */

@@ -139,7 +139,7 @@ v(i+2:ihi) is stored on */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sgehd2_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real *tau, real *work, integer *info)
+void sgehd2_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real *tau, real *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -147,7 +147,7 @@ int sgehd2_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real 
     integer i__;
     real aii;
     extern /* Subroutine */
-    int slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
+    void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -195,7 +195,7 @@ int sgehd2_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real 
     {
         i__1 = -(*info);
         xerbla_("SGEHD2", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     i__1 = *ihi - 1;
     for (i__ = *ilo;
@@ -219,7 +219,7 @@ int sgehd2_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real 
         a[i__ + 1 + i__ * a_dim1] = aii;
         /* L10: */
     }
-    return 0;
+    return;
     /* End of SGEHD2 */
 }
 /* sgehd2_ */

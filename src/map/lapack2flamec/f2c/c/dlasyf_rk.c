@@ -253,7 +253,7 @@ static doublereal c_b10 = 1.;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a, integer *lda, doublereal *e, integer *ipiv, doublereal *w, integer *ldw, integer *info)
+void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a, integer *lda, doublereal *e, integer *ipiv, doublereal *w, integer *ldw, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasyf_rk inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldw %" FLA_IS "",*uplo, *n, *nb, *lda, *ldw);
@@ -270,14 +270,14 @@ int dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a, 
     integer imax, jmax;
     doublereal alpha;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     doublereal dtemp, sfmin;
     integer itemp;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer kstep;
     extern doublereal dlamch_(char *);
     doublereal absakk;
@@ -896,7 +896,7 @@ L90: /* Update the lower triangle of A22 (= A(k:n,k:n)) as */
         *kb = k - 1;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASYF_RK */
 }
 /* dlasyf_rk__ */

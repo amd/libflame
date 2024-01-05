@@ -491,7 +491,7 @@ defaults */
 /* > \ingroup realPOsolve */
 /* ===================================================================== */
 /* Subroutine */
-int sposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integer *lda, real *af, integer *ldaf, char *equed, real *s, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *rpvgrw, real *berr, integer *n_err_bnds__, real * err_bnds_norm__, real *err_bnds_comp__, integer *nparams, real * params, real *work, integer *iwork, integer *info)
+void sposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integer *lda, real *af, integer *ldaf, char *equed, real *s, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *rpvgrw, real *berr, integer *n_err_bnds__, real * err_bnds_norm__, real *err_bnds_comp__, integer *nparams, real * params, real *work, integer *iwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1;
@@ -510,10 +510,10 @@ int sposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
     real bignum;
     integer infequ;
     extern /* Subroutine */
-    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     real smlnum;
     extern /* Subroutine */
-    int slaqsy_(char *, integer *, real *, integer *, real *, real *, real *, char *), spotrf_(char *, integer *, real *, integer *, integer *), spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *), slascl2_(integer *, integer *, real *, real *, integer *), spoequb_(integer *, real *, integer *, real *, real *, real *, integer *), sporfsx_(char *, char *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, real *, real *, integer *, real *, real *, integer *, integer *);
+    void slaqsy_(char *, integer *, real *, integer *, real *, real *, real *, char *), spotrf_(char *, integer *, real *, integer *, integer *), spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *), slascl2_(integer *, integer *, real *, real *, integer *), spoequb_(integer *, real *, integer *, real *, real *, real *, integer *), sporfsx_(char *, char *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, real *, real *, integer *, real *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -656,7 +656,7 @@ int sposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
     {
         i__1 = -(*info);
         xerbla_("SPOSVXX", &i__1, (ftnlen)7);
-        return 0;
+        return;
     }
     if (equil)
     {
@@ -686,7 +686,7 @@ int sposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
             /* Compute the reciprocal pivot growth factor of the */
             /* leading rank-deficient INFO columns of A. */
             *rpvgrw = sla_porpvgrw_(uplo, info, &a[a_offset], lda, &af[ af_offset], ldaf, &work[1]);
-            return 0;
+            return;
         }
     }
     /* Compute the reciprocal growth factor RPVGRW. */
@@ -702,7 +702,7 @@ int sposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
     {
         slascl2_(n, nrhs, &s[1], &x[x_offset], ldx);
     }
-    return 0;
+    return;
     /* End of SPOSVXX */
 }
 /* sposvxx_ */

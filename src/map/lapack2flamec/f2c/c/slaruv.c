@@ -82,7 +82,7 @@ the array */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slaruv_(integer *iseed, integer *n, real *x)
+void slaruv_(integer *iseed, integer *n, real *x)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -177,7 +177,7 @@ L20: /* Multiply the seed by i-th power of the multiplier modulo 2**48 */
     iseed[3] = it3;
     iseed[4] = it4;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLARUV */
 }
 /* slaruv_ */

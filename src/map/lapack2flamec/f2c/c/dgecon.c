@@ -112,7 +112,7 @@ static integer c__1 = 1;
 /* > \ingroup doubleGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dgecon_(char *norm, integer *n, doublereal *a, integer * lda, doublereal *anorm, doublereal *rcond, doublereal *work, integer * iwork, integer *info)
+void dgecon_(char *norm, integer *n, doublereal *a, integer * lda, doublereal *anorm, doublereal *rcond, doublereal *work, integer * iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgecon inputs: norm %c, n %" FLA_IS ", lda %" FLA_IS "",*norm, *n, *lda);
@@ -128,14 +128,14 @@ int dgecon_(char *norm, integer *n, doublereal *a, integer * lda, doublereal *an
     extern logical lsame_(char *, char *);
     integer isave[3];
     extern /* Subroutine */
-    int drscl_(integer *, doublereal *, doublereal *, integer *), dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void drscl_(integer *, doublereal *, doublereal *, integer *), dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     extern /* Subroutine */
-    int dlatrs_(char *, char *, char *, char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+    void dlatrs_(char *, char *, char *, char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     logical onenrm;
     char normin[1];
     doublereal smlnum;
@@ -192,7 +192,7 @@ int dgecon_(char *norm, integer *n, doublereal *a, integer * lda, doublereal *an
         i__1 = -(*info);
         xerbla_("DGECON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.;
@@ -200,12 +200,12 @@ int dgecon_(char *norm, integer *n, doublereal *a, integer * lda, doublereal *an
     {
         *rcond = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (*anorm == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     smlnum = dlamch_("Safe minimum");
     /* Estimate the norm of inv(A). */
@@ -259,7 +259,7 @@ L10:
     }
 L20:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGECON */
 }
 /* dgecon_ */

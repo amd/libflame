@@ -160,7 +160,7 @@ the unit diagonal elements of L are not stored. */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int dlaorhr_col_getrfnp2_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *d__, integer *info)
+void dlaorhr_col_getrfnp2_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *d__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaorhr_col_getrfnp2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
@@ -172,11 +172,11 @@ int dlaorhr_col_getrfnp2_(integer *m, integer *n, doublereal *a, integer *lda, d
     /* Local variables */
     integer i__, n1, n2;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer iinfo;
     doublereal sfmin;
     extern /* Subroutine */
-    int dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -225,13 +225,13 @@ int dlaorhr_col_getrfnp2_(integer *m, integer *n, doublereal *a, integer *lda, d
         i__1 = -(*info);
         xerbla_("DLAORHR_COL_GETRFNP2", &i__1, (ftnlen)20);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*m == 1)
     {
@@ -292,7 +292,7 @@ int dlaorhr_col_getrfnp2_(integer *m, integer *n, doublereal *a, integer *lda, d
         dlaorhr_col_getrfnp2_(&i__1, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &d__[n1 + 1], &iinfo);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAORHR_COL_GETRFNP2 */
 }
 /* dlaorhr_col_getrfnp2__ */

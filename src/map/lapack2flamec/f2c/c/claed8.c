@@ -215,7 +215,7 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int claed8_(integer *k, integer *n, integer *qsiz, complex * q, integer *ldq, real *d__, real *rho, integer *cutpnt, real *z__, real *dlamda, complex *q2, integer *ldq2, real *w, integer *indxp, integer *indx, integer *indxq, integer *perm, integer *givptr, integer *givcol, real *givnum, integer *info)
+void claed8_(integer *k, integer *n, integer *qsiz, complex * q, integer *ldq, real *d__, real *rho, integer *cutpnt, real *z__, real *dlamda, complex *q2, integer *ldq2, real *w, integer *indxp, integer *indx, integer *indxq, integer *perm, integer *givptr, integer *givcol, real *givnum, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -240,13 +240,13 @@ int claed8_(integer *k, integer *n, integer *qsiz, complex * q, integer *ldq, re
     real eps, tau, tol;
     integer jlam, imax, jmax;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *), csrot_(integer *, complex *, integer *, complex *, integer *, real *, real *), scopy_(integer *, real *, integer *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *), csrot_(integer *, complex *, integer *, complex *, integer *, real *, real *), scopy_(integer *, real *, integer *, real *, integer *);
     extern real slapy2_(real *, real *), slamch_(char *);
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    int slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
+    void slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -313,7 +313,7 @@ int claed8_(integer *k, integer *n, integer *qsiz, complex * q, integer *ldq, re
         i__1 = -(*info);
         xerbla_("CLAED8", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Need to initialize GIVPTR to O here in case of quick exit */
     /* to prevent an unspecified code behavior (usually sigfault) */
@@ -324,7 +324,7 @@ int claed8_(integer *k, integer *n, integer *qsiz, complex * q, integer *ldq, re
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     n1 = *cutpnt;
     n2 = *n - n1;
@@ -397,7 +397,7 @@ int claed8_(integer *k, integer *n, integer *qsiz, complex * q, integer *ldq, re
         }
         clacpy_("A", qsiz, n, &q2[q2_dim1 + 1], ldq2, &q[q_dim1 + 1], ldq);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* If there are multiple eigenvalues then the problem deflates. Here */
     /* the number of equal eigenvalues are found. As each equal */
@@ -529,7 +529,7 @@ L100: /* Sort the eigenvalues and corresponding eigenvectors into DLAMDA */
         clacpy_("A", qsiz, &i__1, &q2[(*k + 1) * q2_dim1 + 1], ldq2, &q[(*k + 1) * q_dim1 + 1], ldq);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAED8 */
 }
 /* claed8_ */

@@ -265,7 +265,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *ap, doublecomplex *afp, integer *ipiv, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr, doublecomplex * work, doublereal *rwork, integer *info)
+void zspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *ap, doublecomplex *afp, integer *ipiv, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr, doublecomplex * work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zspsvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *uplo, *n, *nrhs, *ldb, *ldx);
@@ -276,14 +276,14 @@ int zspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *a
     extern logical lsame_(char *, char *);
     doublereal anorm;
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacpy_( char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal zlansp_(char *, char *, integer *, doublecomplex *, doublereal *);
     extern /* Subroutine */
-    int zspcon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zsprfs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zsptrf_(char *, integer *, doublecomplex *, integer *, integer *), zsptrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    void zspcon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zsprfs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zsptrf_(char *, integer *, doublecomplex *, integer *, integer *), zsptrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -351,7 +351,7 @@ int zspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *a
         i__1 = -(*info);
         xerbla_("ZSPSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (nofact)
     {
@@ -364,7 +364,7 @@ int zspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *a
         {
             *rcond = 0.;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -383,7 +383,7 @@ int zspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *a
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSPSVX */
 }
 /* zspsvx_ */

@@ -144,7 +144,7 @@ v(i+1:m) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dgeqp3_fla(integer *m, integer *n, doublereal *a, integer * lda, integer *jpvt, doublereal *tau, doublereal *work, integer *lwork, integer *info)
+void dgeqp3_fla(integer *m, integer *n, doublereal *a, integer * lda, integer *jpvt, doublereal *tau, doublereal *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -153,16 +153,16 @@ int dgeqp3_fla(integer *m, integer *n, doublereal *a, integer * lda, integer *jp
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     integer nbmin, minmn;
     extern /* Subroutine */
-    int dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer minws;
     extern /* Subroutine */
-    int dlaqp2_(integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *), dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlaqp2_(integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *), dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int dlaqps_(integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
+    void dlaqps_(integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
     integer topbmn, sminmn;
     extern /* Subroutine */
-    int dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
@@ -237,11 +237,11 @@ int dgeqp3_fla(integer *m, integer *n, doublereal *a, integer * lda, integer *jp
     {
         i__1 = -(*info);
         xerbla_("DGEQP3", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     else if (lquery)
     {
-        return 0;
+        return;
     }
     /* Move initial columns up front. */
     nfxd = 1;
@@ -381,7 +381,7 @@ L30:
         }
     }
     work[1] = (doublereal) iws;
-    return 0;
+    return;
     /* End of DGEQP3_FLA */
 }
 /* dgeqp3_fla */

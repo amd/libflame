@@ -244,7 +244,7 @@ here the magnitude of a complex number */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n, doublecomplex *h__, integer *ldh, doublecomplex * w, doublecomplex *vl, integer *ldvl, doublecomplex *vr, integer *ldvr, integer *mm, integer *m, doublecomplex *work, doublereal *rwork, integer *ifaill, integer *ifailr, integer *info)
+void zhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n, doublecomplex *h__, integer *ldh, doublecomplex * w, doublecomplex *vl, integer *ldvl, doublecomplex *vr, integer *ldvr, integer *mm, integer *m, doublecomplex *work, doublereal *rwork, integer *ifaill, integer *ifailr, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhsein inputs: side %c, eigsrc %c, initv %c, n %" FLA_IS ", ldh %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",*side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm);
@@ -371,13 +371,13 @@ int zhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n,
         i__1 = -(*info);
         xerbla_("ZHSEIN", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set machine-dependent constants. */
     unfl = dlamch_("Safe minimum");
@@ -456,7 +456,7 @@ L50:
                 {
                     *info = -6;
     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 else if (hnorm > 0.)
                 {
@@ -551,7 +551,7 @@ L60:
         /* L100: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHSEIN */
 }
 /* zhsein_ */

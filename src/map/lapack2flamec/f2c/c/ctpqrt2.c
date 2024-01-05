@@ -173,7 +173,7 @@ that is, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ctpqrt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, complex *b, integer *ldb, complex *t, integer *ldt, integer *info)
+void ctpqrt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, complex *b, integer *ldb, complex *t, integer *ldt, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -193,10 +193,10 @@ int ctpqrt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, compl
     /* Local variables */
     integer i__, j, p, mp, np;
     extern /* Subroutine */
-    int cgerc_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *);
+    void cgerc_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *);
     complex alpha;
     extern /* Subroutine */
-    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -257,13 +257,13 @@ int ctpqrt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, compl
         i__1 = -(*info);
         xerbla_("CTPQRT2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *m == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     i__1 = *n;
     for (i__ = 1;
@@ -378,6 +378,6 @@ int ctpqrt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, compl
     }
     /* End of CTPQRT2 */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* ctpqrt2_ */

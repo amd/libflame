@@ -112,7 +112,7 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complexGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cgttrf_(integer *n, complex *dl, complex *d__, complex * du, complex *du2, integer *ipiv, integer *info)
+void cgttrf_(integer *n, complex *dl, complex *d__, complex * du, complex *du2, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -172,13 +172,13 @@ int cgttrf_(integer *n, complex *dl, complex *d__, complex * du, complex *du2, i
         i__1 = -(*info);
         xerbla_("CGTTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize IPIV(i) = i and DU2(i) = 0 */
     i__1 = *n;
@@ -346,7 +346,7 @@ int cgttrf_(integer *n, complex *dl, complex *d__, complex * du, complex *du2, i
     }
 L50:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGTTRF */
 }
 /* cgttrf_ */

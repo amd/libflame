@@ -93,7 +93,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zlaqr1_(integer *n, doublecomplex *h__, integer *ldh, doublecomplex *s1, doublecomplex *s2, doublecomplex *v)
+void zlaqr1_(integer *n, doublecomplex *h__, integer *ldh, doublecomplex *s1, doublecomplex *s2, doublecomplex *v)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaqr1 inputs: n %" FLA_IS ", ldh %" FLA_IS "",*n, *ldh);
@@ -136,7 +136,7 @@ int zlaqr1_(integer *n, doublecomplex *h__, integer *ldh, doublecomplex *s1, dou
     if (*n != 2 && *n != 3)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (*n == 2)
     {
@@ -282,6 +282,6 @@ int zlaqr1_(integer *n, doublecomplex *h__, integer *ldh, doublecomplex *s1, dou
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* zlaqr1_ */

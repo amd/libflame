@@ -158,7 +158,7 @@ static complex c_b1 =
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int csytrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, complex *e, integer *ipiv, complex *b, integer *ldb, integer *info)
+void csytrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, complex *e, integer *ipiv, complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -181,11 +181,11 @@ int csytrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, c
     integer kp;
     complex akm1, bkm1, akm1k;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *);
+    void cscal_(integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     complex denom;
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *), ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+    void cswap_(integer *, complex *, integer *, complex *, integer *), ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -246,13 +246,13 @@ int csytrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, c
         i__1 = -(*info);
         xerbla_("CSYTRS_3", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -456,7 +456,7 @@ int csytrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, c
         /* END Lower */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSYTRS_3 */
 }
 /* csytrs_3__ */

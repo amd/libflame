@@ -176,7 +176,7 @@ that is, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dtplqt_(integer *m, integer *n, integer *l, integer *mb, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal * t, integer *ldt, doublereal *work, integer *info)
+void dtplqt_(integer *m, integer *n, integer *l, integer *mb, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal * t, integer *ldt, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtplqt inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", mb %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldt %" FLA_IS "",*m, *n, *l, *mb, *lda, *ldb, *ldt);
@@ -248,13 +248,13 @@ int dtplqt_(integer *m, integer *n, integer *l, integer *mb, doublereal *a, inte
         i__1 = -(*info);
         xerbla_("DTPLQT", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *m;
     i__2 = *mb;
@@ -287,7 +287,7 @@ int dtplqt_(integer *m, integer *n, integer *l, integer *mb, doublereal *a, inte
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTPLQT */
 }
 /* dtplqt_ */

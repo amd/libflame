@@ -536,7 +536,7 @@ defaults */
 /* > \ingroup complex16GEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex *a, integer *lda, doublecomplex *af, integer * ldaf, integer *ipiv, char *equed, doublereal *r__, doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *rpvgrw, doublereal *berr, integer * n_err_bnds__, doublereal *err_bnds_norm__, doublereal * err_bnds_comp__, integer *nparams, doublereal *params, doublecomplex * work, doublereal *rwork, integer *info)
+void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex *a, integer *lda, doublecomplex *af, integer * ldaf, integer *ipiv, char *equed, doublereal *r__, doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *rpvgrw, doublereal *berr, integer * n_err_bnds__, doublereal *err_bnds_norm__, doublereal * err_bnds_comp__, integer *nparams, doublereal *params, doublecomplex * work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgesvxx inputs: fact %c, trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS ", n_err_bnds__ %" FLA_IS ", nparams %" FLA_IS "",*fact, *trans, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx, *n_err_bnds__, *nparams);
@@ -557,19 +557,19 @@ int zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex 
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern /* Subroutine */
-    int zlaqge_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, char *);
+    void zlaqge_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, char *);
     integer infequ;
     logical colequ;
     doublereal rowcnd;
     logical notran;
     extern /* Subroutine */
-    int zgetrf_(integer *, integer *, doublecomplex *, integer *, integer *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zgetrf_(integer *, integer *, doublecomplex *, integer *, integer *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     doublereal smlnum;
     extern /* Subroutine */
-    int zgetrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+    void zgetrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
     logical rowequ;
     extern /* Subroutine */
-    int zlascl2_(integer *, integer *, doublereal *, doublecomplex *, integer *), zgeequb_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), zgerfsx_( char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublecomplex *, doublereal *, integer * );
+    void zlascl2_(integer *, integer *, doublereal *, doublecomplex *, integer *), zgeequb_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), zgerfsx_( char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublecomplex *, doublereal *, integer * );
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -750,7 +750,7 @@ int zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex 
         i__1 = -(*info);
         xerbla_("ZGESVXX", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (equil)
     {
@@ -813,7 +813,7 @@ int zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex 
             /* leading rank-deficient INFO columns of A. */
             *rpvgrw = zla_gerpvgrw_(n, info, &a[a_offset], lda, &af[ af_offset], ldaf);
     AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Compute the reciprocal pivot growth factor RPVGRW. */
@@ -834,7 +834,7 @@ int zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex 
         zlascl2_(n, nrhs, &r__[1], &x[x_offset], ldx);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGESVXX */
 }
 /* zgesvxx_ */

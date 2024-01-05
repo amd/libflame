@@ -236,7 +236,7 @@ b(i), i=1,..,n}
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, integer *kd, real *ab, integer *ldab, real *x, real *scale, real *cnorm, integer *info)
+void slatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, integer *kd, real *ab, integer *ldab, real *x, real *scale, real *cnorm, integer *info)
 {
     /* System generated locals */
     integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
@@ -253,13 +253,13 @@ int slatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, inte
     integer maind;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     real tscal, uscal;
     integer jlast;
     extern real sasum_(integer *, real *, integer *);
     logical upper;
     extern /* Subroutine */
-    int stbsv_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *);
+    void stbsv_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -334,12 +334,12 @@ int slatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, inte
     {
         i__1 = -(*info);
         xerbla_("SLATBS", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     /* Determine machine dependent parameters to control overflow. */
     smlnum = slamch_("Safe minimum") / slamch_("Precision");
@@ -930,7 +930,7 @@ L135:
         r__1 = 1.f / tscal;
         sscal_(n, &r__1, &cnorm[1], &c__1);
     }
-    return 0;
+    return;
     /* End of SLATBS */
 }
 /* slatbs_ */

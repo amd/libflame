@@ -127,7 +127,7 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zlaqhb_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ldab, doublereal *s, doublereal *scond, doublereal *amax, char *equed)
+void zlaqhb_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ldab, doublereal *s, doublereal *scond, doublereal *amax, char *equed)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaqhb inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",*uplo, *n, *kd, *ldab);
@@ -170,7 +170,7 @@ int zlaqhb_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *lda
     {
         *(unsigned char *)equed = 'N';
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize LARGE and SMALL. */
     small_val = dlamch_("Safe minimum") / dlamch_("Precision");
@@ -254,7 +254,7 @@ int zlaqhb_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *lda
         *(unsigned char *)equed = 'Y';
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAQHB */
 }
 /* zlaqhb_ */

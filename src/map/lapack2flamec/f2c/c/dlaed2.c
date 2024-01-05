@@ -203,7 +203,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlaed2_(integer *k, integer *n, integer *n1, doublereal * d__, doublereal *q, integer *ldq, integer *indxq, doublereal *rho, doublereal *z__, doublereal *dlamda, doublereal *w, doublereal *q2, integer *indx, integer *indxc, integer *indxp, integer *coltyp, integer *info)
+void dlaed2_(integer *k, integer *n, integer *n1, doublereal * d__, doublereal *q, integer *ldq, integer *indxq, doublereal *rho, doublereal *z__, doublereal *dlamda, doublereal *w, doublereal *q2, integer *indx, integer *indxc, integer *indxp, integer *coltyp, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaed2 inputs: n %" FLA_IS ", n1 %" FLA_IS ", ldq %" FLA_IS ", indxq %" FLA_IS "",*n, *n1, *ldq, *indxq);
@@ -220,14 +220,14 @@ int dlaed2_(integer *k, integer *n, integer *n1, doublereal * d__, doublereal *q
     doublereal eps, tau, tol;
     integer psm[4], imax, jmax;
     extern /* Subroutine */
-    int drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+    void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
     integer ctot[4];
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -291,13 +291,13 @@ int dlaed2_(integer *k, integer *n, integer *n1, doublereal * d__, doublereal *q
         i__1 = -(*info);
         xerbla_("DLAED2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     n2 = *n - *n1;
     n1p1 = *n1 + 1;
@@ -617,7 +617,7 @@ L100: /* Record the last eigenvalue. */
     }
     AOCL_DTL_TRACE_LOG_EXIT
 L190:
-    return 0;
+    return;
     /* End of DLAED2 */
 }
 /* dlaed2_ */

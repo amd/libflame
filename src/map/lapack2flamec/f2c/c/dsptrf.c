@@ -148,7 +148,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dsptrf_(char *uplo, integer *n, doublereal *ap, integer * ipiv, integer *info)
+void dsptrf_(char *uplo, integer *n, doublereal *ap, integer * ipiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsptrf inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
@@ -166,13 +166,13 @@ int dsptrf_(char *uplo, integer *n, doublereal *ap, integer * ipiv, integer *inf
     doublereal wkm1, wkp1;
     integer imax, jmax;
     extern /* Subroutine */
-    int dspr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+    void dspr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *);
     doublereal alpha;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer kstep;
     logical upper;
     doublereal absakk;
@@ -221,7 +221,7 @@ int dsptrf_(char *uplo, integer *n, doublereal *ap, integer * ipiv, integer *inf
         i__1 = -(*info);
         xerbla_("DSPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.) + 1.) / 8.;
@@ -625,7 +625,7 @@ L60:
     }
 L110:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSPTRF */
 }
 /* dsptrf_ */

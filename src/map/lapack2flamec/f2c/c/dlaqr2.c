@@ -269,7 +269,7 @@ DLAQR2 */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw, doublereal *h__, integer * ldh, integer *iloz, integer *ihiz, doublereal *z__, integer *ldz, integer *ns, integer *nd, doublereal *sr, doublereal *si, doublereal * v, integer *ldv, integer *nh, doublereal *t, integer *ldt, integer * nv, doublereal *wv, integer *ldwv, doublereal *work, integer *lwork)
+void dlaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw, doublereal *h__, integer * ldh, integer *iloz, integer *ihiz, doublereal *z__, integer *ldz, integer *ns, integer *nd, doublereal *sr, doublereal *si, doublereal * v, integer *ldv, integer *nh, doublereal *t, integer *ldt, integer * nv, doublereal *wv, integer *ldwv, doublereal *work, integer *lwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaqr2 inputs: n %" FLA_IS ", ktop %" FLA_IS ", kbot %" FLA_IS ", nw %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS ", ns %" FLA_IS ", nd %" FLA_IS ", ldv %" FLA_IS ", nh %" FLA_IS ", ldt %" FLA_IS ", nv %" FLA_IS ", ldwv %" FLA_IS ", lwork %" FLA_IS "",*n, *ktop, *kbot, *nw, *ldh, *iloz, *ihiz, *ldz, *ns, *nd, *ldv, *nh, *ldt, *nv, *ldwv, *lwork);
@@ -289,22 +289,22 @@ int dlaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *
     doublereal beta;
     integer kend, kcol, info, ifst, ilst, ltop, krow;
     extern /* Subroutine */
-    int dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     logical bulge;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer infqr, kwtop;
     extern /* Subroutine */
-    int dlanv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlabad_( doublereal *, doublereal *);
+    void dlanv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlabad_( doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dgehrd_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *), dlahqr_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dgehrd_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *), dlahqr_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+    void dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal safmax;
     extern /* Subroutine */
-    int dtrexc_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *), dormhr_(char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dtrexc_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *), dormhr_(char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     logical sorted;
     doublereal smlnum;
     integer lwkopt;
@@ -375,7 +375,7 @@ int dlaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *
     {
         work[1] = (doublereal) lwkopt;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* ==== Nothing to do ... */
     /* ... for an empty active block ... ==== */
@@ -385,13 +385,13 @@ int dlaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *
     if (*ktop > *kbot)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* ... nor for an empty deflation window. ==== */
     if (*nw < 1)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* ==== Machine constants ==== */
     safmin = dlamch_("SAFE MINIMUM");
@@ -434,7 +434,7 @@ int dlaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *
         }
         work[1] = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* ==== Convert to spike-triangular form. (In case of a */
     /* . rare QR failure, this routine continues to do */
@@ -761,6 +761,6 @@ L60:
     work[1] = (doublereal) lwkopt;
     /* ==== End of DLAQR2 ==== */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dlaqr2_ */

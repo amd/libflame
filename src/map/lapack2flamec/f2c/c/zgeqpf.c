@@ -139,7 +139,7 @@ v(i+1:m) is stored on exit in A(i+1:m,i). */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zgeqpf_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jpvt, doublecomplex *tau, doublecomplex *work, doublereal *rwork, integer *info)
+void zgeqpf_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jpvt, doublecomplex *tau, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgeqpf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
@@ -158,10 +158,10 @@ int zgeqpf_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jpv
     doublereal temp, temp2, tol3z;
     integer itemp;
     extern /* Subroutine */
-    int zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgeqr2_( integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgeqr2_( integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_( char *);
     extern /* Subroutine */
-    int zunm2r_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void zunm2r_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlarfg_( integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
@@ -213,7 +213,7 @@ int zgeqpf_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jpv
         i__1 = -(*info);
         xerbla_("ZGEQPF", &i__1, (ftnlen)6);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     mn = fla_min(*m,*n);
     tol3z = sqrt(dlamch_("Epsilon"));
@@ -359,7 +359,7 @@ int zgeqpf_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jpv
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGEQPF */
 }
 /* zgeqpf_ */

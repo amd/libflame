@@ -253,7 +253,7 @@ static integer c__3 = 3;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, integer *ktop, integer *kbot, integer *nshfts, doublecomplex *s, doublecomplex *h__, integer *ldh, integer *iloz, integer *ihiz, doublecomplex *z__, integer *ldz, doublecomplex *v, integer *ldv, doublecomplex *u, integer *ldu, integer *nv, doublecomplex *wv, integer *ldwv, integer *nh, doublecomplex *wh, integer *ldwh)
+void zlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, integer *ktop, integer *kbot, integer *nshfts, doublecomplex *s, doublecomplex *h__, integer *ldh, integer *iloz, integer *ihiz, doublecomplex *z__, integer *ldz, doublecomplex *v, integer *ldv, doublecomplex *u, integer *ldu, integer *nv, doublecomplex *wv, integer *ldwv, integer *nh, doublecomplex *wh, integer *ldwh)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaqr5 inputs: kacc22 %" FLA_IS ", n %" FLA_IS ", ktop %" FLA_IS ", kbot %" FLA_IS ", nshfts %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS ", ldv %" FLA_IS ", ldu %" FLA_IS ", nv %" FLA_IS ", ldwv %" FLA_IS ", nh %" FLA_IS ", ldwh %" FLA_IS "",*kacc22, *n, *ktop, *kbot, *nshfts, *ldh, *iloz, *ihiz, *ldz, *ldv, *ldu, *nv, *ldwv, *nh, *ldwh);
@@ -282,14 +282,14 @@ int zlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, integer
     logical accum;
     integer ndcol, incol, krcol, nbmps;
     extern /* Subroutine */
-    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), dlabad_(doublereal *, doublereal *), zlaqr1_(integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, doublecomplex *);
+    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), dlabad_(doublereal *, doublereal *), zlaqr1_(integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, doublecomplex *);
     extern doublereal dlamch_(char *);
     doublereal safmin, safmax;
     extern /* Subroutine */
-    int zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    void zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     doublecomplex refsum;
     extern /* Subroutine */
-    int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
+    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
     doublereal smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -341,14 +341,14 @@ int zlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, integer
     if (*nshfts < 2)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* ==== If the active block is empty or 1-by-1, then there */
     /* . is nothing to do. ==== */
     if (*ktop >= *kbot)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* ==== NSHFTS is supposed to be even, but if it is odd, */
     /* . then simply reduce it by one. ==== */
@@ -1463,6 +1463,6 @@ int zlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, integer
     }
     /* ==== End of ZLAQR5 ==== */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* zlaqr5_ */

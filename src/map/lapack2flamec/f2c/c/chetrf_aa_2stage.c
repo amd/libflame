@@ -162,7 +162,7 @@ the */
 /* > \ingroup complexSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int chetrf_aa_2stage_(char *uplo, integer *n, complex *a, integer *lda, complex *tb, integer *ltb, integer *ipiv, integer * ipiv2, complex *work, integer *lwork, integer *info)
+void chetrf_aa_2stage_(char *uplo, integer *n, complex *a, integer *lda, complex *tb, integer *ltb, integer *ipiv, integer * ipiv2, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -185,17 +185,17 @@ int chetrf_aa_2stage_(char *uplo, integer *n, complex *a, integer *lda, complex 
     complex piv;
     integer ldtb;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *), ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+    void ccopy_(integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *), ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int clacgv_(integer *, complex *, integer *), cgbtrf_(integer *, integer *, integer *, integer *, complex *, integer *, integer *, integer *), cgetrf_(integer *, integer *, complex *, integer *, integer *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clacgv_(integer *, complex *, integer *), cgbtrf_(integer *, integer *, integer *, integer *, complex *, integer *, integer *, integer *), cgetrf_(integer *, integer *, complex *, integer *, integer *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int chegst_(integer *, char *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void chegst_(integer *, char *, integer *, complex *, integer *, complex *, integer *, integer *);
     logical tquery, wquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -255,7 +255,7 @@ int chetrf_aa_2stage_(char *uplo, integer *n, complex *a, integer *lda, complex 
         i__1 = -(*info);
         xerbla_("CHETRF_AA_2STAGE", &i__1, (ftnlen)16);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Answer the query */
     nb = ilaenv_(&c__1, "CHETRF_AA_2STAGE", uplo, n, &c_n1, &c_n1, &c_n1);
@@ -277,13 +277,13 @@ int chetrf_aa_2stage_(char *uplo, integer *n, complex *a, integer *lda, complex 
     if (tquery || wquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Determine the number of the block size */
     ldtb = *ltb / *n;
@@ -757,7 +757,7 @@ int chetrf_aa_2stage_(char *uplo, integer *n, complex *a, integer *lda, complex 
     /* Factor the band matrix */
     cgbtrf_(n, n, &nb, &nb, &tb[1], &ldtb, &ipiv2[1], info);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHETRF_AA_2STAGE */
 }
 /* chetrf_aa_2stage__ */

@@ -82,7 +82,7 @@ static doublereal c_b6 = 1.;
 /* > \ingroup OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlartgp_(doublereal *f, doublereal *g, doublereal *cs, doublereal *sn, doublereal *r__)
+void dlartgp_(doublereal *f, doublereal *g, doublereal *cs, doublereal *sn, doublereal *r__)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlartgp inputs : f %lf, g %lf", *f, *g);
@@ -229,7 +229,7 @@ L30:
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARTGP */
 }
 /* dlartgp_ */

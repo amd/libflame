@@ -193,7 +193,7 @@ for 1<=i<=N, row i of the */
 /* > \ingroup doubleGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, doublereal *ab, integer *ldab, doublereal *afb, integer *ldafb, integer *ipiv, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal *ferr, doublereal *berr, doublereal *work, integer *iwork, integer *info)
+void dgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, doublereal *ab, integer *ldab, doublereal *afb, integer *ldafb, integer *ipiv, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal *ferr, doublereal *berr, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgbrfs inputs: trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldx);
@@ -210,14 +210,14 @@ int dgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, d
     integer kase;
     doublereal safe1, safe2;
     extern /* Subroutine */
-    int dgbmv_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgbmv_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *);
     integer isave[3];
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     integer count;
     extern /* Subroutine */
-    int dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
@@ -310,7 +310,7 @@ int dgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, d
         i__1 = -(*info);
         xerbla_("DGBRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0 || *nrhs == 0)
@@ -325,7 +325,7 @@ int dgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, d
             /* L10: */
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (notran)
     {
@@ -547,7 +547,7 @@ L100:
         /* L140: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGBRFS */
 }
 /* dgbrfs_ */

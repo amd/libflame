@@ -105,7 +105,7 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zppequ_(char *uplo, integer *n, doublecomplex *ap, doublereal *s, doublereal *scond, doublereal *amax, integer *info)
+void zppequ_(char *uplo, integer *n, doublecomplex *ap, doublereal *s, doublereal *scond, doublereal *amax, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zppequ inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
@@ -162,7 +162,7 @@ int zppequ_(char *uplo, integer *n, doublecomplex *ap, doublereal *s, doublereal
         i__1 = -(*info);
         xerbla_("ZPPEQU", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
@@ -170,7 +170,7 @@ int zppequ_(char *uplo, integer *n, doublecomplex *ap, doublereal *s, doublereal
         *scond = 1.;
         *amax = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize SMIN and AMAX. */
     s[1] = ap[1].r;
@@ -236,7 +236,7 @@ int zppequ_(char *uplo, integer *n, doublecomplex *ap, doublereal *s, doublereal
             {
                 *info = i__;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L30: */
         }
@@ -257,7 +257,7 @@ int zppequ_(char *uplo, integer *n, doublecomplex *ap, doublereal *s, doublereal
         *scond = sqrt(smin) / sqrt(*amax);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPPEQU */
 }
 /* zppequ_ */

@@ -101,7 +101,7 @@
 /* > \ingroup complex16PTsolve */
 /* ===================================================================== */
 /* Subroutine */
-int zptsv_(integer *n, integer *nrhs, doublereal *d__, doublecomplex *e, doublecomplex *b, integer *ldb, integer *info)
+void zptsv_(integer *n, integer *nrhs, doublereal *d__, doublecomplex *e, doublecomplex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zptsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *ldb);
@@ -151,7 +151,7 @@ int zptsv_(integer *n, integer *nrhs, doublereal *d__, doublecomplex *e, doublec
         i__1 = -(*info);
         xerbla_("ZPTSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the L*D*L**H (or U**H*D*U) factorization of A. */
     zpttrf_(n, &d__[1], &e[1], info);
@@ -161,7 +161,7 @@ int zptsv_(integer *n, integer *nrhs, doublereal *d__, doublecomplex *e, doublec
         zpttrs_("Lower", n, nrhs, &d__[1], &e[1], &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZPTSV */
 }
 /* zptsv_ */

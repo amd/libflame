@@ -166,7 +166,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2, real *a, integer *lda, real *t, integer * ldt, real *work, integer *lwork, integer *info)
+void sgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2, real *a, integer *lda, real *t, integer * ldt, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
@@ -174,13 +174,13 @@ int sgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
     /* Local variables */
     integer lworkopt, i__, j;
     extern /* Subroutine */
-    int sorhr_col_(integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *);
+    void sorhr_col_(integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *);
     integer lw1, lw2, num_all_row_blocks__, lwt, ldwt, iinfo;
     extern /* Subroutine */
-    int sorgtsqr_row_(integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *), scopy_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void sorgtsqr_row_(integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *), scopy_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     extern /* Subroutine */
-    int slatsqr_(integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
+    void slatsqr_(integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
     integer nb1local, nb2local;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -297,18 +297,18 @@ int sgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
     {
         i__1 = -(*info);
         xerbla_("SGETSQRHRT", &i__1, (ftnlen)10);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         work[1] = (real) lworkopt;
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
         work[1] = (real) lworkopt;
-        return 0;
+        return;
     }
     nb2local = fla_min(*nb2,*n);
     /* (1) Perform TSQR-factorization of the M-by-N matrix A. */
@@ -362,7 +362,7 @@ int sgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
         }
     }
     work[1] = (real) lworkopt;
-    return 0;
+    return;
     /* End of SGETSQRHRT */
 }
 /* sgetsqrhrt_ */

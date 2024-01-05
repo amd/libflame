@@ -165,7 +165,7 @@ VR is set to the */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlaein_(logical *rightv, logical *noinit, integer *n, doublereal *h__, integer *ldh, doublereal *wr, doublereal *wi, doublereal *vr, doublereal *vi, doublereal *b, integer *ldb, doublereal *work, doublereal *eps3, doublereal *smlnum, doublereal * bignum, integer *info)
+void dlaein_(logical *rightv, logical *noinit, integer *n, doublereal *h__, integer *ldh, doublereal *wr, doublereal *wi, doublereal *vr, doublereal *vi, doublereal *b, integer *ldb, doublereal *work, doublereal *eps3, doublereal *smlnum, doublereal * bignum, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaein inputs: n %" FLA_IS ", ldh %" FLA_IS ", ldb %" FLA_IS "",*n, *ldh, *ldb);
@@ -183,7 +183,7 @@ int dlaein_(logical *rightv, logical *noinit, integer *n, doublereal *h__, integ
     doublereal temp, norm, vmax;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal scale;
     extern doublereal dasum_(integer *, doublereal *, integer *);
     char trans[1];
@@ -192,7 +192,7 @@ int dlaein_(logical *rightv, logical *noinit, integer *n, doublereal *h__, integ
     doublereal absbii, absbjj;
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dladiv_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlatrs_( char *, char *, char *, char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+    void dladiv_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlatrs_( char *, char *, char *, char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     char normin[1];
     doublereal nrmsml, growto;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -749,7 +749,7 @@ L280: /* Normalize eigenvector. */
         dscal_(n, &d__1, &vi[1], &c__1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAEIN */
 }
 /* dlaein_ */

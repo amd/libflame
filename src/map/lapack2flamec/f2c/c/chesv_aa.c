@@ -151,7 +151,7 @@ the routine */
 /* > \ingroup complexHEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int chesv_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, integer *ipiv, complex *b, integer *ldb, complex *work, integer *lwork, integer *info)
+void chesv_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, integer *ipiv, complex *b, integer *ldb, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -167,7 +167,7 @@ int chesv_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, i
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
     extern /* Subroutine */
-    int chetrf_aa_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), chetrs_aa_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
+    void chetrf_aa_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), chetrs_aa_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
     integer lwkopt_hetrf__, lwkopt_hetrs__;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
@@ -250,12 +250,12 @@ int chesv_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, i
         i__1 = -(*info);
         xerbla_("CHESV_AA ", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the factorization A = U**H*T*U or A = L*T*L**H. */
     chetrf_aa_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], lwork, info);
@@ -267,7 +267,7 @@ int chesv_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, i
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHESV_AA */
 }
 /* chesv_aa__ */

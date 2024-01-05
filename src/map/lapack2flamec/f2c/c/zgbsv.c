@@ -151,7 +151,7 @@ elements marked */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zgbsv_(integer *n, integer *kl, integer *ku, integer * nrhs, doublecomplex *ab, integer *ldab, integer *ipiv, doublecomplex * b, integer *ldb, integer *info)
+void zgbsv_(integer *n, integer *kl, integer *ku, integer * nrhs, doublecomplex *ab, integer *ldab, integer *ipiv, doublecomplex * b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgbsv inputs: n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",*n, *kl, *ku, *nrhs, *ldab, *ldb);
@@ -215,7 +215,7 @@ int zgbsv_(integer *n, integer *kl, integer *ku, integer * nrhs, doublecomplex *
         i__1 = -(*info);
         xerbla_("ZGBSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the LU factorization of the band matrix A. */
     zgbtrf_(n, n, kl, ku, &ab[ab_offset], ldab, &ipiv[1], info);
@@ -225,7 +225,7 @@ int zgbsv_(integer *n, integer *kl, integer *ku, integer * nrhs, doublecomplex *
         zgbtrs_("No transpose", n, kl, ku, nrhs, &ab[ab_offset], ldab, &ipiv[ 1], &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGBSV */
 }
 /* zgbsv_ */

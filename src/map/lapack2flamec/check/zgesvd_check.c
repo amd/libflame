@@ -15,7 +15,7 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
     integer minmn;
     integer wrkbl, mnthr;
     logical wntua, wntva, wntun, wntuo, wntvn, wntvo, wntus, wntvs;
-    extern int
+    extern void
       zgebrd_(integer*, integer*, dcomplex*, integer*, double*, double*, dcomplex*, dcomplex*, dcomplex*, integer*, integer*),
       zgelqf_(integer*, integer*, dcomplex*, integer*, dcomplex*, dcomplex*, integer*, integer* ),
       zgeqrf_(integer*, integer*, dcomplex*, integer*, dcomplex*, dcomplex*, integer*, integer* ),

@@ -121,7 +121,7 @@
 /* > \ingroup complex16SYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zsyr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx, doublecomplex *a, integer *lda)
+void zsyr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx, doublecomplex *a, integer *lda)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsyr inputs: uplo %c, n %" FLA_IS ", incx %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *incx, *lda);
@@ -184,13 +184,13 @@ int zsyr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, intege
     {
         xerbla_("ZSYR ", &info, (ftnlen)5);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0 || alpha->r == 0. && alpha->i == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set the start point in X if the increment is not unity. */
     if (*incx <= 0)
@@ -361,7 +361,7 @@ int zsyr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, intege
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSYR */
 }
 /* zsyr_ */

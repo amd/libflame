@@ -112,7 +112,7 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complex16GTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zgttrf_(integer *n, doublecomplex *dl, doublecomplex * d__, doublecomplex *du, doublecomplex *du2, integer *ipiv, integer * info)
+void zgttrf_(integer *n, doublecomplex *dl, doublecomplex * d__, doublecomplex *du, doublecomplex *du2, integer *ipiv, integer * info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgttrf inputs: n %" FLA_IS "",*n);
@@ -165,13 +165,13 @@ int zgttrf_(integer *n, doublecomplex *dl, doublecomplex * d__, doublecomplex *d
         i__1 = -(*info);
         xerbla_("ZGTTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize IPIV(i) = i and DU2(i) = 0 */
     i__1 = *n;
@@ -339,7 +339,7 @@ int zgttrf_(integer *n, doublecomplex *dl, doublecomplex * d__, doublecomplex *d
     }
 L50:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGTTRF */
 }
 /* zgttrf_ */

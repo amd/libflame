@@ -556,7 +556,7 @@ defaults */
 /* > \ingroup doubleGBsolve */
 /* ===================================================================== */
 /* Subroutine */
-int dgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, integer *nrhs, doublereal *ab, integer *ldab, doublereal *afb, integer *ldafb, integer *ipiv, char *equed, doublereal *r__, doublereal *c__, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal *rcond, doublereal *rpvgrw, doublereal *berr, integer *n_err_bnds__, doublereal *err_bnds_norm__, doublereal *err_bnds_comp__, integer *nparams, doublereal *params, doublereal *work, integer *iwork, integer *info)
+void dgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, integer *nrhs, doublereal *ab, integer *ldab, doublereal *afb, integer *ldafb, integer *ipiv, char *equed, doublereal *r__, doublereal *c__, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal *rcond, doublereal *rpvgrw, doublereal *berr, integer *n_err_bnds__, doublereal *err_bnds_norm__, doublereal *err_bnds_comp__, integer *nparams, doublereal *params, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgbsvxx inputs: fact %c, trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS ", n_err_bnds__ %" FLA_IS ", nparams %" FLA_IS "",*fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx, *n_err_bnds__, *nparams);
@@ -572,16 +572,16 @@ int dgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, int
     logical equil;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlaqgb_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, char *);
+    void dlaqgb_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, char *);
     doublereal colcnd;
     extern /* Subroutine */
-    int dgbtrf_(integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, integer *);
+    void dgbtrf_(integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, integer *);
     logical nofact;
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern /* Subroutine */
-    int dgbtrs_(char *, integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    void dgbtrs_(char *, integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
     integer infequ;
     logical colequ;
     doublereal rowcnd;
@@ -589,7 +589,7 @@ int dgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, int
     doublereal smlnum;
     logical rowequ;
     extern /* Subroutine */
-    int dlascl2_(integer *, integer *, doublereal *, doublereal *, integer *), dgbequb_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dgbrfsx_( char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
+    void dlascl2_(integer *, integer *, doublereal *, doublereal *, integer *), dgbequb_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dgbrfsx_( char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -778,7 +778,7 @@ int dgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, int
         i__1 = -(*info);
         xerbla_("DGBSVXX", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (equil)
     {
@@ -855,7 +855,7 @@ int dgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, int
             /* leading rank-deficient INFO columns of A. */
             *rpvgrw = dla_gbrpvgrw_(n, kl, ku, info, &ab[ab_offset], ldab, & afb[afb_offset], ldafb);
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Compute the reciprocal pivot growth factor RPVGRW. */
@@ -876,7 +876,7 @@ int dgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, int
         dlascl2_(n, nrhs, &r__[1], &x[x_offset], ldx);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGBSVXX */
 }
 /* dgbsvxx_ */

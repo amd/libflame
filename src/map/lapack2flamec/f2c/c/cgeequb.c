@@ -132,7 +132,7 @@
 /* > \ingroup complexGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cgeequb_(integer *m, integer *n, complex *a, integer * lda, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, integer *info)
+void cgeequb_(integer *m, integer *n, complex *a, integer * lda, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -206,7 +206,7 @@ int cgeequb_(integer *m, integer *n, complex *a, integer * lda, real *r__, real 
         i__1 = -(*info);
         xerbla_("CGEEQUB", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*m == 0 || *n == 0)
@@ -215,7 +215,7 @@ int cgeequb_(integer *m, integer *n, complex *a, integer * lda, real *r__, real 
         *colcnd = 1.f;
         *amax = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. Assume SMLNUM is a power of the radix. */
     smlnum = slamch_("S");
@@ -293,7 +293,7 @@ int cgeequb_(integer *m, integer *n, complex *a, integer * lda, real *r__, real 
             {
                 *info = i__;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L50: */
         }
@@ -381,7 +381,7 @@ int cgeequb_(integer *m, integer *n, complex *a, integer * lda, real *r__, real 
             {
                 *info = *m + j;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L110: */
         }
@@ -405,7 +405,7 @@ int cgeequb_(integer *m, integer *n, complex *a, integer * lda, real *r__, real 
         *colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGEEQUB */
 }
 /* cgeequb_ */

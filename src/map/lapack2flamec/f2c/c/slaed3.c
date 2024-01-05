@@ -174,7 +174,7 @@ static real c_b23 = 0.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slaed3_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *ldq, real *rho, real *dlamda, real *q2, integer * indx, integer *ctot, real *w, real *s, integer *info)
+void slaed3_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *ldq, real *rho, real *dlamda, real *q2, integer * indx, integer *ctot, real *w, real *s, integer *info)
 {
     /* System generated locals */
     integer q_dim1, q_offset, i__1, i__2;
@@ -186,7 +186,7 @@ int slaed3_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *ld
     real temp;
     extern real snrm2_(integer *, real *, integer *);
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), slaed4_(integer *, integer *, real *, real *, real *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), slaed4_(integer *, integer *, real *, real *, real *, real *, real *, integer *);
     extern real slamc3_(real *, real *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slacpy_( char *, integer *, integer *, real *, integer *, real *, integer * ), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
@@ -240,12 +240,12 @@ int slaed3_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *ld
     {
         i__1 = -(*info);
         xerbla_("SLAED3", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*k == 0)
     {
-        return 0;
+        return;
     }
     /* Modify values DLAMDA(i) to make sure all DLAMDA(i)-DLAMDA(j) can */
     /* be computed with high relative accuracy (barring over/underflow). */
@@ -394,7 +394,7 @@ L110:
         slaset_("A", n1, k, &c_b23, &c_b23, &q[q_dim1 + 1], ldq);
     }
 L120:
-    return 0;
+    return;
     /* End of SLAED3 */
 }
 /* slaed3_ */

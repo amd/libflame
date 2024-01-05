@@ -153,7 +153,7 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int csptrf_(char *uplo, integer *n, complex *ap, integer * ipiv, integer *info)
+void csptrf_(char *uplo, integer *n, complex *ap, integer * ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -181,13 +181,13 @@ int csptrf_(char *uplo, integer *n, complex *ap, integer * ipiv, integer *info)
     complex wkm1, wkp1;
     integer imax, jmax;
     extern /* Subroutine */
-    int cspr_(char *, integer *, complex *, complex *, integer *, complex *);
+    void cspr_(char *, integer *, complex *, complex *, integer *, complex *);
     real alpha;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *);
+    void cscal_(integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *);
+    void cswap_(integer *, complex *, integer *, complex *, integer *);
     integer kstep;
     logical upper;
     real absakk;
@@ -240,7 +240,7 @@ int csptrf_(char *uplo, integer *n, complex *ap, integer * ipiv, integer *info)
         i__1 = -(*info);
         xerbla_("CSPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.f) + 1.f) / 8.f;
@@ -808,7 +808,7 @@ L60:
     }
 L110:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSPTRF */
 }
 /* csptrf_ */

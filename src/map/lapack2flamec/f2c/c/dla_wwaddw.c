@@ -67,7 +67,7 @@
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dla_wwaddw_(integer *n, doublereal *x, doublereal *y, doublereal *w)
+void dla_wwaddw_(integer *n, doublereal *x, doublereal *y, doublereal *w)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dla_wwaddw inputs: n %" FLA_IS "",*n);
@@ -105,6 +105,6 @@ int dla_wwaddw_(integer *n, doublereal *x, doublereal *y, doublereal *w)
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dla_wwaddw__ */

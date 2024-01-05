@@ -142,7 +142,7 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *work, integer *lwork, integer *info)
+void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -162,7 +162,7 @@ int ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, comp
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len), clarzb_( char *, char *, char *, char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int clarzt_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), clatrz_(integer *, integer *, integer *, complex *, integer *, complex *, complex *);
+    void clarzt_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), clatrz_(integer *, integer *, integer *, complex *, integer *, complex *, complex *);
     integer lwkmin, ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.1) -- */
@@ -234,18 +234,18 @@ int ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, comp
         i__1 = -(*info);
         xerbla_("CTZRZF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (*m == *n)
     {
@@ -260,7 +260,7 @@ int ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, comp
             /* L10: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     nbmin = 2;
     nx = 1;
@@ -344,7 +344,7 @@ int ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, comp
     work[1].r = (real) lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTZRZF */
 }
 /* ctzrzf_ */

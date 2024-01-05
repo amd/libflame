@@ -208,7 +208,7 @@ V2 is upper trapezoidal, consisting of the first L */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ztpmqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, integer *nb, doublecomplex *v, integer *ldv, doublecomplex *t, integer *ldt, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *work, integer *info)
+void ztpmqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, integer *nb, doublecomplex *v, integer *ldv, doublecomplex *t, integer *ldt, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztpmqrt inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", nb %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*side, *trans, *m, *n, *k, *l, *nb, *ldv, *ldt, *lda, *ldb);
@@ -224,7 +224,7 @@ int ztpmqrt_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     extern /* Subroutine */
-    int ztprfb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    void ztprfb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -324,13 +324,13 @@ int ztpmqrt_(char *side, char *trans, integer *m, integer *n, integer *k, intege
         i__1 = -(*info);
         xerbla_("ZTPMQRT", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* .. Quick return if possible .. */
     if (*m == 0 || *n == 0 || *k == 0)
     {
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (left && tran)
     {
@@ -437,7 +437,7 @@ int ztpmqrt_(char *side, char *trans, integer *m, integer *n, integer *k, intege
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTPMQRT */
 }
 /* ztpmqrt_ */

@@ -102,7 +102,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlasd5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho, doublereal *dsigma, doublereal * work)
+void dlasd5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho, doublereal *dsigma, doublereal * work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasd5 inputs: i__ %" FLA_IS "",*i__);
@@ -211,7 +211,7 @@ int dlasd5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, d
         /* DELTA( 2 ) = DELTA( 2 ) / TEMP */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASD5 */
 }
 /* dlasd5_ */

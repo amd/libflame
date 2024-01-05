@@ -137,7 +137,7 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlags2_(logical *upper, doublereal *a1, doublereal *a2, doublereal *a3, doublereal *b1, doublereal *b2, doublereal *b3, doublereal *csu, doublereal *snu, doublereal *csv, doublereal *snv, doublereal *csq, doublereal *snq)
+void dlags2_(logical *upper, doublereal *a1, doublereal *a2, doublereal *a3, doublereal *b1, doublereal *b2, doublereal *b3, doublereal *csu, doublereal *snu, doublereal *csv, doublereal *snv, doublereal *csq, doublereal *snq)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
@@ -145,7 +145,7 @@ int dlags2_(logical *upper, doublereal *a1, doublereal *a2, doublereal *a3, doub
     /* Local variables */
     doublereal a, b, c__, d__, r__, s1, s2, ua11, ua12, ua21, ua22, vb11, vb12, vb21, vb22, csl, csr, snl, snr, aua11, aua12, aua21, aua22, avb11, avb12, avb21, avb22, ua11r, ua22r, vb11r, vb22r;
     extern /* Subroutine */
-    int dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -319,7 +319,7 @@ int dlags2_(logical *upper, doublereal *a1, doublereal *a2, doublereal *a3, doub
         }
     }
     AOCL_DTL_TRACE_EXIT_INDENT
-    return 0;
+    return;
     /* End of DLAGS2 */
 }
 /* dlags2_ */

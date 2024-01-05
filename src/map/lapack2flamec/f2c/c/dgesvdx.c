@@ -264,7 +264,7 @@ the routine */
 /* > \ingroup doubleGEsing */
 /* ===================================================================== */
 /* Subroutine */
-int dgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doublereal *a, integer *lda, doublereal *vl, doublereal *vu, integer *il, integer *iu, integer *ns, doublereal *s, doublereal *u, integer *ldu, doublereal *vt, integer *ldvt, doublereal *work, integer *lwork, integer *iwork, integer *info)
+void dgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doublereal *a, integer *lda, doublereal *vl, doublereal *vu, integer *il, integer *iu, integer *ns, doublereal *s, doublereal *u, integer *ldu, doublereal *vt, integer *ldvt, doublereal *work, integer *lwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgesvdx inputs: jobu %c, jobvt %c, range %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", ldu %" FLA_IS ", ldvt %" FLA_IS ", lwork %" FLA_IS "",*jobu, *jobvt, *range, *m, *n, *lda, *il, *iu, *ldu, *ldvt, *lwork);
@@ -288,26 +288,26 @@ int dgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doub
     extern logical lsame_(char *, char *);
     integer iltgk, itemp, minmn;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer itaup, itauq, iutgk, itgkz, mnthr;
     logical wantu;
     extern /* Subroutine */
-    int dgebrd_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+    void dgebrd_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *), dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
-    int dgelqf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dgelqf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     doublereal bignum;
     extern /* Subroutine */
-    int dormbr_(char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dormbr_(char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     char rngtgk[1];
     extern /* Subroutine */
-    int dormlq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dormlq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer minwrk, maxwrk;
     doublereal smlnum;
     logical lquery, wantvt;
     extern /* Subroutine */
-    int dbdsvdx_(char *, char *, char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    void dbdsvdx_(char *, char *, char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -561,18 +561,18 @@ int dgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doub
         i__2 = -(*info);
         xerbla_("DGESVDX", &i__2, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set singular values indices accord to RANGE. */
     if (alls)
@@ -902,7 +902,7 @@ int dgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doub
     /* Return optimal workspace in WORK(1) */
     work[1] = (doublereal) maxwrk;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGESVDX */
 }
 /* dgesvdx_ */

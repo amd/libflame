@@ -138,7 +138,7 @@ elements marked */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, integer *ldab, integer *ipiv, integer *info)
+void dgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, integer *ldab, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgbtrf inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS "",*m, *n, *kl, *ku, *ldab);
@@ -148,21 +148,21 @@ int dgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, in
     /* Local variables */
     integer i__, j, i2, i3, j2, j3, k2, jb, nb, ii, jj, jm, ip, jp, km, ju, kv, nw;
     extern /* Subroutine */
-    int dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+    void dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal temp;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_( integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer * );
+    void dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_( integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer * );
     doublereal work13[4160] /* was [65][64] */
     , work31[4160] /* was [65][64] */
     ;
     extern /* Subroutine */
-    int dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dgbtf2_( integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, integer *);
+    void dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dgbtf2_( integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
+    void dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -225,13 +225,13 @@ int dgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, in
         i__1 = -(*info);
         xerbla_("DGBTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     #if AOCL_FLA_PROGRESS_H
         progress_step_count =0;
@@ -615,7 +615,7 @@ int dgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, in
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGBTRF */
 }
 /* dgbtrf_ */

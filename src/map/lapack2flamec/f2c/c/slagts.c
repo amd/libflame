@@ -147,7 +147,7 @@
 /* > \ingroup auxOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, integer *in, real *y, real *tol, integer *info)
+void slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, integer *in, real *y, real *tol, integer *info)
 {
     /* System generated locals */
     integer i__1;
@@ -202,11 +202,11 @@ int slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, in
     {
         i__1 = -(*info);
         xerbla_("SLAGTS", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     if (*n == 0)
     {
-        return 0;
+        return;
     }
     eps = slamch_("Epsilon");
     sfmin = slamch_("Safe minimum");
@@ -289,7 +289,7 @@ int slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, in
                         if (absak == 0.f || f2c_abs(temp) * sfmin > absak)
                         {
                             *info = k;
-                            return 0;
+                            return;
                         }
                         else
                         {
@@ -300,7 +300,7 @@ int slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, in
                     else if (f2c_abs(temp) > absak * bignum)
                     {
                         *info = k;
-                        return 0;
+                        return;
                     }
                 }
                 y[k] = temp / ak;
@@ -388,7 +388,7 @@ L40:
                         if (absak == 0.f || f2c_abs(temp) * sfmin > absak)
                         {
                             *info = k;
-                            return 0;
+                            return;
                         }
                         else
                         {
@@ -399,7 +399,7 @@ L40:
                     else if (f2c_abs(temp) > absak * bignum)
                     {
                         *info = k;
-                        return 0;
+                        return;
                     }
                 }
                 y[k] = temp / ak;
@@ -474,6 +474,6 @@ L70:
         }
     }
     /* End of SLAGTS */
-    return 0;
+    return;
 }
 /* slagts_ */

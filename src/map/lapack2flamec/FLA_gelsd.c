@@ -52,7 +52,7 @@
 */
 
 #define LAPACK_gelsd_real(prefix)                                       \
-  int F77_ ## prefix ## gelsd( integer* m,                                  \
+  void F77_ ## prefix ## gelsd( integer* m,                                  \
                                integer* n,                                  \
                                integer* nrhs,                               \
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
@@ -94,7 +94,7 @@ LAPACK_gelsd_real(s)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_gelsd_real(d)
 {
@@ -117,11 +117,11 @@ LAPACK_gelsd_real(d)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 
 #define LAPACK_gelsd_complex(prefix)                                    \
-  int F77_ ## prefix ## gelsd( integer* m,                                  \
+  void F77_ ## prefix ## gelsd( integer* m,                                  \
                                integer* n,                                  \
                                integer* nrhs,                               \
                                PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
@@ -164,7 +164,7 @@ LAPACK_gelsd_complex(c)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_gelsd_complex(z)
 {
@@ -187,7 +187,7 @@ LAPACK_gelsd_complex(z)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 

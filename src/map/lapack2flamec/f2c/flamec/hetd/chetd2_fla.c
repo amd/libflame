@@ -171,7 +171,7 @@ v(i+2:n) is stored on exit in A(i+2:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int chetd2_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tau, integer *info)
+void chetd2_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tau, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -181,16 +181,16 @@ int chetd2_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, real
     integer i__;
     complex taui;
     extern /* Subroutine */
-    int cher2_(char *, integer *, complex *, complex * , integer *, complex *, integer *, complex *, integer *);
+    void cher2_(char *, integer *, complex *, complex * , integer *, complex *, integer *, complex *, integer *);
     complex alpha;
     extern /* Complex */
     VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int chemv_(char *, integer *, complex *, complex * , integer *, complex *, integer *, complex *, complex *, integer * ), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    void chemv_(char *, integer *, complex *, complex * , integer *, complex *, integer *, complex *, complex *, integer * ), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int clarfg_(integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void clarfg_(integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -238,12 +238,12 @@ int chetd2_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, real
     {
         i__1 = -(*info);
         xerbla_("CHETD2", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n <= 0)
     {
-        return 0;
+        return;
     }
     if (upper)
     {
@@ -390,7 +390,7 @@ int chetd2_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, real
         i__2 = *n + *n * a_dim1;
         d__[i__1] = a[i__2].r;
     }
-    return 0;
+    return;
     /* End of CHETD2 */
 }
 /* chetd2_ */

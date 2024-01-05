@@ -76,7 +76,7 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dlartgs_(doublereal *x, doublereal *y, doublereal *sigma, doublereal *cs, doublereal *sn)
+void dlartgs_(doublereal *x, doublereal *y, doublereal *sigma, doublereal *cs, doublereal *sn)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlartgs inputs : x %lf, y %lf, sigma %lf", *x, *y, *sigma);
@@ -84,7 +84,7 @@ int dlartgs_(doublereal *x, doublereal *y, doublereal *sigma, doublereal *cs, do
     extern doublereal dlamch_(char *);
     doublereal thresh;
     extern /* Subroutine */
-    int dlartgp_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    void dlartgp_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -146,7 +146,7 @@ int dlartgs_(doublereal *x, doublereal *y, doublereal *sigma, doublereal *cs, do
     /* is by PI/2. */
     dlartgp_(&w, &z__, sn, cs, &r__);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End DLARTGS */
 }
 /* dlartgs_ */

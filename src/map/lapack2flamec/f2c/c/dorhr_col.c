@@ -260,7 +260,7 @@ INB-by-M}
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int dorhr_col_(integer *m, integer *n, integer *nb, doublereal *a, integer *lda, doublereal *t, integer *ldt, doublereal * d__, integer *info)
+void dorhr_col_(integer *m, integer *n, integer *nb, doublereal *a, integer *lda, doublereal *t, integer *ldt, doublereal * d__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dorhr_col inputs: m %" FLA_IS ", n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS "", *m, *n, *nb, *lda, *ldt);
@@ -269,10 +269,10 @@ int dorhr_col_(integer *m, integer *n, integer *nb, doublereal *a, integer *lda,
     /* Local variables */
     integer nplusone, i__, j, jb, jnb;
     extern /* Subroutine */
-    int dlaorhr_col_getrfnp_(integer *, integer *, doublereal *, integer *, doublereal *, integer *), dscal_(integer *, doublereal *, doublereal *, integer *);
+    void dlaorhr_col_getrfnp_(integer *, integer *, doublereal *, integer *, doublereal *, integer *), dscal_(integer *, doublereal *, doublereal *, integer *);
     integer iinfo;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer jbtemp1, jbtemp2;
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -335,13 +335,13 @@ int dorhr_col_(integer *m, integer *n, integer *nb, doublereal *a, integer *lda,
         i__1 = -(*info);
         xerbla_("DORHR_COL", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (fla_min(*m,*n) == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* On input, the M-by-N matrix A contains the orthogonal */
     /* M-by-N matrix Q_in. */
@@ -457,7 +457,7 @@ int dorhr_col_(integer *m, integer *n, integer *nb, doublereal *a, integer *lda,
         dtrsm_("R", "L", "T", "U", &jnb, &jnb, &c_b7, &a[jb + jb * a_dim1], lda, &t[jb * t_dim1 + 1], ldt);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DORHR_COL */
 }
 /* dorhr_col__ */

@@ -155,7 +155,7 @@ if DIRECT = 'B', T is */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlarft_(char *direct, char *storev, integer *n, integer * k, doublereal *v, integer *ldv, doublereal *tau, doublereal *t, integer *ldt)
+void dlarft_(char *direct, char *storev, integer *n, integer * k, doublereal *v, integer *ldv, doublereal *tau, doublereal *t, integer *ldt)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarft inputs: direct %c, storev %c, n %" FLA_IS ", k %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS "",*direct, *storev, *n, *k, *ldv, *ldt);
@@ -166,10 +166,10 @@ int dlarft_(char *direct, char *storev, integer *n, integer * k, doublereal *v, 
     integer i__, j, prevlastv;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer lastv;
     extern /* Subroutine */
-    int dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *), f90_exit_(void);
+    void dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *), f90_exit_(void);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -201,7 +201,7 @@ int dlarft_(char *direct, char *storev, integer *n, integer * k, doublereal *v, 
     if (*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (lsame_(direct, "F"))
     {
@@ -389,7 +389,7 @@ int dlarft_(char *direct, char *storev, integer *n, integer * k, doublereal *v, 
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARFT */
 }
 /* dlarft_ */

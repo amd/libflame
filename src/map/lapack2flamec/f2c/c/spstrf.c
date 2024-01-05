@@ -132,7 +132,7 @@ static real c_b24 = 1.f;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int spstrf_(char *uplo, integer *n, real *a, integer *lda, integer *piv, integer *rank, real *tol, real *work, integer *info)
+void spstrf_(char *uplo, integer *n, real *a, integer *lda, integer *piv, integer *rank, real *tol, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -151,17 +151,17 @@ int spstrf_(char *uplo, integer *n, real *a, integer *lda, integer *piv, integer
     integer pvt;
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     integer itemp;
     extern /* Subroutine */
-    int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     real stemp;
     logical upper;
     extern /* Subroutine */
-    int sswap_(integer *, real *, integer *, real *, integer *);
+    void sswap_(integer *, real *, integer *, real *, integer *);
     real sstop;
     extern /* Subroutine */
-    int ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *, integer *), spstf2_(char *, integer *, real *, integer *, integer *, integer *, real *, real *, integer *);
+    void ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *, integer *), spstf2_(char *, integer *, real *, integer *, integer *, integer *, real *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -214,13 +214,13 @@ int spstrf_(char *uplo, integer *n, real *a, integer *lda, integer *piv, integer
         i__1 = -(*info);
         xerbla_("SPSTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get block size */
     nb = ilaenv_(&c__1, "SPOTRF", uplo, n, &c_n1, &c_n1, &c_n1);
@@ -484,7 +484,7 @@ L190: /* Rank is the number of steps completed. Set INFO = 1 to signal */
     *info = 1;
 L200:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPSTRF */
 }
 /* spstrf_ */

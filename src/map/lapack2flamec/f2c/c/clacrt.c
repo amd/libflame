@@ -91,7 +91,7 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int clacrt_(integer *n, complex *cx, integer *incx, complex * cy, integer *incy, complex *c__, complex *s)
+void clacrt_(integer *n, complex *cx, integer *incx, complex * cy, integer *incy, complex *c__, complex *s)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -128,7 +128,7 @@ int clacrt_(integer *n, complex *cx, integer *incx, complex * cy, integer *incy,
     if (*n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*incx == 1 && *incy == 1)
     {
@@ -179,7 +179,7 @@ int clacrt_(integer *n, complex *cx, integer *incx, complex * cy, integer *incy,
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* Code for both increments equal to 1 */
 L20:
     i__1 = *n;
@@ -214,6 +214,6 @@ L20:
         /* L30: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* clacrt_ */

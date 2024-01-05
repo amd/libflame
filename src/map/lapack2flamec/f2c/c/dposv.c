@@ -117,7 +117,7 @@
 /* > \ingroup doublePOsolve */
 /* ===================================================================== */
 /* Subroutine */
-int dposv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb, integer *info)
+void dposv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dposv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb);
@@ -178,7 +178,7 @@ int dposv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, d
         i__1 = -(*info);
         xerbla_("DPOSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the Cholesky factorization A = U**T*U or A = L*L**T. */
     dpotrf_(uplo, n, &a[a_offset], lda, info);
@@ -188,7 +188,7 @@ int dposv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, d
         dpotrs_(uplo, n, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPOSV */
 }
 /* dposv_ */

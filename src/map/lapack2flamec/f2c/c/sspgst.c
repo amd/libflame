@@ -106,7 +106,7 @@ static real c_b11 = 1.f;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sspgst_(integer *itype, char *uplo, integer *n, real *ap, real *bp, integer *info)
+void sspgst_(integer *itype, char *uplo, integer *n, real *ap, real *bp, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -126,13 +126,13 @@ int sspgst_(integer *itype, char *uplo, integer *n, real *ap, real *bp, integer 
     real bjj, bkk;
     extern real sdot_(integer *, real *, integer *, real *, integer *);
     extern /* Subroutine */
-    int sspr2_(char *, integer *, real *, real *, integer *, real *, integer *, real *);
+    void sspr2_(char *, integer *, real *, real *, integer *, real *, integer *, real *);
     extern logical lsame_(char *, char *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     logical upper;
     extern /* Subroutine */
-    int saxpy_(integer *, real *, real *, integer *, real *, integer *), sspmv_(char *, integer *, real *, real *, real *, integer *, real *, real *, integer *), stpmv_( char *, char *, char *, integer *, real *, real *, integer *), stpsv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void saxpy_(integer *, real *, real *, integer *, real *, integer *), sspmv_(char *, integer *, real *, real *, real *, integer *, real *, real *, integer *), stpmv_( char *, char *, char *, integer *, real *, real *, integer *), stpsv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -175,7 +175,7 @@ int sspgst_(integer *itype, char *uplo, integer *n, real *ap, real *bp, integer 
         i__1 = -(*info);
         xerbla_("SSPGST", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*itype == 1)
     {
@@ -304,7 +304,7 @@ int sspgst_(integer *itype, char *uplo, integer *n, real *ap, real *bp, integer 
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSPGST */
 }
 /* sspgst_ */

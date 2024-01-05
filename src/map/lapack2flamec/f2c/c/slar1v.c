@@ -215,7 +215,7 @@ is largest */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int slar1v_(integer *n, integer *b1, integer *bn, real * lambda, real *d__, real *l, real *ld, real *lld, real *pivmin, real * gaptol, real *z__, logical *wantnc, integer *negcnt, real *ztz, real * mingma, integer *r__, integer *isuppz, real *nrminv, real *resid, real *rqcorr, real *work)
+void slar1v_(integer *n, integer *b1, integer *bn, real * lambda, real *d__, real *l, real *ld, real *lld, real *pivmin, real * gaptol, real *z__, logical *wantnc, integer *negcnt, real *ztz, real * mingma, integer *r__, integer *isuppz, real *nrminv, real *resid, real *rqcorr, real *work)
 {
     /* System generated locals */
     integer i__1;
@@ -567,7 +567,7 @@ L280:
     *nrminv = sqrt(tmp);
     *resid = f2c_abs(*mingma) * *nrminv;
     *rqcorr = *mingma * tmp;
-    return 0;
+    return;
     /* End of SLAR1V */
 }
 /* slar1v_ */

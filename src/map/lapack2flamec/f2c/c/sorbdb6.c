@@ -144,7 +144,7 @@ static real c_b12 = -1.f;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sorbdb6_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, real *x2, integer *incx2, real *q1, integer *ldq1, real *q2, integer *ldq2, real *work, integer *lwork, integer *info)
+void sorbdb6_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, real *x2, integer *incx2, real *q1, integer *ldq1, real *q2, integer *ldq2, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -159,7 +159,7 @@ int sorbdb6_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, rea
     integer i__;
     real scl1, scl2, ssq1, ssq2;
     extern /* Subroutine */
-    int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slassq_(integer *, real *, integer *, real *, real *);
+    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slassq_(integer *, real *, integer *, real *, real *);
     real normsq1, normsq2;
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -229,7 +229,7 @@ int sorbdb6_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, rea
         i__1 = -(*info);
         xerbla_("SORBDB6", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* First, project X onto the orthogonal complement of Q's column */
     /* space */
@@ -278,12 +278,12 @@ int sorbdb6_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, rea
     if (normsq2 >= normsq1 * .01f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (normsq2 == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     normsq1 = normsq2;
     i__1 = *n;
@@ -342,7 +342,7 @@ int sorbdb6_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, rea
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SORBDB6 */
 }
 /* sorbdb6_ */

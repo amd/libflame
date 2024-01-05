@@ -428,7 +428,7 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, integer *n, complex *a, integer *lda, complex *b, integer *ldb, complex *alpha, complex *beta, complex *q, integer *ldq, complex *z__, integer *ldz, integer *m, real *pl, real *pr, real * dif, complex *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+void ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, integer *n, complex *a, integer *lda, complex *b, integer *ldb, complex *alpha, complex *beta, complex *q, integer *ldq, complex *z__, integer *ldz, integer *m, real *pl, real *pr, real * dif, complex *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -452,25 +452,25 @@ int ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
     logical swap;
     complex temp1, temp2;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *);
+    void cscal_(integer *, complex *, complex *, integer *);
     integer isave[3];
     logical wantd;
     integer lwmin;
     logical wantp;
     extern /* Subroutine */
-    int clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
+    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     logical wantd1, wantd2;
     real dscale;
     extern real slamch_(char *);
     real rdscal;
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
+    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
     real safmin;
     extern /* Subroutine */
-    int ctgexc_(logical *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), classq_(integer *, complex *, integer *, real *, real *);
+    void ctgexc_(logical *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), classq_(integer *, complex *, integer *, real *, real *);
     integer liwmin;
     extern /* Subroutine */
-    int ctgsyl_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, integer *, integer *, integer *);
+    void ctgsyl_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, integer *, integer *, integer *);
     logical lquery;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -544,7 +544,7 @@ int ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
         i__1 = -(*info);
         xerbla_("CTGSEN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     ierr = 0;
     wantp = *ijob == 1 || *ijob >= 4;
@@ -630,12 +630,12 @@ int ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
         i__1 = -(*info);
         xerbla_("CTGSEN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*m == *n || *m == 0)
@@ -868,7 +868,7 @@ L70:
     work[1].i = 0.f; // , expr subst
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTGSEN */
 }
 /* ctgsen_ */

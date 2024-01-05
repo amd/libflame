@@ -30,7 +30,7 @@
 */
 
 #define LAPACK_orgtr(prefix, name)                                      \
-  int F77_ ## prefix ## name ## tr( char* uplo,                         \
+  void F77_ ## prefix ## name ## tr( char* uplo,                         \
                                     integer*  m,                            \
                                     PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer *ldim_A, \
                                     PREFIX2LAPACK_TYPEDEF(prefix)* buff_t, \
@@ -113,10 +113,10 @@
 
 
 
-extern int sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info);
-extern int dorgtr_fla(char *uplo, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *lwork, integer *info);
-extern int cungtr_fla(char *uplo, integer *n, complex *a, integer *lda, complex *tau, complex *work, integer *lwork, integer *info);
-extern int zungtr_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *work, integer *lwork, integer *info);
+extern void sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info);
+extern void dorgtr_fla(char *uplo, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *lwork, integer *info);
+extern void cungtr_fla(char *uplo, integer *n, complex *a, integer *lda, complex *tau, complex *work, integer *lwork, integer *info);
+extern void zungtr_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *work, integer *lwork, integer *info);
 
 LAPACK_orgtr(s, org)
 {
@@ -132,7 +132,7 @@ LAPACK_orgtr(s, org)
                         buff_w, lwork,
                         info );
             AOCL_DTL_TRACE_LOG_EXIT            
-            return 0;
+            return;
         }
     }
     {
@@ -150,7 +150,7 @@ LAPACK_orgtr(s, org)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error; 
+    return; 
 }
 
 LAPACK_orgtr(d, org)
@@ -169,7 +169,7 @@ LAPACK_orgtr(d, org)
                         buff_w, lwork,
                         info );
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     {
@@ -186,7 +186,7 @@ LAPACK_orgtr(d, org)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
@@ -204,7 +204,7 @@ LAPACK_orgtr(c, ung)
                         (complex*)buff_w, lwork,
                         info );
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     {
@@ -221,7 +221,7 @@ LAPACK_orgtr(c, ung)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_orgtr(z, ung)
 {
@@ -237,7 +237,7 @@ LAPACK_orgtr(z, ung)
                         (doublecomplex*)buff_w, lwork,
                         info );
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     {
@@ -254,7 +254,7 @@ LAPACK_orgtr(z, ung)
         fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 

@@ -67,7 +67,7 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zla_wwaddw_(integer *n, doublecomplex *x, doublecomplex *y, doublecomplex *w)
+void zla_wwaddw_(integer *n, doublecomplex *x, doublecomplex *y, doublecomplex *w)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zla_wwaddw inputs: n %" FLA_IS "", *n);
@@ -129,6 +129,6 @@ int zla_wwaddw_(integer *n, doublecomplex *x, doublecomplex *y, doublecomplex *w
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* zla_wwaddw__ */

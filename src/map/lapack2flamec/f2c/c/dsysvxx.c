@@ -499,7 +499,7 @@ defaults */
 /* > \ingroup doubleSYsolve */
 /* ===================================================================== */
 /* Subroutine */
-int dsysvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a, integer *lda, doublereal *af, integer *ldaf, integer *ipiv, char *equed, doublereal *s, doublereal *b, integer * ldb, doublereal *x, integer *ldx, doublereal *rcond, doublereal * rpvgrw, doublereal *berr, integer *n_err_bnds__, doublereal * err_bnds_norm__, doublereal *err_bnds_comp__, integer *nparams, doublereal *params, doublereal *work, integer *iwork, integer *info)
+void dsysvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a, integer *lda, doublereal *af, integer *ldaf, integer *ipiv, char *equed, doublereal *s, doublereal *b, integer * ldb, doublereal *x, integer *ldx, doublereal *rcond, doublereal * rpvgrw, doublereal *berr, integer *n_err_bnds__, doublereal * err_bnds_norm__, doublereal *err_bnds_comp__, integer *nparams, doublereal *params, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsysvxx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS ", n_err_bnds__ %" FLA_IS ", nparams %" FLA_IS "",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx, *n_err_bnds__, *nparams);
@@ -516,14 +516,14 @@ int dsysvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a, 
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     integer infequ;
     extern /* Subroutine */
-    int dlaqsy_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, char *);
+    void dlaqsy_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, char *);
     doublereal smlnum;
     extern /* Subroutine */
-    int dsytrf_(char *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlascl2_(integer *, integer *, doublereal *, doublereal *, integer *), dsytrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dsyequb_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dsyrfsx_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
+    void dsytrf_(char *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlascl2_(integer *, integer *, doublereal *, doublereal *, integer *), dsytrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dsyequb_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dsyrfsx_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -668,7 +668,7 @@ int dsysvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a, 
         i__1 = -(*info);
         xerbla_("DSYSVXX", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     if (equil)
     {
@@ -703,7 +703,7 @@ int dsysvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a, 
                 *rpvgrw = dla_syrpvgrw_(uplo, n, info, &a[a_offset], lda, & af[af_offset], ldaf, &ipiv[1], &work[1]);
             }
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Compute the reciprocal pivot growth factor RPVGRW. */
@@ -723,7 +723,7 @@ int dsysvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a, 
         dlascl2_(n, nrhs, &s[1], &x[x_offset], ldx);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYSVXX */
 }
 /* dsysvxx_ */

@@ -254,7 +254,7 @@ the */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-int chbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, complex *ab, integer *ldab, complex *bb, integer *ldbb, real *w, complex *z__, integer *ldz, complex *work, integer *lwork, real *rwork, integer *lrwork, integer *iwork, integer *liwork, integer *info)
+void chbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, complex *ab, integer *ldab, complex *bb, integer *ldbb, real *w, complex *z__, integer *ldz, complex *work, integer *lwork, real *rwork, integer *lrwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -273,7 +273,7 @@ int chbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
     char vect[1];
     integer llwk2;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *);
     integer iinfo, lwmin;
     logical upper;
@@ -281,10 +281,10 @@ int chbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
     logical wantz;
     integer indwk2;
     extern /* Subroutine */
-    int cstedc_(char *, integer *, real *, real *, complex *, integer *, complex *, integer *, real *, integer *, integer *, integer *, integer *), chbtrd_(char *, char *, integer *, integer *, complex *, integer *, real *, real *, complex *, integer *, complex *, integer *), chbgst_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, real *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cpbstf_(char *, integer *, integer *, complex *, integer *, integer *);
+    void cstedc_(char *, integer *, real *, real *, complex *, integer *, complex *, integer *, real *, integer *, integer *, integer *, integer *), chbtrd_(char *, char *, integer *, integer *, complex *, integer *, real *, real *, complex *, integer *, complex *, integer *), chbgst_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, real *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cpbstf_(char *, integer *, integer *, complex *, integer *, integer *);
     integer indwrk, liwmin;
     extern /* Subroutine */
-    int ssterf_(integer *, real *, real *, integer *);
+    void ssterf_(integer *, real *, real *, integer *);
     integer lrwmin;
     logical lquery;
     /* -- LAPACK driver routine (version 3.7.0) -- */
@@ -403,18 +403,18 @@ int chbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
         i__1 = -(*info);
         xerbla_("CHBGVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Form a split Cholesky factorization of B. */
     cpbstf_(uplo, n, kb, &bb[bb_offset], ldbb, info);
@@ -422,7 +422,7 @@ int chbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
     {
         *info = *n + *info;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem. */
     inde = 1;
@@ -457,7 +457,7 @@ int chbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
     rwork[1] = (real) lrwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHBGVD */
 }
 /* chbgvd_ */

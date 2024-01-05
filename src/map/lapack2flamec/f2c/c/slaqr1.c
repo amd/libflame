@@ -107,7 +107,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slaqr1_(integer *n, real *h__, integer *ldh, real *sr1, real *si1, real *sr2, real *si2, real *v)
+void slaqr1_(integer *n, real *h__, integer *ldh, real *sr1, real *si1, real *sr2, real *si2, real *v)
 {
     /* System generated locals */
     integer h_dim1, h_offset;
@@ -139,7 +139,7 @@ int slaqr1_(integer *n, real *h__, integer *ldh, real *sr1, real *si1, real *sr2
     /* Function Body */
     if (*n != 2 && *n != 3)
     {
-        return 0;
+        return;
     }
     if (*n == 2)
     {
@@ -174,6 +174,6 @@ int slaqr1_(integer *n, real *h__, integer *ldh, real *sr1, real *si1, real *sr2
             v[3] = h31s * (h__[h_dim1 + 1] + h__[h_dim1 * 3 + 3] - *sr1 - * sr2) + h21s * h__[(h_dim1 << 1) + 3];
         }
     }
-    return 0;
+    return;
 }
 /* slaqr1_ */

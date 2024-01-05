@@ -303,7 +303,7 @@ the */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, real *vu, integer *il, integer *iu, integer *m, real *w, real *z__, integer *ldz, integer *nzc, integer *isuppz, logical *tryrac, real *work, integer *lwork, integer *iwork, integer * liwork, integer *info)
+void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, real *vu, integer *il, integer *iu, integer *m, real *w, real *z__, integer *ldz, integer *nzc, integer *isuppz, logical *tryrac, real *work, integer *lwork, integer *iwork, integer * liwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -331,20 +331,20 @@ int sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, r
     real tnrm;
     integer inde2;
     extern /* Subroutine */
-    int slae2_(real *, real *, real *, real *, real *) ;
+    void slae2_(real *, real *, real *, real *, real *) ;
     integer itmp2;
     real rtol1, rtol2, scale;
     integer indgp;
     extern logical lsame_(char *, char *);
     integer iinfo;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     integer iindw, ilast, lwmin;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * );
+    void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * );
     logical wantz;
     extern /* Subroutine */
-    int slaev2_(real *, real *, real *, real *, real *, real *, real *);
+    void slaev2_(real *, real *, real *, real *, real *, real *, real *);
     logical alleig;
     integer ibegin;
     logical indeig;
@@ -358,19 +358,19 @@ int sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, r
     real bignum;
     integer inderr, iindwk, indgrs, offset;
     extern /* Subroutine */
-    int slarrc_(char *, integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *, integer * ), slarre_(char *, integer *, real *, real *, integer *, integer *, real *, real *, real *, real *, real *, real *, integer *, integer *, integer *, real *, real *, real *, integer *, integer *, real *, real *, real *, integer *, integer *) ;
+    void slarrc_(char *, integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *, integer * ), slarre_(char *, integer *, real *, real *, integer *, integer *, real *, real *, real *, real *, real *, real *, integer *, integer *, integer *, real *, real *, real *, integer *, integer *, real *, real *, real *, integer *, integer *) ;
     real thresh;
     integer iinspl, indwrk, ifirst, liwmin, nzcmin;
     real pivmin;
     extern real slanst_(char *, integer *, real *, real *);
     extern /* Subroutine */
-    int slarrj_(integer *, real *, real *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, real *, real *, integer *), slarrr_(integer *, real *, real *, integer *);
+    void slarrj_(integer *, real *, real *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, real *, real *, integer *), slarrr_(integer *, real *, real *, integer *);
     integer nsplit;
     extern /* Subroutine */
-    int slarrv_(integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *, real *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer * );
+    void slarrv_(integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *, real *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer * );
     real smlnum;
     extern /* Subroutine */
-    int slasrt_(char *, integer *, real *, integer *);
+    void slasrt_(char *, integer *, real *, integer *);
     logical lquery, zquery;
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -526,19 +526,19 @@ int sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, r
         i__1 = -(*info);
         xerbla_("SSTEMR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     else if (lquery || zquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Handle N = 0, 1, and 2 cases immediately */
     *m = 0;
     if (*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 1)
     {
@@ -562,7 +562,7 @@ int sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, r
             isuppz[2] = 1;
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     if (*n == 2)
     {
@@ -748,7 +748,7 @@ int sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, r
         {
             *info = f2c_abs(iinfo) + 10;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         /* Note that if RANGE .NE. 'V', SLARRE computes bounds on the desired */
         /* part of the spectrum. All desired eigenvalues are contained in */
@@ -762,7 +762,7 @@ int sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, r
             {
                 *info = f2c_abs(iinfo) + 20;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
         }
         else
@@ -840,7 +840,7 @@ L39:
             {
                 *info = 3;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
         }
         else
@@ -886,7 +886,7 @@ L39:
     work[1] = (real) lwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSTEMR */
 }
 /* sstemr_ */

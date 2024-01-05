@@ -110,8 +110,8 @@ integer FLA_LU_piv_small_s_var1( integer *m, integer *n,
     /* Local variables */
     integer i__, j, jp;
     extern real slamch_(char *);
-    extern int fla_sscal(integer *n, real *alpha, real *x, integer *incx);
-    extern int fla_sger(integer *m, integer *n, real *alpha, real *x, integer *incx, real *y,
+    extern void fla_sscal(integer *n, real *alpha, real *x, integer *incx);
+    extern void fla_sger(integer *m, integer *n, real *alpha, real *x, integer *incx, real *y,
 				              integer *incy, real *a, integer *lda);
     real sfmin;
     

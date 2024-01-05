@@ -409,7 +409,7 @@ defaults */
 /* > \ingroup complex16GEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, doublecomplex *a, integer *lda, doublecomplex *af, integer * ldaf, integer *ipiv, doublereal *r__, doublereal *c__, doublecomplex * b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *berr, integer *n_err_bnds__, doublereal *err_bnds_norm__, doublereal *err_bnds_comp__, integer *nparams, doublereal *params, doublecomplex *work, doublereal *rwork, integer *info)
+void zgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, doublecomplex *a, integer *lda, doublecomplex *af, integer * ldaf, integer *ipiv, doublereal *r__, doublereal *c__, doublecomplex * b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *berr, integer *n_err_bnds__, doublereal *err_bnds_norm__, doublereal *err_bnds_comp__, integer *nparams, doublereal *params, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgerfsx inputs: trans %c, equed %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS ", n_err_bnds__ %" FLA_IS ", nparams %" FLA_IS "",*trans, *equed, *n, *nrhs, *lda, *ldaf, *ldb, *ldx, *n_err_bnds__, *nparams);
@@ -427,7 +427,7 @@ int zgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, doublecomplex
     integer prec_type__, trans_type__;
     doublereal cwise_wrong__;
     extern /* Subroutine */
-    int zla_gerfsx_extended_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, logical *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, doublecomplex *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, logical *, integer *);
+    void zla_gerfsx_extended_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, logical *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, doublecomplex *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, logical *, integer *);
     char norm[1];
     logical ignore_cwise__;
     extern logical lsame_(char *, char *);
@@ -437,7 +437,7 @@ int zgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, doublecomplex
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
     extern /* Subroutine */
-    int zgecon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *);
+    void zgecon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *);
     logical colequ, notran, rowequ;
     extern integer ilaprec_(char *);
     integer ithresh, n_norms__;
@@ -592,7 +592,7 @@ int zgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, doublecomplex
         i__1 = -(*info);
         xerbla_("ZGERFSX", &i__1, (ftnlen)7);
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     if (*n == 0 || *nrhs == 0)
@@ -621,7 +621,7 @@ int zgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, doublecomplex
             }
         }
     AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Default to failure. */
     *rcond = 0.;
@@ -774,7 +774,7 @@ int zgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, doublecomplex
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGERFSX */
 }
 /* zgerfsx_ */

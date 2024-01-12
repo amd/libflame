@@ -931,12 +931,12 @@ void diagonalize_vector(integer datatype, void* s, void* sigma, integer m, integ
     {
         case FLOAT:
         {
-            scopy_(&min_m_n, s, &i_one, sigma, &incr);		
+            scopy_(&min_m_n, s, &i_one, sigma, &incr);
             break;
         }
         case DOUBLE:
         {
-            dcopy_(&min_m_n, s, &i_one, sigma, &incr);		
+            dcopy_(&min_m_n, s, &i_one, sigma, &incr);
             break;
         }
         case COMPLEX:
@@ -994,7 +994,7 @@ void rand_hermitian_matrix(integer datatype, integer n, void** A, integer lda)
     free_matrix(B);
     return;
 }
-/* block diagonal matrix is required for computing eigen decomposition of non symmetric matrix. 
+/* block diagonal matrix is required for computing eigen decomposition of non symmetric matrix.
    W is a block diagonal matrix, with a 1x1 block for each
    real eigenvalue and a 2x2 block for each complex conjugate
    pair.then the 2 x 2 block corresponding to the pair will be:
@@ -1141,7 +1141,7 @@ void copy_submatrix(integer datatype, integer m, integer n, void *A, integer lda
            {
                float_A = ((float*)A + (i * lda + srow));
                float_B = ((float*)B + (j * ldb));
-               copy_vector(datatype, m, float_A, 1, float_B, 1); 
+               copy_vector(datatype, m, float_A, 1, float_B, 1);
            }
            break;
         }
@@ -1163,7 +1163,7 @@ void copy_submatrix(integer datatype, integer m, integer n, void *A, integer lda
            {
                scomplex_A = ((scomplex*)A + (i * lda + srow));
                scomplex_B = ((scomplex*)B + (j * ldb));
-               copy_vector(datatype, m, scomplex_A, 1, scomplex_B, 1); 
+               copy_vector(datatype, m, scomplex_A, 1, scomplex_B, 1);
            }
            break;
         }
@@ -1174,7 +1174,7 @@ void copy_submatrix(integer datatype, integer m, integer n, void *A, integer lda
            {
                dcomplex_A = ((dcomplex*)A + (i * lda + srow));
                dcomplex_B = ((dcomplex*)B + (j * ldb));
-               copy_vector(datatype, m, dcomplex_A, 1, dcomplex_B, 1); 
+               copy_vector(datatype, m, dcomplex_A, 1, dcomplex_B, 1);
            }
            break;
         }
@@ -2054,7 +2054,7 @@ void get_hessenberg_matrix(integer datatype, integer n, void* A, integer lda, vo
             /* Call to DORGHR API to generate orthogonal matrix*/
             fla_lapack_dorghr(&n, ilo, ihi, A_save, &lda, tau, work, &lwork, info);
             copy_matrix(datatype, "full", n, n, A_save, lda, Z, ldz);
-            
+
             /* Convert matrix from DGEHRD to upper hessenberg matrix */
             convert_upper_hessenberg(datatype, n, A, lda);
 
@@ -2194,7 +2194,7 @@ void pack_matrix_lt(integer datatype, void* A, void* B, integer N, integer lda)
         case FLOAT:
         {
             float* bptr = (float*)B;
-    
+
             for (i = 0; i < N; i++)
             {
                 for (j = i; j < N; j++)
@@ -2207,7 +2207,7 @@ void pack_matrix_lt(integer datatype, void* A, void* B, integer N, integer lda)
         case DOUBLE:
         {
             double* bptr = B;
-    
+
             for (i = 0; i < N; i++)
             {
                 for (j = i; j < N; j++)
@@ -2220,7 +2220,7 @@ void pack_matrix_lt(integer datatype, void* A, void* B, integer N, integer lda)
         case COMPLEX:
         {
             scomplex* bptr = B;
-    
+
             for (i = 0; i < N; i++)
             {
                 for (j = i; j < N; j++)
@@ -2235,7 +2235,7 @@ void pack_matrix_lt(integer datatype, void* A, void* B, integer N, integer lda)
         case DOUBLE_COMPLEX:
         {
             dcomplex* bptr = B;
-    
+
             for (i = 0; i < N; i++)
             {
                 for (j = i; j < N; j++)
@@ -3084,6 +3084,71 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
 
 }
 
+/* Intialize vector with special values */
+void init_vector_spec_in(integer datatype, void *A, integer M, integer incx, char type)
+{
+    integer i;
+    switch( datatype )
+    {
+        case FLOAT:
+        {
+            float value=0.f;
+            if(type == 'I')
+                value = INFINITY;
+            else if(type == 'N')
+                value = NAN;
+            for( i = 0; i < M; i++ )
+            {
+            ((float *)A)[i * incx] = value;
+            }
+            break;
+        }
+        case DOUBLE:
+        {
+            double value=0.;
+            if(type == 'I')
+                value = INFINITY;
+            else if(type == 'N')
+                value = NAN;
+            for( i = 0; i < M; i++ )
+            {
+                    ((double *)A)[i * incx] = value;
+            }
+            break;
+        }
+        case COMPLEX:
+        {
+            float value=0.f;
+            if(type == 'I')
+                value = INFINITY;
+            else if(type == 'N')
+                value = NAN;
+            for( i = 0; i < M; i++ )
+            {
+                    ((scomplex *)A)[i * incx].real = value;
+                    ((scomplex *)A)[i * incx].imag = value;
+            }
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            double value=0.;
+            if(type == 'I')
+                value = INFINITY;
+            else if(type == 'N')
+                value = NAN;
+            for( i = 0; i < M; i++ )
+            {
+                    ((dcomplex *)A)[i * incx].real = value;
+                    ((dcomplex *)A)[i * incx].imag = value;
+            }
+            break;
+        }
+    }
+
+    return;
+}
+
 /*Intialize matrix according to given input*/
 void init_matrix(integer datatype, void *A, integer M, integer N, integer LDA, FILE* g_ext_fptr, char imatrix_char)
 {
@@ -3095,4 +3160,57 @@ void init_matrix(integer datatype, void *A, integer M, integer N, integer LDA, F
         init_matrix_spec_rand_in(datatype, A, M, N, LDA, imatrix_char);
     else
         rand_matrix(datatype, A, M, N, LDA);
+}
+
+/* Checks whether the value is zero or not */
+double is_value_zero(integer datatype, void *value, double residual)
+{
+    double resid = residual;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            if(*(float*)value != s_zero)
+            {
+                resid = residual * 2.0;
+            }
+            break;
+        }
+        case DOUBLE:
+        {
+            if(*(double*)value != d_zero)
+            {
+                resid = residual * 2.0;
+            }
+            break;
+        }
+        case COMPLEX:
+        {
+            if(((scomplex *)value)[0].real != s_zero || ((scomplex *)value)[0].imag != s_zero)
+            {
+                resid = residual * 2.0;
+            }
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            if(((dcomplex *)value)[0].real != d_zero || ((dcomplex *)value)[0].imag != d_zero )
+            {
+                resid = residual * 2.0;
+            }
+            break;
+        }
+    }
+    return resid;
+}
+
+/*Intialize vector according to given input*/
+void init_vector(integer datatype, void *A, integer M, integer incx, FILE* g_ext_fptr, char ivector_char)
+{
+    if(g_ext_fptr != NULL)
+        init_vector_from_file(datatype, A, M, incx, g_ext_fptr);
+    else if(ivector_char == 'I' || ivector_char == 'N')
+        init_vector_spec_in(datatype, A, M, incx, ivector_char);
+    else
+        rand_vector(datatype, A, M, incx);
 }

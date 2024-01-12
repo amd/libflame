@@ -1,248 +1,555 @@
-/*
-    Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
-*/
+/******************************************************************************
+* Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+*******************************************************************************/
 
 /*! @file validate_gels.c
  *  @brief Defines validate function of GELS() to use in test suite.
  *  */
 
 #include "test_common.h"
-#include "test_prototype.h"
 
-extern double perf;
-extern double time_min;
-
-void validate_gels(char *tst_api, char *trans, integer m, integer n, integer nrhs, void *A,
-                   integer lda, void *B, integer ldb, void *x, integer datatype, double err_thresh,
-                   char imatrix, void *params)
+void validate_gels(char *trans,
+                   integer m,
+                   integer n,
+                   integer nrhs,
+                   void *A,
+                   integer lda,
+                   void *B,
+                   integer ldb,
+                   void *x,
+                   integer datatype,
+                   double *residual,
+                   integer *info)
 {
-    integer m1 = m, n1 = n, ldc = fla_max(m, fla_max(n, nrhs));
+    integer m1 = m, n1 = n, INFO = 0, lwork = (m+nrhs)*(n+2), ldwork = (m + nrhs), temp;
     char NORM = '1';
     void *work = NULL;
     void *C = NULL;
-    double residual;
-    double resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0., resid5 = 0.;
+    double temp1;
 
-    /* Early return conditions */
-    if(m == 0 || n == 0)
-    {
-        FLA_TEST_PRINT_STATUS_AND_RETURN(m, n, err_thresh);
-        return;
-    }
-    /* print overall status if incoming threshold is
-     * an extreme value indicating that API returned
-     * unexpected info value */
-    FLA_TEST_PRINT_INVALID_STATUS(m, n, err_thresh);
-
-    if(same_char(*trans, 'T') || same_char(*trans, 'C'))
+    if(*trans == 'T' || *trans == 'C')
     {
         m1 = n;
         n1 = m;
         NORM = 'I';
+        lwork = (n+nrhs)*(m+2);
+        ldwork = m;
     }
 
-    create_matrix(datatype, LAPACK_COL_MAJOR, nrhs, n1, &C, ldc);
-    create_vector(datatype, &work, fla_max(m, nrhs));
+    create_matrix(datatype, &C, ldb, n1);
+    create_vector(datatype, &work, lwork);
 
+    if(m == 0 || n == 0)
+    {
+        return;
+    }
     switch(datatype)
     {
         case FLOAT:
         {
-            float norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
-
-            if((same_char(*trans, 'N') && m > n) || (same_char(*trans, 'T') && m < n))
+            float eps, norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
+            float resid1 = 0, resid2 = 0, resid3 = 0, rwork;
+            eps = fla_lapack_slamch("E");
+            if((*trans == 'N' && m > n) || (*trans == 'T' && m < n))
             {
                 /* Test - 1
                  * If m > n and Trans == 'N' or m < n and Trans = 'T'
                  * then the residual sum of squares for the solution in each column
                  * is given by the sum of squares of elements m+1(n+1) to n(m) in that column.
                  */
-                residual_sum_of_squares(datatype, m1, n1, nrhs, x, ldb, &resid1);
+                resid1 = eps;
+                temp = m1-n1;
+                for(int i = 0; i < nrhs; i++)
+                {
+                    bl1_snrm2(temp, &((float*)x)[(i * ldb) + n1], i_one, &resid1);
+                    resid1 = fla_max(norm, resid1);
+                }
+                *residual = (double)resid1;
             }
             else
             {
-                /* Test - 2
+                /* Test - 1
                  * Compute norm(B - A*x) / (max(m, n) * norm(A) * norm(x) * eps)
                  */
-                compute_matrix_norm(datatype, NORM, m, n, A, lda, &norm_a, imatrix, work);
-                compute_matrix_norm(datatype, NORM, m1, nrhs, B, ldb, &norm_b, imatrix, work);
-                compute_matrix_norm(datatype, NORM, n1, nrhs, x, i_one, &norm_x, imatrix, work);
+                norm_a = fla_lapack_slange(&NORM, &m, &n, A, &lda, work);
+                norm_b = fla_lapack_slange(&NORM, &m, &nrhs, B, &ldb, work);
+                norm_x = fla_lapack_slange(&NORM, &n1, &nrhs, x, &i_one, work);
                 sgemm_(trans, "N", &m1, &nrhs, &n1, &s_n_one, A, &lda, x, &ldb, &s_one, B, &ldb);
-                compute_matrix_norm(datatype, NORM, m1, i_one, B, ldb, &norm, imatrix, work);
-                resid2 = fla_compute_residual(datatype, 'E', norm, norm_a, (fla_max(m1, n1) * norm_x), params);
+                norm = fla_lapack_slange(&NORM, &m1, &i_one, B, &ldb, work);
+                resid1 = norm / (fla_max(m1 ,n1 ) * norm_a * norm_x * eps);
 
-                /* Test - 3
+                /* Test - 2
                  * Compute norm(B - A*x)**T * A / (max(m, n, nrhs) * norm(A) * norm(B) * eps)
                  */
-                sgemm_("T", trans, &nrhs, &n1, &m1, &s_one, B, &ldb, A, &lda, &s_zero, C, &ldc);
-                compute_matrix_norm(datatype, NORM, nrhs, n1, C, ldc, &norm, imatrix, work);
-                resid3 = fla_compute_residual(datatype, 'E', norm, norm_a, (fla_max(m1, fla_max(n1, nrhs)) * norm_b), params);
+                sgemm_("T", "N", &nrhs, &n1, &m1, &s_one, B, &ldb, A, &lda, &s_zero, C, &ldb);
+                norm = fla_lapack_slange("M", &nrhs, &n1, C, &ldb, work);
+                resid2 = norm / (fla_max(m1 ,fla_max(n1, nrhs)) * norm_a * norm_b * eps);
 
-                /* Test - 4
+                /* Test - 3
                  * checks whether X is in the row space of A or A'.  It does so
                  * by scaling both X and A such that their norms are in the range
                  * [sqrt(eps), 1/sqrt(eps)], then computing a QR factorization of [A,X]
                  * (if TRANS = 'T') or an LQ factorization of [A',X]' (if TRANS = 'N'),
                  * and returning the norm of the trailing triangle, scaled by
                  * MAX(M,N,NRHS)*eps.
-                 * Currently disabled because of random failures: TODO.
                  */
-                // check_vector_in_rowspace(datatype, trans, m, n, nrhs, A, lda, x, ldb, &resid4);
+                if((*trans == 'T' && m > n) || (*trans == 'N' && m < n))
+                {
+                    /* Copy A into work */
+                    fla_lapack_slacpy("All", &m, &n, A, &lda, work, &ldwork);
+                    norm_a = fla_lapack_slange("M", &m, &n, work, &ldwork, &rwork);
+                    /*Scale work*/
+                    if (norm_a != 0.)
+                    {
+                        slascl_("G", &i_zero, &i_zero, &norm_a, &s_one, &m, &n, work, &ldwork,
+                                &INFO);
+                    }
+                    if(*trans == 'T')
+                    {
+                        /*Copy x into work*/
+                        fla_lapack_slacpy("All", &m, &nrhs, x, &ldb,
+                                          &((float*)work)[n * ldwork], &ldwork);
+                        norm_x = fla_lapack_slange("M", &m, &nrhs, &((float*)work)[n * ldwork],
+                                                   &ldwork, &rwork);
+                        /*Scale x*/
+                        if (norm_x != 0)
+                        {
+                            slascl_("G", &i_zero, &i_zero, &norm_x, &s_one, &m, &nrhs,
+                                    &((float*)work)[n * ldwork], &ldwork, &INFO);
+                        }
+                        temp = n + nrhs;
+                        /*QR factorization of x*/
+                        sgeqr2_(&m, &temp, work, &ldwork, &((float*)work)[ldwork * (n + nrhs)],
+                                &((float*)work)[ldwork * (n + nrhs) + fla_min(m, (n + nrhs))],
+                                &INFO);
+                        norm = 0;
+                        /*Compute norm*/
+                        for(int j = n; j <= temp; j++)
+                        {
+                            for(int i = n; i < fla_min(m, j); i++)
+                            {
+                                temp1 = FLA_FABS(((float*)work)[i + (j - 1) * m]);
+                                norm = fla_max(temp1, norm);
+                            }
+                        }
+                    }
+                    else if( *trans == 'N')
+                    {
+                        /*Copy x into work*/
+                        for( int i = 0; i < n; i++)
+                        {
+                            for(int j = 0; j < nrhs; j++)
+                            {
+                                ((float*)work)[m + j + (i * ldwork)] = ((float*)x)[i + j * ldb];
+                            }
+                        }
+                        norm_x = fla_lapack_slange("M", &nrhs, &n, &((float*)work)[m],
+                                                   &ldwork, &rwork);
+                        /*Scale x*/
+                        if (norm_x != 0)
+                        {
+                        	slascl_("G", &i_zero, &i_zero, &norm_x, &s_one, &nrhs, &n,
+                                    &((float*)work)[m + 1], &ldwork, &INFO);
+                        }
+                        /*LQ factorization*/
+                        sgelq2_(&ldwork, &n, work, &ldwork, &((float*)work)[ldwork * n],
+                                &((float*)work)[ldwork * (n + 1)], &INFO);
+                        /*Compute norm*/
+                        for(int j = n; j <= n; j++)
+                        {
+                            for(int i = n; i < ldwork; i++)
+                            {
+                                temp1 = FLA_FABS(((float*)work)[i + (j - 1) * ldwork]);
+                                norm = fla_max(temp1, norm);
+                            }
+                        }
+                    }
+                    resid3 = norm / ((double) fla_max(m, fla_max(n, nrhs)) * eps);
+                }
+                *residual = (double)fla_max(resid1, fla_max(resid2, resid3));
             }
             break;
         }
         case DOUBLE:
         {
-            double norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
-
-            if((same_char(*trans, 'N') && m > n) || (same_char(*trans, 'T') && m < n))
+            double eps, norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
+            double resid1 = 0, resid2 = 0, resid3 = 0, rwork;
+            eps = fla_lapack_dlamch("E");
+            if((*trans == 'N' && m > n) || (*trans == 'T' && m < n))
             {
                 /* Test - 1
                  * If m > n and Trans == 'N' or m < n and Trans = 'T'
                  * then the residual sum of squares for the solution in each column
                  * is given by the sum of squares of elements m+1(n+1) to n(m) in that column.
                  */
-                residual_sum_of_squares(datatype, m1, n1, nrhs, x, ldb, &resid1);
+                resid1 = eps;
+                temp = m1 - n1;
+                for(int i = 0; i < nrhs; i++)
+                {
+                    bl1_dnrm2(temp, &((double*)x)[(i * ldb) + n1], i_one, &resid1);
+                    resid1 = fla_max(norm, resid1);
+                }
+                *residual = (double)resid1;
             }
             else
             {
-                /* Test - 2
+                /* Test - 1
                  * Compute norm(B - A*x) / (max(m, n) * norm(A) * norm(x) * eps)
                  */
-                compute_matrix_norm(datatype, NORM, m, n, A, lda, &norm_a, imatrix, work);
-                compute_matrix_norm(datatype, NORM, m1, nrhs, B, ldb, &norm_b, imatrix, work);
-                compute_matrix_norm(datatype, NORM, n1, nrhs, x, i_one, &norm_x, imatrix, work);
+                norm_a = fla_lapack_dlange(&NORM, &m, &n, A, &lda, work);
+                norm_b = fla_lapack_dlange(&NORM, &m, &nrhs, B, &ldb, work);
+                norm_x = fla_lapack_dlange(&NORM, &n1, &nrhs, x, &i_one, work);
                 dgemm_(trans, "N", &m1, &nrhs, &n1, &d_n_one, A, &lda, x, &ldb, &d_one, B, &ldb);
-                compute_matrix_norm(datatype, NORM, m1, i_one, B, ldb, &norm, imatrix, work);
-                resid2 = fla_compute_residual(datatype, 'E', norm, norm_a, (fla_max(m1, n1) * norm_x), params);
+                norm = fla_lapack_dlange(&NORM, &m1, &i_one, B, &ldb, work);
+                resid1 = norm / (fla_max(m1 ,n1 ) * norm_a * norm_x * eps);
 
-                /* Test - 3
+                /* Test - 2
                  * Compute norm(B - A*x)**T * A / (max(m, n, nrhs) * norm(A) * norm(B) * eps)
                  */
-                dgemm_("T", trans, &nrhs, &n1, &m1, &d_one, B, &ldb, A, &lda, &d_zero, C, &ldc);
-                compute_matrix_norm(datatype, NORM, nrhs, n1, C, ldc, &norm, imatrix, work);
-                resid3 = fla_compute_residual(datatype, 'E', norm, norm_a, (fla_max(m1, fla_max(n1, nrhs)) * norm_b), params);
+                dgemm_("T", "N", &nrhs, &n1, &m1, &d_one, B, &ldb, A, &lda, &d_zero, C, &ldb);
+                norm = fla_lapack_dlange("1", &nrhs, &n1, C, &ldb, work);
+                resid2 = norm / (fla_max(m1 ,fla_max(n1, nrhs)) * norm_a * norm_b * eps);
 
-                /* Test - 4
+                /* Test - 3
                  * checks whether X is in the row space of A or A'.  It does so
                  * by scaling both X and A such that their norms are in the range
                  * [sqrt(eps), 1/sqrt(eps)], then computing a QR factorization of [A,X]
                  * (if TRANS = 'T') or an LQ factorization of [A',X]' (if TRANS = 'N'),
                  * and returning the norm of the trailing triangle, scaled by
                  * MAX(M,N,NRHS)*eps.
-                 * Currently disabled because of random failures: TODO.
                  */
-                // check_vector_in_rowspace(datatype, trans, m, n, nrhs, A, lda, x, ldb, &resid4);
+                if((*trans == 'T' && m > n) || (*trans == 'N' && m < n))
+                {
+                    /*Copy A into work*/
+                    fla_lapack_dlacpy("All", &m, &n, A, &lda, work, &ldwork);
+                    norm_a = fla_lapack_dlange("M", &m, &n, work, &ldwork, &rwork);
+                    /*Scale work*/
+                    if (norm_a != 0.)
+                    {
+                        dlascl_("G", &i_zero, &i_zero, &norm_a, &d_one, &m, &n, work, &ldwork,
+                                &INFO);
+                    }
+                    if(*trans == 'T')
+                    {
+                        /*Copy x into work*/
+                        fla_lapack_dlacpy("All", &m, &nrhs, x, &ldb,
+                                          &((double*)work)[n * ldwork], &ldwork);
+                        norm_x = fla_lapack_dlange("M", &m, &nrhs, &((double*)work)[n * ldwork],
+                                                   &ldwork, &rwork);
+                        /*Scale x*/
+                        if (norm_x != 0)
+                        {
+                            dlascl_("G", &i_zero, &i_zero, &norm_x, &d_one, &m, &nrhs,
+                                    &((double*)work)[n * ldwork], &ldwork, &INFO);
+                        }
+                        temp = n + nrhs;
+                        /*QR factorization of x*/
+                        dgeqr2_(&m, &temp, work, &ldwork, &((double*)work)[ldwork * (n + nrhs)],
+                                &((double*)work)[ldwork * (n + nrhs) + fla_min(m, (n + nrhs))],
+                                &INFO);
+                        norm = 0;
+                        /*Compute norm*/
+                        for(int j = n; j <= temp; j++)
+                        {
+                            for(int i = n; i < fla_min(m, j); i++)
+                            {
+                                temp1 = FLA_FABS(((double*)work)[i + (j - 1) * m]);
+                                norm = fla_max(temp1, norm);
+                            }
+                        }
+                    }
+                    else if( *trans == 'N')
+                    {
+                        /*Copy x into work*/
+                        for( int i = 0; i < n; i++)
+                        {
+                            for(int j = 0; j < nrhs; j++)
+                            {
+                                ((double*)work)[m + j + (i * ldwork)] = ((double*)x)[i + j * ldb];
+                            }
+                        }
+                        norm_x = fla_lapack_dlange("M", &nrhs, &n, &((double*)work)[m],
+                                                   &ldwork, &rwork);
+                        /*Scale x*/
+                        if (norm_x != 0)
+                        {
+                            dlascl_("G", &i_zero, &i_zero, &norm_x, &d_one, &nrhs, &n,
+                                    &((double*)work)[m + 1], &ldwork, &INFO);
+                        }
+                        /*LQ factorization*/
+                        dgelq2_(&ldwork, &n, work, &ldwork, &((double*)work)[ldwork * n],
+                                &((double*)work)[ldwork * (n + 1)], &INFO);
+                        /*Compute norm*/
+                        for(int j = n; j <= n; j++)
+                        {
+                            for(int i = n; i < ldwork; i++)
+                            {
+                                temp1 = FLA_FABS(((double*)work)[i + (j - 1) * ldwork]);
+                                norm = fla_max(temp1, norm);
+                            }
+                        }
+                    }
+                    resid3 = norm / ((double) fla_max(m, fla_max(n, nrhs)) * eps);
+                }
+                *residual = (double)fla_max(resid1, fla_max(resid2, resid3));
             }
             break;
         }
         case COMPLEX:
         {
-            float norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
-            
-            if((same_char(*trans, 'N') && m > n) || (same_char(*trans, 'C') && m < n))
+            float eps, norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
+            float resid1 = 0, resid2 = 0, resid3 = 0, rwork;
+            eps = fla_lapack_slamch("E");
+            if((*trans == 'N' && m > n) || (*trans == 'C' && m < n))
             {
                 /* Test - 1
                  * If m > n and Trans == 'N' or m < n and Trans = 'T'
                  * then the residual sum of squares for the solution in each column
                  * is given by the sum of squares of elements m+1(n+1) to n(m) in that column.
                  */
-                residual_sum_of_squares(datatype, m1, n1, nrhs, x, ldb, &resid1);
+                resid1 = eps;
+                temp = m1 - n1;
+                for(int i = 0; i < nrhs; i++)
+                {
+                    bl1_cnrm2(temp, &((scomplex*)x)[(i * ldb) + n1], i_one, &resid1);
+                    resid1 = fla_max(norm, resid1);
+                }
+                *residual = (double)resid1;
             }
             else
             {
-                /* Test - 2
+                /* Test - 1
                  * Compute norm(B - A*x) / (max(m, n) * norm(A) * norm(x) * eps)
                  */
-                compute_matrix_norm(datatype, NORM, m, n, A, lda, &norm_a, imatrix, work);
-                compute_matrix_norm(datatype, NORM, m1, nrhs, B, ldb, &norm_b, imatrix, work);
-                compute_matrix_norm(datatype, NORM, n1, nrhs, x, i_one, &norm_x, imatrix, work);
+                norm_a = fla_lapack_clange(&NORM, &m, &n, A, &lda, work);
+                norm_b = fla_lapack_clange(&NORM, &m, &nrhs, B, &ldb, work);
+                norm_x = fla_lapack_clange(&NORM, &n1, &nrhs, x, &i_one, work);
                 cgemm_(trans, "N", &m1, &nrhs, &n1, &c_n_one, A, &lda, x, &ldb, &c_one, B, &ldb);
-                compute_matrix_norm(datatype, NORM, m1, i_one, B, ldb, &norm, imatrix, work);
-                resid2 = fla_compute_residual(datatype, 'E', norm, norm_a, (fla_max(m1, n1) * norm_x), params);
+                norm = fla_lapack_clange(&NORM, &m1, &i_one, B, &ldb, work);
+                resid1 = norm / (fla_max(m1 ,n1 ) * norm_a * norm_x * eps);
+                *residual = (double)resid1;
 
-                /* Test - 3
+                /* Test - 2
                  * Compute norm(B - A*x)**T * A / (max(m, n, nrhs) * norm(A) * norm(B) * eps)
                  */
-                cgemm_("T", trans, &nrhs, &n1, &m1, &c_one, B, &ldb, A, &lda, &c_zero, C, &ldc);
-                compute_matrix_norm(datatype, NORM, nrhs, n1, C, ldc, &norm, imatrix, work);
-                resid3 = fla_compute_residual(datatype, 'E', norm, norm_a, (fla_max(m1, fla_max(n1, nrhs)) * norm_b), params);
+                cgemm_("T", "N", &nrhs, &n1, &m1, &c_one, B, &ldb, A, &lda, &c_zero, C, &ldb);
+                norm = fla_lapack_clange("1", &nrhs, &n1, C, &ldb, work);
+                resid2 = norm / (fla_max(m1 ,fla_max(n1, nrhs)) * norm_a * norm_b * eps);
 
-                /* Test - 4
+                /* Test - 3
                  * checks whether X is in the row space of A or A'.  It does so
                  * by scaling both X and A such that their norms are in the range
                  * [sqrt(eps), 1/sqrt(eps)], then computing a QR factorization of [A,X]
                  * (if TRANS = 'T') or an LQ factorization of [A',X]' (if TRANS = 'N'),
                  * and returning the norm of the trailing triangle, scaled by
                  * MAX(M,N,NRHS)*eps.
-                 * Currently disabled because of random failures: TODO.
                  */
-                // check_vector_in_rowspace(datatype, trans, m, n, nrhs, A, lda, x, ldb, &resid4);
+                if((*trans == 'C' && m > n) || (*trans == 'N' && m < n))
+                {
+                    /*Copy A into work*/
+                    fla_lapack_clacpy("All", &m, &n, A, &lda, work, &ldwork);
+                    norm_a = fla_lapack_clange("M", &m, &n, work, &ldwork, &rwork);
+                    /*Scale work*/
+                    if (norm_a != 0.)
+                    {
+	                    clascl_("G", &i_zero, &i_zero, &norm_a, &s_one, &m, &n, work, &ldwork,
+	                	       &INFO);
+                    }
+                    if(*trans == 'C')
+                    {
+                        /*Copy x into work*/
+                        fla_lapack_clacpy("All", &m, &nrhs, x, &ldb,
+                                          &((scomplex*)work)[n * ldwork], &ldwork);
+                        norm_x = fla_lapack_clange("M", &m, &nrhs, &((scomplex*)work)[n * ldwork],
+                                                   &ldwork, &rwork);
+                        /*Scale x*/
+                        if (norm_x != 0)
+                        {
+                            clascl_("G", &i_zero, &i_zero, &norm_x, &s_one, &m, &nrhs,
+                                    &((scomplex*)work)[n * ldwork], &ldwork, &INFO);
+                        }
+                        temp = n + nrhs;
+                        /*QR factorization of x*/
+                        cgeqr2_(&m, &temp, work, &ldwork, &((scomplex*)work)[ldwork * (n + nrhs)],
+                                &((scomplex*)work)[ldwork * (n + nrhs) + fla_min(m, (n + nrhs))],
+                                &INFO);
+                        norm = 0;
+                        /*Compute norm*/
+                        for(int j = n; j <= temp; j++)
+                        {
+                            for(int i = n; i < fla_min(m, j); i++)
+                            {
+                                temp1 = FLA_FABS(((scomplex*)work)[i + (j - 1) * m].real);
+                                norm = fla_max(temp1, norm);
+                            }
+                        }
+                    }
+                    else if( *trans == 'N')
+                    {
+                        /*Copy x into work*/
+                        for( int i = 0; i < n; i++)
+                        {
+                            for(int j = 0; j < nrhs; j++)
+                            {
+                                ((scomplex*)work)[m + j + (i * ldwork)] = ((scomplex*)x)[i + j * ldb];
+                            }
+                        }
+                        norm_x = fla_lapack_clange("M", &nrhs, &n, &((scomplex*)work)[m],
+                                                   &ldwork, &rwork);
+                        /*Scale x*/
+                        if (norm_x != 0)
+                        {
+                            clascl_("G", &i_zero, &i_zero, &norm_x, &s_one, &nrhs, &n,
+                                    &((scomplex*)work)[m + 1], &ldwork, &INFO);
+                        }
+                        /*LQ factorization*/
+                        cgelq2_(&ldwork, &n, work, &ldwork, &((scomplex*)work)[ldwork * n],
+                                &((scomplex*)work)[ldwork * (n + 1)], &INFO);
+                        /*Compute norm*/
+                        for(int j = n; j <= n; j++)
+                        {
+                            for(int i = n; i < ldwork; i++)
+                            {
+                                temp1 = FLA_FABS(((scomplex*)work)[i + (j - 1) * ldwork].real);
+                                norm = fla_max(norm, temp1);
+                            }
+                        }
+                    }
+                    resid3 = norm / ((double) fla_max(m, fla_max(n, nrhs)) * eps);
+
+                }
+                *residual = (double)fla_max(resid1, fla_max(resid2, resid3));
             }
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
-            
-            if((same_char(*trans, 'N') && m > n) || (same_char(*trans, 'C') && m < n))
+            double eps, norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
+            double resid1 = 0, resid2 = 0, resid3 = 0, rwork;
+            eps = fla_lapack_slamch("E");
+            if((*trans == 'N' && m > n) || (*trans == 'C' && m < n))
             {
                 /* Test - 1
                  * If m > n and Trans == 'N' or m < n and Trans = 'T'
                  * then the residual sum of squares for the solution in each column
                  * is given by the sum of squares of elements m+1(n+1) to n(m) in that column.
                  */
-
-                residual_sum_of_squares(datatype, m1, n1, nrhs, x, ldb, &resid1);
+                resid1 = eps;
+                temp = m1 - n1;
+                for(int i = 0; i < nrhs; i++)
+                {
+                    bl1_znrm2(temp, &((dcomplex*)x)[(i * ldb) + n1], i_one, &resid1);
+                    resid1 = fla_max(norm, resid1);
+                }
+                *residual = (double)resid1;
             }
             else
             {
-                /* Test - 2
+                /* Test - 1
                  * Compute norm(B - A*x) / (max(m, n) * norm(A) * norm(x) * eps)
                  */
-                compute_matrix_norm(datatype, NORM, m, n, A, lda, &norm_a, imatrix, work);
-                compute_matrix_norm(datatype, NORM, m1, nrhs, B, ldb, &norm_b, imatrix, work);
-                compute_matrix_norm(datatype, NORM, n1, nrhs, x, i_one, &norm_x, imatrix, work);
+                norm_a = fla_lapack_zlange(&NORM, &m, &n, A, &lda, work);
+                norm_b = fla_lapack_zlange(&NORM, &m, &nrhs, B, &ldb, work);
+                norm_x = fla_lapack_zlange(&NORM, &n1, &nrhs, x, &i_one, work);
                 zgemm_(trans, "N", &m1, &nrhs, &n1, &z_n_one, A, &lda, x, &ldb, &z_one, B, &ldb);
-                compute_matrix_norm(datatype, NORM, m1, i_one, B, ldb, &norm, imatrix, work);
-                resid2 = fla_compute_residual(datatype, 'E', norm, norm_a, (fla_max(m1, n1) * norm_x), params);
+                norm = fla_lapack_zlange(&NORM, &m1, &i_one, B, &ldb, work);
+                resid1 = norm / (fla_max(m1 ,n1 ) * norm_a * norm_x * eps);
+                *residual = (double)resid1;
 
-                /* Test - 3
+                /* Test - 2
                  * Compute norm(B - A*x)**T * A / (max(m, n, nrhs) * norm(A) * norm(B) * eps)
                  */
-                zgemm_("T", trans, &nrhs, &n1, &m1, &z_one, B, &ldb, A, &lda, &z_zero, C, &ldc);
-                compute_matrix_norm(datatype, NORM, nrhs, n1, C, ldc, &norm, imatrix, work);
-                resid3 = fla_compute_residual(datatype, 'E', norm, norm_a, (fla_max(m1, fla_max(n1, nrhs)) * norm_b), params);
+                zgemm_("T", "N", &nrhs, &n1, &m1, &z_one, B, &ldb, A, &lda, &z_zero, C, &ldb);
+                norm = fla_lapack_zlange("1", &nrhs, &n1, C, &ldb, work);
+                resid2 = norm / (fla_max(m1 ,fla_max(n1, nrhs)) * norm_a * norm_b * eps);
 
-                /* Test - 4
+                /* Test - 3
                  * checks whether X is in the row space of A or A'.  It does so
                  * by scaling both X and A such that their norms are in the range
                  * [sqrt(eps), 1/sqrt(eps)], then computing a QR factorization of [A,X]
                  * (if TRANS = 'T') or an LQ factorization of [A',X]' (if TRANS = 'N'),
                  * and returning the norm of the trailing triangle, scaled by
                  * MAX(M,N,NRHS)*eps.
-                 * Currently disabled because of random failures: TODO.
                  */
-                // check_vector_in_rowspace(datatype, trans, m, n, nrhs, A, lda, x, ldb, &resid4);
+                if((*trans == 'C' && m > n) || (*trans == 'N' && m < n))
+                {
+                    /*Copy A into work*/
+                    fla_lapack_zlacpy("All", &m, &n, A, &lda, work, &ldwork);
+                    norm_a = fla_lapack_zlange("M", &m, &n, work, &ldwork, &rwork);
+                    /*Scale work*/
+                    if (norm_a != 0)
+                    {
+                        zlascl_("G", &i_zero, &i_zero, &norm_a, &d_one, &m, &n, work, &ldwork,
+                                &INFO);
+                    }
+                    if(*trans == 'C')
+                    {
+                        /*Copy x into work*/
+                        fla_lapack_zlacpy("All", &m, &nrhs, x, &ldb,
+                                          &((dcomplex*)work)[n * ldwork], &ldwork);
+                        norm_x = fla_lapack_zlange("M", &m, &nrhs, &((dcomplex*)work)[n * ldwork],
+                                                   &ldwork, &rwork);
+                        /*Scale x*/
+                        if (norm_x != 0)
+                        {
+                            zlascl_("G", &i_zero, &i_zero, &norm_x, &d_one, &m, &nrhs,
+                                    &((dcomplex*)work)[n * ldwork], &ldwork, &INFO);
+                        }
+                        temp = n + nrhs;
+                        /*QR factorization of x*/
+                        zgeqr2_(&m, &temp, work, &ldwork, &((dcomplex*)work)[ldwork * (n + nrhs)],
+                                &((dcomplex*)work)[ldwork * (n + nrhs) + fla_min(m, (n + nrhs))],
+                                &INFO);
+                        norm = 0;
+                        /*Compute norm*/
+                        for(int j = n; j <= temp; j++)
+                        {
+                            for(int i = n; i < fla_min(m, j); i++)
+                            {
+                                temp1 = FLA_FABS(((dcomplex*)work)[i + (j - 1) * m].real);
+                                norm = fla_max(temp1, norm);
+                            }
+                        }
+                    }
+                    else if( *trans == 'N')
+                    {
+                        /*Copy x into work*/
+                        for( int i = 0; i < n; i++)
+                        {
+                            for(int j = 0; j < nrhs; j++)
+                            {
+                                ((dcomplex*)work)[m + j + (i * ldwork)] = ((dcomplex*)x)[i + j * ldb];
+                            }
+                        }
+                        norm_x = fla_lapack_zlange("M", &nrhs, &n, &((dcomplex*)work)[m],
+                                                   &ldwork, &rwork);
+                        /*Scale x*/
+                        if (norm_x != 0)
+                        {
+                        	zlascl_("G", &i_zero, &i_zero, &norm_x, &d_one, &nrhs, &n,
+                                    &((dcomplex*)work)[m + 1], &ldwork, &INFO);
+                        }
+                        /*LQ factorization*/
+                        zgelq2_(&ldwork, &n, work, &ldwork, &((dcomplex*)work)[ldwork * n],
+                                &((dcomplex*)work)[ldwork * (n + 1)], &INFO);
+                        /*Compute norm*/
+                        for(int j = n; j <= n; j++)
+                        {
+                            for(int i = n; i < ldwork; i++)
+                            {
+                                temp1 = FLA_FABS(((dcomplex*)work)[i + (j - 1) * ldwork].real);
+                                norm = fla_max(norm, temp1);
+                            }
+                        }
+                    }
+                    resid3 = norm / ((double) fla_max(m, fla_max(n, nrhs)) * eps);
+                }
+                *residual = (double)fla_max(resid1, fla_max(resid2, resid3));
+
             }
             break;
         }
     }
     free_vector(work);
     free_matrix(C);
-
-    /* Test 5: Check padding rows not modified */
-    resid5 = check_padding(datatype, fla_max(m, n), nrhs, x, ldb);
-
-    residual = fla_test_max(resid1, resid2);
-    residual = fla_test_max(resid3, residual);
-    residual = fla_test_max(resid4, residual);
-    residual = fla_test_max(resid5, residual);
-
-    FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
-    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
-    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
-    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
-    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
-    FLA_PRINT_SUBTEST_STATUS(resid5, err_thresh, "05");
 }

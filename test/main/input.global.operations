@@ -37,3 +37,5 @@
 1   lartg   Generates Plane rotation with cos and sin     (0 = disable; 1 = enable; 2 = enable only this)
 1   org2r   QR factorization                              (0 = disable; 1 = enable; 2 = enable only this)
 1   syevx   Eigen Values and Vectors                      (0 = disable; 1 = enable; 2 = enable only this)
+1   gels    Solves Linear systems for GE matrices         (0 = disable; 1 = enable; 2 = enable only this)
+1   larfg   Generates an elementary reflector             (0 = disable; 1 = enable; 2 = enable only this)

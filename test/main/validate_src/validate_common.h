@@ -369,4 +369,27 @@ void validate_lartg(integer datatype,
     void *s,
     double* residual);
 
+
+void validate_gels(char *trans,
+                   integer m,
+                   integer n,
+                   integer nrhs,
+                   void *A,
+                   integer lda,
+                   void *B,
+                   integer ldb,
+                   void *x,
+                   integer datatype,
+                   double *residual,
+                   integer *info);
+
+void validate_larfg(integer datatype,
+                    integer n,
+                    integer incx,
+                    integer x_length,
+                    void *x,
+                    void *v,
+                    void *tau,
+                    double *residual);
+
 #endif // VALIDATE_COMMON_H

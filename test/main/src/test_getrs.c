@@ -100,7 +100,6 @@ void fla_test_getrs(integer argc, char **argv, test_params_t *params)
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
     }
-    return;
 }
 
 void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer p_cur,
@@ -140,7 +139,7 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
     create_vector(INTEGER, &IPIV, n);
     create_matrix(datatype, &B, ldb, NRHS);
     create_matrix(datatype, &B_save, ldb, NRHS);
-    create_matrix(datatype, &X, n, NRHS);
+    create_matrix(datatype, &X, ldb, NRHS);
     create_matrix(datatype, &A_test, lda, n);
     /* Initialize the test matrices*/
     init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
@@ -157,7 +156,7 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
     /* call to API */
     prepare_getrs_run(&TRANS, n, NRHS, A_test, lda, B, ldb, IPIV, datatype, n_repeats, &time_min,
                       &info);
-    copy_matrix(datatype, "full", n, NRHS, B, ldb, X, n);
+    copy_matrix(datatype, "full", n, NRHS, B, ldb, X, ldb);
     /* execution time */
     *t = time_min;
 

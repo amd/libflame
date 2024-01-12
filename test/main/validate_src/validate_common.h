@@ -121,10 +121,12 @@ void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer l
 void validate_syevx(char *jobz, char *range, integer n, void *A, void *A_test, integer lda,
                     integer il, integer iu, void *L, void *w, void *ifail, integer datatype,
                     double *residual);
-
 void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, void *A,
                      void *A_test, integer lda, void *vl, void *vu, integer il, integer iu,
                      integer ns, void *s, void *s_test, void *U, integer ldu, void *V, integer ldvt,
                      integer datatype, double *residual, integer *info, FILE *g_ext_fptr);
-
+/* This function validates LU factorization output by reconstructing into input band storage
+   matrix.*/
+void validate_gbtrf(integer m_A, integer n_A, integer kl, integer ku, void *AB, void *AB_test,
+                    integer ldab, integer *IPIV, integer datatype, double *residual, integer *info);
 #endif // VALIDATE_COMMON_H

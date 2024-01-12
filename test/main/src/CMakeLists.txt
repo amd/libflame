@@ -4,6 +4,8 @@
 
 target_sources(${PROJECT_NAME}
      PRIVATE
+${CMAKE_CURRENT_SOURCE_DIR}/test_gbtrf.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_gbtrs.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_sytrd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_steqr.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_stevd.c

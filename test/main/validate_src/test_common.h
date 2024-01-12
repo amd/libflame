@@ -24,23 +24,25 @@ extern double d_zero, d_one, d_n_one;
 extern scomplex c_zero, c_one, c_n_one;
 extern dcomplex z_zero, z_one, z_n_one;
 
-#define DRAND()  ( ( double ) rand() / ( ( double ) RAND_MAX / 2.0F ) ) - 1.0F;
-#define SRAND()  ( float ) ( ( double ) rand() / ( ( double ) RAND_MAX / 2.0F ) ) - 1.0F;
-#define SRAND_IN_RANGE(lower, upper) (float)(lower + (upper - lower) * ((double)rand() / (double) RAND_MAX));
-#define DRAND_IN_RANGE(lower, upper) (double)(lower + (upper - lower) * ((double)rand() / (double) RAND_MAX));
-#define FLA_FABS(x)  ((x) >= 0) ? (x) : (-x);
+#define DRAND() ((double)rand() / ((double)RAND_MAX / 2.0F)) - 1.0F;
+#define SRAND() (float)((double)rand() / ((double)RAND_MAX / 2.0F)) - 1.0F;
+#define SRAND_IN_RANGE(lower, upper) \
+    (float)(lower + (upper - lower) * ((double)rand() / (double)RAND_MAX));
+#define DRAND_IN_RANGE(lower, upper) \
+    (double)(lower + (upper - lower) * ((double)rand() / (double)RAND_MAX));
+#define FLA_FABS(x) ((x) >= 0) ? (x) : (-x);
 
 // Datatype
-#define CONSTANT          101
-#define INTEGER           102
-#define FLOAT             103
-#define DOUBLE            104
-#define COMPLEX           105
-#define DOUBLE_COMPLEX    106
-#define INVALID_TYPE     -106
+#define CONSTANT 101
+#define INTEGER 102
+#define FLOAT 103
+#define DOUBLE 104
+#define COMPLEX 105
+#define DOUBLE_COMPLEX 106
+#define INVALID_TYPE -106
 
-#define MAX_FLT_DIFF      0.00001      // Maximum allowed difference for float comparision
-#define MAX_DBL_DIFF      0.0000000001 // Maximum allowed difference for double comparision
+#define MAX_FLT_DIFF 0.00001 // Maximum allowed difference for float comparision
+#define MAX_DBL_DIFF 0.0000000001 // Maximum allowed difference for double comparision
 
 #if defined(FLA_ENABLE_ILP64)
 #ifdef _WIN32
@@ -202,4 +204,24 @@ integer compare_realtype_vector(integer datatype, integer vect_len, void *A, int
 /* Create input matrix A by randomly generating eigen values(EVs) in given range (vl,vu) */
 void generate_matrix_from_EVs(integer datatype, char range, integer n, void *A, integer lda,
                               void *L, void *vl, void *vu);
+/* Initialize band matrix with random values.
+Note: Input buffer A has to be allocated by caller.*/
+void rand_band_matrix(integer datatype, integer M, integer N, integer kl, integer ku, void *A,
+                      integer LDA);
+/* Initialize band storage for given band matrix.
+Note: Input buffer A has to be allocated, initialized with band matrix by caller.*/
+void get_band_storage_matrix(integer datatype, integer M, integer N, integer kl, integer ku,
+                             void *A, integer LDA, void *AB, integer LDAB);
+/* Initialize band storage with random band matrix.
+Note: Input buffer AB has to be allocated by caller.*/
+void rand_band_storage_matrix(integer datatype, integer M, integer N, integer kl, integer ku,
+                              void *AB, integer LDAB);
+/* Get band matrix from band storage matrix.
+Note: Input buffer A has to be allocated, initialized with band storage matrix by caller.*/
+void get_band_matrix_from_band_storage(integer datatype, integer M, integer N, integer kl,
+                                       integer ku, void *AB, integer LDAB, void *A, integer LDA);
+/* On input, AB is the output of GBTRF().
+   On output, AB is the reconstructed band storage matrix same as input of GBTRF().*/
+void reconstruct_band_storage_matrix(integer datatype, integer m, integer n, integer kl, integer ku,
+                                     void *AB, integer ldab, integer *ipiv);
 #endif // TEST_COMMON_H

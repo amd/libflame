@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #ifndef TEST_PROTOTYPE_H
@@ -8,8 +8,8 @@
 #include "FLAME.h"
 
 /* Rename API as per API_CALLING_CONVENTION */
-#if (UPPER_)
-    
+#if(UPPER_)
+
 #define fla_lapack_sladiv SLADIV_
 #define fla_lapack_dladiv DLADIV_
 
@@ -219,7 +219,6 @@
 #define fla_lapack_cunghr CUNGHR_
 #define fla_lapack_zunghr ZUNGHR_
 
-
 #define fla_lapack_sgghrd SGGHRD_
 #define fla_lapack_dgghrd DGGHRD_
 #define fla_lapack_cgghrd CGGHRD_
@@ -265,7 +264,7 @@
 #define fla_lapack_cgesvdx CGESVDX_
 #define fla_lapack_zgesvdx ZGESVDX_
 
-#elif (UPPER)
+#elif(UPPER)
 
 #define fla_lapack_sladiv SLADIV
 #define fla_lapack_dladiv DLADIV
@@ -521,7 +520,7 @@
 #define fla_lapack_cgesvdx CGESVDX
 #define fla_lapack_zgesvdx ZGESVDX
 
-#elif (LOWER)
+#elif(LOWER)
 
 #define fla_lapack_sladiv sladiv
 #define fla_lapack_dladiv dladiv
@@ -1033,15 +1032,34 @@
 #define fla_lapack_cgesvdx cgesvdx_
 #define fla_lapack_zgesvdx zgesvdx_
 
+#define fla_lapack_sgbtrf sgbtrf_
+#define fla_lapack_dgbtrf dgbtrf_
+#define fla_lapack_cgbtrf cgbtrf_
+#define fla_lapack_zgbtrf zgbtrf_
+
+#define fla_lapack_sgbtrs sgbtrs_
+#define fla_lapack_dgbtrs dgbtrs_
+#define fla_lapack_cgbtrs cgbtrs_
+#define fla_lapack_zgbtrs zgbtrs_
+
 #endif /*if UPPER_*/
 
 /* These functions are API invoking functions used in other API test codes */
-extern void invoke_getrf(integer datatype, integer* m, integer* n, void* a, integer* lda, integer* ipiv, integer* info);
-extern void invoke_potrf(char* uplo, integer datatype, integer* m, void* a, integer* lda, integer* info);
-extern void invoke_geqrf(integer datatype, integer* m, integer* n, void* a, integer* lda, void* tau, void* work, integer* lwork, integer* info);
+extern void invoke_getrf(integer datatype, integer *m, integer *n, void *a, integer *lda,
+                         integer *ipiv, integer *info);
+extern void invoke_potrf(char *uplo, integer datatype, integer *m, void *a, integer *lda,
+                         integer *info);
+extern void invoke_geqrf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
+                         void *work, integer *lwork, integer *info);
 /* Generates Orthogonal matrix from ORGTR() after SYTRD() call. */
-extern void invoke_sytrd(integer datatype, char *uplo, char compz, integer n, void *A, integer lda, void *D, void *E, integer *info);
-extern void invoke_gghrd(integer datatype, char* compq, char* compz, integer* n, integer* ilo, integer* ihi, void* a, integer* lda, void* b, integer* ldb, void* q, integer* ldq, void* z, integer* ldz, integer* info);
+extern void invoke_sytrd(integer datatype, char *uplo, char compz, integer n, void *A, integer lda,
+                         void *D, void *E, integer *info);
+extern void invoke_gghrd(integer datatype, char *compq, char *compz, integer *n, integer *ilo,
+                         integer *ihi, void *a, integer *lda, void *b, integer *ldb, void *q,
+                         integer *ldq, void *z, integer *ldz, integer *info);
 
+/* Used for GBTRS(), GBCON()*/
+extern void invoke_gbtrf(integer datatype, integer *m, integer *n, integer *kl, integer *ku,
+                         void *ab, integer *ldab, integer *ipiv, integer *info);
 
-#endif  // TEST_PROTOTYPE_H
+#endif // TEST_PROTOTYPE_H

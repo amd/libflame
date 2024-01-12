@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc.  All rights reserved. Portions of this
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc.  All rights reserved. Portions of this
    file consist of AI-generated content.
 */
 
@@ -3120,77 +3120,77 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
             break;
         }
 
-    case COMPLEX:
-    {
-        if(type == 'A' || type == 'N')
+        case COMPLEX:
         {
-            for(i = 0; i < N; i++)
+            if(type == 'A' || type == 'N')
             {
-                for(j = 0; j < M; j++)
+                for(i = 0; i < N; i++)
                 {
-                    if(isnan(((scomplex *)A)[i * LDA + j].real)
-                       || isnan(((scomplex *)A)[i * LDA + j].imag))
+                    for(j = 0; j < M; j++)
                     {
-                        return true;
+                        if(isnan(((scomplex *)A)[i * LDA + j].real)
+                           || isnan(((scomplex *)A)[i * LDA + j].imag))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
+
+            else if(type == 'F' || type == 'I')
+            {
+                for(i = 0; i < N; i++)
+                {
+                    for(j = 0; j < M; j++)
+                    {
+                        if((isinf(((scomplex *)A)[i * LDA + j].real)
+                            || isinf(((scomplex *)A)[i * LDA + j].imag))
+                           || (isnan(((scomplex *)A)[i * LDA + j].real)
+                               || isnan(((scomplex *)A)[i * LDA + j].imag)))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            break;
         }
 
-        else if(type == 'F' || type == 'I')
+        case DOUBLE_COMPLEX:
         {
-            for(i = 0; i < N; i++)
+            if(type == 'A' || type == 'N')
             {
-                for(j = 0; j < M; j++)
+                for(i = 0; i < N; i++)
                 {
-                    if((isinf(((scomplex *)A)[i * LDA + j].real)
-                        || isinf(((scomplex *)A)[i * LDA + j].imag))
-                       || (isnan(((scomplex *)A)[i * LDA + j].real)
-                           || isnan(((scomplex *)A)[i * LDA + j].imag)))
+                    for(j = 0; j < M; j++)
                     {
-                        return true;
+                        if(isnan(((dcomplex *)A)[i * LDA + j].real)
+                           || isnan(((dcomplex *)A)[i * LDA + j].imag))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
-        }
-        break;
-    }
 
-    case DOUBLE_COMPLEX:
-    {
-        if(type == 'A' || type == 'N')
-        {
-            for(i = 0; i < N; i++)
+            else if(type == 'F' || type == 'I')
             {
-                for(j = 0; j < M; j++)
+                for(i = 0; i < N; i++)
                 {
-                    if(isnan(((dcomplex *)A)[i * LDA + j].real)
-                       || isnan(((dcomplex *)A)[i * LDA + j].imag))
+                    for(j = 0; j < M; j++)
                     {
-                        return true;
+                        if((isinf(((dcomplex *)A)[i * LDA + j].real)
+                            || isinf(((dcomplex *)A)[i * LDA + j].imag))
+                           || (isnan(((dcomplex *)A)[i * LDA + j].real)
+                               || isnan(((dcomplex *)A)[i * LDA + j].imag)))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
+            break;
         }
-
-        else if(type == 'F' || type == 'I')
-        {
-            for(i = 0; i < N; i++)
-            {
-                for(j = 0; j < M; j++)
-                {
-                    if((isinf(((dcomplex *)A)[i * LDA + j].real)
-                        || isinf(((dcomplex *)A)[i * LDA + j].imag))
-                       || (isnan(((dcomplex *)A)[i * LDA + j].real)
-                           || isnan(((dcomplex *)A)[i * LDA + j].imag)))
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-        break;
-    }
     }
     return 0;
 }
@@ -3958,4 +3958,432 @@ void get_abs_vector_value(integer datatype, void *S, integer M, integer inc)
         for(i = 0; i < M; i++)
             ((double *)S)[i * inc] = FLA_FABS(((double *)S)[i * inc]);
     }
+}
+
+/* Initialize band matrix with random values.
+Note: Input buffer A has to be allocated by caller.*/
+void rand_band_matrix(integer datatype, integer M, integer N, integer kl, integer ku, void *A,
+                      integer LDA)
+{
+    integer i, j, min_m_n;
+
+    if((M <= 0) || (N <= 0) || (kl < 0) || (ku < 0) || (LDA <= 0) || (LDA < M) || (A == NULL))
+        return;
+
+    min_m_n = fla_min(M, N);
+    reset_matrix(datatype, M, N, A, LDA);
+
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            for(i = 0; i < min_m_n; i++)
+            {
+                for(j = fla_max(0, i - kl); j < fla_min(min_m_n, i + ku + 1); j++)
+                {
+                    ((float *)A)[i + j * LDA] = SRAND();
+                }
+            }
+            break;
+        }
+        case DOUBLE:
+        {
+            for(i = 0; i < min_m_n; i++)
+            {
+                for(j = fla_max(0, i - kl); j < fla_min(min_m_n, i + ku + 1); j++)
+                {
+                    ((double *)A)[i + j * LDA] = DRAND();
+                }
+            }
+            break;
+        }
+        case COMPLEX:
+        {
+            for(i = 0; i < min_m_n; i++)
+            {
+                for(j = fla_max(0, i - kl); j < fla_min(min_m_n, i + ku + 1); j++)
+                {
+                    ((scomplex *)A)[i + j * LDA].real = SRAND();
+                    ((scomplex *)A)[i + j * LDA].imag = SRAND();
+                }
+            }
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            for(i = 0; i < min_m_n; i++)
+            {
+                for(j = fla_max(0, i - kl); j < fla_min(min_m_n, i + ku + 1); j++)
+                {
+                    ((dcomplex *)A)[i + j * LDA].real = DRAND();
+                    ((dcomplex *)A)[i + j * LDA].imag = DRAND();
+                }
+            }
+            break;
+        }
+    }
+}
+
+/* Initialize band storage for given band matrix.
+Note: Input buffer A has to be allocated, initialized with band matrix by caller.*/
+void get_band_storage_matrix(integer datatype, integer M, integer N, integer kl, integer ku,
+                             void *A, integer LDA, void *AB, integer LDAB)
+{
+    integer i, j, A_size = LDA * N, AB_size = LDAB * N;
+
+    if((M <= 0) || (N <= 0) || (kl < 0) || (ku < 0) || (LDA <= 0) || (LDA < M) || (A == NULL)
+       || (AB == NULL) || (LDAB <= 0) || (LDAB < (2 * kl + ku + 1)))
+        return;
+
+    reset_matrix(datatype, LDAB, N, AB, LDAB);
+
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            for(j = 0; j < N; j++)
+            {
+                for(i = fla_max(0, j - ku); i <= fla_min(M - 1, j + kl); i++)
+                {
+                    if((((kl + ku + i - j) + j * LDAB) < AB_size) && ((i + j * LDA) < A_size))
+                    {
+                        ((float *)AB)[(kl + ku + i - j) + j * LDAB] = ((float *)A)[i + j * LDA];
+                    }
+                }
+            }
+            break;
+        }
+        case DOUBLE:
+        {
+            for(j = 0; j < N; j++)
+            {
+                for(i = fla_max(0, j - ku); i <= fla_min(M - 1, j + kl); i++)
+                {
+                    if((((kl + ku + i - j) + j * LDAB) < AB_size) && ((i + j * LDA) < A_size))
+                    {
+                        ((double *)AB)[(kl + ku + i - j) + j * LDAB] = ((double *)A)[i + j * LDA];
+                    }
+                }
+            }
+            break;
+        }
+        case COMPLEX:
+        {
+            for(j = 0; j < N; j++)
+            {
+                for(i = fla_max(0, j - ku); i <= fla_min(M - 1, j + kl); i++)
+                {
+                    if((((kl + ku + i - j) + j * LDAB) < AB_size) && ((i + j * LDA) < A_size))
+                    {
+                        ((scomplex *)AB)[(kl + ku + i - j) + j * LDAB].real
+                            = ((scomplex *)A)[i + j * LDA].real;
+                        ((scomplex *)AB)[(kl + ku + i - j) + j * LDAB].imag
+                            = ((scomplex *)A)[i + j * LDA].imag;
+                    }
+                }
+            }
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            for(j = 0; j < N; j++)
+            {
+                for(i = fla_max(0, j - ku); i <= fla_min(M - 1, j + kl); i++)
+                {
+                    if((((kl + ku + i - j) + j * LDAB) < AB_size) && ((i + j * LDA) < A_size))
+                    {
+                        ((dcomplex *)AB)[(kl + ku + i - j) + j * LDAB].real
+                            = ((dcomplex *)A)[i + j * LDA].real;
+                        ((dcomplex *)AB)[(kl + ku + i - j) + j * LDAB].imag
+                            = ((dcomplex *)A)[i + j * LDA].imag;
+                    }
+                }
+            }
+            break;
+        }
+    }
+}
+
+/* Get band matrix from band storage matrix.
+Note: Input buffer A has to be allocated, initialized with band storage matrix by caller.*/
+void get_band_matrix_from_band_storage(integer datatype, integer M, integer N, integer kl,
+                                       integer ku, void *AB, integer LDAB, void *A, integer LDA)
+{
+    integer i, j, A_size = LDA * N, AB_size = LDAB * N;
+
+    if((M <= 0) || (N <= 0) || (kl < 0) || (ku < 0) || (LDA <= 0) || (LDA < M) || (A == NULL)
+       || (AB == NULL) || (LDAB <= 0) || (LDAB < (2 * kl + ku + 1)))
+        return;
+    reset_matrix(datatype, M, N, A, LDA);
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            for(j = 0; j < N; j++)
+            {
+                for(i = fla_max(0, j - kl - ku); i <= fla_min(M - 1, j + kl); i++)
+                {
+                    if((((kl + ku + i - j) + j * LDAB) < AB_size) && ((i + j * LDA) < A_size))
+                    {
+                        ((float *)A)[i + j * LDA] = ((float *)AB)[(kl + ku + i - j) + j * LDAB];
+                    }
+                }
+            }
+            break;
+        }
+        case DOUBLE:
+        {
+            for(j = 0; j < N; j++)
+            {
+                for(i = fla_max(0, j - ku); i <= fla_min(M - 1, j + kl); i++)
+                {
+                    if((((kl + ku + i - j) + j * LDAB) < AB_size) && ((i + j * LDA) < A_size))
+                    {
+                        ((double *)A)[i + j * LDA] = ((double *)AB)[(kl + ku + i - j) + j * LDAB];
+                    }
+                }
+            }
+            break;
+        }
+        case COMPLEX:
+        {
+            for(j = 0; j < N; j++)
+            {
+                for(i = fla_max(0, j - ku); i <= fla_min(M - 1, j + kl); i++)
+                {
+                    if((((kl + ku + i - j) + j * LDAB) < AB_size) && ((i + j * LDA) < A_size))
+                    {
+                        ((scomplex *)A)[i + j * LDA].real
+                            = ((scomplex *)AB)[(kl + ku + i - j) + j * LDAB].real;
+                        ((scomplex *)A)[i + j * LDA].imag
+                            = ((scomplex *)AB)[(kl + ku + i - j) + j * LDAB].imag;
+                    }
+                }
+            }
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            for(j = 0; j < N; j++)
+            {
+                for(i = fla_max(0, j - ku); i <= fla_min(M - 1, j + kl); i++)
+                {
+                    if((((kl + ku + i - j) + j * LDAB) < AB_size) && ((i + j * LDA) < A_size))
+                    {
+                        ((dcomplex *)A)[i + j * LDA].real
+                            = ((dcomplex *)AB)[(kl + ku + i - j) + j * LDAB].real;
+                        ((dcomplex *)A)[i + j * LDA].imag
+                            = ((dcomplex *)AB)[(kl + ku + i - j) + j * LDAB].imag;
+                    }
+                }
+            }
+            break;
+        }
+    }
+}
+
+/* Initialize band storage with random band matrix.
+   Note: Input buffer AB has to be allocated by caller.*/
+void rand_band_storage_matrix(integer datatype, integer M, integer N, integer kl, integer ku,
+                              void *AB, integer LDAB)
+{
+    void *A;
+
+    /* Allocate matrix A */
+    create_matrix(datatype, &A, M, N);
+
+    /* Initialize rand band matrix */
+    rand_band_matrix(datatype, M, N, kl, ku, A, M);
+
+    /* Convert band matrix into band storage. */
+    get_band_storage_matrix(datatype, M, N, kl, ku, A, M, AB, LDAB);
+
+    free_matrix(A);
+}
+
+/* On input, AB is the output of GBTRF().
+   On output, AB is the reconstructed band storage matrix same as input of GBTRF().*/
+void reconstruct_band_storage_matrix(integer datatype, integer m, integer n, integer kl, integer ku,
+                                     void *AB, integer ldab, integer *ipiv)
+{
+    void *ABfac;
+    integer j, i__1, i__2, i;
+    integer diag_offset, superdiag_band, column_length;
+    integer il, ip, iw;
+
+    /* Copy factorized banded storage matrix */
+    create_matrix(datatype, &ABfac, ldab, n);
+    copy_matrix(datatype, "full", ldab, n, AB, ldab, ABfac, ldab);
+
+    /* Reset matrix A to store reconstructed band matrix*/
+    reset_matrix(datatype, ldab, n, AB, ldab);
+
+    /* Iterate over each column */
+    diag_offset = kl + ku;
+    for(j = 0; j < n; ++j)
+    {
+        /* Determine super and sub diagonal band size */
+        superdiag_band = fla_min(kl + ku, j);
+
+        /* Determine column length of upper diagonal band */
+        column_length = fla_min(m - 1, j) - j + superdiag_band + 1;
+
+        if(column_length > 0)
+        {
+            switch(datatype)
+            {
+                case FLOAT:
+                {
+                    float t;
+
+                    /* Copy current column of upper diagonal band to corresponding column of matrix
+                     * A*/
+                    copy_matrix(datatype, "full", column_length, 1,
+                                &((float *)ABfac)[diag_offset - superdiag_band + j * ldab], ldab,
+                                &((float *)AB)[diag_offset - column_length + 1 + j * ldab], ldab);
+
+                    /* Apply multipliers of lower diagonal band to compute sub diagonal band
+                     * elements  */
+                    i__1 = m - 1;
+                    i__2 = j - superdiag_band;
+                    for(i = fla_min(i__1, j); i >= i__2; --i)
+                    {
+                        il = fla_min(kl, m - i - 1);
+                        if(il > 0)
+                        {
+                            iw = diag_offset - 1 + i + 1 - j + (j)*ldab;
+                            t = ((float *)AB)[iw];
+                            saxpy_(&il, &t, &((float *)ABfac)[diag_offset + 1 + i * ldab], &i_one,
+                                   &((float *)AB)[iw + 1], &i_one);
+
+                            /* Swap the elements of the current column with the pivot */
+                            ip = ipiv[i] - 1;
+                            if(i != ip)
+                            {
+                                ip = ip - j + superdiag_band
+                                     + fla_max(diag_offset - superdiag_band, 0) + j * ldab;
+                                ((float *)AB)[iw] = ((float *)AB)[ip];
+                                ((float *)AB)[ip] = t;
+                            }
+                        }
+                    }
+                    break;
+                }
+                case DOUBLE:
+                {
+                    double t;
+                    /* Copy current column of upper diagonal band to corresponding column of matrix
+                     * A*/
+                    copy_matrix(datatype, "full", column_length, 1,
+                                &((double *)ABfac)[diag_offset - superdiag_band + j * ldab], ldab,
+                                &((double *)AB)[diag_offset - column_length + 1 + j * ldab], ldab);
+
+                    /* Apply multipliers of lower diagonal band to compute sub diagonal band
+                     * elements  */
+                    i__1 = m - 1;
+                    i__2 = j - superdiag_band;
+                    for(i = fla_min(i__1, j); i >= i__2; --i)
+                    {
+                        il = fla_min(kl, m - i - 1);
+                        if(il > 0)
+                        {
+                            iw = diag_offset - 1 + i + 1 - j + (j)*ldab;
+                            t = ((double *)AB)[iw];
+                            daxpy_(&il, &t, &((double *)ABfac)[diag_offset + 1 + i * ldab], &i_one,
+                                   &((double *)AB)[iw + 1], &i_one);
+
+                            /* Swap the elements of the current column with the pivot */
+                            ip = ipiv[i] - 1;
+                            if(i != ip)
+                            {
+                                ip = ip - j + superdiag_band
+                                     + fla_max(diag_offset - superdiag_band, 0) + j * ldab;
+                                ((double *)AB)[iw] = ((double *)AB)[ip];
+                                ((double *)AB)[ip] = t;
+                            }
+                        }
+                    }
+                    break;
+                }
+                case COMPLEX:
+                {
+                    scomplex t;
+
+                    /* Copy current column of upper diagonal band to corresponding column of matrix
+                     * A*/
+                    copy_matrix(datatype, "full", column_length, 1,
+                                &((scomplex *)ABfac)[diag_offset - superdiag_band + j * ldab], ldab,
+                                &((scomplex *)AB)[diag_offset - column_length + 1 + j * ldab],
+                                ldab);
+
+                    /* Apply multipliers of lower diagonal band to compute sub diagonal band
+                     * elements  */
+                    i__1 = m - 1;
+                    i__2 = j - superdiag_band;
+                    for(i = fla_min(i__1, j); i >= i__2; --i)
+                    {
+                        il = fla_min(kl, m - i - 1);
+                        if(il > 0)
+                        {
+                            iw = diag_offset - 1 + i + 1 - j + (j)*ldab;
+                            t = ((scomplex *)AB)[iw];
+                            caxpy_(&il, &t, &((scomplex *)ABfac)[diag_offset + 1 + i * ldab],
+                                   &i_one, &((scomplex *)AB)[iw + 1], &i_one);
+
+                            /* Swap the elements of the current column with the pivot */
+                            ip = ipiv[i] - 1;
+                            if(i != ip)
+                            {
+                                ip = ip - j + superdiag_band
+                                     + fla_max(diag_offset - superdiag_band, 0) + j * ldab;
+                                ((scomplex *)AB)[iw] = ((scomplex *)AB)[ip];
+                                ((scomplex *)AB)[ip] = t;
+                            }
+                        }
+                    }
+                    break;
+                }
+                case DOUBLE_COMPLEX:
+                {
+                    dcomplex t;
+
+                    /* Copy current column of upper diagonal band to corresponding column of matrix
+                     * A*/
+                    copy_matrix(datatype, "full", column_length, 1,
+                                &((dcomplex *)ABfac)[diag_offset - superdiag_band + j * ldab], ldab,
+                                &((dcomplex *)AB)[diag_offset - column_length + 1 + j * ldab],
+                                ldab);
+
+                    /* Apply multipliers of lower diagonal band to compute sub diagonal band
+                     * elements  */
+                    i__1 = m - 1;
+                    i__2 = j - superdiag_band;
+                    for(i = fla_min(i__1, j); i >= i__2; --i)
+                    {
+                        il = fla_min(kl, m - i - 1);
+                        if(il > 0)
+                        {
+                            iw = diag_offset - 1 + i + 1 - j + (j)*ldab;
+                            t = ((dcomplex *)AB)[iw];
+                            zaxpy_(&il, &t, &((dcomplex *)ABfac)[diag_offset + 1 + i * ldab],
+                                   &i_one, &((dcomplex *)AB)[iw + 1], &i_one);
+
+                            /* Swap the elements of the current column with the pivot */
+                            ip = ipiv[i] - 1;
+                            if(i != ip)
+                            {
+                                ip = ip - j + superdiag_band
+                                     + fla_max(diag_offset - superdiag_band, 0) + j * ldab;
+                                ((dcomplex *)AB)[iw] = ((dcomplex *)AB)[ip];
+                                ((dcomplex *)AB)[ip] = t;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    free_matrix(ABfac);
 }

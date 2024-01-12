@@ -36,6 +36,8 @@ void fla_test_rot(integer argc, char ** argv, test_params_t* params);
 void fla_test_lartg(integer argc, char ** argv, test_params_t* params);
 void fla_test_org2r(integer argc, char ** argv, test_params_t* params);
 void fla_test_syevx(integer argc, char ** argv, test_params_t *params);
+void fla_test_gels(integer argc, char ** argv, test_params_t *params);
+void fla_test_larfg(integer argc, char ** argv, test_params_t *params);
 
 #define LIN_ID 0
 #define EIG_ID 1
@@ -77,7 +79,9 @@ OPERATIONS API_test_functions[] =
     {AUX_ID,    "rot"                 , fla_test_rot},
     {AUX_ID,    "lartg"               , fla_test_lartg},
     {LIN_ID,    "org2r"               , fla_test_org2r},
-    {EIG_ID,    "syevx"               , fla_test_syevx}
+    {EIG_ID,    "syevx"               , fla_test_syevx},
+    {LIN_ID,    "gels"                , fla_test_gels},
+    {AUX_ID,    "larfg"               , fla_test_larfg}
 };
 
 /* Add test API's group entry below */

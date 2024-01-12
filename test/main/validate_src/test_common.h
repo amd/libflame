@@ -26,6 +26,7 @@ extern dcomplex z_zero, z_one, z_n_one;
 
 #define DRAND()  ( ( double ) rand() / ( ( double ) RAND_MAX / 2.0F ) ) - 1.0F;
 #define SRAND()  ( float ) ( ( double ) rand() / ( ( double ) RAND_MAX / 2.0F ) ) - 1.0F;
+#define FLA_FABS(x)  ((x) >= 0) ? (x) : (-x);
 
 // Datatype
 #define CONSTANT          101
@@ -137,4 +138,10 @@ void init_matrix(integer datatype, void *A, integer M, integer N, integer LDA, F
 void init_matrix_spec_rand_in(integer datatype, void *A, integer M, integer N, integer LDA, char type);
 /*Test to check the extreme values propagation in output matrix */
 bool check_extreme_value(integer datatype, integer M, integer N, void *A, integer LDA, char type);
+/*Intialize vector according to given input*/
+void init_vector(integer datatype, void *A, integer M, integer incx, FILE* g_ext_fptr, char ivector_char);
+/*Initialize vector with special values*/
+void init_vector_spec_in(integer datatype, void *A, integer M, integer incx, char type);
+/* Checks whether the value is zero or not */
+double is_value_zero(integer datatype, void *value, double residual);
 #endif // TEST_COMMON_H

@@ -379,6 +379,8 @@ typedef struct AUX_paramlist_t
     integer lda; // Leading dimension of Array A. LDA >= fla_max(1, n)
     integer incx; // The increment between successive values of CX
     integer incy; // The increment between successive values of CY
+    /* Parameter for 'larfg' API */
+    integer incx_larfg; // The increment between successive values of X in larfg(incx > 0)
     integer num_repeats;
     integer num_tests;
     integer num_data_types;

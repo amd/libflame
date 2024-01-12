@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022 - 2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "ctype.h"
@@ -196,7 +196,7 @@ int fla_check_cmd_config_dir( int argc, char** argv )
         AUX_PARAMETERS_FILENAME         =  (char *) malloc(len_aux_file + 1 );
 
         memcpy( LINEAR_PARAMETERS_FILENAME, lin_file, len_lin_file + 1 );
- 
+
         memcpy( SYM_EIG_PARAMETERS_FILENAME, eig_file, len_eig_file + 1 );
 
         memcpy( SVD_PARAMETERS_FILENAME, svd_file, len_svd_file + 1);
@@ -248,7 +248,7 @@ int fla_check_cmd_config_dir( int argc, char** argv )
                 printf("Error: '%s' directory not found under 'config' directory.  Exiting... \n", config_dir);
                 cmd_test_option = -1;
             }
-            
+
             /*Reading the config directory*/
             if(dir)
             {
@@ -390,7 +390,7 @@ void fla_test_print_summary()
 
     if(total_failed_tests > 0)
         printf("\n\nThere are failed tests, Please look at output log for more details\n\n");
-    
+
     if(total_incomplete_tests > 0)
         printf("\n\nThere are some incomplete tests, Please look at the parameters passed to the API\n\n");
 }
@@ -1910,6 +1910,12 @@ void fla_test_read_aux_params ( const char *file_name, test_params_t* params )
         CHECK_LINE_SKIP ();
     }
 
+    fscanf(fp, "%s", &line[0]); // The increment between successive values of X in larfg (incx > 0)
+    for (i=0; i<NUM_SUB_TESTS; i++){
+        fscanf(fp, "%"FT_IS"", &(params->aux_paramslist[i].incx_larfg) );
+        CHECK_LINE_SKIP ();
+    }
+
     fscanf(fp, "%s", &line[0]); // number of repeats
     for (i=0; i<NUM_SUB_TESTS; i++){
         fscanf(fp, "%"FT_IS"", &(params->aux_paramslist[i].num_repeats) );
@@ -2193,7 +2199,7 @@ void fla_test_op_driver( char*         func_str,
         case SVD:
             num_ranges          = params->svd_paramslist[0].num_ranges;
             break;
-        
+
         case AUX:
             num_ranges          = params->aux_paramslist[0].num_ranges;
             break;
@@ -2277,7 +2283,7 @@ void fla_test_op_driver( char*         func_str,
                 n_repeats             = params->aux_paramslist[range_loop_counter].num_repeats;
                 n_datatypes           = params->aux_paramslist[range_loop_counter].num_data_types;
                 break;
-                
+
             default:
                 return;
         }
@@ -2343,7 +2349,7 @@ void fla_test_print_status(char* func_str,
 
     pass_str = fla_test_get_string_for_result( residual, datatype, thresh );
 
-    fla_test_build_function_string( func_str, NULL, func_param_str ); 
+    fla_test_build_function_string( func_str, NULL, func_param_str );
 
     n_spaces = MAX_FUNC_STRING_LENGTH - strlen( func_param_str );
     fill_string_with_n_spaces( blank_str, n_spaces );
@@ -2361,7 +2367,7 @@ void fla_test_print_status(char* func_str,
            fla_test_output_info(" %s%s  %c  %10"FT_IS" x %-9"FT_IS" %-10.2lf  %6.2lf %-7s  %-7.2le   %12s\n",
                                 func_param_str, blank_str,
                                 datatype_char,
-                                p_cur, p_cur, perf, time, scale, residual, pass_str ); 
+                                p_cur, p_cur, perf, time, scale, residual, pass_str );
     }
     else
     {

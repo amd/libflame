@@ -1,5 +1,5 @@
 /******************************************************************************
-* Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+* Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
 *******************************************************************************/
 
 /*! @file fla_dgesvd_small6_avx2_.c
@@ -17,7 +17,7 @@ double d_sign(doublereal *, doublereal *);
 static integer c__0 = 0;
 static integer c__1 = 1;
 
-/* SVD for small fat-matrices with LQ factorization
+/* SVD for small fat-matrices with QR factorization
  * already computed
  */
 void fla_dgesvd_small6_avx2(integer *m, integer *n,
@@ -44,11 +44,11 @@ void fla_dgesvd_small6_avx2(integer *m, integer *n,
 
     /* indices for partitioning work buffer */
     iu = 1;
-    itau = iu + *n * *lda;
+    itau = iu + *lda * *n;
     ie = itau + *n;
     itauq = ie + *n;
     itaup = itauq + *n;
-    iwork = itaup + *n;
+    iwork = iu;
 
     /* parameter adjustments */
     a -= (1 + *lda);
@@ -113,6 +113,13 @@ void fla_dgesvd_small6_avx2(integer *m, integer *n,
             }
         }
     }
+    else
+    {
+        for (i = 1; i <= *n; i++)
+        {
+            vt[i + i * *ldvt] = 1.;
+        }
+    }
 
     /* Generate Ql (from bidiag) in u from a */
 
@@ -161,15 +168,14 @@ void fla_dgesvd_small6_avx2(integer *m, integer *n,
             }
         }
     }
-    vt[1 + *ldvt] = 1.0;
-
+    vt[1 + *ldvt] = 1.;
     lapack_dbdsqr("U", n, n, n, &c__0, &s[1], &e[1],
                   &vt[1 + *ldvt], ldvt,
                   &u[1 + *ldu], ldu,
                   dum, &c__1,
                   &work[iwork], info);
 
-    /* Apply HH from QR factorization (qr) on vt from left */
+    /* Apply HH from QR factorization (qr) on u from left */
 
     tau = &work[itau - 1];
     /* First Iteration corresponding to HH(n) */
@@ -194,13 +200,14 @@ void fla_dgesvd_small6_avx2(integer *m, integer *n,
 
     /* Second Iteration onwards */
     beta = 0;
+    xnorm = 1.;
     for (i = *n - 1; i >= 1; i--)
     {
         ni = *n + i;
 
-        au = &u[-i * *ldqr];
+        au = &u[-i * *ldu];
         v = &qr[i + i * *ldqr - 1];
-        FLA_ELEM_REFLECTOR_APPLY_DLARGE(i, m, &ni, au, ldqr, tau);
+        FLA_ELEM_REFLECTOR_APPLY_DLARGE(i, m, &ni, au, ldu, tau);
     }
 
     return;

@@ -1,5 +1,5 @@
 /******************************************************************************
-* Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+* Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
 *******************************************************************************/
 
 /*! @file fla_dgesvd_small6T_avx2_.c
@@ -43,11 +43,11 @@ void fla_dgesvd_small6T_avx2(integer *m, integer *n,
 
     /* indices for partitioning work buffer */
     iu = 1;
-    itau = iu + *m * *lda;
+    itau = iu + *lda * *m;
     ie = itau + *m;
     itauq = ie + *m;
     itaup = itauq + *m;
-    iwork = itaup + *m;
+    iwork = iu;
 
     /* parameter adjustments */
     a -= (1 + *lda);
@@ -109,6 +109,13 @@ void fla_dgesvd_small6T_avx2(integer *m, integer *n,
                                         vt[j + (i + 1) * *ldvt];
                 }
             }
+        }
+    }
+    else
+    {
+        for (i = 1; i <= *m; i++)
+        {
+            vt[i + i * *ldvt] = 1.;
         }
     }
 

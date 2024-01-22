@@ -1,5 +1,5 @@
 /******************************************************************************
-* Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+* Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
 *******************************************************************************/
 
 /*! @file fla_dgeqrf_small_avx2.h
@@ -551,7 +551,7 @@
     }
 
 #define FLA_BIDIAGONALIZE_SMALL(nr, nc)                                            \
-    for (i = 1; i <= nr; i++)                                                      \
+    for (i = 1; i <= fla_min(nr, nc); i++)                                         \
     {                                                                              \
         slen = nr - i;                                                             \
         /* input address */                                                        \

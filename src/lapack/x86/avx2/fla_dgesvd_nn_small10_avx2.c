@@ -1,5 +1,5 @@
 /******************************************************************************
-* Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+* Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
 *******************************************************************************/
 
 /*! @file fla_dgesvd_nn_small10_avx2.c
@@ -30,20 +30,15 @@ void fla_dgesvd_nn_small10_avx2(integer *m, integer *n,
     integer c__0 = 0;
     integer c__1 = 1;
 
-    integer iu, ie, iwork;
-    integer itau, itauq, itaup;
+    integer ie, iwork;
+    integer itauq, itaup;
     integer i__1, rlen, knt;
 
-    integer ldu_val = 0;
-    integer *ldu = &ldu_val;
-
     /* indices for partitioning work buffer */
-    iu = 1;
-    itau = iu + *m * *ldu;
-    ie = itau + *m;
+    ie = 1;
     itauq = ie + *m;
     itaup = itauq + *m;
-    iwork = itaup + *m;
+    iwork = itauq;
 
     /* parameter adjustments */
     a -= (1 + *lda);

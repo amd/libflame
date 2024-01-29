@@ -39,3 +39,4 @@
 1   syevx   Eigen Values and Vectors                      (0 = disable; 1 = enable; 2 = enable only this)
 1   gels    Solves Linear systems for GE matrices         (0 = disable; 1 = enable; 2 = enable only this)
 1   larfg   Generates an elementary reflector             (0 = disable; 1 = enable; 2 = enable only this)
+1   gtsv    Linear Solve for General Tridiagonal Matrix   (0 = disable; 1 = enable; 2 = enable only this)

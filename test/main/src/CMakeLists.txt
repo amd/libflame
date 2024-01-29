@@ -38,6 +38,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/test_rot.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_lartg.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_org2r.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_syevx.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_gtsv.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_lapack.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_lapack.h
 ${CMAKE_CURRENT_SOURCE_DIR}/test_routines.h

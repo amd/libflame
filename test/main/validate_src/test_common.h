@@ -1,5 +1,5 @@
 /******************************************************************************
-* Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+* Copyright (C) 2022 - 2024, Advanced Micro Devices, Inc. All rights reserved.
 *******************************************************************************/
 
 /*! @file test_common.h
@@ -75,13 +75,16 @@ void copy_realtype_matrix(integer datatype, char *uplo, integer M, integer N, vo
 void reset_matrix(integer datatype, integer M, integer N, void *A, integer LDA);
 void set_identity_matrix(integer datatype, integer M, integer N, void *A, integer LDA);
 void copy_submatrix(integer datatype, integer m, integer n, void *A, integer lda, void *B, integer ldb, integer srow, integer scol);
+void matrix_difference(integer datatype, integer m, integer n, void *A, integer lda, void *B, integer ldb);
 /* orthgonality property of matrix */
 double check_orthogonality(integer datatype, void *A, integer m, integer n, integer lda);
-void rand_sym_tridiag_matrix(integer datatype, void *A, integer M, integer N, integer LDA);
 void get_diagonal(integer datatype, void *A, integer m, integer n, integer lda, void *Diag);
 void get_subdiagonal(integer datatype, void *A, integer m, integer n, integer lda, void *Subdiag);
-void copy_sym_tridiag_matrix(integer datatype, void *D, void *E, integer M, integer N, void *B, integer LDA);
-
+/*Tridiagonal matrix functions*/
+void rand_sym_tridiag_matrix(integer datatype, void *A, integer M, integer N, integer LDA);
+void copy_sym_tridiag_matrix(integer datatype, void *D, void *E, integer M, integer N, void *A, integer LDA);
+void copy_tridiag_matrix(integer datatype, void *dl, void *d, void *du, integer M, integer N, void *A, integer LDA);
+void tridiag_matrix_multiply(integer datatype, integer n, integer nrhs, void *dl, void *d, void *du, void *B, integer ldb, void *C, integer ldc);
 /* Division of complex types */
 void c_div_t(scomplex *cp, scomplex *ap, scomplex *bp);
 void z_div_t(dcomplex *cp, dcomplex *ap, dcomplex *bp);
@@ -110,6 +113,8 @@ void get_min(integer datatype, void *arr, void *min_val, integer n);
 void init_matrix_from_file(integer datatype, void* A,integer m, integer n, integer lda, FILE* fptr);
 /* Reading vector input data from a file */
 void init_vector_from_file(integer datatype, void* A, integer m, integer inc, FILE* fptr);
+/* Intialize vector with special values */
+void init_vector_spec_in(integer datatype, void *A, integer M, integer incx, char type);
 /* Allocate dynamic memory. If FLA_MEM_UNALIGNED is set, unaligned memory is allocated */
 char* fla_mem_alloc(size_t size);
 /* Generate Hessenberg matrix */

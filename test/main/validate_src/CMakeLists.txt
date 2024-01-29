@@ -35,5 +35,6 @@ ${CMAKE_CURRENT_SOURCE_DIR}/validate_rot.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_lartg.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gels.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_larfg.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_gtsv.c
 )
 

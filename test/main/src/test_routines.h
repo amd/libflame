@@ -43,6 +43,7 @@ void fla_test_gesvdx(integer argc, char **argv, test_params_t *params);
 void fla_test_gbtrf(integer argc, char **argv, test_params_t *params);
 void fla_test_gbtrs(integer argc, char **argv, test_params_t *params);
 void fla_test_gelsd(integer argc, char **argv, test_params_t *params);
+void fla_test_gelss(integer argc, char **argv, test_params_t *params);
 
 #define LIN_ID 0
 #define EIG_ID 1
@@ -73,7 +74,7 @@ OPERATIONS API_test_functions[]
        {EIG_ID, "syevx", fla_test_syevx},     {EIG_ID, "heevx", fla_test_syevx},
        {LIN_ID, "gtsv", fla_test_gtsv},       {LIN_ID, "gels", fla_test_gels},
        {AUX_ID, "larfg", fla_test_larfg},     {SVD_ID, "gesvdx", fla_test_gesvdx},
-       {LIN_ID, "gelsd", fla_test_gelsd}};
+       {LIN_ID, "gelsd", fla_test_gelsd},     {LIN_ID, "gelss", fla_test_gelss}};
 
 /* Add test API's group entry below */
 char *API_test_group[] = {"LIN", "EIG", "SVD", "AUX"};

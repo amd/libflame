@@ -1,5 +1,5 @@
 ###############################################################################
-# Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
+# Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 
 target_sources(${PROJECT_NAME}
@@ -48,4 +48,5 @@ ${CMAKE_CURRENT_SOURCE_DIR}/test_gelsd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_lapack.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_lapack.h
 ${CMAKE_CURRENT_SOURCE_DIR}/test_routines.h
+${CMAKE_CURRENT_SOURCE_DIR}/test_gelss.c
 )

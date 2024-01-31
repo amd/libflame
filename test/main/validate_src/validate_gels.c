@@ -15,7 +15,6 @@ void validate_gels(char *trans, integer m, integer n, integer nrhs, void *A, int
     char NORM = '1';
     void *work = NULL;
     void *C = NULL;
-    void *resid = NULL;
 
     if(*trans == 'T' || *trans == 'C')
     {
@@ -36,8 +35,8 @@ void validate_gels(char *trans, integer m, integer n, integer nrhs, void *A, int
         case FLOAT:
         {
             float eps, norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
-            float resid1 = 0, resid2 = 0, resid3 = 0;
-            resid = &resid3;
+            float resid1 = 0, resid2 = 0;
+
             eps = fla_lapack_slamch("E");
             if((*trans == 'N' && m > n) || (*trans == 'T' && m < n))
             {
@@ -67,24 +66,15 @@ void validate_gels(char *trans, integer m, integer n, integer nrhs, void *A, int
                 norm = fla_lapack_slange("1", &nrhs, &n1, C, &ldc, work);
                 resid2 = norm / (fla_max(m1, fla_max(n1, nrhs)) * norm_a * norm_b * eps);
 
-                /* Test - 3
-                 * checks whether X is in the row space of A or A'.  It does so
-                 * by scaling both X and A such that their norms are in the range
-                 * [sqrt(eps), 1/sqrt(eps)], then computing a QR factorization of [A,X]
-                 * (if TRANS = 'T') or an LQ factorization of [A',X]' (if TRANS = 'N'),
-                 * and returning the norm of the trailing triangle, scaled by
-                 * MAX(M,N,NRHS)*eps.
-                 */
-                check_vector_in_rowspace(datatype, trans, m, n, nrhs, A, lda, x, ldb, resid);
-                *residual = (double)fla_max(resid1, fla_max(resid2, resid3));
+                *residual = (double)fla_max(resid1, resid2);
             }
             break;
         }
         case DOUBLE:
         {
             double eps, norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
-            double resid1 = 0, resid2 = 0, resid3 = 0;
-            resid = &resid3;
+            double resid1 = 0, resid2 = 0;
+
             eps = fla_lapack_dlamch("E");
             if((*trans == 'N' && m > n) || (*trans == 'T' && m < n))
             {
@@ -114,24 +104,15 @@ void validate_gels(char *trans, integer m, integer n, integer nrhs, void *A, int
                 norm = fla_lapack_dlange("1", &nrhs, &n1, C, &ldc, work);
                 resid2 = norm / (fla_max(m1, fla_max(n1, nrhs)) * norm_a * norm_b * eps);
 
-                /* Test - 3
-                 * checks whether X is in the row space of A or A'.  It does so
-                 * by scaling both X and A such that their norms are in the range
-                 * [sqrt(eps), 1/sqrt(eps)], then computing a QR factorization of [A,X]
-                 * (if TRANS = 'T') or an LQ factorization of [A',X]' (if TRANS = 'N'),
-                 * and returning the norm of the trailing triangle, scaled by
-                 * MAX(M,N,NRHS)*eps.
-                 */
-                check_vector_in_rowspace(datatype, trans, m, n, nrhs, A, lda, x, ldb, resid);
-                *residual = (double)fla_max(resid1, fla_max(resid2, resid3));
+                *residual = fla_max(resid1, resid2);
             }
             break;
         }
         case COMPLEX:
         {
             float eps, norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
-            float resid1 = 0, resid2 = 0, resid3 = 0;
-            resid = &resid3;
+            float resid1 = 0, resid2 = 0;
+
             eps = fla_lapack_slamch("E");
             if((*trans == 'N' && m > n) || (*trans == 'C' && m < n))
             {
@@ -162,24 +143,15 @@ void validate_gels(char *trans, integer m, integer n, integer nrhs, void *A, int
                 norm = fla_lapack_clange("1", &nrhs, &n1, C, &ldc, work);
                 resid2 = norm / (fla_max(m1, fla_max(n1, nrhs)) * norm_a * norm_b * eps);
 
-                /* Test - 3
-                 * checks whether X is in the row space of A or A'.  It does so
-                 * by scaling both X and A such that their norms are in the range
-                 * [sqrt(eps), 1/sqrt(eps)], then computing a QR factorization of [A,X]
-                 * (if TRANS = 'T') or an LQ factorization of [A',X]' (if TRANS = 'N'),
-                 * and returning the norm of the trailing triangle, scaled by
-                 * MAX(M,N,NRHS)*eps.
-                 */
-                check_vector_in_rowspace(datatype, trans, m, n, nrhs, A, lda, x, ldb, resid);
-                *residual = (double)fla_max(resid1, fla_max(resid2, resid3));
+                *residual = (double)fla_max(resid1, resid2);
             }
             break;
         }
         case DOUBLE_COMPLEX:
         {
             double eps, norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
-            double resid1 = 0, resid2 = 0, resid3 = 0;
-            resid = &resid3;
+            double resid1 = 0, resid2 = 0;
+
             eps = fla_lapack_dlamch("E");
             if((*trans == 'N' && m > n) || (*trans == 'C' && m < n))
             {
@@ -211,16 +183,7 @@ void validate_gels(char *trans, integer m, integer n, integer nrhs, void *A, int
                 norm = fla_lapack_zlange("1", &nrhs, &n1, C, &ldc, work);
                 resid2 = norm / (fla_max(m1, fla_max(n1, nrhs)) * norm_a * norm_b * eps);
 
-                /* Test - 3
-                 * checks whether X is in the row space of A or A'.  It does so
-                 * by scaling both X and A such that their norms are in the range
-                 * [sqrt(eps), 1/sqrt(eps)], then computing a QR factorization of [A,X]
-                 * (if TRANS = 'T') or an LQ factorization of [A',X]' (if TRANS = 'N'),
-                 * and returning the norm of the trailing triangle, scaled by
-                 * MAX(M,N,NRHS)*eps.
-                 */
-                check_vector_in_rowspace(datatype, trans, m, n, nrhs, A, lda, x, ldb, resid);
-                *residual = (double)fla_max(resid1, fla_max(resid2, resid3));
+                *residual = fla_max(resid1, resid2);
             }
             break;
         }

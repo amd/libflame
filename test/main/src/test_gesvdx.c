@@ -257,6 +257,7 @@ void fla_test_gesvdx_experiment(test_params_t *params, integer datatype, integer
     free_matrix(A);
     free_matrix(A_test);
     free_vector(s_test);
+    free_vector(s);
     free_vector(vl);
     free_vector(vu);
     free_matrix(U);

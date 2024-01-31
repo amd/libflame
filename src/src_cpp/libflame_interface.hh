@@ -1,5 +1,5 @@
 /******************************************************************************
-* Copyright (C) 2021-2022, Advanced Micro Devices, Inc. All rights reserved.
+* Copyright (C) 2021-2024, Advanced Micro Devices, Inc. All rights reserved.
 *******************************************************************************/
 
 /*! @file libflame_interface.hh
@@ -57,12 +57,11 @@ namespace libflame {
                     positive definite, and the factorization could not be
                     completed. \n
 
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template<typename T>
-integer potrf(char* uplo, integer* n, T* a, integer* lda, integer* info)
+void potrf(char* uplo, integer* n, T* a, integer* lda, integer* info)
 {
-  return potrf(uplo, n, a, lda, info);
+  potrf(uplo, n, a, lda, info);
 }
 
 /*! @brief Cholesky factorization of a real symmetric
@@ -110,12 +109,11 @@ integer potrf(char* uplo, integer* n, T* a, integer* lda, integer* info)
                    positive definite, and the factorization could not be
                    completed. \n
 
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer potf2(char* uplo, integer* n, T* a, integer* lda, integer* info)
+void potf2(char* uplo, integer* n, T* a, integer* lda, integer* info)
 {
-  return potf2(uplo, n, a, lda, info);
+  potf2(uplo, n, a, lda, info);
 }
 
 /*! @brief LU factorization of a general m-by-n matrix a
@@ -160,12 +158,11 @@ integer potf2(char* uplo, integer* n, T* a, integer* lda, integer* info)
                     singular, and division by zero will occur if it is used
                     to solve a system of equations. \n
 
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer getrf(integer* m, integer* n, T* a, integer* lda, integer* ipiv, integer* info)
+void getrf(integer* m, integer* n, T* a, integer* lda, integer* ipiv, integer* info)
 {
-  return getrf(m, n, a, lda, ipiv, info);
+  getrf(m, n, a, lda, ipiv, info);
 }
 
 /*! @brief LU factorization of a general m-by-n matrix a
@@ -211,12 +208,11 @@ integer getrf(integer* m, integer* n, T* a, integer* lda, integer* ipiv, integer
                     singular, and division by zero will occur if it is used
                     to solve a system of equations. \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer getf2(integer* m, integer* n, T* a, integer* lda, integer* ipiv, integer* info)
+void getf2(integer* m, integer* n, T* a, integer* lda, integer* ipiv, integer* info)
 {
-  return getf2(m, n, a, lda, ipiv, info);
+  getf2(m, n, a, lda, ipiv, info);
 }
 
 /*! @brief QR factorization of a real m-by-n matrix a
@@ -282,12 +278,11 @@ integer getf2(integer* m, integer* n, T* a, integer* lda, integer* ipiv, integer
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer geqrf(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
+void geqrf(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
 {
-  return geqrf(m, n, a, lda, tau, work, lwork, info);
+  geqrf(m, n, a, lda, tau, work, lwork, info);
 }
 
 /*! @brief QR factorization of a real m-by-n matrix a
@@ -341,12 +336,11 @@ integer geqrf(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integ
               = 0: successful exit \n
               < 0: if INFO = -i, the i-th argument had an illegal value \n
 
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer geqr2(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integer* info)
+void geqr2(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integer* info)
 {
-  return geqr2(m, n, a, lda, tau, work, info);
+  geqr2(m, n, a, lda, tau, work, info);
 }
 
 /*! @brief QR factorization of a real m-by-n matrix a
@@ -424,18 +418,17 @@ integer geqr2(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integ
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template<typename T>
-integer geqpf(integer* m, integer* n, T* a, integer* lda, integer* jpvt, T* tau, T* work, integer* info)
+void geqpf(integer* m, integer* n, T* a, integer* lda, integer* jpvt, T* tau, T* work, integer* info)
 {
-  return geqpf(m, n, a, lda, jpvt, tau, work, info);
+  geqpf(m, n, a, lda, jpvt, tau, work, info);
 }
 
 template<typename T, typename Ta>
-integer geqpf(integer* m, integer* n, T* a, integer* lda, integer* jpvt, T* tau, T* work, Ta* rwork, integer* info)
+void geqpf(integer* m, integer* n, T* a, integer* lda, integer* jpvt, T* tau, T* work, Ta* rwork, integer* info)
 {
-  return geqpf(m, n, a, lda, jpvt, tau, work, rwork, info);
+  geqpf(m, n, a, lda, jpvt, tau, work, rwork, info);
 }
 
 /*! @brief QR factorization of a real m-by-n matrix a
@@ -510,17 +503,16 @@ integer geqpf(integer* m, integer* n, T* a, integer* lda, integer* jpvt, T* tau,
               = 0: successful exit. \n
               < 0: if INFO = -i, the i-th argument had an illegal value. \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template<typename T>
-integer geqp3(integer* m, integer* n, T* a, integer* lda, integer* jpvt, T* tau, T* work, integer* lwork, integer* info)
+void geqp3(integer* m, integer* n, T* a, integer* lda, integer* jpvt, T* tau, T* work, integer* lwork, integer* info)
 {
-  return geqp3(m, n, a, lda, jpvt, tau, work, lwork, info);
+  geqp3(m, n, a, lda, jpvt, tau, work, lwork, info);
 }
 template<typename T, typename Ta>
-integer geqp3(integer* m, integer* n, T* a, integer* lda, integer* jpvt, T* tau, T* work, integer* lwork, Ta* rwork, integer* info)
+void geqp3(integer* m, integer* n, T* a, integer* lda, integer* jpvt, T* tau, T* work, integer* lwork, Ta* rwork, integer* info)
 {
-  return geqp3(m, n, a, lda, jpvt, tau, work, lwork, rwork, info);
+  geqp3(m, n, a, lda, jpvt, tau, work, lwork, rwork, info);
 }
 
 /*! @brief LQ factorization of a real m-by-n matrix a
@@ -585,12 +577,11 @@ integer geqp3(integer* m, integer* n, T* a, integer* lda, integer* jpvt, T* tau,
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template<typename T>
-integer gelqf(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
+void gelqf(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
 {
-  return gelqf(m, n, a, lda, tau, work, lwork, info);
+  gelqf(m, n, a, lda, tau, work, lwork, info);
 }
 
 /*! @brief LQ factorization of a real m-by-n matrix a
@@ -644,12 +635,11 @@ integer gelqf(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integ
               = 0: successful exit \n
               < 0: if INFO = -i, the i-th argument had an illegal value \n
 
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer gelq2(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integer* info)
+void gelq2(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integer* info)
 {
-  return gelq2(m, n, a, lda, tau, work, info);
+  gelq2(m, n, a, lda, tau, work, info);
 }
 
 /*! @brief The minimum-norm solution to a real linear least squares problem
@@ -770,17 +760,16 @@ integer gelq2(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integ
                     if INFO = i, i off-diagonal elements of an intermediate
                     bidiagonal form did not converge to zero. \n
 
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer gelsd(integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, T* s, T* rcond, integer* rank, T* work, integer* lwork, integer* iwork, integer* info)
+void gelsd(integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, T* s, T* rcond, integer* rank, T* work, integer* lwork, integer* iwork, integer* info)
 {
-  return gelsd(m, n, nrhs, a, lda, b, ldb, s, rcond, rank, work, lwork, iwork, info);
+  gelsd(m, n, nrhs, a, lda, b, ldb, s, rcond, rank, work, lwork, iwork, info);
 }
 template< typename T, typename Ta >
-integer gelsd(integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, Ta* s, Ta* rcond, integer* rank, T* work, integer* lwork, Ta* rwork, integer* iwork, integer* info)
+void gelsd(integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, Ta* s, Ta* rcond, integer* rank, T* work, integer* lwork, Ta* rwork, integer* iwork, integer* info)
 {
-  return gelsd(m,  n, nrhs, a, lda, b, ldb, s, rcond, rank, work, lwork, rwork, iwork, info);
+  gelsd(m,  n, nrhs, a, lda, b, ldb, s, rcond, rank, work, lwork, rwork, iwork, info);
 }
 
 /*! @brief The minimum-norm solution to a real linear least squares problem
@@ -865,17 +854,16 @@ integer gelsd(integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, i
                     if INFO = i, i off-diagonal elements of an intermediate
                     bidiagonal form did not converge to zero. \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer gelss(integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, T*  s, T* rcond, integer* rank, T* work, integer* lwork, integer* info)
+void gelss(integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, T*  s, T* rcond, integer* rank, T* work, integer* lwork, integer* info)
 {
-  return gelss(m, n, nrhs, a, lda, b,ldb, s, rcond, rank, work, lwork, info);
+  gelss(m, n, nrhs, a, lda, b,ldb, s, rcond, rank, work, lwork, info);
 }
 template< typename T, typename Ta >
-integer gelss(integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, Ta*  s, Ta*  rcond, integer* rank, T* work, integer* lwork, Ta* rwork, integer* info)
+void gelss(integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, Ta*  s, Ta*  rcond, integer* rank, T* work, integer* lwork, Ta* rwork, integer* info)
 {
-  return gelss(m, n, nrhs, a, lda, b, ldb, s, rcond, rank, work, lwork, rwork, info);
+  gelss(m, n, nrhs, a, lda, b, ldb, s, rcond, rank, work, lwork, rwork, info);
 }
 
 /*! @brief Product UUH or LHL, where U and L are upper or lower triangular matrices (blocked algorithm).
@@ -917,12 +905,11 @@ integer gelss(integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, i
               = 0: successful exit \n
               < 0: if INFO = -k, the k-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer lauum(char* uplo, integer* n, T* a, integer* lda, integer* info)
+void lauum(char* uplo, integer* n, T* a, integer* lda, integer* info)
 {
-  return lauum(uplo, n, a, lda, info);
+  lauum(uplo, n, a, lda, info);
 }
 
 /*! @brief Product UUH or LHL, where U and L are upper or lower triangular matrices (unblocked algorithm).
@@ -964,12 +951,11 @@ integer lauum(char* uplo, integer* n, T* a, integer* lda, integer* info)
               = 0: successful exit \n
               < 0: if INFO = -k, the k-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
     *  */
 template< typename T >
-integer lauu2(char* uplo, integer* n, T* a, integer* lda, integer* info)
+void lauu2(char* uplo, integer* n, T* a, integer* lda, integer* info)
 {
-  return lauu2(uplo, n, a, lda, info);
+  lauu2(uplo, n, a, lda, info);
 }
 
 /*! @brief Inverse of a real symmetric positive definite matrix.
@@ -1005,12 +991,11 @@ integer lauu2(char* uplo, integer* n, T* a, integer* lda, integer* info)
               > 0:  if INFO = i, the (i,i) element of the factor U or L is
                     zero, and the inverse could not be computed. \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer potri(char* uplo, integer* n, T* buff_A, integer*  ldim_A, integer* info)
+void potri(char* uplo, integer* n, T* buff_A, integer*  ldim_A, integer* info)
 {
-  return potri(uplo, n, buff_A, ldim_A, info);
+  potri(uplo, n, buff_A, ldim_A, info);
 }
 
 /*! @brief Inverse of a real upper or lower triangular matrix.
@@ -1057,12 +1042,11 @@ integer potri(char* uplo, integer* n, T* buff_A, integer*  ldim_A, integer* info
               > 0: if INFO = i, A(i,i) is exactly zero.  The triangular
                    matrix is singular and its inverse can not be computed. \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer trtri(char* uplo, char* diag, integer* n, T* a, integer* lda, integer* info)
+void trtri(char* uplo, char* diag, integer* n, T* a, integer* lda, integer* info)
 {
-  return trtri(uplo, diag, n, a, lda, info);
+  trtri(uplo, diag, n, a, lda, info);
 }
 
 /*! @brief Inverse of a triangular matrix (unblocked algorithm).
@@ -1107,12 +1091,11 @@ integer trtri(char* uplo, char* diag, integer* n, T* a, integer* lda, integer* i
               = 0: successful exit \n
               < 0: if INFO = -k, the k-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer trti2(char* uplo, char* diag, integer* n, T* a, integer* lda, integer* info)
+void trti2(char* uplo, char* diag, integer* n, T* a, integer* lda, integer* info)
 {
-  return trti2(uplo, diag, n, a, lda, info);
+  trti2(uplo, diag, n, a, lda, info);
 }
 
 /*! @brief Solving Sylvester matrix equation
@@ -1188,17 +1171,16 @@ integer trti2(char* uplo, char* diag, integer* n, T* a, integer* lda, integer* i
                    values were used to solve the equation (but the matrices
                    A and B are unchanged). \n
 
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer trsyl(char* transa, char* transb, integer* isgn, integer* m, integer* n, T* a, integer* lda, T* b, integer* ldb, T* c, integer* ldc, T* scale, integer* info)
+void trsyl(char* transa, char* transb, integer* isgn, integer* m, integer* n, T* a, integer* lda, T* b, integer* ldb, T* c, integer* ldc, T* scale, integer* info)
 {
-  return trsyl(transa, transb, isgn, m, n, a, lda, b, ldb, c, ldc, scale, info);
+  trsyl(transa, transb, isgn, m, n, a, lda, b, ldb, c, ldc, scale, info);
 }
 template< typename T, typename Ta >
-integer trsyl(char* transa, char* transb, integer* isgn, integer* m, integer* n, T* a, integer* lda, T* b, integer* ldb, T* c, integer* ldc, Ta* scale, integer* info)
+void trsyl(char* transa, char* transb, integer* isgn, integer* m, integer* n, T* a, integer* lda, T* b, integer* ldb, T* c, integer* ldc, Ta* scale, integer* info)
 {
-  return trsyl(transa, transb, isgn, m, n, a, lda, b, ldb, c, ldc, scale, info);
+  trsyl(transa, transb, isgn, m, n, a, lda, b, ldb, c, ldc, scale, info);
 }
 
 /*! @brief Reduction to upper Hessenberg form
@@ -1286,12 +1268,11 @@ integer trsyl(char* transa, char* transb, integer* isgn, integer* m, integer* n,
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value. \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer gehrd(integer* n, integer* ilo, integer* ihi, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
+void gehrd(integer* n, integer* ilo, integer* ihi, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
 {
-  return gehrd(n, ilo, ihi, a, lda, tau, work, lwork, info);
+  gehrd(n, ilo, ihi, a, lda, tau, work, lwork, info);
 }
 
 /*! @brief Reduction to upper Hessenberg form using an unblocked algorithm
@@ -1368,12 +1349,11 @@ integer gehrd(integer* n, integer* ilo, integer* ihi, T* a, integer* lda, T* tau
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value. \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer gehd2(integer* n, integer* ilo, integer* ihi, T* a, integer* lda, T* tau, T* work, integer* info)
+void gehd2(integer* n, integer* ilo, integer* ihi, T* a, integer* lda, T* tau, T* work, integer* info)
 {
-  return gehd2(n, ilo, ihi, a, lda, tau, work, info);
+  gehd2(n, ilo, ihi, a, lda, tau, work, info);
 }
 
 /*! @brief Reduction of a real symmetric matrix a to real symmetric tridiagonal form
@@ -1485,12 +1465,11 @@ integer gehd2(integer* n, integer* ilo, integer* ihi, T* a, integer* lda, T* tau
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer sytrd(char* uplo, integer* n, T* a, integer* lda, T*  d, T*  e, T* tau, T* work, integer* lwork, integer* info)
+void sytrd(char* uplo, integer* n, T* a, integer* lda, T*  d, T*  e, T* tau, T* work, integer* lwork, integer* info)
 {
-  return sytrd(uplo, n, a, lda, d, e, tau, work, lwork, info);
+  sytrd(uplo, n, a, lda, d, e, tau, work, lwork, info);
 }
 
 /*! @brief Reduction of a complex Hermitian matrix a to real symmetric tridiagonal form
@@ -1602,12 +1581,11 @@ integer sytrd(char* uplo, integer* n, T* a, integer* lda, T*  d, T*  e, T* tau, 
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T, typename Ta >
-integer hetrd(char* uplo, integer* n, T* a, integer* lda, Ta*  d, Ta*  e, T* tau, T* work, integer* lwork, integer* info)
+void hetrd(char* uplo, integer* n, T* a, integer* lda, Ta*  d, Ta*  e, T* tau, T* work, integer* lwork, integer* info)
 {
-  return hetrd(uplo, n, a, lda, d, e, tau, work, lwork, info);
+  hetrd(uplo, n, a, lda, d, e, tau, work, lwork, info);
 }
 /*! @brief Reduction of a real symmetric matrix a to real symmetric tridiagonal form (unblocked algorithm)
     *
@@ -1705,12 +1683,11 @@ integer hetrd(char* uplo, integer* n, T* a, integer* lda, Ta*  d, Ta*  e, T* tau
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value. \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer sytd2(char* uplo, integer* n, T* a, integer* lda, T*  d, T*  e, T* tau, integer* info)
+void sytd2(char* uplo, integer* n, T* a, integer* lda, T*  d, T*  e, T* tau, integer* info)
 {
-  return sytd2(uplo, n, a, lda, d, e, tau, info);
+  sytd2(uplo, n, a, lda, d, e, tau, info);
 }
 
 /*! @brief Reduction of a Hermitian matrix a to real symmetric tridiagonal form (unblocked algorithm)
@@ -1809,12 +1786,11 @@ integer sytd2(char* uplo, integer* n, T* a, integer* lda, T*  d, T*  e, T* tau, 
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value. \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T, typename Ta >
-integer hetd2(char* uplo, integer* n, T* a, integer* lda, Ta*  d, Ta*  e, T* tau, integer* info)
+void hetd2(char* uplo, integer* n, T* a, integer* lda, Ta*  d, Ta*  e, T* tau, integer* info)
 {
-  return hetd2(uplo, n, a, lda, d, e, tau, info);
+  hetd2(uplo, n, a, lda, d, e, tau, info);
 }
 
 /*! @brief Reduction to bidiagonal form
@@ -1939,17 +1915,16 @@ integer hetd2(char* uplo, integer* n, T* a, integer* lda, Ta*  d, Ta*  e, T* tau
               = 0:  successful exit. \n
               < 0:  if INFO = -i, the i-th argument had an illegal value. \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer gebrd(integer* m, integer* n, T* a, integer* lda, T*  d, T*  e, T* tauq, T* taup, T* work, integer* lwork, integer* info)
+void gebrd(integer* m, integer* n, T* a, integer* lda, T*  d, T*  e, T* tauq, T* taup, T* work, integer* lwork, integer* info)
 {
-  return gebrd(m, n, a, lda, d, e, tauq, taup, work, lwork, info);
+  gebrd(m, n, a, lda, d, e, tauq, taup, work, lwork, info);
 }
 template< typename T, typename Ta >
-integer gebrd(integer* m, integer* n, T* a, integer* lda, Ta* d, Ta* e, T* tauq, T* taup, T* work, integer* lwork, integer* info)
+void gebrd(integer* m, integer* n, T* a, integer* lda, Ta* d, Ta* e, T* tauq, T* taup, T* work, integer* lwork, integer* info)
 {
-  return gebrd(m, n, a, lda, d, e, tauq, taup, work, lwork, info);
+  gebrd(m, n, a, lda, d, e, tauq, taup, work, lwork, info);
 }
 
 /*! @brief Reduction to bidiagonal form (unblocked algorithm)
@@ -2063,17 +2038,16 @@ integer gebrd(integer* m, integer* n, T* a, integer* lda, Ta* d, Ta* e, T* tauq,
               = 0: successful exit \n
               < 0: if INFO = -i, the i-th argument had an illegal value. \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer gebd2(integer* m, integer* n, T* a, integer* lda, T*  d, T*  e, T* tauq, T* taup, T* work, integer* info)
+void gebd2(integer* m, integer* n, T* a, integer* lda, T*  d, T*  e, T* tauq, T* taup, T* work, integer* info)
 {
-  return gebd2(m, n, a, lda, d, e, tauq, taup, work, info);
+  gebd2(m, n, a, lda, d, e, tauq, taup, work, info);
 }
 template< typename T, typename Ta >
-integer gebd2(integer* m, integer* n, T* a, integer* lda, Ta*  d, Ta*  e, T* tauq, T* taup, T* work, integer* info)
+void gebd2(integer* m, integer* n, T* a, integer* lda, Ta*  d, Ta*  e, T* tauq, T* taup, T* work, integer* info)
 {
-  return gebd2(m, n, a,lda, d, e, tauq, taup, work, info);
+  gebd2(m, n, a,lda, d, e, tauq, taup, work, info);
 }
 
 /*! @brief Reduction of a real symmetric-definite generalized eigenproblem to standard form
@@ -2131,12 +2105,11 @@ integer gebd2(integer* m, integer* n, T* a, integer* lda, Ta*  d, Ta*  e, T* tau
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer sygst(integer* itype, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* info)
+void sygst(integer* itype, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* info)
 {
-  return sygst(itype, uplo, n, a, lda, b, ldb, info);
+  sygst(itype, uplo, n, a, lda, b, ldb, info);
 }
 
 /*! @brief Reduction of a complex Hermitian-definite generalized eigenproblem to standard form
@@ -2194,12 +2167,11 @@ integer sygst(integer* itype, char* uplo, integer* n, T* a, integer* lda, T* b, 
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer hegst(integer* itype, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* info)
+void hegst(integer* itype, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* info)
 {
-  return hegst(itype, uplo, n, a, lda, b, ldb, info);
+  hegst(itype, uplo, n, a, lda, b, ldb, info);
 }
 
 /*! @brief Reduction of a symmetric-definite generalized eigenproblem to standard form (unblocked algorithm)
@@ -2257,12 +2229,11 @@ integer hegst(integer* itype, char* uplo, integer* n, T* a, integer* lda, T* b, 
               = 0:  successful exit. \n
               < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer sygs2(integer* itype, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* info)
+void sygs2(integer* itype, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* info)
 {
-  return sygs2(itype, uplo, n, a, lda, b, ldb, info);
+  sygs2(itype, uplo, n, a, lda, b, ldb, info);
 }
 
 /*! @brief Reduction of a Hermitian-definite generalized eigenproblem to standard form (unblocked algorithm)
@@ -2320,12 +2291,11 @@ integer sygs2(integer* itype, char* uplo, integer* n, T* a, integer* lda, T* b, 
               = 0:  successful exit. \n
               < 0:  if INFO = -i, the i-th argument had an illegal value. \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer hegs2(integer* itype, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* info)
+void hegs2(integer* itype, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* info)
 {
-  return hegs2(itype, uplo, n, a, lda, b, ldb, info);
+  hegs2(itype, uplo, n, a, lda, b, ldb, info);
 }
 
 /*! @brief Triangular factor of a block reflector
@@ -2416,12 +2386,11 @@ integer hegs2(integer* itype, char* uplo, integer* n, T* a, integer* lda, T* b, 
                       (  1)
               \endverbatim
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer larft(char* direct, char* storev, integer* n, integer* k, T* v, integer* ldv, T* tau, T* t, integer* ldt)
+void larft(char* direct, char* storev, integer* n, integer* k, T* v, integer* ldv, T* tau, T* t, integer* ldt)
 {
-  return larft(direct, storev, n, k, v, ldv, tau, t, ldt);
+  larft(direct, storev, n, k, v, ldv, tau, t, ldt);
 }
 
 /*! @brief Generation of an elementary reflector (Householder matrix)
@@ -2465,12 +2434,11 @@ integer larft(char* direct, char* storev, integer* n, integer* k, T* v, integer*
               tau is float/double/COMPLEX/COMPLEX*16* \n
               The value tau. \n
 
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer larfg(integer* n, T* alpha, T* x, integer* incx, T* tau)
+void larfg(integer* n, T* alpha, T* x, integer* incx, T* tau)
 {
-  return larfg(n, alpha, x, incx, tau);
+  larfg(n, alpha, x, incx, tau);
 }
 
 /*! @brief Generation of an elementary reflector (Householder matrix) with non-negative beta
@@ -2513,12 +2481,11 @@ integer larfg(integer* n, T* alpha, T* x, integer* incx, T* tau)
               tau is float/double/COMPLEX/COMPLEX*16* \n
               The value tau. \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer larfgp(integer* n, T* alpha, T* x, integer* incx, T* tau)
+void larfgp(integer* n, T* alpha, T* x, integer* incx, T* tau)
 {
-  return larfgp(n, alpha, x, incx, tau);
+  larfgp(n, alpha, x, incx, tau);
 }
 
 /*! @brief Form Q from QR factorization
@@ -2576,12 +2543,11 @@ integer larfgp(integer* n, T* alpha, T* x, integer* incx, T* tau)
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument has an illegal value \n
 
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer orgqr(integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
+void orgqr(integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
 {
-  return orgqr(m, n, k,  a, lda, tau, work, lwork, info);
+  orgqr(m, n, k,  a, lda, tau, work, lwork, info);
 }
 
 /*! @brief Form Q from QR factorization
@@ -2639,12 +2605,11 @@ integer orgqr(integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T*
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument has an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer ungqr(integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
+void ungqr(integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
 {
-  return ungqr(m, n, k, a, lda, tau, work, lwork, info);
+  ungqr(m, n, k, a, lda, tau, work, lwork, info);
 }
 
 /*! @brief Apply Q or Q' from QR factorization
@@ -2726,12 +2691,11 @@ integer ungqr(integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T*
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer ormqr(char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
+void ormqr(char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
 {
-  return ormqr(side, trans, m, n, k, a, lda, tau, c, ldc, work, lwork, info);
+  ormqr(side, trans, m, n, k, a, lda, tau, c, ldc, work, lwork, info);
 }
 
 /*! @brief Apply Q or Q' from QR factorization
@@ -2813,12 +2777,11 @@ integer ormqr(char* side, char* trans, integer* m, integer* n, integer* k, T* a,
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer unmqr(char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
+void unmqr(char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
 {
-  return unmqr(side, trans, m, n, k, a, lda, tau, c, ldc, work, lwork, info);
+  unmqr(side, trans, m, n, k, a, lda, tau, c, ldc, work, lwork, info);
 }
 
 /*! @brief Multiply a general matrix by the orthogonal matrix from a QR factorization
@@ -2896,12 +2859,11 @@ integer unmqr(char* side, char* trans, integer* m, integer* n, integer* k, T* a,
               = 0: successful exit \n
               < 0: if INFO = -i, the i-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer orm2r(char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* info)
+void orm2r(char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* info)
 {
-  return orm2r(side, trans, m, n, k, a, lda, tau, c, ldc, work, info);
+  orm2r(side, trans, m, n, k, a, lda, tau, c, ldc, work, info);
 }
 
 /*! @brief Multiply a general matrix by the orthogonal matrix from a QR factorization
@@ -2979,12 +2941,11 @@ integer orm2r(char* side, char* trans, integer* m, integer* n, integer* k, T* a,
               = 0: successful exit \n
               < 0: if INFO = -i, the i-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer unm2r(char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* info)
+void unm2r(char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* info)
 {
-  return unm2r(side, trans, m, n, k, a, lda, tau, c, ldc, work, info);
+  unm2r(side, trans, m, n, k, a, lda, tau, c, ldc, work, info);
 }
 
 /*! @brief Form Q from LQ factorization
@@ -3041,12 +3002,11 @@ integer unm2r(char* side, char* trans, integer* m, integer* n, integer* k, T* a,
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument has an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer orglq(integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
+void orglq(integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
 {
-  return orglq(m, n, k, a, lda, tau, work, lwork, info);
+  orglq(m, n, k, a, lda, tau, work, lwork, info);
 }
 
 /*! @brief Form Q from LQ factorization
@@ -3103,12 +3063,11 @@ integer orglq(integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T*
               = 0:  successful exit; \n
               < 0:  if INFO = -i, the i-th argument has an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer unglq(integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
+void unglq(integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
 {
-  return unglq(m, n, k, a, lda, tau, work, lwork, info);
+  unglq(m, n, k, a, lda, tau, work, lwork, info);
 }
 
 /*! @brief Apply Q or Q' from LQ factorization
@@ -3189,12 +3148,11 @@ integer unglq(integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T*
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer ormlq(char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
+void ormlq(char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
 {
-  return ormlq(side, trans,  m, n, k, a, lda, tau, c, ldc, work, lwork, info);
+  ormlq(side, trans,  m, n, k, a, lda, tau, c, ldc, work, lwork, info);
 }
 
 /*! @brief Apply Q or Q' from LQ factorization
@@ -3275,12 +3233,11 @@ integer ormlq(char* side, char* trans, integer* m, integer* n, integer* k, T* a,
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer unmlq(char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
+void unmlq(char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
 {
-  return unmlq(side, trans, m, n, k, a, lda, tau, c, ldc, work, lwork, info);
+  unmlq(side, trans, m, n, k, a, lda, tau, c, ldc, work, lwork, info);
 }
 
 /*! @brief Apply Q or Q' from LQ factorization
@@ -3356,12 +3313,11 @@ integer unmlq(char* side, char* trans, integer* m, integer* n, integer* k, T* a,
               = 0: successful exit \n
               < 0: if INFO = -i, the i-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer orml2(char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* info)
+void orml2(char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* info)
 {
-  return orml2(side, trans, m, n, k, a, lda, tau, c, ldc, work, info);
+  orml2(side, trans, m, n, k, a, lda, tau, c, ldc, work, info);
 }
 
 /*! @brief Apply Q or Q' from LQ factorization
@@ -3437,12 +3393,11 @@ integer orml2(char* side, char* trans, integer* m, integer* n, integer* k, T* a,
               = 0: successful exit \n
               < 0: if INFO = -i, the i-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer unml2(char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* info)
+void unml2(char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* info)
 {
-  return unml2(side, trans, m, n, k, a, lda, tau, c, ldc, work, info);
+  unml2(side, trans, m, n, k, a, lda, tau, c, ldc, work, info);
 }
 
 /*! @brief Form Q from tridiagonal reduction
@@ -3497,12 +3452,11 @@ integer unml2(char* side, char* trans, integer* m, integer* n, integer* k, T* a,
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer orgtr(char* uplo, integer* m, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
+void orgtr(char* uplo, integer* m, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
 {
-  return orgtr(uplo, m, a, lda, tau, work, lwork, info);
+  orgtr(uplo, m, a, lda, tau, work, lwork, info);
 }
 
 /*! @brief Form Q from tridiagonal reduction
@@ -3557,12 +3511,11 @@ integer orgtr(char* uplo, integer* m, T* a, integer* lda, T* tau, T* work, integ
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer ungtr(char* uplo, integer* m, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
+void ungtr(char* uplo, integer* m, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
 {
-  return ungtr(uplo, m, a, lda, tau, work, lwork, info);
+  ungtr(uplo, m, a, lda, tau, work, lwork, info);
 }
 
 /*! @brief Apply Q or Q' from tridiagonal reduction
@@ -3648,12 +3601,11 @@ integer ungtr(char* uplo, integer* m, T* a, integer* lda, T* tau, T* work, integ
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer ormtr(char* side, char* uplo, char* trans, integer* m, integer* n, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
+void ormtr(char* side, char* uplo, char* trans, integer* m, integer* n, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
 {
-  return ormtr(side, uplo, trans, m, n, a, lda, tau, c, ldc, work, lwork, info);
+  ormtr(side, uplo, trans, m, n, a, lda, tau, c, ldc, work, lwork, info);
 }
 
 /*! @brief Apply Q or Q' from tridiagonal reduction
@@ -3739,12 +3691,11 @@ integer ormtr(char* side, char* uplo, char* trans, integer* m, integer* n, T* a,
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer unmtr(char* side, char* uplo, char* trans, integer* m, integer* n, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
+void unmtr(char* side, char* uplo, char* trans, integer* m, integer* n, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
 {
-  return unmtr(side, uplo, trans, m, n, a, lda, tau, c, ldc, work, lwork, info);
+  unmtr(side, uplo, trans, m, n, a, lda, tau, c, ldc, work, lwork, info);
 }
 
 /*! @brief Form Q from bidiagonal reduction
@@ -3823,12 +3774,11 @@ integer unmtr(char* side, char* uplo, char* trans, integer* m, integer* n, T* a,
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer orgbr(char* vect, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
+void orgbr(char* vect, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
 {
-  return orgbr(vect, m, n, k, a, lda, tau, work, lwork, info);
+  orgbr(vect, m, n, k, a, lda, tau, work, lwork, info);
 }
 
 /*! @brief Form Q from bidiagonal reduction
@@ -3907,12 +3857,11 @@ integer orgbr(char* vect, integer* m, integer* n, integer* k, T* a, integer* lda
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer ungbr(char* vect, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
+void ungbr(char* vect, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
 {
-  return ungbr(vect, m, n, k, a, lda, tau, work, lwork, info);
+  ungbr(vect, m, n, k, a, lda, tau, work, lwork, info);
 }
 
 /*! @brief Apply Q or Q' from bidiagonal reduction
@@ -4017,12 +3966,11 @@ integer ungbr(char* vect, integer* m, integer* n, integer* k, T* a, integer* lda
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer ormbr(char* vect, char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
+void ormbr(char* vect, char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
 {
-  return ormbr(vect, side, trans, m, n, k, a, lda, tau, c, ldc, work, lwork, info);
+  ormbr(vect, side, trans, m, n, k, a, lda, tau, c, ldc, work, lwork, info);
 }
 
 /*! @brief Apply Q or Q' from bidiagonal reduction
@@ -4128,12 +4076,11 @@ integer ormbr(char* vect, char* side, char* trans, integer* m, integer* n, integ
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer unmbr(char* vect, char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
+void unmbr(char* vect, char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
 {
-  return unmbr( vect, side, trans, m, n, k, a, lda, tau, c, ldc, work, lwork, info);
+  unmbr( vect, side, trans, m, n, k, a, lda, tau, c, ldc, work, lwork, info);
 }
 
 /*! @brief Tridiagonal QR algorithm
@@ -4196,17 +4143,16 @@ integer unmbr(char* vect, char* side, char* trans, integer* m, integer* n, integ
                     matrix which is unitarily similar to the original
                     matrix. \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer steqr(char* compz, integer* n, T* d, T* e, T* z, integer* ldz, T* work, integer* info)
+void steqr(char* compz, integer* n, T* d, T* e, T* z, integer* ldz, T* work, integer* info)
 {
-  return steqr(compz, n, d, e, z, ldz, work, info);
+  steqr(compz, n, d, e, z, ldz, work, info);
 }
 template< typename T, typename Ta >
-integer steqr(char* compz, integer* n, Ta* d, Ta* e, T* z, integer* ldz, Ta* work, integer* info)
+void steqr(char* compz, integer* n, Ta* d, Ta* e, T* z, integer* ldz, Ta* work, integer* info)
 {
-  return steqr(compz, n, d, e, z, ldz, work, info);
+  steqr(compz, n, d, e, z, ldz, work, info);
 }
 
 /*! @brief Tridiagonal divide-and-conquer algorithm
@@ -4325,17 +4271,16 @@ integer steqr(char* compz, integer* n, Ta* d, Ta* e, T* z, integer* ldz, Ta* wor
                     working on the submatrix lying in rows and columns
                     INFO/(N+1) through mod(INFO,N+1). \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer stedc(char* compz, integer* n, T* d, T* e, T* z, integer* ldz, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
+void stedc(char* compz, integer* n, T* d, T* e, T* z, integer* ldz, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
 {
-  return stedc(compz, n, d, e, z, ldz, work, lwork, iwork, liwork, info);
+  stedc(compz, n, d, e, z, ldz, work, lwork, iwork, liwork, info);
 }
 template< typename T, typename Ta >
-integer stedc(char* compz, integer* n, Ta* d, Ta* e, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
+void stedc(char* compz, integer* n, Ta* d, Ta* e, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
 {
-  return stedc(compz, n, d, e, z, ldz, work, lwork, rwork, lrwork, iwork, liwork, info);
+  stedc(compz, n, d, e, z, ldz, work, lwork, rwork, lrwork, iwork, liwork, info);
 }
 
 /*! @brief Tridiagonal MRRR algorithm
@@ -4526,17 +4471,16 @@ integer stedc(char* compz, integer* n, Ta* d, Ta* e, T* z, integer* ldz, T* work
                     the nonzero error code returned by SLARRE or
                     CLARRV, respectively. \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer stemr(char* jobz, char* range, integer* n, T*  d, T*  e, T* vl, T* vu, integer* il, integer* iu, integer* m, T*  w, T* z, integer* ldz, integer* nzc, integer* isuppz, integer* tryrac, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
+void stemr(char* jobz, char* range, integer* n, T*  d, T*  e, T* vl, T* vu, integer* il, integer* iu, integer* m, T*  w, T* z, integer* ldz, integer* nzc, integer* isuppz, integer* tryrac, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
 {
-  return stemr(jobz, range, n, d, e, vl, vu, il, iu, m, w, z, ldz, nzc, isuppz, tryrac, work, lwork, iwork, liwork, info);
+  stemr(jobz, range, n, d, e, vl, vu, il, iu, m, w, z, ldz, nzc, isuppz, tryrac, work, lwork, iwork, liwork, info);
 }
 template< typename T, typename Ta >
-integer stemr(char* jobz, char* range, integer* n, Ta*  d, Ta*  e, Ta* vl, Ta* vu, integer* il, integer* iu, integer* m, Ta*  w, T* z, integer* ldz, integer* nzc, integer* isuppz, integer* tryrac, Ta* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
+void stemr(char* jobz, char* range, integer* n, Ta*  d, Ta*  e, Ta* vl, Ta* vu, integer* il, integer* iu, integer* m, Ta*  w, T* z, integer* ldz, integer* nzc, integer* isuppz, integer* tryrac, Ta* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
 {
-  return stemr(jobz, range, n, d, e, vl, vu, il, iu, m, w, z, ldz, nzc, isuppz, tryrac, work, lwork, iwork, liwork, info);
+  stemr(jobz, range, n, d, e, vl, vu, il, iu, m, w, z, ldz, nzc, isuppz, tryrac, work, lwork, iwork, liwork, info);
 }
 
 /*! @brief Eigenvalue decomposition (QR algorithm)
@@ -4598,12 +4542,11 @@ integer stemr(char* jobz, char* range, integer* n, Ta*  d, Ta*  e, Ta* vl, Ta* v
                     off-diagonal elements of an intermediate tridiagonal
                     form did not converge to zero. \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer syev(char* jobz, char* uplo, integer* n, T* a, integer* lda, T*  w, T* work, integer* lwork, integer* info)
+void syev(char* jobz, char* uplo, integer* n, T* a, integer* lda, T*  w, T* work, integer* lwork, integer* info)
 {
-  return syev(jobz, uplo, n, a, lda, w, work, lwork, info);
+  syev(jobz, uplo, n, a, lda, w, work, lwork, info);
 }
 
 /*! @brief SYR performs the symmetric rank-1 update of a complex symmetric matrix
@@ -4672,12 +4615,11 @@ integer syev(char* jobz, char* uplo, integer* n, T* a, integer* lda, T*  w, T* w
            fla_max( 1, N).
            Unchanged on exit. \n
   
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer syr(char* uplo, integer* n, T alpha,  T* x, integer* incx, T* a, integer* lda)
+void syr(char* uplo, integer* n, T alpha,  T* x, integer* incx, T* a, integer* lda)
 {
-  return syr(uplo, n, alpha, x, incx, a, lda);
+  syr(uplo, n, alpha, x, incx, a, lda);
 }
 
 /*! @brief Eigenvalue decomposition (QR algorithm)
@@ -4741,12 +4683,11 @@ integer syr(char* uplo, integer* n, T alpha,  T* x, integer* incx, T* a, integer
                     off-diagonal elements of an intermediate tridiagonal
                     form did not converge to zero. \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T, typename Ta >
-integer heev(char* jobz, char* uplo, integer* n, T* a, integer* lda, Ta*  w, T* work, integer* lwork, Ta* rwork, integer* info)
+void heev(char* jobz, char* uplo, integer* n, T* a, integer* lda, Ta*  w, T* work, integer* lwork, Ta* rwork, integer* info)
 {
-  return heev(jobz, uplo, n, a, lda, w, work, lwork, rwork, info);
+  heev(jobz, uplo, n, a, lda, w, work, lwork, rwork, info);
 }
 
 /*! @brief Eigenvalue decomposition (divide-and-conquer)
@@ -4840,12 +4781,11 @@ integer heev(char* jobz, char* uplo, integer* n, T* a, integer* lda, Ta*  w, T* 
                     lying in rows and columns INFO/(N+1) through
                     mod(INFO,N+1). \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer syevd(char* jobz, char* uplo, integer* n, T* a, integer* lda, T*  w, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
+void syevd(char* jobz, char* uplo, integer* n, T* a, integer* lda, T*  w, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
 {
-  return syevd(jobz, uplo, n, a, lda, w, work, lwork, iwork, liwork, info);
+  syevd(jobz, uplo, n, a, lda, w, work, lwork, iwork, liwork, info);
 }
 
 /*! @brief Eigenvalue decomposition (divide-and-conquer)
@@ -4955,12 +4895,11 @@ integer syevd(char* jobz, char* uplo, integer* n, T* a, integer* lda, T*  w, T* 
                     lying in rows and columns INFO/(N+1) through
                     mod(INFO,N+1). \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T, typename Ta >
-integer heevd(char* jobz, char* uplo, integer* n, T* a, integer* lda, Ta* w, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
+void heevd(char* jobz, char* uplo, integer* n, T* a, integer* lda, Ta* w, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
 {
-  return heevd(jobz, uplo, n, a, lda, w, work, lwork, rwork, lrwork, iwork, liwork, info);
+  heevd(jobz, uplo, n, a, lda, w, work, lwork, rwork, lrwork, iwork, liwork, info);
 }
 
 /*! @brief Hermitian eigenvalue decomposition (MRRR)
@@ -5177,12 +5116,11 @@ integer heevd(char* jobz, char* uplo, integer* n, T* a, integer* lda, Ta* w, T* 
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
               > 0:  Internal error \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T, typename Ta >
-integer heevr(char* jobz, char* range, char* uplo, integer* n, T* a, integer* lda, Ta*  vl, Ta*  vu, integer* il, integer* iu, Ta*  abstol, integer* m, Ta* w, T* z, integer* ldz, integer* isuppz, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
+void heevr(char* jobz, char* range, char* uplo, integer* n, T* a, integer* lda, Ta*  vl, Ta*  vu, integer* il, integer* iu, Ta*  abstol, integer* m, Ta* w, T* z, integer* ldz, integer* isuppz, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
 {
-  return heevr(jobz, range, uplo, n, a, lda, vl, vu, il, iu, abstol, m, w, z, ldz, isuppz, work, lwork, rwork, lrwork, iwork, liwork, info);
+  heevr(jobz, range, uplo, n, a, lda, vl, vu, il, iu, abstol, m, w, z, ldz, isuppz, work, lwork, rwork, lrwork, iwork, liwork, info);
 }
 
 /*! @brief Hermitian eigenvalue decomposition (MRRR)
@@ -5388,12 +5326,11 @@ integer heevr(char* jobz, char* range, char* uplo, integer* n, T* a, integer* ld
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
               > 0:  Internal error \n
 
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template<typename T>
-integer syevr(char* jobz, char* range, char* uplo, integer* n, T* a, integer* lda, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T*  w, T* z, integer* ldz, integer* isuppz, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
+void syevr(char* jobz, char* range, char* uplo, integer* n, T* a, integer* lda, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T*  w, T* z, integer* ldz, integer* isuppz, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
 {
-  return syevr(jobz, range, uplo, n, a, lda, vl, vu, il, iu, abstol, m, w, z, ldz, isuppz, work, lwork, iwork, liwork, info);
+  syevr(jobz, range, uplo, n, a, lda, vl, vu, il, iu, abstol, m, w, z, ldz, isuppz, work, lwork, iwork, liwork, info);
 }
 
 /*! @brief Bidiagonal QR algorithm
@@ -5529,17 +5466,16 @@ integer syevr(char* jobz, char* range, char* uplo, integer* n, T* a, integer* ld
                        similar to the input matrix B;  if INFO = i, i
                        elements of E have not converged to zero. \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template<typename T>
-integer bdsqr(char* uplo, integer* n, integer* ncvt, integer* nru, integer* ncc, T* d, T* e, T* vt, integer* ldvt, T* u, integer* ldu, T* c, integer* ldc, T* rwork, integer* info)
+void bdsqr(char* uplo, integer* n, integer* ncvt, integer* nru, integer* ncc, T* d, T* e, T* vt, integer* ldvt, T* u, integer* ldu, T* c, integer* ldc, T* rwork, integer* info)
 {
-  return  bdsqr(uplo, n, ncvt, nru, ncc, d, e, vt, ldvt, u, ldu, c, ldc, rwork, info);
+  bdsqr(uplo, n, ncvt, nru, ncc, d, e, vt, ldvt, u, ldu, c, ldc, rwork, info);
 }
 template<typename T, typename Ta>
-integer bdsqr(char* uplo, integer* n, integer* ncvt, integer* nru, integer* ncc, Ta* d, Ta* e, T* vt, integer* ldvt, T* u, integer* ldu, T* c, integer* ldc, Ta* rwork, integer* info)
+void bdsqr(char* uplo, integer* n, integer* ncvt, integer* nru, integer* ncc, Ta* d, Ta* e, T* vt, integer* ldvt, T* u, integer* ldu, T* c, integer* ldc, Ta* rwork, integer* info)
 {
-  return bdsqr(uplo, n, ncvt, nru, ncc, d, e, vt, ldvt, u, ldu, c, ldc, rwork, info);
+  bdsqr(uplo, n, ncvt, nru, ncc, d, e, vt, ldvt, u, ldu, c, ldc, rwork, info);
 }
 
 /*! @brief BDSDC Bidiagonal divide-and-conquer algorithm
@@ -5647,12 +5583,11 @@ integer bdsqr(char* uplo, integer* n, integer* ncvt, integer* nru, integer* ncc,
               > 0:  The algorithm failed to compute a singular value.
                     The update process of divide and conquer failed. \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer bdsdc(char* uplo, char* compq, integer* n, T*  d, T*  e, T*  u, integer* ldu, T*  vt, integer* ldvt, T*  q, T* iq, T* work, integer* iwork, integer* info)
+void bdsdc(char* uplo, char* compq, integer* n, T*  d, T*  e, T*  u, integer* ldu, T*  vt, integer* ldvt, T*  q, T* iq, T* work, integer* iwork, integer* info)
 {
-  return bdsdc(uplo, compq, n, d, e, u, ldu, vt, ldvt, q, iq, work, iwork, info);
+  bdsdc(uplo, compq, n, d, e, u, ldu, vt, ldvt, q, iq, work, iwork, info);
 }
 
 /*! @brief BDSVDX computes the singular value decomposition (SVD) of a real  \n
@@ -5780,12 +5715,11 @@ integer bdsdc(char* uplo, char* compq, integer* n, T*  d, T*  e, T*  u, integer*
                    array IWORK. \n
                 if INFO = N*2 + 1, an internal error occurred. \n
  
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer bdsvdx(char* uplo, char* jobz, char* range, integer* n, T* d, T* e, T vl, T vu, integer* il, integer* iu, integer* ns, T* s, T* z, integer* ldz, T* work, integer* iwork, integer* info)
+void bdsvdx(char* uplo, char* jobz, char* range, integer* n, T* d, T* e, T vl, T vu, integer* il, integer* iu, integer* ns, T* s, T* z, integer* ldz, T* work, integer* iwork, integer* info)
 {
-  return bdsvdx(uplo, jobz, range, n, d, e, vl, vu, il, iu, ns, s, z, ldz, work, iwork, info);
+  bdsvdx(uplo, jobz, range, n, d, e, vl, vu, il, iu, ns, s, z, ldz, work, iwork, info);
 }
 
 /*! @brief DISNA computes the reciprocal condition numbers for the eigenvectors \n
@@ -5841,12 +5775,11 @@ integer bdsvdx(char* uplo, char* jobz, char* range, integer* n, T* d, T* e, T vl
           = 0:  successful exit. \n
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
  
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer disna(char* job, integer* m, integer* n, T* d, T* sep, integer* info)
+void disna(char* job, integer* m, integer* n, T* d, T* sep, integer* info)
 {
-  return disna(job, m, n, d, sep, info);
+  disna(job, m, n, d, sep, info);
 }
 
 /*! @brief SLAG2D converts a single precision matrix to a double precision matrix
@@ -5886,11 +5819,10 @@ integer disna(char* job, integer* m, integer* n, T* d, T* sep, integer* info)
           INFO is INTEGER \n
           = 0:  successful exit \n
  
- * @return INTEGER Return value of the function.
- * */
-integer lag2d(integer* m, integer* n, float* sa, integer* ldsa, double* a, integer* lda, integer* info)
+ *  * */
+void lag2d(integer* m, integer* n, float* sa, integer* ldsa, double* a, integer* lda, integer* info)
 {
-  return slag2d(m, n, sa, ldsa, a, lda, info);
+  slag2d(m, n, sa, ldsa, a, lda, info);
 }
 
 /*! @brief DLAG2S converts a double precision matrix to a single precision matrix
@@ -5934,11 +5866,10 @@ integer lag2d(integer* m, integer* n, float* sa, integer* ldsa, double* a, integ
                 PRECISION overflow threshold, in this case, the content
                 of SA in exit is unspecified. \n
  
- * @return INTEGER Return value of the function.
- * */
-integer lag2s(integer*m, integer* n, double* a, integer* lda, float* sa, integer *ldsa, integer* info)
+ *  * */
+void lag2s(integer*m, integer* n, double* a, integer* lda, float* sa, integer *ldsa, integer* info)
 {
-  return dlag2s(m, n, a, lda, sa, ldsa, info);
+  dlag2s(m, n, a, lda, sa, ldsa, info);
 }
 
 /*! @brief CLAG2Z converts a complex single precision matrix to a complex double precision matrix
@@ -5977,11 +5908,10 @@ integer lag2s(integer*m, integer* n, double* a, integer* lda, float* sa, integer
           INFO is INTEGER \n
           = 0:  successful exit \n
  
- * @return INTEGER Return value of the function.
- * */
-integer lag2z(integer*m, integer* n, scomplex* sa, integer*ldsa, dcomplex* a, integer* lda, integer* info)
+ *  * */
+void lag2z(integer*m, integer* n, scomplex* sa, integer*ldsa, dcomplex* a, integer* lda, integer* info)
 {
-  return clag2z(m, n, sa, ldsa, a, lda, info);
+  clag2z(m, n, sa, ldsa, a, lda, info);
 }
 
 /*! @brief ZLAG2C converts a complex double precision matrix to a complex single precision matrix.
@@ -6024,11 +5954,10 @@ integer lag2z(integer*m, integer* n, scomplex* sa, integer*ldsa, dcomplex* a, in
                 PRECISION overflow threshold, in this case, the content
                 of SA in exit is unspecified. \n
  
- * @return INTEGER Return value of the function.
- * */
-integer lag2c(integer*m, integer* n, dcomplex* a, integer*lda, scomplex* sa, integer* ldsa, integer* info)
+ *  * */
+void lag2c(integer*m, integer* n, dcomplex* a, integer*lda, scomplex* sa, integer* ldsa, integer* info)
 {
-  return zlag2c(m, n, a, lda, sa, ldsa, info);
+  zlag2c(m, n, a, lda, sa, ldsa, info);
 }
 
 /*! @brief LAMCH determines single precision machine parameters
@@ -6162,12 +6091,11 @@ T lapy3(T* x, T* y, T* z)
   This version has a few statements commented out for thread safety
   (machine parameters are computed on each entry). 10 feb 03, SJH. \n
 
- * @return T Template based return value of the function.
  * */
 template<typename T>
-T lartgp(T* f, T* g, T* cs, T* sn, T* r)
+void lartgp(T* f, T* g, T* cs, T* sn, T* r)
 {
-  return lartgp(f, g, cs, sn, r);
+  lartgp(f, g, cs, sn, r);
 }
 
 /*! @brief General matrix singular value decomposition (QR algorithm)
@@ -6289,17 +6217,16 @@ T lartgp(T* f, T* g, T* cs, T* sn, T* r)
                     did not converge to zero. See the description of RWORK
                     above for details. \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer gesvd(char* jobu, char* jobv, integer* m, integer* n, T* a, integer* lda, T*  s, T* u, integer* ldu, T* vt, integer* ldvt, T* work, integer* lwork, integer* info)
+void gesvd(char* jobu, char* jobv, integer* m, integer* n, T* a, integer* lda, T*  s, T* u, integer* ldu, T* vt, integer* ldvt, T* work, integer* lwork, integer* info)
 {
-  return gesvd(jobu, jobv, m, n, a, lda, s, u, ldu, vt, ldvt, work, lwork, info);
+  gesvd(jobu, jobv, m, n, a, lda, s, u, ldu, vt, ldvt, work, lwork, info);
 }
 template< typename T, typename Ta >
-integer gesvd(char* jobu, char* jobv, integer* m, integer* n, T* a, integer* lda, Ta*  s, T* u, integer* ldu, T* vt, integer* ldvt, T* work, integer* lwork, Ta* rwork, integer* info)
+void gesvd(char* jobu, char* jobv, integer* m, integer* n, T* a, integer* lda, Ta*  s, T* u, integer* ldu, T* vt, integer* ldvt, T* work, integer* lwork, Ta* rwork, integer* info)
 {
-  return gesvd(jobu, jobv, m, n, a, lda, s, u, ldu, vt, ldvt, work, lwork, rwork, info);
+  gesvd(jobu, jobv, m, n, a, lda, s, u, ldu, vt, ldvt, work, lwork, rwork, info);
 }
 
 /*! @brief General matrix singular value decomposition (divide-and-conquer)
@@ -6425,17 +6352,16 @@ integer gesvd(char* jobu, char* jobv, integer* m, integer* n, T* a, integer* lda
               < 0:  if INFO = -i, the i-th argument had an illegal value. \n
               > 0:  The updating process of SBDSDC did not converge. \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer gesdd(char* jobz, integer* m, integer* n, T* a, integer* lda, T*  s, T* u, integer* ldu, T* vt, integer* ldvt, T* work, integer* lwork, integer* iwork, integer* info)
+void gesdd(char* jobz, integer* m, integer* n, T* a, integer* lda, T*  s, T* u, integer* ldu, T* vt, integer* ldvt, T* work, integer* lwork, integer* iwork, integer* info)
 {
-  return gesdd(jobz, m, n, a, lda, s, u, ldu, vt, ldvt, work, lwork, iwork, info);
+  gesdd(jobz, m, n, a, lda, s, u, ldu, vt, ldvt, work, lwork, iwork, info);
 }
 template< typename T, typename Ta >
-integer gesdd(char* jobz, integer* m, integer* n, T* a, integer* lda, Ta*  s, T* u, integer* ldu, T* vt, integer* ldvt, T* work, integer* lwork, Ta* rwork, integer* iwork, integer* info)
+void gesdd(char* jobz, integer* m, integer* n, T* a, integer* lda, Ta*  s, T* u, integer* ldu, T* vt, integer* ldvt, T* work, integer* lwork, Ta* rwork, integer* iwork, integer* info)
 {
-  return gesdd(jobz, m, n, a, lda, s, u, ldu, vt, ldvt, work, lwork, rwork, iwork, info);
+  gesdd(jobz, m, n, a, lda, s, u, ldu, vt, ldvt, work, lwork, rwork, iwork, info);
 }
 
 /*! @brief Swap rows
@@ -6477,12 +6403,11 @@ integer gesdd(char* jobz, integer* m, integer* n, T* a, integer* lda, Ta*  s, T*
               The increment between successive values of ipiv. If incx
               is negative, the pivots are applied in reverse order. \n
     
-    * @return INTEGER Return value of the function.
-    *  */
+    *     *  */
 template< typename T >
-integer laswp(integer* n, T* a, integer* lda, integer* k1, integer* k2, integer* ipiv, integer* incx)
+void laswp(integer* n, T* a, integer* lda, integer* k1, integer* k2, integer* ipiv, integer* incx)
 {
-  return laswp(n, a, lda, k1, k2, ipiv, incx);
+  laswp(n, a, lda, k1, k2, ipiv, incx);
 }
 
 /*! @brief Initialize the off-diagonal elements and the diagonal elements of a matrix to given values
@@ -6524,12 +6449,11 @@ integer laswp(integer* n, T* a, integer* lda, integer* k1, integer* k2, integer*
               lda is integer* \n
               The leading dimension of the array a.  lda >= fla_max(1,m). \n
     
-    * @return INTEGER Return value of the function.
     *  */
 template< typename T >
-integer laset(char* uplo, integer* m, integer* n, T* alpha, T* beta, T* a, integer* lda)
+void laset(char* uplo, integer* m, integer* n, T* alpha, T* beta, T* a, integer* lda)
 {
-  return laset(uplo, m, n, alpha, beta, a, lda);
+  laset(uplo, m, n, alpha, beta, a, lda);
 }
 
 /*! @brief Bidiagonal block cs decomposition of orthogonal/unitary matrix
@@ -6718,28 +6642,27 @@ integer laset(char* uplo, integer* m, integer* n, T* alpha, T* beta, T* a, integ
                 of nonzero entries in PHI, and B11D, B11E, etc.,
                 contain the partially reduced matrix. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template<typename T>
-integer bbcsd(char* jobu1, char* jobu2, char* jobv1t, char* jobv2t, char* trans,
+void bbcsd(char* jobu1, char* jobu2, char* jobv1t, char* jobv2t, char* trans,
       integer* m, integer* p, integer* q, T* theta, T* phi, T* u1,
       integer* ldu1, T* u2, integer* ldu2, T* v1t, integer* ldv1t, T* v2t,
       integer* ldv2t, T* b11d, T* b11e, T* b12d, T* b12e, T* b21d, T* b21e,
       T* b22d, T* b22e, T* work, integer *lwork, integer* info)
 {
-  return bbcsd(jobu1, jobu2, jobv1t, jobv2t, trans, m, p, q, theta, phi, u1,
+  bbcsd(jobu1, jobu2, jobv1t, jobv2t, trans, m, p, q, theta, phi, u1,
             ldu1, u2, ldu2, v1t, ldv1t, v2t, ldv2t, b11d, b11e, b12d, b12e,
             b21d, b21e, b22d, b22e, work, lwork, info);
 }
 
 template<typename T, typename Ta>
-integer bbcsd(char* jobu1, char* jobu2, char* jobv1t, char* jobv2t, char* trans,
+void bbcsd(char* jobu1, char* jobu2, char* jobv1t, char* jobv2t, char* trans,
       integer* m, integer* p, integer* q, Ta* theta, Ta* phi, T* u1,
       integer* ldu1, T* u2, integer* ldu2, T* v1t, integer* ldv1t, T* v2t,
       integer* ldv2t, Ta* b11d, Ta* b11e, Ta* b12d, Ta* b12e, Ta* b21d,
       Ta* b21e, Ta* b22d, Ta* b22e, Ta* rwork, integer* lrwork, integer *info)
 {
-    return bbcsd(jobu1, jobu2, jobv1t, jobv2t, trans, m, p, q, theta, phi, u1,
+    bbcsd(jobu1, jobu2, jobv1t, jobv2t, trans, m, p, q, theta, phi, u1,
             ldu1, u2, ldu2, v1t, ldv1t, v2t, ldv2t, b11d, b11e, b12d, b12e,
             b21d, b21e, b22d, b22e, rwork, lrwork, info);
 }
@@ -6831,17 +6754,16 @@ integer bbcsd(char* jobu1, char* jobu2, char* jobv1t, char* jobv2t, char* trans,
           = 0:  successful exit. \n
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
-* */
+ * * */
 template< typename T >
-integer gbbrd(char* vect, integer* m, integer* n, integer* ncc, integer* kl, integer* ku, T* ab, integer* ldab, T* d, T* e, T* q, integer* ldq, T* pt, integer* ldpt, T* c, integer* ldc, T* work, integer* info)
+void gbbrd(char* vect, integer* m, integer* n, integer* ncc, integer* kl, integer* ku, T* ab, integer* ldab, T* d, T* e, T* q, integer* ldq, T* pt, integer* ldpt, T* c, integer* ldc, T* work, integer* info)
 {
-  return gbbrd( vect, m, n, ncc, kl, ku, ab, ldab, d, e, q, ldq, pt, ldpt, c, ldc, work, info);
+  gbbrd( vect, m, n, ncc, kl, ku, ab, ldab, d, e, q, ldq, pt, ldpt, c, ldc, work, info);
 }
 template< typename T, typename Ta >
-integer gbbrd(char* vect, integer* m, integer* n, integer* ncc, integer* kl, integer* ku, T* ab, integer* ldab, Ta* d, Ta* e, T* q, integer* ldq, T* pt, integer* ldpt, T* c, integer* ldc, T* work, Ta* rwork, integer* info)
+void gbbrd(char* vect, integer* m, integer* n, integer* ncc, integer* kl, integer* ku, T* ab, integer* ldab, Ta* d, Ta* e, T* q, integer* ldq, T* pt, integer* ldpt, T* c, integer* ldc, T* work, Ta* rwork, integer* info)
 {
-  return gbbrd( vect, m, n, ncc, kl, ku, ab, ldab, d, e, q, ldq, pt, ldpt, c, ldc, work, rwork, info);
+  gbbrd( vect, m, n, ncc, kl, ku, ab, ldab, d, e, q, ldq, pt, ldpt, c, ldc, work, rwork, info);
 }
 
 /*! @brief estimates the reciprocal of the condition number of a real general band matrix A, in either the 1-norm or the infinity-norm,
@@ -6904,17 +6826,16 @@ integer gbbrd(char* vect, integer* m, integer* n, integer* ncc, integer* kl, int
           = 0:  successful exit \n
           < 0: if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
-* */
+ * * */
 template< typename T >
-integer gbcon(char* norm, integer* n, integer* kl, integer* ku,  T* ab, integer* ldab, integer* ipiv, T* anorm, T* rcond, T* work, integer* iwork, integer* info)
+void gbcon(char* norm, integer* n, integer* kl, integer* ku,  T* ab, integer* ldab, integer* ipiv, T* anorm, T* rcond, T* work, integer* iwork, integer* info)
 {
-  return gbcon(norm, n, kl, ku, ab, ldab, ipiv, anorm, rcond, work, iwork, info);
+  gbcon(norm, n, kl, ku, ab, ldab, ipiv, anorm, rcond, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer gbcon(char* norm, integer* n, integer* kl, integer* ku,  T* ab, integer* ldab,  integer* ipiv, Ta* anorm, Ta* rcond, T* work, Ta* rwork, integer* info)
+void gbcon(char* norm, integer* n, integer* kl, integer* ku,  T* ab, integer* ldab,  integer* ipiv, Ta* anorm, Ta* rcond, T* work, Ta* rwork, integer* info)
 {
-  return gbcon(norm, n, kl, ku, ab, ldab, ipiv, anorm, rcond, work, rwork, info);
+  gbcon(norm, n, kl, ku, ab, ldab, ipiv, anorm, rcond, work, rwork, info);
 }
 
 /*! @brief Computes row and column scalings intended to equilibrate  band matrix and reduce its condition number
@@ -6978,17 +6899,16 @@ integer gbcon(char* norm, integer* n, integer* kl, integer* ku,  T* ab, integer*
                 <= M:  the i-th row of A is exactly zero \n
                 >  M:  the (i-M)-th column of A is exactly zero \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gbequ(integer* m, integer* n, integer* kl, integer* ku,  T* ab, integer* ldab, T* r, T* c, T* rowcnd, T* colcnd, T* amax, integer* info)
+void gbequ(integer* m, integer* n, integer* kl, integer* ku,  T* ab, integer* ldab, T* r, T* c, T* rowcnd, T* colcnd, T* amax, integer* info)
 {
-  return gbequ(m, n, kl, ku, ab, ldab, r, c, rowcnd, colcnd, amax, info);
+  gbequ(m, n, kl, ku, ab, ldab, r, c, rowcnd, colcnd, amax, info);
 }
 template< typename T, typename Ta >
-integer gbequ(integer* m, integer* n, integer* kl, integer* ku,  T* ab, integer* ldab, Ta* r, Ta* c, Ta* rowcnd, Ta* colcnd, Ta* amax, integer* info)
+void gbequ(integer* m, integer* n, integer* kl, integer* ku,  T* ab, integer* ldab, Ta* r, Ta* c, Ta* rowcnd, Ta* colcnd, Ta* amax, integer* info)
 {
-  return gbequ(m, n, kl, ku, ab, ldab, r, c, rowcnd, colcnd, amax, info);
+  gbequ(m, n, kl, ku, ab, ldab, r, c, rowcnd, colcnd, amax, info);
 }
 
 /*! @brief Computes row and column scalings intended to equilibrate band matrix and reduce its condition number(scaling factor:power of radix)
@@ -7067,17 +6987,16 @@ integer gbequ(integer* m, integer* n, integer* kl, integer* ku,  T* ab, integer*
                 <= M:  the i-th row of A is exactly zero \n
                 >  M:  the (i-M)-th column of A is exactly zero \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gbequb(integer* m, integer* n, integer* kl, integer* ku, T* ab, integer* ldab, T* r, T* c, T* rowcnd, T* colcnd, T* amax, integer* info)
+void gbequb(integer* m, integer* n, integer* kl, integer* ku, T* ab, integer* ldab, T* r, T* c, T* rowcnd, T* colcnd, T* amax, integer* info)
 {
-  return gbequb(m, n, kl, ku, ab, ldab, r, c, rowcnd, colcnd, amax, info);
+  gbequb(m, n, kl, ku, ab, ldab, r, c, rowcnd, colcnd, amax, info);
 }
 template< typename T, typename Ta >
-integer gbequb(integer* m, integer* n, integer* kl, integer* ku, T* ab, integer* ldab, Ta* r, Ta* c, Ta* rowcnd, Ta* colcnd, Ta* amax, integer* info)
+void gbequb(integer* m, integer* n, integer* kl, integer* ku, T* ab, integer* ldab, Ta* r, Ta* c, Ta* rowcnd, Ta* colcnd, Ta* amax, integer* info)
 {
-  return gbequb(m, n, kl, ku, ab, ldab, r, c, rowcnd, colcnd, amax, info);
+  gbequb(m, n, kl, ku, ab, ldab, r, c, rowcnd, colcnd, amax, info);
 }
 
 /*! @brief Improves computed solution to banded matrix and provides error bounds and backward estimates
@@ -7170,17 +7089,16 @@ integer gbequb(integer* m, integer* n, integer* kl, integer* ku, T* ab, integer*
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gbrfs(char* trans, integer* n, integer* kl, integer* ku, integer* nrhs,  T* ab, integer* ldab,  T* afb, integer* ldafb,  integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, T* ferr, T* berr, T* work, integer* iwork, integer* info)
+void gbrfs(char* trans, integer* n, integer* kl, integer* ku, integer* nrhs,  T* ab, integer* ldab,  T* afb, integer* ldafb,  integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, T* ferr, T* berr, T* work, integer* iwork, integer* info)
 {
-  return gbrfs( trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb,  ipiv, b, ldb, x, ldx, ferr, berr, work, iwork, info);
+  gbrfs( trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb,  ipiv, b, ldb, x, ldx, ferr, berr, work, iwork, info);
 }
 template< typename T , typename Ta >
-integer gbrfs(char* trans, integer* n, integer* kl, integer* ku, integer* nrhs,  T* ab, integer* ldab,  T* afb, integer* ldafb,  integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void gbrfs(char* trans, integer* n, integer* kl, integer* ku, integer* nrhs,  T* ab, integer* ldab,  T* afb, integer* ldafb,  integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return gbrfs( trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb,  ipiv, b, ldb, x, ldx, ferr, berr, work, rwork, info);
+  gbrfs( trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb,  ipiv, b, ldb, x, ldx, ferr, berr, work, rwork, info);
 }
 
 /*! @brief Improves computed solution to banded matrix and provides backward estimates,component wise and normwise error bound
@@ -7461,14 +7379,14 @@ integer gbrfs(char* trans, integer* n, integer* kl, integer* ku, integer* nrhs, 
          ERR_BNDS_COMP. \n
 * */
 template< typename T >
-integer gbrfsx(char* trans, char* equed, integer* n, integer* kl, integer* ku, integer* nrhs, T* ab, integer* ldab, T* afb, integer* ldafb, integer* ipiv, T* r, T* c, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* berr, integer* n_err_bnds, T* err_bnds_norm, T* err_bnds_comp, integer* nparams, T* params, T* work, integer* iwork, integer* info)
+void gbrfsx(char* trans, char* equed, integer* n, integer* kl, integer* ku, integer* nrhs, T* ab, integer* ldab, T* afb, integer* ldafb, integer* ipiv, T* r, T* c, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* berr, integer* n_err_bnds, T* err_bnds_norm, T* err_bnds_comp, integer* nparams, T* params, T* work, integer* iwork, integer* info)
 {
-  return gbrfsx(trans, equed, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, r, c, b, ldb, x, ldx, rcond, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, iwork, info);
+  gbrfsx(trans, equed, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, r, c, b, ldb, x, ldx, rcond, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, iwork, info);
 }
 template< typename T , typename Ta >
-integer gbrfsx(char* trans, char* equed, integer* n, integer* kl, integer* ku, integer* nrhs,  T* ab, integer* ldab,  T* afb, integer* ldafb,  integer* ipiv,  Ta* r,  Ta* c,  T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* berr, integer* n_err_bnds, Ta* err_bnds_norm, Ta* err_bnds_comp, integer* nparams, Ta* params, T* work, Ta* rwork, integer* info)
+void gbrfsx(char* trans, char* equed, integer* n, integer* kl, integer* ku, integer* nrhs,  T* ab, integer* ldab,  T* afb, integer* ldafb,  integer* ipiv,  Ta* r,  Ta* c,  T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* berr, integer* n_err_bnds, Ta* err_bnds_norm, Ta* err_bnds_comp, integer* nparams, Ta* params, T* work, Ta* rwork, integer* info)
 {
-  return gbrfsx(trans, equed, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, r, c, b, ldb, x, ldx, rcond, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, rwork, info);
+  gbrfsx(trans, equed, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, r, c, b, ldb, x, ldx, rcond, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, rwork, info);
 }
 
 /*! @brief  GBSV computes the solution to system of linear equations A * X = B for GB matrices
@@ -7529,12 +7447,11 @@ integer gbrfsx(char* trans, char* equed, integer* n, integer* kl, integer* ku, i
                 has been completed, but the factor U is exactly
                 singular, and the solution has not been computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gbsv(integer* n, integer* kl, integer* ku, integer* nrhs, T* ab, integer* ldab, integer* ipiv, T* b, integer* ldb, integer* info)
+void gbsv(integer* n, integer* kl, integer* ku, integer* nrhs, T* ab, integer* ldab, integer* ipiv, T* b, integer* ldb, integer* info)
 {
-  return gbsv(n, kl, ku, nrhs, ab, ldab, ipiv, b, ldb, info);
+  gbsv(n, kl, ku, nrhs, ab, ldab, ipiv, b, ldb, info);
 }
 
 /*! @brief It computes the solution to system of linear equations A * X = B for GB matrices along with error bounds
@@ -7737,17 +7654,16 @@ integer gbsv(integer* n, integer* kl, integer* ku, integer* nrhs, T* ab, integer
                        computed solution can be more accurate than the
                        value of RCOND would suggest. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gbsvx(char* fact, char* trans, integer* n, integer* kl, integer* ku, integer* nrhs, T* ab, integer* ldab, T* afb, integer* ldafb, integer* ipiv, char* equed, T* r, T* c, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* ferr, T* berr, T* work, integer* iwork, integer* info)
+void gbsvx(char* fact, char* trans, integer* n, integer* kl, integer* ku, integer* nrhs, T* ab, integer* ldab, T* afb, integer* ldafb, integer* ipiv, char* equed, T* r, T* c, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* ferr, T* berr, T* work, integer* iwork, integer* info)
 {
-  return gbsvx(fact, trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, equed, r, c, b, ldb, x, ldx, rcond, ferr, berr, work, iwork, info);
+  gbsvx(fact, trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, equed, r, c, b, ldb, x, ldx, rcond, ferr, berr, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer gbsvx(char* fact, char* trans, integer* n, integer* kl, integer* ku, integer* nrhs, T* ab, integer* ldab, T* afb, integer* ldafb, integer* ipiv, char* equed, Ta* r, Ta* c, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void gbsvx(char* fact, char* trans, integer* n, integer* kl, integer* ku, integer* nrhs, T* ab, integer* ldab, T* afb, integer* ldafb, integer* ipiv, char* equed, Ta* r, Ta* c, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return gbsvx(fact, trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, equed, r, c, b, ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
+  gbsvx(fact, trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, equed, r, c, b, ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
 }
 
 /*! @brief  GBSVXX computes the solution to system of linear equations A * X = B for GB matrices
@@ -8110,17 +8026,16 @@ integer gbsvx(char* fact, char* trans, integer* n, integer* kl, integer* ku, int
            about all of the right-hand sides check ERR_BNDS_NORM or
            ERR_BNDS_COMP. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gbsvxx(char* fact, char* trans, integer* n, integer* kl, integer* ku, integer* nrhs, T* ab, integer* ldab, T* afb, integer* ldafb, integer* ipiv, char* equed, T* r, T* c, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* rpvgrw, T* berr, integer* n_err_bnds, T* err_bnds_norm, T* err_bnds_comp, integer* nparams, T* params, T* work, integer* iwork, integer* info)
+void gbsvxx(char* fact, char* trans, integer* n, integer* kl, integer* ku, integer* nrhs, T* ab, integer* ldab, T* afb, integer* ldafb, integer* ipiv, char* equed, T* r, T* c, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* rpvgrw, T* berr, integer* n_err_bnds, T* err_bnds_norm, T* err_bnds_comp, integer* nparams, T* params, T* work, integer* iwork, integer* info)
 {
-  return gbsvxx(fact, trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, equed, r, c, b, ldb, x, ldx, rcond, rpvgrw, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, iwork, info);
+  gbsvxx(fact, trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, equed, r, c, b, ldb, x, ldx, rcond, rpvgrw, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer gbsvxx(char* fact, char* trans, integer* n, integer* kl, integer* ku, integer* nrhs, T* ab, integer* ldab, T* afb, integer* ldafb, integer* ipiv, char* equed, Ta* r, Ta* c, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* rpvgrw, Ta* berr, integer* n_err_bnds, Ta* err_bnds_norm, Ta* err_bnds_comp, integer* nparams, Ta* params, T* work, Ta* rwork, integer* info)
+void gbsvxx(char* fact, char* trans, integer* n, integer* kl, integer* ku, integer* nrhs, T* ab, integer* ldab, T* afb, integer* ldafb, integer* ipiv, char* equed, Ta* r, Ta* c, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* rpvgrw, Ta* berr, integer* n_err_bnds, Ta* err_bnds_norm, Ta* err_bnds_comp, integer* nparams, Ta* params, T* work, Ta* rwork, integer* info)
 {
-  return gbsvxx(fact, trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, equed, r, c, b, ldb, x, ldx, rcond, rpvgrw, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, rwork, info);
+  gbsvxx(fact, trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, equed, r, c, b, ldb, x, ldx, rcond, rpvgrw, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, rwork, info);
 }
 
 /*! @brief \b GBTRF computes the LU factorization of a general band matrix using the pivot
@@ -8174,12 +8089,11 @@ integer gbsvxx(char* fact, char* trans, integer* n, integer* kl, integer* ku, in
                singular, and division by zero will occur if it is used
                to solve a system of equations. \n
 
- * @return INTEGER Return value of the function.
-  * */
+ *   * */
 template< typename T >
-integer gbtrf(integer* m, integer* n, integer* kl, integer* ku, T* ab, integer* ldab, integer* ipiv, integer* info)
+void gbtrf(integer* m, integer* n, integer* kl, integer* ku, T* ab, integer* ldab, integer* ipiv, integer* info)
 {
-  return gbtrf(m, n, kl, ku, ab, ldab, ipiv, info);
+  gbtrf(m, n, kl, ku, ab, ldab, ipiv, info);
 }
 
 /*! @brief \b GBTRS solves a system of linear equationsA * X = B  or  A**T * X = B with a general band matrix A using the LU factorization computed by GBTRF
@@ -8236,12 +8150,11 @@ integer gbtrf(integer* m, integer* n, integer* kl, integer* ku, T* ab, integer* 
         = 0:  successful exit \n
         < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
-* @return INTEGER Return value of the function.
- * */
+*  * */
 template< typename T >
-integer gbtrs(char* trans, integer* n, integer* kl, integer* ku, integer* nrhs,  T* ab, integer* ldab,  integer* ipiv, T* b, integer* ldb, integer* info)
+void gbtrs(char* trans, integer* n, integer* kl, integer* ku, integer* nrhs,  T* ab, integer* ldab,  integer* ipiv, T* b, integer* ldb, integer* info)
 {
-  return gbtrs(trans, n, kl, ku, nrhs, ab, ldab, ipiv, b, ldb, info);
+  gbtrs(trans, n, kl, ku, nrhs, ab, ldab, ipiv, b, ldb, info);
 }
 
 /*! @brief \b GEBAK Forms right left vectors of real general matrix
@@ -8297,17 +8210,16 @@ integer gbtrs(char* trans, integer* n, integer* kl, integer* ku, integer* nrhs, 
         = 0:  successful exit \n
         < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gebak(char* job, char* side, integer* n, integer* ilo, integer* ihi,  T* scale, integer* m, T* v, integer* ldv, integer* info)
+void gebak(char* job, char* side, integer* n, integer* ilo, integer* ihi,  T* scale, integer* m, T* v, integer* ldv, integer* info)
 {
-  return gebak(job, side, n, ilo, ihi,  scale, m, v, ldv, info);
+  gebak(job, side, n, ilo, ihi,  scale, m, v, ldv, info);
 }
 template< typename T, typename Ta >
-integer gebak(char* job, char* side, integer* n, integer* ilo, integer* ihi,  Ta* scale, integer* m, T* v, integer* ldv, integer* info)
+void gebak(char* job, char* side, integer* n, integer* ilo, integer* ihi,  Ta* scale, integer* m, T* v, integer* ldv, integer* info)
 {
-  return gebak(job, side, n, ilo, ihi,  scale, m, v, ldv, info);
+  gebak(job, side, n, ilo, ihi,  scale, m, v, ldv, info);
 }
 
 /*! @brief \b GEBAL It balances a real matrix
@@ -8369,17 +8281,16 @@ integer gebak(char* job, char* side, integer* n, integer* ilo, integer* ihi,  Ta
           = 0:  successful exit. \n
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gebal(char* job, integer* n, T* a, integer* lda, integer* ilo, integer* ihi, T* scale, integer* info)
+void gebal(char* job, integer* n, T* a, integer* lda, integer* ilo, integer* ihi, T* scale, integer* info)
 {
-  return gebal(job, n, a, lda, ilo, ihi, scale, info);
+  gebal(job, n, a, lda, ilo, ihi, scale, info);
 }
 template< typename T, typename Ta >
-integer gebal(char* job, integer* n, T* a, integer* lda, integer* ilo, integer* ihi, Ta* scale, integer* info)
+void gebal(char* job, integer* n, T* a, integer* lda, integer* ilo, integer* ihi, Ta* scale, integer* info)
 {
-  return gebal(job, n, a, lda, ilo, ihi, scale, info);
+  gebal(job, n, a, lda, ilo, ihi, scale, info);
 }
 
 /*! @brief  GEEQUB - computes row and column scaling to reduce condition number of matrix
@@ -8450,17 +8361,16 @@ integer gebal(char* job, integer* n, T* a, integer* lda, integer* ilo, integer* 
                 <= M:  the i-th row of A is exactly zero \n
                 >  M:  the (i-M)-th column of A is exactly zero \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer geequb(integer* m, integer* n,  T* a, integer* lda, T* r, T* c, T* rowcnd, T* colcnd, T* amax, integer* info)
+void geequb(integer* m, integer* n,  T* a, integer* lda, T* r, T* c, T* rowcnd, T* colcnd, T* amax, integer* info)
 {
-  return geequb(m, n,  a, lda, r, c, rowcnd, colcnd, amax, info);
+  geequb(m, n,  a, lda, r, c, rowcnd, colcnd, amax, info);
 }
 template< typename T, typename Ta >
-integer geequb(integer* m, integer* n,  T* a, integer* lda, Ta* r, Ta* c, Ta* rowcnd, Ta* colcnd, Ta* amax, integer* info)
+void geequb(integer* m, integer* n,  T* a, integer* lda, Ta* r, Ta* c, Ta* rowcnd, Ta* colcnd, Ta* amax, integer* info)
 {
-  return geequb(m, n,  a, lda, r, c, rowcnd, colcnd, amax, info);
+  geequb(m, n,  a, lda, r, c, rowcnd, colcnd, amax, info);
 }
 
 /*! @brief GEES computes the eigenvalues, the Schur form, and, optionally, the matrix of Schur vectors for GE matrices</b>
@@ -8582,17 +8492,16 @@ integer geequb(integer* m, integer* n,  T* a, integer* lda, Ta* r, Ta* c, Ta* ro
                       SELECT = .TRUE..  This could also be caused by
                       underflow due to scaling. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gees(char* jobvs, char* sort, void* select, integer* n, T* a, integer* lda, integer* sdim, T* wr, T* wi, T* vs, integer* ldvs, T* work, integer* lwork, logical* bwork, integer* info)
+void gees(char* jobvs, char* sort, void* select, integer* n, T* a, integer* lda, integer* sdim, T* wr, T* wi, T* vs, integer* ldvs, T* work, integer* lwork, logical* bwork, integer* info)
 {
-  return gees(jobvs, sort, select, n, a, lda, sdim, wr, wi, vs, ldvs, work, lwork, bwork, info);
+  gees(jobvs, sort, select, n, a, lda, sdim, wr, wi, vs, ldvs, work, lwork, bwork, info);
 }
 template< typename T, typename Ta >
-integer gees(char* jobvs, char* sort, void* select, integer* n, T* a, integer* lda, integer* sdim, T* w, T* vs, integer* ldvs, T* work, integer* lwork, Ta* rwork, logical* bwork, integer* info)
+void gees(char* jobvs, char* sort, void* select, integer* n, T* a, integer* lda, integer* sdim, T* w, T* vs, integer* ldvs, T* work, integer* lwork, Ta* rwork, logical* bwork, integer* info)
 {
-  return gees(jobvs, sort, select, n, a, lda, sdim, w, vs, ldvs, work, lwork, rwork, bwork, info);
+  gees(jobvs, sort, select, n, a, lda, sdim, w, vs, ldvs, work, lwork, rwork, bwork, info);
 }
 
 /*! @brief GEESX computes the eigenvalues, the Schur form, and, optionally, the matrix of Schur vectors for GE matrices
@@ -8744,17 +8653,16 @@ integer gees(char* jobvs, char* sort, void* select, integer* n, T* a, integer* l
                    the Schur form no longer satisfy SELECT=.TRUE.  This
                    could also be caused by underflow due to scaling. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer geesx(char* jobvs, char* sort, void* select, char* sense, integer* n, T* a, integer* lda, integer* sdim, T* wr, T* wi, T* vs, integer* ldvs, T* rconde, T* rcondv, T* work, integer* lwork, integer* iwork, integer* liwork, logical* bwork, integer* info)
+void geesx(char* jobvs, char* sort, void* select, char* sense, integer* n, T* a, integer* lda, integer* sdim, T* wr, T* wi, T* vs, integer* ldvs, T* rconde, T* rcondv, T* work, integer* lwork, integer* iwork, integer* liwork, logical* bwork, integer* info)
 {
-  return geesx(jobvs, sort, select, sense, n, a, lda, sdim, wr, wi, vs, ldvs, rconde, rcondv, work, lwork, iwork, liwork, bwork, info);
+  geesx(jobvs, sort, select, sense, n, a, lda, sdim, wr, wi, vs, ldvs, rconde, rcondv, work, lwork, iwork, liwork, bwork, info);
 }
 template< typename T, typename Ta >
-integer geesx(char* jobvs, char* sort, void* select, char* sense, integer* n, T* a, integer* lda, integer* sdim, T* w, T* vs, integer* ldvs, Ta* rconde, Ta* rcondv, T* work, integer* lwork, Ta* rwork, logical* bwork, integer* info)
+void geesx(char* jobvs, char* sort, void* select, char* sense, integer* n, T* a, integer* lda, integer* sdim, T* w, T* vs, integer* ldvs, Ta* rconde, Ta* rcondv, T* work, integer* lwork, Ta* rwork, logical* bwork, integer* info)
 {
-  return geesx(jobvs, sort, select, sense, n, a, lda, sdim, w, vs, ldvs, rconde, rcondv, work, lwork, rwork, bwork, info);
+  geesx(jobvs, sort, select, sense, n, a, lda, sdim, w, vs, ldvs, rconde, rcondv, work, lwork, rwork, bwork, info);
 }
 
 /*! @brief GEEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matrices
@@ -8856,17 +8764,16 @@ integer geesx(char* jobvs, char* sort, void* select, char* sense, integer* n, T*
                 elements i+1:N of W contain eigenvalues which have
                 converged. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template<typename T>
-integer geev(char* jobvl, char* jobvr, integer* n, T* a, integer* lda, T* wr, T* wi, T* vl, integer* ldvl, T* vr, integer* ldvr, T* work, integer* lwork, integer* info)
+void geev(char* jobvl, char* jobvr, integer* n, T* a, integer* lda, T* wr, T* wi, T* vl, integer* ldvl, T* vr, integer* ldvr, T* work, integer* lwork, integer* info)
 {
-  return geev(jobvl, jobvr, n, a, lda, wr, wi, vl, ldvl, vr, ldvr, work, lwork, info);
+  geev(jobvl, jobvr, n, a, lda, wr, wi, vl, ldvl, vr, ldvr, work, lwork, info);
 }
 template<typename T, typename Ta>
-integer geev(char* jobvl, char* jobvr, integer* n, T* a, integer* lda, T* w, T* vl, integer* ldvl, T* vr, integer* ldvr, T* work, integer* lwork, Ta* rwork, integer* info)
+void geev(char* jobvl, char* jobvr, integer* n, T* a, integer* lda, T* w, T* vl, integer* ldvl, T* vr, integer* ldvr, T* work, integer* lwork, Ta* rwork, integer* info)
 {
-  return geev(jobvl, jobvr, n, a, lda, w, vl, ldvl, vr, ldvr, work, lwork, rwork, info);
+  geev(jobvl, jobvr, n, a, lda, w, vl, ldvl, vr, ldvr, work, lwork, rwork, info);
 }
 
 /*! @brief GEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matrices(enabling conditions)
@@ -9047,17 +8954,16 @@ integer geev(char* jobvl, char* jobvr, integer* n, T* a, integer* lda, T* w, T* 
                 have been computed; elements 1:ILO-1 and i+1:N of W
                 contain eigenvalues which have converged. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer geevx(char* balanc, char* jobvl, char* jobvr, char* sense, integer* n, T* a, integer* lda, T* wr, T* wi, T* vl, integer* ldvl, T* vr, integer* ldvr, integer* ilo, integer* ihi, T* scale, T* abnrm, T* rconde, T* rcondv, T* work, integer* lwork, integer* iwork, integer* info)
+void geevx(char* balanc, char* jobvl, char* jobvr, char* sense, integer* n, T* a, integer* lda, T* wr, T* wi, T* vl, integer* ldvl, T* vr, integer* ldvr, integer* ilo, integer* ihi, T* scale, T* abnrm, T* rconde, T* rcondv, T* work, integer* lwork, integer* iwork, integer* info)
 {
-  return geevx(balanc, jobvl, jobvr, sense, n, a, lda, wr, wi, vl, ldvl, vr, ldvr, ilo, ihi, scale, abnrm, rconde, rcondv, work, lwork, iwork, info);
+  geevx(balanc, jobvl, jobvr, sense, n, a, lda, wr, wi, vl, ldvl, vr, ldvr, ilo, ihi, scale, abnrm, rconde, rcondv, work, lwork, iwork, info);
 }
 template< typename T, typename Ta >
-integer geevx(char* balanc, char* jobvl, char* jobvr, char* sense, integer* n, T* a, integer* lda, T* w, T* vl, integer* ldvl, T* vr, integer* ldvr, integer* ilo, integer* ihi, Ta* scale, Ta* abnrm, Ta* rconde, Ta* rcondv, T* work, integer* lwork, Ta* rwork, integer* info)
+void geevx(char* balanc, char* jobvl, char* jobvr, char* sense, integer* n, T* a, integer* lda, T* w, T* vl, integer* ldvl, T* vr, integer* ldvr, integer* ilo, integer* ihi, Ta* scale, Ta* abnrm, Ta* rconde, Ta* rcondv, T* work, integer* lwork, Ta* rwork, integer* info)
 {
-  return geevx(balanc, jobvl, jobvr, sense, n, a, lda, w, vl, ldvl, vr, ldvr, ilo, ihi, scale, abnrm, rconde, rcondv, work, lwork, rwork, info);
+  geevx(balanc, jobvl, jobvr, sense, n, a, lda, w, vl, ldvl, vr, ldvr, ilo, ihi, scale, abnrm, rconde, rcondv, work, lwork, rwork, info);
 }
 
 /*! @brief Computes the singular value decomposition (SVD) of a real matrix
@@ -9438,17 +9344,16 @@ integer geevx(char* balanc, char* jobvl, char* jobvr, char* sense, integer* n, T
            > 0:  CGEJSV  did not converge in the maximal allowed number
                  of sweeps. The computed values may be inaccurate. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gejsv(char* joba, char* jobu, char* jobv, char* jobr, char* jobt, char* jobp, integer* m, integer* n, T* a, integer* lda, T* sva, T* u, integer* ldu, T* v, integer* ldv, T* stat, integer* istat, T* work, integer* lwork, integer* iwork, integer* info)
+void gejsv(char* joba, char* jobu, char* jobv, char* jobr, char* jobt, char* jobp, integer* m, integer* n, T* a, integer* lda, T* sva, T* u, integer* ldu, T* v, integer* ldv, T* stat, integer* istat, T* work, integer* lwork, integer* iwork, integer* info)
 {
-  return gejsv(joba, jobu, jobv, jobr, jobt, jobp, m, n, a, lda, sva, u, ldu, v, ldv, work, lwork, iwork, info);
+  gejsv(joba, jobu, jobv, jobr, jobt, jobp, m, n, a, lda, sva, u, ldu, v, ldv, work, lwork, iwork, info);
 }
 template< typename T, typename Ta >
-integer gejsv(char* joba, char* jobu, char* jobv, char* jobr, char* jobt, char* jobp, integer* m, integer* n, T* a, integer* lda, Ta* sva, T* u, integer* ldu, T* v, integer* ldv, T* cwork, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* info)
+void gejsv(char* joba, char* jobu, char* jobv, char* jobr, char* jobt, char* jobp, integer* m, integer* n, T* a, integer* lda, Ta* sva, T* u, integer* ldu, T* v, integer* ldv, T* cwork, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* info)
 {
-  return gejsv(joba, jobu, jobv, jobr, jobt, jobp, m, n, a, lda, sva, u, ldu, v, ldv, cwork, lwork, rwork, lrwork, iwork, info);
+  gejsv(joba, jobu, jobv, jobr, jobt, jobp, m, n, a, lda, sva, u, ldu, v, ldv, cwork, lwork, rwork, lrwork, iwork, info);
 }
 
 /*! @brief Computes LQ factorization of a real matrix
@@ -9523,12 +9428,11 @@ integer gejsv(char* joba, char* jobu, char* jobv, char* jobr, char* jobt, char* 
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
-* @return INTEGER Return value of the function.
-* */
+* * */
 template< typename T >
-integer gelq(integer* m, integer* n, T* a, integer* lda, T* t, integer* tsize, T* work, integer* lwork, integer* info)
+void gelq(integer* m, integer* n, T* a, integer* lda, T* t, integer* tsize, T* work, integer* lwork, integer* info)
 {
-  return gelq(m, n, a, lda, t, tsize, work, lwork, info);
+  gelq(m, n, a, lda, t, tsize, work, lwork, info);
 }
 
 /*! @brief GELS solves overdetermined or underdetermined systems for GE matrices
@@ -9633,12 +9537,11 @@ integer gelq(integer* m, integer* n, T* a, integer* lda, T* t, integer* tsize, T
                 full rank; the least squares solution could not be
                 computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gels(char* trans, integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, T* work, integer* lwork, integer* info)
+void gels(char* trans, integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, T* work, integer* lwork, integer* info)
 {
-  return gels(trans, m, n, nrhs, a, lda, b, ldb, work, lwork, info);
+  gels(trans, m, n, nrhs, a, lda, b, ldb, work, lwork, info);
 }
 
 /*! @brief GELSY solves overdetermined or underdetermined systems for GE matrices
@@ -9750,17 +9653,16 @@ integer gels(char* trans, integer* m, integer* n, integer* nrhs, T* a, integer* 
           = 0: successful exit \n
           < 0: If INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gelsy(integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, integer* jpvt, T rcond, integer* rank, T* work, integer* lwork, integer* info)
+void gelsy(integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, integer* jpvt, T rcond, integer* rank, T* work, integer* lwork, integer* info)
 {
-  return gelsy(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, lwork, info);
+  gelsy(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, lwork, info);
 }
 template< typename T , typename Ta >
-integer gelsy(integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, integer* jpvt, Ta rcond, integer* rank, T* work, integer* lwork, Ta* rwork, integer* info)
+void gelsy(integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, integer* jpvt, Ta rcond, integer* rank, T* work, integer* lwork, Ta* rwork, integer* info)
 {
-  return gelsy(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, lwork, rwork, info);
+  gelsy(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, lwork, rwork, info);
 }
 
 /*! @brief GELSX solves overdetermined or underdetermined systems for GE matrices
@@ -9853,17 +9755,16 @@ integer gelsy(integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, i
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gelsx(integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, integer* jpvt, T rcond, integer* rank, T* work, integer* info)
+void gelsx(integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, integer* jpvt, T rcond, integer* rank, T* work, integer* info)
 {
-  return gelsx(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, info);
+  gelsx(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, info);
 }
 template< typename T , typename Ta >
-integer gelsx(integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, integer* jpvt, Ta rcond, integer* rank, T* work, Ta* rwork, integer* info)
+void gelsx(integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, integer* jpvt, Ta rcond, integer* rank, T* work, Ta* rwork, integer* info)
 {
-  return gelsx(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, rwork, info);
+  gelsx(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, rwork, info);
 }
 
 /*! @brief Overwrites general matrix with a form compatible with orthogonal matrix
@@ -9936,9 +9837,9 @@ integer gelsx(integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, i
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
  * */
 template< typename T >
-integer gemlq(char* side, char* trans, integer* m, integer* n, integer* k,  T* a, integer* lda,  T* t, integer* tsize, T* c, integer* ldc, T* work, integer* lwork, integer* info)
+void gemlq(char* side, char* trans, integer* m, integer* n, integer* k,  T* a, integer* lda,  T* t, integer* tsize, T* c, integer* ldc, T* work, integer* lwork, integer* info)
 {
-  return gemlq(side, trans, m, n, k,  a, lda,  t, tsize, c, ldc, work, lwork, info);
+  gemlq(side, trans, m, n, k,  a, lda,  t, tsize, c, ldc, work, lwork, info);
 }
 
 /*! @brief Multiples a matrix C by a real orthogonal or complex unitary matrix Q, as computed by ?geqr, \n
@@ -10011,12 +9912,11 @@ integer gemlq(char* side, char* trans, integer* m, integer* n, integer* k,  T* a
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gemqr(char* side, char* trans, integer* m, integer* n, integer* k,  T* a, integer* lda,  T* t, integer* tsize, T* c, integer* ldc, T* work, integer* lwork, integer* info)
+void gemqr(char* side, char* trans, integer* m, integer* n, integer* k,  T* a, integer* lda,  T* t, integer* tsize, T* c, integer* ldc, T* work, integer* lwork, integer* info)
 {
-  return gemqr(side, trans, m, n, k,  a, lda,  t, tsize, c, ldc, work, lwork, info);
+  gemqr(side, trans, m, n, k,  a, lda,  t, tsize, c, ldc, work, lwork, info);
 }
 
 /*! @brief Multiplies a general matrix by the orthogonal/unitary matrix Q of the QR factorization formed by ?geqrt.
@@ -10096,12 +9996,11 @@ integer gemqr(char* side, char* trans, integer* m, integer* n, integer* k,  T* a
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
-* @return INTEGER Return value of the function.
-* */
+* * */
 template< typename T >
-integer gemqrt(char* side, char* trans, integer* m, integer* n, integer* k, integer* nb, T* v, integer* ldv, T* t, integer* ldt, T* c, integer* ldc, T* work, integer* info)
+void gemqrt(char* side, char* trans, integer* m, integer* n, integer* k, integer* nb, T* v, integer* ldv, T* t, integer* ldt, T* c, integer* ldc, T* work, integer* info)
 {
-  return gemqrt(side, trans, m, n, k, nb, v, ldv, t, ldt, c, ldc, work, info);
+  gemqrt(side, trans, m, n, k, nb, v, ldv, t, ldt, c, ldc, work, info);
 }
 
 /*! @brief GEQLF computes a QL factorization of M-by-N matrix
@@ -10152,12 +10051,11 @@ integer gemqrt(char* side, char* trans, integer* m, integer* n, integer* k, inte
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer geqlf(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
+void geqlf(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
 {
-  return geqlf(m, n, a, lda, tau, work, lwork, info);
+  geqlf(m, n, a, lda, tau, work, lwork, info);
 }
 
 /*! @brief GEQR computes a QR factorization of M-by-N matrix
@@ -10231,12 +10129,11 @@ integer geqlf(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integ
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer geqr(integer* m, integer* n, T* a, integer* lda, T* t, integer* tsize, T* work, integer* lwork, integer* info)
+void geqr(integer* m, integer* n, T* a, integer* lda, T* t, integer* tsize, T* work, integer* lwork, integer* info)
 {
-  return geqr(m, n, a, lda, t, tsize, work, lwork, info);
+  geqr(m, n, a, lda, t, tsize, work, lwork, info);
 }
 
 /*! @brief GEQRP computes a QR factorization of a M-by-N matrix
@@ -10295,12 +10192,11 @@ integer geqr(integer* m, integer* n, T* a, integer* lda, T* t, integer* tsize, T
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer geqrfp(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
+void geqrfp(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
 {
-  return geqrfp(m, n, a, lda, tau, work, lwork, info);
+  geqrfp(m, n, a, lda, tau, work, lwork, info);
 } 
 
 /*! @brief GEQRT computes a blocked QR factorization of a M-by-N matrix A \n
@@ -10346,12 +10242,11 @@ integer geqrfp(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, inte
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer geqrt(integer* m, integer* n, integer* nb, T* a, integer* lda, T* t, integer* ldt, T* work, integer* info)
+void geqrt(integer* m, integer* n, integer* nb, T* a, integer* lda, T* t, integer* ldt, T* work, integer* info)
 {
-  return geqrt(m, n, nb, a, lda, t, ldt, work, info);
+  geqrt(m, n, nb, a, lda, t, ldt, work, info);
 }
 
 /*! @brief GEQRT2 computes a blocked QR factorization of a M-by-N matrix A \n
@@ -10392,12 +10287,11 @@ integer geqrt(integer* m, integer* n, integer* nb, T* a, integer* lda, T* t, int
           = 0: successful exit \n
           < 0: if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */ 
+ *  * */ 
 template< typename T >
-integer geqrt2(integer* m, integer* n, T* a, integer* lda, T* t, integer* ldt, integer* info)
+void geqrt2(integer* m, integer* n, T* a, integer* lda, T* t, integer* ldt, integer* info)
 {
-  return geqrt2(m, n, a, lda, t, ldt, info);
+  geqrt2(m, n, a, lda, t, ldt, info);
 }
 
 /*! @brief GEQRT3 computes a blocked QR factorization of a M-by-N matrix A \n
@@ -10438,12 +10332,11 @@ integer geqrt2(integer* m, integer* n, T* a, integer* lda, T* t, integer* ldt, i
           = 0: successful exit \n
           < 0: if INFO = -i, the i-th argument had an illegal value \n
 
-* @return INTEGER Return value of the function.
- * */
+*  * */
 template< typename T >
-integer geqrt3(integer* m, integer* n, T* a, integer* lda, T* t, integer* ldt, integer* info)
+void geqrt3(integer* m, integer* n, T* a, integer* lda, T* t, integer* ldt, integer* info)
 {
-  return geqrt3(m, n, a, lda, t, ldt, info);
+  geqrt3(m, n, a, lda, t, ldt, info);
 }
 
 /*! @brief GERFS improves the computed solution to a system of linear equations \n
@@ -10523,17 +10416,16 @@ integer geqrt3(integer* m, integer* n, T* a, integer* lda, T* t, integer* ldt, i
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */ 
+ *  * */ 
 template< typename T >
-integer gerfs(char* trans, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, T* ferr, T* berr, T* work, integer* iwork, integer* info)
+void gerfs(char* trans, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, T* ferr, T* berr, T* work, integer* iwork, integer* info)
 {
-  return gerfs(trans, n, nrhs, a, lda, af, ldaf, ipiv, b, ldb, x, ldx, ferr, berr, work, iwork, info);
+  gerfs(trans, n, nrhs, a, lda, af, ldaf, ipiv, b, ldb, x, ldx, ferr, berr, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer gerfs(char* trans, integer* n, integer* nrhs,  T* a, integer* lda,  T* af, integer* ldaf,  integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void gerfs(char* trans, integer* n, integer* nrhs,  T* a, integer* lda,  T* af, integer* ldaf,  integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return gerfs(trans, n, nrhs, a, lda,  af, ldaf, ipiv, b, ldb, x, ldx, ferr, berr, work, rwork, info);
+  gerfs(trans, n, nrhs, a, lda,  af, ldaf, ipiv, b, ldb, x, ldx, ferr, berr, work, rwork, info);
 }
 
 /*! @brief GERFSX improves the computed solution to a system of linear equations \n
@@ -10808,17 +10700,16 @@ integer gerfs(char* trans, integer* n, integer* nrhs,  T* a, integer* lda,  T* a
            about all of the right-hand sides check ERR_BNDS_NORM or
            ERR_BNDS_COMP. \n
 
-* @return INTEGER Return value of the function.
- * */
+*  * */
 template< typename T >
-integer gerfsx(char* trans, char* equed, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, T* r, T* c, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* berr, integer* n_err_bnds, T* err_bnds_norm, T* err_bnds_comp, integer* nparams, T* params, T* work, integer* iwork, integer* info)
+void gerfsx(char* trans, char* equed, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, T* r, T* c, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* berr, integer* n_err_bnds, T* err_bnds_norm, T* err_bnds_comp, integer* nparams, T* params, T* work, integer* iwork, integer* info)
 {
-  return gerfsx(trans, equed, n, nrhs, a, lda, af, ldaf, ipiv, r, c, b, ldb, x, ldx, rcond, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, iwork, info);
+  gerfsx(trans, equed, n, nrhs, a, lda, af, ldaf, ipiv, r, c, b, ldb, x, ldx, rcond, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer gerfsx(char* trans, char* equed, integer* n, integer* nrhs,  T* a, integer* lda,  T* af, integer* ldaf, integer* ipiv, Ta* r, Ta* c, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* berr, integer* n_err_bnds, Ta* err_bnds_norm, Ta* err_bnds_comp, integer* nparams, Ta* params, T* work, Ta* rwork, integer* info)
+void gerfsx(char* trans, char* equed, integer* n, integer* nrhs,  T* a, integer* lda,  T* af, integer* ldaf, integer* ipiv, Ta* r, Ta* c, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* berr, integer* n_err_bnds, Ta* err_bnds_norm, Ta* err_bnds_comp, integer* nparams, Ta* params, T* work, Ta* rwork, integer* info)
 {
-  return gerfsx(trans, equed, n, nrhs, a, lda, af, ldaf, ipiv, r, c, b, ldb, x, ldx, rcond, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, rwork, info);
+  gerfsx(trans, equed, n, nrhs, a, lda, af, ldaf, ipiv, r, c, b, ldb, x, ldx, rcond, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, rwork, info);
 }
 
 /*! @brief GERQF computes a RQ factorization of a M-by-N matrix
@@ -10871,12 +10762,11 @@ integer gerfsx(char* trans, char* equed, integer* n, integer* nrhs,  T* a, integ
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gerqf(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
+void gerqf(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
 {
-  return gerqf(m, n, a, lda, tau, work, lwork, info);
+  gerqf(m, n, a, lda, tau, work, lwork, info);
 }
 
 /*! @brief GESV computes the solution to a real system of linear equations
@@ -10930,12 +10820,11 @@ integer gerqf(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integ
                 has been completed, but the factor U is exactly
                 singular, so the solution could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gesv(integer* n, integer* nrhs, T* a, integer* lda, integer* ipiv, T* b, integer* ldb, integer* info)
+void gesv(integer* n, integer* nrhs, T* a, integer* lda, integer* ipiv, T* b, integer* ldb, integer* info)
 {
-  return gesv(n, nrhs, a, lda, ipiv, b, ldb, info);
+  gesv(n, nrhs, a, lda, ipiv, b, ldb, info);
 }
 
 /*! @brief DSGESV computes the solution to system of linear equations A * X = B \n 
@@ -11036,11 +10925,10 @@ integer gesv(integer* n, integer* nrhs, T* a, integer* lda, integer* ipiv, T* b,
                 has been completed, but the factor U is exactly
                 singular, so the solution could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
-integer sgesv(integer* n, integer* nrhs, double* a, integer* lda, integer* ipiv, double* b, integer* ldb, double* x, integer* ldx, double* work, float* swork, integer* iter, integer* info)
+ *  * */
+void sgesv(integer* n, integer* nrhs, double* a, integer* lda, integer* ipiv, double* b, integer* ldb, double* x, integer* ldx, double* work, float* swork, integer* iter, integer* info)
 {
-  return dsgesv_(n, nrhs, a, lda, ipiv, b, ldb, x, ldx, work, swork, iter, info);
+  dsgesv_(n, nrhs, a, lda, ipiv, b, ldb, x, ldx, work, swork, iter, info);
 }
 
 /*! @brief ZCGESV computes the solution to system of linear equations A * X = B \n
@@ -11141,11 +11029,10 @@ integer sgesv(integer* n, integer* nrhs, double* a, integer* lda, integer* ipiv,
                 has been completed, but the factor U is exactly
                 singular, so the solution could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
-integer cgesv(integer* n, integer* nrhs, dcomplex* a, integer* lda, integer* ipiv, dcomplex* b, integer* ldb, dcomplex* x, integer* ldx, dcomplex *work, scomplex *swork, double *rwork, integer *iter, integer *info)
+ *  * */
+void cgesv(integer* n, integer* nrhs, dcomplex* a, integer* lda, integer* ipiv, dcomplex* b, integer* ldb, dcomplex* x, integer* ldx, dcomplex *work, scomplex *swork, double *rwork, integer *iter, integer *info)
 {
-  return zcgesv_(n, nrhs, a, lda, ipiv, b, ldb, x, ldx, work, swork, rwork, iter, info);
+  zcgesv_(n, nrhs, a, lda, ipiv, b, ldb, x, ldx, work, swork, rwork, iter, info);
 }
 
 /*! @brief GESVDQ computes the singular value decomposition (SVD) with a QR-Preconditioned QR SVD Method for GE matrices
@@ -11371,17 +11258,16 @@ integer cgesv(integer* n, integer* nrhs, dcomplex* a, integer* lda, integer* ipi
           of an intermediate bidiagonal form B (computed in CGESVD) did not
           converge to zero. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gesvdq(char* joba, char* jobp, char* jobr, char* jobu, char* jobv, integer* m, integer* n, T* a, integer* lda, T* s, T* u, integer* ldu, T* v, integer* ldv, integer* numrank, integer* iwork, integer* liwork, T* work, integer* lwork, T* rwork, integer* lrwork, integer* info)
+void gesvdq(char* joba, char* jobp, char* jobr, char* jobu, char* jobv, integer* m, integer* n, T* a, integer* lda, T* s, T* u, integer* ldu, T* v, integer* ldv, integer* numrank, integer* iwork, integer* liwork, T* work, integer* lwork, T* rwork, integer* lrwork, integer* info)
 {
-  return gesvdq(joba, jobp, jobr, jobu, jobv, m, n, a, lda, s, u, ldu, v, ldv, numrank, iwork, liwork, work, lwork, rwork, lrwork, info);
+  gesvdq(joba, jobp, jobr, jobu, jobv, m, n, a, lda, s, u, ldu, v, ldv, numrank, iwork, liwork, work, lwork, rwork, lrwork, info);
 }
 template< typename T, typename Ta >
-integer gesvdq(char* joba, char* jobp, char* jobr, char* jobu, char* jobv, integer* m, integer* n, T* a, integer* lda, Ta* s, T* u, integer* ldu, T* v, integer* ldv, integer* numrank, integer* iwork, integer* liwork, T* cwork, integer* lcwork, Ta* rwork, integer* lrwork, integer* info)
+void gesvdq(char* joba, char* jobp, char* jobr, char* jobu, char* jobv, integer* m, integer* n, T* a, integer* lda, Ta* s, T* u, integer* ldu, T* v, integer* ldv, integer* numrank, integer* iwork, integer* liwork, T* cwork, integer* lcwork, Ta* rwork, integer* lrwork, integer* info)
 {
-  return gesvdq(joba, jobp, jobr, jobu, jobv, m, n, a, lda, s, u, ldu, v, ldv, numrank, iwork, liwork, cwork, lcwork, rwork, lrwork, info);
+  gesvdq(joba, jobp, jobr, jobu, jobv, m, n, a, lda, s, u, ldu, v, ldv, numrank, iwork, liwork, cwork, lcwork, rwork, lrwork, info);
 }
 
 /*! @brief GESVDX computes the singular value decomposition (SVD) for GE matrices
@@ -11532,17 +11418,16 @@ integer gesvdq(char* joba, char* jobp, char* jobr, char* jobu, char* jobv, integ
                  if INFO = N*2 + 1, an internal error occurred in
                  SBDSVDX \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gesvdx(char* jobu, char* jobvt, char* range, integer* m, integer* n, T* a, integer* lda, T* vl, T* vu, integer* il, integer* iu, integer* ns, T* s, T* u, integer* ldu, T* vt, integer* ldvt, T* work, integer* lwork, integer* iwork, integer* info)
+void gesvdx(char* jobu, char* jobvt, char* range, integer* m, integer* n, T* a, integer* lda, T* vl, T* vu, integer* il, integer* iu, integer* ns, T* s, T* u, integer* ldu, T* vt, integer* ldvt, T* work, integer* lwork, integer* iwork, integer* info)
 {
-  return gesvdx(jobu, jobvt, range, m, n, a, lda, vl, vu, il, iu, ns, s, u, ldu, vt, ldvt, work, lwork, iwork, info);
+  gesvdx(jobu, jobvt, range, m, n, a, lda, vl, vu, il, iu, ns, s, u, ldu, vt, ldvt, work, lwork, iwork, info);
 }
 template< typename T, typename Ta >
-integer gesvdx(char* jobu, char* jobvt, char* range, integer* m, integer* n, T* a, integer* lda, Ta* vl, Ta* vu, integer* il, integer* iu, integer* ns, Ta* s, T* u, integer* ldu, T* vt, integer* ldvt, T* work, integer* lwork, Ta* rwork, integer* iwork, integer* info)
+void gesvdx(char* jobu, char* jobvt, char* range, integer* m, integer* n, T* a, integer* lda, Ta* vl, Ta* vu, integer* il, integer* iu, integer* ns, Ta* s, T* u, integer* ldu, T* vt, integer* ldvt, T* work, integer* lwork, Ta* rwork, integer* iwork, integer* info)
 {
-  return gesvdx(jobu, jobvt, range, m, n, a, lda, vl, vu, il, iu, ns, s, u, ldu, vt, ldvt, work, lwork, rwork, iwork, info);
+  gesvdx(jobu, jobvt, range, m, n, a, lda, vl, vu, il, iu, ns, s, u, ldu, vt, ldvt, work, lwork, rwork, iwork, info);
 }
 
 /*! @brief GESVJ computes the singular value decomposition (SVD) of a M-by-N matrix A
@@ -11733,17 +11618,16 @@ integer gesvdx(char* jobu, char* jobvt, char* range, integer* m, integer* n, T* 
                 (NSWEEP=30) of sweeps. The output may still be useful.
                 See the description of RWORK. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gesvj(char* joba, char* jobu, char* jobv, integer* m, integer* n, T* a, integer* lda, T* sva, integer* mv, T* v, integer* ldv, T* work, integer* lwork, integer* info)
+void gesvj(char* joba, char* jobu, char* jobv, integer* m, integer* n, T* a, integer* lda, T* sva, integer* mv, T* v, integer* ldv, T* work, integer* lwork, integer* info)
 {
-  return gesvj( joba, jobu, jobv, m, n, a, lda, sva, mv, v, ldv, work, lwork, info);
+  gesvj( joba, jobu, jobv, m, n, a, lda, sva, mv, v, ldv, work, lwork, info);
 }
 template< typename T,typename Ta >
-integer gesvj(char* joba, char* jobu, char* jobv, integer* m, integer* n, T* a, integer* lda, Ta* sva, integer* mv, T* v, integer* ldv, T* cwork, integer* lwork, Ta* rwork, integer* lrwork, integer* info)
+void gesvj(char* joba, char* jobu, char* jobv, integer* m, integer* n, T* a, integer* lda, Ta* sva, integer* mv, T* v, integer* ldv, T* cwork, integer* lwork, Ta* rwork, integer* lrwork, integer* info)
 {
-  return gesvj( joba, jobu, jobv, m, n, a, lda, sva, mv, v, ldv, cwork, lwork, rwork, lrwork, info);
+  gesvj( joba, jobu, jobv, m, n, a, lda, sva, mv, v, ldv, cwork, lwork, rwork, lrwork, info);
 }
 
 /*! @brief GESVX computes the solution to system of linear equations A * X = B for GE matrices
@@ -11932,17 +11816,16 @@ integer gesvj(char* joba, char* jobu, char* jobv, integer* m, integer* n, T* a, 
                        computed solution can be more accurate than the
                        value of RCOND would suggest. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gesvx(char* fact, char* trans, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, char* equed, T* r, T* c, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* ferr, T* berr, T* work, integer* iwork, integer* info)
+void gesvx(char* fact, char* trans, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, char* equed, T* r, T* c, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* ferr, T* berr, T* work, integer* iwork, integer* info)
 {
-  return gesvx( fact, trans, n, nrhs, a, lda, af, ldaf, ipiv, equed, r, c, b, ldb, x, ldx, rcond, ferr, berr, work, iwork, info);
+  gesvx( fact, trans, n, nrhs, a, lda, af, ldaf, ipiv, equed, r, c, b, ldb, x, ldx, rcond, ferr, berr, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer gesvx(char* fact, char* trans, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, char* equed, Ta* r, Ta* c, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void gesvx(char* fact, char* trans, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, char* equed, Ta* r, Ta* c, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return gesvx( fact, trans, n, nrhs, a, lda, af, ldaf, ipiv, equed, r, c, b, ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
+  gesvx( fact, trans, n, nrhs, a, lda, af, ldaf, ipiv, equed, r, c, b, ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
 }
 
 /*! @brief GESVXX computes the solution to system of linear equations A * X = B for GE matrices
@@ -12291,17 +12174,16 @@ integer gesvx(char* fact, char* trans, integer* n, integer* nrhs, T* a, integer*
            about all of the right-hand sides check ERR_BNDS_NORM or
            ERR_BNDS_COMP. \n
 
- * @return INTEGER Return value of the function.
- * */   
+ *  * */   
 template< typename T >
-integer gesvxx(char* fact, char* trans, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, char* equed, T* r, T* c, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* rpvgrw, T* berr, integer* n_err_bnds, T* err_bnds_norm, T* err_bnds_comp, integer* nparams, T* params, T* work, integer* iwork, integer* info)
+void gesvxx(char* fact, char* trans, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, char* equed, T* r, T* c, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* rpvgrw, T* berr, integer* n_err_bnds, T* err_bnds_norm, T* err_bnds_comp, integer* nparams, T* params, T* work, integer* iwork, integer* info)
 {
-  return gesvxx(fact, trans, n, nrhs, a, lda, af, ldaf, ipiv, equed, r, c, b, ldb, x, ldx, rcond, rpvgrw, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, iwork, info);
+  gesvxx(fact, trans, n, nrhs, a, lda, af, ldaf, ipiv, equed, r, c, b, ldb, x, ldx, rcond, rpvgrw, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, iwork, info);
 }
 template< typename T , typename Ta >
-integer gesvxx(char* fact, char* trans, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, char* equed, Ta* r, Ta* c, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* rpvgrw, Ta* berr, integer* n_err_bnds, Ta* err_bnds_norm, Ta* err_bnds_comp, integer* nparams, Ta* params, T* work, Ta* rwork, integer* info)
+void gesvxx(char* fact, char* trans, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, char* equed, Ta* r, Ta* c, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* rpvgrw, Ta* berr, integer* n_err_bnds, Ta* err_bnds_norm, Ta* err_bnds_comp, integer* nparams, Ta* params, T* work, Ta* rwork, integer* info)
 {
-  return gesvxx(fact, trans, n, nrhs, a, lda, af, ldaf, ipiv, equed, r, c, b, ldb, x, ldx, rcond, rpvgrw, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, rwork, info);
+  gesvxx(fact, trans, n, nrhs, a, lda, af, ldaf, ipiv, equed, r, c, b, ldb, x, ldx, rcond, rpvgrw, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, rwork, info);
 }
 
 /*! @brief GETRF2 computes an LU factorization of a general M-by-N matrix A
@@ -12356,12 +12238,11 @@ integer gesvxx(char* fact, char* trans, integer* n, integer* nrhs, T* a, integer
                 singular, and division by zero will occur if it is used
                 to solve a system of equations. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer getrf2(integer* m, integer* n, T* a, integer* lda, integer* ipiv, integer* info)
+void getrf2(integer* m, integer* n, T* a, integer* lda, integer* ipiv, integer* info)
 {
-  return getrf2(m, n, a, lda, ipiv, info);
+  getrf2(m, n, a, lda, ipiv, info);
 }
 
 /*! @brief GETRI computes the inverse of a matrix using the LU factorization computed by GETRF
@@ -12410,12 +12291,11 @@ integer getrf2(integer* m, integer* n, T* a, integer* lda, integer* ipiv, intege
           > 0:  if INFO = i, U(i,i) is exactly zero; the matrix is
                 singular and its inverse could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer getri(integer* n, T* a, integer* lda, integer* ipiv, T* work, integer* lwork, integer* info)
+void getri(integer* n, T* a, integer* lda, integer* ipiv, T* work, integer* lwork, integer* info)
 {
-  return getri(n, a, lda, ipiv, work, lwork, info);
+  getri(n, a, lda, ipiv, work, lwork, info);
 }
 
 /*! @brief GETRS solves a system of linear equations
@@ -12464,12 +12344,11 @@ integer getri(integer* n, T* a, integer* lda, integer* ipiv, T* work, integer* l
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
-* @return INTEGER Return value of the function.
- * */
+*  * */
 template< typename T >
-integer getrs(char* trans, integer* n, integer* nrhs,  T* a, integer* lda,  integer* ipiv, T* b, integer* ldb, integer* info)
+void getrs(char* trans, integer* n, integer* nrhs,  T* a, integer* lda,  integer* ipiv, T* b, integer* ldb, integer* info)
 {
-  return getrs(trans, n, nrhs,  a, lda,  ipiv, b, ldb, info);
+  getrs(trans, n, nrhs,  a, lda,  ipiv, b, ldb, info);
 }
 
 /*! @brief GETSLS solves overdetermined or underdetermined real linear systems
@@ -12565,12 +12444,11 @@ integer getrs(char* trans, integer* n, integer* nrhs,  T* a, integer* lda,  inte
                 full rank; the least squares solution could not be
                 computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer getsls(char* trans, integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, T* work, integer* lwork, integer* info)
+void getsls(char* trans, integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, T* work, integer* lwork, integer* info)
 {
-  return getsls(trans, m, n, nrhs, a, lda, b, ldb, work, lwork, info);
+  getsls(trans, m, n, nrhs, a, lda, b, ldb, work, lwork, info);
 }
 
 /*! @brief GGBAK forms the right or left eigenvectors of a real generalized eigenvalue problem
@@ -12629,17 +12507,16 @@ integer getsls(char* trans, integer* m, integer* n, integer* nrhs, T* a, integer
           = 0:  successful exit. \n
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ggbak(char* job, char* side, integer* n, integer* ilo, integer* ihi,  T* lscale,  T* rscale, integer* m, T* v, integer* ldv, integer* info)
+void ggbak(char* job, char* side, integer* n, integer* ilo, integer* ihi,  T* lscale,  T* rscale, integer* m, T* v, integer* ldv, integer* info)
 {
-  return ggbak(job, side, n, ilo, ihi,  lscale,  rscale, m, v, ldv, info);
+  ggbak(job, side, n, ilo, ihi,  lscale,  rscale, m, v, ldv, info);
 }
 template< typename T , typename Ta >
-integer ggbak(char* job, char* side, integer* n, integer* ilo, integer* ihi,  Ta* lscale,  Ta* rscale, integer* m, T* v, integer* ldv, integer* info)
+void ggbak(char* job, char* side, integer* n, integer* ilo, integer* ihi,  Ta* lscale,  Ta* rscale, integer* m, T* v, integer* ldv, integer* info)
 {
-  return ggbak(job, side, n, ilo, ihi,  lscale,  rscale, m, v, ldv, info);
+  ggbak(job, side, n, ilo, ihi,  lscale,  rscale, m, v, ldv, info);
 }
 
 /*! @brief GGBAL balances a pair of general real matrices (A,B)
@@ -12724,17 +12601,16 @@ integer ggbak(char* job, char* side, integer* n, integer* ilo, integer* ihi,  Ta
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ggbal(char* job, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* ilo, integer* ihi, T* lscale, T* rscale, T* work, integer* info)
+void ggbal(char* job, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* ilo, integer* ihi, T* lscale, T* rscale, T* work, integer* info)
 {
-  return ggbal(job, n, a, lda, b, ldb, ilo, ihi, lscale, rscale, work, info);
+  ggbal(job, n, a, lda, b, ldb, ilo, ihi, lscale, rscale, work, info);
 }
 template< typename T , typename Ta >
-integer ggbal(char* job, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* ilo, integer* ihi, Ta* lscale, Ta* rscale, Ta* work, integer* info)
+void ggbal(char* job, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* ilo, integer* ihi, Ta* lscale, Ta* rscale, Ta* work, integer* info)
 {
-  return ggbal(job, n, a, lda, b, ldb, ilo, ihi, lscale, rscale, work, info);
+  ggbal(job, n, a, lda, b, ldb, ilo, ihi, lscale, rscale, work, info);
 }
 
 /*! @brief GGES computes the eigenvalues, the Schur form, and, optionally, the matrix of Schur vectors for GE matrices
@@ -12899,17 +12775,16 @@ integer ggbal(char* job, integer* n, T* a, integer* lda, T* b, integer* ldb, int
                       be caused due to scaling. \n
                 =N+3: reordering failed in STGSEN. \n
 
- * @return INTEGER Return value of the function.
- * */ 
+ *  * */ 
 template< typename T >
-integer gges(char* jobvsl, char* jobvsr, char* sort, void *selctg, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* sdim, T* alphar, T* alphai, T* beta, T* vsl, integer* ldvsl, T* vsr, integer* ldvsr, T* work, integer* lwork, logical* bwork, integer* info)
+void gges(char* jobvsl, char* jobvsr, char* sort, void *selctg, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* sdim, T* alphar, T* alphai, T* beta, T* vsl, integer* ldvsl, T* vsr, integer* ldvsr, T* work, integer* lwork, logical* bwork, integer* info)
 {
-  return gges(jobvsl, jobvsr, sort, selctg, n, a, lda, b, ldb, sdim, alphar, alphai, beta, vsl, ldvsl, vsr, ldvsr, work, lwork, bwork, info);
+  gges(jobvsl, jobvsr, sort, selctg, n, a, lda, b, ldb, sdim, alphar, alphai, beta, vsl, ldvsl, vsr, ldvsr, work, lwork, bwork, info);
 }
 template< typename T, typename Ta >
-integer gges(char* jobvsl, char* jobvsr, char* sort, void *selctg, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* sdim, T* alpha, T* beta, T* vsl, integer* ldvsl, T* vsr, integer* ldvsr, T* work, integer* lwork, Ta* rwork, logical* bwork, integer* info)
+void gges(char* jobvsl, char* jobvsr, char* sort, void *selctg, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* sdim, T* alpha, T* beta, T* vsl, integer* ldvsl, T* vsr, integer* ldvsr, T* work, integer* lwork, Ta* rwork, logical* bwork, integer* info)
 {
-  return gges(jobvsl, jobvsr, sort, selctg, n, a, lda, b, ldb, sdim, alpha, beta, vsl, ldvsl, vsr, ldvsr, work, lwork, rwork, bwork, info);
+  gges(jobvsl, jobvsr, sort, selctg, n, a, lda, b, ldb, sdim, alpha, beta, vsl, ldvsl, vsr, ldvsr, work, lwork, rwork, bwork, info);
 }
 
 /*! @brief GGES3 computes the eigenvalues, the Schur form, and, optionally, the matrix of Schur vectors for GE matrices (blocked algorithm)
@@ -13072,17 +12947,16 @@ integer gges(char* jobvsl, char* jobvsr, char* sort, void *selctg, integer* n, T
                       be caused due to scaling. \n
                 =N+3: reordering failed in STGSEN. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gges3(char* jobvsl, char* jobvsr, char* sort, void *selctg, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* sdim, T* alphar, T* alphai, T* beta, T* vsl, integer* ldvsl, T* vsr, integer* ldvsr, T* work, integer* lwork, logical* bwork, integer* info)
+void gges3(char* jobvsl, char* jobvsr, char* sort, void *selctg, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* sdim, T* alphar, T* alphai, T* beta, T* vsl, integer* ldvsl, T* vsr, integer* ldvsr, T* work, integer* lwork, logical* bwork, integer* info)
 {
-  return gges3(jobvsl, jobvsr, sort, selctg, n, a, lda, b, ldb, sdim, alphar, alphai, beta, vsl, ldvsl, vsr, ldvsr, work, lwork, bwork, info);
+  gges3(jobvsl, jobvsr, sort, selctg, n, a, lda, b, ldb, sdim, alphar, alphai, beta, vsl, ldvsl, vsr, ldvsr, work, lwork, bwork, info);
 }
 template< typename T, typename Ta >
-integer gges3(char* jobvsl, char* jobvsr, char* sort, void *selctg, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* sdim, T* alpha, T* beta, T* vsl, integer* ldvsl, T* vsr, integer* ldvsr, T* work, integer* lwork, Ta* rwork, logical* bwork, integer* info)
+void gges3(char* jobvsl, char* jobvsr, char* sort, void *selctg, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* sdim, T* alpha, T* beta, T* vsl, integer* ldvsl, T* vsr, integer* ldvsr, T* work, integer* lwork, Ta* rwork, logical* bwork, integer* info)
 {
-  return gges3(jobvsl, jobvsr, sort, selctg, n, a, lda, b, ldb, sdim, alpha, beta, vsl, ldvsl, vsr, ldvsr, work, lwork, rwork, bwork, info);
+  gges3(jobvsl, jobvsr, sort, selctg, n, a, lda, b, ldb, sdim, alpha, beta, vsl, ldvsl, vsr, ldvsr, work, lwork, rwork, bwork, info);
 }
 
 /*! @brief GGESX computes the eigenvalues, the Schur form, and, optionally, the matrix of Schur vectors for GE matrices
@@ -13291,17 +13165,16 @@ integer gges3(char* jobvsl, char* jobvsr, char* sort, void *selctg, integer* n, 
                       be caused due to scaling. \n
                 =N+3: reordering failed in STGSEN. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ggesx(char* jobvsl, char* jobvsr, char* sort, void *selctg, char* sense, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* sdim, T* alphar, T* alphai, T* beta, T* vsl, integer* ldvsl, T* vsr, integer* ldvsr, T* rconde, T* rcondv, T* work, integer* lwork, integer* iwork, integer* liwork, logical* bwork, integer* info)
+void ggesx(char* jobvsl, char* jobvsr, char* sort, void *selctg, char* sense, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* sdim, T* alphar, T* alphai, T* beta, T* vsl, integer* ldvsl, T* vsr, integer* ldvsr, T* rconde, T* rcondv, T* work, integer* lwork, integer* iwork, integer* liwork, logical* bwork, integer* info)
 {
-  return ggesx(jobvsl, jobvsr, sort, selctg, sense, n, a, lda, b, ldb, sdim, alphar, alphai, beta, vsl, ldvsl, vsr, ldvsr, rconde, rcondv, work, lwork, iwork, liwork, bwork, info);
+  ggesx(jobvsl, jobvsr, sort, selctg, sense, n, a, lda, b, ldb, sdim, alphar, alphai, beta, vsl, ldvsl, vsr, ldvsr, rconde, rcondv, work, lwork, iwork, liwork, bwork, info);
 }
 template< typename T , typename Ta >
-integer ggesx(char* jobvsl, char* jobvsr, char* sort, void *selctg, char* sense, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* sdim, T* alpha, T* beta, T* vsl, integer* ldvsl, T* vsr, integer* ldvsr, Ta* rconde, Ta* rcondv, T* work, integer* lwork, Ta* rwork, integer* iwork, integer* liwork, logical* bwork, integer* info)
+void ggesx(char* jobvsl, char* jobvsr, char* sort, void *selctg, char* sense, integer* n, T* a, integer* lda, T* b, integer* ldb, integer* sdim, T* alpha, T* beta, T* vsl, integer* ldvsl, T* vsr, integer* ldvsr, Ta* rconde, Ta* rcondv, T* work, integer* lwork, Ta* rwork, integer* iwork, integer* liwork, logical* bwork, integer* info)
 {
-  return ggesx(jobvsl, jobvsr, sort, selctg, sense, n, a, lda, b, ldb, sdim, alpha, beta, vsl, ldvsl, vsr, ldvsr, rconde, rcondv, work, lwork, rwork, iwork, liwork, bwork, info);
+  ggesx(jobvsl, jobvsr, sort, selctg, sense, n, a, lda, b, ldb, sdim, alpha, beta, vsl, ldvsl, vsr, ldvsr, rconde, rcondv, work, lwork, rwork, iwork, liwork, bwork, info);
 }
 
 /*! @brief GGEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matrices
@@ -13421,17 +13294,16 @@ integer ggesx(char* jobvsl, char* jobvsr, char* sort, void *selctg, char* sense,
           > N:  =N+1: other than QZ iteration failed in SHGEQZ.
                 =N+2: error return from STGEVC. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ggev(char* jobvl, char* jobvr, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alphar, T* alphai, T* beta, T* vl, integer* ldvl, T* vr, integer* ldvr, T* work, integer* lwork, integer* info)
+void ggev(char* jobvl, char* jobvr, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alphar, T* alphai, T* beta, T* vl, integer* ldvl, T* vr, integer* ldvr, T* work, integer* lwork, integer* info)
 {
-  return ggev(jobvl, jobvr, n, a, lda, b, ldb, alphar, alphai, beta, vl, ldvl, vr, ldvr, work, lwork, info);
+  ggev(jobvl, jobvr, n, a, lda, b, ldb, alphar, alphai, beta, vl, ldvl, vr, ldvr, work, lwork, info);
 } 
 template< typename T, typename Ta >
-integer ggev(char* jobvl, char* jobvr, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alpha, T* beta, T* vl, integer* ldvl, T* vr, integer* ldvr, T* work, integer* lwork, Ta* rwork, integer* info)
+void ggev(char* jobvl, char* jobvr, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alpha, T* beta, T* vl, integer* ldvl, T* vr, integer* ldvr, T* work, integer* lwork, Ta* rwork, integer* info)
 {
-  return ggev(jobvl, jobvr, n, a, lda, b, ldb, alpha, beta, vl, ldvl, vr, ldvr, work, lwork, rwork, info);
+  ggev(jobvl, jobvr, n, a, lda, b, ldb, alpha, beta, vl, ldvl, vr, ldvr, work, lwork, rwork, info);
 }
 
 /*! @brief GGEV3 computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matrices (blocked algorithm)
@@ -13549,17 +13421,16 @@ integer ggev(char* jobvl, char* jobvr, integer* n, T* a, integer* lda, T* b, int
           > N:  =N+1: other than QZ iteration failed in SHGEQZ. \n
                 =N+2: error return from STGEVC. \n
 
-* @return INTEGER Return value of the function.
- * */
+*  * */
 template< typename T >
-integer ggev3(char* jobvl, char* jobvr, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alphar, T* alphai, T* beta, T* vl, integer* ldvl, T* vr, integer* ldvr, T* work, integer* lwork, integer* info)
+void ggev3(char* jobvl, char* jobvr, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alphar, T* alphai, T* beta, T* vl, integer* ldvl, T* vr, integer* ldvr, T* work, integer* lwork, integer* info)
 {
-  return ggev3( jobvl, jobvr, n, a, lda, b, ldb, alphar, alphai, beta, vl, ldvl, vr, ldvr, work, lwork, info);
+  ggev3( jobvl, jobvr, n, a, lda, b, ldb, alphar, alphai, beta, vl, ldvl, vr, ldvr, work, lwork, info);
 }
 template< typename T, typename Ta >
-integer ggev3(char* jobvl, char* jobvr, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alpha, T* beta, T* vl, integer* ldvl, T* vr, integer* ldvr, T* work, integer* lwork, Ta* rwork, integer* info)
+void ggev3(char* jobvl, char* jobvr, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alpha, T* beta, T* vl, integer* ldvl, T* vr, integer* ldvr, T* work, integer* lwork, Ta* rwork, integer* info)
 {
-  return ggev3( jobvl, jobvr, n, a, lda, b, ldb, alpha, beta, vl, ldvl, vr, ldvr, work, lwork, rwork, info);
+  ggev3( jobvl, jobvr, n, a, lda, b, ldb, alpha, beta, vl, ldvl, vr, ldvr, work, lwork, rwork, info);
 }
 
 /*! @brief GGEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matrices
@@ -13770,17 +13641,16 @@ integer ggev3(char* jobvl, char* jobvr, integer* n, T* a, integer* lda, T* b, in
           > N:  =N+1: other than QZ iteration failed in SHGEQZ. \n
                 =N+2: error return from STGEVC. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ggevx(char* balanc, char* jobvl, char* jobvr, char* sense, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alphar, T* alphai, T* beta, T* vl, integer* ldvl, T* vr, integer* ldvr, integer* ilo, integer* ihi, T* lscale, T* rscale, T* abnrm, T* bbnrm, T* rconde, T* rcondv, T* work, integer* lwork, integer* iwork, logical* bwork, integer* info)
+void ggevx(char* balanc, char* jobvl, char* jobvr, char* sense, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alphar, T* alphai, T* beta, T* vl, integer* ldvl, T* vr, integer* ldvr, integer* ilo, integer* ihi, T* lscale, T* rscale, T* abnrm, T* bbnrm, T* rconde, T* rcondv, T* work, integer* lwork, integer* iwork, logical* bwork, integer* info)
 {
-  return ggevx(balanc, jobvl, jobvr, sense, n, a, lda, b, ldb, alphar, alphai, beta, vl, ldvl, vr, ldvr, ilo, ihi, lscale, rscale, abnrm, bbnrm, rconde, rcondv, work, lwork, iwork, bwork, info);
+  ggevx(balanc, jobvl, jobvr, sense, n, a, lda, b, ldb, alphar, alphai, beta, vl, ldvl, vr, ldvr, ilo, ihi, lscale, rscale, abnrm, bbnrm, rconde, rcondv, work, lwork, iwork, bwork, info);
 }
 template< typename T , typename Ta >
-integer ggevx(char* balanc, char* jobvl, char* jobvr, char* sense, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alpha, T* beta, T* vl, integer* ldvl, T* vr, integer* ldvr, integer* ilo, integer* ihi, Ta* lscale, Ta* rscale, Ta* abnrm, Ta* bbnrm, Ta* rconde, Ta* rcondv, T* work, integer* lwork, Ta* rwork, integer* iwork, logical* bwork, integer* info)
+void ggevx(char* balanc, char* jobvl, char* jobvr, char* sense, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alpha, T* beta, T* vl, integer* ldvl, T* vr, integer* ldvr, integer* ilo, integer* ihi, Ta* lscale, Ta* rscale, Ta* abnrm, Ta* bbnrm, Ta* rconde, Ta* rcondv, T* work, integer* lwork, Ta* rwork, integer* iwork, logical* bwork, integer* info)
 {
-  return ggevx(balanc, jobvl, jobvr, sense, n, a, lda, b, ldb, alpha, beta, vl, ldvl, vr, ldvr, ilo, ihi, lscale, rscale, abnrm, bbnrm, rconde, rcondv, work, lwork, rwork, iwork, bwork, info);
+  ggevx(balanc, jobvl, jobvr, sense, n, a, lda, b, ldb, alpha, beta, vl, ldvl, vr, ldvr, ilo, ihi, lscale, rscale, abnrm, bbnrm, rconde, rcondv, work, lwork, rwork, iwork, bwork, info);
 }
 
 /*! @brief GGGLM solves a general Gauss-Markov linear model (GLM) problem
@@ -13871,12 +13741,11 @@ integer ggevx(char* balanc, char* jobvl, char* jobvr, char* sense, integer* n, T
                 rank( A B ) < N; the least squares solution could not
                 be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ggglm(integer* n, integer* m, integer* p, T* a, integer* lda, T* b, integer* ldb, T* d, T* x, T* y, T* work, integer* lwork, integer* info)
+void ggglm(integer* n, integer* m, integer* p, T* a, integer* lda, T* b, integer* ldb, T* d, T* x, T* y, T* work, integer* lwork, integer* info)
 {
-  return ggglm( n, m, p, a, lda, b, ldb, d, x, y, work, lwork, info);
+  ggglm( n, m, p, a, lda, b, ldb, d, x, y, work, lwork, info);
 }
 
 /*! @brief GGHD3 reduces a pair of real matrices (A,B) to generalized upper Hessenberg \n
@@ -14000,12 +13869,11 @@ integer ggglm(integer* n, integer* m, integer* p, T* a, integer* lda, T* b, inte
           = 0:  successful exit. \n
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gghd3(char* compq, char* compz, integer* n, integer* ilo, integer* ihi, T* a, integer* lda, T* b, integer* ldb, T* q, integer* ldq, T* z, integer* ldz, T* work, integer* lwork, integer* info)
+void gghd3(char* compq, char* compz, integer* n, integer* ilo, integer* ihi, T* a, integer* lda, T* b, integer* ldb, T* q, integer* ldq, T* z, integer* ldz, T* work, integer* lwork, integer* info)
 {
-  return gghd3(compq, compz, n, ilo, ihi, a, lda, b, ldb, q, ldq, z, ldz, work, lwork, info);
+  gghd3(compq, compz, n, ilo, ihi, a, lda, b, ldb, q, ldq, z, ldz, work, lwork, info);
 } 
 
 /*! @brief GGHRD reduces a pair of real matrices (A,B) to generalized upper Hessenberg \n
@@ -14115,12 +13983,11 @@ integer gghd3(char* compq, char* compz, integer* n, integer* ilo, integer* ihi, 
           = 0:  successful exit. \n
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gghrd(char* compq, char* compz, integer* n, integer* ilo, integer* ihi, T* a, integer* lda, T* b, integer* ldb, T* q, integer* ldq, T* z, integer* ldz, integer* info)
+void gghrd(char* compq, char* compz, integer* n, integer* ilo, integer* ihi, T* a, integer* lda, T* b, integer* ldb, T* q, integer* ldq, T* z, integer* ldz, integer* info)
 {
-  return gghrd(compq, compz, n, ilo, ihi, a, lda, b, ldb, q, ldq, z, ldz, info);
+  gghrd(compq, compz, n, ilo, ihi, a, lda, b, ldb, q, ldq, z, ldz, info);
 }
 
 /*! @brief GGLSE solves overdetermined or underdetermined systems for OTHER matrices
@@ -14210,12 +14077,11 @@ integer gghrd(char* compq, char* compz, integer* n, integer* ilo, integer* ihi, 
                     ( (B) )
                 be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gglse(integer* m, integer* n, integer* p, T* a, integer* lda, T* b, integer* ldb, T* c, T* d, T* x, T* work, integer* lwork, integer* info)
+void gglse(integer* m, integer* n, integer* p, T* a, integer* lda, T* b, integer* ldb, T* c, T* d, T* x, T* work, integer* lwork, integer* info)
 {
-  return gglse( m, n, p, a, lda, b, ldb, c, d, x, work, lwork, info);
+  gglse( m, n, p, a, lda, b, ldb, c, d, x, work, lwork, info);
 }
 
 /*! @brief GGQRF computes a generalized QR factorization of an N-by-M matrix A and an N-by-P matrix B
@@ -14306,12 +14172,11 @@ integer gglse(integer* m, integer* n, integer* p, T* a, integer* lda, T* b, inte
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ggqrf(integer* n, integer* m, integer* p, T* a, integer* lda, T* taua, T* b, integer* ldb, T* taub, T* work, integer* lwork, integer* info)
+void ggqrf(integer* n, integer* m, integer* p, T* a, integer* lda, T* taua, T* b, integer* ldb, T* taub, T* work, integer* lwork, integer* info)
 {
-  return ggqrf(n, m, p, a, lda, taua, b, ldb, taub, work, lwork, info);
+  ggqrf(n, m, p, a, lda, taua, b, ldb, taub, work, lwork, info);
 }
 
 /*! @brief GGRQF computes a generalized RQ factorization of an M-by-N matrix A and a P-by-N matrix B
@@ -14401,12 +14266,11 @@ integer ggqrf(integer* n, integer* m, integer* p, T* a, integer* lda, T* taua, T
           = 0:  successful exit \n
           < 0:  if INF0= -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ggrqf(integer* m, integer* p, integer* n, T* a, integer* lda, T* taua, T* b, integer* ldb, T* taub, T* work, integer* lwork, integer* info)
+void ggrqf(integer* m, integer* p, integer* n, T* a, integer* lda, T* taua, T* b, integer* ldb, T* taub, T* work, integer* lwork, integer* info)
 {
-  return ggrqf( m, p, n, a, lda, taua, b, ldb, taub, work, lwork, info);
+  ggrqf( m, p, n, a, lda, taua, b, ldb, taub, work, lwork, info);
 }
 
 /*! @brief GGSVD computes the singular value decomposition (SVD) for OTHER matrices
@@ -14595,17 +14459,16 @@ integer ggrqf(integer* m, integer* p, integer* n, T* a, integer* lda, T* taua, T
           > 0:  if INFO = 1, the Jacobi-type procedure failed to
                 converge.  For further details, see subroutine STGSJA. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ggsvd(char* jobu, char* jobv, char* jobq, integer* m, integer* n, integer* p, integer* k, integer* l, T* a, integer* lda, T* b, integer* ldb, T* alpha, T* beta, T* u, integer* ldu, T* v, integer* ldv, T* q, integer* ldq, T* work, integer* iwork, integer* info)
+void ggsvd(char* jobu, char* jobv, char* jobq, integer* m, integer* n, integer* p, integer* k, integer* l, T* a, integer* lda, T* b, integer* ldb, T* alpha, T* beta, T* u, integer* ldu, T* v, integer* ldv, T* q, integer* ldq, T* work, integer* iwork, integer* info)
 {
-  return ggsvd(jobu, jobv, jobq, m, n, p, k, l, a, lda, b, ldb, alpha, beta, u, ldu, v, ldv, q, ldq, work, iwork, info);
+  ggsvd(jobu, jobv, jobq, m, n, p, k, l, a, lda, b, ldb, alpha, beta, u, ldu, v, ldv, q, ldq, work, iwork, info);
 }
 template< typename T , typename Ta >
-integer ggsvd(char* jobu, char* jobv, char* jobq, integer* m, integer* n, integer* p, integer* k, integer* l, T* a, integer* lda, T* b, integer* ldb, Ta* alpha, Ta* beta, T* u, integer* ldu, T* v, integer* ldv, T* q, integer* ldq, T* work, Ta* rwork, integer* iwork, integer* info)
+void ggsvd(char* jobu, char* jobv, char* jobq, integer* m, integer* n, integer* p, integer* k, integer* l, T* a, integer* lda, T* b, integer* ldb, Ta* alpha, Ta* beta, T* u, integer* ldu, T* v, integer* ldv, T* q, integer* ldq, T* work, Ta* rwork, integer* iwork, integer* info)
 {
-  return ggsvd(jobu, jobv, jobq, m, n, p, k, l, a, lda, b, ldb, alpha, beta, u, ldu, v, ldv, q, ldq, work, rwork, iwork, info);
+  ggsvd(jobu, jobv, jobq, m, n, p, k, l, a, lda, b, ldb, alpha, beta, u, ldu, v, ldv, q, ldq, work, rwork, iwork, info);
 }
 
 /*! @brief GGSVD3 computes the singular value decomposition (SVD) for OTHER matrices
@@ -14800,17 +14663,16 @@ integer ggsvd(char* jobu, char* jobv, char* jobq, integer* m, integer* n, intege
           > 0:  if INFO = 1, the Jacobi-type procedure failed to
                 converge.  For further details, see subroutine STGSJA. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ggsvd3(char* jobu, char* jobv, char* jobq, integer* m, integer* n, integer* p, integer* k, integer* l, T* a, integer* lda, T* b, integer* ldb, T* alpha, T* beta, T* u, integer* ldu, T* v, integer* ldv, T* q, integer* ldq, T* work, integer* lwork, integer* iwork, integer* info)
+void ggsvd3(char* jobu, char* jobv, char* jobq, integer* m, integer* n, integer* p, integer* k, integer* l, T* a, integer* lda, T* b, integer* ldb, T* alpha, T* beta, T* u, integer* ldu, T* v, integer* ldv, T* q, integer* ldq, T* work, integer* lwork, integer* iwork, integer* info)
 {
-  return ggsvd3(jobu, jobv, jobq, m, n, p, k, l, a, lda, b, ldb, alpha, beta, u, ldu, v, ldv, q, ldq, work, lwork, iwork, info);
+  ggsvd3(jobu, jobv, jobq, m, n, p, k, l, a, lda, b, ldb, alpha, beta, u, ldu, v, ldv, q, ldq, work, lwork, iwork, info);
 }
 template< typename T, typename Ta >
-integer ggsvd3(char* jobu, char* jobv, char* jobq, integer* m, integer* n, integer* p, integer* k, integer* l, T* a, integer* lda, T* b, integer* ldb, Ta* alpha, Ta* beta, T* u, integer* ldu, T* v, integer* ldv, T* q, integer* ldq, T* work, integer* lwork, Ta* rwork, integer* iwork, integer* info)
+void ggsvd3(char* jobu, char* jobv, char* jobq, integer* m, integer* n, integer* p, integer* k, integer* l, T* a, integer* lda, T* b, integer* ldb, Ta* alpha, Ta* beta, T* u, integer* ldu, T* v, integer* ldv, T* q, integer* ldq, T* work, integer* lwork, Ta* rwork, integer* iwork, integer* info)
 {
-  return ggsvd3(jobu, jobv, jobq, m, n, p, k, l, a, lda, b, ldb, alpha, beta, u, ldu, v, ldv, q, ldq, work, lwork, rwork, iwork, info);
+  ggsvd3(jobu, jobv, jobq, m, n, p, k, l, a, lda, b, ldb, alpha, beta, u, ldu, v, ldv, q, ldq, work, lwork, rwork, iwork, info);
 }
 
 /*! @brief GGSVP computes orthogonal matrices U, V and Q
@@ -14934,17 +14796,16 @@ integer ggsvd3(char* jobu, char* jobv, char* jobq, integer* m, integer* n, integ
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ggsvp(char* jobu, char* jobv, char* jobq, integer* m, integer* p, integer* n, T* a, integer* lda, T* b, integer* ldb, T* tola, T* tolb, integer* k, integer* l, T* u, integer* ldu, T* v, integer* ldv, T* q, integer* ldq, integer* iwork, T* tau, T* work, integer* info)
+void ggsvp(char* jobu, char* jobv, char* jobq, integer* m, integer* p, integer* n, T* a, integer* lda, T* b, integer* ldb, T* tola, T* tolb, integer* k, integer* l, T* u, integer* ldu, T* v, integer* ldv, T* q, integer* ldq, integer* iwork, T* tau, T* work, integer* info)
 {
-  return ggsvp(jobu, jobv, jobq, m, p, n, a, lda, b, ldb, tola, tolb, k, l, u, ldu, v, ldv, q, ldq, iwork, tau, work, info);
+  ggsvp(jobu, jobv, jobq, m, p, n, a, lda, b, ldb, tola, tolb, k, l, u, ldu, v, ldv, q, ldq, iwork, tau, work, info);
 }
 template< typename T, typename Ta >
-integer ggsvp(char* jobu, char* jobv, char* jobq, integer* m, integer* p, integer* n, T* a, integer* lda, T* b, integer* ldb, Ta* tola, Ta* tolb, integer* k, integer* l, T* u, integer* ldu, T* v, integer* ldv, T* q, integer* ldq, integer* iwork, Ta* rwork, T* tau, T* work, integer* info)
+void ggsvp(char* jobu, char* jobv, char* jobq, integer* m, integer* p, integer* n, T* a, integer* lda, T* b, integer* ldb, Ta* tola, Ta* tolb, integer* k, integer* l, T* u, integer* ldu, T* v, integer* ldv, T* q, integer* ldq, integer* iwork, Ta* rwork, T* tau, T* work, integer* info)
 {
-  return ggsvp(jobu, jobv, jobq, m, p, n, a, lda, b, ldb, tola, tolb, k, l, u, ldu, v, ldv, q, ldq, iwork, rwork, tau, work, info);
+  ggsvp(jobu, jobv, jobq, m, p, n, a, lda, b, ldb, tola, tolb, k, l, u, ldu, v, ldv, q, ldq, iwork, rwork, tau, work, info);
 }
 
 /*! @brief GGSVP3 computes orthogonal matrices U, V and Q
@@ -15075,17 +14936,16 @@ integer ggsvp(char* jobu, char* jobv, char* jobq, integer* m, integer* p, intege
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ggsvp3(char* jobu, char* jobv, char* jobq, integer* m, integer* p, integer* n, T* a, integer* lda, T* b, integer* ldb, T* tola, T* tolb, integer* k, integer* l, T* u, integer* ldu, T* v, integer* ldv, T* q, integer* ldq, integer* iwork, T* tau, T* work, integer* lwork, integer* info)
+void ggsvp3(char* jobu, char* jobv, char* jobq, integer* m, integer* p, integer* n, T* a, integer* lda, T* b, integer* ldb, T* tola, T* tolb, integer* k, integer* l, T* u, integer* ldu, T* v, integer* ldv, T* q, integer* ldq, integer* iwork, T* tau, T* work, integer* lwork, integer* info)
 {
-  return ggsvp3(jobu, jobv, jobq, m, p, n, a, lda, b, ldb, tola, tolb, k, l, u, ldu, v, ldv, q, ldq, iwork, tau, work, lwork, info);
+  ggsvp3(jobu, jobv, jobq, m, p, n, a, lda, b, ldb, tola, tolb, k, l, u, ldu, v, ldv, q, ldq, iwork, tau, work, lwork, info);
 } 
 template< typename T, typename Ta >
-integer ggsvp3(char* jobu, char* jobv, char* jobq, integer* m, integer* p, integer* n, T* a, integer* lda, T* b, integer* ldb, Ta* tola, Ta* tolb, integer* k, integer* l, T* u, integer* ldu, T* v, integer* ldv, T* q, integer* ldq, integer* iwork, Ta* rwork, T* tau, T* work, integer* lwork, integer* info)
+void ggsvp3(char* jobu, char* jobv, char* jobq, integer* m, integer* p, integer* n, T* a, integer* lda, T* b, integer* ldb, Ta* tola, Ta* tolb, integer* k, integer* l, T* u, integer* ldu, T* v, integer* ldv, T* q, integer* ldq, integer* iwork, Ta* rwork, T* tau, T* work, integer* lwork, integer* info)
 {
-  return ggsvp3(jobu, jobv, jobq, m, p, n, a, lda, b, ldb, tola, tolb, k, l, u, ldu, v, ldv, q, ldq, iwork, rwork, tau, work, lwork, info);
+  ggsvp3(jobu, jobv, jobq, m, p, n, a, lda, b, ldb, tola, tolb, k, l, u, ldu, v, ldv, q, ldq, iwork, rwork, tau, work, lwork, info);
 }
 
 /*! @brief GTCON estimates the reciprocal of the condition number of a real tridiagonal matrix A
@@ -15147,17 +15007,16 @@ integer ggsvp3(char* jobu, char* jobv, char* jobq, integer* m, integer* p, integ
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
-* @return INTEGER Return value of the function.
- * */
+*  * */
 template< typename T >
-integer gtcon(char* norm, integer* n,  T* dl,  T* d,  T* du,  T* du2,  integer* ipiv, T* anorm, T* rcond, T* work, integer* iwork, integer* info)
+void gtcon(char* norm, integer* n,  T* dl,  T* d,  T* du,  T* du2,  integer* ipiv, T* anorm, T* rcond, T* work, integer* iwork, integer* info)
 {
-  return gtcon(norm, n,  dl,  d,  du,  du2,  ipiv, anorm, rcond, work, iwork, info);
+  gtcon(norm, n,  dl,  d,  du,  du2,  ipiv, anorm, rcond, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer gtcon(char* norm, integer* n,  T* dl,  T* d,  T* du,  T* du2, integer* ipiv, Ta* anorm, Ta* rcond, T* work, integer* info)
+void gtcon(char* norm, integer* n,  T* dl,  T* d,  T* du,  T* du2, integer* ipiv, Ta* anorm, Ta* rcond, T* work, integer* info)
 {
-  return gtcon(norm, n,  dl,  d,  du,  du2,  ipiv, anorm, rcond, work, info);
+  gtcon(norm, n,  dl,  d,  du,  du2,  ipiv, anorm, rcond, work, info);
 }
 
 /*! @brief GTRFS improves the computed solution to a system of linear equations
@@ -15249,17 +15108,16 @@ integer gtcon(char* norm, integer* n,  T* dl,  T* d,  T* du,  T* du2, integer* i
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gtrfs(char* trans, integer* n, integer* nrhs, T* dl, T* d, T* du, T* dlf, T* df, T* duf, T* du2, integer* ipiv, T* b, integer* ldb, T* x, integer* ldx, T* ferr, T* berr, T* work, T* iwork, integer* info)
+void gtrfs(char* trans, integer* n, integer* nrhs, T* dl, T* d, T* du, T* dlf, T* df, T* duf, T* du2, integer* ipiv, T* b, integer* ldb, T* x, integer* ldx, T* ferr, T* berr, T* work, T* iwork, integer* info)
 {
-  return gtrfs(trans, n, nrhs, dl, d, du, dlf, df, duf, du2, ipiv, b, ldb, x, ldx, ferr, berr, work, iwork, info);
+  gtrfs(trans, n, nrhs, dl, d, du, dlf, df, duf, du2, ipiv, b, ldb, x, ldx, ferr, berr, work, iwork, info);
 }
 template< typename T , typename Ta >
-integer gtrfs(char* trans, integer* n, integer* nrhs,  T* dl,  T* d,  T* du,  T* dlf,  T* df,  T* duf,  T* du2,  integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void gtrfs(char* trans, integer* n, integer* nrhs,  T* dl,  T* d,  T* du,  T* dlf,  T* df,  T* duf,  T* du2,  integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return gtrfs(trans, n, nrhs, dl, d,  du, dlf, df, duf, du2, ipiv, b, ldb, x, ldx, ferr, berr, work, rwork, info);
+  gtrfs(trans, n, nrhs, dl, d,  du, dlf, df, duf, du2, ipiv, b, ldb, x, ldx, ferr, berr, work, rwork, info);
 }
 
 /*! @brief GTSV computes the solution to system of linear equations A * X = B for GT matrices
@@ -15318,12 +15176,11 @@ integer gtrfs(char* trans, integer* n, integer* nrhs,  T* dl,  T* d,  T* du,  T*
                has not been computed.  The factorization has not been
                completed unless i = N. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gtsv(integer* n, integer* nrhs, T* dl, T* d, T* du, T* b, integer* ldb, integer* info)
+void gtsv(integer* n, integer* nrhs, T* dl, T* d, T* du, T* b, integer* ldb, integer* info)
 {
-  return gtsv(n, nrhs, dl, d, du, b, ldb, info);
+  gtsv(n, nrhs, dl, d, du, b, ldb, info);
 }
 
 /*! @brief GTSVX uses the LU factorization to compute the solution to a real system of linear equations
@@ -15494,17 +15351,16 @@ integer gtsv(integer* n, integer* nrhs, T* dl, T* d, T* du, T* b, integer* ldb, 
                        computed solution can be more accurate than the
                        value of RCOND would suggest. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gtsvx(char* fact, char* trans, integer* n, integer* nrhs,  T* dl,  T* d,  T* du, T* dlf, T* df, T* duf, T* du2, integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* ferr, T* berr, T* work, integer* iwork, integer* info)
+void gtsvx(char* fact, char* trans, integer* n, integer* nrhs,  T* dl,  T* d,  T* du, T* dlf, T* df, T* duf, T* du2, integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* ferr, T* berr, T* work, integer* iwork, integer* info)
 {
-  return gtsvx(fact, trans, n, nrhs,  dl,  d,  du, dlf, df, duf, du2, ipiv,  b, ldb, x, ldx, rcond, ferr, berr, work, iwork, info);
+  gtsvx(fact, trans, n, nrhs,  dl,  d,  du, dlf, df, duf, du2, ipiv,  b, ldb, x, ldx, rcond, ferr, berr, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer gtsvx(char* fact, char* trans, integer* n, integer* nrhs,  T* dl,  T* d,  T* du, T* dlf, T* df, T* duf, T* du2, integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void gtsvx(char* fact, char* trans, integer* n, integer* nrhs,  T* dl,  T* d,  T* du, T* dlf, T* df, T* duf, T* du2, integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return gtsvx(fact, trans, n, nrhs,  dl,  d,  du, dlf, df, duf, du2, ipiv,  b, ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
+  gtsvx(fact, trans, n, nrhs,  dl,  d,  du, dlf, df, duf, du2, ipiv,  b, ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
 }
 
 /*! @brief GTTRF computes an LU factorization of a real tridiagonal matrix A
@@ -15563,12 +15419,11 @@ integer gtsvx(char* fact, char* trans, integer* n, integer* nrhs,  T* dl,  T* d,
                 singular, and division by zero will occur if it is used
                 to solve a system of equations. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gttrf(integer* n, T* dl, T* d, T* du, T* du2, integer* ipiv, integer* info)
+void gttrf(integer* n, T* dl, T* d, T* du, T* du2, integer* ipiv, integer* info)
 {
-  return gttrf(n, dl, d, du, du2, ipiv, info);
+  gttrf(n, dl, d, du, du2, ipiv, info);
 }
 
 /*! @brief GTTRS solves one of the systems of equations
@@ -15626,12 +15481,11 @@ integer gttrf(integer* n, T* dl, T* d, T* du, T* du2, integer* ipiv, integer* in
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gttrs(char* trans, integer* n, integer* nrhs,  T* dl,  T* d,  T* du,  T* du2,  integer* ipiv, T* b, integer* ldb, integer* info)
+void gttrs(char* trans, integer* n, integer* nrhs,  T* dl,  T* d,  T* du,  T* du2,  integer* ipiv, T* b, integer* ldb, integer* info)
 {
-  return gttrs(trans, n, nrhs,  dl,  d,  du,  du2,  ipiv, b, ldb, info);
+  gttrs(trans, n, nrhs,  dl,  d,  du,  du2,  ipiv, b, ldb, info);
 }
 
 /*! @brief LACN2 estimates the 1-norm of a square matrix
@@ -15674,17 +15528,16 @@ integer gttrs(char* trans, integer* n, integer* nrhs,  T* dl,  T* d,  T* du,  T*
           ISAVE is INTEGER array, dimension (3) \n
           ISAVE is used to save variables between calls to SLACN2 \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lacn2(integer* n, T* v, T* x, integer* isgn, T* est, integer* kase, integer* isave)
+void lacn2(integer* n, T* v, T* x, integer* isgn, T* est, integer* kase, integer* isave)
 {
-  return lacn2(n, v, x, isgn, est, kase, isave);
+  lacn2(n, v, x, isgn, est, kase, isave);
 }
 template< typename T, typename Ta >
-integer lacn2(integer* n, T* v, T* x, Ta* est, integer* kase, integer* isave)
+void lacn2(integer* n, T* v, T* x, Ta* est, integer* kase, integer* isave)
 {
-  return lacn2(n, v, x, est, kase, isave);
+  lacn2(n, v, x, est, kase, isave);
 }
 
 /*! @brief LACPY copies all or part of one two-dimensional array to another.
@@ -15723,12 +15576,11 @@ integer lacn2(integer* n, T* v, T* x, Ta* est, integer* kase, integer* isave)
           LDB is INTEGER \n
           The leading dimension of the array B.  LDB >= fla_max(1,M). \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lacpy(char* uplo, integer* m, integer* n,  T* a, integer* lda, T* b, integer* ldb)
+void lacpy(char* uplo, integer* m, integer* n,  T* a, integer* lda, T* b, integer* ldb)
 {
-  return lacpy(uplo, m, n,  a, lda, b, ldb);
+  lacpy(uplo, m, n,  a, lda, b, ldb);
 }
 
 /*! @brief LANGE returns the value of the 1-norm, Frobenius norm, infinity-norm, \n
@@ -15776,18 +15628,17 @@ integer lacpy(char* uplo, integer* m, integer* n,  T* a, integer* lda, T* b, int
           WORK is REAL array, dimension (MAX(1,LWORK)), \n
           where LWORK >= M when NORM = 'I'; otherwise, WORK is not
           referenced. \n
-
- * @return INTEGER Return value of the function.
+ * @return Returns value of the norm.
  * */
 template< typename T >
 T lange(char* norm, integer* m, integer* n,  T* a, integer* lda, T* work)
 {
-  return lange(norm, m, n,  a, lda, work);
+  lange(norm, m, n,  a, lda, work);
 }
 template< typename T, typename Ta >
 Ta lange(char* norm, integer* m, integer* n,  T* a, integer* lda, Ta* work)
 {
-  return lange(norm, m, n,  a, lda, work);
+  lange(norm, m, n,  a, lda, work);
 }
 
 /*! @brief LANSY returns the value of the 1-norm, or the Frobenius norm, or the infinity 
@@ -15845,7 +15696,7 @@ Ta lange(char* norm, integer* m, integer* n,  T* a, integer* lda, Ta* work)
           where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,
           WORK is not referenced. \n
 
- * @return INTEGER Return value of the function.
+ * @return Returns value of the norm.
  * */
 template< typename T >
 T lansy(char* norm, char* uplo, integer* n,  T* a, integer* lda, T* work)
@@ -15922,7 +15773,7 @@ Ta lansy(char* norm, char* uplo, integer* n,  T* a, integer* lda, Ta* work)
           where LWORK >= M when NORM = 'I'; otherwise, WORK is not
           referenced. \n
 
- * @return INTEGER Return value of the function.
+ * @return Returns value of the norm.
  * */
 template< typename T >
 T lantr(char* norm, char* uplo, char* diag, integer* m, integer* n,  T* a, integer* lda, T* work)
@@ -15972,12 +15823,11 @@ Ta lantr(char* norm, char* uplo, char* diag, integer* m, integer* n,  T* a, inte
           internal workspace, but reset to its original value on
           output. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lapmr(logical* forwrd, integer* m, integer* n, T* x, integer* ldx, integer* k)
+void lapmr(logical* forwrd, integer* m, integer* n, T* x, integer* ldx, integer* k)
 {
-  return lapmr(forwrd, m, n, x, ldx, k);
+  lapmr(forwrd, m, n, x, ldx, k);
 }
 
 /*! @brief LAPMT performs a forward or backward permutation of the columns of a matrix.
@@ -16017,12 +15867,11 @@ integer lapmr(logical* forwrd, integer* m, integer* n, T* x, integer* ldx, integ
           internal workspace, but reset to its original value on
           output. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lapmt(logical* forwrd, integer* m, integer* n, T* x, integer* ldx, integer* k)
+void lapmt(logical* forwrd, integer* m, integer* n, T* x, integer* ldx, integer* k)
 {
-  return lapmt(forwrd, m, n, x, ldx, k);
+  lapmt(forwrd, m, n, x, ldx, k);
 }
 
 /*! @brief LARFB applies a block reflector or its transpose to a general rectangular matrix
@@ -16100,12 +15949,11 @@ integer lapmt(logical* forwrd, integer* m, integer* n, T* x, integer* ldx, integ
           If SIDE = 'L', LDWORK >= fla_max(1,N); \n
           if SIDE = 'R', LDWORK >= fla_max(1,M). \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer larfb(char* side, char* trans, char* direct, char* storev, integer* m, integer* n, integer* k,  T* v, integer* ldv,  T* t, integer* ldt, T* c, integer* ldc, T* work, integer* ldwork)
+void larfb(char* side, char* trans, char* direct, char* storev, integer* m, integer* n, integer* k,  T* v, integer* ldv,  T* t, integer* ldt, T* c, integer* ldc, T* work, integer* ldwork)
 {
-  return larfb( side, trans, direct, storev, m, n, k,  v, ldv,  t, ldt, c, ldc, work, ldwork);
+  larfb( side, trans, direct, storev, m, n, k,  v, ldv,  t, ldt, c, ldc, work, ldwork);
 } 
 
 /*! @brief LARFX applies an elementary reflector to a general rectangular matrix, \n
@@ -16156,12 +16004,11 @@ integer larfb(char* side, char* trans, char* direct, char* storev, integer* m, i
                       or (M) if SIDE = 'R' \n
           WORK is not referenced if H has order < 11. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer larfx(char* side, integer* m, integer* n,  T* v, T* tau, T* c, integer* ldc, T* work)
+void larfx(char* side, integer* m, integer* n,  T* v, T* tau, T* c, integer* ldc, T* work)
 {
-  return larfx(side, m, n,  v, tau, c, ldc, work);
+  larfx(side, m, n,  v, tau, c, ldc, work);
 }
 
 /*! @brief LARNV returns a vector of random numbers from a uniform or normal distribution
@@ -16191,12 +16038,11 @@ integer larfx(char* side, integer* m, integer* n,  T* v, T* tau, T* c, integer* 
           X is REAL array, dimension (N) \n
           The generated random numbers. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer larnv(integer* idist, integer* iseed, integer* n, T* x)
+void larnv(integer* idist, integer* iseed, integer* n, T* x)
 {
-  return larnv(idist, iseed, n, x);
+  larnv(idist, iseed, n, x);
 }
 
 /*! @brief LARTGS generates a plane rotation designed to introduce a bulge \n
@@ -16232,12 +16078,11 @@ integer larnv(integer* idist, integer* iseed, integer* n, T* x)
           SN is REAL \n
           The sine of the rotation. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lartgs(T* x, T* y, T* sigma, T* cs, T* sn)
+void lartgs(T* x, T* y, T* sigma, T* cs, T* sn)
 {
-  return lartgs(x, y, sigma, cs, sn);
+  lartgs(x, y, sigma, cs, sn);
 }
 
 /*! @brief LASCL multiplies a general rectangular matrix by a real scalar defined as cto/cfrom
@@ -16305,17 +16150,16 @@ integer lartgs(T* x, T* y, T* sigma, T* cs, T* sn)
           0  - successful exit \n
           <0 - if INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lascl(char* type, integer* kl, integer* ku, T* cfrom, T* cto, integer* m, integer* n, T* a, integer* lda, integer* info)
+void lascl(char* type, integer* kl, integer* ku, T* cfrom, T* cto, integer* m, integer* n, T* a, integer* lda, integer* info)
 {
-  return lascl(type, kl, ku, cfrom, cto, m, n, a, lda, info);
+  lascl(type, kl, ku, cfrom, cto, m, n, a, lda, info);
 }
 template< typename T , typename Ta >
-integer lascl(char* type, integer* kl, integer* ku, Ta* cfrom, Ta* cto, integer* m, integer* n, T* a, integer* lda, integer* info)
+void lascl(char* type, integer* kl, integer* ku, Ta* cfrom, Ta* cto, integer* m, integer* n, T* a, integer* lda, integer* info)
 {
-  return lascl(type, kl, ku, cfrom, cto, m, n, a, lda, info);
+  lascl(type, kl, ku, cfrom, cto, m, n, a, lda, info);
 }
 
 /*! @brief LASRT sorts numbers in increasing or decreasing order
@@ -16348,12 +16192,11 @@ integer lascl(char* type, integer* kl, integer* ku, Ta* cfrom, Ta* cto, integer*
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lasrt(char* id, integer* n, T* d, integer* info)
+void lasrt(char* id, integer* n, T* d, integer* info)
 {
-  return lasrt(id, n, d, info);
+  lasrt(id, n, d, info);
 }
 
 /*! @brief LASSQ updates a sum of squares represented in scaled form
@@ -16398,17 +16241,16 @@ integer lasrt(char* id, integer* n, T* d, integer* info)
           On exit, SUMSQ is overwritten with  smsq , the basic sum of
           squares from which  scl  has been factored out. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lassq(integer* n, T* x, integer* incx, T* scale, T* sumsq)
+void lassq(integer* n, T* x, integer* incx, T* scale, T* sumsq)
 {
-  return lassq(n, x, incx, scale, sumsq);
+  lassq(n, x, incx, scale, sumsq);
 }
 template< typename T, typename Ta >
-integer lassq(integer* n, T* x, integer* incx, Ta* scale, Ta* sumsq)
+void lassq(integer* n, T* x, integer* incx, Ta* scale, Ta* sumsq)
 {
-  return lassq( n, x, incx, scale, sumsq);
+  lassq( n, x, incx, scale, sumsq);
 }
 
 /*! @brief OPGTR generates a real orthogonal matrix Q
@@ -16455,17 +16297,16 @@ integer lassq(integer* n, T* x, integer* incx, Ta* scale, Ta* sumsq)
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer opgtr(char* uplo, integer* n,  T* ap,  T* tau, T* q, integer* ldq, T *work, integer *info)
+void opgtr(char* uplo, integer* n,  T* ap,  T* tau, T* q, integer* ldq, T *work, integer *info)
 {
-  return opgtr(uplo, n, ap, tau, q, ldq, work, info);
+  opgtr(uplo, n, ap, tau, q, ldq, work, info);
 }
 template< typename T >
-integer upgtr(char* uplo, integer* n,  T* ap,  T* tau, T* q, integer* ldq, T *work, integer *info)
+void upgtr(char* uplo, integer* n,  T* ap,  T* tau, T* q, integer* ldq, T *work, integer *info)
 {
-  return upgtr(uplo, n, ap, tau, q, ldq, work, info);
+  upgtr(uplo, n, ap, tau, q, ldq, work, info);
 }
 
 /*! @brief OPMTR overwrites the general real M-by-N matrix
@@ -16534,18 +16375,17 @@ integer upgtr(char* uplo, integer* n,  T* ap,  T* tau, T* q, integer* ldq, T *wo
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer opmtr(char* side, char* uplo, char* trans, integer* m, integer* n,  T* ap,  T* tau, T* c, integer* ldc, T* work, integer* info)
+void opmtr(char* side, char* uplo, char* trans, integer* m, integer* n,  T* ap,  T* tau, T* c, integer* ldc, T* work, integer* info)
 {
-  return opmtr(side, uplo, trans, m, n,  ap,  tau, c, ldc, work, info);
+  opmtr(side, uplo, trans, m, n,  ap,  tau, c, ldc, work, info);
 }
 
 template< typename T >
-integer upmtr(char* side, char* uplo, char* trans, integer* m, integer* n,  T* ap,  T* tau, T* c, integer* ldc, T* work, integer* info)
+void upmtr(char* side, char* uplo, char* trans, integer* m, integer* n,  T* ap,  T* tau, T* c, integer* ldc, T* work, integer* info)
 {
-  return upmtr(side, uplo, trans, m, n,  ap,  tau, c, ldc, work, info);
+  upmtr(side, uplo, trans, m, n,  ap,  tau, c, ldc, work, info);
 }
 
 /*! @brief ORBDB simultaneously bidiagonalizes the blocks of an M-by-M \n
@@ -16693,18 +16533,17 @@ integer upmtr(char* side, char* uplo, char* trans, integer* m, integer* n,  T* a
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
 
- * @return INTEGER Return value of the function.
- * */ 
+ *  * */ 
 template< typename T >
-integer orbdb(char* trans, char* signs, integer* m, integer* p, integer* q, T* x11, integer* ldx11, T* x12, integer* ldx12, T* x21, integer* ldx21, T* x22, integer* ldx22, T* theta, T* phi, T* taup1, T* taup2, T* tauq1, T* tauq2, T* work, integer* lwork, integer* info)
+void orbdb(char* trans, char* signs, integer* m, integer* p, integer* q, T* x11, integer* ldx11, T* x12, integer* ldx12, T* x21, integer* ldx21, T* x22, integer* ldx22, T* theta, T* phi, T* taup1, T* taup2, T* tauq1, T* tauq2, T* work, integer* lwork, integer* info)
 {
-  return orbdb(trans, signs, m, p, q, x11, ldx11, x12, ldx12, x21, ldx21, x22, ldx22, theta, phi, taup1, taup2, tauq1, tauq2, work, lwork, info);
+  orbdb(trans, signs, m, p, q, x11, ldx11, x12, ldx12, x21, ldx21, x22, ldx22, theta, phi, taup1, taup2, tauq1, tauq2, work, lwork, info);
 }
 
 template< typename T, typename Ta >
-integer unbdb(char* trans, char* signs, integer* m, integer* p, integer* q, T* x11, integer* ldx11, T* x12, integer* ldx12, T* x21, integer* ldx21, T* x22, integer* ldx22, Ta* theta, Ta* phi, T* taup1, T* taup2, T* tauq1, T* tauq2, T* work, integer* lwork, integer* info)
+void unbdb(char* trans, char* signs, integer* m, integer* p, integer* q, T* x11, integer* ldx11, T* x12, integer* ldx12, T* x21, integer* ldx21, T* x22, integer* ldx22, Ta* theta, Ta* phi, T* taup1, T* taup2, T* tauq1, T* tauq2, T* work, integer* lwork, integer* info)
 {
-  return unbdb(trans, signs, m, p, q, x11, ldx11, x12, ldx12, x21, ldx21, x22, ldx22, theta, phi, taup1, taup2, tauq1, tauq2, work, lwork, info);
+  unbdb(trans, signs, m, p, q, x11, ldx11, x12, ldx12, x21, ldx21, x22, ldx22, theta, phi, taup1, taup2, tauq1, tauq2, work, lwork, info);
 }
 
 /*! @brief ORCSD computes the CS decomposition of an M-by-M partitioned orthogonal/unitary matrix X
@@ -16851,17 +16690,16 @@ integer unbdb(char* trans, char* signs, integer* m, integer* p, integer* q, T* x
           > 0:  SBBCSD did not converge. See the description of WORK
                 above for details. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer orcsd(char* jobu1, char* jobu2, char* jobv1t, char* jobv2t, char* trans, char* signs, integer* m, integer* p, integer* q, T* x11, integer* ldx11, T* x12, integer* ldx12, T* x21, integer* ldx21, T* x22, integer* ldx22, T* theta, T* u1, integer* ldu1, T* u2, integer* ldu2, T* v1t, integer* ldv1t, T* v2t, integer* ldv2t, T *work, integer *lwork, integer *iwork, integer *info)
+void orcsd(char* jobu1, char* jobu2, char* jobv1t, char* jobv2t, char* trans, char* signs, integer* m, integer* p, integer* q, T* x11, integer* ldx11, T* x12, integer* ldx12, T* x21, integer* ldx21, T* x22, integer* ldx22, T* theta, T* u1, integer* ldu1, T* u2, integer* ldu2, T* v1t, integer* ldv1t, T* v2t, integer* ldv2t, T *work, integer *lwork, integer *iwork, integer *info)
 {
-  return orcsd(jobu1, jobu2, jobv1t, jobv2t, trans, signs, m, p, q, x11, ldx11, x12, ldx12, x21, ldx21, x22, ldx22, theta, u1, ldu1, u2, ldu2, v1t, ldv1t, v2t, ldv2t, work, lwork, iwork, info);
+  orcsd(jobu1, jobu2, jobv1t, jobv2t, trans, signs, m, p, q, x11, ldx11, x12, ldx12, x21, ldx21, x22, ldx22, theta, u1, ldu1, u2, ldu2, v1t, ldv1t, v2t, ldv2t, work, lwork, iwork, info);
 }
 template< typename T, typename Ta >
-integer uncsd(char* jobu1, char* jobu2, char* jobv1t, char* jobv2t, char* trans, char* signs, integer* m, integer* p, integer* q, T* x11, integer* ldx11, T* x12, integer* ldx12, T* x21, integer* ldx21, T* x22, integer* ldx22, Ta* theta, T* u1, integer* ldu1, T* u2, integer* ldu2, T* v1t, integer* ldv1t, T* v2t, integer* ldv2t, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* info)
+void uncsd(char* jobu1, char* jobu2, char* jobv1t, char* jobv2t, char* trans, char* signs, integer* m, integer* p, integer* q, T* x11, integer* ldx11, T* x12, integer* ldx12, T* x21, integer* ldx21, T* x22, integer* ldx22, Ta* theta, T* u1, integer* ldu1, T* u2, integer* ldu2, T* v1t, integer* ldv1t, T* v2t, integer* ldv2t, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* info)
 {
-  return uncsd(jobu1, jobu2, jobv1t, jobv2t, trans, signs, m, p, q, x11, ldx11, x12, ldx12, x21, ldx21, x22, ldx22, theta, u1, ldu1, u2, ldu2, v1t, ldv1t, v2t, ldv2t, work, lwork, rwork, lrwork, iwork, info);
+  uncsd(jobu1, jobu2, jobv1t, jobv2t, trans, signs, m, p, q, x11, ldx11, x12, ldx12, x21, ldx21, x22, ldx22, theta, u1, ldu1, u2, ldu2, v1t, ldv1t, v2t, ldv2t, work, lwork, rwork, lrwork, iwork, info);
 }
 
 /*! @brief ORCSD2BY1 computes the CS decomposition of an M-by-Q matrix X with orthonormal columns
@@ -16974,17 +16812,16 @@ integer uncsd(char* jobu1, char* jobu2, char* jobv1t, char* jobv2t, char* trans,
           > 0:  SBBCSD did not converge. See the description of WORK
                 above for details. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer orcsd2by1(char* jobu1, char* jobu2, char* jobv1t, integer* m, integer* p, integer* q, T* x11, integer* ldx11, T* x21, integer* ldx21, T* theta, T* u1, integer* ldu1, T* u2, integer* ldu2, T* v1t, integer* ldv1t, T *work, integer *lwork, integer *iwork, integer *info)
+void orcsd2by1(char* jobu1, char* jobu2, char* jobv1t, integer* m, integer* p, integer* q, T* x11, integer* ldx11, T* x21, integer* ldx21, T* theta, T* u1, integer* ldu1, T* u2, integer* ldu2, T* v1t, integer* ldv1t, T *work, integer *lwork, integer *iwork, integer *info)
 {
-  return orcsd2by1(jobu1, jobu2, jobv1t, m, p, q, x11, ldx11, x21, ldx21, theta, u1, ldu1, u2, ldu2, v1t, ldv1t, work, lwork, iwork, info);
+  orcsd2by1(jobu1, jobu2, jobv1t, m, p, q, x11, ldx11, x21, ldx21, theta, u1, ldu1, u2, ldu2, v1t, ldv1t, work, lwork, iwork, info);
 }
 template< typename T, typename Ta >
-integer uncsd2by1(char* jobu1, char* jobu2, char* jobv1t, integer* m, integer* p, integer* q, T* x11, integer* ldx11, T* x21, integer* ldx21, Ta* theta, T* u1, integer* ldu1, T* u2, integer* ldu2, T* v1t, integer* ldv1t, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* info)
+void uncsd2by1(char* jobu1, char* jobu2, char* jobv1t, integer* m, integer* p, integer* q, T* x11, integer* ldx11, T* x21, integer* ldx21, Ta* theta, T* u1, integer* ldu1, T* u2, integer* ldu2, T* v1t, integer* ldv1t, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* info)
 {
-  return uncsd2by1(jobu1, jobu2, jobv1t, m, p, q, x11, ldx11, x21, ldx21, theta, u1, ldu1, u2, ldu2, v1t, ldv1t, work, lwork, rwork, lrwork, iwork, info);
+  uncsd2by1(jobu1, jobu2, jobv1t, m, p, q, x11, ldx11, x21, ldx21, theta, u1, ldu1, u2, ldu2, v1t, ldv1t, work, lwork, rwork, lrwork, iwork, info);
 }
 
 /*! @brief ORGQL generates an M-by-N real matrix Q with orthonormal columns
@@ -17041,17 +16878,16 @@ integer uncsd2by1(char* jobu1, char* jobu2, char* jobv1t, integer* m, integer* p
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument has an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer orgql(integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
+void orgql(integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
 {
-  return orgql(m, n, k, a, lda, tau, work, lwork, info);
+  orgql(m, n, k, a, lda, tau, work, lwork, info);
 }
 template< typename T >
-integer ungql(integer* m, integer* n, integer* k, T* a, integer* lda,  T* tau, T* work, integer* lwork, integer* info)
+void ungql(integer* m, integer* n, integer* k, T* a, integer* lda,  T* tau, T* work, integer* lwork, integer* info)
 {
-  return ungql(m, n, k, a, lda, tau, work, lwork, info);
+  ungql(m, n, k, a, lda, tau, work, lwork, info);
 }
 
 /*! @brief ORGRQ generates an M-by-N real matrix Q with orthonormal rows
@@ -17110,17 +16946,16 @@ integer ungql(integer* m, integer* n, integer* k, T* a, integer* lda,  T* tau, T
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument has an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer orgrq(integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
+void orgrq(integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
 {
-  return orgrq(m, n, k, a, lda, tau, work, lwork, info);
+  orgrq(m, n, k, a, lda, tau, work, lwork, info);
 }
 template< typename T >
-integer ungrq(integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
+void ungrq(integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
 {
-  return ungrq( m, n, k, a, lda, tau, work, lwork, info);
+  ungrq( m, n, k, a, lda, tau, work, lwork, info);
 }
 
 /*! @brief ORMQL overwrites the general real M-by-N matrix
@@ -17203,17 +17038,16 @@ integer ungrq(integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T*
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ormql(char* side, char* trans, integer* m, integer* n, integer* k,  T* a, integer* lda,  T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
+void ormql(char* side, char* trans, integer* m, integer* n, integer* k,  T* a, integer* lda,  T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
 {
-  return ormql(side, trans, m, n, k,  a, lda,  tau, c, ldc, work, lwork, info);
+  ormql(side, trans, m, n, k,  a, lda,  tau, c, ldc, work, lwork, info);
 }
 template< typename T >
-integer unmql(char* side, char* trans, integer* m, integer* n, integer* k,  T* a, integer* lda,  T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
+void unmql(char* side, char* trans, integer* m, integer* n, integer* k,  T* a, integer* lda,  T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
 {
-  return unmql(side, trans, m, n, k,  a, lda,  tau, c, ldc, work, lwork, info);
+  unmql(side, trans, m, n, k,  a, lda,  tau, c, ldc, work, lwork, info);
 }
 
 /*! @brief ORMRQ overwrites the general real M-by-N matrix 
@@ -17296,17 +17130,16 @@ integer unmql(char* side, char* trans, integer* m, integer* n, integer* k,  T* a
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ormrq(char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
+void ormrq(char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
 {
-  return ormrq(side, trans, m, n, k,  a, lda,  tau, c, ldc, work, lwork, info);
+  ormrq(side, trans, m, n, k,  a, lda,  tau, c, ldc, work, lwork, info);
 }
 template< typename T >
-integer unmrq(char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
+void unmrq(char* side, char* trans, integer* m, integer* n, integer* k, T* a, integer* lda, T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
 {
-  return unmrq(side, trans, m, n, k,  a, lda,  tau, c, ldc, work, lwork, info);
+  unmrq(side, trans, m, n, k,  a, lda,  tau, c, ldc, work, lwork, info);
 }
 
 /*! @brief ORMRZ overwrites the general real M-by-N matrix
@@ -17398,17 +17231,16 @@ integer unmrq(char* side, char* trans, integer* m, integer* n, integer* k, T* a,
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ormrz(char* side, char* trans, integer* m, integer* n, integer* k, integer* l,  T* a, integer* lda,  T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
+void ormrz(char* side, char* trans, integer* m, integer* n, integer* k, integer* l,  T* a, integer* lda,  T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
 {
-  return ormrz(side, trans, m, n, k, l,  a, lda,  tau, c, ldc, work, lwork, info);
+  ormrz(side, trans, m, n, k, l,  a, lda,  tau, c, ldc, work, lwork, info);
 }
 template< typename T >
-integer unmrz(char* side, char* trans, integer* m, integer* n, integer* k, integer* l,  T* a, integer* lda,  T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
+void unmrz(char* side, char* trans, integer* m, integer* n, integer* k, integer* l,  T* a, integer* lda,  T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
 {
-  return unmrz(side, trans, m, n, k, l,  a, lda,  tau, c, ldc, work, lwork, info);
+  unmrz(side, trans, m, n, k, l,  a, lda,  tau, c, ldc, work, lwork, info);
 }
 
 /*! @brief ORGHR generates a real orthogonal matrix Q
@@ -17464,17 +17296,16 @@ integer unmrz(char* side, char* trans, integer* m, integer* n, integer* k, integ
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer orghr(integer* n, integer* ilo, integer* ihi, T* a, integer* lda, T* tau, T *work, integer *lwork, integer *info)
+void orghr(integer* n, integer* ilo, integer* ihi, T* a, integer* lda, T* tau, T *work, integer *lwork, integer *info)
 {
-  return orghr(n, ilo, ihi, a, lda, tau, work, lwork, info);
+  orghr(n, ilo, ihi, a, lda, tau, work, lwork, info);
 }
 template< typename T >
-integer unghr(integer* n, integer* ilo, integer* ihi, T* a, integer* lda,  T* tau, T* work, integer* lwork, integer* info)
+void unghr(integer* n, integer* ilo, integer* ihi, T* a, integer* lda,  T* tau, T* work, integer* lwork, integer* info)
 {
-  return unghr(n, ilo, ihi, a, lda, tau, work, lwork, info);
+  unghr(n, ilo, ihi, a, lda, tau, work, lwork, info);
 }
 
 /*! @brief ORMHR overwrites the general real M-by-N matrix C
@@ -17564,17 +17395,16 @@ integer unghr(integer* n, integer* ilo, integer* ihi, T* a, integer* lda,  T* ta
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ormhr(char* side, char* trans, integer* m, integer* n, integer* ilo, integer* ihi,  T* a, integer* lda,  T* tau, T* c, integer* ldc, T *work, integer *lwork, integer *info)
+void ormhr(char* side, char* trans, integer* m, integer* n, integer* ilo, integer* ihi,  T* a, integer* lda,  T* tau, T* c, integer* ldc, T *work, integer *lwork, integer *info)
 {
-  return ormhr(side, trans, m, n, ilo, ihi,  a, lda,  tau, c, ldc, work, lwork, info);
+  ormhr(side, trans, m, n, ilo, ihi,  a, lda,  tau, c, ldc, work, lwork, info);
 }
 template< typename T >
-integer unmhr(char* side, char* trans, integer* m, integer* n, integer* ilo, integer* ihi,  T* a, integer* lda,  T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
+void unmhr(char* side, char* trans, integer* m, integer* n, integer* ilo, integer* ihi,  T* a, integer* lda,  T* tau, T* c, integer* ldc, T* work, integer* lwork, integer* info)
 {
-  return unmhr(side, trans, m, n, ilo, ihi,  a, lda,  tau, c, ldc, work, lwork, info);
+  unmhr(side, trans, m, n, ilo, ihi,  a, lda,  tau, c, ldc, work, lwork, info);
 }
 
 /*! @brief PBCON estimates the reciprocal of the condition number
@@ -17629,17 +17459,16 @@ integer unmhr(char* side, char* trans, integer* m, integer* n, integer* ilo, int
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer pbcon(char* uplo, integer* n, integer* kd,  T* ab, integer* ldab, T* anorm, T* rcond, T* work, integer* iwork, integer* info)
+void pbcon(char* uplo, integer* n, integer* kd,  T* ab, integer* ldab, T* anorm, T* rcond, T* work, integer* iwork, integer* info)
 {
-  return pbcon(uplo, n, kd,  ab, ldab, anorm, rcond, work, iwork, info);
+  pbcon(uplo, n, kd,  ab, ldab, anorm, rcond, work, iwork, info);
 }
 template< typename T , typename Ta >
-integer pbcon(char* uplo, integer* n, integer* kd,  T* ab, integer* ldab, Ta* anorm, Ta* rcond, T* work, Ta* rwork, integer* info)
+void pbcon(char* uplo, integer* n, integer* kd,  T* ab, integer* ldab, Ta* anorm, Ta* rcond, T* work, Ta* rwork, integer* info)
 {
-  return pbcon(uplo, n, kd,  ab, ldab, anorm, rcond, work, rwork, info);
+  pbcon(uplo, n, kd,  ab, ldab, anorm, rcond, work, rwork, info);
 }
 
 /*! @brief PBEQU computes row and column scalings
@@ -17697,17 +17526,16 @@ integer pbcon(char* uplo, integer* n, integer* kd,  T* ab, integer* ldab, Ta* an
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
           > 0:  if INFO = i, the i-th diagonal element is nonpositive. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer pbequ(char* uplo, integer* n, integer* kd,  T* ab, integer* ldab, T* s, T* scond, T* amax, integer* info)
+void pbequ(char* uplo, integer* n, integer* kd,  T* ab, integer* ldab, T* s, T* scond, T* amax, integer* info)
 {
-  return pbequ(uplo, n, kd,  ab, ldab, s, scond, amax, info);
+  pbequ(uplo, n, kd,  ab, ldab, s, scond, amax, info);
 }
 template< typename T , typename Ta >
-integer pbequ(char* uplo, integer* n, integer* kd,  T* ab, integer* ldab, T* s, Ta* scond, Ta* amax, integer* info)
+void pbequ(char* uplo, integer* n, integer* kd,  T* ab, integer* ldab, T* s, Ta* scond, Ta* amax, integer* info)
 {
-  return pbequ(uplo, n, kd,  ab, ldab, s, scond, amax, info);
+  pbequ(uplo, n, kd,  ab, ldab, s, scond, amax, info);
 }
 
 /*! @brief PBRFS improves the computed solution to a system of linear equations
@@ -17791,17 +17619,16 @@ integer pbequ(char* uplo, integer* n, integer* kd,  T* ab, integer* ldab, T* s, 
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer pbrfs(char* uplo, integer* n, integer* kd, integer* nrhs,  T* ab, integer* ldab,  T* afb, integer* ldafb,  T* b, integer* ldb, T* x, integer* ldx, T* ferr, T* berr, T* work, integer* iwork, integer* info)
+void pbrfs(char* uplo, integer* n, integer* kd, integer* nrhs,  T* ab, integer* ldab,  T* afb, integer* ldafb,  T* b, integer* ldb, T* x, integer* ldx, T* ferr, T* berr, T* work, integer* iwork, integer* info)
 {
-  return pbrfs(uplo, n, kd, nrhs,  ab, ldab,  afb, ldafb,  b, ldb, x, ldx, ferr, berr, work, iwork, info);
+  pbrfs(uplo, n, kd, nrhs,  ab, ldab,  afb, ldafb,  b, ldb, x, ldx, ferr, berr, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer pbrfs(char* uplo, integer* n, integer* kd, integer* nrhs,  T* ab, integer* ldab,  T* afb, integer* ldafb,  T* b, integer* ldb, T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void pbrfs(char* uplo, integer* n, integer* kd, integer* nrhs,  T* ab, integer* ldab,  T* afb, integer* ldafb,  T* b, integer* ldb, T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return pbrfs(uplo, n, kd, nrhs, ab, ldab, afb, ldafb, b, ldb, x, ldx, ferr, berr, work, rwork, info);
+  pbrfs(uplo, n, kd, nrhs, ab, ldab, afb, ldafb, b, ldb, x, ldx, ferr, berr, work, rwork, info);
 }
 
 /*! @brief PBSTF computes a split Cholesky factorization of a real symmetric \n
@@ -17858,12 +17685,11 @@ integer pbrfs(char* uplo, integer* n, integer* kd, integer* nrhs,  T* ab, intege
                because the updated element a(i,i) was negative; the
                matrix A is not positive definite. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer pbstf(char* uplo, integer* n, integer* kb, T* bb, integer* ldbb, integer* info)
+void pbstf(char* uplo, integer* n, integer* kb, T* bb, integer* ldbb, integer* info)
 {
-  return pbstf(uplo, n, kb, bb, ldbb, info);
+  pbstf(uplo, n, kb, bb, ldbb, info);
 }
 
 /*! @brief PBSV computes the solution to system of linear equations A * X = B for OTHER matrices
@@ -17932,12 +17758,11 @@ integer pbstf(char* uplo, integer* n, integer* kb, T* bb, integer* ldbb, integer
                 positive definite, so the factorization could not be
                 completed, and the solution has not been computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer pbsv(char* uplo, integer* n, integer* kd, integer* nrhs, T* ab, integer* ldab, T* b, integer* ldb, integer* info)
+void pbsv(char* uplo, integer* n, integer* kd, integer* nrhs, T* ab, integer* ldab, T* b, integer* ldb, integer* info)
 {
-  return pbsv(uplo, n, kd, nrhs, ab, ldab, b, ldb, info);
+  pbsv(uplo, n, kd, nrhs, ab, ldab, b, ldb, info);
 }
 
 /*! @brief PBSVX computes the solution to system of linear equations A * X = B for OTHER matrices
@@ -18131,17 +17956,16 @@ integer pbsv(char* uplo, integer* n, integer* kd, integer* nrhs, T* ab, integer*
                        computed solution can be more accurate than the
                        value of RCOND would suggest. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer pbsvx(char* fact, char* uplo, integer* n, integer* kd, integer* nrhs, T* ab, integer* ldab, T* afb, integer* ldafb, char* equed, T* s, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* ferr, T* berr, T* work, integer* iwork, integer* info)
+void pbsvx(char* fact, char* uplo, integer* n, integer* kd, integer* nrhs, T* ab, integer* ldab, T* afb, integer* ldafb, char* equed, T* s, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* ferr, T* berr, T* work, integer* iwork, integer* info)
 {
-  return pbsvx(fact, uplo, n, kd, nrhs, ab, ldab, afb, ldafb, equed, s, b, ldb, x, ldx, rcond, ferr, berr, work, iwork, info);
+  pbsvx(fact, uplo, n, kd, nrhs, ab, ldab, afb, ldafb, equed, s, b, ldb, x, ldx, rcond, ferr, berr, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer pbsvx(char* fact, char* uplo, integer* n, integer* kd, integer* nrhs, T* ab, integer* ldab, T* afb, integer* ldafb, char* equed, Ta* s, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void pbsvx(char* fact, char* uplo, integer* n, integer* kd, integer* nrhs, T* ab, integer* ldab, T* afb, integer* ldafb, char* equed, Ta* s, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return pbsvx(fact, uplo, n, kd, nrhs, ab, ldab, afb, ldafb, equed, s, b, ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
+  pbsvx(fact, uplo, n, kd, nrhs, ab, ldab, afb, ldafb, equed, s, b, ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
 }
 
 /*! @brief PBTRF computes the Cholesky factorization of a real symmetric  \n
@@ -18193,12 +18017,11 @@ integer pbsvx(char* fact, char* uplo, integer* n, integer* kd, integer* nrhs, T*
                 positive definite, and the factorization could not be
                 completed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer pbtrf(char* uplo, integer* n, integer* kd, T* ab, integer *ldab, integer* info)
+void pbtrf(char* uplo, integer* n, integer* kd, T* ab, integer *ldab, integer* info)
 {
-  return pbtrf(uplo, n, kd, ab, ldab, info);
+  pbtrf(uplo, n, kd, ab, ldab, info);
 }
 
 /*! @brief PBTRS solves a system of linear equations
@@ -18249,12 +18072,11 @@ integer pbtrf(char* uplo, integer* n, integer* kd, T* ab, integer *ldab, integer
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer pbtrs(char* uplo, integer* n, integer* kd, integer* nrhs,  T* ab, integer* ldab, T* b, integer* ldb, integer* info)
+void pbtrs(char* uplo, integer* n, integer* kd, integer* nrhs,  T* ab, integer* ldab, T* b, integer* ldb, integer* info)
 {
-  return pbtrs(uplo, n, kd, nrhs,  ab, ldab, b, ldb, info);
+  pbtrs(uplo, n, kd, nrhs,  ab, ldab, b, ldb, info);
 }
 
 /*! @brief PFTRF computes the Cholesky factorization
@@ -18308,12 +18130,11 @@ integer pbtrs(char* uplo, integer* n, integer* kd, integer* nrhs,  T* ab, intege
                 positive definite, and the factorization could not be
                 completed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer pftrf(char* transr, char* uplo, integer* n, T* a, integer* info)
+void pftrf(char* transr, char* uplo, integer* n, T* a, integer* info)
 {
-  return pftrf(transr, uplo, n, a, info);
+  pftrf(transr, uplo, n, a, info);
 }
 
 /*! @brief PFTRI computes the inverse of a real (symmetric) positive definite matrix
@@ -18360,12 +18181,11 @@ integer pftrf(char* transr, char* uplo, integer* n, T* a, integer* info)
           > 0:  if INFO = i, the (i,i) element of the factor U or L is
                 zero, and the inverse could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer pftri(char* transr, char* uplo, integer* n, T* a, integer* info)
+void pftri(char* transr, char* uplo, integer* n, T* a, integer* info)
 {
-  return pftri(transr, uplo, n, a, info);
+  pftri(transr, uplo, n, a, info);
 }
 
 /*! @brief PFTRS solves a system of linear equations A*X = B with a symmetric positive definite matrix
@@ -18410,12 +18230,11 @@ integer pftri(char* transr, char* uplo, integer* n, T* a, integer* info)
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer pftrs(char* transr, char* uplo, integer* n, integer* nrhs,  T* a, T* b, integer* ldb, integer* info)
+void pftrs(char* transr, char* uplo, integer* n, integer* nrhs,  T* a, T* b, integer* ldb, integer* info)
 {
-  return pftrs(transr, uplo, n, nrhs, a, b, ldb, info);
+  pftrs(transr, uplo, n, nrhs, a, b, ldb, info);
 }
 
 /*! @brief POCON estimates the reciprocal of the condition number
@@ -18462,17 +18281,16 @@ integer pftrs(char* transr, char* uplo, integer* n, integer* nrhs,  T* a, T* b, 
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer pocon(char* uplo, integer* n,  T* a, integer* lda, T* anorm, T* rcond, T* work, integer* iwork, integer* info)
+void pocon(char* uplo, integer* n,  T* a, integer* lda, T* anorm, T* rcond, T* work, integer* iwork, integer* info)
 {
-  return pocon(uplo, n,  a, lda, anorm, rcond, work, iwork, info);
+  pocon(uplo, n,  a, lda, anorm, rcond, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer pocon(char* uplo, integer* n,  T* a, integer* lda, Ta* anorm, Ta* rcond, T* work, Ta* rwork, integer* info)
+void pocon(char* uplo, integer* n,  T* a, integer* lda, Ta* anorm, Ta* rcond, T* work, Ta* rwork, integer* info)
 {
-  return pocon(uplo, n,  a, lda, anorm, rcond, work, rwork, info);
+  pocon(uplo, n,  a, lda, anorm, rcond, work, rwork, info);
 }
 
 /*! @brief POEQU computes row and column scalings
@@ -18520,17 +18338,16 @@ integer pocon(char* uplo, integer* n,  T* a, integer* lda, Ta* anorm, Ta* rcond,
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
           > 0:  if INFO = i, the i-th diagonal element is nonpositive. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer poequ(integer* n,  T* a, integer* lda, T* s, T* scond, T* amax, integer* info)
+void poequ(integer* n,  T* a, integer* lda, T* s, T* scond, T* amax, integer* info)
 {
-  return poequ(n, a, lda, s, scond, amax, info);
+  poequ(n, a, lda, s, scond, amax, info);
 }
 template< typename T, typename Ta >
-integer poequ(integer* n,  T* a, integer* lda, Ta* s, Ta* scond, Ta* amax, integer* info)
+void poequ(integer* n,  T* a, integer* lda, Ta* s, Ta* scond, Ta* amax, integer* info)
 {
-  return poequ(n, a, lda, s, scond, amax, info);
+  poequ(n, a, lda, s, scond, amax, info);
 }
 
 /*! @brief POEQUB computes row and column scalings
@@ -18584,17 +18401,16 @@ integer poequ(integer* n,  T* a, integer* lda, Ta* s, Ta* scond, Ta* amax, integ
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
           > 0:  if INFO = i, the i-th diagonal element is nonpositive. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer poequb(integer* n, T* a, integer* lda, T* s, T* scond, T* amax, integer* info)
+void poequb(integer* n, T* a, integer* lda, T* s, T* scond, T* amax, integer* info)
 {
-  return poequb(n, a, lda, s, scond, amax, info);
+  poequb(n, a, lda, s, scond, amax, info);
 }
 template< typename T, typename Ta >
-integer poequb(integer* n, T* a, integer* lda, Ta* s, Ta* scond, Ta* amax, integer* info)
+void poequb(integer* n, T* a, integer* lda, Ta* s, Ta* scond, Ta* amax, integer* info)
 {
-  return poequb(n, a, lda, s, scond, amax, info);
+  poequb(n, a, lda, s, scond, amax, info);
 }
 
 /*! @brief PORFS improves the computed solution to a system of linear equations
@@ -18675,17 +18491,16 @@ integer poequb(integer* n, T* a, integer* lda, Ta* s, Ta* scond, Ta* amax, integ
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer porfs(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, T* b, integer* ldb, T* x, integer* ldx, T* ferr, T* berr, T* work, integer* iwork, integer* info)
+void porfs(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, T* b, integer* ldb, T* x, integer* ldx, T* ferr, T* berr, T* work, integer* iwork, integer* info)
 {
-  return porfs(uplo, n, nrhs,  a, lda,  af, ldaf,  b, ldb, x, ldx, ferr, berr, work, iwork, info);
+  porfs(uplo, n, nrhs,  a, lda,  af, ldaf,  b, ldb, x, ldx, ferr, berr, work, iwork, info);
 }
 template< typename T , typename Ta>
-integer porfs(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, T* b, integer* ldb, T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void porfs(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, T* b, integer* ldb, T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return porfs(uplo, n, nrhs,  a, lda,  af, ldaf,  b, ldb, x, ldx, ferr, berr, work, rwork, info);
+  porfs(uplo, n, nrhs,  a, lda,  af, ldaf,  b, ldb, x, ldx, ferr, berr, work, rwork, info);
 }
 
 /*! @brief PORFSX improves the computed solution to a system of linear equations
@@ -18945,17 +18760,16 @@ integer porfs(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* af, 
            about all of the right-hand sides check ERR_BNDS_NORM or
            ERR_BNDS_COMP. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer porfsx(char* uplo, char* equed, integer* n, integer* nrhs,  T* a, integer* lda,  T* af, integer* ldaf,  T* s,  T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* berr, integer* n_err_bnds, T* err_bnds_norm, T* err_bnds_comp, integer* nparams, T* params, T* work, integer* iwork, integer* info)
+void porfsx(char* uplo, char* equed, integer* n, integer* nrhs,  T* a, integer* lda,  T* af, integer* ldaf,  T* s,  T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* berr, integer* n_err_bnds, T* err_bnds_norm, T* err_bnds_comp, integer* nparams, T* params, T* work, integer* iwork, integer* info)
 {
-  return porfsx(uplo, equed, n, nrhs,  a, lda,  af, ldaf,  s,  b, ldb, x, ldx, rcond, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, iwork, info);
+  porfsx(uplo, equed, n, nrhs,  a, lda,  af, ldaf,  s,  b, ldb, x, ldx, rcond, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer porfsx(char* uplo, char* equed, integer* n, integer* nrhs,  T* a, integer* lda,  T* af, integer* ldaf,  Ta* s,  T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* berr, integer* n_err_bnds, Ta* err_bnds_norm, Ta* err_bnds_comp, integer* nparams, Ta* params, T* work, Ta* rwork, integer* info)
+void porfsx(char* uplo, char* equed, integer* n, integer* nrhs,  T* a, integer* lda,  T* af, integer* ldaf,  Ta* s,  T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* berr, integer* n_err_bnds, Ta* err_bnds_norm, Ta* err_bnds_comp, integer* nparams, Ta* params, T* work, Ta* rwork, integer* info)
 {
-  return porfsx(uplo, equed, n, nrhs,  a, lda,  af, ldaf,  s,  b, ldb, x, ldx, rcond, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, rwork, info);
+  porfsx(uplo, equed, n, nrhs,  a, lda,  af, ldaf,  s,  b, ldb, x, ldx, rcond, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, rwork, info);
 }
 
 /*! @brief POSV computes the solution to system of linear equations A * X = B for PO matrices
@@ -19018,12 +18832,11 @@ integer porfsx(char* uplo, char* equed, integer* n, integer* nrhs,  T* a, intege
                 positive definite, so the factorization could not be
                 completed, and the solution has not been computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer posv(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, integer* info)
+void posv(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, integer* info)
 {
-  return posv(uplo, n, nrhs, a, lda, b, ldb, info);
+  posv(uplo, n, nrhs, a, lda, b, ldb, info);
 }
 
 /*! @brief POSVX uses the Cholesky factorization to compute the solution to a real system of linear equations
@@ -19215,17 +19028,16 @@ integer posv(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* b, in
                        computed solution can be more accurate than the
                        value of RCOND would suggest. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer posvx(char* fact, char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, char* equed, T* s, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* ferr, T* berr, T* work, integer* iwork, integer* info)
+void posvx(char* fact, char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, char* equed, T* s, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* ferr, T* berr, T* work, integer* iwork, integer* info)
 {
-  return posvx(fact, uplo, n, nrhs, a, lda, af, ldaf, equed, s, b, ldb, x, ldx, rcond, ferr, berr, work, iwork, info);
+  posvx(fact, uplo, n, nrhs, a, lda, af, ldaf, equed, s, b, ldb, x, ldx, rcond, ferr, berr, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer posvx(char* fact, char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, char* equed, Ta* s, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void posvx(char* fact, char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, char* equed, Ta* s, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return posvx(fact, uplo, n, nrhs, a, lda, af, ldaf, equed, s, b, ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
+  posvx(fact, uplo, n, nrhs, a, lda, af, ldaf, equed, s, b, ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
 }
 
 /*! @brief POSVXX computes the solution to system of linear equations A * X = B for PO matrices
@@ -19579,17 +19391,16 @@ integer posvx(char* fact, char* uplo, integer* n, integer* nrhs, T* a, integer* 
            about all of the right-hand sides check ERR_BNDS_NORM or
            ERR_BNDS_COMP. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer posvxx(char* fact, char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, char* equed, T* s, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* rpvgrw, T* berr, integer* n_err_bnds, T* err_bnds_norm, T* err_bnds_comp, integer* nparams, T* params, float* work, integer* iwork, integer* info)
+void posvxx(char* fact, char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, char* equed, T* s, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* rpvgrw, T* berr, integer* n_err_bnds, T* err_bnds_norm, T* err_bnds_comp, integer* nparams, T* params, float* work, integer* iwork, integer* info)
 {
-  return posvxx(fact, uplo, n, nrhs, a, lda, af, ldaf, equed, s, b, ldb, x, ldx, rcond, rpvgrw, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, iwork, info);
+  posvxx(fact, uplo, n, nrhs, a, lda, af, ldaf, equed, s, b, ldb, x, ldx, rcond, rpvgrw, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer posvxx(char* fact, char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, char* equed, Ta* s, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* rpvgrw, Ta* berr, integer* n_err_bnds, Ta* err_bnds_norm, Ta* err_bnds_comp, integer* nparams, Ta* params, dcomplex* work, double* rwork, integer* info)
+void posvxx(char* fact, char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, char* equed, Ta* s, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* rpvgrw, Ta* berr, integer* n_err_bnds, Ta* err_bnds_norm, Ta* err_bnds_comp, integer* nparams, Ta* params, dcomplex* work, double* rwork, integer* info)
 {
-  return posvxx(fact, uplo, n, nrhs, a, lda, af, ldaf, equed, s, b, ldb, x, ldx, rcond, rpvgrw, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, rwork, info);
+  posvxx(fact, uplo, n, nrhs, a, lda, af, ldaf, equed, s, b, ldb, x, ldx, rcond, rpvgrw, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, rwork, info);
 }
 
 /*! @brief POTRF2 computes the Cholesky factorization of a real symmetric \n
@@ -19647,12 +19458,11 @@ integer posvxx(char* fact, char* uplo, integer* n, integer* nrhs, T* a, integer*
                 positive definite, and the factorization could not be
                 completed. \n
 
- * @return INTEGER Return value of the function.
- * */  
+ *  * */  
 template< typename T >
-integer potrf2(char* uplo, integer* n, T* a, integer* lda, integer* info)
+void potrf2(char* uplo, integer* n, T* a, integer* lda, integer* info)
 {
-  return potrf2(uplo, n, a, lda, info);
+  potrf2(uplo, n, a, lda, info);
 }
 
 /*! @brief POTRS solves a system of linear equations A*X = B
@@ -19695,12 +19505,11 @@ integer potrf2(char* uplo, integer* n, T* a, integer* lda, integer* info)
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */  
+ *  * */  
 template< typename T >
-integer potrs(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, integer* info)
+void potrs(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* b, integer* ldb, integer* info)
 {
-  return potrs(uplo, n, nrhs, a, lda, b, ldb, info);
+  potrs(uplo, n, nrhs, a, lda, b, ldb, info);
 }
 
 /*! @brief PPCON estimates the reciprocal of the condition number
@@ -19749,17 +19558,16 @@ integer potrs(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* b, i
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */  
+ *  * */  
 template< typename T >
-integer ppcon(char* uplo, integer* n,  T* ap, T* anorm, T* rcond, T* work, integer* iwork, integer* info)
+void ppcon(char* uplo, integer* n,  T* ap, T* anorm, T* rcond, T* work, integer* iwork, integer* info)
 {
-  return ppcon(uplo, n, ap, anorm, rcond, work, iwork, info);
+  ppcon(uplo, n, ap, anorm, rcond, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer ppcon(char* uplo, integer* n,  T* ap, Ta* anorm, Ta* rcond, T* work, Ta* rwork, integer* info)
+void ppcon(char* uplo, integer* n,  T* ap, Ta* anorm, Ta* rcond, T* work, Ta* rwork, integer* info)
 {
-  return ppcon(uplo, n, ap, anorm, rcond, work, rwork, info);
+  ppcon(uplo, n, ap, anorm, rcond, work, rwork, info);
 }
 
 /*! @brief PPEQU computes row and column scalings
@@ -19810,17 +19618,16 @@ integer ppcon(char* uplo, integer* n,  T* ap, Ta* anorm, Ta* rcond, T* work, Ta*
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
           > 0:  if INFO = i, the i-th diagonal element is nonpositive. \n
 
- * @return INTEGER Return value of the function.
- * */ 
+ *  * */ 
 template< typename T >
-integer ppequ(char* uplo, integer* n,  T* ap, T* s, T* scond, T* amax, integer* info)
+void ppequ(char* uplo, integer* n,  T* ap, T* s, T* scond, T* amax, integer* info)
 {
-  return ppequ(uplo, n, ap, s, scond, amax, info);
+  ppequ(uplo, n, ap, s, scond, amax, info);
 }
 template< typename T, typename Ta >
-integer ppequ(char* uplo, integer* n,  T* ap, Ta* s, Ta* scond, Ta* amax, integer* info)
+void ppequ(char* uplo, integer* n,  T* ap, Ta* s, Ta* scond, Ta* amax, integer* info)
 {
-  return ppequ(uplo, n, ap, s, scond, amax, info);
+  ppequ(uplo, n, ap, s, scond, amax, info);
 }
 
 /*! @brief PPRFS improves the computed solution to a system of linear equations 
@@ -19895,17 +19702,16 @@ integer ppequ(char* uplo, integer* n,  T* ap, Ta* s, Ta* scond, Ta* amax, intege
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer pprfs(char* uplo, integer* n, integer* nrhs,  T* ap,  T* afp,  T* b, integer* ldb, T* x, integer* ldx, T* ferr, T* berr, T* work, integer* iwork, integer* info)
+void pprfs(char* uplo, integer* n, integer* nrhs,  T* ap,  T* afp,  T* b, integer* ldb, T* x, integer* ldx, T* ferr, T* berr, T* work, integer* iwork, integer* info)
 {
-  return pprfs(uplo, n, nrhs, ap, afp, b, ldb, x, ldx, ferr, berr, work, iwork, info);
+  pprfs(uplo, n, nrhs, ap, afp, b, ldb, x, ldx, ferr, berr, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer pprfs(char* uplo, integer* n, integer* nrhs,  T* ap,  T* afp,  T* b, integer* ldb, T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void pprfs(char* uplo, integer* n, integer* nrhs,  T* ap,  T* afp,  T* b, integer* ldb, T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return pprfs(uplo, n, nrhs, ap, afp, b, ldb, x, ldx, ferr, berr, work, rwork, info);
+  pprfs(uplo, n, nrhs, ap, afp, b, ldb, x, ldx, ferr, berr, work, rwork, info);
 }
 
 /*! @brief PPSV computes the solution to a real system of linear equations
@@ -19965,12 +19771,11 @@ integer pprfs(char* uplo, integer* n, integer* nrhs,  T* ap,  T* afp,  T* b, int
                 positive definite, so the factorization could not be
                 completed, and the solution has not been computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ppsv(char* uplo, integer* n, integer* nrhs, T* ap, T* b, integer* ldb, integer* info)
+void ppsv(char* uplo, integer* n, integer* nrhs, T* ap, T* b, integer* ldb, integer* info)
 {
-  return ppsv(uplo, n, nrhs, ap, b, ldb, info);
+  ppsv(uplo, n, nrhs, ap, b, ldb, info);
 }
 
 /*! @brief PPSVX computes the solution to system of linear equations A * X = B for OTHER matrices
@@ -20155,17 +19960,16 @@ integer ppsv(char* uplo, integer* n, integer* nrhs, T* ap, T* b, integer* ldb, i
                        computed solution can be more accurate than the
                        value of RCOND would suggest. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ppsvx(char* fact, char* uplo, integer* n, integer* nrhs, T* ap, T* afp, char* equed, T* s, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* ferr, T* berr, T* work, integer* iwork, integer* info)
+void ppsvx(char* fact, char* uplo, integer* n, integer* nrhs, T* ap, T* afp, char* equed, T* s, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* ferr, T* berr, T* work, integer* iwork, integer* info)
 {
-  return ppsvx(fact, uplo, n, nrhs, ap, afp, equed, s, b, ldb, x, ldx, rcond, ferr, berr, work, iwork, info);
+  ppsvx(fact, uplo, n, nrhs, ap, afp, equed, s, b, ldb, x, ldx, rcond, ferr, berr, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer ppsvx(char* fact, char* uplo, integer* n, integer* nrhs, T* ap, T* afp, char* equed, Ta* s, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void ppsvx(char* fact, char* uplo, integer* n, integer* nrhs, T* ap, T* afp, char* equed, Ta* s, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return ppsvx(fact, uplo, n, nrhs, ap, afp, equed, s, b, ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
+  ppsvx(fact, uplo, n, nrhs, ap, afp, equed, s, b, ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
 }
 
 /*! @brief PPTRF computes the Cholesky factorization of a real symmetric matrix
@@ -20209,12 +20013,11 @@ integer ppsvx(char* fact, char* uplo, integer* n, integer* nrhs, T* ap, T* afp, 
                 positive definite, and the factorization could not be
                 completed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer pptrf(char* uplo, integer* n, T* ap, integer* info)
+void pptrf(char* uplo, integer* n, T* ap, integer* info)
 {
-  return pptrf(uplo, n, ap, info);
+  pptrf(uplo, n, ap, info);
 }
 
 /*! @brief PPTRI computes the inverse of a real symmetric matrix
@@ -20252,12 +20055,11 @@ integer pptrf(char* uplo, integer* n, T* ap, integer* info)
           > 0:  if INFO = i, the (i,i) element of the factor U or L is
                 zero, and the inverse could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer pptri(char* uplo, integer* n, T* ap, integer* info)
+void pptri(char* uplo, integer* n, T* ap, integer* info)
 {
-  return pptri(uplo, n, ap, info);
+  pptri(uplo, n, ap, info);
 }
 
 /*! @brief PPTRS solves a system of linear equations A*X = B with a symmetric matrix
@@ -20301,12 +20103,11 @@ integer pptri(char* uplo, integer* n, T* ap, integer* info)
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer pptrs(char* uplo, integer* n, integer* nrhs,  T* ap, T* b, integer* ldb, integer* info)
+void pptrs(char* uplo, integer* n, integer* nrhs,  T* ap, T* b, integer* ldb, integer* info)
 {
-  return pptrs(uplo, n, nrhs,  ap, b, ldb, info);
+  pptrs(uplo, n, nrhs,  ap, b, ldb, info);
 }
 
 /*! @brief PSTRF computes the Cholesky factorization with complete pivoting of a real symmetric positive semidefinite matrix.
@@ -20375,17 +20176,16 @@ integer pptrs(char* uplo, integer* n, integer* nrhs,  T* ap, T* b, integer* ldb,
                Section 7 of LAPACK Working Note #161 for further
                information. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer pstrf(char* uplo, integer* n, T* a, integer* lda, integer* piv, integer* rank, T* tol, T* work, integer* info)
+void pstrf(char* uplo, integer* n, T* a, integer* lda, integer* piv, integer* rank, T* tol, T* work, integer* info)
 {
-  return pstrf(uplo, n, a, lda, piv, rank, tol, work, info);
+  pstrf(uplo, n, a, lda, piv, rank, tol, work, info);
 }
 template< typename T, typename Ta >
-integer pstrf(char* uplo, integer* n, T* a, integer* lda, integer* piv, integer* rank, Ta* tol, Ta* work, integer* info)
+void pstrf(char* uplo, integer* n, T* a, integer* lda, integer* piv, integer* rank, Ta* tol, Ta* work, integer* info)
 {
-  return pstrf(uplo, n, a, lda, piv, rank, tol, work, info);
+  pstrf(uplo, n, a, lda, piv, rank, tol, work, info);
 }
 
 /*! @brief PTCON computes the reciprocal of the condition number
@@ -20429,17 +20229,16 @@ integer pstrf(char* uplo, integer* n, T* a, integer* lda, integer* piv, integer*
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
  
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ptcon(integer* n, T* d, T* e, T* anorm, T* rcond, T* rwork, integer* info)
+void ptcon(integer* n, T* d, T* e, T* anorm, T* rcond, T* rwork, integer* info)
 {
-  return ptcon(n, d, e, anorm, rcond, rwork, info);
+  ptcon(n, d, e, anorm, rcond, rwork, info);
 }
 template< typename T, typename Ta >
-integer ptcon(integer* n, Ta* d, T* e, Ta* anorm, Ta* rcond, Ta* rwork, integer* info)
+void ptcon(integer* n, Ta* d, T* e, Ta* anorm, Ta* rcond, Ta* rwork, integer* info)
 {
-  return ptcon(n, d, e, anorm, rcond, rwork, info);
+  ptcon(n, d, e, anorm, rcond, rwork, info);
 }
 
 /*! @brief PTEQR computes all eigenvalues and, optionally, eigenvectors of a symmetric matrix
@@ -20517,17 +20316,16 @@ integer ptcon(integer* n, Ta* d, T* e, Ta* anorm, Ta* rcond, Ta* rwork, integer*
                       if INFO = N+i, i off-diagonal elements of the
                       bidiagonal factor did not converge to zero. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer pteqr(char* compz, integer* n, T* d, T* e, T* z, integer* ldz, T* work, integer* info)
+void pteqr(char* compz, integer* n, T* d, T* e, T* z, integer* ldz, T* work, integer* info)
 {
-  return pteqr(compz, n, d, e, z, ldz, work, info);
+  pteqr(compz, n, d, e, z, ldz, work, info);
 }
 template< typename T, typename Ta >
-integer pteqr(char* compz, integer* n, Ta* d, Ta* e, T* z, integer* ldz, Ta* work, integer* info)
+void pteqr(char* compz, integer* n, Ta* d, Ta* e, T* z, integer* ldz, Ta* work, integer* info)
 {
-  return pteqr(compz, n, d, e, z, ldz, work, info);
+  pteqr(compz, n, d, e, z, ldz, work, info);
 }
 
 /*! @brief PTRFS improves the computed solution to a system of linear equations
@@ -20597,17 +20395,16 @@ integer pteqr(char* compz, integer* n, Ta* d, Ta* e, T* z, integer* ldz, Ta* wor
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
  
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ptrfs(integer* n, integer* nrhs, T* d, T* e, T* df, T* ef, T* b, integer* ldb, T* x, integer* ldx, T* ferr, T* berr, T* work, integer* info)
+void ptrfs(integer* n, integer* nrhs, T* d, T* e, T* df, T* ef, T* b, integer* ldb, T* x, integer* ldx, T* ferr, T* berr, T* work, integer* info)
 {
-  return ptrfs(n, nrhs, d, e, df, ef, b, ldb, x, ldx, ferr, berr, work, info);
+  ptrfs(n, nrhs, d, e, df, ef, b, ldb, x, ldx, ferr, berr, work, info);
 }
 template< typename T, typename Ta >
-integer ptrfs(char *uplo, integer* n, integer* nrhs, Ta* d, T* e, Ta* df, T* ef, T* b, integer* ldb, T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void ptrfs(char *uplo, integer* n, integer* nrhs, Ta* d, T* e, Ta* df, T* ef, T* b, integer* ldb, T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return ptrfs(uplo, n, nrhs, d, e, df, ef, b, ldb, x, ldx, ferr, berr, work, rwork, info);
+  ptrfs(uplo, n, nrhs, d, e, df, ef, b, ldb, x, ldx, ferr, berr, work, rwork, info);
 }
 
 /*! @brief PTSV computes the solution to system of linear equations A * X = B for PT matrices
@@ -20658,17 +20455,16 @@ integer ptrfs(char *uplo, integer* n, integer* nrhs, Ta* d, T* e, Ta* df, T* ef,
                 computed.  The factorization has not been completed
                 unless i = N. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ptsv(integer* n, integer* nrhs, T* d, T* e, T* b, integer* ldb, integer* info)
+void ptsv(integer* n, integer* nrhs, T* d, T* e, T* b, integer* ldb, integer* info)
 {
-  return ptsv(n, nrhs, d, e, b, ldb, info);
+  ptsv(n, nrhs, d, e, b, ldb, info);
 }
 template< typename T, typename Ta >
-integer ptsv(integer* n, integer* nrhs, Ta* d, T* e, T* b, integer* ldb, integer* info)
+void ptsv(integer* n, integer* nrhs, Ta* d, T* e, T* b, integer* ldb, integer* info)
 {
-  return ptsv(n, nrhs, d, e, b, ldb, info);
+  ptsv(n, nrhs, d, e, b, ldb, info);
 }
 
 /*! @brief PTSVX computes the solution to system of linear equations A * X = B for PT matrices
@@ -20799,17 +20595,16 @@ integer ptsv(integer* n, integer* nrhs, Ta* d, T* e, T* b, integer* ldb, integer
                        computed solution can be more accurate than the
                        value of RCOND would suggest. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ptsvx(char* fact, integer* n, integer* nrhs, T* d,  T* e, T* df, T* ef, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* ferr, T* berr, T* work, integer* info)
+void ptsvx(char* fact, integer* n, integer* nrhs, T* d,  T* e, T* df, T* ef, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* ferr, T* berr, T* work, integer* info)
 {
-  return ptsvx(fact, n, nrhs, d, e, df, ef, b, ldb, x, ldx, rcond, ferr, berr, work, info);
+  ptsvx(fact, n, nrhs, d, e, df, ef, b, ldb, x, ldx, rcond, ferr, berr, work, info);
 }
 template< typename T, typename Ta >
-integer ptsvx(char* fact, integer* n, integer* nrhs, Ta* d, T* e, Ta* df, T* ef, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void ptsvx(char* fact, integer* n, integer* nrhs, Ta* d, T* e, Ta* df, T* ef, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return ptsvx(fact, n, nrhs, d, e, df, ef, b, ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
+  ptsvx(fact, n, nrhs, d, e, df, ef, b, ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
 }
 
 /*! @brief PTTRF computes the L*D*L**T factorization of a real symmetric matrix
@@ -20846,17 +20641,16 @@ integer ptsvx(char* fact, integer* n, integer* nrhs, Ta* d, T* e, Ta* df, T* ef,
                be completed, while if k = N, the factorization was
                completed, but D(N) <= 0. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer pttrf(integer* n, T* d, T* e, integer* info)
+void pttrf(integer* n, T* d, T* e, integer* info)
 {
-  return pttrf(n, d, e, info);
+  pttrf(n, d, e, info);
 }
 template< typename T, typename Ta >
-integer pttrf(integer* n, Ta* d, T* e, integer* info)
+void pttrf(integer* n, Ta* d, T* e, integer* info)
 {
-  return pttrf(n, d, e, info);
+  pttrf(n, d, e, info);
 }
 
 /*! @brief PTTRS solves a tridiagonal system of the form A * X = B
@@ -20902,17 +20696,16 @@ integer pttrf(integer* n, Ta* d, T* e, integer* info)
           = 0: successful exit \n
           < 0: if INFO = -k, the k-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer pttrs(integer* n, integer* nrhs, T* d, T* e, T* b, integer* ldb, integer* info)
+void pttrs(integer* n, integer* nrhs, T* d, T* e, T* b, integer* ldb, integer* info)
 {
-  return pttrs(n, nrhs, d, e, b, ldb, info);
+  pttrs(n, nrhs, d, e, b, ldb, info);
 }
 template< typename T, typename Ta >
-integer pttrs(char *uplo, integer* n, integer* nrhs, Ta* d, T* e, T* b, integer* ldb, integer* info)
+void pttrs(char *uplo, integer* n, integer* nrhs, Ta* d, T* e, T* b, integer* ldb, integer* info)
 {
-  return pttrs(uplo, n, nrhs, d, e, b, ldb, info);
+  pttrs(uplo, n, nrhs, d, e, b, ldb, info);
 }
 
 /*! @brief SBEV_2STAGE computes the eigenvalues and, optionally, \n
@@ -21000,17 +20793,16 @@ integer pttrs(char *uplo, integer* n, integer* nrhs, Ta* d, T* e, T* b, integer*
                 off-diagonal elements of an intermediate tridiagonal
                 form did not converge to zero. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sbev_2stage(char* jobz, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, T* w, T* z, integer* ldz, T* work, integer* lwork, integer* info)
+void sbev_2stage(char* jobz, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, T* w, T* z, integer* ldz, T* work, integer* lwork, integer* info)
 {
-  return sbev_2stage(jobz, uplo, n, kd, ab, ldab, w, z, ldz, work, lwork, info);
+  sbev_2stage(jobz, uplo, n, kd, ab, ldab, w, z, ldz, work, lwork, info);
 }
 template< typename T, typename Ta >
-integer hbev_2stage(char* jobz, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, Ta* w, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* info)
+void hbev_2stage(char* jobz, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, Ta* w, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* info)
 {
-  return hbev_2stage(jobz, uplo, n, kd, ab, ldab, w, z, ldz, work, lwork, rwork, info);
+  hbev_2stage(jobz, uplo, n, kd, ab, ldab, w, z, ldz, work, lwork, rwork, info);
 }
 
 /*! @brief SBEV computes the eigenvalues and, optionally, the left \n
@@ -21079,17 +20871,16 @@ integer hbev_2stage(char* jobz, char* uplo, integer* n, integer* kd, T* ab, inte
                 off-diagonal elements of an intermediate tridiagonal
                 form did not converge to zero. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sbev(char* jobz, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, T* w, T* z, integer* ldz, T* work, integer* info)
+void sbev(char* jobz, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, T* w, T* z, integer* ldz, T* work, integer* info)
 {
-  return sbev(jobz, uplo, n, kd, ab, ldab, w, z, ldz, work, info);
+  sbev(jobz, uplo, n, kd, ab, ldab, w, z, ldz, work, info);
 }
 template< typename T, typename Ta >
-integer hbev(char* jobz, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, Ta* w, T* z, integer* ldz, T* work, Ta* rwork, integer* info)
+void hbev(char* jobz, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, Ta* w, T* z, integer* ldz, T* work, Ta* rwork, integer* info)
 {
-  return hbev(jobz, uplo, n, kd, ab, ldab, w, z, ldz, work, rwork, info);
+  hbev(jobz, uplo, n, kd, ab, ldab, w, z, ldz, work, rwork, info);
 }
 
 /*! @brief SBEVD_2STAGE computes the eigenvalues and, optionally, the left \n 
@@ -21200,17 +20991,16 @@ integer hbev(char* jobz, char* uplo, integer* n, integer* kd, T* ab, integer* ld
                 off-diagonal elements of an intermediate tridiagonal
                 form did not converge to zero. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sbevd_2stage(char* jobz, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, T* w, T* z, integer* ldz, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
+void sbevd_2stage(char* jobz, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, T* w, T* z, integer* ldz, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
 {
-  return sbevd_2stage(jobz, uplo, n, kd, ab, ldab, w, z, ldz, work, lwork, iwork, liwork, info);
+  sbevd_2stage(jobz, uplo, n, kd, ab, ldab, w, z, ldz, work, lwork, iwork, liwork, info);
 }
 template< typename T, typename Ta >
-integer hbevd_2stage(char* jobz, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, Ta* w, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
+void hbevd_2stage(char* jobz, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, Ta* w, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
 {
-  return hbevd_2stage(jobz, uplo, n, kd, ab, ldab, w, z, ldz, work, lwork, rwork, lrwork, iwork, liwork, info);
+  hbevd_2stage(jobz, uplo, n, kd, ab, ldab, w, z, ldz, work, lwork, rwork, lrwork, iwork, liwork, info);
 }
 
 /*! @brief SBEVD computes the eigenvalues and, optionally, the left \n 
@@ -21316,17 +21106,16 @@ integer hbevd_2stage(char* jobz, char* uplo, integer* n, integer* kd, T* ab, int
                 off-diagonal elements of an intermediate tridiagonal
                 form did not converge to zero. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sbevd(char* jobz, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, T* w, T* z, integer* ldz, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
+void sbevd(char* jobz, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, T* w, T* z, integer* ldz, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
 {
-  return sbevd(jobz, uplo, n, kd, ab, ldab, w, z, ldz, work, lwork, iwork, liwork, info);
+  sbevd(jobz, uplo, n, kd, ab, ldab, w, z, ldz, work, lwork, iwork, liwork, info);
 }
 template< typename T, typename Ta >
-integer hbevd(char* jobz, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, Ta* w, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
+void hbevd(char* jobz, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, Ta* w, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
 {
-  return hbevd(jobz, uplo, n, kd, ab, ldab, w, z, ldz, work, lwork, rwork, lrwork, iwork, liwork, info);
+  hbevd(jobz, uplo, n, kd, ab, ldab, w, z, ldz, work, lwork, rwork, lrwork, iwork, liwork, info);
 }
 
 /*! @brief SBEVX_2STAGE computes the eigenvalues and, optionally, the left \n
@@ -21494,17 +21283,16 @@ integer hbevd(char* jobz, char* uplo, integer* n, integer* kd, T* ab, integer* l
           > 0:  if INFO = i, then i eigenvectors failed to converge.
                 Their indices are stored in array IFAIL. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sbevx_2stage(char* jobz, char* range, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, T* q, integer* ldq, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, T* work, integer* lwork, integer* iwork, integer* ifail, integer* info)
+void sbevx_2stage(char* jobz, char* range, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, T* q, integer* ldq, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, T* work, integer* lwork, integer* iwork, integer* ifail, integer* info)
 {
-  return sbevx_2stage(jobz, range, uplo, n, kd, ab, ldab, q, ldq, vl, vu, il, iu, abstol, m, w, z, ldz, work, lwork, iwork, ifail, info);
+  sbevx_2stage(jobz, range, uplo, n, kd, ab, ldab, q, ldq, vl, vu, il, iu, abstol, m, w, z, ldz, work, lwork, iwork, ifail, info);
 }
 template< typename T, typename Ta >
-integer hbevx_2stage(char* jobz, char* range, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, T* q, integer* ldq, Ta* vl, Ta* vu, integer* il, integer* iu, Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* iwork, integer* ifail, integer* info)
+void hbevx_2stage(char* jobz, char* range, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, T* q, integer* ldq, Ta* vl, Ta* vu, integer* il, integer* iu, Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* iwork, integer* ifail, integer* info)
 {
-  return hbevx_2stage(jobz, range, uplo, n, kd, ab, ldab, q, ldq, vl, vu, il, iu, abstol, m, w, z, ldz, work, lwork, rwork, iwork, ifail, info);
+  hbevx_2stage(jobz, range, uplo, n, kd, ab, ldab, q, ldq, vl, vu, il, iu, abstol, m, w, z, ldz, work, lwork, rwork, iwork, ifail, info);
 }
 
 /*! @brief SBEVX computes the eigenvalues and, optionally, the left \n
@@ -21655,17 +21443,16 @@ integer hbevx_2stage(char* jobz, char* range, char* uplo, integer* n, integer* k
                 Their indices are stored in array IFAIL. \n
 
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sbevx(char* jobz, char* range, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, T* q, integer* ldq, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, T* work, integer* iwork, integer* ifail, integer* info)
+void sbevx(char* jobz, char* range, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, T* q, integer* ldq, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, T* work, integer* iwork, integer* ifail, integer* info)
 {
-  return sbevx(jobz, range, uplo, n, kd, ab, ldab, q, ldq, vl, vu, il, iu, abstol, m, w, z, ldz, work, iwork, ifail, info);
+  sbevx(jobz, range, uplo, n, kd, ab, ldab, q, ldq, vl, vu, il, iu, abstol, m, w, z, ldz, work, iwork, ifail, info);
 }
 template< typename T, typename Ta >
-integer hbevx(char* jobz, char* range, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, T* q, integer* ldq, Ta* vl, Ta* vu, integer* il, integer* iu, Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, T* work, Ta* rwork, integer* iwork, integer* ifail, integer* info)
+void hbevx(char* jobz, char* range, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, T* q, integer* ldq, Ta* vl, Ta* vu, integer* il, integer* iu, Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, T* work, Ta* rwork, integer* iwork, integer* ifail, integer* info)
 {
-  return hbevx(jobz, range, uplo, n, kd, ab, ldab, q, ldq, vl, vu, il, iu, abstol, m, w, z, ldz, work, rwork, iwork, ifail, info);
+  hbevx(jobz, range, uplo, n, kd, ab, ldab, q, ldq, vl, vu, il, iu, abstol, m, w, z, ldz, work, rwork, iwork, ifail, info);
 }
 
 /*! @brief SBGST reduces a real symmetric-definite banded generalized eigenproblem  to standard form
@@ -21739,17 +21526,16 @@ integer hbevx(char* jobz, char* range, char* uplo, integer* n, integer* kd, T* a
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sbgst(char* vect, char* uplo, integer* n, integer* ka, integer* kb, T* ab, integer* ldab,  T* bb, integer* ldbb, T* x, integer* ldx, T* work, integer* info)
+void sbgst(char* vect, char* uplo, integer* n, integer* ka, integer* kb, T* ab, integer* ldab,  T* bb, integer* ldbb, T* x, integer* ldx, T* work, integer* info)
 {
-  return sbgst(vect, uplo, n, ka, kb, ab, ldab, bb, ldbb, x, ldx, work, info);
+  sbgst(vect, uplo, n, ka, kb, ab, ldab, bb, ldbb, x, ldx, work, info);
 }
 template< typename T, typename Ta >
-integer hbgst(char* vect, char* uplo, integer* n, integer* ka, integer* kb, T* ab, integer* ldab,  T* bb, integer* ldbb, T* x, integer* ldx, T* work, Ta* rwork, integer* info)
+void hbgst(char* vect, char* uplo, integer* n, integer* ka, integer* kb, T* ab, integer* ldab,  T* bb, integer* ldbb, T* x, integer* ldx, T* work, Ta* rwork, integer* info)
 {
-  return hbgst(vect, uplo, n, ka, kb, ab, ldab, bb, ldbb, x, ldx, work, rwork, info);
+  hbgst(vect, uplo, n, ka, kb, ab, ldab, bb, ldbb, x, ldx, work, rwork, info);
 }
 
 /*! @brief SBGV computes all the eigenvalues, and optionally, the eigenvectors
@@ -21838,17 +21624,16 @@ integer hbgst(char* vect, char* uplo, integer* n, integer* ka, integer* kb, T* a
                     The factorization of B could not be completed and
                     no eigenvalues or eigenvectors were computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sbgv(char* jobz, char* uplo, integer* n, integer* ka, integer* kb, T* ab, integer* ldab, T* bb, integer* ldbb, T* w, T* z, integer* ldz, float* work, integer* info)
+void sbgv(char* jobz, char* uplo, integer* n, integer* ka, integer* kb, T* ab, integer* ldab, T* bb, integer* ldbb, T* w, T* z, integer* ldz, float* work, integer* info)
 {
-  return sbgv(jobz, uplo, n, ka, kb, ab, ldab, bb, ldbb, w, z, ldz, work, info);
+  sbgv(jobz, uplo, n, ka, kb, ab, ldab, bb, ldbb, w, z, ldz, work, info);
 }
 template< typename T, typename Ta >
-integer hbgv(char* jobz, char* uplo, integer* n, integer* ka, integer* kb, T* ab, integer* ldab, T* bb, integer* ldbb, Ta* w, T* z, integer* ldz, T* work, Ta* rwork, integer* info)
+void hbgv(char* jobz, char* uplo, integer* n, integer* ka, integer* kb, T* ab, integer* ldab, T* bb, integer* ldbb, Ta* w, T* z, integer* ldz, T* work, Ta* rwork, integer* info)
 {
-  return hbgv(jobz, uplo, n, ka, kb, ab, ldab, bb, ldbb, w, z, ldz, work, rwork, info);
+  hbgv(jobz, uplo, n, ka, kb, ab, ldab, bb, ldbb, w, z, ldz, work, rwork, info);
 }
 
 /*! @brief SBGVD computes all the eigenvalues, and optionally, the eigenvectors
@@ -21972,17 +21757,16 @@ integer hbgv(char* jobz, char* uplo, integer* n, integer* ka, integer* kb, T* ab
                     The factorization of B could not be completed and
                     no eigenvalues or eigenvectors were computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sbgvd(char* jobz, char* uplo, integer* n, integer* ka, integer* kb, T* ab, integer* ldab, T* bb, integer* ldbb, T* w, T* z, integer* ldz, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
+void sbgvd(char* jobz, char* uplo, integer* n, integer* ka, integer* kb, T* ab, integer* ldab, T* bb, integer* ldbb, T* w, T* z, integer* ldz, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
 {
-  return sbgvd(jobz, uplo, n, ka, kb, ab, ldab, bb, ldbb, w, z, ldz, work, lwork, iwork, liwork, info);
+  sbgvd(jobz, uplo, n, ka, kb, ab, ldab, bb, ldbb, w, z, ldz, work, lwork, iwork, liwork, info);
 }
 template< typename T, typename Ta >
-integer hbgvd(char* jobz, char* uplo, integer* n, integer* ka, integer* kb, T* ab, integer* ldab, T* bb, integer* ldbb, Ta* w, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
+void hbgvd(char* jobz, char* uplo, integer* n, integer* ka, integer* kb, T* ab, integer* ldab, T* bb, integer* ldbb, Ta* w, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
 {
-  return hbgvd(jobz, uplo, n, ka, kb, ab, ldab, bb, ldbb, w, z, ldz, work, lwork, rwork, lrwork, iwork, liwork, info);
+  hbgvd(jobz, uplo, n, ka, kb, ab, ldab, bb, ldbb, w, z, ldz, work, lwork, rwork, lrwork, iwork, liwork, info);
 }
 
 /*! @brief SBGVX computes all the eigenvalues, and optionally, the eigenvectors
@@ -22141,17 +21925,16 @@ integer hbgvd(char* jobz, char* uplo, integer* n, integer* ka, integer* kb, T* a
                 The factorization of B could not be completed and
                 no eigenvalues or eigenvectors were computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sbgvx(char* jobz, char* range, char* uplo, integer* n, integer* ka, integer* kb, T* ab, integer* ldab, T* bb, integer* ldbb, T* q, integer* ldq, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, T* work, integer* iwork, integer* ifail, integer* info)
+void sbgvx(char* jobz, char* range, char* uplo, integer* n, integer* ka, integer* kb, T* ab, integer* ldab, T* bb, integer* ldbb, T* q, integer* ldq, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, T* work, integer* iwork, integer* ifail, integer* info)
 {
-  return sbgvx(jobz, range, uplo, n, ka, kb, ab, ldab, bb, ldbb, q, ldq, vl, vu, il, iu, abstol, m, w, z, ldz, work, iwork, ifail, info);
+  sbgvx(jobz, range, uplo, n, ka, kb, ab, ldab, bb, ldbb, q, ldq, vl, vu, il, iu, abstol, m, w, z, ldz, work, iwork, ifail, info);
 }
 template< typename T, typename Ta >
-integer hbgvx(char* jobz, char* range, char* uplo, integer* n, integer* ka, integer* kb, T* ab, integer* ldab, T* bb, integer* ldbb, T* q, integer* ldq, Ta* vl, Ta* vu, integer* il, integer* iu, Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, T* work, Ta* rwork, integer* iwork, integer* ifail, integer* info)
+void hbgvx(char* jobz, char* range, char* uplo, integer* n, integer* ka, integer* kb, T* ab, integer* ldab, T* bb, integer* ldbb, T* q, integer* ldq, Ta* vl, Ta* vu, integer* il, integer* iu, Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, T* work, Ta* rwork, integer* iwork, integer* ifail, integer* info)
 {
-  return hbgvx(jobz, range, uplo, n, ka, kb, ab, ldab, bb, ldbb, q, ldq, vl, vu, il, iu, abstol, m, w, z, ldz, work, rwork, iwork, ifail, info);
+  hbgvx(jobz, range, uplo, n, ka, kb, ab, ldab, bb, ldbb, q, ldq, vl, vu, il, iu, abstol, m, w, z, ldz, work, rwork, iwork, ifail, info);
 }
 
 /*! @brief SBTRD reduces a real symmetric band matrix A to symmetric tridiagonal form T
@@ -22224,17 +22007,16 @@ integer hbgvx(char* jobz, char* range, char* uplo, integer* n, integer* ka, inte
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sbtrd(char* vect, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, T* d, T* e, T* q, integer* ldq, T* work, integer* info)
+void sbtrd(char* vect, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, T* d, T* e, T* q, integer* ldq, T* work, integer* info)
 {
-  return sbtrd(vect, uplo, n, kd, ab, ldab, d, e, q, ldq, work, info);
+  sbtrd(vect, uplo, n, kd, ab, ldab, d, e, q, ldq, work, info);
 }
 template< typename T, typename Ta >
-integer hbtrd(char* vect, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, Ta* d, Ta* e, T* q, integer* ldq, T* work, integer* info)
+void hbtrd(char* vect, char* uplo, integer* n, integer* kd, T* ab, integer* ldab, Ta* d, Ta* e, T* q, integer* ldq, T* work, integer* info)
 {
-  return hbtrd(vect, uplo, n, kd, ab, ldab, d, e, q, ldq, work, info);
+  hbtrd(vect, uplo, n, kd, ab, ldab, d, e, q, ldq, work, info);
 }
 
 /*! @brief SFRK performs a symmetric rank-k operation for matrix in RFP format
@@ -22318,17 +22100,16 @@ integer hbtrd(char* vect, char* uplo, integer* n, integer* kd, T* ab, integer* l
            NT = N*(N+1)/2. On entry, the symmetric matrix C in RFP
            Format. RFP Format is described by TRANSR, UPLO and N.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sfrk(char* transr, char* uplo, char* trans, integer* n, integer* k, T* alpha, T* a, integer* lda, T* beta, T* c)
+void sfrk(char* transr, char* uplo, char* trans, integer* n, integer* k, T* alpha, T* a, integer* lda, T* beta, T* c)
 {
-  return sfrk(transr, uplo, trans, n, k, alpha, a, lda, beta, c);
+  sfrk(transr, uplo, trans, n, k, alpha, a, lda, beta, c);
 }
 template< typename T, typename Ta >
-integer hfrk(char* transr, char* uplo, char* trans, integer* n, integer* k, Ta* alpha, T* a, integer* lda, Ta* beta, T* c)
+void hfrk(char* transr, char* uplo, char* trans, integer* n, integer* k, Ta* alpha, T* a, integer* lda, Ta* beta, T* c)
 {
-  return hfrk(transr, uplo, trans, n, k, alpha, a, lda, beta, c);
+  hfrk(transr, uplo, trans, n, k, alpha, a, lda, beta, c);
 }
 
 /*! @brief SPCON estimates the reciprocal of the condition number
@@ -22379,22 +22160,21 @@ integer hfrk(char* transr, char* uplo, char* trans, integer* n, integer* k, Ta* 
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer spcon(char* uplo, integer* n,  T* ap,  integer* ipiv, T* anorm, T* rcond, T* work, integer* iwork, integer* info)
+void spcon(char* uplo, integer* n,  T* ap,  integer* ipiv, T* anorm, T* rcond, T* work, integer* iwork, integer* info)
 {
-  return spcon(uplo, n, ap, ipiv, anorm, rcond, work, iwork, info);
+  spcon(uplo, n, ap, ipiv, anorm, rcond, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer spcon(char* uplo, integer* n,  T* ap,  integer* ipiv, Ta* anorm, Ta* rcond, T* work, integer* info)
+void spcon(char* uplo, integer* n,  T* ap,  integer* ipiv, Ta* anorm, Ta* rcond, T* work, integer* info)
 {
-  return spcon(uplo, n, ap, ipiv, anorm, rcond, work, info);
+  spcon(uplo, n, ap, ipiv, anorm, rcond, work, info);
 }
 template< typename T, typename Ta >
-integer hpcon(char* uplo, integer* n,  T* ap,  integer* ipiv, Ta* anorm, Ta* rcond, T* work, integer* info)
+void hpcon(char* uplo, integer* n,  T* ap,  integer* ipiv, Ta* anorm, Ta* rcond, T* work, integer* info)
 {
-  return hpcon(uplo, n,  ap,  ipiv, anorm, rcond, work, info);
+  hpcon(uplo, n,  ap,  ipiv, anorm, rcond, work, info);
 }
 
 /*! @brief SSPEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices
@@ -22454,17 +22234,16 @@ integer hpcon(char* uplo, integer* n,  T* ap,  integer* ipiv, Ta* anorm, Ta* rco
                 off-diagonal elements of an intermediate tridiagonal
                 form did not converge to zero. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer spev(char* jobz, char* uplo, integer* n, T* ap, T* w, T* z, integer* ldq, T* work, integer* info)
+void spev(char* jobz, char* uplo, integer* n, T* ap, T* w, T* z, integer* ldq, T* work, integer* info)
 {
-  return spev(jobz, uplo, n, ap, w, z, ldq, work, info);
+  spev(jobz, uplo, n, ap, w, z, ldq, work, info);
 }
 template< typename T, typename Ta >
-integer hpev(char* jobz, char* uplo, integer* n, T* ap, Ta* w, T* z, integer* ldq, T* work, Ta* rwork, integer* info)
+void hpev(char* jobz, char* uplo, integer* n, T* ap, Ta* w, T* z, integer* ldq, T* work, Ta* rwork, integer* info)
 {
-  return hpev(jobz, uplo, n, ap, w, z, ldq, work, rwork, info);
+  hpev(jobz, uplo, n, ap, w, z, ldq, work, rwork, info);
 }
 
 /*! @brief SPEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices
@@ -22560,17 +22339,16 @@ integer hpev(char* jobz, char* uplo, integer* n, T* ap, Ta* w, T* z, integer* ld
                 off-diagonal elements of an intermediate tridiagonal
                 form did not converge to zero. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer spevd(char* jobz, char* uplo, integer* n, T* ap, T* w, T* z, integer* ldz, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
+void spevd(char* jobz, char* uplo, integer* n, T* ap, T* w, T* z, integer* ldz, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
 {
-  return spevd(jobz, uplo, n, ap, w, z, ldz, work, lwork, iwork, liwork, info);
+  spevd(jobz, uplo, n, ap, w, z, ldz, work, lwork, iwork, liwork, info);
 } 
 template< typename T, typename Ta >
-integer hpevd(char* jobz, char* uplo, integer* n, T* ap, Ta* w, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
+void hpevd(char* jobz, char* uplo, integer* n, T* ap, Ta* w, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
 {
-  return hpevd(jobz, uplo, n, ap, w, z, ldz, work, lwork, rwork, lrwork, iwork, liwork, info);
+  hpevd(jobz, uplo, n, ap, w, z, ldz, work, lwork, rwork, lrwork, iwork, liwork, info);
 } 
 
 /*! @brief SPEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices
@@ -22701,17 +22479,16 @@ integer hpevd(char* jobz, char* uplo, integer* n, T* ap, Ta* w, T* z, integer* l
           > 0:  if INFO = i, then i eigenvectors failed to converge.
                 Their indices are stored in array IFAIL. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer spevx(char* jobz, char* range, char* uplo, integer* n, T* ap, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, T* work, integer* iwork, integer* ifail, integer* info)
+void spevx(char* jobz, char* range, char* uplo, integer* n, T* ap, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, T* work, integer* iwork, integer* ifail, integer* info)
 {
-  return spevx(jobz, range, uplo, n, ap, vl, vu, il, iu, abstol, m, w, z, ldz, work, iwork, ifail, info);
+  spevx(jobz, range, uplo, n, ap, vl, vu, il, iu, abstol, m, w, z, ldz, work, iwork, ifail, info);
 }
 template< typename T, typename Ta >
-integer spevx(char* jobz, char* range, char* uplo, integer* n, T* ap, Ta* vl, Ta* vu, integer* il, integer* iu, Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, T* work, Ta* rwork, integer* iwork, integer* ifail, integer* info)
+void spevx(char* jobz, char* range, char* uplo, integer* n, T* ap, Ta* vl, Ta* vu, integer* il, integer* iu, Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, T* work, Ta* rwork, integer* iwork, integer* ifail, integer* info)
 {
-  return spevx(jobz, range, uplo, n, ap, vl, vu, il, iu, abstol, m, w, z, ldz, work, rwork, iwork, ifail, info);
+  spevx(jobz, range, uplo, n, ap, vl, vu, il, iu, abstol, m, w, z, ldz, work, rwork, iwork, ifail, info);
 }
 
 /*! @brief SPGST reduces a real symmetric-definite generalized eigenproblem to standard form
@@ -22763,17 +22540,16 @@ integer spevx(char* jobz, char* range, char* uplo, integer* n, T* ap, Ta* vl, Ta
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer spgst(integer* itype, char* uplo, integer* n, T* ap, T* bp, integer* info)
+void spgst(integer* itype, char* uplo, integer* n, T* ap, T* bp, integer* info)
 {
-  return spgst(itype, uplo, n, ap, bp, info);
+  spgst(itype, uplo, n, ap, bp, info);
 }
 template< typename T >
-integer hpgst(integer* itype, char* uplo, integer* n, T* ap, T* bp, integer* info)
+void hpgst(integer* itype, char* uplo, integer* n, T* ap, T* bp, integer* info)
 {
-  return hpgst(itype, uplo, n, ap, bp, info);
+  hpgst(itype, uplo, n, ap, bp, info);
 }
 
 /*! @brief SPGV computes all the eigenvalues
@@ -22854,17 +22630,16 @@ integer hpgst(integer* itype, char* uplo, integer* n, T* ap, T* bp, integer* inf
                     The factorization of B could not be completed and
                     no eigenvalues or eigenvectors were computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer spgv(integer* itype, char* jobz, char* uplo, integer* n, T* ap, T* bp, T* w, T* z, integer* ldz, T* work, integer* info)
+void spgv(integer* itype, char* jobz, char* uplo, integer* n, T* ap, T* bp, T* w, T* z, integer* ldz, T* work, integer* info)
 {
-  return spgv(itype, jobz, uplo, n, ap, bp, w, z, ldz, work, info);
+  spgv(itype, jobz, uplo, n, ap, bp, w, z, ldz, work, info);
 } 
 template< typename T, typename Ta >
-integer hpgv(integer* itype, char* jobz, char* uplo, integer* n, T* ap, T* bp, T* w, T* z, integer* ldz, T* work, Ta* rwork, integer* info)
+void hpgv(integer* itype, char* jobz, char* uplo, integer* n, T* ap, T* bp, T* w, T* z, integer* ldz, T* work, Ta* rwork, integer* info)
 {
-  return hpgv(itype, jobz, uplo, n, ap, bp, w, z, ldz, work, rwork, info);
+  hpgv(itype, jobz, uplo, n, ap, bp, w, z, ldz, work, rwork, info);
 } 
 
 /*! @brief SPGVD computes all the eigenvalues
@@ -22980,17 +22755,16 @@ integer hpgv(integer* itype, char* jobz, char* uplo, integer* n, T* ap, T* bp, T
                     The factorization of B could not be completed and
                     no eigenvalues or eigenvectors were computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer spgvd(integer* itype, char* jobz, char* uplo, integer* n, T* ap, T* bp, T* w, T* z, integer* ldz, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
+void spgvd(integer* itype, char* jobz, char* uplo, integer* n, T* ap, T* bp, T* w, T* z, integer* ldz, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
 {
-  return spgvd(itype, jobz, uplo, n, ap, bp, w, z, ldz, work, lwork, iwork, liwork, info);
+  spgvd(itype, jobz, uplo, n, ap, bp, w, z, ldz, work, lwork, iwork, liwork, info);
 } 
 template< typename T, typename Ta >
-integer hpgvd(integer* itype, char* jobz, char* uplo, integer* n, T* ap, T* bp, Ta* w, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
+void hpgvd(integer* itype, char* jobz, char* uplo, integer* n, T* ap, T* bp, Ta* w, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
 {
-  return hpgvd(itype, jobz, uplo, n, ap, bp, w, z, ldz, work, lwork, rwork, lrwork, iwork, liwork, info);
+  hpgvd(itype, jobz, uplo, n, ap, bp, w, z, ldz, work, lwork, rwork, lrwork, iwork, liwork, info);
 }
 
 /*! @brief SPGVX computes all the eigenvalues
@@ -23143,17 +22917,16 @@ integer hpgvd(integer* itype, char* jobz, char* uplo, integer* n, T* ap, T* bp, 
                     The factorization of B could not be completed and
                     no eigenvalues or eigenvectors were computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer spgvx(integer* itype, char* jobz, char* range, char* uplo, integer* n, T* ap, T* bp, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, T* work, integer* iwork, integer* ifail, integer* info)
+void spgvx(integer* itype, char* jobz, char* range, char* uplo, integer* n, T* ap, T* bp, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, T* work, integer* iwork, integer* ifail, integer* info)
 {
-  return spgvx(itype, jobz, range, uplo, n, ap, bp, vl, vu, il, iu, abstol, m, w, z, ldz, work, iwork, ifail, info);
+  spgvx(itype, jobz, range, uplo, n, ap, bp, vl, vu, il, iu, abstol, m, w, z, ldz, work, iwork, ifail, info);
 }
 template< typename T, typename Ta >
-integer hpgvx(integer* itype, char* jobz, char* range, char* uplo, integer* n, T* ap, T* bp, Ta* vl, Ta* vu, integer* il, integer* iu, Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, T* work, Ta* rwork, integer* iwork, integer* ifail, integer* info)
+void hpgvx(integer* itype, char* jobz, char* range, char* uplo, integer* n, T* ap, T* bp, Ta* vl, Ta* vu, integer* il, integer* iu, Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, T* work, Ta* rwork, integer* iwork, integer* ifail, integer* info)
 {
-  return hpgvx(itype, jobz, range, uplo, n, ap, bp, vl, vu, il, iu, abstol, m, w, z, ldz, work, rwork, iwork, ifail, info);
+  hpgvx(itype, jobz, range, uplo, n, ap, bp, vl, vu, il, iu, abstol, m, w, z, ldz, work, rwork, iwork, ifail, info);
 }
 
 /*! @brief SPSV computes the solution to system of linear equations A * X = B for OTHER matrices
@@ -23227,17 +23000,16 @@ integer hpgvx(integer* itype, char* jobz, char* range, char* uplo, integer* n, T
                 exactly singular, so the solution could not be
                 computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer spsv(char* uplo, integer* n, integer* nrhs, T* ap, integer* ipiv, T* b, integer* ldb, integer* info)
+void spsv(char* uplo, integer* n, integer* nrhs, T* ap, integer* ipiv, T* b, integer* ldb, integer* info)
 {
-  return spsv(uplo, n, nrhs, ap, ipiv, b, ldb, info);
+  spsv(uplo, n, nrhs, ap, ipiv, b, ldb, info);
 }
 template< typename T >
-integer hpsv(char* uplo, integer* n, integer* nrhs, T* ap, integer* ipiv, T* b, integer* ldb, integer* info)
+void hpsv(char* uplo, integer* n, integer* nrhs, T* ap, integer* ipiv, T* b, integer* ldb, integer* info)
 {
-  return hpsv(uplo, n, nrhs, ap, ipiv, b, ldb, info);
+  hpsv(uplo, n, nrhs, ap, ipiv, b, ldb, info);
 }
 
 /*! @brief SPSVX computes the solution to system of linear equations A * X = B for OTHER matrices
@@ -23391,22 +23163,21 @@ integer hpsv(char* uplo, integer* n, integer* nrhs, T* ap, integer* ipiv, T* b, 
                        computed solution can be more accurate than the
                        value of RCOND would suggest. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer spsvx(char* fact, char* uplo, integer* n, integer* nrhs,  T* ap, T* afp, integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* ferr, T* berr, T* work, integer* iwork, integer* info)
+void spsvx(char* fact, char* uplo, integer* n, integer* nrhs,  T* ap, T* afp, integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* ferr, T* berr, T* work, integer* iwork, integer* info)
 {
-  return spsvx(fact, uplo, n, nrhs,  ap, afp, ipiv,  b, ldb, x, ldx, rcond, ferr, berr, work, iwork, info);
+  spsvx(fact, uplo, n, nrhs,  ap, afp, ipiv,  b, ldb, x, ldx, rcond, ferr, berr, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer spsvx(char* fact, char* uplo, integer* n, integer* nrhs,  T* ap, T* afp, integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void spsvx(char* fact, char* uplo, integer* n, integer* nrhs,  T* ap, T* afp, integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return spsvx(fact, uplo, n, nrhs,  ap, afp, ipiv,  b, ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
+  spsvx(fact, uplo, n, nrhs,  ap, afp, ipiv,  b, ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
 }
 template< typename T, typename Ta >
-integer hpsvx(char* fact, char* uplo, integer* n, integer* nrhs,  T* ap, T* afp, integer* ipiv, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void hpsvx(char* fact, char* uplo, integer* n, integer* nrhs,  T* ap, T* afp, integer* ipiv, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return hpsvx(fact, uplo, n, nrhs,  ap, afp, ipiv,  b, ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
+  hpsvx(fact, uplo, n, nrhs,  ap, afp, ipiv,  b, ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
 }
 
 /*! @brief SPTRD reduces a real symmetric matrix A stored in packed form to symmetric tridiagonal form T
@@ -23460,17 +23231,16 @@ integer hpsvx(char* fact, char* uplo, integer* n, integer* nrhs,  T* ap, T* afp,
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sptrd(char* uplo, integer* n, T* ap, T* d, T* e, T* tau, integer* info)
+void sptrd(char* uplo, integer* n, T* ap, T* d, T* e, T* tau, integer* info)
 {
-  return sptrd(uplo, n, ap, d, e, tau, info);
+  sptrd(uplo, n, ap, d, e, tau, info);
 }
 template< typename T, typename Ta >
-integer hptrd(char* uplo, integer* n, T* ap, Ta* d, Ta* e, T* tau, integer* info)
+void hptrd(char* uplo, integer* n, T* ap, Ta* d, Ta* e, T* tau, integer* info)
 {
-  return hptrd(uplo, n, ap, d, e, tau, info);
+  hptrd(uplo, n, ap, d, e, tau, info);
 }
 
 /*! @brief SPTRF computes the factorization of a real symmetric matrix A
@@ -23525,17 +23295,16 @@ integer hptrd(char* uplo, integer* n, T* ap, Ta* d, Ta* e, T* tau, integer* info
                exactly singular, and division by zero will occur if it
                is used to solve a system of equations. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sptrf(char* uplo, integer* n, T* ap, integer* ipiv, integer* info)
+void sptrf(char* uplo, integer* n, T* ap, integer* ipiv, integer* info)
 {
-  return sptrf(uplo, n, ap, ipiv, info);
+  sptrf(uplo, n, ap, ipiv, info);
 }
 template< typename T >
-integer hptrf(char* uplo, integer* n, T* ap, integer* ipiv, integer* info)
+void hptrf(char* uplo, integer* n, T* ap, integer* ipiv, integer* info)
 {
-  return hptrf(uplo, n, ap, ipiv, info);
+  hptrf(uplo, n, ap, ipiv, info);
 }
 
 /*! @brief SPTRI computes the inverse of a real symmetric indefinite matrix A
@@ -23582,17 +23351,16 @@ integer hptrf(char* uplo, integer* n, T* ap, integer* ipiv, integer* info)
           > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its
                inverse could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sptri(char* uplo, integer* n, T* ap,  integer* ipiv, T* work, integer* info)
+void sptri(char* uplo, integer* n, T* ap,  integer* ipiv, T* work, integer* info)
 {
-  return sptri(uplo, n, ap, ipiv, work, info);
+  sptri(uplo, n, ap, ipiv, work, info);
 }
 template< typename T >
-integer hptri(char* uplo, integer* n, T* ap,  integer* ipiv, T* work, integer* info)
+void hptri(char* uplo, integer* n, T* ap,  integer* ipiv, T* work, integer* info)
 {
-  return hptri(uplo, n, ap, ipiv, work, info);
+  hptri(uplo, n, ap, ipiv, work, info);
 }
 
 /*! @brief SPTRS solves a system of linear equations A*X = B
@@ -23639,17 +23407,16 @@ integer hptri(char* uplo, integer* n, T* ap,  integer* ipiv, T* work, integer* i
           = 0:  successful exit \n
           < 0: if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sptrs(char* uplo, integer* n, integer* nrhs,  T* ap,  integer* ipiv, T* b, integer* ldb, integer* info)
+void sptrs(char* uplo, integer* n, integer* nrhs,  T* ap,  integer* ipiv, T* b, integer* ldb, integer* info)
 {
-  return sptrs(uplo, n, nrhs,  ap,  ipiv, b, ldb, info);
+  sptrs(uplo, n, nrhs,  ap,  ipiv, b, ldb, info);
 }
 template< typename T >
-integer hptrs(char* uplo, integer* n, integer* nrhs,  T* ap,  integer* ipiv, T* b, integer* ldb, integer* info)
+void hptrs(char* uplo, integer* n, integer* nrhs,  T* ap,  integer* ipiv, T* b, integer* ldb, integer* info)
 {
-  return hptrs(uplo, n, nrhs,  ap,  ipiv, b, ldb, info);
+  hptrs(uplo, n, nrhs,  ap,  ipiv, b, ldb, info);
 }
 
 /*! @brief STEBZ computes the eigenvalues of a symmetric tridiagonal matrix T
@@ -23796,12 +23563,11 @@ integer hptrs(char* uplo, integer* n, integer* nrhs,  T* ap,  integer* ipiv, T* 
                         Cure: Increase the PARAMETER "FUDGE",
                               recompile, and try again. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer stebz(char* range, char* order, integer* n, T* vl, T* vu, integer* il, integer* iu, T* abstol, T* d,  T* e, integer* m, integer* nsplit, T* w, integer* iblock, integer* isplit, T* work, integer* iwork, integer* info)
+void stebz(char* range, char* order, integer* n, T* vl, T* vu, integer* il, integer* iu, T* abstol, T* d,  T* e, integer* m, integer* nsplit, T* w, integer* iblock, integer* isplit, T* work, integer* iwork, integer* info)
 {
-  return stebz(range, order, n, vl, vu, il, iu, abstol, d,  e, m, nsplit, w, iblock, isplit, work, iwork, info);
+  stebz(range, order, n, vl, vu, il, iu, abstol, d,  e, m, nsplit, w, iblock, isplit, work, iwork, info);
 }
 
 /*! @brief STEGR computes selected eigenvalues and, optionally, eigenvectors of a real symmetric tridiagonal matrix T
@@ -23945,17 +23711,16 @@ integer stebz(char* range, char* order, integer* n, T* vl, T* vu, integer* il, i
                 the nonzero error code returned by SLARRE or
                 SLARRV, respectively. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer stegr(char* jobz, char* range, integer* n, T* d, T* e, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, integer* isuppz, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
+void stegr(char* jobz, char* range, integer* n, T* d, T* e, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, integer* isuppz, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
 {
-  return stegr(jobz, range, n, d, e, vl, vu, il, iu, abstol, m, w, z, ldz, isuppz, work, lwork, iwork, liwork, info);
+  stegr(jobz, range, n, d, e, vl, vu, il, iu, abstol, m, w, z, ldz, isuppz, work, lwork, iwork, liwork, info);
 }
 template< typename T, typename Ta >
-integer stegr(char* jobz, char* range, integer* n, Ta* d, Ta* e, Ta* vl, Ta* vu, integer* il, integer* iu, Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, integer* isuppz, Ta* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
+void stegr(char* jobz, char* range, integer* n, Ta* d, Ta* e, Ta* vl, Ta* vu, integer* il, integer* iu, Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, integer* isuppz, Ta* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
 {
-  return stegr(jobz, range, n, d, e, vl, vu, il, iu, abstol, m, w, z, ldz, isuppz, work, lwork, iwork, liwork, info);
+  stegr(jobz, range, n, d, e, vl, vu, il, iu, abstol, m, w, z, ldz, isuppz, work, lwork, iwork, liwork, info);
 }
 
 /*! @brief STEIN computes the eigenvectors of a real symmetric tridiagonal matrix T
@@ -24032,17 +23797,16 @@ integer stegr(char* jobz, char* range, integer* n, Ta* d, Ta* e, Ta* vl, Ta* vu,
                in MAXITS iterations.  Their indices are stored in
                array IFAIL. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer stein(integer* n,  T* d,  T* e, integer* m, T* w, integer* iblock, integer* isplit, T* z, integer* ldz, T* work, integer* iwork, integer* ifail, integer* info)
+void stein(integer* n,  T* d,  T* e, integer* m, T* w, integer* iblock, integer* isplit, T* z, integer* ldz, T* work, integer* iwork, integer* ifail, integer* info)
 {
-  return stein(n, d,  e, m,  w, iblock, isplit, z, ldz, work, iwork, ifail, info);
+  stein(n, d,  e, m,  w, iblock, isplit, z, ldz, work, iwork, ifail, info);
 }
 template< typename T, typename Ta >
-integer stein(integer* n,  Ta* d,  Ta* e, integer* m, Ta* w, integer* iblock, integer* isplit, T* z, integer* ldz, Ta* work, integer* iwork, integer* ifail, integer* info)
+void stein(integer* n,  Ta* d,  Ta* e, integer* m, Ta* w, integer* iblock, integer* isplit, T* z, integer* ldz, Ta* work, integer* iwork, integer* ifail, integer* info)
 {
-  return stein(n, d, e, m, w, iblock, isplit, z, ldz, work, iwork, ifail, info);
+  stein(n, d, e, m, w, iblock, isplit, z, ldz, work, iwork, ifail, info);
 }
 
 /*! @brief STERF computes all eigenvalues of a symmetric tridiagonal matrix
@@ -24074,12 +23838,11 @@ integer stein(integer* n,  Ta* d,  Ta* e, integer* m, Ta* w, integer* iblock, in
                 a total of 30*N iterations; if INFO = i, then i
                 elements of E have not converged to zero. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sterf(integer* n, T* d, T* e, integer* info)
+void sterf(integer* n, T* d, T* e, integer* info)
 {
-  return sterf(n, d, e, info);
+  sterf(n, d, e, info);
 }
 
 /*! @brief STEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices
@@ -24128,12 +23891,11 @@ integer sterf(integer* n, T* d, T* e, integer* info)
           > 0:  if INFO = i, the algorithm failed to converge; i
                 off-diagonal elements of E did not converge to zero. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer stev(char* jobz, integer* n, T* d, T* e, T* z, integer* ldz, T* work, integer* info)
+void stev(char* jobz, integer* n, T* d, T* e, T* z, integer* ldz, T* work, integer* info)
 {
-  return stev(jobz, n, d, e, z, ldz, work, info);
+  stev(jobz, n, d, e, z, ldz, work, info);
 }
 
 /*! @brief STEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices
@@ -24217,12 +23979,11 @@ integer stev(char* jobz, integer* n, T* d, T* e, T* z, integer* ldz, T* work, in
           > 0:  if INFO = i, the algorithm failed to converge; i
                 off-diagonal elements of E did not converge to zero. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer stevd(char* jobz, integer* n, T* d, T* e, T* z, integer* ldz, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
+void stevd(char* jobz, integer* n, T* d, T* e, T* z, integer* ldz, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
 {
-  return stevd(jobz, n, d, e, z, ldz, work, lwork, iwork, liwork, info);
+  stevd(jobz, n, d, e, z, ldz, work, lwork, iwork, liwork, info);
 }
 
 /*! @brief STEVR computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices
@@ -24408,12 +24169,11 @@ integer stevd(char* jobz, integer* n, T* d, T* e, T* z, integer* ldz, T* work, i
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
           > 0:  Internal error \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer stevr(char* jobz, char* range, integer* n, T* d, T* e, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, integer* isuppz, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
+void stevr(char* jobz, char* range, integer* n, T* d, T* e, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, integer* isuppz, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
 {
-  return stevr(jobz, range, n, d, e, vl, vu, il, iu, abstol, m, w, z, ldz, isuppz, work, lwork, iwork, liwork, info);
+  stevr(jobz, range, n, d, e, vl, vu, il, iu, abstol, m, w, z, ldz, isuppz, work, lwork, iwork, liwork, info);
 }
 
 /*! @brief STEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices
@@ -24540,12 +24300,11 @@ integer stevr(char* jobz, char* range, integer* n, T* d, T* e, T* vl, T* vu, int
           > 0:  if INFO = i, then i eigenvectors failed to converge.
                 Their indices are stored in array IFAIL. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer stevx(char* jobz, char* range, integer* n, T* d, T* e, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, float* work, integer* iwork, integer* ifail, integer* info)
+void stevx(char* jobz, char* range, integer* n, T* d, T* e, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, float* work, integer* iwork, integer* ifail, integer* info)
 {
-  return stevx(jobz, range, n, d, e, vl, vu, il, iu, abstol, m, w, z, ldz, work, iwork, ifail, info);
+  stevx(jobz, range, n, d, e, vl, vu, il, iu, abstol, m, w, z, ldz, work, iwork, ifail, info);
 }
 
 /*! @brief SYCON_3 estimates the reciprocal of the condition number of a real symmetric matrix A
@@ -24623,17 +24382,16 @@ integer stevx(char* jobz, char* range, integer* n, T* d, T* e, T* vl, T* vu, int
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sycon_3(char* uplo, integer* n, T* a, integer* lda, T* e, integer* ipiv, T* anorm, T* rcond, T* work, integer* iwork, integer* info)
+void sycon_3(char* uplo, integer* n, T* a, integer* lda, T* e, integer* ipiv, T* anorm, T* rcond, T* work, integer* iwork, integer* info)
 {
-  return sycon_3(uplo, n, a, lda, e, ipiv, anorm, rcond, work, iwork, info);
+  sycon_3(uplo, n, a, lda, e, ipiv, anorm, rcond, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer sycon_3(char* uplo, integer* n, T* a, integer* lda, T* e, integer* ipiv, Ta* anorm, Ta* rcond, T* work, integer* info)
+void sycon_3(char* uplo, integer* n, T* a, integer* lda, T* e, integer* ipiv, Ta* anorm, Ta* rcond, T* work, integer* info)
 {
-  return sycon_3(uplo, n, a, lda, e, ipiv, anorm, rcond, work, info);
+  sycon_3(uplo, n, a, lda, e, ipiv, anorm, rcond, work, info);
 }
 
 /*! @brief SYCON estimates the reciprocal of the condition number of a real symmetric matrix A
@@ -24686,17 +24444,16 @@ integer sycon_3(char* uplo, integer* n, T* a, integer* lda, T* e, integer* ipiv,
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sycon(char* uplo, integer* n,  T* a, integer* lda,  integer* ipiv, T* anorm, T* rcond, T* work, integer* iwork, integer* info)
+void sycon(char* uplo, integer* n,  T* a, integer* lda,  integer* ipiv, T* anorm, T* rcond, T* work, integer* iwork, integer* info)
 {
-  return sycon(uplo, n, a, lda,  ipiv, anorm, rcond, work, iwork, info);
+  sycon(uplo, n, a, lda,  ipiv, anorm, rcond, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer sycon(char* uplo, integer* n,  T* a, integer* lda,  integer* ipiv, Ta* anorm, Ta* rcond, T* work, integer* info)
+void sycon(char* uplo, integer* n,  T* a, integer* lda,  integer* ipiv, Ta* anorm, Ta* rcond, T* work, integer* info)
 {
-  return sycon(uplo, n, a, lda,  ipiv, anorm, rcond, work, info);
+  sycon(uplo, n, a, lda,  ipiv, anorm, rcond, work, info);
 }
 
 /*! @brief SYCONV convert A given by TRF into L and D and vice-versa
@@ -24742,12 +24499,11 @@ integer sycon(char* uplo, integer* n,  T* a, integer* lda,  integer* ipiv, Ta* a
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer syconv(char* uplo, char* way, integer* n, T* a, integer* lda, integer* ipiv, T* work, integer* info)
+void syconv(char* uplo, char* way, integer* n, T* a, integer* lda, integer* ipiv, T* work, integer* info)
 {
-  return syconv(uplo, way, n, a, lda, ipiv, work, info);
+  syconv(uplo, way, n, a, lda, ipiv, work, info);
 }
 
 /*! @brief SYEQUB computes row and column scalings intended to equilibrate a symmetric matrix A
@@ -24799,17 +24555,16 @@ integer syconv(char* uplo, char* way, integer* n, T* a, integer* lda, integer* i
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
           > 0:  if INFO = i, the i-th diagonal element is nonpositive. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer syequb(char* uplo, integer* n,  T* a, integer* lda, T* s, T* scond, T* amax, T* work, integer* info)
+void syequb(char* uplo, integer* n,  T* a, integer* lda, T* s, T* scond, T* amax, T* work, integer* info)
 {
-  return syequb(uplo, n, a, lda, s, scond, amax, work, info);
+  syequb(uplo, n, a, lda, s, scond, amax, work, info);
 }
 template< typename T, typename Ta >
-integer syequb(char* uplo, integer* n,  T* a, integer* lda, Ta* s, Ta* scond, Ta* amax, T* work, integer* info)
+void syequb(char* uplo, integer* n,  T* a, integer* lda, Ta* s, Ta* scond, Ta* amax, T* work, integer* info)
 {
-  return syequb(uplo, n, a, lda, s, scond, amax, work, info);
+  syequb(uplo, n, a, lda, s, scond, amax, work, info);
 }
 
 /*! @brief SYEV_2STAGE computes the eigenvalues and, optionally, the left \n
@@ -24884,12 +24639,11 @@ integer syequb(char* uplo, integer* n,  T* a, integer* lda, Ta* s, Ta* scond, Ta
                 off-diagonal elements of an intermediate tridiagonal
                 form did not converge to zero. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer syev_2stage(char* jobz, char* uplo, integer* n, T* a, integer* lda, T* w, T* work, integer* lwork, integer* info)
+void syev_2stage(char* jobz, char* uplo, integer* n, T* a, integer* lda, T* w, T* work, integer* lwork, integer* info)
 {
-  return syev_2stage(jobz, uplo, n, a, lda, w, work, lwork, info);
+  syev_2stage(jobz, uplo, n, a, lda, w, work, lwork, info);
 }
 
 /*! @brief SYEVD_2STAGE computes the eigenvalues and, optionally, the left \n
@@ -24994,12 +24748,11 @@ integer syev_2stage(char* jobz, char* uplo, integer* n, T* a, integer* lda, T* w
                 lying in rows and columns INFO/(N+1) through
                 mod(INFO,N+1). \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer syevd_2stage(char* jobz, char* uplo, integer* n, T* a, integer* lda, T* w, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
+void syevd_2stage(char* jobz, char* uplo, integer* n, T* a, integer* lda, T* w, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
 {
-  return syevd_2stage(jobz, uplo, n, a, lda, w, work, lwork, iwork, liwork, info);
+  syevd_2stage(jobz, uplo, n, a, lda, w, work, lwork, iwork, liwork, info);
 }
 
 /*! @brief SYEVR_2STAGE computes the eigenvalues and, optionally, the left \n
@@ -25222,12 +24975,11 @@ integer syevd_2stage(char* jobz, char* uplo, integer* n, T* a, integer* lda, T* 
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
           > 0:  Internal error \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer syevr_2stage(char* jobz, char* range, char* uplo, integer* n, T* a, integer* lda, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, integer* isuppz, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
+void syevr_2stage(char* jobz, char* range, char* uplo, integer* n, T* a, integer* lda, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, integer* isuppz, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
 {
-  return syevr_2stage(jobz, range, uplo, n, a, lda, vl, vu, il, iu, abstol, m, w, z, ldz, isuppz, work, lwork, iwork, liwork, info);
+  syevr_2stage(jobz, range, uplo, n, a, lda, vl, vu, il, iu, abstol, m, w, z, ldz, isuppz, work, lwork, iwork, liwork, info);
 }
 
 /*! @brief SYEVX_2STAGE  computes the eigenvalues and, optionally, the left \n
@@ -25382,12 +25134,11 @@ integer syevr_2stage(char* jobz, char* range, char* uplo, integer* n, T* a, inte
           > 0:  if INFO = i, then i eigenvectors failed to converge.
                 Their indices are stored in array IFAIL. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer syevx_2stage(char* jobz, char* range, char* uplo, integer* n, T* a, integer* lda, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, T* work, integer* lwork, integer* iwork, integer* ifail, integer* info)
+void syevx_2stage(char* jobz, char* range, char* uplo, integer* n, T* a, integer* lda, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, T* work, integer* lwork, integer* iwork, integer* ifail, integer* info)
 {
-  return syevx_2stage(jobz, range, uplo, n, a, lda, vl, vu, il, iu, abstol, m, w, z, ldz, work, lwork, iwork, ifail, info);
+  syevx_2stage(jobz, range, uplo, n, a, lda, vl, vu, il, iu, abstol, m, w, z, ldz, work, lwork, iwork, ifail, info);
 }
 
 /*! @brief SYEVX  computes the eigenvalues and, optionally, the left \n
@@ -25531,12 +25282,11 @@ integer syevx_2stage(char* jobz, char* range, char* uplo, integer* n, T* a, inte
           > 0:  if INFO = i, then i eigenvectors failed to converge.
                 Their indices are stored in array IFAIL. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer syevx(char* jobz, char* range, char* uplo, integer* n, T* a, integer* lda, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, T* work, integer* lwork, integer* iwork, integer* ifail, integer* info)
+void syevx(char* jobz, char* range, char* uplo, integer* n, T* a, integer* lda, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, T* work, integer* lwork, integer* iwork, integer* ifail, integer* info)
 {
-  return syevx(jobz, range, uplo, n, a, lda, vl, vu, il, iu, abstol, m, w, z, ldz, work, lwork, iwork, ifail, info);
+  syevx(jobz, range, uplo, n, a, lda, vl, vu, il, iu, abstol, m, w, z, ldz, work, lwork, iwork, ifail, info);
 }
 
 /*! @brief SYGV_2STAGE  computes all the eigenvalues, the eigenvectors \n
@@ -25645,12 +25395,11 @@ integer syevx(char* jobz, char* range, char* uplo, integer* n, T* a, integer* ld
                     The factorization of B could not be completed and
                     no eigenvalues or eigenvectors were computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sygv_2stage(integer* itype, char* jobz, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, T* w, T* work, integer* lwork, integer* info)
+void sygv_2stage(integer* itype, char* jobz, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, T* w, T* work, integer* lwork, integer* info)
 {
-  return sygv_2stage(itype, jobz, uplo, n, a, lda, b, ldb, w, work, lwork, info);
+  sygv_2stage(itype, jobz, uplo, n, a, lda, b, ldb, w, work, lwork, info);
 }
 
 /*! @brief SYGV  computes all the eigenvalues, the eigenvectors \n
@@ -25744,12 +25493,11 @@ integer sygv_2stage(integer* itype, char* jobz, char* uplo, integer* n, T* a, in
                     The factorization of B could not be completed and
                     no eigenvalues or eigenvectors were computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sygv(integer* itype, char* jobz, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, T* w, T* work, integer* lwork, integer* info)
+void sygv(integer* itype, char* jobz, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, T* w, T* work, integer* lwork, integer* info)
 {
-  return sygv(itype, jobz, uplo, n, a, lda, b, ldb, w, work, lwork, info);
+  sygv(itype, jobz, uplo, n, a, lda, b, ldb, w, work, lwork, info);
 }
 
 /*! @brief SYGVD  computes all the eigenvalues, the eigenvectors \n
@@ -25872,12 +25620,11 @@ integer sygv(integer* itype, char* jobz, char* uplo, integer* n, T* a, integer* 
                     The factorization of B could not be completed and
                     no eigenvalues or eigenvectors were computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sygvd(integer* itype, char* jobz, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, T* w, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
+void sygvd(integer* itype, char* jobz, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, T* w, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
 {
-  return sygvd(itype, jobz, uplo, n, a, lda, b, ldb, w, work, lwork, iwork, liwork, info);
+  sygvd(itype, jobz, uplo, n, a, lda, b, ldb, w, work, lwork, iwork, liwork, info);
 }
 
 /*! @brief SYGVX computes selected eigenvalues, the eigenvectors \n
@@ -26056,12 +25803,11 @@ integer sygvd(integer* itype, char* jobz, char* uplo, integer* n, T* a, integer*
                     The factorization of B could not be completed and
                     no eigenvalues or eigenvectors were computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sygvx(integer* itype, char* jobz, char* range, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, T* work, integer* lwork, integer* iwork, integer* ifail, integer* info)
+void sygvx(integer* itype, char* jobz, char* range, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, T* vl, T* vu, integer* il, integer* iu, T* abstol, integer* m, T* w, T* z, integer* ldz, T* work, integer* lwork, integer* iwork, integer* ifail, integer* info)
 {
-  return sygvx(itype, jobz, range, uplo, n, a, lda, b, ldb, vl, vu, il, iu, abstol, m, w, z, ldz, work, lwork, iwork, ifail, info);
+  sygvx(itype, jobz, range, uplo, n, a, lda, b, ldb, vl, vu, il, iu, abstol, m, w, z, ldz, work, lwork, iwork, ifail, info);
 }
 
 /*! @brief SYRFS improves the computed solution to a system of linear equations
@@ -26147,17 +25893,16 @@ integer sygvx(integer* itype, char* jobz, char* range, char* uplo, integer* n, T
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer syrfs(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  T* af, integer* ldaf,  integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, T* ferr, T* berr, T* work, integer* iwork, integer* info)
+void syrfs(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  T* af, integer* ldaf,  integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, T* ferr, T* berr, T* work, integer* iwork, integer* info)
 {
-  return syrfs(uplo, n, nrhs,  a, lda,  af, ldaf,  ipiv,  b, ldb, x, ldx, ferr, berr, work, iwork, info);
+  syrfs(uplo, n, nrhs,  a, lda,  af, ldaf,  ipiv,  b, ldb, x, ldx, ferr, berr, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer syrfs(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  T* af, integer* ldaf,  integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void syrfs(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  T* af, integer* ldaf,  integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return syrfs(uplo, n, nrhs,  a, lda,  af, ldaf,  ipiv,  b, ldb, x, ldx, ferr, berr, work, rwork, info);
+  syrfs(uplo, n, nrhs,  a, lda,  af, ldaf,  ipiv,  b, ldb, x, ldx, ferr, berr, work, rwork, info);
 }
 
 /*! @brief SYRFSX improves the computed solution to a system of linear equations
@@ -26423,17 +26168,16 @@ integer syrfs(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  T* af
              about all of the right-hand sides check ERR_BNDS_NORM or
              ERR_BNDS_COMP. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer syrfsx(char* uplo, char* equed, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, T* s, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* berr, integer* n_err_bnds, T* err_bnds_norm, T* err_bnds_comp, integer* nparams, T* params, T* work, integer* iwork, integer* info)
+void syrfsx(char* uplo, char* equed, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, T* s, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* berr, integer* n_err_bnds, T* err_bnds_norm, T* err_bnds_comp, integer* nparams, T* params, T* work, integer* iwork, integer* info)
 {
-  return syrfsx(uplo, equed, n, nrhs, a, lda,  af, ldaf, ipiv, s, b, ldb, x, ldx, rcond, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, iwork, info);
+  syrfsx(uplo, equed, n, nrhs, a, lda,  af, ldaf, ipiv, s, b, ldb, x, ldx, rcond, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer syrfsx(char* uplo, char* equed, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, Ta* s, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* berr, integer* n_err_bnds, Ta* err_bnds_norm, Ta* err_bnds_comp, integer* nparams, Ta* params, T* work, Ta* rwork, integer* info)
+void syrfsx(char* uplo, char* equed, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, Ta* s, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* berr, integer* n_err_bnds, Ta* err_bnds_norm, Ta* err_bnds_comp, integer* nparams, Ta* params, T* work, Ta* rwork, integer* info)
 {
-  return syrfsx(uplo, equed, n, nrhs, a, lda, af, ldaf, ipiv, s, b, ldb, x, ldx, rcond, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, rwork, info);
+  syrfsx(uplo, equed, n, nrhs, a, lda, af, ldaf, ipiv, s, b, ldb, x, ldx, rcond, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, rwork, info);
 }
 
 /*! @brief SYSV_AA_2STAGE computes the solution to system of linear equations A * X = B for SY matrices
@@ -26530,12 +26274,11 @@ integer syrfsx(char* uplo, char* equed, integer* n, integer* nrhs, T* a, integer
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
           > 0:  if INFO = i, band LU factorization failed on i-th column \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sysv_aa_2stage(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* tb, integer* ltb, integer* ipiv, integer* ipiv2, T* b, integer* ldb, T* work, integer* lwork, integer* info)
+void sysv_aa_2stage(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* tb, integer* ltb, integer* ipiv, integer* ipiv2, T* b, integer* ldb, T* work, integer* lwork, integer* info)
 {
-  return sysv_aa_2stage(uplo, n, nrhs, a, lda, tb, ltb, ipiv, ipiv2, b, ldb, work, lwork, info);
+  sysv_aa_2stage(uplo, n, nrhs, a, lda, tb, ltb, ipiv, ipiv2, b, ldb, work, lwork, info);
 }
 
 /*! @brief SYSV_AA computes the solution to system of linear equations A * X = B for SY matrices
@@ -26618,12 +26361,11 @@ integer sysv_aa_2stage(char* uplo, integer* n, integer* nrhs, T* a, integer* lda
                has been completed, but the block diagonal matrix D is
                exactly singular, so the solution could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sysv_aa(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, integer* ipiv, T* b, integer* ldb, T* work, integer* lwork, integer* info)
+void sysv_aa(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, integer* ipiv, T* b, integer* ldb, T* work, integer* lwork, integer* info)
 {
-  return sysv_aa(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info);
+  sysv_aa(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info);
 }
 
 /*! @brief SSYSV_RK computes the solution to system of linear equations A * X = B for SY matrices
@@ -26753,12 +26495,11 @@ integer sysv_aa(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, integ
                is not stored in INFO even though the factorization
                always completes. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sysv_rk(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* e, integer* ipiv, T* b, integer* ldb, T* work, integer* lwork, integer* info)
+void sysv_rk(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* e, integer* ipiv, T* b, integer* ldb, T* work, integer* lwork, integer* info)
 {
-  return sysv_rk(uplo, n, nrhs, a, lda, e, ipiv, b, ldb, work, lwork, info);
+  sysv_rk(uplo, n, nrhs, a, lda, e, ipiv, b, ldb, work, lwork, info);
 }
 
 /*! @brief SSYSV_ROOK computes the solution to system of linear equations A * X = B for SY matrices
@@ -26868,12 +26609,11 @@ integer sysv_rk(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* e,
                has been completed, but the block diagonal matrix D is
                exactly singular, so the solution could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sysv_rook(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, integer* ipiv, T* b, integer* ldb, T* work, integer* lwork, integer* info)
+void sysv_rook(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, integer* ipiv, T* b, integer* ldb, T* work, integer* lwork, integer* info)
 {
-  return sysv_rook(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info);
+  sysv_rook(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info);
 }
 
 /*! @brief SYSV computes the solution to system of linear equations A * X = B for SY matrices
@@ -26968,12 +26708,11 @@ integer sysv_rook(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, int
                has been completed, but the block diagonal matrix D is
                exactly singular, so the solution could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sysv(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, integer* ipiv, T* b, integer* ldb, T* work, integer* lwork, integer* info)
+void sysv(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, integer* ipiv, T* b, integer* ldb, T* work, integer* lwork, integer* info)
 {
-  return sysv(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info);
+  sysv(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info);
 }
 
 /*! @brief SYSVX computes the solution to system of linear equations A * X = B for SY matrices
@@ -27143,17 +26882,16 @@ integer sysv(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, integer*
                        computed solution can be more accurate than the
                        value of RCOND would suggest. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sysvx(char* fact, char* uplo, integer* n, integer* nrhs,  T* a, integer* lda, T* af, integer* ldaf, integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* ferr, T* berr, T* work, integer* lwork, integer* iwork, integer* info)
+void sysvx(char* fact, char* uplo, integer* n, integer* nrhs,  T* a, integer* lda, T* af, integer* ldaf, integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* ferr, T* berr, T* work, integer* lwork, integer* iwork, integer* info)
 {
-  return sysvx(fact, uplo, n, nrhs,  a, lda, af, ldaf, ipiv,  b, ldb, x, ldx, rcond, ferr, berr, work, lwork, iwork, info);
+  sysvx(fact, uplo, n, nrhs,  a, lda, af, ldaf, ipiv,  b, ldb, x, ldx, rcond, ferr, berr, work, lwork, iwork, info);
 }
 template< typename T, typename Ta >
-integer sysvx(char* fact, char* uplo, integer* n, integer* nrhs,  T* a, integer* lda, T* af, integer* ldaf, integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* ferr, Ta* berr, T* work, integer* lwork, Ta* rwork, integer* info)
+void sysvx(char* fact, char* uplo, integer* n, integer* nrhs,  T* a, integer* lda, T* af, integer* ldaf, integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* ferr, Ta* berr, T* work, integer* lwork, Ta* rwork, integer* info)
 {
-  return sysvx(fact, uplo, n, nrhs,  a, lda, af, ldaf, ipiv,  b, ldb, x, ldx, rcond, ferr, berr, work, lwork, rwork, info);
+  sysvx(fact, uplo, n, nrhs,  a, lda, af, ldaf, ipiv,  b, ldb, x, ldx, rcond, ferr, berr, work, lwork, rwork, info);
 }
 
 /*! @brief  SYSVXX uses the diagonal pivoting factorization to compute the \n
@@ -27516,17 +27254,16 @@ integer sysvx(char* fact, char* uplo, integer* n, integer* nrhs,  T* a, integer*
            about all of the right-hand sides check ERR_BNDS_NORM or
            ERR_BNDS_COMP. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T > 
-integer sysvxx(char* fact, char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, char* equed, T* s, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* rpvgrw, T* berr, integer* n_err_bnds, T* err_bnds_norm, T* err_bnds_comp, integer* nparams, T* params, T* work, integer* iwork, integer* info)
+void sysvxx(char* fact, char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, char* equed, T* s, T* b, integer* ldb, T* x, integer* ldx, T* rcond, T* rpvgrw, T* berr, integer* n_err_bnds, T* err_bnds_norm, T* err_bnds_comp, integer* nparams, T* params, T* work, integer* iwork, integer* info)
 {
-  return sysvxx(fact, uplo, n, nrhs, a, lda, af, ldaf, ipiv, equed, s, b, ldb, x, ldx, rcond, rpvgrw, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, iwork, info);
+  sysvxx(fact, uplo, n, nrhs, a, lda, af, ldaf, ipiv, equed, s, b, ldb, x, ldx, rcond, rpvgrw, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, iwork, info);
 }
 template< typename T, typename Ta > 
-integer sysvxx(char* fact, char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, char* equed, Ta* s, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* rpvgrw, Ta* berr, integer* n_err_bnds, Ta* err_bnds_norm, Ta* err_bnds_comp, integer* nparams, Ta* params, T* work, Ta* rwork, integer* info)
+void sysvxx(char* fact, char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, char* equed, Ta* s, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* rpvgrw, Ta* berr, integer* n_err_bnds, Ta* err_bnds_norm, Ta* err_bnds_comp, integer* nparams, Ta* params, T* work, Ta* rwork, integer* info)
 {
-  return sysvxx(fact, uplo, n, nrhs, a, lda, af, ldaf, ipiv, equed, s, b, ldb, x, ldx, rcond, rpvgrw, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, rwork, info);
+  sysvxx(fact, uplo, n, nrhs, a, lda, af, ldaf, ipiv, equed, s, b, ldb, x, ldx, rcond, rpvgrw, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, rwork, info);
 }
 
 /*! @brief  SYSWAPR applies an elementary permutation on the rows and columns of a symmetric matrix.
@@ -27568,12 +27305,11 @@ integer sysvxx(char* fact, char* uplo, integer* n, integer* nrhs, T* a, integer*
           I2 is INTEGER \n
           Index of the second row to swap \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer syswapr(char* uplo, integer* n, T* a, integer* lda, integer* i1, integer* i2)
+void syswapr(char* uplo, integer* n, T* a, integer* lda, integer* i1, integer* i2)
 {
-  return syswapr(uplo, n, a, lda, i1, i2);
+  syswapr(uplo, n, a, lda, i1, i2);
 }
 
 /*! @brief  SYTRF_AA_2STAGE computes the factorization of a real symmetric matrix A using the Aasen's algorithm
@@ -27655,12 +27391,11 @@ integer syswapr(char* uplo, integer* n, T* a, integer* lda, integer* i1, integer
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
           > 0:  if INFO = i, band LU factorization failed on i-th column \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytrf_aa_2stage(char* uplo, integer* n, T* a, integer* lda, T* tb, integer* ltb, integer* ipiv, integer* ipiv2, T* work, integer* lwork, integer* info)
+void sytrf_aa_2stage(char* uplo, integer* n, T* a, integer* lda, T* tb, integer* ltb, integer* ipiv, integer* ipiv2, T* work, integer* lwork, integer* info)
 {
-  return sytrf_aa_2stage(uplo, n, a, lda, tb, ltb, ipiv, ipiv2, work, lwork, info);
+  sytrf_aa_2stage(uplo, n, a, lda, tb, ltb, ipiv, ipiv2, work, lwork, info);
 }
 
 /*! @brief SYTRF_AA computes the factorization of a real symmetric matrix A using the Aasen's algorithm
@@ -27725,12 +27460,11 @@ integer sytrf_aa_2stage(char* uplo, integer* n, T* a, integer* lda, T* tb, integ
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytrf_aa(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* work, integer* lwork, integer* info)
+void sytrf_aa(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* work, integer* lwork, integer* info)
 {
-  return sytrf_aa(uplo, n, a, lda, ipiv, work, lwork, info);
+  sytrf_aa(uplo, n, a, lda, ipiv, work, lwork, info);
 }
 
 /*! @brief SYTRF_RK computes the factorization of a real symmetric indefinite matrix \n
@@ -27893,12 +27627,11 @@ integer sytrf_aa(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* w
                is not stored in INFO even though the factorization
                always completes. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytrf_rk(char* uplo, integer* n, T* a, integer* lda, T* e, integer* ipiv, T* work, integer* lwork, integer* info)
+void sytrf_rk(char* uplo, integer* n, T* a, integer* lda, T* e, integer* ipiv, T* work, integer* lwork, integer* info)
 {
-  return sytrf_rk(uplo, n, a, lda, e, ipiv, work, lwork, info);
+  sytrf_rk(uplo, n, a, lda, e, ipiv, work, lwork, info);
 }
 
 /*! @brief SYTRF_ROOK computes the factorization of a real symmetric matrix A \n
@@ -27983,12 +27716,11 @@ integer sytrf_rk(char* uplo, integer* n, T* a, integer* lda, T* e, integer* ipiv
                 exactly singular, and division by zero will occur if it
                 is used to solve a system of equations. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytrf_rook(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* work, integer* lwork, integer* info)
+void sytrf_rook(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* work, integer* lwork, integer* info)
 {
-  return sytrf_rook(uplo, n, a, lda, ipiv, work, lwork, info);
+  sytrf_rook(uplo, n, a, lda, ipiv, work, lwork, info);
 }
 
 /*! @brief SYTRF computes the factorization of a real symmetric matrix A \n
@@ -28062,12 +27794,11 @@ integer sytrf_rook(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T*
                 exactly singular, and division by zero will occur if it
                 is used to solve a system of equations. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytrf(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* work, integer* lwork, integer* info)
+void sytrf(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* work, integer* lwork, integer* info)
 {
-  return sytrf(uplo, n, a, lda, ipiv, work, lwork, info);
+  sytrf(uplo, n, a, lda, ipiv, work, lwork, info);
 }
 
 /*! @brief SYTRI_3 computes the inverse of a real symmetric indefinite  \n
@@ -28155,12 +27886,11 @@ integer sytrf(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* work
           > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its
                inverse could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytri_3(char* uplo, integer* n, T* a, integer* lda,  T* e,  integer* ipiv, T* work, integer* lwork, integer* info)
+void sytri_3(char* uplo, integer* n, T* a, integer* lda,  T* e,  integer* ipiv, T* work, integer* lwork, integer* info)
 {
-  return sytri_3(uplo, n, a, lda, e, ipiv, work, lwork, info);
+  sytri_3(uplo, n, a, lda, e, ipiv, work, lwork, info);
 }
 
 /*! @brief SYTRI computes the inverse of a real symmetric indefinite matrix A \n
@@ -28208,12 +27938,11 @@ integer sytri_3(char* uplo, integer* n, T* a, integer* lda,  T* e,  integer* ipi
           > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its
                inverse could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytri(char* uplo, integer* n, T* a, integer* lda,  integer* ipiv, T* work, integer* info)
+void sytri(char* uplo, integer* n, T* a, integer* lda,  integer* ipiv, T* work, integer* info)
 {
-  return sytri(uplo, n, a, lda, ipiv, work, info);
+  sytri(uplo, n, a, lda, ipiv, work, info);
 }
 
 /*! @brief SYTRI2 computes the inverse of a REAL symmetric indefinite matrix \n
@@ -28272,12 +28001,11 @@ integer sytri(char* uplo, integer* n, T* a, integer* lda,  integer* ipiv, T* wor
           > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its
                inverse could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytri2(char* uplo, integer* n, T* a, integer* lda,  integer* ipiv, T* work, integer* lwork, integer* info)
+void sytri2(char* uplo, integer* n, T* a, integer* lda,  integer* ipiv, T* work, integer* lwork, integer* info)
 {
-  return sytri2(uplo, n, a, lda, ipiv, work, lwork, info);
+  sytri2(uplo, n, a, lda, ipiv, work, lwork, info);
 }
 
 /*! @brief SYTRI2X computes the inverse of a real symmetric indefinite matrix
@@ -28325,12 +28053,11 @@ integer sytri2(char* uplo, integer* n, T* a, integer* lda,  integer* ipiv, T* wo
           > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its
                inverse could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytri2x(char* uplo, integer* n, T* a, integer* lda,  integer* ipiv, float* work, integer* nb, integer* info)
+void sytri2x(char* uplo, integer* n, T* a, integer* lda,  integer* ipiv, float* work, integer* nb, integer* info)
 {
-  return sytri2x(uplo, n, a, lda, ipiv, work, nb, info);
+  sytri2x(uplo, n, a, lda, ipiv, work, nb, info);
 }
 
 /*! @brief SYTRS_3 solves a system of linear equations A * X = B with a real \n
@@ -28405,12 +28132,11 @@ integer sytri2x(char* uplo, integer* n, T* a, integer* lda,  integer* ipiv, floa
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytrs_3(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  T* e,  integer* ipiv, T* b, integer* ldb, integer* info)
+void sytrs_3(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  T* e,  integer* ipiv, T* b, integer* ldb, integer* info)
 {
-  return sytrs_3(uplo, n, nrhs, a, lda, e, ipiv, b, ldb, info);
+  sytrs_3(uplo, n, nrhs, a, lda, e, ipiv, b, ldb, info);
 }
 
 /*! @brief SYTRS_AA_2STAGE solves a system of linear equations A*X = B with a real \n
@@ -28468,12 +28194,11 @@ integer sytrs_3(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  T* 
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytrs_aa_2stage(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* tb, integer* ltb, integer* ipiv, integer* ipiv2, T* b, integer* ldb, integer* info)
+void sytrs_aa_2stage(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* tb, integer* ltb, integer* ipiv, integer* ipiv2, T* b, integer* ldb, integer* info)
 {
-  return sytrs_aa_2stage(uplo, n, nrhs, a, lda, tb, ltb, ipiv, ipiv2, b, ldb, info);
+  sytrs_aa_2stage(uplo, n, nrhs, a, lda, tb, ltb, ipiv, ipiv2, b, ldb, info);
 }
 
 /*! @brief SYTRS_AA solves a system of linear equations A*X = B with a real  \n
@@ -28525,12 +28250,11 @@ integer sytrs_aa_2stage(char* uplo, integer* n, integer* nrhs, T* a, integer* ld
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytrs_aa(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  integer* ipiv, T* b, integer* ldb, T* work, integer* lwork, integer* info)
+void sytrs_aa(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  integer* ipiv, T* b, integer* ldb, T* work, integer* lwork, integer* info)
 {
-  return sytrs_aa(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info);
+  sytrs_aa(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info);
 }
 
 /*! @brief SYTRS_ROOK solves a system of linear equations A*X = B with a \n
@@ -28579,12 +28303,11 @@ integer sytrs_aa(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  in
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytrs_rook(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda, integer* ipiv, T* b, integer* ldb, integer* info)
+void sytrs_rook(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda, integer* ipiv, T* b, integer* ldb, integer* info)
 {
-  return sytrs_rook(uplo, n, nrhs, a, lda, ipiv, b, ldb, info);
+  sytrs_rook(uplo, n, nrhs, a, lda, ipiv, b, ldb, info);
 }
 
 /*! @brief SYTRS solves a system of linear equations A*X = B with a real \n
@@ -28633,12 +28356,11 @@ integer sytrs_rook(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda, i
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytrs(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  integer* ipiv, T* b, integer* ldb, integer* info)
+void sytrs(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  integer* ipiv, T* b, integer* ldb, integer* info)
 {
-  return sytrs(uplo, n, nrhs, a, lda, ipiv, b, ldb, info);
+  sytrs(uplo, n, nrhs, a, lda, ipiv, b, ldb, info);
 }
 
 /*! @brief SYTRS2 solves a system of linear equations A*X = B with a real \n
@@ -28694,12 +28416,11 @@ integer sytrs(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  integ
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytrs2(char* uplo, integer* n, integer* nrhs, T* a, integer* lda,  integer* ipiv, T* b, integer* ldb, T* work, integer* info)
+void sytrs2(char* uplo, integer* n, integer* nrhs, T* a, integer* lda,  integer* ipiv, T* b, integer* ldb, T* work, integer* info)
 {
-  return sytrs2(uplo, n, nrhs, a, lda,  ipiv, b, ldb, work, info);
+  sytrs2(uplo, n, nrhs, a, lda,  ipiv, b, ldb, work, info);
 }
 
 /*! @brief HGEQZ computes the eigenvalues of a real matrix pair (H,T).
@@ -28881,17 +28602,16 @@ integer sytrs2(char* uplo, integer* n, integer* nrhs, T* a, integer* lda,  integ
                      in Schur form, but ALPHAR(i), ALPHAI(i), and
                      BETA(i), i=INFO-N+1,...,N should be correct. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hgeqz(char* job, char* compq, char* compz, integer* n, integer* ilo, integer* ihi, T* h, integer* ldh, T* t, integer* ldt, T* alphar, T* alphai, T* beta, T* q, integer* ldq, T* z, integer* ldz, T* work, integer* lwork, integer* info)
+void hgeqz(char* job, char* compq, char* compz, integer* n, integer* ilo, integer* ihi, T* h, integer* ldh, T* t, integer* ldt, T* alphar, T* alphai, T* beta, T* q, integer* ldq, T* z, integer* ldz, T* work, integer* lwork, integer* info)
 {
-  return hgeqz(job, compq, compz, n, ilo, ihi, h, ldh, t, ldt, alphar, alphai, beta, q, ldq, z, ldz, work, lwork, info);
+  hgeqz(job, compq, compz, n, ilo, ihi, h, ldh, t, ldt, alphar, alphai, beta, q, ldq, z, ldz, work, lwork, info);
 }
 template< typename T, typename Ta >
-integer hgeqz(char* job, char* compq, char* compz, integer* n, integer* ilo, integer* ihi, T* h, integer* ldh, T* t, integer* ldt, T* alpha, T* beta, T* q, integer* ldq, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* info)
+void hgeqz(char* job, char* compq, char* compz, integer* n, integer* ilo, integer* ihi, T* h, integer* ldh, T* t, integer* ldt, T* alpha, T* beta, T* q, integer* ldq, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* info)
 {
-  return hgeqz(job, compq, compz, n, ilo, ihi, h, ldh, t, ldt, alpha, beta, q, ldq, z, ldz, work, lwork, rwork, info);
+  hgeqz(job, compq, compz, n, ilo, ihi, h, ldh, t, ldt, alpha, beta, q, ldq, z, ldz, work, lwork, rwork, info);
 }
 
 /*! @brief HSEIN uses inverse iteration to find specified right and/or left \n
@@ -29055,17 +28775,16 @@ integer hgeqz(char* job, char* compq, char* compz, integer* n, integer* ilo, int
                 failed to converge; see IFAILL and IFAILR for further
                 details. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hsein(char* job, char* eigsrc, char* initv, logical* select, integer* n, T* h, integer* ldh, T* wr,  T* wi, T* vl, integer* ldvl, T* vr, integer* ldvr, integer* mm, integer* m, T* work, integer* ifaill, integer* ifailr, integer* info)
+void hsein(char* job, char* eigsrc, char* initv, logical* select, integer* n, T* h, integer* ldh, T* wr,  T* wi, T* vl, integer* ldvl, T* vr, integer* ldvr, integer* mm, integer* m, T* work, integer* ifaill, integer* ifailr, integer* info)
 {
-  return hsein(job, eigsrc, initv, select, n, h, ldh, wr, wi, vl, ldvl, vr, ldvr, mm, m, work, ifaill, ifailr, info);
+  hsein(job, eigsrc, initv, select, n, h, ldh, wr, wi, vl, ldvl, vr, ldvr, mm, m, work, ifaill, ifailr, info);
 }
 template< typename T, typename Ta >
-integer hsein(char* job, char* eigsrc, char* initv, logical* select, integer* n, T* h, integer* ldh, T* w, T* vl, integer* ldvl, T* vr, integer* ldvr, integer* mm, integer* m, T* work, Ta* rwork, integer* ifaill, integer* ifailr, integer* info)
+void hsein(char* job, char* eigsrc, char* initv, logical* select, integer* n, T* h, integer* ldh, T* w, T* vl, integer* ldvl, T* vr, integer* ldvr, integer* mm, integer* m, T* work, Ta* rwork, integer* ifaill, integer* ifailr, integer* info)
 {
-  return hsein(job, eigsrc, initv, select, n, h, ldh, w, vl, ldvl, vr, ldvr, mm, m, work, rwork, ifaill, ifailr, info);
+  hsein(job, eigsrc, initv, select, n, h, ldh, w, vl, ldvl, vr, ldvr, mm, m, work, rwork, ifaill, ifailr, info);
 }
 
 /*! @brief HSEQR computes the eigenvalues of a Hessenberg matrix H
@@ -29216,17 +28935,16 @@ integer hsein(char* job, char* eigsrc, char* initv, logical* select, integer* n,
                 If INFO > 0 and COMPZ = 'N', then Z is not
                 accessed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hseqr(char* job, char* compz, integer* n, integer* ilo, integer* ihi, T* h, integer* ldh, T* wr, T* wi, T* z, integer* ldz, T* work, integer* lwork, integer* info)
+void hseqr(char* job, char* compz, integer* n, integer* ilo, integer* ihi, T* h, integer* ldh, T* wr, T* wi, T* z, integer* ldz, T* work, integer* lwork, integer* info)
 {
-  return hseqr(job, compz, n, ilo, ihi, h, ldh, wr, wi, z, ldz, work, lwork, info);
+  hseqr(job, compz, n, ilo, ihi, h, ldh, wr, wi, z, ldz, work, lwork, info);
 }
 template< typename T >
-integer hseqr(char* job, char* compz, integer* n, integer* ilo, integer* ihi, T* h, integer* ldh, T* w, T* z, integer* ldz, T* work, integer* lwork, integer* info)
+void hseqr(char* job, char* compz, integer* n, integer* ilo, integer* ihi, T* h, integer* ldh, T* w, T* z, integer* ldz, T* work, integer* lwork, integer* info)
 {
-  return hseqr(job, compz, n, ilo, ihi, h, ldh, w, z, ldz, work, lwork, info);
+  hseqr(job, compz, n, ilo, ihi, h, ldh, w, z, ldz, work, lwork, info);
 }
 
 /*! @brief TBCON estimates the reciprocal of the condition number of a  \n
@@ -29290,17 +29008,16 @@ integer hseqr(char* job, char* compz, integer* n, integer* ilo, integer* ihi, T*
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tbcon(char* norm, char* uplo, char* diag, integer* n, integer* kd,  T* ab, integer* ldab, T* rcond, T* work, integer* iwork, integer* info)
+void tbcon(char* norm, char* uplo, char* diag, integer* n, integer* kd,  T* ab, integer* ldab, T* rcond, T* work, integer* iwork, integer* info)
 {
-  return tbcon(norm, uplo, diag, n, kd,  ab, ldab, rcond, work, iwork, info);
+  tbcon(norm, uplo, diag, n, kd,  ab, ldab, rcond, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer tbcon(char* norm, char* uplo, char* diag, integer* n, integer* kd,  T* ab, integer* ldab, Ta* rcond, T* work, Ta* rwork, integer* info)
+void tbcon(char* norm, char* uplo, char* diag, integer* n, integer* kd,  T* ab, integer* ldab, Ta* rcond, T* work, Ta* rwork, integer* info)
 {
-  return tbcon(norm, uplo, diag, n, kd,  ab, ldab, rcond, work, rwork, info);
+  tbcon(norm, uplo, diag, n, kd,  ab, ldab, rcond, work, rwork, info);
 }
 
 /*! @brief TBRFS provides error bounds and backward error estimates for the  \n
@@ -29391,17 +29108,16 @@ integer tbcon(char* norm, char* uplo, char* diag, integer* n, integer* kd,  T* a
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tbrfs(char* uplo, char* trans, char* diag, integer* n, integer* kd, integer* nrhs,  T* ab, integer* ldab,  T* b, integer* ldb,  T* x, integer* ldx, T* ferr, T* berr, T* work, integer* iwork, integer* info)
+void tbrfs(char* uplo, char* trans, char* diag, integer* n, integer* kd, integer* nrhs,  T* ab, integer* ldab,  T* b, integer* ldb,  T* x, integer* ldx, T* ferr, T* berr, T* work, integer* iwork, integer* info)
 {
-  return tbrfs(uplo, trans, diag, n, kd, nrhs,  ab, ldab,  b, ldb,  x, ldx, ferr, berr, work, iwork, info);
+  tbrfs(uplo, trans, diag, n, kd, nrhs,  ab, ldab,  b, ldb,  x, ldx, ferr, berr, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer tbrfs(char* uplo, char* trans, char* diag, integer* n, integer* kd, integer* nrhs,  T* ab, integer* ldab,  T* b, integer* ldb,  T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void tbrfs(char* uplo, char* trans, char* diag, integer* n, integer* kd, integer* nrhs,  T* ab, integer* ldab,  T* b, integer* ldb,  T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return tbrfs(uplo, trans, diag, n, kd, nrhs,  ab, ldab,  b, ldb,  x, ldx, ferr, berr, work, rwork, info);
+  tbrfs(uplo, trans, diag, n, kd, nrhs,  ab, ldab,  b, ldb,  x, ldx, ferr, berr, work, rwork, info);
 }
 
 /*! @brief TBTRS solves a triangular system of the form A * X = B  or  A**T * X = B
@@ -29469,12 +29185,11 @@ integer tbrfs(char* uplo, char* trans, char* diag, integer* n, integer* kd, inte
                 indicating that the matrix is singular and the
                 solutions X have not been computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tbtrs(char* uplo, char* trans, char* diag, integer* n, integer* kd, integer* nrhs,  T* ab, integer* ldab, T* b, integer* ldb, integer* info)
+void tbtrs(char* uplo, char* trans, char* diag, integer* n, integer* kd, integer* nrhs,  T* ab, integer* ldab, T* b, integer* ldb, integer* info)
 {
-  return tbtrs(uplo, trans, diag, n, kd, nrhs,  ab, ldab, b, ldb, info);
+  tbtrs(uplo, trans, diag, n, kd, nrhs,  ab, ldab, b, ldb, info);
 }
 
 /*! @brief TFSM solves a matrix equation (one operand is a triangular matrix in RFP format).
@@ -29573,12 +29288,11 @@ integer tbtrs(char* uplo, char* trans, char* diag, integer* n, integer* kd, inte
           fla_max( 1, m). \n
           Unchanged on exit. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tfsm(char* transr, char* side, char* uplo, char* trans, char* diag, integer* m, integer* n, T* alpha,  T* a, T* b, integer* ldb)
+void tfsm(char* transr, char* side, char* uplo, char* trans, char* diag, integer* m, integer* n, T* alpha,  T* a, T* b, integer* ldb)
 {
-  return tfsm(transr, side, uplo, trans, diag, m, n, alpha, a, b, ldb);
+  tfsm(transr, side, uplo, trans, diag, m, n, alpha, a, b, ldb);
 }
 
 /*! @brief TFTRI computes the inverse of a triangular matrix A stored in RFP format
@@ -29631,12 +29345,11 @@ integer tfsm(char* transr, char* side, char* uplo, char* trans, char* diag, inte
           > 0: if INFO = i, A(i,i) is exactly zero.  The triangular
                matrix is singular and its inverse can not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tftri(char* transr, char* uplo, char* diag, integer* n, T* a, integer* info)
+void tftri(char* transr, char* uplo, char* diag, integer* n, T* a, integer* info)
 {
-  return tftri(transr, uplo, diag, n, a, info);
+  tftri(transr, uplo, diag, n, a, info);
 }
 
 /*! @brief TFTTP copies a triangular matrix from the rectangular full \n
@@ -29676,12 +29389,11 @@ integer tftri(char* transr, char* uplo, char* diag, integer* n, T* a, integer* i
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tfttp(char* transr, char* uplo, integer* n,  T* arf, T* ap, integer* info)
+void tfttp(char* transr, char* uplo, integer* n,  T* arf, T* ap, integer* info)
 {
-  return tfttp(transr, uplo, n,  arf, ap, info);
+  tfttp(transr, uplo, n,  arf, ap, info);
 }
 
 /*! @brief TFTTR copies a triangular matrix from the rectangular full \n
@@ -29726,12 +29438,11 @@ integer tfttp(char* transr, char* uplo, integer* n,  T* arf, T* ap, integer* inf
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tfttr(char* transr, char* uplo, integer* n,  T* arf, T* a, integer* lda, integer* info)
+void tfttr(char* transr, char* uplo, integer* n,  T* arf, T* a, integer* lda, integer* info)
 {
-  return tfttr(transr, uplo, n, arf, a, lda, info);
+  tfttr(transr, uplo, n, arf, a, lda, info);
 }
 /*! @brief TGEVC computes some or all of the right and/or left eigenvectors  \n
      of a pair of real matrices
@@ -29869,18 +29580,17 @@ integer tfttr(char* transr, char* uplo, integer* n,  T* arf, T* a, integer* lda,
           > 0:  the 2-by-2 block (INFO:INFO+1) does not have a complex
                 eigenvalue. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tgevc(char* side, char* howmny,  logical* select, integer* n,  T* s, integer* lds,  T* p, integer* ldp, T* vl, integer* ldvl, T* vr, integer* ldvr, integer* mm, integer* m, T* work, integer* info)
+void tgevc(char* side, char* howmny,  logical* select, integer* n,  T* s, integer* lds,  T* p, integer* ldp, T* vl, integer* ldvl, T* vr, integer* ldvr, integer* mm, integer* m, T* work, integer* info)
 {
-  return tgevc(side, howmny,  select, n,  s, lds,  p, ldp, vl, ldvl, vr, ldvr, mm, m, work, info);
+  tgevc(side, howmny,  select, n,  s, lds,  p, ldp, vl, ldvl, vr, ldvr, mm, m, work, info);
 }
 
 template< typename T, typename Ta >
-integer tgevc(char* side, char* howmny,  logical* select, integer* n,  T* s, integer* lds,  T* p, integer* ldp, T* vl, integer* ldvl, T* vr, integer* ldvr, integer* mm, integer* m, T* work, Ta* rwork, integer* info)
+void tgevc(char* side, char* howmny,  logical* select, integer* n,  T* s, integer* lds,  T* p, integer* ldp, T* vl, integer* ldvl, T* vr, integer* ldvr, integer* mm, integer* m, T* work, Ta* rwork, integer* info)
 {
-  return tgevc(side, howmny,  select, n,  s, lds,  p, ldp, vl, ldvl, vr, ldvr, mm, m, work, rwork, info);
+  tgevc(side, howmny,  select, n,  s, lds,  p, ldp, vl, ldvl, vr, ldvr, mm, m, work, rwork, info);
 }
 /*! @brief TGEXC reorders the generalized real Schur decomposition of a real matrix pair
 
@@ -29987,18 +29697,17 @@ integer tgevc(char* side, char* howmny,  logical* select, integer* n,  T* s, int
                 and ILST points to the first row of the current
                 position of the block being moved. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tgexc(logical* wantq, logical* wantz, integer* n, T* a, integer* lda, T* b, integer* ldb, T* q, integer* ldq, T* z, integer* ldz, integer* ifst, integer* ilst, integer* info)
+void tgexc(logical* wantq, logical* wantz, integer* n, T* a, integer* lda, T* b, integer* ldb, T* q, integer* ldq, T* z, integer* ldz, integer* ifst, integer* ilst, integer* info)
 {
-  return tgexc(wantq, wantz, n, a, lda, b, ldb, q, ldq, z, ldz, ifst, ilst, info);
+  tgexc(wantq, wantz, n, a, lda, b, ldb, q, ldq, z, ldz, ifst, ilst, info);
 }
 
 template< typename T, typename Ta >
-integer tgexc(logical* wantq, logical* wantz, integer* n, T* a, integer* lda, T* b, integer* ldb, T* q, integer* ldq, T* z, integer* ldz, integer* ifst, integer* ilst, Ta* work, integer* lwork, integer* info)
+void tgexc(logical* wantq, logical* wantz, integer* n, T* a, integer* lda, T* b, integer* ldb, T* q, integer* ldq, T* z, integer* ldz, integer* ifst, integer* ilst, Ta* work, integer* lwork, integer* info)
 {
-  return tgexc(wantq, wantz, n, a, lda, b, ldb, q, ldq, z, ldz, ifst, ilst, work, lwork, info);
+  tgexc(wantq, wantz, n, a, lda, b, ldb, q, ldq, z, ldz, ifst, ilst, work, lwork, info);
 }
 
 /*! @brief TGSEN reorders the generalized real Schur decomposition of a real matrix pair
@@ -30181,17 +29890,16 @@ integer tgexc(logical* wantq, logical* wantz, integer* n, T* a, integer* lda, T*
                 (A, B) may have been partially reordered.
                 If requested, 0 is returned in DIF(*), PL and PR. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tgsen(integer* ijob, logical* wantq, logical* wantz,  logical* select, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alphar, T* alphai, T* beta, T* q, integer* ldq, T* z, integer* ldz, integer* m, T* pl, T* pr, T* dif, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
+void tgsen(integer* ijob, logical* wantq, logical* wantz,  logical* select, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alphar, T* alphai, T* beta, T* q, integer* ldq, T* z, integer* ldz, integer* m, T* pl, T* pr, T* dif, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
 {
-  return tgsen(ijob, wantq, wantz, select, n, a, lda, b, ldb, alphar, alphai, beta, q, ldq, z, ldz, m, pl, pr, dif, work, lwork, iwork, liwork, info);
+  tgsen(ijob, wantq, wantz, select, n, a, lda, b, ldb, alphar, alphai, beta, q, ldq, z, ldz, m, pl, pr, dif, work, lwork, iwork, liwork, info);
 }
 template< typename T, typename Ta >
-integer tgsen(integer* ijob, logical* wantq, logical* wantz,  logical* select, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alpha, T* beta, T* q, integer* ldq, T* z, integer* ldz, integer* m, Ta* pl, Ta* pr, Ta* dif, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
+void tgsen(integer* ijob, logical* wantq, logical* wantz,  logical* select, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alpha, T* beta, T* q, integer* ldq, T* z, integer* ldz, integer* m, Ta* pl, Ta* pr, Ta* dif, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
 {
-  return tgsen(ijob, wantq, wantz, select, n, a, lda, b, ldb, alpha, beta, q, ldq, z, ldz, m, pl, pr, dif, work, lwork, iwork, liwork, info);
+  tgsen(ijob, wantq, wantz, select, n, a, lda, b, ldb, alpha, beta, q, ldq, z, ldz, m, pl, pr, dif, work, lwork, iwork, liwork, info);
 }
 
 /*! @brief TGSJA computes the generalized singular value decomposition (GSVD)  \n
@@ -30412,17 +30120,16 @@ integer tgsen(integer* ijob, logical* wantq, logical* wantz,  logical* select, i
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
           = 1:  the procedure does not converge after MAXIT cycles. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tgsja(char* jobu, char* jobv, char* jobq, integer* m, integer* p, integer* n, integer* k, integer* l, T* a, integer* lda, T* b, integer* ldb, T* tola, T* tolb, T* alpha, T* beta, T* u, integer* ldu, T* v, integer* ldv, T* q, integer* ldq, T* work, integer* ncycle, integer* info)
+void tgsja(char* jobu, char* jobv, char* jobq, integer* m, integer* p, integer* n, integer* k, integer* l, T* a, integer* lda, T* b, integer* ldb, T* tola, T* tolb, T* alpha, T* beta, T* u, integer* ldu, T* v, integer* ldv, T* q, integer* ldq, T* work, integer* ncycle, integer* info)
 {
-  return tgsja(jobu, jobv, jobq, m, p, n, k, l, a, lda, b, ldb, tola, tolb, alpha, beta, u, ldu, v, ldv, q, ldq, work, ncycle, info);
+  tgsja(jobu, jobv, jobq, m, p, n, k, l, a, lda, b, ldb, tola, tolb, alpha, beta, u, ldu, v, ldv, q, ldq, work, ncycle, info);
 }
 template< typename T, typename Ta >
-integer tgsja(char* jobu, char* jobv, char* jobq, integer* m, integer* p, integer* n, integer* k, integer* l, T* a, integer* lda, T* b, integer* ldb, Ta* tola, Ta* tolb, Ta* alpha, Ta* beta, T* u, integer* ldu, T* v, integer* ldv, T* q, integer* ldq, T* work, integer* ncycle, integer* info)
+void tgsja(char* jobu, char* jobv, char* jobq, integer* m, integer* p, integer* n, integer* k, integer* l, T* a, integer* lda, T* b, integer* ldb, Ta* tola, Ta* tolb, Ta* alpha, Ta* beta, T* u, integer* ldu, T* v, integer* ldv, T* q, integer* ldq, T* work, integer* ncycle, integer* info)
 {
-  return tgsja(jobu, jobv, jobq, m, p, n, k, l, a, lda, b, ldb, tola, tolb, alpha, beta, u, ldu, v, ldv, q, ldq, work, ncycle, info);
+  tgsja(jobu, jobv, jobq, m, p, n, k, l, a, lda, b, ldb, tola, tolb, alpha, beta, u, ldu, v, ldv, q, ldq, work, ncycle, info);
 }
 
 /*! @brief TGSNA estimates reciprocal condition numbers for specified  \n
@@ -30550,17 +30257,16 @@ integer tgsja(char* jobu, char* jobv, char* jobq, integer* m, integer* p, intege
           =0: Successful exit \n
           <0: If INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tgsna(char* job, char* howmny,  logical* select, integer* n,  T* a, integer* lda,  T* b, integer* ldb,  T* vl, integer* ldvl,  T* vr, integer* ldvr, T* s, T* dif, integer* mm, integer* m, T* work, integer* lwork, integer* iwork, integer* info)
+void tgsna(char* job, char* howmny,  logical* select, integer* n,  T* a, integer* lda,  T* b, integer* ldb,  T* vl, integer* ldvl,  T* vr, integer* ldvr, T* s, T* dif, integer* mm, integer* m, T* work, integer* lwork, integer* iwork, integer* info)
 {
-  return tgsna(job, howmny, select, n, a, lda, b, ldb, vl, ldvl, vr, ldvr, s, dif, mm, m, work, lwork, iwork, info);
+  tgsna(job, howmny, select, n, a, lda, b, ldb, vl, ldvl, vr, ldvr, s, dif, mm, m, work, lwork, iwork, info);
 }
 template< typename T, typename Ta >
-integer tgsna(char* job, char* howmny,  logical* select, integer* n,  T* a, integer* lda,  T* b, integer* ldb,  T* vl, integer* ldvl,  T* vr, integer* ldvr, Ta* s, Ta* dif, integer* mm, integer* m, T* work, integer* lwork, integer* iwork, integer* info)
+void tgsna(char* job, char* howmny,  logical* select, integer* n,  T* a, integer* lda,  T* b, integer* ldb,  T* vl, integer* ldvl,  T* vr, integer* ldvr, Ta* s, Ta* dif, integer* mm, integer* m, T* work, integer* lwork, integer* iwork, integer* info)
 {
-  return tgsna(job, howmny, select, n, a, lda, b, ldb, vl, ldvl, vr, ldvr, s, dif, mm, m, work, lwork, iwork, info);
+  tgsna(job, howmny, select, n, a, lda, b, ldb, vl, ldvl, vr, ldvr, s, dif, mm, m, work, lwork, iwork, info);
 }
 
 /*! @brief TGSYL solves the generalized Sylvester equation
@@ -30712,17 +30418,16 @@ integer tgsna(char* job, char* howmny,  logical* select, integer* n,  T* a, inte
             <0: If INFO = -i, the i-th argument had an illegal value. \n
             >0: (A, D) and (B, E) have common or close eigenvalues. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tgsyl(char* trans, integer* ijob, integer* m, integer* n,  T* a, integer* lda,  T* b, integer* ldb, T* c, integer* ldc,  T* d, integer* ldd,  T* e, integer* lde, T* f, integer* ldf, T* scale, T* dif, T* work, integer* lwork, integer* iwork, integer* info)
+void tgsyl(char* trans, integer* ijob, integer* m, integer* n,  T* a, integer* lda,  T* b, integer* ldb, T* c, integer* ldc,  T* d, integer* ldd,  T* e, integer* lde, T* f, integer* ldf, T* scale, T* dif, T* work, integer* lwork, integer* iwork, integer* info)
 {
-  return tgsyl(trans, ijob, m, n,  a, lda,  b, ldb, c, ldc,  d, ldd,  e, lde, f, ldf, scale, dif, work, lwork, iwork, info);
+  tgsyl(trans, ijob, m, n,  a, lda,  b, ldb, c, ldc,  d, ldd,  e, lde, f, ldf, scale, dif, work, lwork, iwork, info);
 }
 template< typename T, typename Ta >
-integer tgsyl(char* trans, integer* ijob, integer* m, integer* n,  T* a, integer* lda,  T* b, integer* ldb, T* c, integer* ldc,  T* d, integer* ldd,  T* e, integer* lde, T* f, integer* ldf, Ta* scale, Ta* dif, T* work, integer* lwork, integer* iwork, integer* info)
+void tgsyl(char* trans, integer* ijob, integer* m, integer* n,  T* a, integer* lda,  T* b, integer* ldb, T* c, integer* ldc,  T* d, integer* ldd,  T* e, integer* lde, T* f, integer* ldf, Ta* scale, Ta* dif, T* work, integer* lwork, integer* iwork, integer* info)
 {
-  return tgsyl(trans, ijob, m, n,  a, lda,  b, ldb, c, ldc,  d, ldd,  e, lde, f, ldf, scale, dif, work, lwork, iwork, info);
+  tgsyl(trans, ijob, m, n,  a, lda,  b, ldb, c, ldc,  d, ldd,  e, lde, f, ldf, scale, dif, work, lwork, iwork, info);
 }
 
 /*! @brief TPCON estimates the reciprocal of the condition number of a packed
@@ -30778,17 +30483,16 @@ integer tgsyl(char* trans, integer* ijob, integer* m, integer* n,  T* a, integer
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tpcon(char* norm, char* uplo, char* diag, integer* n,  T* ap, T* rcond, T* work, integer* iwork, integer* info)
+void tpcon(char* norm, char* uplo, char* diag, integer* n,  T* ap, T* rcond, T* work, integer* iwork, integer* info)
 {
-  return tpcon(norm, uplo, diag, n, ap, rcond, work, iwork, info);
+  tpcon(norm, uplo, diag, n, ap, rcond, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer tpcon(char* norm, char* uplo, char* diag, integer* n,  T* ap, Ta* rcond, T* work, Ta* rwork, integer* info)
+void tpcon(char* norm, char* uplo, char* diag, integer* n,  T* ap, Ta* rcond, T* work, Ta* rwork, integer* info)
 {
-  return tpcon(norm, uplo, diag, n, ap, rcond, work, rwork, info);
+  tpcon(norm, uplo, diag, n, ap, rcond, work, rwork, info);
 }
 
 /*! @brief TPMQRT applies a real orthogonal matrix Q obtained from a   \n
@@ -30874,12 +30578,11 @@ integer tpcon(char* norm, char* uplo, char* diag, integer* n,  T* ap, Ta* rcond,
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tpmqrt(char* side, char* trans, integer* m, integer* n, integer* k, integer* l, integer* nb,  T* v, integer* ldv,  T* t, integer* ldt, T* a, integer* lda, T* b, integer* ldb, T* work, integer* info)
+void tpmqrt(char* side, char* trans, integer* m, integer* n, integer* k, integer* l, integer* nb,  T* v, integer* ldv,  T* t, integer* ldt, T* a, integer* lda, T* b, integer* ldb, T* work, integer* info)
 {
-  return tpmqrt(side, trans, m, n, k, l, nb,  v, ldv,  t, ldt, a, lda, b, ldb, work, info);
+  tpmqrt(side, trans, m, n, k, l, nb,  v, ldv,  t, ldt, a, lda, b, ldb, work, info);
 }
 
 /*! @brief TPQRT computes a blocked QR factorization of a real
@@ -30939,12 +30642,11 @@ integer tpmqrt(char* side, char* trans, integer* m, integer* n, integer* k, inte
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tpqrt(integer* m, integer* n, integer* l, integer* nb, T* a, integer* lda, T* b, integer* ldb, T* t, integer* ldt, T* work, integer* info)
+void tpqrt(integer* m, integer* n, integer* l, integer* nb, T* a, integer* lda, T* b, integer* ldb, T* t, integer* ldt, T* work, integer* info)
 {
-  return tpqrt(m, n, l, nb, a, lda, b, ldb, t, ldt, work, info);
+  tpqrt(m, n, l, nb, a, lda, b, ldb, t, ldt, work, info);
 }
 
 /*! @brief TPQRT2 computes a QR factorization of a real or complex    \n
@@ -30999,12 +30701,11 @@ integer tpqrt(integer* m, integer* n, integer* l, integer* nb, T* a, integer* ld
           = 0: successful exit \n
           < 0: if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tpqrt2(integer* m, integer* n, integer* l, T* a, integer* lda, T* b, integer* ldb, T* t, integer* ldt, integer* info)
+void tpqrt2(integer* m, integer* n, integer* l, T* a, integer* lda, T* b, integer* ldb, T* t, integer* ldt, integer* info)
 {
-  return tpqrt2(m, n, l, a, lda, b, ldb, t, ldt, info);
+  tpqrt2(m, n, l, a, lda, b, ldb, t, ldt, info);
 }
 
 /*! @brief TPRFB applies a real or complex "triangular-pentagonal" blocked  \n
@@ -31105,12 +30806,11 @@ integer tpqrt2(integer* m, integer* n, integer* l, T* a, integer* lda, T* b, int
           If SIDE = 'L', LDWORK >= K; \n
           if SIDE = 'R', LDWORK >= M. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tprfb(char* side, char* trans, char* direct, char* storev, integer* m, integer* n, integer* k, integer* l,  T* v, integer* ldv,  T* t, integer* ldt, T* a, integer* lda, T* b, integer* ldb, T* work, integer* ldwork)
+void tprfb(char* side, char* trans, char* direct, char* storev, integer* m, integer* n, integer* k, integer* l,  T* v, integer* ldv,  T* t, integer* ldt, T* a, integer* lda, T* b, integer* ldb, T* work, integer* ldwork)
 {
-  return tprfb(side, trans, direct, storev, m, n, k, l,  v, ldv,  t, ldt, a, lda, b, ldb, work, ldwork);
+  tprfb(side, trans, direct, storev, m, n, k, l,  v, ldv,  t, ldt, a, lda, b, ldb, work, ldwork);
 }
 
 /*! @brief TPRFS provides error bounds and backward error estimates \n
@@ -31193,17 +30893,16 @@ integer tprfb(char* side, char* trans, char* direct, char* storev, integer* m, i
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tprfs(char* uplo, char* trans, char* diag, integer* n, integer* nrhs,  T* ap,  T* b, integer* ldb,  T* x, integer* ldx, T* ferr, T* berr, T* work, integer* iwork, integer* info)
+void tprfs(char* uplo, char* trans, char* diag, integer* n, integer* nrhs,  T* ap,  T* b, integer* ldb,  T* x, integer* ldx, T* ferr, T* berr, T* work, integer* iwork, integer* info)
 {
-  return tprfs(uplo, trans, diag, n, nrhs,  ap,  b, ldb,  x, ldx, ferr, berr, work, iwork, info);
+  tprfs(uplo, trans, diag, n, nrhs,  ap,  b, ldb,  x, ldx, ferr, berr, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer tprfs(char* uplo, char* trans, char* diag, integer* n, integer* nrhs,  T* ap,  T* b, integer* ldb,  T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void tprfs(char* uplo, char* trans, char* diag, integer* n, integer* nrhs,  T* ap,  T* b, integer* ldb,  T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return tprfs(uplo, trans, diag, n, nrhs,  ap,  b, ldb,  x, ldx, ferr, berr, work, rwork, info);
+  tprfs(uplo, trans, diag, n, nrhs,  ap,  b, ldb,  x, ldx, ferr, berr, work, rwork, info);
 }
 
 /*! @brief TPTRI computes the inverse of a real upper or lower triangular \n
@@ -31243,12 +30942,11 @@ integer tprfs(char* uplo, char* trans, char* diag, integer* n, integer* nrhs,  T
           > 0:  if INFO = i, A(i,i) is exactly zero.  The triangular
                 matrix is singular and its inverse can not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tptri(char* uplo, char* diag, integer* n, T* ap, integer* info)
+void tptri(char* uplo, char* diag, integer* n, T* ap, integer* info)
 {
-  return tptri(uplo, diag, n, ap, info);
+  tptri(uplo, diag, n, ap, info);
 }
 
 /*! @brief TPTRS solves a triangular system of the form A * X = B  or  A**T * X = B
@@ -31308,12 +31006,11 @@ integer tptri(char* uplo, char* diag, integer* n, T* ap, integer* info)
                 indicating that the matrix is singular and the
                 solutions X have not been computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tptrs(char* uplo, char* trans, char* diag, integer* n, integer* nrhs,  T* ap, T* b, integer* ldb, integer* info)
+void tptrs(char* uplo, char* trans, char* diag, integer* n, integer* nrhs,  T* ap, T* b, integer* ldb, integer* info)
 {
-  return tptrs(uplo, trans, diag, n, nrhs,  ap, b, ldb, info);
+  tptrs(uplo, trans, diag, n, nrhs,  ap, b, ldb, info);
 }
 
 /*! @brief TPTTF copies a triangular matrix from the standard packed \n
@@ -31352,12 +31049,11 @@ integer tptrs(char* uplo, char* trans, char* diag, integer* n, integer* nrhs,  T
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tpttf(char* transr, char* uplo, integer* n,  T* ap, T* arf, integer* info)
+void tpttf(char* transr, char* uplo, integer* n,  T* ap, T* arf, integer* info)
 {
-  return tpttf(transr, uplo, n,  ap, arf, info);
+  tpttf(transr, uplo, n,  ap, arf, info);
 }
 
 /*! @brief TPTTR copies a triangular matrix from the standard    \n
@@ -31400,12 +31096,11 @@ integer tpttf(char* transr, char* uplo, integer* n,  T* ap, T* arf, integer* inf
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tpttr(char* uplo, integer* n,  T* ap, T* a, integer* lda, integer* info)
+void tpttr(char* uplo, integer* n,  T* ap, T* a, integer* lda, integer* info)
 {
-  return tpttr(uplo, n,  ap, a, lda, info);
+  tpttr(uplo, n,  ap, a, lda, info);
 }
 
 /*! @brief TRCON estimates the reciprocal of the condition number of a triangular matrix A
@@ -31465,17 +31160,16 @@ integer tpttr(char* uplo, integer* n,  T* ap, T* a, integer* lda, integer* info)
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer trcon(char* norm, char* uplo, char* diag, integer* n,  T* a, integer* lda, T* rcond, T* work, integer* iwork, integer* info)
+void trcon(char* norm, char* uplo, char* diag, integer* n,  T* a, integer* lda, T* rcond, T* work, integer* iwork, integer* info)
 {
-  return trcon(norm, uplo, diag, n,  a, lda, rcond, work, iwork, info);
+  trcon(norm, uplo, diag, n,  a, lda, rcond, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer trcon(char* norm, char* uplo, char* diag, integer* n,  T* a, integer* lda, Ta* rcond, T* work, Ta* rwork, integer* info)
+void trcon(char* norm, char* uplo, char* diag, integer* n,  T* a, integer* lda, Ta* rcond, T* work, Ta* rwork, integer* info)
 {
-  return trcon(norm, uplo, diag, n,  a, lda, rcond, work, rwork, info);
+  trcon(norm, uplo, diag, n,  a, lda, rcond, work, rwork, info);
 }
 /*! @brief TREVC computes some or all of the right and/or left eigenvectors of  \n
      a real upper quasi-triangular matrix T.
@@ -31594,17 +31288,16 @@ integer trcon(char* norm, char* uplo, char* diag, integer* n,  T* a, integer* ld
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer trevc(char* side, char* howmny, logical* select, integer* n,  T* t, integer* ldt, T* vl, integer* ldvl, T* vr, integer* ldvr, integer* mm, integer* m, T* work, integer* info)
+void trevc(char* side, char* howmny, logical* select, integer* n,  T* t, integer* ldt, T* vl, integer* ldvl, T* vr, integer* ldvr, integer* mm, integer* m, T* work, integer* info)
 {
-  return trevc(side, howmny, select, n,  t, ldt, vl, ldvl, vr, ldvr, mm, m, work, info);
+  trevc(side, howmny, select, n,  t, ldt, vl, ldvl, vr, ldvr, mm, m, work, info);
 }
 template< typename T, typename Ta >
-integer trevc(char* side, char* howmny, logical* select, integer* n,  T* t, integer* ldt, T* vl, integer* ldvl, T* vr, integer* ldvr, integer* mm, integer* m, T* work, Ta* rwork, integer* info)
+void trevc(char* side, char* howmny, logical* select, integer* n,  T* t, integer* ldt, T* vl, integer* ldvl, T* vr, integer* ldvr, integer* mm, integer* m, T* work, Ta* rwork, integer* info)
 {
-  return trevc(side, howmny, select, n,  t, ldt, vl, ldvl, vr, ldvr, mm, m, work, rwork, info);
+  trevc(side, howmny, select, n,  t, ldt, vl, ldvl, vr, ldvr, mm, m, work, rwork, info);
 }
 
 /*! @brief TREXC reorders the real Schur factorization of a real matrix A = Q*T*Q**T
@@ -31676,17 +31369,16 @@ integer trevc(char* side, char* howmny, logical* select, integer* n,  T* t, inte
                 reordered, and ILST points to the first row of the
                 current position of the block being moved. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer trexc(char* compq, integer* n, T* t, integer* ldt, T* q, integer* ldq, integer* ifst, integer* ilst, T* work, integer* info)
+void trexc(char* compq, integer* n, T* t, integer* ldt, T* q, integer* ldq, integer* ifst, integer* ilst, T* work, integer* info)
 {
-  return trexc(compq, n, t, ldt, q, ldq, ifst, ilst, work, info);
+  trexc(compq, n, t, ldt, q, ldq, ifst, ilst, work, info);
 }
 template< typename T >
-integer trexc(char* compq, integer* n, T* t, integer* ldt, T* q, integer* ldq, integer* ifst, integer* ilst, integer* info)
+void trexc(char* compq, integer* n, T* t, integer* ldt, T* q, integer* ldq, integer* ifst, integer* ilst, integer* info)
 {
-  return trexc(compq, n, t, ldt, q, ldq, ifst, ilst, info);
+  trexc(compq, n, t, ldt, q, ldq, ifst, ilst, info);
 }
 /*! @brief TRRFS provides error bounds and backward error estimates for the \n
      solution to a system of linear equations
@@ -31773,17 +31465,16 @@ integer trexc(char* compq, integer* n, T* t, integer* ldt, T* q, integer* ldq, i
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer trrfs(char* uplo, char* trans, char* diag, integer* n, integer* nrhs,  T* a, integer* lda,  T* b, integer* ldb,  T* x, integer* ldx, T* ferr, T* berr, T* work, integer* iwork, integer* info)
+void trrfs(char* uplo, char* trans, char* diag, integer* n, integer* nrhs,  T* a, integer* lda,  T* b, integer* ldb,  T* x, integer* ldx, T* ferr, T* berr, T* work, integer* iwork, integer* info)
 {
-  return trrfs(uplo, trans, diag, n, nrhs,  a, lda,  b, ldb,  x, ldx, ferr, berr, work, iwork, info);
+  trrfs(uplo, trans, diag, n, nrhs,  a, lda,  b, ldb,  x, ldx, ferr, berr, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer trrfs(char* uplo, char* trans, char* diag, integer* n, integer* nrhs, T* a, integer* lda,  T* b, integer* ldb,  T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void trrfs(char* uplo, char* trans, char* diag, integer* n, integer* nrhs, T* a, integer* lda,  T* b, integer* ldb,  T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return trrfs(uplo, trans, diag, n, nrhs,  a, lda,  b, ldb,  x, ldx, ferr, berr, work, rwork, info);
+  trrfs(uplo, trans, diag, n, nrhs,  a, lda,  b, ldb,  x, ldx, ferr, berr, work, rwork, info);
 }
 
 /*! @brief TRSEN reorders the real Schur factorization of a real matrix A = Q*T*Q**T
@@ -31918,17 +31609,16 @@ integer trrfs(char* uplo, char* trans, char* diag, integer* n, integer* nrhs, T*
                contain the eigenvalues in the same order as in T; S and
                SEP (if requested) are set to zero. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer trsen(char* job, char* compq,  logical* select, integer* n, T* t, integer* ldt, T* q, integer* ldq, T* wr, T* wi, integer* m, T* s, T* sep, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
+void trsen(char* job, char* compq,  logical* select, integer* n, T* t, integer* ldt, T* q, integer* ldq, T* wr, T* wi, integer* m, T* s, T* sep, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
 {
-  return trsen(job, compq,  select, n, t, ldt, q, ldq, wr, wi, m, s, sep, work, lwork, iwork, liwork, info);
+  trsen(job, compq,  select, n, t, ldt, q, ldq, wr, wi, m, s, sep, work, lwork, iwork, liwork, info);
 }
 template< typename T, typename Ta >
-integer trsen(char* job, char* compq,  logical* select, integer* n, T* t, integer* ldt, T* q, integer* ldq, T* w, integer* m, Ta* s, Ta* sep, T* work, integer* lwork, integer* info)
+void trsen(char* job, char* compq,  logical* select, integer* n, T* t, integer* ldt, T* q, integer* ldq, T* w, integer* m, Ta* s, Ta* sep, T* work, integer* lwork, integer* info)
 {
-  return trsen(job, compq,  select, n, t, ldt, q, ldq, w, m, s, sep, work, lwork, info);
+  trsen(job, compq,  select, n, t, ldt, q, ldq, w, m, s, sep, work, lwork, info);
 }
 
 /*! @brief TRSNA estimates reciprocal condition numbers for specified eigenvalues
@@ -32046,17 +31736,16 @@ integer trsen(char* job, char* compq,  logical* select, integer* n, T* t, intege
           = 0: successful exit \n
           < 0: if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer trsna(char* job, char* howmny,  logical* select, integer* n,  T* t, integer* ldt,  T* vl, integer* ldvl,  T* vr, integer* ldvr, T* s, T* sep, integer* mm, integer* m, T* work, integer* ldwork, integer* iwork, integer* info)
+void trsna(char* job, char* howmny,  logical* select, integer* n,  T* t, integer* ldt,  T* vl, integer* ldvl,  T* vr, integer* ldvr, T* s, T* sep, integer* mm, integer* m, T* work, integer* ldwork, integer* iwork, integer* info)
 {
-  return trsna(job, howmny,  select, n,  t, ldt,  vl, ldvl,  vr, ldvr, s, sep, mm, m, work, ldwork, iwork, info);
+  trsna(job, howmny,  select, n,  t, ldt,  vl, ldvl,  vr, ldvr, s, sep, mm, m, work, ldwork, iwork, info);
 }
 template< typename T, typename Ta >
-integer trsna(char* job, char* howmny,  logical* select, integer* n,  T* t, integer* ldt,  T* vl, integer* ldvl,  T* vr, integer* ldvr, Ta* s, Ta* sep, integer* mm, integer* m, T* work, integer* ldwork, Ta* rwork, integer* info)
+void trsna(char* job, char* howmny,  logical* select, integer* n,  T* t, integer* ldt,  T* vl, integer* ldvl,  T* vr, integer* ldvr, Ta* s, Ta* sep, integer* mm, integer* m, T* work, integer* ldwork, Ta* rwork, integer* info)
 {
-  return trsna(job, howmny,  select, n,  t, ldt,  vl, ldvl,  vr, ldvr, s, sep, mm, m, work, ldwork, rwork, info);
+  trsna(job, howmny,  select, n,  t, ldt,  vl, ldvl,  vr, ldvr, s, sep, mm, m, work, ldwork, rwork, info);
 }
 
 /*! @brief TRTRS solves a triangular system of the form A * X = B  or  A**T * X = B
@@ -32121,12 +31810,11 @@ integer trsna(char* job, char* howmny,  logical* select, integer* n,  T* t, inte
                indicating that the matrix is singular and the solutions
                X have not been computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer trtrs(char* uplo, char* trans, char* diag, integer* n, integer* nrhs,  T* a, integer* lda, T* b, integer* ldb, integer* info)
+void trtrs(char* uplo, char* trans, char* diag, integer* n, integer* nrhs,  T* a, integer* lda, T* b, integer* ldb, integer* info)
 {
-  return trtrs(uplo, trans, diag, n, nrhs,  a, lda, b, ldb, info);
+  trtrs(uplo, trans, diag, n, nrhs,  a, lda, b, ldb, info);
 }
 
 /*! @brief TRTTF copies a triangular matrix from the standard full \n
@@ -32169,12 +31857,11 @@ integer trtrs(char* uplo, char* trans, char* diag, integer* n, integer* nrhs,  T
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer trttf(char* transr, char* uplo, integer* n,  T* a, integer* lda, T* arf, integer* info)
+void trttf(char* transr, char* uplo, integer* n,  T* a, integer* lda, T* arf, integer* info)
 {
-  return trttf(transr, uplo, n,  a, lda, arf, info);
+  trttf(transr, uplo, n,  a, lda, arf, info);
 }
 
 /*! @brief TRTTP copies a triangular matrix from the standard full \n
@@ -32217,12 +31904,11 @@ integer trttf(char* transr, char* uplo, integer* n,  T* a, integer* lda, T* arf,
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer trttp(char* uplo, integer* n,  T* a, integer* lda, T* ap, integer* info)
+void trttp(char* uplo, integer* n,  T* a, integer* lda, T* ap, integer* info)
 {
-  return trttp(uplo, n, a, lda, ap, info);
+  trttp(uplo, n, a, lda, ap, info);
 }
 
 /*! @brief TZRZF reduces the M-by-N ( M<=N) real upper trapezoidal matrix A \n
@@ -32279,12 +31965,11 @@ integer trttp(char* uplo, integer* n,  T* a, integer* lda, T* ap, integer* info)
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tzrzf(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
+void tzrzf(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
 {
-  return tzrzf(m, n, a, lda, tau, work, lwork, info);
+  tzrzf(m, n, a, lda, tau, work, lwork, info);
 }
 
 /*! @brief SPRFS improves the computed solution to a system of linear equations \n
@@ -32364,329 +32049,23 @@ integer tzrzf(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integ
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sprfs(char* uplo, integer* n, integer* nrhs,  T* ap,  T* afp,  integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, T* ferr, T* berr, T* work, integer* iwork, integer* info)
+void sprfs(char* uplo, integer* n, integer* nrhs,  T* ap,  T* afp,  integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, T* ferr, T* berr, T* work, integer* iwork, integer* info)
 {
-  return sprfs(uplo, n, nrhs,  ap,  afp,  ipiv,  b, ldb, x, ldx, ferr, berr, work, iwork, info);
+  sprfs(uplo, n, nrhs,  ap,  afp,  ipiv,  b, ldb, x, ldx, ferr, berr, work, iwork, info);
 } 
 template< typename T, typename Ta >
-integer sprfs(char* uplo, integer* n, integer* nrhs,  T* ap,  T* afp,  integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void sprfs(char* uplo, integer* n, integer* nrhs,  T* ap,  T* afp,  integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return sprfs(uplo, n, nrhs,  ap,  afp,  ipiv,  b, ldb, x, ldx, ferr, berr, work, rwork, info);
+  sprfs(uplo, n, nrhs,  ap,  afp,  ipiv,  b, ldb, x, ldx, ferr, berr, work, rwork, info);
 } 
 template< typename T, typename Ta >
-integer hprfs(char* uplo, integer* n, integer* nrhs,  T* ap,  T* afp,  integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void hprfs(char* uplo, integer* n, integer* nrhs,  T* ap,  T* afp,  integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return hprfs(uplo, n, nrhs,  ap,  afp,  ipiv,  b, ldb, x, ldx, ferr, berr, work, rwork, info);
+  hprfs(uplo, n, nrhs,  ap,  afp,  ipiv,  b, ldb, x, ldx, ferr, berr, work, rwork, info);
 }
 
-/*! @brief LATMS generates random matrices with specified singular values \n
-     for testing LAPACK programs
- * @details
- * \b Purpose:
-    \verbatim 
-    LATMS generates random matrices with specified singular values
-     (or symmetric/hermitian with specified eigenvalues)
-     for testing LAPACK programs.
- 
-     SLATMS operates by applying the following sequence of
-     operations:
- 
-       Set the diagonal to D, where D may be input or
-          computed according to MODE, COND, DMAX, and SYM
-          as described below.
- 
-       Generate a matrix with the appropriate band structure, by one
-          of two methods:
- 
-       Method A:
-           Generate a dense M x N matrix by multiplying D on the left
-               and the right by random unitary matrices, then:
- 
-           Reduce the bandwidth according to KL and KU, using
-           Householder transformations.
- 
-       Method B:
-           Convert the bandwidth-0 (i.e., diagonal) matrix to a
-               bandwidth-1 matrix using Givens rotations, "chasing"
-               out-of-band elements back, much as in QR; then
-               convert the bandwidth-1 to a bandwidth-2 matrix, etc.
-               Note that for reasonably small bandwidths (relative to
-               M and N) this requires less storage, as a dense matrix
-               is not generated.  Also, for symmetric matrices, only
-               one triangle is generated.
- 
-       Method A is chosen if the bandwidth is a large fraction of the
-           order of the matrix, and LDA is at least M (so a dense
-           matrix can be stored.)  Method B is chosen if the bandwidth
-           is small (< 1/2 N for symmetric, < .3 N+M for
-           non-symmetric), or LDA is less than M and not less than the
-           bandwidth.
- 
-       Pack the matrix if desired. Options specified by PACK are:
-          no packing
-          zero out upper half (if symmetric)
-          zero out lower half (if symmetric)
-          store the upper half columnwise (if symmetric or upper
-                triangular)
-          store the lower half columnwise (if symmetric or lower
-                triangular)
-          store the lower triangle in banded format (if symmetric
-                or lower triangular)
-          store the upper triangle in banded format (if symmetric
-                or upper triangular)
-          store the entire matrix in banded format
-       If Method B is chosen, and band format is specified, then the
-          matrix will be generated in the band format, so no repacking
-          will be necessary.
-    \endverbatim   
-
-  * @param[in] M
-           M is INTEGER \n
-           The number of rows of A. Not modified. \n
-  * @param[in] N
-           N is INTEGER \n
-           The number of columns of A. Not modified. \n
-  * @param[in] DIST
-           DIST is CHARACTER*1 \n
-           On entry, DIST specifies the type of distribution to be used
-           to generate the random eigen-/singular values. \n
-           'U' => UNIFORM( 0, 1)  ( 'U' for uniform) \n
-           'S' => UNIFORM( -1, 1) ( 'S' for symmetric) \n
-           'N' => NORMAL( 0, 1)   ( 'N' for normal) \n
-           Not modified. \n
-  * @param[in,out] ISEED
-           ISEED is INTEGER array, dimension ( 4) \n
-           On entry ISEED specifies the seed of the random number
-           generator. They should lie between 0 and 4095 inclusive,
-           and ISEED(4) should be odd. The random number generator
-           uses a linear congruential sequence limited to small
-           integers, and so should produce machine independent
-           random numbers. The values of ISEED are changed on
-           exit, and can be used in the next call to SLATMS
-           to continue the same random number sequence. \n
-           Changed on exit. \n
-  * @param[in] SYM
-           SYM is CHARACTER*1 \n
-           If SYM='S' or 'H', the generated matrix is symmetric, with
-             eigenvalues specified by D, COND, MODE, and DMAX; they
-             may be positive, negative, or zero. \n
-           If SYM='P', the generated matrix is symmetric, with
-             eigenvalues (= singular values) specified by D, COND,
-             MODE, and DMAX; they will not be negative. \n
-           If SYM='N', the generated matrix is nonsymmetric, with
-             singular values specified by D, COND, MODE, and DMAX;
-             they will not be negative. \n
-           Not modified. \n
-  * @param[in,out] D
-           D is REAL array, dimension ( MIN( M , N)) \n
-           This array is used to specify the singular values or
-           eigenvalues of A (see SYM, above.)  If MODE=0, then D is
-           assumed to contain the singular/eigenvalues, otherwise
-           they will be computed according to MODE, COND, and DMAX,
-           and placed in D. \n
-           Modified if MODE is nonzero. \n
-  * @param[in] MODE
-           MODE is INTEGER \n
-           On entry this describes how the singular/eigenvalues are to
-           be specified: \n
-           MODE = 0 means use D as input \n
-           MODE = 1 sets D(1)=1 and D(2:N)=1.0/COND \n
-           MODE = 2 sets D(1:N-1)=1 and D(N)=1.0/COND \n
-           MODE = 3 sets D(I)=COND**(-(I-1)/(N-1)) \n
-           MODE = 4 sets D(i)=1 - (i-1)/(N-1)*(1 - 1/COND) \n
-           MODE = 5 sets D to random numbers in the range
-                    ( 1/COND , 1) such that their logarithms
-                    are uniformly distributed. \n
-           MODE = 6 set D to random numbers from same distribution
-                    as the rest of the matrix. \n
-           MODE < 0 has the same meaning as ABS(MODE), except that
-              the order of the elements of D is reversed. \n
-           Thus if MODE is positive, D has entries ranging from
-              1 to 1/COND, if negative, from 1/COND to 1, \n
-           If SYM='S' or 'H', and MODE is neither 0, 6, nor -6, then
-              the elements of D will also be multiplied by a random
-              sign (i.e., +1 or -1.) \n
-           Not modified. \n
-  * @param[in] COND
-           COND is REAL \n
-           On entry, this is used as described under MODE above.
-           If used, it must be >= 1. Not modified. \n
-  * @param[in] DMAX
-           DMAX is REAL \n
-           If MODE is neither -6, 0 nor 6, the contents of D, as
-           computed according to MODE and COND, will be scaled by
-           DMAX / fla_max(abs(D(i))); thus, the maximum absolute eigen- or
-           singular value (which is to say the norm) will be abs(DMAX).
-           Note that DMAX need not be positive: if DMAX is negative
-           (or zero), D will be scaled by a negative number (or zero).
-           Not modified. \n
-  * @param[in] KL
-           KL is INTEGER \n
-           This specifies the lower bandwidth of the  matrix. For
-           example, KL=0 implies upper triangular, KL=1 implies upper
-           Hessenberg, and KL being at least M-1 means that the matrix
-           has full lower bandwidth.  KL must equal KU if the matrix
-           is symmetric. \n
-           Not modified. \n
-  * @param[in] KU
-           KU is INTEGER \n
-           This specifies the upper bandwidth of the  matrix. For
-           example, KU=0 implies lower triangular, KU=1 implies lower
-           Hessenberg, and KU being at least N-1 means that the matrix
-           has full upper bandwidth.  KL must equal KU if the matrix
-           is symmetric. \n
-           Not modified. \n
-  * @param[in] PACK
-           PACK is CHARACTER*1 \n
-           This specifies packing of matrix as follows:
-           'N' => no packing \n
-           'U' => zero out all subdiagonal entries (if symmetric) \n
-           'L' => zero out all superdiagonal entries (if symmetric) \n
-           'C' => store the upper triangle columnwise
-                  (only if the matrix is symmetric or upper triangular) \n
-           'R' => store the lower triangle columnwise
-                  (only if the matrix is symmetric or lower triangular) \n
-           'B' => store the lower triangle in band storage scheme
-                  (only if matrix symmetric or lower triangular) \n
-           'Q' => store the upper triangle in band storage scheme
-                  (only if matrix symmetric or upper triangular) \n
-           'Z' => store the entire matrix in band storage scheme
-                      (pivoting can be provided for by using this
-                      option to store A in the trailing rows of
-                      the allocated storage) \n
- \n
-           Using these options, the various LAPACK packed and banded
-           storage schemes can be obtained: \n
-           GB               - use 'Z' \n
-           PB, SB or TB     - use 'B' or 'Q' \n
-           PP, SP or TP     - use 'C' or 'R' \n
- \n
-           If two calls to SLATMS differ only in the PACK parameter,
-           they will generate mathematically equivalent matrices.
-           Not modified. \n
-  * @param[in,out] A
-           A is REAL array, dimension ( LDA, N) \n
-           On exit A is the desired test matrix.  A is first generated
-           in full (unpacked) form, and then packed, if so specified
-           by PACK.  Thus, the first M elements of the first N
-           columns will always be modified.  If PACK specifies a
-           packed or banded storage scheme, all LDA elements of the
-           first N columns will be modified; the elements of the
-           array which do not correspond to elements of the generated
-           matrix are set to zero.
-           Modified. \n
-  * @param[in] LDA
-           LDA is INTEGER \n
-           LDA specifies the first dimension of A as declared in the
-           calling program.  If PACK='N', 'U', 'L', 'C', or 'R', then
-           LDA must be at least M.  If PACK='B' or 'Q', then LDA must
-           be at least MIN( KL, M-1) (which is equal to MIN(KU,N-1)).
-           If PACK='Z', LDA must be large enough to hold the packed
-           array: MIN( KU, N-1) + MIN( KL, M-1) + 1. \n
-           Not modified.  \n
-  * @param[out]	WORK	
-          WORK is REAL array, dimension ( 3*MAX( N , M ) ) \n
-          Workspace. \n
-          Modified. \n
-  * @param[out]	INFO	
-          INFO is INTEGER \n
-          Error code.  On exit, INFO will be set to one of the
-          following values: \n
-            0 => normal return \n
-           -1 => M negative or unequal to N and SYM='S', 'H', or 'P' \n
-           -2 => N negative \n
-           -3 => DIST illegal string \n
-           -5 => SYM illegal string \n
-           -7 => MODE not in range -6 to 6 \n
-           -8 => COND less than 1.0, and MODE neither -6, 0 nor 6 \n
-           -10 => KL negative \n
-           -11 => KU negative, or SYM='S' or 'H' and KU not equal to KL \n
-           -12 => PACK illegal string, or PACK='U' or 'L', and SYM='N';
-                  or PACK='C' or 'Q' and SYM='N' and KL is not zero;
-                  or PACK='R' or 'B' and SYM='N' and KU is not zero;
-                  or PACK='U', 'L', 'C', 'R', 'B', or 'Q', and M is not
-                  N. \n
-           -14 => LDA is less than M, or PACK='Z' and LDA is less than
-                  MIN(KU,N-1) + MIN(KL,M-1) + 1. \n
-            1  => Error return from SLATM1 \n
-            2  => Cannot scale to DMAX (max. sing. value is 0) \n
-            3  => Error return from SLAGGE or SLAGSY \n
-
- * @return INTEGER Return value of the function.
- * */
-/*template< typename T >
-integer latms(integer* m, integer* n, char* dist, integer* iseed, char* sym, T* d, integer* mode, T cond, T dmax, integer* kl, integer* ku, char* pack, T* a, integer* lda)
-{
-  return latms(m, n, dist, iseed, sym, d, mode, cond, dmax, kl, ku, pack, a, lda);
-} 
-template< typename T, typename Ta >
-integer latms(integer* m, integer* n, char* dist, integer* iseed, char* sym, Ta* d, integer* mode, Ta cond, Ta dmax, integer* kl, integer* ku, char* pack, T* a, integer* lda)
-{
-  return latms(m, n, dist, iseed, sym, d, mode, cond, dmax, kl, ku, pack, a, lda);
-}*/
-
-/*! @brief LAGGE generates a real general m by n matrix A
-
- * @details
- * \b Purpose:
-    \verbatim 
-     LAGGE generates a real general m by n matrix A, by pre- and post-
-    multiplying a real diagonal matrix D with random orthogonal matrices:
-    A = U*D*V. The lower and upper bandwidths may then be reduced to
-    kl and ku by additional orthogonal transformations.
-    \endverbatim   
-
-  * @param[in] M
-           M is INTEGER \n
-           The number of rows of the matrix A.  M >= 0. \n
-  * @param[in] N
-           N is INTEGER \n
-           The number of columns of the matrix A.  N >= 0. \n
-  * @param[in] KL
-           KL is INTEGER \n
-           The number of nonzero subdiagonals within the band of A.
-           0 <= KL <= M-1. \n
-  * @param[in] KU
-           KU is INTEGER \n
-           The number of nonzero superdiagonals within the band of A.
-           0 <= KU <= N-1. \n
-  * @param[in] D
-           D is REAL array, dimension (min(M,N)) \n
-           The diagonal elements of the diagonal matrix D. \n
-  * @param[out] A
-           A is REAL array, dimension (LDA,N) \n
-           The generated m by n matrix A. \n
-  * @param[in] LDA
-           LDA is INTEGER \n
-           The leading dimension of the array A.  LDA >= M. \n
-  * @param[in,out] ISEED
-           ISEED is INTEGER array, dimension (4) \n
-           On entry, the seed of the random number generator; the array
-           elements must be between 0 and 4095, and ISEED(4) must be
-           odd. \n
-           On exit, the seed is updated. \n
-  * @param[out]	WORK	
-          WORK is REAL array, dimension (M+N) \n
-  * @param[out]	INFO	
-          INFO is INTEGER \n
-          = 0: successful exit \n
-          < 0: if INFO = -i, the i-th argument had an illegal value \n
-
- * @return INTEGER Return value of the function.
- * */
-/*template< typename T >
-integer lagge(integer* m, integer* n, integer* kl, integer* ku,  T* d, T* a, integer* lda, integer* iseed)
-{
-  return lagge(m, n, kl, ku, d, a, lda, iseed);
-}
-template< typename T, typename Ta >
-integer lagge(integer* m, integer* n, integer* kl, integer* ku,  Ta* d, T* a, integer* lda, integer* iseed)
-{
-  return lagge(m, n, kl, ku, d, a, lda, iseed);
-}*/
 
 /*! @brief LACGV conjugates a complex vector
 
@@ -32708,12 +32087,11 @@ integer lagge(integer* m, integer* n, integer* kl, integer* ku,  Ta* d, T* a, in
           INCX is INTEGER \n
           The spacing between successive elements of X. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lacgv(integer *n, T* x, integer *incx)
+void lacgv(integer *n, T* x, integer *incx)
 {
-  return lacgv(n, x, incx); 
+  lacgv(n, x, incx); 
 }
 
 /*! @brief LACP2 copies all or part of a real two-dimensional array to a complex array
@@ -32752,12 +32130,11 @@ integer lacgv(integer *n, T* x, integer *incx)
           LDB is INTEGER \n
           The leading dimension of the array B.  LDB >= fla_max(1,M). \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T, typename Ta >
-integer lacp2(char *uplo, integer *m, integer *n, T* a, integer *lda, Ta* b, integer *ldb)
+void lacp2(char *uplo, integer *m, integer *n, T* a, integer *lda, Ta* b, integer *ldb)
 {
-  return lacp2(uplo, m, n, a, lda, b, ldb);
+  lacp2(uplo, m, n, a, lda, b, ldb);
 } 
 
 /*! @brief LACRM multiplies a complex matrix by a square real matrix
@@ -32801,62 +32178,13 @@ integer lacp2(char *uplo, integer *m, integer *n, T* a, integer *lda, Ta* b, int
  * @param[out]	RWORK	
           RWORK is REAL array, dimension (2*M*N) \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T, typename Ta >
-integer lacrm(integer *m, integer *n, T* a, integer *lda, Ta* b, integer *ldb, T* c, integer *ldc, T* rwork)
+void lacrm(integer *m, integer *n, T* a, integer *lda, Ta* b, integer *ldb, T* c, integer *ldc, T* rwork)
 {
-  return lacrm(m, n, a, lda, b, ldb, c, ldc, rwork); 
+  lacrm(m, n, a, lda, b, ldb, c, ldc, rwork); 
 }
 
-/*! @brief LAGHE generates a complex hermitian matrix A, by pre- and post- \n
-     multiplying a real diagonal matrix D
- * @details
- * \b Purpose:
-    \verbatim 
-    LAGHE generates a complex hermitian matrix A, by pre- and post-
-    multiplying a real diagonal matrix D with a random unitary matrix:
-    A = U*D*U'. The semi-bandwidth may then be reduced to k by additional
-    unitary transformations.
-    \endverbatim   
-
-  * @param[in] N
-           N is INTEGER \n
-           The order of the matrix A.  N >= 0. \n
-  * @param[in] K
-           K is INTEGER \n
-           The number of nonzero subdiagonals within the band of A.
-           0 <= K <= N-1. \n
-  * @param[in] D
-           D is REAL array, dimension (N) \n
-           The diagonal elements of the diagonal matrix D. \n
-  * @param[out] A
-           A is COMPLEX array, dimension (LDA,N) \n
-           The generated n by n hermitian matrix A (the full matrix is
-           stored). \n
-  * @param[in] LDA
-           LDA is INTEGER \n
-           The leading dimension of the array A.  LDA >= N. \n
-  * @param[in,out] ISEED
-           ISEED is INTEGER array, dimension (4) \n
-           On entry, the seed of the random number generator; the array
-           elements must be between 0 and 4095, and ISEED(4) must be
-           odd. \n
-           On exit, the seed is updated. \n
-  * @param[out]	WORK	
-          WORK is COMPLEX array, dimension (2*N) \n
-  * @param[out]	INFO	
-          INFO is INTEGER \n
-          = 0: successful exit \n
-          < 0: if INFO = -i, the i-th argument had an illegal value \n
-
- * @return INTEGER Return value of the function.
- * */
-/*template< typename T, typename Ta >
-integer laghe(integer *n, integer *k, Ta* d, T* a, integer *lda, integer* iseed)
-{
-  return laghe(n, k, d, a, lda, iseed); 
-}*/
 
 /*! @brief LANHE returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, \n
      or the element of largest absolute value of a complex Hermitian matrix.
@@ -32914,7 +32242,7 @@ integer laghe(integer *n, integer *k, Ta* d, T* a, integer *lda, integer* iseed)
           where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,
           WORK is not referenced. \n
 
- * @return INTEGER Return value of the function.
+ * @return Returns value of the norm.
  * */
 template< typename T, typename Ta >
 Ta lanhe(char *norm, char *uplo, integer *n, T* a, integer *lda, Ta* work)
@@ -32963,12 +32291,11 @@ Ta lanhe(char *norm, char *uplo, integer *n, T* a, integer *lda, Ta* work)
  * @param[out]	RWORK	
           RWORK is REAL array, dimension (2*M*N) \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T, typename Ta >
-integer larcm(integer *m, integer *n, Ta* a, integer *lda, T* b, integer *ldb, T* c, integer *ldc, Ta* rwork)
+void larcm(integer *m, integer *n, Ta* a, integer *lda, T* b, integer *ldb, T* c, integer *ldc, Ta* rwork)
 {
-  return larcm(m, n, a, lda, b, ldb, c, ldc, rwork); 
+  larcm(m, n, a, lda, b, ldb, c, ldc, rwork); 
 }
 
 /*! @brief GECON estimates the reciprocal of the condition number of a general real matrix A
@@ -33018,17 +32345,16 @@ integer larcm(integer *m, integer *n, Ta* a, integer *lda, T* b, integer *ldb, T
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gecon(char* norm, integer* n,  T* a, integer* lda, T* anorm, T* rcond, T* work, integer* iwork, integer* info)
+void gecon(char* norm, integer* n,  T* a, integer* lda, T* anorm, T* rcond, T* work, integer* iwork, integer* info)
 {
-return gecon(norm, n,  a, lda, anorm, rcond, work, iwork, info);
+  gecon(norm, n,  a, lda, anorm, rcond, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer gecon(char* norm, integer* n,  T* a, integer* lda, Ta* anorm, Ta* rcond, T* work, Ta* rwork, integer* info)
+void gecon(char* norm, integer* n,  T* a, integer* lda, Ta* anorm, Ta* rcond, T* work, Ta* rwork, integer* info)
 {
-  return gecon(norm, n,  a, lda, anorm, rcond, work, rwork, info);
+  gecon(norm, n,  a, lda, anorm, rcond, work, rwork, info);
 }
 
 /*! @brief GEEQU computes row and column scalings intended to equilibrate an \n
@@ -33093,17 +32419,16 @@ integer gecon(char* norm, integer* n,  T* a, integer* lda, Ta* anorm, Ta* rcond,
                 <= M:  the i-th row of A is exactly zero \n
                 >  M:  the (i-M)-th column of A is exactly zero \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer geequ(integer* m, integer* n,  T* a, integer* lda, T* r, T* c, T* rowcnd, T* colcnd, T* amax, integer* info)
+void geequ(integer* m, integer* n,  T* a, integer* lda, T* r, T* c, T* rowcnd, T* colcnd, T* amax, integer* info)
 {
-  return geequ(m, n, a, lda, r, c, rowcnd, colcnd, amax, info);
+  geequ(m, n, a, lda, r, c, rowcnd, colcnd, amax, info);
 }
 template< typename T, typename Ta >
-integer geequ(integer* m, integer* n,  T* a, integer* lda, Ta* r, Ta* c, Ta* rowcnd, Ta* colcnd, Ta* amax, integer* info)
+void geequ(integer* m, integer* n,  T* a, integer* lda, Ta* r, Ta* c, Ta* rowcnd, Ta* colcnd, Ta* amax, integer* info)
 {
-  return geequ(m, n, a, lda, r, c, rowcnd, colcnd, amax, info);
+  geequ(m, n, a, lda, r, c, rowcnd, colcnd, amax, info);
 }
 
 /*! @brief HECON estimates the reciprocal of the condition number of a complex Hermitian matrix A
@@ -33154,12 +32479,11 @@ integer geequ(integer* m, integer* n,  T* a, integer* lda, Ta* r, Ta* c, Ta* row
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
-integer hecon(char* uplo, integer* n,  T* a, integer* lda,  integer* ipiv, Ta* anorm, Ta* rcond, T* work, integer* info)
+void hecon(char* uplo, integer* n,  T* a, integer* lda,  integer* ipiv, Ta* anorm, Ta* rcond, T* work, integer* info)
 {
-  return hecon(uplo, n, a, lda, ipiv, anorm, rcond, work, info);
+  hecon(uplo, n, a, lda, ipiv, anorm, rcond, work, info);
 }
 
 /*! @brief HECON_3 estimates the reciprocal of the condition number
@@ -33235,12 +32559,11 @@ integer hecon(char* uplo, integer* n,  T* a, integer* lda,  integer* ipiv, Ta* a
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
-integer hecon_3(char* uplo, integer* n, T* a, integer* lda, T* e, integer* ipiv, Ta* anorm, Ta* rcond, T* work, integer* info)
+void hecon_3(char* uplo, integer* n, T* a, integer* lda, T* e, integer* ipiv, Ta* anorm, Ta* rcond, T* work, integer* info)
 {
-  return hecon_3(uplo, n, a, lda, e, ipiv, anorm, rcond, work, info);
+  hecon_3(uplo, n, a, lda, e, ipiv, anorm, rcond, work, info);
 }
 
 /*! @brief HEEQUB computes row and column scalings intended to equilibrate a Hermitian matrix A
@@ -33292,12 +32615,11 @@ integer hecon_3(char* uplo, integer* n, T* a, integer* lda, T* e, integer* ipiv,
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
           > 0:  if INFO = i, the i-th diagonal element is nonpositive. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
-integer heequb(char* uplo, integer* n, T* a, integer* lda, Ta* s, Ta* scond, Ta* amax, T* work, integer* info)
+void heequb(char* uplo, integer* n, T* a, integer* lda, Ta* s, Ta* scond, Ta* amax, T* work, integer* info)
 {
-  return heequb(uplo, n, a, lda, s, scond, amax, work, info);
+  heequb(uplo, n, a, lda, s, scond, amax, work, info);
 }
 
 /*! @brief HEEV_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for HE matrices
@@ -33374,12 +32696,11 @@ integer heequb(char* uplo, integer* n, T* a, integer* lda, Ta* s, Ta* scond, Ta*
                 off-diagonal elements of an intermediate tridiagonal
                 form did not converge to zero. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
-integer heev_2stage(char* jobz, char* uplo, integer* n, T* a, integer* lda, Ta* w, T* work, integer* lwork, Ta* rwork, integer* info)
+void heev_2stage(char* jobz, char* uplo, integer* n, T* a, integer* lda, Ta* w, T* work, integer* lwork, Ta* rwork, integer* info)
 {
-  return heev_2stage(jobz, uplo, n, a, lda, w, work, lwork, rwork, info);
+  heev_2stage(jobz, uplo, n, a, lda, w, work, lwork, rwork, info);
 }
 
 /*! @brief HEEVD_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for HE matrices
@@ -33499,12 +32820,11 @@ integer heev_2stage(char* jobz, char* uplo, integer* n, T* a, integer* lda, Ta* 
                 lying in rows and columns INFO/(N+1) through
                 mod(INFO,N+1). \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
-integer heevd_2stage(char* jobz, char* uplo, integer* n, T* a, integer* lda, Ta* w, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
+void heevd_2stage(char* jobz, char* uplo, integer* n, T* a, integer* lda, Ta* w, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
 {
-  return heevd_2stage(jobz, uplo, n, a, lda, w, work, lwork, rwork, lrwork, iwork, liwork, info);
+  heevd_2stage(jobz, uplo, n, a, lda, w, work, lwork, rwork, lrwork, iwork, liwork, info);
 }
 
 /*! @brief HEEVR_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for HE matrices
@@ -33742,12 +33062,11 @@ integer heevd_2stage(char* jobz, char* uplo, integer* n, T* a, integer* lda, Ta*
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
           > 0:  Internal error \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
-integer heevr_2stage(char* jobz, char* range, char* uplo, integer* n, T* a, integer* lda, Ta* vl, Ta* vu, integer* il, integer* iu, Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, integer* isuppz, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
+void heevr_2stage(char* jobz, char* range, char* uplo, integer* n, T* a, integer* lda, Ta* vl, Ta* vu, integer* il, integer* iu, Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, integer* isuppz, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
 {
-  return heevr_2stage(jobz, range, uplo, n, a, lda, vl, vu, il, iu, abstol, m, w, z, ldz, isuppz, work, lwork, rwork, lrwork, iwork, liwork, info);
+  heevr_2stage(jobz, range, uplo, n, a, lda, vl, vu, il, iu, abstol, m, w, z, ldz, isuppz, work, lwork, rwork, lrwork, iwork, liwork, info);
 }
 
 /*! @brief HEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for HE matrices
@@ -33893,12 +33212,11 @@ integer heevr_2stage(char* jobz, char* range, char* uplo, integer* n, T* a, inte
           > 0:  if INFO = i, then i eigenvectors failed to converge.
                 Their indices are stored in array IFAIL. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
-integer heevx(char* jobz, char* range, char* uplo, integer* n, T* a, integer* lda, Ta* vl, Ta* vu, integer* il, integer* iu, Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* iwork, integer* ifail, integer* info)
+void heevx(char* jobz, char* range, char* uplo, integer* n, T* a, integer* lda, Ta* vl, Ta* vu, integer* il, integer* iu, Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* iwork, integer* ifail, integer* info)
 {
-  return heevx(jobz, range, uplo, n, a, lda, vl, vu, il, iu, abstol, m, w, z, ldz, work, lwork, rwork, iwork, ifail, info);
+  heevx(jobz, range, uplo, n, a, lda, vl, vu, il, iu, abstol, m, w, z, ldz, work, lwork, rwork, iwork, ifail, info);
 }
 
 /*! @brief HEEVX_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for HE matrices
@@ -34060,12 +33378,11 @@ integer heevx(char* jobz, char* range, char* uplo, integer* n, T* a, integer* ld
           > 0:  if INFO = i, then i eigenvectors failed to converge.
                 Their indices are stored in array IFAIL. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
-integer heevx_2stage(char* jobz, char* range, char* uplo, integer* n, T* a, integer* lda, Ta* vl, Ta* vu, integer* il, integer* iu, Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* iwork, integer* ifail, integer* info)
+void heevx_2stage(char* jobz, char* range, char* uplo, integer* n, T* a, integer* lda, Ta* vl, Ta* vu, integer* il, integer* iu, Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* iwork, integer* ifail, integer* info)
 {
-  return heevx_2stage(jobz, range, uplo, n, a, lda, vl, vu, il, iu, abstol, m, w, z, ldz, work, lwork, rwork, iwork, ifail, info);
+  heevx_2stage(jobz, range, uplo, n, a, lda, vl, vu, il, iu, abstol, m, w, z, ldz, work, lwork, rwork, iwork, ifail, info);
 }
 
 /*! @brief HEGV computes all the eigenvalues, and optionally, the eigenvectors  \n
@@ -34162,12 +33479,11 @@ integer heevx_2stage(char* jobz, char* range, char* uplo, integer* n, T* a, inte
                     The factorization of B could not be completed and
                     no eigenvalues or eigenvectors were computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
-integer hegv(integer* itype, char* jobz, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, Ta* w, T* work, integer* lwork, Ta* rwork, integer* info)
+void hegv(integer* itype, char* jobz, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, Ta* w, T* work, integer* lwork, Ta* rwork, integer* info)
 {
-  return hegv(itype, jobz, uplo, n, a, lda, b, ldb, w, work, lwork, rwork, info);
+  hegv(itype, jobz, uplo, n, a, lda, b, ldb, w, work, lwork, rwork, info);
 }
 
 /*! @brief HEGV_2STAGE computes all the eigenvalues, and optionally, the eigenvectors  \n
@@ -34278,12 +33594,11 @@ integer hegv(integer* itype, char* jobz, char* uplo, integer* n, T* a, integer* 
                     The factorization of B could not be completed and
                     no eigenvalues or eigenvectors were computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
-integer hegv_2stage(integer* itype, char* jobz, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, Ta* w, T* work, integer* lwork, Ta* rwork, integer* info)
+void hegv_2stage(integer* itype, char* jobz, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, Ta* w, T* work, integer* lwork, Ta* rwork, integer* info)
 {
-  return hegv_2stage(itype, jobz, uplo, n, a, lda, b, ldb, w, work, lwork, rwork, info);
+  hegv_2stage(itype, jobz, uplo, n, a, lda, b, ldb, w, work, lwork, rwork, info);
 }
 
 /*! @brief HEGVD computes all the eigenvalues, and optionally, the eigenvectors  \n
@@ -34422,12 +33737,11 @@ integer hegv_2stage(integer* itype, char* jobz, char* uplo, integer* n, T* a, in
                     The factorization of B could not be completed and
                     no eigenvalues or eigenvectors were computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
-integer hegvd(integer* itype, char* jobz, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, Ta* w, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
+void hegvd(integer* itype, char* jobz, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, Ta* w, T* work, integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
 {
-  return hegvd(itype, jobz, uplo, n, a, lda, b, ldb, w, work, lwork, rwork, lrwork, iwork, liwork, info);
+  hegvd(itype, jobz, uplo, n, a, lda, b, ldb, w, work, lwork, rwork, lrwork, iwork, liwork, info);
 }
 
 /*! @brief HEGVX computes selected eigenvalues, and optionally, eigenvectors   \n
@@ -34602,12 +33916,11 @@ integer hegvd(integer* itype, char* jobz, char* uplo, integer* n, T* a, integer*
                     The factorization of B could not be completed and
                     no eigenvalues or eigenvectors were computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
-integer hegvx(integer* itype, char* jobz, char* range, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, Ta* vl, Ta* vu, integer* il, integer* iu, Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* iwork, integer* ifail, integer* info)
+void hegvx(integer* itype, char* jobz, char* range, char* uplo, integer* n, T* a, integer* lda, T* b, integer* ldb, Ta* vl, Ta* vu, integer* il, integer* iu, Ta* abstol, integer* m, Ta* w, T* z, integer* ldz, T* work, integer* lwork, Ta* rwork, integer* iwork, integer* ifail, integer* info)
 {
-  return hegvx(itype, jobz, range, uplo, n, a, lda, b, ldb, vl, vu, il, iu, abstol, m, w, z, ldz, work, lwork, rwork, iwork, ifail, info);
+  hegvx(itype, jobz, range, uplo, n, a, lda, b, ldb, vl, vu, il, iu, abstol, m, w, z, ldz, work, lwork, rwork, iwork, ifail, info);
 }
 
 /*! @brief HERFS improves the computed solution to a system of linear equations
@@ -34693,12 +34006,11 @@ integer hegvx(integer* itype, char* jobz, char* range, char* uplo, integer* n, T
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
-integer herfs(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  T* af, integer* ldaf, integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
+void herfs(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  T* af, integer* ldaf, integer* ipiv,  T* b, integer* ldb, T* x, integer* ldx, Ta* ferr, Ta* berr, T* work, Ta* rwork, integer* info)
 {
-  return herfs(uplo, n, nrhs,  a, lda,  af, ldaf,  ipiv,  b, ldb, x, ldx, ferr, berr, work, rwork, info);
+  herfs(uplo, n, nrhs,  a, lda,  af, ldaf,  ipiv,  b, ldb, x, ldx, ferr, berr, work, rwork, info);
 }
 
 /*! @brief HERFSX improves the computed solution to a system of linear equations
@@ -34964,12 +34276,11 @@ integer herfs(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  T* af
            about all of the right-hand sides check ERR_BNDS_NORM or
            ERR_BNDS_COMP. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
-integer herfsx(char* uplo, char* equed, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, Ta* s, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* berr, integer* n_err_bnds, Ta* err_bnds_norm, Ta* err_bnds_comp, integer* nparams, Ta* params, T* work, Ta* rwork, integer* info)
+void herfsx(char* uplo, char* equed, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, Ta* s, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* berr, integer* n_err_bnds, Ta* err_bnds_norm, Ta* err_bnds_comp, integer* nparams, Ta* params, T* work, Ta* rwork, integer* info)
 {
-  return herfsx(uplo, equed, n, nrhs, a, lda, af, ldaf, ipiv, s, b, ldb, x, ldx, rcond, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, rwork, info);
+  herfsx(uplo, equed, n, nrhs, a, lda, af, ldaf, ipiv, s, b, ldb, x, ldx, rcond, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, rwork, info);
 }
 
 /*! @brief HESV computes the solution to system of linear equations A * X = B for HE matrices
@@ -35061,12 +34372,11 @@ integer herfsx(char* uplo, char* equed, integer* n, integer* nrhs, T* a, integer
                has been completed, but the block diagonal matrix D is
                exactly singular, so the solution could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hesv(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, integer* ipiv, T* b, integer* ldb, T* work, integer* lwork, integer* info)
+void hesv(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, integer* ipiv, T* b, integer* ldb, T* work, integer* lwork, integer* info)
 {
-  return hesv(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info);
+  hesv(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info);
 }
 
 /*! @brief HESV_AA computes the solution to system of linear equations A * X = B for HE matrices
@@ -35155,12 +34465,11 @@ integer hesv(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, integer*
                has been completed, but the block diagonal matrix D is
                exactly singular, so the solution could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hesv_aa(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, integer* ipiv, T* b, integer* ldb, T* work, integer* lwork, integer* info)
+void hesv_aa(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, integer* ipiv, T* b, integer* ldb, T* work, integer* lwork, integer* info)
 {
-  return hesv_aa(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info);
+  hesv_aa(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info);
 }
  
 /*! @brief HESV_AA_2STAGE computes the solution to system of linear equations A * X = B for HE matrices
@@ -35257,12 +34566,11 @@ integer hesv_aa(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, integ
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
           > 0:  if INFO = i, band LU factorization failed on i-th column \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hesv_aa_2stage(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* tb, integer* ltb, integer* ipiv, integer* ipiv2, T* b, integer* ldb, T* work, integer* lwork, integer* info)
+void hesv_aa_2stage(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* tb, integer* ltb, integer* ipiv, integer* ipiv2, T* b, integer* ldb, T* work, integer* lwork, integer* info)
 {
-  return hesv_aa_2stage(uplo, n, nrhs, a, lda, tb, ltb, ipiv, ipiv2, b, ldb, work, lwork, info);
+  hesv_aa_2stage(uplo, n, nrhs, a, lda, tb, ltb, ipiv, ipiv2, b, ldb, work, lwork, info);
 }
 
 /*! @brief HESV_RK computes the solution to system of linear equations A * X = B for SY matrices
@@ -35392,12 +34700,11 @@ integer hesv_aa_2stage(char* uplo, integer* n, integer* nrhs, T* a, integer* lda
                is not stored in INFO even though the factorization
                always completes. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hesv_rk(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* e, integer* ipiv, T* b, integer* ldb, T* work, integer* lwork, integer* info)
+void hesv_rk(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* e, integer* ipiv, T* b, integer* ldb, T* work, integer* lwork, integer* info)
 {
-  return hesv_rk(uplo, n, nrhs, a, lda, e, ipiv, b, ldb, work, lwork, info);
+  hesv_rk(uplo, n, nrhs, a, lda, e, ipiv, b, ldb, work, lwork, info);
 }
 
 /*! @brief HESVX computes the solution to system of linear equations A * X = B for HE matrices
@@ -35568,12 +34875,11 @@ integer hesv_rk(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* e,
                        computed solution can be more accurate than the
                        value of RCOND would suggest. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
-integer hesvx(char* fact, char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* ferr, Ta* berr, T* work, integer* lwork, Ta* rwork, integer* info)
+void hesvx(char* fact, char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* ferr, Ta* berr, T* work, integer* lwork, Ta* rwork, integer* info)
 {
-  return hesvx(fact, uplo, n, nrhs, a, lda, af, ldaf, ipiv, b, ldb, x, ldx, rcond, ferr, berr, work, lwork, rwork, info);
+  hesvx(fact, uplo, n, nrhs, a, lda, af, ldaf, ipiv, b, ldb, x, ldx, rcond, ferr, berr, work, lwork, rwork, info);
 }
 
 /*! @brief HESVXX computes the solution to system of linear equations A * X = B for HE matrices
@@ -35938,12 +35244,11 @@ integer hesvx(char* fact, char* uplo, integer* n, integer* nrhs, T* a, integer* 
            about all of the right-hand sides check ERR_BNDS_NORM or
            ERR_BNDS_COMP. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
-integer hesvxx(char* fact, char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, char* equed, Ta* s, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* rpvgrw, Ta* berr, integer* n_err_bnds, Ta* err_bnds_norm, Ta* err_bnds_comp, integer* nparams, Ta* params, T* work, Ta* rwork, integer* info)
+void hesvxx(char* fact, char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* af, integer* ldaf, integer* ipiv, char* equed, Ta* s, T* b, integer* ldb, T* x, integer* ldx, Ta* rcond, Ta* rpvgrw, Ta* berr, integer* n_err_bnds, Ta* err_bnds_norm, Ta* err_bnds_comp, integer* nparams, Ta* params, T* work, Ta* rwork, integer* info)
 {
-  return hesvxx(fact, uplo, n, nrhs, a, lda, af, ldaf, ipiv, equed, s, b, ldb, x, ldx, rcond, rpvgrw, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, rwork, info);
+  hesvxx(fact, uplo, n, nrhs, a, lda, af, ldaf, ipiv, equed, s, b, ldb, x, ldx, rcond, rpvgrw, berr, n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, rwork, info);
 }
 
 /*! @brief HESWAPR applies an elementary permutation on the rows and columns of a Hermitian matrix.
@@ -35985,12 +35290,11 @@ integer hesvxx(char* fact, char* uplo, integer* n, integer* nrhs, T* a, integer*
           I2 is INTEGER
           Index of the second row to swap \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer heswapr(char* uplo, integer* n, T* a, integer* lda, integer* i1, integer* i2)
+void heswapr(char* uplo, integer* n, T* a, integer* lda, integer* i1, integer* i2)
 {
-  return heswapr(uplo, n, a, lda, i1, i2);
+  heswapr(uplo, n, a, lda, i1, i2);
 }
 
 /*! @brief HETRF computes the factorization of a complex Hermitian matrix A
@@ -36059,12 +35363,11 @@ integer heswapr(char* uplo, integer* n, T* a, integer* lda, integer* i1, integer
                 exactly singular, and division by zero will occur if it
                 is used to solve a system of equations. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hetrf(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* work, integer* lwork, integer* info)
+void hetrf(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* work, integer* lwork, integer* info)
 {
-  return hetrf(uplo, n, a, lda, ipiv, work, lwork, info);
+  hetrf(uplo, n, a, lda, ipiv, work, lwork, info);
 }
 
 /*! @brief HETRF_AA computes the factorization of a complex hermitian matrix A
@@ -36129,12 +35432,11 @@ integer hetrf(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* work
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hetrf_aa(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* work, integer* lwork, integer* info)
+void hetrf_aa(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* work, integer* lwork, integer* info)
 {
-  return hetrf_aa(uplo, n, a, lda, ipiv, work, lwork, info);
+  hetrf_aa(uplo, n, a, lda, ipiv, work, lwork, info);
 }
 
 /*! @brief HETRF_AA_2STAGE computes the factorization of a real hermitian matrix A
@@ -36216,12 +35518,11 @@ integer hetrf_aa(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* w
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
           > 0:  if INFO = i, band LU factorization failed on i-th column \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hetrf_aa_2stage(char* uplo, integer* n, T* a, integer* lda, T* tb, integer* ltb, integer* ipiv, integer* ipiv2, T* work, integer* lwork, integer* info)
+void hetrf_aa_2stage(char* uplo, integer* n, T* a, integer* lda, T* tb, integer* ltb, integer* ipiv, integer* ipiv2, T* work, integer* lwork, integer* info)
 {
-  return hetrf_aa_2stage(uplo, n, a, lda, tb, ltb, ipiv, ipiv2, work, lwork, info);
+  hetrf_aa_2stage(uplo, n, a, lda, tb, ltb, ipiv, ipiv2, work, lwork, info);
 }
 
 /*! @brief HETRF_RK computes the factorization of a complex Hermitian indefinite matrix   \n
@@ -36383,12 +35684,11 @@ integer hetrf_aa_2stage(char* uplo, integer* n, T* a, integer* lda, T* tb, integ
                is not stored in INFO even though the factorization
                always completes. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hetrf_rk(char* uplo, integer* n, T* a, integer* lda, T* e, integer* ipiv, T* work, integer* lwork, integer* info)
+void hetrf_rk(char* uplo, integer* n, T* a, integer* lda, T* e, integer* ipiv, T* work, integer* lwork, integer* info)
 {
-  return hetrf_rk(uplo, n, a, lda, e, ipiv, work, lwork, info);
+  hetrf_rk(uplo, n, a, lda, e, ipiv, work, lwork, info);
 }
 
 /*! @brief HETRF_ROOK computes the factorization of a complex Hermitian indefinite matrix   \n
@@ -36477,12 +35777,11 @@ integer hetrf_rk(char* uplo, integer* n, T* a, integer* lda, T* e, integer* ipiv
                 exactly singular, and division by zero will occur if it
                 is used to solve a system of equations. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hetrf_rook(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* work, integer* lwork, integer* info)
+void hetrf_rook(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* work, integer* lwork, integer* info)
 {
-  return hetrf_rook(uplo, n, a, lda, ipiv, work, lwork, info);
+  hetrf_rook(uplo, n, a, lda, ipiv, work, lwork, info);
 }
 
 /*! @brief HETRI computes the inverse of a complex Hermitian indefinite matrix A
@@ -36531,12 +35830,11 @@ integer hetrf_rook(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T*
           > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its
                inverse could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hetri(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* work, integer* info)
+void hetri(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* work, integer* info)
 {
-  return hetri(uplo, n, a, lda, ipiv, work, info);
+  hetri(uplo, n, a, lda, ipiv, work, info);
 }
 
 /*! @brief HETRI_3 computes the inverse of a complex Hermitian indefinite matrix A
@@ -36624,12 +35922,11 @@ integer hetri(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* work
           > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its
                inverse could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hetri_3(char* uplo, integer* n, T* a, integer* lda,  T* e,  integer* ipiv, T* work, integer* lwork, integer* info)
+void hetri_3(char* uplo, integer* n, T* a, integer* lda,  T* e,  integer* ipiv, T* work, integer* lwork, integer* info)
 {
-  return hetri_3(uplo, n, a, lda, e, ipiv, work, lwork, info);
+  hetri_3(uplo, n, a, lda, e, ipiv, work, lwork, info);
 }
 
 /*! @brief HETRI2 computes the inverse of a COMPLEX hermitian indefinite matrix A 
@@ -36688,12 +35985,11 @@ integer hetri_3(char* uplo, integer* n, T* a, integer* lda,  T* e,  integer* ipi
           > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its
                inverse could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hetri2(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* work, integer* lwork, integer* info)
+void hetri2(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* work, integer* lwork, integer* info)
 {
-  return hetri2(uplo, n, a, lda, ipiv, work, lwork, info);
+  hetri2(uplo, n, a, lda, ipiv, work, lwork, info);
 }
 
 /*! @brief HETRI2X computes the inverse of a complex Hermitian indefinite matrix A
@@ -36745,12 +36041,11 @@ integer hetri2(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* wor
           > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its
                inverse could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hetri2x(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* work, integer *nb, integer* info)
+void hetri2x(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* work, integer *nb, integer* info)
 {
-  return hetri2x(uplo, n, a, lda, ipiv, work, nb, info);
+  hetri2x(uplo, n, a, lda, ipiv, work, nb, info);
 }
 
 /*! @brief HETRS solves a system of linear equations A*X = B with a complex Hermitian matrix A
@@ -36799,12 +36094,11 @@ integer hetri2x(char* uplo, integer* n, T* a, integer* lda, integer* ipiv, T* wo
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hetrs(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  integer* ipiv, T* b, integer* ldb, integer* info)
+void hetrs(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  integer* ipiv, T* b, integer* ldb, integer* info)
 {
-  return hetrs(uplo, n, nrhs,  a, lda,  ipiv, b, ldb, info);
+  hetrs(uplo, n, nrhs,  a, lda,  ipiv, b, ldb, info);
 }
 
 
@@ -36880,12 +36174,11 @@ integer hetrs(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  integ
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hetrs_3(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* e, integer* ipiv, T* b, integer* ldb, integer* info)
+void hetrs_3(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* e, integer* ipiv, T* b, integer* ldb, integer* info)
 {
-  return hetrs_3(uplo, n, nrhs, a, lda, e, ipiv, b, ldb, info);
+  hetrs_3(uplo, n, nrhs, a, lda, e, ipiv, b, ldb, info);
 }
 
 /*! @brief HETRS_AA solves a system of linear equations A*X = B with a complex hermitian matrix A
@@ -36937,12 +36230,11 @@ integer hetrs_3(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* e,
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hetrs_aa(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  integer* ipiv, T* b, integer* ldb, T* work, integer* lwork, integer* info)
+void hetrs_aa(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  integer* ipiv, T* b, integer* ldb, T* work, integer* lwork, integer* info)
 {
-  return hetrs_aa(uplo, n, nrhs,  a, lda,  ipiv, b, ldb, work, lwork, info);
+  hetrs_aa(uplo, n, nrhs,  a, lda,  ipiv, b, ldb, work, lwork, info);
 }
 
 /*! @brief HETRS_AA_2STAGE solves a system of linear equations A*X = B with a real hermitian matrix A
@@ -37000,12 +36292,11 @@ integer hetrs_aa(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  in
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hetrs_aa_2stage(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* tb, integer* ltb, integer* ipiv, integer* ipiv2, T* b, integer* ldb, integer* info)
+void hetrs_aa_2stage(char* uplo, integer* n, integer* nrhs, T* a, integer* lda, T* tb, integer* ltb, integer* ipiv, integer* ipiv2, T* b, integer* ldb, integer* info)
 {
-  return hetrs_aa_2stage(uplo, n, nrhs, a, lda, tb, ltb, ipiv, ipiv2, b, ldb, info);
+  hetrs_aa_2stage(uplo, n, nrhs, a, lda, tb, ltb, ipiv, ipiv2, b, ldb, info);
 }
 
 /*! @brief HETRS_ROOK computes the solution to a system of linear equations A * X = B for \n
@@ -37055,12 +36346,11 @@ integer hetrs_aa_2stage(char* uplo, integer* n, integer* nrhs, T* a, integer* ld
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hetrs_rook(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  integer* ipiv, T* b, integer* ldb, integer* info)
+void hetrs_rook(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  integer* ipiv, T* b, integer* ldb, integer* info)
 {
-  return hetrs_rook(uplo, n, nrhs,  a, lda,  ipiv, b, ldb, info);
+  hetrs_rook(uplo, n, nrhs,  a, lda,  ipiv, b, ldb, info);
 }
 
 /*! @brief HETRS2 solves a system of linear equations A*X = B with a complex Hermitian matrix A
@@ -37111,12 +36401,11 @@ integer hetrs_rook(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hetrs2(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  integer* ipiv, T* b, integer* ldb, T* work, integer* info)
+void hetrs2(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  integer* ipiv, T* b, integer* ldb, T* work, integer* info)
 {
-  return hetrs2(uplo, n, nrhs,  a, lda,  ipiv, b, ldb, work, info);
+  hetrs2(uplo, n, nrhs,  a, lda,  ipiv, b, ldb, work, info);
 }
 
 /*! @brief COMBSSQ adds two scaled sum of squares quantities
@@ -37141,9 +36430,9 @@ integer hetrs2(char* uplo, integer* n, integer* nrhs,  T* a, integer* lda,  inte
            V2(1) = V2_scale, V2(2) = V2_sumsq.  \n
  * */
 template< typename T >
-integer combssq(T* v1, T* v2)
+void combssq(T* v1, T* v2)
 {
-  return combssq(v1, v2);
+  combssq(v1, v2);
 }
 
 /*! @brief SUM1 forms the 1-norm of the complex vector using the true absolute value
@@ -37226,12 +36515,11 @@ Ta sum1(integer* n, T* cx, integer* incx)
                  singular, and division by zero will occur if it is used
                  to solve a system of equations. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gbtf2(integer* m, integer* n, integer* kl, integer* ku, T* ab, integer* ldab, integer* ipiv, integer* info)
+void gbtf2(integer* m, integer* n, integer* kl, integer* ku, T* ab, integer* ldab, integer* ipiv, integer* info)
 {
-  return gbtf2(m, n, kl, ku, ab, ldab, ipiv, info);
+  gbtf2(m, n, kl, ku, ab, ldab, ipiv, info);
 }
 
 /*! @brief GELQT3 recursively computes a LQ factorization of a real M-by-N matrix A
@@ -37275,12 +36563,11 @@ integer gbtf2(integer* m, integer* n, integer* kl, integer* ku, T* ab, integer* 
           = 0: successful exit \n
           < 0: if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gelqt3(integer *m, integer *n, T *a, integer *lda, T *t, integer *ldt, integer *info)
+void gelqt3(integer *m, integer *n, T *a, integer *lda, T *t, integer *ldt, integer *info)
 {
-  return gelqt3(m, n, a, lda, t, ldt, info);
+  gelqt3(m, n, a, lda, t, ldt, info);
 }
 
 /*! @brief GEQL2 computes the QL factorization of a general rectangular matrix using an unblocked algorithm
@@ -37322,12 +36609,11 @@ integer gelqt3(integer *m, integer *n, T *a, integer *lda, T *t, integer *ldt, i
           = 0: successful exit \n
           < 0: if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer geql2(integer *m, integer *n, T *a, integer *lda, T *tau, T *work, integer *info)
+void geql2(integer *m, integer *n, T *a, integer *lda, T *tau, T *work, integer *info)
 {
-  return geql2(m, n, a, lda, tau, work, info);
+  geql2(m, n, a, lda, tau, work, info);
 }
 
 /*! @brief GEQR2P computes the QR factorization of a general rectangular  \n
@@ -37378,12 +36664,11 @@ integer geql2(integer *m, integer *n, T *a, integer *lda, T *tau, T *work, integ
           = 0: successful exit \n
           < 0: if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer geqr2p(integer *m, integer *n, T *a, integer *lda, T *tau, T *work, integer *info)
+void geqr2p(integer *m, integer *n, T *a, integer *lda, T *tau, T *work, integer *info)
 {
-  return geqr2p(m, n, a, lda, tau, work, info);
+  geqr2p(m, n, a, lda, tau, work, info);
 }
 
 /*! @brief GERQ2 computes the RQ factorization of a general rectangular matrix using an unblocked algorithm
@@ -37425,12 +36710,11 @@ integer geqr2p(integer *m, integer *n, T *a, integer *lda, T *tau, T *work, inte
           = 0: successful exit \n
           < 0: if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gerq2(integer *m, integer *n, T *a, integer *lda, T *tau, T *work, integer *info)
+void gerq2(integer *m, integer *n, T *a, integer *lda, T *tau, T *work, integer *info)
 {
-  return gerq2(m, n, a, lda, tau, work, info);
+  gerq2(m, n, a, lda, tau, work, info);
 }
 
 /*! @brief GESC2 solves a system of linear equations using the LU factorization with complete pivoting computed by getc2
@@ -37473,17 +36757,16 @@ integer gerq2(integer *m, integer *n, T *a, integer *lda, T *tau, T *work, integ
           On exit, SCALE contains the scale factor. SCALE is chosen
           0 <= SCALE <= 1 to prevent overflow in the solution. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gesc2(integer *n, T *a, integer *lda, T *rhs, integer *ipiv, integer *jpiv, T *scale)
+void gesc2(integer *n, T *a, integer *lda, T *rhs, integer *ipiv, integer *jpiv, T *scale)
 {
-  return gesc2(n, a, lda, rhs, ipiv, jpiv, scale);
+  gesc2(n, a, lda, rhs, ipiv, jpiv, scale);
 }
 template< typename T, typename Ta >
-integer gesc2(integer *n, T *a, integer *lda, T *rhs, integer *ipiv, integer *jpiv, Ta *scale)
+void gesc2(integer *n, T *a, integer *lda, T *rhs, integer *ipiv, integer *jpiv, Ta *scale)
 {
-  return gesc2(n, a, lda, rhs, ipiv, jpiv, scale);
+  gesc2(n, a, lda, rhs, ipiv, jpiv, scale);
 }
 
 /*! @brief GSVJ0 pre-processor for the routine gesvj
@@ -37586,17 +36869,16 @@ integer gesc2(integer *n, T *a, integer *lda, T *rhs, integer *ipiv, integer *jp
           = 0:  successful exit. \n
           < 0:  if INFO = -i, then the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gsvj0(char *jobv, integer *m, integer *n, T *a, integer *lda, T *d, T *sva, integer *mv, T *v, integer *ldv, T *eps, T *sfmin, T *tol, integer *nsweep, T *work, integer *lwork, integer *info)
+void gsvj0(char *jobv, integer *m, integer *n, T *a, integer *lda, T *d, T *sva, integer *mv, T *v, integer *ldv, T *eps, T *sfmin, T *tol, integer *nsweep, T *work, integer *lwork, integer *info)
 {
-  return gsvj0(jobv, m, n, a, lda, d, sva, mv, v, ldv, eps, sfmin, tol, nsweep, work, lwork, info);
+  gsvj0(jobv, m, n, a, lda, d, sva, mv, v, ldv, eps, sfmin, tol, nsweep, work, lwork, info);
 }
 template< typename T, typename Ta >
-integer gsvj0(char *jobv, integer *m, integer *n, T *a, integer *lda, T *d, Ta *sva, integer *mv, T *v, integer *ldv, Ta *eps, Ta *sfmin, Ta *tol, integer *nsweep, T *work, integer *lwork, integer *info)
+void gsvj0(char *jobv, integer *m, integer *n, T *a, integer *lda, T *d, Ta *sva, integer *mv, T *v, integer *ldv, Ta *eps, Ta *sfmin, Ta *tol, integer *nsweep, T *work, integer *lwork, integer *info)
 {
-  return gsvj0(jobv, m, n, a, lda, d, sva, mv, v, ldv, eps, sfmin, tol, nsweep, work, lwork, info);
+  gsvj0(jobv, m, n, a, lda, d, sva, mv, v, ldv, eps, sfmin, tol, nsweep, work, lwork, info);
 }
 
 /*! @brief GSVJ1 pre-processor for the routine gesvj, applies Jacobi rotations targeting only particular pivots
@@ -37726,17 +37008,16 @@ integer gsvj0(char *jobv, integer *m, integer *n, T *a, integer *lda, T *d, Ta *
           = 0:  successful exit. \n
           < 0:  if INFO = -i, then the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gsvj1(char *jobv, integer *m, integer *n, integer *n1, T *a, integer *lda, T *d, T *sva, integer *mv, T *v, integer *ldv, T *eps, T *sfmin, T *tol, integer *nsweep, T *work, integer *lwork, integer *info)
+void gsvj1(char *jobv, integer *m, integer *n, integer *n1, T *a, integer *lda, T *d, T *sva, integer *mv, T *v, integer *ldv, T *eps, T *sfmin, T *tol, integer *nsweep, T *work, integer *lwork, integer *info)
 {
-  return gsvj1(jobv, m, n, n1, a, lda, d, sva, mv, v, ldv, eps, sfmin, tol, nsweep, work, lwork, info);
+  gsvj1(jobv, m, n, n1, a, lda, d, sva, mv, v, ldv, eps, sfmin, tol, nsweep, work, lwork, info);
 }
 template< typename T, typename Ta >
-integer gsvj1(char *jobv, integer *m, integer *n, integer *n1, T *a, integer *lda, T *d, Ta *sva, integer *mv, T *v, integer *ldv, Ta *eps, Ta *sfmin, Ta *tol, integer *nsweep, T *work, integer *lwork, integer *info)
+void gsvj1(char *jobv, integer *m, integer *n, integer *n1, T *a, integer *lda, T *d, Ta *sva, integer *mv, T *v, integer *ldv, Ta *eps, Ta *sfmin, Ta *tol, integer *nsweep, T *work, integer *lwork, integer *info)
 {
-  return gsvj1(jobv, m, n, n1, a, lda, d, sva, mv, v, ldv, eps, sfmin, tol, nsweep, work, lwork, info);
+  gsvj1(jobv, m, n, n1, a, lda, d, sva, mv, v, ldv, eps, sfmin, tol, nsweep, work, lwork, info);
 }
 
 /*! @brief GTTS2 solves a system of linear equations with a tridiagonal matrix using the LU factorization computed by sgttrf
@@ -37791,12 +37072,11 @@ integer gsvj1(char *jobv, integer *m, integer *n, integer *n1, T *a, integer *ld
           LDB is INTEGER \n
           The leading dimension of the array B.  LDB >= fla_max(1,N). \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gtts2(integer *itrans, integer *n, integer *nrhs, T *dl, T *d, T *du, T *du2, integer *ipiv, T *b, integer * ldb)
+void gtts2(integer *itrans, integer *n, integer *nrhs, T *dl, T *d, T *du, T *du2, integer *ipiv, T *b, integer * ldb)
 {
-  return gtts2(itrans, n, nrhs, dl, d, du, du2, ipiv, b, ldb);
+  gtts2(itrans, n, nrhs, dl, d, du, du2, ipiv, b, ldb);
 }
 
 /*! @brief HB2ST_KERNELS is an internal routine used by the HETRD_HB2ST subroutine
@@ -37846,12 +37126,11 @@ integer gtts2(integer *itrans, integer *n, integer *nrhs, T *dl, T *d, T *du, T 
  * @param[out] WORK
           WORK is COMPLEX array. Workspace of size nb. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hb2st_kernels(char *uplo, logical *wantz, integer * ttype, integer *st, integer *ed, integer *sweep, integer *n, integer * nb, integer *ib, T *a, integer *lda, T *v, T *tau, integer *ldvt, T *work)
+void hb2st_kernels(char *uplo, logical *wantz, integer * ttype, integer *st, integer *ed, integer *sweep, integer *n, integer * nb, integer *ib, T *a, integer *lda, T *v, T *tau, integer *ldvt, T *work)
 {
-  return hb2st_kernels(uplo, wantz, ttype, st, ed, sweep, n, nb, ib, a, lda, v, tau, ldvt, work);
+  hb2st_kernels(uplo, wantz, ttype, st, ed, sweep, n, nb, ib, a, lda, v, tau, ldvt, work);
 }
 
 /*! @brief HECON_ROOK estimates the reciprocal of the condition number fort HE matrices \n
@@ -37903,12 +37182,11 @@ integer hb2st_kernels(char *uplo, logical *wantz, integer * ttype, integer *st, 
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
-integer hecon_rook(char *uplo, integer *n, T *a, integer *lda, integer *ipiv, Ta *anorm, Ta *rcond, T *work, integer *info)
+void hecon_rook(char *uplo, integer *n, T *a, integer *lda, integer *ipiv, Ta *anorm, Ta *rcond, T *work, integer *info)
 {
-  return hecon_rook(uplo, n, a, lda, ipiv, anorm, rcond, work, info); 
+  hecon_rook(uplo, n, a, lda, ipiv, anorm, rcond, work, info); 
 }
 
 /*! @brief HESV_ROOK computes the solution to a system of linear equations A * X = B \n
@@ -38022,12 +37300,11 @@ integer hecon_rook(char *uplo, integer *n, T *a, integer *lda, integer *ipiv, Ta
                has been completed, but the block diagonal matrix D is
                exactly singular, so the solution could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hesv_rook(char *uplo, integer *n, integer *nrhs, T *a, integer *lda, integer *ipiv, T *b, integer *ldb, T *work, integer *lwork, integer *info)
+void hesv_rook(char *uplo, integer *n, integer *nrhs, T *a, integer *lda, integer *ipiv, T *b, integer *ldb, T *work, integer *lwork, integer *info)
 {
-  return hesv_rook(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info);
+  hesv_rook(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info);
 }
 
 /*! @brief HETF2 computes the factorization of a complex Hermitian matrix, using the 
@@ -38100,12 +37377,11 @@ integer hesv_rook(char *uplo, integer *n, integer *nrhs, T *a, integer *lda, int
                exactly singular, and division by zero will occur if it
                is used to solve a system of equations. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hetf2(char *uplo, integer *n, T *a, integer *lda, integer *ipiv, integer *info)
+void hetf2(char *uplo, integer *n, T *a, integer *lda, integer *ipiv, integer *info)
 {
-  return hetf2(uplo, n, a, lda, ipiv, info); 
+  hetf2(uplo, n, a, lda, ipiv, info); 
 }
 
 /*! @brief HETF2_RK computes the factorization of a complex Hermitian indefinite matrix \n
@@ -38255,12 +37531,11 @@ integer hetf2(char *uplo, integer *n, T *a, integer *lda, integer *ipiv, integer
                is not stored in INFO even though the factorization
                always completes. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hetf2_rk(char *uplo, integer *n, T *a, integer *lda, T *e, integer *ipiv, integer *info)
+void hetf2_rk(char *uplo, integer *n, T *a, integer *lda, T *e, integer *ipiv, integer *info)
 {
-  return hetf2_rk(uplo, n, a, lda, e, ipiv, info); 
+  hetf2_rk(uplo, n, a, lda, e, ipiv, info); 
 }
 
 /*! @brief HETF2_ROOK computes the factorization of a complex Hermitian indefinite matrix \n
@@ -38334,12 +37609,11 @@ integer hetf2_rk(char *uplo, integer *n, T *a, integer *lda, T *e, integer *ipiv
                exactly singular, and division by zero will occur if it
                is used to solve a system of equations. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hetf2_rook(char *uplo, integer *n, T *a, integer *lda, integer *ipiv, integer *info)
+void hetf2_rook(char *uplo, integer *n, T *a, integer *lda, integer *ipiv, integer *info)
 {
-  return hetf2_rook(uplo, n, a, lda, ipiv, info); 
+  hetf2_rook(uplo, n, a, lda, ipiv, info); 
 }
 
 /*! @brief HETRD_2STAGE reduces a complex Hermitian matrix A to real symmetric \n
@@ -38439,12 +37713,11 @@ integer hetf2_rook(char *uplo, integer *n, T *a, integer *lda, integer *ipiv, in
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
-integer hetrd_2stage(char *vect, char *uplo, integer *n, T *a, integer *lda, Ta *d, Ta *e, T *tau, T *hous2, integer *lhous2, T *work, integer *lwork, integer *info)
+void hetrd_2stage(char *vect, char *uplo, integer *n, T *a, integer *lda, Ta *d, Ta *e, T *tau, T *hous2, integer *lhous2, T *work, integer *lwork, integer *info)
 {
-  return hetrd_2stage(vect, uplo, n, a, lda, d, e, tau, hous2, lhous2, work, lwork, info);   
+  hetrd_2stage(vect, uplo, n, a, lda, d, e, tau, hous2, lhous2, work, lwork, info);   
 }
 
 /*! @brief HBTRD_HB2ST reduces a complex Hermitian band matrix A to real symmetric tridiagonal form T
@@ -38546,12 +37819,11 @@ integer hetrd_2stage(char *vect, char *uplo, integer *n, T *a, integer *lda, Ta 
            = 0:  successful exit \n
            < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
-integer hetrd_hb2st(char *stage1, char *vect, char *uplo, integer *n, integer *kd, T *ab, integer *ldab, Ta *d, Ta * e, T *hous, integer *lhous, T *work, integer *lwork, integer *info)
+void hetrd_hb2st(char *stage1, char *vect, char *uplo, integer *n, integer *kd, T *ab, integer *ldab, Ta *d, Ta * e, T *hous, integer *lhous, T *work, integer *lwork, integer *info)
 {
-  return hetrd_hb2st(stage1, vect, uplo, n, kd, ab, ldab, d, e, hous, lhous, work, lwork, info);
+  hetrd_hb2st(stage1, vect, uplo, n, kd, ab, ldab, d, e, hous, lhous, work, lwork, info);
 }
 
 /*! @brief HETRD_HE2HB reduces a complex Hermitian matrix A to complex Hermitian band-diagonal form AB
@@ -38634,12 +37906,11 @@ integer hetrd_hb2st(char *stage1, char *vect, char *uplo, integer *n, integer *k
            = 0:  successful exit \n
            < 0:  if INFO = -i, the i-th argument had an illegal value  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hetrd_he2hb(char *uplo, integer *n, integer *kd, T *a, integer *lda, T *ab, integer *ldab, T *tau, T *work, integer *lwork, integer *info)
+void hetrd_he2hb(char *uplo, integer *n, integer *kd, T *a, integer *lda, T *ab, integer *ldab, T *tau, T *work, integer *lwork, integer *info)
 {
-  return hetrd_he2hb(uplo, n, kd, a, lda, ab, ldab, tau, work, lwork, info);
+  hetrd_he2hb(uplo, n, kd, a, lda, ab, ldab, tau, work, lwork, info);
 }
 
 /*! @brief HETRI_3X computes the inverse of a complex Hermitian indefinite matrix A
@@ -38718,12 +37989,11 @@ integer hetrd_he2hb(char *uplo, integer *n, integer *kd, T *a, integer *lda, T *
           > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its
                inverse could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hetri_3x(char *uplo, integer *n, T *a, integer * lda, T *e, integer *ipiv, T *work, integer *nb, integer * info)
+void hetri_3x(char *uplo, integer *n, T *a, integer * lda, T *e, integer *ipiv, T *work, integer *nb, integer * info)
 {
-  return hetri_3x(uplo, n, a, lda, e, ipiv, work, nb, info);
+  hetri_3x(uplo, n, a, lda, e, ipiv, work, nb, info);
 }
 
 /*! @brief HETRI_ROOK computes the inverse of HE matrix using the factorization \n
@@ -38773,12 +38043,11 @@ integer hetri_3x(char *uplo, integer *n, T *a, integer * lda, T *e, integer *ipi
           > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its
                inverse could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer hetri_rook(char *uplo, integer *n, T *a, integer * lda, integer *ipiv, T *work, integer * info)
+void hetri_rook(char *uplo, integer *n, T *a, integer * lda, integer *ipiv, T *work, integer * info)
 {
-  return hetri_rook(uplo, n, a, lda, ipiv, work, info);
+  hetri_rook(uplo, n, a, lda, ipiv, work, info);
 }
 
 /*! @brief CHLA_TRANSTYPE subroutine translates from a BLAST-specified integer constant \n
@@ -38798,7 +38067,7 @@ integer hetri_rook(char *uplo, integer *n, T *a, integer * lda, integer *ipiv, T
  * */
 void hla_transtype(char *ret_val, integer *trans)
 {
-  return chla_transtype_(ret_val, trans);
+  chla_transtype_(ret_val, trans);
 } 
 
 /*! @brief ISNAN tests input for NaN
@@ -38814,9 +38083,10 @@ void hla_transtype(char *ret_val, integer *trans)
  * @param[in] SIN
           SIN is REAL \n
           Input to test for NaN. \n
+ * @return LOGICAL Boolean. Return TRUE if argument is NAN.
  * */ 
 template< typename T >
-integer isnan(T *sin)
+logical isnan(T *sin)
 {
   return isnan(sin);
 }
@@ -38875,12 +38145,11 @@ integer isnan(T *sin)
                positive definite, and the factorization could not be
                completed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer pbtf2(char *uplo, integer *n, integer *kd, T *ab, integer *ldab, integer *info)
+void pbtf2(char *uplo, integer *n, integer *kd, T *ab, integer *ldab, integer *info)
 {
-  return pbtf2(uplo, n, kd, ab, ldab, info);
+  pbtf2(uplo, n, kd, ab, ldab, info);
 }
 
 /*! @brief PSTF2 computes the Cholesky factorization with complete pivoting \n
@@ -38949,17 +38218,16 @@ integer pbtf2(char *uplo, integer *n, integer *kd, T *ab, integer *ldab, integer
                Section 7 of LAPACK Working Note #161 for further
                information. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer pstf2(char *uplo, integer *n, T *a, integer *lda, integer *piv, integer *rank, T *tol, T *work, integer *info)
+void pstf2(char *uplo, integer *n, T *a, integer *lda, integer *piv, integer *rank, T *tol, T *work, integer *info)
 {
-  return pstf2(uplo, n, a, lda, piv, rank, tol, work, info);
+  pstf2(uplo, n, a, lda, piv, rank, tol, work, info);
 }
 template< typename T, typename Ta >
-integer pstf2(char *uplo, integer *n, T *a, integer *lda, integer *piv, integer *rank, Ta *tol, Ta *work, integer *info)
+void pstf2(char *uplo, integer *n, T *a, integer *lda, integer *piv, integer *rank, Ta *tol, Ta *work, integer *info)
 {
-  return pstf2(uplo, n, a, lda, piv, rank, tol, work, info);
+  pstf2(uplo, n, a, lda, piv, rank, tol, work, info);
 }
 
 /*! @brief PTTS2 solves a tridiagonal system of the form AX=B using \n
@@ -39001,17 +38269,16 @@ integer pstf2(char *uplo, integer *n, T *a, integer *lda, integer *piv, integer 
           LDB is INTEGER \n
           The leading dimension of the array B.  LDB >= fla_max(1,N). \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ptts2(integer *n, integer *nrhs, T *d, T *e, T *b, integer *ldb)
+void ptts2(integer *n, integer *nrhs, T *d, T *e, T *b, integer *ldb)
 {
-  return ptts2(n, nrhs, d, e, b, ldb);
+  ptts2(n, nrhs, d, e, b, ldb);
 }
 template< typename T, typename Ta >
-integer ptts2(integer* iuplo, integer *n, integer *nrhs, Ta *d, T *e, T *b, integer *ldb)
+void ptts2(integer* iuplo, integer *n, integer *nrhs, Ta *d, T *e, T *b, integer *ldb)
 {
-  return ptts2(iuplo, n, nrhs, d, e, b, ldb);
+  ptts2(iuplo, n, nrhs, d, e, b, ldb);
 }
 
 /*! @brief ROT applies a plane rotation with real cosine and complex sine to a pair of complex vectors
@@ -39049,12 +38316,11 @@ integer ptts2(integer* iuplo, integer *n, integer *nrhs, Ta *d, T *e, T *b, inte
              [ -conjg(S)   C  ] \n
           where C*C + S*CONJG(S) = 1.0. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
-integer rot(integer *n, T *cx, integer *incx, T * cy, integer *incy, Ta *c, T *s)
+void rot(integer *n, T *cx, integer *incx, T * cy, integer *incy, Ta *c, T *s)
 {
-  return rot(n, cx, incx, cy, incy, c, s);
+  rot(n, cx, incx, cy, incy, c, s);
 }
 
 /*! @brief RSCL multiplies a vector by the reciprocal of a real scalar
@@ -39083,17 +38349,16 @@ integer rot(integer *n, T *cx, integer *incx, T * cy, integer *incy, Ta *c, T *s
           The increment between successive values of the vector SX. \n
           > 0:  SX(1) = X(1) and SX(1+(i-1)*INCX) = x(i),    1< i<= n \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer rscl(integer *n, T *sa, T *sx, integer *incx)
+void rscl(integer *n, T *sa, T *sx, integer *incx)
 {
-  return rscl(n, sa, sx, incx);
+  rscl(n, sa, sx, incx);
 }
 template< typename T, typename Ta >
-integer rscl(integer *n, Ta *sa, T *sx, integer *incx)
+void rscl(integer *n, Ta *sa, T *sx, integer *incx)
 {
-  return rscl(n, sa, sx, incx);
+  rscl(n, sa, sx, incx);
 }
 
 /*! @brief SB2ST_KERNELS is an internal routine used by the SYTRD_SB2ST subroutine
@@ -39143,12 +38408,11 @@ integer rscl(integer *n, Ta *sa, T *sx, integer *incx)
  * @param[out] WORK
           WORK is REAL array. Workspace of size nb. \n
 
- * @return INTEGER Return value of the function.
- * */         
+ *  * */         
 template< typename T >
-integer sb2st_kernels(char *uplo, logical *wantz, integer * ttype, integer *st, integer *ed, integer *sweep, integer *n, integer * nb, integer *ib, T *a, integer *lda, T *v, T *tau, integer *ldvt, T *work)
+void sb2st_kernels(char *uplo, logical *wantz, integer * ttype, integer *st, integer *ed, integer *sweep, integer *n, integer * nb, integer *ib, T *a, integer *lda, T *v, T *tau, integer *ldvt, T *work)
 {
-  return sb2st_kernels(uplo, wantz, ttype, st, ed, sweep, n, nb, ib, a, lda, v, tau, ldvt, work);
+  sb2st_kernels(uplo, wantz, ttype, st, ed, sweep, n, nb, ib, a, lda, v, tau, ldvt, work);
 }
 
 /*! @brief SPMV computes a matrix-vector product for complex vectors using a complex symmetric packed matrix
@@ -39225,12 +38489,11 @@ integer sb2st_kernels(char *uplo, logical *wantz, integer * ttype, integer *st, 
           Y. INCY must not be zero. \n
           Unchanged on exit. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer spmv(char *uplo, integer *n, T *alpha, T *ap, T *x, integer *incx, T *beta, T *y, integer * incy)
+void spmv(char *uplo, integer *n, T *alpha, T *ap, T *x, integer *incx, T *beta, T *y, integer * incy)
 {
-  return spmv(uplo, n, alpha, ap, x, incx, beta, y, incy);
+  spmv(uplo, n, alpha, ap, x, incx, beta, y, incy);
 }
 
 /*! @brief SPR performs the symmetrical rank-1 update of a complex symmetric packed matrix
@@ -39297,12 +38560,11 @@ integer spmv(char *uplo, integer *n, T *alpha, T *ap, T *x, integer *incx, T *be
           not be set, they are assumed to be zero, and on exit they
           are set to zero. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer spr(char *uplo, integer *n, T *alpha, T *x, integer *incx, T *ap)
+void spr(char *uplo, integer *n, T *alpha, T *x, integer *incx, T *ap)
 {
-  return spr(uplo, n, alpha, x, incx, ap);
+  spr(uplo, n, alpha, x, incx, ap);
 }
 
 /*! @brief SYMV computes a matrix-vector product for a complex symmetric matrix
@@ -39382,12 +38644,11 @@ integer spr(char *uplo, integer *n, T *alpha, T *x, integer *incx, T *ap)
           Y. INCY must not be zero. \n
           Unchanged on exit.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer symv(char *uplo, integer *n, T *alpha, T * a, integer *lda, T *x, integer *incx, T *beta, T *y, integer *incy)
+void symv(char *uplo, integer *n, T *alpha, T * a, integer *lda, T *x, integer *incx, T *beta, T *y, integer *incy)
 {
-  return symv(uplo, n, alpha, a, lda, x, incx, beta, y, incy); 
+  symv(uplo, n, alpha, a, lda, x, incx, beta, y, incy); 
 }
 
 /*! @brief SYTRD_2STAGE reduces a real symmetric matrix A to real symmetric tridiagonal form T
@@ -39487,12 +38748,11 @@ integer symv(char *uplo, integer *n, T *alpha, T * a, integer *lda, T *x, intege
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytrd_2stage(char *vect, char *uplo, integer *n, T *a, integer *lda, T *d, T *e, T *tau, T *hous2, integer *lhous2, T *work, integer *lwork, integer *info)
+void sytrd_2stage(char *vect, char *uplo, integer *n, T *a, integer *lda, T *d, T *e, T *tau, T *hous2, integer *lhous2, T *work, integer *lwork, integer *info)
 {
-  return sytrd_2stage(vect, uplo, n, a, lda, d, e, tau, hous2, lhous2, work, lwork, info);   
+  sytrd_2stage(vect, uplo, n, a, lda, d, e, tau, hous2, lhous2, work, lwork, info);   
 }
 
 /*! @brief SYTRD_SB2ST reduces a real symmetric band matrix A to real symmetric tridiagonal form T
@@ -39594,12 +38854,11 @@ integer sytrd_2stage(char *vect, char *uplo, integer *n, T *a, integer *lda, T *
            = 0:  successful exit \n
            < 0:  if INFO = -i, the i-th argument had an illegal value  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytrd_sb2st(char *stage1, char *vect, char *uplo, integer *n, integer *kd, T *ab, integer *ldab, T *d, T * e, T *hous, integer *lhous, T *work, integer *lwork, integer *info)
+void sytrd_sb2st(char *stage1, char *vect, char *uplo, integer *n, integer *kd, T *ab, integer *ldab, T *d, T * e, T *hous, integer *lhous, T *work, integer *lwork, integer *info)
 {
-  return hetrd_hb2st(stage1, vect, uplo, n, kd, ab, ldab, d, e, hous, lhous, work, lwork, info);
+  hetrd_hb2st(stage1, vect, uplo, n, kd, ab, ldab, d, e, hous, lhous, work, lwork, info);
 }
 
 /*! @brief SYTRD_SY2SB reduces a real symmetric matrix A to real symmetric band-diagonal form AB
@@ -39682,12 +38941,11 @@ integer sytrd_sb2st(char *stage1, char *vect, char *uplo, integer *n, integer *k
            = 0:  successful exit \n
            < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytrd_sy2sb(char *uplo, integer *n, integer *kd, T *a, integer *lda, T *ab, integer *ldab, T *tau, T *work, integer *lwork, integer *info)
+void sytrd_sy2sb(char *uplo, integer *n, integer *kd, T *a, integer *lda, T *ab, integer *ldab, T *tau, T *work, integer *lwork, integer *info)
 {
-  return sytrd_sy2sb(uplo, n, kd, a, lda, ab, ldab, tau, work, lwork, info);
+  sytrd_sy2sb(uplo, n, kd, a, lda, ab, ldab, tau, work, lwork, info);
 }
 
 /*! @brief SYCON_ROOK estimates the reciprocal of the condition number of a real symmetric matrix A
@@ -39740,17 +38998,16 @@ integer sytrd_sy2sb(char *uplo, integer *n, integer *kd, T *a, integer *lda, T *
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sycon_rook(char *uplo, integer *n, T *a, integer * lda, integer *ipiv, T *anorm, T *rcond, T *work, integer * iwork, integer *info)
+void sycon_rook(char *uplo, integer *n, T *a, integer * lda, integer *ipiv, T *anorm, T *rcond, T *work, integer * iwork, integer *info)
 {
-  return sycon_rook(*uplo, *n, a, *lda, *ipiv, anorm, rcond, work, *iwork, *info);
+  sycon_rook(*uplo, *n, a, *lda, *ipiv, anorm, rcond, work, *iwork, *info);
 }
 template< typename T, typename Ta >
-integer sycon_rook(char *uplo, integer *n, T *a, integer * lda, integer *ipiv, Ta *anorm, Ta *rcond, T *work, integer * iwork, integer *info)
+void sycon_rook(char *uplo, integer *n, T *a, integer * lda, integer *ipiv, Ta *anorm, Ta *rcond, T *work, integer * iwork, integer *info)
 {
-  return sycon_rook(*uplo, *n, a, *lda, *ipiv, anorm, rcond, work, *iwork, *info);
+  sycon_rook(*uplo, *n, a, *lda, *ipiv, anorm, rcond, work, *iwork, *info);
 }
 
 /*! @brief SYCONVF converts the factorization output format
@@ -39879,12 +39136,11 @@ integer sycon_rook(char *uplo, integer *n, T *a, integer * lda, integer *ipiv, T
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer syconvf(char *uplo, char *way, integer *n, T *a, integer *lda, T *e, integer *ipiv, integer *info)
+void syconvf(char *uplo, char *way, integer *n, T *a, integer *lda, T *e, integer *ipiv, integer *info)
 {
-  return syconvf(uplo, way, n, a, lda, e, ipiv, info);
+  syconvf(uplo, way, n, a, lda, e, ipiv, info);
 }
 
 /*! @brief SYCONVF_ROOK converts the factorization output format
@@ -40004,12 +39260,11 @@ integer syconvf(char *uplo, char *way, integer *n, T *a, integer *lda, T *e, int
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer syconvf_rook(char *uplo, char *way, integer *n, T *a, integer *lda, T *e, integer *ipiv, integer *info)
+void syconvf_rook(char *uplo, char *way, integer *n, T *a, integer *lda, T *e, integer *ipiv, integer *info)
 {
-  return syconvf_rook(uplo, way, n, a, lda, e, ipiv, info);
+  syconvf_rook(uplo, way, n, a, lda, e, ipiv, info);
 }
 
 /*! @brief SYTF2 computes the factorization of a real symmetric indefinite matrix, using the diagonal pivoting method
@@ -40081,12 +39336,11 @@ integer syconvf_rook(char *uplo, char *way, integer *n, T *a, integer *lda, T *e
                exactly singular, and division by zero will occur if it
                is used to solve a system of equations. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytf2(char *uplo, integer *n, T *a, integer *lda, integer *ipiv, integer *info)
+void sytf2(char *uplo, integer *n, T *a, integer *lda, integer *ipiv, integer *info)
 {
-  return sytf2(uplo, n, a, lda, ipiv, info);
+  sytf2(uplo, n, a, lda, ipiv, info);
 }
 
 /*! @brief SYTF2_RK computes the factorization of a real symmetric indefinite \n
@@ -40236,12 +39490,11 @@ integer sytf2(char *uplo, integer *n, T *a, integer *lda, integer *ipiv, integer
                is not stored in INFO even though the factorization
                always completes. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytf2_rk(char *uplo, integer *n, T *a, integer * lda, T *e, integer *ipiv, integer *info)
+void sytf2_rk(char *uplo, integer *n, T *a, integer * lda, T *e, integer *ipiv, integer *info)
 {
-  return sytf2_rk(uplo, n, a, lda, e, ipiv, info);
+  sytf2_rk(uplo, n, a, lda, e, ipiv, info);
 }
 
 /*! @brief SYTF2_ROOK computes the factorization of a real symmetric indefinite \n
@@ -40315,12 +39568,11 @@ integer sytf2_rk(char *uplo, integer *n, T *a, integer * lda, T *e, integer *ipi
                exactly singular, and division by zero will occur if it
                is used to solve a system of equations. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytf2_rook(char *uplo, integer *n, T *a, integer * lda, integer *ipiv, integer *info)
+void sytf2_rook(char *uplo, integer *n, T *a, integer * lda, integer *ipiv, integer *info)
 {
-  return sytf2_rook(uplo, n, a, lda, ipiv, info);
+  sytf2_rook(uplo, n, a, lda, ipiv, info);
 }
 
 /*! @brief SYTRI_3X computes the inverse of a real symmetric indefinite matrix A
@@ -40399,12 +39651,11 @@ integer sytf2_rook(char *uplo, integer *n, T *a, integer * lda, integer *ipiv, i
           > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its
                inverse could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytri_3x(char *uplo, integer *n, T *a, integer * lda, T *e, integer *ipiv, T *work, integer *nb, integer *info)
+void sytri_3x(char *uplo, integer *n, T *a, integer * lda, T *e, integer *ipiv, T *work, integer *nb, integer *info)
 {
-  return sytri_3x(uplo, n, a, lda, e, ipiv, work, nb, info);
+  sytri_3x(uplo, n, a, lda, e, ipiv, work, nb, info);
 }
 
 /*! @brief SYTRI_ROOK computes the inverse of a real symmetric matrix A
@@ -40453,12 +39704,11 @@ integer sytri_3x(char *uplo, integer *n, T *a, integer * lda, T *e, integer *ipi
           > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its
                inverse could not be computed. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer sytri_rook(char *uplo, integer *n, T *a, integer * lda, integer *ipiv, T *work, integer *info)
+void sytri_rook(char *uplo, integer *n, T *a, integer * lda, integer *ipiv, T *work, integer *info)
 {
-  return sytri_rook(uplo, n, a, lda, ipiv, work, info);
+  sytri_rook(uplo, n, a, lda, ipiv, work, info);
 }
 
 /*! @brief TGEX2 swaps adjacent diagonal blocks in an upper (quasi) triangular matrix pair by an orthogonal equivalence transformation
@@ -40549,12 +39799,11 @@ integer sytri_rook(char *uplo, integer *n, T *a, integer * lda, integer *ipiv, T
             <0: If INFO = -16: LWORK is too small. Appropriate value
                 for LWORK is   returned in WORK(1).  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tgex2(logical *wantq, logical *wantz, integer *n, T *a, integer *lda, T *b, integer *ldb, T *q, integer *ldq, T * z, integer *ldz, integer *j1, integer *n1, integer *n2, T *work, integer *lwork, integer *info)
+void tgex2(logical *wantq, logical *wantz, integer *n, T *a, integer *lda, T *b, integer *ldb, T *q, integer *ldq, T * z, integer *ldz, integer *j1, integer *n1, integer *n2, T *work, integer *lwork, integer *info)
 {
-  return tgex2(wantq, wantz, n, a, lda, b, ldb, q, ldq, z, ldz, j1, n1, n2, work, lwork, info);
+  tgex2(wantq, wantz, n, a, lda, b, ldb, q, ldq, z, ldz, j1, n1, n2, work, lwork, info);
 }
 
 /*! @brief TGSY2 solves the generalized Sylvester equation (unblocked algorithm)
@@ -40705,17 +39954,16 @@ integer tgex2(logical *wantq, logical *wantz, integer *n, T *a, integer *lda, T 
             >0: The matrix pairs (A, D) and (B, E) have common or very
                 close eigenvalues. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tgsy2(char *trans, integer *ijob, integer *m, integer * n, T *a, integer *lda, T *b, integer *ldb, T *c, integer * ldc, T *d, integer *ldd, T *e, integer *lde, T *f, integer *ldf, T *scale, T *rdsum, T *rdscal, integer *iwork, integer *pq, integer *info)
+void tgsy2(char *trans, integer *ijob, integer *m, integer * n, T *a, integer *lda, T *b, integer *ldb, T *c, integer * ldc, T *d, integer *ldd, T *e, integer *lde, T *f, integer *ldf, T *scale, T *rdsum, T *rdscal, integer *iwork, integer *pq, integer *info)
 {
-  return tgsy2(trans, ijob, m, n, a, lda, b, ldb, c, ldc, d, ldd, e, lde, f, ldf, scale, rdsum, rdscal, iwork, pq, info);
+  tgsy2(trans, ijob, m, n, a, lda, b, ldb, c, ldc, d, ldd, e, lde, f, ldf, scale, rdsum, rdscal, iwork, pq, info);
 }
 template< typename T, typename Ta >
-integer tgsy2(char *trans, integer *ijob, integer *m, integer * n, T *a, integer *lda, T *b, integer *ldb, T *c, integer * ldc, T *d, integer *ldd, T *e, integer *lde, T *f, integer *ldf, Ta *scale, Ta *rdsum, Ta *rdscal, integer *info)
+void tgsy2(char *trans, integer *ijob, integer *m, integer * n, T *a, integer *lda, T *b, integer *ldb, T *c, integer * ldc, T *d, integer *ldd, T *e, integer *lde, T *f, integer *ldf, Ta *scale, Ta *rdsum, Ta *rdscal, integer *info)
 {
-  return tgsy2(trans, ijob, m, n, a, lda, b, ldb, c, ldc, d, ldd, e, lde, f, ldf, scale, rdsum, rdscal, info);
+  tgsy2(trans, ijob, m, n, a, lda, b, ldb, c, ldc, d, ldd, e, lde, f, ldf, scale, rdsum, rdscal, info);
 }
 
 /*! @brief TPLQT computes a blocked LQ factorization of a real "triangular-pentagonal" matrix C
@@ -40775,12 +40023,11 @@ integer tgsy2(char *trans, integer *ijob, integer *m, integer * n, T *a, integer
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tplqt(integer *m, integer *n, integer *l, integer *mb, T *a, integer *lda, T *b, integer *ldb, T *t, integer *ldt, T *work, integer *info)
+void tplqt(integer *m, integer *n, integer *l, integer *mb, T *a, integer *lda, T *b, integer *ldb, T *t, integer *ldt, T *work, integer *info)
 {
-  return tplqt(m, n, l, mb, a, lda, b, ldb, t, ldt, work, info);
+  tplqt(m, n, l, mb, a, lda, b, ldb, t, ldt, work, info);
 }
 
 /*! @brief TPLQT2 computes a LQ factorization of a real or complex "triangular-pentagonal" matrix
@@ -40834,12 +40081,11 @@ integer tplqt(integer *m, integer *n, integer *l, integer *mb, T *a, integer *ld
           = 0: successful exit \n
           < 0: if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tplqt2(integer *m, integer *n, integer *l, T *a, integer *lda, T *b, integer *ldb, T *t, integer *ldt, integer * info)
+void tplqt2(integer *m, integer *n, integer *l, T *a, integer *lda, T *b, integer *ldb, T *t, integer *ldt, integer * info)
 {
-  return tplqt2(m, n, l, a, lda, b, ldb, t, ldt, info);
+  tplqt2(m, n, l, a, lda, b, ldb, t, ldt, info);
 }
 
 /*! @brief TPMLQT applies a real orthogonal matrix Q obtained from a "triangular-pentagonal" real block reflector
@@ -40925,12 +40171,11 @@ integer tplqt2(integer *m, integer *n, integer *l, T *a, integer *lda, T *b, int
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer tpmlqt(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, integer *mb, T *v, integer *ldv, T *t, integer *ldt, T *a, integer *lda, T *b, integer *ldb, T * work, integer *info)
+void tpmlqt(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, integer *mb, T *v, integer *ldv, T *t, integer *ldt, T *a, integer *lda, T *b, integer *ldb, T * work, integer *info)
 {
-  return tpmlqt(side, trans, m, n, k, l, mb, v, ldv, t, ldt, a, lda, b, ldb, work, info);
+  tpmlqt(side, trans, m, n, k, l, mb, v, ldv, t, ldt, a, lda, b, ldb, work, info);
 }
 
 /*! @brief TREVC3 computes some or all of the right and/or left eigenvectors \n
@@ -41062,17 +40307,16 @@ integer tpmlqt(char *side, char *trans, integer *m, integer *n, integer *k, inte
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer trevc3(char *side, char *howmny, logical *select, integer *n, T *t, integer *ldt, T *vl, integer *ldvl, T *vr, integer *ldvr, integer *mm, integer *m, T *work, integer *lwork, integer *info)
+void trevc3(char *side, char *howmny, logical *select, integer *n, T *t, integer *ldt, T *vl, integer *ldvl, T *vr, integer *ldvr, integer *mm, integer *m, T *work, integer *lwork, integer *info)
 {
-  return trevc3(side, howmny, select, n, t, ldt, vl, ldvl, vr, ldvr, mm, m, work, lwork, info);
+  trevc3(side, howmny, select, n, t, ldt, vl, ldvl, vr, ldvr, mm, m, work, lwork, info);
 }
 template< typename T, typename Ta >
-integer trevc3(char *side, char *howmny, logical *select, integer *n, T *t, integer *ldt, T *vl, integer *ldvl, T *vr, integer *ldvr, integer *mm, integer *m, T *work, integer *lwork, Ta *rwork, integer *lrwork, integer *info)
+void trevc3(char *side, char *howmny, logical *select, integer *n, T *t, integer *ldt, T *vl, integer *ldvl, T *vr, integer *ldvr, integer *mm, integer *m, T *work, integer *lwork, Ta *rwork, integer *lrwork, integer *info)
 {
-  return trevc3(side, howmny, select, n, t, ldt, vl, ldvl, vr, ldvr, mm, m, work, lwork, rwork, lrwork, info);
+  trevc3(side, howmny, select, n, t, ldt, vl, ldvl, vr, ldvr, mm, m, work, lwork, rwork, lrwork, info);
 }
 
 /*! @brief ORBDB1 simultaneously bidiagonalizes the blocks of a tall and skinny \n
@@ -41161,17 +40405,16 @@ integer trevc3(char *side, char *howmny, logical *select, integer *n, T *t, inte
           = 0:  successful exit. \n
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer orbdb1(integer *m, integer *p, integer *q, T *x11, integer *ldx11, T *x21, integer *ldx21, T *theta, T *phi, T *taup1, T *taup2, T *tauq1, T *work, integer *lwork, integer *info)
+void orbdb1(integer *m, integer *p, integer *q, T *x11, integer *ldx11, T *x21, integer *ldx21, T *theta, T *phi, T *taup1, T *taup2, T *tauq1, T *work, integer *lwork, integer *info)
 {
-  return orbdb1(m, p, q, x11, ldx11, x21, ldx21, theta, phi, taup1, taup2, tauq1, work, lwork, info);
+  orbdb1(m, p, q, x11, ldx11, x21, ldx21, theta, phi, taup1, taup2, tauq1, work, lwork, info);
 }
 template< typename T, typename Ta >
-integer unbdb1(integer *m, integer *p, integer *q, T *x11, integer *ldx11, T *x21, integer *ldx21, Ta *theta, Ta *phi, T *taup1, T *taup2, T *tauq1, T *work, integer *lwork, integer *info)
+void unbdb1(integer *m, integer *p, integer *q, T *x11, integer *ldx11, T *x21, integer *ldx21, Ta *theta, Ta *phi, T *taup1, T *taup2, T *tauq1, T *work, integer *lwork, integer *info)
 {
-  return unbdb1(m, p, q, x11, ldx11, x21, ldx21, theta, phi, taup1, taup2, tauq1, work, lwork, info);
+  unbdb1(m, p, q, x11, ldx11, x21, ldx21, theta, phi, taup1, taup2, tauq1, work, lwork, info);
 }
 
 /*! @brief ORBDB2 simultaneously bidiagonalizes the blocks of a tall and skinny  \n
@@ -41259,17 +40502,16 @@ integer unbdb1(integer *m, integer *p, integer *q, T *x11, integer *ldx11, T *x2
           = 0:  successful exit. \n
           < 0:  if INFO = -i, the i-th argument had an illegal value.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer orbdb2(integer *m, integer *p, integer *q, T *x11, integer *ldx11, T *x21, integer *ldx21, T *theta, T *phi, T *taup1, T *taup2, T *tauq1, T *work, integer *lwork, integer *info)
+void orbdb2(integer *m, integer *p, integer *q, T *x11, integer *ldx11, T *x21, integer *ldx21, T *theta, T *phi, T *taup1, T *taup2, T *tauq1, T *work, integer *lwork, integer *info)
 {
-  return orbdb2(m, p, q, x11, ldx11, x21, ldx21, theta, phi, taup1, taup2, tauq1, work, lwork, info);
+  orbdb2(m, p, q, x11, ldx11, x21, ldx21, theta, phi, taup1, taup2, tauq1, work, lwork, info);
 }
 template< typename T, typename Ta >
-integer unbdb2(integer *m, integer *p, integer *q, T *x11, integer *ldx11, T *x21, integer *ldx21, Ta *theta, Ta *phi, T *taup1, T *taup2, T *tauq1, T *work, integer *lwork, integer *info)
+void unbdb2(integer *m, integer *p, integer *q, T *x11, integer *ldx11, T *x21, integer *ldx21, Ta *theta, Ta *phi, T *taup1, T *taup2, T *tauq1, T *work, integer *lwork, integer *info)
 {
-  return unbdb2(m, p, q, x11, ldx11, x21, ldx21, theta, phi, taup1, taup2, tauq1, work, lwork, info);
+  unbdb2(m, p, q, x11, ldx11, x21, ldx21, theta, phi, taup1, taup2, tauq1, work, lwork, info);
 }
 
 /*! @brief ORBDB3 simultaneously bidiagonalizes the blocks of a tall and skinny  \n
@@ -41357,17 +40599,16 @@ integer unbdb2(integer *m, integer *p, integer *q, T *x11, integer *ldx11, T *x2
           = 0:  successful exit. \n
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer orbdb3(integer *m, integer *p, integer *q, T *x11, integer *ldx11, T *x21, integer *ldx21, T *theta, T *phi, T *taup1, T *taup2, T *tauq1, T *work, integer *lwork, integer *info)
+void orbdb3(integer *m, integer *p, integer *q, T *x11, integer *ldx11, T *x21, integer *ldx21, T *theta, T *phi, T *taup1, T *taup2, T *tauq1, T *work, integer *lwork, integer *info)
 {
-  return orbdb3(m, p, q, x11, ldx11, x21, ldx21, theta, phi, taup1, taup2, tauq1, work, lwork, info);
+  orbdb3(m, p, q, x11, ldx11, x21, ldx21, theta, phi, taup1, taup2, tauq1, work, lwork, info);
 }
 template< typename T, typename Ta >
-integer unbdb3(integer *m, integer *p, integer *q, T *x11, integer *ldx11, T *x21, integer *ldx21, Ta *theta, Ta *phi, T *taup1, T *taup2, T *tauq1, T *work, integer *lwork, integer *info)
+void unbdb3(integer *m, integer *p, integer *q, T *x11, integer *ldx11, T *x21, integer *ldx21, Ta *theta, Ta *phi, T *taup1, T *taup2, T *tauq1, T *work, integer *lwork, integer *info)
 {
-  return unbdb3(m, p, q, x11, ldx11, x21, ldx21, theta, phi, taup1, taup2, tauq1, work, lwork, info);
+  unbdb3(m, p, q, x11, ldx11, x21, ldx21, theta, phi, taup1, taup2, tauq1, work, lwork, info);
 }
 
 /*! @brief ORBDB4 simultaneously bidiagonalizes the blocks of a tall and skinny \n
@@ -41462,17 +40703,16 @@ integer unbdb3(integer *m, integer *p, integer *q, T *x11, integer *ldx11, T *x2
           = 0:  successful exit. \n
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer orbdb4(integer *m, integer *p, integer *q, T *x11, integer *ldx11, T *x21, integer *ldx21, T *theta, T *phi, T *taup1, T *phantom, T *taup2, T *tauq1, T *work, integer *lwork, integer *info)
+void orbdb4(integer *m, integer *p, integer *q, T *x11, integer *ldx11, T *x21, integer *ldx21, T *theta, T *phi, T *taup1, T *phantom, T *taup2, T *tauq1, T *work, integer *lwork, integer *info)
 {
-  return orbdb4(m, p, q, x11, ldx11, x21, ldx21, theta, phi, taup1, taup2, tauq1, phantom, work, lwork, info);
+  orbdb4(m, p, q, x11, ldx11, x21, ldx21, theta, phi, taup1, taup2, tauq1, phantom, work, lwork, info);
 }
 template< typename T, typename Ta >
-integer unbdb4(integer *m, integer *p, integer *q, T *x11, integer *ldx11, T *x21, integer *ldx21, Ta *theta, Ta *phi, T *taup1, T *phantom, T *taup2, T *tauq1, T *work, integer *lwork, integer *info)
+void unbdb4(integer *m, integer *p, integer *q, T *x11, integer *ldx11, T *x21, integer *ldx21, Ta *theta, Ta *phi, T *taup1, T *phantom, T *taup2, T *tauq1, T *work, integer *lwork, integer *info)
 {
-  return unbdb4(m, p, q, x11, ldx11, x21, ldx21, theta, phi, taup1, taup2, tauq1, phantom, work, lwork, info);
+  unbdb4(m, p, q, x11, ldx11, x21, ldx21, theta, phi, taup1, taup2, tauq1, phantom, work, lwork, info);
 }
 
 /*! @brief ORBDB5 orthogonalizes the column vector
@@ -41540,17 +40780,16 @@ integer unbdb4(integer *m, integer *p, integer *q, T *x11, integer *ldx11, T *x2
           = 0:  successful exit. \n
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer orbdb5(integer *m1, integer *m2, integer *n, T *x1, integer *incx1, T *x2, integer *incx2, T *q1, integer *ldq1, T *q2, integer *ldq2, T *work, integer *lwork, integer *info)
+void orbdb5(integer *m1, integer *m2, integer *n, T *x1, integer *incx1, T *x2, integer *incx2, T *q1, integer *ldq1, T *q2, integer *ldq2, T *work, integer *lwork, integer *info)
 {
-  return orbdb5(m1, m2, n, x1, incx1, x2, incx2, q1, ldq1, q2, ldq2, work, lwork, info);
+  orbdb5(m1, m2, n, x1, incx1, x2, incx2, q1, ldq1, q2, ldq2, work, lwork, info);
 }
 template< typename T >
-integer unbdb5(integer *m1, integer *m2, integer *n, T *x1, integer *incx1, T *x2, integer *incx2, T *q1, integer *ldq1, T *q2, integer *ldq2, T *work, integer *lwork, integer *info)
+void unbdb5(integer *m1, integer *m2, integer *n, T *x1, integer *incx1, T *x2, integer *incx2, T *q1, integer *ldq1, T *q2, integer *ldq2, T *work, integer *lwork, integer *info)
 {
-  return unbdb5(m1, m2, n, x1, incx1, x2, incx2, q1, ldq1, q2, ldq2, work, lwork, info);
+  unbdb5(m1, m2, n, x1, incx1, x2, incx2, q1, ldq1, q2, ldq2, work, lwork, info);
 }
 
 /*! @brief ORBDB6 orthogonalizes the column vector
@@ -41616,17 +40855,16 @@ integer unbdb5(integer *m1, integer *m2, integer *n, T *x1, integer *incx1, T *x
           = 0:  successful exit. \n
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer orbdb6(integer *m1, integer *m2, integer *n, T *x1, integer *incx1, T *x2, integer *incx2, T *q1, integer *ldq1, T *q2, integer *ldq2, T *work, integer *lwork, integer *info)
+void orbdb6(integer *m1, integer *m2, integer *n, T *x1, integer *incx1, T *x2, integer *incx2, T *q1, integer *ldq1, T *q2, integer *ldq2, T *work, integer *lwork, integer *info)
 {
-  return orbdb6(m1, m2, n, x1, incx1, x2, incx2, q1, ldq1, q2, ldq2, work, lwork, info);
+  orbdb6(m1, m2, n, x1, incx1, x2, incx2, q1, ldq1, q2, ldq2, work, lwork, info);
 }
 template< typename T >
-integer unbdb6(integer *m1, integer *m2, integer *n, T *x1, integer *incx1, T *x2, integer *incx2, T *q1, integer *ldq1, T *q2, integer *ldq2, T *work, integer *lwork, integer *info)
+void unbdb6(integer *m1, integer *m2, integer *n, T *x1, integer *incx1, T *x2, integer *incx2, T *q1, integer *ldq1, T *q2, integer *ldq2, T *work, integer *lwork, integer *info)
 {
-  return unbdb6(m1, m2, n, x1, incx1, x2, incx2, q1, ldq1, q2, ldq2, work, lwork, info);
+  unbdb6(m1, m2, n, x1, incx1, x2, incx2, q1, ldq1, q2, ldq2, work, lwork, info);
 }
 
 /*! @brief ORG2L generates all or part of the orthogonal matrix Q from a QL factorization determined by sgeqlf.
@@ -41674,17 +40912,16 @@ integer unbdb6(integer *m1, integer *m2, integer *n, T *x1, integer *incx1, T *x
           = 0: successful exit \n
           < 0: if INFO = -i, the i-th argument has an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer org2l(integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *work, integer *info)
+void org2l(integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *work, integer *info)
 {
-  return org2l(m, n, k, a, lda, tau, work, info);
+  org2l(m, n, k, a, lda, tau, work, info);
 }
 template< typename T >
-integer ung2l(integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *work, integer *info)
+void ung2l(integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *work, integer *info)
 {
-  return ung2l(m, n, k, a, lda, tau, work, info);
+  ung2l(m, n, k, a, lda, tau, work, info);
 }
 
 /*! @brief ORG2R generates all or part of the orthogonal matrix Q from a QR factorization determined by sgeqrf.
@@ -41732,17 +40969,16 @@ integer ung2l(integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T 
           = 0: successful exit \n
           < 0: if INFO = -i, the i-th argument has an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer org2r(integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *work, integer *info)
+void org2r(integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *work, integer *info)
 {
-  return org2r(m, n, k, a, lda, tau, work, info);
+  org2r(m, n, k, a, lda, tau, work, info);
 }
 template< typename T >
-integer ung2r(integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *work, integer *info)
+void ung2r(integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *work, integer *info)
 {
-  return ung2r(m, n, k, a, lda, tau, work, info);
+  ung2r(m, n, k, a, lda, tau, work, info);
 }
 
 /*! @brief ORGL2 generates an m by n real matrix Q with orthonormal rows
@@ -41789,17 +41025,16 @@ integer ung2r(integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T 
           = 0: successful exit \n
           < 0: if INFO = -i, the i-th argument has an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer orgl2(integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *work, integer *info)
+void orgl2(integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *work, integer *info)
 {
-  return orgl2(m, n, k, a, lda, tau, work, info);
+  orgl2(m, n, k, a, lda, tau, work, info);
 }
 template< typename T >
-integer ungl2(integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *work, integer *info)
+void ungl2(integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *work, integer *info)
 {
-  return ungl2(m, n, k, a, lda, tau, work, info);
+  ungl2(m, n, k, a, lda, tau, work, info);
 }
 
 /*! @brief ORGR2 generates all or part of the orthogonal matrix Q from an RQ factorization determined by sgerqf
@@ -41847,17 +41082,16 @@ integer ungl2(integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T 
           = 0: successful exit \n
           < 0: if INFO = -i, the i-th argument has an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer orgr2(integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *work, integer *info)
+void orgr2(integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *work, integer *info)
 {
-  return orgr2(m, n, k, a, lda, tau, work, info);
+  orgr2(m, n, k, a, lda, tau, work, info);
 }
 template< typename T >
-integer ungr2(integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *work, integer *info)
+void ungr2(integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *work, integer *info)
 {
-  return ungr2(m, n, k, a, lda, tau, work, info);
+  ungr2(m, n, k, a, lda, tau, work, info);
 }
 
 /*! @brief ORGTSQR generates an M-by-N real matrix Q_out with orthonormal columns
@@ -41945,17 +41179,16 @@ integer ungr2(integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T 
            = 0:  successful exit \n
            < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer orgtsqr(integer *m, integer *n, integer *mb, integer * nb, T *a, integer *lda, T *t, integer *ldt, T *work, integer *lwork, integer *info)
+void orgtsqr(integer *m, integer *n, integer *mb, integer * nb, T *a, integer *lda, T *t, integer *ldt, T *work, integer *lwork, integer *info)
 {
-  return orgtsqr(m, n, mb, nb, a, lda, t, ldt, work, lwork, info);
+  orgtsqr(m, n, mb, nb, a, lda, t, ldt, work, lwork, info);
 }
 template< typename T >
-integer ungtsqr(integer *m, integer *n, integer *mb, integer * nb, T *a, integer *lda, T *t, integer *ldt, T *work, integer *lwork, integer *info)
+void ungtsqr(integer *m, integer *n, integer *mb, integer * nb, T *a, integer *lda, T *t, integer *ldt, T *work, integer *lwork, integer *info)
 {
-  return ungtsqr(m, n, mb, nb, a, lda, t, ldt, work, lwork, info);
+  ungtsqr(m, n, mb, nb, a, lda, t, ldt, work, lwork, info);
 }
 
 /*! @brief ORHR_COL takes an M-by-N real matrix Q_in with orthonormal columns \n
@@ -42045,17 +41278,16 @@ integer ungtsqr(integer *m, integer *n, integer *mb, integer * nb, T *a, integer
            = 0:  successful exit \n
            < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer orhr_col(integer *m, integer *n, integer *nb, T *a, integer *lda, T *t, integer *ldt, T *d, integer *info)
+void orhr_col(integer *m, integer *n, integer *nb, T *a, integer *lda, T *t, integer *ldt, T *d, integer *info)
 {
-  return orhr_col(m, n, nb, a, lda, t, ldt, d, info);
+  orhr_col(m, n, nb, a, lda, t, ldt, d, info);
 }
 template< typename T >
-integer unhr_col(integer *m, integer *n, integer *nb, T *a, integer *lda, T *t, integer *ldt, T *d, integer *info)
+void unhr_col(integer *m, integer *n, integer *nb, T *a, integer *lda, T *t, integer *ldt, T *d, integer *info)
 {
-  return unhr_col(m, n, nb, a, lda, t, ldt, d, info);
+  unhr_col(m, n, nb, a, lda, t, ldt, d, info);
 }
 
 /*! @brief ORM2L multiplies a general matrix by the orthogonal matrix from a QL factorization determined by sgeqlf
@@ -42133,17 +41365,16 @@ integer unhr_col(integer *m, integer *n, integer *nb, T *a, integer *lda, T *t, 
           = 0: successful exit \n
           < 0: if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer orm2l(char *side, char *trans, integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *c, integer *ldc, T *work, integer *info)
+void orm2l(char *side, char *trans, integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *c, integer *ldc, T *work, integer *info)
 {
-  return orm2l(side, trans, m, n, k, a, lda, tau, c, ldc, work, info);
+  orm2l(side, trans, m, n, k, a, lda, tau, c, ldc, work, info);
 }
 template< typename T >
-integer unm2l(char *side, char *trans, integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *c, integer *ldc, T *work, integer *info)
+void unm2l(char *side, char *trans, integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *c, integer *ldc, T *work, integer *info)
 {
-  return unm2l(side, trans, m, n, k, a, lda, tau, c, ldc, work, info);
+  unm2l(side, trans, m, n, k, a, lda, tau, c, ldc, work, info);
 }
 
 /*! @brief ORM22 multiplies a general matrix by a banded orthogonal matrix
@@ -42224,17 +41455,16 @@ integer unm2l(char *side, char *trans, integer *m, integer *n, integer *k, T *a,
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer orm22(char *side, char *trans, integer *m, integer *n, integer *n1, integer *n2, T *q, integer *ldq, T *c, integer * ldc, T *work, integer *lwork, integer *info)
+void orm22(char *side, char *trans, integer *m, integer *n, integer *n1, integer *n2, T *q, integer *ldq, T *c, integer * ldc, T *work, integer *lwork, integer *info)
 {
-  return orm22(side, trans, m, n, n1, n2, q, ldq, c, ldc, work, lwork, info);
+  orm22(side, trans, m, n, n1, n2, q, ldq, c, ldc, work, lwork, info);
 }
 template< typename T >
-integer unm22(char *side, char *trans, integer *m, integer *n, integer *n1, integer *n2, T *q, integer *ldq, T *c, integer * ldc, T *work, integer *lwork, integer *info)
+void unm22(char *side, char *trans, integer *m, integer *n, integer *n1, integer *n2, T *q, integer *ldq, T *c, integer * ldc, T *work, integer *lwork, integer *info)
 {
-  return unm22(side, trans, m, n, n1, n2, q, ldq, c, ldc, work, lwork, info);
+  unm22(side, trans, m, n, n1, n2, q, ldq, c, ldc, work, lwork, info);
 }
 
 /*! @brief ORMR2 multiplies a general matrix by the orthogonal matrix from a RQ factorization determined by sgerqf
@@ -42312,17 +41542,16 @@ integer unm22(char *side, char *trans, integer *m, integer *n, integer *n1, inte
           = 0: successful exit \n
           < 0: if INFO = -i, the i-th argument had an illegal value  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ormr2(char *side, char *trans, integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *c, integer *ldc, T *work, integer *info)
+void ormr2(char *side, char *trans, integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *c, integer *ldc, T *work, integer *info)
 {
-  return ormr2(side, trans, m, n, k, a, lda, tau, c, ldc, work, info);
+  ormr2(side, trans, m, n, k, a, lda, tau, c, ldc, work, info);
 }
 template< typename T >
-integer unmr2(char *side, char *trans, integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *c, integer *ldc, T *work, integer *info)
+void unmr2(char *side, char *trans, integer *m, integer *n, integer *k, T *a, integer *lda, T *tau, T *c, integer *ldc, T *work, integer *info)
 {
-  return unmr2(side, trans, m, n, k, a, lda, tau, c, ldc, work, info);
+  unmr2(side, trans, m, n, k, a, lda, tau, c, ldc, work, info);
 }
 
 /*! @brief ORMR3 multiplies a general matrix by the orthogonal matrix from a RZ factorization determined by stzrzf
@@ -42405,17 +41634,16 @@ integer unmr2(char *side, char *trans, integer *m, integer *n, integer *k, T *a,
           = 0: successful exit \n
           < 0: if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer ormr3(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, T *a, integer *lda, T *tau, T *c, integer *ldc, T *work, integer *info)
+void ormr3(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, T *a, integer *lda, T *tau, T *c, integer *ldc, T *work, integer *info)
 {
-  return ormr3(side, trans, m, n, k, l, a, lda, tau, c, ldc, work, info);
+  ormr3(side, trans, m, n, k, l, a, lda, tau, c, ldc, work, info);
 }
 template< typename T >
-integer unmr3(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, T *a, integer *lda, T *tau, T *c, integer *ldc, T *work, integer *info)
+void unmr3(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, T *a, integer *lda, T *tau, T *c, integer *ldc, T *work, integer *info)
 {
-  return unmr3(side, trans, m, n, k, l, a, lda, tau, c, ldc, work, info);
+  unmr3(side, trans, m, n, k, l, a, lda, tau, c, ldc, work, info);
 }
 
 /*! @brief LA_GBAMV performs a matrix-vector operation to calculate error bounds
@@ -42515,17 +41743,16 @@ integer unmr3(char *side, char *trans, integer *m, integer *n, integer *k, integ
           Y. INCY must not be zero. \n
           Unchanged on exit. \n
 
- * @return INTEGER Return value of the function.
  * */         
 template< typename T >
-integer la_gbamv(integer *trans, integer *m, integer *n, integer *kl, integer *ku, T *alpha, T *ab, integer *ldab, T * x, integer *incx, T *beta, T *y, integer *incy)
+void la_gbamv(integer *trans, integer *m, integer *n, integer *kl, integer *ku, T *alpha, T *ab, integer *ldab, T * x, integer *incx, T *beta, T *y, integer *incy)
 {
-  return la_gbamv(trans, m, n, kl, ku, alpha, ab, ldab, x, incx, beta, y, incy);
+  la_gbamv(trans, m, n, kl, ku, alpha, ab, ldab, x, incx, beta, y, incy);
 }
 template< typename T, typename Ta >
-integer la_gbamv(integer *trans, integer *m, integer *n, integer *kl, integer *ku, Ta *alpha, T *ab, integer *ldab, T *x, integer *incx, Ta *beta, Ta *y, integer *incy)
+void la_gbamv(integer *trans, integer *m, integer *n, integer *kl, integer *ku, Ta *alpha, T *ab, integer *ldab, T *x, integer *incx, Ta *beta, Ta *y, integer *incy)
 {
-  return la_gbamv(trans, m, n, kl, ku, alpha, ab, ldab, x, incx, beta, y, incy);
+  la_gbamv(trans, m, n, kl, ku, alpha, ab, ldab, x, incx, beta, y, incy);
 }
 
 /*! @brief LA_GBRCOND estimates the Skeel condition number for a general banded matrix
@@ -42604,8 +41831,7 @@ integer la_gbamv(integer *trans, integer *m, integer *n, integer *kl, integer *k
           IWORK is INTEGER array, dimension (N). \n
           Workspace. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
 T la_gbrcond(char *trans, integer *n, integer *kl, integer *ku, T * ab, integer *ldab, T *afb, integer *ldafb, integer *ipiv, integer * cmode, T *c, integer *info, T *work, integer *iwork)
 {
@@ -42678,8 +41904,7 @@ T la_gbrcond(char *trans, integer *n, integer *kl, integer *ku, T * ab, integer 
           RWORK is REAL array, dimension (N). \n
           Workspace. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
 Ta la_gbrcond_c(char *trans, integer *n, integer *kl, integer *ku, T *ab, integer *ldab, T *afb, integer *ldafb, integer *ipiv, Ta *c, logical *capply, integer *info, T *work, Ta * rwork)
 {
@@ -42749,8 +41974,7 @@ Ta la_gbrcond_c(char *trans, integer *n, integer *kl, integer *ku, T *ab, intege
           RWORK is REAL array, dimension (N). \n
           Workspace. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
 Ta la_gbrcond_x(char *trans, integer *n, integer *kl, integer *ku, T *ab, integer *ldab, T *afb, integer *ldafb, integer *ipiv, T *x, integer *info, T *work, Ta *rwork)
 {
@@ -43011,17 +42235,16 @@ Ta la_gbrcond_x(char *trans, integer *n, integer *kl, integer *ku, T *ab, intege
           < 0:  if INFO = -i, the ith argument to SGBTRS had an illegal
                 value  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer la_gbrfsx_extended(integer *prec_type, integer * trans_type, integer *n, integer *kl, integer *ku, integer *nrhs, T *ab, integer *ldab, T *afb, integer *ldafb, integer *ipiv, logical *colequ, T *c, T *b, integer *ldb, T *y, integer * ldy, T *berr_out, integer *n_norms, T *err_bnds_norm, T *err_bnds_comp, T *res, T *ayb, T *dy, T *y_tail, T *rcond, integer *ithresh, T *rthresh, T *dz_ub, logical *ignore_cwise, integer *info)
+void la_gbrfsx_extended(integer *prec_type, integer * trans_type, integer *n, integer *kl, integer *ku, integer *nrhs, T *ab, integer *ldab, T *afb, integer *ldafb, integer *ipiv, logical *colequ, T *c, T *b, integer *ldb, T *y, integer * ldy, T *berr_out, integer *n_norms, T *err_bnds_norm, T *err_bnds_comp, T *res, T *ayb, T *dy, T *y_tail, T *rcond, integer *ithresh, T *rthresh, T *dz_ub, logical *ignore_cwise, integer *info)
 {
-  return la_gbrfsx_extended(prec_type, trans_type, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, colequ, c, b, ldb, y, ldy, berr_out, n_norms, err_bnds_norm, err_bnds_comp, res, ayb, dy, y_tail, rcond, ithresh, rthresh, dz_ub, ignore_cwise, info);
+  la_gbrfsx_extended(prec_type, trans_type, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, colequ, c, b, ldb, y, ldy, berr_out, n_norms, err_bnds_norm, err_bnds_comp, res, ayb, dy, y_tail, rcond, ithresh, rthresh, dz_ub, ignore_cwise, info);
 }
 template< typename T, typename Ta >
-integer la_gbrfsx_extended(integer *prec_type, integer * trans_type, integer *n, integer *kl, integer *ku, integer *nrhs, T *ab, integer *ldab, T *afb, integer *ldafb, integer * ipiv, logical *colequ, Ta *c, T *b, integer *ldb, T * y, integer *ldy, Ta *berr_out, integer *n_norms, Ta * err_bnds_norm, Ta *err_bnds_comp, T *res, Ta *ayb, T *dy, T *y_tail, Ta *rcond, integer *ithresh, Ta * rthresh, Ta *dz_ub, logical *ignore_cwise, integer *info)
+void la_gbrfsx_extended(integer *prec_type, integer * trans_type, integer *n, integer *kl, integer *ku, integer *nrhs, T *ab, integer *ldab, T *afb, integer *ldafb, integer * ipiv, logical *colequ, Ta *c, T *b, integer *ldb, T * y, integer *ldy, Ta *berr_out, integer *n_norms, Ta * err_bnds_norm, Ta *err_bnds_comp, T *res, Ta *ayb, T *dy, T *y_tail, Ta *rcond, integer *ithresh, Ta * rthresh, Ta *dz_ub, logical *ignore_cwise, integer *info)
 {
-  return la_gbrfsx_extended(prec_type, trans_type, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, colequ, c, b, ldb, y, ldy, berr_out, n_norms, err_bnds_norm, err_bnds_comp, res, ayb, dy, y_tail, rcond, ithresh, rthresh, dz_ub, ignore_cwise, info);
+  la_gbrfsx_extended(prec_type, trans_type, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, colequ, c, b, ldb, y, ldy, berr_out, n_norms, err_bnds_norm, err_bnds_comp, res, ayb, dy, y_tail, rcond, ithresh, rthresh, dz_ub, ignore_cwise, info);
 }
 
 /*! @brief LA_GERFSX_EXTENDED improves the computed solution to a system of      \n
@@ -43272,17 +42495,16 @@ integer la_gbrfsx_extended(integer *prec_type, integer * trans_type, integer *n,
           < 0:  if INFO = -i, the ith argument to SGETRS had an illegal
                 value \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer la_gerfsx_extended(integer *prec_type, integer * trans_type, integer *n, integer *nrhs, T *a, integer *lda, T * af, integer *ldaf, integer *ipiv, logical *colequ, T *c, T *b, integer *ldb, T *y, integer *ldy, T *berr_out, integer * n_norms, T *errs_n, T *errs_c, T *res, T *ayb, T *dy, T *y_tail, T *rcond, integer *ithresh, T *rthresh, T *dz_ub, logical *ignore_cwise, integer *info)
+void la_gerfsx_extended(integer *prec_type, integer * trans_type, integer *n, integer *nrhs, T *a, integer *lda, T * af, integer *ldaf, integer *ipiv, logical *colequ, T *c, T *b, integer *ldb, T *y, integer *ldy, T *berr_out, integer * n_norms, T *errs_n, T *errs_c, T *res, T *ayb, T *dy, T *y_tail, T *rcond, integer *ithresh, T *rthresh, T *dz_ub, logical *ignore_cwise, integer *info)
 {
-  return la_gerfsx_extended(prec_type, trans_type, n, nrhs, a, lda, af, ldaf, ipiv, colequ, c, b, ldb, y, ldy, berr_out, n_norms, errs_n, errs_c, res, ayb, dy, y_tail, rcond, ithresh, rthresh, dz_ub, ignore_cwise, info);
+  la_gerfsx_extended(prec_type, trans_type, n, nrhs, a, lda, af, ldaf, ipiv, colequ, c, b, ldb, y, ldy, berr_out, n_norms, errs_n, errs_c, res, ayb, dy, y_tail, rcond, ithresh, rthresh, dz_ub, ignore_cwise, info);
 }
 template< typename T, typename Ta >
-integer la_gerfsx_extended(integer *prec_type, integer * trans_type, integer *n, integer *nrhs, T *a, integer *lda, T *af, integer *ldaf, integer *ipiv, logical *colequ, Ta *c, T *b, integer *ldb, T *y, integer *ldy, Ta *berr_out, integer *n_norms, Ta *errs_n, Ta *errs_c, T *res, Ta *ayb, T *dy, T *y_tail, Ta *rcond, integer * ithresh, Ta *rthresh, Ta *dz_ub, logical *ignore_cwise, integer *info)
+void la_gerfsx_extended(integer *prec_type, integer * trans_type, integer *n, integer *nrhs, T *a, integer *lda, T *af, integer *ldaf, integer *ipiv, logical *colequ, Ta *c, T *b, integer *ldb, T *y, integer *ldy, Ta *berr_out, integer *n_norms, Ta *errs_n, Ta *errs_c, T *res, Ta *ayb, T *dy, T *y_tail, Ta *rcond, integer * ithresh, Ta *rthresh, Ta *dz_ub, logical *ignore_cwise, integer *info)
 {
-  return la_gerfsx_extended(prec_type, trans_type, n, nrhs, a, lda, af, ldaf, ipiv, colequ, c, b, ldb, y, ldy, berr_out, n_norms, errs_n, errs_c, res, ayb, dy, y_tail, rcond, ithresh, rthresh, dz_ub, ignore_cwise, info);
+  la_gerfsx_extended(prec_type, trans_type, n, nrhs, a, lda, af, ldaf, ipiv, colequ, c, b, ldb, y, ldy, berr_out, n_norms, errs_n, errs_c, res, ayb, dy, y_tail, rcond, ithresh, rthresh, dz_ub, ignore_cwise, info);
 }
 
 /*! @brief LA_PORFSX_EXTENDED improves the computed solution to a system of \n
@@ -43525,17 +42747,16 @@ integer la_gerfsx_extended(integer *prec_type, integer * trans_type, integer *n,
           < 0:  if INFO = -i, the ith argument to SPOTRS had an illegal
                 value  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer la_porfsx_extended(integer *prec_type, char *uplo, integer *n, integer *nrhs, T *a, integer *lda, T *af, integer * ldaf, logical *colequ, T *c, T *b, integer *ldb, T *y, integer *ldy, T *berr_out, integer *n_norms, T * err_bnds_norm, T *err_bnds_comp, T *res, T *ayb, T * dy, T *y_tail, T *rcond, integer *ithresh, T *rthresh, T *dz_ub, logical *ignore_cwise, integer *info)
+void la_porfsx_extended(integer *prec_type, char *uplo, integer *n, integer *nrhs, T *a, integer *lda, T *af, integer * ldaf, logical *colequ, T *c, T *b, integer *ldb, T *y, integer *ldy, T *berr_out, integer *n_norms, T * err_bnds_norm, T *err_bnds_comp, T *res, T *ayb, T * dy, T *y_tail, T *rcond, integer *ithresh, T *rthresh, T *dz_ub, logical *ignore_cwise, integer *info)
 {
-  return la_porfsx_extended(prec_type, uplo, n, nrhs, a, lda, af, ldaf, colequ, c, b, ldb, y, ldy, berr_out, n_norms, err_bnds_norm, err_bnds_comp, res, ayb, dy, y_tail, rcond, ithresh, rthresh, dz_ub, ignore_cwise, info);
+  la_porfsx_extended(prec_type, uplo, n, nrhs, a, lda, af, ldaf, colequ, c, b, ldb, y, ldy, berr_out, n_norms, err_bnds_norm, err_bnds_comp, res, ayb, dy, y_tail, rcond, ithresh, rthresh, dz_ub, ignore_cwise, info);
 }
 template< typename T, typename Ta >
-integer la_porfsx_extended(integer *prec_type, char *uplo, integer *n, integer *nrhs, T *a, integer *lda, T *af, integer *ldaf, logical *colequ, Ta *c, T *b, integer *ldb, T *y, integer *ldy, Ta *berr_out, integer *n_norms, Ta * err_bnds_norm, Ta *err_bnds_comp, T *res, Ta *ayb, T *dy, T *y_tail, Ta *rcond, integer *ithresh, Ta * rthresh, Ta *dz_ub, logical *ignore_cwise, integer *info)
+void la_porfsx_extended(integer *prec_type, char *uplo, integer *n, integer *nrhs, T *a, integer *lda, T *af, integer *ldaf, logical *colequ, Ta *c, T *b, integer *ldb, T *y, integer *ldy, Ta *berr_out, integer *n_norms, Ta * err_bnds_norm, Ta *err_bnds_comp, T *res, Ta *ayb, T *dy, T *y_tail, Ta *rcond, integer *ithresh, Ta * rthresh, Ta *dz_ub, logical *ignore_cwise, integer *info)
 {
-  return la_porfsx_extended(prec_type, uplo, n, nrhs, a, lda, af, ldaf, colequ, c, b, ldb, y, ldy, berr_out, n_norms, err_bnds_norm, err_bnds_comp, res, ayb, dy, y_tail, rcond, ithresh, rthresh, dz_ub, ignore_cwise, info);
+  la_porfsx_extended(prec_type, uplo, n, nrhs, a, lda, af, ldaf, colequ, c, b, ldb, y, ldy, berr_out, n_norms, err_bnds_norm, err_bnds_comp, res, ayb, dy, y_tail, rcond, ithresh, rthresh, dz_ub, ignore_cwise, info);
 }
 
 /*! @brief LA_SYRFSX_EXTENDED improves the computed solution to a system \n
@@ -43782,17 +43003,16 @@ integer la_porfsx_extended(integer *prec_type, char *uplo, integer *n, integer *
           < 0:  if INFO = -i, the ith argument to SLA_SYRFSX_EXTENDED had an illegal
                 value \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer la_syrfsx_extended(integer *prec_type, char *uplo, integer *n, integer *nrhs, T *a, integer *lda, T *af, integer * ldaf, integer *ipiv, logical *colequ, T *c, T *b, integer * ldb, T *y, integer *ldy, T *berr_out, integer *n_norms, T *err_bnds_norm, T *err_bnds_comp, T *res, T *ayb, T *dy, T *y_tail, T *rcond, integer *ithresh, T * rthresh, T *dz_ub, logical *ignore_cwise, integer *info)
+void la_syrfsx_extended(integer *prec_type, char *uplo, integer *n, integer *nrhs, T *a, integer *lda, T *af, integer * ldaf, integer *ipiv, logical *colequ, T *c, T *b, integer * ldb, T *y, integer *ldy, T *berr_out, integer *n_norms, T *err_bnds_norm, T *err_bnds_comp, T *res, T *ayb, T *dy, T *y_tail, T *rcond, integer *ithresh, T * rthresh, T *dz_ub, logical *ignore_cwise, integer *info)
 {
-  return la_syrfsx_extended(prec_type, uplo, n, nrhs, a, lda, af, ldaf, ipiv, colequ, c, b, ldb, y, ldy, berr_out, n_norms, err_bnds_norm, err_bnds_comp, res, ayb, dy, y_tail, rcond, ithresh, rthresh, dz_ub, ignore_cwise, info);
+  la_syrfsx_extended(prec_type, uplo, n, nrhs, a, lda, af, ldaf, ipiv, colequ, c, b, ldb, y, ldy, berr_out, n_norms, err_bnds_norm, err_bnds_comp, res, ayb, dy, y_tail, rcond, ithresh, rthresh, dz_ub, ignore_cwise, info);
 }
 template< typename T, typename Ta >
-integer la_syrfsx_extended(integer *prec_type, char *uplo, integer *n, integer *nrhs, T *a, integer *lda, T *af, integer *ldaf, integer *ipiv, logical *colequ, Ta *c, T *b, integer *ldb, T *y, integer *ldy, Ta *berr_out, integer * n_norms, Ta *err_bnds_norm, Ta *err_bnds_comp, T *res, Ta *ayb, T *dy, T *y_tail, Ta *rcond, integer * ithresh, Ta *rthresh, Ta *dz_ub, logical *ignore_cwise, integer *info)
+void la_syrfsx_extended(integer *prec_type, char *uplo, integer *n, integer *nrhs, T *a, integer *lda, T *af, integer *ldaf, integer *ipiv, logical *colequ, Ta *c, T *b, integer *ldb, T *y, integer *ldy, Ta *berr_out, integer * n_norms, Ta *err_bnds_norm, Ta *err_bnds_comp, T *res, Ta *ayb, T *dy, T *y_tail, Ta *rcond, integer * ithresh, Ta *rthresh, Ta *dz_ub, logical *ignore_cwise, integer *info)
 {
-  return la_syrfsx_extended(prec_type, uplo, n, nrhs, a, lda, af, ldaf, ipiv, colequ, c, b, ldb, y, ldy, berr_out, n_norms, err_bnds_norm, err_bnds_comp, res, ayb, dy, y_tail, rcond, ithresh, rthresh, dz_ub, ignore_cwise, info);
+  la_syrfsx_extended(prec_type, uplo, n, nrhs, a, lda, af, ldaf, ipiv, colequ, c, b, ldb, y, ldy, berr_out, n_norms, err_bnds_norm, err_bnds_comp, res, ayb, dy, y_tail, rcond, ithresh, rthresh, dz_ub, ignore_cwise, info);
 }
 
 /*! @brief LA_HERFSX_EXTENDED improves the computed solution to a system \n
@@ -44039,12 +43259,11 @@ integer la_syrfsx_extended(integer *prec_type, char *uplo, integer *n, integer *
           < 0:  if INFO = -i, the ith argument to CLA_HERFSX_EXTENDED had an illegal
                 value \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T, typename Ta >
-integer la_herfsx_extended(integer *prec_type, char *uplo, integer *n, integer *nrhs, T *a, integer *lda, T *af, integer *ldaf, integer *ipiv, logical *colequ, Ta *c, T *b, integer *ldb, T *y, integer *ldy, Ta *berr_out, integer * n_norms, Ta *err_bnds_norm, Ta *err_bnds_comp, T *res, Ta *ayb, T *dy, T *y_tail, Ta *rcond, integer * ithresh, Ta *rthresh, Ta *dz_ub, logical *ignore_cwise, integer *info)
+void la_herfsx_extended(integer *prec_type, char *uplo, integer *n, integer *nrhs, T *a, integer *lda, T *af, integer *ldaf, integer *ipiv, logical *colequ, Ta *c, T *b, integer *ldb, T *y, integer *ldy, Ta *berr_out, integer * n_norms, Ta *err_bnds_norm, Ta *err_bnds_comp, T *res, Ta *ayb, T *dy, T *y_tail, Ta *rcond, integer * ithresh, Ta *rthresh, Ta *dz_ub, logical *ignore_cwise, integer *info)
 {
-  return la_herfsx_extended(prec_type, uplo, n, nrhs, a, lda, af, ldaf, ipiv, colequ, c, b, ldb, y, ldy, berr_out, n_norms, err_bnds_norm, err_bnds_comp, res, ayb, dy, y_tail, rcond, ithresh, rthresh, dz_ub, ignore_cwise, info);
+  la_herfsx_extended(prec_type, uplo, n, nrhs, a, lda, af, ldaf, ipiv, colequ, c, b, ldb, y, ldy, berr_out, n_norms, err_bnds_norm, err_bnds_comp, res, ayb, dy, y_tail, rcond, ithresh, rthresh, dz_ub, ignore_cwise, info);
 }
 
 /*! @brief LA_GBRPVGRW computes the reciprocal pivot growth factor norm(A)/norm(U) for a general banded matrix.
@@ -44093,8 +43312,7 @@ integer la_herfsx_extended(integer *prec_type, char *uplo, integer *n, integer *
           LDAFB is INTEGER \n
           The leading dimension of the array AFB.  LDAFB >= 2*KL+KU+1. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
 T la_gbrpvgrw(integer *n, integer *kl, integer *ku, integer *ncols, T *ab, integer *ldab, T *afb, integer *ldafb)
 {
@@ -44199,17 +43417,16 @@ Ta la_gbrpvgrw(integer *n, integer *kl, integer *ku, integer *ncols, T *ab, inte
           Y. INCY must not be zero. \n
           Unchanged on exit. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer la_geamv(integer *trans, integer *m, integer *n, T *alpha, T *a, integer *lda, T *x, integer *incx, T * beta, T *y, integer *incy)
+void la_geamv(integer *trans, integer *m, integer *n, T *alpha, T *a, integer *lda, T *x, integer *incx, T * beta, T *y, integer *incy)
 {
-  return la_geamv(trans, m, n, alpha, a, lda, x, incx, beta, y, incy);
+  la_geamv(trans, m, n, alpha, a, lda, x, incx, beta, y, incy);
 }
 template< typename T, typename Ta >
-integer la_geamv(integer *trans, integer *m, integer *n, Ta *alpha, T *a, integer *lda, T *x, integer *incx, Ta * beta, Ta *y, integer *incy)
+void la_geamv(integer *trans, integer *m, integer *n, Ta *alpha, T *a, integer *lda, T *x, integer *incx, Ta * beta, Ta *y, integer *incy)
 {
-  return la_geamv(trans, m, n, alpha, a, lda, x, incx, beta, y, incy);
+  la_geamv(trans, m, n, alpha, a, lda, x, incx, beta, y, incy);
 }
 
 /*! @brief LA_GERCOND estimates the Skeel condition number for a general matrix
@@ -44276,8 +43493,7 @@ integer la_geamv(integer *trans, integer *m, integer *n, Ta *alpha, T *a, intege
           IWORK is INTEGER array, dimension (N). \n
           Workspace.2 \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
 T la_gercond(char *trans, integer *n, T *a, integer *lda, T *af, integer *ldaf, integer *ipiv, integer *cmode, T *c, integer * info, T *work, integer *iwork)
 {
@@ -44328,8 +43544,7 @@ Ta la_gercond_c(char *trans, integer *n, T *a, integer *lda, T *af, integer *lda
           LDAF is INTEGER \n
           The leading dimension of the array AF.  LDAF >= fla_max(1,N). \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
 T la_gerpvgrw(integer *n, integer *ncols, T *a, integer *lda, T * af, integer *ldaf)
 {
@@ -44419,12 +43634,11 @@ T la_gerpvgrw(integer *n, integer *ncols, T *a, integer *lda, T * af, integer *l
           Y. INCY must not be zero. \n
           Unchanged on exit. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T, typename Ta >
-integer la_heamv(integer *uplo, integer *n, Ta *alpha, T *a, integer *lda, T *x, integer *incx, Ta *beta, Ta *y, integer *incy)
+void la_heamv(integer *uplo, integer *n, Ta *alpha, T *a, integer *lda, T *x, integer *incx, Ta *beta, Ta *y, integer *incy)
 {
-  return la_heamv(uplo, n, alpha, a, lda, x, incx, beta, y, incy);
+  la_heamv(uplo, n, alpha, a, lda, x, incx, beta, y, incy);
 }
 
 /*! @brief LA_HERCOND_C computes the infinity norm condition number of op(A)*inv(diag(c)) for Hermitian indefinite matrices
@@ -44478,8 +43692,7 @@ integer la_heamv(integer *uplo, integer *n, Ta *alpha, T *a, integer *lda, T *x,
           RWORK is REAL array, dimension (N). \n
           Workspace. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
 Ta la_hercond_c(char *uplo, integer *n, T *a, integer *lda, T *af, integer *ldaf, integer *ipiv, Ta *c, logical *capply, integer *info, T *work, Ta *rwork)
 {
@@ -44534,8 +43747,7 @@ Ta la_hercond_c(char *uplo, integer *n, T *a, integer *lda, T *af, integer *ldaf
           RWORK is REAL array, dimension (N). \n
           Workspace.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
 Ta la_hercond_x(char *uplo, integer *n, T *a, integer *lda, T *af, integer *ldaf, integer *ipiv, T *x, integer *info, T *work, Ta *rwork)
 {
@@ -44587,8 +43799,7 @@ Ta la_hercond_x(char *uplo, integer *n, T *a, integer *lda, T *af, integer *ldaf
  * @param[out] WORK
           WORK is REAL array, dimension (2*N) \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
 Ta la_herpvgrw(char *uplo, integer *n, integer *info, T *a, integer *lda, T *af, integer *ldaf, integer *ipiv, Ta *work)
 {
@@ -44632,17 +43843,16 @@ Ta la_herpvgrw(char *uplo, integer *n, integer *info, T *a, integer *lda, T *af,
           BERR is REAL array, dimension (NRHS) \n
           The componentwise relative backward error from the formula above. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer la_lin_berr(integer *n, integer *nz, integer *nrhs, T *res, T *ayb, T *berr)
+void la_lin_berr(integer *n, integer *nz, integer *nrhs, T *res, T *ayb, T *berr)
 {
-  return la_lin_berr(n, nz, nrhs, res, ayb, berr);
+  la_lin_berr(n, nz, nrhs, res, ayb, berr);
 }
 template< typename T, typename Ta >
-integer la_lin_berr(integer *n, integer *nz, integer *nrhs, T *res, Ta *ayb, Ta *berr)
+void la_lin_berr(integer *n, integer *nz, integer *nrhs, T *res, Ta *ayb, Ta *berr)
 {
-  return la_lin_berr(n, nz, nrhs, res, ayb, berr);
+  la_lin_berr(n, nz, nrhs, res, ayb, berr);
 }
 
 /*! @brief LA_PORCOND estimates the Skeel condition number for a symmetric positive-definite matrix
@@ -44702,8 +43912,7 @@ integer la_lin_berr(integer *n, integer *nz, integer *nrhs, T *res, Ta *ayb, Ta 
           IWORK is INTEGER array, dimension (N). \n
           Workspace. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
 T la_porcond(char *uplo, integer *n, T *a, integer *lda, T *af, integer *ldaf, integer *cmode, T *c, integer *info, T *work, integer *iwork)
 {
@@ -44754,8 +43963,7 @@ T la_porcond(char *uplo, integer *n, T *a, integer *lda, T *af, integer *ldaf, i
           RWORK is REAL array, dimension (N). \n
           Workspace. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
 Ta la_porcond_x(char *uplo, integer *n, T *a, integer *lda, T *af, integer *ldaf, T *x, integer *info, T *work, Ta *rwork)
 {
@@ -44809,8 +44017,7 @@ Ta la_porcond_x(char *uplo, integer *n, T *a, integer *lda, T *af, integer *ldaf
           RWORK is REAL array, dimension (N). \n
           Workspace.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
 Ta la_porcond_c(char *uplo, integer *n, T *a, integer *lda, T *af, integer *ldaf, Ta *c, logical *capply, integer *info, T *work, Ta *rwork)
 {
@@ -44900,17 +44107,16 @@ Ta la_porcond_c(char *uplo, integer *n, T *a, integer *lda, T *af, integer *ldaf
           Y. INCY must not be zero. \n
           Unchanged on exit. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer la_syamv(integer *uplo, integer *n, T *alpha, T *a, integer *lda, T *x, integer *incx, T *beta, T *y, integer *incy)
+void la_syamv(integer *uplo, integer *n, T *alpha, T *a, integer *lda, T *x, integer *incx, T *beta, T *y, integer *incy)
 {
-  return la_syamv(uplo, n, alpha, a, lda, x, incx, beta, y, incy);
+  la_syamv(uplo, n, alpha, a, lda, x, incx, beta, y, incy);
 }
 template< typename T, typename Ta >
-integer la_syamv(integer *uplo, integer *n, Ta *alpha, T *a, integer *lda, T *x, integer *incx, Ta *beta, Ta *y, integer *incy)
+void la_syamv(integer *uplo, integer *n, Ta *alpha, T *a, integer *lda, T *x, integer *incx, Ta *beta, Ta *y, integer *incy)
 {
-  return la_syamv(uplo, n, alpha, a, lda, x, incx, beta, y, incy);
+  la_syamv(uplo, n, alpha, a, lda, x, incx, beta, y, incy);
 }
 
 /*! @brief LA_PORPVGRW computes the reciprocal pivot growth factor norm(A)/norm(U) for a symmetric or Hermitian positive-definite matrix
@@ -44949,10 +44155,9 @@ integer la_syamv(integer *uplo, integer *n, Ta *alpha, T *a, integer *lda, T *x,
  * @param[out] WORK
           WORK is REAL array, dimension (2*N) \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer la_porpvgrw(char *uplo, integer *ncols, T *a, integer *lda, T * af, integer *ldaf, T *work)
+T la_porpvgrw(char *uplo, integer *ncols, T *a, integer *lda, T * af, integer *ldaf, T *work)
 {
   return la_porpvgrw(uplo, ncols, a, lda, af, ldaf, work);
 }
@@ -45023,8 +44228,7 @@ Ta la_porpvgrw(char *uplo, integer *ncols, T *a, integer *lda, T * af, integer *
           IWORK is INTEGER array, dimension (N). \n
           Workspace. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
 T la_syrcond(char *uplo, integer *n, T *a, integer *lda, T *af, integer *ldaf, integer *ipiv, integer *cmode, T *c, integer * info, T *work, integer *iwork)
 {
@@ -45079,8 +44283,7 @@ T la_syrcond(char *uplo, integer *n, T *a, integer *lda, T *af, integer *ldaf, i
           RWORK is REAL array, dimension (N). \n
           Workspace.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
 Ta la_syrcond_x(char *uplo, integer *n, T *a, integer *lda, T *af, integer *ldaf, integer *ipiv, T *x, integer *info, T *work, Ta *rwork)
 {
@@ -45138,8 +44341,7 @@ Ta la_syrcond_x(char *uplo, integer *n, T *a, integer *lda, T *af, integer *ldaf
           RWORK is REAL array, dimension (N). \n
           Workspace.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T, typename Ta >
 Ta la_syrcond_c(char *uplo, integer *n, T *a, integer *lda, T *af, integer *ldaf, integer *ipiv, Ta *c, logical *capply, integer *info, T *work, Ta *rwork)
 {
@@ -45190,8 +44392,7 @@ Ta la_syrcond_c(char *uplo, integer *n, T *a, integer *lda, T *af, integer *ldaf
  * @param[out] WORK
           WORK is REAL array, dimension (2*N)  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
 T la_syrpvgrw(char *uplo, integer *n, integer *info, T *a, integer * lda, T *af, integer *ldaf, integer *ipiv, T *work)
 {
@@ -45227,12 +44428,11 @@ Ta la_syrpvgrw(char *uplo, integer *n, integer *info, T *a, integer * lda, T *af
           W is REAL array, dimension (N) \n
           The vector to be added.  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer la_wwaddw(integer *n, T *x, T *y, T *w)
+void la_wwaddw(integer *n, T *x, T *y, T *w)
 {
-  return la_wwaddw(n, x, y, w);
+  la_wwaddw(n, x, y, w);
 }
 
 /*! @brief LABAD takes as input the values computed by LAMCH for underflow and  \n
@@ -45262,12 +44462,11 @@ integer la_wwaddw(integer *n, T *x, T *y, T *w)
           On exit, if LOG10(LARGE) is sufficiently large, the square
           root of LARGE, otherwise unchanged. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer labad(T *small, T *large)
+void labad(T *small, T *large)
 {
-  return labad(small, large);
+  labad(small, large);
 }
 
 /*! @brief LABRD reduces the first nb rows and columns of a general matrix to a bidiagonal form
@@ -45347,12 +44546,11 @@ integer labad(T *small, T *large)
           LDY is INTEGER \n
           The leading dimension of the array Y. LDY >= fla_max(1,N).  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T, typename Ta >
-integer labrd(integer *m, integer *n, integer *nb, T *a, integer *lda, Ta *d, Ta *e, T *tauq, T *taup, T *x, integer *ldx, T *y, integer *ldy)
+void labrd(integer *m, integer *n, integer *nb, T *a, integer *lda, Ta *d, Ta *e, T *tauq, T *taup, T *x, integer *ldx, T *y, integer *ldy)
 {
-  return labrd(m, n, nb, a, lda, d, e, tauq, taup, x, ldx, y, ldy);
+  labrd(m, n, nb, a, lda, d, e, tauq, taup, x, ldx, y, ldy);
 }
 
 /*! @brief LACON estimates the 1-norm of a square matrix, using reverse communication for evaluating matrix-vector products
@@ -45392,17 +44590,16 @@ integer labrd(integer *m, integer *n, integer *nb, T *a, integer *lda, Ta *d, Ta
           whether X should be overwritten by A * X  or A**T * X.
           On the final return from SLACON, KASE will again be 0.  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lacon(integer *n, T *v, T *x, integer *isgn, T *est, integer *kase)
+void lacon(integer *n, T *v, T *x, integer *isgn, T *est, integer *kase)
 {
-  return lacon(n, v, x, isgn, est, kase);
+  lacon(n, v, x, isgn, est, kase);
 }
 template< typename T, typename Ta >
-integer lacon(integer *n, T *v, T *x, Ta *est, integer *kase)
+void lacon(integer *n, T *v, T *x, Ta *est, integer *kase)
 {
-  return lacon(n, v, x, est, kase);
+  lacon(n, v, x, est, kase);
 }
 
 /*! @brief LACRT performs a linear transformation of a pair of complex vectors
@@ -45443,12 +44640,11 @@ integer lacon(integer *n, T *v, T *x, Ta *est, integer *kase)
              [  C   S  ]. \n
              [ -S   C  ] \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lacrt(integer *n, T *cx, integer *incx, T * cy, integer *incy, T *c, T *s)
+void lacrt(integer *n, T *cx, integer *incx, T * cy, integer *incy, T *c, T *s)
 {
-  return lacrt(n, cx, incx, cy, incy, c, s); 
+  lacrt(n, cx, incx, cy, incy, c, s); 
 }
 
 /*! @brief LADIV performs complex division in real arithmetic, avoiding unnecessary overflow
@@ -45482,12 +44678,11 @@ integer lacrt(integer *n, T *cx, integer *incx, T * cy, integer *incy, T *c, T *
           Q is REAL \n
           The scalars p and q in the above expression.  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer ladiv(T *a, T *b, T *c, T *d, T *p, T *q)
+void ladiv(T *a, T *b, T *c, T *d, T *p, T *q)
 {
-  return ladiv(a, b, c, d, p, q);
+  ladiv(a, b, c, d, p, q);
 }
 
 /*! @brief LADIV performs complex division in real arithmetic, avoiding unnecessary overflow
@@ -45506,15 +44701,14 @@ integer ladiv(T *a, T *b, T *c, T *d, T *p, T *q)
           Y is COMPLEX \n
           The complex scalars X and Y. \n
 
- * @return INTEGER Return value of the function.
  * */
 void cladiv(scomplex *ret_val, scomplex *x, scomplex *y)
 {
-  return cladiv_(ret_val, x, y);
+  cladiv_(ret_val, x, y);
 }
 void zladiv(dcomplex *ret_val, dcomplex *x, dcomplex *y)
 {
-  return zladiv_(ret_val, x, y);
+  zladiv_(ret_val, x, y);
 }
 
 /*! @brief LAE2 computes the eigenvalues of a 2-by-2 symmetric matrix
@@ -45545,12 +44739,11 @@ void zladiv(dcomplex *ret_val, dcomplex *x, dcomplex *y)
           RT2 is REAL \n
           The eigenvalue of smaller absolute value. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lae2(T *a, T *b, T *c, T *rt1, T *rt2)
+void lae2(T *a, T *b, T *c, T *rt1, T *rt2)
 {
-  return lae2(a, b, c, rt1, rt2);
+  lae2(a, b, c, rt1, rt2);
 }
 
 /*! @brief LAEBZ computes the number of eigenvalues of a real symmetric tridiagonal \n
@@ -45724,12 +44917,11 @@ integer lae2(T *a, T *b, T *c, T *rt1, T *rt2)
           = 1--MMAX: The last INFO intervals did not converge. \n
           = MMAX+1:  More than MMAX intervals were generated. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laebz(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer *minp, integer *nbmin, T *abstol, T * reltol, T *pivmin, T *d, T *e, T *e2, integer *nval, T *ab, T *c, integer *mout, integer *nab, T *work, integer *iwork, integer *info)
+void laebz(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer *minp, integer *nbmin, T *abstol, T * reltol, T *pivmin, T *d, T *e, T *e2, integer *nval, T *ab, T *c, integer *mout, integer *nab, T *work, integer *iwork, integer *info)
 {
-  return laebz(ijob, nitmax, n, mmax, minp, nbmin, abstol, reltol, pivmin, d, e, e2, nval, ab, c, mout, nab, work, iwork, info);
+  laebz(ijob, nitmax, n, mmax, minp, nbmin, abstol, reltol, pivmin, d, e, e2, nval, ab, c, mout, nab, work, iwork, info);
 }
 
 /*! @brief LAED0 used by sstedc. Computes all eigenvalues and corresponding \n
@@ -45814,17 +45006,16 @@ integer laebz(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer
                 working on the submatrix lying in rows and columns
                 INFO/(N+1) through mod(INFO,N+1).  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laed0(integer *icompq, integer *qsiz, integer *n, T *d, T *e, T *q, integer *ldq, T *qstore, integer *ldqs, T *work, integer *iwork, integer *info)
+void laed0(integer *icompq, integer *qsiz, integer *n, T *d, T *e, T *q, integer *ldq, T *qstore, integer *ldqs, T *work, integer *iwork, integer *info)
 {
-  return laed0(qsiz, n, d, e, q, ldq, qstore, ldqs, work, iwork, info);
+  laed0(qsiz, n, d, e, q, ldq, qstore, ldqs, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer laed0(integer *qsiz, integer *n, Ta *d, Ta *e, T *q, integer *ldq, T *qstore, integer *ldqs, Ta *rwork, integer *iwork, integer *info)
+void laed0(integer *qsiz, integer *n, Ta *d, Ta *e, T *q, integer *ldq, T *qstore, integer *ldqs, Ta *rwork, integer *iwork, integer *info)
 {
-  return laed0(qsiz, n, d, e, q, ldq, qstore, ldqs, rwork, iwork, info);
+  laed0(qsiz, n, d, e, q, ldq, qstore, ldqs, rwork, iwork, info);
 }
 
 /*! @brief LAED1 used by sstedc. Computes the updated eigensystem of a diagonal \n
@@ -45905,12 +45096,11 @@ integer laed0(integer *qsiz, integer *n, Ta *d, Ta *e, T *q, integer *ldq, T *qs
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
           > 0:  if INFO = 1, an eigenvalue did not converge \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laed1(integer *n, T *d, T *q, integer *ldq, integer *indxq, T *rho, integer *cutpnt, T *work, integer * iwork, integer *info)
+void laed1(integer *n, T *d, T *q, integer *ldq, integer *indxq, T *rho, integer *cutpnt, T *work, integer * iwork, integer *info)
 {
-  return laed1(*n, d, q, *ldq, *indxq, rho, *cutpnt, work, * iwork, *info); 
+  laed1(*n, d, q, *ldq, *indxq, rho, *cutpnt, work, * iwork, *info); 
 }
 
 /*! @brief LAED2 used by sstedc. Merges eigenvalues and deflates secular equation. \n
@@ -46016,12 +45206,11 @@ integer laed1(integer *n, T *d, T *q, integer *ldq, integer *indxq, T *rho, inte
           = 0:  successful exit. \n
           < 0:  if INFO = -i, the i-th argument had an illegal value.  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laed2(integer *k, integer *n, integer *n1, T *d, T *q, integer *ldq, integer *indxq, T *rho, T *z, T * dlamda, T *w, T *q2, integer *indx, integer *indxc, integer * indxp, integer *coltyp, integer *info)
+void laed2(integer *k, integer *n, integer *n1, T *d, T *q, integer *ldq, integer *indxq, T *rho, T *z, T * dlamda, T *w, T *q2, integer *indx, integer *indxc, integer * indxp, integer *coltyp, integer *info)
 {
-  return laed2(*k, *n, *n1, d, q, *ldq, *indxq, rho, z, dlamda, w, q2, *indx, *indxc, *indxp, *coltyp, *info); 
+  laed2(*k, *n, *n1, d, q, *ldq, *indxq, rho, z, dlamda, w, q2, *indx, *indxc, *indxp, *coltyp, *info); 
 }
 
 /*! @brief LAED3 used by sstedc. Finds the roots of the secular equation and \n
@@ -46110,12 +45299,11 @@ integer laed2(integer *k, integer *n, integer *n1, T *d, T *q, integer *ldq, int
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
           > 0:  if INFO = 1, an eigenvalue did not converge \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laed3(integer *k, integer *n, integer *n1, T *d, T *q, integer *ldq, T *rho, T *dlamda, T *q2, integer * indx, integer *ctot, T *w, T *s, integer *info)
+void laed3(integer *k, integer *n, integer *n1, T *d, T *q, integer *ldq, T *rho, T *dlamda, T *q2, integer * indx, integer *ctot, T *w, T *s, integer *info)
 {
-  return laed3(*k, *n, *n1, d, q, *ldq, rho, dlamda, q2, *indx, *ctot, w, s, *info); 
+  laed3(*k, *n, *n1, d, q, *ldq, rho, dlamda, q2, *indx, *ctot, w, s, *info); 
 }
 
 /*! @brief LAED4 used by sstedc. Finds a single root of the secular equation
@@ -46170,12 +45358,11 @@ integer laed3(integer *k, integer *n, integer *n1, T *d, T *q, integer *ldq, T *
           = 0:  successful exit \n
           > 0:  if INFO = 1, the updating process failed.  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laed4(integer *n, integer *i, T *d, T *z, T *delta, T *rho, T *dlam, integer *info)
+void laed4(integer *n, integer *i, T *d, T *z, T *delta, T *rho, T *dlam, integer *info)
 {
-  return laed4(*n, *i, d, z, delta, rho, dlam, *info); 
+  laed4(*n, *i, d, z, delta, rho, dlam, *info); 
 }
 
 /*! @brief LAED5 used by sstedc. Solves the 2-by-2 secular equation
@@ -46216,12 +45403,11 @@ integer laed4(integer *n, integer *i, T *d, T *z, T *delta, T *rho, T *dlam, int
           DLAM is REAL \n
           The computed lambda_I, the I-th updated eigenvalue. \n 
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laed5(integer *i, T *d, T *z, T *delta, T *rho, T *dlam)
+void laed5(integer *i, T *d, T *z, T *delta, T *rho, T *dlam)
 {
-  return laed5(*i, d, z, delta, rho, dlam);
+  laed5(*i, d, z, delta, rho, dlam);
 }
 
 /*! @brief LAED6 used by sstedc. Computes one Newton step in solution of the secular equation
@@ -46275,12 +45461,11 @@ integer laed5(integer *i, T *d, T *z, T *delta, T *rho, T *dlam)
           = 0: successful exit \n
           > 0: if INFO = 1, failure to converge \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laed6(integer *kniter, logical *orgati, T *rho, T *d, T *z, T *finit, T *tau, integer *info)
+void laed6(integer *kniter, logical *orgati, T *rho, T *d, T *z, T *finit, T *tau, integer *info)
 {
-  return laed6(kniter, orgati, rho, d, z, finit, tau, *info);
+  laed6(kniter, orgati, rho, d, z, finit, tau, *info);
 }
 
 /*! @brief LAED7 used by sstedc. Computes the updated eigensystem of a diagonal \n
@@ -46416,17 +45601,16 @@ integer laed6(integer *kniter, logical *orgati, T *rho, T *d, T *z, T *finit, T 
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
           > 0:  if INFO = 1, an eigenvalue did not converge \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laed7(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer *curlvl, integer *curpbm, T *d, T *q, integer *ldq, integer *indxq, T *rho, integer *cutpnt, T * qstore, integer *qptr, integer *prmptr, integer *perm, integer * givptr, integer *givcol, T *givnum, T *work, integer *iwork, integer *info)
+void laed7(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer *curlvl, integer *curpbm, T *d, T *q, integer *ldq, integer *indxq, T *rho, integer *cutpnt, T * qstore, integer *qptr, integer *prmptr, integer *perm, integer * givptr, integer *givcol, T *givnum, T *work, integer *iwork, integer *info)
 {
-  return laed7(icompq, n, qsiz, tlvls, curlvl, curpbm, d, q, ldq, indxq,  rho, cutpnt, qstore, qptr, prmptr, perm, givptr, givcol, givnum, work, iwork, info);  
+  laed7(icompq, n, qsiz, tlvls, curlvl, curpbm, d, q, ldq, indxq,  rho, cutpnt, qstore, qptr, prmptr, perm, givptr, givcol, givnum, work, iwork, info);  
 }
 template< typename T, typename Ta >
-integer laed7(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer *curlvl, integer *curpbm, Ta *d, T *q, integer *ldq, Ta *rho, integer *indxq, Ta *qstore, integer * qptr, integer *prmptr, integer *perm, integer *givptr, integer *givcol, Ta *givnum, T *work, Ta *rwork, integer *iwork, integer *info)
+void laed7(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer *curlvl, integer *curpbm, Ta *d, T *q, integer *ldq, Ta *rho, integer *indxq, Ta *qstore, integer * qptr, integer *prmptr, integer *perm, integer *givptr, integer *givcol, Ta *givnum, T *work, Ta *rwork, integer *iwork, integer *info)
 {
-  return laed7(n, cutpnt, qsiz, tlvls, curlvl, curpbm, d, q, ldq, rho, indxq, qstore, qptr, prmptr, perm, givptr, givcol, givnum, work, rwork, iwork, info);  
+  laed7(n, cutpnt, qsiz, tlvls, curlvl, curpbm, d, q, ldq, rho, indxq, qstore, qptr, prmptr, perm, givptr, givcol, givnum, work, rwork, iwork, info);  
 }
 
 /*! @brief LAED8 used by sstedc. Merges eigenvalues and deflates secular \n
@@ -46546,17 +45730,16 @@ integer laed7(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, intege
           = 0:  successful exit. \n
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laed8(integer *icompq, integer *k, integer *n, integer *qsiz, T *d, T *q, integer *ldq, integer *indxq, T *rho, integer *cutpnt, T *z, T *dlamda, T *q2, integer *ldq2, T *w, integer *perm, integer *givptr, integer *givcol, T * givnum, integer *indxp, integer *indx, integer *info)
+void laed8(integer *icompq, integer *k, integer *n, integer *qsiz, T *d, T *q, integer *ldq, integer *indxq, T *rho, integer *cutpnt, T *z, T *dlamda, T *q2, integer *ldq2, T *w, integer *perm, integer *givptr, integer *givcol, T * givnum, integer *indxp, integer *indx, integer *info)
 {
-  return laed8(icompq, k, n, qsiz, d, q, ldq, indxq, rho, cutpnt, z, dlamda, q2, ldq2, w, perm, givptr, givcol, givnum, indxp, indx, info); 
+  laed8(icompq, k, n, qsiz, d, q, ldq, indxq, rho, cutpnt, z, dlamda, q2, ldq2, w, perm, givptr, givcol, givnum, indxp, indx, info); 
 }
 template< typename T, typename Ta >
-integer laed8(integer *k, integer *n, integer *qsiz, T * q, integer *ldq, Ta *d, Ta *rho, integer *cutpnt, Ta *z, Ta *dlamda, T *q2, integer *ldq2, Ta *w, integer *indxp, integer *indx, integer *indxq, integer *perm, integer *givptr, integer *givcol, Ta *givnum, integer *info)
+void laed8(integer *k, integer *n, integer *qsiz, T * q, integer *ldq, Ta *d, Ta *rho, integer *cutpnt, Ta *z, Ta *dlamda, T *q2, integer *ldq2, Ta *w, integer *indxp, integer *indx, integer *indxq, integer *perm, integer *givptr, integer *givcol, Ta *givnum, integer *info)
 {
-  return laed8(k, n, qsiz, q, ldq, d, rho, cutpnt, z, dlamda, q2, ldq2, w, indxp, indx, indxq, perm, givptr, givcol, givnum, info); 
+  laed8(k, n, qsiz, q, ldq, d, rho, cutpnt, z, dlamda, q2, ldq2, w, indxp, indx, indxq, perm, givptr, givcol, givnum, info); 
 }
 
 /*! @brief LAED9 used by sstedc. Finds the roots of the secular equation and \n
@@ -46621,12 +45804,11 @@ integer laed8(integer *k, integer *n, integer *qsiz, T * q, integer *ldq, Ta *d,
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
           > 0:  if INFO = 1, an eigenvalue did not converge \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laed9(integer *k, integer *kstart, integer *kstop, integer *n, T *d, T *q, integer *ldq, T *rho, T *dlamda, T *w, T *s, integer *lds, integer *info)
+void laed9(integer *k, integer *kstart, integer *kstop, integer *n, T *d, T *q, integer *ldq, T *rho, T *dlamda, T *w, T *s, integer *lds, integer *info)
 {
-  return laed9(k, kstart, kstop, n, d, q, ldq, rho, dlamda, w, s, lds, info); 
+  laed9(k, kstart, kstop, n, d, q, ldq, rho, dlamda, w, s, lds, info); 
 }
 
 /*! @brief LAEDA used by sstedc. Computes the Z vector determining the rank-one \n
@@ -46698,12 +45880,11 @@ integer laed9(integer *k, integer *kstart, integer *kstop, integer *n, T *d, T *
           = 0:  successful exit. \n
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laeda(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integer *prmptr, integer *perm, integer *givptr, integer *givcol, float *givnum, float *q, integer *qptr, float *z, float *ztemp, integer *info)
+void laeda(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integer *prmptr, integer *perm, integer *givptr, integer *givcol, float *givnum, float *q, integer *qptr, float *z, float *ztemp, integer *info)
 {
-  return laeda(n, tlvls, curlvl, curpbm, prmptr, perm, givptr, givcol, givnum, q, qptr, z, ztemp, info);
+  laeda(n, tlvls, curlvl, curpbm, prmptr, perm, givptr, givcol, givnum, q, qptr, z, ztemp, info);
 }
 
 /*! @brief LAEIN computes a specified right or left eigenvector of an upper Hessenberg matrix by inverse iteration
@@ -46780,17 +45961,16 @@ integer laeda(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, inte
           = 1:  inverse iteration did not converge; VR is set to the
                 last iterate, and so is VI if WI.ne.0.0. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laein(logical *rightv, logical *noinit, integer *n, T *h, integer *ldh, T *wr, T *wi, T *vr, T *vi, T *b, integer *ldb, T *work, T *eps3, T *smlnum, T *bignum, integer *info)
+void laein(logical *rightv, logical *noinit, integer *n, T *h, integer *ldh, T *wr, T *wi, T *vr, T *vi, T *b, integer *ldb, T *work, T *eps3, T *smlnum, T *bignum, integer *info)
 {
-  return laein(rightv, noinit, n, h, ldh, wr, wi, vr, vi, b, ldb, work, eps3, smlnum, bignum, info); 
+  laein(rightv, noinit, n, h, ldh, wr, wi, vr, vi, b, ldb, work, eps3, smlnum, bignum, info); 
 }
 template< typename T, typename Ta >
-integer laein(logical *rightv, logical *noinit, integer *n, T *h, integer *ldh, T *w, T *v, T *b, integer *ldb, Ta *rwork, Ta *eps3, Ta *smlnum, integer *info)
+void laein(logical *rightv, logical *noinit, integer *n, T *h, integer *ldh, T *w, T *v, T *b, integer *ldb, Ta *rwork, Ta *eps3, Ta *smlnum, integer *info)
 {
-  return laein(rightv, noinit, n, h, ldh, w, v, b, ldb, rwork, eps3, smlnum, info);
+  laein(rightv, noinit, n, h, ldh, w, v, b, ldb, rwork, eps3, smlnum, info);
 }
 
 /*! @brief LAESY computes the eigenvalues and eigenvectors of a 2-by-2 complex symmetric matrix
@@ -46842,12 +46022,11 @@ integer laein(logical *rightv, logical *noinit, integer *n, T *h, integer *ldh, 
           If EVSCAL .NE. 0, (CS1, SN1) is the unit right eigenvector
           for RT1. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laesy(T *a, T *b, T *c, T * rt1, T *rt2, T *evscal, T *cs1, T *sn1)
+void laesy(T *a, T *b, T *c, T * rt1, T *rt2, T *evscal, T *cs1, T *sn1)
 {
-  return laesy(a, b, c, rt1, rt2, evscal, cs1, sn1); 
+  laesy(a, b, c, rt1, rt2, evscal, cs1, sn1); 
 }
 
 /*! @brief LAEV2 computes the eigenvalues and eigenvectors of a 2-by-2 symmetric/Hermitian matrix
@@ -46888,17 +46067,16 @@ integer laesy(T *a, T *b, T *c, T * rt1, T *rt2, T *evscal, T *cs1, T *sn1)
           SN1 is REAL \n
           The vector (CS1, SN1) is a unit right eigenvector for RT1.  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laev2(T *a, T *b, T *c, T *rt1, T * rt2, T *cs1, T *sn1)
+void laev2(T *a, T *b, T *c, T *rt1, T * rt2, T *cs1, T *sn1)
 {
-  return laev2(a, b, c, rt1, rt2, cs1, sn1);
+  laev2(a, b, c, rt1, rt2, cs1, sn1);
 } 
 template< typename T, typename Ta >
-integer laev2(T *a, T *b, T *c, Ta *rt1, Ta * rt2, Ta *cs1, T *sn1)
+void laev2(T *a, T *b, T *c, Ta *rt1, Ta * rt2, Ta *cs1, T *sn1)
 {
-  return laev2(a, b, c, rt1, rt2, cs1, sn1);
+  laev2(a, b, c, rt1, rt2, cs1, sn1);
 }
 
 /*! @brief LAEXC swaps adjacent diagonal blocks of a real upper quasi-triangular \n
@@ -46958,12 +46136,11 @@ integer laev2(T *a, T *b, T *c, Ta *rt1, Ta * rt2, Ta *cs1, T *sn1)
                form; the blocks are not swapped and T and Q are
                unchanged. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laexc(logical *wantq, integer *n, T *t, integer * ldt, T *q, integer *ldq, integer *j1, integer *n1, integer *n2, T *work, integer *info)
+void laexc(logical *wantq, integer *n, T *t, integer * ldt, T *q, integer *ldq, integer *j1, integer *n1, integer *n2, T *work, integer *info)
 {
-    return laexc(wantq, n, t, ldt, q, ldq, j1, n1, n2, work, info); 
+    laexc(wantq, n, t, ldt, q, ldq, j1, n1, n2, work, info); 
 }
 
 /*! @brief LAG2 computes the eigenvalues of a 2-by-2 generalized eigenvalue problem, \n
@@ -47044,12 +46221,11 @@ integer laexc(logical *wantq, integer *n, T *t, integer * ldt, T *q, integer *ld
           eigenvalue is complex, then WI is SCALE1 times the imaginary
           part of the eigenvalues. WI will always be non-negative. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lag2(T *a, integer *lda, T *b, integer *ldb, T *safmin, T *scale1, T *scale2, T *wr1, T *wr2, T * wi)
+void lag2(T *a, integer *lda, T *b, integer *ldb, T *safmin, T *scale1, T *scale2, T *wr1, T *wr2, T * wi)
 {
-    return lag2(a, lda, b, ldb, safmin, scale1, scale2, wr1, wr2, wi);
+    lag2(a, lda, b, ldb, safmin, scale1, scale2, wr1, wr2, wi);
 }
 
 /*! @brief LAGS2 computes 2-by-2 orthogonal matrices U, V, and Q, and applies them \n
@@ -47119,17 +46295,16 @@ integer lag2(T *a, integer *lda, T *b, integer *ldb, T *safmin, T *scale1, T *sc
           SNQ is REAL \n
           The desired orthogonal matrix Q.  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lags2(logical *upper, T *a1, T *a2, T *a3, T *b1, T *b2, T *b3, T *csu, T *snu, T *csv, T * snv, T *csq, T *snq)
+void lags2(logical *upper, T *a1, T *a2, T *a3, T *b1, T *b2, T *b3, T *csu, T *snu, T *csv, T * snv, T *csq, T *snq)
 {
-  return lags2(upper, a1, a2, a3, b1, b2, b3, csu, snu, csv, snv, csq, snq);
+  lags2(upper, a1, a2, a3, b1, b2, b3, csu, snu, csv, snv, csq, snq);
 }
 template< typename T, typename Ta >
-integer lags2(logical *upper, Ta *a1, T *a2, Ta *a3, Ta *b1, T *b2, Ta *b3, Ta *csu, T *snu, Ta *csv, T *snv, Ta *csq, T *snq)
+void lags2(logical *upper, Ta *a1, T *a2, Ta *a3, Ta *b1, T *b2, Ta *b3, Ta *csu, T *snu, Ta *csv, T *snv, Ta *csq, T *snq)
 {
-  return lags2(upper, a1, a2, a3, b1, b2, b3, csu, snu, csv, snv, csq, snq);
+  lags2(upper, a1, a2, a3, b1, b2, b3, csu, snu, csv, snv, csq, snq);
 }
 
 /*! @brief LAGTF computes an LU factorization of a matrix T-Î»I, where T is a general  \n
@@ -47214,12 +46389,11 @@ integer lags2(logical *upper, Ta *a1, T *a2, Ta *a3, Ta *b1, T *b2, Ta *b3, Ta *
           = 0: successful exit \n
           < 0: if INFO = -k, the kth argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lagtf(integer *n, T *a, T *lambda, T *b, T *c, T *tol, T *d, integer *in, integer *info)
+void lagtf(integer *n, T *a, T *lambda, T *b, T *c, T *tol, T *d, integer *in, integer *info)
 {
-  return lagtf(n, a, lambda, b, c, tol, d, in, info);
+  lagtf(n, a, lambda, b, c, tol, d, in, info);
 }
 
 /*! @brief LAGTM performs a matrix-matrix product of the form C = Î±AB+Î²C, where A is a \n
@@ -47282,17 +46456,16 @@ integer lagtf(integer *n, T *a, T *lambda, T *b, T *c, T *tol, T *d, integer *in
           LDB is INTEGER \n
           The leading dimension of the array B.  LDB >= fla_max(N,1).  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lagtm(char *trans, integer *n, integer *nrhs, T *alpha, T *dl, T *d, T *du, T *x, integer *ldx, T * beta, T *b, integer *ldb)
+void lagtm(char *trans, integer *n, integer *nrhs, T *alpha, T *dl, T *d, T *du, T *x, integer *ldx, T * beta, T *b, integer *ldb)
 {
-  return lagtm(trans, n, nrhs, alpha, dl, d, du, x, ldx, beta, b, ldb);
+  lagtm(trans, n, nrhs, alpha, dl, d, du, x, ldx, beta, b, ldb);
 }
 template< typename T, typename Ta >
-integer lagtm(char *trans, integer *n, integer *nrhs, Ta *alpha, T *dl, T *d, T *du, T *x, integer *ldx, Ta *beta, T *b, integer *ldb)
+void lagtm(char *trans, integer *n, integer *nrhs, Ta *alpha, T *dl, T *d, T *du, T *x, integer *ldx, Ta *beta, T *b, integer *ldb)
 {
-  return lagtm(trans, n, nrhs, alpha, dl, d, du, x, ldx, beta, b, ldb);
+  lagtm(trans, n, nrhs, alpha, dl, d, du, x, ldx, beta, b, ldb);
 }
 
 /*! @brief LAGTS solves the system of equations (T-Î»I)x = y or (T-Î»I)Tx = y,where T is a general \n
@@ -47379,12 +46552,11 @@ integer lagtm(char *trans, integer *n, integer *nrhs, Ta *alpha, T *dl, T *d, T 
                the elements of the right-hand side vector y are very
                large. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lagts(integer *job, integer *n, T *a, T *b, T *c, T *d, integer *in, T *y, T *tol, integer *info)
+void lagts(integer *job, integer *n, T *a, T *b, T *c, T *d, integer *in, T *y, T *tol, integer *info)
 {
-  return lagts(job, n, a, b, c, d, in, y, tol, info);
+  lagts(job, n, a, b, c, d, in, y, tol, info);
 }
 
 /*! @brief LAGV2 computes the Generalized Schur factorization of a real 2-by-2 \n
@@ -47456,12 +46628,11 @@ integer lagts(integer *job, integer *n, T *a, T *b, T *c, T *d, integer *in, T *
           SNR is REAL \n
           The sine of the right rotation matrix. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lagv2(T *a, integer *lda, T *b, integer *ldb, T *alphar, T *alphai, T *beta, T *csl, T *snl, T * csr, T *snr)
+void lagv2(T *a, integer *lda, T *b, integer *ldb, T *alphar, T *alphai, T *beta, T *csl, T *snl, T * csr, T *snr)
 {
-  return lagv2(a, lda, b, ldb, alphar, alphai, beta, csl, snl, csr, snr);
+  lagv2(a, lda, b, ldb, alphar, alphai, beta, csl, snl, csr, snr);
 }
 
 /*! @brief LAHEF computes a partial factorization of a complex Hermitian indefinite \n
@@ -47555,12 +46726,11 @@ integer lagv2(T *a, integer *lda, T *b, integer *ldb, T *alphar, T *alphai, T *b
                has been completed, but the block diagonal matrix D is
                exactly singular. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lahef(char *uplo, integer *n, integer *nb, integer *kb, T *a, integer *lda, integer *ipiv, T *w, integer *ldw, integer *info)
+void lahef(char *uplo, integer *n, integer *nb, integer *kb, T *a, integer *lda, integer *ipiv, T *w, integer *ldw, integer *info)
 {
-  return lahef(uplo, n, nb, kb, a, lda, ipiv, w, ldw, info);
+  lahef(uplo, n, nb, kb, a, lda, ipiv, w, ldw, info);
 }
 
 /*! @brief LAHEF_AA factorizes a panel of a complex hermitian matrix A using the Aasen's algorithm
@@ -47625,12 +46795,11 @@ integer lahef(char *uplo, integer *n, integer *nb, integer *kb, T *a, integer *l
  * @param[out] WORK
           WORK is COMPLEX workspace, dimension (M). \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lahef_aa(char *uplo, integer *j1, integer *m, integer *nb, T *a, integer *lda, integer *ipiv, T *h, integer * ldh, T *work) 
+void lahef_aa(char *uplo, integer *j1, integer *m, integer *nb, T *a, integer *lda, integer *ipiv, T *h, integer * ldh, T *work) 
 {
-  return lahef_aa(uplo, j1, m, nb, a, lda, ipiv, h, ldh, work); 
+  lahef_aa(uplo, j1, m, nb, a, lda, ipiv, h, ldh, work); 
 }
 
 /*! @brief LAHEF_RK computes a partial factorization of a complex Hermitian indefinite \n
@@ -47796,12 +46965,11 @@ integer lahef_aa(char *uplo, integer *j1, integer *m, integer *nb, T *a, integer
                is not stored in INFO even though the factorization
                always completes.  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lahef_rk(char *uplo, integer *n, integer *nb, integer *kb, T *a, integer *lda, T *e, integer *ipiv, T *w, integer *ldw, integer *info)
+void lahef_rk(char *uplo, integer *n, integer *nb, integer *kb, T *a, integer *lda, T *e, integer *ipiv, T *w, integer *ldw, integer *info)
 {
-  return lahef_rk(uplo, n, nb, kb, a, lda, e, ipiv, w, ldw, info);
+  lahef_rk(uplo, n, nb, kb, a, lda, e, ipiv, w, ldw, info);
 }
 
 /*! @brief LAHEF_ROOK computes a partial factorization of a complex Hermitian matrix \n
@@ -47896,12 +47064,11 @@ integer lahef_rk(char *uplo, integer *n, integer *nb, integer *kb, T *a, integer
                has been completed, but the block diagonal matrix D is
                exactly singular.  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lahef_rook(char *uplo, integer *n, integer *nb, integer *kb, T *a, integer *lda, integer *ipiv, T *w, integer *ldw, integer *info)
+void lahef_rook(char *uplo, integer *n, integer *nb, integer *kb, T *a, integer *lda, integer *ipiv, T *w, integer *ldw, integer *info)
 {
-  return lahef_rook(uplo, n, nb, kb, a, lda, ipiv, w, ldw, info); 
+  lahef_rook(uplo, n, nb, kb, a, lda, ipiv, w, ldw, info); 
 }
 
 /*! @brief LAHQR computes the eigenvalues and Schur factorization of an upper \n
@@ -48005,17 +47172,16 @@ integer lahef_rook(char *uplo, integer *n, integer *nb, integer *kb, T *a, integ
                   where U is the orthogonal matrix in (*)
                   (regardless of the value of WANTT.)  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lahqr(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, T *h, integer *ldh, T *wr, T * wi, integer *iloz, integer *ihiz, T *z, integer *ldz, integer * info)
+void lahqr(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, T *h, integer *ldh, T *wr, T * wi, integer *iloz, integer *ihiz, T *z, integer *ldz, integer * info)
 {
-  return lahqr(wantt, wantz, n, ilo, ihi, h, ldh, wr, wi, iloz, ihiz, z, ldz, info);
+  lahqr(wantt, wantz, n, ilo, ihi, h, ldh, wr, wi, iloz, ihiz, z, ldz, info);
 }
 template< typename T >
-integer lahqr(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, T *h, integer *ldh, T *w, integer *iloz, integer *ihiz, T *z, integer *ldz, integer * info)
+void lahqr(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, T *h, integer *ldh, T *w, integer *iloz, integer *ihiz, T *z, integer *ldz, integer * info)
 {
-  return lahqr(wantt, wantz, n, ilo, ihi, h, ldh, w, iloz, ihiz, z, ldz, info);
+  lahqr(wantt, wantz, n, ilo, ihi, h, ldh, w, iloz, ihiz, z, ldz, info);
 }
 
 /*! @brief LAHR2 reduces the specified number of first columns of a general \n
@@ -48074,12 +47240,11 @@ integer lahqr(logical *wantt, logical *wantz, integer *n, integer *ilo, integer 
           LDY is INTEGER \n
           The leading dimension of the array Y. LDY >= N.  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lahr2(integer *n, integer *k, integer *nb, T *a, integer *lda, T *tau, T *t, integer *ldt, T *y, integer *ldy)
+void lahr2(integer *n, integer *k, integer *nb, T *a, integer *lda, T *tau, T *t, integer *ldt, T *y, integer *ldy)
 {
-  return lahr2(n, k, nb, a, lda, tau, t, ldt, y, ldy);
+  lahr2(n, k, nb, a, lda, tau, t, ldt, y, ldy);
 }
 
 /*! @brief LAHRD reduces the first nb columns of a general rectangular matrix A \n
@@ -48135,12 +47300,11 @@ integer lahr2(integer *n, integer *k, integer *nb, T *a, integer *lda, T *tau, T
            LDY is INTEGER \n
            The leading dimension of the array Y. LDY >= N.   \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lahrd(integer *n, integer *k, integer *nb, T *a, integer *lda, T *tau, T *t, integer *ldt, T *y, integer *ldy)
+void lahrd(integer *n, integer *k, integer *nb, T *a, integer *lda, T *tau, T *t, integer *ldt, T *y, integer *ldy)
 {
-  return lahrd(n, k, nb, a, lda, tau, t, ldt, y, ldy);
+  lahrd(n, k, nb, a, lda, tau, t, ldt, y, ldy);
 }
 
 /*! @brief LAIC1 applies one step of incremental condition estimation
@@ -48204,17 +47368,16 @@ integer lahrd(integer *n, integer *k, integer *nb, T *a, integer *lda, T *tau, T
           C is REAL \n
           Cosine needed in forming xhat. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laic1(integer *job, integer *j, T *x, T *sest, T *w, T *gamma, T *sestpr, T *s, T *c__)
+void laic1(integer *job, integer *j, T *x, T *sest, T *w, T *gamma, T *sestpr, T *s, T *c__)
 {
-  return laic1(job, j, x, sest, w, gamma, sestpr, s, c__);
+  laic1(job, j, x, sest, w, gamma, sestpr, s, c__);
 }
 template< typename T, typename Ta >
-integer laic1(integer *job, integer *j, T *x, Ta *sest, T *w, T *gamma, Ta *sestpr, T *s, T *c__)
+void laic1(integer *job, integer *j, T *x, Ta *sest, T *w, T *gamma, Ta *sestpr, T *s, T *c__)
 {
-  return laic1(job, j, x, sest, w, gamma, sestpr, s, c__);
+  laic1(job, j, x, sest, w, gamma, sestpr, s, c__);
 }
 
 /*! @brief LAISNAN tests input for NaN by comparing two arguments for inequality
@@ -48243,7 +47406,7 @@ integer laic1(integer *job, integer *j, T *x, Ta *sest, T *w, T *gamma, Ta *sest
           SIN2 is REAL \n
           Two numbers to compare for inequality. \n
 
- * @return INTEGER Return value of the function.
+ * @return LOGICAL Boolean. Return TRUE if argument is NAN.
  * */
 template< typename T >
 logical laisnan(real *sin1, real *sin2)
@@ -48366,12 +47529,11 @@ logical laisnan(real *sin1, real *sin2)
           NOTE: In the interests of speed, this routine does not
                 check the inputs for errors. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laln2(logical *ltrans, integer *na, integer *nw, float * smin, float *ca, float *a, integer *lda, float *d1, float *d2, float *b, integer *ldb, float *wr, float *wi, float *x, integer *ldx, float *scale, float *xnorm, integer *info)
+void laln2(logical *ltrans, integer *na, integer *nw, float * smin, float *ca, float *a, integer *lda, float *d1, float *d2, float *b, integer *ldb, float *wr, float *wi, float *x, integer *ldx, float *scale, float *xnorm, integer *info)
 {
-  return laln2(ltrans, na, nw, smin, ca, a, lda, d1, d2, b, ldb, wr, wi, x, ldx, scale, xnorm, info);
+  laln2(ltrans, na, nw, smin, ca, a, lda, d1, d2, b, ldb, wr, wi, x, ldx, scale, xnorm, info);
 }
 
 /*! @brief LALS0 applies back multiplying factors in solving the least squares problem \n
@@ -48509,17 +47671,16 @@ integer laln2(logical *ltrans, integer *na, integer *nw, float * smin, float *ca
           = 0:  successful exit. \n
           < 0:  if INFO = -i, the i-th argument had an illegal value.  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lals0(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *nrhs, T *b, integer *ldb, T *bx, integer *ldbx, integer *perm, integer *givptr, integer *givcol, integer *ldgcol, T *givnum, integer *ldgnum, T *poles, T * difl, T *difr, T *z, integer *k, T *c, T *s, T * work, integer *info)
+void lals0(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *nrhs, T *b, integer *ldb, T *bx, integer *ldbx, integer *perm, integer *givptr, integer *givcol, integer *ldgcol, T *givnum, integer *ldgnum, T *poles, T * difl, T *difr, T *z, integer *k, T *c, T *s, T * work, integer *info)
 {
-  return lals0(icompq, nl, nr, sqre, nrhs, b, ldb, bx, ldbx, perm, givptr, givcol, ldgcol, givnum, ldgnum, poles, difl, difr, z, k, c, s, work, info);
+  lals0(icompq, nl, nr, sqre, nrhs, b, ldb, bx, ldbx, perm, givptr, givcol, ldgcol, givnum, ldgnum, poles, difl, difr, z, k, c, s, work, info);
 }
 template< typename T, typename Ta >
-integer lals0(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *nrhs, T *b, integer *ldb, T *bx, integer *ldbx, integer *perm, integer *givptr, integer *givcol, integer *ldgcol, Ta *givnum, integer *ldgnum, Ta *poles, Ta *difl, Ta *difr, Ta *z, integer *k, Ta *c, Ta *s, Ta * work, integer *info)
+void lals0(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *nrhs, T *b, integer *ldb, T *bx, integer *ldbx, integer *perm, integer *givptr, integer *givcol, integer *ldgcol, Ta *givnum, integer *ldgnum, Ta *poles, Ta *difl, Ta *difr, Ta *z, integer *k, Ta *c, Ta *s, Ta * work, integer *info)
 {
-  return lals0(icompq, nl, nr, sqre, nrhs, b, ldb, bx, ldbx, perm, givptr, givcol, ldgcol, givnum, ldgnum, poles, difl, difr, z, k, c, s, work, info);
+  lals0(icompq, nl, nr, sqre, nrhs, b, ldb, bx, ldbx, perm, givptr, givcol, ldgcol, givnum, ldgnum, poles, difl, difr, z, k, c, s, work, info);
 }
 
 /*! @brief LALSA computes the SVD of the coefficient matrix in compact form. Used by sgelsd
@@ -48646,17 +47807,16 @@ integer lals0(integer *icompq, integer *nl, integer *nr, integer *sqre, integer 
           = 0:  successful exit. \n
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lalsa(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, T *b, integer *ldb, T *bx, integer *ldbx, T * u, integer *ldu, T *vt, integer *k, T *difl, T *difr, T * z, T *poles, integer *givptr, integer *givcol, integer *ldgcol, integer *perm, T *givnum, T *c, T *s, T *work, integer * iwork, integer *info)
+void lalsa(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, T *b, integer *ldb, T *bx, integer *ldbx, T * u, integer *ldu, T *vt, integer *k, T *difl, T *difr, T * z, T *poles, integer *givptr, integer *givcol, integer *ldgcol, integer *perm, T *givnum, T *c, T *s, T *work, integer * iwork, integer *info)
 {
-  return lalsa(icompq, smlsiz, n, nrhs, b, ldb, bx, ldbx, u, ldu, vt, k, difl, difr, z, poles, givptr, givcol, ldgcol, perm, givnum, c, s, work, iwork, info);
+  lalsa(icompq, smlsiz, n, nrhs, b, ldb, bx, ldbx, u, ldu, vt, k, difl, difr, z, poles, givptr, givcol, ldgcol, perm, givnum, c, s, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer lalsa(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, T *b, integer *ldb, T *bx, integer *ldbx, Ta * u, integer *ldu, Ta *vt, integer *k, Ta *difl, Ta *difr, Ta * z, Ta *poles, integer *givptr, integer *givcol, integer *ldgcol, integer *perm, Ta *givnum, Ta *c, Ta *s, Ta *work, integer * iwork, integer *info)
+void lalsa(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, T *b, integer *ldb, T *bx, integer *ldbx, Ta * u, integer *ldu, Ta *vt, integer *k, Ta *difl, Ta *difr, Ta * z, Ta *poles, integer *givptr, integer *givcol, integer *ldgcol, integer *perm, Ta *givnum, Ta *c, Ta *s, Ta *work, integer * iwork, integer *info)
 {
-  return lalsa(icompq, smlsiz, n, nrhs, b, ldb, bx, ldbx, u, ldu, vt, k, difl, difr, z, poles, givptr, givcol, ldgcol, perm, givnum, c, s, work, iwork, info);
+  lalsa(icompq, smlsiz, n, nrhs, b, ldb, bx, ldbx, u, ldu, vt, k, difl, difr, z, poles, givptr, givcol, ldgcol, perm, givnum, c, s, work, iwork, info);
 }
 
 /*! @brief LALSD uses the singular value decomposition of A to solve the least squares problem
@@ -48742,17 +47902,16 @@ integer lalsa(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, T *b,
                 working on the submatrix lying in rows and columns
                 INFO/(N+1) through MOD(INFO,N+1). \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lalsd(char *uplo, integer *smlsiz, integer *n, integer *nrhs, T *d, T *e, T *b, integer *ldb, T *rcond, integer *rank, T *work, integer *iwork, integer *info)
+void lalsd(char *uplo, integer *smlsiz, integer *n, integer *nrhs, T *d, T *e, T *b, integer *ldb, T *rcond, integer *rank, T *work, integer *iwork, integer *info)
 {
-  return lalsd(uplo, smlsiz, n, nrhs, d, e, b, ldb, rcond, rank, work, iwork, info);
+  lalsd(uplo, smlsiz, n, nrhs, d, e, b, ldb, rcond, rank, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer lalsd(char *uplo, integer *smlsiz, integer *n, integer *nrhs, Ta *d, Ta *e, T *b, integer *ldb, Ta *rcond, integer *rank, T *work, Ta* rwork, integer *iwork, integer *info)
+void lalsd(char *uplo, integer *smlsiz, integer *n, integer *nrhs, Ta *d, Ta *e, T *b, integer *ldb, Ta *rcond, integer *rank, T *work, Ta* rwork, integer *iwork, integer *info)
 {
-  return lalsd(uplo, smlsiz, n, nrhs, d, e, b, ldb, rcond, rank, work, rwork, iwork, info);
+  lalsd(uplo, smlsiz, n, nrhs, d, e, b, ldb, rcond, rank, work, rwork, iwork, info);
 }
 
 /*! @brief LAMRG creates a permutation list to merge the entries of two independently sorted sets into a single set sorted in ascending order
@@ -48790,12 +47949,11 @@ integer lalsd(char *uplo, integer *smlsiz, integer *n, integer *nrhs, Ta *d, Ta 
           if B(I) = A(INDEX(I)) for I=1,N1+N2, then B will be
           sorted in ascending order. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lamrg(integer *n1, integer *n2, T *a, integer * strd1, integer *strd2, integer *index)
+void lamrg(integer *n1, integer *n2, T *a, integer * strd1, integer *strd2, integer *index)
 {
-  return lamrg(n1, n2, a, strd1, strd2, index);
+  lamrg(n1, n2, a, strd1, strd2, index);
 }
 
 /*! @brief LAMSWLQ overwrites the general real M-by-N matrix C
@@ -48888,12 +48046,11 @@ integer lamrg(integer *n1, integer *n2, T *a, integer * strd1, integer *strd2, i
            = 0:  successful exit \n
            < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lamswlq(char *side, char *trans, integer *m, integer * n, integer *k, integer *mb, integer *nb, T *a, integer *lda, T * t, integer *ldt, T *c, integer *ldc, T *work, integer *lwork, integer *info)
+void lamswlq(char *side, char *trans, integer *m, integer * n, integer *k, integer *mb, integer *nb, T *a, integer *lda, T * t, integer *ldt, T *c, integer *ldc, T *work, integer *lwork, integer *info)
 {
-  return lamswlq(side, trans, m, n, k, mb, nb, a, lda, t, ldt, c, ldc, work, lwork, info);
+  lamswlq(side, trans, m, n, k, mb, nb, a, lda, t, ldt, c, ldc, work, lwork, info);
 }
 
 /*! @brief LAMTSQR overwrites the general real M-by-N matrix C
@@ -48982,12 +48139,11 @@ integer lamswlq(char *side, char *trans, integer *m, integer * n, integer *k, in
            = 0:  successful exit \n
            < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lamtsqr(char *side, char *trans, integer *m, integer * n, integer *k, integer *mb, integer *nb, T *a, integer *lda, T * t, integer *ldt, T *c, integer *ldc, T *work, integer *lwork, integer *info)
+void lamtsqr(char *side, char *trans, integer *m, integer * n, integer *k, integer *mb, integer *nb, T *a, integer *lda, T * t, integer *ldt, T *c, integer *ldc, T *work, integer *lwork, integer *info)
 {
-  return lamtsqr(side, trans, m, n, k, mb, nb, a, lda, t, ldt, c, ldc, work, lwork, info);
+  lamtsqr(side, trans, m, n, k, mb, nb, a, lda, t, ldt, c, ldc, work, lwork, info);
 }
 
 /*! @brief LANEG computes the Sturm count
@@ -49036,9 +48192,8 @@ integer lamtsqr(char *side, char *trans, integer *m, integer * n, integer *k, in
           R is INTEGER \n
           The twist index for the twisted factorization that is used
           for the negcount. \n
-
  * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
 integer laneg(integer *n, T *d, T *lld, T *sigma, T *pivmin, integer *r__)
 {
@@ -49097,7 +48252,7 @@ integer laneg(integer *n, T *d, T *lld, T *sigma, T *pivmin, integer *r__)
           where LWORK >= N when NORM = 'I'; otherwise, WORK is not
           referenced.   \n
 
- * @return INTEGER Return value of the function.
+ * @return Returns the value of the norm.
  * */
 template< typename T >
 T langb(char *norm, integer *n, integer *kl, integer *ku, T *ab, integer *ldab, T *work)
@@ -49151,7 +48306,7 @@ Ta langb(char *norm, integer *n, integer *kl, integer *ku, T *ab, integer *ldab,
           DU is REAL array, dimension (N-1) \n
           The (n-1) super-diagonal elements of A. \n
 
- * @return INTEGER Return value of the function.
+ * @return Returns the value of norm.
  * */
 template< typename T >
 T langt(char *norm, integer *n, T *dl, T *d, T *du)
@@ -49222,7 +48377,7 @@ Ta langt(char *norm, integer *n, T *dl, T *d, T *du)
           where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,
           WORK is not referenced. \n
 
- * @return INTEGER Return value of the function.
+ * @return Returns the value of norm.
  * */
 template< typename T, typename Ta >
 Ta lanhb(char *norm, char *uplo, integer *n, integer *k, T *ab, integer *ldab, Ta *work)
@@ -49299,7 +48454,7 @@ Ta lanhb(char *norm, char *uplo, integer *n, integer *k, T *ab, integer *ldab, T
           where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,
           WORK is not referenced. \n
 
- * @return INTEGER Return value of the function.
+ * @return Returns value of norm.
  * */
 template< typename T, typename Ta >
 Ta lanhf(char *norm, char *transr, char *uplo, integer *n, T *a, Ta *work)
@@ -49358,7 +48513,7 @@ Ta lanhf(char *norm, char *transr, char *uplo, integer *n, T *a, Ta *work)
           where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,
           WORK is not referenced. \n
 
- * @return INTEGER Return value of the function.
+ * @return Returns the value of norm.
  * */
 template< typename T, typename Ta >
 Ta lanhp(char *norm, char *uplo, integer *n, T *ap, Ta *work)
@@ -49409,7 +48564,7 @@ Ta lanhp(char *norm, char *uplo, integer *n, T *ap, Ta *work)
           where LWORK >= N when NORM = 'I'; otherwise, WORK is not
           referenced. \n
 
- * @return INTEGER Return value of the function.
+ * @return Returns the value of norm.
  * */
 template< typename T >
 T lanhs(char *norm, integer *n, T *a, integer *lda, T *work)
@@ -49463,7 +48618,7 @@ Ta lanhs(char *norm, integer *n, T *a, integer *lda, Ta *work)
           E is COMPLEX array, dimension (N-1) \n
           The (n-1) sub-diagonal or super-diagonal elements of A.  \n
 
- * @return INTEGER Return value of the function.
+ * @return Returns the value of norm.
  * */
 template< typename T, typename Ta >
 Ta lanht(char *norm, integer *n, Ta *d, T *e)
@@ -49529,7 +48684,7 @@ Ta lanht(char *norm, integer *n, Ta *d, T *e)
           where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,
           WORK is not referenced.  \n
 
- * @return INTEGER Return value of the function.
+ * @return Returns value of norm.
  * */
 template< typename T, typename Ta >
 Ta lansb(char *norm, char *uplo, integer *n, integer *k, T *ab, integer *ldab, Ta *work)
@@ -49593,7 +48748,7 @@ Ta lansb(char *norm, char *uplo, integer *n, integer *k, T *ab, integer *ldab, T
           where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,
           WORK is not referenced.  \n
 
- * @return INTEGER Return value of the function.
+ * @return Returns the value of norm.
  * */
 template< typename T >
 T lansf(char *norm, char *transr, char *uplo, integer *n, T *a, T * work)
@@ -49652,7 +48807,7 @@ T lansf(char *norm, char *transr, char *uplo, integer *n, T *a, T * work)
           where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,
           WORK is not referenced. \n
 
- * @return INTEGER Return value of the function.
+ * @return Returns the value of norm.
  * */
 template< typename T >
 T lansp(char *norm, char *uplo, integer *n, T *ap, T *work)
@@ -49705,7 +48860,7 @@ Ta lansp(char *norm, char *uplo, integer *n, T *ap, Ta *work)
           E is REAL array, dimension (N-1) \n
           The (n-1) sub-diagonal or super-diagonal elements of A. \n
 
- * @return INTEGER Return value of the function.
+ * @return Returns the value of norm.
  * */
 template< typename T >
 T lanst(char *norm, integer *n, T *d, T *e)
@@ -49757,12 +48912,11 @@ T lanst(char *norm, integer *n, T *d, T *e)
           SN is REAL \n
           Parameters of the rotation matrix. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lanv2(T *a, T *b, T *c, T *d, T * rt1r, T *rt1i, T *rt2r, T *rt2i, T *cs, T *sn)
+void lanv2(T *a, T *b, T *c, T *d, T * rt1r, T *rt1i, T *rt2r, T *rt2i, T *cs, T *sn)
 {
-  return lanv2(a, b, c, d,  rt1r, rt1i, rt2r, rt2i, cs, sn);
+  lanv2(a, b, c, d,  rt1r, rt1i, rt2r, rt2i, cs, sn);
 }
 
 /*! @brief LAORHR_COL_GETRFNP computes the modified LU factorization without pivoting of a real general M-by-N matrix A 
@@ -49837,12 +48991,11 @@ integer lanv2(T *a, T *b, T *c, T *d, T * rt1r, T *rt1i, T *rt2r, T *rt2i, T *cs
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laorhr_col_getrfnp(integer *m, integer *n, T *a, integer *lda, T *d, integer *info)
+void laorhr_col_getrfnp(integer *m, integer *n, T *a, integer *lda, T *d, integer *info)
 {
-  return laorhr_col_getrfnp(m, n, a, lda, d, info);
+  laorhr_col_getrfnp(m, n, a, lda, d, info);
 }
 
 /*! @brief LAUNHR_COL_GETRFNP computes the modified LU factorization without pivoting of a complex general M-by-N matrix A
@@ -49917,12 +49070,11 @@ integer laorhr_col_getrfnp(integer *m, integer *n, T *a, integer *lda, T *d, int
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer launhr_col_getrfnp(integer *m, integer *n, T *a, integer *lda, T *d, integer *info)
+void launhr_col_getrfnp(integer *m, integer *n, T *a, integer *lda, T *d, integer *info)
 {
-  return launhr_col_getrfnp(m, n, a, lda, d, info);
+  launhr_col_getrfnp(m, n, a, lda, d, info);
 }
 
 /*! @brief LAORHR_COL_GETRFNP2 computes the modified LU factorization without pivoting of a real general M-by-N matrix A
@@ -50018,12 +49170,11 @@ integer launhr_col_getrfnp(integer *m, integer *n, T *a, integer *lda, T *d, int
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laorhr_col_getrfnp2(integer *m, integer *n, T *a, integer *lda, T *d, integer *info)
+void laorhr_col_getrfnp2(integer *m, integer *n, T *a, integer *lda, T *d, integer *info)
 {
-  return laorhr_col_getrfnp2(m, n, a, lda, d, info);
+  laorhr_col_getrfnp2(m, n, a, lda, d, info);
 }
 
 /*! @brief LAUNHR_COL_GETRFNP2 computes the modified LU factorization without pivoting of a real general M-by-N matrix A
@@ -50119,12 +49270,11 @@ integer laorhr_col_getrfnp2(integer *m, integer *n, T *a, integer *lda, T *d, in
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer launhr_col_getrfnp2(integer *m, integer *n, T *a, integer *lda, T *d, integer *info)
+void launhr_col_getrfnp2(integer *m, integer *n, T *a, integer *lda, T *d, integer *info)
 {
-  return launhr_col_getrfnp2(m, n, a, lda, d, info);
+  launhr_col_getrfnp2(m, n, a, lda, d, info);
 }
 
 /*! @brief LAPLL measures the linear dependence of two vectors
@@ -50163,17 +49313,16 @@ integer launhr_col_getrfnp2(integer *m, integer *n, T *a, integer *lda, T *d, in
           SSMIN is REAL \n
           The smallest singular value of the N-by-2 matrix A = (X Y).  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer lapll(integer *n, T *x, integer *incx, T *y, integer *incy, T *ssmin)
+void lapll(integer *n, T *x, integer *incx, T *y, integer *incy, T *ssmin)
 {
-  return lapll(n, x, incx, y, incy, ssmin);
+  lapll(n, x, incx, y, incy, ssmin);
 }
 template< typename T, typename Ta >
-integer lapll(integer *n, T *x, integer *incx, T *y, integer *incy, Ta *ssmin)
+void lapll(integer *n, T *x, integer *incx, T *y, integer *incy, Ta *ssmin)
 {
-  return lapll(n, x, incx, y, incy, ssmin);
+  lapll(n, x, incx, y, incy, ssmin);
 }
 
 /*! @brief LAQGB scales a general band matrix, using row and column scaling factors computed by gbequ
@@ -50236,17 +49385,16 @@ integer lapll(integer *n, T *x, integer *incx, T *y, integer *incy, Ta *ssmin)
           = 'B':  Both row and column equilibration, i.e., A has been
                   replaced by diag(R) * A * diag(C).  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laqgb(integer *m, integer *n, integer *kl, integer *ku, T *ab, integer *ldab, T *r, T *c, T *rowcnd, T *colcnd, T *amax, char *equed)
+void laqgb(integer *m, integer *n, integer *kl, integer *ku, T *ab, integer *ldab, T *r, T *c, T *rowcnd, T *colcnd, T *amax, char *equed)
 {
-  return laqgb(m, n, kl, ku, ab, ldab, r, c, rowcnd, colcnd, amax, equed);
+  laqgb(m, n, kl, ku, ab, ldab, r, c, rowcnd, colcnd, amax, equed);
 }
 template< typename T, typename Ta >
-integer laqgb(integer *m, integer *n, integer *kl, integer *ku, T *ab, integer *ldab, Ta *r, Ta *c, Ta *rowcnd, Ta *colcnd, Ta *amax, char *equed)
+void laqgb(integer *m, integer *n, integer *kl, integer *ku, T *ab, integer *ldab, Ta *r, Ta *c, Ta *rowcnd, Ta *colcnd, Ta *amax, char *equed)
 {
-  return laqgb(m, n, kl, ku, ab, ldab, r, c, rowcnd, colcnd, amax, equed);
+  laqgb(m, n, kl, ku, ab, ldab, r, c, rowcnd, colcnd, amax, equed);
 }
 
 /*! @brief LAQGE scales a general rectangular matrix, using row and column scaling factors computed by geequ
@@ -50300,17 +49448,16 @@ integer laqgb(integer *m, integer *n, integer *kl, integer *ku, T *ab, integer *
           = 'B':  Both row and column equilibration, i.e., A has been
                   replaced by diag(R) * A * diag(C).  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laqge(integer *m, integer *n, T *a, integer *lda, T *r, T *c, T *rowcnd, T *colcnd, T *amax, char *equed)
+void laqge(integer *m, integer *n, T *a, integer *lda, T *r, T *c, T *rowcnd, T *colcnd, T *amax, char *equed)
 {
-  return laqge(m, n, a, lda, r, c, rowcnd, colcnd, amax, equed);
+  laqge(m, n, a, lda, r, c, rowcnd, colcnd, amax, equed);
 }
 template< typename T, typename Ta >
-integer laqge(integer *m, integer *n, T *a, integer *lda, Ta *r, Ta *c, Ta *rowcnd, Ta *colcnd, Ta *amax, char *equed)
+void laqge(integer *m, integer *n, T *a, integer *lda, Ta *r, Ta *c, Ta *rowcnd, Ta *colcnd, Ta *amax, char *equed)
 {
-  return laqge(m, n, a, lda, r, c, rowcnd, colcnd, amax, equed);
+  laqge(m, n, a, lda, r, c, rowcnd, colcnd, amax, equed);
 }
 
 /*! @brief LAQHB scales a Hermitian band matrix, using scaling factors computed by cpbequ
@@ -50366,12 +49513,11 @@ integer laqge(integer *m, integer *n, T *a, integer *lda, Ta *r, Ta *c, Ta *rowc
           = 'Y':  Equilibration was done, i.e., A has been replaced by
                   diag(S) * A * diag(S).  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T, typename Ta >
-integer laqhb(char *uplo, integer *n, integer *kd, T *ab, integer *ldab, Ta *s, Ta *scond, Ta *amax, char *equed)
+void laqhb(char *uplo, integer *n, integer *kd, T *ab, integer *ldab, Ta *s, Ta *scond, Ta *amax, char *equed)
 {
-  return laqhb(uplo, n, kd, ab, ldab, s, scond, amax, equed); 
+  laqhb(uplo, n, kd, ab, ldab, s, scond, amax, equed); 
 }
 
 /*! @brief LAQHE scales a Hermitian matrix
@@ -50423,12 +49569,11 @@ integer laqhb(char *uplo, integer *n, integer *kd, T *ab, integer *ldab, Ta *s, 
           = 'Y':  Equilibration was done, i.e., A has been replaced by
                   diag(S) * A * diag(S).   \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T, typename Ta >
-integer laqhe(char *uplo, integer *n, T *a, integer *lda, Ta *s, Ta *scond, Ta *amax, char *equed)
+void laqhe(char *uplo, integer *n, T *a, integer *lda, Ta *s, Ta *scond, Ta *amax, char *equed)
 {
-  return laqhe(uplo, n, a, lda, s, scond, amax, equed); 
+  laqhe(uplo, n, a, lda, s, scond, amax, equed); 
 }
 
 /*! @brief LAQHP scales a Hermitian matrix stored in packed form
@@ -50475,12 +49620,11 @@ integer laqhe(char *uplo, integer *n, T *a, integer *lda, Ta *s, Ta *scond, Ta *
           = 'Y':  Equilibration was done, i.e., A has been replaced by
                   diag(S) * A * diag(S).  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T, typename Ta >
-integer laqhp(char *uplo, integer *n, T *ap, Ta *s, Ta *scond, Ta *amax, char *equed)
+void laqhp(char *uplo, integer *n, T *ap, Ta *s, Ta *scond, Ta *amax, char *equed)
 {
-  return laqhp(uplo, n, ap, s, scond, amax, equed); 
+  laqhp(uplo, n, ap, s, scond, amax, equed); 
 }
 
 /*! @brief LAQP2 computes a QR factorization with column pivoting of the matrix block
@@ -50534,17 +49678,16 @@ integer laqhp(char *uplo, integer *n, T *ap, Ta *s, Ta *scond, Ta *amax, char *e
  * @param[out] WORK
           WORK is REAL array, dimension (N)  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laqp2(integer *m, integer *n, integer *offset, T *a, integer *lda, integer *jpvt, T *tau, T *vn1, T *vn2, T *work)
+void laqp2(integer *m, integer *n, integer *offset, T *a, integer *lda, integer *jpvt, T *tau, T *vn1, T *vn2, T *work)
 {
-  return laqp2(m, n, offset, a, lda, jpvt, tau, vn1, vn2, work);
+  laqp2(m, n, offset, a, lda, jpvt, tau, vn1, vn2, work);
 }
 template< typename T, typename Ta >
-integer laqp2(integer *m, integer *n, integer *offset, T *a, integer *lda, integer *jpvt, T *tau, Ta *vn1, Ta *vn2, T *work)
+void laqp2(integer *m, integer *n, integer *offset, T *a, integer *lda, integer *jpvt, T *tau, Ta *vn1, Ta *vn2, T *work)
 {
-  return laqp2(m, n, offset, a, lda, jpvt, tau, vn1, vn2, work);
+  laqp2(m, n, offset, a, lda, jpvt, tau, vn1, vn2, work);
 }
 
 /*! @brief LAQPS computes a step of QR factorization with column pivoting of a real m-by-n matrix A by using BLAS level 3
@@ -50614,17 +49757,16 @@ integer laqp2(integer *m, integer *n, integer *offset, T *a, integer *lda, integ
           LDF is INTEGER \n
           The leading dimension of the array F. LDF >= fla_max(1,N).  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laqps(integer *m, integer *n, integer *offset, integer *nb, integer *kb, T *a, integer *lda, integer *jpvt, T *tau, T *vn1, T *vn2, T *auxv, T *f, integer *ldf)
+void laqps(integer *m, integer *n, integer *offset, integer *nb, integer *kb, T *a, integer *lda, integer *jpvt, T *tau, T *vn1, T *vn2, T *auxv, T *f, integer *ldf)
 {
-  return laqps(m, n, offset, nb, kb, a, lda, jpvt, tau, vn1, vn2, auxv, f, ldf);
+  laqps(m, n, offset, nb, kb, a, lda, jpvt, tau, vn1, vn2, auxv, f, ldf);
 }
 template< typename T, typename Ta >
-integer laqps(integer *m, integer *n, integer *offset, integer *nb, integer *kb, T *a, integer *lda, integer *jpvt, T *tau, Ta *vn1, Ta *vn2, T *auxv, T *f, integer *ldf)
+void laqps(integer *m, integer *n, integer *offset, integer *nb, integer *kb, T *a, integer *lda, integer *jpvt, T *tau, Ta *vn1, Ta *vn2, T *auxv, T *f, integer *ldf)
 {
-  return laqps(m, n, offset, nb, kb, a, lda, jpvt, tau, vn1, vn2, auxv, f, ldf);
+  laqps(m, n, offset, nb, kb, a, lda, jpvt, tau, vn1, vn2, auxv, f, ldf);
 }
 
 /*! @brief LAQR0 computes the eigenvalues of a Hessenberg matrix, and optionally the matrices from the Schur decomposition
@@ -50768,17 +49910,16 @@ integer laqps(integer *m, integer *n, integer *offset, integer *nb, integer *kb,
                 If INFO > 0 and WANTZ is .FALSE., then Z is not
                 accessed. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laqr0(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, T *h, integer *ldh, T *wr, T *wi, integer *iloz, integer *ihiz, T *z, integer *ldz, T *work, integer *lwork, integer *info)
+void laqr0(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, T *h, integer *ldh, T *wr, T *wi, integer *iloz, integer *ihiz, T *z, integer *ldz, T *work, integer *lwork, integer *info)
 {
-  return laqr0(wantt, wantz, n, ilo, ihi, h, ldh, wr, wi, iloz, ihiz, z, ldz, work, lwork, info);
+  laqr0(wantt, wantz, n, ilo, ihi, h, ldh, wr, wi, iloz, ihiz, z, ldz, work, lwork, info);
 }
 template< typename T >
-integer laqr0(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, T *h, integer *ldh, T *w, integer *iloz, integer *ihiz, T *z, integer *ldz, T *work, integer *lwork, integer *info)
+void laqr0(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, T *h, integer *ldh, T *w, integer *iloz, integer *ihiz, T *z, integer *ldz, T *work, integer *lwork, integer *info)
 {
-  return laqr0(wantt, wantz, n, ilo, ihi, h, ldh, w, iloz, ihiz, z, ldz, work, lwork, info);
+  laqr0(wantt, wantz, n, ilo, ihi, h, ldh, w, iloz, ihiz, z, ldz, work, lwork, info);
 }
 
 /*! @brief LAQR1 sets a scalar multiple of the first column of the product of 2-by-2 or 3-by-3 matrix H and specified shifts
@@ -50826,17 +49967,16 @@ integer laqr0(logical *wantt, logical *wantz, integer *n, integer *ilo, integer 
           A scalar multiple of the first column of the
           matrix K in (*).  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laqr1(integer *n, T *h, integer *ldh, T *sr1, T *si1, T *sr2, T *si2, T *v)
+void laqr1(integer *n, T *h, integer *ldh, T *sr1, T *si1, T *sr2, T *si2, T *v)
 {
-  return laqr1(n, h, ldh, sr1, si1, sr2, si2, v);
+  laqr1(n, h, ldh, sr1, si1, sr2, si2, v);
 }
 template< typename T >
-integer laqr1(integer *n, T *h, integer *ldh, T *s1, T *s2, T *v)
+void laqr1(integer *n, T *h, integer *ldh, T *s1, T *s2, T *v)
 {
-  return laqr1(n, h, ldh, s1, s2, v);
+  laqr1(n, h, ldh, s1, s2, v);
 }
 
 /*! @brief LAQR2 performs the orthogonal similarity transformation of a Hessenberg  \n
@@ -50981,17 +50121,16 @@ integer laqr1(integer *n, T *h, integer *ldh, T *s1, T *s2, T *v)
           in WORK(1).  No error message related to LWORK is issued
           by XERBLA.  Neither H nor Z are accessed. \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laqr2(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw, T *h, integer *ldh, integer *iloz, integer *ihiz, T *z, integer *ldz, integer *ns, integer *nd, T *sr, T *si, T *v, integer *ldv, integer *nh, T *t, integer *ldt, integer *nv, T *wv, integer *ldwv, T *work, integer *lwork)
+void laqr2(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw, T *h, integer *ldh, integer *iloz, integer *ihiz, T *z, integer *ldz, integer *ns, integer *nd, T *sr, T *si, T *v, integer *ldv, integer *nh, T *t, integer *ldt, integer *nv, T *wv, integer *ldwv, T *work, integer *lwork)
 {
-  return laqr2(wantt, wantz, n, ktop, kbot, nw, h, ldh, iloz, ihiz, z, ldz, ns, nd, sr, si, v, ldv, nh, t, ldt, nv, wv, ldwv, work, lwork);
+  laqr2(wantt, wantz, n, ktop, kbot, nw, h, ldh, iloz, ihiz, z, ldz, ns, nd, sr, si, v, ldv, nh, t, ldt, nv, wv, ldwv, work, lwork);
 }
 template< typename T >
-integer laqr2(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw, T *h, integer *ldh, integer *iloz, integer *ihiz, T *z, integer *ldz, integer *ns, integer *nd, T *sh, T *v, integer *ldv, integer *nh, T *t, integer *ldt, integer *nv, T *wv, integer *ldwv, T *work, integer *lwork)
+void laqr2(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw, T *h, integer *ldh, integer *iloz, integer *ihiz, T *z, integer *ldz, integer *ns, integer *nd, T *sh, T *v, integer *ldv, integer *nh, T *t, integer *ldt, integer *nv, T *wv, integer *ldwv, T *work, integer *lwork)
 {
-  return laqr2(wantt, wantz, n, ktop, kbot, nw, h, ldh, iloz, ihiz, z, ldz, ns, nd, sh, v, ldv, nh, t, ldt, nv, wv, ldwv, work, lwork);
+  laqr2(wantt, wantz, n, ktop, kbot, nw, h, ldh, iloz, ihiz, z, ldz, ns, nd, sh, v, ldv, nh, t, ldt, nv, wv, ldwv, work, lwork);
 }
 
 /*! @brief LAQR3 performs the orthogonal similarity transformation of a Hessenberg \n
@@ -51131,17 +50270,16 @@ integer laqr2(logical *wantt, logical *wantz, integer *n, integer *ktop, integer
           in WORK(1).  No error message related to LWORK is issued
           by XERBLA.  Neither H nor Z are accessed.  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laqr3(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw, T *h, integer *ldh, integer *iloz, integer *ihiz, T *z, integer *ldz, integer *ns, integer *nd, T *sr, T *si, T *v, integer *ldv, integer *nh, T *t, integer *ldt, integer *nv, T *wv, integer *ldwv, T *work, integer *lwork)
+void laqr3(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw, T *h, integer *ldh, integer *iloz, integer *ihiz, T *z, integer *ldz, integer *ns, integer *nd, T *sr, T *si, T *v, integer *ldv, integer *nh, T *t, integer *ldt, integer *nv, T *wv, integer *ldwv, T *work, integer *lwork)
 {
-  return laqr3(wantt, wantz, n, ktop, kbot, nw, h, ldh, iloz, ihiz, z, ldz, ns, nd, sr, si, v, ldv, nh, t, ldt, nv, wv, ldwv, work, lwork);
+  laqr3(wantt, wantz, n, ktop, kbot, nw, h, ldh, iloz, ihiz, z, ldz, ns, nd, sr, si, v, ldv, nh, t, ldt, nv, wv, ldwv, work, lwork);
 }
 template< typename T >
-integer laqr3(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw, T *h, integer *ldh, integer *iloz, integer *ihiz, T *z, integer *ldz, integer *ns, integer *nd, T *sh, T *v, integer *ldv, integer *nh, T *t, integer *ldt, integer *nv, T *wv, integer *ldwv, T *work, integer *lwork)
+void laqr3(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw, T *h, integer *ldh, integer *iloz, integer *ihiz, T *z, integer *ldz, integer *ns, integer *nd, T *sh, T *v, integer *ldv, integer *nh, T *t, integer *ldt, integer *nv, T *wv, integer *ldwv, T *work, integer *lwork)
 {
-  return laqr3(wantt, wantz, n, ktop, kbot, nw, h, ldh, iloz, ihiz, z, ldz, ns, nd, sh, v, ldv, nh, t, ldt, nv, wv, ldwv, work, lwork);
+  laqr3(wantt, wantz, n, ktop, kbot, nw, h, ldh, iloz, ihiz, z, ldz, ns, nd, sh, v, ldv, nh, t, ldt, nv, wv, ldwv, work, lwork);
 }
 
 /*! @brief LAQR4 computes the eigenvalues of a Hessenberg matrix, and optionally the matrices from the Schur decomposition 
@@ -51292,17 +50430,16 @@ integer laqr3(logical *wantt, logical *wantz, integer *n, integer *ktop, integer
                 If INFO > 0 and WANTZ is .FALSE., then Z is not
                 accessed.  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laqr4(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, T *h, integer *ldh, T *wr, T * wi, integer *iloz, integer *ihiz, T *z, integer *ldz, T *work, integer *lwork, integer *info)
+void laqr4(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, T *h, integer *ldh, T *wr, T * wi, integer *iloz, integer *ihiz, T *z, integer *ldz, T *work, integer *lwork, integer *info)
 {
-  return laqr4(wantt, wantz, n, ilo, ihi, h, ldh, wr, wi, iloz, ihiz, z, ldz, work, lwork, info);
+  laqr4(wantt, wantz, n, ilo, ihi, h, ldh, wr, wi, iloz, ihiz, z, ldz, work, lwork, info);
 }
 template< typename T >
-integer laqr4(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, T *h, integer *ldh, T *w, integer *iloz, integer *ihiz, T *z, integer *ldz, T *work, integer *lwork, integer *info)
+void laqr4(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, T *h, integer *ldh, T *w, integer *iloz, integer *ihiz, T *z, integer *ldz, T *work, integer *lwork, integer *info)
 {
-  return laqr4(wantt, wantz, n, ilo, ihi, h, ldh, w, iloz, ihiz, z, ldz, work, lwork, info);
+  laqr4(wantt, wantz, n, ilo, ihi, h, ldh, w, iloz, ihiz, z, ldz, work, lwork, info);
 }
 
 /*! @brief LAQR5 performs a single small-bulge multi-shift QR sweep
@@ -51420,17 +50557,16 @@ integer laqr4(logical *wantt, logical *wantz, integer *n, integer *ilo, integer 
           Leading dimension of WH just as declared in the
           calling procedure.  LDWH >= 3*NSHFTS-3.  \n
 
- * @return INTEGER Return value of the function.
  * */
 template< typename T >
-integer laqr5(logical *wantt, logical *wantz, integer *kacc22, integer *n, integer *ktop, integer *kbot, integer *nshfts, T *sr, T *si, T *h, integer *ldh, integer *iloz, integer *ihiz, T *z, integer *ldz, T *v, integer *ldv, T *u, integer *ldu, integer *nv, T *wv, integer *ldwv, integer *nh, T *wh, integer * ldwh)
+void laqr5(logical *wantt, logical *wantz, integer *kacc22, integer *n, integer *ktop, integer *kbot, integer *nshfts, T *sr, T *si, T *h, integer *ldh, integer *iloz, integer *ihiz, T *z, integer *ldz, T *v, integer *ldv, T *u, integer *ldu, integer *nv, T *wv, integer *ldwv, integer *nh, T *wh, integer * ldwh)
 {
-  return laqr5(wantt, wantz, kacc22, n, ktop, kbot, nshfts, sr, si, h, ldh, iloz, ihiz, z, ldz, v, ldv, u, ldu, nv, wv, ldwv, nh, wh, ldwh);
+  laqr5(wantt, wantz, kacc22, n, ktop, kbot, nshfts, sr, si, h, ldh, iloz, ihiz, z, ldz, v, ldv, u, ldu, nv, wv, ldwv, nh, wh, ldwh);
 }
 template< typename T >
-integer laqr5(logical *wantt, logical *wantz, integer *kacc22, integer *n, integer *ktop, integer *kbot, integer *nshfts, T *s, T *h, integer *ldh, integer *iloz, integer *ihiz, T *z, integer *ldz, T *v, integer *ldv, T *u, integer *ldu, integer *nv, T *wv, integer *ldwv, integer *nh, T *wh, integer * ldwh)
+void laqr5(logical *wantt, logical *wantz, integer *kacc22, integer *n, integer *ktop, integer *kbot, integer *nshfts, T *s, T *h, integer *ldh, integer *iloz, integer *ihiz, T *z, integer *ldz, T *v, integer *ldv, T *u, integer *ldu, integer *nv, T *wv, integer *ldwv, integer *nh, T *wh, integer * ldwh)
 {
-  return laqr5(wantt, wantz, kacc22, n, ktop, kbot, nshfts, s, h, ldh, iloz, ihiz, z, ldz, v, ldv, u, ldu, nv, wv, ldwv, nh, wh, ldwh);
+  laqr5(wantt, wantz, kacc22, n, ktop, kbot, nshfts, s, h, ldh, iloz, ihiz, z, ldz, v, ldv, u, ldu, nv, wv, ldwv, nh, wh, ldwh);
 }
 
 /*! @brief LAQSB scales a symmetric/Hermitian band matrix, using scaling factors computed by spbequ.
@@ -51486,17 +50622,16 @@ integer laqr5(logical *wantt, logical *wantz, integer *kacc22, integer *n, integ
           = 'Y':  Equilibration was done, i.e., A has been replaced by
                   diag(S) * A * diag(S).  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer laqsb(char *uplo, integer *n, integer *kd, T *ab, integer *ldab, T *s, T *scond, T *amax, char *equed)
+void laqsb(char *uplo, integer *n, integer *kd, T *ab, integer *ldab, T *s, T *scond, T *amax, char *equed)
 {
-  return laqsb(uplo, n, kd, ab, ldab, s, scond, amax, equed);
+  laqsb(uplo, n, kd, ab, ldab, s, scond, amax, equed);
 }
 template< typename T, typename Ta >
-integer laqsb(char *uplo, integer *n, integer *kd, T *ab, integer *ldab, Ta *s, Ta *scond, Ta *amax, char *equed)
+void laqsb(char *uplo, integer *n, integer *kd, T *ab, integer *ldab, Ta *s, Ta *scond, Ta *amax, char *equed)
 {
-  return laqsb(uplo, n, kd, ab, ldab, s, scond, amax, equed);
+  laqsb(uplo, n, kd, ab, ldab, s, scond, amax, equed);
 }
 
 /*! @brief LAQSP scales a symmetric/Hermitian matrix in packed storage, using scaling factors computed by sppequ
@@ -51543,17 +50678,16 @@ integer laqsb(char *uplo, integer *n, integer *kd, T *ab, integer *ldab, Ta *s, 
           = 'Y':  Equilibration was done, i.e., A has been replaced by
                   diag(S) * A * diag(S).  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer laqsp(char *uplo, integer *n, T *ap, T *s, T * scond, T *amax, char *equed)
+void laqsp(char *uplo, integer *n, T *ap, T *s, T * scond, T *amax, char *equed)
 {
-  return laqsp(uplo, n, ap, s, scond, amax, equed);
+  laqsp(uplo, n, ap, s, scond, amax, equed);
 }
 template< typename T, typename Ta >
-integer laqsp(char *uplo, integer *n, T *ap, Ta *s, Ta * scond, Ta *amax, char *equed)
+void laqsp(char *uplo, integer *n, T *ap, Ta *s, Ta * scond, Ta *amax, char *equed)
 {
-  return laqsp(uplo, n, ap, s, scond, amax, equed);
+  laqsp(uplo, n, ap, s, scond, amax, equed);
 }
 
 /*! @brief LAQSY scales a symmetric/Hermitian matrix, using scaling factors computed by spoequ
@@ -51605,17 +50739,16 @@ integer laqsp(char *uplo, integer *n, T *ap, Ta *s, Ta * scond, Ta *amax, char *
           = 'Y':  Equilibration was done, i.e., A has been replaced by
                   diag(S) * A * diag(S). \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer laqsy(char *uplo, integer *n, T *a, integer *lda, T *s, T *scond, T *amax, char *equed)
+void laqsy(char *uplo, integer *n, T *a, integer *lda, T *s, T *scond, T *amax, char *equed)
 {
-  return laqsy(uplo, n, a, lda, s, scond, amax, equed);
+  laqsy(uplo, n, a, lda, s, scond, amax, equed);
 }
 template< typename T, typename Ta >
-integer laqsy(char *uplo, integer *n, T *a, integer *lda, Ta *s, Ta *scond, Ta *amax, char *equed)
+void laqsy(char *uplo, integer *n, T *a, integer *lda, Ta *s, Ta *scond, Ta *amax, char *equed)
 {
-  return laqsy(uplo, n, a, lda, s, scond, amax, equed);
+  laqsy(uplo, n, a, lda, s, scond, amax, equed);
 }
 
 /*! @brief LAQTR solves a real quasi-triangular system of equations, or a complex \n
@@ -51701,12 +50834,11 @@ integer laqsy(char *uplo, integer *n, T *a, integer *lda, Ta *s, Ta *scond, Ta *
           NOTE: In the interests of speed, this routine does not
                 check the inputs for errors.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer laqtr(logical *ltran, logical *lreal, integer *n, T *t, integer *ldt, T *b, T *w, T *scale, T *x, T *work, integer *info)
+void laqtr(logical *ltran, logical *lreal, integer *n, T *t, integer *ldt, T *b, T *w, T *scale, T *x, T *work, integer *info)
 {
-  return laqtr(ltran, lreal, n, t, ldt, b, w, scale, x, work, info);
+  laqtr(ltran, lreal, n, t, ldt, b, w, scale, x, work, info);
 }
 
 /*! @brief LAR1V computes the (scaled) r-th column of the inverse of the \n
@@ -51812,17 +50944,16 @@ integer laqtr(logical *ltran, logical *lreal, integer *n, T *t, integer *ldt, T 
  * @param[out] WORK
           WORK is REAL array, dimension (4*N)  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lar1v(integer *n, integer *b1, integer *bn, T * lambda, T *d, T *l, T *ld, T *lld, T *pivmin, T * gaptol, T *z, logical *wantnc, integer *negcnt, T *ztz, T * mingma, integer *r, integer *isuppz, T *nrminv, T *resid, T *rqcorr, T *work)
+void lar1v(integer *n, integer *b1, integer *bn, T * lambda, T *d, T *l, T *ld, T *lld, T *pivmin, T * gaptol, T *z, logical *wantnc, integer *negcnt, T *ztz, T * mingma, integer *r, integer *isuppz, T *nrminv, T *resid, T *rqcorr, T *work)
 {
-  return lar1v(n, b1, bn, lambda, d, l, d, lld, pivmin, gaptol, z, wantnc, negcnt, ztz, mingma, r, isuppz, nrminv, resid, rqcorr, work);
+  lar1v(n, b1, bn, lambda, d, l, d, lld, pivmin, gaptol, z, wantnc, negcnt, ztz, mingma, r, isuppz, nrminv, resid, rqcorr, work);
 }
 template< typename T, typename Ta >
-integer lar1v(integer *n, integer *b1, integer *bn, Ta *lambda, Ta *d, Ta *l, Ta *ld, Ta *lld, Ta *pivmin, Ta * gaptol, T *z, logical *wantnc, integer *negcnt, Ta *ztz, Ta * mingma, integer *r, integer *isuppz, Ta *nrminv, Ta *resid, Ta *rqcorr, Ta *work)
+void lar1v(integer *n, integer *b1, integer *bn, Ta *lambda, Ta *d, Ta *l, Ta *ld, Ta *lld, Ta *pivmin, Ta * gaptol, T *z, logical *wantnc, integer *negcnt, Ta *ztz, Ta * mingma, integer *r, integer *isuppz, Ta *nrminv, Ta *resid, Ta *rqcorr, Ta *work)
 {
-  return lar1v(n, b1, bn, lambda, d, l, d, lld, pivmin, gaptol, z, wantnc, negcnt, ztz, mingma, r, isuppz, nrminv, resid, rqcorr, work);
+  lar1v(n, b1, bn, lambda, d, l, d, lld, pivmin, gaptol, z, wantnc, negcnt, ztz, mingma, r, isuppz, nrminv, resid, rqcorr, work);
 }
 
 /*! @brief LAR2V applies a vector of plane rotations with real cosines and real \n
@@ -51866,17 +50997,16 @@ integer lar1v(integer *n, integer *b1, integer *bn, Ta *lambda, Ta *d, Ta *l, Ta
           INCC is INTEGER \n
           The increment between elements of C and S. INCC > 0.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lar2v(integer *n, T *x, T *y, T *z, integer *incx, T *c, T *s, integer *incc)
+void lar2v(integer *n, T *x, T *y, T *z, integer *incx, T *c, T *s, integer *incc)
 {
-  return lar2v(n, x, y, z, incx, c, s, incc);
+  lar2v(n, x, y, z, incx, c, s, incc);
 }
 template< typename T, typename Ta >
-integer lar2v(integer *n, T *x, T *y, T *z, integer *incx, Ta *c, T *s, integer *incc)
+void lar2v(integer *n, T *x, T *y, T *z, integer *incx, Ta *c, T *s, integer *incc)
 {
-  return lar2v(n, x, y, z, incx, c, s, incc);
+  lar2v(n, x, y, z, incx, c, s, incc);
 }
 
 /*! @brief LARF applies an elementary reflector to a general rectangular matrix
@@ -51929,12 +51059,11 @@ integer lar2v(integer *n, T *x, T *y, T *z, integer *incx, Ta *c, T *s, integer 
                          (N) if SIDE = 'L' \n
                       or (M) if SIDE = 'R'  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer larf(char *side, integer *m, integer *n, T *v, integer *incv, T *tau, T *c, integer *ldc, T *work)
+void larf(char *side, integer *m, integer *n, T *v, integer *incv, T *tau, T *c, integer *ldc, T *work)
 {
-  return larf(side, m, n, v, incv, tau, c, ldc, work);
+  larf(side, m, n, v, incv, tau, c, ldc, work);
 }
 
 /*! @brief LARFY applies an elementary reflector, or Householder matrix, H, \n
@@ -51984,12 +51113,11 @@ integer larf(char *side, integer *m, integer *n, T *v, integer *incv, T *tau, T 
   * @param[out] WORK
            WORK is REAL array, dimension (N)   \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer larfy(char *uplo, integer *n, T *v, integer *incv, T *tau, T *c, integer *ldc, T *work)
+void larfy(char *uplo, integer *n, T *v, integer *incv, T *tau, T *c, integer *ldc, T *work)
 {
-  return larfy(uplo, n, v, incv, tau, c, ldc, work);
+  larfy(uplo, n, v, incv, tau, c, ldc, work);
 }
 
 /*! @brief LARGV generates a vector of plane rotations with real cosines and real sines
@@ -52030,17 +51158,16 @@ integer larfy(char *uplo, integer *n, T *v, integer *incv, T *tau, T *c, integer
           INCC is INTEGER \n
           The increment between elements of C. INCC > 0. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer largv(integer *n, T *x, integer *incx, T *y, integer *incy, T *c, integer *incc)
+void largv(integer *n, T *x, integer *incx, T *y, integer *incy, T *c, integer *incc)
 {
-  return largv(n, x, incx, y, incy, c, incc);
+  largv(n, x, incx, y, incy, c, incc);
 }
 template< typename T, typename Ta >
-integer largv(integer *n, T *x, integer *incx, T *y, integer *incy, Ta *c, integer *incc)
+void largv(integer *n, T *x, integer *incx, T *y, integer *incy, Ta *c, integer *incc)
 {
-  return largv(n, x, incx, y, incy, c, incc);
+  largv(n, x, incx, y, incy, c, incc);
 }
 
 /*! @brief LARRA computes the splitting points with the specified threshold
@@ -52094,12 +51221,11 @@ integer largv(integer *n, T *x, integer *incx, T *y, integer *incy, Ta *c, integ
           INFO is INTEGER \n
           = 0:  successful exit \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer larra(integer *n, T *d, T *e, T *e2, T * spltol, T *tnrm, integer *nsplit, integer *isplit, integer *info)
+void larra(integer *n, T *d, T *e, T *e2, T * spltol, T *tnrm, integer *nsplit, integer *isplit, integer *info)
 {
-  return larra(n, d, e, e2, spltol, tnrm, nsplit, isplit, info); 
+  larra(n, d, e, e2, spltol, tnrm, nsplit, isplit, info); 
 }
 
 /*! @brief LARRB provides limited bisection to locate eigenvalues for more accuracy
@@ -52186,12 +51312,11 @@ integer larra(integer *n, T *d, T *e, T *e2, T * spltol, T *tnrm, integer *nspli
           INFO is INTEGER \n
           Error flag.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer larrb(integer *n, T *d, T *lld, integer *ifirst, integer *ilast, T *rtol1, T *rtol2, integer *offset, T *w, T *wgap, T *werr, T *work, integer *iwork, T * pivmin, T *spdiam, integer *twist, integer *info)
+void larrb(integer *n, T *d, T *lld, integer *ifirst, integer *ilast, T *rtol1, T *rtol2, integer *offset, T *w, T *wgap, T *werr, T *work, integer *iwork, T * pivmin, T *spdiam, integer *twist, integer *info)
 {
-  return larrb(n, d, lld, ifirst, ilast, rtol1, rtol2, offset, w, wgap, werr, work, iwork, pivmin, spdiam, twist, info); 
+  larrb(n, d, lld, ifirst, ilast, rtol1, rtol2, offset, w, wgap, werr, work, iwork, pivmin, spdiam, twist, info); 
 }
 
 /*! @brief LARRC computes the number of eigenvalues of the symmetric tridiagonal matrix
@@ -52240,12 +51365,11 @@ integer larrb(integer *n, T *d, T *lld, integer *ifirst, integer *ilast, T *rtol
  * @param[out] INFO
           INFO is INTEGER  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer larrc(char *jobt, integer *n, T *vl, T *vu, T *d, T *e, T *pivmin, integer *eigcnt, integer *lcnt, integer * rcnt, integer *info)
+void larrc(char *jobt, integer *n, T *vl, T *vu, T *d, T *e, T *pivmin, integer *eigcnt, integer *lcnt, integer * rcnt, integer *info)
 {
-  return larrc(jobt, n, vl, vu, d, e, pivmin, eigcnt, lcnt, rcnt, info); 
+  larrc(jobt, n, vl, vu, d, e, pivmin, eigcnt, lcnt, rcnt, info); 
 }
 
 /*! @brief LARRD computes the eigenvalues of a symmetric tridiagonal matrix to suitable accuracy
@@ -52423,12 +51547,11 @@ integer larrc(char *jobt, integer *n, T *vl, T *vu, T *d, T *e, T *pivmin, integ
                         Cure: Increase the PARAMETER "FUDGE",
                               recompile, and try again.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer larrd(char *range, char *order, integer *n, T *vl, T *vu, integer *il, integer *iu, T *gers, T *reltol, T * d, T *e, T *e2, T *pivmin, integer *nsplit, integer * isplit, integer *m, T *w, T *werr, T *wl, T *wu, integer * iblock, integer *indexw, T *work, integer *iwork, integer *info)
+void larrd(char *range, char *order, integer *n, T *vl, T *vu, integer *il, integer *iu, T *gers, T *reltol, T * d, T *e, T *e2, T *pivmin, integer *nsplit, integer * isplit, integer *m, T *w, T *werr, T *wl, T *wu, integer * iblock, integer *indexw, T *work, integer *iwork, integer *info)
 {
-  return larrd(range, order, n, vl, vu, il, iu, gers, reltol, d, e, e2, pivmin, nsplit, isplit, m, w, werr, wl, wu, iblock, indexw, work, iwork, info); 
+  larrd(range, order, n, vl, vu, il, iu, gers, reltol, d, e, e2, pivmin, nsplit, isplit, m, w, werr, wl, wu, iblock, indexw, work, iwork, info); 
 }
 
 /*! @brief LARRE given the tridiagonal matrix T, sets small off-diagonal elements to \n
@@ -52585,12 +51708,11 @@ integer larrd(char *range, char *order, integer *n, T *vl, T *vu, integer *il, i
           =-5:  Problem in SLASQ2. \n
           =-6:  Problem in SLASQ2.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer larre(char *range, integer *n, T *vl, T *vu, integer *il, integer *iu, T *d, T *e, T *e2, T *rtol1, T *rtol2, T *spltol, integer *nsplit, integer *isplit, integer * m, T *w, T *werr, T *wgap, integer *iblock, integer *indexw, T *gers, T *pivmin, T *work, integer *iwork, integer *info)
+void larre(char *range, integer *n, T *vl, T *vu, integer *il, integer *iu, T *d, T *e, T *e2, T *rtol1, T *rtol2, T *spltol, integer *nsplit, integer *isplit, integer * m, T *w, T *werr, T *wgap, integer *iblock, integer *indexw, T *gers, T *pivmin, T *work, integer *iwork, integer *info)
 {
-  return larre(range, n, vl, vu, il, iu, d, e, e2, rtol1, rtol2, spltol, nsplit, isplit, m, w, werr, wgap, iblock, indexw, gers, pivmin, work, iwork, info); 
+  larre(range, n, vl, vu, il, iu, d, e, e2, rtol1, rtol2, spltol, nsplit, isplit, m, w, werr, wgap, iblock, indexw, gers, pivmin, work, iwork, info); 
 }
 
 /*! @brief LARRF finds a new relatively robust representation such that at least \n
@@ -52670,12 +51792,11 @@ integer larre(char *range, integer *n, T *vl, T *vu, integer *il, integer *iu, T
           INFO is INTEGER \n
           Signals processing OK (=0) or failure (=1) \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer larrf(integer *n, T *d, T *l, T *ld, integer *clstrt, integer *clend, T *w, T *wgap, T *werr, T *spdiam, T *clgapl, T *clgapr, T *pivmin, T *sigma, T *dplus, T *lplus, T *work, integer *info)
+void larrf(integer *n, T *d, T *l, T *ld, integer *clstrt, integer *clend, T *w, T *wgap, T *werr, T *spdiam, T *clgapl, T *clgapr, T *pivmin, T *sigma, T *dplus, T *lplus, T *work, integer *info)
 {
-  return larrf(n, d, l, ld, clstrt, clend, w, wgap, werr, spdiam, clgapl, clgapr, pivmin, sigma, dplus, lplus, work, info); 
+  larrf(n, d, l, ld, clstrt, clend, w, wgap, werr, spdiam, clgapl, clgapr, pivmin, sigma, dplus, lplus, work, info); 
 }
 
 /*! @brief LARRJ performs refinement of the initial estimates of the eigenvalues of the matrix T
@@ -52743,12 +51864,11 @@ integer larrf(integer *n, T *d, T *l, T *ld, integer *clstrt, integer *clend, T 
           INFO is INTEGER \n
           Error flag. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer larrj(integer *n, T *d, T *e2, integer *ifirst, integer *ilast, T *rtol, integer *offset, T *w, T *werr, T *work, integer *iwork, T *pivmin, T *spdiam, integer *info)
+void larrj(integer *n, T *d, T *e2, integer *ifirst, integer *ilast, T *rtol, integer *offset, T *w, T *werr, T *work, integer *iwork, T *pivmin, T *spdiam, integer *info)
 {
-  return larrj(n, d, e2, ifirst, ilast, rtol, offset, w, werr, work, iwork, pivmin, spdiam, info); 
+  larrj(n, d, e2, ifirst, ilast, rtol, offset, w, werr, work, iwork, pivmin, spdiam, info); 
 }
 
 /*! @brief LARRK computes one eigenvalue of a symmetric tridiagonal matrix T to suitable accuracy
@@ -52807,12 +51927,11 @@ integer larrj(integer *n, T *d, T *e2, integer *ifirst, integer *ilast, T *rtol,
           = 0:       Eigenvalue converged \n
           = -1:      Eigenvalue did NOT converge  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer larrk(integer *n, integer *iw, T *gl, T *gu, T *d, T *e2, T *pivmin, T *reltol, T *w, T *werr, integer *info)
+void larrk(integer *n, integer *iw, T *gl, T *gu, T *d, T *e2, T *pivmin, T *reltol, T *w, T *werr, integer *info)
 {
-  return larrk(n, iw, gl, gu, d, e2, pivmin, reltol, w, werr, info); 
+  larrk(n, iw, gl, gu, d, e2, pivmin, reltol, w, werr, info); 
 }
 
 /*! @brief LARRR performs tests to decide whether the symmetric tridiagonal matrix T \n
@@ -52843,12 +51962,11 @@ integer larrk(integer *n, integer *iw, T *gl, T *gu, T *d, T *e2, T *pivmin, T *
           INFO = 1          : the matrix warrants computations guaranteeing
                               only absolute accuracy.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer larrr(integer *n, T *d, T *e, integer *info)
+void larrr(integer *n, T *d, T *e, integer *info)
 {
-  return larrr(n, d, e, info);   
+  larrr(n, d, e, info);   
 }
 
 /*! @brief LARRV computes the eigenvectors of the tridiagonal matrix T = L D LT    \n
@@ -52999,17 +52117,16 @@ integer larrr(integer *n, T *d, T *e, integer *info)
           = 5:  The Rayleigh Quotient Iteration failed to converge to
                 full accuracy in MAXITR steps.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer larrv(integer *n, T *vl, T *vu, T *d, T *l, T *pivmin, integer *isplit, integer *m, integer *dol, integer *dou, T *minrgp, T *rtol1, T *rtol2, T *w, T *werr, T *wgap, integer *iblock, integer *indexw, T *gers, T *z, integer *ldz, integer *isuppz, T *work, integer *iwork, integer * info)
+void larrv(integer *n, T *vl, T *vu, T *d, T *l, T *pivmin, integer *isplit, integer *m, integer *dol, integer *dou, T *minrgp, T *rtol1, T *rtol2, T *w, T *werr, T *wgap, integer *iblock, integer *indexw, T *gers, T *z, integer *ldz, integer *isuppz, T *work, integer *iwork, integer * info)
 {
-  return larrv(n, vl, vu, d, l, pivmin, isplit, m, dol, dou, minrgp, rtol1, rtol2, w, werr, wgap, iblock, indexw, gers, z, ldz, isuppz, work, iwork, info);
+  larrv(n, vl, vu, d, l, pivmin, isplit, m, dol, dou, minrgp, rtol1, rtol2, w, werr, wgap, iblock, indexw, gers, z, ldz, isuppz, work, iwork, info);
 }
 template< typename T, typename Ta >
-integer larrv(integer *n, Ta *vl, Ta *vu, Ta *d, Ta *l, Ta *pivmin, integer *isplit, integer *m, integer *dol, integer *dou, Ta *minrgp, Ta *rtol1, Ta *rtol2, Ta *w, Ta *werr, Ta *wgap, integer *iblock, integer *indexw, Ta *gers, T *z, integer *ldz, integer *isuppz, Ta *work, integer *iwork, integer * info)
+void larrv(integer *n, Ta *vl, Ta *vu, Ta *d, Ta *l, Ta *pivmin, integer *isplit, integer *m, integer *dol, integer *dou, Ta *minrgp, Ta *rtol1, Ta *rtol2, Ta *w, Ta *werr, Ta *wgap, integer *iblock, integer *indexw, Ta *gers, T *z, integer *ldz, integer *isuppz, Ta *work, integer *iwork, integer * info)
 {
-  return larrv(n, vl, vu, d, l, pivmin, isplit, m, dol, dou, minrgp, rtol1, rtol2, w, werr, wgap, iblock, indexw, gers, z, ldz, isuppz, work, iwork, info);
+  larrv(n, vl, vu, d, l, pivmin, isplit, m, dol, dou, minrgp, rtol1, rtol2, w, werr, wgap, iblock, indexw, gers, z, ldz, isuppz, work, iwork, info);
 }
 
 /*! @brief LARSCL2 performs reciprocal diagonal scaling on a vector
@@ -53042,17 +52159,16 @@ integer larrv(integer *n, Ta *vl, Ta *vu, Ta *d, Ta *l, Ta *pivmin, integer *isp
           LDX is INTEGER \n
           The leading dimension of the vector X. LDX >= M.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer larscl2(integer *m, integer *n, T *d, T *x, integer *ldx)
+void larscl2(integer *m, integer *n, T *d, T *x, integer *ldx)
 {
-  return larscl2(m, n, d, x, ldx);
+  larscl2(m, n, d, x, ldx);
 }
 template< typename T, typename Ta >
-integer larscl2(integer *m, integer *n, Ta *d, T *x, integer *ldx)
+void larscl2(integer *m, integer *n, Ta *d, T *x, integer *ldx)
 {
-  return larscl2(m, n, d, x, ldx);
+  larscl2(m, n, d, x, ldx);
 }
 
 /*! @brief LARTG generates a plane rotation with real cosine and real sine
@@ -53095,17 +52211,16 @@ integer larscl2(integer *m, integer *n, Ta *d, T *x, integer *ldx)
   This version has a few statements commented out for thread safety
   (machine parameters are computed on each entry). 10 feb 03, SJH.
  
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lartg(T f, T g, T *cs, T *sn, T *r__)
+void lartg(T f, T g, T *cs, T *sn, T *r__)
 {
-  return lartg(f, g, cs, sn, r__);
+  lartg(f, g, cs, sn, r__);
 }
 template< typename T, typename Ta >
-integer lartg(T f, T g, Ta *cs, T *sn, T *r__)
+void lartg(T f, T g, Ta *cs, T *sn, T *r__)
 {
-  return lartg(f, g, cs, sn, r__);
+  lartg(f, g, cs, sn, r__);
 }
 
 /*! @brief LARTV applies a vector of plane rotations with real cosines and \n
@@ -53147,17 +52262,16 @@ integer lartg(T f, T g, Ta *cs, T *sn, T *r__)
           INCC is INTEGER \n
           The increment between elements of C and S. INCC > 0. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lartv(integer *n, T *x, integer *incx, T *y, integer *incy, T *c, T *s, integer *incc)
+void lartv(integer *n, T *x, integer *incx, T *y, integer *incy, T *c, T *s, integer *incc)
 {
-  return lartv(n, x, incx, y, incy, c, s, incc);
+  lartv(n, x, incx, y, incy, c, s, incc);
 }
 template< typename T, typename Ta >
-integer lartv(integer *n, T *x, integer *incx, T *y, integer *incy, Ta *c, T *s, integer *incc)
+void lartv(integer *n, T *x, integer *incx, T *y, integer *incy, Ta *c, T *s, integer *incc)
 {
-  return lartv(n, x, incx, y, incy, c, s, incc);
+  lartv(n, x, incx, y, incy, c, s, incc);
 }
 
 /*! @brief LARUV returns a vector of n random real numbers from a uniform distribution
@@ -53184,12 +52298,11 @@ integer lartv(integer *n, T *x, integer *incx, T *y, integer *incy, Ta *c, T *s,
           X is REAL array, dimension (N) \n
           The generated random numbers. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer laruv(integer *iseed, integer *n, T *x)
+void laruv(integer *iseed, integer *n, T *x)
 {
-  return laruv(iseed, n, x);  
+  laruv(iseed, n, x);  
 }
 
 /*! @brief LARZ applies an elementary reflector (as   returned by stzrzf) to a general matrix
@@ -53249,12 +52362,11 @@ integer laruv(integer *iseed, integer *n, T *x)
                          (N) if SIDE = 'L' \n
                       or (M) if SIDE = 'R'   \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer larz(char *side, integer *m, integer *n, integer *l, T *v, integer *incv, T *tau, T *c, integer *ldc, T * work)
+void larz(char *side, integer *m, integer *n, integer *l, T *v, integer *incv, T *tau, T *c, integer *ldc, T * work)
 {
-  return larz(side, m, n, l, v, incv, tau, c, ldc, work);
+  larz(side, m, n, l, v, incv, tau, c, ldc, work);
 }
 
 /*! @brief LARZB applies a block reflector or its transpose to a general matrix
@@ -53332,12 +52444,11 @@ integer larz(char *side, integer *m, integer *n, integer *l, T *v, integer *incv
           If SIDE = 'L', LDWORK >= fla_max(1,N); \n
           if SIDE = 'R', LDWORK >= fla_max(1,M). \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer larzb(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, integer *l, T *v, integer *ldv, T *t, integer *ldt, T *c, integer *ldc, T * work, integer *ldwork)
+void larzb(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, integer *l, T *v, integer *ldv, T *t, integer *ldt, T *c, integer *ldc, T * work, integer *ldwork)
 {
-  return larzb(side, trans, direct, storev, m, n, k, l, v, ldv, t, ldt, c, ldc, work, ldwork);
+  larzb(side, trans, direct, storev, m, n, k, l, v, ldv, t, ldt, c, ldc, work, ldwork);
 }
 
 /*! @brief LARZT forms the triangular factor T of a block reflector H = I - vtvH.
@@ -53407,12 +52518,11 @@ integer larzb(char *side, char *trans, char *direct, char * storev, integer *m, 
           LDT is INTEGER \n
           The leading dimension of the array T. LDT >= K. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer larzt(char *direct, char *storev, integer *n, integer * k, T *v, integer *ldv, T *tau, T *t, integer *ldt)
+void larzt(char *direct, char *storev, integer *n, integer * k, T *v, integer *ldv, T *tau, T *t, integer *ldt)
 {
-  return larzt(direct, storev, n, k, v, ldv, tau, t, ldt);
+  larzt(direct, storev, n, k, v, ldv, tau, t, ldt);
 }
 
 /*! @brief LAS2 computes singular values of a 2-by-2 triangular matrix
@@ -53443,12 +52553,11 @@ integer larzt(char *direct, char *storev, integer *n, integer * k, T *v, integer
           SSMAX is REAL \n
           The larger singular value.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer las2(T *f, T *g, T *h, T *ssmin, T * ssmax)
+void las2(T *f, T *g, T *h, T *ssmin, T * ssmax)
 {
-  return las2(f, g, h, ssmin, ssmax); 
+  las2(f, g, h, ssmin, ssmax); 
 }
 
 /*! @brief LASCL2 performs diagonal scaling on a vector
@@ -53481,17 +52590,16 @@ integer las2(T *f, T *g, T *h, T *ssmin, T * ssmax)
           LDX is INTEGER \n
           The leading dimension of the vector X. LDX >= M.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lascl2(integer *m, integer *n, T *d, T *x, integer *ldx)
+void lascl2(integer *m, integer *n, T *d, T *x, integer *ldx)
 {
-  return lascl2(m, n, d, x, ldx);
+  lascl2(m, n, d, x, ldx);
 }
 template< typename T, typename Ta >
-integer lascl2(integer *m, integer *n, Ta *d, T *x, integer *ldx)
+void lascl2(integer *m, integer *n, Ta *d, T *x, integer *ldx)
 {
-  return lascl2(m, n, d, x, ldx);
+  lascl2(m, n, d, x, ldx);
 }
 
 /*! @brief LASD0 computes the singular values of a real upper bidiagonal n-by-m  \n
@@ -53553,12 +52661,11 @@ integer lascl2(integer *m, integer *n, Ta *d, T *x, integer *ldx)
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
           > 0:  if INFO = 1, a singular value did not converge  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasd0(integer *n, integer *sqre, T *d, T *e, T *u, integer *ldu, T *vt, integer *ldvt, integer *smlsiz, integer *iwork, T *work, integer *info)
+void lasd0(integer *n, integer *sqre, T *d, T *e, T *u, integer *ldu, T *vt, integer *ldvt, integer *smlsiz, integer *iwork, T *work, integer *info)
 {
-  return lasd0(n, sqre, d, e, u, ldu, vt, ldvt, smlsiz, iwork, work, info); 
+  lasd0(n, sqre, d, e, u, ldu, vt, ldvt, smlsiz, iwork, work, info); 
 }
 
 /*! @brief LASD1 computes the SVD of an upper bidiagonal matrix B of the specified size. Used by sbdsdc
@@ -53668,12 +52775,11 @@ integer lasd0(integer *n, integer *sqre, T *d, T *e, T *u, integer *ldu, T *vt, 
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
           > 0:  if INFO = 1, a singular value did not converge \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasd1(integer *nl, integer *nr, integer *sqre, T * d, T *alpha, T *beta, T *u, integer *ldu, T *vt, integer *ldvt, integer *idxq, integer *iwork, T *work, integer * info)
+void lasd1(integer *nl, integer *nr, integer *sqre, T * d, T *alpha, T *beta, T *u, integer *ldu, T *vt, integer *ldvt, integer *idxq, integer *iwork, T *work, integer * info)
 {
-  return lasd1(nl, nr, sqre, d, alpha, beta, u, ldu, vt, ldvt, idxq, iwork, work, info); 
+  lasd1(nl, nr, sqre, d, alpha, beta, u, ldu, vt, ldvt, idxq, iwork, work, info); 
 }
 
 /*! @brief LASD2 merges the two sets of singular values together into a single sorted set. Used by sbdsdc
@@ -53816,12 +52922,11 @@ integer lasd1(integer *nl, integer *nr, integer *sqre, T * d, T *alpha, T *beta,
           = 0:  successful exit. \n
           < 0:  if INFO = -i, the i-th argument had an illegal value.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasd2(integer *nl, integer *nr, integer *sqre, integer *k, T *d, T *z, T *alpha, T *beta, T *u, integer * ldu, T *vt, integer *ldvt, T *dsigma, T *u2, integer *ldu2, T *vt2, integer *ldvt2, integer *idxp, integer *idx, integer *idxc, integer *idxq, integer *coltyp, integer *info)
+void lasd2(integer *nl, integer *nr, integer *sqre, integer *k, T *d, T *z, T *alpha, T *beta, T *u, integer * ldu, T *vt, integer *ldvt, T *dsigma, T *u2, integer *ldu2, T *vt2, integer *ldvt2, integer *idxp, integer *idx, integer *idxc, integer *idxq, integer *coltyp, integer *info)
 {
-  return lasd2(nl, nr, sqre, k, d, z, alpha, beta, u, ldu, vt, ldvt, dsigma, u2, ldu2, vt2, ldvt2, idxp, idx, idxc, idxq, coltyp, info); 
+  lasd2(nl, nr, sqre, k, d, z, alpha, beta, u, ldu, vt, ldvt, dsigma, u2, ldu2, vt2, ldvt2, idxp, idx, idxc, idxq, coltyp, info); 
 }
 
 /*! @brief LASD3 finds all square roots of the roots of the secular equation, \n
@@ -53930,12 +53035,11 @@ integer lasd2(integer *nl, integer *nr, integer *sqre, integer *k, T *d, T *z, T
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
           > 0:  if INFO = 1, a singular value did not converge  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasd3(integer *nl, integer *nr, integer *sqre, integer *k, T *d, T *q, integer *ldq, T *dsigma, T *u, integer * ldu, T *u2, integer *ldu2, T *vt, integer *ldvt, T *vt2, integer *ldvt2, integer *idxc, integer *ctot, T *z, integer * info)
+void lasd3(integer *nl, integer *nr, integer *sqre, integer *k, T *d, T *q, integer *ldq, T *dsigma, T *u, integer * ldu, T *u2, integer *ldu2, T *vt, integer *ldvt, T *vt2, integer *ldvt2, integer *idxc, integer *ctot, T *z, integer * info)
 {
-  return lasd3(nl, nr, sqre, k, d, q, ldq, dsigma, u, ldu, u2, ldu2, vt, ldvt, vt2, ldvt2, idxc, ctot, z, info); 
+  lasd3(nl, nr, sqre, k, d, q, ldq, dsigma, u, ldu, u2, ldu2, vt, ldvt, vt2, ldvt2, idxc, ctot, z, info); 
 }
 
 /*! @brief LASD4 computes the square root of the i-th updated eigenvalue  \n
@@ -53996,12 +53100,11 @@ integer lasd3(integer *nl, integer *nr, integer *sqre, integer *k, T *d, T *q, i
           = 0:  successful exit \n
           > 0:  if INFO = 1, the updating process failed.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasd4(integer *n, integer *i, T *d, T *z, T *delta, T *rho, T *sigma, T *work, integer *info)
+void lasd4(integer *n, integer *i, T *d, T *z, T *delta, T *rho, T *sigma, T *work, integer *info)
 {
-  return lasd4(n, i, d, z, delta, rho, sigma, work, info); 
+  lasd4(n, i, d, z, delta, rho, sigma, work, info); 
 }
 
 /*! @brief LASD5 computes the square root of the i-th eigenvalue of a      \n
@@ -54048,12 +53151,11 @@ integer lasd4(integer *n, integer *i, T *d, T *z, T *delta, T *rho, T *sigma, T 
           WORK is REAL array, dimension (2) \n
           WORK contains (D(j) + sigma_I) in its  j-th component.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasd5(integer *i, T *d, T *z, T *delta, T *rho, T *dsigma, T *work)
+void lasd5(integer *i, T *d, T *z, T *delta, T *rho, T *dsigma, T *work)
 {
-  return lasd5(i, d, z, delta, rho, dsigma, work); 
+  lasd5(i, d, z, delta, rho, dsigma, work); 
 }
 
 /*! @brief LASD6 computes the SVD of an updated upper bidiagonal matrix \n
@@ -54229,12 +53331,11 @@ integer lasd5(integer *i, T *d, T *z, T *delta, T *rho, T *dsigma, T *work)
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
           > 0:  if INFO = 1, a singular value did not converge  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasd6(integer *icompq, integer *nl, integer *nr, integer *sqre, T *d, T *vf, T *vl, T *alpha, T *beta, integer *idxq, integer *perm, integer *givptr, integer *givcol, integer *ldgcol, T *givnum, integer *ldgnum, T *poles, T * difl, T *difr, T *z, integer *k, T *c, T *s, T * work, integer *iwork, integer *info)
+void lasd6(integer *icompq, integer *nl, integer *nr, integer *sqre, T *d, T *vf, T *vl, T *alpha, T *beta, integer *idxq, integer *perm, integer *givptr, integer *givcol, integer *ldgcol, T *givnum, integer *ldgnum, T *poles, T * difl, T *difr, T *z, integer *k, T *c, T *s, T * work, integer *iwork, integer *info)
 {
-  return lasd6(icompq, nl, nr, sqre, d, vf, vl, alpha, beta, idxq, perm, givptr, givcol, ldgcol, givnum, ldgnum, poles, difl, difr, z, k, c, s, work, iwork, info); 
+  lasd6(icompq, nl, nr, sqre, d, vf, vl, alpha, beta, idxq, perm, givptr, givcol, ldgcol, givnum, ldgnum, poles, difl, difr, z, k, c, s, work, iwork, info); 
 }
 
 /*! @brief LASD7 merges the two sets of singular values together into a   \n
@@ -54374,12 +53475,11 @@ integer lasd6(integer *icompq, integer *nl, integer *nr, integer *sqre, T *d, T 
           = 0:  successful exit. \n
           < 0:  if INFO = -i, the i-th argument had an illegal value.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasd7(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *k, T *d, T *z, T *zw, T *vf, T *vfw, T *vl, T *vlw, T *alpha, T *beta, T *dsigma, integer *idx, integer *idxp, integer *idxq, integer *perm, integer * givptr, integer *givcol, integer *ldgcol, T *givnum, integer * ldgnum, T *c, T *s, integer *info)
+void lasd7(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *k, T *d, T *z, T *zw, T *vf, T *vfw, T *vl, T *vlw, T *alpha, T *beta, T *dsigma, integer *idx, integer *idxp, integer *idxq, integer *perm, integer * givptr, integer *givcol, integer *ldgcol, T *givnum, integer * ldgnum, T *c, T *s, integer *info)
 {
-  return lasd7(icompq, nl, nr, sqre, k, d, z, zw, vf, vfw, vl, vlw, alpha, beta, dsigma, idx, idxp, idxq, perm, givptr, givcol, ldgcol, givnum, ldgnum, c, s, info); 
+  lasd7(icompq, nl, nr, sqre, k, d, z, zw, vf, vfw, vl, vlw, alpha, beta, dsigma, idx, idxp, idxq, perm, givptr, givcol, ldgcol, givnum, ldgnum, c, s, info); 
 }
 
 /*! @brief LASD8 finds the square roots of the roots of the secular equation, \n
@@ -54458,12 +53558,11 @@ integer lasd7(integer *icompq, integer *nl, integer *nr, integer *sqre, integer 
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
           > 0:  if INFO = 1, a singular value did not converge  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasd8(integer *icompq, integer *k, T *d, T * z, T *vf, T *vl, T *difl, T *difr, integer *lddifr, T *dsigma, T *work, integer *info)
+void lasd8(integer *icompq, integer *k, T *d, T * z, T *vf, T *vl, T *difl, T *difr, integer *lddifr, T *dsigma, T *work, integer *info)
 {
-  return lasd8(icompq, k, d, z, vf, vl, difl, difr, lddifr, dsigma, work, info); 
+  lasd8(icompq, k, d, z, vf, vl, difl, difr, lddifr, dsigma, work, info); 
 }
 
 /*! @brief LASDA computes the singular value decomposition (SVD) of a \n
@@ -54608,12 +53707,11 @@ integer lasd8(integer *icompq, integer *k, T *d, T * z, T *vf, T *vl, T *difl, T
           < 0:  if INFO = -i, the i-th argument had an illegal value. \n
           > 0:  if INFO = 1, a singular value did not converge  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasda(integer *icompq, integer *smlsiz, integer *n, integer *sqre, T *d, T *e, T *u, integer *ldu, T *vt, integer *k, T *difl, T *difr, T *z, T *poles, integer * givptr, integer *givcol, integer *ldgcol, integer *perm, T *givnum, T *c, T *s, T *work, integer *iwork, integer *info)
+void lasda(integer *icompq, integer *smlsiz, integer *n, integer *sqre, T *d, T *e, T *u, integer *ldu, T *vt, integer *k, T *difl, T *difr, T *z, T *poles, integer * givptr, integer *givcol, integer *ldgcol, integer *perm, T *givnum, T *c, T *s, T *work, integer *iwork, integer *info)
 {
-  return lasda(icompq, smlsiz, n, sqre, d, e, u, ldu, vt, k, difl, difr, z, poles, givptr, givcol, ldgcol, perm, givnum, c, s, work, iwork, info); 
+  lasda(icompq, smlsiz, n, sqre, d, e, u, ldu, vt, k, difl, difr, z, poles, givptr, givcol, ldgcol, perm, givnum, c, s, work, iwork, info); 
 }
 
 /*! @brief LASDQ computes the SVD of a real bidiagonal matrix with diagonal \n
@@ -54724,12 +53822,11 @@ integer lasda(integer *icompq, integer *smlsiz, integer *n, integer *sqre, T *d,
           If INFO > 0, the algorithm did not converge, and INFO
           specifies how many superdiagonals did not converge.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasdq(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru, integer *ncc, T *d, T *e, T *vt, integer *ldvt, T *u, integer *ldu, T *c, integer *ldc, T * work, integer *info)
+void lasdq(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru, integer *ncc, T *d, T *e, T *vt, integer *ldvt, T *u, integer *ldu, T *c, integer *ldc, T * work, integer *info)
 {
-  return lasdq(uplo, sqre, n, ncvt, nru, ncc, d, e, vt, ldvt, u, ldu, c, ldc, work, info); 
+  lasdq(uplo, sqre, n, ncvt, nru, ncc, d, e, vt, ldvt, u, ldu, c, ldc, work, info); 
 }
 
 /*! @brief LASDT creates a tree of subproblems for bidiagonal divide and conquer. \n
@@ -54765,15 +53862,14 @@ integer lasdq(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nr
           On entry, the maximum row dimension each subproblem at the
           bottom of the tree can be of.  \n
 
- * @return INTEGER Return value of the function.
- * */
-integer slasdt(integer *n, integer *lvl, integer *nd, integer * inode, integer *ndiml, integer *ndimr, integer *msub)
+ *  * */
+void slasdt(integer *n, integer *lvl, integer *nd, integer * inode, integer *ndiml, integer *ndimr, integer *msub)
 {
-  return slasdt_(n, lvl, nd, inode, ndiml, ndimr, msub); 
+  slasdt_(n, lvl, nd, inode, ndiml, ndimr, msub); 
 }
-integer dlasdt(integer *n, integer *lvl, integer *nd, integer * inode, integer *ndiml, integer *ndimr, integer *msub)
+void dlasdt(integer *n, integer *lvl, integer *nd, integer * inode, integer *ndiml, integer *ndimr, integer *msub)
 {
-  return dlasdt_(n, lvl, nd, inode, ndiml, ndimr, msub); 
+  dlasdt_(n, lvl, nd, inode, ndiml, ndimr, msub); 
 }
 
 /*! @brief LASQ1 computes the singular values of a real square bidiagonal matrix. \n
@@ -54824,12 +53920,11 @@ integer dlasdt(integer *n, integer *lvl, integer *nd, integer * inode, integer *
                = 3, termination criterion of outer while loop not met
                     (program created more than N unreduced blocks) \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasq1(integer *n, T *d, T *e, T *work, integer *info)
+void lasq1(integer *n, T *d, T *e, T *work, integer *info)
 {
-  return lasq1(n, d, e, work, info);
+  lasq1(n, d, e, work, info);
 }
 
 /*! @brief LASQ2 computes all the eigenvalues of the symmetric positive definite   \n
@@ -54881,12 +53976,11 @@ integer lasq1(integer *n, T *d, T *e, T *work, integer *info)
                 = 3, termination criterion of outer while loop not met
                      (program created more than N unreduced blocks)  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasq2(integer *n, T *z, integer *info)
+void lasq2(integer *n, T *z, integer *info)
 {
-  return lasq2(n, z, info);
+  lasq2(n, z, info);
 }
 
 /*! @brief LASQ3 checks for deflation, computes a shift and calls dqds. Used by sbdsqr.
@@ -54958,12 +54052,11 @@ integer lasq2(integer *n, T *z, integer *info)
           These are passed as arguments in order to save their values
           between calls to LASQ3. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasq3(integer *i0, integer *n0, T *z, integer *pp, T *dmin, T *sigma, T *desig, T *qmax, integer *nfail, integer *iter, integer *ndiv, logical *ieee, integer *ttype, T * dmin1, T *dmin2, T *dn, T *dn1, T *dn2, T *g, T * tau)
+void lasq3(integer *i0, integer *n0, T *z, integer *pp, T *dmin, T *sigma, T *desig, T *qmax, integer *nfail, integer *iter, integer *ndiv, logical *ieee, integer *ttype, T * dmin1, T *dmin2, T *dn, T *dn1, T *dn2, T *g, T * tau)
 {
-  return lasq3(i0, n0, z, pp, dmin, sigma, desig, qmax, nfail, iter, ndiv, ieee, ttype, dmin1, dmin2, dn, dn1, dn2, g, tau);
+  lasq3(i0, n0, z, pp, dmin, sigma, desig, qmax, nfail, iter, ndiv, ieee, ttype, dmin1, dmin2, dn, dn1, dn2, g, tau);
 }
 
 /*! @brief LASQ4 computes an approximation to the smallest eigenvalue using   \n
@@ -55019,12 +54112,11 @@ integer lasq3(integer *i0, integer *n0, T *z, integer *pp, T *dmin, T *sigma, T 
           G is passed as an argument in order to save its value between
           calls to SLASQ4.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasq4(integer *i0, integer *n0, T *z, integer *pp, integer *n0in, T *dmin, T *dmin1, T *dmin2, T *dn, T *dn1, T *dn2, T *tau, integer *ttype, T *g)
+void lasq4(integer *i0, integer *n0, T *z, integer *pp, integer *n0in, T *dmin, T *dmin1, T *dmin2, T *dn, T *dn1, T *dn2, T *tau, integer *ttype, T *g)
 {
-  return lasq4(i0, n0, z, pp, n0in, dmin, dmin1, dmin2, dn, dn1, dn2, tau, ttype, g);
+  lasq4(i0, n0, z, pp, n0in, dmin, dmin1, dmin2, dn, dn1, dn2, tau, ttype, g);
 }
 
 /*! @brief LASQ5 computes one dqds transform in ping-pong form. Used by sbdsqr and sstegr
@@ -55080,12 +54172,11 @@ integer lasq4(integer *i0, integer *n0, T *z, integer *pp, integer *n0in, T *dmi
           EPS is REAL \n
           This is the value of epsilon used. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasq5(integer *i0, integer *n0, T *z, integer *pp, T *tau, T *sigma, T *dmin, T *dmin1, T *dmin2, T *dn, T *dnm1, T *dnm2, logical *ieee, T *eps)
+void lasq5(integer *i0, integer *n0, T *z, integer *pp, T *tau, T *sigma, T *dmin, T *dmin1, T *dmin2, T *dn, T *dnm1, T *dnm2, logical *ieee, T *eps)
 {
-  return lasq5(i0, n0, z, pp, tau, sigma, dmin, dmin1, dmin2, dn, dnm1, dnm2, ieee, eps);
+  lasq5(i0, n0, z, pp, tau, sigma, dmin, dmin1, dmin2, dn, dnm1, dnm2, ieee, eps);
 }
 
 /*! @brief LASQ6 computes one dqd transform in ping-pong form. Used by sbdsqr and sstegr.
@@ -55129,12 +54220,11 @@ integer lasq5(integer *i0, integer *n0, T *z, integer *pp, T *tau, T *sigma, T *
           DNM2 is REAL \n
           d(N0-2).  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasq6(integer *i0, integer *n0, T *z, integer *pp, T *dmin, T *dmin1, T *dmin2, T *dn, T *dnm1, T * dnm2) 
+void lasq6(integer *i0, integer *n0, T *z, integer *pp, T *dmin, T *dmin1, T *dmin2, T *dn, T *dnm1, T * dnm2) 
 {
-  return lasq6(i0, n0, z, pp, dmin, dmin1, dmin2, dn, dnm1, dnm2);
+  lasq6(i0, n0, z, pp, dmin, dmin1, dmin2, dn, dnm1, dnm2);
 }
 
 /*! @brief LASR applies a sequence of plane rotations to a general rectangular matrix
@@ -55263,17 +54353,16 @@ integer lasq6(integer *i0, integer *n0, T *z, integer *pp, T *dmin, T *dmin1, T 
           LDA is INTEGER \n
           The leading dimension of the array A.  LDA >= fla_max(1,M).  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasr(char *side, char *pivot, char *direct, integer *m, integer *n, T *c, T *s, T *a, integer *lda)
+void lasr(char *side, char *pivot, char *direct, integer *m, integer *n, T *c, T *s, T *a, integer *lda)
 {
-  return lasr(side, pivot, direct, m, n, c, s, a, lda);
+  lasr(side, pivot, direct, m, n, c, s, a, lda);
 }
 template< typename T, typename Ta >
-integer lasr(char *side, char *pivot, char *direct, integer *m, integer *n, Ta *c, Ta *s, T *a, integer *lda)
+void lasr(char *side, char *pivot, char *direct, integer *m, integer *n, Ta *c, Ta *s, T *a, integer *lda)
 {
-  return lasr(side, pivot, direct, m, n, c, s, a, lda);
+  lasr(side, pivot, direct, m, n, c, s, a, lda);
 }
 
 /*! @brief LASV2 computes the singular value decomposition of a 2-by-2 triangular matrix
@@ -55321,12 +54410,11 @@ integer lasr(char *side, char *pivot, char *direct, integer *m, integer *n, Ta *
           The vector (CSR, SNR) is a unit right singular vector for the
           singular value abs(SSMAX).  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasv2(T *f, T *g, T *h, T *ssmin, T * ssmax, T *snr, T *csr, T *snl, T *csl)
+void lasv2(T *f, T *g, T *h, T *ssmin, T * ssmax, T *snr, T *csr, T *snl, T *csl)
 {
-  return lasv2(f, g, h, ssmin, ssmax, snr, csr, snl, csl);
+  lasv2(f, g, h, ssmin, ssmax, snr, csr, snl, csl);
 }
 
 /*! @brief LASWLQ computes a blocked Tall-Skinny LQ factorization of a real M-by-N matrix A for M <= N
@@ -55396,12 +54484,11 @@ integer lasv2(T *f, T *g, T *h, T *ssmin, T * ssmax, T *snr, T *csr, T *snl, T *
            = 0:  successful exit \n
            < 0:  if INFO = -i, the i-th argument had an illegal value   \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer laswlq(integer *m, integer *n, integer *mb, integer * nb, T *a, integer *lda, T *t, integer *ldt, T *work, integer *lwork, integer *info)
+void laswlq(integer *m, integer *n, integer *mb, integer * nb, T *a, integer *lda, T *t, integer *ldt, T *work, integer *lwork, integer *info)
 {
-  return laswlq(m, n, mb, nb, a, lda, t, ldt, work, lwork, info);
+  laswlq(m, n, mb, nb, a, lda, t, ldt, work, lwork, info);
 }
 
 /*! @brief LASY2 solves the Sylvester matrix equation where the matrices are of order 1 or 2
@@ -55480,12 +54567,11 @@ integer laswlq(integer *m, integer *n, integer *mb, integer * nb, T *a, integer 
           NOTE: In the interests of speed, this routine does not
                 check the inputs for errors.   \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasy2(logical *ltranl, logical *ltranr, integer *isgn, integer *n1, integer *n2, T *tl, integer *ldtl, T *tr, integer * ldtr, T *b, integer *ldb, T *scale, T *x, integer *ldx, T *xnorm, integer *info)
+void lasy2(logical *ltranl, logical *ltranr, integer *isgn, integer *n1, integer *n2, T *tl, integer *ldtl, T *tr, integer * ldtr, T *b, integer *ldb, T *scale, T *x, integer *ldx, T *xnorm, integer *info)
 {
-  return lasy2(ltranl, ltranr, isgn, n1, n2, tl, ldtl, tr,  ldtr, b, ldb, scale, x, ldx, xnorm, info);
+  lasy2(ltranl, ltranr, isgn, n1, n2, tl, ldtl, tr,  ldtr, b, ldb, scale, x, ldx, xnorm, info);
 }
 
 /*! @brief LASYF computes a partial factorization of a real symmetric matrix using the Bunch-Kaufman diagonal pivoting method
@@ -55577,12 +54663,11 @@ integer lasy2(logical *ltranl, logical *ltranr, integer *isgn, integer *n1, inte
                has been completed, but the block diagonal matrix D is
                exactly singular.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasyf(char *uplo, integer *n, integer *nb, integer *kb, T *a, integer *lda, integer *ipiv, T *w, integer *ldw, integer *info)
+void lasyf(char *uplo, integer *n, integer *nb, integer *kb, T *a, integer *lda, integer *ipiv, T *w, integer *ldw, integer *info)
 {
-  return lasyf(uplo, n, nb, kb, a, lda, ipiv, w, ldw, info);
+  lasyf(uplo, n, nb, kb, a, lda, ipiv, w, ldw, info);
 }
 
 /*! @brief LASYF_AA factorizes a panel of a real symmetric matrix A using the Aasen's algorithm
@@ -55647,12 +54732,11 @@ integer lasyf(char *uplo, integer *n, integer *nb, integer *kb, T *a, integer *l
   * @param[out] WORK
            WORK is REAL workspace, dimension (M).  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasyf_aa(char *uplo, integer *j1, integer *m, integer *nb, T *a, integer *lda, integer *ipiv, T *h, integer *ldh, T *work)
+void lasyf_aa(char *uplo, integer *j1, integer *m, integer *nb, T *a, integer *lda, integer *ipiv, T *h, integer *ldh, T *work)
 {
-  return lasyf_aa(uplo, j1, m, nb, a, lda, ipiv, h, ldh, work);
+  lasyf_aa(uplo, j1, m, nb, a, lda, ipiv, h, ldh, work);
 }
 
 /*! @brief LASYF_RK computes a partial factorization of a real symmetric indefinite \n
@@ -55818,12 +54902,11 @@ integer lasyf_aa(char *uplo, integer *j1, integer *m, integer *nb, T *a, integer
                is not stored in INFO even though the factorization
                always completes.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasyf_rk(char *uplo, integer *n, integer *nb, integer *kb, T *a, integer *lda, T *e, integer *ipiv, T *w, integer * ldw, integer *info)
+void lasyf_rk(char *uplo, integer *n, integer *nb, integer *kb, T *a, integer *lda, T *e, integer *ipiv, T *w, integer * ldw, integer *info)
 {
-  return lasyf_rk(uplo, n, nb, kb, a, lda, e, ipiv, w, ldw, info);
+  lasyf_rk(uplo, n, nb, kb, a, lda, e, ipiv, w, ldw, info);
 }
 
 /*! @brief LASYF_ROOK computes a partial factorization of a real symmetric    \n
@@ -55917,12 +55000,11 @@ integer lasyf_rk(char *uplo, integer *n, integer *nb, integer *kb, T *a, integer
                has been completed, but the block diagonal matrix D is
                exactly singular.  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer lasyf_rook(char *uplo, integer *n, integer *nb, integer *kb, T *a, integer *lda, integer *ipiv, T *w, integer * ldw, integer *info)
+void lasyf_rook(char *uplo, integer *n, integer *nb, integer *kb, T *a, integer *lda, integer *ipiv, T *w, integer * ldw, integer *info)
 {
-  return lasyf_rook(uplo, n, nb, kb, a, lda, ipiv, w, ldw, info);
+  lasyf_rook(uplo, n, nb, kb, a, lda, ipiv, w, ldw, info);
 }
 
 /*! @brief LAT2S converts a double-precision triangular matrix to a single-precision triangular matrix
@@ -55968,11 +55050,10 @@ integer lasyf_rook(char *uplo, integer *n, integer *nb, integer *kb, T *a, integ
                 PRECISION overflow threshold, in this case, the content
                 of the UPLO part of SA in exit is unspecified.  \n
 
- * @return INTEGER Return value of the function.
- * */
-integer dlat2s(char *uplo, integer *n, double *a, integer * lda, float *sa, integer *ldsa, integer *info)
+ *  * */
+void dlat2s(char *uplo, integer *n, double *a, integer * lda, float *sa, integer *ldsa, integer *info)
 {
-  return dlat2s_(uplo, n, a, lda, sa, ldsa, info); 
+  dlat2s_(uplo, n, a, lda, sa, ldsa, info); 
 }
 
 /*! @brief LAT2C converts a double complex triangular matrix to a complex triangular matrix
@@ -56018,11 +55099,10 @@ integer dlat2s(char *uplo, integer *n, double *a, integer * lda, float *sa, inte
                 PRECISION overflow threshold, in this case, the content
                 of the UPLO part of SA in exit is unspecified.  \n
 
- * @return INTEGER Return value of the function.
  * */
-integer zlat2c(char *uplo, integer *n, dcomplex *a, integer *lda, scomplex *sa, integer *ldsa, integer *info)
+void zlat2c(char *uplo, integer *n, dcomplex *a, integer *lda, scomplex *sa, integer *ldsa, integer *info)
 {
-  return zlat2c_(uplo, n, a, lda, sa, ldsa, info);
+  zlat2c_(uplo, n, a, lda, sa, ldsa, info);
 }
 
 /*! @brief LATBS solves a triangular banded system of equations
@@ -56110,17 +55190,16 @@ integer zlat2c(char *uplo, integer *n, dcomplex *a, integer *lda, scomplex *sa, 
           = 0:  successful exit \n
           < 0:  if INFO = -k, the k-th argument had an illegal value  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer latbs(char *uplo, char *trans, char *diag, char *normin, integer *n, integer *kd, T *ab, integer *ldab, T *x, T *scale, T *cnorm, integer *info)
+void latbs(char *uplo, char *trans, char *diag, char *normin, integer *n, integer *kd, T *ab, integer *ldab, T *x, T *scale, T *cnorm, integer *info)
 {
-  return latbs(uplo, trans, diag, normin, n, kd, ab, ldab, x, scale, cnorm, info);
+  latbs(uplo, trans, diag, normin, n, kd, ab, ldab, x, scale, cnorm, info);
 }
 template< typename T, typename Ta >
-integer latbs(char *uplo, char *trans, char *diag, char * normin, integer *n, integer *kd, T *ab, integer *ldab, T *x, Ta *scale, Ta *cnorm, integer *info)
+void latbs(char *uplo, char *trans, char *diag, char * normin, integer *n, integer *kd, T *ab, integer *ldab, T *x, Ta *scale, Ta *cnorm, integer *info)
 {
-  return latbs(uplo, trans, diag, normin, n, kd, ab, ldab, x, scale, cnorm, info);
+  latbs(uplo, trans, diag, normin, n, kd, ab, ldab, x, scale, cnorm, info);
 }
 
 /*! @brief LATDF uses the LU factorization of the n-by-n matrix computed by sgetc2 \n
@@ -56188,17 +55267,16 @@ integer latbs(char *uplo, char *trans, char *diag, char * normin, integer *n, in
           The pivot indices; for 1 <= j <= N, column j of the
           matrix has been interchanged with column JPIV(j).  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer latdf(integer *ijob, integer *n, T *z, integer * ldz, T *rhs, T *rdsum, T *rdscal, integer *ipiv, integer * jpiv)
+void latdf(integer *ijob, integer *n, T *z, integer * ldz, T *rhs, T *rdsum, T *rdscal, integer *ipiv, integer * jpiv)
 {
-  return latdf(ijob, n, z, ldz, rhs, rdsum, rdscal, ipiv, jpiv);
+  latdf(ijob, n, z, ldz, rhs, rdsum, rdscal, ipiv, jpiv);
 }
 template< typename T, typename Ta >
-integer latdf(integer *ijob, integer *n, T *z, integer * ldz, T *rhs, Ta *rdsum, Ta *rdscal, integer *ipiv, integer * jpiv)
+void latdf(integer *ijob, integer *n, T *z, integer * ldz, T *rhs, Ta *rdsum, Ta *rdscal, integer *ipiv, integer * jpiv)
 {
-  return latdf(ijob, n, z, ldz, rhs, rdsum, rdscal, ipiv, jpiv);
+  latdf(ijob, n, z, ldz, rhs, rdsum, rdscal, ipiv, jpiv);
 }
 
 /*! @brief LATPS solves a triangular system of equations with the matrix held in packed storage
@@ -56279,17 +55357,16 @@ integer latdf(integer *ijob, integer *n, T *z, integer * ldz, T *rhs, Ta *rdsum,
           = 0:  successful exit \n
           < 0:  if INFO = -k, the k-th argument had an illegal value  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer latps(char *uplo, char *trans, char *diag, char * normin, integer *n, T *ap, T *x, T *scale, T *cnorm, integer *info)
+void latps(char *uplo, char *trans, char *diag, char * normin, integer *n, T *ap, T *x, T *scale, T *cnorm, integer *info)
 {
-  return latps(uplo, trans, diag, normin, n, ap, x, scale, cnorm, info);
+  latps(uplo, trans, diag, normin, n, ap, x, scale, cnorm, info);
 }
 template< typename T, typename Ta >
-integer latps(char *uplo, char *trans, char *diag, char * normin, integer *n, T *ap, T *x, Ta *scale, Ta *cnorm, integer *info)
+void latps(char *uplo, char *trans, char *diag, char * normin, integer *n, T *ap, T *x, Ta *scale, Ta *cnorm, integer *info)
 {
-  return latps(uplo, trans, diag, normin, n, ap, x, scale, cnorm, info);
+  latps(uplo, trans, diag, normin, n, ap, x, scale, cnorm, info);
 }
 
 /*! @brief LATRD reduces the first nb rows and columns of a symmetric/Hermitian   \n
@@ -56365,17 +55442,16 @@ integer latps(char *uplo, char *trans, char *diag, char * normin, integer *n, T 
           LDW is INTEGER \n
           The leading dimension of the array W. LDW >= fla_max(1,N).  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer latrd(char *uplo, integer *n, integer *nb, T *a, integer *lda, T *e, T *tau, T *w, integer *ldw)
+void latrd(char *uplo, integer *n, integer *nb, T *a, integer *lda, T *e, T *tau, T *w, integer *ldw)
 {
-  return latrd(uplo, n, nb, a, lda, e, tau, w, ldw);
+  latrd(uplo, n, nb, a, lda, e, tau, w, ldw);
 }
 template< typename T, typename Ta >
-integer latrd(char *uplo, integer *n, integer *nb, T *a, integer *lda, Ta *e, T *tau, T *w, integer *ldw)
+void latrd(char *uplo, integer *n, integer *nb, T *a, integer *lda, Ta *e, T *tau, T *w, integer *ldw)
 {
-  return latrd(uplo, n, nb, a, lda, e, tau, w, ldw);
+  latrd(uplo, n, nb, a, lda, e, tau, w, ldw);
 }
 
 /*! @brief LATRS solves a triangular system of equations with the scale factor set to prevent overflow
@@ -56462,17 +55538,16 @@ integer latrd(char *uplo, integer *n, integer *nb, T *a, integer *lda, Ta *e, T 
           = 0:  successful exit \n
           < 0:  if INFO = -k, the k-th argument had an illegal value  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer latrs(char *uplo, char *trans, char *diag, char * normin, integer *n, T *a, integer *lda, T *x, T *scale, T *cnorm, integer *info)
+void latrs(char *uplo, char *trans, char *diag, char * normin, integer *n, T *a, integer *lda, T *x, T *scale, T *cnorm, integer *info)
 {
-  return latrs(uplo, trans, diag, normin, n, a, lda, x, scale, cnorm, info);
+  latrs(uplo, trans, diag, normin, n, a, lda, x, scale, cnorm, info);
 }
 template< typename T, typename Ta >
-integer latrs(char *uplo, char *trans, char *diag, char * normin, integer *n, T *a, integer *lda, T *x, Ta *scale, Ta *cnorm, integer *info)
+void latrs(char *uplo, char *trans, char *diag, char * normin, integer *n, T *a, integer *lda, T *x, Ta *scale, Ta *cnorm, integer *info)
 {
-  return latrs(uplo, trans, diag, normin, n, a, lda, x, scale, cnorm, info);
+  latrs(uplo, trans, diag, normin, n, a, lda, x, scale, cnorm, info);
 }
 
 /*! @brief LATRZ factors an upper trapezoidal matrix by means of orthogonal transformations
@@ -56513,12 +55588,11 @@ integer latrs(char *uplo, char *trans, char *diag, char * normin, integer *n, T 
  * @param[out] WORK
           WORK is REAL array, dimension (M)  \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer latrz(integer *m, integer *n, integer *l, T *a, integer *lda, T *tau, T *work)
+void latrz(integer *m, integer *n, integer *l, T *a, integer *lda, T *tau, T *work)
 {
-  return latrz(m, n, l, a, lda, tau, work);
+  latrz(m, n, l, a, lda, tau, work);
 }
 
 /*! @brief LATSQR computes a blocked Tall-Skinny QR factorization of a real M-by-N matrix A for M >= N
@@ -56591,12 +55665,11 @@ integer latrz(integer *m, integer *n, integer *l, T *a, integer *lda, T *tau, T 
            = 0:  successful exit \n
            < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer latsqr(integer *m, integer *n, integer *mb, integer *nb, T *a, integer *lda, T *t, integer *ldt, T *work, integer *lwork, integer *info)
+void latsqr(integer *m, integer *n, integer *mb, integer *nb, T *a, integer *lda, T *t, integer *ldt, T *work, integer *lwork, integer *info)
 {
-  return latsqr(m, n, mb, nb, a, lda, t, ldt, work, lwork, info);
+  latsqr(m, n, mb, nb, a, lda, t, ldt, work, lwork, info);
 }
 
 /*! @brief ICMAX1 finds the index of the first vector element of maximum absolute value
@@ -56620,9 +55693,8 @@ integer latsqr(integer *m, integer *n, integer *mb, integer *nb, T *a, integer *
  * @param[in] INCX
           INCX is INTEGER \n
           The spacing between successive values of CX.  INCX >= 1.  \n
-
  * @return INTEGER Return value of the function.
- * */
+ *  * */
 integer icmax1(integer *n, scomplex *cx, integer *incx)
 {
   return icmax1_(n, cx, incx);
@@ -56650,7 +55722,7 @@ integer icmax1(integer *n, scomplex *cx, integer *incx)
           The leading dimension of the array A. LDA >= fla_max(1,M). \n
 
  * @return INTEGER Return value of the function.
- * */
+ *  * */
 integer ilaclc(integer *m, integer *n, scomplex *a, integer *lda) 
 {
   return ilaclc_(m, n, a, lda); 
@@ -56678,7 +55750,7 @@ integer ilaclc(integer *m, integer *n, scomplex *a, integer *lda)
           The leading dimension of the array A. LDA >= fla_max(1,M). \n
 
  * @return INTEGER Return value of the function.
- * */
+ *  * */
 integer ilaclr(integer *m, integer *n, scomplex *a, integer *lda) 
 {
   return ilaclr_(m, n, a, lda); 
@@ -56703,7 +55775,7 @@ integer ilaclr(integer *m, integer *n, scomplex *a, integer *lda)
           = U means unit diagonal. \n
 
  * @return INTEGER Return value of the function.
- * */  
+ *  * */  
 integer iladiag(char *diag)
 {
   return iladiag_(diag); 
@@ -56731,7 +55803,7 @@ integer iladiag(char *diag)
           The leading dimension of the array A. LDA >= fla_max(1,M).  \n
 
  * @return INTEGER Return value of the function.
- * */
+ *  * */
 integer iladlc(integer *m, integer *n, double *a, integer *lda) 
 {
   return iladlc_(m, n, a, lda);
@@ -56759,7 +55831,7 @@ integer iladlc(integer *m, integer *n, double *a, integer *lda)
           The leading dimension of the array A. LDA >= fla_max(1,M).  \n
 
  * @return INTEGER Return value of the function.
- * */
+ *  * */
 integer iladlr(integer *m, integer *n, double *a, integer *lda)
 {
   return iladlr_(m, n, a, lda);
@@ -56830,7 +55902,7 @@ integer iladlr(integer *m, integer *n, double *a, integer *lda)
           be required.  \n
 
  * @return INTEGER Return value of the function.
- * */
+ *  * */
 integer ilaenv2stage(integer *ispec, char *name, char *opts, integer *n1, integer *n2, integer *n3, integer *n4) 
 {
   return ilaenv2stage_(ispec, name, opts, n1, n2, n3, n4); 
@@ -56858,7 +55930,7 @@ integer ilaenv2stage(integer *ispec, char *name, char *opts, integer *n1, intege
           Other values returns invalid result. \n
 
  * @return INTEGER Return value of the function.
- * */
+ *  * */
 integer ilaprec(char *prec)
 {
   return ilaprec_(prec);
@@ -56886,7 +55958,7 @@ integer ilaprec(char *prec)
           The leading dimension of the array A. LDA >= fla_max(1,M). \n
 
  * @return INTEGER Return value of the function.
- * */
+ *  * */
 integer ilaslc(integer *m, integer *n, float *a, integer *lda)
 {
   return ilaslc_(m, n, a, lda);
@@ -56914,7 +55986,7 @@ integer ilaslc(integer *m, integer *n, float *a, integer *lda)
           The leading dimension of the array A. LDA >= fla_max(1,M). \n 
 
  * @return INTEGER Return value of the function.
- * */
+ *  * */
 integer ilaslr(integer *m, integer *n, float *a, integer *lda) 
 {
   return ilaslr_(m, n, a, lda); 
@@ -56940,7 +56012,7 @@ integer ilaslr(integer *m, integer *n, float *a, integer *lda)
           = C means conjugate transposition \n
 
  * @return INTEGER Return value of the function.
- * */
+ *  * */
 integer ilatrans(char *trans) 
 {
   return ilatrans_(trans); 
@@ -56966,7 +56038,7 @@ integer ilatrans(char *trans)
           Other values, returns invalid result. \n
 
  * @return INTEGER Return value of the function.
- * */
+ *  * */
 integer ilauplo(char *uplo) 
 {
   return ilauplo_(uplo); 
@@ -56990,11 +56062,10 @@ integer ilauplo(char *uplo)
           VERS_PATCH is INTEGER \n
           return the lapack patch version from the minor version \n
 
- * @return INTEGER Return value of the function.
  * */
-integer ilaver(integer *vers_major, integer *vers_minor, integer *vers_patch__) 
+void ilaver(integer *vers_major, integer *vers_minor, integer *vers_patch__) 
 {
-  return ilaver_(vers_major, vers_minor, vers_patch__); 
+  ilaver_(vers_major, vers_minor, vers_patch__); 
 }
 
 /*! @brief ILAZLC scans a matrix for its last non-zero column
@@ -57021,7 +56092,7 @@ integer ilaver(integer *vers_major, integer *vers_minor, integer *vers_patch__)
           The leading dimension of the array A. LDA >= fla_max(1,M) \n
 
  * @return INTEGER Return value of the function.
- * */
+ *  * */
 integer ilazlc(integer *m, integer *n, dcomplex *a, integer *lda) 
 {
   return ilazlc_(m, n, a, lda); 
@@ -57051,7 +56122,7 @@ integer ilazlc(integer *m, integer *n, dcomplex *a, integer *lda)
           The leading dimension of the array A. LDA >= fla_max(1,M).  \n
 
  * @return INTEGER Return value of the function.
- * */
+ *  * */
 integer ilazlr(integer *m, integer *n, dcomplex *a, integer *lda) 
 {
   return ilazlr_(m, n, a, lda); 
@@ -57111,7 +56182,7 @@ integer ilazlr(integer *m, integer *n, dcomplex *a, integer *lda)
            NXI is INTEGER needed in the future release. \n
 
  * @return INTEGER Return value of the function.
- * */
+ *  * */
 integer iparam2stage(integer *ispec, char *name, char *opts, integer *ni, integer *nbi, integer *ibi, integer *nxi) 
 {
   return iparam2stage_(ispec, name, opts, ni, nbi, ibi, nxi);
@@ -57140,7 +56211,7 @@ integer iparam2stage(integer *ispec, char *name, char *opts, integer *ni, intege
           The spacing between successive values of ZX.  INCX >= 1.  \n
 
  * @return INTEGER Return value of the function.
- * */
+ *  * */
 integer izmax1(integer *n, dcomplex *zx, integer *incx)
 {
   return izmax1_(n, zx, incx);   
@@ -57200,7 +56271,7 @@ integer izmax1(integer *n, dcomplex *zx, integer *incx)
           where LWORK >= N when NORM = 'I'; otherwise, WORK is not
           referenced. \n
 
- * @return INTEGER Return value of the function.
+ * @return Returns value of the norm.
  * */
 template <typename T>
 T lantp(char* norm, char* uplo, char* diag, integer* n, T* ap, T* work)
@@ -57275,7 +56346,7 @@ Ta lantp(char* norm, char* uplo, char* diag, integer* n, T* ap, Ta* work)
           where LWORK >= N when NORM = 'I'; otherwise, WORK is not
           referenced. \n
 
- * @return INTEGER Return value of the function.
+ * @return Returns value of the norm.
  * */
 template <typename T>
 T lantb(char* norm, char* uplo, char* diag, integer* n, integer* k, T* ab, integer* ldab, T* work)
@@ -57333,12 +56404,11 @@ Ta lantb(char* norm, char* uplo, char* diag, integer* n, integer* k, T* ab, inte
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gelqt(integer* m, integer* n, integer* mb, T* a, integer* lda, T* t, integer* ldt, T* work, integer* info)
+void gelqt(integer* m, integer* n, integer* mb, T* a, integer* lda, T* t, integer* ldt, T* work, integer* info)
 {
-  return gelqt(m, n, mb, a, lda, t, ldt, work, info);
+  gelqt(m, n, mb, a, lda, t, ldt, work, info);
 }
 
 /*! @brief GEMLQT overwrites the general real M-by-N matrix C
@@ -57419,12 +56489,11 @@ integer gelqt(integer* m, integer* n, integer* mb, T* a, integer* lda, T* t, int
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gemlqt(char* side, char* trans, integer* m, integer* n, integer* k, integer* mb, T* v, integer* ldv, T* t, integer* ldt, T* c, integer* ldc, T* work, integer* info)
+void gemlqt(char* side, char* trans, integer* m, integer* n, integer* k, integer* mb, T* v, integer* ldv, T* t, integer* ldt, T* c, integer* ldc, T* work, integer* info)
 {
-  return gemlqt(side, trans, m, n, k, mb, v, ldv, t, ldt, c, ldc, work, info);
+  gemlqt(side, trans, m, n, k, mb, v, ldv, t, ldt, c, ldc, work, info);
 }
 
 /*! @brief GEGS computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matrices
@@ -57551,17 +56620,16 @@ integer gemlqt(char* side, char* trans, integer* m, integer* n, integer* k, inte
                 =N+8: error return from SGGBAK (computing VSR) \n
                 =N+9: error return from SLASCL (various places) \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gegs(char* jobvsl, char* jobvsr, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alphar, T* alphai, T* beta, T* vsl, integer* ldvsl, T* vsr, integer* ldvsr, T* work, integer* lwork, integer* info)
+void gegs(char* jobvsl, char* jobvsr, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alphar, T* alphai, T* beta, T* vsl, integer* ldvsl, T* vsr, integer* ldvsr, T* work, integer* lwork, integer* info)
 {
-  return gegs(jobvsl, jobvsr, n, a, lda, b, ldb, alphar, alphai, beta, vsl, ldvsl, vsr, ldvsr, work, lwork, info);
+  gegs(jobvsl, jobvsr, n, a, lda, b, ldb, alphar, alphai, beta, vsl, ldvsl, vsr, ldvsr, work, lwork, info);
 }
 template <typename T, typename Ta>
-integer gegs(char* jobvsl, char* jobvsr, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alpha, T* beta, T* vsl, integer* ldvsl, T* vsr, integer* ldvsr, T* work, integer* lwork, Ta* rwork, integer* info)
+void gegs(char* jobvsl, char* jobvsr, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alpha, T* beta, T* vsl, integer* ldvsl, T* vsr, integer* ldvsr, T* work, integer* lwork, Ta* rwork, integer* info)
 {
-  return gegs(jobvsl, jobvsr, n, a, lda, b, ldb, alpha, beta, vsl, ldvsl, vsr, ldvsr, work, lwork, rwork, info);
+  gegs(jobvsl, jobvsr, n, a, lda, b, ldb, alpha, beta, vsl, ldvsl, vsr, ldvsr, work, lwork, rwork, info);
 }
 
 /*! @brief GEGV computes the eigenvalues and, optionally, the left and/or right
@@ -57736,17 +56804,16 @@ integer gegs(char* jobvsl, char* jobvsr, integer* n, T* a, integer* lda, T* b, i
                 =N+9: error return from SGGBAK (computing VR) \n
                 =N+10: error return from SLASCL (various calls) \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer gegv(char* jobvl, char* jobvr, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alphar, T* alphai, T* beta, T* vl, integer* ldvl, T* vr, integer* ldvr, T* work, integer* lwork, integer* info)
+void gegv(char* jobvl, char* jobvr, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alphar, T* alphai, T* beta, T* vl, integer* ldvl, T* vr, integer* ldvr, T* work, integer* lwork, integer* info)
 {
-  return ggev(jobvl, jobvr, n, a, lda, b, ldb, alphar, alphai, beta, vl, ldvl, vr, ldvr, work, lwork, info);
+  ggev(jobvl, jobvr, n, a, lda, b, ldb, alphar, alphai, beta, vl, ldvl, vr, ldvr, work, lwork, info);
 }
 template <typename T, typename Ta>
-integer gegv(char* jobvl, char* jobvr, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alpha, T* beta, T* vl, integer* ldvl, T* vr, integer* ldvr, T* work, integer* lwork, Ta* rwork, integer* info)
+void gegv(char* jobvl, char* jobvr, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alpha, T* beta, T* vl, integer* ldvl, T* vr, integer* ldvr, T* work, integer* lwork, Ta* rwork, integer* info)
 {
-  return gegv(jobvl, jobvr, n, a, lda, b, ldb, alpha, beta, vl, ldvl, vr, ldvr, work, lwork, rwork, info);
+  gegv(jobvl, jobvr, n, a, lda, b, ldb, alpha, beta, vl, ldvl, vr, ldvr, work, lwork, rwork, info);
 }
 
 /*! @brief LATZM applies a Householder matrix generated by STZRQF to a matrix.
@@ -57823,12 +56890,11 @@ integer gegv(char* jobvl, char* jobvr, integer* n, T* a, integer* lda, T* b, int
                       (N) if SIDE = 'L' \n
                       (M) if SIDE = 'R' \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer latzm(char* side, integer* m, integer* n, T* v, integer* incv, T* tau, T* c1, T* c2, integer* ldc, T* work)
+void latzm(char* side, integer* m, integer* n, T* v, integer* incv, T* tau, T* c1, T* c2, integer* ldc, T* work)
 {
-  return latzm(side, m, n, v, incv, tau, c1, c2, ldc, work);
+  latzm(side, m, n, v, incv, tau, c1, c2, ldc, work);
 }
 
 /*! @brief DSPOSV computes the solution to system of linear equations A * X = B for PO matrices
@@ -57941,11 +57007,10 @@ integer latzm(char* side, integer* m, integer* n, T* v, integer* incv, T* tau, T
                 factorization could not be completed, and the solution
                 has not been computed. \n
 
- * @return INTEGER Return value of the function.
- * */
-integer dsposv(char* uplo, integer* n, integer* nrhs, double* a, integer* lda, double* b, integer* ldb, double* x, integer* ldx, double* work, float* swork, integer* iter, integer* info)
+ *  * */
+void dsposv(char* uplo, integer* n, integer* nrhs, double* a, integer* lda, double* b, integer* ldb, double* x, integer* ldx, double* work, float* swork, integer* iter, integer* info)
 {
-  return dsposv_(uplo, n, nrhs, a, lda, b, ldb, x, ldx, work, swork, iter, info);
+  dsposv_(uplo, n, nrhs, a, lda, b, ldb, x, ldx, work, swork, iter, info);
 }
 
 /*! @brief ZCPOSV computes the solution to system of linear equations A * X = B for PO matrices
@@ -58064,11 +57129,10 @@ integer dsposv(char* uplo, integer* n, integer* nrhs, double* a, integer* lda, d
                 factorization could not be completed, and the solution
                 has not been computed. \n
 
- * @return INTEGER Return value of the function.
  * */
-integer zcposv(char* uplo, integer* n, integer* nrhs, dcomplex* a, integer* lda, dcomplex* b, integer* ldb, dcomplex* x, integer* ldx, dcomplex* work, scomplex* swork, double* rwork, integer* iter, integer* info)
+void zcposv(char* uplo, integer* n, integer* nrhs, dcomplex* a, integer* lda, dcomplex* b, integer* ldb, dcomplex* x, integer* ldx, dcomplex* work, scomplex* swork, double* rwork, integer* iter, integer* info)
 {
-  return zcposv_(uplo, n, nrhs, a, lda, b, ldb, x, ldx, work, swork, rwork, iter, info);
+  zcposv_(uplo, n, nrhs, a, lda, b, ldb, x, ldx, work, swork, rwork, iter, info);
 }
 
 /*! @brief Computes the LU factorization of a general m-by-n matrix without pivoting.
@@ -58108,12 +57172,11 @@ integer zcposv(char* uplo, integer* n, integer* nrhs, dcomplex* a, integer* lda,
           but U is exactly singular. Division by 0 will occur if 
           you use the factor U for solving a system of linear equations. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer getrfnp(integer* m, integer* n, T* a, integer* lda, integer* info)
+void getrfnp(integer* m, integer* n, T* a, integer* lda, integer* info)
 {
-  return getrfnp(m, n, a, lda, info);
+  getrfnp(m, n, a, lda, info);
 }
 
 /*! @brief Computes the partial LDLT factorization of a symmetric matrix using packed storage.
@@ -58160,17 +57223,16 @@ integer getrfnp(integer* m, integer* n, T* a, integer* lda, integer* info)
           WORK2 is REAL array. \n
           Workspace arrays, size of each at least n. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer spffrt2(T *ap, integer *n, integer * ncolm, T *work, T *work2)
+void spffrt2(T *ap, integer *n, integer * ncolm, T *work, T *work2)
 {
-  return spffrt2(ap, n, ncolm, work, work2);
+  spffrt2(ap, n, ncolm, work, work2);
 }
 template< typename T >
-integer spffrtx(T *ap, integer *n, integer * ncolm, T *work, T *work2)
+void spffrtx(T *ap, integer *n, integer * ncolm, T *work, T *work2)
 {
-  return spffrtx(ap, n, ncolm, work, work2);
+  spffrtx(ap, n, ncolm, work, work2);
 }
 
 /*! @brief Performs LU factorization (complete or incomplete) of a general matrix without pivoting.
@@ -58221,12 +57283,11 @@ integer spffrtx(T *ap, integer *n, integer * ncolm, T *work, T *work2)
           Division by 0 will occur if factorization is completed
           and factor U is used for solving a system of linear equations. \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer getrfnpi(integer *m, integer *n, integer *nfact, T *a, integer *lda, integer *info)
+void getrfnpi(integer *m, integer *n, integer *nfact, T *a, integer *lda, integer *info)
 {
-  return getrfnpi(m, n, nfact, a, lda, info);
+  getrfnpi(m, n, nfact, a, lda, info);
 }
 
 /*! @brief Computes a NB2-sized column blocked QR-factorization.
@@ -58313,12 +57374,11 @@ integer getrfnpi(integer *m, integer *n, integer *nfact, T *a, integer *lda, int
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template< typename T >
-integer getsqrhrt(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2, T *a, integer *lda, T *t, integer *ldt, T *work, integer *lwork, integer *info)
+void getsqrhrt(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2, T *a, integer *lda, T *t, integer *ldt, T *work, integer *lwork, integer *info)
 {
-  return getsqrhrt(m, n, mb1, nb1, nb2, a, lda, t, ldt, work, lwork, info);
+  getsqrhrt(m, n, mb1, nb1, nb2, a, lda, t, ldt, work, lwork, info);
 }
 
 /*! @brief  Computes the eigenvalues of a real matrix pair (H,T),
@@ -58507,17 +57567,16 @@ integer getsqrhrt(integer *m, integer *n, integer *mb1, integer *nb1, integer *n
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
  * */
 template < typename T >
-integer laqz0(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, integer *ihi, T *a, integer *lda, T *b, integer *ldb, T *alphar, T *alphai, T *beta, T *q, integer *ldq, T *z, integer *ldz, T *work, integer *lwork, integer *rec, integer *info)
+void laqz0(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, integer *ihi, T *a, integer *lda, T *b, integer *ldb, T *alphar, T *alphai, T *beta, T *q, integer *ldq, T *z, integer *ldz, T *work, integer *lwork, integer *rec, integer *info)
 {
-  return laqz0(wants, wantq, wantz, n, ilo, ihi, a, lda, b, ldb, alphar, alphai, beta, q, ldq, z, ldz, work, lwork, rec, info);
+  laqz0(wants, wantq, wantz, n, ilo, ihi, a, lda, b, ldb, alphar, alphai, beta, q, ldq, z, ldz, work, lwork, rec, info);
 }
 template < typename T, typename Ta >
-integer laqz0(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, integer *ihi, T *a, integer *lda, T *b, integer *ldb, T *alpha, T *beta, T *q, integer *ldq, T *z, integer *ldz, T *work, integer *lwork, Ta * rwork, integer *rec, integer *info)
+void laqz0(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, integer *ihi, T *a, integer *lda, T *b, integer *ldb, T *alpha, T *beta, T *q, integer *ldq, T *z, integer *ldz, T *work, integer *lwork, Ta * rwork, integer *rec, integer *info)
 {
-  return laqz0(wants, wantq, wantz, n, ilo, ihi, a, lda, b, ldb, alpha, beta, q, ldq, z, ldz, work, lwork, rwork, rec, info);
+  laqz0(wants, wantq, wantz, n, ilo, ihi, a, lda, b, ldb, alpha, beta, q, ldq, z, ldz, work, lwork, rwork, rec, info);
 }
 
 /*! @brief Given a 3-by-3 matrix pencil (A,B), LAQZ1 sets v to a
@@ -58570,17 +57629,16 @@ integer laqz0(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, 
           A scalar multiple of the first column of the
           matrix K in (*). \n
 
- * @return INTEGER Return value of the function.
  * */
 template < typename T >
-integer laqz1(T *a, integer *lda, T *b, integer *ldb, T *sr1, T *sr2, T *si, T *beta1, T *beta2, T *v)
+void laqz1(T *a, integer *lda, T *b, integer *ldb, T *sr1, T *sr2, T *si, T *beta1, T *beta2, T *v)
 {
-  return laqz1(a, lda, b, ldb, sr1, sr2, si, beta1, beta2, v);
+  laqz1(a, lda, b, ldb, sr1, sr2, si, beta1, beta2, v);
 }
 template < typename T >
-integer laqz1(logical *ilq, logical *ilz, integer *k, integer * istartm, integer *istopm, integer *ihi, T *a, integer *lda, T *b, integer *ldb, integer *nq, integer *qstart, T *q, integer *ldq, integer *nz, integer *zstart, T *z, integer * ldz)
+void laqz1(logical *ilq, logical *ilz, integer *k, integer * istartm, integer *istopm, integer *ihi, T *a, integer *lda, T *b, integer *ldb, integer *nq, integer *qstart, T *q, integer *ldq, integer *nz, integer *zstart, T *z, integer * ldz)
 {
-  return laqz1(ilq, ilz, k, istartm, istopm, ihi, a, lda, b, ldb, nq, qstart, q, ldq, nz, zstart, z, ldz);
+  laqz1(ilq, ilz, k, istartm, istopm, ihi, a, lda, b, ldb, nq, qstart, q, ldq, nz, zstart, z, ldz);
 }
 
 /*! @brief LAQZ2 chases a 2x2 shift bulge in a matrix pencil down a single position.
@@ -58653,17 +57711,16 @@ integer laqz1(logical *ilq, logical *ilz, integer *k, integer * istartm, integer
           The leading dimension of Q as declared in
           the calling procedure. \n
 
- * @return INTEGER Return value of the function.
  * */
 template < typename T >
-integer laqz2(logical *ilq, logical *ilz, integer *k, integer * istartm, integer *istopm, integer *ihi, T *a, integer *lda, T *b, integer *ldb, integer *nq, integer *qstart, T *q, integer *ldq, integer *nz, integer *zstart, T *z, integer *ldz)
+void laqz2(logical *ilq, logical *ilz, integer *k, integer * istartm, integer *istopm, integer *ihi, T *a, integer *lda, T *b, integer *ldb, integer *nq, integer *qstart, T *q, integer *ldq, integer *nz, integer *zstart, T *z, integer *ldz)
 {
-  return laqz2(ilq, ilz, k, istartm, istopm, ihi, a, lda, b, ldb, nq, qstart, q, ldq, nz, zstart, z, ldz);
+  laqz2(ilq, ilz, k, istartm, istopm, ihi, a, lda, b, ldb, nq, qstart, q, ldq, nz, zstart, z, ldz);
 }
 template < typename T, typename Ta >
-integer laqz2(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *ilo, integer *ihi, integer *nw, T *a, integer *lda, T *b, integer *ldb, T *q, integer *ldq, T *z, integer *ldz, integer *ns, integer *nd, T *alpha, T *beta, T *qc, integer *ldqc, T *zc, integer *ldzc, T *work, integer *lwork, float *rwork, integer *rec, integer * info)
+void laqz2(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *ilo, integer *ihi, integer *nw, T *a, integer *lda, T *b, integer *ldb, T *q, integer *ldq, T *z, integer *ldz, integer *ns, integer *nd, T *alpha, T *beta, T *qc, integer *ldqc, T *zc, integer *ldzc, T *work, integer *lwork, float *rwork, integer *rec, integer * info)
 {
-  return laqz2(ilschur, ilq, ilz, n, ilo, ihi, nw, a, lda, b, ldb, q, ldq, z, ldz, ns, nd, alpha, beta, qc, ldqc, zc, ldzc, work, lwork, rwork, rec, info);
+  laqz2(ilschur, ilq, ilz, n, ilo, ihi, nw, a, lda, b, ldb, q, ldq, z, ldz, ns, nd, alpha, beta, qc, ldqc, zc, ldzc, work, lwork, rwork, rec, info);
 }
 
 /*! @brief LAQZ3 performs AED
@@ -58767,17 +57824,16 @@ integer laqz2(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer 
           = 0: successful exit \n
           < 0: if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
  * */
 template < typename T >
-integer laqz3(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *ilo, integer *ihi, integer *nw, T *a, integer *lda, T *b, integer *ldb, T *q, integer * ldq, T *z, integer *ldz, integer *ns, integer *nd, T *alphar, T *alphai, T *beta, T * qc, integer *ldqc, T *zc, integer *ldzc, T *work, integer *lwork, integer *rec, integer *info)
+void laqz3(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *ilo, integer *ihi, integer *nw, T *a, integer *lda, T *b, integer *ldb, T *q, integer * ldq, T *z, integer *ldz, integer *ns, integer *nd, T *alphar, T *alphai, T *beta, T * qc, integer *ldqc, T *zc, integer *ldzc, T *work, integer *lwork, integer *rec, integer *info)
 {
-  return laqz3(ilschur, ilq, ilz, n, ilo, ihi, nw, a, lda, b, ldb, q, ldq, z, ldz, ns, nd, alphar, alphai, beta, qc, ldqc, zc, ldzc, work, lwork, rec, info);
+  laqz3(ilschur, ilq, ilz, n, ilo, ihi, nw, a, lda, b, ldb, q, ldq, z, ldz, ns, nd, alphar, alphai, beta, qc, ldqc, zc, ldzc, work, lwork, rec, info);
 }
 template < typename T >
-integer laqz3(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *ilo, integer *ihi, integer *nshifts, integer * nblock_desired, T *alpha, T *beta, T *a, integer * lda, T *b, integer *ldb, T *q, integer *ldq, T *z, integer *ldz, T *qc, integer *ldqc, T *zc, integer *ldzc, T *work, integer *lwork, integer *info)
+void laqz3(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *ilo, integer *ihi, integer *nshifts, integer * nblock_desired, T *alpha, T *beta, T *a, integer * lda, T *b, integer *ldb, T *q, integer *ldq, T *z, integer *ldz, T *qc, integer *ldqc, T *zc, integer *ldzc, T *work, integer *lwork, integer *info)
 {
-  return laqz3(ilschur, ilq, ilz, n, ilo, ihi, nshifts, nblock_desired, alpha, beta, a, lda, b, ldb, q, ldq, z, ldz, qc, ldqc, zc, ldzc, work, lwork, info);
+  laqz3(ilschur, ilq, ilz, n, ilo, ihi, nshifts, nblock_desired, alpha, beta, a, lda, b, ldb, q, ldq, z, ldz, qc, ldqc, zc, ldzc, work, lwork, info);
 }
 
 /*! @brief LAQZ4 Executes a single multishift QZ sweep
@@ -58861,12 +57917,11 @@ integer laqz3(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer 
           = 0: successful exit \n
           < 0: if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
  * */
 template < typename T >
-inline integer laqz4(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *ilo, integer *ihi, integer *nshifts, integer * nblock_desired, T *sr, T *si, T *ss, T *a, integer *lda, T *b, integer *ldb, T *q, integer *ldq, T *z, integer * ldz, T *qc, integer *ldqc, T *zc, integer *ldzc, T *work, integer *lwork, integer *info)
+void laqz4(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *ilo, integer *ihi, integer *nshifts, integer * nblock_desired, T *sr, T *si, T *ss, T *a, integer *lda, T *b, integer *ldb, T *q, integer *ldq, T *z, integer * ldz, T *qc, integer *ldqc, T *zc, integer *ldzc, T *work, integer *lwork, integer *info)
 {
-  return laqz4(ilschur, ilq, ilz, n, ilo, ihi, nshifts, nblock_desired, sr, si, ss, a, lda, b, ldb, q, ldq, z, ldz, qc, ldqc, zc, ldzc, work, lwork, info);
+  laqz4(ilschur, ilq, ilz, n, ilo, ihi, nshifts, nblock_desired, sr, si, ss, a, lda, b, ldb, q, ldq, z, ldz, qc, ldqc, zc, ldzc, work, lwork, info);
 }
 
 /*! @brief LARFB_GETT applies a real Householder block reflector H from the
@@ -58949,12 +58004,11 @@ inline integer laqz4(logical *ilschur, logical *ilq, logical *ilz, integer *n, i
           LDWORK is INTEGER \n
           The leading dimension of the array WORK. LDWORK>=max(1,K). \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template < typename T >
-inline integer larfb_gett(char *ident, integer *m, integer *n, integer *k, T *t, integer *ldt, T *a, integer *lda, T *b, integer *ldb, T *work, integer *ldwork)
+void larfb_gett(char *ident, integer *m, integer *n, integer *k, T *t, integer *ldt, T *a, integer *lda, T *b, integer *ldb, T *work, integer *ldwork)
 {
-  return larfb_gett(ident, m, n, k, t, ldt, a, lda, b, ldb, work, ldwork);
+  larfb_gett(ident, m, n, k, t, ldt, a, lda, b, ldb, work, ldwork);
 }
 
 /*! @brief ORGTSQR_ROW generates an M-by-N real matrix Q_out with
@@ -59054,12 +58108,11 @@ inline integer larfb_gett(char *ident, integer *m, integer *n, integer *k, T *t,
           = 0:  successful exit \n
           < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
- * @return INTEGER Return value of the function.
- * */
+ *  * */
 template < typename T >
-inline integer gtsqr_row(integer *m, integer *n, integer *mb, integer *nb, T *a, integer *lda, T *t, integer *ldt, T *work, integer *lwork, integer *info)
+void gtsqr_row(integer *m, integer *n, integer *mb, integer *nb, T *a, integer *lda, T *t, integer *ldt, T *work, integer *lwork, integer *info)
 {
-  return gtsqr_row(m, n, mb, nb, a, lda, t, ldt, work, lwork, info);
+  gtsqr_row(m, n, mb, nb, a, lda, t, ldt, work, lwork, info);
 }
 
 }  // namespace libflame

@@ -196,6 +196,7 @@ void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer 
     free_matrix(B);
     free_matrix(B_save);
     free_vector(S);
+    free_vector(rcond);
 }
 
 void prepare_gelsd_run(integer m_A, integer n_A, integer nrhs, void *A, integer lda, void *B,

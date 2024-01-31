@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -35,8 +35,8 @@ void fla_test_lartg(integer argc, char **argv, test_params_t *params)
             /* Loop over the requested datatypes. */
             for(i = 0; i < num_types; ++i)
             {
-                datatype = params->datatype[i];
-                stype = params->datatype_char[i];
+                datatype = params->aux_paramslist[0].data_types[i];
+                stype    = params->aux_paramslist[0].data_types_char[i];
 
                 /* Call the test code */
                 fla_test_lartg_experiment(params, datatype, 2, i_one, 0, n_repeats, einfo, &perf,

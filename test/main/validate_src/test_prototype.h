@@ -260,6 +260,11 @@
 #define fla_lapack_cgtsv CGTSV_
 #define fla_lapack_zgtsv ZGTSV_
 
+#define fla_lapack_sgesvdx SGESVDX_
+#define fla_lapack_dgesvdx DGESVDX_
+#define fla_lapack_cgesvdx CGESVDX_
+#define fla_lapack_zgesvdx ZGESVDX_
+
 #elif (UPPER)
 
 #define fla_lapack_sladiv SLADIV
@@ -510,6 +515,11 @@
 #define fla_lapack_dgtsv DGTSV
 #define fla_lapack_cgtsv CGTSV
 #define fla_lapack_zgtsv ZGTSV
+
+#define fla_lapack_sgesvdx SGESVDX
+#define fla_lapack_dgesvdx DGESVDX
+#define fla_lapack_cgesvdx CGESVDX
+#define fla_lapack_zgesvdx ZGESVDX
 
 #elif (LOWER)
 
@@ -762,6 +772,11 @@
 #define fla_lapack_cgtsv cgtsv
 #define fla_lapack_zgtsv zgtsv
 
+#define fla_lapack_sgesvdx sgesvdx
+#define fla_lapack_dgesvdx dgesvdx
+#define fla_lapack_cgesvdx cgesvdx
+#define fla_lapack_zgesvdx zgesvdx
+
 #else
 
 #define fla_lapack_sladiv sladiv_
@@ -1012,6 +1027,11 @@
 #define fla_lapack_dgtsv dgtsv_
 #define fla_lapack_cgtsv cgtsv_
 #define fla_lapack_zgtsv zgtsv_
+
+#define fla_lapack_sgesvdx sgesvdx_
+#define fla_lapack_dgesvdx dgesvdx_
+#define fla_lapack_cgesvdx cgesvdx_
+#define fla_lapack_zgesvdx zgesvdx_
 
 #endif /*if UPPER_*/
 

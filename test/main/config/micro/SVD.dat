@@ -46,4 +46,4 @@ vu 0.5  3.0  4.9  0.8
 joba_gesvdq A H M E
 jobu_gesvdq A S R N
 jobv_gesvdq A V R N
-threshold 3.0 5.0 20.0 40.0
+threshold 10.0 10.0 20.0 40.0

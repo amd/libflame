@@ -1,4 +1,4 @@
-##Copyright (C) 2023, Advanced Micro Devices, Inc.##
+##Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.##
 
 cmake_minimum_required(VERSION 3.15.0)
 
@@ -988,6 +988,7 @@ endif ()
 	target_include_directories(${PROJECT_NAME} PUBLIC src/lapack/x86/avx2)
 	target_include_directories(${PROJECT_NAME} PUBLIC src/lapack/x86/avx512)
 	target_include_directories(${PROJECT_NAME} PUBLIC src/lapack/x86/front)
+	target_include_directories(${PROJECT_NAME} PUBLIC src/lapack/x86/generic)
 
 #If embedding AOCL-UTILS library in AOCL-LAPACK option is selected  
 if(ENABLE_EMBED_AOCLUTILS)

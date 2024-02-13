@@ -11,8 +11,6 @@
 
 #ifdef FLA_ENABLE_AMD_OPT
 
-double d_sign(doublereal *, doublereal *);
-
 void fla_dgesvd_nn_small1T_avx2(integer *m, integer *n,
                                 doublereal *a, integer *lda,
                                 doublereal *s,
@@ -25,7 +23,6 @@ void fla_dgesvd_nn_small1T_avx2(integer *m, integer *n,
     doublereal d__1;
     doublereal *tau, *tauq, *taup;
     doublereal *e;
-    doublereal dum[1];
 
     integer c__0 = 0;
     integer c__1 = 1;
@@ -50,14 +47,13 @@ void fla_dgesvd_nn_small1T_avx2(integer *m, integer *n,
     taup = &work[itaup - 1];
 
     /* Upper Bidiagonalization */
-    FLA_BIDIAGONALIZE_SMALL(*m, *m);
+    FLA_BIDIAGONALIZE_SMALL(*m, *m, a, lda, tauq, taup, s, e);
 
     /* Compute Singular Values */
-    lapack_dbdsqr("U", m, &c__0, &c__0, &c__0, &s[1], &e[1],
-                  NULL, &c__1,
-                  NULL, &c__1,
-                  dum, &c__1,
-                  &work[itauq], info);
+    lapack_dbdsqr_small("U", m, &c__0, &c__0, &s[1], &e[1],
+                        NULL, &c__1,
+                        NULL, &c__1,
+                        info);
 
     return;
 }

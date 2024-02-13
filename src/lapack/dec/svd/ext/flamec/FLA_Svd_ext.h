@@ -20,6 +20,11 @@ int lapack_dbdsqr(char *uplo, integer *n, integer *ncvt, integer *
 	          nru, integer *ncc, doublereal *d__, doublereal *e, doublereal *vt, 
 	          integer *ldvt, doublereal *u, integer *ldu, doublereal *c__, integer *
 	          ldc, doublereal *work, integer *info);
+int lapack_dbdsqr_small(char *uplo, integer *n, integer *ncvt, integer *nru,
+                                doublereal *d__, doublereal *e,
+                                doublereal *vt, integer *ldvt,
+                                doublereal *u, integer *ldu,
+                                integer *info);
 int lapack_dgebd2(integer *m, integer *n, doublereal *a, integer *
 	          lda, doublereal *d__, doublereal *e, doublereal *tauq, doublereal *
 	          taup, doublereal *work, integer *info);

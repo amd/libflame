@@ -1,41 +1,19 @@
 /* dgelqf.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
- #include "FLAME.h"
- #include "FLA_f2c.h" /* Table of constant values */
+/*
+ * Modifications Copyright (c) 2021-2024 Advanced Micro Devices, Inc.  All
+ * rights reserved.
+ */
+#include "FLAME.h"
+#include "FLA_f2c.h" /* Table of constant values */
+#include "fla_lapack_x86_common.h"
+
 #ifdef FLA_ENABLE_AMD_OPT
 extern void dgeqrf_fla(integer *m, integer *n,
                       doublereal *a, integer * lda,
                       doublereal *tau,
                       doublereal *work, integer *lwork,
                       integer *info);
-int fla_dgelqf_tran(integer *m, integer *n,
-                    doublereal *a, integer * lda,
-                    doublereal *tau,
-                    doublereal *work, integer *lwork,
-                    integer *info);
-/* Transpose copy from matrix 'a' to 'b'.
- * Memory locations of a and b are assumed to be different
- * without any overlapping memory
- * */
-static void fla_dtranspose(integer *m, integer *n,
-                           doublereal *a, integer *lda,
-                           doublereal *b, integer *ldb)
-{
-    integer i, j;
-
-    /* Offset adjustments */
-    a -= (1 + *lda);
-    b -= (1 + *ldb);
-
-    /* Do the transpose copy */
-    for (i = 1; i <= *n; i++)
-    {
-        for (j = 1; j <= *m; j++)
-        {
-            b[i + j * *ldb] = a[i * *lda + j];
-        }
-    }
-}
 #endif
  static integer c__1 = 1;
  static integer c_n1 = -1;

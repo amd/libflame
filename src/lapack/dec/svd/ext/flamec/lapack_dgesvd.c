@@ -5,7 +5,7 @@
  the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 /*
- *     Modifications Copyright (c) 2021-2023 Advanced Micro Devices, Inc.  All
+ * Modifications Copyright (c) 2021-2024 Advanced Micro Devices, Inc.  All
  * rights reserved.
  */
 #include "FLAME.h"
@@ -400,30 +400,41 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
       mnthr = ilaenv_(&c__6, "DGESVD", ch__1, m, n, &c__0, &c__0);
       bdspac = *n * 5;
       if (*m >= mnthr) {
-        /* Compute space needed for DGEQRF */
-        lwork_dgeqrf = *n * FLA_GEQRF_BLOCK_SIZE;
-        /* Compute space needed for DGEBRD */
-        lwork_dgebrd = *n * 2 * FLA_GEQRF_BLOCK_SIZE;
         if (wntun) {
-          /* Compute space needed for DORGBR P */
-          lwork_dorgbrp = fla_max(1, (*n - 1)) * FLA_GEQRF_BLOCK_SIZE;
           /* Path 1 (M much larger than N, JOBU='N') */
-          maxwrk = *n + lwork_dgeqrf;
-          /* Computing MAX */
-          i__2 = maxwrk;
-          i__3 = *n * 3 + lwork_dgebrd; // , expr subst
-          maxwrk = fla_max(i__2, i__3);
-          if (wntvo || wntvas) {
+          if ((!wntvo) && (*m < 128) && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+            i__2 = *n << 2;
+            maxwrk = fla_max(i__2, bdspac);
+            minwrk = i__2;
+          }
+          else {
+            /* Compute space needed for DGEQRF */
+            lwork_dgeqrf = *n * FLA_GEQRF_BLOCK_SIZE;
+            /* Compute space needed for DGEBRD */
+            lwork_dgebrd = *n * 2 * FLA_GEQRF_BLOCK_SIZE;
+            /* Compute space needed for DORGBR P */
+            lwork_dorgbrp = fla_max(1, (*n - 1)) * FLA_GEQRF_BLOCK_SIZE;
+            maxwrk = *n + lwork_dgeqrf;
             /* Computing MAX */
             i__2 = maxwrk;
-            i__3 = *n * 3 + lwork_dorgbrp; // , expr subst
+            i__3 = *n * 3 + lwork_dgebrd; // , expr subst
             maxwrk = fla_max(i__2, i__3);
+            if (wntvo || wntvas) {
+              /* Computing MAX */
+              i__2 = maxwrk;
+              i__3 = *n * 3 + lwork_dorgbrp; // , expr subst
+              maxwrk = fla_max(i__2, i__3);
+            }
+            maxwrk = fla_max(maxwrk, bdspac);
+            /* Computing MAX */
+            i__2 = *n << 2;
+            minwrk = fla_max(i__2, bdspac);
           }
-          maxwrk = fla_max(maxwrk, bdspac);
-          /* Computing MAX */
-          i__2 = *n << 2;
-          minwrk = fla_max(i__2, bdspac);
         } else if (wntuo && wntvn) {
+          /* Compute space needed for DGEQRF */
+          lwork_dgeqrf = *n * FLA_GEQRF_BLOCK_SIZE;
+          /* Compute space needed for DGEBRD */
+          lwork_dgebrd = *n * 2 * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGQR */
           lwork_dorgqrn = fla_max(1, *n) * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGBR Q */
@@ -451,6 +462,10 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
           i__2 = *n * 3 + *m;
           minwrk = fla_max(i__2, bdspac);
         } else if (wntuo && wntvas) {
+          /* Compute space needed for DGEQRF */
+          lwork_dgeqrf = *n * FLA_GEQRF_BLOCK_SIZE;
+          /* Compute space needed for DGEBRD */
+          lwork_dgebrd = *n * 2 * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGQR */
           lwork_dorgqrn = fla_max(1, *n) * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGBR Q */
@@ -485,6 +500,10 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
           i__2 = *n * 3 + *m;
           minwrk = fla_max(i__2, bdspac);
         } else if (wntus && wntvn) {
+          /* Compute space needed for DGEQRF */
+          lwork_dgeqrf = *n * FLA_GEQRF_BLOCK_SIZE;
+          /* Compute space needed for DGEBRD */
+          lwork_dgebrd = *n * 2 * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGQR */
           lwork_dorgqrn = fla_max(1, *n) * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGBR Q */
@@ -509,6 +528,10 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
           i__2 = *n * 3 + *m;
           minwrk = fla_max(i__2, bdspac);
         } else if (wntus && wntvo) {
+          /* Compute space needed for DGEQRF */
+          lwork_dgeqrf = *n * FLA_GEQRF_BLOCK_SIZE;
+          /* Compute space needed for DGEBRD */
+          lwork_dgebrd = *n * 2 * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGQR */
           lwork_dorgqrn = fla_max(1, *n) * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGBR P */
@@ -539,37 +562,52 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
           i__2 = *n * 3 + *m;
           minwrk = fla_max(i__2, bdspac);
         } else if (wntus && wntvas) {
-          /* Compute space needed for DORGQR */
-          lwork_dorgqrn = fla_max(1, *n) * FLA_GEQRF_BLOCK_SIZE;
-          /* Compute space needed for DORGBR P */
-          lwork_dorgbrp = fla_max(1, (*n - 1)) * FLA_GEQRF_BLOCK_SIZE;
-          /* Compute space needed for DORGBR Q */
-          lwork_dorgbrq = fla_max(1, *n) * FLA_GEQRF_BLOCK_SIZE;
           /* Path 6 (M much larger than N, JOBU='S', JOBVT='S' or */
           /* 'A') */
-          wrkbl = *n + lwork_dgeqrf;
-          /* Computing MAX */
-          i__2 = wrkbl;
-          i__3 = *n + lwork_dorgqrn; // , expr subst
-          wrkbl = fla_max(i__2, i__3);
-          /* Computing MAX */
-          i__2 = wrkbl;
-          i__3 = *n * 3 + lwork_dgebrd; // , expr subst
-          wrkbl = fla_max(i__2, i__3);
-          /* Computing MAX */
-          i__2 = wrkbl;
-          i__3 = *n * 3 + lwork_dorgbrq; // , expr subst
-          wrkbl = fla_max(i__2, i__3);
-          /* Computing MAX */
-          i__2 = wrkbl;
-          i__3 = *n * 3 + lwork_dorgbrp; // , expr subst
-          wrkbl = fla_max(i__2, i__3);
-          wrkbl = fla_max(wrkbl, bdspac);
-          maxwrk = *n * *n + wrkbl;
-          /* Computing MAX */
-          i__2 = *n * 3 + *m;
-          minwrk = fla_max(i__2, bdspac);
+          if (*m < 128 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+            i__2 = *n * 3 + *m;
+            maxwrk = fla_max(i__2, bdspac);
+            minwrk = *n << 2;
+          }
+          else {
+            /* Compute space needed for DGEQRF */
+            lwork_dgeqrf = *n * FLA_GEQRF_BLOCK_SIZE;
+            /* Compute space needed for DGEBRD */
+            lwork_dgebrd = *n * 2 * FLA_GEQRF_BLOCK_SIZE;
+            /* Compute space needed for DORGQR */
+            lwork_dorgqrn = fla_max(1, *n) * FLA_GEQRF_BLOCK_SIZE;
+            /* Compute space needed for DORGBR P */
+            lwork_dorgbrp = fla_max(1, (*n - 1)) * FLA_GEQRF_BLOCK_SIZE;
+            /* Compute space needed for DORGBR Q */
+            lwork_dorgbrq = fla_max(1, *n) * FLA_GEQRF_BLOCK_SIZE;
+            wrkbl = *n + lwork_dgeqrf;
+            /* Computing MAX */
+            i__2 = wrkbl;
+            i__3 = *n + lwork_dorgqrn; // , expr subst
+            wrkbl = fla_max(i__2, i__3);
+            /* Computing MAX */
+            i__2 = wrkbl;
+            i__3 = *n * 3 + lwork_dgebrd; // , expr subst
+            wrkbl = fla_max(i__2, i__3);
+            /* Computing MAX */
+            i__2 = wrkbl;
+            i__3 = *n * 3 + lwork_dorgbrq; // , expr subst
+            wrkbl = fla_max(i__2, i__3);
+            /* Computing MAX */
+            i__2 = wrkbl;
+            i__3 = *n * 3 + lwork_dorgbrp; // , expr subst
+            wrkbl = fla_max(i__2, i__3);
+            wrkbl = fla_max(wrkbl, bdspac);
+            maxwrk = *n * *n + wrkbl;
+            /* Computing MAX */
+            i__2 = *n * 3 + *m;
+            minwrk = fla_max(i__2, bdspac);
+          }
         } else if (wntua && wntvn) {
+          /* Compute space needed for DGEQRF */
+          lwork_dgeqrf = *n * FLA_GEQRF_BLOCK_SIZE;
+          /* Compute space needed for DGEBRD */
+          lwork_dgebrd = *n * 2 * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGQR */
           lwork_dorgqrm = fla_max(1, *m) * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGBR Q */
@@ -594,6 +632,10 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
           i__2 = *n * 3 + *m;
           minwrk = fla_max(i__2, bdspac);
         } else if (wntua && wntvo) {
+          /* Compute space needed for DGEQRF */
+          lwork_dgeqrf = *n * FLA_GEQRF_BLOCK_SIZE;
+          /* Compute space needed for DGEBRD */
+          lwork_dgebrd = *n * 2 * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGQR */
           lwork_dorgqrm = fla_max(1, *m) * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGBR Q */
@@ -624,6 +666,10 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
           i__2 = *n * 3 + *m;
           minwrk = fla_max(i__2, bdspac);
         } else if (wntua && wntvas) {
+          /* Compute space needed for DGEQRF */
+          lwork_dgeqrf = *n * FLA_GEQRF_BLOCK_SIZE;
+          /* Compute space needed for DGEBRD */
+          lwork_dgebrd = *n * 2 * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGQR */
           lwork_dorgqrm = fla_max(1, *m) * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGBR Q */
@@ -657,64 +703,87 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
         }
       } else {
         /* Path 10 (M at least N, but not much larger) */
-        lwork_dgebrd = (*m + *n) * FLA_GEQRF_BLOCK_SIZE;
-        maxwrk = *n * 3 + lwork_dgebrd;
-        if (wntus || wntuo) {
-          lwork_dorgbrq = fla_max(1, *n) * FLA_GEQRF_BLOCK_SIZE;
-          /* Computing MAX */
-          i__2 = maxwrk;
-          i__3 = *n * 3 + lwork_dorgbrq; // , expr subst
-          maxwrk = fla_max(i__2, i__3);
+        if ((wntun || wntus) && (wntvn || wntvs) && (*m < 128) && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+          i__2 = *n * 3 + *m;
+          maxwrk = fla_max(i__2, bdspac);
+          minwrk = *n * 3;
         }
-        if (wntua) {
-          /* Compute space needed for DORGBR Q */
-          lwork_dorgbrq = fla_max(1, *m) * FLA_GEQRF_BLOCK_SIZE;
+        else
+        {
+          /* Compute space needed for DGEQRF */
+          lwork_dgeqrf = *n * FLA_GEQRF_BLOCK_SIZE;
+          /* Compute space needed for DGEBRD */
+          lwork_dgebrd = (*m + *n) * FLA_GEQRF_BLOCK_SIZE;
+          maxwrk = *n * 3 + lwork_dgebrd;
+          if (wntus || wntuo) {
+            lwork_dorgbrq = fla_max(1, *n) * FLA_GEQRF_BLOCK_SIZE;
+            /* Computing MAX */
+            i__2 = maxwrk;
+            i__3 = *n * 3 + lwork_dorgbrq; // , expr subst
+            maxwrk = fla_max(i__2, i__3);
+          }
+          if (wntua) {
+            /* Compute space needed for DORGBR Q */
+            lwork_dorgbrq = fla_max(1, *m) * FLA_GEQRF_BLOCK_SIZE;
+            /* Computing MAX */
+            i__2 = maxwrk;
+            i__3 = *n * 3 + lwork_dorgbrq; // , expr subst
+            maxwrk = fla_max(i__2, i__3);
+          }
+          if (!wntvn) {
+            /* Compute space needed for DORGBR P */
+            lwork_dorgbrp = fla_max(1, (*n - 1)) * FLA_GEQRF_BLOCK_SIZE;
+            /* Computing MAX */
+            i__2 = maxwrk;
+            i__3 = *n * 3 + lwork_dorgbrp; // , expr subst
+            maxwrk = fla_max(i__2, i__3);
+          }
+          maxwrk = fla_max(maxwrk, bdspac);
           /* Computing MAX */
-          i__2 = maxwrk;
-          i__3 = *n * 3 + lwork_dorgbrq; // , expr subst
-          maxwrk = fla_max(i__2, i__3);
+          i__2 = *n * 3 + *m;
+          minwrk = fla_max(i__2, bdspac);
         }
-        if (!wntvn) {
-          /* Compute space needed for DORGBR P */
-          lwork_dorgbrp = fla_max(1, (*n - 1)) * FLA_GEQRF_BLOCK_SIZE;
-          /* Computing MAX */
-          i__2 = maxwrk;
-          i__3 = *n * 3 + lwork_dorgbrp; // , expr subst
-          maxwrk = fla_max(i__2, i__3);
-        }
-        maxwrk = fla_max(maxwrk, bdspac);
-        /* Computing MAX */
-        i__2 = *n * 3 + *m;
-        minwrk = fla_max(i__2, bdspac);
       }
     } else if (minmn > 0) {
       /* Compute space needed for lapack_dbdsqr */
       mnthr = ilaenv_(&c__6, "DGESVD", ch__1, m, n, &c__0, &c__0);
       bdspac = *m * 5;
       if (*n >= mnthr) {
-        /* Compute space needed for DGELQF */
-        lwork_dgelqf = *m * FLA_GEQRF_BLOCK_SIZE;
-        /* Compute space needed for DGEBRD */
-        lwork_dgebrd = (*m + *n) * FLA_GEQRF_BLOCK_SIZE;
         if (wntvn) {
           /* Path 1t(N much larger than M, JOBVT='N') */
-          maxwrk = *m + lwork_dgelqf;
-          /* Computing MAX */
-          i__2 = maxwrk;
-          i__3 = *m * 3 + lwork_dgebrd; // , expr subst
-          maxwrk = fla_max(i__2, i__3);
-          if (wntuo || wntuas) {
-            lwork_dorgbrq = fla_max(1, *m) * FLA_GEQRF_BLOCK_SIZE;
+          if ((wntun && wntvn) && (*n < 128) && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+            i__2 = *m << 2;
+            maxwrk = fla_max(i__2, bdspac);
+            minwrk = i__2;
+          }
+          else
+          {
+            /* Compute space needed for DGELQF */
+            lwork_dgelqf = *m * FLA_GEQRF_BLOCK_SIZE;
+            /* Compute space needed for DGEBRD */
+            lwork_dgebrd = (*m + *n) * FLA_GEQRF_BLOCK_SIZE;
+            maxwrk = *m + lwork_dgelqf;
             /* Computing MAX */
             i__2 = maxwrk;
-            i__3 = *m * 3 + lwork_dorgbrq; // , expr subst
+            i__3 = *m * 3 + lwork_dgebrd; // , expr subst
             maxwrk = fla_max(i__2, i__3);
+            if (wntuo || wntuas) {
+              lwork_dorgbrq = fla_max(1, *m) * FLA_GEQRF_BLOCK_SIZE;
+              /* Computing MAX */
+              i__2 = maxwrk;
+              i__3 = *m * 3 + lwork_dorgbrq; // , expr subst
+              maxwrk = fla_max(i__2, i__3);
+            }
+            maxwrk = fla_max(maxwrk, bdspac);
+            /* Computing MAX */
+            i__2 = *m << 2;
+            minwrk = fla_max(i__2, bdspac);
           }
-          maxwrk = fla_max(maxwrk, bdspac);
-          /* Computing MAX */
-          i__2 = *m << 2;
-          minwrk = fla_max(i__2, bdspac);
         } else if (wntvo && wntun) {
+          /* Compute space needed for DGELQF */
+          lwork_dgelqf = *m * FLA_GEQRF_BLOCK_SIZE;
+          /* Compute space needed for DGEBRD */
+          lwork_dgebrd = (*m + *n) * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGLQ */
           lwork_dorglqm = fla_max(1, *m) * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGBR P */
@@ -742,6 +811,10 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
           i__2 = *m * 3 + *n;
           minwrk = fla_max(i__2, bdspac);
         } else if (wntvo && wntuas) {
+          /* Compute space needed for DGELQF */
+          lwork_dgelqf = *m * FLA_GEQRF_BLOCK_SIZE;
+          /* Compute space needed for DGEBRD */
+          lwork_dgebrd = (*m + *n) * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGLQ */
           lwork_dorglqm = fla_max(1, *m) * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGBR P */
@@ -776,6 +849,10 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
           i__2 = *m * 3 + *n;
           minwrk = fla_max(i__2, bdspac);
         } else if (wntvs && wntun) {
+          /* Compute space needed for DGELQF */
+          lwork_dgelqf = *m * FLA_GEQRF_BLOCK_SIZE;
+          /* Compute space needed for DGEBRD */
+          lwork_dgebrd = (*m + *n) * FLA_GEQRF_BLOCK_SIZE;
           lwork_dorglqm = fla_max(1, *m) * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGBR P */
           lwork_dorgbrp = fla_max(1, (*m - 1)) * FLA_GEQRF_BLOCK_SIZE;
@@ -799,6 +876,10 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
           i__2 = *m * 3 + *n;
           minwrk = fla_max(i__2, bdspac);
         } else if (wntvs && wntuo) {
+          /* Compute space needed for DGELQF */
+          lwork_dgelqf = *m * FLA_GEQRF_BLOCK_SIZE;
+          /* Compute space needed for DGEBRD */
+          lwork_dgebrd = (*m + *n) * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGLQ */
           lwork_dorglqm = fla_max(1, *m) * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGBR P */
@@ -829,37 +910,52 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
           i__2 = *m * 3 + *n;
           minwrk = fla_max(i__2, bdspac);
         } else if (wntvs && wntuas) {
-          /* Compute space needed for DORGLQ */
-          lwork_dorglqm = fla_max(1, *m) * FLA_GEQRF_BLOCK_SIZE;
-          /* Compute space needed for DORGBR P */
-          lwork_dorgbrp = fla_max(1, (*m - 1)) * FLA_GEQRF_BLOCK_SIZE;
-          /* Compute space needed for DORGBR Q */
-          lwork_dorgbrq = fla_max(1, *m) * FLA_GEQRF_BLOCK_SIZE;
           /* Path 6t(N much larger than M, JOBU='S' or 'A', */
           /* JOBVT='S') */
-          wrkbl = *m + lwork_dgelqf;
-          /* Computing MAX */
-          i__2 = wrkbl;
-          i__3 = *m + lwork_dorglqm; // , expr subst
-          wrkbl = fla_max(i__2, i__3);
-          /* Computing MAX */
-          i__2 = wrkbl;
-          i__3 = *m * 3 + lwork_dgebrd; // , expr subst
-          wrkbl = fla_max(i__2, i__3);
-          /* Computing MAX */
-          i__2 = wrkbl;
-          i__3 = *m * 3 + lwork_dorgbrp; // , expr subst
-          wrkbl = fla_max(i__2, i__3);
-          /* Computing MAX */
-          i__2 = wrkbl;
-          i__3 = *m * 3 + lwork_dorgbrq; // , expr subst
-          wrkbl = fla_max(i__2, i__3);
-          wrkbl = fla_max(wrkbl, bdspac);
-          maxwrk = *m * *m + wrkbl;
-          /* Computing MAX */
-          i__2 = *m * 3 + *n;
-          minwrk = fla_max(i__2, bdspac);
+          if (*n < 128 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+            i__2 = *m * 3 + *n;
+            minwrk = fla_max(i__2, bdspac);
+            maxwrk = (*m << 2) + *m * *m;
+          } else {
+            /* Compute space needed for DGELQF */
+            lwork_dgelqf = *m * FLA_GEQRF_BLOCK_SIZE;
+            /* Compute space needed for DGEBRD */
+            lwork_dgebrd = (*m + *n) * FLA_GEQRF_BLOCK_SIZE;
+            /* Compute space needed for DORGLQ */
+            lwork_dorglqm = fla_max(1, *m) * FLA_GEQRF_BLOCK_SIZE;
+            /* Compute space needed for DORGBR P */
+            lwork_dorgbrp = fla_max(1, (*m - 1)) * FLA_GEQRF_BLOCK_SIZE;
+            /* Compute space needed for DORGBR Q */
+            lwork_dorgbrq = fla_max(1, *m) * FLA_GEQRF_BLOCK_SIZE;
+            wrkbl = *m + lwork_dgelqf;
+            /* Computing MAX */
+            i__2 = wrkbl;
+            i__3 = *m + lwork_dorglqm; // , expr subst
+            wrkbl = fla_max(i__2, i__3);
+            /* Computing MAX */
+            i__2 = wrkbl;
+            i__3 = *m * 3 + lwork_dgebrd; // , expr subst
+            wrkbl = fla_max(i__2, i__3);
+            /* Computing MAX */
+            i__2 = wrkbl;
+            i__3 = *m * 3 + lwork_dorgbrp; // , expr subst
+            wrkbl = fla_max(i__2, i__3);
+            /* Computing MAX */
+            i__2 = wrkbl;
+            i__3 = *m * 3 + lwork_dorgbrq; // , expr subst
+            wrkbl = fla_max(i__2, i__3);
+            wrkbl = fla_max(wrkbl, bdspac);
+            maxwrk = *m * *m + wrkbl;
+            /* Computing MAX */
+            i__2 = *m * 3 + *n;
+            minwrk = fla_max(i__2, bdspac);
+          }
         } else if (wntva && wntun) {
+          /* Compute space needed for DGELQF */
+          lwork_dgelqf = *m * FLA_GEQRF_BLOCK_SIZE;
+          /* Compute space needed for DGEBRD */
+          lwork_dgebrd = (*m + *n) * FLA_GEQRF_BLOCK_SIZE;
+          /* Compute space needed for DORGLQ */
           lwork_dorglqn = fla_max(1, *n) * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGBR P */
           lwork_dorgbrp = fla_max(1, (*m - 1)) * FLA_GEQRF_BLOCK_SIZE;
@@ -883,6 +979,11 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
           i__2 = *m * 3 + *n;
           minwrk = fla_max(i__2, bdspac);
         } else if (wntva && wntuo) {
+          /* Compute space needed for DGELQF */
+          lwork_dgelqf = *m * FLA_GEQRF_BLOCK_SIZE;
+          /* Compute space needed for DGEBRD */
+          lwork_dgebrd = (*m + *n) * FLA_GEQRF_BLOCK_SIZE;
+          /* Compute space needed for DORGLQ */
           lwork_dorglqn = fla_max(1, *n) * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGBR P */
           lwork_dorgbrp = fla_max(1, (*m - 1)) * FLA_GEQRF_BLOCK_SIZE;
@@ -912,6 +1013,10 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
           i__2 = *m * 3 + *n;
           minwrk = fla_max(i__2, bdspac);
         } else if (wntva && wntuas) {
+          /* Compute space needed for DGELQF */
+          lwork_dgelqf = *m * FLA_GEQRF_BLOCK_SIZE;
+          /* Compute space needed for DGEBRD */
+          lwork_dgebrd = (*m + *n) * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGLQ */
           lwork_dorglqn = fla_max(1, *n) * FLA_GEQRF_BLOCK_SIZE;
           /* Compute space needed for DORGBR P */
@@ -945,36 +1050,43 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
         }
       } else {
         /* Path 10t(N greater than M, but not much larger) */
-        lwork_dgebrd = (*m + *n) * FLA_GEQRF_BLOCK_SIZE;
-        maxwrk = *m * 3 + lwork_dgebrd;
-        if (wntvs || wntvo) {
-          /* Compute space needed for DORGBR P */
-          lwork_dorgbrp = fla_max(1, (*n - 1)) * FLA_GEQRF_BLOCK_SIZE;
-          /* Computing MAX */
-          i__2 = maxwrk;
-          i__3 = *m * 3 + lwork_dorgbrp; // , expr subst
-          maxwrk = fla_max(i__2, i__3);
+        if ((wntuas & wntvs) && (*n < 16) && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+          i__2 = *m * 3 + *n;
+          maxwrk = fla_max(i__2, bdspac);
+          minwrk = 3 * *m;
         }
-        if (wntva) {
-          /* Compute space needed for DORGBR P */
-          lwork_dorgbrp = fla_max(1, *n) * FLA_GEQRF_BLOCK_SIZE;
+        else {
+          lwork_dgebrd = (*m + *n) * FLA_GEQRF_BLOCK_SIZE;
+          maxwrk = *m * 3 + lwork_dgebrd;
+          if (wntvs || wntvo) {
+            /* Compute space needed for DORGBR P */
+            lwork_dorgbrp = fla_max(1, (*n - 1)) * FLA_GEQRF_BLOCK_SIZE;
+            /* Computing MAX */
+            i__2 = maxwrk;
+            i__3 = *m * 3 + lwork_dorgbrp; // , expr subst
+            maxwrk = fla_max(i__2, i__3);
+          }
+          if (wntva) {
+            /* Compute space needed for DORGBR P */
+            lwork_dorgbrp = fla_max(1, *n) * FLA_GEQRF_BLOCK_SIZE;
+            /* Computing MAX */
+            i__2 = maxwrk;
+            i__3 = *m * 3 + lwork_dorgbrp; // , expr subst
+            maxwrk = fla_max(i__2, i__3);
+          }
+          if (!wntun) {
+            /* Compute space needed for DORGBR Q */
+            lwork_dorgbrq = fla_max(1, *m) * FLA_GEQRF_BLOCK_SIZE;
+            /* Computing MAX */
+            i__2 = maxwrk;
+            i__3 = *m * 3 + lwork_dorgbrq; // , expr subst
+            maxwrk = fla_max(i__2, i__3);
+          }
+          maxwrk = fla_max(maxwrk, bdspac);
           /* Computing MAX */
-          i__2 = maxwrk;
-          i__3 = *m * 3 + lwork_dorgbrp; // , expr subst
-          maxwrk = fla_max(i__2, i__3);
+          i__2 = *m * 3 + *n;
+          minwrk = fla_max(i__2, bdspac);
         }
-        if (!wntun) {
-          /* Compute space needed for DORGBR Q */
-          lwork_dorgbrq = fla_max(1, *m) * FLA_GEQRF_BLOCK_SIZE;
-          /* Computing MAX */
-          i__2 = maxwrk;
-          i__3 = *m * 3 + lwork_dorgbrq; // , expr subst
-          maxwrk = fla_max(i__2, i__3);
-        }
-        maxwrk = fla_max(maxwrk, bdspac);
-        /* Computing MAX */
-        i__2 = *m * 3 + *n;
-        minwrk = fla_max(i__2, bdspac);
       }
     }
     maxwrk = fla_max(maxwrk, minwrk);
@@ -1563,47 +1675,63 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
       if (wntun) {
         /* Path 1 (M much larger than N, JOBU='N') */
         /* No left singular vectors to be computed */
-        itau = 1;
-        iwork = itau + *n;
-        /* Compute A=Q*R */
-        /* (Workspace: need 2*N, prefer N + N*NB) */
-        i__2 = *lwork - iwork + 1;
-        dgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
-                &ierr);
-        /* Zero out below R */
-        if (*n > 1) {
-          i__2 = *n - 1;
-          i__3 = *n - 1;
-          dlaset_("L", &i__2, &i__3, &c_b57, &c_b57, &a[a_dim1 + 2], lda);
-        }
-        ie = 1;
-        itauq = ie + *n;
-        itaup = itauq + *n;
-        iwork = itaup + *n;
-        /* Bidiagonalize R in A */
-        /* (Workspace: need 4*N, prefer 3*N + 2*N*NB) */
-        i__2 = *lwork - iwork + 1;
-        lapack_dgebrd(n, n, &a[a_offset], lda, &s[1], &work[ie], &work[itauq],
-                      &work[itaup], &work[iwork], &i__2, &ierr);
-        ncvt = 0;
-        if (wntvo || wntvas) {
-          /* If right singular vectors desired, generate P'. */
-          /* (Workspace: need 4*N-1, prefer 3*N + (N-1)*NB) */
+#if FLA_ENABLE_AMD_OPT
+          if ((!wntvo) && (*m < 128) && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+            if (wntvn) {
+              fla_dgesvd_small6(0, 0, m, n, &a[a_offset], lda, NULL, ldu,
+                                &s[1], NULL, ldu, NULL, ldvt,
+                                &work[1], info);
+            }
+            else {
+              fla_dgesvd_small6(0, wntvas, m, n, &a[a_offset], lda, NULL, ldu,
+                                &s[1], NULL, ldu, &vt[vt_offset], ldvt,
+                                &work[1], info);
+            }
+        } else
+#endif
+        {
+          itau = 1;
+          iwork = itau + *n;
+          /* Compute A=Q*R */
+          /* (Workspace: need 2*N, prefer N + N*NB) */
           i__2 = *lwork - iwork + 1;
-          lapack_dorgbr("P", n, n, n, &a[a_offset], lda, &work[itaup],
-                        &work[iwork], &i__2, &ierr);
-          ncvt = *n;
-        }
-        iwork = ie + *n;
-        /* Perform bidiagonal QR iteration, computing right */
-        /* singular vectors of A in A if desired */
-        /* (Workspace: need BDSPAC) */
-        lapack_dbdsqr("U", n, &ncvt, &c__0, &c__0, &s[1], &work[ie],
-                      &a[a_offset], lda, dum, &c__1, dum, &c__1, &work[iwork],
-                      info);
-        /* If right singular vectors desired in VT, copy them there */
-        if (wntvas) {
-          dlacpy_("F", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+          dgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
+                  &ierr);
+          /* Zero out below R */
+          if (*n > 1) {
+            i__2 = *n - 1;
+            i__3 = *n - 1;
+            dlaset_("L", &i__2, &i__3, &c_b57, &c_b57, &a[a_dim1 + 2], lda);
+          }
+          ie = 1;
+          itauq = ie + *n;
+          itaup = itauq + *n;
+          iwork = itaup + *n;
+          /* Bidiagonalize R in A */
+          /* (Workspace: need 4*N, prefer 3*N + 2*N*NB) */
+          i__2 = *lwork - iwork + 1;
+          lapack_dgebrd(n, n, &a[a_offset], lda, &s[1], &work[ie], &work[itauq],
+                        &work[itaup], &work[iwork], &i__2, &ierr);
+          ncvt = 0;
+          if (wntvo || wntvas) {
+            /* If right singular vectors desired, generate P'. */
+            /* (Workspace: need 4*N-1, prefer 3*N + (N-1)*NB) */
+            i__2 = *lwork - iwork + 1;
+            lapack_dorgbr("P", n, n, n, &a[a_offset], lda, &work[itaup],
+                          &work[iwork], &i__2, &ierr);
+            ncvt = *n;
+          }
+          iwork = ie + *n;
+          /* Perform bidiagonal QR iteration, computing right */
+          /* singular vectors of A in A if desired */
+          /* (Workspace: need BDSPAC) */
+          lapack_dbdsqr("U", n, &ncvt, &c__0, &c__0, &s[1], &work[ie],
+                        &a[a_offset], lda, dum, &c__1, dum, &c__1, &work[iwork],
+                        info);
+          /* If right singular vectors desired in VT, copy them there */
+          if (wntvas) {
+            dlacpy_("F", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+          }
         }
       } else if (wntuo && wntvn) {
         /* Path 2 (M much larger than N, JOBU='O', JOBVT='N') */
@@ -2097,37 +2225,37 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
           /* N left singular vectors to be computed in U and */
           /* N right singular vectors to be computed in VT */
           /* Computing MAX */
-          i__2 = *n << 2;
-          if (*lwork >= *n * *n + fla_max(i__2, bdspac)) {
-            /* Sufficient workspace for a fast algorithm */
-            iu = 1;
-            if (*lwork >= wrkbl + *lda * *n) {
-              /* WORK(IU) is LDA by N */
-              ldwrku = *lda;
-            } else {
-              /* WORK(IU) is N by N */
-              ldwrku = *n;
-            }
-            itau = iu + ldwrku * *n;
-            iwork = itau + *n;
-            /* Compute A=Q*R */
-            /* (Workspace: need N*N + 2*N, prefer N*N + N + N*NB) */
-            i__2 = *lwork - iwork + 1;
-            dgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
-                    &ierr);
-            /* Copy R to WORK(IU), zeroing out below it */
-            dlacpy_("U", n, n, &a[a_offset], lda, &work[iu], &ldwrku);
-            i__2 = *n - 1;
-            i__3 = *n - 1;
-            dlaset_("L", &i__2, &i__3, &c_b57, &c_b57, &work[iu + 1], &ldwrku);
 #if FLA_ENABLE_AMD_OPT
-            if (*n < 128 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
-              fla_dgesvd_small6(m, n, &work[iu], &ldwrku, &a[a_offset], lda,
-                                &s[1], &u[u_offset], ldu, &vt[vt_offset], ldvt,
-                                &work[1], info);
-            } else
+          if (*m < 128 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+            fla_dgesvd_small6(wntus, wntvas, m, n, &a[a_offset], lda, &a[a_offset], lda,
+                              &s[1], &u[u_offset], ldu, &vt[vt_offset], ldvt,
+                              &work[1], info);
+          } else
 #endif
-            {
+          {
+            i__2 = *n << 2;
+            if (*lwork >= *n * *n + fla_max(i__2, bdspac)) {
+              /* Sufficient workspace for a fast algorithm */
+              iu = 1;
+              if (*lwork >= wrkbl + *lda * *n) {
+                /* WORK(IU) is LDA by N */
+                ldwrku = *lda;
+              } else {
+                /* WORK(IU) is N by N */
+                ldwrku = *n;
+              }
+              itau = iu + ldwrku * *n;
+              iwork = itau + *n;
+              /* Compute A=Q*R */
+              /* (Workspace: need N*N + 2*N, prefer N*N + N + N*NB) */
+              i__2 = *lwork - iwork + 1;
+              dgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
+                      &ierr);
+              /* Copy R to WORK(IU), zeroing out below it */
+              dlacpy_("U", n, n, &a[a_offset], lda, &work[iu], &ldwrku);
+              i__2 = *n - 1;
+              i__3 = *n - 1;
+              dlaset_("L", &i__2, &i__3, &c_b57, &c_b57, &work[iu + 1], &ldwrku);
               /* Generate Q in A */
               /* (Workspace: need N*N + 2*N, prefer N*N + N + N*NB) */
               i__2 = *lwork - iwork + 1;
@@ -2169,59 +2297,60 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
               dgemm_("N", "N", m, n, n, &c_b79, &a[a_offset], lda, &work[iu],
                      &ldwrku, &c_b57, &u[u_offset], ldu);
             }
-          } else {
-            /* Insufficient workspace for a fast algorithm */
-            itau = 1;
-            iwork = itau + *n;
-            /* Compute A=Q*R, copying result to U */
-            /* (Workspace: need 2*N, prefer N + N*NB) */
-            i__2 = *lwork - iwork + 1;
-            dgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
-                    &ierr);
-            dlacpy_("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
-            /* Generate Q in U */
-            /* (Workspace: need 2*N, prefer N + N*NB) */
-            i__2 = *lwork - iwork + 1;
-            lapack_dorgqr(m, n, n, &u[u_offset], ldu, &work[itau], &work[iwork],
-                          &i__2, &ierr);
-            /* Copy R to VT, zeroing out below it */
-            dlacpy_("U", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
-            if (*n > 1) {
-              i__2 = *n - 1;
-              i__3 = *n - 1;
-              dlaset_("L", &i__2, &i__3, &c_b57, &c_b57, &vt[vt_dim1 + 2],
-                      ldvt);
+            else {
+              /* Insufficient workspace for a fast algorithm */
+              itau = 1;
+              iwork = itau + *n;
+              /* Compute A=Q*R, copying result to U */
+              /* (Workspace: need 2*N, prefer N + N*NB) */
+              i__2 = *lwork - iwork + 1;
+              dgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
+                      &ierr);
+              dlacpy_("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
+              /* Generate Q in U */
+              /* (Workspace: need 2*N, prefer N + N*NB) */
+              i__2 = *lwork - iwork + 1;
+              lapack_dorgqr(m, n, n, &u[u_offset], ldu, &work[itau], &work[iwork],
+                            &i__2, &ierr);
+              /* Copy R to VT, zeroing out below it */
+              dlacpy_("U", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+              if (*n > 1) {
+                i__2 = *n - 1;
+                i__3 = *n - 1;
+                dlaset_("L", &i__2, &i__3, &c_b57, &c_b57, &vt[vt_dim1 + 2],
+                        ldvt);
+              }
+              ie = itau;
+              itauq = ie + *n;
+              itaup = itauq + *n;
+              iwork = itaup + *n;
+              /* Bidiagonalize R in VT */
+              /* (Workspace: need 4*N, prefer 3*N + 2*N*NB) */
+              i__2 = *lwork - iwork + 1;
+              lapack_dgebrd(n, n, &vt[vt_offset], ldvt, &s[1], &work[ie],
+                            &work[itauq], &work[itaup], &work[iwork], &i__2,
+                            &ierr);
+              /* Multiply Q in U by left bidiagonalizing vectors */
+              /* in VT */
+              /* (Workspace: need 3*N + M, prefer 3*N + M*NB) */
+              i__2 = *lwork - iwork + 1;
+              lapack_dormbr("Q", "R", "N", m, n, n, &vt[vt_offset], ldvt,
+                            &work[itauq], &u[u_offset], ldu, &work[iwork], &i__2,
+                            &ierr);
+              /* Generate right bidiagonalizing vectors in VT */
+              /* (Workspace: need 4*N-1, prefer 3*N + (N-1)*NB) */
+              i__2 = *lwork - iwork + 1;
+              lapack_dorgbr("P", n, n, n, &vt[vt_offset], ldvt, &work[itaup],
+                            &work[iwork], &i__2, &ierr);
+              iwork = ie + *n;
+              /* Perform bidiagonal QR iteration, computing left */
+              /* singular vectors of A in U and computing right */
+              /* singular vectors of A in VT */
+              /* (Workspace: need BDSPAC) */
+              lapack_dbdsqr("U", n, n, m, &c__0, &s[1], &work[ie], &vt[vt_offset],
+                            ldvt, &u[u_offset], ldu, dum, &c__1, &work[iwork],
+                            info);
             }
-            ie = itau;
-            itauq = ie + *n;
-            itaup = itauq + *n;
-            iwork = itaup + *n;
-            /* Bidiagonalize R in VT */
-            /* (Workspace: need 4*N, prefer 3*N + 2*N*NB) */
-            i__2 = *lwork - iwork + 1;
-            lapack_dgebrd(n, n, &vt[vt_offset], ldvt, &s[1], &work[ie],
-                          &work[itauq], &work[itaup], &work[iwork], &i__2,
-                          &ierr);
-            /* Multiply Q in U by left bidiagonalizing vectors */
-            /* in VT */
-            /* (Workspace: need 3*N + M, prefer 3*N + M*NB) */
-            i__2 = *lwork - iwork + 1;
-            lapack_dormbr("Q", "R", "N", m, n, n, &vt[vt_offset], ldvt,
-                          &work[itauq], &u[u_offset], ldu, &work[iwork], &i__2,
-                          &ierr);
-            /* Generate right bidiagonalizing vectors in VT */
-            /* (Workspace: need 4*N-1, prefer 3*N + (N-1)*NB) */
-            i__2 = *lwork - iwork + 1;
-            lapack_dorgbr("P", n, n, n, &vt[vt_offset], ldvt, &work[itaup],
-                          &work[iwork], &i__2, &ierr);
-            iwork = ie + *n;
-            /* Perform bidiagonal QR iteration, computing left */
-            /* singular vectors of A in U and computing right */
-            /* singular vectors of A in VT */
-            /* (Workspace: need BDSPAC) */
-            lapack_dbdsqr("U", n, n, m, &c__0, &s[1], &work[ie], &vt[vt_offset],
-                          ldvt, &u[u_offset], ldu, dum, &c__1, &work[iwork],
-                          info);
           }
         }
       } else if (wntua) {
@@ -2607,8 +2736,8 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
       /* Path 10 (M at least N, but not much larger) */
       /* Reduce to bidiagonal form without QR decomposition */
 #if FLA_ENABLE_AMD_OPT
-      if ((wntun & wntvn) && (*m < 128) && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
-        fla_dgesvd_nn_small10(m, n, &a[a_offset], lda, &s[1], &work[1], info);
+      if ((wntun || wntus) && (wntvn || wntvs) && (*m < 128) && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+        fla_dgesvd_xx_small10(wntus, wntvs, m, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu, &vt[vt_offset], ldvt, &work[1], info);
       } else
 #endif
       {
@@ -2711,21 +2840,27 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
         /* No right singular vectors to be computed */
         itau = 1;
         iwork = itau + *m;
-        /* Compute A=L*Q */
-        /* (Workspace: need 2*M, prefer M + M*NB) */
-        i__2 = *lwork - iwork + 1;
-        lapack_dgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
-                      &ierr);
-        /* Zero out above L */
-        i__2 = *m - 1;
-        i__3 = *m - 1;
-        dlaset_("U", &i__2, &i__3, &c_b57, &c_b57, &a[(a_dim1 << 1) + 1], lda);
 #if FLA_ENABLE_AMD_OPT
         if ((wntun && wntvn) && (*m < 128) && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+          /* Compute A=L*Q */
+          fla_dgelqf_small(m, n, &a[a_offset], lda, &work[itau], &work[itau]);
+          /* Zero out above L */
+          i__2 = *m - 1;
+          i__3 = *m - 1;
+          dlaset_("U", &i__2, &i__3, &c_b57, &c_b57, &a[(a_dim1 << 1) + 1], lda);
           fla_dgesvd_nn_small1T(m, n, &a[a_offset], lda, &s[1], &work[1], info);
         } else
 #endif
         {
+          /* Compute A=L*Q */
+          /* (Workspace: need 2*M, prefer M + M*NB) */
+          i__2 = *lwork - iwork + 1;
+          lapack_dgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
+                        &ierr);
+          /* Zero out above L */
+          i__2 = *m - 1;
+          i__3 = *m - 1;
+          dlaset_("U", &i__2, &i__3, &c_b57, &c_b57, &a[(a_dim1 << 1) + 1], lda);
           ie = 1;
           itauq = ie + *m;
           itaup = itauq + *m;
@@ -3257,39 +3392,51 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
           /* JOBVT='S') */
           /* M right singular vectors to be computed in VT and */
           /* M left singular vectors to be computed in U */
-          /* Computing MAX */
-          i__2 = *m << 2;
-          if (*lwork >= *m * *m + fla_max(i__2, bdspac)) {
-            /* Sufficient workspace for a fast algorithm */
+#if FLA_ENABLE_AMD_OPT
+          if (*n < 128 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
             iu = 1;
-            if (*lwork >= wrkbl + *lda * *m) {
-              /* WORK(IU) is LDA by N */
-              ldwrku = *lda;
-            } else {
-              /* WORK(IU) is LDA by M */
-              ldwrku = *m;
-            }
+            ldwrku = *m;
             itau = iu + ldwrku * *m;
             iwork = itau + *m;
             /* Compute A=L*Q */
-            /* (Workspace: need M*M + 2*M, prefer M*M + M + M*NB) */
-            i__2 = *lwork - iwork + 1;
-            lapack_dgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
-                          &i__2, &ierr);
+            fla_dgelqf_small(m, n, &a[a_offset], lda, &work[itau], &work[itau]);
             /* Copy L to WORK(IU), zeroing out above it */
             dlacpy_("L", m, m, &a[a_offset], lda, &work[iu], &ldwrku);
             i__2 = *m - 1;
             i__3 = *m - 1;
             dlaset_("U", &i__2, &i__3, &c_b57, &c_b57, &work[iu + ldwrku],
                     &ldwrku);
-#if FLA_ENABLE_AMD_OPT
-            if (*n < 128 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
-              fla_dgesvd_small6T(m, n, &work[iu], &ldwrku, &a[a_offset], lda,
-                                 &s[1], &u[u_offset], ldu, &vt[vt_offset], ldvt,
-                                 &work[1], info);
-            } else
+            fla_dgesvd_small6T(m, n, &work[iu], &ldwrku, &a[a_offset], lda,
+                               &s[1], &u[u_offset], ldu, &vt[vt_offset], ldvt,
+                               &work[1], info);
+          } else
 #endif
-            {
+          {
+            /* Computing MAX */
+            i__2 = *m << 2;
+            if (*lwork >= (*m * *m + fla_max(i__2, bdspac))) {
+              /* Sufficient workspace for a fast algorithm */
+              iu = 1;
+              if (*lwork >= wrkbl + *lda * *m) {
+                /* WORK(IU) is LDA by N */
+                ldwrku = *lda;
+              } else {
+                /* WORK(IU) is LDA by M */
+                ldwrku = *m;
+              }
+              itau = iu + ldwrku * *m;
+              iwork = itau + *m;
+              /* Compute A=L*Q */
+              /* (Workspace: need M*M + 2*M, prefer M*M + M + M*NB) */
+              i__2 = *lwork - iwork + 1;
+              lapack_dgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                            &i__2, &ierr);
+              /* Copy L to WORK(IU), zeroing out above it */
+              dlacpy_("L", m, m, &a[a_offset], lda, &work[iu], &ldwrku);
+              i__2 = *m - 1;
+              i__3 = *m - 1;
+              dlaset_("U", &i__2, &i__3, &c_b57, &c_b57, &work[iu + ldwrku],
+                    &ldwrku);
               /* Generate Q in A */
               /* (Workspace: need M*M + 2*M, prefer M*M + M + M*NB) */
               i__2 = *lwork - iwork + 1;
@@ -3330,58 +3477,58 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
               /* (Workspace: need M*M) */
               dgemm_("N", "N", m, n, m, &c_b79, &work[iu], &ldwrku,
                      &a[a_offset], lda, &c_b57, &vt[vt_offset], ldvt);
+            } else {
+              /* Insufficient workspace for a fast algorithm */
+              itau = 1;
+              iwork = itau + *m;
+              /* Compute A=L*Q, copying result to VT */
+              /* (Workspace: need 2*M, prefer M + M*NB) */
+              i__2 = *lwork - iwork + 1;
+              lapack_dgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                            &i__2, &ierr);
+              dlacpy_("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+              /* Generate Q in VT */
+              /* (Workspace: need 2*M, prefer M + M*NB) */
+              i__2 = *lwork - iwork + 1;
+              lapack_dorglq(m, n, m, &vt[vt_offset], ldvt, &work[itau],
+                            &work[iwork], &i__2, &ierr);
+              /* Copy L to U, zeroing out above it */
+              dlacpy_("L", m, m, &a[a_offset], lda, &u[u_offset], ldu);
+              i__2 = *m - 1;
+              i__3 = *m - 1;
+              dlaset_("U", &i__2, &i__3, &c_b57, &c_b57, &u[(u_dim1 << 1) + 1],
+                      ldu);
+              ie = itau;
+              itauq = ie + *m;
+              itaup = itauq + *m;
+              iwork = itaup + *m;
+              /* Bidiagonalize L in U */
+              /* (Workspace: need 4*M, prefer 3*M + 2*M*NB) */
+              i__2 = *lwork - iwork + 1;
+              lapack_dgebrd(m, m, &u[u_offset], ldu, &s[1], &work[ie],
+                            &work[itauq], &work[itaup], &work[iwork], &i__2,
+                            &ierr);
+              /* Multiply right bidiagonalizing vectors in U by Q */
+              /* in VT */
+              /* (Workspace: need 3*M + N, prefer 3*M + N*NB) */
+              i__2 = *lwork - iwork + 1;
+              lapack_dormbr("P", "L", "T", m, n, m, &u[u_offset], ldu,
+                            &work[itaup], &vt[vt_offset], ldvt, &work[iwork],
+                            &i__2, &ierr);
+              /* Generate left bidiagonalizing vectors in U */
+              /* (Workspace: need 4*M, prefer 3*M + M*NB) */
+              i__2 = *lwork - iwork + 1;
+              lapack_dorgbr("Q", m, m, m, &u[u_offset], ldu, &work[itauq],
+                            &work[iwork], &i__2, &ierr);
+              iwork = ie + *m;
+              /* Perform bidiagonal QR iteration, computing left */
+              /* singular vectors of A in U and computing right */
+              /* singular vectors of A in VT */
+              /* (Workspace: need BDSPAC) */
+              lapack_dbdsqr("U", m, n, m, &c__0, &s[1], &work[ie], &vt[vt_offset],
+                            ldvt, &u[u_offset], ldu, dum, &c__1, &work[iwork],
+                            info);
             }
-          } else {
-            /* Insufficient workspace for a fast algorithm */
-            itau = 1;
-            iwork = itau + *m;
-            /* Compute A=L*Q, copying result to VT */
-            /* (Workspace: need 2*M, prefer M + M*NB) */
-            i__2 = *lwork - iwork + 1;
-            lapack_dgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
-                          &i__2, &ierr);
-            dlacpy_("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
-            /* Generate Q in VT */
-            /* (Workspace: need 2*M, prefer M + M*NB) */
-            i__2 = *lwork - iwork + 1;
-            lapack_dorglq(m, n, m, &vt[vt_offset], ldvt, &work[itau],
-                          &work[iwork], &i__2, &ierr);
-            /* Copy L to U, zeroing out above it */
-            dlacpy_("L", m, m, &a[a_offset], lda, &u[u_offset], ldu);
-            i__2 = *m - 1;
-            i__3 = *m - 1;
-            dlaset_("U", &i__2, &i__3, &c_b57, &c_b57, &u[(u_dim1 << 1) + 1],
-                    ldu);
-            ie = itau;
-            itauq = ie + *m;
-            itaup = itauq + *m;
-            iwork = itaup + *m;
-            /* Bidiagonalize L in U */
-            /* (Workspace: need 4*M, prefer 3*M + 2*M*NB) */
-            i__2 = *lwork - iwork + 1;
-            lapack_dgebrd(m, m, &u[u_offset], ldu, &s[1], &work[ie],
-                          &work[itauq], &work[itaup], &work[iwork], &i__2,
-                          &ierr);
-            /* Multiply right bidiagonalizing vectors in U by Q */
-            /* in VT */
-            /* (Workspace: need 3*M + N, prefer 3*M + N*NB) */
-            i__2 = *lwork - iwork + 1;
-            lapack_dormbr("P", "L", "T", m, n, m, &u[u_offset], ldu,
-                          &work[itaup], &vt[vt_offset], ldvt, &work[iwork],
-                          &i__2, &ierr);
-            /* Generate left bidiagonalizing vectors in U */
-            /* (Workspace: need 4*M, prefer 3*M + M*NB) */
-            i__2 = *lwork - iwork + 1;
-            lapack_dorgbr("Q", m, m, m, &u[u_offset], ldu, &work[itauq],
-                          &work[iwork], &i__2, &ierr);
-            iwork = ie + *m;
-            /* Perform bidiagonal QR iteration, computing left */
-            /* singular vectors of A in U and computing right */
-            /* singular vectors of A in VT */
-            /* (Workspace: need BDSPAC) */
-            lapack_dbdsqr("U", m, n, m, &c__0, &s[1], &work[ie], &vt[vt_offset],
-                          ldvt, &u[u_offset], ldu, dum, &c__1, &work[iwork],
-                          info);
           }
         }
       } else if (wntva) {
@@ -3764,93 +3911,103 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
       }
     } else {
       /* N .LT. MNTHR */
+      /* Path 10t(N greater than M, but not much larger) */
       /* Reduce to bidiagonal form without LQ decomposition */
-      ie = 1;
-      itauq = ie + *m;
-      itaup = itauq + *m;
-      iwork = itaup + *m;
-      /* Bidiagonalize A */
-      /* (Workspace: need 3*M + N, prefer 3*M + (M + N)*NB) */
-      i__2 = *lwork - iwork + 1;
-      lapack_dgebrd(m, n, &a[a_offset], lda, &s[1], &work[ie], &work[itauq],
-                    &work[itaup], &work[iwork], &i__2, &ierr);
-      if (wntuas) {
-        /* If left singular vectors desired in U, copy result to U */
-        /* and generate left bidiagonalizing vectors in U */
-        /* (Workspace: need 4*M-1, prefer 3*M + (M-1)*NB) */
-        dlacpy_("L", m, m, &a[a_offset], lda, &u[u_offset], ldu);
+#if FLA_ENABLE_AMD_OPT
+      if ((wntuas & wntvs) && (*n < 16) && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+        fla_dgesvd_xs_small10T(m, n, &a[a_offset], lda, &s[1],
+                               &u[u_offset], ldu, &vt[vt_offset], ldvt,
+                               &work[1], info);
+      } else
+#endif
+      {
+        ie = 1;
+        itauq = ie + *m;
+        itaup = itauq + *m;
+        iwork = itaup + *m;
+        /* Bidiagonalize A */
+        /* (Workspace: need 3*M + N, prefer 3*M + (M + N)*NB) */
         i__2 = *lwork - iwork + 1;
-        lapack_dorgbr("Q", m, m, n, &u[u_offset], ldu, &work[itauq],
-                      &work[iwork], &i__2, &ierr);
-      }
-      if (wntvas) {
-        /* If right singular vectors desired in VT, copy result to */
-        /* VT and generate right bidiagonalizing vectors in VT */
-        /* (Workspace: need 3*M + NRVT, prefer 3*M + NRVT*NB) */
-        dlacpy_("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
-        if (wntva) {
-          nrvt = *n;
+        lapack_dgebrd(m, n, &a[a_offset], lda, &s[1], &work[ie], &work[itauq],
+                      &work[itaup], &work[iwork], &i__2, &ierr);
+        if (wntuas) {
+          /* If left singular vectors desired in U, copy result to U */
+          /* and generate left bidiagonalizing vectors in U */
+          /* (Workspace: need 4*M-1, prefer 3*M + (M-1)*NB) */
+          dlacpy_("L", m, m, &a[a_offset], lda, &u[u_offset], ldu);
+          i__2 = *lwork - iwork + 1;
+          lapack_dorgbr("Q", m, m, n, &u[u_offset], ldu, &work[itauq],
+                        &work[iwork], &i__2, &ierr);
         }
-        if (wntvs) {
-          nrvt = *m;
+        if (wntvas) {
+          /* If right singular vectors desired in VT, copy result to */
+          /* VT and generate right bidiagonalizing vectors in VT */
+          /* (Workspace: need 3*M + NRVT, prefer 3*M + NRVT*NB) */
+          dlacpy_("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+          if (wntva) {
+            nrvt = *n;
+          }
+          if (wntvs) {
+            nrvt = *m;
+          }
+          i__2 = *lwork - iwork + 1;
+          lapack_dorgbr("P", &nrvt, n, m, &vt[vt_offset], ldvt, &work[itaup],
+                        &work[iwork], &i__2, &ierr);
         }
-        i__2 = *lwork - iwork + 1;
-        lapack_dorgbr("P", &nrvt, n, m, &vt[vt_offset], ldvt, &work[itaup],
-                      &work[iwork], &i__2, &ierr);
-      }
-      if (wntuo) {
-        /* If left singular vectors desired in A, generate left */
-        /* bidiagonalizing vectors in A */
-        /* (Workspace: need 4*M-1, prefer 3*M + (M-1)*NB) */
-        i__2 = *lwork - iwork + 1;
-        lapack_dorgbr("Q", m, m, n, &a[a_offset], lda, &work[itauq],
-                      &work[iwork], &i__2, &ierr);
-      }
-      if (wntvo) {
-        /* If right singular vectors desired in A, generate right */
-        /* bidiagonalizing vectors in A */
-        /* (Workspace: need 4*M, prefer 3*M + M*NB) */
-        i__2 = *lwork - iwork + 1;
-        lapack_dorgbr("P", m, n, m, &a[a_offset], lda, &work[itaup],
-                      &work[iwork], &i__2, &ierr);
-      }
-      iwork = ie + *m;
-      if (wntuas || wntuo) {
-        nru = *m;
-      }
-      if (wntun) {
-        nru = 0;
-      }
-      if (wntvas || wntvo) {
-        ncvt = *n;
-      }
-      if (wntvn) {
-        ncvt = 0;
-      }
-      if (!wntuo && !wntvo) {
-        /* Perform bidiagonal QR iteration, if desired, computing */
-        /* left singular vectors in U and computing right singular */
-        /* vectors in VT */
-        /* (Workspace: need BDSPAC) */
-        lapack_dbdsqr("L", m, &ncvt, &nru, &c__0, &s[1], &work[ie],
-                      &vt[vt_offset], ldvt, &u[u_offset], ldu, dum, &c__1,
-                      &work[iwork], info);
-      } else if (!wntuo && wntvo) {
-        /* Perform bidiagonal QR iteration, if desired, computing */
-        /* left singular vectors in U and computing right singular */
-        /* vectors in A */
-        /* (Workspace: need BDSPAC) */
-        lapack_dbdsqr("L", m, &ncvt, &nru, &c__0, &s[1], &work[ie],
-                      &a[a_offset], lda, &u[u_offset], ldu, dum, &c__1,
-                      &work[iwork], info);
-      } else {
-        /* Perform bidiagonal QR iteration, if desired, computing */
-        /* left singular vectors in A and computing right singular */
-        /* vectors in VT */
-        /* (Workspace: need BDSPAC) */
-        lapack_dbdsqr("L", m, &ncvt, &nru, &c__0, &s[1], &work[ie],
-                      &vt[vt_offset], ldvt, &a[a_offset], lda, dum, &c__1,
-                      &work[iwork], info);
+        if (wntuo) {
+          /* If left singular vectors desired in A, generate left */
+          /* bidiagonalizing vectors in A */
+          /* (Workspace: need 4*M-1, prefer 3*M + (M-1)*NB) */
+          i__2 = *lwork - iwork + 1;
+          lapack_dorgbr("Q", m, m, n, &a[a_offset], lda, &work[itauq],
+                        &work[iwork], &i__2, &ierr);
+        }
+        if (wntvo) {
+          /* If right singular vectors desired in A, generate right */
+          /* bidiagonalizing vectors in A */
+          /* (Workspace: need 4*M, prefer 3*M + M*NB) */
+          i__2 = *lwork - iwork + 1;
+          lapack_dorgbr("P", m, n, m, &a[a_offset], lda, &work[itaup],
+                        &work[iwork], &i__2, &ierr);
+        }
+        iwork = ie + *m;
+        if (wntuas || wntuo) {
+          nru = *m;
+        }
+        if (wntun) {
+          nru = 0;
+        }
+        if (wntvas || wntvo) {
+          ncvt = *n;
+        }
+        if (wntvn) {
+          ncvt = 0;
+        }
+        if (!wntuo && !wntvo) {
+          /* Perform bidiagonal QR iteration, if desired, computing */
+          /* left singular vectors in U and computing right singular */
+          /* vectors in VT */
+          /* (Workspace: need BDSPAC) */
+          lapack_dbdsqr("L", m, &ncvt, &nru, &c__0, &s[1], &work[ie],
+                        &vt[vt_offset], ldvt, &u[u_offset], ldu, dum, &c__1,
+                        &work[iwork], info);
+        } else if (!wntuo && wntvo) {
+          /* Perform bidiagonal QR iteration, if desired, computing */
+          /* left singular vectors in U and computing right singular */
+          /* vectors in A */
+          /* (Workspace: need BDSPAC) */
+          lapack_dbdsqr("L", m, &ncvt, &nru, &c__0, &s[1], &work[ie],
+                        &a[a_offset], lda, &u[u_offset], ldu, dum, &c__1,
+                        &work[iwork], info);
+        } else {
+          /* Perform bidiagonal QR iteration, if desired, computing */
+          /* left singular vectors in A and computing right singular */
+          /* vectors in VT */
+          /* (Workspace: need BDSPAC) */
+          lapack_dbdsqr("L", m, &ncvt, &nru, &c__0, &s[1], &work[ie],
+                        &vt[vt_offset], ldvt, &a[a_offset], lda, dum, &c__1,
+                        &work[iwork], info);
+        }
       }
     }
   }

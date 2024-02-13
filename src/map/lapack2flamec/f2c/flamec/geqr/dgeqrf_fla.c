@@ -1,13 +1,13 @@
-/* dgeqrf.f -- translated by f2c (version 20000121). You must link the resulting object file with
- * the libraries: -lf2c -lm (in that order) */
+/* dgeqrf.f -- translated by f2c (version 20000121). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
+/******************************************************************************
+* Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
+*******************************************************************************/
 #include "FLA_f2c.h" /* Table of constant values */
-#ifdef FLA_ENABLE_AMD_OPT
-extern int fla_dgeqrf_small(integer *m, integer *n, doublereal *a, integer *lda, doublereal *tau,
-                            doublereal *work);
-#else
-static doublereal c_d0 = 0.;
-static doublereal c_d1 = 1.;
-static integer c__1 = 1;
+#include "fla_lapack_x86_common.h"
+#ifndef FLA_ENABLE_AMD_OPT
+ static doublereal c_d0 = 0.;
+ static doublereal c_d1 = 1.;
+ static integer c__1 = 1;
 #endif
 static integer c_n1 = -1;
 static integer c__3 = 3;

@@ -12,11 +12,6 @@
 
 #if FLA_ENABLE_AMD_OPT
 
-double d_sign(doublereal *, doublereal *);
-
-static integer c__0 = 0;
-static integer c__1 = 1;
-
 /* SVD for small fat-matrices with LQ factorization
  * already computed
  */
@@ -32,14 +27,14 @@ void fla_dgesvd_small6T_avx2(integer *m, integer *n,
     /* Declare and init local variables */
     FLA_GEQRF_INIT_DSMALL();
 
-    integer iu, ie, iwork;
+    integer iu, ie;
     integer itau, itauq, itaup;
     integer i__1, rlen, knt;
+    integer c__1 = 1;
 
     doublereal *tau, *tauq, *taup;
     doublereal *e, *vtau, *avt;
     doublereal stau, d__1;
-    doublereal dum[1];
 
     /* indices for partitioning work buffer */
     iu = 1;
@@ -47,7 +42,6 @@ void fla_dgesvd_small6T_avx2(integer *m, integer *n,
     ie = itau + *m;
     itauq = ie + *m;
     itaup = itauq + *m;
-    iwork = iu;
 
     /* parameter adjustments */
     a -= (1 + *lda);
@@ -63,123 +57,27 @@ void fla_dgesvd_small6T_avx2(integer *m, integer *n,
     taup = &work[itaup - 1];
 
     /* Upper Bidiagonalization */
-    FLA_BIDIAGONALIZE_SMALL(*m, *m);
+    FLA_BIDIAGONALIZE_SMALL(*m, *m, a, lda, tauq, taup, s, e);
 
+    /* Generate Qr (from bidiag) in vt from work[iu] (a here) */
     for (i = 1; i <= *m; i++)
         for (j = 1; j <= *n; j++)
             vt[i + j * *ldvt] = 0.;
-    /* Generate Qr (from bidiag) in vt from work[iu] (a here) */
-    if (*m > 2)
-    {
-        /* iteration corresponding to (m - 2) HH[m-2] */
-        stau = taup[*m - 2];
-        d__1 = a[*m - 2 + *m * *lda];
-        dtmp = - (stau * d__1); /* tau * v2 */
-
-        vt[*m - 1 + (*m - 1) * *ldvt] = 1.0 - stau; /* 1 - tau */
-        vt[*m + (*m - 1) * *ldvt] = dtmp; /* tau * v2 */
-        vt[*m - 1 + *m * *ldvt] = dtmp; /* tau * v2 */
-        vt[*m + *m * *ldvt] = 1.0 + (dtmp * d__1); /* 1 - tau * v2^2 */
-
-        /* for HH vectors [m-3:1] */
-        for (i = *m - 3; i >= 1; i--)
-        {
-            stau = - taup[i];
-
-            /* Scale row i by -tau and dlarf for rest of the rows */
-            for (j = i + 2; j <= *m; j++)
-            {
-                vt[i + 1 + j * *ldvt] = stau * a[i + j * *lda];
-
-                /* GEMV part of the dlarf excluding zero first column */
-                dtmp = 0.;
-                for (k = i + 2; k <= *m; k++)
-                {
-                    dtmp = dtmp + vt[j + k * *ldvt] * a[i + k * *lda];
-                }
-                vt[j + (i + 1) * *ldvt] = stau * dtmp;
-            }
-            vt[i + 1 + (i + 1) * *ldvt] = 1.0 + stau;
-
-            for (j = i + 2; j <= *m; j++)
-            {
-                for (k = i + 2; k <= *m; k++)
-                {
-                    vt[j + k * *ldvt] = vt[j + k * *ldvt] + a[i + k * *lda] *
-                                        vt[j + (i + 1) * *ldvt];
-                }
-            }
-        }
-    }
-    else
-    {
-        for (i = 1; i <= *m; i++)
-        {
-            vt[i + i * *ldvt] = 1.;
-        }
-    }
+    FLA_LARF_VTAPPLY_DSMALL_SQR(m, a, lda, taup, vt, ldvt);
 
     /* Generate Ql (from bidiag) in u from a */
+    FLA_LARF_UAPPLY_DSMALL_SQR(m, a, lda, tauq, u, ldu, taup);
 
-    if (*m > 1)
-    {
-        /* iteration corresponding to (m - 1) HH(m-1) */
-        stau = tauq[*m - 1];
-        d__1 = a[*m + (*m - 1) * *lda];
-        dtmp = - (stau * d__1);
+    lapack_dbdsqr_small("U", m, m, m, &s[1], &e[1],
+                        &vt[1 + *ldvt], ldvt,
+                        &u[1 + *ldu], ldu,
+                        info);
 
-        u[*m - 1 + (*m - 1) * *ldu] = 1.0 - stau; /* 1 - tau */
-        u[*m + (*m - 1) * *ldu] = dtmp; /* tau * v2 */
-        u[*m - 1 + *m * *ldu] = dtmp; /* tau * v2 */
-        u[*m + *m * *ldu] = 1.0 + (dtmp * d__1); /* 1 - tau * v2^2 */
-    }
-    else
-    {
-        u[1 + *ldu] = 1.0;
-    }
-
-    /* for HH vectors [m-2:1] */
-    for (i = *m - 2; i >= 1; i--)
-    {
-        stau = - tauq[i];
-
-        /* scale col i by -tau and dlarf for rest of the columns */
-        for (j = i + 1; j <= *m; j++)
-        {
-            u[j + i * *ldu] = stau * a[j + i * *lda];
-
-            /* GEMV part of dlarf excluding zero first row */
-            dtmp = 0;
-            for (k = i + 1; k <= *m; k++)
-            {
-                dtmp = dtmp + u[k + j * *ldu] * a[k + i * *lda];
-            }
-            u[i + j * *ldu] = stau * dtmp;
-        }
-        u[i + i * *ldu] = 1.0 + stau;
-
-        for (j = i + 1; j <= *m; j++)
-        {
-            for (k = i + 1; k <= *m; k++)
-            {
-                u[k + j * *ldu] = u[k + j * *ldu] + a[k + i * *lda] * u[i + j * *ldu];
-            }
-        }
-    }
-    vt[1 + *ldvt] = 1.0;
-
-    lapack_dbdsqr("U", m, m, m, &c__0, &s[1], &e[1],
-                  &vt[1 + *ldvt], ldvt,
-                  &u[1 + *ldu], ldu,
-                  dum, &c__1,
-                  &work[iwork], info);
+    /* Apply HH from LQ factorization (ql) on vt from right */
 
     tau = &work[itau - 1];
     vtau = tau + *m;
     avt = vtau + *n;
-
-    /* Apply HH from LQ factorization (ql) on vt from right */
-
     /* First Iteration corresponding to HH(m) */
     i = *m;
     for (j = i + 1; j <= *n; j++)

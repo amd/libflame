@@ -1,5 +1,5 @@
 /******************************************************************************
-* Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+* Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
 *******************************************************************************/
 
 /*! @file fla_dgeqrf_small_avx2.c
@@ -32,7 +32,7 @@ int fla_dgeqrf_small_avx2(integer *m, integer *n,
     {
         slen = *m - i;
         /* input address */
-        const doublereal *iptr = (const doublereal *) &a[i + 1 + i * *lda - 1];
+        doublereal *iptr = &a[i + 1 + i * *lda - 1];
         integer has_outliers = 0;
 
         if (slen <= 0)
@@ -41,13 +41,13 @@ int fla_dgeqrf_small_avx2(integer *m, integer *n,
         }
         else if (slen < 4)
         {
-            FLA_ELEM_REFLECTOR_GENERATE_DSMALL(i, m, n, tau);
-            FLA_ELEM_REFLECTOR_APPLY_DSMALL(i, m, n, a, tau);
+            FLA_LARF_GEN_DSMALL_COL(i, m, n, tau);
+            FLA_LARF_APPLY_DSMALL_COL(i, m, n, a, tau);
         }
         else
         {
-            FLA_ELEM_REFLECTOR_GENERATE_DLARGE(i, m, n, tau);
-            FLA_ELEM_REFLECTOR_APPLY_DLARGE(i, m, n, a, lda, tau);
+            FLA_LARF_GEN_DLARGE_COL(i, m, n, tau);
+            FLA_LARF_APPLY_DLARGE_COL(i, m, n, a, lda, tau);
         }
     }
     return 0;

@@ -351,6 +351,7 @@ MK_EXC_HEADER_PATHS := ./src/lapack/x86/
 MK_EXC_HEADER_PATHS += ./src/lapack/x86/avx2/
 MK_EXC_HEADER_PATHS += ./src/lapack/x86/avx512/
 MK_EXC_HEADER_PATHS += ./src/lapack/x86/front/
+MK_EXC_HEADER_PATHS += ./src/lapack/x86/generic/
 
 # Remove the header paths in exclude list
 MK_HEADER_DIR_PATHS := $(filter-out $(MK_EXC_HEADER_PATHS), $(MK_HEADER_DIR_PATHS))

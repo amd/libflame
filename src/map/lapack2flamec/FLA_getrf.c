@@ -21,6 +21,7 @@
 #include "FLA_lapack2flame_prototypes.h"
 #include "fla_lapack_x86_common.h"
 #include "fla_lapack_avx2_kernels.h"
+#include "fla_lapack_lu_small_kernals_d.h"
 
 /*
   GETRF computes an LU factorization of a general M-by-N matrix A
@@ -56,7 +57,20 @@ extern void DTL_Trace(
 /* FLA_ENABLE_AMD_OPT enables the code which selects algorithm variants based on size */
 #define LAPACK_getrf_body_d(prefix)                                                    \
 extern fla_context global_context;                                                     \
-  if(*m <= FLA_DGETRF_SMALL_THRESH0 && *n <= FLA_DGETRF_SMALL_THRESH0)                 \
+  integer i = 0;                                                                       \
+  if(*m == 2 && *n == 2)                                                               \
+  {                                                                                    \
+      FLA_LU_PIV_SMALL_D_2x2(i, n, buff_A, ldim_A, buff_p, info);                      \
+  }                                                                                    \
+  else if(*m == 3 && *n == 3)                                                          \
+  {                                                                                    \
+      FLA_LU_PIV_SMALL_D_3x3(i, n, buff_A, ldim_A, buff_p, info);                      \
+  }                                                                                    \
+  else if(*m == 4 && *n == 4)                                                          \
+  {                                                                                    \
+      FLA_LU_PIV_SMALL_D_4x4(i, n, buff_A, ldim_A, buff_p, info);                      \
+  }                                                                                    \
+  else if(*m <= FLA_DGETRF_SMALL_THRESH0 && *n <= FLA_DGETRF_SMALL_THRESH0)            \
   {                                                                                    \
     FLA_LU_piv_small_d_var0( m, n, buff_A, ldim_A, buff_p, info);                      \
   }                                                                                    \

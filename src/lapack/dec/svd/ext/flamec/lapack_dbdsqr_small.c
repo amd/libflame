@@ -7,15 +7,11 @@
  *  Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
  */
 #include "FLAME.h"
-#if FLA_ENABLE_AOCL_BLAS
-#include "blis.h"
-#endif
 #include "FLA_f2c.h" /* Table of constant values */
 #include "fla_dgeqrf_small_avx2.h"
 
-#if FLA_ENABLE_AMD_OPT
 static doublereal c_b15 = -.125;
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 static doublereal c_b49 = 1.;
 static doublereal c_b72 = -1.;
 /* > \brief \b DBDSQR */
@@ -253,38 +249,40 @@ if INFO = i, i */
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int lapack_dbdsqr_small(char *uplo, aocl_int64_t *n, aocl_int64_t *ncvt, aocl_int64_t *nru,
-                        doublereal *d__, doublereal *e, doublereal *vt, aocl_int64_t *ldvt,
-                        doublereal *u, aocl_int64_t *ldu, aocl_int64_t *info)
+int lapack_dbdsqr_small(char *uplo, integer *n, integer *ncvt, integer *nru,
+                        doublereal *d__, doublereal *e, doublereal *vt, integer *ldvt,
+                        doublereal *u, integer *ldu, integer *info)
 {
     /* System generated locals */
-    aocl_int64_t u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
+    integer u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
     doublereal d__1, d__2, d__3, d__4;
     /* Builtin functions */
     double pow_dd(doublereal *, doublereal *), sqrt(doublereal), d_sign(doublereal *, doublereal *);
     /* Local variables */
-    aocl_int64_t iterdivn;
+    integer iterdivn;
     doublereal f, g, h__;
-    aocl_int64_t i__, j, m;
+    integer i__, j, m;
     doublereal r__;
-    aocl_int64_t maxitdivn;
+    integer maxitdivn;
     doublereal cs;
-    aocl_int64_t ll;
+    integer ll;
     doublereal sn, mu;
-    aocl_int64_t tidx, lll;
+    integer tidx, lll;
     doublereal eps, sll, tol, abse;
-    aocl_int64_t idir;
+    integer idir;
     doublereal abss;
-    aocl_int64_t oldm;
+    integer oldm;
     doublereal cosl;
-    aocl_int64_t isub, iter;
+    integer isub, iter;
     doublereal unfl, sinl, cosr, smin, smax, sinr;
-#ifndef FLA_ENABLE_AOCL_BLAS
-    void dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
-    extern logical lsame_(char *, char *, aocl_int64_t a, aocl_int64_t b);
-#endif
+    extern /* Subroutine */
+        void
+        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+              doublereal *),
+        dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    extern logical lsame_(char *, char *, integer a, integer b);
     doublereal oldcs;
-    aocl_int64_t oldll;
+    integer oldll;
     doublereal shift, sigmn, oldsn;
     /* Subroutine */
     doublereal sminl, sigmx;
@@ -499,12 +497,11 @@ L90:
         /* Compute singular vectors, if desired */
         if(*ncvt > 0)
         {
-            aocl_blas_drot(ncvt, &vt[m - 1 + vt_dim1], ldvt, &vt[m + vt_dim1], ldvt, &cosr, &sinr);
+            drot_(ncvt, &vt[m - 1 + vt_dim1], ldvt, &vt[m + vt_dim1], ldvt, &cosr, &sinr);
         }
         if(*nru > 0)
         {
-            aocl_blas_drot(nru, &u[(m - 1) * u_dim1 + 1], &c__1, &u[m * u_dim1 + 1], &c__1, &cosl,
-                           &sinl);
+            drot_(nru, &u[(m - 1) * u_dim1 + 1], &c__1, &u[m * u_dim1 + 1], &c__1, &cosl, &sinl);
         }
         m += -2;
         goto L60;
@@ -632,7 +629,6 @@ L90:
             /* Save cosines and sines for later singular vector updates */
             cs = 1.;
             oldcs = 1.;
-            oldsn = 0.;
             i__1 = m - 1;
             for(i__ = ll; i__ <= i__1; ++i__)
             {
@@ -803,18 +799,13 @@ L160:
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if(d__[i__] == 0.)
-        {
-            /* Avoid -ZERO */
-            d__[i__] = 0.;
-        }
-        else if(d__[i__] < 0.)
+        if(d__[i__] < 0.)
         {
             d__[i__] = -d__[i__];
             /* Change sign of singular vectors, if desired */
             if(*ncvt > 0)
             {
-                aocl_blas_dscal(ncvt, &c_b72, &vt[i__ + vt_dim1], ldvt);
+                dscal_(ncvt, &c_b72, &vt[i__ + vt_dim1], ldvt);
             }
         }
     }
@@ -842,12 +833,11 @@ L160:
             d__[*n + 1 - i__] = smin;
             if(*ncvt > 0)
             {
-                aocl_blas_dswap(ncvt, &vt[isub + vt_dim1], ldvt, &vt[*n + 1 - i__ + vt_dim1], ldvt);
+                dswap_(ncvt, &vt[isub + vt_dim1], ldvt, &vt[*n + 1 - i__ + vt_dim1], ldvt);
             }
             if(*nru > 0)
             {
-                aocl_blas_dswap(nru, &u[isub * u_dim1 + 1], &c__1, &u[(*n + 1 - i__) * u_dim1 + 1],
-                                &c__1);
+                dswap_(nru, &u[isub * u_dim1 + 1], &c__1, &u[(*n + 1 - i__) * u_dim1 + 1], &c__1);
             }
         }
     }
@@ -867,4 +857,4 @@ L220:
     return 0;
     /* End of DBDSQR */
 }
-#endif
+

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -15,6 +15,7 @@ void fla_test_gesv(integer argc, char ** argv, test_params_t *params)
     char* op_str = "Linear Solve using LU";
     char* front_str = "GESV";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char='\0';
 
     if(argc == 1)
     {
@@ -166,10 +167,20 @@ void fla_test_gesv_experiment(test_params_t *params,
         *perf *= 4.0;
 
     /* output validation */
-    if(info == 0)
+    if(!params->imatrix_char  && info == 0)
         validate_gesv(n, NRHS, A, lda, B, ldb, B_save, datatype, residual, &vinfo);
+    /* check for output matrix when inputs as extreme values */
+    else if (FLA_EXTREME_CASE_TEST)
+    {
+        if((!check_extreme_value(datatype, n, n, A_save, lda, params->imatrix_char)) &&
+           (!check_extreme_value(datatype, n, NRHS, B_save, ldb, params->imatrix_char)))
+        {
+            *residual = DBL_MAX;
+        }
+    }
+    else
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
     free_matrix(A);

@@ -1,5 +1,5 @@
 /******************************************************************************
-* Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
+* Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 *******************************************************************************/
 
 /*! @file test_common.h
@@ -133,4 +133,8 @@ double svd_check_order(integer datatype, void *s, integer m, integer n, double r
 void init_matrix_spec_in(integer datatype, void *A, integer M, integer N, integer LDA, char type);
 /*Intialize matrix according to given input*/
 void init_matrix(integer datatype, void *A, integer M, integer N, integer LDA, FILE* g_ext_fptr, char imatrix_char);
+/* Intialize matrix with special values in random locations */
+void init_matrix_spec_rand_in(integer datatype, void *A, integer M, integer N, integer LDA, char type);
+/*Test to check the extreme values propagation in output matrix */
+bool check_extreme_value(integer datatype, integer M, integer N, void *A, integer LDA, char type);
 #endif // TEST_COMMON_H

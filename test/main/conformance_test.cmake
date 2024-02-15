@@ -195,6 +195,17 @@ set(MIN_WORK_TEST_CASES "gesvd d S S 3 3 3 3 3 15 1 --einfo=0"
             "gesvd d N N 3 9 3 1 1 15 1 --einfo=0"
             "gesvd d S S 9 3 9 9 3 18 1 --einfo=0")
 
+set(EXTREMEVALUE_TEST_CASES "gesv sdcz 4 4 4 4 1 --imatrix=A"
+            "gesv sdcz 4 4 4 4 1 --imatrix=F"
+            "gesv sdcz 23 23 23 23 1 --imatrix=A"
+            "gesv sdcz 23 23 23 23 1 --imatrix=F"
+            "gesv sdcz 4 4 4 4 1 --imatrix=I"
+            "gesv sdcz 4 4 4 4 1 --imatrix=N"
+            "gesv sdcz 1 1 1 1 1 --imatrix=I"
+            "gesv sdcz 1 1 1 1 1 --imatrix=N"
+            "gesv sdcz 20 20 20 20 1 --imatrix=I"
+            "gesv sdcz 20 20 20 20 1 --imatrix=N")
+
 set(TEST_NUM 1)
 foreach(neg_test_cases IN LISTS NEGATIVE_TEST_CASES)
     string(REPLACE " " ";" COMMANDLINE_PARAMS ${neg_test_cases})
@@ -215,6 +226,14 @@ endforeach()
 foreach(min_work_test_cases IN LISTS MIN_WORK_TEST_CASES)
     string(REPLACE " " ";" COMMANDLINE_PARAMS ${min_work_test_cases})
     set(TEST_NAME CONF_MIN_WORK_TEST_CASE_${TEST_NUM} )
+    add_test(${TEST_NAME} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME} ${COMMANDLINE_PARAMS})
+    set_tests_properties(${TEST_NAME} PROPERTIES FAIL_REGULAR_EXPRESSION "FAIL;No test was run, give valid arguments")
+MATH(EXPR TEST_NUM "${TEST_NUM}+1")
+endforeach()
+
+foreach(extremevalue_test_cases IN LISTS EXTREMEVALUE_TEST_CASES)
+    string(REPLACE " " ";" COMMANDLINE_PARAMS ${extremevalue_test_cases})
+    set(TEST_NAME CONF_EXTREMEVALUE_TEST_CASE_${TEST_NUM} )
     add_test(${TEST_NAME} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME} ${COMMANDLINE_PARAMS})
     set_tests_properties(${TEST_NAME} PROPERTIES FAIL_REGULAR_EXPRESSION "FAIL;No test was run, give valid arguments")
 MATH(EXPR TEST_NUM "${TEST_NUM}+1")

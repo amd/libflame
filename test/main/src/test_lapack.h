@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #ifndef TEST_LAPACK_H
@@ -128,6 +128,11 @@ extern FILE* g_ext_fptr;
 #define FLA_TEST_CHECK_EINFO(residual, info, einfo)       \
     if(info != einfo)                                     \
         *residual = DBL_MAX;                              \
+
+#define FLA_EXTREME_CASE_TEST (params->imatrix_char == 'A' ||      \
+                               params->imatrix_char == 'F' ||      \
+                               params->imatrix_char == 'N' ||      \
+                               params->imatrix_char == 'I')        \
 
 typedef struct Lin_solver_paramlist_t
 {

@@ -210,14 +210,21 @@ NOTE:
 7. Tests with special inputs using --imatrix option:
 
    Test the API's by intializing matrix with special input values such as NAN or INFINITY using --imatrix.
+   The test-suite checks the propagation of special values and return PASS if the propagation happens and
+   FAIL if they don't.
    This option is available only through command line execution.
 
    Example:
     ./test_lapack.x GETRF d 10 10 10 1 --imatrix=N
     ./test_lapack.x GETRF d 10 10 10 1 --imatrix=I
-   
-   In the above example passing the value of --imatrix as 'N' will intialize the matrix with NAN values
-   and if the value is 'I' then matrix will be intialized with the INFINITY.
+    ./test_lapack.x GESV d 10 10 10 10 1 --imatrix=A
+    ./test_lapack.x GESV d 10 10 10 10 1 --imatrix=F
+
+   Test behaviour for --imatrix=
+   N:intialize the matrix with NAN values in all locations
+   I:intialize the matrix with INFINITY values in all locations
+   A:intialize the matrix with the NAN values in few random locations
+   F:intialize the matrix with the INFINITY values in few random locations
 
 8. Tests with -1 for leading dimensions from config files
 

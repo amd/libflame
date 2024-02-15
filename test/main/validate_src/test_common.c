@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2022-2023, Advanced Micro Devices, Inc.  All rights reserved.
+    Copyright (c) 2022-2024, Advanced Micro Devices, Inc.  All rights reserved.
 */
 
 #include "test_common.h"
@@ -2477,7 +2477,7 @@ void print_matrix(char* desc, integer datatype, integer M, integer N, void* A, i
             {
                 for( j = 0; j < N; j++ )
                 {
-                    printf(" (%e + j %e)", ((dcomplex *)A)[i + j * lda].real, ((scomplex *)A)[i + j * lda].imag);
+                    printf(" (%e + j %e)", ((dcomplex *)A)[i + j * lda].real, ((dcomplex *)A)[i + j * lda].imag);
                 }
                 printf( "\n" );
             }
@@ -2742,6 +2742,348 @@ void init_matrix_spec_in(integer datatype, void *A, integer M, integer N, intege
     return;
 }
 
+/* Intialize matrix with special values in random locations */
+void init_matrix_spec_rand_in(integer datatype, void *A, integer M, integer N, integer LDA, char type)
+{
+    integer rows, cols, upspan, lowspan, span;
+    if (LDA < M)
+        return;
+    rand_matrix(datatype, A, M, N, LDA);
+    /* when M*N less than 2 there is no need of randomness*/
+    if (M*N < 2)
+        return;
+    /*
+    Add random extreme values:
+    for small size matrices, when M*N less than 10 adding one extreme value in upper triangular
+    matrix, other one extreme value in lower triangular matrix
+    for medium/large sizes, when M*N greater than 10 adding 10% of input values as extreme values
+    in upper triangular matrix, other 10% of input values as exterme values in lower triangular matrix
+    */
+    if (M*N > 10)
+    {
+        lowspan = (M*N) * 0.1;
+        upspan = (M*N) * 0.1;
+    }
+    else
+    {
+        lowspan = 1;
+        upspan = 1;
+    }
+    span = lowspan + upspan;
+    switch( datatype )
+    {
+        case FLOAT:
+        {
+            float value=0.f;
+            if(type == 'F')
+                value = INFINITY;
+            else if(type == 'A')
+                value = NAN;
+            while (span > 0)
+            {
+                rows= rand() % M;
+                cols= rand() % N;
+                /* Replace 10 percent of special values in upper triangular matrix */
+                if (upspan > 0)
+                {
+                    if (rows <= cols){
+                        if (!isnan(((float *)A)[cols * LDA + rows]))
+                        {
+                            ((float *)A)[cols * LDA + rows] = value;
+                            upspan = upspan - 1;
+                        }
+                    }
+                }
+                /* Replace 10 percent of special values in lower triangular matrix */
+                else if (lowspan > 0 )
+                {
+                    if (rows >= cols)
+                    {
+                        if (!isnan(((float *)A)[cols * LDA + rows]))
+                        {
+                            ((float *)A)[cols * LDA + rows] = value;
+                            lowspan = lowspan - 1;
+                        }
+                    }
+                }
+                span = lowspan + upspan;
+            }
+            break;
+        }
+        case DOUBLE:
+        {
+            double value=0.;
+            if(type == 'F')
+                value = INFINITY;
+            else if(type == 'A')
+                value = NAN;
+            while (span > 0)
+            {
+                rows = rand() % M;
+                cols = rand() % N;
+                if (upspan > 0)
+                {
+                    if (rows <= cols)
+                    {
+                        if (!isnan(((double *)A)[cols * LDA + rows]))
+                        {
+                            ((double *)A)[cols * LDA + rows] = value;
+                            upspan = upspan - 1;
+                        }
+                    }
+                }
+                else if (lowspan > 0 )
+                {
+                    if (rows >= cols)
+                    {
+                        if (!isnan(((double *)A)[cols * LDA + rows]))
+                        {
+                            ((double *)A)[cols * LDA + rows] = value;
+                            lowspan = lowspan - 1;
+                        }
+                    }
+                }
+                span = lowspan + upspan;
+            }
+            break;
+        }
+        case COMPLEX:
+        {
+            float value=0.f;
+            if(type == 'F')
+                value = INFINITY;
+            else if(type == 'A')
+                value = NAN;
+            while (span > 0)
+            {
+                rows = rand() % M;
+                cols = rand() % N;
+                if (upspan > 0)
+                {
+                    if (rows <= cols)
+                    {
+                        if (!isnan(((scomplex *)A)[cols * LDA + rows].real))
+                        {
+                            ((scomplex *)A)[cols * LDA + rows].real = value;
+                            ((scomplex *)A)[cols * LDA + rows].imag = value;
+                            upspan = upspan - 1;
+                        }
+                    }
+                }
+                else if (lowspan > 0 )
+                {
+                    if (rows >= cols)
+                    {
+                        if (!isnan(((scomplex *)A)[cols * LDA + rows].real))
+                        {
+                            ((scomplex *)A)[cols * LDA + rows].real = value;
+                            ((scomplex *)A)[cols * LDA + rows].imag = value;
+                            lowspan = lowspan - 1 ;
+                        }
+                    }
+                }
+                span = lowspan + upspan;
+            }
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            double value=0.;
+            if(type == 'F')
+                value = INFINITY;
+            else if(type == 'A')
+                value = NAN;
+            while (span > 0)
+            {
+                rows = rand() % M;
+                cols = rand() % N;
+                if (upspan > 0)
+                {
+                    if (rows <= cols)
+                    {
+                        if (!isnan(((dcomplex *)A)[cols * LDA + rows].real))
+                        {
+                            ((dcomplex *)A)[cols * LDA + rows].real = value;
+                            ((dcomplex *)A)[cols * LDA + rows].imag = value;
+                            upspan = upspan - 1;
+                        }
+                    }
+                }
+                else if (lowspan > 0 )
+                {
+                    if (rows >= cols)
+                    {
+                        if (!isnan(((dcomplex *)A)[cols * LDA + rows].real))
+                        {
+                            ((dcomplex *)A)[cols * LDA + rows].real = value;
+                            ((dcomplex *)A)[cols * LDA + rows].imag = value;
+                            lowspan = lowspan - 1;
+                        }
+                    }
+                }
+                span = lowspan + upspan;
+            }
+            break;
+        }
+    }
+
+    return;
+}
+
+/* Test to check the extreme values propagation in output matrix */
+bool check_extreme_value(integer datatype, integer M, integer N, void *A, integer LDA, char type)
+{
+    if (!A)
+        return false;
+    integer i, j;
+    switch ( datatype )
+    {
+        case FLOAT:
+        {
+            float value=0.f;
+            if (type == 'A' || type == 'N')
+            {
+                for( i = 0; i < N; i++ )
+                {
+                    for( j = 0; j < M; j++ )
+                    {
+                        if (isnan(((float *)A)[i * LDA + j]))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            else if (type == 'F' || type == 'I' )
+            {
+                for( i = 0; i < N; i++ )
+                {
+                    for( j = 0; j < M; j++ )
+                    {
+                        if ((isinf(((float *)A)[i * LDA + j])) ||
+                            (isnan(((float *)A)[i * LDA + j])))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            break;
+        }
+
+        case DOUBLE:
+        {
+            double value=0.f;
+            if (type == 'A' || type == 'N')
+            {
+                for( i = 0; i < N; i++ )
+                {
+                    for( j = 0; j < M; j++ )
+                    {
+                        if (isnan(((double *)A)[i * LDA + j]))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            if (type == 'F' || type == 'I')
+            {
+                for( i = 0; i < N; i++ )
+                {
+                    for( j = 0; j < M; j++ )
+                    {
+                        if ((isinf(((double *)A)[i * LDA + j])) ||
+                            (isnan(((double *)A)[i * LDA + j])))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            break;
+        }
+
+        case COMPLEX:
+        {
+            float value=0.f;
+            if (type == 'A' || type == 'N')
+            {
+                for( i = 0; i < N; i++ )
+                {
+                    for( j = 0; j < M; j++ )
+                    {
+                        if (isnan(((scomplex *)A)[i * LDA + j].real) &&
+                            isnan(((scomplex *)A)[i * LDA + j].imag))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            else if (type == 'F' || type == 'I' )
+            {
+                for( i = 0; i < N; i++ )
+                {
+                    for( j = 0; j < M; j++ )
+                    {
+                        if ((isinf(((scomplex *)A)[i * LDA + j].real) &&
+                             isinf(((scomplex *)A)[i * LDA + j].imag)) ||
+                            (isnan(((scomplex *)A)[i * LDA + j].real) &&
+                             isnan(((scomplex *)A)[i * LDA + j].imag)))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            double value=0.f;
+            if (type == 'A' || type == 'N')
+            {
+                for( i = 0; i < N; i++ )
+                {
+                    for( j = 0; j < M; j++ )
+                    {
+                        if (isnan(((dcomplex *)A)[i * LDA + j].real) &&
+                            isnan(((dcomplex *)A)[i * LDA + j].imag))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            else if (type == 'F' || type == 'I' )
+            {
+                for( i = 0; i < N; i++ )
+                {
+                    for( j = 0; j < M; j++ )
+                    {
+                        if ((isinf(((dcomplex *)A)[i * LDA + j].real) &&
+                             isinf(((dcomplex *)A)[i * LDA + j].imag)) ||
+                            (isnan(((dcomplex *)A)[i * LDA + j].real) &&
+                             isnan(((dcomplex *)A)[i * LDA + j].imag)))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            break;
+        }
+    }
+    return 0;
+
+}
+
 /*Intialize matrix according to given input*/
 void init_matrix(integer datatype, void *A, integer M, integer N, integer LDA, FILE* g_ext_fptr, char imatrix_char)
 {
@@ -2749,6 +3091,8 @@ void init_matrix(integer datatype, void *A, integer M, integer N, integer LDA, F
         init_matrix_from_file(datatype, A, M, N, LDA, g_ext_fptr);
     else if(imatrix_char == 'I' || imatrix_char == 'N')
         init_matrix_spec_in(datatype, A, M, N, LDA, imatrix_char);
+    else if(imatrix_char == 'A' || imatrix_char == 'F')
+        init_matrix_spec_rand_in(datatype, A, M, N, LDA, imatrix_char);
     else
         rand_matrix(datatype, A, M, N, LDA);
 }

@@ -171,8 +171,8 @@ void fla_test_getrs_experiment(test_params_t *params,
     *t = time_min;
 
     /* performance computation */
-    /* 2mn^2 - (2/3)n^3 flops */
-    *perf = (double)((2.0 * n * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min / FLOPS_PER_UNIT_PERF;
+    /* 2*n^2 * nrhs flops */
+    *perf = (double)(2.0 * n * n * NRHS) / time_min / FLOPS_PER_UNIT_PERF;
     if (datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         *perf *= 4.0;
 

@@ -3,7 +3,11 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/*
+ *     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+ */
 #include "FLA_f2c.h" /* Table of constant values */
+
 static doublereal c_b4 = 1.;
 static doublereal c_b5 = 0.;
 static integer c__1 = 1;
@@ -135,11 +139,10 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
     doublereal d__1;
     /* Local variables */
     integer i__;
-#ifdef FLA_ENABLE_AMD_OPT
-    doublereal temp;
-    integer i__1, j;
-#endif
     logical applyleft;
+#ifdef FLA_ENABLE_AMD_OPT
+    extern void fla_dlarf_left_apply_incv1_avx2( integer lastv, integer lastc, double *c__, integer ldc, double *v, double tau, double *work);
+#endif
     extern /* Subroutine */
         void
         dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
@@ -223,54 +226,36 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
     if(applyleft)
     {
         /* Form H * C */
-        if(lastv > 0)
+        if(lastv > 0 && lastc > 0)
         {
+            d__1 = -(*tau);
+
+#ifndef FLA_ENABLE_AMD_OPT
             /* w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1) */
             dgemv_("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1], incv, &c_b5,
                    &work[1], &c__1);
+
             /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T */
-            d__1 = -(*tau);
-#ifdef FLA_ENABLE_AMD_OPT
-            /* Inline DGER for small size */
-            if(lastc <= FLA_DGER_INLINE_SMALL_THRESH0 && lastv <= FLA_DGER_INLINE_SMALL_THRESH1)
+            dger_(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[ c_offset], ldc);            
+#else
+            /* Get threshold sizes to take optimized path*/
+            FLA_Bool min_lastc_lastv = (lastc < FLA_DGEMV_DGER_SIMD_SMALL_THRESH) && 
+                    (lastv > FLA_DGEMV_DGER_SIMD_SMALL_THRESH_M && lastv < FLA_DGEMV_DGER_SIMD_SMALL_THRESH);
+
+          /* If the size of the matrix is small and incv =1, use the optimized path */
+            if(min_lastc_lastv && *incv == c__1 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
             {
-                if(*incv == c__1)
-                {
-                    for(j = 1; j <= lastc; ++j)
-                    {
-                        if(work[j] != 0.)
-                        {
-                            temp = d__1 * work[j];
-                            for(i__ = 1; i__ <= lastv; ++i__)
-                            {
-                                c__[i__ + j * *ldc] += v[i__] * temp;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    for(j = 1; j <= lastc; ++j)
-                    {
-                        if(work[j] != 0.)
-                        {
-                            i__1 = 1;
-                            temp = d__1 * work[j];
-                            for(i__ = 1; i__ <= lastv; ++i__)
-                            {
-                                c__[i__ + j * *ldc] += v[i__1] * temp;
-                                i__1 += *incv;
-                            }
-                        }
-                    }
-                }
+                /* Call optimized routine */
+                fla_dlarf_left_apply_incv1_avx2( lastv, lastc, c__, *ldc, v, d__1, work);
             }
             else
             {
-                dger_(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
+                /* w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1) */
+                dgemv_("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1], incv, &c_b5, &work[1], &c__1);
+            
+                /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T*/
+                dger_(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[ c_offset], ldc);
             }
-#else
-            dger_(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
 #endif
         }
     }

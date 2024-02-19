@@ -3,6 +3,9 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/*
+ *     Modifications Copyright (c) 2021-2024 Advanced Micro Devices, Inc.  All rights reserved.
+ */
 #include "FLA_f2c.h" /* > \brief \b ILADLC scans a matrix for its last non-zero column. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -117,9 +120,9 @@ integer iladlc_(integer *m, integer *n, doublereal *a, integer *lda)
     else
     {
         /* Now scan each column from the end, returning with the first non-zero. */
+        i__1 = *m;
         for(ret_val = *n; ret_val >= 1; --ret_val)
         {
-            i__1 = *m;
             for(i__ = 1; i__ <= i__1; ++i__)
             {
                 if(a[i__ + ret_val * a_dim1] != 0.)

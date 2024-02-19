@@ -6,10 +6,11 @@ add_library(FLA_LAPACK_AVX512
      ${CMAKE_CURRENT_SOURCE_DIR}/fla_dgetrf_small_avx512.c
      ${CMAKE_CURRENT_SOURCE_DIR}/fla_zgetrf_small_avx512.c
      ${CMAKE_CURRENT_SOURCE_DIR}/fla_dscal_ix1_avx512.c
+     ${CMAKE_CURRENT_SOURCE_DIR}/fla_dlange_kernels_avx512.c
 )
 
 if(WIN32)
 target_compile_options(FLA_LAPACK_AVX512 PRIVATE /arch:AVX512)
 else(UNIX)
-target_compile_options(FLA_LAPACK_AVX512 PRIVATE -mavx512f -mfma)
+target_compile_options(FLA_LAPACK_AVX512 PRIVATE -mavx512f -mavx512dq -mfma)
 endif()

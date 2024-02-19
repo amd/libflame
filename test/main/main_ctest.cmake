@@ -82,3 +82,16 @@ foreach(FUNCTION "gesv")
         endforeach(SIZE_N)
     endforeach(PREC)
 endforeach(FUNCTION)
+
+#Performance tests for GELS
+foreach(FUNCTION "gels")
+    foreach(PREC "d") 
+        foreach(SIZE_M RANGE 10 40)
+          foreach(SIZE_N 10)
+            add_test(NAME GELS_NT_NRHS2_${PREC}${FUNCTION}_${SIZE_M}x${SIZE_N} COMMAND ${CTEST_MAIN_COMMAND} ${FUNCTION} ${PREC} N ${SIZE_M} ${SIZE_N} 2 ${SIZE_M} ${SIZE_M} -1 10000)
+            set_property(TEST GELS_NT_NRHS2_${PREC}${FUNCTION}_${SIZE_M}x${SIZE_N} PROPERTY ENVIRONMENT "OMP_NUM_THREADS=1")
+          endforeach(SIZE_N)
+	endforeach(SIZE_M)
+    endforeach(PREC)
+endforeach(FUNCTION)
+

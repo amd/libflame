@@ -43,8 +43,6 @@ integer fla_dgetrf_small_avx2(integer *m, integer *n,
                               integer *info);
 void fla_lu_piv_small_d_update_tr_matrix_avx2(integer i_1, integer mi, integer ni,
                                               doublereal* acur, integer lda_t);
-void fla_lu_piv_small_d_update_tr_matrix_avx2(integer i_1, integer mi, integer ni,
-                                              doublereal* acur, integer lda_t);
 int fla_dgetrs_small_trsm_ll_avx2(char *trans, integer *n, integer *nrhs,
                                   doublereal *a, integer *lda, integer *ipiv,
                                   doublereal *b, integer *ldb, integer *info);
@@ -91,6 +89,10 @@ void fla_dgesvd_xs_small10T_avx2(integer *m, integer *n,
                                  doublereal *vt, integer *ldvt,
                                  doublereal *work,
                                  integer *info);
+doublereal fla_get_max_abs_element_vector_avx2(integer m, doublereal *a, 
+						integer a_dim);
+void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *r, integer ldr, 
+                doublereal *v, doublereal tau, doublereal *work);
 #endif /* FLA_ENABLE_AMD_OPT */
 #endif /* FLA_LAPACK_AVX2_KERNELS_DEFS_H */
 

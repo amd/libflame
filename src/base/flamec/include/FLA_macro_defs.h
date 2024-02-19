@@ -9,7 +9,7 @@
 */
 
 /*
-    Modifications Copyright (c) 2021-2023 Advanced Micro Devices, Inc.  All rights reserved.
+    Modifications Copyright (c) 2021-2024 Advanced Micro Devices, Inc.  All rights reserved.
 */
 
 
@@ -267,8 +267,8 @@
 #define FLA_FULL_DGER_CONSTANT (200)
 
 // ORGQR , threshold numbers to chose paths for performance
-#define FLA_DGER_INLINE_SMALL_THRESH0   (6)
-#define FLA_DGER_INLINE_SMALL_THRESH1   (32)
+#define FLA_DGEMV_DGER_SIMD_SMALL_THRESH   (100)
+#define FLA_DGEMV_DGER_SIMD_SMALL_THRESH_M (8)
 #define FLA_DSCAL_INLINE_SMALL          (128)
 #define FLA_ZGERC_INLINE_SMALL_THRESH0  (128)
 #define FLA_ZGERC_INLINE_SMALL_THRESH1  (32)

@@ -307,4 +307,37 @@ int fla_dgetrs_small_notrans(char *trans, integer *n, integer *nrhs, doublereal 
     }
     return 0;
 }
+/* Find the maximum element from absolute values of a vector*/
+doublereal fla_get_max_abs_element_vector(integer m, doublereal *a, integer a_dim)
+{
+    doublereal value = 0.0f, temp;
+    integer i__;
+
+    //Path when AVX512 ISA is supported 
+    if( FLA_IS_ARCH_ID(FLA_ARCH_AVX512))
+    {
+        value = fla_get_max_abs_element_vector_avx512(m, a, a_dim);
+    }
+    else if( FLA_IS_ARCH_ID(FLA_ARCH_AVX2) )
+    {
+        //Path when AVX2 ISA is supported 
+        value = fla_get_max_abs_element_vector_avx2(m, a, a_dim);
+    }
+    else
+    {
+	//Reference code 
+        for (i__ = 1;
+             i__ <= m;
+             ++i__)
+        {
+	    temp = f2c_abs(a[i__ + a_dim]);
+            if (value < temp || temp != temp)
+            {
+               value = temp;
+            }
+ 	}
+    }
+
+    return value;
+}
 #endif

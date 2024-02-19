@@ -84,7 +84,11 @@ In order to build tests an additional flag, BUILD_TEST, must be set ON
         -DLIBAOCLUTILS_LIBRARY_PATH="<full path to AOCL-Utils library including library file>"
     
 This will enable aocl progress feature tests and main test suite. It will generate test_libFLAME_aocl , test_lapack.x executables in the respective directories.
-Note: Building tests require path to AOCL-Utils library and an external blas library. Refer to Readme in respective test suite directory for more details
+Note: 
+1. Building tests require path to AOCL-Utils library and an external blas library. Refer to Readme in respective test suite directory for more details.
+2. EXT_BLAS_LIBNAME flag can be set with space separated binaries for BLAS libraries which may have more than one binary file. But all of them
+   must be under the same directory as set in flag CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH.
+
 Recomended to use AOCL-BLAS sharedlib with AOCL-LAPACK sharedlib
 
 ## 3 Building Legacy test and Netlib test

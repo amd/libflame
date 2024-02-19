@@ -11,6 +11,7 @@ else()
 endif()
 
 if(WIN32)
+	SET(OpenMP_libomp_LIB "C:/Program Files/LLVM/lib/libomp.lib" CACHE STRING "openmp library path")
 	SET(CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH "${CMAKE_SOURCE_DIR}/bin/Release" CACHE STRING "BLAS library path")
 	SET(EXT_BLAS_LIBNAME "" CACHE STRING "BLAS library name")
 	SET(LIBAOCLUTILS_LIBRARY_PATH "" CACHE STRING "AOCLUtils library name")
@@ -20,6 +21,10 @@ endif()
 message(STATUS "External blas library Path : ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}")
 message(STATUS "External blas library name : ${EXT_BLAS_LIBNAME}")
 SET(LF_ISA_CONFIG "AVX2" CACHE STRING "LibFlame Instruction set architecture Configuration")
+
+if(WIN32)
+	SET(OpenMP_libomp_LIBRARY "${OpenMP_libomp_LIB}" CACHE STRING "openmp library path")
+endif()
 
 message(STATUS "CMAKE_C_COMPILER_ID: ${CMAKE_C_COMPILER_ID}")
 message(STATUS "C compiler version: ${CMAKE_C_COMPILER_VERSION}")
@@ -166,7 +171,7 @@ if(WIN32)
 elseif(UNIX)
 	set(COMPILER_OPTIMIZATION_FLAGS	"-mtune=native -O3")
 	if(${lf_isa_config_lower} STREQUAL "avx512")
-		set(COMPILER_OPTIMIZATION_FLAGS	"${COMPILER_OPTIMIZATION_FLAGS} -mavx512f -mfma")
+		set(COMPILER_OPTIMIZATION_FLAGS	"${COMPILER_OPTIMIZATION_FLAGS} -mavx512f -mavx512dq -mfma")
 	elseif(${lf_isa_config_lower} STREQUAL "avx2" OR ${lf_isa_config_lower} STREQUAL "avx")
 		set(COMPILER_OPTIMIZATION_FLAGS	"${COMPILER_OPTIMIZATION_FLAGS} -mavx2 -mfma")
 	else()
@@ -176,6 +181,7 @@ elseif(UNIX)
 else()
 	message(STATUS "OS UNKNOWN CANNOT SET SIMD")
 endif()
+	
 
 if(ENABLE_GCOV)
 	set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
@@ -1119,36 +1125,50 @@ if (BUILD_TEST OR BUILD_LEGACY_TEST)
 		message(FATAL_ERROR "Please set path and name of BLAS library using CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH and EXT_BLAS_LIBNAME options respectively.")
 	endif()
 
-	# CHECKS if blas library exists 
-	if(NOT EXISTS ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME})
-		message(FATAL_ERROR "\n Invalid path to blas Library \n \
-${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME} \
-Does not exist.\n Please check the path again")
-	else()
-		add_library(blas SHARED IMPORTED)
-		add_library(aoclutils SHARED IMPORTED)
-		if(NOT ENABLE_EMBED_AOCLUTILS AND NOT EXISTS ${LIBAOCLUTILS_LIBRARY_PATH})
-			message(FATAL_ERROR "aocl-utils library path not set! Please set the same using LIBAOCLUTILS_LIBRARY_PATH option")
+	add_library(blas SHARED IMPORTED)
+	add_library(aoclutils SHARED IMPORTED)
+	if(NOT ENABLE_EMBED_AOCLUTILS AND NOT EXISTS ${LIBAOCLUTILS_LIBRARY_PATH})
+		message(FATAL_ERROR "aocl-utils library path not set! Please set the same using LIBAOCLUTILS_LIBRARY_PATH option")
+	endif()
+
+	if(UNIX)
+		# CHECKS if blas library exists
+		set(BLAS_LIB_LIST ${EXT_BLAS_LIBNAME})
+
+		# If there are multiple libraries that are part of given BLAS, each will be separated by space 
+		separate_arguments(BLAS_LIB_LIST)
+		message(STATUS "BLAS library provided ${BLAS_LIB_LIST}")
+		foreach(BLAS_LIB ${BLAS_LIB_LIST})
+			if(NOT EXISTS ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${BLAS_LIB})
+				message(FATAL_ERROR "\n Invalid path to BLAS Library \n \
+				${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME} \
+				Does not exist.\n Please check the path again")
+			endif()
+		endforeach()
+
+		foreach(BLAS_LIB ${BLAS_LIB_LIST})
+			list(APPEND BLAS_LINK_LIST ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${BLAS_LIB})
+		endforeach()
+		set_target_properties(aoclutils PROPERTIES
+		IMPORTED_LOCATION ${LIBAOCLUTILS_LIBRARY_PATH}
+		POSITION_INDEPENDENT_CODE ON
+		)
+	elseif(WIN32)
+		# CHECKS if blas library exists
+       		if(NOT EXISTS ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME})
+               		message(FATAL_ERROR "\n Invalid path to BLAS Library \n \
+			${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME} \
+			Does not exist.\n Please check the path again")
 		endif()
-		if(UNIX)
-			set_target_properties(blas PROPERTIES
-			IMPORTED_LOCATION ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME}
-			POSITION_INDEPENDENT_CODE ON
-			)
-			set_target_properties(aoclutils PROPERTIES
-			IMPORTED_LOCATION ${LIBAOCLUTILS_LIBRARY_PATH}
-			POSITION_INDEPENDENT_CODE ON
-			)
-		elseif(WIN32)
-			set_target_properties(blas PROPERTIES
-			IMPORTED_IMPLIB ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME}
-			POSITION_INDEPENDENT_CODE ON
-			)
-			set_target_properties(aoclutils PROPERTIES
-			IMPORTED_IMPLIB ${LIBAOCLUTILS_LIBRARY_PATH}
-			POSITION_INDEPENDENT_CODE ON
-			)
-		endif()
+
+		set_target_properties(blas PROPERTIES
+		IMPORTED_IMPLIB ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME}
+		POSITION_INDEPENDENT_CODE ON
+		)
+		set_target_properties(aoclutils PROPERTIES
+		IMPORTED_IMPLIB ${LIBAOCLUTILS_LIBRARY_PATH}
+		POSITION_INDEPENDENT_CODE ON
+		)
 	endif()
 
 	# if user wants to run tests on an external lapack library

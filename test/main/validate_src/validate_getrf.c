@@ -1,5 +1,5 @@
 /******************************************************************************
-* Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+* Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 *******************************************************************************/
 
 /*! @file validate_getrf.c
@@ -151,14 +151,14 @@ void validate_getrf(integer m_A,
             /* Test 1 */
             if (m_A == n_A)
             {
-                norm_B = snrm2_(&m_A, B, &i_one);
+                norm_B = scnrm2_(&m_A, B, &i_one);
                 /* Compute X by passing A and B */
                 fla_lapack_cgetrs("N", &m_A, &nrhs, A_test, &lda, IPIV, B_test, &m_A, info);
                 if(*info < 0)
                     break;
                 /* Compute AX-B */
                 cgemv_("N", &m_A, &m_A, &c_one, A, &lda, B_test, &i_one, &c_n_one, B, &i_one);
-                norm = snrm2_(&m_A, B, &i_one);
+                norm = scnrm2_(&m_A, B, &i_one);
                 resid1 = norm / (float)m_A / norm_B / eps;
             }
             else
@@ -192,14 +192,14 @@ void validate_getrf(integer m_A,
             /* Test 1 */
             if (m_A == n_A)
             {
-                norm_B = dnrm2_(&m_A, B, &i_one);
+                norm_B = dznrm2_(&m_A, B, &i_one);
                 /* Compute X by passing A and B */
                 fla_lapack_zgetrs("N", &m_A, &nrhs, A_test, &lda, IPIV, B_test, &m_A, info);
                 if(*info < 0)
                     break;
                 /* Compute AX-B */
                 zgemv_("N", &m_A, &m_A, &z_one, A, &lda, B_test, &i_one, &z_n_one, B, &i_one);
-                norm = dnrm2_(&m_A, B, &i_one);
+                norm = dznrm2_(&m_A, B, &i_one);
                 resid1 = norm / (double)m_A / norm_B / eps;
             }
             else

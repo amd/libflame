@@ -1,5 +1,5 @@
 /******************************************************************************
-* Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+* Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 *******************************************************************************/
 
 /*! @file validate_rot.c
@@ -102,8 +102,8 @@ void validate_rot(integer datatype, integer n, void *cx, void *cx_test, integer 
             double eps = fla_lapack_slamch("P");
             double norm_resid1, norm_resid2, norm_cx, norm_cy;
 
-            norm_cx = dnrm2_(&n, cx, &incx);
-            norm_cy = dnrm2_(&n, cy, &incy);
+            norm_cx = dznrm2_(&n, cx, &incx);
+            norm_cy = dznrm2_(&n, cy, &incy);
 
             /*Hermitian Transpose of original rotation vector*/
             ((dcomplex *)s)[0].real = -((dcomplex *)s)[0].real;

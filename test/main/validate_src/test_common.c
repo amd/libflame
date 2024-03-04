@@ -2940,7 +2940,6 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
     {
         case FLOAT:
         {
-            float value=0.f;
             if (type == 'A' || type == 'N')
             {
                 for( i = 0; i < N; i++ )
@@ -2974,7 +2973,6 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
 
         case DOUBLE:
         {
-            double value=0.f;
             if (type == 'A' || type == 'N')
             {
                 for( i = 0; i < N; i++ )
@@ -3008,7 +3006,6 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
 
         case COMPLEX:
         {
-            float value=0.f;
             if (type == 'A' || type == 'N')
             {
                 for( i = 0; i < N; i++ )
@@ -3045,7 +3042,6 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
 
         case DOUBLE_COMPLEX:
         {
-            double value=0.f;
             if (type == 'A' || type == 'N')
             {
                 for( i = 0; i < N; i++ )

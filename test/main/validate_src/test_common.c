@@ -2833,7 +2833,12 @@ void init_matrix_spec_rand_in(
     rand_matrix(datatype, A, M, N, LDA);
     /* when M*N less than 2 there is no need of randomness*/
     if(M * N < 2)
+    {
+        char type_;
+        type_ = (type == 'A') ? 'N' : 'I';
+        init_matrix_spec_in(datatype, A, M, N, LDA, type_);
         return;
+    }
     /*
     Add random extreme values:
     for small size matrices, when M*N less than 10 adding one extreme value in upper triangular
@@ -3094,7 +3099,7 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
                 for(j = 0; j < M; j++)
                 {
                     if(isnan(((scomplex *)A)[i * LDA + j].real)
-                       && isnan(((scomplex *)A)[i * LDA + j].imag))
+                       || isnan(((scomplex *)A)[i * LDA + j].imag))
                     {
                         return true;
                     }
@@ -3109,9 +3114,9 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
                 for(j = 0; j < M; j++)
                 {
                     if((isinf(((scomplex *)A)[i * LDA + j].real)
-                        && isinf(((scomplex *)A)[i * LDA + j].imag))
+                        || isinf(((scomplex *)A)[i * LDA + j].imag))
                        || (isnan(((scomplex *)A)[i * LDA + j].real)
-                           && isnan(((scomplex *)A)[i * LDA + j].imag)))
+                           || isnan(((scomplex *)A)[i * LDA + j].imag)))
                     {
                         return true;
                     }
@@ -3130,7 +3135,7 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
                 for(j = 0; j < M; j++)
                 {
                     if(isnan(((dcomplex *)A)[i * LDA + j].real)
-                       && isnan(((dcomplex *)A)[i * LDA + j].imag))
+                       || isnan(((dcomplex *)A)[i * LDA + j].imag))
                     {
                         return true;
                     }
@@ -3145,9 +3150,9 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
                 for(j = 0; j < M; j++)
                 {
                     if((isinf(((dcomplex *)A)[i * LDA + j].real)
-                        && isinf(((dcomplex *)A)[i * LDA + j].imag))
+                        || isinf(((dcomplex *)A)[i * LDA + j].imag))
                        || (isnan(((dcomplex *)A)[i * LDA + j].real)
-                           && isnan(((dcomplex *)A)[i * LDA + j].imag)))
+                           || isnan(((dcomplex *)A)[i * LDA + j].imag)))
                     {
                         return true;
                     }

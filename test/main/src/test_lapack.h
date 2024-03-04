@@ -113,6 +113,15 @@ extern FILE* g_ext_fptr;
             i++;                                          \
             info = strtok(NULL, "=");                     \
         }                                                 \
+        if (strlen(info_value[1]) !=1 ||                  \
+            (info_value[1][0] != 'I' &&                   \
+             info_value[1][0] != 'N' &&                   \
+             info_value[1][0] != 'A' &&                   \
+             info_value[1][0] != 'F'))                    \
+        {                                                 \
+            printf("\n Invalid input for imatrix \n");    \
+            return;                                       \
+        }                                                 \
         params->imatrix_char  = info_value[1][0];         \
     }                                                     \
     else                                                  \

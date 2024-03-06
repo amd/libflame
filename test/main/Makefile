@@ -16,9 +16,9 @@ LDFLAGS        := -lstdc++ -lm -lpthread $(OMP_LIB)
 #
 # --- LIBFLAME \ LAPACK library ------------------------------------------------
 #
-LIB_PATH          := ../../lib/x86_64-unknown-linux-gnu/
+LIB_PATH          := ../../lib
 LIBFLAME          := $(LIB_PATH)/libflame.a
-LAPACK_INC_PATH   := ../../include/x86_64-unknown-linux-gnu/
+LAPACK_INC_PATH   := ../../include
 
 #
 # --- BLAS library -------------------------------------------------------------

@@ -61,7 +61,7 @@ void validate_gels(char *trans,
                 temp = m1-n1;
                 for(int i = 0; i < nrhs; i++)
                 {
-                    bl1_snrm2(temp, &((float*)x)[(i * ldb) + n1], i_one, &resid1);
+                    resid1 = snrm2_(&temp, &((float*)x)[(i * ldb) + n1], &i_one);
                     resid1 = fla_max(norm, resid1);
                 }
                 *residual = (double)resid1;
@@ -186,7 +186,7 @@ void validate_gels(char *trans,
                 temp = m1 - n1;
                 for(int i = 0; i < nrhs; i++)
                 {
-                    bl1_dnrm2(temp, &((double*)x)[(i * ldb) + n1], i_one, &resid1);
+                    resid1 = dnrm2_(&temp, &((double*)x)[(i * ldb) + n1], &i_one);
                     resid1 = fla_max(norm, resid1);
                 }
                 *residual = (double)resid1;
@@ -311,7 +311,7 @@ void validate_gels(char *trans,
                 temp = m1 - n1;
                 for(int i = 0; i < nrhs; i++)
                 {
-                    bl1_cnrm2(temp, &((scomplex*)x)[(i * ldb) + n1], i_one, &resid1);
+                    resid1 = scnrm2_(&temp, &((scomplex*)x)[(i * ldb) + n1], &i_one);
                     resid1 = fla_max(norm, resid1);
                 }
                 *residual = (double)resid1;
@@ -438,7 +438,7 @@ void validate_gels(char *trans,
                 temp = m1 - n1;
                 for(int i = 0; i < nrhs; i++)
                 {
-                    bl1_znrm2(temp, &((dcomplex*)x)[(i * ldb) + n1], i_one, &resid1);
+                    resid1 = dznrm2_(&temp, &((dcomplex*)x)[(i * ldb) + n1], &i_one);
                     resid1 = fla_max(norm, resid1);
                 }
                 *residual = (double)resid1;

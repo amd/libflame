@@ -231,7 +231,27 @@ set(EXTREMEVALUE_TEST_CASES "gesv sdcz 4 4 4 4 1 --imatrix=A"
             "gerq2 sdcz 1 1 1 1 --imatrix=I"
             "gerq2 sdcz 1 1 1 1 --imatrix=N"
             "gerq2 sdcz 13 29 13 1 --imatrix=I"
-            "gerq2 sdcz 13 29 13 1 --imatrix=N")
+            "gerq2 sdcz 13 29 13 1 --imatrix=N"
+            "geqrf sdcz 4 4 4 -1 1 --imatrix=A"
+            "geqrf sdcz 4 7 4 -1 1 --imatrix=A"
+            "geqrf sdcz 4 4 4 -1 1 --imatrix=F"
+            "geqrf sdcz 4 7 4 -1 1 --imatrix=F"
+            "geqrf sdcz 23 23 23 -1 1 --imatrix=A"
+            "geqrf sdcz 23 36 23 -1 1 --imatrix=A"
+            "geqrf sdcz 23 23 23 -1 1 --imatrix=F"
+            "geqrf sdcz 23 36 23 -1 1 --imatrix=F"
+            "geqrf sdcz 4 4 4 -1 1 --imatrix=I"
+            "geqrf sdcz 4 7 4 -1 1 --imatrix=I"
+            "geqrf sdcz 4 4 4 -1 1 --imatrix=N"
+            "geqrf sdcz 4 7 4 -1 1 --imatrix=N"
+            "geqrf sdcz 1 1 1 -1 1 --imatrix=I"
+            "geqrf sdcz 1 2 1 -1 1 --imatrix=I"
+            "geqrf sdcz 1 1 1 -1 1 --imatrix=N"
+            "geqrf sdcz 1 2 1 -1 1 --imatrix=N"
+            "geqrf sdcz 20 20 20 -1 1 --imatrix=I"
+            "geqrf sdcz 20 25 20 -1 1 --imatrix=I"
+            "geqrf sdcz 20 20 20 -1 1 --imatrix=N"
+            "geqrf sdcz 20 25 20 -1 1 --imatrix=N")
 
 set(TEST_NUM 1)
 foreach(neg_test_cases IN LISTS NEGATIVE_TEST_CASES)

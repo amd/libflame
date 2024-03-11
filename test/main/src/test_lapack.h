@@ -143,6 +143,21 @@ extern FILE* g_ext_fptr;
                                params->imatrix_char == 'N' ||      \
                                params->imatrix_char == 'I')        \
 
+/* Macro to check if a LAPACK API have different names for its
+   (precision)variants and modify API display string
+   according to datatype/precision
+
+   Ex: Eigen API SYEVX - FLOAT          - SSYEVX
+                         DOUBLE         - DSYEVX
+                         COMPLEX        - CHEEVX
+                         DOUBLE_COMPLEX - ZHEEVX                  */
+#define fla_map_api_name(datatype, func_str)                      \
+    if((datatype == COMPLEX) || (datatype == DOUBLE_COMPLEX))     \
+    {                                                             \
+        if(strcmp(func_str,"SYEVX")==0)                           \
+            func_str = "HEEVX";                                   \
+    }                                                             \
+
 typedef struct Lin_solver_paramlist_t
 {
     integer num_ranges; // number of ranges to run

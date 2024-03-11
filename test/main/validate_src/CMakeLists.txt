@@ -1,5 +1,5 @@
 ###############################################################################
-# Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
+# Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 
 target_sources(${PROJECT_NAME}
@@ -36,5 +36,6 @@ ${CMAKE_CURRENT_SOURCE_DIR}/validate_lartg.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gels.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_larfg.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gtsv.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_syevx.c
 )
 

@@ -1,5 +1,5 @@
 /******************************************************************************
-* Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
+* Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 *******************************************************************************/
 
 /*! @file validate_common.h
@@ -395,5 +395,19 @@ void validate_gtsv(integer datatype,
                    void *du_save,
                    integer info,
                    double *residual);
+
+void validate_syevx(char* jobz,
+                    char* range,
+                    integer n,
+                    void* A,
+                    void* A_test,
+                    integer lda,
+                    integer il,
+                    integer iu,
+                    void *L,
+                    void* w,
+                    void* ifail,
+                    integer datatype,
+                    double* residual);
 
 #endif // VALIDATE_COMMON_H

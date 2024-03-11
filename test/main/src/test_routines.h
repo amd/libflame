@@ -81,6 +81,7 @@ OPERATIONS API_test_functions[] =
     {AUX_ID,    "lartg"               , fla_test_lartg},
     {LIN_ID,    "org2r"               , fla_test_org2r},
     {EIG_ID,    "syevx"               , fla_test_syevx},
+    {EIG_ID,    "heevx"               , fla_test_syevx},
     {LIN_ID,    "gtsv"                , fla_test_gtsv},
     {LIN_ID,    "gels"                , fla_test_gels},
     {AUX_ID,    "larfg"               , fla_test_larfg}

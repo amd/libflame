@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc.  All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc.  All rights reserved. Portions of this file consist of AI-generated content.
 */
 
 #include "test_common.h"
@@ -3450,4 +3450,337 @@ void copy_tridiag_matrix(
         break;
     }
     }
+}
+
+/* Initialize realtype vector with random values */
+void rand_realtype_vector(integer datatype, void *A, integer M, integer LDA)
+{
+    integer i;
+
+    if(datatype == FLOAT || datatype == COMPLEX)
+    {
+        for(i = 0; i < M; i++)
+        {
+            ((float *)A)[i * LDA] = SRAND();
+        }
+    }
+    else if(datatype == DOUBLE || datatype == DOUBLE_COMPLEX)
+    {
+        for(i = 0; i < M; i++)
+        {
+            ((double *)A)[i * LDA] = DRAND();
+        }
+    }
+    else
+        return;
+
+    return;
+}
+
+/* Initialize real type vector with random values
+   between given range (Vl, VU) */
+void rand_realvector_in_range(integer datatype, void *A, void *VL,
+                              void *VU, integer M)
+{
+    integer i;
+
+    if(datatype == FLOAT || datatype == COMPLEX)
+    {
+        float vl, vu;
+        vl = *(float*)VL;
+        vu = *(float*)VU;
+        for(i = 0; i < M; i++)
+        {
+            ((float *)A)[i] = SRAND_IN_RANGE(vl, vu);
+        }
+    }
+    else if(datatype == DOUBLE || datatype == DOUBLE_COMPLEX)
+    {
+        double vl, vu;
+        vl = *(double*)VL;
+        vu = *(double*)VU;
+        for(i = 0; i < M; i++)
+        {
+            ((double *)A)[i] = DRAND_IN_RANGE(vl, vu);
+        }
+    }
+    else
+        return;
+
+    return;
+}
+
+/* Multiply general m * n matrix with diagonal real type vector
+   (of an n * n diagonal matrix) of size n
+   NOTE: General matrix by vector multiplication can be done by scaling each
+         column of the matrix with corresponding element in the vector */
+void multiply_matrix_diag_vector(integer datatype, integer m, integer n,
+                                 void* A, integer lda, void* X, integer incx)
+{
+    integer j;
+    if(m <= 0 || n <= 0)
+        return;
+
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            float *a_begin, *x = (float *)X;
+            for (j = 0; j < n; j++)
+            {
+                /* scale each column of the matrix by corresponding element
+                   in the vector */
+                a_begin = (float *)A + j * lda;
+                sscal_(&m, &x[j], a_begin, &incx);
+            }
+            break;
+        }
+
+        case DOUBLE:
+        {
+            double *a_begin, *x = (double *)X;
+            for (j = 0; j < n; j++)
+            {
+                /* scale each column of the matrix by corresponding element
+                   in the vector */
+                a_begin = (double *)A + j * lda;
+                dscal_(&m, &x[j], a_begin, &incx);
+            }
+            break;
+        }
+
+        case COMPLEX:
+        {
+            scomplex *a_begin, x;
+            for (j = 0; j < n; j++)
+            {
+                /* scale each column of the matrix by corresponding element
+                   in the vector */
+                a_begin = (scomplex *)A + j * lda;
+                x.real = *((float *)X + j);
+                x.imag = 0.f;
+                cscal_(&m, &x, a_begin, &incx);
+            }
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            dcomplex *a_begin, x;
+            for (j = 0; j < n; j++)
+            {
+                /* scale each column of the matrix by corresponding element
+                   in the vector */
+                a_begin = (dcomplex *)A + j * lda;
+                x.real = *((double *)X + j);
+                x.imag = 0.0;
+                zscal_(&m, &x, a_begin, &incx);
+            }
+            break;
+        }
+    }
+    return;
+}
+
+/*
+ * Generate square matrix of size n x n using Eigen decomposition(ED)
+ *                     A  = (Q * lambda * Q')
+ * where Q is an n x n orthogonal matrix and
+ *       lambda is a diagonal vector(realtype)
+ * NOTE: For simplification of general matrix - diagonal matrix multiplication,
+ *       in this funciton lamda is taken as a vector.
+ */
+void generate_matrix_from_ED(integer datatype, integer n, void *A, integer lda,
+                             void *Q, void *lambda)
+{
+    void *Qlambda = NULL;
+    if (lda < n)
+        return;
+
+    create_matrix(datatype, &Qlambda, n, n);
+    copy_matrix(datatype, "full", n, n, Q, n, Qlambda, n);
+
+    /* Perform Q * lambda */
+    multiply_matrix_diag_vector(datatype, n, n, Qlambda, n, lambda, 1);
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            /* Generate matrix A using eigen decomposition (Q * lambda) * Q' */
+            sgemm_("N", "T", &n, &n, &n, &s_one, Qlambda, &n, Q, &n, &s_zero,
+                    A, &lda);
+            break;
+        }
+        case DOUBLE:
+        {
+            /* Generate matrix A using eigen decomposition (Q * lambda) * Q' */
+            dgemm_("N", "T", &n, &n, &n, &d_one, Qlambda, &n, Q, &n, &d_zero,
+                    A, &lda);
+            break;
+        }
+        case COMPLEX:
+        {
+            /* Generate matrix A using eigen decomposition (Q * lambda) * Q' */
+            cgemm_("N", "C", &n, &n, &n, &c_one, Qlambda, &n, Q, &n, &c_zero,
+                    A, &lda);
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            /* Generate matrix A using eigen decomposition (Q * lambda) * Q' */
+            zgemm_("N", "C", &n, &n, &n, &z_one, Qlambda, &n, Q, &n, &z_zero,
+                    A, &lda);
+            break;
+        }
+    }
+    free_matrix(Qlambda);
+}
+
+/* Sort the given real type vector in the given order
+   order = A - Ascending order
+         = D - Descending order */
+void sort_realtype_vector(integer datatype, char* order, integer vect_len,
+                          void* w, integer incw)
+{
+    if(!w)
+        return;
+
+    integer i, j;
+    if (datatype == FLOAT || datatype == COMPLEX)
+    {
+        float temp;
+        float* w_ptr = (float*)w;
+
+        for (i = 0; i < vect_len; i++)
+        {
+            for (j = i + 1; j < vect_len; j++)
+            {
+                if (*order == 'A')
+                {
+                    if (*(w_ptr + i * incw) > *(w_ptr + j * incw))
+                    {
+                        temp = *(w_ptr + i * incw);
+                        *(w_ptr + i * incw) = *(w_ptr + j * incw);
+                        *(w_ptr + j * incw) = temp;
+                    }
+                }
+                else if (*order == 'D')
+                {
+                    if (*(w_ptr + i * incw) < *(w_ptr + j * incw))
+                    {
+                        temp = *(w_ptr + i * incw);
+                        *(w_ptr + i * incw) = *(w_ptr + j * incw);
+                        *(w_ptr + j * incw) = temp;
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        double temp;
+        double* w_ptr = (double*)w;
+
+        for (i = 0; i < vect_len; i++)
+        {
+            for (j = i + 1; j < vect_len; j++)
+            {
+                if (*order == 'A')
+                {
+                    if (*(w_ptr + i * incw) > *(w_ptr + j * incw))
+                    {
+                        temp = *(w_ptr + i * incw);
+                        *(w_ptr + i * incw) = *(w_ptr + j * incw);
+                        *(w_ptr + j * incw) = temp;
+                    }
+                }
+                else if (*order == 'D')
+                {
+                    if (*(w_ptr + i * incw) < *(w_ptr + j * incw))
+                    {
+                        temp = *(w_ptr + i * incw);
+                        *(w_ptr + i * incw) = *(w_ptr + j * incw);
+                        *(w_ptr + j * incw) = temp;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Compare two vectors starting from offset_A in A vector with B vector
+   (starting from offset 0 in B) */
+integer compare_realtype_vector(integer datatype, integer vect_len, void* A,
+                               integer inca, integer offset_A, void* B,
+                               integer incb)
+{
+    integer i;
+    if (datatype == FLOAT || datatype == COMPLEX)
+    {
+        float *a = (float *)A;
+        float *b = (float *)B;
+        for(i = 0; i < vect_len; i++)
+        {
+            if(f2c_abs(a[(i * inca) + (offset_A-1)] - b[i * incb]) > MAX_FLT_DIFF)
+            {
+                return 1;
+            }
+        }
+    }
+    else
+    {
+        double *a = (double *)A;
+        double *b = (double *)B;
+        for(i = 0; i < vect_len; i++)
+        {
+            if(f2c_abs(a[(i * inca) + (offset_A-1)] - b[i * incb]) > MAX_DBL_DIFF)
+                return 1;
+        }
+    }
+    return 0;
+}
+
+/*
+ *   Create input matrix A by randomly generating eigen values(EVs) in given
+ *   range (vl,vu)
+ *               A  = (Q * lambda * Q')
+ *   where  lambda  is a diagonal matrix with diagonal elements being
+ *                  the eigen values of input matrix A
+ *               Q  is an orthogonal matrix with corresponding
+ *                  eigen vectors as its rows.
+ */
+void generate_matrix_from_EVs(integer datatype, char range, integer n, void *A,
+                              integer lda, void *L, void *vl, void *vu)
+{
+    void *X = NULL, *Q = NULL;
+    integer realtype, info = 0;
+    realtype = get_realtype(datatype);
+
+    if ((range == 'V') || (range == 'v'))
+    {
+        /* Generate random vector of size n with values ranging
+        between (vl, vu) */
+        rand_realvector_in_range(realtype, L, vl, vu, n);
+    }
+    else
+    {
+        rand_realtype_vector(realtype, L, n, 1);
+    }
+
+    create_matrix(datatype, &X, n, n);
+    rand_matrix(datatype, X, n, n, n);
+    create_matrix(datatype, &Q, n, n);
+
+    /* Generate random orthogonal matrix(Q) of size n x n */
+    get_orthogonal_matrix_from_QR(datatype, n, X, n, Q, n, &info);
+
+    /* Generate input matrix A using L(Eigen values)
+       and Q(Eigen vectors) obtained above using reverse
+       Eigen decompostion */
+    generate_matrix_from_ED(datatype, n, A, lda, Q, L);
+
+    /* Free up the buffers */
+    free_matrix(X);
+    free_matrix(Q);
+    return;
 }

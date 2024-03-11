@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -14,7 +14,7 @@ void fla_test_syevx_experiment(test_params_t *params, integer datatype,
 void prepare_syevx_run(char* jobz, char* range, char* uplo, integer n, void* A,
                        integer lda, void *vl, void *vu, integer il,
                        integer iu, void *abstol, void* w, integer ldz,
-                       integer datatype, integer n_repeats,
+                       void* ifail, integer datatype, integer n_repeats,
                        double* time_min_, integer* info);
 void invoke_syevx(integer datatype, char* jobz, char* range, char* uplo,
                   integer* n, void* a, integer* lda, void* vl, void* vu,
@@ -34,7 +34,8 @@ void fla_test_syevx(integer argc, char ** argv, test_params_t *params)
         config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
-        fla_test_op_driver(front_str, SQUARE_INPUT, params, EIG_SYM, fla_test_syevx_experiment);
+        fla_test_op_driver(front_str, SQUARE_INPUT, params,
+                           EIG_SYM, fla_test_syevx_experiment);
         tests_not_run = 0;
     }
     if (argc == 17)
@@ -68,7 +69,6 @@ void fla_test_syevx(integer argc, char ** argv, test_params_t *params)
             {
                 params->eig_sym_paramslist[0].IL = 1;
                 params->eig_sym_paramslist[0].IU = 0;
-                printf("\nIL = 1 and IU = 0 if N = 0\n");
             }
             else
             {
@@ -128,7 +128,7 @@ void fla_test_syevx(integer argc, char ** argv, test_params_t *params)
     if(tests_not_run)
     {
         printf("\nIllegal arguments for syevx\n");
-        printf("./<EXE> syevx <precisions - sdcz> <JOBZ> <RANGE> <UPLO> <N> <LDA> <VL> <VU> <IL> <IU> <ABSTOL> <LDZ> <LWORK> <repeats>\n");
+        printf("./<EXE> syevx/heevx <precisions - sdcz> <JOBZ> <RANGE> <UPLO> <N> <LDA> <VL> <VU> <IL> <IU> <ABSTOL> <LDZ> <LWORK> <repeats>\n");
     }
     if(invalid_dtype)
     {
@@ -153,9 +153,9 @@ void fla_test_syevx_experiment(test_params_t *params,
                                double *time_min,
                                double* residual)
 {
-    integer n, lda, ldz, il, iu, info = 0, vinfo = 0;
+    integer n, lda, ldz, il, iu, info = 0;
     char jobz, uplo, range;
-    void *A = NULL, *w = NULL, *A_test = NULL;
+    void *A = NULL, *w = NULL, *A_test = NULL, *L = NULL, *ifail = NULL;
     void *vl, *vu, *abstol;
 
     /* Get input matrix dimensions.*/
@@ -235,20 +235,19 @@ void fla_test_syevx_experiment(test_params_t *params,
     }
     else
     {
-        /* input matrix A with random symmetric numbers
-           or complex hermitian matrix */
-        if (datatype == FLOAT || datatype == DOUBLE)
-            rand_sym_matrix(datatype, A, n, n, lda);
-        else
-            rand_hermitian_matrix(datatype, n, &A, lda);
+        /*  Creating input matrix A by generating random eigen values.
+            When range = V, generate EVs in given range (vl,vu)  */
+        create_realtype_vector(datatype, &L, n);
+        generate_matrix_from_EVs(datatype, range, n, A, lda, L, vl, vu);
     }
     /* Make a copy of input matrix A.
        This is required to validate the API functionality.*/
     create_matrix(datatype, &A_test, lda, n);
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
+    create_vector(INTEGER, &ifail, n);
 
     prepare_syevx_run(&jobz, &range, &uplo, n, A_test, lda, vl, vu, il, iu,
-                      abstol, w, ldz, datatype, n_repeats, time_min,
+                      abstol, w, ldz, ifail, datatype, n_repeats, time_min,
                       &info);
 
     /* performance computation
@@ -262,8 +261,11 @@ void fla_test_syevx_experiment(test_params_t *params,
         *perf *= 4.0;
 
     /* output validation */
-    if (info == 0 && range == 'A')
-        validate_syevd(&jobz, n, A, A_test, lda, w, datatype, residual, &vinfo);
+    if (info == 0)
+    {
+        validate_syevx(&jobz, &range, n, A, A_test, lda, il, iu, L, w,
+                       ifail, datatype, residual);
+    }
 
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
@@ -271,22 +273,24 @@ void fla_test_syevx_experiment(test_params_t *params,
     free_vector(vl);
     free_vector(vu);
     free_vector(abstol);
+    free_vector(ifail);
     free_matrix(A);
     free_matrix(A_test);
     free_vector(w);
+    free_vector(L);
 }
 
 void prepare_syevx_run(char* jobz, char* range, char* uplo, integer n, void* A,
                        integer lda, void* vl, void* vu, integer il,
                        integer iu, void* abstol, void* w, integer ldz,
-                       integer datatype, integer n_repeats,
+                       void* ifail, integer datatype, integer n_repeats,
                        double* time_min_, integer* info)
 {
     void *A_save = NULL, *work = NULL, *rwork = NULL;
     void *w_test = NULL, *z__ = NULL;
     integer i, m, lwork;
     double time_min = 1e9, exe_time;
-    void *iwork = NULL, *ifail = NULL;
+    void *iwork = NULL;
 
     if(*range == 'I')
         m = iu - il + 1;
@@ -298,7 +302,6 @@ void prepare_syevx_run(char* jobz, char* range, char* uplo, integer n, void* A,
     create_matrix(datatype, &A_save, lda, n);
     copy_matrix(datatype, "full", n, n, A, lda, A_save, lda);
     create_vector(INTEGER, &iwork, 5*n);
-    create_vector(INTEGER, &ifail, n);
 
     if (datatype == COMPLEX || datatype == DOUBLE_COMPLEX )
         create_realtype_vector(datatype, &rwork, (7*n));
@@ -371,7 +374,6 @@ void prepare_syevx_run(char* jobz, char* range, char* uplo, integer n, void* A,
     if (datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         free_vector(rwork);
     free_vector(iwork);
-    free_vector(ifail);
     free_matrix(A_save);
 }
 

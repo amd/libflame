@@ -1,5 +1,5 @@
 /******************************************************************************
-* Copyright (C) 2022 - 2024, Advanced Micro Devices, Inc. All rights reserved.
+* Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 *******************************************************************************/
 
 /*! @file test_common.h
@@ -26,6 +26,8 @@ extern dcomplex z_zero, z_one, z_n_one;
 
 #define DRAND()  ( ( double ) rand() / ( ( double ) RAND_MAX / 2.0F ) ) - 1.0F;
 #define SRAND()  ( float ) ( ( double ) rand() / ( ( double ) RAND_MAX / 2.0F ) ) - 1.0F;
+#define SRAND_IN_RANGE(lower, upper) (float)(lower + (upper - lower) * ((double)rand() / (double) RAND_MAX));
+#define DRAND_IN_RANGE(lower, upper) (double)(lower + (upper - lower) * ((double)rand() / (double) RAND_MAX));
 #define FLA_FABS(x)  ((x) >= 0) ? (x) : (-x);
 
 // Datatype
@@ -36,6 +38,9 @@ extern dcomplex z_zero, z_one, z_n_one;
 #define COMPLEX           105
 #define DOUBLE_COMPLEX    106
 #define INVALID_TYPE     -106
+
+#define MAX_FLT_DIFF      0.00001      // Maximum allowed difference for float comparision
+#define MAX_DBL_DIFF      0.0000000001 // Maximum allowed difference for double comparision
 
 #if defined(FLA_ENABLE_ILP64)
 #ifdef _WIN32
@@ -149,4 +154,18 @@ void init_vector(integer datatype, void *A, integer M, integer incx, FILE* g_ext
 void init_vector_spec_in(integer datatype, void *A, integer M, integer incx, char type);
 /* Checks whether the value is zero or not */
 double is_value_zero(integer datatype, void *value, double residual);
+/* Initialize vector with random real type values */
+void rand_realtype_vector(integer datatype, void *A, integer M, integer LDA);
+/* Initialize vector with random real type values between given range (Vl, VU) */
+void rand_realvector_in_range(integer datatype, void *A, void *VL, void *VU, integer M);
+/* Multiply general m * n matrix with diagonal vector (of an n * n diagonal matrix) of size n */
+void multiply_matrix_diag_vector(integer datatype, integer m, integer n, void* A, integer lda, void* X, integer incx);
+/* Generate square matrix of size n x n using Eigen decomposition(ED) */
+void generate_matrix_from_ED(integer datatype, integer n, void *A, integer lda, void *Q, void *lambda);
+/* Sort the given real type vector in given order */
+void sort_realtype_vector(integer datatype, char* order, integer vect_len, void* w, integer incw);
+/* Compare two vectors starting from offset_A in A vector with B vector (starting from offset 0 in B) */
+integer compare_realtype_vector(integer datatype, integer vect_len, void* A, integer inca, integer offset_A, void* B, integer incb);
+/* Create input matrix A by randomly generating eigen values(EVs) in given range (vl,vu) */
+void generate_matrix_from_EVs(integer datatype, char range, integer n, void *A, integer lda, void *L, void *vl, void *vu);
 #endif // TEST_COMMON_H

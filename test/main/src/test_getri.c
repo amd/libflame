@@ -1,19 +1,23 @@
 /*
-    Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
 
 /* Local prototypes */
-void fla_test_getri_experiment(test_params_t *params, integer  datatype, integer  p_cur, integer  q_cur, integer pci,
-                                    integer n_repeats, integer einfo, double* perf, double* t, double* residual);
-void prepare_getri_run(integer m_A, integer n_A, void *A, integer lda, integer* ipiv, integer datatype, integer n_repeats, double* time_min_, integer *info);
-void invoke_getri(integer datatype, integer *n, void *a, integer *lda, integer *ipiv, void *work, integer *lwork, integer *info);
-void fla_test_getri(integer argc, char ** argv, test_params_t *params)
+void fla_test_getri_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual);
+void prepare_getri_run(integer m_A, integer n_A, void *A, integer lda, integer *ipiv,
+                       integer datatype, integer n_repeats, double *time_min_, integer *info);
+void invoke_getri(integer datatype, integer *n, void *a, integer *lda, integer *ipiv, void *work,
+                  integer *lwork, integer *info);
+void fla_test_getri(integer argc, char **argv, test_params_t *params)
 {
-    char* op_str = "Inverse through LU factorization";
-    char* front_str = "GETRI";
+    char *op_str = "Inverse through LU factorization";
+    char *front_str = "GETRI";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char = '\0';
 
     if(argc == 1)
     {
@@ -30,10 +34,10 @@ void fla_test_getri(integer argc, char ** argv, test_params_t *params)
     }
     if(argc >= 7 && argc <= 8)
     {
-        integer i, num_types,N;
+        integer i, num_types, N;
         integer datatype, n_repeats;
         double perf, time_min, residual;
-        char stype,type_flag[4] = {0};
+        char stype, type_flag[4] = {0};
         char *endptr;
 
         /* Parse the arguments */
@@ -41,7 +45,7 @@ void fla_test_getri(integer argc, char ** argv, test_params_t *params)
         N = strtoimax(argv[3], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].lda = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
         g_lwork = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-        
+
         n_repeats = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
 
         if(n_repeats > 0)
@@ -66,18 +70,12 @@ void fla_test_getri(integer argc, char ** argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_getri_experiment(params, datatype,
-                                          N, N,
-                                          0,
-                                          n_repeats, einfo,
-                                          &perf, &time_min, &residual);
+                fla_test_getri_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
+                                          &time_min, &residual);
                 /* Print the results */
-                fla_test_print_status(front_str,
-                                      stype,
-                                     SQUARE_INPUT,
-                                      N, N,
-                                      residual, params->lin_solver_paramslist[0].solver_threshold,
-                                      time_min, perf);
+                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
+                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
+                                      perf);
                 tests_not_run = 0;
             }
         }
@@ -93,7 +91,7 @@ void fla_test_getri(integer argc, char ** argv, test_params_t *params)
     {
         printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n\n");
     }
-    if (g_ext_fptr != NULL)
+    if(g_ext_fptr != NULL)
     {
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
@@ -102,23 +100,14 @@ void fla_test_getri(integer argc, char ** argv, test_params_t *params)
     return;
 }
 
-
-void fla_test_getri_experiment(test_params_t *params,
-    integer  datatype,
-    integer  p_cur,
-    integer  q_cur,
-    integer pci,
-    integer n_repeats,
-    integer einfo,
-    double* perf,
-    double* t,
-    double* residual)
+void fla_test_getri_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual)
 {
     integer n, lda, info = 0, vinfo = 0;
-    void* IPIV;
+    void *IPIV;
     void *A, *A_test;
     double time_min = 1e9;
-
 
     /* Determine the dimensions*/
     n = p_cur;
@@ -127,11 +116,11 @@ void fla_test_getri_experiment(test_params_t *params,
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if (config_data)
+    if(config_data)
     {
-        if (lda == -1)
+        if(lda == -1)
         {
-            lda = fla_max(1,n);
+            lda = fla_max(1, n);
         }
     }
 
@@ -153,15 +142,24 @@ void fla_test_getri_experiment(test_params_t *params,
 
     /* performance computation */
     /* 2mn^2 - (2/3)n^3 flops */
-    *perf = (double)((2.0 * n * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min / FLOPS_PER_UNIT_PERF;
-    if (datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+    *perf
+        = (double)((2.0 * n * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min / FLOPS_PER_UNIT_PERF;
+    if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         *perf *= 4.0;
 
     /* output validation */
-    if (info == 0)
+    if(!params->imatrix_char && info == 0)
         validate_getri(n, n, A, A_test, lda, IPIV, datatype, residual, &vinfo);
-
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    /* check for output matrix when inputs as extreme values */
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        if(!check_extreme_value(datatype, n, n, A_test, lda, params->imatrix_char))
+        {
+            *residual = DBL_MAX;
+        }
+    }
+    else
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
     free_matrix(A);
@@ -169,16 +167,8 @@ void fla_test_getri_experiment(test_params_t *params,
     free_vector(IPIV);
 }
 
-
-void prepare_getri_run(integer m_A,
-    integer n_A,
-    void* A,
-    integer lda,
-    integer* IPIV,
-    integer datatype,
-    integer n_repeats,
-    double* time_min_,
-    integer* info)
+void prepare_getri_run(integer m_A, integer n_A, void *A, integer lda, integer *IPIV,
+                       integer datatype, integer n_repeats, double *time_min_, integer *info)
 {
     integer lwork;
     integer i;
@@ -202,8 +192,8 @@ void prepare_getri_run(integer m_A,
             lwork = get_work_value(datatype, work);
         }
 
-        /* Output buffers will be freshly allocated for each iterations, free up 
-        the current output buffers.*/ 
+        /* Output buffers will be freshly allocated for each iterations, free up
+        the current output buffers.*/
         free_vector(work);
     }
     else
@@ -212,7 +202,7 @@ void prepare_getri_run(integer m_A,
     }
 
     *info = 0;
-    for (i = 0; i < n_repeats && *info == 0; ++i)
+    for(i = 0; i < n_repeats && *info == 0; ++i)
     {
 
         /* Copy original input data */
@@ -239,15 +229,14 @@ void prepare_getri_run(integer m_A,
     /*  Save the final result to A matrix*/
     copy_matrix(datatype, "full", m_A, n_A, A_save, lda, A, lda);
     free_matrix(A_save);
-
 }
-
 
 /*
  *  GETRI_API calls LAPACK interface of
  *  Singular value decomposition - gesvd
  *  */
-void invoke_getri(integer datatype, integer *n, void *a, integer *lda, integer *ipiv, void* work, integer *lwork, integer *info)
+void invoke_getri(integer datatype, integer *n, void *a, integer *lda, integer *ipiv, void *work,
+                  integer *lwork, integer *info)
 {
     switch(datatype)
     {
@@ -256,7 +245,7 @@ void invoke_getri(integer datatype, integer *n, void *a, integer *lda, integer *
             fla_lapack_sgetri(n, a, lda, ipiv, work, lwork, info);
             break;
         }
-        
+
         case DOUBLE:
         {
             fla_lapack_dgetri(n, a, lda, ipiv, work, lwork, info);

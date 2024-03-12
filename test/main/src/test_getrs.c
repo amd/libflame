@@ -1,20 +1,25 @@
 /*
-    Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
 
 /* Local prototypes */
-void fla_test_getrs_experiment(test_params_t *params, integer  datatype, integer  p_cur, integer  q_cur, integer pci,
-                                    integer n_repeats, integer einfo, double* perf, double* t, double* residual);
-void prepare_getrs_run(char *trans, integer m_A, integer n_A, void *A, integer lda, void *B, integer ldb, integer* ipiv, integer datatype, integer n_repeats, double* time_min_, integer *info);
-void invoke_getrs(integer datatype, char *trans, integer *nrhs, integer *n, void *a, integer *lda, integer *ipiv, void *b, integer *ldb, integer *info);
+void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual);
+void prepare_getrs_run(char *trans, integer m_A, integer n_A, void *A, integer lda, void *B,
+                       integer ldb, integer *ipiv, integer datatype, integer n_repeats,
+                       double *time_min_, integer *info);
+void invoke_getrs(integer datatype, char *trans, integer *nrhs, integer *n, void *a, integer *lda,
+                  integer *ipiv, void *b, integer *ldb, integer *info);
 
-void fla_test_getrs(integer argc, char ** argv, test_params_t *params)
+void fla_test_getrs(integer argc, char **argv, test_params_t *params)
 {
-    char* op_str = "LU factorization";
-    char* front_str = "GETRS";
+    char *op_str = "LU factorization";
+    char *front_str = "GETRS";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char = '\0';
 
     if(argc == 1)
     {
@@ -44,7 +49,7 @@ void fla_test_getrs(integer argc, char ** argv, test_params_t *params)
         params->lin_solver_paramslist[0].nrhs = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].ldb = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
-        
+
         n_repeats = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
 
         if(n_repeats > 0)
@@ -69,18 +74,12 @@ void fla_test_getrs(integer argc, char ** argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_getrs_experiment(params, datatype,
-                                          N, N,
-                                          0,
-                                          n_repeats, einfo,
-                                          &perf, &time_min, &residual);
+                fla_test_getrs_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
+                                          &time_min, &residual);
                 /* Print the results */
-                fla_test_print_status(front_str,
-                                      stype,
-                                      SQUARE_INPUT,
-                                      N, N,
-                                      residual, params->lin_solver_paramslist[0].solver_threshold,
-                                      time_min, perf);
+                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
+                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
+                                      perf);
                 tests_not_run = 0;
             }
         }
@@ -96,30 +95,21 @@ void fla_test_getrs(integer argc, char ** argv, test_params_t *params)
     {
         printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n\n");
     }
-    if (g_ext_fptr != NULL)
+    if(g_ext_fptr != NULL)
     {
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
     }
     return;
-
 }
 
-
-void fla_test_getrs_experiment(test_params_t *params,
-    integer  datatype,
-    integer  p_cur,
-    integer  q_cur,
-    integer pci,
-    integer n_repeats,
-    integer einfo,
-    double* perf,
-    double* t,
-    double* residual)
+void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual)
 {
     integer n, lda, ldb, NRHS;
     integer info = 0, vinfo = 0;
-    void* IPIV;
+    void *IPIV;
     void *A, *A_test, *B, *B_save, *X;
     double time_min = 1e9;
     char TRANS = params->lin_solver_paramslist[pci].transr;
@@ -133,15 +123,15 @@ void fla_test_getrs_experiment(test_params_t *params,
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if (config_data)
+    if(config_data)
     {
-        if (lda == -1)
+        if(lda == -1)
         {
-            lda = fla_max(1,n);
+            lda = fla_max(1, n);
         }
-        if (ldb == -1)
+        if(ldb == -1)
         {
-            ldb = fla_max(1,n);
+            ldb = fla_max(1, n);
         }
     }
 
@@ -165,7 +155,8 @@ void fla_test_getrs_experiment(test_params_t *params,
     invoke_getrf(datatype, &n, &n, A_test, &lda, IPIV, &info);
 
     /* call to API */
-    prepare_getrs_run(&TRANS, n, NRHS, A_test, lda, B, ldb, IPIV, datatype, n_repeats, &time_min, &info);
+    prepare_getrs_run(&TRANS, n, NRHS, A_test, lda, B, ldb, IPIV, datatype, n_repeats, &time_min,
+                      &info);
     copy_matrix(datatype, "full", n, NRHS, B, ldb, X, n);
     /* execution time */
     *t = time_min;
@@ -173,14 +164,22 @@ void fla_test_getrs_experiment(test_params_t *params,
     /* performance computation */
     /* 2*n^2 * nrhs flops */
     *perf = (double)(2.0 * n * n * NRHS) / time_min / FLOPS_PER_UNIT_PERF;
-    if (datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+    if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         *perf *= 4.0;
 
     /* output validation */
-    if(info == 0)
+    if(!params->imatrix_char && info == 0)
         validate_getrs(&TRANS, n, NRHS, A, lda, B_save, ldb, X, datatype, residual, &vinfo);
-
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    /* check for output matrix when inputs as extreme values */
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        if(!check_extreme_value(datatype, n, NRHS, B, ldb, params->imatrix_char))
+        {
+            *residual = DBL_MAX;
+        }
+    }
+    else
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
     free_matrix(A);
@@ -191,19 +190,9 @@ void fla_test_getrs_experiment(test_params_t *params,
     free_matrix(B_save);
 }
 
-
-void prepare_getrs_run(char *TRANS,
-    integer n_A,
-    integer nrhs,
-    void* A,
-    integer lda,
-    void* B,
-    integer ldb,
-    integer* IPIV,
-    integer datatype,
-    integer n_repeats,
-    double* time_min_,
-    integer* info)
+void prepare_getrs_run(char *TRANS, integer n_A, integer nrhs, void *A, integer lda, void *B,
+                       integer ldb, integer *IPIV, integer datatype, integer n_repeats,
+                       double *time_min_, integer *info)
 {
     integer i;
     void *A_save, *B_test;
@@ -214,9 +203,8 @@ void prepare_getrs_run(char *TRANS,
     copy_matrix(datatype, "full", n_A, n_A, A, lda, A_save, lda);
     create_matrix(datatype, &B_test, ldb, nrhs);
 
-
     *info = 0;
-    for (i = 0; i < n_repeats && *info == 0; ++i)
+    for(i = 0; i < n_repeats && *info == 0; ++i)
     {
         /* Copy original input data */
         copy_matrix(datatype, "full", n_A, n_A, A, lda, A_save, lda);
@@ -231,7 +219,6 @@ void prepare_getrs_run(char *TRANS,
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
-
     }
 
     *time_min_ = time_min;
@@ -240,15 +227,14 @@ void prepare_getrs_run(char *TRANS,
 
     free_matrix(A_save);
     free_vector(B_test);
-
 }
-
 
 /*
  *  GETRS_API calls LAPACK interface of
  *  Singular value decomposition - gesvd
  *  */
-void invoke_getrs(integer datatype, char* trans, integer *n, integer *nrhs, void *a, integer *lda, integer *ipiv, void* b, integer *ldb, integer *info)
+void invoke_getrs(integer datatype, char *trans, integer *n, integer *nrhs, void *a, integer *lda,
+                  integer *ipiv, void *b, integer *ldb, integer *info)
 {
     switch(datatype)
     {

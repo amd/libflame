@@ -2523,21 +2523,31 @@ void get_orthogonal_matrix_from_QR(integer datatype, integer n, void *A, integer
     free_vector(work);
 }
 
-/* Print matrix contents for visual inspection */
-void print_matrix(char *desc, integer datatype, integer M, integer N, void *A, integer lda)
+/* Print matrix contents for visual inspection
+ * if order == 'C' matrix will be printed in columns first order
+ * else if order == 'R' matrix will be printed in rows first order
+ */
+void print_matrix(char *desc, char *order, integer datatype, integer M, integer N, void *A,
+                  integer lda)
 {
-    integer i, j;
-
+    integer i, j, row_max = M, col_max = N, ldc = lda, ldr = 1;
+    if(*order == 'C')
+    {
+        row_max = N;
+        col_max = M;
+        ldc = 1;
+        ldr = lda;
+    }
     printf("\n %s:\n", desc);
     switch(datatype)
     {
         case INTEGER:
         {
-            for(i = 0; i < M; i++)
+            for(i = 0; i < row_max; i++)
             {
-                for(j = 0; j < N; j++)
+                for(j = 0; j < col_max; j++)
                 {
-                    printf(" %" FT_IS " ", ((integer *)A)[i + j * lda]);
+                    printf(" %" FT_IS " ", ((integer *)A)[i * ldr + j * ldc]);
                 }
                 printf("\n");
             }
@@ -2545,11 +2555,11 @@ void print_matrix(char *desc, integer datatype, integer M, integer N, void *A, i
         }
         case FLOAT:
         {
-            for(i = 0; i < M; i++)
+            for(i = 0; i < row_max; i++)
             {
-                for(j = 0; j < N; j++)
+                for(j = 0; j < col_max; j++)
                 {
-                    printf(" %e", ((float *)A)[i + j * lda]);
+                    printf(" %e", ((float *)A)[i * ldr + j * ldc]);
                 }
                 printf("\n");
             }
@@ -2557,11 +2567,11 @@ void print_matrix(char *desc, integer datatype, integer M, integer N, void *A, i
         }
         case DOUBLE:
         {
-            for(i = 0; i < M; i++)
+            for(i = 0; i < row_max; i++)
             {
-                for(j = 0; j < N; j++)
+                for(j = 0; j < col_max; j++)
                 {
-                    printf(" %e", ((double *)A)[i + j * lda]);
+                    printf(" %e", ((double *)A)[i * ldr + j * ldc]);
                 }
                 printf("\n");
             }
@@ -2569,12 +2579,12 @@ void print_matrix(char *desc, integer datatype, integer M, integer N, void *A, i
         }
         case COMPLEX:
         {
-            for(i = 0; i < M; i++)
+            for(i = 0; i < row_max; i++)
             {
-                for(j = 0; j < N; j++)
+                for(j = 0; j < col_max; j++)
                 {
-                    printf(" (%e + j %e)", ((scomplex *)A)[i + j * lda].real,
-                           ((scomplex *)A)[i + j * lda].imag);
+                    printf(" (%e + j %e)", ((scomplex *)A)[i * ldr + j * ldc].real,
+                           ((scomplex *)A)[i * ldr + j * ldc].imag);
                 }
                 printf("\n");
             }
@@ -2582,12 +2592,12 @@ void print_matrix(char *desc, integer datatype, integer M, integer N, void *A, i
         }
         case DOUBLE_COMPLEX:
         {
-            for(i = 0; i < M; i++)
+            for(i = 0; i < row_max; i++)
             {
-                for(j = 0; j < N; j++)
+                for(j = 0; j < col_max; j++)
                 {
-                    printf(" (%e + j %e)", ((dcomplex *)A)[i + j * lda].real,
-                           ((scomplex *)A)[i + j * lda].imag);
+                    printf(" (%e + j %e)", ((dcomplex *)A)[i * ldr + j * ldc].real,
+                           ((dcomplex *)A)[i * ldr + j * ldc].imag);
                 }
                 printf("\n");
             }
@@ -4386,4 +4396,396 @@ void reconstruct_band_storage_matrix(integer datatype, integer m, integer n, int
     }
 
     free_matrix(ABfac);
+}
+
+
+/* Test for checking whether solution x of Ax = B from least square api belongs to
+ * row space of A
+ */
+void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer n, integer nrhs,
+                              void *A, integer lda, void *x, integer ldb, void *resid)
+{
+    integer lwork = (m + nrhs) * (n + 2), ldwork = (m + nrhs), temp, INFO = 0;
+    double temp1;
+    void *work = NULL;
+
+    if(*trans == 'T' || *trans == 'C')
+    {
+        lwork = (n + nrhs) * (m + 2);
+        ldwork = m;
+    }
+    create_vector(datatype, &work, lwork);
+
+    /* checks whether X is in the row space of A or A'.  It does so
+     * by scaling both X and A such that their norms are in the range
+     * [sqrt(eps), 1/sqrt(eps)], then computing a QR factorization of [A,X]
+     * (if TRANS = 'T') or an LQ factorization of [A',X]' (if TRANS = 'N'),
+     * and returning the norm of the trailing triangle, scaled by
+     * MAX(M,N,NRHS)*eps.
+     */
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            float eps, norm = 0, norm_a = 0, norm_x = 0, rwork;
+            eps = fla_lapack_slamch("E");
+
+            if((*trans == 'T' && m > n) || (*trans == 'N' && m < n))
+            {
+                /* Copy A into work */
+                fla_lapack_slacpy("All", &m, &n, A, &lda, work, &ldwork);
+                norm_a = fla_lapack_slange("M", &m, &n, work, &ldwork, &rwork);
+                /*Scale work*/
+                if(norm_a != 0.)
+                {
+                    slascl_("G", &i_zero, &i_zero, &norm_a, &s_one, &m, &n, work, &ldwork, &INFO);
+                }
+                if(*trans == 'T')
+                {
+                    /*Copy x into work*/
+                    fla_lapack_slacpy("All", &m, &nrhs, x, &ldb, &((float *)work)[n * ldwork],
+                                      &ldwork);
+                    norm_x = fla_lapack_slange("M", &m, &nrhs, &((float *)work)[n * ldwork],
+                                               &ldwork, &rwork);
+                    /*Scale x*/
+                    if(norm_x != 0)
+                    {
+                        slascl_("G", &i_zero, &i_zero, &norm_x, &s_one, &m, &nrhs,
+                                &((float *)work)[n * ldwork], &ldwork, &INFO);
+                    }
+                    temp = n + nrhs;
+                    /*QR factorization of [A x]*/
+                    sgeqr2_(&m, &temp, work, &ldwork, &((float *)work)[ldwork * (n + nrhs)],
+                            &((float *)work)[ldwork * (n + nrhs) + fla_min(m, (n + nrhs))], &INFO);
+                    norm = 0;
+                    /*Compute norm*/
+                    for(int j = n; j <= temp; j++)
+                    {
+                        for(int i = n; i < fla_min(m, j); i++)
+                        {
+                            temp1 = FLA_FABS(((float *)work)[i + (j - 1) * m]);
+                            norm = fla_max(temp1, norm);
+                        }
+                    }
+                }
+                else if(*trans == 'N')
+                {
+                    /*Copy x into work*/
+                    for(int i = 0; i < n; i++)
+                    {
+                        for(int j = 0; j < nrhs; j++)
+                        {
+                            ((float *)work)[m + j + (i * ldwork)] = ((float *)x)[i + j * ldb];
+                        }
+                    }
+                    norm_x
+                        = fla_lapack_slange("M", &nrhs, &n, &((float *)work)[m], &ldwork, &rwork);
+                    /*Scale x*/
+                    if(norm_x != 0)
+                    {
+                        slascl_("G", &i_zero, &i_zero, &norm_x, &s_one, &nrhs, &n,
+                                &((float *)work)[m + 1], &ldwork, &INFO);
+                    }
+                    /*LQ factorization [A' x]*/
+                    sgelq2_(&ldwork, &n, work, &ldwork, &((float *)work)[ldwork * n],
+                            &((float *)work)[ldwork * (n + 1)], &INFO);
+                    /*Compute norm*/
+                    for(int j = m + 1; j <= n; j++)
+                    {
+                        for(int i = j; i < ldwork; i++)
+                        {
+                            temp1 = FLA_FABS(((float *)work)[i + (j * ldwork)]);
+                            norm = fla_max(temp1, norm);
+                        }
+                    }
+                }
+                *(float *)resid = norm / ((double)fla_max(m, fla_max(n, nrhs)) * eps);
+            }
+            break;
+        }
+        case DOUBLE:
+        {
+            double eps, norm = 0, norm_a = 0, norm_x = 0, rwork;
+            eps = fla_lapack_dlamch("E");
+
+            if((*trans == 'T' && m > n) || (*trans == 'N' && m < n))
+            {
+                /*Copy A into work*/
+                fla_lapack_dlacpy("All", &m, &n, A, &lda, work, &ldwork);
+                norm_a = fla_lapack_dlange("M", &m, &n, work, &ldwork, &rwork);
+                /*Scale work*/
+                if(norm_a != 0.)
+                {
+                    dlascl_("G", &i_zero, &i_zero, &norm_a, &d_one, &m, &n, work, &ldwork, &INFO);
+                }
+                if(*trans == 'T')
+                {
+                    /*Copy x into work*/
+                    fla_lapack_dlacpy("All", &m, &nrhs, x, &ldb, &((double *)work)[n * ldwork],
+                                      &ldwork);
+                    norm_x = fla_lapack_dlange("M", &m, &nrhs, &((double *)work)[n * ldwork],
+                                               &ldwork, &rwork);
+                    /*Scale x*/
+                    if(norm_x != 0)
+                    {
+                        dlascl_("G", &i_zero, &i_zero, &norm_x, &d_one, &m, &nrhs,
+                                &((double *)work)[n * ldwork], &ldwork, &INFO);
+                    }
+                    temp = n + nrhs;
+                    /*QR factorization of [A x]*/
+                    dgeqr2_(&m, &temp, work, &ldwork, &((double *)work)[ldwork * (n + nrhs)],
+                            &((double *)work)[ldwork * (n + nrhs) + fla_min(m, (n + nrhs))], &INFO);
+                    norm = 0;
+                    /*Compute norm*/
+                    for(int j = n; j <= temp; j++)
+                    {
+                        for(int i = n; i < fla_min(m, j); i++)
+                        {
+                            temp1 = FLA_FABS(((double *)work)[i + (j - 1) * m]);
+                            norm = fla_max(temp1, norm);
+                        }
+                    }
+                }
+                else if(*trans == 'N')
+                {
+                    /*Copy x into work*/
+                    for(int i = 0; i < n; i++)
+                    {
+                        for(int j = 0; j < nrhs; j++)
+                        {
+                            ((double *)work)[m + j + (i * ldwork)] = ((double *)x)[i + j * ldb];
+                        }
+                    }
+                    norm_x
+                        = fla_lapack_dlange("M", &nrhs, &n, &((double *)work)[m], &ldwork, &rwork);
+                    /*Scale x*/
+                    if(norm_x != 0)
+                    {
+                        dlascl_("G", &i_zero, &i_zero, &norm_x, &d_one, &nrhs, &n,
+                                &((double *)work)[m + 1], &ldwork, &INFO);
+                    }
+                    /*LQ factorization [A' x]*/
+                    dgelq2_(&ldwork, &n, work, &ldwork, &((double *)work)[ldwork * n],
+                            &((double *)work)[ldwork * (n + 1)], &INFO);
+                    /*Compute norm*/
+                    for(int j = m + 1; j <= n; j++)
+                    {
+                        for(int i = j; i < ldwork; i++)
+                        {
+                            temp1 = FLA_FABS(((double *)work)[i + (j * ldwork)]);
+                            norm = fla_max(temp1, norm);
+                        }
+                    }
+                }
+                *(double *)resid = norm / ((double)fla_max(m, fla_max(n, nrhs)) * eps);
+            }
+            break;
+        }
+        case COMPLEX:
+        {
+            float eps, norm = 0, norm_a = 0, norm_x = 0, rwork;
+            eps = fla_lapack_slamch("E");
+            if((*trans == 'C' && m > n) || (*trans == 'N' && m < n))
+            {
+                /*Copy A into work*/
+                fla_lapack_clacpy("All", &m, &n, A, &lda, work, &ldwork);
+                norm_a = fla_lapack_clange("M", &m, &n, work, &ldwork, &rwork);
+                /*Scale work*/
+                if(norm_a != 0.)
+                {
+                    clascl_("G", &i_zero, &i_zero, &norm_a, &s_one, &m, &n, work, &ldwork, &INFO);
+                }
+                if(*trans == 'C')
+                {
+                    /*Copy x into work*/
+                    fla_lapack_clacpy("All", &m, &nrhs, x, &ldb, &((scomplex *)work)[n * ldwork],
+                                      &ldwork);
+                    norm_x = fla_lapack_clange("M", &m, &nrhs, &((scomplex *)work)[n * ldwork],
+                                               &ldwork, &rwork);
+                    /*Scale x*/
+                    if(norm_x != 0)
+                    {
+                        clascl_("G", &i_zero, &i_zero, &norm_x, &s_one, &m, &nrhs,
+                                &((scomplex *)work)[n * ldwork], &ldwork, &INFO);
+                    }
+                    temp = n + nrhs;
+                    /*QR factorization of [A x]*/
+                    cgeqr2_(&m, &temp, work, &ldwork, &((scomplex *)work)[ldwork * (n + nrhs)],
+                            &((scomplex *)work)[ldwork * (n + nrhs) + fla_min(m, (n + nrhs))],
+                            &INFO);
+                    norm = 0;
+                    /*Compute norm*/
+                    for(int j = n; j <= temp; j++)
+                    {
+                        for(int i = n; i < fla_min(m, j); i++)
+                        {
+                            temp1 = FLA_FABS(((scomplex *)work)[i + (j - 1) * m].real);
+                            norm = fla_max(temp1, norm);
+                        }
+                    }
+                }
+                else if(*trans == 'N')
+                {
+                    /*Copy x into work*/
+                    for(int i = 0; i < n; i++)
+                    {
+                        for(int j = 0; j < nrhs; j++)
+                        {
+                            ((scomplex *)work)[m + j + (i * ldwork)].real
+                                = ((scomplex *)x)[i + j * ldb].real;
+                            ((scomplex *)work)[m + j + (i * ldwork)].imag
+                                = -1 * ((scomplex *)x)[i + j * ldb].imag;
+                        }
+                    }
+                    norm_x = fla_lapack_clange("M", &nrhs, &n, &((scomplex *)work)[m], &ldwork,
+                                               &rwork);
+                    /*Scale x*/
+                    if(norm_x != 0)
+                    {
+                        clascl_("G", &i_zero, &i_zero, &norm_x, &s_one, &nrhs, &n,
+                                &((scomplex *)work)[m + 1], &ldwork, &INFO);
+                    }
+                    /*LQ factorization [A' x]*/
+                    cgelq2_(&ldwork, &n, work, &ldwork, &((scomplex *)work)[ldwork * n],
+                            &((scomplex *)work)[ldwork * (n + 1)], &INFO);
+                    /*Compute norm*/
+                    for(int j = m + 1; j <= n; j++)
+                    {
+                        for(int i = j; i < ldwork; i++)
+                        {
+                            temp1 = FLA_FABS(((scomplex *)work)[i + (j * ldwork)].real);
+                            norm = fla_max(norm, temp1);
+                        }
+                    }
+                }
+                *(float *)resid = norm / ((double)fla_max(m, fla_max(n, nrhs)) * eps);
+            }
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            double eps, norm = 0, norm_a = 0, norm_x = 0, rwork;
+            eps = fla_lapack_dlamch("E");
+            if((*trans == 'C' && m > n) || (*trans == 'N' && m < n))
+            {
+                /*Copy A into work*/
+                fla_lapack_zlacpy("All", &m, &n, A, &lda, work, &ldwork);
+                norm_a = fla_lapack_zlange("M", &m, &n, work, &ldwork, &rwork);
+                /*Scale work*/
+                if(norm_a != 0)
+                {
+                    zlascl_("G", &i_zero, &i_zero, &norm_a, &d_one, &m, &n, work, &ldwork, &INFO);
+                }
+                if(*trans == 'C')
+                {
+                    /*Copy x into work*/
+                    fla_lapack_zlacpy("All", &m, &nrhs, x, &ldb, &((dcomplex *)work)[n * ldwork],
+                                      &ldwork);
+                    norm_x = fla_lapack_zlange("M", &m, &nrhs, &((dcomplex *)work)[n * ldwork],
+                                               &ldwork, &rwork);
+                    /*Scale x*/
+                    if(norm_x != 0)
+                    {
+                        zlascl_("G", &i_zero, &i_zero, &norm_x, &d_one, &m, &nrhs,
+                                &((dcomplex *)work)[n * ldwork], &ldwork, &INFO);
+                    }
+                    temp = n + nrhs;
+                    /*QR factorization of [A x]*/
+                    zgeqr2_(&m, &temp, work, &ldwork, &((dcomplex *)work)[ldwork * (n + nrhs)],
+                            &((dcomplex *)work)[ldwork * (n + nrhs) + fla_min(m, (n + nrhs))],
+                            &INFO);
+                    norm = 0;
+                    /*Compute norm*/
+                    for(integer j = n; j <= temp; j++)
+                    {
+                        for(integer i = n; i < fla_min(m, j); i++)
+                        {
+                            temp1 = FLA_FABS(((dcomplex *)work)[i + (j - 1) * m].real);
+                            norm = fla_max(temp1, norm);
+                        }
+                    }
+                }
+                else if(*trans == 'N')
+                {
+                    /*Copy x into work*/
+                    for(integer i = 0; i < n; i++)
+                    {
+                        for(integer j = 0; j < nrhs; j++)
+                        {
+                            ((dcomplex *)work)[m + j + (i * ldwork)] = ((dcomplex *)x)[i + j * ldb];
+                            ((dcomplex *)work)[m + j + (i * ldwork)].imag
+                                = -1 * ((dcomplex *)x)[i + j * ldb].imag;
+                        }
+                    }
+                    norm_x = fla_lapack_zlange("M", &nrhs, &n, &((dcomplex *)work)[m], &ldwork,
+                                               &rwork);
+                    /*Scale x*/
+                    if(norm_x != 0)
+                    {
+                        zlascl_("G", &i_zero, &i_zero, &norm_x, &d_one, &nrhs, &n,
+                                &((dcomplex *)work)[m + 1], &ldwork, &INFO);
+                    }
+                    /*LQ factorization [A' x]*/
+                    zgelq2_(&ldwork, &n, work, &ldwork, &((dcomplex *)work)[ldwork * n],
+                            &((dcomplex *)work)[ldwork * (n + 1)], &INFO);
+                    /*Compute norm*/
+                    for(integer j = m + 1; j <= n; j++)
+                    {
+                        for(integer i = j; i < ldwork; i++)
+                        {
+                            temp1 = FLA_FABS(((dcomplex *)work)[i + (j * ldwork)].real);
+                            norm = fla_max(norm, temp1);
+                        }
+                    }
+                }
+                *(double *)resid = norm / ((double)fla_max(m, fla_max(n, nrhs)) * eps);
+            }
+            break;
+        }
+    }
+    free_vector(work);
+}
+
+/* To calculate the resudial sum of squares of solution for solution x of Ax = b and m < n
+ */
+void residual_sum_of_squares(int datatype, integer m, integer n, integer nrhs, void *x, integer ldx,
+                             double *resid)
+{
+    integer temp = m - n;
+    *resid = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            for(integer i = 0; i < nrhs; i++)
+            {
+                *resid = fla_max(snrm2_(&temp, &((float *)x)[(i * ldx) + n], &i_one), *resid);
+            }
+            break;
+        }
+        case DOUBLE:
+        {
+            for(integer i = 0; i < nrhs; i++)
+            {
+                *resid = fla_max(dnrm2_(&temp, &((double *)x)[(i * ldx) + n], &i_one), *resid);
+            }
+            break;
+        }
+        case COMPLEX:
+        {
+            for(integer i = 0; i < nrhs; i++)
+            {
+                *resid = fla_max(scnrm2_(&temp, &((scomplex *)x)[(i * ldx) + n], &i_one), *resid);
+            }
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            for(integer i = 0; i < nrhs; i++)
+            {
+                *resid = fla_max(dznrm2_(&temp, &((dcomplex *)x)[(i * ldx) + n], &i_one), *resid);
+            }
+            break;
+        }
+    }
 }

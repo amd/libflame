@@ -123,7 +123,7 @@ void fla_test_gesvdx_experiment(test_params_t *params, integer datatype, integer
     void *vl = NULL, *vu = NULL;
     float d_vl, d_vu;
     integer il, iu, ns, ldu, ldvt;
-    integer info = 0, vinfo = 0;
+    integer info = 0;
     void *A = NULL, *U = NULL, *V = NULL, *s = NULL, *A_test = NULL, *s_test = NULL;
     /* Get input matrix dimensions. */
     jobu = params->svd_paramslist[pci].jobu_gesvdx;

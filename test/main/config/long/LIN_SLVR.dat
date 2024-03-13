@@ -35,4 +35,4 @@ ku_gbcon    2 3 8 35
 ldab_gbcon  4 7 15 65
 ilo 2 40 1
 ihi 6 55 100
-RSEE_Threshold 10.0 10.0 20.0 50.0
+RSEE_Threshold 15.0 15.0 20.0 50.0

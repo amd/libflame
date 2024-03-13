@@ -1,23 +1,28 @@
 /*
-    Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
-
 
 #include "test_lapack.h"
 
-
 /* Local prototypes */
-void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p_cur, integer  q_cur, integer pci, integer n_repeats, integer einfo, double* perf, double* t, double* residual);
-void prepare_ggev_run(char *jobvl, char *jobvr, integer n, void *a, integer lda, void *b, integer ldb, void* alpha, void * alphar, void * alphai, void *beta,	void *vl, integer ldvl, 
-                      void *vr, integer ldvr,	integer datatype, integer n_repeats, double* time_min_, integer* info);
-void invoke_ggev(integer datatype, char* jobvl, char* jobvr, integer* n, void* a, integer* lda, void* b, integer* ldb, void* alpha, void* alphar,
-    void* alphai, void* beta, void* vl, integer* ldvl, void* vr, integer* ldvr, void* work, integer* lwork, void* rwork, integer* info);
+void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
+                              integer pci, integer n_repeats, integer einfo, double *perf,
+                              double *t, double *residual);
+void prepare_ggev_run(char *jobvl, char *jobvr, integer n, void *a, integer lda, void *b,
+                      integer ldb, void *alpha, void *alphar, void *alphai, void *beta, void *vl,
+                      integer ldvl, void *vr, integer ldvr, integer datatype, integer n_repeats,
+                      double *time_min_, integer *info);
+void invoke_ggev(integer datatype, char *jobvl, char *jobvr, integer *n, void *a, integer *lda,
+                 void *b, integer *ldb, void *alpha, void *alphar, void *alphai, void *beta,
+                 void *vl, integer *ldvl, void *vr, integer *ldvr, void *work, integer *lwork,
+                 void *rwork, integer *info);
 
-void fla_test_ggev(integer argc, char ** argv, test_params_t *params)
+void fla_test_ggev(integer argc, char **argv, test_params_t *params)
 {
-    char* op_str = "Computing Eigen value and Eigen vectors";
-    char* front_str = "GGEV";
+    char *op_str = "Computing Eigen value and Eigen vectors";
+    char *front_str = "GGEV";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char = '\0';
 
     if(argc == 1)
     {
@@ -27,11 +32,11 @@ void fla_test_ggev(integer argc, char ** argv, test_params_t *params)
         fla_test_op_driver(front_str, SQUARE_INPUT, params, EIG_NSYM, fla_test_ggev_experiment);
         tests_not_run = 0;
     }
-    if (argc == 13)
+    if(argc == 13)
     {
         FLA_TEST_PARSE_LAST_ARG(argv[12]);
     }
-    if (argc >= 12 && argc <= 13)
+    if(argc >= 12 && argc <= 13)
     {
         /* Test with parameters from commandline */
         integer i, num_types, N;
@@ -75,18 +80,13 @@ void fla_test_ggev(integer argc, char ** argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_ggev_experiment(params, datatype,
-                                          N, N,
-                                          0,
-                                          n_repeats, einfo,
-                                          &perf, &time_min, &residual);
+                fla_test_ggev_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
+                                         &time_min, &residual);
                 /* Print the results */
-                fla_test_print_status(front_str,
-                                      stype,
-                                      SQUARE_INPUT,
-                                      N, N,
-                                      residual, params->eig_non_sym_paramslist[0].GenNonSymEigProblem_threshold,
-                                      time_min, perf);
+                fla_test_print_status(
+                    front_str, stype, SQUARE_INPUT, N, N, residual,
+                    params->eig_non_sym_paramslist[0].GenNonSymEigProblem_threshold, time_min,
+                    perf);
                 tests_not_run = 0;
             }
         }
@@ -96,13 +96,14 @@ void fla_test_ggev(integer argc, char ** argv, test_params_t *params)
     if(tests_not_run)
     {
         printf("\nIllegal arguments for ggev\n");
-        printf("./<EXE> ggev <precisions - sdcz> <jobvl> <jobvr> <N> <LDA> <LDB> <LDVL> <LDVR> <LWORK> <repeats>\n");
+        printf("./<EXE> ggev <precisions - sdcz> <jobvl> <jobvr> <N> <LDA> <LDB> <LDVL> <LDVR> "
+               "<LWORK> <repeats>\n");
     }
     if(invalid_dtype)
     {
         printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n\n");
     }
-    if (g_ext_fptr != NULL)
+    if(g_ext_fptr != NULL)
     {
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
@@ -110,26 +111,18 @@ void fla_test_ggev(integer argc, char ** argv, test_params_t *params)
     return;
 }
 
-
-void fla_test_ggev_experiment(test_params_t *params,
-    integer  datatype,
-    integer  p_cur,
-    integer  q_cur,
-    integer  pci,
-    integer  n_repeats,
-    integer  einfo,
-    double   *perf,
-    double   *t,
-    double   *residual)
+void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
+                              integer pci, integer n_repeats, integer einfo, double *perf,
+                              double *t, double *residual)
 {
     integer m, lda, ldvl, ldvr, ldb;
     integer info = 0, vinfo = 0;
     void *A = NULL, *B = NULL, *VL = NULL, *VR = NULL;
-    void * alpha = NULL, *alphar=NULL, *alphai=NULL, *beta, *A_test , *B_test;
+    void *alpha = NULL, *alphar = NULL, *alphai = NULL, *beta, *A_test, *B_test;
     double time_min = 1e9;
     *residual = params->eig_non_sym_paramslist[pci].GenNonSymEigProblem_threshold;
-    //char JOBVL = params->eig_non_sym_paramslist[pci].jobvsl;
-    //char JOBVR = params->eig_non_sym_paramslist[pci].jobvsr;
+    // char JOBVL = params->eig_non_sym_paramslist[pci].jobvsl;
+    // char JOBVR = params->eig_non_sym_paramslist[pci].jobvsr;
     char JOBVL = 'V';
     char JOBVR = 'V';
 
@@ -141,23 +134,23 @@ void fla_test_ggev_experiment(test_params_t *params,
     ldvl = params->eig_non_sym_paramslist[pci].ldvl;
     ldvr = params->eig_non_sym_paramslist[pci].ldvr;
 
-   /* If leading dimensions = -1, set them to default value
-       when inputs are from config files */
-    if (config_data)
+    /* If leading dimensions = -1, set them to default value
+        when inputs are from config files */
+    if(config_data)
     {
-        if (lda == -1)
+        if(lda == -1)
         {
-            lda = fla_max(1,m);
+            lda = fla_max(1, m);
         }
-        if (ldb == -1)
+        if(ldb == -1)
         {
-            ldb = fla_max(1,m);
+            ldb = fla_max(1, m);
         }
         /* LDVL >= 1, and
            if JOBVL = 'V', LDVL >= M */
-        if (ldvl == -1)
+        if(ldvl == -1)
         {
-            if (JOBVL == 'V')
+            if(JOBVL == 'V')
             {
                 ldvl = m;
             }
@@ -168,9 +161,9 @@ void fla_test_ggev_experiment(test_params_t *params,
         }
         /* LDVR >= 1, and
            if JOBVR = 'V', LDVR >= M */
-        if (ldvr == -1)
+        if(ldvr == -1)
         {
-            if (JOBVR == 'V')
+            if(JOBVR == 'V')
             {
                 ldvr = m;
             }
@@ -186,7 +179,7 @@ void fla_test_ggev_experiment(test_params_t *params,
     create_matrix(datatype, &B, ldb, m);
     create_matrix(datatype, &VL, ldvl, m);
     create_matrix(datatype, &VR, ldvr, m);
-    if (datatype == FLOAT || datatype == DOUBLE)
+    if(datatype == FLOAT || datatype == DOUBLE)
     {
         create_vector(datatype, &alphar, m);
         create_vector(datatype, &alphai, m);
@@ -206,22 +199,34 @@ void fla_test_ggev_experiment(test_params_t *params,
     copy_matrix(datatype, "full", m, m, A, lda, A_test, lda);
     copy_matrix(datatype, "full", m, m, B, ldb, B_test, ldb);
 
-    prepare_ggev_run(&JOBVL,&JOBVR, m, A_test, lda, B_test, ldb, alpha, alphar, alphai, beta,  VL, ldvl, VR, ldvr, datatype, n_repeats, &time_min, &info);
+    prepare_ggev_run(&JOBVL, &JOBVR, m, A_test, lda, B_test, ldb, alpha, alphar, alphai, beta, VL,
+                     ldvl, VR, ldvr, datatype, n_repeats, &time_min, &info);
 
     /* execution time */
     *t = time_min;
 
     /* performance computation */
     /* 2m^3 - (2/3)m^3 flops */
-    *perf = (double)((2.0 * m * m * m) - ((2.0 / 3.0) * m * m * m)) / time_min / FLOPS_PER_UNIT_PERF;
-    if (datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+    *perf
+        = (double)((2.0 * m * m * m) - ((2.0 / 3.0) * m * m * m)) / time_min / FLOPS_PER_UNIT_PERF;
+    if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         *perf *= 4.0;
 
     /* output validation */
-    if ((JOBVL == 'V' && JOBVR == 'V') && info == 0)
-        validate_ggev(&JOBVL, &JOBVR, m, A, lda, B, ldb, alpha, alphar, alphai, beta, VL, ldvl, VR, ldvr, datatype, residual, &vinfo);
-
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!params->imatrix_char && (JOBVL == 'V' && JOBVR == 'V') && info == 0)
+        validate_ggev(&JOBVL, &JOBVR, m, A, lda, B, ldb, alpha, alphar, alphai, beta, VL, ldvl, VR,
+                      ldvr, datatype, residual, &vinfo);
+    /* check for output matrix when inputs as extreme values */
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        if((!check_extreme_value(datatype, m, m, A_test, lda, params->imatrix_char))
+           && (!check_extreme_value(datatype, m, m, B_test, ldb, params->imatrix_char)))
+        {
+            *residual = DBL_MAX;
+        }
+    }
+    else
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
     free_matrix(A);
@@ -230,7 +235,7 @@ void fla_test_ggev_experiment(test_params_t *params,
     free_matrix(VR);
     free_matrix(B);
     free_matrix(B_test);
-    if (datatype == FLOAT || datatype == DOUBLE)
+    if(datatype == FLOAT || datatype == DOUBLE)
     {
         free_vector(alphar);
         free_vector(alphai);
@@ -241,15 +246,14 @@ void fla_test_ggev_experiment(test_params_t *params,
     }
 
     free_vector(beta);
-
 }
 
-void prepare_ggev_run(char *jobvl, char *jobvr, integer n_A, void *A, integer lda,
-                        void *B, integer ldb, void* alpha, void * alphar, void * alphai, void* beta,
-                        void *VL, integer ldvl, void *VR, integer ldvr,
-                        integer datatype, integer n_repeats, double* time_min_, integer* info)
+void prepare_ggev_run(char *jobvl, char *jobvr, integer n_A, void *A, integer lda, void *B,
+                      integer ldb, void *alpha, void *alphar, void *alphai, void *beta, void *VL,
+                      integer ldvl, void *VR, integer ldvr, integer datatype, integer n_repeats,
+                      double *time_min_, integer *info)
 {
-    void *A_save = NULL, *B_save = NULL , *work = NULL, * rwork = NULL;
+    void *A_save = NULL, *B_save = NULL, *work = NULL, *rwork = NULL;
     integer i;
     integer lwork;
     double time_min = 1e9, exe_time;
@@ -266,18 +270,19 @@ void prepare_ggev_run(char *jobvl, char *jobvr, integer n_A, void *A, integer ld
     if(g_lwork <= 0)
     {
         lwork = -1;
-        create_vector(datatype, &work, 8*n_A);
+        create_vector(datatype, &work, 8 * n_A);
 
         /* call to  ggev API to get work query */
-        invoke_ggev(datatype, jobvl, jobvr, &n_A, NULL, &lda, NULL, &ldb, NULL, NULL, NULL, NULL, NULL, &ldvl, NULL, &ldvr, work, &lwork, rwork, info);
+        invoke_ggev(datatype, jobvl, jobvr, &n_A, NULL, &lda, NULL, &ldb, NULL, NULL, NULL, NULL,
+                    NULL, &ldvl, NULL, &ldvr, work, &lwork, rwork, info);
         if(*info == 0)
         {
             /* Get work size */
-            lwork = get_work_value( datatype, work);
+            lwork = get_work_value(datatype, work);
         }
 
-        /* Output buffers will be freshly allocated for each iterations, free up 
-        the current output buffers.*/ 
+        /* Output buffers will be freshly allocated for each iterations, free up
+        the current output buffers.*/
         free_vector(work);
     }
     else
@@ -286,22 +291,23 @@ void prepare_ggev_run(char *jobvl, char *jobvr, integer n_A, void *A, integer ld
     }
 
     *info = 0;
-    for (i = 0; i < n_repeats && *info == 0; ++i)
+    for(i = 0; i < n_repeats && *info == 0; ++i)
     {
         /* Restore input matrix A value and allocate memory to output buffers for each iteration */
         copy_matrix(datatype, "full", n_A, n_A, A_save, lda, A, lda);
         copy_matrix(datatype, "full", n_A, n_A, B_save, ldb, B, ldb);
         create_vector(datatype, &work, lwork);
-        if (datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+        if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         {
-            create_realtype_vector(datatype, &rwork, 8*n_A);
+            create_realtype_vector(datatype, &rwork, 8 * n_A);
         }
         exe_time = fla_test_clock();
 
         /* call to API */
 
-        invoke_ggev(datatype, jobvl, jobvr, &n_A, A, &lda, B, &ldb, alpha, alphar, alphai, beta, VL, &ldvl, VR, &ldvr, work, &lwork, rwork , info);
-        
+        invoke_ggev(datatype, jobvl, jobvr, &n_A, A, &lda, B, &ldb, alpha, alphar, alphai, beta, VL,
+                    &ldvl, VR, &ldvr, work, &lwork, rwork, info);
+
         exe_time = fla_test_clock() - exe_time;
 
         /* Get the best execution time */
@@ -309,7 +315,7 @@ void prepare_ggev_run(char *jobvl, char *jobvr, integer n_A, void *A, integer ld
 
         /* Free up the output buffers */
         free_vector(work);
-        if (datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+        if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         {
             free_vector(rwork);
         }
@@ -321,37 +327,40 @@ void prepare_ggev_run(char *jobvl, char *jobvr, integer n_A, void *A, integer ld
 
     free_matrix(A_save);
     free_matrix(B_save);
-
-
 }
 
-
-void invoke_ggev(integer datatype, char *jobvl, char *jobvr,integer *n, void *a, integer *lda, void *b, integer *ldb, void* alpha, void * alphar,
-    void* alphai, void* beta, void *vl, integer *ldvl, void *vr, integer *ldvr, void* work, integer* lwork, void* rwork, integer* info)
+void invoke_ggev(integer datatype, char *jobvl, char *jobvr, integer *n, void *a, integer *lda,
+                 void *b, integer *ldb, void *alpha, void *alphar, void *alphai, void *beta,
+                 void *vl, integer *ldvl, void *vr, integer *ldvr, void *work, integer *lwork,
+                 void *rwork, integer *info)
 {
     switch(datatype)
     {
         case FLOAT:
         {
-            fla_lapack_sggev(jobvl, jobvr, n, a, lda, b, ldb, alphar, alphai, beta, vl, ldvl, vr, ldvr, work, lwork, info);
+            fla_lapack_sggev(jobvl, jobvr, n, a, lda, b, ldb, alphar, alphai, beta, vl, ldvl, vr,
+                             ldvr, work, lwork, info);
             break;
         }
-        
+
         case DOUBLE:
         {
-            fla_lapack_dggev(jobvl, jobvr, n, a, lda, b, ldb, alphar, alphai, beta, vl, ldvl, vr, ldvr, work, lwork, info);
+            fla_lapack_dggev(jobvl, jobvr, n, a, lda, b, ldb, alphar, alphai, beta, vl, ldvl, vr,
+                             ldvr, work, lwork, info);
             break;
         }
 
         case COMPLEX:
         {
-            fla_lapack_cggev(jobvl, jobvr, n, a, lda, b, ldb, alpha, beta, vl, ldvl, vr, ldvr, work, lwork, rwork, info);
+            fla_lapack_cggev(jobvl, jobvr, n, a, lda, b, ldb, alpha, beta, vl, ldvl, vr, ldvr, work,
+                             lwork, rwork, info);
             break;
         }
 
         case DOUBLE_COMPLEX:
         {
-            fla_lapack_zggev(jobvl, jobvr, n, a, lda, b, ldb, alpha, beta, vl, ldvl, vr, ldvr, work, lwork, rwork, info);
+            fla_lapack_zggev(jobvl, jobvr, n, a, lda, b, ldb, alpha, beta, vl, ldvl, vr, ldvr, work,
+                             lwork, rwork, info);
             break;
         }
     }

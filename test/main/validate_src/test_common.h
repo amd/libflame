@@ -156,8 +156,11 @@ void get_generic_triangular_matrix(integer datatype, integer N, void *A, integer
 /* Decompose matrix A in to QR and store orthogonal matrix in Q and R in A*/
 void get_orthogonal_matrix_from_QR(integer datatype, integer n, void *A, integer lda, void *Q,
                                    integer ldq, integer *info);
-/* Print matrix contents for visual inspection */
-void print_matrix(char *desc, integer datatype, integer M, integer N, void *A, integer lda);
+/* Print matrix contents for visual inspection
+   if order == 'C' matrix will be printed in columns first order
+   else if order == 'R' matrix will be printed in rows first order*/
+void print_matrix(char *desc, char *order, integer datatype, integer M, integer N, void *A,
+                  integer lda);
 /* Get upper triangular matrix or lower triangular matrix based on UPLO */
 void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, void *a,
                            integer lda);
@@ -224,4 +227,10 @@ void get_band_matrix_from_band_storage(integer datatype, integer M, integer N, i
    On output, AB is the reconstructed band storage matrix same as input of GBTRF().*/
 void reconstruct_band_storage_matrix(integer datatype, integer m, integer n, integer kl, integer ku,
                                      void *AB, integer ldab, integer *ipiv);
+/* Test for checking whether solution x of Ax = B from least square api belongs to row space of A*/
+void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer n, integer nrhs,
+                              void *A, integer lda, void *x, integer ldb, void *resid);
+/* To calculate the resudial sum of squares of solution for solution x of Ax = b and m < n*/
+void residual_sum_of_squares(int datatype, integer m, integer n, integer nrhs, void *x, integer ldx,
+                             double *resid);
 #endif // TEST_COMMON_H

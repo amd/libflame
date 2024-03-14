@@ -412,6 +412,8 @@ typedef struct AUX_paramlist_t
     integer incy; // The increment between successive values of CY
     /* Parameter for 'larfg' API */
     integer incx_larfg; // The increment between successive values of X in larfg(incx > 0)
+    double alpha_real;
+    double alpha_imag; // The alpha values for larfg
     integer num_repeats;
     integer num_tests;
     integer num_data_types;

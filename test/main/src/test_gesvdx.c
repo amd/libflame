@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /* GESVDX API */
@@ -151,8 +151,8 @@ void fla_test_gesvdx_experiment(test_params_t *params, integer datatype, integer
         {
             lda = fla_max(1, m);
         }
-        /*If LDU >= 1; if
-          JOBU = 'V', LDU >= M.*/
+        /* If LDU >= 1; if
+          JOBU = 'V', LDU >= M. */
         if(ldu == -1)
         {
             if((jobu == 'V'))
@@ -191,8 +191,8 @@ void fla_test_gesvdx_experiment(test_params_t *params, integer datatype, integer
     create_realtype_vector(datatype, &vu, 1);
 
     /* Assign datatype for void */
-    assign_realtype_value(datatype, vl, d_vl);
-    assign_realtype_value(datatype, vu, d_vu);
+    assign_value(get_realtype(datatype), vl, d_vl, d_zero);
+    assign_value(get_realtype(datatype), vu, d_vu, d_zero);
 
     /* Create input matrix parameters. */
     create_matrix(datatype, &A, lda, n);

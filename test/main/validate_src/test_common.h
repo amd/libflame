@@ -62,7 +62,6 @@ void create_realtype_vector(integer datatype, void **A, integer M);
 void free_vector(void *A);
 void reset_vector(integer datatype, void *A, integer M, integer incA);
 void rand_vector(integer datatype, void *A, integer M, integer LDA);
-void rand_realtype_vector_in_range(integer datatype, void *A, void *VL, void *VU, integer M);
 void copy_vector(integer datatype, integer M, void *A, integer LDA, void *B, integer LDB);
 void copy_realtype_vector(integer datatype, integer M, void *A, integer LDA, void *B, integer LDB);
 
@@ -88,7 +87,7 @@ void set_identity_matrix(integer datatype, integer M, integer N, void *A, intege
 void copy_submatrix(integer datatype, integer m, integer n, void *A, integer lda, void *B,
                     integer ldb, integer srow, integer scol);
 void copy_realtype_subvector(integer datatype, integer m, void *A, void *B, integer index);
-void assign_realtype_value(integer datatype, void *var, float data);
+void assign_value(integer datatype, void *x, double data_real, double data_imag);
 
 void matrix_difference(integer datatype, integer m, integer n, void *A, integer lda, void *B,
                        integer ldb);

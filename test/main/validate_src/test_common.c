@@ -93,17 +93,34 @@ void create_realtype_vector(integer datatype, void **A, integer M)
     return;
 }
 /*Assign datatype*/
-void assign_realtype_value(integer datatype, void *var, float data)
+void assign_value(integer datatype, void *x, double data_real, double data_imag)
 {
-    if(datatype == FLOAT || datatype == COMPLEX)
+    switch(datatype)
     {
-        float a = data;
-        *(float *)var = a;
-    }
-    else
-    {
-        double a = (double)data;
-        *(double *)var = a;
+        case FLOAT:
+        {
+            float a = (float)data_real;
+            *(float *)x = a;
+            break;
+        }
+        case DOUBLE:
+        {
+            double a = data_real;
+            *(double *)x = a;
+            break;
+        }
+        case COMPLEX:
+        {
+            ((scomplex *)x)[0].real = (float)data_real;
+            ((scomplex *)x)[0].imag = (float)data_imag;
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            ((dcomplex *)x)[0].real = data_real;
+            ((dcomplex *)x)[0].imag = data_imag;
+            break;
+        }
     }
     return;
 }
@@ -3399,34 +3416,6 @@ void copy_realtype_subvector(integer datatype, integer m, void *A, void *B, inte
         double_B = (double *)B;
         copy_vector(datatype, m, double_A, 1, double_B, 1);
     }
-}
-
-/* Initialize realtype vector with random values between given range (Vl, VU) */
-void rand_realtype_vector_in_range(integer datatype, void *A, void *VL, void *VU, integer M)
-{
-
-    integer i;
-    if(datatype == FLOAT || datatype == COMPLEX)
-    {
-        float vl, vu;
-        vl = *(float *)VL;
-        vu = *(float *)VU;
-        for(i = 0; i < M; i++)
-        {
-            ((float *)A)[i] = SRAND_IN_RANGE(vl, vu);
-        }
-    }
-    else if(datatype == DOUBLE || datatype == DOUBLE_COMPLEX)
-    {
-        double vl, vu;
-        vl = *(double *)VL;
-        vu = *(double *)VU;
-        for(i = 0; i < M; i++)
-        {
-            ((double *)A)[i] = DRAND_IN_RANGE(vl, vu);
-        }
-    }
-    return;
 }
 
 /* Checks whether the value is zero or not */

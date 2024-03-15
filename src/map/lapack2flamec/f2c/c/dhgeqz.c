@@ -319,7 +319,7 @@ void dhgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
     aocl_fla_init();
 
 #if FLA_ENABLE_AMD_OPT
-    if (fla_global_context.is_avx2)
+    if (FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
       fla_dhgeqz_opt(job, compq, compz, n, ilo, ihi, h__, ldh, t, ldt, alphar, alphai, beta, q, ldq, z__, ldz, work, lwork, info);
     }

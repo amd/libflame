@@ -117,7 +117,7 @@ void dorg2r_fla(integer *m, integer *n, integer *k, doublereal * a, integer *lda
     aocl_fla_init();
 
 #if FLA_ENABLE_AMD_OPT
-    if (fla_global_context.is_avx2)
+    if (FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
        dorg2r_fla_opt(m, n, k, a, lda, tau, work, info);
     }

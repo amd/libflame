@@ -110,7 +110,7 @@ void zrot_(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, inte
     aocl_fla_init();
 
 #ifdef FLA_ENABLE_AMD_OPT
-    if (fla_global_context.is_avx2)
+    if (FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
       fla_zrot(n, cx, incx, cy, incy, c__, s);
     }

@@ -2121,7 +2121,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
             i__3 = *n - 1;
             dlaset_("L", &i__2, &i__3, &c_b57, &c_b57, &work[iu + 1], &ldwrku);
 #if FLA_ENABLE_AMD_OPT
-            if (*n < 128 && fla_global_context.is_avx2) {
+            if (*n < 128 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
               fla_dgesvd_small6(m, n, &work[iu], &ldwrku, &a[a_offset], lda,
                                 &s[1], &u[u_offset], ldu, &vt[vt_offset], ldvt,
                                 &work[1], info);
@@ -2607,7 +2607,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
       /* Path 10 (M at least N, but not much larger) */
       /* Reduce to bidiagonal form without QR decomposition */
 #if FLA_ENABLE_AMD_OPT
-      if ((wntun & wntvn) && (*m < 128) && fla_global_context.is_avx2) {
+      if ((wntun & wntvn) && (*m < 128) && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
         fla_dgesvd_nn_small10(m, n, &a[a_offset], lda, &s[1], &work[1], info);
       } else
 #endif
@@ -2721,7 +2721,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
         i__3 = *m - 1;
         dlaset_("U", &i__2, &i__3, &c_b57, &c_b57, &a[(a_dim1 << 1) + 1], lda);
 #if FLA_ENABLE_AMD_OPT
-        if ((wntun && wntvn) && (*m < 128) && fla_global_context.is_avx2) {
+        if ((wntun && wntvn) && (*m < 128) && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
           fla_dgesvd_nn_small1T(m, n, &a[a_offset], lda, &s[1], &work[1], info);
         } else
 #endif
@@ -3283,7 +3283,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
             dlaset_("U", &i__2, &i__3, &c_b57, &c_b57, &work[iu + ldwrku],
                     &ldwrku);
 #if FLA_ENABLE_AMD_OPT
-            if (*n < 128 && fla_global_context.is_avx2) {
+            if (*n < 128 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
               fla_dgesvd_small6T(m, n, &work[iu], &ldwrku, &a[a_offset], lda,
                                  &s[1], &u[u_offset], ldu, &vt[vt_offset], ldvt,
                                  &work[1], info);

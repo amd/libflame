@@ -78,7 +78,7 @@ extern fla_context fla_global_context;                                          
   {                                                                                    \
     /* Initialize global context data */                                               \
     aocl_fla_init();                                                                   \
-    if(fla_global_context.is_avx2 && *m < FLA_DGETRF_SMALL_AVX2_THRESH0 && *n < FLA_DGETRF_SMALL_AVX2_THRESH0) \
+    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2) && *m < FLA_DGETRF_SMALL_AVX2_THRESH0 && *n < FLA_DGETRF_SMALL_AVX2_THRESH0) \
     {                                                                                  \
         /* Calling vectorized code when avx2 supported architecture detected */        \
         fla_dgetrf_small_avx2( m, n, buff_A, ldim_A, buff_p, info );                   \
@@ -120,7 +120,7 @@ extern fla_context fla_global_context;                                          
   {                                                                                                       \
     FLA_LU_piv_small_s_var0( m, n, buff_A, ldim_A, buff_p, info );                                        \
   }                                                                                                       \
-  else if( fla_global_context.is_avx2 && *m <= FLA_SGETRF_SMALL_THRESH1 && *n <= FLA_SGETRF_SMALL_THRESH1 )   \
+  else if( FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2) && *m <= FLA_SGETRF_SMALL_THRESH1 && *n <= FLA_SGETRF_SMALL_THRESH1 )   \
   {                                                                                                       \
     FLA_LU_piv_small_s_var1( m, n, buff_A, ldim_A, buff_p, info );                                        \
   }                                                                                                       \
@@ -373,7 +373,7 @@ LAPACK_getrf(z)
     {
 	extern fla_context fla_global_context;
 	aocl_fla_init();
-	if (fla_global_context.is_avx2)
+	if (FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
 	{
         	LAPACK_getrf_body_z(z)
 	}

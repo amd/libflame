@@ -1,20 +1,24 @@
 /*
-    Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
 
 // Local prototypes.
-void fla_test_gerqf_experiment(test_params_t *params, integer  datatype, integer  p_cur, integer  q_cur, integer pci,
-                                    integer n_repeats, integer einfo, double* perf, double* t, double* residual);
-void prepare_gerqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, integer datatype, integer n_repeats, double* time_min_, integer *info);
-void invoke_gerqf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau, void *work, integer *lwork, integer *info);
+void fla_test_gerqf_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual);
+void prepare_gerqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, integer datatype,
+                       integer n_repeats, double *time_min_, integer *info);
+void invoke_gerqf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
+                  void *work, integer *lwork, integer *info);
 
-void fla_test_gerqf(integer argc, char ** argv, test_params_t *params)
+void fla_test_gerqf(integer argc, char **argv, test_params_t *params)
 {
-    char* op_str = "RQ factorization";
-    char* front_str = "GERQF";
+    char *op_str = "RQ factorization";
+    char *front_str = "GERQF";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char = '\0';
     if(argc == 1)
     {
         g_lwork = -1;
@@ -24,13 +28,13 @@ void fla_test_gerqf(integer argc, char ** argv, test_params_t *params)
         fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_gerqf_experiment);
         tests_not_run = 0;
     }
-    if (argc == 9)
+    if(argc == 9)
     {
-       FLA_TEST_PARSE_LAST_ARG(argv[8]);
+        FLA_TEST_PARSE_LAST_ARG(argv[8]);
     }
-    if (argc >= 8 && argc <= 9)
+    if(argc >= 8 && argc <= 9)
     {
-        integer i, num_types, M,N;
+        integer i, num_types, M, N;
         integer datatype, n_repeats;
         double perf, time_min, residual;
         char stype, type_flag[4] = {0};
@@ -67,18 +71,12 @@ void fla_test_gerqf(integer argc, char ** argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_gerqf_experiment(params, datatype,
-                                          M, N,
-                                          0,
-                                          n_repeats, einfo,
-                                          &perf, &time_min, &residual);
+                fla_test_gerqf_experiment(params, datatype, M, N, 0, n_repeats, einfo, &perf,
+                                          &time_min, &residual);
                 /* Print the results */
-                fla_test_print_status(front_str,
-                                      stype,
-                                      RECT_INPUT,
-                                      M, N,
-                                      residual, params->lin_solver_paramslist[0].solver_threshold,
-                                      time_min, perf);
+                fla_test_print_status(front_str, stype, RECT_INPUT, M, N, residual,
+                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
+                                      perf);
                 tests_not_run = 0;
             }
         }
@@ -94,27 +92,18 @@ void fla_test_gerqf(integer argc, char ** argv, test_params_t *params)
     {
         printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n\n");
     }
-    if (g_ext_fptr != NULL)
+    if(g_ext_fptr != NULL)
     {
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
     }
 
-
     return;
 }
 
-
-void fla_test_gerqf_experiment(test_params_t *params,
-    integer  datatype,
-    integer  p_cur,
-    integer  q_cur,
-    integer pci,
-    integer n_repeats,
-    integer einfo,
-    double* perf,
-    double* t,
-    double* residual)
+void fla_test_gerqf_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual)
 {
     integer m, n, lda;
     integer info = 0, vinfo = 0;
@@ -129,17 +118,17 @@ void fla_test_gerqf_experiment(test_params_t *params,
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if (config_data)
+    if(config_data)
     {
-        if (lda == -1)
+        if(lda == -1)
         {
-             lda = fla_max(1,m);
+            lda = fla_max(1, m);
         }
     }
 
     // Create input matrix parameters
     create_matrix(datatype, &A, lda, n);
-    create_vector(datatype, &T, fla_min(m,n));
+    create_vector(datatype, &T, fla_min(m, n));
 
     init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
 
@@ -155,17 +144,27 @@ void fla_test_gerqf_experiment(test_params_t *params,
     // performance computation
     // 2mn^2 - (2/3)n^3 flops
     if(m >= n)
-        *perf = (double)((2.0 * m * n * n) - (( 2.0 / 3.0 ) * n * n * n )) / time_min / FLOPS_PER_UNIT_PERF;
+        *perf = (double)((2.0 * m * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min
+                / FLOPS_PER_UNIT_PERF;
     else
-        *perf = (double)((2.0 * n * m * m) - (( 2.0 / 3.0 ) * m * m * m )) / time_min / FLOPS_PER_UNIT_PERF;
+        *perf = (double)((2.0 * n * m * m) - ((2.0 / 3.0) * m * m * m)) / time_min
+                / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         *perf *= 4.0;
 
-    // Output validation
-    if (info == 0 )
+    /* output validation */
+    if(!params->imatrix_char && info == 0)
         validate_gerqf(m, n, A, A_test, lda, T, datatype, residual, &vinfo);
-
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    /* check for output matrix when inputs as extreme values */
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        if(!check_extreme_value(datatype, m, n, A_test, lda, params->imatrix_char))
+        {
+            *residual = DBL_MAX;
+        }
+    }
+    else
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     // Free up the buffers
     free_matrix(A);
@@ -173,16 +172,8 @@ void fla_test_gerqf_experiment(test_params_t *params,
     free_vector(T);
 }
 
-
-void prepare_gerqf_run(integer m_A,
-    integer n_A,
-    void *A,
-    integer lda,
-    void *T,
-    integer datatype,
-    integer n_repeats,
-    double* time_min_,
-    integer* info)
+void prepare_gerqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, integer datatype,
+                       integer n_repeats, double *time_min_, integer *info)
 {
     integer min_A, i;
     void *A_save, *T_test, *work;
@@ -208,11 +199,11 @@ void prepare_gerqf_run(integer m_A,
         if(*info == 0)
         {
             // Get work size
-            lwork = get_work_value( datatype, work );
+            lwork = get_work_value(datatype, work);
         }
 
-        /* Output buffers will be freshly allocated for each iterations, free up 
-       the current output buffers.*/ 
+        /* Output buffers will be freshly allocated for each iterations, free up
+       the current output buffers.*/
         free_vector(work);
     }
     else
@@ -221,7 +212,7 @@ void prepare_gerqf_run(integer m_A,
     }
 
     *info = 0;
-    for (i = 0; i < n_repeats && *info == 0; ++i)
+    for(i = 0; i < n_repeats && *info == 0; ++i)
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
@@ -256,9 +247,8 @@ void prepare_gerqf_run(integer m_A,
     free_matrix(A_save);
 }
 
-
-
-void invoke_gerqf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau, void *work, integer *lwork, integer *info)
+void invoke_gerqf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
+                  void *work, integer *lwork, integer *info)
 {
     switch(datatype)
     {

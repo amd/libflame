@@ -7,14 +7,8 @@
  *  */
 #include "test_common.h"
 
-void validate_larfg(integer datatype,
-                    integer n,
-                    integer incx,
-                    integer x_length,
-                    void *x,
-                    void *v,
-                    void *tau,
-                    double *residual)
+void validate_larfg(integer datatype, integer n, integer incx, integer x_length, void *x, void *v,
+                    void *tau, double *residual)
 {
     /* Early return for n < 0, tau = 0.0f */
     if(n < 0)
@@ -35,7 +29,7 @@ void validate_larfg(integer datatype,
     /* First element of V is the beta value */
     copy_vector(datatype, 1, v, 1, beta, 1);
 
-    switch (datatype)
+    switch(datatype)
     {
         case FLOAT:
         {
@@ -85,10 +79,10 @@ void validate_larfg(integer datatype,
         }
         case COMPLEX:
         {
-           float norm, norm_beta, eps, resid1;
-           ((scomplex *)v)[0] = c_one;
-           /* v_temp consists of [1, v(output)] elements */
-           copy_vector(datatype, n, v, incx, v_temp, 1);
+            float norm, norm_beta, eps, resid1;
+            ((scomplex *)v)[0] = c_one;
+            /* v_temp consists of [1, v(output)] elements */
+            copy_vector(datatype, n, v, incx, v_temp, 1);
 
             /* Get Conjugate of tau */
             ((scomplex *)tau)[0].imag = (-1.0) * ((scomplex *)tau)[0].imag;

@@ -1,6 +1,6 @@
 /******************************************************************************
-* Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
-*******************************************************************************/
+ * Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 
 /*! @file validate_geev.c
  *  @brief Defines validate function of GEEV() to use in test suite.
@@ -8,21 +8,9 @@
 
 #include "test_common.h"
 
-void validate_geev(char* jobvl, char* jobvr,
-    integer m,
-    void* A,
-    void* A_test,
-    integer lda,
-    void* VL,
-    integer ldvl,
-    void* VR,
-    integer ldvr,
-    void* w,
-    void* wr,
-    void* wi,
-    integer datatype,
-    double* residual,
-    integer* info)
+void validate_geev(char *jobvl, char *jobvr, integer m, void *A, void *A_test, integer lda,
+                   void *VL, integer ldvl, void *VR, integer ldvr, void *w, void *wr, void *wi,
+                   integer datatype, double *residual, integer *info)
 {
     if(m == 0)
         return;
@@ -36,7 +24,7 @@ void validate_geev(char* jobvl, char* jobvr,
     reset_matrix(datatype, m, m, lambda, m);
     reset_matrix(datatype, m, m, Vlambda, m);
 
-    if (datatype == FLOAT || datatype == DOUBLE)
+    if(datatype == FLOAT || datatype == DOUBLE)
     {
         create_block_diagonal_matrix(datatype, wr, wi, lambda, m, m, m);
     }
@@ -56,7 +44,7 @@ void validate_geev(char* jobvl, char* jobvr,
                 norm_A = fla_lapack_slange("1", &m, &m, Vlambda, &m, work);
                 sgemm_("N", "N", &m, &m, &m, &s_one, VR, &ldvr, lambda, &m, &s_n_one, Vlambda, &m);
                 norm = fla_lapack_slange("1", &m, &m, Vlambda, &m, work);
-                resid1 = norm/(eps * norm_A * (float)m);
+                resid1 = norm / (eps * norm_A * (float)m);
 
                 /* Test 2
                    compute norm (A**H * VL - VL * W**H) / (V * norm(A) * EPS)*/
@@ -64,7 +52,7 @@ void validate_geev(char* jobvl, char* jobvr,
                 norm_A = fla_lapack_slange("1", &m, &m, Vlambda, &m, work);
                 sgemm_("N", "C", &m, &m, &m, &s_one, VL, &ldvl, lambda, &m, &s_n_one, Vlambda, &m);
                 norm = fla_lapack_slange("1", &m, &m, Vlambda, &m, work);
-                resid2 = norm/(eps * norm_A * (float)m);
+                resid2 = norm / (eps * norm_A * (float)m);
                 *residual = (double)fla_max(resid1, resid2);
             }
             else if(*jobvr == 'V')
@@ -75,7 +63,7 @@ void validate_geev(char* jobvl, char* jobvr,
                 norm_A = fla_lapack_slange("1", &m, &m, Vlambda, &m, work);
                 sgemm_("N", "N", &m, &m, &m, &s_one, VR, &ldvr, lambda, &m, &s_n_one, Vlambda, &m);
                 norm = fla_lapack_slange("1", &m, &m, Vlambda, &m, work);
-                resid1 = norm/(eps * norm_A * (float)m);
+                resid1 = norm / (eps * norm_A * (float)m);
                 *residual = (double)resid1;
             }
             else if(*jobvl == 'V')
@@ -86,7 +74,7 @@ void validate_geev(char* jobvl, char* jobvr,
                 norm_A = fla_lapack_slange("1", &m, &m, Vlambda, &m, work);
                 sgemm_("N", "C", &m, &m, &m, &s_one, VL, &ldvl, lambda, &m, &s_n_one, Vlambda, &m);
                 norm = fla_lapack_slange("1", &m, &m, Vlambda, &m, work);
-                resid2 = norm/(eps * norm_A * (float)m);
+                resid2 = norm / (eps * norm_A * (float)m);
                 *residual = (double)resid2;
             }
             break;
@@ -104,7 +92,7 @@ void validate_geev(char* jobvl, char* jobvr,
                 norm_A = fla_lapack_dlange("1", &m, &m, Vlambda, &m, work);
                 dgemm_("N", "N", &m, &m, &m, &d_one, VR, &ldvr, lambda, &m, &d_n_one, Vlambda, &m);
                 norm = fla_lapack_dlange("1", &m, &m, Vlambda, &m, work);
-                resid1 = norm/(eps * norm_A * (double)m);
+                resid1 = norm / (eps * norm_A * (double)m);
 
                 /* Test 2
                    compute norm (A**H * VL - VL * W**H) / (V * norm(A) * EPS)*/
@@ -112,7 +100,7 @@ void validate_geev(char* jobvl, char* jobvr,
                 norm_A = fla_lapack_dlange("1", &m, &m, Vlambda, &m, work);
                 dgemm_("N", "C", &m, &m, &m, &d_one, VL, &ldvl, lambda, &m, &d_n_one, Vlambda, &m);
                 norm = fla_lapack_dlange("1", &m, &m, Vlambda, &m, work);
-                resid2 = norm/(eps * norm_A * (double)m);
+                resid2 = norm / (eps * norm_A * (double)m);
                 *residual = (double)fla_max(resid1, resid2);
             }
             else if(*jobvr == 'V')
@@ -123,7 +111,7 @@ void validate_geev(char* jobvl, char* jobvr,
                 norm_A = fla_lapack_dlange("1", &m, &m, Vlambda, &m, work);
                 dgemm_("N", "N", &m, &m, &m, &d_one, VR, &ldvr, lambda, &m, &d_n_one, Vlambda, &m);
                 norm = fla_lapack_dlange("1", &m, &m, Vlambda, &m, work);
-                resid1 = norm/(eps * norm_A * (double)m);
+                resid1 = norm / (eps * norm_A * (double)m);
                 *residual = (double)resid1;
             }
             else if(*jobvl == 'V')
@@ -134,7 +122,7 @@ void validate_geev(char* jobvl, char* jobvr,
                 norm_A = fla_lapack_dlange("1", &m, &m, Vlambda, &m, work);
                 dgemm_("N", "C", &m, &m, &m, &d_one, VL, &ldvl, lambda, &m, &d_n_one, Vlambda, &m);
                 norm = fla_lapack_dlange("1", &m, &m, Vlambda, &m, work);
-                resid2 = norm/(eps * norm_A * (double)m);
+                resid2 = norm / (eps * norm_A * (double)m);
                 *residual = (double)resid2;
             }
             break;
@@ -143,7 +131,7 @@ void validate_geev(char* jobvl, char* jobvr,
         {
             float norm, norm_A, eps, resid1, resid2;
             integer incr;
-            incr = m+1;
+            incr = m + 1;
             eps = fla_lapack_slamch("P");
             ccopy_(&m, w, &i_one, lambda, &incr);
 
@@ -155,7 +143,7 @@ void validate_geev(char* jobvl, char* jobvr,
                 norm_A = fla_lapack_clange("1", &m, &m, Vlambda, &m, work);
                 cgemm_("N", "N", &m, &m, &m, &c_one, VR, &ldvr, lambda, &m, &c_n_one, Vlambda, &m);
                 norm = fla_lapack_clange("1", &m, &m, Vlambda, &m, work);
-                resid1 = norm/(eps * norm_A * (float)m);
+                resid1 = norm / (eps * norm_A * (float)m);
 
                 /* Test 2
                    compute norm (A**H * VL - VL * W**H) / (V * norm(A) * EPS)*/
@@ -163,7 +151,7 @@ void validate_geev(char* jobvl, char* jobvr,
                 norm_A = fla_lapack_clange("1", &m, &m, Vlambda, &m, work);
                 cgemm_("N", "C", &m, &m, &m, &c_one, VL, &ldvl, lambda, &m, &c_n_one, Vlambda, &m);
                 norm = fla_lapack_clange("1", &m, &m, Vlambda, &m, work);
-                resid2 = norm/(eps * norm_A * (float)m);
+                resid2 = norm / (eps * norm_A * (float)m);
                 *residual = (double)fla_max(resid1, resid2);
             }
             else if(*jobvr == 'V')
@@ -174,10 +162,10 @@ void validate_geev(char* jobvl, char* jobvr,
                 norm_A = fla_lapack_clange("1", &m, &m, Vlambda, &m, work);
                 cgemm_("N", "N", &m, &m, &m, &c_one, VR, &ldvr, lambda, &m, &c_n_one, Vlambda, &m);
                 norm = fla_lapack_clange("1", &m, &m, Vlambda, &m, work);
-                resid1 = norm/(eps * norm_A * (float)m);
+                resid1 = norm / (eps * norm_A * (float)m);
                 *residual = (double)resid1;
             }
-	    else if(*jobvl == 'V')
+            else if(*jobvl == 'V')
             {
                 /* Test 1
                    compute norm (A**H * VL - VL * W**H) / (V * norm(A) * EPS)*/
@@ -185,7 +173,7 @@ void validate_geev(char* jobvl, char* jobvr,
                 norm_A = fla_lapack_clange("1", &m, &m, Vlambda, &m, work);
                 cgemm_("N", "C", &m, &m, &m, &c_one, VL, &ldvl, lambda, &m, &c_n_one, Vlambda, &m);
                 norm = fla_lapack_clange("1", &m, &m, Vlambda, &m, work);
-                resid2 = norm/(eps * norm_A * (float)m);
+                resid2 = norm / (eps * norm_A * (float)m);
                 *residual = (double)resid2;
             }
             break;
@@ -194,7 +182,7 @@ void validate_geev(char* jobvl, char* jobvr,
         {
             double norm, norm_A, eps, resid1, resid2;
             integer incr;
-            incr = m+1;
+            incr = m + 1;
             eps = fla_lapack_dlamch("P");
             zcopy_(&m, w, &i_one, lambda, &incr);
 
@@ -206,14 +194,14 @@ void validate_geev(char* jobvl, char* jobvr,
                 norm_A = fla_lapack_zlange("1", &m, &m, Vlambda, &m, work);
                 zgemm_("N", "N", &m, &m, &m, &z_one, VR, &ldvr, lambda, &m, &z_n_one, Vlambda, &m);
                 norm = fla_lapack_zlange("1", &m, &m, Vlambda, &m, work);
-                resid1 = norm/(eps * norm_A * (double)m);
+                resid1 = norm / (eps * norm_A * (double)m);
                 /* Test 2
                    compute norm (A**H * VL - VL * W**H) / (V * norm(A) * EPS)*/
                 zgemm_("C", "N", &m, &m, &m, &z_one, A, &lda, VL, &ldvl, &z_zero, Vlambda, &m);
                 norm_A = fla_lapack_zlange("1", &m, &m, Vlambda, &m, work);
                 zgemm_("N", "C", &m, &m, &m, &z_one, VL, &ldvl, lambda, &m, &z_n_one, Vlambda, &m);
                 norm = fla_lapack_zlange("1", &m, &m, Vlambda, &m, work);
-                resid2 = norm/(eps * norm_A * (double)m);
+                resid2 = norm / (eps * norm_A * (double)m);
                 *residual = (double)fla_max(resid1, resid2);
             }
             else if(*jobvr == 'V')
@@ -224,7 +212,7 @@ void validate_geev(char* jobvl, char* jobvr,
                 norm_A = fla_lapack_zlange("1", &m, &m, Vlambda, &m, work);
                 zgemm_("N", "N", &m, &m, &m, &z_one, VR, &ldvr, lambda, &m, &z_n_one, Vlambda, &m);
                 norm = fla_lapack_zlange("1", &m, &m, Vlambda, &m, work);
-                resid1 = norm/(eps * norm_A * (double)m);
+                resid1 = norm / (eps * norm_A * (double)m);
                 *residual = (double)resid1;
             }
             else if(*jobvl == 'V')
@@ -235,7 +223,7 @@ void validate_geev(char* jobvl, char* jobvr,
                 norm_A = fla_lapack_zlange("1", &m, &m, Vlambda, &m, work);
                 zgemm_("N", "C", &m, &m, &m, &z_one, VL, &ldvl, lambda, &m, &z_n_one, Vlambda, &m);
                 norm = fla_lapack_zlange("1", &m, &m, Vlambda, &m, work);
-                resid2 = norm/(eps * norm_A * (double)m);
+                resid2 = norm / (eps * norm_A * (double)m);
                 *residual = (double)resid2;
             }
             break;

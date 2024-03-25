@@ -1,5 +1,5 @@
-##Copyright (C) 2023, Advanced Micro Devices, Inc.## 
-add_library(AVX2_LU
+##Copyright (C) 2023-24, Advanced Micro Devices, Inc. All rights reserved.## 
+add_library(FLA_LAPACK_AVX2
      OBJECT
 ${CMAKE_CURRENT_SOURCE_DIR}/fla_lapack_avx2_kernels.h
 ${CMAKE_CURRENT_SOURCE_DIR}/fla_dgeqrf_small_avx2.h
@@ -22,7 +22,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/fla_dgetrs_small_trsm_ll_avx2.c
 )
 
 if(WIN32)
-target_compile_options(AVX2_LU PRIVATE /arch:AVX2)
+target_compile_options(FLA_LAPACK_AVX2 PRIVATE /arch:AVX2)
 else(UNIX)
-target_compile_options(AVX2_LU PRIVATE -mavx2 -mfma)
+target_compile_options(FLA_LAPACK_AVX2 PRIVATE -mavx2 -mfma)
 endif()

@@ -2,22 +2,23 @@
     Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-#include "test_lapack.h"
 #include "test_common.h"
+#include "test_lapack.h"
 #include "test_prototype.h"
 
 /* Local prototypes.*/
-void fla_test_syev_experiment(test_params_t *params, integer datatype, integer p_cur, integer  q_cur, integer pci,
-                                integer n_repeats, integer einfo, double* perf, double* t, double* residual);
-void prepare_syev_run(char* jobz, char* uplo, integer n, void* A, integer lda, void* w, integer datatype, integer n_repeats,
-                        double* time_min_, integer* info);
-void invoke_syev(integer datatype, char* jobz, char* uplo, integer* n, void* a, integer* lda, void* w, void* work, integer* lwork,
-                     void *rwork, integer* info);
+void fla_test_syev_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
+                              integer pci, integer n_repeats, integer einfo, double *perf,
+                              double *t, double *residual);
+void prepare_syev_run(char *jobz, char *uplo, integer n, void *A, integer lda, void *w,
+                      integer datatype, integer n_repeats, double *time_min_, integer *info);
+void invoke_syev(integer datatype, char *jobz, char *uplo, integer *n, void *a, integer *lda,
+                 void *w, void *work, integer *lwork, void *rwork, integer *info);
 
-void fla_test_syev(integer argc, char ** argv, test_params_t *params)
+void fla_test_syev(integer argc, char **argv, test_params_t *params)
 {
-    char* op_str = "Eigen Values and Vectors";
-    char* front_str = "SYEV";
+    char *op_str = "Eigen Values and Vectors";
+    char *front_str = "SYEV";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
 
     if(argc == 1)
@@ -29,16 +30,16 @@ void fla_test_syev(integer argc, char ** argv, test_params_t *params)
         fla_test_op_driver(front_str, SQUARE_INPUT, params, EIG_SYM, fla_test_syev_experiment);
         tests_not_run = 0;
     }
-    if (argc == 10)
+    if(argc == 10)
     {
         FLA_TEST_PARSE_LAST_ARG(argv[9]);
     }
-    if (argc >= 9 && argc <= 10)
+    if(argc >= 9 && argc <= 10)
     {
-        integer i, num_types,N;
+        integer i, num_types, N;
         integer datatype, n_repeats;
         double perf, time_min, residual;
-        char stype,type_flag[4] = {0};
+        char stype, type_flag[4] = {0};
         char *endptr;
 
         /* Parse the arguments */
@@ -72,18 +73,12 @@ void fla_test_syev(integer argc, char ** argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_syev_experiment(params, datatype,
-                                          N, N,
-                                          0,
-                                          n_repeats, einfo,
-                                          &perf, &time_min, &residual);
+                fla_test_syev_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
+                                         &time_min, &residual);
                 /* Print the results */
-                fla_test_print_status(front_str,
-                                      stype,
-                                      SQUARE_INPUT,
-                                      N, N,
-                                      residual, params->eig_sym_paramslist[0].threshold_value,
-                                      time_min, perf);
+                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
+                                      params->eig_sym_paramslist[0].threshold_value, time_min,
+                                      perf);
                 tests_not_run = 0;
             }
         }
@@ -100,23 +95,16 @@ void fla_test_syev(integer argc, char ** argv, test_params_t *params)
     {
         printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n\n");
     }
-    if (g_ext_fptr != NULL)
+    if(g_ext_fptr != NULL)
     {
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
     }
 }
 
-void fla_test_syev_experiment(test_params_t *params,
-                               integer  datatype,
-                               integer  p_cur,
-                               integer  q_cur,
-                               integer pci,
-                               integer n_repeats,
-                               integer einfo,
-                               double* perf,
-                               double *time_min,
-                               double* residual)
+void fla_test_syev_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
+                              integer pci, integer n_repeats, integer einfo, double *perf,
+                              double *time_min, double *residual)
 {
     integer n, lda, info = 0, vinfo = 0;
     char jobz, uplo;
@@ -132,18 +120,18 @@ void fla_test_syev_experiment(test_params_t *params,
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if (config_data)
+    if(config_data)
     {
-        if (lda == -1)
+        if(lda == -1)
         {
-            lda = fla_max(1,n);
+            lda = fla_max(1, n);
         }
     }
 
     /* Create input matrix parameters */
     create_matrix(datatype, &A, lda, n);
     create_realtype_vector(datatype, &w, n);
-    if (g_ext_fptr != NULL)
+    if(g_ext_fptr != NULL)
     {
         /* Initialize input matrix with custom data */
         init_matrix_from_file(datatype, A, n, n, lda, g_ext_fptr);
@@ -151,7 +139,7 @@ void fla_test_syev_experiment(test_params_t *params,
     else
     {
         /* input matrix A with random symmetric numbers or complex hermitian matrix */
-        if (datatype == FLOAT || datatype == DOUBLE)
+        if(datatype == FLOAT || datatype == DOUBLE)
             rand_sym_matrix(datatype, A, n, n, lda);
         else
             rand_hermitian_matrix(datatype, n, &A, lda);
@@ -165,7 +153,7 @@ void fla_test_syev_experiment(test_params_t *params,
     /* performance computation
        (8/3)n^3 flops for eigen vectors
        (4/3)n^3 flops for eigen values */
-    if( jobz == 'V')
+    if(jobz == 'V')
         *perf = (double)((8.0 / 3.0) * n * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
     else
         *perf = (double)((4.0 / 3.0) * n * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
@@ -173,7 +161,7 @@ void fla_test_syev_experiment(test_params_t *params,
         *perf *= 4.0;
 
     /* output validation */
-    if (info == 0)
+    if(info == 0)
         validate_syevd(&jobz, n, A, A_test, lda, w, datatype, residual, &vinfo);
 
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
@@ -184,16 +172,8 @@ void fla_test_syev_experiment(test_params_t *params,
     free_vector(w);
 }
 
-void prepare_syev_run(char *jobz,
-                       char *uplo,
-                       integer n,
-                       void *A,
-                       integer lda,
-                       void *w,
-                       integer datatype,
-                       integer n_repeats,
-                       double* time_min_,
-                       integer* info)
+void prepare_syev_run(char *jobz, char *uplo, integer n, void *A, integer lda, void *w,
+                      integer datatype, integer n_repeats, double *time_min_, integer *info)
 {
     void *A_save = NULL, *work = NULL, *rwork = NULL, *w_test = NULL;
     integer i, lwork;
@@ -227,7 +207,7 @@ void prepare_syev_run(char *jobz,
     }
 
     *info = 0;
-    for (i = 0; i < n_repeats && *info == 0; ++i)
+    for(i = 0; i < n_repeats && *info == 0; ++i)
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
@@ -235,8 +215,8 @@ void prepare_syev_run(char *jobz,
         create_realtype_vector(datatype, &w_test, n);
         create_vector(datatype, &work, lwork);
 
-        if (datatype == COMPLEX || datatype == DOUBLE_COMPLEX )
-                create_realtype_vector(datatype, &rwork, fla_max(1, 3*n -2));
+        if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+            create_realtype_vector(datatype, &rwork, fla_max(1, 3 * n - 2));
         else
             rwork = NULL;
 
@@ -256,7 +236,7 @@ void prepare_syev_run(char *jobz,
         /* Free up the output buffers */
         free_vector(work);
 
-        if ( datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+        if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
             free_vector(rwork);
 
         free_vector(w_test);
@@ -267,7 +247,8 @@ void prepare_syev_run(char *jobz,
     free_matrix(A_save);
 }
 
-void invoke_syev(integer datatype, char* jobz, char* uplo, integer* n, void* a, integer* lda, void* w, void* work, integer* lwork, void* rwork, integer* info)
+void invoke_syev(integer datatype, char *jobz, char *uplo, integer *n, void *a, integer *lda,
+                 void *w, void *work, integer *lwork, void *rwork, integer *info)
 {
     switch(datatype)
     {

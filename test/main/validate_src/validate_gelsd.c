@@ -1,6 +1,6 @@
 /******************************************************************************
-* Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
-*******************************************************************************/
+ * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 
 /* > \brief \b validate_gelsd.c                                              */
 /* =========== DOCUMENTATION ===========                                     */
@@ -35,19 +35,9 @@
 
 #include "test_common.h"
 
-void validate_gelsd(integer m,
-    integer n,
-    integer nrhs,
-    void *A,
-    integer lda,
-    void *B,
-    integer ldb,
-    void *S,
-    void *X,
-    void *rcond,
-    integer *rank,
-    integer datatype,
-    double* residual)
+void validate_gelsd(integer m, integer n, integer nrhs, void *A, integer lda, void *B, integer ldb,
+                    void *S, void *X, void *rcond, integer *rank, integer datatype,
+                    double *residual)
 {
     if(m == 0 || n == 0 || nrhs == 0)
         return;
@@ -61,7 +51,7 @@ void validate_gelsd(integer m,
        Check the order of Singular values generated */
     resid1 = svd_check_order(datatype, S, m, n, *residual);
 
-    switch (datatype)
+    switch(datatype)
     {
         case FLOAT:
         {
@@ -88,7 +78,7 @@ void validate_gelsd(integer m,
                 sgemm_("N", "N", &m, &nrhs, &n, &s_n_one, A, &lda, X, &ldx, &s_one, B, &ldb);
                 norm = fla_lapack_slange("1", &m, &nrhs, B, &ldb, work);
 
-                resid2 = norm / ((norm_a * norm_x + norm_b) * (float)fla_max(m,n) * eps);
+                resid2 = norm / ((norm_a * norm_x + norm_b) * (float)fla_max(m, n) * eps);
 
                 /* Test 3
                  * checks whether X is in the row space of A or A'
@@ -126,7 +116,7 @@ void validate_gelsd(integer m,
                 dgemm_("N", "N", &m, &nrhs, &n, &d_n_one, A, &lda, X, &ldx, &d_one, B, &ldb);
                 norm = fla_lapack_dlange("1", &m, &nrhs, B, &ldb, work);
 
-                resid2 = norm / ((norm_a * norm_x + norm_b) * (double)fla_max(m,n) * eps);
+                resid2 = norm / ((norm_a * norm_x + norm_b) * (double)fla_max(m, n) * eps);
 
                 /* Test 3
                  * checks whether X is in the row space of A or A'
@@ -165,7 +155,7 @@ void validate_gelsd(integer m,
                 cgemm_("N", "N", &m, &nrhs, &n, &c_n_one, A, &lda, X, &ldx, &c_one, B, &ldb);
                 norm = fla_lapack_clange("1", &m, &nrhs, B, &ldb, work);
 
-                resid2 = norm / ((norm_a * norm_x + norm_b) * (float)fla_max(m,n) * eps);
+                resid2 = norm / ((norm_a * norm_x + norm_b) * (float)fla_max(m, n) * eps);
 
                 /* Test 3
                  * checks whether X is in the row space of A or A'
@@ -204,7 +194,7 @@ void validate_gelsd(integer m,
                 zgemm_("N", "N", &m, &nrhs, &n, &z_n_one, A, &lda, X, &ldx, &z_one, B, &ldb);
                 norm = fla_lapack_zlange("1", &m, &nrhs, B, &ldb, work);
 
-                resid2 = norm / ((norm_a * norm_x + norm_b) * (double)fla_max(m,n) * eps);
+                resid2 = norm / ((norm_a * norm_x + norm_b) * (double)fla_max(m, n) * eps);
 
                 /* Test 3
                  * checks whether X is in the row space of A or A'

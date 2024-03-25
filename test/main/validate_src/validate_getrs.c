@@ -1,6 +1,6 @@
 /******************************************************************************
-* Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
-*******************************************************************************/
+ * Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 
 /*! @file validate_getrs.c
  *  @brief Defines validate function of GETRS() to use in test suite.

@@ -1,6 +1,6 @@
 /******************************************************************************
-* Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
-*******************************************************************************/
+ * Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 
 /*! @file validate_geqp3.c
  *  @brief Defines validate function of GEQP3() to use in test suite.
@@ -8,18 +8,11 @@
 
 #include "test_common.h"
 
-void validate_geqp3(integer m_A, integer n_A,
-    void *A,
-    void *A_test,
-    integer lda,
-    integer *jpvt,
-    void *T_test,
-    integer datatype,
-    double* residual,
-    integer* info)
+void validate_geqp3(integer m_A, integer n_A, void *A, void *A_test, integer lda, integer *jpvt,
+                    void *T_test, integer datatype, double *residual, integer *info)
 {
     if(m_A == 0 || n_A == 0)
-      return;
+        return;
     void *Q = NULL, *R = NULL, *work = NULL;
     integer min_A;
     integer lwork = -1, FLA_TRUE = 1;
@@ -37,7 +30,7 @@ void validate_geqp3(integer m_A, integer n_A,
     copy_matrix(datatype, "full", m_A, min_A, A_test, lda, Q, m_A);
     copy_matrix(datatype, "Upper", min_A, n_A, A_test, lda, R, m_A);
 
-    switch( datatype )
+    switch(datatype)
     {
         case FLOAT:
         {
@@ -52,20 +45,20 @@ void validate_geqp3(integer m_A, integer n_A,
             /* sorgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
             fla_lapack_sorgqr(&m_A, &m_A, &min_A, NULL, &m_A, NULL, &twork, &lwork, info);
-            if (*info < 0)
-               break;
+            if(*info < 0)
+                break;
             lwork = twork;
             create_vector(datatype, &work, lwork);
             fla_lapack_sorgqr(&m_A, &m_A, &min_A, Q, &m_A, T_test, work, &lwork, info);
-            if (*info < 0)
-               break;
+            if(*info < 0)
+                break;
 
             /* Test 1
                compute norm(((Q * R) - (A * P)) / (N * norm(A) * EPS)*/
             sgemm_("N", "N", &m_A, &n_A, &m_A, &s_one, Q, &m_A, R, &m_A, &s_n_one, A, &lda);
             norm = fla_lapack_slange("1", &m_A, &n_A, A, &lda, work);
 
-            resid1 = norm/(eps * norm_A * (float)n_A);
+            resid1 = norm / (eps * norm_A * (float)n_A);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
@@ -87,25 +80,25 @@ void validate_geqp3(integer m_A, integer n_A,
             /* dorgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
             fla_lapack_dorgqr(&m_A, &m_A, &min_A, NULL, &m_A, NULL, &twork, &lwork, info);
-            if (*info < 0)
-               break;
+            if(*info < 0)
+                break;
             lwork = twork;
-            create_vector(datatype,  &work, lwork);
+            create_vector(datatype, &work, lwork);
 
             fla_lapack_dorgqr(&m_A, &m_A, &min_A, Q, &m_A, T_test, work, &lwork, info);
-            if (*info < 0)
-               break;
+            if(*info < 0)
+                break;
 
             /* Test 1
                compute norm((Q * R) - (A * P)) / (N * norm(A) * EPS)*/
             dgemm_("N", "N", &m_A, &n_A, &m_A, &d_one, Q, &m_A, R, &m_A, &d_n_one, A, &lda);
 
             norm = fla_lapack_dlange("1", &m_A, &n_A, A, &lda, work);
-            resid1 = norm/(eps * norm_A * (double)n_A);
+            resid1 = norm / (eps * norm_A * (double)n_A);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = check_orthogonality(datatype, Q, m_A, n_A, m_A); 
+            resid2 = check_orthogonality(datatype, Q, m_A, n_A, m_A);
 
             *residual = (double)fla_max(resid1, resid2);
             break;
@@ -123,26 +116,26 @@ void validate_geqp3(integer m_A, integer n_A,
             /* corgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
             fla_lapack_cungqr(&m_A, &m_A, &min_A, NULL, &m_A, NULL, &twork, &lwork, info);
-            if (*info < 0)
-               break;
+            if(*info < 0)
+                break;
 
             lwork = twork.real;
-            create_vector(datatype,  &work, lwork);
+            create_vector(datatype, &work, lwork);
 
             fla_lapack_cungqr(&m_A, &m_A, &min_A, Q, &m_A, T_test, work, &lwork, info);
-            if (*info < 0)
-               break;
+            if(*info < 0)
+                break;
 
             /* Test 1
                compute norm((Q * R) - (A * P)) / (N * norm(A) * EPS)*/
             cgemm_("N", "N", &m_A, &n_A, &m_A, &c_one, Q, &m_A, R, &m_A, &c_n_one, A, &lda);
 
             norm = fla_lapack_clange("1", &m_A, &n_A, A, &lda, work);
-            resid1 = norm/(eps * norm_A * (float)n_A);
+            resid1 = norm / (eps * norm_A * (float)n_A);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = (float)check_orthogonality(datatype, Q, m_A, n_A, m_A); 
+            resid2 = (float)check_orthogonality(datatype, Q, m_A, n_A, m_A);
 
             *residual = (double)fla_max(resid1, resid2);
             break;
@@ -160,33 +153,33 @@ void validate_geqp3(integer m_A, integer n_A,
             /* zorgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
             fla_lapack_zungqr(&m_A, &m_A, &min_A, NULL, &m_A, NULL, &twork, &lwork, info);
-            if (*info < 0)
-               break;
+            if(*info < 0)
+                break;
 
             lwork = twork.real;
             create_vector(datatype, &work, lwork);
 
             fla_lapack_zungqr(&m_A, &m_A, &min_A, Q, &m_A, T_test, work, &lwork, info);
-            if (*info < 0)
-               break;
+            if(*info < 0)
+                break;
 
             /* Test 1
                compute norm((Q * R) - (A * P)) / (N * norm(A) * EPS)*/
             zgemm_("N", "N", &m_A, &n_A, &m_A, &z_n_one, Q, &m_A, R, &m_A, &z_one, A, &lda);
 
             norm = fla_lapack_zlange("1", &m_A, &n_A, A, &lda, work);
-            resid1 = norm/(eps * norm_A * (double)n_A);
+            resid1 = norm / (eps * norm_A * (double)n_A);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = check_orthogonality(datatype, Q, m_A, n_A, m_A);  
+            resid2 = check_orthogonality(datatype, Q, m_A, n_A, m_A);
 
             *residual = (double)fla_max(resid1, resid2);
             break;
         }
     }
     // Free up buffers
-    free_matrix( R );
-    free_matrix( Q );
-    free_vector( work );
+    free_matrix(R);
+    free_matrix(Q);
+    free_vector(work);
 }

@@ -141,10 +141,7 @@ void dlarfg_(integer *n, doublereal *alpha, doublereal *x, integer *incx, double
     /* .. Executable Statements .. */
     /* Parameter adjustments */
     
-    /* Initialize global context data */
-    aocl_fla_init();
-
-    --x;
+     --x;
     /* Function Body */
     if (*n <= 1)
     {

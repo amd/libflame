@@ -1,6 +1,6 @@
 /******************************************************************************
-* Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
-*******************************************************************************/
+ * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 
 /* > \brief \b validate_syevx.c                                              */
 /* =========== DOCUMENTATION ===========                                     */
@@ -39,20 +39,20 @@
 
 #include "test_common.h"
 
-void validate_syevx(char* jobz, char* range, integer n, void* A, void* A_test,
-                    integer lda, integer il, integer iu, void *L, void* lambda,
-                    void* ifail, integer datatype, double* residual)
+void validate_syevx(char *jobz, char *range, integer n, void *A, void *A_test, integer lda,
+                    integer il, integer iu, void *L, void *lambda, void *ifail, integer datatype,
+                    double *residual)
 {
     if(n == 0)
         return;
 
     sort_realtype_vector(datatype, "A", n, L, 1);
 
-    if ((*range == 'I') || (*range == 'i'))
+    if((*range == 'I') || (*range == 'i'))
     {
         /* Test I range
            check if output EVs matches the input EVs in given index range */
-        if (compare_realtype_vector(datatype, (iu-il+1), L, 1, il, lambda, 1))
+        if(compare_realtype_vector(datatype, (iu - il + 1), L, 1, il, lambda, 1))
         {
             *residual = DBL_MAX;
         }
@@ -87,10 +87,9 @@ void validate_syevx(char* jobz, char* range, integer n, void* A, void* A_test,
                        compute norm(A - ((Q * lambda) * Q')) /
                                     (n * norm(A) * EPS)      */
                     norm_A = fla_lapack_slange("1", &n, &n, A, &lda, work);
-                    sgemm_("N", "T", &n, &n, &n, &s_one, Q, &lda, Z, &lda,
-                           &s_n_one, A, &lda);
+                    sgemm_("N", "T", &n, &n, &n, &s_one, Q, &lda, Z, &lda, &s_n_one, A, &lda);
                     norm = fla_lapack_slange("1", &n, &n, A, &lda, work);
-                    resid1 = norm/(eps * norm_A * (float)n);
+                    resid1 = norm / (eps * norm_A * (float)n);
 
                     /* Test 2
                        compute norm(I - Z'*Z) / (N * EPS)  */
@@ -109,10 +108,9 @@ void validate_syevx(char* jobz, char* range, integer n, void* A, void* A_test,
                        compute norm(A - (Q * lambda * Q')) /
                                      (n * norm(A) * EPS)       */
                     norm_A = fla_lapack_dlange("1", &n, &n, A, &lda, work);
-                    dgemm_("N", "T", &n, &n, &n, &d_one, Q, &lda, Z, &lda,
-                           &d_n_one, A, &lda);
+                    dgemm_("N", "T", &n, &n, &n, &d_one, Q, &lda, Z, &lda, &d_n_one, A, &lda);
                     norm = fla_lapack_dlange("1", &n, &n, A, &lda, work);
-                    resid1 = norm/(eps * norm_A * (double)n);
+                    resid1 = norm / (eps * norm_A * (double)n);
 
                     /* Test 2
                        compute norm(I - Z'*Z) / (N * EPS)*/
@@ -131,10 +129,9 @@ void validate_syevx(char* jobz, char* range, integer n, void* A, void* A_test,
                        compute norm(A - (Q * lambda * Q')) /
                                        (n * norm(A) * EPS)   */
                     norm_A = fla_lapack_clange("1", &n, &n, A, &lda, work);
-                    cgemm_("N", "C", &n, &n, &n, &c_one, Q, &lda, Z, &lda,
-                           &c_n_one, A, &lda);
+                    cgemm_("N", "C", &n, &n, &n, &c_one, Q, &lda, Z, &lda, &c_n_one, A, &lda);
                     norm = fla_lapack_clange("1", &n, &n, A, &lda, work);
-                    resid1 = norm/(eps * norm_A * (float)n);
+                    resid1 = norm / (eps * norm_A * (float)n);
 
                     /* Test 2
                        compute norm(I - Z'*Z) / (N * EPS)*/
@@ -153,10 +150,9 @@ void validate_syevx(char* jobz, char* range, integer n, void* A, void* A_test,
                        compute norm(A - (Q * lambda * Q')) /
                                     (n * norm(A) * EPS)      */
                     norm_A = fla_lapack_zlange("1", &n, &n, A, &lda, work);
-                    zgemm_("N", "C", &n, &n, &n, &z_one, Q, &lda, Z, &lda,
-                           &z_n_one, A, &lda);
+                    zgemm_("N", "C", &n, &n, &n, &z_one, Q, &lda, Z, &lda, &z_n_one, A, &lda);
                     norm = fla_lapack_zlange("1", &n, &n, A, &lda, work);
-                    resid1 = norm/(eps * norm_A * (double)n);
+                    resid1 = norm / (eps * norm_A * (double)n);
 
                     /* Test 2
                        compute norm(I - Z'*Z) / (N * EPS)*/
@@ -182,7 +178,7 @@ void validate_syevx(char* jobz, char* range, integer n, void* A, void* A_test,
 
         /* Test 4
            check if output EVs matches lambdaith input EVs */
-        if (compare_realtype_vector(datatype, n, L, 1, 1, lambda, 1))
+        if(compare_realtype_vector(datatype, n, L, 1, 1, lambda, 1))
         {
             *residual = DBL_MAX;
         }

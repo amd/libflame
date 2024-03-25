@@ -2,24 +2,25 @@
     Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-
 #include "test_lapack.h"
 
-
 /* Local prototypes */
-void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer p_cur, integer  q_cur, integer pci,
-                                    integer n_repeats, integer einfo, double* perf, double* t, double* residual);
-void prepare_hgeqz_run(char* job, char* compq, char* compz, integer n, integer* ilo, integer* ihi, void* h, integer ldh,
-                            void* t, integer ldt, void *alpha, void *alphar, void *alphai, void* beta, void* q, integer ldq, void* z,
-                            integer ldz, integer datatype, integer n_repeats, double* time_min_, integer* info);
-void invoke_hgeqz(integer datatype, char* job, char* compq, char* compz, integer* n, integer* ilo, integer* ihi, void* h,
-                            integer* ldh, void* t, integer* ldt, void *alpha, void *alphar, void *alphai, void* beta, void* q, integer* ldq,
-                            void* z, integer* ldz, void* work, integer* lwork, void* rwork, integer* info);
+void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual);
+void prepare_hgeqz_run(char *job, char *compq, char *compz, integer n, integer *ilo, integer *ihi,
+                       void *h, integer ldh, void *t, integer ldt, void *alpha, void *alphar,
+                       void *alphai, void *beta, void *q, integer ldq, void *z, integer ldz,
+                       integer datatype, integer n_repeats, double *time_min_, integer *info);
+void invoke_hgeqz(integer datatype, char *job, char *compq, char *compz, integer *n, integer *ilo,
+                  integer *ihi, void *h, integer *ldh, void *t, integer *ldt, void *alpha,
+                  void *alphar, void *alphai, void *beta, void *q, integer *ldq, void *z,
+                  integer *ldz, void *work, integer *lwork, void *rwork, integer *info);
 
-void fla_test_hgeqz(integer argc, char ** argv, test_params_t *params)
+void fla_test_hgeqz(integer argc, char **argv, test_params_t *params)
 {
-    char* op_str = "Computing Eigen value of a real matrix pair (H,T)";
-    char* front_str = "HGEQZ";
+    char *op_str = "Computing Eigen value of a real matrix pair (H,T)";
+    char *front_str = "HGEQZ";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
     if(argc == 1)
     {
@@ -33,12 +34,12 @@ void fla_test_hgeqz(integer argc, char ** argv, test_params_t *params)
     {
         FLA_TEST_PARSE_LAST_ARG(argv[15]);
     }
-    if(argc >= 15 && argc <=16)
+    if(argc >= 15 && argc <= 16)
     {
         integer i, num_types, N;
         integer datatype, n_repeats;
         double perf, time_min, residual;
-        char stype,type_flag[4] = {0};
+        char stype, type_flag[4] = {0};
         char *endptr;
 
         /* Prase the arguments */
@@ -78,18 +79,12 @@ void fla_test_hgeqz(integer argc, char ** argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_hgeqz_experiment(params, datatype,
-                                          N, N,
-                                          0,
-                                          n_repeats, einfo,
-                                          &perf, &time_min, &residual);
+                fla_test_hgeqz_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
+                                          &time_min, &residual);
                 /* Print the results */
-                fla_test_print_status(front_str,
-                                      stype,
-                                      SQUARE_INPUT,
-                                      N, N,
-                                      residual, params->eig_sym_paramslist[0].threshold_value,
-                                      time_min, perf);
+                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
+                                      params->eig_sym_paramslist[0].threshold_value, time_min,
+                                      perf);
                 tests_not_run = 0;
             }
         }
@@ -99,29 +94,23 @@ void fla_test_hgeqz(integer argc, char ** argv, test_params_t *params)
     if(tests_not_run)
     {
         printf("\nIllegal arguments for HGEQZ\n");
-        printf("./<EXE> hgeqz <precisions - sdcz> <job> <compq> <compz> <N> <ILO> <IHI> <LDH> <LDT> <LDQ> <LDZ> <LWORK> <repeats>\n");
+        printf("./<EXE> hgeqz <precisions - sdcz> <job> <compq> <compz> <N> <ILO> <IHI> <LDH> "
+               "<LDT> <LDQ> <LDZ> <LWORK> <repeats>\n");
     }
     if(invalid_dtype)
     {
         printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n\n");
     }
-    if (g_ext_fptr != NULL)
+    if(g_ext_fptr != NULL)
     {
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
     }
 }
 
-void fla_test_hgeqz_experiment(test_params_t *params,
-    integer  datatype,
-    integer  p_cur,
-    integer  q_cur,
-    integer  pci,
-    integer  n_repeats,
-    integer  einfo,
-    double   *perf,
-    double   *time_min,
-    double   *residual)
+void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *time_min, double *residual)
 {
     integer n, ldz, ldh, ldt, ldq;
     integer ilo, ihi, info = 0, vinfo = 0;
@@ -147,20 +136,20 @@ void fla_test_hgeqz_experiment(test_params_t *params,
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if (config_data)
+    if(config_data)
     {
-        if (ldh == -1)
+        if(ldh == -1)
         {
-            ldh = fla_max(1,n);
+            ldh = fla_max(1, n);
         }
-        if (ldt == -1)
+        if(ldt == -1)
         {
-            ldt = fla_max(1,n);
+            ldt = fla_max(1, n);
         }
         /* LDQ >= N if COMPQ='V' or 'I'; LDQ >= 1 otherwise */
-        if (ldq == -1)
+        if(ldq == -1)
         {
-            if ((compq == 'V') || (compq == 'I'))
+            if((compq == 'V') || (compq == 'I'))
             {
                 ldq = n;
             }
@@ -170,9 +159,9 @@ void fla_test_hgeqz_experiment(test_params_t *params,
             }
         }
         /* LDZ >= N if COMPZ='V' or 'I'; LDZ >= 1 otherwise */
-        if (ldz == -1)
+        if(ldz == -1)
         {
-            if ((compz == 'V') || (compz == 'I'))
+            if((compz == 'V') || (compz == 'I'))
             {
                 ldz = n;
             }
@@ -192,7 +181,7 @@ void fla_test_hgeqz_experiment(test_params_t *params,
     create_matrix(datatype, &B, ldt, n);
     create_matrix(datatype, &Q_A, ldq, n);
     create_matrix(datatype, &Z_A, ldz, n);
-    if (datatype == FLOAT || datatype == DOUBLE)
+    if(datatype == FLOAT || datatype == DOUBLE)
     {
         create_vector(datatype, &alphar, n);
         create_vector(datatype, &alphai, n);
@@ -238,7 +227,8 @@ void fla_test_hgeqz_experiment(test_params_t *params,
         copy_matrix(datatype, "full", n, n, Q, ldq, Q_A, ldq);
         copy_matrix(datatype, "full", n, n, Z, ldz, Z_A, ldz);
         /* Call to GGHRD API */
-        invoke_gghrd(datatype, &compq, &compz, &n, &ilo, &ihi, H, &ldh, T, &ldt, Q, &ldq, Z, &ldz, &info);
+        invoke_gghrd(datatype, &compq, &compz, &n, &ilo, &ihi, H, &ldh, T, &ldt, Q, &ldq, Z, &ldz,
+                     &info);
         if(compq == 'I')
             set_identity_matrix(datatype, n, n, Q, ldq);
         if(compz == 'I')
@@ -255,8 +245,8 @@ void fla_test_hgeqz_experiment(test_params_t *params,
     copy_matrix(datatype, "full", n, n, Q, ldq, Q_test, ldq);
     copy_matrix(datatype, "full", n, n, Z, ldz, Z_test, ldz);
 
-    prepare_hgeqz_run(&job, &compq, &compq, n, &ilo, &ihi, H_test, ldh, T_test, ldt, alpha, alphar, alphai, beta, Q_test, ldq, Z_test,
-                        ldz, datatype, n_repeats, time_min, &info);
+    prepare_hgeqz_run(&job, &compq, &compq, n, &ilo, &ihi, H_test, ldh, T_test, ldt, alpha, alphar,
+                      alphai, beta, Q_test, ldq, Z_test, ldz, datatype, n_repeats, time_min, &info);
 
     /* Performance computation
        (7)n^3 flops for eigen vectors for real
@@ -290,7 +280,8 @@ void fla_test_hgeqz_experiment(test_params_t *params,
 
     /* Output Validation */
     if(info == 0)
-        validate_hgeqz(&job, &compq, &compz, n, H, H_test, A, ldh, T, T_test, B, ldt, Q, Q_test, Q_A, ldq, Z, Z_test, Z_A, ldz, datatype, residual, &vinfo);
+        validate_hgeqz(&job, &compq, &compz, n, H, H_test, A, ldh, T, T_test, B, ldt, Q, Q_test,
+                       Q_A, ldq, Z, Z_test, Z_A, ldz, datatype, residual, &vinfo);
 
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
@@ -309,7 +300,7 @@ void fla_test_hgeqz_experiment(test_params_t *params,
     free_matrix(B);
     free_matrix(Q_A);
     free_matrix(Z_A);
-    if (datatype == FLOAT || datatype == DOUBLE)
+    if(datatype == FLOAT || datatype == DOUBLE)
     {
         free_vector(alphar);
         free_vector(alphai);
@@ -318,15 +309,17 @@ void fla_test_hgeqz_experiment(test_params_t *params,
         free_vector(alpha);
 }
 
-void prepare_hgeqz_run(char* job, char* compq, char* compz, integer n, integer* ilo, integer* ihi, void* H, integer ldh,
-                            void* T, integer ldt, void *alpha, void *alphar, void *alphai, void* beta, void* Q, integer ldq, void* Z,
-                            integer ldz, integer datatype, integer n_repeats, double* time_min_, integer* info)
+void prepare_hgeqz_run(char *job, char *compq, char *compz, integer n, integer *ilo, integer *ihi,
+                       void *H, integer ldh, void *T, integer ldt, void *alpha, void *alphar,
+                       void *alphai, void *beta, void *Q, integer ldq, void *Z, integer ldz,
+                       integer datatype, integer n_repeats, double *time_min_, integer *info)
 {
     void *H_save = NULL, *T_save = NULL, *Q_save = NULL, *Z_save = NULL, *work = NULL, *rwork;
     integer i, lwork;
     double time_min = 1e9, exe_time;
 
-    /* Make a copy of the input matrix H,T,Q and Z. Same input values will be passed in each itertaion.*/
+    /* Make a copy of the input matrix H,T,Q and Z. Same input values will be passed in each
+     * itertaion.*/
     create_matrix(datatype, &H_save, ldh, n);
     create_matrix(datatype, &T_save, ldt, n);
     create_matrix(datatype, &Q_save, ldq, n);
@@ -345,15 +338,15 @@ void prepare_hgeqz_run(char* job, char* compq, char* compz, integer n, integer* 
         create_vector(datatype, &work, 1);
 
         /* call to  hgeqz API */
-        invoke_hgeqz(datatype, job, compq, compz, &n, ilo, ihi, NULL, &ldh, NULL, &ldt, alpha, alphar, alphai,
-                         beta, NULL, &ldq, NULL, &ldz, work, &lwork, rwork, info);
+        invoke_hgeqz(datatype, job, compq, compz, &n, ilo, ihi, NULL, &ldh, NULL, &ldt, alpha,
+                     alphar, alphai, beta, NULL, &ldq, NULL, &ldz, work, &lwork, rwork, info);
 
         /* Output buffers will be freshly allocated for each iterations, free up
         the current output buffers.*/
         if(*info == 0)
         {
             /* Get work size */
-            lwork = get_work_value( datatype, work );
+            lwork = get_work_value(datatype, work);
             free_vector(work);
         }
     }
@@ -376,8 +369,8 @@ void prepare_hgeqz_run(char* job, char* compq, char* compz, integer n, integer* 
         exe_time = fla_test_clock();
 
         /* Call to hgeqz API */
-        invoke_hgeqz(datatype, job, compq, compz, &n, ilo, ihi, H, &ldh, T, &ldt, alpha, alphar, alphai,
-                        beta, Q, &ldq, Z, &ldz, work, &lwork, rwork, info);
+        invoke_hgeqz(datatype, job, compq, compz, &n, ilo, ihi, H, &ldh, T, &ldt, alpha, alphar,
+                     alphai, beta, Q, &ldq, Z, &ldz, work, &lwork, rwork, info);
 
         exe_time = fla_test_clock() - exe_time;
 
@@ -396,31 +389,38 @@ void prepare_hgeqz_run(char* job, char* compq, char* compz, integer n, integer* 
     free_vector(rwork);
 }
 
-void invoke_hgeqz(integer datatype, char* job, char* compq, char* compz, integer* n, integer* ilo, integer* ihi, void* h, integer* ldh, void* t, integer* ldt, void *alpha, void *alphar, void *alphai, void* beta, void* q, integer* ldq, void* z, integer* ldz, void* work, integer* lwork, void* rwork, integer* info)
+void invoke_hgeqz(integer datatype, char *job, char *compq, char *compz, integer *n, integer *ilo,
+                  integer *ihi, void *h, integer *ldh, void *t, integer *ldt, void *alpha,
+                  void *alphar, void *alphai, void *beta, void *q, integer *ldq, void *z,
+                  integer *ldz, void *work, integer *lwork, void *rwork, integer *info)
 {
     switch(datatype)
     {
         case FLOAT:
         {
-            fla_lapack_shgeqz(job, compq, compz, n, ilo, ihi, h, ldh, t, ldt, alphar, alphai, beta, q, ldq, z, ldz, work, lwork, info);
+            fla_lapack_shgeqz(job, compq, compz, n, ilo, ihi, h, ldh, t, ldt, alphar, alphai, beta,
+                              q, ldq, z, ldz, work, lwork, info);
             break;
         }
 
         case DOUBLE:
         {
-            fla_lapack_dhgeqz(job, compq, compz, n, ilo, ihi, h, ldh, t, ldt, alphar, alphai, beta, q, ldq, z, ldz, work, lwork, info);
+            fla_lapack_dhgeqz(job, compq, compz, n, ilo, ihi, h, ldh, t, ldt, alphar, alphai, beta,
+                              q, ldq, z, ldz, work, lwork, info);
             break;
         }
 
         case COMPLEX:
         {
-            fla_lapack_chgeqz(job, compq, compz, n, ilo, ihi, h, ldh, t, ldt, alpha, beta, q, ldq, z, ldz, work, lwork, rwork, info);
+            fla_lapack_chgeqz(job, compq, compz, n, ilo, ihi, h, ldh, t, ldt, alpha, beta, q, ldq,
+                              z, ldz, work, lwork, rwork, info);
             break;
         }
 
         case DOUBLE_COMPLEX:
         {
-            fla_lapack_zhgeqz(job, compq, compz, n, ilo, ihi, h, ldh, t, ldt, alpha, beta, q, ldq, z, ldz, work, lwork, rwork, info);
+            fla_lapack_zhgeqz(job, compq, compz, n, ilo, ihi, h, ldh, t, ldt, alpha, beta, q, ldq,
+                              z, ldz, work, lwork, rwork, info);
             break;
         }
     }

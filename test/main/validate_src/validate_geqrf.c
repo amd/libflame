@@ -1,6 +1,6 @@
 /******************************************************************************
-* Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
-*******************************************************************************/
+ * Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 
 /*! @file validate_geqrf.c
  *  @brief Defines validate function of GEQRF() to use in test suite.
@@ -8,18 +8,11 @@
 
 #include "test_common.h"
 
-void validate_geqrf(integer m_A,
-    integer n_A,
-    void *A,
-    void *A_test,
-    integer lda,
-    void *T_test,
-    integer datatype,
-    double* residual,
-    integer* info)
+void validate_geqrf(integer m_A, integer n_A, void *A, void *A_test, integer lda, void *T_test,
+                    integer datatype, double *residual, integer *info)
 {
     if(m_A == 0 || n_A == 0)
-      return;
+        return;
     void *Q = NULL, *R = NULL, *work = NULL;
     integer min_A;
     integer lwork = -1;
@@ -37,25 +30,25 @@ void validate_geqrf(integer m_A,
     copy_matrix(datatype, "full", m_A, min_A, A_test, lda, Q, m_A);
     copy_matrix(datatype, "Upper", min_A, n_A, A_test, lda, R, m_A);
 
-    switch( datatype )
+    switch(datatype)
     {
         case FLOAT:
         {
             float twork;
             float norm, norm_A, eps, resid1, resid2;
 
-            /* sorgrq api generates the Q martrix using the elementary reflectors and scalar 
+            /* sorgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
             fla_lapack_sorgqr(&m_A, &m_A, &min_A, NULL, &m_A, NULL, &twork, &lwork, info);
-            if (*info < 0)
-               break;
+            if(*info < 0)
+                break;
 
             lwork = twork;
-            create_vector(datatype,  &work, lwork);
+            create_vector(datatype, &work, lwork);
 
             fla_lapack_sorgqr(&m_A, &m_A, &min_A, Q, &m_A, T_test, work, &lwork, info);
             if(*info < 0)
-               break;
+                break;
 
             /* Test 1
                compute norm(R - Q'*A) / (V * norm(A) * EPS)*/
@@ -66,7 +59,7 @@ void validate_geqrf(integer m_A,
 
             eps = fla_lapack_slamch("P");
 
-            resid1 = norm/(eps * norm_A * (float)n_A);
+            resid1 = norm / (eps * norm_A * (float)n_A);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
@@ -80,18 +73,18 @@ void validate_geqrf(integer m_A,
             double twork;
             double norm, norm_A, eps, resid1, resid2;
 
-            /* dorgrq api generates the Q martrix using the elementary reflectors and scalar 
+            /* dorgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
             fla_lapack_dorgqr(&m_A, &m_A, &min_A, NULL, &m_A, NULL, &twork, &lwork, info);
             if(*info < 0)
-               break;
+                break;
 
             lwork = twork;
-            create_vector(datatype,  &work, lwork);
+            create_vector(datatype, &work, lwork);
 
             fla_lapack_dorgqr(&m_A, &m_A, &min_A, Q, &m_A, T_test, work, &lwork, info);
             if(*info < 0)
-               break;
+                break;
 
             /* Test 1
                compute norm(R - Q'*A) / (V * norm(A) * EPS)*/
@@ -102,7 +95,7 @@ void validate_geqrf(integer m_A,
 
             eps = fla_lapack_dlamch("P");
 
-            resid1 = norm/(eps * norm_A * (double)n_A);
+            resid1 = norm / (eps * norm_A * (double)n_A);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
@@ -116,18 +109,18 @@ void validate_geqrf(integer m_A,
             scomplex twork;
             float norm, norm_A, eps, resid1, resid2;
 
-            /* corgrq api generates the Q martrix using the elementary reflectors and scalar 
+            /* corgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
             fla_lapack_cungqr(&m_A, &m_A, &min_A, NULL, &m_A, NULL, &twork, &lwork, info);
             if(*info < 0)
-               break;
+                break;
 
             lwork = twork.real;
-            create_vector(datatype,  &work, lwork);
+            create_vector(datatype, &work, lwork);
 
             fla_lapack_cungqr(&m_A, &m_A, &min_A, Q, &m_A, T_test, work, &lwork, info);
             if(*info < 0)
-               break;
+                break;
 
             /* Test 1
                compute norm(R - Q'*A) / (V * norm(A) * EPS)*/
@@ -138,7 +131,7 @@ void validate_geqrf(integer m_A,
 
             eps = fla_lapack_slamch("P");
 
-            resid1 = norm/(eps * norm_A * (float)n_A);
+            resid1 = norm / (eps * norm_A * (float)n_A);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
@@ -152,19 +145,19 @@ void validate_geqrf(integer m_A,
             dcomplex twork;
             double norm, norm_A, eps, resid1, resid2;
 
-            /* zorgrq api generates the Q martrix using the elementary reflectors and scalar 
+            /* zorgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
             fla_lapack_zungqr(&m_A, &m_A, &min_A, NULL, &m_A, NULL, &twork, &lwork, info);
             if(*info < 0)
-               break;
-            
+                break;
+
             lwork = twork.real;
             create_vector(datatype, &work, lwork);
 
             fla_lapack_zungqr(&m_A, &m_A, &min_A, Q, &m_A, T_test, work, &lwork, info);
             if(*info < 0)
-               break;
-            
+                break;
+
             /* Test 1
                compute norm(R - Q'*A) / (V * norm(A) * EPS)*/
             zgemm_("C", "N", &m_A, &n_A, &m_A, &z_n_one, Q, &m_A, A, &lda, &z_one, R, &m_A);
@@ -174,7 +167,7 @@ void validate_geqrf(integer m_A,
 
             eps = fla_lapack_dlamch("P");
 
-            resid1 = norm/(eps * norm_A * (double)n_A);
+            resid1 = norm / (eps * norm_A * (double)n_A);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
@@ -186,7 +179,7 @@ void validate_geqrf(integer m_A,
     }
 
     // Free up buffers
-    free_matrix( R );
-    free_matrix( Q );
-    free_vector( work );
+    free_matrix(R);
+    free_matrix(Q);
+    free_vector(work);
 }

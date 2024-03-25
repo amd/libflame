@@ -42,7 +42,7 @@ void fla_test_gtsv(integer argc, char **argv, test_params_t *params);
 void fla_test_gesvdx(integer argc, char **argv, test_params_t *params);
 void fla_test_gbtrf(integer argc, char **argv, test_params_t *params);
 void fla_test_gbtrs(integer argc, char **argv, test_params_t *params);
-void fla_test_gelsd(integer argc, char ** argv, test_params_t *params);
+void fla_test_gelsd(integer argc, char **argv, test_params_t *params);
 
 #define LIN_ID 0
 #define EIG_ID 1

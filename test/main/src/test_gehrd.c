@@ -2,22 +2,21 @@
     Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-
 #include "test_lapack.h"
 
-
 /* Local prototypes */
-void fla_test_gehrd_experiment(test_params_t *params, integer datatype, integer p_cur, integer  q_cur, integer pci,
-                                    integer n_repeats, integer einfo, double* perf, double* t, double* residual);
-void prepare_gehrd_run(integer n, integer* ilo, integer* ihi, void* A, integer lda, void *tau, integer datatype,
-                        integer n_repeats, double* time_min_, integer* info);
-void invoke_gehrd(integer datatype, integer* n, integer* ilo, integer* ihi, void* a, integer* lda, void *tau, void* work,
-                    integer* lwork, integer* info);
+void fla_test_gehrd_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual);
+void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer lda, void *tau,
+                       integer datatype, integer n_repeats, double *time_min_, integer *info);
+void invoke_gehrd(integer datatype, integer *n, integer *ilo, integer *ihi, void *a, integer *lda,
+                  void *tau, void *work, integer *lwork, integer *info);
 
-void fla_test_gehrd(integer argc, char ** argv, test_params_t *params)
+void fla_test_gehrd(integer argc, char **argv, test_params_t *params)
 {
-    char* op_str = "Reduces matrix to upper hessenberg from";
-    char* front_str = "GEHRD";
+    char *op_str = "Reduces matrix to upper hessenberg from";
+    char *front_str = "GEHRD";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
     if(argc == 1)
     {
@@ -31,12 +30,12 @@ void fla_test_gehrd(integer argc, char ** argv, test_params_t *params)
     {
         FLA_TEST_PARSE_LAST_ARG(argv[9]);
     }
-    if(argc >=9 && argc <= 10)
+    if(argc >= 9 && argc <= 10)
     {
         integer i, num_types, N;
         integer datatype, n_repeats;
         double perf, time_min, residual;
-        char stype,type_flag[4] = {0};
+        char stype, type_flag[4] = {0};
         char *endptr;
 
         /* Prase the arguments */
@@ -70,18 +69,12 @@ void fla_test_gehrd(integer argc, char ** argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_gehrd_experiment(params, datatype,
-                                          N, N,
-                                          0,
-                                          n_repeats, einfo,
-                                          &perf, &time_min, &residual);
+                fla_test_gehrd_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
+                                          &time_min, &residual);
                 /* Print the results */
-                fla_test_print_status(front_str,
-                                      stype,
-                                      SQUARE_INPUT,
-                                      N, N,
-                                      residual, params->lin_solver_paramslist[0].solver_threshold,
-                                      time_min, perf);
+                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
+                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
+                                      perf);
                 tests_not_run = 0;
             }
         }
@@ -97,23 +90,16 @@ void fla_test_gehrd(integer argc, char ** argv, test_params_t *params)
     {
         printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n\n");
     }
-    if (g_ext_fptr != NULL)
+    if(g_ext_fptr != NULL)
     {
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
     }
 }
 
-void fla_test_gehrd_experiment(test_params_t *params,
-    integer  datatype,
-    integer  p_cur,
-    integer  q_cur,
-    integer  pci,
-    integer  n_repeats,
-    integer  einfo,
-    double   *perf,
-    double   *time_min,
-    double   *residual)
+void fla_test_gehrd_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *time_min, double *residual)
 {
     integer n, lda;
     integer ilo, ihi, info = 0, vinfo = 0;
@@ -125,11 +111,11 @@ void fla_test_gehrd_experiment(test_params_t *params,
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if (config_data)
+    if(config_data)
     {
-        if (lda == -1)
+        if(lda == -1)
         {
-             lda = fla_max(1,n);
+            lda = fla_max(1, n);
         }
     }
 
@@ -140,7 +126,7 @@ void fla_test_gehrd_experiment(test_params_t *params,
 
     /* Create input matrix parameters*/
     create_matrix(datatype, &A, lda, n);
-    create_vector(datatype, &tau, n-1);
+    create_vector(datatype, &tau, n - 1);
 
     if(g_ext_fptr != NULL)
     {
@@ -163,9 +149,11 @@ void fla_test_gehrd_experiment(test_params_t *params,
        4*((2/3)*(ihi - ilo)^2(2ihi + 2ilo + 3n)) flops for complex values */
 
     if(datatype == FLOAT || datatype == DOUBLE)
-        *perf = (double)((2.0 / 3.0) * pow((ihi - ilo),2) * (2*ihi + 2*ilo + 3*n)) / *time_min / FLOPS_PER_UNIT_PERF;
+        *perf = (double)((2.0 / 3.0) * pow((ihi - ilo), 2) * (2 * ihi + 2 * ilo + 3 * n))
+                / *time_min / FLOPS_PER_UNIT_PERF;
     else
-        *perf = (double)(4.0 * ((2.0 / 3.0) * pow((ihi - ilo),2) * (2*ihi + 2*ilo + 3*n))) / *time_min / FLOPS_PER_UNIT_PERF;
+        *perf = (double)(4.0 * ((2.0 / 3.0) * pow((ihi - ilo), 2) * (2 * ihi + 2 * ilo + 3 * n)))
+                / *time_min / FLOPS_PER_UNIT_PERF;
 
     /* Output Validation */
     if(info == 0)
@@ -179,8 +167,8 @@ void fla_test_gehrd_experiment(test_params_t *params,
     free_vector(tau);
 }
 
-void prepare_gehrd_run(integer n, integer* ilo, integer* ihi, void* A, integer lda, void* tau,
-                        integer datatype, integer n_repeats, double* time_min_, integer* info)
+void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer lda, void *tau,
+                       integer datatype, integer n_repeats, double *time_min_, integer *info)
 {
     void *A_save = NULL, *work = NULL, *tau_test = NULL;
     integer i, lwork;
@@ -198,14 +186,14 @@ void prepare_gehrd_run(integer n, integer* ilo, integer* ihi, void* A, integer l
         create_vector(datatype, &work, 1);
 
         /* call to  gehrd API */
-        invoke_gehrd(datatype ,&n, ilo, ihi, NULL, &lda, NULL, work, &lwork, info);
+        invoke_gehrd(datatype, &n, ilo, ihi, NULL, &lda, NULL, work, &lwork, info);
 
         /* Output buffers will be freshly allocated for each iterations, free up
         the current output buffers.*/
         if(*info == 0)
         {
             /* Get work size */
-            lwork = get_work_value( datatype, work );
+            lwork = get_work_value(datatype, work);
         }
 
         free_vector(work);
@@ -222,7 +210,7 @@ void prepare_gehrd_run(integer n, integer* ilo, integer* ihi, void* A, integer l
            for each iteration*/
         copy_matrix(datatype, "full", n, n, A_save, lda, A, lda);
         create_vector(datatype, &work, lwork);
-        create_vector(datatype, &tau_test, n-1);
+        create_vector(datatype, &tau_test, n - 1);
         exe_time = fla_test_clock();
 
         /* Call to gehrd API */
@@ -233,7 +221,7 @@ void prepare_gehrd_run(integer n, integer* ilo, integer* ihi, void* A, integer l
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
 
-        copy_vector(datatype, n-1, tau_test, 1, tau, 1);
+        copy_vector(datatype, n - 1, tau_test, 1, tau, 1);
 
         /* Free up the output buffers */
         free_vector(work);
@@ -244,7 +232,8 @@ void prepare_gehrd_run(integer n, integer* ilo, integer* ihi, void* A, integer l
     free_matrix(A_save);
 }
 
-void invoke_gehrd(integer datatype, integer* n, integer* ilo, integer* ihi, void* A, integer* lda, void *tau, void* work, integer* lwork, integer* info)
+void invoke_gehrd(integer datatype, integer *n, integer *ilo, integer *ihi, void *A, integer *lda,
+                  void *tau, void *work, integer *lwork, integer *info)
 {
     switch(datatype)
     {

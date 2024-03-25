@@ -2,26 +2,24 @@
     Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-#include "test_lapack.h"
 #include "test_common.h"
+#include "test_lapack.h"
 #include "test_prototype.h"
 
-void invoke_gels(integer datatype, char *trans, integer *m, integer *n, integer *nrhs,
-                 void *A, integer *lda, void *B, integer *ldb,
-                 void *work, integer *lwork, integer *info);
-void fla_test_gels_experiment(test_params_t *params, integer  datatype,
-                              integer  p_cur, integer q_cur, integer pci, integer n_repeats,
-                              integer einfo, double *perf, double *t, double *residual);
-void prepare_gels_run(integer datatype, char trans, integer m, integer n, integer nrhs,
-                      void *A, integer lda, void *B, integer ldb,
-                      void *work, integer lwork, integer n_repeats,
-                      double *time_min_, integer *info);
+void invoke_gels(integer datatype, char *trans, integer *m, integer *n, integer *nrhs, void *A,
+                 integer *lda, void *B, integer *ldb, void *work, integer *lwork, integer *info);
+void fla_test_gels_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
+                              integer pci, integer n_repeats, integer einfo, double *perf,
+                              double *t, double *residual);
+void prepare_gels_run(integer datatype, char trans, integer m, integer n, integer nrhs, void *A,
+                      integer lda, void *B, integer ldb, void *work, integer lwork,
+                      integer n_repeats, double *time_min_, integer *info);
 void fla_test_gels(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Solves overdetermined or underdetermined systems for GE matrices";
     char *front_str = "GELS";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
-    if (argc == 1)
+    if(argc == 1)
     {
         config_data = 1;
         g_lwork = -1;
@@ -38,15 +36,15 @@ void fla_test_gels(integer argc, char **argv, test_params_t *params)
     {
         integer i, num_types, M, N;
         integer datatype, n_repeats;
-        double perf, time_min,residual;
+        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
         /* Parse the arguments */
         num_types = strlen(argv[2]);
-        M = strtoimax( argv[4], &endptr, CLI_DECIMAL_BASE);
-        N = strtoimax( argv[5], &endptr, CLI_DECIMAL_BASE);
-        params->lin_solver_paramslist[0].nrhs = strtoimax( argv[6], &endptr, CLI_DECIMAL_BASE);
+        M = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
+        N = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+        params->lin_solver_paramslist[0].nrhs = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].transr = argv[3][0];
         params->lin_solver_paramslist[0].lda = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].ldb = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
@@ -75,15 +73,13 @@ void fla_test_gels(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_gels_experiment(params, datatype,
-                                          M, N,
-                                          0, n_repeats, einfo,
-                                          &perf, &time_min, &residual);
+                fla_test_gels_experiment(params, datatype, M, N, 0, n_repeats, einfo, &perf,
+                                         &time_min, &residual);
 
                 /* Print the result */
                 fla_test_print_status(front_str, stype, RECT_INPUT, M, N, residual,
-                                      params->lin_solver_paramslist[0].solver_threshold,
-                                      time_min, perf);
+                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
+                                      perf);
                 tests_not_run = 0;
             }
         }
@@ -92,13 +88,14 @@ void fla_test_gels(integer argc, char **argv, test_params_t *params)
     if(tests_not_run)
     {
         printf("\nIllegal arguments for gels\n");
-        printf("./<EXE> gels <precisions - sdcz> <TRANS> <M> <N> <NRHS> <LDA> <LDB> <LWORK> <repeats>\n");
+        printf("./<EXE> gels <precisions - sdcz> <TRANS> <M> <N> <NRHS> <LDA> <LDB> <LWORK> "
+               "<repeats>\n");
     }
     if(invalid_dtype)
     {
         printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n\n");
     }
-    if (g_ext_fptr != NULL)
+    if(g_ext_fptr != NULL)
     {
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
@@ -106,17 +103,9 @@ void fla_test_gels(integer argc, char **argv, test_params_t *params)
     return;
 }
 
-
-void fla_test_gels_experiment(test_params_t *params,
-                              integer  datatype,
-                              integer  p_cur,
-                              integer q_cur,
-                              integer pci,
-                              integer n_repeats,
-                              integer einfo,
-                              double *perf,
-                              double *t,
-                              double *residual)
+void fla_test_gels_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
+                              integer pci, integer n_repeats, integer einfo, double *perf,
+                              double *t, double *residual)
 {
     integer m, n, m_b, nrhs, lda, ldb, lwork = -1, info = 0;
     void *A = NULL, *A_test = NULL, *B = NULL, *B_test = NULL, *work = NULL;
@@ -141,7 +130,7 @@ void fla_test_gels_experiment(test_params_t *params,
         }
         if(ldb == -1)
         {
-            ldb = fla_max(fla_max(1, m),n);
+            ldb = fla_max(fla_max(1, m), n);
         }
     }
 
@@ -161,7 +150,7 @@ void fla_test_gels_experiment(test_params_t *params,
     }
 
     /* trans for complex number should be equal to 'C' (or 'c') while passing to the GEL api
-    */
+     */
     if((datatype == COMPLEX || datatype == DOUBLE_COMPLEX) && (trans == 'T'))
     {
         trans = 'C';
@@ -182,8 +171,8 @@ void fla_test_gels_experiment(test_params_t *params,
     copy_matrix(datatype, "full", ldb, nrhs, B, ldb, B_test, ldb);
 
     /* call to API */
-    prepare_gels_run(datatype, trans, m, n, nrhs, A_test, lda, B_test, ldb,
-                     work, lwork, n_repeats, t, &info);
+    prepare_gels_run(datatype, trans, m, n, nrhs, A_test, lda, B_test, ldb, work, lwork, n_repeats,
+                     t, &info);
 
     /* Performance computation */
     if(m >= n)
@@ -192,7 +181,7 @@ void fla_test_gels_experiment(test_params_t *params,
     }
     else
     {
-        *perf = (double)((m * m)  *(2.0 / 3.0) * ((3 * n) - m)) / *t / FLOPS_PER_UNIT_PERF;
+        *perf = (double)((m * m) * (2.0 / 3.0) * ((3 * n) - m)) / *t / FLOPS_PER_UNIT_PERF;
     }
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         *perf *= 4.0;
@@ -201,7 +190,7 @@ void fla_test_gels_experiment(test_params_t *params,
 
     if(info == 0)
     {
-        validate_gels(&trans, m , n,  nrhs, A, lda, B, ldb, B_test, datatype, residual, &info);
+        validate_gels(&trans, m, n, nrhs, A, lda, B, ldb, B_test, datatype, residual, &info);
     }
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
@@ -212,20 +201,9 @@ void fla_test_gels_experiment(test_params_t *params,
     free_matrix(B_test);
 }
 
-void prepare_gels_run(integer datatype,
-                      char trans,
-                      integer m,
-                      integer n,
-                      integer nrhs,
-                      void *A,
-                      integer lda,
-                      void *B,
-                      integer ldb,
-                      void *work,
-                      integer lwork,
-                      integer n_repeats,
-                      double *time_min,
-                      integer *info)
+void prepare_gels_run(integer datatype, char trans, integer m, integer n, integer nrhs, void *A,
+                      integer lda, void *B, integer ldb, void *work, integer lwork,
+                      integer n_repeats, double *time_min, integer *info)
 {
     integer i;
     void *A_save = NULL, *B_save = NULL;
@@ -240,12 +218,10 @@ void prepare_gels_run(integer datatype,
         create_vector(datatype, &work, 1);
 
         /* Getting lwork from api by passing lwork = -1 */
-        invoke_gels(datatype, &trans, &m, &n, &nrhs,
-                    NULL, &lda, NULL, &ldb,
-                    work, &lwork, info);
+        invoke_gels(datatype, &trans, &m, &n, &nrhs, NULL, &lda, NULL, &ldb, work, &lwork, info);
         if(*info == 0)
         {
-           lwork = get_work_value(datatype, work);
+            lwork = get_work_value(datatype, work);
         }
         free_vector(work);
     }
@@ -267,9 +243,8 @@ void prepare_gels_run(integer datatype,
         exe_time = fla_test_clock();
 
         /*  call to API */
-        invoke_gels(datatype, &trans, &m, &n, &nrhs,
-                    A_save, &lda, B_save, &ldb,
-                    work, &lwork, info);
+        invoke_gels(datatype, &trans, &m, &n, &nrhs, A_save, &lda, B_save, &ldb, work, &lwork,
+                    info);
 
         exe_time = fla_test_clock() - exe_time;
 
@@ -287,18 +262,8 @@ void prepare_gels_run(integer datatype,
     free_matrix(B_save);
 }
 
-void invoke_gels(integer datatype,
-                 char *trans,
-                 integer *m,
-                 integer *n,
-                 integer *nrhs,
-                 void *A,
-                 integer *lda,
-                 void *B,
-                 integer *ldb,
-                 void *work,
-                 integer *lwork,
-                 integer *info)
+void invoke_gels(integer datatype, char *trans, integer *m, integer *n, integer *nrhs, void *A,
+                 integer *lda, void *B, integer *ldb, void *work, integer *lwork, integer *info)
 {
     switch(datatype)
     {

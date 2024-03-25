@@ -1,6 +1,6 @@
 /******************************************************************************
-* Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
-*******************************************************************************/
+ * Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 
 /*! @file validate_gelqf.c
  *  @brief Defines validate function of GELQF() to use in test suite.
@@ -8,18 +8,11 @@
 
 #include "test_common.h"
 
-void validate_gelqf(integer m_A,
-    integer n_A,
-    void *A,
-    void *A_test,
-    integer lda,
-    void *T_test,
-    integer datatype,
-    double* residual,
-    integer* info)
+void validate_gelqf(integer m_A, integer n_A, void *A, void *A_test, integer lda, void *T_test,
+                    integer datatype, double *residual, integer *info)
 {
     if(m_A == 0 || n_A == 0)
-      return;
+        return;
     void *Q = NULL, *L = NULL, *work = NULL;
     integer min_A;
     integer lwork = -1;
@@ -37,7 +30,7 @@ void validate_gelqf(integer m_A,
     copy_matrix(datatype, "full", min_A, n_A, A_test, lda, Q, n_A);
     copy_matrix(datatype, "Lower", m_A, min_A, A_test, lda, L, m_A);
 
-    switch( datatype )
+    switch(datatype)
     {
         case FLOAT:
         {
@@ -47,15 +40,15 @@ void validate_gelqf(integer m_A,
             /* sorglq api generates the Q martrix using the elementary reflectors and scalar
                factor values */
             fla_lapack_sorglq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, info);
-            if (*info < 0)
-               break;
+            if(*info < 0)
+                break;
 
             lwork = twork;
-            create_vector(datatype,  &work, lwork);
+            create_vector(datatype, &work, lwork);
 
             fla_lapack_sorglq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, info);
             if(*info < 0)
-               break;
+                break;
 
             /* Test 1
                compute norm(L - A*Q') / (V * norm(A) * EPS) */
@@ -66,7 +59,7 @@ void validate_gelqf(integer m_A,
 
             eps = fla_lapack_slamch("P");
 
-            resid1 = norm/(eps * norm_A * (float)n_A);
+            resid1 = norm / (eps * norm_A * (float)n_A);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS) */
@@ -84,14 +77,14 @@ void validate_gelqf(integer m_A,
                factor values*/
             fla_lapack_dorglq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, info);
             if(*info < 0)
-               break;
+                break;
 
             lwork = twork;
-            create_vector(datatype,  &work, lwork);
+            create_vector(datatype, &work, lwork);
 
             fla_lapack_dorglq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, info);
             if(*info < 0)
-               break;
+                break;
 
             /* Test 1
                compute norm(L - A*Q') / (V * norm(A) * EPS)*/
@@ -102,7 +95,7 @@ void validate_gelqf(integer m_A,
 
             eps = fla_lapack_dlamch("P");
 
-            resid1 = norm/(eps * norm_A * (double)n_A);
+            resid1 = norm / (eps * norm_A * (double)n_A);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
@@ -120,14 +113,14 @@ void validate_gelqf(integer m_A,
                factor values*/
             fla_lapack_cunglq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, info);
             if(*info < 0)
-               break;
+                break;
 
             lwork = twork.real;
-            create_vector(datatype,  &work, lwork);
+            create_vector(datatype, &work, lwork);
 
             fla_lapack_cunglq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, info);
             if(*info < 0)
-               break;
+                break;
 
             /* Test 1
                compute norm(L - A*Q') / (V * norm(A) * EPS)*/
@@ -138,7 +131,7 @@ void validate_gelqf(integer m_A,
 
             eps = fla_lapack_slamch("P");
 
-            resid1 = norm/(eps * norm_A * (float)n_A);
+            resid1 = norm / (eps * norm_A * (float)n_A);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
@@ -156,14 +149,14 @@ void validate_gelqf(integer m_A,
                factor values*/
             fla_lapack_zunglq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, info);
             if(*info < 0)
-               break;
+                break;
 
             lwork = twork.real;
             create_vector(datatype, &work, lwork);
 
             fla_lapack_zunglq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, info);
             if(*info < 0)
-               break;
+                break;
 
             /* Test 1
                compute norm(L - Q'*A) / (V * norm(A) * EPS)*/
@@ -174,7 +167,7 @@ void validate_gelqf(integer m_A,
 
             eps = fla_lapack_dlamch("P");
 
-            resid1 = norm/(eps * norm_A * (double)n_A);
+            resid1 = norm / (eps * norm_A * (double)n_A);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
@@ -186,8 +179,7 @@ void validate_gelqf(integer m_A,
     }
 
     // Free up buffers
-    free_matrix( L );
-    free_matrix( Q );
-    free_vector( work );
+    free_matrix(L);
+    free_matrix(Q);
+    free_vector(work);
 }
-

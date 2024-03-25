@@ -1,6 +1,6 @@
 /******************************************************************************
-* Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
-*******************************************************************************/
+ * Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 
 /*! @file validate_potrf.c
  *  @brief Defines validate function of POTRF() to use in test suite.
@@ -8,7 +8,8 @@
 
 #include "test_common.h"
 
-void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, integer datatype, double* residual, integer* info)
+void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, integer datatype,
+                    double *residual, integer *info)
 {
     if(m == 0)
         return;
@@ -61,12 +62,13 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
             norm_A = fla_lapack_slange("1", &m, &m, A, &lda, work);
 
             /* Compute LL'-A */
-            sgemm_(&trans_A, &trans_B, &m, &m, &m, &s_one, buff_A, &m, buff_B, &m, &s_n_one, A, &lda);
+            sgemm_(&trans_A, &trans_B, &m, &m, &m, &s_one, buff_A, &m, buff_B, &m, &s_n_one, A,
+                   &lda);
 
             norm = fla_lapack_slange("1", &m, &m, A, &lda, work);
             eps = fla_lapack_slamch("P");
 
-            resid1 = norm/(eps * norm_A * (float)m);
+            resid1 = norm / (eps * norm_A * (float)m);
 
             /* Test 2 */
             copy_matrix(datatype, "full", m, m, A_save, lda, A, lda);
@@ -77,13 +79,13 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
             if(*info < 0)
                 break;
 
-            copy_vector(datatype, m, b_test, 1, x,  1);
+            copy_vector(datatype, m, b_test, 1, x, 1);
 
             /* Compute Ax-b */
             sgemv_("N", &m, &m, &s_one, A, &lda, x, &incx, &s_n_one, b, &incy);
             norm = snrm2_(&m, b, &incx);
 
-            resid2 = norm/(eps * norm_b * (float)m);
+            resid2 = norm / (eps * norm_b * (float)m);
 
             *residual = (double)fla_max(resid1, resid2);
             break;
@@ -97,12 +99,13 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
             norm_A = fla_lapack_dlange("1", &m, &m, A, &lda, work);
 
             /* compute L*L'-A */
-            dgemm_(&trans_A, &trans_B, &m, &m, &m, &d_one, buff_A, &m, buff_B, &m, &d_n_one, A, &lda);
+            dgemm_(&trans_A, &trans_B, &m, &m, &m, &d_one, buff_A, &m, buff_B, &m, &d_n_one, A,
+                   &lda);
 
             norm = fla_lapack_dlange("1", &m, &m, A, &lda, work);
             eps = fla_lapack_dlamch("P");
 
-            resid1 = norm/(eps * norm_A * (double)m);
+            resid1 = norm / (eps * norm_A * (double)m);
 
             /* Test 2 */
             copy_matrix(datatype, "full", m, m, A_save, lda, A, lda);
@@ -113,13 +116,13 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
             if(*info < 0)
                 break;
 
-            copy_vector(datatype, m, b_test, 1, x,  1);
+            copy_vector(datatype, m, b_test, 1, x, 1);
 
             /* Compute Ax-b */
             dgemv_("N", &m, &m, &d_one, A, &lda, x, &incx, &d_n_one, b, &incy);
             norm = dnrm2_(&m, b, &incx);
 
-            resid2 = norm/(eps * norm_b * (double)m);
+            resid2 = norm / (eps * norm_b * (double)m);
 
             *residual = (double)fla_max(resid1, resid2);
             break;
@@ -133,12 +136,13 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
             norm_A = fla_lapack_clange("1", &m, &m, A, &lda, work);
 
             /* compute L*L'-A */
-            cgemm_(&trans_A, &trans_B, &m, &m, &m, &c_one, buff_A, &m, buff_B, &m, &c_n_one, A, &lda);
+            cgemm_(&trans_A, &trans_B, &m, &m, &m, &c_one, buff_A, &m, buff_B, &m, &c_n_one, A,
+                   &lda);
 
             norm = fla_lapack_clange("1", &m, &m, A, &lda, work);
             eps = fla_lapack_slamch("P");
 
-            resid1 = norm/(eps * norm_A * (float)m);
+            resid1 = norm / (eps * norm_A * (float)m);
 
             /* Test 2 */
             copy_matrix(datatype, "full", m, m, A_save, lda, A, lda);
@@ -149,13 +153,13 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
             if(*info < 0)
                 break;
 
-            copy_vector(datatype, m, b_test, 1, x,  1);
+            copy_vector(datatype, m, b_test, 1, x, 1);
 
             /* Compute Ax-b */
             cgemv_("N", &m, &m, &c_one, A, &lda, x, &incx, &c_n_one, b, &incy);
             norm = scnrm2_(&m, b, &incx);
 
-            resid2 = norm/(eps * norm_b * (float)m);
+            resid2 = norm / (eps * norm_b * (float)m);
 
             *residual = (double)fla_max(resid1, resid2);
             break;
@@ -169,12 +173,13 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
             norm_A = fla_lapack_zlange("1", &m, &m, A, &lda, work);
 
             /* compute L*L'-A */
-            zgemm_(&trans_A, &trans_B, &m, &m, &m, &z_one, buff_A, &m, buff_B, &m, &z_n_one, A, &lda);
+            zgemm_(&trans_A, &trans_B, &m, &m, &m, &z_one, buff_A, &m, buff_B, &m, &z_n_one, A,
+                   &lda);
 
             norm = fla_lapack_zlange("1", &m, &m, A, &lda, work);
             eps = fla_lapack_dlamch("P");
 
-            resid1 = norm/(eps * norm_A * (double)m);
+            resid1 = norm / (eps * norm_A * (double)m);
 
             /* Test 2 */
             copy_matrix(datatype, "full", m, m, A_save, lda, A, lda);
@@ -185,7 +190,7 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
             if(*info < 0)
                 break;
 
-            copy_vector(datatype, m, b_test, 1, x,  1);
+            copy_vector(datatype, m, b_test, 1, x, 1);
 
             /* Compute Ax-b */
             zgemv_("N", &m, &m, &z_one, A, &lda, x, &incx, &z_n_one, b, &incy);
@@ -193,18 +198,18 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
             norm = dznrm2_(&m, b, &incx);
             eps = fla_lapack_dlamch("P");
 
-            resid2 = norm/(eps * norm_b * (double)m);
+            resid2 = norm / (eps * norm_b * (double)m);
 
             *residual = (double)fla_max(resid1, resid2);
             break;
         }
     }
     /* Free up buffers */
-    free_matrix( b );
-    free_matrix( x );
-    free_matrix( x_test );
-    free_matrix( b_test );
-    free_matrix( A_save );
-    free_matrix( buff_A );
-    free_matrix( buff_B );
+    free_matrix(b);
+    free_matrix(x);
+    free_matrix(x_test);
+    free_matrix(b_test);
+    free_matrix(A_save);
+    free_matrix(buff_A);
+    free_matrix(buff_B);
 }

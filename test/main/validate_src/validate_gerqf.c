@@ -1,6 +1,6 @@
 /******************************************************************************
-* Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
-*******************************************************************************/
+ * Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 
 /*! @file validate_gerqf.c
  *  @brief Defines validate function of GERQF() to use in test suite.
@@ -8,19 +8,12 @@
 
 #include "test_common.h"
 
-void validate_gerqf(integer m_A,
-    integer n_A,
-    void *A,
-    void *A_test,
-    integer lda,
-    void *T_test,
-    integer datatype,
-    double* residual,
-    integer* info)
+void validate_gerqf(integer m_A, integer n_A, void *A, void *A_test, integer lda, void *T_test,
+                    integer datatype, double *residual, integer *info)
 {
     if(m_A == 0 || n_A == 0)
-      return;
-    void *R, *Q, *work=NULL;
+        return;
+    void *R, *Q, *work = NULL;
     integer min_A, diff_A;
     integer lwork = -1;
     *info = 0;
@@ -41,35 +34,39 @@ void validate_gerqf(integer m_A,
     // Extract R matrix and elementary reflectors from the input/output matrix parameter A_test.
     if(m_A <= n_A)
     {
-        copy_matrix(datatype, "Upper", m_A, m_A, get_m_ptr(datatype, A_test, 0, diff_A, lda), lda, get_m_ptr(datatype, R, 0, diff_A, m_A), m_A);
-        copy_matrix(datatype, "full", m_A, n_A, A_test, lda, get_m_ptr(datatype, Q, diff_A, 0, n_A), n_A);
+        copy_matrix(datatype, "Upper", m_A, m_A, get_m_ptr(datatype, A_test, 0, diff_A, lda), lda,
+                    get_m_ptr(datatype, R, 0, diff_A, m_A), m_A);
+        copy_matrix(datatype, "full", m_A, n_A, A_test, lda, get_m_ptr(datatype, Q, diff_A, 0, n_A),
+                    n_A);
     }
     else
     {
         copy_matrix(datatype, "full", diff_A, n_A, A_test, lda, R, m_A);
-        copy_matrix(datatype, "Upper", n_A, n_A, get_m_ptr(datatype, A_test, diff_A, 0, lda), lda, get_m_ptr(datatype, R, diff_A, 0, m_A), m_A);
-        copy_matrix(datatype, "full", n_A, n_A, get_m_ptr(datatype, A_test, diff_A, 0, lda), lda, Q, n_A);
+        copy_matrix(datatype, "Upper", n_A, n_A, get_m_ptr(datatype, A_test, diff_A, 0, lda), lda,
+                    get_m_ptr(datatype, R, diff_A, 0, m_A), m_A);
+        copy_matrix(datatype, "full", n_A, n_A, get_m_ptr(datatype, A_test, diff_A, 0, lda), lda, Q,
+                    n_A);
     }
 
-    switch( datatype )
+    switch(datatype)
     {
         case FLOAT:
         {
             float twork;
             float norm, norm_A, eps, resid1, resid2;
 
-            /* sorgrq api generates the Q martrix using the elementary reflectors and scalar 
+            /* sorgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
             fla_lapack_sorgrq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, info);
-            if (*info < 0)
-               break;
+            if(*info < 0)
+                break;
 
             lwork = twork;
-            create_vector(datatype,  &work, lwork);
+            create_vector(datatype, &work, lwork);
 
             fla_lapack_sorgrq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, info);
-            if (*info < 0)
-               break;
+            if(*info < 0)
+                break;
 
             /* Test 1
                compute norm(R - Q'*A) / (N * norm(A) * EPS)*/
@@ -81,8 +78,8 @@ void validate_gerqf(integer m_A,
             // Get machine precision
             eps = fla_lapack_slamch("P");
 
-            resid1 = norm/(eps * norm_A * (float)n_A);
- 
+            resid1 = norm / (eps * norm_A * (float)n_A);
+
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
             resid2 = (float)check_orthogonality(datatype, Q, n_A, n_A, n_A);
@@ -96,18 +93,18 @@ void validate_gerqf(integer m_A,
             double twork;
             double norm, norm_A, eps, resid1, resid2;
 
-            /* dorgrq api generates the Q martrix using the elementary reflectors and scalar 
+            /* dorgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
             fla_lapack_dorgrq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, info);
-            if (*info < 0)
-               break;
+            if(*info < 0)
+                break;
 
             lwork = twork;
-            create_vector(datatype,  &work, lwork);
+            create_vector(datatype, &work, lwork);
 
             fla_lapack_dorgrq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, info);
-            if (*info < 0)
-               break;
+            if(*info < 0)
+                break;
 
             /* Test 1
                compute norm(R - Q'*A) / (N * norm(A) * EPS)*/
@@ -118,7 +115,7 @@ void validate_gerqf(integer m_A,
 
             eps = fla_lapack_dlamch("P");
 
-            resid1 = norm/(eps * norm_A * (double)n_A);
+            resid1 = norm / (eps * norm_A * (double)n_A);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
@@ -132,18 +129,18 @@ void validate_gerqf(integer m_A,
             scomplex twork;
             float norm, norm_A, eps, resid1, resid2;
 
-            /* dorgrq api generates the Q martrix using the elementary reflectors and scalar 
+            /* dorgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
             fla_lapack_cungrq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, info);
-            if (*info < 0)
-               break;
+            if(*info < 0)
+                break;
 
             lwork = twork.real;
-            create_vector(datatype,  &work, lwork);
+            create_vector(datatype, &work, lwork);
 
             fla_lapack_cungrq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, info);
-            if (*info < 0)
-               break;
+            if(*info < 0)
+                break;
 
             /* Test 1
                compute norm(R - Q'*A) / (V * norm(A) * EPS)*/
@@ -153,7 +150,7 @@ void validate_gerqf(integer m_A,
 
             eps = fla_lapack_slamch("P");
 
-            resid1 = norm/(eps * norm_A * (float)n_A);
+            resid1 = norm / (eps * norm_A * (float)n_A);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
@@ -167,18 +164,18 @@ void validate_gerqf(integer m_A,
             dcomplex twork;
             double norm, norm_A, eps, resid1, resid2;
 
-            /* dorgrq api generates the Q martrix using the elementary reflectors and scalar 
+            /* dorgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
             fla_lapack_zungrq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, info);
-            if (*info < 0)
-               break;
+            if(*info < 0)
+                break;
 
             lwork = twork.real;
-            create_vector(datatype,  &work, lwork);
+            create_vector(datatype, &work, lwork);
 
             fla_lapack_zungrq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, info);
-            if (*info < 0)
-               break;
+            if(*info < 0)
+                break;
 
             /* Test 1
                compute norm(R - Q'*A) / (V * norm(A) * EPS)*/
@@ -188,7 +185,7 @@ void validate_gerqf(integer m_A,
 
             eps = fla_lapack_dlamch("P");
 
-            resid1 = norm/(eps * norm_A * (double)n_A);
+            resid1 = norm / (eps * norm_A * (double)n_A);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
@@ -200,7 +197,7 @@ void validate_gerqf(integer m_A,
     }
 
     // Free up buffers
-    free_matrix( R );
-    free_matrix( Q );
-    free_vector( work );
+    free_matrix(R);
+    free_matrix(Q);
+    free_vector(work);
 }

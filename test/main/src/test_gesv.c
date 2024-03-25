@@ -5,17 +5,21 @@
 #include "test_lapack.h"
 
 /* Local prototypes */
-void fla_test_gesv_experiment(test_params_t *params, integer  datatype, integer  p_cur, integer  q_cur, integer pci,
-                                    integer n_repeats, integer einfo, double* perf, double* t, double* residual);
-void prepare_gesv_run(integer n_A, integer nrhs, void *A, integer lda, void *B, integer ldb, integer* ipiv, integer datatype, integer n_repeats, double* time_min_, integer* info);
-void invoke_gesv(integer datatype, integer *nrhs, integer *n, void *a, integer *lda, integer *ipiv, void *b, integer *ldb, integer *info);
+void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
+                              integer pci, integer n_repeats, integer einfo, double *perf,
+                              double *t, double *residual);
+void prepare_gesv_run(integer n_A, integer nrhs, void *A, integer lda, void *B, integer ldb,
+                      integer *ipiv, integer datatype, integer n_repeats, double *time_min_,
+                      integer *info);
+void invoke_gesv(integer datatype, integer *nrhs, integer *n, void *a, integer *lda, integer *ipiv,
+                 void *b, integer *ldb, integer *info);
 
-void fla_test_gesv(integer argc, char ** argv, test_params_t *params)
+void fla_test_gesv(integer argc, char **argv, test_params_t *params)
 {
-    char* op_str = "Linear Solve using LU";
-    char* front_str = "GESV";
+    char *op_str = "Linear Solve using LU";
+    char *front_str = "GESV";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
-    params->imatrix_char='\0';
+    params->imatrix_char = '\0';
 
     if(argc == 1)
     {
@@ -25,11 +29,11 @@ void fla_test_gesv(integer argc, char ** argv, test_params_t *params)
         fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_gesv_experiment);
         tests_not_run = 0;
     }
-    if (argc == 9)
+    if(argc == 9)
     {
         FLA_TEST_PARSE_LAST_ARG(argv[8]);
     }
-    if (argc >= 8 && argc <= 9)
+    if(argc >= 8 && argc <= 9)
     {
         /* Test with parameters from commandline */
         integer i, num_types, N;
@@ -69,18 +73,12 @@ void fla_test_gesv(integer argc, char ** argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_gesv_experiment(params, datatype,
-                                          N, N,
-                                          0,
-                                          n_repeats, einfo,
-                                          &perf, &time_min, &residual);
+                fla_test_gesv_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
+                                         &time_min, &residual);
                 /* Print the results */
-                fla_test_print_status(front_str,
-                                      stype,
-                                      SQUARE_INPUT,
-                                      N, N,
-                                      residual, params->lin_solver_paramslist[0].solver_threshold,
-                                      time_min, perf);
+                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
+                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
+                                      perf);
                 tests_not_run = 0;
             }
         }
@@ -96,7 +94,7 @@ void fla_test_gesv(integer argc, char ** argv, test_params_t *params)
     {
         printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n\n");
     }
-    if (g_ext_fptr != NULL)
+    if(g_ext_fptr != NULL)
     {
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
@@ -105,21 +103,13 @@ void fla_test_gesv(integer argc, char ** argv, test_params_t *params)
     return;
 }
 
-
-void fla_test_gesv_experiment(test_params_t *params,
-    integer  datatype,
-    integer  p_cur,
-    integer  q_cur,
-    integer pci,
-    integer n_repeats,
-    integer einfo,
-    double* perf,
-    double* t,
-    double* residual)
+void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
+                              integer pci, integer n_repeats, integer einfo, double *perf,
+                              double *t, double *residual)
 {
     integer n, lda, ldb, NRHS;
     integer info = 0, vinfo = 0;
-    void* IPIV;
+    void *IPIV;
     void *A, *A_save, *B, *B_save;
     double time_min = 1e9;
     *residual = params->lin_solver_paramslist[pci].solver_threshold;
@@ -131,18 +121,18 @@ void fla_test_gesv_experiment(test_params_t *params,
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if (config_data)
+    if(config_data)
     {
-        if (lda == -1)
+        if(lda == -1)
         {
-            lda = fla_max(1,n);
+            lda = fla_max(1, n);
         }
-        if (ldb == -1)
+        if(ldb == -1)
         {
-            ldb = fla_max(1,n);
+            ldb = fla_max(1, n);
         }
     }
-    
+
     /* Create the matrices for the current operation*/
     create_matrix(datatype, &A, lda, n);
     create_matrix(datatype, &A_save, lda, n);
@@ -156,31 +146,32 @@ void fla_test_gesv_experiment(test_params_t *params,
     copy_matrix(datatype, "full", n, n, A, lda, A_save, lda);
     copy_matrix(datatype, "full", n, NRHS, B, ldb, B_save, ldb);
     /* call to API */
-    prepare_gesv_run(n, NRHS, A_save, lda, B_save, ldb, IPIV, datatype, n_repeats, &time_min, &info);
+    prepare_gesv_run(n, NRHS, A_save, lda, B_save, ldb, IPIV, datatype, n_repeats, &time_min,
+                     &info);
     /* execution time */
     *t = time_min;
 
     /* performance computation */
     /* 2mn^2 - (2/3)n^3 flops */
-    *perf = (double)((2.0 * n * n *n) - ((2.0 / 3.0) *n * n * n)) / time_min / FLOPS_PER_UNIT_PERF;
-    if (datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+    *perf
+        = (double)((2.0 * n * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min / FLOPS_PER_UNIT_PERF;
+    if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         *perf *= 4.0;
 
     /* output validation */
-    if(!params->imatrix_char  && info == 0)
+    if(!params->imatrix_char && info == 0)
         validate_gesv(n, NRHS, A, lda, B, ldb, B_save, datatype, residual, &vinfo);
     /* check for output matrix when inputs as extreme values */
-    else if (FLA_EXTREME_CASE_TEST)
+    else if(FLA_EXTREME_CASE_TEST)
     {
-        if((!check_extreme_value(datatype, n, n, A_save, lda, params->imatrix_char)) &&
-           (!check_extreme_value(datatype, n, NRHS, B_save, ldb, params->imatrix_char)))
+        if((!check_extreme_value(datatype, n, n, A_save, lda, params->imatrix_char))
+           && (!check_extreme_value(datatype, n, NRHS, B_save, ldb, params->imatrix_char)))
         {
             *residual = DBL_MAX;
         }
     }
     else
         FLA_TEST_CHECK_EINFO(residual, info, einfo);
-
 
     /* Free up the buffers */
     free_matrix(A);
@@ -190,18 +181,9 @@ void fla_test_gesv_experiment(test_params_t *params,
     free_matrix(B_save);
 }
 
-
-void prepare_gesv_run(integer n_A,
-    integer nrhs,
-    void* A,
-    integer lda,
-    void* B,
-    integer ldb,
-    integer* IPIV,
-    integer datatype,
-    integer n_repeats,
-    double* time_min_,
-    integer* info)
+void prepare_gesv_run(integer n_A, integer nrhs, void *A, integer lda, void *B, integer ldb,
+                      integer *IPIV, integer datatype, integer n_repeats, double *time_min_,
+                      integer *info)
 {
     integer i;
     void *A_test, *B_test;
@@ -212,7 +194,7 @@ void prepare_gesv_run(integer n_A,
     create_matrix(datatype, &B_test, ldb, nrhs);
 
     *info = 0;
-    for (i = 0; i < n_repeats && *info == 0; ++i)
+    for(i = 0; i < n_repeats && *info == 0; ++i)
     {
 
         /* Copy original input data */
@@ -228,7 +210,6 @@ void prepare_gesv_run(integer n_A,
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
-
     }
 
     *time_min_ = time_min;
@@ -237,15 +218,14 @@ void prepare_gesv_run(integer n_A,
 
     free_matrix(A_test);
     free_matrix(B_test);
-
 }
-
 
 /*
  *  gesv_API calls LAPACK interface of
  *  Singular value decomposition - gesvd
  *  */
-void invoke_gesv(integer datatype, integer *n, integer *nrhs, void *a, integer *lda, integer *ipiv, void* b, integer *ldb, integer *info)
+void invoke_gesv(integer datatype, integer *n, integer *nrhs, void *a, integer *lda, integer *ipiv,
+                 void *b, integer *ldb, integer *info)
 {
     switch(datatype)
     {
@@ -254,7 +234,7 @@ void invoke_gesv(integer datatype, integer *n, integer *nrhs, void *a, integer *
             fla_lapack_sgesv(n, nrhs, a, lda, ipiv, b, ldb, info);
             break;
         }
-        
+
         case DOUBLE:
         {
             fla_lapack_dgesv(n, nrhs, a, lda, ipiv, b, ldb, info);
@@ -274,4 +254,3 @@ void invoke_gesv(integer datatype, integer *n, integer *nrhs, void *a, integer *
         }
     }
 }
-

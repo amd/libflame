@@ -4387,7 +4387,6 @@ void reconstruct_band_storage_matrix(integer datatype, integer m, integer n, int
     free_matrix(ABfac);
 }
 
-
 /* Test for checking whether solution x of Ax = B from least square api belongs to
  * row space of A
  */

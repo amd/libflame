@@ -2,24 +2,24 @@
     Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-
 #include "test_lapack.h"
 
-
 /* Local prototypes */
-void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer p_cur, integer  q_cur, integer pci,
-                                    integer n_repeats, integer einfo, double* perf, double* t, double* residual);
-void prepare_gghrd_run(char* compq, char* compz, integer n, integer* ilo, integer* ihi, void* a, integer lda,
-                            void* b, integer ldb, void* q, integer ldq, void* z, integer ldz, integer datatype,
-                            integer n_repeats, double* time_min_, integer* info);
-void invoke_gghrd(integer datatype, char* compq, char* compz, integer* n, integer* ilo, integer* ihi, void* a,
-                            integer* lda, void* b, integer* ldb, void* q, integer* ldq,
-                            void* z, integer* ldz, integer* info);
+void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual);
+void prepare_gghrd_run(char *compq, char *compz, integer n, integer *ilo, integer *ihi, void *a,
+                       integer lda, void *b, integer ldb, void *q, integer ldq, void *z,
+                       integer ldz, integer datatype, integer n_repeats, double *time_min_,
+                       integer *info);
+void invoke_gghrd(integer datatype, char *compq, char *compz, integer *n, integer *ilo,
+                  integer *ihi, void *a, integer *lda, void *b, integer *ldb, void *q, integer *ldq,
+                  void *z, integer *ldz, integer *info);
 
-void fla_test_gghrd(integer argc, char ** argv, test_params_t *params)
+void fla_test_gghrd(integer argc, char **argv, test_params_t *params)
 {
-    char* op_str = "Reduces a pair matrices (A,B) to generalized upper Hessenberg form";
-    char* front_str = "GGHRD";
+    char *op_str = "Reduces a pair matrices (A,B) to generalized upper Hessenberg form";
+    char *front_str = "GGHRD";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
     if(argc == 1)
     {
@@ -33,12 +33,12 @@ void fla_test_gghrd(integer argc, char ** argv, test_params_t *params)
     {
         FLA_TEST_PARSE_LAST_ARG(argv[13]);
     }
-    if(argc >= 13 && argc <=14)
+    if(argc >= 13 && argc <= 14)
     {
         integer i, num_types, N;
         integer datatype, n_repeats;
         double perf, time_min, residual;
-        char stype,type_flag[4] = {0};
+        char stype, type_flag[4] = {0};
         char *endptr;
 
         /* Prase the arguments */
@@ -76,18 +76,12 @@ void fla_test_gghrd(integer argc, char ** argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_gghrd_experiment(params, datatype,
-                                          N, N,
-                                          0,
-                                          n_repeats, einfo,
-                                          &perf, &time_min, &residual);
+                fla_test_gghrd_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
+                                          &time_min, &residual);
                 /* Print the results */
-                fla_test_print_status(front_str,
-                                      stype,
-                                      SQUARE_INPUT,
-                                      N, N,
-                                      residual, params->lin_solver_paramslist[0].solver_threshold,
-                                      time_min, perf);
+                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
+                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
+                                      perf);
                 tests_not_run = 0;
             }
         }
@@ -97,13 +91,14 @@ void fla_test_gghrd(integer argc, char ** argv, test_params_t *params)
     if(tests_not_run)
     {
         printf("\nIllegal arguments for GGHRD\n");
-        printf("./<EXE> gghrd <precisions - sdcz> <compq> <compz> <N> <ILO> <IHI> <LDA> <LDB> <LDQ> <LDZ> <repeats>\n");
+        printf("./<EXE> gghrd <precisions - sdcz> <compq> <compz> <N> <ILO> <IHI> <LDA> <LDB> "
+               "<LDQ> <LDZ> <repeats>\n");
     }
     if(invalid_dtype)
     {
         printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n\n");
     }
-    if (g_ext_fptr != NULL)
+    if(g_ext_fptr != NULL)
     {
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
@@ -111,20 +106,14 @@ void fla_test_gghrd(integer argc, char ** argv, test_params_t *params)
     return;
 }
 
-void fla_test_gghrd_experiment(test_params_t *params,
-    integer  datatype,
-    integer  p_cur,
-    integer  q_cur,
-    integer  pci,
-    integer  n_repeats,
-    integer  einfo,
-    double   *perf,
-    double   *time_min,
-    double   *residual)
+void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *time_min, double *residual)
 {
     integer n, ldz, lda, ldb, ldq;
     integer ilo, ihi, info = 0, vinfo = 0;
-    void *A = NULL, *Z = NULL, *Q = NULL, *B = NULL, *A_test = NULL, *B_test = NULL, *Q_test = NULL, *Z_test = NULL;
+    void *A = NULL, *Z = NULL, *Q = NULL, *B = NULL, *A_test = NULL, *B_test = NULL, *Q_test = NULL,
+         *Z_test = NULL;
     char compz, compq;
 
     /* Get input matrix dimensions. */
@@ -143,20 +132,20 @@ void fla_test_gghrd_experiment(test_params_t *params,
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if (config_data)
+    if(config_data)
     {
-        if (lda == -1)
+        if(lda == -1)
         {
-            lda = fla_max(1,n);
+            lda = fla_max(1, n);
         }
-        if (ldb == -1)
+        if(ldb == -1)
         {
-            ldb = fla_max(1,n);
+            ldb = fla_max(1, n);
         }
         /* LDQ >= N if COMPQ='V' or 'I'; LDQ >= 1 otherwise */
-        if (ldq == -1)
+        if(ldq == -1)
         {
-            if ((compq == 'V') || (compq == 'I'))
+            if((compq == 'V') || (compq == 'I'))
             {
                 ldq = n;
             }
@@ -166,9 +155,9 @@ void fla_test_gghrd_experiment(test_params_t *params,
             }
         }
         /* LDZ >= N if COMPZ='V' or 'I'; LDZ >= 1 otherwise */
-        if (ldz == -1)
+        if(ldz == -1)
         {
-            if ((compz == 'V') || (compz == 'I'))
+            if((compz == 'V') || (compz == 'I'))
             {
                 ldz = n;
             }
@@ -212,7 +201,8 @@ void fla_test_gghrd_experiment(test_params_t *params,
     copy_matrix(datatype, "full", n, n, Q, ldq, Q_test, ldq);
     copy_matrix(datatype, "full", n, n, Z, ldz, Z_test, ldz);
 
-    prepare_gghrd_run(&compq, &compz, n, &ilo, &ihi, A_test, lda, B_test, ldb, Q_test, ldq, Z_test, ldz, datatype, n_repeats, time_min, &info);
+    prepare_gghrd_run(&compq, &compz, n, &ilo, &ihi, A_test, lda, B_test, ldb, Q_test, ldq, Z_test,
+                      ldz, datatype, n_repeats, time_min, &info);
 
     /* Performance computation
        (7)n^3 flops for eigen vectors for real
@@ -246,8 +236,9 @@ void fla_test_gghrd_experiment(test_params_t *params,
 
     /* Output Validation */
     if(info == 0)
-        validate_gghrd(&compq, &compz, n, A, A_test, lda, B, B_test, ldb, Q, Q_test, ldq, Z, Z_test, ldz, datatype, residual, &vinfo);
-    
+        validate_gghrd(&compq, &compz, n, A, A_test, lda, B, B_test, ldb, Q, Q_test, ldq, Z, Z_test,
+                       ldz, datatype, residual, &vinfo);
+
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
@@ -261,15 +252,17 @@ void fla_test_gghrd_experiment(test_params_t *params,
     free_matrix(Z_test);
 }
 
-void prepare_gghrd_run(char* compq, char* compz, integer n, integer* ilo, integer* ihi, void* A, integer lda,
-                            void* B, integer ldb, void* Q, integer ldq, void* Z, integer ldz, integer datatype,
-                            integer n_repeats, double* time_min_, integer* info)
+void prepare_gghrd_run(char *compq, char *compz, integer n, integer *ilo, integer *ihi, void *A,
+                       integer lda, void *B, integer ldb, void *Q, integer ldq, void *Z,
+                       integer ldz, integer datatype, integer n_repeats, double *time_min_,
+                       integer *info)
 {
     void *A_save = NULL, *B_save = NULL, *Q_save = NULL, *Z_save = NULL;
     integer i;
     double time_min = 1e9, exe_time;
 
-    /* Make a copy of the input matrix A,B,Q and Z. Same input values will be passed in each itertaion.*/
+    /* Make a copy of the input matrix A,B,Q and Z. Same input values will be passed in each
+     * itertaion.*/
     create_matrix(datatype, &A_save, lda, n);
     create_matrix(datatype, &B_save, ldb, n);
     create_matrix(datatype, &Q_save, ldq, n);
@@ -292,7 +285,8 @@ void prepare_gghrd_run(char* compq, char* compz, integer n, integer* ilo, intege
         exe_time = fla_test_clock();
 
         /* Call to gghrd API */
-        invoke_gghrd(datatype, compq, compz, &n, ilo, ihi, A, &lda, B, &ldb, Q, &ldq, Z, &ldz, info);
+        invoke_gghrd(datatype, compq, compz, &n, ilo, ihi, A, &lda, B, &ldb, Q, &ldq, Z, &ldz,
+                     info);
 
         exe_time = fla_test_clock() - exe_time;
 
@@ -307,7 +301,9 @@ void prepare_gghrd_run(char* compq, char* compz, integer n, integer* ilo, intege
     free_matrix(Z_save);
 }
 
-void invoke_gghrd(integer datatype, char* compq, char* compz, integer* n, integer* ilo, integer* ihi, void* a, integer* lda, void* b, integer* ldb, void* q, integer* ldq, void* z, integer* ldz, integer* info)
+void invoke_gghrd(integer datatype, char *compq, char *compz, integer *n, integer *ilo,
+                  integer *ihi, void *a, integer *lda, void *b, integer *ldb, void *q, integer *ldq,
+                  void *z, integer *ldz, integer *info)
 {
     switch(datatype)
     {

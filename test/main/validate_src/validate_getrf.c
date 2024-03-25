@@ -1,6 +1,6 @@
 /******************************************************************************
-* Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
-*******************************************************************************/
+ * Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 
 /*! @file validate_getrf.c
  *  @brief Defines validate function of GETRF() to use in test suite.
@@ -8,15 +8,8 @@
 
 #include "test_common.h"
 
-void validate_getrf(integer m_A,
-    integer n_A,
-    void* A,
-    void* A_test,/*AFACT*/
-    integer lda,
-    integer* IPIV,
-    integer datatype,
-    double* residual,
-    integer* info)
+void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
+                    integer lda, integer *IPIV, integer datatype, double *residual, integer *info)
 {
     if(m_A == 0 || n_A == 0)
         return;
@@ -24,14 +17,14 @@ void validate_getrf(integer m_A,
     integer m_n_vector, min_A;
     integer m_L, n_L, m_U, n_U, k;
     void *L, *U, *T, *work, *B, *B_test, *A_save;
-    integer nrhs=1;
+    integer nrhs = 1;
     *info = 0;
 
     m_n_vector = m_A * n_A;
     min_A = fla_min(m_A, n_A);
     create_vector(datatype, &B, m_A);
     create_vector(datatype, &B_test, m_A);
-    if (m_A > n_A)
+    if(m_A > n_A)
     {
         m_L = m_A;
         n_L = m_U = n_U = n_A;
@@ -56,19 +49,19 @@ void validate_getrf(integer m_A,
     /* For m==i OR  m < n OR m > n -->  A(mxn) = L(mxm) * U(mxn) */
     copy_matrix(datatype, "Lower", m_L, n_L, A_test, lda, L, m_L);
     copy_matrix(datatype, "Upper", m_U, n_U, A_test, lda, U, m_U);
-    
+
     // Create matrix of A(MxN) for subtracting in Test 2 (T-A).
     create_matrix(datatype, &A_save, m_A, n_A);
     copy_matrix(datatype, "Full", m_A, n_A, A, lda, A_save, m_A);
 
-    switch (datatype)
+    switch(datatype)
     {
         case FLOAT:
         {
             float norm, norm_A, norm_B, eps, resid1, resid2;
             eps = fla_lapack_slamch("Epsilon");
             /* Test 1 */
-            if (m_A == n_A)
+            if(m_A == n_A)
             {
                 norm_B = snrm2_(&m_A, B, &i_one);
                 /* Compute X by passing A and B */
@@ -84,7 +77,7 @@ void validate_getrf(integer m_A,
             {
                 resid1 = 0.0;
             }
-            
+
             /* Test 2 */
             /* Unity diagonal elements to Lower triangular matrix */
             fla_lapack_slaset("U", &m_L, &n_L, &s_zero, &s_one, L, &m_L);
@@ -109,7 +102,7 @@ void validate_getrf(integer m_A,
 
             eps = fla_lapack_slamch("Epsilon");
             /* Test 1 */
-            if (m_A == n_A)
+            if(m_A == n_A)
             {
                 norm_B = dnrm2_(&m_A, B, &i_one);
                 /* Compute X by passing A and B */
@@ -125,10 +118,10 @@ void validate_getrf(integer m_A,
             {
                 resid1 = 0.0;
             }
-            
+
             /* Test 2 */
             /* Unity diagonal elements to Lower triangular matrix */
-            fla_lapack_dlaset("U",&m_L, &n_L, &d_zero, &d_one, L, &m_L);
+            fla_lapack_dlaset("U", &m_L, &n_L, &d_zero, &d_one, L, &m_L);
             norm_A = fla_lapack_dlange("1", &m_A, &n_A, A, &lda, work);
             /* T = L * U  */
             dgemm_("N", "N", &m_A, &n_A, &k, &d_one, L, &m_L, U, &m_U, &d_zero, T, &m_A);
@@ -149,7 +142,7 @@ void validate_getrf(integer m_A,
 
             eps = fla_lapack_slamch("Epsilon");
             /* Test 1 */
-            if (m_A == n_A)
+            if(m_A == n_A)
             {
                 norm_B = scnrm2_(&m_A, B, &i_one);
                 /* Compute X by passing A and B */
@@ -165,7 +158,7 @@ void validate_getrf(integer m_A,
             {
                 resid1 = 0.0;
             }
-            
+
             /* Test 2 */
             /* Unity diagonal elements to Lower triangular matrix */
             fla_lapack_claset("U", &m_L, &n_L, &c_zero, &c_one, L, &m_L);
@@ -190,7 +183,7 @@ void validate_getrf(integer m_A,
 
             eps = fla_lapack_slamch("Epsilon");
             /* Test 1 */
-            if (m_A == n_A)
+            if(m_A == n_A)
             {
                 norm_B = dznrm2_(&m_A, B, &i_one);
                 /* Compute X by passing A and B */
@@ -206,7 +199,7 @@ void validate_getrf(integer m_A,
             {
                 resid1 = 0.0;
             }
-            
+
             /* Test 2 */
             /* Unity diagonal elements to Lower triangular matrix */
             fla_lapack_zlaset("U", &m_L, &n_L, &z_zero, &z_one, L, &m_L);

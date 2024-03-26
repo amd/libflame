@@ -50,6 +50,7 @@ void fla_test_gesvdx(integer argc, char ** argv, test_params_t *params);
 OPERATIONS API_test_functions[] =
 {
     {LIN_ID,    "orgqr"               , fla_test_orgqr},
+    {LIN_ID,    "ungqr"               , fla_test_orgqr},
     {LIN_ID,    "potrs"               , fla_test_potrs},
     {EIG_ID,    "geev"                , fla_test_geev},
     {EIG_ID,    "geevx"               , fla_test_geevx},
@@ -64,6 +65,7 @@ OPERATIONS API_test_functions[] =
     {LIN_ID,    "getri"               , fla_test_getri},
     {LIN_ID,    "getrs"               , fla_test_getrs},
     {EIG_ID,    "syevd"               , fla_test_syevd},
+    {EIG_ID,    "heevd"               , fla_test_syevd},
     {SVD_ID,    "gesvd"               , fla_test_gesvd},
     {EIG_ID,    "ggevx"               , fla_test_ggevx},
     {LIN_ID,    "gesv"                , fla_test_gesv},
@@ -73,6 +75,7 @@ OPERATIONS API_test_functions[] =
     {EIG_ID,    "stedc"               , fla_test_stedc},
     {EIG_ID,    "hseqr"               , fla_test_hseqr},
     {EIG_ID,    "syev"                , fla_test_syev},
+    {EIG_ID,    "heev"                , fla_test_syev},
     {LIN_ID,    "spffrt2"             , fla_test_spffrt2},
     {LIN_ID,    "spffrtx"             , fla_test_spffrtx},
     {LIN_ID,    "gehrd"               , fla_test_gehrd},
@@ -81,6 +84,7 @@ OPERATIONS API_test_functions[] =
     {AUX_ID,    "rot"                 , fla_test_rot},
     {AUX_ID,    "lartg"               , fla_test_lartg},
     {LIN_ID,    "org2r"               , fla_test_org2r},
+    {LIN_ID,    "ung2r"               , fla_test_org2r},
     {EIG_ID,    "syevx"               , fla_test_syevx},
     {EIG_ID,    "heevx"               , fla_test_syevx},
     {LIN_ID,    "gtsv"                , fla_test_gtsv},

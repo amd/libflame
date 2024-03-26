@@ -2347,7 +2347,7 @@ void fla_test_print_status(char* func_str,
 
     datatype = get_datatype(datatype_char);
 
-    fla_map_api_name(datatype, func_str);
+    FLA_MAP_API_NAME(datatype, func_str);
 
     pass_str = fla_test_get_string_for_result( residual, datatype, thresh );
 

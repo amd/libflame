@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -89,8 +89,9 @@ void fla_test_orgqr(integer argc, char ** argv, test_params_t *params)
     /* Print error messages */
     if(tests_not_run)
     {
-        printf("\nIllegal arguments for orgqr\n");
-        printf("./<EXE> orgqr <precisions - sdcz> <M> <N> <lda> <LWORK> <repeats>\n");
+        printf("\nIllegal arguments for orgqr/ungqr\n");
+        printf("./<EXE> orgqr <precisions - sd> <M> <N> <lda> <LWORK> <repeats>\n");
+        printf("./<EXE> ungqr <precisions - cz> <M> <N> <lda> <LWORK> <repeats>\n");
     }
     if(invalid_dtype)
     {
@@ -156,7 +157,7 @@ void fla_test_orgqr_experiment(test_params_t *params,
         /* create Q matrix to check orthogonality */
         create_matrix(datatype, &Q, lda, n);
         reset_matrix(datatype, m, n, Q, lda);
- 
+
         /* Make a workspace query the first time. This will provide us with
            and ideal workspace size based on internal block size.*/
         if(g_lwork <= 0)
@@ -165,7 +166,7 @@ void fla_test_orgqr_experiment(test_params_t *params,
             create_vector(datatype, &work, 1);
 
             /* call to  geqrf API */
-            invoke_geqrf(datatype, &m, &n, NULL, &lda, NULL, work, &lwork, &info);  
+            invoke_geqrf(datatype, &m, &n, NULL, &lda, NULL, work, &lwork, &info);
 
             if(info == 0)
             {

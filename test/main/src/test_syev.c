@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -92,8 +92,9 @@ void fla_test_syev(integer argc, char ** argv, test_params_t *params)
     /* Print error messages */
     if(tests_not_run)
     {
-        printf("\nIllegal arguments for syev\n");
-        printf("./<EXE> syev <precisions - sdcz> <JOBZ> <UPLO> <N> <LDA> <LWORK> <repeats>\n");
+        printf("\nIllegal arguments for syev/heev\n");
+        printf("./<EXE> syev <precisions - sd> <JOBZ> <UPLO> <N> <LDA> <LWORK> <repeats>\n");
+        printf("./<EXE> heev <precisions - cz> <JOBZ> <UPLO> <N> <LDA> <LWORK> <repeats>\n");
     }
     if(invalid_dtype)
     {

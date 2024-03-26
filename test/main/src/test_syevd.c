@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -47,11 +47,11 @@ void fla_test_syevd(integer argc, char ** argv, test_params_t *params)
         params->eig_sym_paramslist[0].uplo = argv[4][0];
         N = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         params->eig_sym_paramslist[0].lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
-        
+
         g_lwork = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
         g_liwork = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
         g_lrwork = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
-        
+
         n_repeats = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
 
         if(n_repeats > 0)
@@ -96,8 +96,11 @@ void fla_test_syevd(integer argc, char ** argv, test_params_t *params)
     /* Print error messages */
     if(tests_not_run)
     {
-        printf("\nIllegal arguments for syevd\n");
-        printf("./<EXE> syevd <precisions - sdcz> <JOBZ> <UPLO> <N> <LDA> <LWORK> <LIWORK> <LRWORK> <repeats>\n");
+        printf("\nIllegal arguments for syevd/heevd\n");
+        printf("./<EXE> syevd <precisions - sd> <JOBZ> <UPLO> <N> <LDA>"
+               " <LWORK> <LIWORK> <LRWORK> <repeats>\n");
+        printf("./<EXE> heevd <precisions - cz> <JOBZ> <UPLO> <N> <LDA>"
+               " <LWORK> <LIWORK> <LRWORK> <repeats>\n");
     }
     if(invalid_dtype)
     {
@@ -240,7 +243,7 @@ void prepare_syevd_run(char *jobz,
     {
         lwork = g_lwork;
         liwork = g_liwork;
-        lrwork = g_lrwork;   
+        lrwork = g_lrwork;
     }
 
     *info = 0;

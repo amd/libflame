@@ -150,13 +150,21 @@ extern FILE* g_ext_fptr;
    Ex: Eigen API SYEVX - FLOAT          - SSYEVX
                          DOUBLE         - DSYEVX
                          COMPLEX        - CHEEVX
-                         DOUBLE_COMPLEX - ZHEEVX                  */
-#define fla_map_api_name(datatype, func_str)                      \
+                         DOUBLE_COMPLEX - ZHEEVX                 */
+#define FLA_MAP_API_NAME(datatype, func_str)                      \
     if((datatype == COMPLEX) || (datatype == DOUBLE_COMPLEX))     \
     {                                                             \
         if(strcmp(func_str,"SYEVX")==0)                           \
             func_str = "HEEVX";                                   \
-    }                                                             \
+        else if(strcmp(func_str,"SYEV")==0)                       \
+            func_str = "HEEV";                                    \
+        else if(strcmp(func_str,"SYEVD")==0)                      \
+            func_str = "HEEVD";                                   \
+        else if(strcmp(func_str,"ORGQR")==0)                      \
+            func_str = "UNGQR";                                   \
+        else if(strcmp(func_str,"ORG2R")==0)                      \
+            func_str = "UNG2R";                                   \
+    }
 
 typedef struct Lin_solver_paramlist_t
 {

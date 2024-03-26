@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -95,8 +95,9 @@ void fla_test_org2r(integer argc, char ** argv, test_params_t *params)
     /* Print error messages */
     if(tests_not_run)
     {
-        printf("\nIllegal arguments for org2r\n");
-        printf("./<EXE> org2r <precisions - sdcz> <M> <N> <lda> <repeats>\n");
+        printf("\nIllegal arguments for org2r/ung2r\n");
+        printf("./<EXE> org2r <precisions - sd> <M> <N> <lda> <repeats>\n");
+        printf("./<EXE> ung2r <precisions - cz> <M> <N> <lda> <repeats>\n");
     }
     if(invalid_dtype)
     {
@@ -163,7 +164,7 @@ void fla_test_org2r_experiment(test_params_t *params,
         /* create Q matrix to check orthogonality */
         create_matrix(datatype, &Q, lda, n);
         reset_matrix(datatype, m, n, Q, lda);
- 
+
         /* Make a workspace query the first time. This will provide us with
            and ideal workspace size based on internal block size.*/
         if(g_lwork <= 0)

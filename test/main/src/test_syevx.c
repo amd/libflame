@@ -127,8 +127,12 @@ void fla_test_syevx(integer argc, char ** argv, test_params_t *params)
     /* Print error messages */
     if(tests_not_run)
     {
-        printf("\nIllegal arguments for syevx\n");
-        printf("./<EXE> syevx/heevx <precisions - sdcz> <JOBZ> <RANGE> <UPLO> <N> <LDA> <VL> <VU> <IL> <IU> <ABSTOL> <LDZ> <LWORK> <repeats>\n");
+        printf("\nIllegal arguments for syevx/heevx\n");
+        printf("./<EXE> syevx <precisions - sd> <JOBZ> <RANGE> <UPLO>"
+               "<N> <LDA> <VL> <VU> <IL> <IU> <ABSTOL> <LDZ> <LWORK> <repeats>\n");
+        printf("./<EXE> heevx <precisions - cz> <JOBZ> <RANGE> <UPLO>"
+               "<N> <LDA> <VL> <VU> <IL> <IU> <ABSTOL> <LDZ> <LWORK> <repeats>\n");
+
     }
     if(invalid_dtype)
     {

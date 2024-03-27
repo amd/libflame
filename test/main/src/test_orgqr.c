@@ -2,20 +2,26 @@
     Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-#include "test_lapack.h"
 #include "test_common.h"
+#include "test_lapack.h"
 #include "test_prototype.h"
 
 /* Local prototypes.*/
-void fla_test_orgqr_experiment(test_params_t *params, integer datatype, integer  p_cur, integer  q_cur, integer  pci, integer  n_repeats, integer einfo, double* perf, double* t,double* residual);
-void prepare_orgqr_run(integer m, integer n, void *A, integer lda, void *T, void* work, integer *lwork, integer datatype, integer n_repeats, double* time_min_, integer *info);
-void invoke_orgqr(integer datatype, integer* m, integer* n, integer *min_A, void* a, integer* lda, void* tau, void* work, integer* lwork, integer* info);
+void fla_test_orgqr_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual);
+void prepare_orgqr_run(integer m, integer n, void *A, integer lda, void *T, void *work,
+                       integer *lwork, integer datatype, integer n_repeats, double *time_min_,
+                       integer *info);
+void invoke_orgqr(integer datatype, integer *m, integer *n, integer *min_A, void *a, integer *lda,
+                  void *tau, void *work, integer *lwork, integer *info);
 
-void fla_test_orgqr(integer argc, char ** argv, test_params_t *params)
+void fla_test_orgqr(integer argc, char **argv, test_params_t *params)
 {
-    char* op_str = "QR factorization";
-    char* front_str = "ORGQR";
+    char *op_str = "QR factorization";
+    char *front_str = "ORGQR";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char = '\0';
 
     if(argc == 1)
     {
@@ -26,16 +32,16 @@ void fla_test_orgqr(integer argc, char ** argv, test_params_t *params)
         fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_orgqr_experiment);
         tests_not_run = 0;
     }
-    if (argc == 9)
+    if(argc == 9)
     {
         FLA_TEST_PARSE_LAST_ARG(argv[8]);
     }
-    if (argc >= 8 && argc <= 9)
+    if(argc >= 8 && argc <= 9)
     {
-        integer i, num_types,N,M;
+        integer i, num_types, N, M;
         integer datatype, n_repeats;
         double perf, time_min, residual;
-        char stype,type_flag[4] = {0};
+        char stype, type_flag[4] = {0};
         char *endptr;
 
         /* Parse the arguments */
@@ -69,18 +75,12 @@ void fla_test_orgqr(integer argc, char ** argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_orgqr_experiment(params, datatype,
-                                          M, N,
-                                          0,
-                                          n_repeats, einfo,
-                                          &perf, &time_min, &residual);
+                fla_test_orgqr_experiment(params, datatype, M, N, 0, n_repeats, einfo, &perf,
+                                          &time_min, &residual);
                 /* Print the results */
-                fla_test_print_status(front_str,
-                                      stype,
-                                      RECT_INPUT,
-                                      M, N,
-                                      residual, params->lin_solver_paramslist[0].solver_threshold,
-                                      time_min, perf);
+                fla_test_print_status(front_str, stype, RECT_INPUT, M, N, residual,
+                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
+                                      perf);
                 tests_not_run = 0;
             }
         }
@@ -97,7 +97,7 @@ void fla_test_orgqr(integer argc, char ** argv, test_params_t *params)
     {
         printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n\n");
     }
-    if (g_ext_fptr != NULL)
+    if(g_ext_fptr != NULL)
     {
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
@@ -105,16 +105,9 @@ void fla_test_orgqr(integer argc, char ** argv, test_params_t *params)
     return;
 }
 
-void fla_test_orgqr_experiment(test_params_t *params,
-    integer datatype,
-    integer p_cur,
-    integer q_cur,
-    integer pci,
-    integer n_repeats,
-    integer einfo,
-    double* perf,
-    double* time_min,
-    double* residual)
+void fla_test_orgqr_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *time_min, double *residual)
 {
     integer m, n, lda;
     void *A = NULL, *A_test = NULL, *T_test = NULL;
@@ -132,11 +125,11 @@ void fla_test_orgqr_experiment(test_params_t *params,
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if (config_data)
+    if(config_data)
     {
-        if (lda == -1)
+        if(lda == -1)
         {
-            lda = fla_max(1,m);
+            lda = fla_max(1, m);
         }
     }
 
@@ -146,7 +139,7 @@ void fla_test_orgqr_experiment(test_params_t *params,
         create_matrix(datatype, &A, lda, n);
 
         /* create tau vector */
-        create_vector(datatype, &T_test, fla_min(m,n));
+        create_vector(datatype, &T_test, fla_min(m, n));
 
         init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
 
@@ -197,19 +190,29 @@ void fla_test_orgqr_experiment(test_params_t *params,
         copy_matrix(datatype, "full", m, n, A_test, lda, Q, lda);
 
         /*invoke orgqr API */
-        prepare_orgqr_run(m, n, Q, lda, T_test, work_test, &lwork, datatype, n_repeats, time_min, &info);
+        prepare_orgqr_run(m, n, Q, lda, T_test, work_test, &lwork, datatype, n_repeats, time_min,
+                          &info);
 
         /* performance computation
            (2/3)*n2*(3m - n) */
-        *perf = (double)((2.0 * m * n * n) - (( 2.0 / 3.0 ) * n * n * n )) / *time_min / FLOPS_PER_UNIT_PERF;
+        *perf = (double)((2.0 * m * n * n) - ((2.0 / 3.0) * n * n * n)) / *time_min
+                / FLOPS_PER_UNIT_PERF;
         if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
             *perf *= 4.0;
 
         /* output validation */
         if(info == 0)
             validate_orgqr(m, n, A, lda, Q, R, work_test, datatype, residual, &vinfo);
-
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
+        /* check for output matrix when inputs as extreme values */
+        else if(FLA_EXTREME_CASE_TEST)
+        {
+            if((!check_extreme_value(datatype, m, n, T_test, lda, params->imatrix_char)))
+            {
+                *residual = DBL_MAX;
+            }
+        }
+        else
+            FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
         /* Free up the buffers */
         free_matrix(A);
@@ -222,16 +225,9 @@ void fla_test_orgqr_experiment(test_params_t *params,
     }
 }
 
-void prepare_orgqr_run(integer m, integer n,
-    void* A,
-    integer lda,
-    void* T,
-    void* work,
-    integer *lwork,
-    integer datatype,
-    integer n_repeats,
-    double* time_min_,
-    integer *info)
+void prepare_orgqr_run(integer m, integer n, void *A, integer lda, void *T, void *work,
+                       integer *lwork, integer datatype, integer n_repeats, double *time_min_,
+                       integer *info)
 {
     integer i;
     void *A_save = NULL;
@@ -243,7 +239,7 @@ void prepare_orgqr_run(integer m, integer n,
     copy_matrix(datatype, "full", m, n, A, lda, A_save, lda);
 
     *info = 0;
-    for (i = 0; i < n_repeats && *info == 0; ++i)
+    for(i = 0; i < n_repeats && *info == 0; ++i)
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
@@ -258,7 +254,6 @@ void prepare_orgqr_run(integer m, integer n,
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
-
     }
 
     *time_min_ = time_min;
@@ -266,8 +261,8 @@ void prepare_orgqr_run(integer m, integer n,
     free_matrix(A_save);
 }
 
-
-void invoke_orgqr(integer datatype, integer* m, integer* n, integer *min_A, void* a, integer* lda, void* tau, void* work, integer* lwork, integer* info)
+void invoke_orgqr(integer datatype, integer *m, integer *n, integer *min_A, void *a, integer *lda,
+                  void *tau, void *work, integer *lwork, integer *info)
 {
     switch(datatype)
     {

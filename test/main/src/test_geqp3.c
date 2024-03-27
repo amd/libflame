@@ -1,22 +1,24 @@
 /*
-    Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
 
 /* Local prototypes */
-void fla_test_geqp3_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
-                               integer pci, integer n_repeats, integer einfo, double* perf, double* t,double* residual);
-void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *jpvt, void *T, integer datatype,
-                       integer n_repeats, double* time_min_, integer* info);
-void invoke_geqp3(integer datatype, integer* m, integer* n, void* a, integer* lda, integer *jpvt,
-                  void* tau, void* work, integer* lwork, void* rwork, integer* info);
+void fla_test_geqp3_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual);
+void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *jpvt, void *T,
+                       integer datatype, integer n_repeats, double *time_min_, integer *info);
+void invoke_geqp3(integer datatype, integer *m, integer *n, void *a, integer *lda, integer *jpvt,
+                  void *tau, void *work, integer *lwork, void *rwork, integer *info);
 
-void fla_test_geqp3(integer argc, char ** argv, test_params_t *params)
+void fla_test_geqp3(integer argc, char **argv, test_params_t *params)
 {
-    char* op_str = "QR factorization with column pivoting";
-    char* front_str = "GEQP3";
+    char *op_str = "QR factorization with column pivoting";
+    char *front_str = "GEQP3";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char = '\0';
 
     if(argc == 1)
     {
@@ -33,7 +35,7 @@ void fla_test_geqp3(integer argc, char ** argv, test_params_t *params)
     }
     if(argc >= 8 && argc <= 9)
     {
-        integer i, num_types, M,N;
+        integer i, num_types, M, N;
         integer datatype, n_repeats;
         double perf, time_min, residual;
         char stype, type_flag[4] = {0};
@@ -44,7 +46,7 @@ void fla_test_geqp3(integer argc, char ** argv, test_params_t *params)
         M = strtoimax(argv[3], &endptr, CLI_DECIMAL_BASE);
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-        
+
         g_lwork = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
 
@@ -70,18 +72,12 @@ void fla_test_geqp3(integer argc, char ** argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_geqp3_experiment(params, datatype,
-                                          M, N,
-                                          0,
-                                          n_repeats, einfo,
-                                          &perf, &time_min, &residual);
+                fla_test_geqp3_experiment(params, datatype, M, N, 0, n_repeats, einfo, &perf,
+                                          &time_min, &residual);
                 /* Print the results */
-                fla_test_print_status(front_str,
-                                      stype,
-                                      RECT_INPUT,
-                                      M, N,
-                                      residual, params->lin_solver_paramslist[0].solver_threshold,
-                                      time_min, perf);
+                fla_test_print_status(front_str, stype, RECT_INPUT, M, N, residual,
+                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
+                                      perf);
                 tests_not_run = 0;
             }
         }
@@ -103,19 +99,11 @@ void fla_test_geqp3(integer argc, char ** argv, test_params_t *params)
         g_ext_fptr = NULL;
     }
     return;
-
 }
 
-void fla_test_geqp3_experiment(test_params_t *params,
-                               integer datatype,
-                               integer p_cur,
-                               integer q_cur,
-                               integer pci,
-                               integer n_repeats,
-                               integer einfo,
-                               double* perf,
-                               double* t,
-                               double* residual)
+void fla_test_geqp3_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual)
 {
     integer m, n, lda;
     integer info = 0, vinfo = 0;
@@ -131,17 +119,17 @@ void fla_test_geqp3_experiment(test_params_t *params,
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if (config_data)
+    if(config_data)
     {
-        if (lda == -1)
+        if(lda == -1)
         {
-             lda = fla_max(1,m);
+            lda = fla_max(1, m);
         }
     }
 
     /* Create input matrix parameters */
     create_matrix(datatype, &A, lda, n);
-    create_vector(datatype, &T, fla_min(m,n));
+    create_vector(datatype, &T, fla_min(m, n));
 
     init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
 
@@ -150,7 +138,7 @@ void fla_test_geqp3_experiment(test_params_t *params,
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
     /* Create pivot array */
-    create_vector(INTEGER, (void **) &jpvt, n);
+    create_vector(INTEGER, (void **)&jpvt, n);
 
     prepare_geqp3_run(m, n, A_test, lda, jpvt, T, datatype, n_repeats, &time_min, &info);
 
@@ -161,17 +149,27 @@ void fla_test_geqp3_experiment(test_params_t *params,
      * 2mn^2 - (2/3)n^3 flops
      */
     if(m >= n)
-        *perf = (double)((2.0 * m * n * n) - (( 2.0 / 3.0 ) * n * n * n )) / time_min / FLOPS_PER_UNIT_PERF;
+        *perf = (double)((2.0 * m * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min
+                / FLOPS_PER_UNIT_PERF;
     else
-        *perf = (double)((2.0 * n * m * m) - (( 2.0 / 3.0 ) * m * m * m )) / time_min / FLOPS_PER_UNIT_PERF;
+        *perf = (double)((2.0 * n * m * m) - ((2.0 / 3.0) * m * m * m)) / time_min
+                / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         *perf *= 4.0;
 
     /* output validation */
-    if (info == 0)
+    if(info == 0)
         validate_geqp3(m, n, A, A_test, lda, jpvt, T, datatype, residual, &vinfo);
-
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    /* check for output matrix when inputs as extreme values */
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        if((!check_extreme_value(datatype, m, n, A_test, lda, params->imatrix_char)))
+        {
+            *residual = DBL_MAX;
+        }
+    }
+    else
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
     free_matrix(A);
@@ -180,20 +178,12 @@ void fla_test_geqp3_experiment(test_params_t *params,
     free_vector(jpvt);
 }
 
-
-void prepare_geqp3_run(integer m_A, integer n_A,
-    void *A,
-    integer lda,
-    integer *jpvt,
-    void *T,
-    integer datatype,
-    integer n_repeats,
-    double* time_min_,
-    integer* info)
+void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *jpvt, void *T,
+                       integer datatype, integer n_repeats, double *time_min_, integer *info)
 {
     integer min_A, i;
     void *A_save = NULL, *T_test = NULL, *work = NULL;
-    void *rwork=NULL;
+    void *rwork = NULL;
     integer lwork = -1;
     double time_min = 1e9, exe_time;
 
@@ -216,11 +206,11 @@ void prepare_geqp3_run(integer m_A, integer n_A,
         if(*info == 0)
         {
             /* Get work size */
-            lwork = get_work_value( datatype, work );
+            lwork = get_work_value(datatype, work);
         }
 
-        /* Output buffers will be freshly allocated for each iterations, free up 
-        the current output buffers. */ 
+        /* Output buffers will be freshly allocated for each iterations, free up
+        the current output buffers. */
         free_vector(work);
     }
     else
@@ -229,11 +219,11 @@ void prepare_geqp3_run(integer m_A, integer n_A,
     }
 
     /* rwork for complex types */
-    if (datatype >= COMPLEX)
+    if(datatype >= COMPLEX)
         create_realtype_vector(datatype, &rwork, 2 * n_A);
 
     *info = 0;
-    for (i = 0; i < n_repeats && *info == 0; ++i)
+    for(i = 0; i < n_repeats && *info == 0; ++i)
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration */
@@ -269,13 +259,12 @@ void prepare_geqp3_run(integer m_A, integer n_A,
     *time_min_ = time_min;
 
     free_matrix(A_save);
-    if (datatype >= COMPLEX)
+    if(datatype >= COMPLEX)
         free_vector(rwork);
 }
 
-
-void invoke_geqp3(integer datatype, integer* m, integer* n, void* a, integer* lda, integer *jpvt,
-                  void* tau, void* work, integer* lwork, void *rwork, integer* info)
+void invoke_geqp3(integer datatype, integer *m, integer *n, void *a, integer *lda, integer *jpvt,
+                  void *tau, void *work, integer *lwork, void *rwork, integer *info)
 {
     switch(datatype)
     {

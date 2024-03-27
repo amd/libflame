@@ -1,19 +1,24 @@
 /*
-    Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
 
 // Local prototypes.
-void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer  p_cur, integer  q_cur, integer  pci, integer  n_repeats, integer einfo, double* perf, double* time_min,double* residual);
-void prepare_potrs_run(char* uplo, integer m, integer nrhs, void *A, integer lda, integer datatype, void *b, integer ldb, integer n_repeats, double* time_min_, integer *info);
-void invoke_potrs(char* uplo, integer datatype, integer* m, void* A, integer* lda, integer *nrhs, void* b, integer* ldb, integer* info);
+void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *time_min, double *residual);
+void prepare_potrs_run(char *uplo, integer m, integer nrhs, void *A, integer lda, integer datatype,
+                       void *b, integer ldb, integer n_repeats, double *time_min_, integer *info);
+void invoke_potrs(char *uplo, integer datatype, integer *m, void *A, integer *lda, integer *nrhs,
+                  void *b, integer *ldb, integer *info);
 
-void fla_test_potrs(integer argc, char ** argv, test_params_t *params)
+void fla_test_potrs(integer argc, char **argv, test_params_t *params)
 {
-    char* op_str = "Cholesky factorization";
-    char* front_str = "POTRS";
+    char *op_str = "Cholesky factorization";
+    char *front_str = "POTRS";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char = '\0';
 
     if(argc == 1)
     {
@@ -23,11 +28,11 @@ void fla_test_potrs(integer argc, char ** argv, test_params_t *params)
         fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_potrs_experiment);
         tests_not_run = 0;
     }
-    if (argc == 10)
+    if(argc == 10)
     {
         FLA_TEST_PARSE_LAST_ARG(argv[9]);
     }
-    if (argc >= 9 && argc <= 10)
+    if(argc >= 9 && argc <= 10)
     {
         /* Test with parameters from commandline */
         integer i, num_types, N;
@@ -43,7 +48,7 @@ void fla_test_potrs(integer argc, char ** argv, test_params_t *params)
         params->lin_solver_paramslist[0].nrhs = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].ldb = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
-        
+
         n_repeats = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
 
         if(n_repeats > 0)
@@ -68,18 +73,12 @@ void fla_test_potrs(integer argc, char ** argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_potrs_experiment(params, datatype,
-                                          N, N,
-                                          0,
-                                          n_repeats, einfo,
-                                          &perf, &time_min, &residual);
+                fla_test_potrs_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
+                                          &time_min, &residual);
                 /* Print the results */
-                fla_test_print_status(front_str,
-                                      stype,
-                                      SQUARE_INPUT,
-                                      N, N,
-                                      residual, params->lin_solver_paramslist[0].solver_threshold,
-                                      time_min, perf);
+                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
+                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
+                                      perf);
                 tests_not_run = 0;
             }
         }
@@ -95,25 +94,17 @@ void fla_test_potrs(integer argc, char ** argv, test_params_t *params)
     {
         printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n\n");
     }
-    if (g_ext_fptr != NULL)
+    if(g_ext_fptr != NULL)
     {
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
     }
     return;
-
 }
 
-void fla_test_potrs_experiment(test_params_t *params,
-    integer  datatype,
-    integer  p_cur,
-    integer  q_cur,
-    integer  pci,
-    integer  n_repeats,
-    integer  einfo,
-    double* perf,
-    double* t,
-    double* residual)
+void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual)
 {
     integer n, info = 0, nrhs, lda, ldb, vinfo = 0;
     void *A = NULL, *A_test = NULL;
@@ -124,21 +115,21 @@ void fla_test_potrs_experiment(test_params_t *params,
     nrhs = params->lin_solver_paramslist[pci].nrhs;
     *residual = params->lin_solver_paramslist[pci].solver_threshold;
     /* Get input matrix dimensions. */
-    n= p_cur;
+    n = p_cur;
     lda = params->lin_solver_paramslist[pci].lda;
     ldb = params->lin_solver_paramslist[pci].ldb;
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if (config_data)
+    if(config_data)
     {
-        if (lda == -1)
+        if(lda == -1)
         {
-            lda = fla_max(1,n);
+            lda = fla_max(1, n);
         }
-        if (ldb == -1)
+        if(ldb == -1)
         {
-            ldb = fla_max(1,n);
+            ldb = fla_max(1, n);
         }
     }
 
@@ -151,7 +142,7 @@ void fla_test_potrs_experiment(test_params_t *params,
 
     /* Initialize input symmetric positive definite matrix A */
     reset_matrix(datatype, n, n, A, lda);
-    if (g_ext_fptr != NULL)
+    if(g_ext_fptr != NULL)
     {
         /* Initialize input matrix with custom data */
         init_matrix_from_file(datatype, A, n, n, lda, g_ext_fptr);
@@ -176,35 +167,34 @@ void fla_test_potrs_experiment(test_params_t *params,
     *t = time_min;
     /* Compute the performance of the best experiment repeat. */
     /* (2.0)m^2 flops for Ax=b computation. */
-    *perf = (double)((2.0 * n * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min / FLOPS_PER_UNIT_PERF;
+    *perf
+        = (double)((2.0 * n * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         *perf *= 4.0;
 
     /* Validate potrs call by computing Ax-b */
     if(info == 0)
         validate_potrs(n, nrhs, A_test, lda, X, B, ldb, datatype, residual, &vinfo);
-
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    /* check for output matrix when inputs as extreme values */
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        if((!check_extreme_value(datatype, n, nrhs, B_test, ldb, params->imatrix_char)))
+        {
+            *residual = DBL_MAX;
+        }
+    }
+    else
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     free_matrix(A);
     free_matrix(A_test);
     free_matrix(B_test);
     free_matrix(B);
     free_matrix(X);
-
 }
 
-void prepare_potrs_run(char* uplo, 
-    integer n,
-    integer nrhs,
-    void *A,
-    integer lda,
-    integer datatype,
-    void *B,
-    integer ldb,
-    integer n_repeats,
-    double* time_min_,
-    integer* info)
+void prepare_potrs_run(char *uplo, integer n, integer nrhs, void *A, integer lda, integer datatype,
+                       void *B, integer ldb, integer n_repeats, double *time_min_, integer *info)
 {
     void *A_save = NULL, *B_test = NULL;
     double time_min = 1e9, exe_time;
@@ -216,7 +206,7 @@ void prepare_potrs_run(char* uplo,
     create_matrix(datatype, &B_test, ldb, nrhs);
 
     *info = 0;
-    for (i = 0; i < n_repeats && *info == 0; ++i)
+    for(i = 0; i < n_repeats && *info == 0; ++i)
     {
         /* Restore input matrix A value and allocate memory to output buffers
         for each iteration */
@@ -234,14 +224,8 @@ void prepare_potrs_run(char* uplo,
     free_vector(B_test);
 }
 
-void invoke_potrs(char* uplo, integer datatype,
-    integer* n,
-    void* A,
-    integer* lda,
-    integer *nrhs,
-    void* B,
-    integer* ldb,
-    integer* info)
+void invoke_potrs(char *uplo, integer datatype, integer *n, void *A, integer *lda, integer *nrhs,
+                  void *B, integer *ldb, integer *info)
 {
     switch(datatype)
     {

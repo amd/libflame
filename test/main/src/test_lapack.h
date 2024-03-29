@@ -205,7 +205,8 @@ typedef struct Lin_solver_paramlist_t
     char norm_gbcon; // norm param for gbcon API
     integer kl_gbcon; // number of subdiagonals
     integer ku_gbcon; // number of superdiagonals
-    integer ldab_gbcon; //  leading dimension of the array ab
+    integer ldab_gbcon; // leading dimension of the array ab
+    doublereal rcond; // used to determine the effective rank of matrix
 } Lin_solver_paramlist;
 
 /* struct to hold eigen parameters */

@@ -13,7 +13,6 @@ void validate_gbtrf(integer m_A, integer n_A, integer kl, integer ku, void *AB, 
                     integer ldab, integer *IPIV, integer datatype, double *residual, integer *info)
 {
     void *work = NULL;
-    integer nrhs = 1;
 
     *info = 0;
 

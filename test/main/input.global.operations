@@ -43,3 +43,4 @@
 1   gtsv    Linear Solve for General Tridiagonal Matrix   (0 = disable; 1 = enable; 2 = enable only this)
 1   gbtrf   LU factorization of banded matrix             (0 = disable; 1 = enable; 2 = enable only this)
 1   gbtrs   Linear solver of banded matrix                (0 = disable; 1 = enable; 2 = enable only this)
+1   gelsd   Solves linear least squares of a GE matrix    (0 = disable; 1 = enable; 2 = enable only this)

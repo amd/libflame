@@ -30,6 +30,7 @@ set(NEGATIVE_TEST_CASES "ggevx sdcz A V V B 10 10 10 10 10 -1 1 --einfo=-1"
             "gelqf sdcz 10 -10 10 -1 1 --einfo=-2"
             "gelqf sdcz 10 10 -10 -1 1 --einfo=-4"
             "gelqf sdcz 10 10 10 1 1 --einfo=-7"
+            "gelqf sdcz 0 10 10 -1 1 --einfo=-7"
             "potrf sdcz U -10 10 1 --einfo=-2"
             "potrf sdcz X 10 10 1 --einfo=-1"
             "potrf sdcz U 10 -10 1 --einfo=-4"
@@ -227,7 +228,9 @@ set(CORNER_TEST_CASES "ggevx sdcz B V V B 0 10 10 10 10 -1 1 --einfo=0"
             "gesdd sdcz O 0 0 1 1 10 -1 1 --einfo=0"
             "gesdd sdcz N 0 10 1 1 10 -1 1 --einfo=0"
             "gesdd sdcz N 10 0 10 10 10 -1 1 --einfo=0"
-            "gesdd sdcz N 0 0 1 1 10 -1 1 --einfo=0")
+            "gesdd sdcz N 0 0 1 1 10 -1 1 --einfo=0"
+            "gelqf sdcz 10 0 10 -1 1 --einfo=0"
+            "gelqf sdcz 0 1 10 1 1 --einfo=0")
 
 set(MIN_WORK_TEST_CASES "gesvd d S S 3 3 3 3 3 15 1 --einfo=0"
             "gesvd d S S 3 9 3 3 9 18 1 --einfo=0"
@@ -363,7 +366,19 @@ set(EXTREMEVALUE_TEST_CASES "gesv sdcz 4 4 4 4 1 --imatrix=A"
             "gesvd sdcz A S 120 120 120 120 120 -1 1 --imatrix=I"
             "gesvd sdcz A S 120 125 120 120 120 -1 1 --imatrix=I"
             "gesvd sdcz A S 120 120 120 120 120 -1 1 --imatrix=N"
-            "gesvd sdcz A S 120 125 120 120 120 -1 1 --imatrix=N")
+            "gesvd sdcz A S 120 125 120 120 120 -1 1 --imatrix=N"
+            "gelqf sdcz 10 10 10 -1 1 --imatrix=A"
+            "gelqf sdcz 10 10 10 -1 1 --imatrix=F"
+            "gelqf sdcz 1 1 10 -1 1 --imatrix=A"
+            "gelqf sdcz 1 1 10 -1 1 --imatrix=F"
+            "gelqf sdcz 17 5 17 -1 1 --imatrix=A"
+            "gelqf sdcz 17 5 17 -1 1 --imatrix=F"
+            "gelqf sdcz 7 3 17 -1 1 --imatrix=I"
+            "gelqf sdcz 7 3 17 -1 1 --imatrix=N"
+            "gelqf sdcz 23 3 30 -1 1 --imatrix=I"
+            "gelqf sdcz 23 3 30 -1 1 --imatrix=N"
+            "gelqf sdcz 1 1 1 -1 1 --imatrix=I"
+            "gelqf sdcz 1 1 1 -1 1 --imatrix=N")
 
 set(TEST_NUM 1)
 foreach(neg_test_cases IN LISTS NEGATIVE_TEST_CASES)

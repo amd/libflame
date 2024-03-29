@@ -129,4 +129,8 @@ void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, 
    matrix.*/
 void validate_gbtrf(integer m_A, integer n_A, integer kl, integer ku, void *AB, void *AB_test,
                     integer ldab, integer *IPIV, integer datatype, double *residual, integer *info);
+
+void validate_gelsd(integer m, integer n, integer NRHS, void *A, integer lda, void *B,
+                    integer ldb, void *S, void *X, void *rcond, integer *rank, integer datatype,
+                    double* residual);
 #endif // VALIDATE_COMMON_H

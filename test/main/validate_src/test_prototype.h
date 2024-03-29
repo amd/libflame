@@ -264,6 +264,21 @@
 #define fla_lapack_cgesvdx CGESVDX_
 #define fla_lapack_zgesvdx ZGESVDX_
 
+#define fla_lapack_sgbtrf SGBTRF_
+#define fla_lapack_dgbtrf DGBTRF_
+#define fla_lapack_cgbtrf CGBTRF_
+#define fla_lapack_zgbtrf ZGBTRF_
+
+#define fla_lapack_sgbtrs SGBTRS_
+#define fla_lapack_dgbtrs DGBTRS_
+#define fla_lapack_cgbtrs CGBTRS_
+#define fla_lapack_zgbtrs ZGBTRS_
+
+#define fla_lapack_sgelsd SGELSD_
+#define fla_lapack_dgelsd DGELSD_
+#define fla_lapack_cgelsd CGELSD_
+#define fla_lapack_zgelsd ZGELSD_
+
 #elif(UPPER)
 
 #define fla_lapack_sladiv SLADIV
@@ -520,6 +535,21 @@
 #define fla_lapack_cgesvdx CGESVDX
 #define fla_lapack_zgesvdx ZGESVDX
 
+#define fla_lapack_sgbtrf SGBTRF
+#define fla_lapack_dgbtrf DGBTRF
+#define fla_lapack_cgbtrf CGBTRF
+#define fla_lapack_zgbtrf ZGBTRF
+
+#define fla_lapack_sgbtrs SGBTRS
+#define fla_lapack_dgbtrs DGBTRS
+#define fla_lapack_cgbtrs CGBTRS
+#define fla_lapack_zgbtrs ZGBTRS
+
+#define fla_lapack_sgelsd SGELSD
+#define fla_lapack_dgelsd DGELSD
+#define fla_lapack_cgelsd CGELSD
+#define fla_lapack_zgelsd ZGELSD
+
 #elif(LOWER)
 
 #define fla_lapack_sladiv sladiv
@@ -775,6 +805,21 @@
 #define fla_lapack_dgesvdx dgesvdx
 #define fla_lapack_cgesvdx cgesvdx
 #define fla_lapack_zgesvdx zgesvdx
+
+#define fla_lapack_sgbtrf sgbtrf
+#define fla_lapack_dgbtrf dgbtrf
+#define fla_lapack_cgbtrf cgbtrf
+#define fla_lapack_zgbtrf zgbtrf
+
+#define fla_lapack_sgbtrs sgbtrs
+#define fla_lapack_dgbtrs dgbtrs
+#define fla_lapack_cgbtrs cgbtrs
+#define fla_lapack_zgbtrs zgbtrs
+
+#define fla_lapack_sgelsd sgelsd
+#define fla_lapack_dgelsd dgelsd
+#define fla_lapack_cgelsd cgelsd
+#define fla_lapack_zgelsd zgelsd
 
 #else
 
@@ -1041,6 +1086,11 @@
 #define fla_lapack_dgbtrs dgbtrs_
 #define fla_lapack_cgbtrs cgbtrs_
 #define fla_lapack_zgbtrs zgbtrs_
+
+#define fla_lapack_sgelsd sgelsd_
+#define fla_lapack_dgelsd dgelsd_
+#define fla_lapack_cgelsd cgelsd_
+#define fla_lapack_zgelsd zgelsd_
 
 #endif /*if UPPER_*/
 

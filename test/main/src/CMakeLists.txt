@@ -42,9 +42,10 @@ ${CMAKE_CURRENT_SOURCE_DIR}/test_org2r.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_syevx.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_gtsv.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_gesvdx.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_gels.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_larfg.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_gelsd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_lapack.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_lapack.h
 ${CMAKE_CURRENT_SOURCE_DIR}/test_routines.h
-${CMAKE_CURRENT_SOURCE_DIR}/test_gels.c
-${CMAKE_CURRENT_SOURCE_DIR}/test_larfg.c
 )

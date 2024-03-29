@@ -15,7 +15,7 @@ void fla_test_gelqf(integer argc, char ** argv, test_params_t *params)
     char* op_str = "LQ factorization";
     char* front_str = "GEQLF";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
-
+    params->imatrix_char = '\0';
     if(argc == 1)
     {
         g_lwork = -1;
@@ -162,10 +162,17 @@ void fla_test_gelqf_experiment(test_params_t *params,
         *perf *= 4.0;
 
     /* output validation */
-    if (info == 0) 
+    if(!params->imatrix_char && info == 0)
         validate_gelqf(m, n, A, A_test, lda, T, datatype, residual, &vinfo);
-
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        if((!check_extreme_value(datatype, m, n, A_test, lda, params->imatrix_char)))
+        {
+            *residual = DBL_MAX;
+        }
+    }
+    else
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
     free_matrix(A);
@@ -210,8 +217,8 @@ void prepare_gelqf_run(integer m_A, integer n_A,
             lwork = get_work_value( datatype, work );
         }
 
-        /* Output buffers will be freshly allocated for each iterations, free up 
-       the current output buffers.*/ 
+        /* Output buffers will be freshly allocated for each iterations, free up
+       the current output buffers.*/
         free_vector(work);
     }
     else

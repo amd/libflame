@@ -2545,9 +2545,10 @@ void fla_test_op_driver(char *func_str, integer sqr_inp, test_params_t *params, 
                               (perf + ith), (time + ith), (residual + ith));
                     }
 
-                    get_max(DOUBLE, (void *)residual, (void *)&residual_max_val, n_threads);
-                    get_min(DOUBLE, (void *)time, (void *)&time_min_val, n_threads);
-                    get_max(DOUBLE, (void *)perf, (void *)&perf_max_val, n_threads);
+                    get_max_from_array(DOUBLE, (void *)residual, (void *)&residual_max_val,
+                                       n_threads);
+                    get_min_from_array(DOUBLE, (void *)time, (void *)&time_min_val, n_threads);
+                    get_max_from_array(DOUBLE, (void *)perf, (void *)&perf_max_val, n_threads);
 
                     fla_test_print_status(func_str, datatype_char, sqr_inp, p_cur, q_cur,
                                           residual_max_val, thresh, time_min_val, perf_max_val);

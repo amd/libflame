@@ -26,7 +26,7 @@ void fla_test_gesvdx(integer argc, char **argv, test_params_t *params)
     char *op_str = "Singular value decomposition";
     char *front_str = "GESVDX";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
-
+    params->imatrix_char = '\0';
     if(argc == 1)
     {
         g_lwork = -1;
@@ -209,8 +209,8 @@ void fla_test_gesvdx_experiment(test_params_t *params, integer datatype, integer
     else
     {
         /* Generate A matrix by known singular values */
-        create_matrix_for_svd(datatype, jobu, jobvt, range, A, s_test, m, n, lda, ldu, ldvt, vl, vu,
-                              il, iu, info);
+        create_svd_matrix(datatype, range, m, n, A, lda, m, n, s_test, d_vl, d_vu, il, iu,
+                          params->imatrix_char, NULL, info);
     }
 
     /* Make a copy of input matrix A. This is required to validate the API functionality. */
@@ -256,12 +256,12 @@ void fla_test_gesvdx_experiment(test_params_t *params, integer datatype, integer
     /* Free up the buffers */
     free_matrix(A);
     free_matrix(A_test);
-    free_vector(s_test);
     free_vector(s);
     free_vector(vl);
     free_vector(vu);
     free_matrix(U);
     free_matrix(V);
+    free_vector(s_test);
 }
 
 void prepare_gesvdx_run(char *jobu, char *jobvt, char *range, integer m_A, integer n_A, void *A,

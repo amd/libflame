@@ -5,6 +5,7 @@
 target_sources(${PROJECT_NAME}
      PRIVATE
 ${CMAKE_CURRENT_SOURCE_DIR}/test_common.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_overflow_underflow.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gbtrf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_geqrf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gerq2.c

@@ -1663,7 +1663,7 @@ void copy_sym_tridiag_matrix(integer datatype, void *D, void *E, integer M, inte
     }
 }
 /* Get the maximum value from the array */
-void get_max(integer datatype, void *arr, void *max_val, integer n)
+void get_max_from_array(integer datatype, void *arr, void *max_val, integer n)
 {
     integer i;
 
@@ -1778,7 +1778,7 @@ void get_max(integer datatype, void *arr, void *max_val, integer n)
 }
 
 /* Get the minimum value from the array */
-void get_min(integer datatype, void *arr, void *min_val, integer n)
+void get_min_from_array(integer datatype, void *arr, void *min_val, integer n)
 {
     integer i;
 
@@ -3294,7 +3294,7 @@ void init_vector_spec_rand_in(integer datatype, void *A, integer M, integer incx
     integer rows, span;
     rand_vector(datatype, A, M, incx);
     /* when M*N less than 2 there is no need of randomness*/
-    if(M  < 2)
+    if(M < 2)
     {
         char type_;
         type_ = (type == 'A') ? 'N' : 'I';
@@ -3309,7 +3309,7 @@ void init_vector_spec_rand_in(integer datatype, void *A, integer M, integer incx
     */
     if(M > 10)
     {
-        span = (M) * 0.2;
+        span = (M)*0.2;
     }
     else
     {
@@ -3426,10 +3426,21 @@ void init_matrix(integer datatype, void *A, integer M, integer N, integer LDA, F
         rand_matrix(datatype, A, M, N, LDA);
 }
 
-/* Generate SVD matrix with known conditions */
-void create_matrix_for_svd(integer datatype, char jobu, char jobvt, char range, void *A_input,
-                           void *S, integer m, integer n, integer lda, integer ldu, integer ldvt,
-                           void *vl, void *vu, integer il, integer iu, integer info)
+/*
+ *   Create input matrix A by randomly generating singular values(S)
+ *   according to range A, I, V respectively
+ *   A -> All singular values => rand vector
+ *   V -> Singular value between (vl, vu) range => vector in range(vl, vu)
+ *   I -> Singular value between (il, iu) index
+ *               A  = (U * S * V')
+ *   where  S  is a diagonal matrix with diagonal elements being
+ *   the singular values of input matrix A
+ *   U is an M-by-M orthogonal matrix, and
+ *   V is an N-by-N orthogonal matrix.
+ */
+void create_svd_matrix(integer datatype, char range, integer m, integer n, void *A_input,
+                       integer lda, integer ldu, integer ldvt, void *S, double vl, double vu,
+                       integer il, integer iu, char imatrix, void *scal, integer info)
 {
     if(lda < m)
         return;
@@ -3438,10 +3449,10 @@ void create_matrix_for_svd(integer datatype, char jobu, char jobvt, char range, 
         return;
 
     void *A, *B, *U, *V, *sigma, *Usigma, *s_test;
-    integer min_m_n = fla_min(m, n), ldb = n;
+    integer min_m_n = fla_min(m, n);
 
-    create_matrix(datatype, &A, lda, m);
-    create_matrix(datatype, &B, ldb, n);
+    create_matrix(datatype, &A, m, m);
+    create_matrix(datatype, &B, n, n);
     /* Orthogonal matrix U and V */
     create_matrix(datatype, &U, m, m);
     create_matrix(datatype, &V, n, n);
@@ -3449,18 +3460,17 @@ void create_matrix_for_svd(integer datatype, char jobu, char jobvt, char range, 
     create_realtype_vector(datatype, &s_test, min_m_n);
 
     /* Generate random matrix for Decomposition */
-    rand_matrix(datatype, A, m, m, lda);
-    rand_matrix(datatype, B, n, n, ldb);
+    rand_matrix(datatype, A, m, m, m);
+    rand_matrix(datatype, B, n, n, n);
 
     /* Calculate orthogonal matrix U & V */
-    get_orthogonal_matrix_from_QR(datatype, m, A, lda, U, m, &info);
-    get_orthogonal_matrix_from_QR(datatype, n, B, ldb, V, n, &info);
+    get_orthogonal_matrix_from_QR(datatype, m, A, m, U, m, &info);
+    get_orthogonal_matrix_from_QR(datatype, n, B, n, V, n, &info);
 
     /* Generating positive singular values according to the ranges */
     if(range == 'V' || range == 'v')
     {
-        rand_realvector_in_range(get_realtype(datatype), s_test, get_realtype_value(datatype, vl),
-                                 get_realtype_value(datatype, vu), min_m_n);
+        rand_realvector_in_range(get_realtype(datatype), s_test, vl, vu, min_m_n);
     }
     else
         rand_vector(get_realtype(datatype), s_test, min_m_n, i_one);
@@ -3494,28 +3504,35 @@ void create_matrix_for_svd(integer datatype, char jobu, char jobvt, char range, 
         case FLOAT:
         {
             sgemm_("N", "N", &m, &n, &min_m_n, &s_one, U, &m, sigma, &min_m_n, &s_zero, Usigma, &m);
-            sgemm_("N", "T", &m, &n, &n, &s_one, Usigma, &m, V, &n, &s_zero, A_input, &lda);
+            sgemm_("N", "N", &m, &n, &n, &s_one, Usigma, &m, V, &n, &s_zero, A_input, &lda);
             break;
         }
         case DOUBLE:
         {
             dgemm_("N", "N", &m, &n, &min_m_n, &d_one, U, &m, sigma, &min_m_n, &d_zero, Usigma, &m);
-            dgemm_("N", "T", &m, &n, &n, &d_one, Usigma, &m, V, &n, &d_zero, A_input, &lda);
+            dgemm_("N", "N", &m, &n, &n, &d_one, Usigma, &m, V, &n, &d_zero, A_input, &lda);
             break;
         }
         case COMPLEX:
         {
             cgemm_("N", "N", &m, &n, &min_m_n, &c_one, U, &m, sigma, &min_m_n, &c_zero, Usigma, &m);
-            cgemm_("N", "C", &m, &n, &n, &c_one, Usigma, &m, V, &n, &c_zero, A_input, &lda);
+            cgemm_("N", "N", &m, &n, &n, &c_one, Usigma, &m, V, &n, &c_zero, A_input, &lda);
             break;
         }
         case DOUBLE_COMPLEX:
         {
             zgemm_("N", "N", &m, &n, &min_m_n, &z_one, U, &m, sigma, &min_m_n, &z_zero, Usigma, &m);
-            zgemm_("N", "C", &m, &n, &n, &z_one, Usigma, &m, V, &n, &z_zero, A_input, &lda);
+            zgemm_("N", "N", &m, &n, &n, &z_one, Usigma, &m, V, &n, &z_zero, A_input, &lda);
             break;
         }
     }
+
+    if(imatrix == 'O' || imatrix == 'U')
+    {
+        /* Initializing matrix with values around overflow underflow */
+        init_matrix_overflow_underflow_svd(datatype, m, n, A_input, lda, imatrix, scal);
+    }
+
     free_matrix(A);
     free_matrix(B);
     free_matrix(U);
@@ -5030,6 +5047,203 @@ void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, ch
                     ((dcomplex *)A)[j * lda + i].imag = conj * ((dcomplex *)A)[i * lda + j].imag;
                 }
             }
+            break;
+        }
+    }
+}
+/* Scaling the matrix by x scalar */
+void scal_matrix(integer datatype, void *x, void *A, integer m, integer n, integer lda, integer inc)
+{
+    integer j;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            float *column_of_matrix;
+            for(j = 0; j < n; j++)
+            {
+                /* scale each column of the matrix by scalar x */
+                column_of_matrix = (float *)A + j * lda;
+                sscal_(&m, x, column_of_matrix, &inc);
+            }
+            break;
+        }
+
+        case DOUBLE:
+        {
+            double *column_of_matrix;
+            for(j = 0; j < n; j++)
+            {
+                /* scale each column of the matrix by in the x */
+                column_of_matrix = (double *)A + j * lda;
+                dscal_(&m, x, column_of_matrix, &inc);
+            }
+            break;
+        }
+
+        case COMPLEX:
+        {
+            scomplex *column_of_matrix;
+            for(j = 0; j < n; j++)
+            {
+                /* scale each column of the matrix by x */
+                column_of_matrix = (scomplex *)A + j * lda;
+                csscal_(&m, x, column_of_matrix, &inc);
+            }
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            dcomplex *column_of_matrix;
+            for(j = 0; j < n; j++)
+            {
+                /* scale each column of the matrix by x */
+                column_of_matrix = (dcomplex *)A + j * lda;
+                zdscal_(&m, x, column_of_matrix, &inc);
+            }
+            break;
+        }
+    }
+    return;
+}
+/* Get the maximum value from the matrix */
+void get_max_from_matrix(integer datatype, void *A, void *max_val, integer m, integer n,
+                         integer lda)
+{
+    void *work = NULL;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            *(float *)max_val = fla_lapack_slange("M", &m, &n, A, &lda, work);
+            break;
+        }
+
+        case DOUBLE:
+        {
+            *(double *)max_val = fla_lapack_dlange("M", &m, &n, A, &lda, work);
+            break;
+        }
+        case COMPLEX:
+        {
+            *(float *)max_val = fla_lapack_clange("M", &m, &n, A, &lda, work);
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            *(double *)max_val = fla_lapack_zlange("M", &m, &n, A, &lda, work);
+            break;
+        }
+    }
+}
+
+/* Get the minimum value from the matrix */
+void get_min_from_matrix(integer datatype, void *A, void *min_val, integer m, integer n,
+                         integer lda)
+{
+    integer i, j;
+
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            float val = ((float *)A)[0];
+            float min_local = FLA_FABS(val);
+            for(i = 0; i < n; i++)
+            {
+                for(j = 0; j < m; j++)
+                {
+                    val = FLA_FABS(((float *)A)[i * lda + j]);
+                    if(val != s_zero && min_local > val)
+                    {
+                        min_local = val;
+                    }
+                }
+            }
+
+            *(float *)min_val = min_local;
+            break;
+        }
+
+        case DOUBLE:
+        {
+            double val = ((double *)A)[i * 0 + j * 0];
+            double min_local = FLA_FABS(val);
+
+            for(i = 0; i < n; i++)
+            {
+                for(j = 0; j < m; j++)
+                {
+                    val = FLA_FABS(((double *)A)[i * lda + j]);
+                    if(val != d_zero && min_local > val)
+                    {
+                        min_local = val;
+                    }
+                }
+            }
+            *(double *)min_val = min_local;
+            break;
+        }
+
+        case COMPLEX:
+        {
+            scomplex *ptr = A;
+            scomplex min_local = ptr[0];
+            min_local.real = FLA_FABS(ptr[0].real);
+            min_local.imag = FLA_FABS(ptr[0].imag);
+
+            for(i = 0; i < n; i++)
+            {
+                for(j = 0; j < m; j++)
+                {
+                    float real, imag;
+                    real = FLA_FABS(ptr[i * lda + j].real);
+                    imag = FLA_FABS(ptr[i * lda + j].imag);
+                    /* Compare real part */
+                    if(real != s_zero && real < min_local.real)
+                    {
+                        min_local.real = real;
+                    }
+                    /* Compare imaginary part */
+                    if(imag != s_zero && imag < min_local.imag)
+                    {
+                        min_local.imag = imag;
+                    }
+                }
+            }
+            *(float *)min_val = fla_min(min_local.real, min_local.imag);
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            dcomplex *ptr = A;
+            dcomplex min_local = ptr[0];
+            min_local.real = FLA_FABS(ptr[0].real);
+            min_local.imag = FLA_FABS(ptr[0].imag);
+
+            for(i = 0; i < n; i++)
+            {
+                for(j = 0; j < m; j++)
+                {
+                    double real, imag;
+                    real = FLA_FABS(ptr[i * lda + j].real);
+                    imag = FLA_FABS(ptr[i * lda + j].imag);
+                    /* Compare real part */
+                    if(real != d_zero && real < min_local.real)
+                    {
+                        min_local.real = real;
+                    }
+                    /* Compare imaginary part */
+                    if(imag != d_zero && imag < min_local.imag)
+                    {
+                        min_local.imag = imag;
+                    }
+                }
+            }
+            *(double *)min_val = fla_min(min_local.real, min_local.imag);
             break;
         }
     }

@@ -12,6 +12,7 @@
 #include "blis.h"
 #include "test_prototype.h"
 #include "validate_common.h"
+#include "test_overflow_underflow.h"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -143,9 +144,9 @@ void scgemv(char TRANS, integer real_alpha, integer m, integer n, scomplex *alph
             integer lda, scomplex *v, integer incv, float beta, scomplex *c, integer inc);
 
 /* To find the maximum from the array */
-void get_max(integer datatype, void *arr, void *max_val, integer n);
+void get_max_from_array(integer datatype, void *arr, void *max_val, integer n);
 /* To find the minimum from the array */
-void get_min(integer datatype, void *arr, void *min_val, integer n);
+void get_min_from_array(integer datatype, void *arr, void *min_val, integer n);
 /* Reading matrix input data from a file */
 void init_matrix_from_file(integer datatype, void *A, integer m, integer n, integer lda,
                            FILE *fptr);
@@ -181,9 +182,9 @@ void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, v
 /*To Check order of Singular values of SVD (positive and non-decreasing)*/
 double svd_check_order(integer datatype, void *s, integer m, integer n, double residual);
 /*Generate Matrix for SVD*/
-void create_matrix_for_svd(integer datatype, char jobu, char jobvt, char range, void *A_input,
-                           void *S, integer m, integer n, integer lda, integer ldu, integer ldvt,
-                           void *vl, void *vu, integer il, integer iu, integer info);
+void create_svd_matrix(integer datatype, char range, integer m, integer n, void *A_input,
+                       integer lda, integer ldu, integer ldvt, void *S, double vl, double vu,
+                       integer il, integer iu, char imatrix, void *scal, integer info);
 void get_abs_vector_value(integer datatype, void *S, integer M, integer inc);
 /* Intialize matrix with special values*/
 void init_matrix_spec_in(integer datatype, void *A, integer M, integer N, integer LDA, char type);
@@ -212,7 +213,7 @@ void multiply_matrix_diag_vector(integer datatype, integer m, integer n, void *A
 /* Generate square matrix of size n x n using Eigen decomposition(ED) */
 void generate_matrix_from_ED(integer datatype, integer n, void *A, integer lda, void *Q,
                              void *lambda);
-/* Sort the given real type vector in given order */
+/* Sort the real type vector in given order */
 void sort_realtype_vector(integer datatype, char *order, integer vect_len, void *w, integer incw);
 /* Compare two vectors starting from offset_A in A vector with B vector (starting from offset 0 in
  * B) */
@@ -252,4 +253,13 @@ void residual_sum_of_squares(int datatype, integer m, integer n, integer nrhs, v
  * If type = "S" symmetric matrix is formed.
  */
 void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, char *type);
+/* Scaling the matrix by x scalar */
+void scal_matrix(integer datatype, void *x, void *A, integer m, integer n, integer lda,
+                 integer inc);
+/* Get the maximum value from the matrix */
+void get_max_from_matrix(integer datatype, void *A, void *max_val, integer m, integer n,
+                         integer lda);
+/* Get the minimum value from the matrix */
+void get_min_from_matrix(integer datatype, void *A, void *min_val, integer m, integer n,
+                         integer lda);
 #endif // TEST_COMMON_H

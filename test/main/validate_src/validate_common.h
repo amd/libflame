@@ -27,8 +27,9 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
                     integer *info);
 
 void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void *A_test,
-                    integer lda, void *s, void *U, integer ldu, void *V, integer ldvt,
-                    integer datatype, double *residual, integer *info);
+                    integer lda, void *s, void *s_test, void *U, integer ldu, void *V, integer ldvt,
+                    integer datatype, double *residual, integer *info, FILE *g_ext_fptr,
+                    char imatrix, void *scal);
 
 void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, integer lda, integer *IPIV,
                     integer datatype, double *residual, integer *info);

@@ -269,7 +269,7 @@
 // ORGQR , threshold numbers to chose paths for performance
 #define FLA_DGER_INLINE_SMALL_THRESH0   (6)
 #define FLA_DGER_INLINE_SMALL_THRESH1   (32)
-#define FLA_DSCAL_INLINE_SMALL          (32)
+#define FLA_DSCAL_INLINE_SMALL          (128)
 #define FLA_ZGERC_INLINE_SMALL_THRESH0  (128)
 #define FLA_ZGERC_INLINE_SMALL_THRESH1  (32)
 #define FLA_ZSCAL_INLINE_SMALL          (128)

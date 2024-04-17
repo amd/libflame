@@ -102,7 +102,7 @@ void zrot_(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, inte
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zrot inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*n, *incx, *incy);
-    extern fla_context global_context;
+    extern fla_context fla_global_context;
     extern void fla_zrot(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy, doublereal *c__, doublecomplex *s);
     extern void fla_zrot_native(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy, doublereal *c__, doublecomplex *s);
 
@@ -110,7 +110,7 @@ void zrot_(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, inte
     aocl_fla_init();
 
 #ifdef FLA_ENABLE_AMD_OPT
-    if (global_context.is_avx2)
+    if (fla_global_context.is_avx2)
     {
       fla_zrot(n, cx, incx, cy, incy, c__, s);
     }

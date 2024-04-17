@@ -113,14 +113,14 @@ typedef struct _fla_context
       .libflame_mt = FALSE, \
     }
 
-extern fla_context global_context;
+extern fla_context fla_global_context;
 
 typedef struct _fla_tl_context
 {
     // num of threads
     int num_threads;
     FLA_Bool    libflame_mt; // num_threads is set using libFLAME environment variable or using OpenMP.
-} fla_tl_context;
+} fla_tl_context_t;
 
 #define FLA_TL_CONTEXT_INITIALIZER \
     { \
@@ -128,7 +128,7 @@ typedef struct _fla_tl_context
       .libflame_mt = FALSE, \
     }
 
-extern TLS_CLASS_SPEC fla_tl_context tl_context;
+extern TLS_CLASS_SPEC fla_tl_context_t fla_tl_context;
 
 /*! \ingroup aux_module
  *  \brief Initialise various framework variables including

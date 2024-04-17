@@ -56,7 +56,7 @@ extern void DTL_Trace(
 #if FLA_ENABLE_AMD_OPT /* FLA_ENABLE_AMD_OPT */
 /* FLA_ENABLE_AMD_OPT enables the code which selects algorithm variants based on size */
 #define LAPACK_getrf_body_d(prefix)                                                    \
-extern fla_context global_context;                                                     \
+extern fla_context fla_global_context;                                                     \
   integer i = 0;                                                                       \
   if(*m == 2 && *n == 2)                                                               \
   {                                                                                    \
@@ -78,7 +78,7 @@ extern fla_context global_context;                                              
   {                                                                                    \
     /* Initialize global context data */                                               \
     aocl_fla_init();                                                                   \
-    if(global_context.is_avx2 && *m < FLA_DGETRF_SMALL_AVX2_THRESH0 && *n < FLA_DGETRF_SMALL_AVX2_THRESH0) \
+    if(fla_global_context.is_avx2 && *m < FLA_DGETRF_SMALL_AVX2_THRESH0 && *n < FLA_DGETRF_SMALL_AVX2_THRESH0) \
     {                                                                                  \
         /* Calling vectorized code when avx2 supported architecture detected */        \
         fla_dgetrf_small_avx2( m, n, buff_A, ldim_A, buff_p, info );                   \
@@ -114,13 +114,13 @@ extern fla_context global_context;                                              
   integer      min_m_n    = fla_min( *m, *n );                                                            \
   FLA_Error    e_val = FLA_SUCCESS;                                                                       \
   FLA_Error    init_result;                                                                               \
-  extern fla_context global_context;                                                                      \
+  extern fla_context fla_global_context;                                                                      \
                                                                                                           \
   if( *m <= FLA_SGETRF_SMALL_THRESH0 && *n <= FLA_SGETRF_SMALL_THRESH0 )                                  \
   {                                                                                                       \
     FLA_LU_piv_small_s_var0( m, n, buff_A, ldim_A, buff_p, info );                                        \
   }                                                                                                       \
-  else if( global_context.is_avx2 && *m <= FLA_SGETRF_SMALL_THRESH1 && *n <= FLA_SGETRF_SMALL_THRESH1 )   \
+  else if( fla_global_context.is_avx2 && *m <= FLA_SGETRF_SMALL_THRESH1 && *n <= FLA_SGETRF_SMALL_THRESH1 )   \
   {                                                                                                       \
     FLA_LU_piv_small_s_var1( m, n, buff_A, ldim_A, buff_p, info );                                        \
   }                                                                                                       \
@@ -371,9 +371,9 @@ LAPACK_getrf(z)
     }
     if (fla_error == LAPACK_SUCCESS)
     {
-	extern fla_context global_context;
+	extern fla_context fla_global_context;
 	aocl_fla_init();
-	if (global_context.is_avx2)
+	if (fla_global_context.is_avx2)
 	{
         	LAPACK_getrf_body_z(z)
 	}

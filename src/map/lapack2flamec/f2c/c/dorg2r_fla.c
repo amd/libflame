@@ -109,7 +109,7 @@ static integer c__1 = 1;
 /* Subroutine */
 void dorg2r_fla(integer *m, integer *n, integer *k, doublereal * a, integer *lda, doublereal *tau, doublereal *work, integer *info)
 {
-    extern fla_context global_context;
+    extern fla_context fla_global_context;
     extern void dorg2r_fla_opt(integer *m, integer *n, integer *k, doublereal * a, integer *lda, doublereal *tau, doublereal *work, integer *info);
     extern void dorg2r_fla_native(integer *m, integer *n, integer *k, doublereal * a, integer *lda, doublereal *tau, doublereal *work, integer *info);
 
@@ -117,7 +117,7 @@ void dorg2r_fla(integer *m, integer *n, integer *k, doublereal * a, integer *lda
     aocl_fla_init();
 
 #if FLA_ENABLE_AMD_OPT
-    if (global_context.is_avx2)
+    if (fla_global_context.is_avx2)
     {
        dorg2r_fla_opt(m, n, k, a, lda, tau, work, info);
     }

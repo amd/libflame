@@ -120,15 +120,15 @@ void fla_pthread_once(fla_pthread_once_t *once, void (*init)(void))
 
 // The global fla_context structure, which holds the global thread count
 // and ISA settings
-fla_context global_context = FLA_CONTEXT_INITIALIZER;
+fla_context fla_global_context = FLA_CONTEXT_INITIALIZER;
 
 // The global fla_context structure, which holds the updated thread-local
 // thread count
-TLS_CLASS_SPEC fla_tl_context tl_context = FLA_TL_CONTEXT_INITIALIZER;
-TLS_CLASS_SPEC FLA_Bool tl_context_init = FALSE;
+TLS_CLASS_SPEC fla_tl_context_t fla_tl_context = FLA_TL_CONTEXT_INITIALIZER;
+TLS_CLASS_SPEC FLA_Bool fla_tl_context_init = FALSE;
 
 // A mutex to allow synchronous access to global_thread.
-fla_pthread_mutex_t global_thread_mutex = FLA_PTHREAD_MUTEX_INITIALIZER;
+TLS_CLASS_SPEC fla_pthread_mutex_t fla_global_thread_mutex = FLA_PTHREAD_MUTEX_INITIALIZER;
 
 /********************************************************************************
  * \brief fla_env_get_var is a function used to query the environment
@@ -189,27 +189,27 @@ void fla_thread_init_rntm_from_env(fla_context *context)
 }
 
 // This updates tl_context
-void fla_thread_update_rntm_from_env(fla_tl_context *context)
+void fla_thread_update_rntm_from_env(fla_tl_context_t *context)
 {
 
 #ifdef FLA_OPENMP_MULTITHREADING
 
-    if( !tl_context_init )
+    if( !fla_tl_context_init )
     {
         // On first call for each thread, need to check settings from
         // BLIS environment variables in global_context. First, set
-        // tl_context_init to TRUE for subsequent calls.
-        tl_context_init = TRUE;
+        // fla_tl_context_init to TRUE for subsequent calls.
+        fla_tl_context_init = TRUE;
 
         // Acquire the mutex protecting global_thread.
-        fla_pthread_mutex_lock(&global_thread_mutex);
+        fla_pthread_mutex_lock(&fla_global_thread_mutex);
 
         // Copy values from global_context.
-        context->num_threads = global_context.num_threads;
-        context->libflame_mt = global_context.libflame_mt;
+        context->num_threads = fla_global_context.num_threads;
+        context->libflame_mt = fla_global_context.libflame_mt;
 
         // Release the mutex protecting global_thread.
-        fla_pthread_mutex_unlock(&global_thread_mutex);
+        fla_pthread_mutex_unlock(&fla_global_thread_mutex);
     }
 
     // If FLA_NUM_THREADS was not set, read OpenMP's omp_get_max_threads()
@@ -232,10 +232,10 @@ void fla_thread_update_rntm_from_env(fla_tl_context *context)
 
 #else
 
-    if( !tl_context_init )
+    if( !fla_tl_context_init )
     {
-        // First, set tl_context_init to TRUE for subsequent calls.
-        tl_context_init = TRUE;
+        // First, set fla_tl_context_init to TRUE for subsequent calls.
+        fla_tl_context_init = TRUE;
 
         // Always set maximum threads as 1. These should never be
         // changed so only set on first call.
@@ -265,10 +265,10 @@ void fla_context_init(void)
 {
     // Read the environment variables and use them to initialize the
     // global runtime object.
-    fla_thread_init_rntm_from_env(&global_context);
+    fla_thread_init_rntm_from_env(&fla_global_context);
 
     // Read target ISA if it supports avx512
-    fla_isa_init(&global_context);
+    fla_isa_init(&fla_global_context);
 }
 
 // -----------------------------------------------------------------------------
@@ -301,9 +301,9 @@ int fla_thread_get_num_threads(void)
 
     // Update the OpenMP information from the runtime, unless FLA_NUM_THREADS
     // was set or fla_thread_set_num_threads() was called.
-    fla_thread_update_rntm_from_env(&tl_context);
+    fla_thread_update_rntm_from_env(&fla_tl_context);
 
-    return tl_context.num_threads;
+    return fla_tl_context.num_threads;
 }
 
 void fla_thread_set_num_threads(int n_threads)
@@ -315,8 +315,8 @@ void fla_thread_set_num_threads(int n_threads)
     aocl_fla_init();
 
     // Update values in tl_context for future reference
-    tl_context.num_threads = n_threads;
-    tl_context.libflame_mt = TRUE;
+    fla_tl_context.num_threads = n_threads;
+    fla_tl_context.libflame_mt = TRUE;
 
 #endif
 

@@ -311,7 +311,7 @@ void dhgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dhgeqz inputs: job %c, compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS "",*job, *compq, *compz, *n, *ilo, *ihi, *ldh, *ldt, *ldq, *ldz, *lwork);
 
-    extern fla_context global_context;
+    extern fla_context fla_global_context;
     extern void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *h__, integer *ldh, doublereal *t, integer *ldt, doublereal *alphar, doublereal *alphai, doublereal * beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info);
     extern void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *h__, integer *ldh, doublereal *t, integer *ldt, doublereal *alphar, doublereal *alphai, doublereal * beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info);
 
@@ -319,7 +319,7 @@ void dhgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
     aocl_fla_init();
 
 #if FLA_ENABLE_AMD_OPT
-    if (global_context.is_avx2)
+    if (fla_global_context.is_avx2)
     {
       fla_dhgeqz_opt(job, compq, compz, n, ilo, ihi, h__, ldh, t, ldt, alphar, alphai, beta, q, ldq, z__, ldz, work, lwork, info);
     }

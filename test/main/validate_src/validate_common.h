@@ -59,7 +59,8 @@ void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer
 
 void validate_geev(char *jobvl, char *jobvr, integer m, void *A, void *A_test, integer lda,
                    void *VL, integer ldvt, void *VR, integer ldvr, void *w, void *wr, void *wi,
-                   integer datatype, double *residual, integer *info, void *wr_in, void *wi_in);
+                   integer datatype, char imatrix, void *scal, double *residual, integer *info,
+                   void *wr_in, void *wi_in);
 
 void validate_geqp3(integer m_A, integer n_A, void *A, void *A_test, integer lda, integer *jpvt,
                     void *T_test, integer datatype, double *residual, integer *info);

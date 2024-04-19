@@ -1685,54 +1685,50 @@ void get_max_from_array(integer datatype, void *arr, void *max_val, integer n)
         case INTEGER:
         {
             integer *ptr = arr;
-            integer *maxVal = (integer *)max_val;
-            integer maxlocal = ptr[0];
-
-            for(i = 1; i < n; i++)
+            integer maxlocal = INT_MIN;
+            for(i = 0; i < n; i++)
             {
-                if(ptr[i] > maxlocal)
+                int val = fla_i_abs(&(ptr[i]));
+                if(val > maxlocal)
                 {
-                    maxlocal = ptr[i];
+                    maxlocal = val;
                 }
             }
-
-            *maxVal = maxlocal;
+            *(integer *)max_val = maxlocal;
             break;
         }
 
         case FLOAT:
         {
             float *ptr = arr;
-            float *maxVal = (float *)max_val;
-            float maxlocal = ptr[0];
-
-            for(i = 1; i < n; i++)
+            float maxlocal = FLT_MIN;
+            for(i = 0; i < n; i++)
             {
-                if(ptr[i] > maxlocal)
+                float val = FLA_FABS(ptr[i]);
+                if(val > maxlocal)
                 {
-                    maxlocal = ptr[i];
+                    maxlocal = val;
                 }
             }
 
-            *maxVal = maxlocal;
+            *(float *)max_val = maxlocal;
             break;
         }
 
         case DOUBLE:
         {
             double *ptr = arr;
-            double *maxVal = (double *)max_val;
-            double maxlocal = ptr[0];
-
-            for(i = 1; i < n; i++)
+            double maxlocal = DBL_MIN;
+            for(i = 0; i < n; i++)
             {
-                if(ptr[i] > maxlocal)
+                double val = FLA_FABS(ptr[i]);
+                if(val > maxlocal)
                 {
-                    maxlocal = ptr[i];
+                    maxlocal = val;
                 }
             }
 
-            *maxVal = maxlocal;
+            *(double *)max_val = maxlocal;
             break;
         }
 
@@ -1740,25 +1736,28 @@ void get_max_from_array(integer datatype, void *arr, void *max_val, integer n)
         case COMPLEX:
         {
             scomplex *ptr = arr;
-            scomplex *maxVal = (scomplex *)max_val;
-            scomplex maxlocal = ptr[0];
+            scomplex maxlocal;
+            maxlocal.real = FLT_MIN;
+            maxlocal.imag = FLT_MIN;
 
-            for(i = 1; i < n; i++)
+            for(i = 0; i < n; i++)
             {
-                if(ptr[i].real > maxlocal.real)
+                float real, imag;
+                real = FLA_FABS(ptr[i].real);
+                imag = FLA_FABS(ptr[i].imag);
+                /* Compare real part */
+                if(real != s_zero && real > maxlocal.real)
                 {
-                    maxlocal = ptr[i];
+                    maxlocal.real = real;
                 }
-                else if(ptr[i].real == maxlocal.real)
+                /* Compare imaginary part */
+                if(imag != s_zero && imag > maxlocal.imag)
                 {
-                    if(ptr[i].imag > maxlocal.imag)
-                    {
-                        maxlocal = ptr[i];
-                    }
+                    maxlocal.imag = imag;
                 }
             }
 
-            *maxVal = maxlocal;
+            *(float *)max_val = fla_max(maxlocal.real, maxlocal.imag);
             break;
         }
 
@@ -1766,25 +1765,28 @@ void get_max_from_array(integer datatype, void *arr, void *max_val, integer n)
         case DOUBLE_COMPLEX:
         {
             dcomplex *ptr = arr;
-            dcomplex *maxVal = (dcomplex *)max_val;
-            dcomplex maxlocal = ptr[0];
+            dcomplex maxlocal;
+            maxlocal.real = DBL_MIN;
+            maxlocal.imag = DBL_MIN;
 
-            for(i = 1; i < n; i++)
+            for(i = 0; i < n; i++)
             {
-                if(ptr[i].real > maxlocal.real)
+                double real, imag;
+                real = FLA_FABS(ptr[i].real);
+                imag = FLA_FABS(ptr[i].imag);
+                /* Compare real part */
+                if(real != d_zero && real > maxlocal.real)
                 {
-                    maxlocal = ptr[i];
+                    maxlocal.real = real;
                 }
-                else if(ptr[i].real == maxlocal.real)
+                /* Compare imaginary part */
+                if(imag != d_zero && imag > maxlocal.imag)
                 {
-                    if(ptr[i].imag > maxlocal.imag)
-                    {
-                        maxlocal = ptr[i];
-                    }
+                    maxlocal.imag = imag;
                 }
             }
 
-            *maxVal = maxlocal;
+            *(double *)max_val = fla_max(maxlocal.real, maxlocal.imag);
             break;
         }
     }
@@ -1800,54 +1802,54 @@ void get_min_from_array(integer datatype, void *arr, void *min_val, integer n)
         case INTEGER:
         {
             integer *ptr = arr;
-            integer *maxVal = (integer *)min_val;
-            integer maxlocal = ptr[0];
+            integer minlocal = INT_MAX;
 
-            for(i = 1; i < n; i++)
+            for(i = 0; i < n; i++)
             {
-                if(ptr[i] < maxlocal)
+                int val = fla_i_abs(&(ptr[i]));
+                if(val < minlocal)
                 {
-                    maxlocal = ptr[i];
+                    minlocal = val;
                 }
             }
 
-            *maxVal = maxlocal;
+            *(integer *)min_val = minlocal;
             break;
         }
 
         case FLOAT:
         {
             float *ptr = arr;
-            float *maxVal = (float *)min_val;
-            float maxlocal = ptr[0];
+            float minlocal = FLT_MAX;
 
-            for(i = 1; i < n; i++)
+            for(i = 0; i < n; i++)
             {
-                if(ptr[i] < maxlocal)
+                float val = FLA_FABS(ptr[i]);
+
+                if(val != s_zero && val < minlocal)
                 {
-                    maxlocal = ptr[i];
+                    minlocal = val;
                 }
             }
 
-            *maxVal = maxlocal;
+            *(float *)min_val = minlocal;
             break;
         }
 
         case DOUBLE:
         {
             double *ptr = arr;
-            double *maxVal = (double *)min_val;
-            double maxlocal = ptr[0];
-
-            for(i = 1; i < n; i++)
+            double minlocal = DBL_MAX;
+            for(i = 0; i < n; i++)
             {
-                if(ptr[i] < maxlocal)
+                double val = FLA_FABS(ptr[i]);
+                if(val != d_zero && val < minlocal)
                 {
-                    maxlocal = ptr[i];
+                    minlocal = val;
                 }
             }
 
-            *maxVal = maxlocal;
+            *(double *)min_val = minlocal;
             break;
         }
 
@@ -1855,25 +1857,28 @@ void get_min_from_array(integer datatype, void *arr, void *min_val, integer n)
         case COMPLEX:
         {
             scomplex *ptr = arr;
-            scomplex *maxVal = (scomplex *)min_val;
-            scomplex maxlocal = ptr[0];
+            scomplex minlocal;
+            minlocal.real = FLT_MAX;
+            minlocal.imag = FLT_MAX;
 
-            for(i = 1; i < n; i++)
+            for(i = 0; i < n; i++)
             {
-                if(ptr[i].real < maxlocal.real)
+                float real, imag;
+                real = FLA_FABS(ptr[i].real);
+                imag = FLA_FABS(ptr[i].imag);
+                /* Compare real part */
+                if(real != s_zero && real < minlocal.real)
                 {
-                    maxlocal = ptr[i];
+                    minlocal.real = real;
                 }
-                else if(ptr[i].real == maxlocal.real)
+                /* Compare imaginary part */
+                if(imag != s_zero && imag < minlocal.imag)
                 {
-                    if(ptr[i].imag < maxlocal.imag)
-                    {
-                        maxlocal = ptr[i];
-                    }
+                    minlocal.imag = imag;
                 }
             }
 
-            *maxVal = maxlocal;
+            *(float *)min_val = fla_min(minlocal.real, minlocal.imag);
             break;
         }
 
@@ -1881,25 +1886,28 @@ void get_min_from_array(integer datatype, void *arr, void *min_val, integer n)
         case DOUBLE_COMPLEX:
         {
             dcomplex *ptr = arr;
-            dcomplex *maxVal = (dcomplex *)min_val;
-            dcomplex maxlocal = ptr[0];
+            dcomplex minlocal;
+            minlocal.real = DBL_MAX;
+            minlocal.imag = DBL_MAX;
 
-            for(i = 1; i < n; i++)
+            for(i = 0; i < n; i++)
             {
-                if(ptr[i].real < maxlocal.real)
+                double real, imag;
+                real = FLA_FABS(ptr[i].real);
+                imag = FLA_FABS(ptr[i].imag);
+                /* Compare real part */
+                if(real != d_zero && real < minlocal.real)
                 {
-                    maxlocal = ptr[i];
+                    minlocal.real = real;
                 }
-                else if(ptr[i].real == maxlocal.real)
+                /* Compare imaginary part */
+                if(imag != d_zero && imag < minlocal.imag)
                 {
-                    if(ptr[i].imag < maxlocal.imag)
-                    {
-                        maxlocal = ptr[i];
-                    }
+                    minlocal.imag = imag;
                 }
             }
 
-            *maxVal = maxlocal;
+            *(double *)min_val = fla_min(minlocal.real, minlocal.imag);
             break;
         }
     }
@@ -3949,7 +3957,7 @@ void sort_realtype_vector(integer datatype, char *order, integer vect_len, void 
         return;
 
     integer i, j;
-    if(datatype == FLOAT || datatype == COMPLEX)
+    if(get_realtype(datatype) == FLOAT)
     {
         float temp;
         float *w_ptr = (float *)w;
@@ -3979,7 +3987,7 @@ void sort_realtype_vector(integer datatype, char *order, integer vect_len, void 
             }
         }
     }
-    else
+    else if(get_realtype(datatype) == DOUBLE)
     {
         double temp;
         double *w_ptr = (double *)w;
@@ -5165,12 +5173,12 @@ void get_min_from_matrix(integer datatype, void *A, void *min_val, integer m, in
     {
         case FLOAT:
         {
-            float val, min_local = FLT_MAX;
+            float min_local = FLT_MAX;
             for(i = 0; i < n; i++)
             {
                 for(j = 0; j < m; j++)
                 {
-                    val = FLA_FABS(((float *)A)[i * lda + j]);
+                    float val = FLA_FABS(((float *)A)[i * lda + j]);
                     if(val != s_zero && min_local > val)
                     {
                         min_local = val;
@@ -5184,12 +5192,12 @@ void get_min_from_matrix(integer datatype, void *A, void *min_val, integer m, in
 
         case DOUBLE:
         {
-            double val, min_local = DBL_MAX;
+            double min_local = DBL_MAX;
             for(i = 0; i < n; i++)
             {
                 for(j = 0; j < m; j++)
                 {
-                    val = FLA_FABS(((double *)A)[i * lda + j]);
+                    double val = FLA_FABS(((double *)A)[i * lda + j]);
                     if(val != d_zero && min_local > val)
                     {
                         min_local = val;
@@ -5481,7 +5489,8 @@ void create_realtype_block_diagonal_matrix(integer datatype, void *A, integer n,
  *               Q  is an orthogonal matrix with corresponding
  *                  eigen vectors as its rows.
  */
-void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *L)
+void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *L,
+                                   char imatrix, void *scal)
 {
     void *X = NULL, *Q = NULL;
     integer info = 0;
@@ -5511,6 +5520,9 @@ void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer
        and Q(Eigen vectors) obtained above using reverse
        Eigen decompostion */
     generate_asym_matrix_from_ED(datatype, n, A, lda, Q, L);
+
+    if(imatrix == 'O' || imatrix == 'U')
+        init_matrix_overflow_underflow_asym(datatype, n, n, A, lda, imatrix, scal);
 
     /* Free up the buffers */
     free_matrix(X);

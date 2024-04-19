@@ -73,12 +73,12 @@ below.
 
       The `input.general.operations` file also contains the list of all sub-groups of APIs
       like all LIN,EIG etc. User can enable/disable the testing of a particular sub-group
-      of API's by setting/resetting the corresponding group's flag. Below is the content
+      of APIs by setting/resetting the corresponding group's flag. Below is the content
       in `input.general.operations` corresponding to subgroup testing.
 
-         1   LIN     for testing all LIN API's               (0 = disable; 1 = enable)
-         1   EIG     for testing all Eigen API's             (0 = disable; 1 = enable)
-         1   SVD     for testing all SVD API's               (0 = disable; 1 = enable)
+         1   LIN     for testing all LIN APIs               (0 = disable; 1 = enable)
+         1   EIG     for testing all Eigen APIs             (0 = disable; 1 = enable)
+         1   SVD     for testing all SVD APIs               (0 = disable; 1 = enable)
 
       Note: If any sub-group is enabled then individual API test will not execute.
 
@@ -207,9 +207,9 @@ NOTE:
    All parameter related testing commands are compiled in test/main/scripts run_negative_test_cases.py which
    can be used for this purpose.
 
-7. Tests with special inputs using --imatrix option:
+7. Tests with special inputs using --imatrix option for extreme values test:
 
-   Test the API's by intializing matrix with special input values such as NAN or INFINITY using --imatrix.
+   Test the APIs by intializing matrix with special input values such as NAN or INFINITY using --imatrix.
    The test-suite checks the propagation of special values and return PASS if the propagation happens and
    FAIL if they don't.
    This option is available only through command line execution.
@@ -226,7 +226,24 @@ NOTE:
    A:intialize the matrix with the NAN values in few random locations
    F:intialize the matrix with the INFINITY values in few random locations
 
-8. Tests with -1 for leading dimensions from config files
+8. Tests with special inputs using --imatrix option for overflow/underflow test:
+
+   Test and validate the APIs for inputs with maximum and minimum values of repective datatypes
+
+   Test Explanation:
+   Step1: The input matrix are created with predefined properties specific to the API
+   Step2: For overflow(O), scale up the input and for underflow(U), scale down the input
+   to sufficiently large / small values
+
+   Example:
+    ./test_lapack.x gesvd sdcz S S 10 10 10 10 10 -1 1 --imatrix=O
+    ./test_lapack.x gesvd sdcz S S 10 10 10 10 10 -1 1 --imatrix=U
+
+   Test behaviour for --imatrix:
+   O: Performs overflow test
+   U: Performs underflow test
+
+9. Tests with -1 for leading dimensions from config files
 
    When -1 is passed as any of the leading dimensions(lda, ldab, ldu, ldvt, ldz etc) from config files,
    least valid value is assigned to the corresponding leading dimension.
@@ -237,7 +254,7 @@ NOTE:
             If lda = -1 is passed through command line, then -1 will be taken as the given lda 
             without any change.
  
-9. AOCL_FLA_PROGRESS feature test.
+10. AOCL_FLA_PROGRESS feature test.
 
    Enable a macro 'AOCL_FLA_SET_PROGRESS_ENABLE' for aocl progress and build libflame main test suite for sequential/multithread and run the
    executable.

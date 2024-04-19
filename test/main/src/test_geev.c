@@ -22,6 +22,7 @@ void fla_test_geev(integer argc, char **argv, test_params_t *params)
     char *op_str = "Eigen Decomposition of non symmetric matrix";
     char *front_str = "GEEV";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char = '\0';
 
     if(argc == 1)
     {
@@ -116,7 +117,7 @@ void fla_test_geev_experiment(test_params_t *params, integer datatype, integer p
     integer n, lda, ldvl, ldvr;
     integer info = 0, vinfo = 0;
     void *A = NULL, *wr = NULL, *wi = NULL, *w = NULL, *VL = NULL, *VR = NULL;
-    void *A_test = NULL, *L = NULL, *wr_in = NULL, *wi_in = NULL;
+    void *A_test = NULL, *L = NULL, *wr_in = NULL, *wi_in = NULL, *scal = NULL;
     char jobvl, jobvr;
 
     /* Get input matrix dimensions.*/
@@ -176,15 +177,18 @@ void fla_test_geev_experiment(test_params_t *params, integer datatype, integer p
         create_vector(datatype, &wr, n);
         create_vector(datatype, &wi, n);
     }
-    if((g_ext_fptr != NULL) || (params->imatrix_char))
+    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
     {
         init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
     }
     else
     {
-        /*  Creating input matrix A by generating random eigen values */
+        /* Initialize the scaling factor only for overflow/underflow test */
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            create_vector(get_realtype(datatype), &scal, 1);
+         /*  Creating input matrix A by generating random eigen values */
         create_matrix(datatype, &L, n, n);
-        generate_asym_matrix_from_EVs(datatype, n, A, lda, L);
+        generate_asym_matrix_from_EVs(datatype, n, A, lda, L, params->imatrix_char, scal);
 
         /* Diagonal and sub-diagonals(upper and lower sub-diagonal together
            contains imaginary parts) contain real and imaginary parts
@@ -219,9 +223,9 @@ void fla_test_geev_experiment(test_params_t *params, integer datatype, integer p
         *perf *= 4.0;
 
     /* output validation */
-    if(info == 0)
+    if(info == 0 && (FLA_OVERFLOW_UNDERFLOW_TEST || (!FLA_EXTREME_CASE_TEST)))
         validate_geev(&jobvl, &jobvr, n, A, A_test, lda, VL, ldvl, VR, ldvr, w, wr, wi, datatype,
-                      residual, &vinfo, wr_in, wi_in);
+                      params->imatrix_char, scal, residual, &vinfo, wr_in, wi_in);
 
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
@@ -239,7 +243,7 @@ void fla_test_geev_experiment(test_params_t *params, integer datatype, integer p
         free_vector(wr);
         free_vector(wi);
     }
-    if((g_ext_fptr == NULL) && !(params->imatrix_char))
+    if((g_ext_fptr == NULL) && !(FLA_EXTREME_CASE_TEST))
     {
         free_matrix(L);
         free_vector(wr_in);
@@ -248,7 +252,8 @@ void fla_test_geev_experiment(test_params_t *params, integer datatype, integer p
             free_vector(wi_in);
         }
     }
-
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        free_vector(scal);
 }
 
 void prepare_geev_run(char *jobvl, char *jobvr, integer m_A, void *A, integer lda, void *wr,

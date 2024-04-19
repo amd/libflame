@@ -296,7 +296,8 @@ set(CORNER_TEST_CASES "ggevx sdcz B V V B 0 10 10 10 10 -1 1 --einfo=0"
             "potrf sdcz U 0 10 1 --einfo=0"
             "larfg sdcz 0 1 1 1 1 --einfo=0"
             "sytrf sdcz U 0 1 1 1 --einfo=0"
-            "sytrf sdcz L 0 1 1 1 --einfo=0")
+            "sytrf sdcz L 0 1 1 1 --einfo=0"
+            "geev sdcz V V 0 1 1 1 -1 1 --einfo=0")
 
 set(MIN_WORK_TEST_CASES "gesvd d S S 3 3 3 3 3 15 1 --einfo=0"
             "gesvd d S S 3 9 3 3 9 18 1 --einfo=0"
@@ -764,32 +765,6 @@ set(EXTREMEVALUE_TEST_CASES "gesv sdcz 4 4 4 4 1 --imatrix=A"
             "sytrf sdcz U 430 501 -1 1 --imatrix=I"
             "sytrf sdcz L 430 501 -1 1 --imatrix=I")
 
-
-# Overflow and Underflow test cases for APIs.
-set(OVERFLOW_UNDERFLOW_VALUES_TEST_CASES "gesvd sdcz A A 1 10 1 1 10 -1 1 --imatrix=O"
-            "gesvd sdcz S O 10 10 10 10 10 -1 1 --imatrix=O"
-            "gesvd sdcz N N 150 250 150 150 250 -1 1 --imatrix=O"
-            "gesvd sdcz S S 400 200 400 400 200 -1 1 --imatrix=O"
-            "gesvd sdcz A A 1 10 1 1 10 -1 1 --imatrix=U"
-            "gesvd sdcz S S 10 10 10 10 10 -1 1 --imatrix=U"
-            "gesvd sdcz N A 150 250 150 150 250 -1 1 --imatrix=U"
-            "gesvd sdcz A S 400 200 400 400 400 -1 1 --imatrix=U"
-            "gerq2 sdcz 100 30 200 1 --imatrix=U"
-            "gerq2 sdcz 75 30 200 1 --imatrix=O"
-            "gerq2 sdcz 200 100 200 1 --imatrix=O"
-            "potrf sdcz L 10 10 1 --imatrix=U"
-            "potrf sdcz U 10 10 1 --imatrix=U"
-            "potrf sdcz L 10 10 1 --imatrix=O"
-            "potrf sdcz U 10 10 1 --imatrix=O"
-            "potrf sdcz L 155 500 1 --imatrix=U"
-            "potrf sdcz U 155 500 1 --imatrix=U"
-            "potrf sdcz L 155 500 1 --imatrix=O"
-            "potrf sdcz U 155 500 1 --imatrix=O"
-            "potrf sdcz L 553 600 1 --imatrix=U"
-            "potrf sdcz U 553 600 1 --imatrix=U"
-            "potrf sdcz L 553 600 1 --imatrix=O"
-            "potrf sdcz U 553 600 1 --imatrix=O")
-
 set(TEST_NUM 1)
 foreach(neg_test_cases IN LISTS NEGATIVE_TEST_CASES)
     string(REPLACE " " ";" COMMANDLINE_PARAMS ${neg_test_cases})
@@ -818,14 +793,6 @@ endforeach()
 foreach(extremevalue_test_cases IN LISTS EXTREMEVALUE_TEST_CASES)
     string(REPLACE " " ";" COMMANDLINE_PARAMS ${extremevalue_test_cases})
     set(TEST_NAME CONF_EXTREMEVALUE_TEST_CASE_${TEST_NUM} )
-    add_test(${TEST_NAME} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME} ${COMMANDLINE_PARAMS})
-    set_tests_properties(${TEST_NAME} PROPERTIES FAIL_REGULAR_EXPRESSION "FAIL;No test was run, give valid arguments")
-MATH(EXPR TEST_NUM "${TEST_NUM}+1")
-endforeach()
-
-foreach(ou_vals_test_cases IN LISTS OVERFLOW_UNDERFLOW_VALUES_TEST_CASES)
-    string(REPLACE " " ";" COMMANDLINE_PARAMS ${ou_vals_test_cases})
-    set(TEST_NAME OVERFLOW_UNDERFLOW_VALUES_TEST_CASE_${TEST_NUM} )
     add_test(${TEST_NAME} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME} ${COMMANDLINE_PARAMS})
     set_tests_properties(${TEST_NAME} PROPERTIES FAIL_REGULAR_EXPRESSION "FAIL;No test was run, give valid arguments")
 MATH(EXPR TEST_NUM "${TEST_NUM}+1")

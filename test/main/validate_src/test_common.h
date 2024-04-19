@@ -17,6 +17,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 // global variables
 extern integer i_zero, i_one, i_n_one;
@@ -137,7 +138,8 @@ void scalv(integer datatype, integer n, void *x, integer incx, void *y, integer 
 void set_transpose(integer datatype, char *uplo, char *trans_A, char *trans_B);
 
 /* Create diagonal matrix by copying elements from vector to matrix */
-void diagonalize_realtype_vector(integer datatype, void *s, void *sigma, integer m, integer n, integer LDA);
+void diagonalize_realtype_vector(integer datatype, void *s, void *sigma, integer m, integer n,
+                                 integer LDA);
 
 /* To calculate matrix multiplication with real and complex datatypes */
 void scgemv(char TRANS, integer real_alpha, integer m, integer n, scomplex *alpha, float *a,
@@ -177,7 +179,7 @@ void get_orthogonal_matrix_from_QR(integer datatype, integer n, void *A, integer
 void print_matrix(char *desc, char *order, integer datatype, integer M, integer N, void *A,
                   integer lda);
 /* Get upper triangular matrix or lower triangular matrix based on UPLO */
-void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, void *a,
+void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, void *A,
                            integer lda);
 /*To Check order of Singular values of SVD (positive and non-decreasing)*/
 double svd_check_order(integer datatype, void *s, integer m, integer n, double residual);
@@ -219,7 +221,8 @@ void sort_realtype_vector(integer datatype, char *order, integer vect_len, void 
  * B) */
 integer compare_realtype_vector(integer datatype, integer vect_len, void *A, integer inca,
                                 integer offset_A, void *B, integer incb);
-/* Create input matrix A(symmetric) by randomly generating eigen values(EVs) in given range (vl,vu) */
+/* Create input matrix A(symmetric) by randomly generating eigen values(EVs) in given range (vl,vu)
+ */
 void generate_matrix_from_EVs(integer datatype, char range, integer n, void *A, integer lda,
                               void *L, double vl, double vu);
 /* Initialize band matrix with random values.
@@ -268,13 +271,14 @@ void sort_vector(integer datatype, char *order, integer vect_len, void *w, integ
    2 * 2 blocks along the diagonal. This is used for generating asymmetric matrix */
 void create_realtype_block_diagonal_matrix(integer datatype, void *A, integer n, integer lda);
 /* Create input matrix A(Asymmetric) by randomly generating eigen values(EVs) */
-void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *L);
+void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *L,
+                                   char imatrix, void *scal);
 /* Generate asymmetric square matrix of size n x n using Eigen decomposition(ED) */
 void generate_asym_matrix_from_ED(integer datatype, integer n, void *A, integer lda, void *Q,
-                             void *lambda);
+                                  void *lambda);
 /* Compare two vectors starting from offset_A in A vector with B vector */
-integer compare_vector(integer datatype, integer vect_len, void *A, integer inca,
-                                integer offset_A, void *B, integer incb);
+integer compare_vector(integer datatype, integer vect_len, void *A, integer inca, integer offset_A,
+                       void *B, integer incb);
 /* Create diagonal matrix by copying elements from a vector to matrix */
 void diagonalize_vector(integer datatype, void *s, void *sigma, integer m, integer n, integer LDA);
 /* Find negative value of each element and store in next location

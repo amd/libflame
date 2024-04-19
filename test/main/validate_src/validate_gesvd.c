@@ -18,7 +18,9 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
     void *sigma = NULL, *Usigma = NULL;
     void *work = NULL;
     *info = 0;
-    integer ns = fla_min(m, n);
+    integer n_U, m_V, ns = fla_min(m, n);
+    n_U = (*jobu != 'A') ? ns : m;
+    m_V = (*jobvt != 'A') ? ns : n;
 
     create_matrix(datatype, &sigma, m, n);
     create_matrix(datatype, &Usigma, m, n);
@@ -36,8 +38,8 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
     {
         case FLOAT:
         {
-            float norm = 0.0, norm_A = 0.0, eps, resid1 = 0.0, resid2 = 0.0, resid3 = 0.0,
-                  resid4 = 0.0, resid5 = 0.00;
+            float norm, norm_A, eps, resid1, resid2, resid3, resid4, resid5;
+            norm = norm_A = resid1 = resid2 = resid3 = resid4 = resid5 = FLT_MIN;
             eps = fla_lapack_slamch("P");
 
             /* Test 1
@@ -55,8 +57,8 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
                 }
                 else
                     norm_A = fla_lapack_slange("F", &m, &n, A, &lda, work);
-                sgemm_("N", "N", &m, &n, &m, &s_one, U, &ldu, sigma, &m, &s_zero, Usigma, &m);
-                sgemm_("N", "N", &m, &n, &n, &s_one, Usigma, &m, V, &ldvt, &s_n_one, A, &lda);
+                sgemm_("N", "N", &m, &n, &n_U, &s_one, U, &ldu, sigma, &m, &s_zero, Usigma, &m);
+                sgemm_("N", "N", &m, &n, &m_V, &s_one, Usigma, &m, V, &ldvt, &s_n_one, A, &lda);
                 if(imatrix == 'O')
                 {
                     for(int i = 0; i < n; i++)
@@ -68,7 +70,7 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
                 }
                 else
                     norm = fla_lapack_slange("F", &m, &n, A, &lda, work);
-                resid1 = norm / (eps * norm_A * (float)n);
+                resid1 = norm / (eps * norm_A * fla_max(m, n));
             }
 
             /* Test 2
@@ -111,8 +113,8 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
 
         case DOUBLE:
         {
-            double norm = 0.0, norm_A = 0.0, eps, resid1 = 0.0, resid2 = 0.0, resid3 = 0.0,
-                   resid4 = 0.0, resid5 = 0.00;
+            double norm, norm_A, eps, resid1, resid2, resid3, resid4, resid5;
+            norm = norm_A = resid1 = resid2 = resid3 = resid4 = resid5 = DBL_MIN;
             eps = fla_lapack_dlamch("P");
 
             /* Test 1
@@ -130,8 +132,8 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
                 }
                 else
                     norm_A = fla_lapack_dlange("F", &m, &n, A, &lda, work);
-                dgemm_("N", "N", &m, &n, &m, &d_one, U, &ldu, sigma, &m, &d_zero, Usigma, &m);
-                dgemm_("N", "N", &m, &n, &n, &d_one, Usigma, &m, V, &ldvt, &d_n_one, A, &lda);
+                dgemm_("N", "N", &m, &n, &n_U, &d_one, U, &ldu, sigma, &m, &d_zero, Usigma, &m);
+                dgemm_("N", "N", &m, &n, &m_V, &d_one, Usigma, &m, V, &ldvt, &d_n_one, A, &lda);
                 norm = fla_lapack_dlange("F", &m, &n, A, &lda, work);
                 if(imatrix == 'O')
                 {
@@ -145,7 +147,7 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
                 else
                     norm = fla_lapack_dlange("F", &m, &n, A, &lda, work);
 
-                resid1 = norm / (eps * norm_A * (double)n);
+                resid1 = norm / (eps * norm_A * fla_max(m, n));
             }
 
             /* Test 2
@@ -186,8 +188,9 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
 
         case COMPLEX:
         {
-            float norm = 0.0, norm_A = 0.0, eps, resid1 = 0.0, resid2 = 0.0, resid3 = 0.0,
-                  resid4 = 0.0, resid5 = 0.00;
+            float norm, norm_A, eps, resid1, resid2, resid3, resid4, resid5;
+            norm = norm_A = resid1 = resid2 = resid3 = resid4 = resid5 = FLT_MIN;
+
             eps = fla_lapack_slamch("P");
 
             /* Test 1
@@ -205,8 +208,8 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
                 }
                 else
                     norm_A = fla_lapack_clange("F", &m, &n, A, &lda, work);
-                cgemm_("N", "N", &m, &n, &m, &c_one, U, &ldu, sigma, &m, &c_zero, Usigma, &m);
-                cgemm_("N", "N", &m, &n, &n, &c_one, Usigma, &m, V, &ldvt, &c_n_one, A, &lda);
+                cgemm_("N", "N", &m, &n, &n_U, &c_one, U, &ldu, sigma, &m, &c_zero, Usigma, &m);
+                cgemm_("N", "N", &m, &n, &m_V, &c_one, Usigma, &m, V, &ldvt, &c_n_one, A, &lda);
 
                 if(imatrix == 'O')
                 {
@@ -219,7 +222,7 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
                 }
                 else
                     norm = fla_lapack_clange("F", &m, &n, A, &lda, work);
-                resid1 = norm / (eps * norm_A * (float)n);
+                resid1 = norm / (eps * norm_A * fla_max(m, n));
             }
 
             /* Test 2
@@ -262,8 +265,8 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
 
         case DOUBLE_COMPLEX:
         {
-            double norm = 0.0, norm_A = 0.0, eps, resid1 = 0.0, resid2 = 0.0, resid3 = 0.0,
-                   resid4 = 0.0, resid5 = 0.00;
+            double norm, norm_A, eps, resid1, resid2, resid3, resid4, resid5;
+            norm = norm_A = resid1 = resid2 = resid3 = resid4 = resid5 = DBL_MIN;
             eps = fla_lapack_dlamch("P");
 
             /* Test 1
@@ -281,8 +284,8 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
                 }
                 else
                     norm_A = fla_lapack_zlange("F", &m, &n, A, &lda, work);
-                zgemm_("N", "N", &m, &n, &m, &z_one, U, &ldu, sigma, &m, &z_zero, Usigma, &m);
-                zgemm_("N", "N", &m, &n, &n, &z_one, Usigma, &m, V, &ldvt, &z_n_one, A, &lda);
+                zgemm_("N", "N", &m, &n, &n_U, &z_one, U, &ldu, sigma, &m, &z_zero, Usigma, &m);
+                zgemm_("N", "N", &m, &n, &m_V, &z_one, Usigma, &m, V, &ldvt, &z_n_one, A, &lda);
                 if(imatrix == 'O')
                 {
                     for(int i = 0; i < n; i++)
@@ -295,7 +298,7 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
                 else
                     norm = fla_lapack_zlange("F", &m, &n, A, &lda, work);
 
-                resid1 = norm / (eps * norm_A * (double)n);
+                resid1 = norm / (eps * norm_A * fla_max(m, n));
             }
 
             /* Test 2

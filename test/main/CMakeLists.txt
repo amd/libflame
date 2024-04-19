@@ -115,3 +115,4 @@ add_subdirectory(validate_src)
 
 include(main_ctest.cmake)
 include(conformance_test.cmake)
+include(overflow_underflow_test.cmake)

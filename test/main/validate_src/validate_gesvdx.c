@@ -28,8 +28,8 @@ void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, 
     {
         case FLOAT:
         {
-            float norm1, norm2, norm_s, norm_sigma, eps, resid1 = 0.0, resid2 = 0.0, resid3 = 0.0,
-                                                         resid4 = 0.0, resid5;
+            float norm1, norm2, norm_s, norm_sigma, eps, resid1, resid2, resid3, resid4, resid5;
+            norm1 = norm2 = norm_s = norm_sigma = resid1 = resid2 = resid3 = resid4 = FLT_MIN;
             eps = fla_lapack_slamch("P");
             if((*jobu == 'V' && *jobvt == 'V') || (*jobu == 'v' && *jobvt == 'v'))
             {
@@ -69,8 +69,8 @@ void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, 
 
         case DOUBLE:
         {
-            double norm1, norm2, norm_s, norm_sigma, eps, resid1 = 0.0, resid2 = 0.0, resid3 = 0.0,
-                                                          resid4 = 0.0, resid5;
+            double norm1, norm2, norm_s, norm_sigma, eps, resid1, resid2, resid3, resid4, resid5;
+            norm1 = norm2 = norm_s = norm_sigma = resid1 = resid2 = resid3 = resid4 = DBL_MIN;
             eps = fla_lapack_dlamch("P");
             if((*jobu == 'V' && *jobvt == 'V') || (*jobu == 'v' && *jobvt == 'v'))
             {
@@ -110,8 +110,8 @@ void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, 
 
         case COMPLEX:
         {
-            float norm1, norm2, norm_s, norm_sigma, eps, resid1 = 0.0, resid2 = 0.0, resid3 = 0.0,
-                                                         resid4 = 0.0, resid5;
+            float norm1, norm2, norm_s, norm_sigma, eps, resid1, resid2, resid3, resid4, resid5;
+            norm1 = norm2 = norm_s = norm_sigma = resid1 = resid2 = resid3 = resid4 = FLT_MIN;
             eps = fla_lapack_slamch("P");
             if((*jobu == 'V' && *jobvt == 'V') || (*jobu == 'v' && *jobvt == 'v'))
             {
@@ -150,8 +150,8 @@ void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, 
 
         case DOUBLE_COMPLEX:
         {
-            double norm1, norm2, norm_s, norm_sigma, eps, resid1 = 0.0, resid2 = 0.0, resid3 = 0.0,
-                                                          resid4 = 0.0, resid5;
+            double norm1, norm2, norm_s, norm_sigma, eps, resid1, resid2, resid3, resid4, resid5;
+            norm1 = norm2 = norm_s = norm_sigma = resid1 = resid2 = resid3 = resid4 = DBL_MIN;
             eps = fla_lapack_dlamch("P");
             if((*jobu == 'V' && *jobvt == 'V') || (*jobu == 'v' && *jobvt == 'v'))
             {

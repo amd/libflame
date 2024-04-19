@@ -17,9 +17,15 @@
 /* Initializing matrix with values around overflow underflow */
 void init_matrix_overflow_underflow_svd(integer datatype, integer m, integer n, void *A,
                                         integer lda, char imatrix, void *scal);
+/* Initializing asymmetrix matrix with values around overflow underflow (GEEV)*/
+void init_matrix_overflow_underflow_asym(integer datatype, integer m, integer n, void *A,
+                                         integer lda, char imatrix, void *scal);
 /* Calculating the scaling value with respect to max and min for SVD */
 void calculate_svd_scale_value(integer datatype, integer m, integer n, void *A, integer lda,
                                char imatrix, void *scal);
+/* Calculating the scaling value with respect to max and min for ASYM */
+void calculate_asym_scale_value(integer datatype, integer m, integer n, void *A, integer lda,
+                                char imatrix, void *scal);
 /* Finding ratio between two real datatype values */
 void compute_ratio(integer datatype, void *scal, float flt_quotient, double dbl_quotient,
                    void *denominator);

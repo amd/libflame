@@ -42,6 +42,16 @@
  *       *************************************
  */
 
+/* Initializing svd matrix with values around overflow underflow (GESVD) */
+void init_matrix_overflow_underflow_svd(integer datatype, integer m, integer n, void *A,
+                                        integer lda, char imatrix, void *scal)
+{
+    /* Find factor to scale up/down the matrix */
+    calculate_svd_scale_value(datatype, m, n, A, lda, imatrix, scal);
+    /* Scaling the matrix A by x scalar */
+    scal_matrix(datatype, scal, A, m, n, lda, i_one);
+}
+
 /* Calculating the scaling value with respect to max and min for SVD */
 void calculate_svd_scale_value(integer datatype, integer m, integer n, void *A, integer lda,
                                char imatrix, void *scal)
@@ -95,24 +105,89 @@ void calculate_svd_scale_value(integer datatype, integer m, integer n, void *A, 
     }
 }
 
+/* Initializing asymmetrix matrix with values around overflow underflow (GEEV)*/
+void init_matrix_overflow_underflow_asym(integer datatype, integer m, integer n, void *A,
+                                         integer lda, char imatrix, void *scal)
+{
+    /* Find factor to scale up/down the matrix */
+    calculate_asym_scale_value(datatype, m, n, A, lda, imatrix, scal);
+    /* Scaling the matrix A by X scalar */
+    scal_matrix(datatype, scal, A, m, n, lda, i_one);
+}
+
+/* Calculating the scaling value with respect to max and min for ASYM */
+void calculate_asym_scale_value(integer datatype, integer m, integer n, void *A, integer lda,
+                                char imatrix, void *scal)
+{
+    float flt_ratio;
+    double dbl_ratio;
+    if(n == 1)
+    {
+        assign_value(datatype, A, d_one, d_one);
+    }
+    if(imatrix == 'O')
+    {
+        /*Intialize the ratios with maximum of datatype value*/
+        flt_ratio = FLT_MAX;
+        dbl_ratio = DBL_MAX;
+        void *max;
+        create_vector(get_realtype(datatype), &max, 1);
+        get_max_from_matrix(datatype, A, max, m, n, lda);
+        /* The ratio is modified w.r.t dimension, to avoid inf in output */
+        if(n <= 50)
+        {
+            flt_ratio = FLT_MAX / 4.00;
+            dbl_ratio = DBL_MAX / 4.00;
+        }
+        else if(n <= 100)
+        {
+            flt_ratio = flt_ratio / 6.00;
+            dbl_ratio = dbl_ratio / 6.00;
+        }
+        else if(n <= 500)
+        {
+            flt_ratio = flt_ratio / 15.00;
+            dbl_ratio = dbl_ratio / 15.00;
+        }
+        else if(n <= 1000)
+        {
+            flt_ratio = flt_ratio / 20.00;
+            dbl_ratio = dbl_ratio / 20.00;
+        }
+        else
+        {
+            flt_ratio = flt_ratio / 1000.00;
+            dbl_ratio = dbl_ratio / 1000.00;
+        }
+        compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, max);
+        free_vector(max);
+    }
+    else if(imatrix == 'U')
+    {
+        void *min;
+        create_vector(get_realtype(datatype), &min, 1);
+        /* Get minimum value from matrix */
+        get_min_from_matrix(datatype, A, min, m, n, lda);
+        /* Intialize with minimum of datatype value */
+        flt_ratio = FLT_MIN;
+        dbl_ratio = DBL_MIN;
+        compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, min);
+        free_vector(min);
+    }
+}
+
 /* Finding ratio between two real datatype values */
 void compute_ratio(integer datatype, void *scal, float flt_quotient, double dbl_quotient,
                    void *denominator)
 {
-    if(get_realtype(datatype) == FLOAT)
+    if(datatype == FLOAT)
+    {
         *(float *)scal = flt_quotient / *(float *)denominator;
-    else if(get_realtype(datatype) == DOUBLE)
+    }
+    else if(datatype == DOUBLE)
+    {
         *(double *)scal = dbl_quotient / *(double *)denominator;
-}
-
-/* Initializing matrix with values around overflow underflow */
-void init_matrix_overflow_underflow_svd(integer datatype, integer m, integer n, void *A,
-                                        integer lda, char imatrix, void *scal)
-{
-    /* Find factor to scale up/down the matrix */
-    calculate_svd_scale_value(datatype, m, n, A, lda, imatrix, scal);
-    /* Scaling the matrix A by x scalar */
-    scal_matrix(datatype, scal, A, m, n, lda, i_one);
+    }
 }
 
 /* Scaling matrix with values around overflow underflow for gerq2 */

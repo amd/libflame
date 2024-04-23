@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b SLASDQ computes the SVD of a real bidiagonal matrix with diagonal d and off-diagonal
  * e. Used by sbdsdc. */
 /* =========== DOCUMENTATION =========== */
@@ -208,12 +208,17 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slasdq_(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru, integer *ncc, real *d__, real *e, real *vt, integer *ldvt, real *u, integer *ldu, real *c__, integer *ldc, real * work, integer *info)
+void slasdq_(char *uplo, integer *sqre, integer *n, integer *ncvt, integer *nru, integer *ncc,
+             real *d__, real *e, real *vt, integer *ldvt, real *u, integer *ldu, real *c__,
+             integer *ldc, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slasdq inputs: uplo %c, sqre %d, n %d, ncvt %d, nru %d, ncc %d, ldvt %d, ldu %d, ldc %d",*uplo, *sqre, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
+    snprintf(
+        buffer, 256,
+        "slasdq inputs: uplo %c, sqre %d, n %d, ncvt %d, nru %d, ncc %d, ldvt %d, ldu %d, ldc %d",
+        *uplo, *sqre, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -226,13 +231,19 @@ void slasdq_(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru
     integer sqre1;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *);
+        void
+        slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *);
     integer iuplo;
     extern /* Subroutine */
-    void sswap_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slartg_(real *, real *, real *, real *, real *);
+        void
+        sswap_(integer *, real *, integer *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slartg_(real *, real *, real *, real *, real *);
     logical rotate;
     extern /* Subroutine */
-    void sbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
+        void
+        sbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, real *,
+                integer *, real *, integer *, real *, integer *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -270,11 +281,11 @@ void slasdq_(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru
     /* Function Body */
     *info = 0;
     iuplo = 0;
-    if (lsame_(uplo, "U", 1, 1))
+    if(lsame_(uplo, "U", 1, 1))
     {
         iuplo = 1;
     }
-    if (lsame_(uplo, "L", 1, 1))
+    if(lsame_(uplo, "L", 1, 1))
     {
         iuplo = 2;
     }
@@ -302,15 +313,15 @@ void slasdq_(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru
     {
         *info = -6;
     }
-    else if (*ncvt == 0 && *ldvt < 1 || *ncvt > 0 && *ldvt < fla_max(1,*n))
+    else if(*ncvt == 0 && *ldvt < 1 || *ncvt > 0 && *ldvt < fla_max(1, *n))
     {
         *info = -10;
     }
-    else if (*ldu < fla_max(1,*nru))
+    else if(*ldu < fla_max(1, *nru))
     {
         *info = -12;
     }
-    else if (*ncc == 0 && *ldc < 1 || *ncc > 0 && *ldc < fla_max(1,*n))
+    else if(*ncc == 0 && *ldc < 1 || *ncc > 0 && *ldc < fla_max(1, *n))
     {
         *info = -14;
     }
@@ -361,8 +372,7 @@ void slasdq_(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru
         /* Update singular vectors if desired. */
         if(*ncvt > 0)
         {
-            aocl_lapack_slasr("L", "V", "F", &np1, ncvt, &work[1], &work[np1], &vt[vt_offset],
-                              ldvt);
+            slasr_("L", "V", "F", &np1, ncvt, &work[1], &work[np1], &vt[vt_offset], ldvt);
         }
     }
     /* If matrix lower bidiagonal, rotate to be upper bidiagonal */
@@ -400,31 +410,29 @@ void slasdq_(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru
         {
             if(sqre1 == 0)
             {
-                aocl_lapack_slasr("R", "V", "F", nru, n, &work[1], &work[np1], &u[u_offset], ldu);
+                slasr_("R", "V", "F", nru, n, &work[1], &work[np1], &u[u_offset], ldu);
             }
             else
             {
-                aocl_lapack_slasr("R", "V", "F", nru, &np1, &work[1], &work[np1], &u[u_offset],
-                                  ldu);
+                slasr_("R", "V", "F", nru, &np1, &work[1], &work[np1], &u[u_offset], ldu);
             }
         }
         if(*ncc > 0)
         {
             if(sqre1 == 0)
             {
-                aocl_lapack_slasr("L", "V", "F", n, ncc, &work[1], &work[np1], &c__[c_offset], ldc);
+                slasr_("L", "V", "F", n, ncc, &work[1], &work[np1], &c__[c_offset], ldc);
             }
             else
             {
-                aocl_lapack_slasr("L", "V", "F", &np1, ncc, &work[1], &work[np1], &c__[c_offset],
-                                  ldc);
+                slasr_("L", "V", "F", &np1, ncc, &work[1], &work[np1], &c__[c_offset], ldc);
             }
         }
     }
     /* Call SBDSQR to compute the SVD of the reduced real */
     /* N-by-N upper bidiagonal matrix. */
-    aocl_lapack_sbdsqr("U", n, ncvt, nru, ncc, &d__[1], &e[1], &vt[vt_offset], ldvt, &u[u_offset],
-                       ldu, &c__[c_offset], ldc, &work[1], info);
+    sbdsqr_("U", n, ncvt, nru, ncc, &d__[1], &e[1], &vt[vt_offset], ldvt, &u[u_offset], ldu,
+            &c__[c_offset], ldc, &work[1], info);
     /* Sort the singular values into ascending order (insertion sort on */
     /* singular values, but only one transposition per singular vector) */
     i__1 = *n;
@@ -458,7 +466,7 @@ void slasdq_(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru
             }
             if(*ncc > 0)
             {
-                aocl_blas_sswap(ncc, &c__[isub + c_dim1], ldc, &c__[i__ + c_dim1], ldc);
+                sswap_(ncc, &c__[isub + c_dim1], ldc, &c__[i__ + c_dim1], ldc);
             }
         }
         /* L40: */

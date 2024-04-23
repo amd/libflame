@@ -1,23 +1,29 @@
-/* ../netlib/cgetc2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cgetc2.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-static complex c_b10 =
-{
-    -1.f,-0.f
-    }
-;
-/* > \brief \b CGETC2 computes the LU factorization with complete pivoting of the general n-by-n matrix. */
+static complex c_b10 = {-1.f, -0.f};
+/* > \brief \b CGETC2 computes the LU factorization with complete pivoting of the general n-by-n
+ * matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CGETC2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgetc2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgetc2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgetc2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgetc2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgetc2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgetc2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -106,15 +112,15 @@ for 1 <= j <= N, column j of the */
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-void cgetc2_(integer *n, complex *a, integer *lda, integer * ipiv, integer *jpiv, integer *info)
+void cgetc2_(integer *n, complex *a, integer *lda, integer *ipiv, integer *jpiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgetc2 inputs: n %lld, lda %lld",*n, *lda);
+    snprintf(buffer, 256, "cgetc2 inputs: n %lld, lda %lld", *n, *lda);
 #else
-    snprintf(buffer, 256,"cgetc2 inputs: n %d, lda %d",*n, *lda);
+    snprintf(buffer, 256, "cgetc2 inputs: n %d, lda %d", *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -131,7 +137,10 @@ void cgetc2_(integer *n, complex *a, integer *lda, integer * ipiv, integer *jpiv
     integer ipv, jpv;
     real smin, xmax;
     extern /* Subroutine */
-    void cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *), slabad_(real *, real *);
+        void
+        cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *,
+               complex *, integer *),
+        cswap_(integer *, complex *, integer *, complex *, integer *), slabad_(real *, real *);
     extern real slamch_(char *);
     real bignum, smlnum;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
@@ -166,7 +175,7 @@ void cgetc2_(integer *n, complex *a, integer *lda, integer * ipiv, integer *jpiv
     jpv = 0;
     ipv = 0;
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -177,11 +186,11 @@ void cgetc2_(integer *n, complex *a, integer *lda, integer * ipiv, integer *jpiv
     bignum = 1.f / smlnum;
     slabad_(&smlnum, &bignum);
     /* Handle the case N=1 by itself */
-    if (*n == 1)
+    if(*n == 1)
     {
         ipiv[1] = 1;
         jpiv[1] = 1;
-        if (c_abs(&a[a_dim1 + 1]) < smlnum)
+        if(c_abs(&a[a_dim1 + 1]) < smlnum)
         {
             *info = 1;
             i__1 = a_dim1 + 1;
@@ -196,23 +205,17 @@ void cgetc2_(integer *n, complex *a, integer *lda, integer * ipiv, integer *jpiv
     /* Factorize A using complete pivoting. */
     /* Set pivots less than SMIN to SMIN */
     i__1 = *n - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Find max element in matrix A */
         xmax = 0.f;
         i__2 = *n;
-        for (ip = i__;
-                ip <= i__2;
-                ++ip)
+        for(ip = i__; ip <= i__2; ++ip)
         {
             i__3 = *n;
-            for (jp = i__;
-                    jp <= i__3;
-                    ++jp)
+            for(jp = i__; jp <= i__3; ++jp)
             {
-                if (c_abs(&a[ip + jp * a_dim1]) >= xmax)
+                if(c_abs(&a[ip + jp * a_dim1]) >= xmax)
                 {
                     xmax = c_abs(&a[ip + jp * a_dim1]);
                     ipv = ip;
@@ -222,26 +225,26 @@ void cgetc2_(integer *n, complex *a, integer *lda, integer * ipiv, integer *jpiv
             }
             /* L20: */
         }
-        if (i__ == 1)
+        if(i__ == 1)
         {
             /* Computing MAX */
             r__1 = eps * xmax;
-            smin = fla_max(r__1,smlnum);
+            smin = fla_max(r__1, smlnum);
         }
         /* Swap rows */
-        if (ipv != i__)
+        if(ipv != i__)
         {
             cswap_(n, &a[ipv + a_dim1], lda, &a[i__ + a_dim1], lda);
         }
         ipiv[i__] = ipv;
         /* Swap columns */
-        if (jpv != i__)
+        if(jpv != i__)
         {
-            cswap_(n, &a[jpv * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], & c__1);
+            cswap_(n, &a[jpv * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
         }
         jpiv[i__] = jpv;
         /* Check for singularity */
-        if (c_abs(&a[i__ + i__ * a_dim1]) < smin)
+        if(c_abs(&a[i__ + i__ * a_dim1]) < smin)
         {
             *info = i__;
             i__2 = i__ + i__ * a_dim1;
@@ -251,9 +254,7 @@ void cgetc2_(integer *n, complex *a, integer *lda, integer * ipiv, integer *jpiv
             a[i__2].i = q__1.i; // , expr subst
         }
         i__2 = *n;
-        for (j = i__ + 1;
-                j <= i__2;
-                ++j)
+        for(j = i__ + 1; j <= i__2; ++j)
         {
             i__3 = j + i__ * a_dim1;
             c_div(&q__1, &a[j + i__ * a_dim1], &a[i__ + i__ * a_dim1]);
@@ -263,10 +264,11 @@ void cgetc2_(integer *n, complex *a, integer *lda, integer * ipiv, integer *jpiv
         }
         i__2 = *n - i__;
         i__3 = *n - i__;
-        cgeru_(&i__2, &i__3, &c_b10, &a[i__ + 1 + i__ * a_dim1], &c__1, &a[ i__ + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + (i__ + 1) * a_dim1], lda);
+        cgeru_(&i__2, &i__3, &c_b10, &a[i__ + 1 + i__ * a_dim1], &c__1,
+               &a[i__ + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + (i__ + 1) * a_dim1], lda);
         /* L40: */
     }
-    if (c_abs(&a[*n + *n * a_dim1]) < smin)
+    if(c_abs(&a[*n + *n * a_dim1]) < smin)
     {
         *info = *n;
         i__1 = *n + *n * a_dim1;
@@ -283,4 +285,3 @@ void cgetc2_(integer *n, complex *a, integer *lda, integer * ipiv, integer *jpiv
     /* End of CGETC2 */
 }
 /* cgetc2_ */
-

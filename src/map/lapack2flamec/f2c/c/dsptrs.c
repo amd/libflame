@@ -115,10 +115,12 @@ static doublereal c_b19 = 1.;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dsptrs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, integer *ipiv, doublereal *b, integer *ldb, integer * info)
+void dsptrs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, integer *ipiv, doublereal *b,
+             integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsptrs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *ldb);
+    AOCL_DTL_SNPRINTF("dsptrs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",
+                      *uplo, *n, *nrhs, *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1;
     doublereal d__1;
@@ -128,17 +130,24 @@ void dsptrs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, integer *ipi
     aocl_int64_t kc, kp;
     doublereal akm1, bkm1;
     extern /* Subroutine */
-    void dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+              doublereal *, integer *);
     doublereal akm1k;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     doublereal denom;
     extern /* Subroutine */
-    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *),
+        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -168,7 +177,7 @@ void dsptrs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, integer *ipi
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -180,7 +189,7 @@ void dsptrs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, integer *ipi
     {
         *info = -3;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
@@ -223,8 +232,7 @@ void dsptrs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, integer *ipi
             /* Multiply by inv(U(K)), where U(K) is the transformation */
             /* stored in column K of A. */
             i__1 = k - 1;
-            aocl_blas_dger(&i__1, nrhs, &c_b7, &ap[kc], &c__1, &b[k + b_dim1], ldb, &b[b_dim1 + 1],
-                           ldb);
+            dger_(&i__1, nrhs, &c_b7, &ap[kc], &c__1, &b[k + b_dim1], ldb, &b[b_dim1 + 1], ldb);
             /* Multiply by the inverse of the diagonal block. */
             d__1 = 1. / ap[kc + k - 1];
             aocl_blas_dscal(nrhs, &d__1, &b[k + b_dim1], ldb);
@@ -242,11 +250,10 @@ void dsptrs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, integer *ipi
             /* Multiply by inv(U(K)), where U(K) is the transformation */
             /* stored in columns K-1 and K of A. */
             i__1 = k - 2;
-            aocl_blas_dger(&i__1, nrhs, &c_b7, &ap[kc], &c__1, &b[k + b_dim1], ldb, &b[b_dim1 + 1],
-                           ldb);
+            dger_(&i__1, nrhs, &c_b7, &ap[kc], &c__1, &b[k + b_dim1], ldb, &b[b_dim1 + 1], ldb);
             i__1 = k - 2;
-            aocl_blas_dger(&i__1, nrhs, &c_b7, &ap[kc - (k - 1)], &c__1, &b[k - 1 + b_dim1], ldb,
-                           &b[b_dim1 + 1], ldb);
+            dger_(&i__1, nrhs, &c_b7, &ap[kc - (k - 1)], &c__1, &b[k - 1 + b_dim1], ldb,
+                  &b[b_dim1 + 1], ldb);
             /* Multiply by the inverse of the diagonal block. */
             akm1k = ap[kc + k - 2];
             akm1 = ap[kc - 1] / akm1k;
@@ -281,7 +288,8 @@ void dsptrs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, integer *ipi
             /* Multiply by inv(U**T(K)), where U(K) is the transformation */
             /* stored in column K of A. */
             i__1 = k - 1;
-            dgemv_("Transpose", &i__1, nrhs, &c_b7, &b[b_offset], ldb, &ap[kc], &c__1, &c_b19, &b[k + b_dim1], ldb);
+            dgemv_("Transpose", &i__1, nrhs, &c_b7, &b[b_offset], ldb, &ap[kc], &c__1, &c_b19,
+                   &b[k + b_dim1], ldb);
             /* Interchange rows K and IPIV(K). */
             kp = ipiv[k];
             if(kp != k)
@@ -297,10 +305,11 @@ void dsptrs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, integer *ipi
             /* Multiply by inv(U**T(K+1)), where U(K+1) is the transformation */
             /* stored in columns K and K+1 of A. */
             i__1 = k - 1;
-            dgemv_("Transpose", &i__1, nrhs, &c_b7, &b[b_offset], ldb, &ap[kc], &c__1, &c_b19, &b[k + b_dim1], ldb);
+            dgemv_("Transpose", &i__1, nrhs, &c_b7, &b[b_offset], ldb, &ap[kc], &c__1, &c_b19,
+                   &b[k + b_dim1], ldb);
             i__1 = k - 1;
-            aocl_blas_dgemv("Transpose", &i__1, nrhs, &c_b7, &b[b_offset], ldb, &ap[kc + k], &c__1,
-                            &c_b19, &b[k + 1 + b_dim1], ldb);
+            dgemv_("Transpose", &i__1, nrhs, &c_b7, &b[b_offset], ldb, &ap[kc + k], &c__1, &c_b19,
+                   &b[k + 1 + b_dim1], ldb);
             /* Interchange rows K and -IPIV(K). */
             kp = -ipiv[k];
             if(kp != k)
@@ -340,8 +349,8 @@ void dsptrs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, integer *ipi
             if(k < *n)
             {
                 i__1 = *n - k;
-                aocl_blas_dger(&i__1, nrhs, &c_b7, &ap[kc + 1], &c__1, &b[k + b_dim1], ldb,
-                               &b[k + 1 + b_dim1], ldb);
+                dger_(&i__1, nrhs, &c_b7, &ap[kc + 1], &c__1, &b[k + b_dim1], ldb,
+                      &b[k + 1 + b_dim1], ldb);
             }
             /* Multiply by the inverse of the diagonal block. */
             d__1 = 1. / ap[kc];
@@ -363,11 +372,11 @@ void dsptrs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, integer *ipi
             if(k < *n - 1)
             {
                 i__1 = *n - k - 1;
-                aocl_blas_dger(&i__1, nrhs, &c_b7, &ap[kc + 2], &c__1, &b[k + b_dim1], ldb,
-                               &b[k + 2 + b_dim1], ldb);
+                dger_(&i__1, nrhs, &c_b7, &ap[kc + 2], &c__1, &b[k + b_dim1], ldb,
+                      &b[k + 2 + b_dim1], ldb);
                 i__1 = *n - k - 1;
-                aocl_blas_dger(&i__1, nrhs, &c_b7, &ap[kc + *n - k + 2], &c__1, &b[k + 1 + b_dim1],
-                               ldb, &b[k + 2 + b_dim1], ldb);
+                dger_(&i__1, nrhs, &c_b7, &ap[kc + *n - k + 2], &c__1, &b[k + 1 + b_dim1], ldb,
+                      &b[k + 2 + b_dim1], ldb);
             }
             /* Multiply by the inverse of the diagonal block. */
             akm1k = ap[kc + 1];
@@ -406,8 +415,8 @@ void dsptrs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, integer *ipi
             if(k < *n)
             {
                 i__1 = *n - k;
-                aocl_blas_dgemv("Transpose", &i__1, nrhs, &c_b7, &b[k + 1 + b_dim1], ldb,
-                                &ap[kc + 1], &c__1, &c_b19, &b[k + b_dim1], ldb);
+                dgemv_("Transpose", &i__1, nrhs, &c_b7, &b[k + 1 + b_dim1], ldb, &ap[kc + 1], &c__1,
+                       &c_b19, &b[k + b_dim1], ldb);
             }
             /* Interchange rows K and IPIV(K). */
             kp = ipiv[k];
@@ -425,11 +434,11 @@ void dsptrs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, integer *ipi
             if(k < *n)
             {
                 i__1 = *n - k;
-                aocl_blas_dgemv("Transpose", &i__1, nrhs, &c_b7, &b[k + 1 + b_dim1], ldb,
-                                &ap[kc + 1], &c__1, &c_b19, &b[k + b_dim1], ldb);
+                dgemv_("Transpose", &i__1, nrhs, &c_b7, &b[k + 1 + b_dim1], ldb, &ap[kc + 1], &c__1,
+                       &c_b19, &b[k + b_dim1], ldb);
                 i__1 = *n - k;
-                aocl_blas_dgemv("Transpose", &i__1, nrhs, &c_b7, &b[k + 1 + b_dim1], ldb,
-                                &ap[kc - (*n - k)], &c__1, &c_b19, &b[k - 1 + b_dim1], ldb);
+                dgemv_("Transpose", &i__1, nrhs, &c_b7, &b[k + 1 + b_dim1], ldb, &ap[kc - (*n - k)],
+                       &c__1, &c_b19, &b[k - 1 + b_dim1], ldb);
             }
             /* Interchange rows K and -IPIV(K). */
             kp = -ipiv[k];

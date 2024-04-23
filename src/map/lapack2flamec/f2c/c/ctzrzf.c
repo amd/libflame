@@ -1,8 +1,8 @@
-/* ./ctzrzf.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ctzrzf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
@@ -150,15 +150,17 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *work, integer *lwork, integer *info)
+void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *work,
+             integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctzrzf inputs: m %lld, n %lld, lda %lld, lwork %lld",*m, *n, *lda, *lwork);
+    snprintf(buffer, 256, "ctzrzf inputs: m %lld, n %lld, lda %lld, lwork %lld", *m, *n, *lda,
+             *lwork);
 #else
-    snprintf(buffer, 256,"ctzrzf inputs: m %d, n %d, lda %d, lwork %d",*m, *n, *lda, *lwork);
+    snprintf(buffer, 256, "ctzrzf inputs: m %d, n %d, lda %d, lwork %d", *m, *n, *lda, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -168,10 +170,17 @@ void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     /* Local variables */
     integer i__, m1, ib, nb, ki, kk, mu, nx, iws, nbmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), clarzb_( char *, char *, char *, char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        clarzb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *,
+                complex *, integer *, complex *, integer *, complex *, integer *, complex *,
+                integer *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void clarzt_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), clatrz_(integer *, integer *, integer *, complex *, integer *, complex *, complex *);
+        void
+        clarzt_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *),
+        clatrz_(integer *, integer *, integer *, complex *, integer *, complex *, complex *);
     integer lwkmin, ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
@@ -212,7 +221,7 @@ void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
@@ -228,11 +237,10 @@ void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
             /* Determine the block size. */
             nb = aocl_lapack_ilaenv(&c__1, "CGERQF", " ", m, n, &c_n1, &c_n1);
             lwkopt = *m * nb;
-            lwkmin = fla_max(1,*m);
+            lwkmin = fla_max(1, *m);
         }
-        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].real = r__1;
-        work[1].imag = 0.f; // , expr subst
+        work[1].r = (real)lwkopt;
+        work[1].i = 0.f; // , expr subst
         if(*lwork < lwkmin && !lquery)
         {
             *info = -7;
@@ -278,8 +286,8 @@ void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         /* Computing MAX */
         i__1 = 0;
         i__2 = ilaenv_(&c__3, "CGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
-        nx = fla_max(i__1,i__2);
-        if (nx < *m)
+        nx = fla_max(i__1, i__2);
+        if(nx < *m)
         {
             /* Determine if workspace is large enough for blocked code. */
             ldwork = *m;
@@ -291,8 +299,8 @@ void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "CGERQF", " ", m, n, &c_n1, & c_n1); // , expr subst
-                nbmin = fla_max(i__1,i__2);
+                i__2 = ilaenv_(&c__2, "CGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
+                nbmin = fla_max(i__1, i__2);
             }
         }
     }
@@ -302,38 +310,38 @@ void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         /* The last kk rows are handled by the block method. */
         /* Computing MIN */
         i__1 = *m + 1;
-        m1 = fla_min(i__1,*n);
+        m1 = fla_min(i__1, *n);
         ki = (*m - nx - 1) / nb * nb;
         /* Computing MIN */
         i__1 = *m;
         i__2 = ki + nb; // , expr subst
-        kk = fla_min(i__1,i__2);
+        kk = fla_min(i__1, i__2);
         i__1 = *m - kk + 1;
         i__2 = -nb;
         for(i__ = *m - kk + ki + 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
         {
             /* Computing MIN */
             i__3 = *m - i__ + 1;
-            ib = fla_min(i__3,nb);
+            ib = fla_min(i__3, nb);
             /* Compute the TZ factorization of the current block */
             /* A(i:i+ib-1,i:n) */
             i__3 = *n - i__ + 1;
             i__4 = *n - *m;
-            aocl_lapack_clatrz(&ib, &i__3, &i__4, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1]);
+            clatrz_(&ib, &i__3, &i__4, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1]);
             if(i__ > 1)
             {
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i+ib-1) . . . H(i+1) H(i) */
                 i__3 = *n - *m;
-                aocl_lapack_clarzt("Backward", "Rowwise", &i__3, &ib, &a[i__ + m1 * a_dim1], lda,
-                                   &tau[i__], &work[1], &ldwork);
+                clarzt_("Backward", "Rowwise", &i__3, &ib, &a[i__ + m1 * a_dim1], lda, &tau[i__],
+                        &work[1], &ldwork);
                 /* Apply H to A(1:i-1,i:n) from the right */
                 i__3 = i__ - 1;
                 i__4 = *n - i__ + 1;
                 i__5 = *n - *m;
-                aocl_lapack_clarzb("Right", "No transpose", "Backward", "Rowwise", &i__3, &i__4,
-                                   &ib, &i__5, &a[i__ + m1 * a_dim1], lda, &work[1], &ldwork,
-                                   &a[i__ * a_dim1 + 1], lda, &work[ib + 1], &ldwork);
+                clarzb_("Right", "No transpose", "Backward", "Rowwise", &i__3, &i__4, &ib, &i__5,
+                        &a[i__ + m1 * a_dim1], lda, &work[1], &ldwork, &a[i__ * a_dim1 + 1], lda,
+                        &work[ib + 1], &ldwork);
             }
             /* L20: */
         }
@@ -349,7 +357,7 @@ void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         i__2 = *n - *m;
         aocl_lapack_clatrz(&mu, n, &i__2, &a[a_offset], lda, &tau[1], &work[1]);
     }
-    work[1].r = (real) lwkopt;
+    work[1].r = (real)lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

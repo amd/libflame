@@ -1,8 +1,8 @@
-/* ./cgecon.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cgecon.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CGECON */
@@ -128,15 +128,16 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup gecon */
 /* ===================================================================== */
 /* Subroutine */
-void cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real *rcond, complex *work, real *rwork, integer *info)
+void cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real *rcond,
+             complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgecon inputs: norm %c, n %lld, lda %lld",*norm, *n, *lda);
+    snprintf(buffer, 256, "cgecon inputs: norm %c, n %lld, lda %lld", *norm, *n, *lda);
 #else
-    snprintf(buffer, 256,"cgecon inputs: norm %c, n %d, lda %d",*norm, *n, *lda);
+    snprintf(buffer, 256, "cgecon inputs: norm %c, n %d, lda %d", *norm, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -154,14 +155,19 @@ void cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
+        void
+        clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     extern /* Subroutine */
-    void clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *, real *, integer *), csrscl_(integer *, real *, complex *, integer *);
+        void
+        clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *,
+                real *, integer *),
+        csrscl_(integer *, real *, complex *, integer *);
     logical onenrm;
     char normin[1];
     real smlnum, hugeval;
@@ -199,7 +205,7 @@ void cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real
     /* Function Body */
     *info = 0;
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
-    if (! onenrm && ! lsame_(norm, "I", 1, 1))
+    if(!onenrm && !lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }
@@ -207,7 +213,7 @@ void cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -249,26 +255,26 @@ void cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real
     }
     kase = 0;
 L10:
-    aocl_lapack_clacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    clacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == kase1)
         {
             /* Multiply by inv(L). */
-            aocl_lapack_clatrs("Lower", "No transpose", "Unit", normin, n, &a[a_offset], lda,
-                               &work[1], &sl, &rwork[1], info);
+            clatrs_("Lower", "No transpose", "Unit", normin, n, &a[a_offset], lda, &work[1], &sl,
+                    &rwork[1], info);
             /* Multiply by inv(U). */
-            aocl_lapack_clatrs("Upper", "No transpose", "Non-unit", normin, n, &a[a_offset], lda,
-                               &work[1], &su, &rwork[*n + 1], info);
+            clatrs_("Upper", "No transpose", "Non-unit", normin, n, &a[a_offset], lda, &work[1],
+                    &su, &rwork[*n + 1], info);
         }
         else
         {
             /* Multiply by inv(U**H). */
-            aocl_lapack_clatrs("Upper", "Conjugate transpose", "Non-unit", normin, n, &a[a_offset],
-                               lda, &work[1], &su, &rwork[*n + 1], info);
+            clatrs_("Upper", "Conjugate transpose", "Non-unit", normin, n, &a[a_offset], lda,
+                    &work[1], &su, &rwork[*n + 1], info);
             /* Multiply by inv(L**H). */
-            aocl_lapack_clatrs("Lower", "Conjugate transpose", "Unit", normin, n, &a[a_offset], lda,
-                               &work[1], &sl, &rwork[1], info);
+            clatrs_("Lower", "Conjugate transpose", "Unit", normin, n, &a[a_offset], lda, &work[1],
+                    &sl, &rwork[1], info);
         }
         /* Divide X by 1/(SL*SU) if doing so will not cause overflow. */
         scale = sl * su;
@@ -277,7 +283,10 @@ L10:
         {
             ix = aocl_blas_icamax(n, &work[1], &c__1);
             i__1 = ix;
-            if (scale < ((r__1 = work[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(& work[ix]), f2c_abs(r__2))) * smlnum || scale == 0.f)
+            if(scale < ((r__1 = work[i__1].r, f2c_abs(r__1))
+                        + (r__2 = r_imag(&work[ix]), f2c_abs(r__2)))
+                           * smlnum
+               || scale == 0.f)
             {
                 goto L20;
             }

@@ -181,12 +181,17 @@ static real c_b19 = -1.f;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb, real *x, integer *ldx, real *ferr, real *berr, real *work, integer *iwork, integer *info)
+void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, real *a, integer *lda,
+             real *b, integer *ldb, real *x, integer *ldx, real *ferr, real *berr, real *work,
+             integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"strrfs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*uplo, *trans, *diag, *n, *nrhs, *lda, *ldb, *ldx);
+    snprintf(buffer, 256,
+             "strrfs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", nrhs %" FLA_IS
+             ", lda %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",
+             *uplo, *trans, *diag, *n, *nrhs, *lda, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -203,11 +208,17 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *), strsv_( char *, char *, char *, integer *, real *, integer *, real *, integer *), slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *),
+        saxpy_(integer *, real *, real *, integer *, real *, integer *),
+        strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *),
+        strsv_(char *, char *, char *, integer *, real *, integer *, real *, integer *),
+        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     char transt[1];
     logical nounit;
@@ -254,15 +265,15 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
     upper = lsame_(uplo, "U", 1, 1);
     notran = lsame_(trans, "N", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
@@ -274,15 +285,15 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -11;
     }
@@ -344,7 +355,7 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
         if(notran)
         {
             /* Compute f2c_abs(A)*f2c_abs(X) + f2c_abs(B). */
-            if (upper)
+            if(upper)
             {
                 if(nounit)
                 {
@@ -355,7 +366,7 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
                         i__3 = k;
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
-                            work[i__] += (r__1 = a[i__ + k * a_dim1], f2c_abs( r__1)) * xk;
+                            work[i__] += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1)) * xk;
                             /* L30: */
                         }
                         /* L40: */
@@ -370,7 +381,7 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
                         i__3 = k - 1;
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
-                            work[i__] += (r__1 = a[i__ + k * a_dim1], f2c_abs( r__1)) * xk;
+                            work[i__] += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1)) * xk;
                             /* L50: */
                         }
                         work[k] += xk;
@@ -389,7 +400,7 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
                         i__3 = *n;
                         for(i__ = k; i__ <= i__3; ++i__)
                         {
-                            work[i__] += (r__1 = a[i__ + k * a_dim1], f2c_abs( r__1)) * xk;
+                            work[i__] += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1)) * xk;
                             /* L70: */
                         }
                         /* L80: */
@@ -404,7 +415,7 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
                         i__3 = *n;
                         for(i__ = k + 1; i__ <= i__3; ++i__)
                         {
-                            work[i__] += (r__1 = a[i__ + k * a_dim1], f2c_abs( r__1)) * xk;
+                            work[i__] += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1)) * xk;
                             /* L90: */
                         }
                         work[k] += xk;
@@ -416,7 +427,7 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
         else
         {
             /* Compute f2c_abs(A**T)*f2c_abs(X) + f2c_abs(B). */
-            if (upper)
+            if(upper)
             {
                 if(nounit)
                 {
@@ -427,7 +438,8 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
                         i__3 = k;
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
-                            s += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1)) * ( r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
+                            s += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1))
+                                 * (r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
                             /* L110: */
                         }
                         work[k] += s;
@@ -443,7 +455,8 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
                         i__3 = k - 1;
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
-                            s += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1)) * ( r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
+                            s += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1))
+                                 * (r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
                             /* L130: */
                         }
                         work[k] += s;
@@ -462,7 +475,8 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
                         i__3 = *n;
                         for(i__ = k; i__ <= i__3; ++i__)
                         {
-                            s += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1)) * ( r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
+                            s += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1))
+                                 * (r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
                             /* L150: */
                         }
                         work[k] += s;
@@ -478,7 +492,8 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
                         i__3 = *n;
                         for(i__ = k + 1; i__ <= i__3; ++i__)
                         {
-                            s += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1)) * ( r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
+                            s += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1))
+                                 * (r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
                             /* L170: */
                         }
                         work[k] += s;
@@ -495,15 +510,16 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
             {
                 /* Computing MAX */
                 r__2 = s;
-                r__3 = (r__1 = work[*n + i__], f2c_abs(r__1)) / work[ i__]; // , expr subst
-                s = fla_max(r__2,r__3);
+                r__3 = (r__1 = work[*n + i__], f2c_abs(r__1)) / work[i__]; // , expr subst
+                s = fla_max(r__2, r__3);
             }
             else
             {
                 /* Computing MAX */
                 r__2 = s;
-                r__3 = ((r__1 = work[*n + i__], f2c_abs(r__1)) + safe1) / (work[i__] + safe1); // , expr subst
-                s = fla_max(r__2,r__3);
+                r__3 = ((r__1 = work[*n + i__], f2c_abs(r__1)) + safe1)
+                       / (work[i__] + safe1); // , expr subst
+                s = fla_max(r__2, r__3);
             }
             /* L190: */
         }
@@ -540,8 +556,7 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
         }
         kase = 0;
     L210:
-        aocl_lapack_slacn2(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase,
-                           isave);
+        slacn2_(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
@@ -576,7 +591,7 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
             /* Computing MAX */
             r__2 = lstres;
             r__3 = (r__1 = x[i__ + j * x_dim1], f2c_abs(r__1)); // , expr subst
-            lstres = fla_max(r__2,r__3);
+            lstres = fla_max(r__2, r__3);
             /* L240: */
         }
         if(lstres != 0.f)

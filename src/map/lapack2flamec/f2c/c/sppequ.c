@@ -113,12 +113,12 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sppequ_(char *uplo, integer *n, real *ap, real *s, real * scond, real *amax, integer *info)
+void sppequ_(char *uplo, integer *n, real *ap, real *s, real *scond, real *amax, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sppequ inputs: uplo %c, n %d",*uplo, *n);
+    snprintf(buffer, 256, "sppequ inputs: uplo %c, n %d", *uplo, *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -132,7 +132,8 @@ void sppequ_(char *uplo, integer *n, real *ap, real *s, real * scond, real *amax
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -160,7 +161,7 @@ void sppequ_(char *uplo, integer *n, real *ap, real *s, real * scond, real *amax
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -200,11 +201,11 @@ void sppequ_(char *uplo, integer *n, real *ap, real *s, real * scond, real *amax
             /* Computing MIN */
             r__1 = smin;
             r__2 = s[i__]; // , expr subst
-            smin = fla_min(r__1,r__2);
+            smin = fla_min(r__1, r__2);
             /* Computing MAX */
             r__1 = *amax;
             r__2 = s[i__]; // , expr subst
-            *amax = fla_max(r__1,r__2);
+            *amax = fla_max(r__1, r__2);
             /* L10: */
         }
     }
@@ -221,11 +222,11 @@ void sppequ_(char *uplo, integer *n, real *ap, real *s, real * scond, real *amax
             /* Computing MIN */
             r__1 = smin;
             r__2 = s[i__]; // , expr subst
-            smin = fla_min(r__1,r__2);
+            smin = fla_min(r__1, r__2);
             /* Computing MAX */
             r__1 = *amax;
             r__2 = s[i__]; // , expr subst
-            *amax = fla_max(r__1,r__2);
+            *amax = fla_max(r__1, r__2);
             /* L20: */
         }
     }

@@ -274,10 +274,15 @@ here the magnitude of a scomplex number */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n, doublereal *h__, integer *ldh, doublereal *wr, doublereal *wi, doublereal *vl, integer *ldvl, doublereal *vr, integer *ldvr, integer *mm, integer *m, doublereal *work, integer * ifaill, integer *ifailr, integer *info)
+void dhsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n, doublereal *h__,
+             integer *ldh, doublereal *wr, doublereal *wi, doublereal *vl, integer *ldvl,
+             doublereal *vr, integer *ldvr, integer *mm, integer *m, doublereal *work,
+             integer *ifaill, integer *ifailr, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dhsein inputs: side %c, eigsrc %c, initv %c, n %" FLA_IS ", ldh %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",*side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm);
+    AOCL_DTL_SNPRINTF("dhsein inputs: side %c, eigsrc %c, initv %c, n %" FLA_IS ", ldh %" FLA_IS
+                      ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",
+                      *side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm);
     /* System generated locals */
     aocl_int64_t h_dim1, h_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -294,11 +299,15 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
     doublereal hnorm;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    void dlaein_(logical *, logical *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
+        void
+        dlaein_(logical *, logical *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *,
+                doublereal *, doublereal *, doublereal *, integer *);
     extern doublereal dlanhs_(char *, integer *, doublereal *, integer *, doublereal *);
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical noinit;
     aocl_int64_t ldwork;
@@ -386,11 +395,11 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
     {
         *info = -1;
     }
-    else if (! fromqr && ! lsame_(eigsrc, "N", 1, 1))
+    else if(!fromqr && !lsame_(eigsrc, "N", 1, 1))
     {
         *info = -2;
     }
-    else if (! noinit && ! lsame_(initv, "U", 1, 1))
+    else if(!noinit && !lsame_(initv, "U", 1, 1))
     {
         *info = -3;
     }
@@ -398,7 +407,7 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
     {
         *info = -5;
     }
-    else if (*ldh < fla_max(1,*n))
+    else if(*ldh < fla_max(1, *n))
     {
         *info = -7;
     }
@@ -493,7 +502,7 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
                 /* Compute infinity-norm of submatrix H(KL:KR,KL:KR) if it */
                 /* has not ben computed before. */
                 i__2 = kr - kl + 1;
-                hnorm = aocl_lapack_dlanhs("I", &i__2, &h__[kl + kl * h_dim1], ldh, &work[1]);
+                hnorm = dlanhs_("I", &i__2, &h__[kl + kl * h_dim1], ldh, &work[1]);
                 if(disnan_(&hnorm))
                 {
                     *info = -6;
@@ -518,7 +527,10 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
             i__2 = kl;
             for(i__ = k - 1; i__ >= i__2; --i__)
             {
-                if (select[i__] && (d__1 = wr[i__] - wkr, f2c_dabs(d__1)) + (d__2 = wi[i__] - wki, f2c_dabs(d__2)) < eps3)
+                if(select[i__]
+                   && (d__1 = wr[i__] - wkr, f2c_dabs(d__1))
+                              + (d__2 = wi[i__] - wki, f2c_dabs(d__2))
+                          < eps3)
                 {
                     wkr += eps3;
                     goto L60;
@@ -539,10 +551,9 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
             {
                 /* Compute left eigenvector. */
                 i__2 = *n - kl + 1;
-                aocl_lapack_dlaein(&c_false, &noinit, &i__2, &h__[kl + kl * h_dim1], ldh, &wkr,
-                                   &wki, &vl[kl + ksr * vl_dim1], &vl[kl + ksi * vl_dim1], &work[1],
-                                   &ldwork, &work[*n * *n + *n + 1], &eps3, &smlnum, &bignum,
-                                   &iinfo);
+                dlaein_(&c_false, &noinit, &i__2, &h__[kl + kl * h_dim1], ldh, &wkr, &wki,
+                        &vl[kl + ksr * vl_dim1], &vl[kl + ksi * vl_dim1], &work[1], &ldwork,
+                        &work[*n * *n + *n + 1], &eps3, &smlnum, &bignum, &iinfo);
                 if(iinfo > 0)
                 {
                     if(pair)
@@ -580,10 +591,9 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
             if(rightv)
             {
                 /* Compute right eigenvector. */
-                aocl_lapack_dlaein(&c_true, &noinit, &kr, &h__[h_offset], ldh, &wkr, &wki,
-                                   &vr[ksr * vr_dim1 + 1], &vr[ksi * vr_dim1 + 1], &work[1],
-                                   &ldwork, &work[*n * *n + *n + 1], &eps3, &smlnum, &bignum,
-                                   &iinfo);
+                dlaein_(&c_true, &noinit, &kr, &h__[h_offset], ldh, &wkr, &wki,
+                        &vr[ksr * vr_dim1 + 1], &vr[ksi * vr_dim1 + 1], &work[1], &ldwork,
+                        &work[*n * *n + *n + 1], &eps3, &smlnum, &bignum, &iinfo);
                 if(iinfo > 0)
                 {
                     if(pair)

@@ -127,7 +127,8 @@ void aocl_lapack_stpttr(char *uplo, aocl_int64_t *n, real *ap, real *a, aocl_int
     extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -155,7 +156,7 @@ void aocl_lapack_stpttr(char *uplo, aocl_int64_t *n, real *ap, real *a, aocl_int
     /* Function Body */
     *info = 0;
     lower = lsame_(uplo, "L", 1, 1);
-    if (! lower && ! lsame_(uplo, "U", 1, 1))
+    if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -1;
     }
@@ -163,7 +164,7 @@ void aocl_lapack_stpttr(char *uplo, aocl_int64_t *n, real *ap, real *a, aocl_int
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }

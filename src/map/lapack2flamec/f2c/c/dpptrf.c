@@ -119,10 +119,10 @@ static doublereal c_b16 = -1.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dpptrf_(char *uplo, integer *n, doublereal *ap, integer * info)
+void dpptrf_(char *uplo, integer *n, doublereal *ap, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dpptrf inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
+    AOCL_DTL_SNPRINTF("dpptrf inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     doublereal d__1;
@@ -133,11 +133,15 @@ void dpptrf_(char *uplo, integer *n, doublereal *ap, integer * info)
     doublereal ajj;
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern /* Subroutine */
-    void dspr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *), dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dspr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *),
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    void dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -164,7 +168,7 @@ void dpptrf_(char *uplo, integer *n, doublereal *ap, integer * info)
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -198,11 +202,11 @@ void dpptrf_(char *uplo, integer *n, doublereal *ap, integer * info)
             if(j > 1)
             {
                 i__2 = j - 1;
-                aocl_blas_dtpsv("Upper", "Transpose", "Non-unit", &i__2, &ap[1], &ap[jc], &c__1);
+                dtpsv_("Upper", "Transpose", "Non-unit", &i__2, &ap[1], &ap[jc], &c__1);
             }
             /* Compute U(J,J) and test for non-positive-definiteness. */
             i__2 = j - 1;
-            ajj = ap[jj] - aocl_blas_ddot(&i__2, &ap[jc], &c__1, &ap[jc], &c__1);
+            ajj = ap[jj] - ddot_(&i__2, &ap[jc], &c__1, &ap[jc], &c__1);
             if(ajj <= 0.)
             {
                 ap[jj] = ajj;

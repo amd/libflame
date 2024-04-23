@@ -119,15 +119,15 @@ static real c_b16 = -1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cpptrf_(char *uplo, integer *n, complex *ap, integer * info)
+void cpptrf_(char *uplo, integer *n, complex *ap, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cpptrf inputs: uplo %c, n %lld",*uplo, *n);
+    snprintf(buffer, 256, "cpptrf inputs: uplo %c, n %lld", *uplo, *n);
 #else
-    snprintf(buffer, 256,"cpptrf inputs: uplo %c, n %d",*uplo, *n);
+    snprintf(buffer, 256, "cpptrf inputs: uplo %c, n %d", *uplo, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -141,13 +141,18 @@ void cpptrf_(char *uplo, integer *n, complex *ap, integer * info)
     aocl_int64_t j, jc, jj;
     real ajj;
     extern /* Subroutine */
-    void chpr_(char *, integer *, real *, complex *, integer *, complex *);
+        void
+        chpr_(char *, integer *, real *, complex *, integer *, complex *);
     extern /* Complex */
-    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+        VOID
+        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    void ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *), csscal_( integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *),
+        csscal_(integer *, real *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -174,7 +179,7 @@ void cpptrf_(char *uplo, integer *n, complex *ap, integer * info)
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -208,17 +213,16 @@ void cpptrf_(char *uplo, integer *n, complex *ap, integer * info)
             if(j > 1)
             {
                 i__2 = j - 1;
-                aocl_blas_ctpsv("Upper", "Conjugate transpose", "Non-unit", &i__2, &ap[1], &ap[jc],
-                                &c__1);
+                ctpsv_("Upper", "Conjugate transpose", "Non-unit", &i__2, &ap[1], &ap[jc], &c__1);
             }
             /* Compute U(J,J) and test for non-positive-definiteness. */
             i__2 = jj;
             r__1 = ap[i__2].real;
             i__3 = j - 1;
-            aocl_lapack_cdotc_f2c(&q__2, &i__3, &ap[jc], &c__1, &ap[jc], &c__1);
-            q__1.real = r__1 - q__2.real;
-            q__1.imag = -q__2.imag; // , expr subst
-            ajj = q__1.real;
+            cdotc_f2c_(&q__2, &i__3, &ap[jc], &c__1, &ap[jc], &c__1);
+            q__1.r = r__1 - q__2.r;
+            q__1.i = -q__2.i; // , expr subst
+            ajj = q__1.r;
             if(ajj <= 0.f)
             {
                 i__2 = jj;
@@ -242,7 +246,7 @@ void cpptrf_(char *uplo, integer *n, complex *ap, integer * info)
         {
             /* Compute L(J,J) and test for non-positive-definiteness. */
             i__2 = jj;
-            ajj = ap[i__2].real;
+            ajj = ap[i__2].r;
             if(ajj <= 0.f)
             {
                 i__2 = jj;

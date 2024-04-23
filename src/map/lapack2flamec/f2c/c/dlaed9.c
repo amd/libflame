@@ -1,11 +1,11 @@
-/* ./dlaed9.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlaed9.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-/* > \brief \b DLAED9 used by DSTEDC. Finds the roots of the secular equation and updates the
+static integer c__1 = 1;
+/* > \brief \b DLAED9 used by sstedc. Finds the roots of the secular equation and updates the
  * eigenvectors. Us ed when the original matrix is dense. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -151,10 +151,14 @@ static aocl_int64_t c__1 = 1;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void dlaed9_(integer *k, integer *kstart, integer *kstop, integer *n, doublereal *d__, doublereal *q, integer *ldq, doublereal * rho, doublereal *dlamda, doublereal *w, doublereal *s, integer *lds, integer *info)
+void dlaed9_(integer *k, integer *kstart, integer *kstop, integer *n, doublereal *d__,
+             doublereal *q, integer *ldq, doublereal *rho, doublereal *dlamda, doublereal *w,
+             doublereal *s, integer *lds, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaed9 inputs: k %" FLA_IS ", kstart %" FLA_IS ", kstop %" FLA_IS ", n %" FLA_IS ", ldq %" FLA_IS ", lds %" FLA_IS "",*k, *kstart, *kstop, *n, *ldq, *lds);
+    AOCL_DTL_SNPRINTF("dlaed9 inputs: k %" FLA_IS ", kstart %" FLA_IS ", kstop %" FLA_IS
+                      ", n %" FLA_IS ", ldq %" FLA_IS ", lds %" FLA_IS "",
+                      *k, *kstart, *kstop, *n, *ldq, *lds);
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, s_dim1, s_offset, i__1, i__2;
     doublereal d__1;
@@ -165,10 +169,14 @@ void dlaed9_(integer *k, integer *kstart, integer *kstop, integer *n, doublereal
     doublereal temp;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dlaed4_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        dlaed4_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *, integer *);
     extern doublereal dlamc3_(doublereal *, doublereal *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -203,11 +211,11 @@ void dlaed9_(integer *k, integer *kstart, integer *kstop, integer *n, doublereal
     {
         *info = -1;
     }
-    else if (*kstart < 1 || *kstart > fla_max(1,*k))
+    else if(*kstart < 1 || *kstart > fla_max(1, *k))
     {
         *info = -2;
     }
-    else if (fla_max(1,*kstop) < *kstart || *kstop > fla_max(1,*k))
+    else if(fla_max(1, *kstop) < *kstart || *kstop > fla_max(1, *k))
     {
         *info = -3;
     }
@@ -215,11 +223,11 @@ void dlaed9_(integer *k, integer *kstart, integer *kstop, integer *n, doublereal
     {
         *info = -4;
     }
-    else if (*ldq < fla_max(1,*k))
+    else if(*ldq < fla_max(1, *k))
     {
         *info = -7;
     }
-    else if (*lds < fla_max(1,*k))
+    else if(*lds < fla_max(1, *k))
     {
         *info = -12;
     }
@@ -254,9 +262,7 @@ void dlaed9_(integer *k, integer *kstart, integer *kstop, integer *n, doublereal
     /* 2*DLAMBDA(I) to prevent optimizing compilers from eliminating */
     /* this code. */
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         dlamda[i__] = dlamc3_(&dlamda[i__], &dlamda[i__]) - dlamda[i__];
         /* L10: */

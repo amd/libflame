@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b DGEHD2 reduces a general square matrix to upper Hessenberg form using an unblocked
  * algorithm. */
 /* =========== DOCUMENTATION =========== */
@@ -149,17 +149,24 @@ v(i+2:ihi) is stored on */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dgehd2_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda, doublereal *tau, doublereal *work, integer *info)
+void dgehd2_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda, doublereal *tau,
+             doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgehd2 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS "",*n, *ilo, *ihi, *lda);
+    AOCL_DTL_SNPRINTF("dgehd2 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS
+                      "",
+                      *n, *ilo, *ihi, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
     aocl_int64_t i__;
     doublereal aii;
     extern /* Subroutine */
-    void dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *),
+        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -191,15 +198,15 @@ void dgehd2_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda
     {
         *info = -1;
     }
-    else if (*ilo < 1 || *ilo > fla_max(1,*n))
+    else if(*ilo < 1 || *ilo > fla_max(1, *n))
     {
         *info = -2;
     }
-    else if (*ihi < fla_min(*ilo,*n) || *ihi > *n)
+    else if(*ihi < fla_min(*ilo, *n) || *ihi > *n)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
@@ -217,18 +224,19 @@ void dgehd2_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda
         i__2 = *ihi - i__;
         /* Computing MIN */
         i__3 = i__ + 2;
-        dlarfg_(&i__2, &a[i__ + 1 + i__ * a_dim1], &a[fla_min(i__3,*n) + i__ * a_dim1], &c__1, &tau[i__]);
+        dlarfg_(&i__2, &a[i__ + 1 + i__ * a_dim1], &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1,
+                &tau[i__]);
         aii = a[i__ + 1 + i__ * a_dim1];
         a[i__ + 1 + i__ * a_dim1] = 1.;
         /* Apply H(i) to A(1:ihi,i+1:ihi) from the right */
         i__2 = *ihi - i__;
-        aocl_lapack_dlarf("Right", ihi, &i__2, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__],
-                          &a[(i__ + 1) * a_dim1 + 1], lda, &work[1]);
+        dlarf_("Right", ihi, &i__2, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__],
+               &a[(i__ + 1) * a_dim1 + 1], lda, &work[1]);
         /* Apply H(i) to A(i+1:ihi,i+1:n) from the left */
         i__2 = *ihi - i__;
         i__3 = *n - i__;
-        aocl_lapack_dlarf("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__],
-                          &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
+        dlarf_("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__],
+               &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
         a[i__ + 1 + i__ * a_dim1] = aii;
         /* L10: */
     }

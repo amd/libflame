@@ -1,12 +1,12 @@
-/* ./ctgevc.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ctgevc.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {0.f, 0.f};
-static scomplex c_b2 = {1.f, 0.f};
-static aocl_int64_t c__1 = 1;
+static complex c_b1 = {0.f, 0.f};
+static complex c_b2 = {1.f, 0.f};
+static integer c__1 = 1;
 /* > \brief \b CTGEVC */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -223,21 +223,28 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup tgevc */
 /* ===================================================================== */
 /* Subroutine */
-void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, integer *lds, complex *p, integer *ldp, complex *vl, integer *ldvl, complex *vr, integer *ldvr, integer *mm, integer *m, complex *work, real *rwork, integer *info)
+void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, integer *lds,
+             complex *p, integer *ldp, complex *vl, integer *ldvl, complex *vr, integer *ldvr,
+             integer *mm, integer *m, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctgevc inputs: side %c, howmny %c, n %lld, lds %lld, ldp %lld, ldvl %lld, ldvr %lld, mm %lld",*side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm);
+    snprintf(buffer, 256,
+             "ctgevc inputs: side %c, howmny %c, n %lld, lds %lld, ldp %lld, ldvl %lld, ldvr %lld, "
+             "mm %lld",
+             *side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm);
 #else
-    snprintf(buffer, 256,"ctgevc inputs: side %c, howmny %c, n %d, lds %d, ldp %d, ldvl %d, ldvr %d, mm %d",*side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm);
+    snprintf(buffer, 256,
+             "ctgevc inputs: side %c, howmny %c, n %d, lds %d, ldp %d, ldvl %d, ldvr %d, mm %d",
+             *side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t p_dim1, p_offset, s_dim1, s_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1,
-        i__2, i__3, i__4, i__5;
+    integer p_dim1, p_offset, s_dim1, s_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2,
+        i__3, i__4, i__5;
     real r__1, r__2, r__3, r__4, r__5, r__6;
     scomplex q__1, q__2, q__3, q__4;
     /* Builtin functions */
@@ -263,24 +270,29 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
     real sbeta;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+        void
+        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
+               complex *, complex *, integer *);
     real small_val;
-    logical compl;
+    logical compl ;
     real anorm, bnorm;
     logical compr, ilbbad;
     real acoefa, bcoefa, acoeff;
     scomplex bcoeff;
     logical ilback;
     extern /* Subroutine */
-    void slabad_(real *, real *);
+        void
+        slabad_(real *, real *);
     real ascale, bscale;
     extern /* Complex */
-    void cladiv_f2c_(complex *, complex *, complex *);
+        void
+        cladiv_f2c_(complex *, complex *, complex *);
     extern real slamch_(char *);
     scomplex salpha;
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     logical ilcomp;
     aocl_int64_t ihwmny;
@@ -327,19 +339,19 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
     /* Function Body */
     ilall = FALSE_;
     ilback = FALSE_;
-    if (lsame_(howmny, "A", 1, 1))
+    if(lsame_(howmny, "A", 1, 1))
     {
         ihwmny = 1;
         ilall = TRUE_;
         ilback = FALSE_;
     }
-    else if (lsame_(howmny, "S", 1, 1))
+    else if(lsame_(howmny, "S", 1, 1))
     {
         ihwmny = 2;
         ilall = FALSE_;
         ilback = FALSE_;
     }
-    else if (lsame_(howmny, "B", 1, 1))
+    else if(lsame_(howmny, "B", 1, 1))
     {
         ihwmny = 3;
         ilall = TRUE_;
@@ -349,19 +361,19 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
     {
         ihwmny = -1;
     }
-    if (lsame_(side, "R", 1, 1))
+    if(lsame_(side, "R", 1, 1))
     {
         iside = 1;
         compl = FALSE_;
         compr = TRUE_;
     }
-    else if (lsame_(side, "L", 1, 1))
+    else if(lsame_(side, "L", 1, 1))
     {
         iside = 2;
         compl = TRUE_;
         compr = FALSE_;
     }
-    else if (lsame_(side, "B", 1, 1))
+    else if(lsame_(side, "B", 1, 1))
     {
         iside = 3;
         compl = TRUE_;
@@ -384,11 +396,11 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
     {
         *info = -4;
     }
-    else if (*lds < fla_max(1,*n))
+    else if(*lds < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldp < fla_max(1,*n))
+    else if(*ldp < fla_max(1, *n))
     {
         *info = -8;
     }
@@ -483,25 +495,31 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * s_dim1;
-            rwork[j] += (r__1 = s[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&s[i__ + j * s_dim1]), f2c_abs(r__2));
+            rwork[j] += (r__1 = s[i__3].r, f2c_abs(r__1))
+                        + (r__2 = r_imag(&s[i__ + j * s_dim1]), f2c_abs(r__2));
             i__3 = i__ + j * p_dim1;
-            rwork[*n + j] += (r__1 = p[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(& p[i__ + j * p_dim1]), f2c_abs(r__2));
+            rwork[*n + j] += (r__1 = p[i__3].r, f2c_abs(r__1))
+                             + (r__2 = r_imag(&p[i__ + j * p_dim1]), f2c_abs(r__2));
             /* L30: */
         }
         /* Computing MAX */
         i__2 = j + j * s_dim1;
         r__3 = anorm;
-        r__4 = rwork[j] + ((r__1 = s[i__2].r, f2c_abs(r__1)) + ( r__2 = r_imag(&s[j + j * s_dim1]), f2c_abs(r__2))); // , expr subst
-        anorm = fla_max(r__3,r__4);
+        r__4 = rwork[j]
+               + ((r__1 = s[i__2].r, f2c_abs(r__1))
+                  + (r__2 = r_imag(&s[j + j * s_dim1]), f2c_abs(r__2))); // , expr subst
+        anorm = fla_max(r__3, r__4);
         /* Computing MAX */
         i__2 = j + j * p_dim1;
         r__3 = bnorm;
-        r__4 = rwork[*n + j] + ((r__1 = p[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&p[j + j * p_dim1]), f2c_abs(r__2))); // , expr subst
-        bnorm = fla_max(r__3,r__4);
+        r__4 = rwork[*n + j]
+               + ((r__1 = p[i__2].r, f2c_abs(r__1))
+                  + (r__2 = r_imag(&p[j + j * p_dim1]), f2c_abs(r__2))); // , expr subst
+        bnorm = fla_max(r__3, r__4);
         /* L40: */
     }
-    ascale = 1.f / fla_max(anorm,safmin);
-    bscale = 1.f / fla_max(bnorm,safmin);
+    ascale = 1.f / fla_max(anorm, safmin);
+    bscale = 1.f / fla_max(bnorm, safmin);
     /* Left eigenvectors */
     if(compl )
     {
@@ -523,7 +541,10 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                 ++ieig;
                 i__2 = je + je * s_dim1;
                 i__3 = je + je * p_dim1;
-                if ((r__2 = s[i__2].r, f2c_abs(r__2)) + (r__3 = r_imag(&s[je + je * s_dim1]), f2c_abs(r__3)) <= safmin && (r__1 = p[i__3].r, f2c_abs(r__1)) <= safmin)
+                if((r__2 = s[i__2].r, f2c_abs(r__2))
+                           + (r__3 = r_imag(&s[je + je * s_dim1]), f2c_abs(r__3))
+                       <= safmin
+                   && (r__1 = p[i__3].r, f2c_abs(r__1)) <= safmin)
                 {
                     /* Singular matrix pencil -- return unit eigenvector */
                     i__2 = *n;
@@ -546,10 +567,12 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                 /* Computing MAX */
                 i__2 = je + je * s_dim1;
                 i__3 = je + je * p_dim1;
-                r__4 = ((r__2 = s[i__2].r, f2c_abs(r__2)) + (r__3 = r_imag(&s[je + je * s_dim1]), f2c_abs(r__3))) * ascale;
+                r__4 = ((r__2 = s[i__2].r, f2c_abs(r__2))
+                        + (r__3 = r_imag(&s[je + je * s_dim1]), f2c_abs(r__3)))
+                       * ascale;
                 r__5 = (r__1 = p[i__3].r, f2c_abs(r__1)) * bscale;
-                r__4 = fla_max(r__4,r__5); // ; expr subst
-                temp = 1.f / fla_max(r__4,safmin);
+                r__4 = fla_max(r__4, r__5); // ; expr subst
+                temp = 1.f / fla_max(r__4, safmin);
                 i__2 = je + je * s_dim1;
                 q__2.real = temp * s[i__2].real;
                 q__2.imag = temp * s[i__2].imag; // , expr subst
@@ -566,30 +589,37 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                 bcoeff.imag = q__1.imag; // , expr subst
                 /* Scale to avoid underflow */
                 lsa = f2c_abs(sbeta) >= safmin && f2c_abs(acoeff) < small_val;
-                lsb = (r__1 = salpha.r, f2c_abs(r__1)) + (r__2 = r_imag(&salpha), f2c_abs(r__2)) >= safmin && (r__3 = bcoeff.r, f2c_abs(r__3)) + (r__4 = r_imag(&bcoeff), f2c_abs(r__4)) < small_val;
+                lsb = (r__1 = salpha.r, f2c_abs(r__1)) + (r__2 = r_imag(&salpha), f2c_abs(r__2))
+                          >= safmin
+                      && (r__3 = bcoeff.r, f2c_abs(r__3)) + (r__4 = r_imag(&bcoeff), f2c_abs(r__4))
+                             < small_val;
                 scale = 1.f;
                 if(lsa)
                 {
-                    scale = small_val / f2c_abs(sbeta) * fla_min(anorm,big);
+                    scale = small_val / f2c_abs(sbeta) * fla_min(anorm, big);
                 }
                 if(lsb)
                 {
                     /* Computing MAX */
                     r__3 = scale;
-                    r__4 = small_val / ((r__1 = salpha.r, f2c_abs(r__1)) + (r__2 = r_imag(&salpha), f2c_abs(r__2))) * fla_min( bnorm,big); // , expr subst
-                    scale = fla_max(r__3,r__4);
+                    r__4 = small_val
+                           / ((r__1 = salpha.r, f2c_abs(r__1))
+                              + (r__2 = r_imag(&salpha), f2c_abs(r__2)))
+                           * fla_min(bnorm, big); // , expr subst
+                    scale = fla_max(r__3, r__4);
                 }
                 if(lsa || lsb)
                 {
                     /* Computing MIN */
                     /* Computing MAX */
                     r__5 = 1.f, r__6 = f2c_abs(acoeff);
-                    r__5 = fla_max(r__5,r__6);
-                    r__6 = (r__1 = bcoeff.r, f2c_abs(r__1)) + (r__2 = r_imag(&bcoeff), f2c_abs(r__2)); // ; expr subst
+                    r__5 = fla_max(r__5, r__6);
+                    r__6 = (r__1 = bcoeff.r, f2c_abs(r__1))
+                           + (r__2 = r_imag(&bcoeff), f2c_abs(r__2)); // ; expr subst
                     r__3 = scale;
-                    r__4 = 1.f / (safmin * fla_max(r__5,r__6)); // , expr subst
-                    scale = fla_min(r__3,r__4);
-                    if (lsa)
+                    r__4 = 1.f / (safmin * fla_max(r__5, r__6)); // , expr subst
+                    scale = fla_min(r__3, r__4);
+                    if(lsa)
                     {
                         acoeff = ascale * (scale * sbeta);
                     }
@@ -615,7 +645,7 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                     }
                 }
                 acoefa = f2c_abs(acoeff);
-                bcoefa = (r__1 = bcoeff.r, f2c_abs(r__1)) + (r__2 = r_imag(& bcoeff), f2c_abs(r__2));
+                bcoefa = (r__1 = bcoeff.r, f2c_abs(r__1)) + (r__2 = r_imag(&bcoeff), f2c_abs(r__2));
                 xmax = 1.f;
                 i__2 = *n;
                 for(jr = 1; jr <= i__2; ++jr)
@@ -631,8 +661,8 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                 /* Computing MAX */
                 r__1 = ulp * acoefa * anorm;
                 r__2 = ulp * bcoefa * bnorm;
-                r__1 = fla_max(r__1,r__2); // ; expr subst
-                dmin__ = fla_max(r__1,safmin);
+                r__1 = fla_max(r__1, r__2); // ; expr subst
+                dmin__ = fla_max(r__1, safmin);
                 /* H */
                 /* Triangular solve of (a A - b B) y = 0 */
                 /* H */
@@ -670,20 +700,20 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                     {
                         r_cnjg(&q__3, &s[jr + j * s_dim1]);
                         i__4 = jr;
-                        q__2.real = q__3.real * work[i__4].real - q__3.imag * work[i__4].imag;
-                        q__2.imag = q__3.real * work[i__4].imag + q__3.imag * work[i__4].real; // , expr subst
-                        q__1.real = suma.real + q__2.real;
-                        q__1.imag = suma.imag + q__2.imag; // , expr subst
-                        suma.real = q__1.real;
-                        suma.imag = q__1.imag; // , expr subst
+                        q__2.r = q__3.r * work[i__4].r - q__3.i * work[i__4].i;
+                        q__2.i = q__3.r * work[i__4].i + q__3.i * work[i__4].r; // , expr subst
+                        q__1.r = suma.r + q__2.r;
+                        q__1.i = suma.i + q__2.i; // , expr subst
+                        suma.r = q__1.r;
+                        suma.i = q__1.i; // , expr subst
                         r_cnjg(&q__3, &p[jr + j * p_dim1]);
                         i__4 = jr;
-                        q__2.real = q__3.real * work[i__4].real - q__3.imag * work[i__4].imag;
-                        q__2.imag = q__3.real * work[i__4].imag + q__3.imag * work[i__4].real; // , expr subst
-                        q__1.real = sumb.real + q__2.real;
-                        q__1.imag = sumb.imag + q__2.imag; // , expr subst
-                        sumb.real = q__1.real;
-                        sumb.imag = q__1.imag; // , expr subst
+                        q__2.r = q__3.r * work[i__4].r - q__3.i * work[i__4].i;
+                        q__2.i = q__3.r * work[i__4].i + q__3.i * work[i__4].r; // , expr subst
+                        q__1.r = sumb.r + q__2.r;
+                        q__1.i = sumb.i + q__2.i; // , expr subst
+                        sumb.r = q__1.r;
+                        sumb.i = q__1.i; // , expr subst
                         /* L80: */
                     }
                     q__2.real = acoeff * suma.real;
@@ -701,25 +731,31 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                     q__3.real = acoeff * s[i__3].real;
                     q__3.imag = acoeff * s[i__3].imag; // , expr subst
                     i__4 = j + j * p_dim1;
-                    q__4.real = bcoeff.real * p[i__4].real - bcoeff.imag * p[i__4].imag;
-                    q__4.imag = bcoeff.real * p[i__4].imag + bcoeff.imag * p[i__4].real; // , expr subst
-                    q__2.real = q__3.real - q__4.real;
-                    q__2.imag = q__3.imag - q__4.imag; // , expr subst
+                    q__4.r = bcoeff.r * p[i__4].r - bcoeff.i * p[i__4].i;
+                    q__4.i = bcoeff.r * p[i__4].i + bcoeff.i * p[i__4].r; // , expr subst
+                    q__2.r = q__3.r - q__4.r;
+                    q__2.i = q__3.i - q__4.i; // , expr subst
                     r_cnjg(&q__1, &q__2);
                     d__.r = q__1.r;
                     d__.i = q__1.i; // , expr subst
-                    if ((r__1 = d__.r, f2c_abs(r__1)) + (r__2 = r_imag(&d__), f2c_abs( r__2)) <= dmin__)
+                    if((r__1 = d__.r, f2c_abs(r__1)) + (r__2 = r_imag(&d__), f2c_abs(r__2))
+                       <= dmin__)
                     {
                         q__1.real = dmin__;
                         q__1.imag = 0.f; // , expr subst
                         d__.real = q__1.real;
                         d__.imag = q__1.imag; // , expr subst
                     }
-                    if ((r__1 = d__.r, f2c_abs(r__1)) + (r__2 = r_imag(&d__), f2c_abs( r__2)) < 1.f)
+                    if((r__1 = d__.r, f2c_abs(r__1)) + (r__2 = r_imag(&d__), f2c_abs(r__2)) < 1.f)
                     {
-                        if ((r__1 = sum.r, f2c_abs(r__1)) + (r__2 = r_imag(&sum), f2c_abs(r__2)) >= bignum * ((r__3 = d__.r, f2c_abs( r__3)) + (r__4 = r_imag(&d__), f2c_abs(r__4))))
+                        if((r__1 = sum.r, f2c_abs(r__1)) + (r__2 = r_imag(&sum), f2c_abs(r__2))
+                           >= bignum
+                                  * ((r__3 = d__.r, f2c_abs(r__3))
+                                     + (r__4 = r_imag(&d__), f2c_abs(r__4))))
                         {
-                            temp = 1.f / ((r__1 = sum.r, f2c_abs(r__1)) + (r__2 = r_imag(&sum), f2c_abs(r__2)));
+                            temp = 1.f
+                                   / ((r__1 = sum.r, f2c_abs(r__1))
+                                      + (r__2 = r_imag(&sum), f2c_abs(r__2)));
                             i__3 = j - 1;
                             for(jr = je; jr <= i__3; ++jr)
                             {
@@ -747,16 +783,17 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                     /* Computing MAX */
                     i__3 = j;
                     r__3 = xmax;
-                    r__4 = (r__1 = work[i__3].r, f2c_abs(r__1)) + ( r__2 = r_imag(&work[j]), f2c_abs(r__2)); // , expr subst
-                    xmax = fla_max(r__3,r__4);
+                    r__4 = (r__1 = work[i__3].r, f2c_abs(r__1))
+                           + (r__2 = r_imag(&work[j]), f2c_abs(r__2)); // , expr subst
+                    xmax = fla_max(r__3, r__4);
                     /* L100: */
                 }
                 /* Back transform eigenvector if HOWMNY='B'. */
                 if(ilback)
                 {
                     i__2 = *n + 1 - je;
-                    aocl_blas_cgemv("N", n, &i__2, &c_b2, &vl[je * vl_dim1 + 1], ldvl, &work[je],
-                                    &c__1, &c_b1, &work[*n + 1], &c__1);
+                    cgemv_("N", n, &i__2, &c_b2, &vl[je * vl_dim1 + 1], ldvl, &work[je], &c__1,
+                           &c_b1, &work[*n + 1], &c__1);
                     isrc = 2;
                     ibeg = 1;
                 }
@@ -773,8 +810,10 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                     /* Computing MAX */
                     i__3 = (isrc - 1) * *n + jr;
                     r__3 = xmax;
-                    r__4 = (r__1 = work[i__3].r, f2c_abs(r__1)) + ( r__2 = r_imag(&work[(isrc - 1) * *n + jr]), f2c_abs( r__2)); // , expr subst
-                    xmax = fla_max(r__3,r__4);
+                    r__4 = (r__1 = work[i__3].r, f2c_abs(r__1))
+                           + (r__2 = r_imag(&work[(isrc - 1) * *n + jr]),
+                              f2c_abs(r__2)); // , expr subst
+                    xmax = fla_max(r__3, r__4);
                     /* L110: */
                 }
                 if(xmax > safmin)
@@ -785,10 +824,10 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                     {
                         i__3 = jr + ieig * vl_dim1;
                         i__4 = (isrc - 1) * *n + jr;
-                        q__1.real = temp * work[i__4].real;
-                        q__1.imag = temp * work[i__4].imag; // , expr subst
-                        vl[i__3].real = q__1.real;
-                        vl[i__3].imag = q__1.imag; // , expr subst
+                        q__1.r = temp * work[i__4].r;
+                        q__1.i = temp * work[i__4].i; // , expr subst
+                        vl[i__3].r = q__1.r;
+                        vl[i__3].i = q__1.i; // , expr subst
                         /* L120: */
                     }
                 }
@@ -828,7 +867,10 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                 --ieig;
                 i__1 = je + je * s_dim1;
                 i__2 = je + je * p_dim1;
-                if ((r__2 = s[i__1].r, f2c_abs(r__2)) + (r__3 = r_imag(&s[je + je * s_dim1]), f2c_abs(r__3)) <= safmin && (r__1 = p[i__2].r, f2c_abs(r__1)) <= safmin)
+                if((r__2 = s[i__1].r, f2c_abs(r__2))
+                           + (r__3 = r_imag(&s[je + je * s_dim1]), f2c_abs(r__3))
+                       <= safmin
+                   && (r__1 = p[i__2].r, f2c_abs(r__1)) <= safmin)
                 {
                     /* Singular matrix pencil -- return unit eigenvector */
                     i__1 = *n;
@@ -850,10 +892,12 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                 /* Computing MAX */
                 i__1 = je + je * s_dim1;
                 i__2 = je + je * p_dim1;
-                r__4 = ((r__2 = s[i__1].r, f2c_abs(r__2)) + (r__3 = r_imag(&s[je + je * s_dim1]), f2c_abs(r__3))) * ascale;
+                r__4 = ((r__2 = s[i__1].r, f2c_abs(r__2))
+                        + (r__3 = r_imag(&s[je + je * s_dim1]), f2c_abs(r__3)))
+                       * ascale;
                 r__5 = (r__1 = p[i__2].r, f2c_abs(r__1)) * bscale;
-                r__4 = fla_max(r__4,r__5); // ; expr subst
-                temp = 1.f / fla_max(r__4,safmin);
+                r__4 = fla_max(r__4, r__5); // ; expr subst
+                temp = 1.f / fla_max(r__4, safmin);
                 i__1 = je + je * s_dim1;
                 q__2.real = temp * s[i__1].real;
                 q__2.imag = temp * s[i__1].imag; // , expr subst
@@ -870,30 +914,37 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                 bcoeff.imag = q__1.imag; // , expr subst
                 /* Scale to avoid underflow */
                 lsa = f2c_abs(sbeta) >= safmin && f2c_abs(acoeff) < small_val;
-                lsb = (r__1 = salpha.r, f2c_abs(r__1)) + (r__2 = r_imag(&salpha), f2c_abs(r__2)) >= safmin && (r__3 = bcoeff.r, f2c_abs(r__3)) + (r__4 = r_imag(&bcoeff), f2c_abs(r__4)) < small_val;
+                lsb = (r__1 = salpha.r, f2c_abs(r__1)) + (r__2 = r_imag(&salpha), f2c_abs(r__2))
+                          >= safmin
+                      && (r__3 = bcoeff.r, f2c_abs(r__3)) + (r__4 = r_imag(&bcoeff), f2c_abs(r__4))
+                             < small_val;
                 scale = 1.f;
                 if(lsa)
                 {
-                    scale = small_val / f2c_abs(sbeta) * fla_min(anorm,big);
+                    scale = small_val / f2c_abs(sbeta) * fla_min(anorm, big);
                 }
                 if(lsb)
                 {
                     /* Computing MAX */
                     r__3 = scale;
-                    r__4 = small_val / ((r__1 = salpha.r, f2c_abs(r__1)) + (r__2 = r_imag(&salpha), f2c_abs(r__2))) * fla_min( bnorm,big); // , expr subst
-                    scale = fla_max(r__3,r__4);
+                    r__4 = small_val
+                           / ((r__1 = salpha.r, f2c_abs(r__1))
+                              + (r__2 = r_imag(&salpha), f2c_abs(r__2)))
+                           * fla_min(bnorm, big); // , expr subst
+                    scale = fla_max(r__3, r__4);
                 }
                 if(lsa || lsb)
                 {
                     /* Computing MIN */
                     /* Computing MAX */
                     r__5 = 1.f, r__6 = f2c_abs(acoeff);
-                    r__5 = fla_max(r__5,r__6);
-                    r__6 = (r__1 = bcoeff.r, f2c_abs(r__1)) + (r__2 = r_imag(&bcoeff), f2c_abs(r__2)); // ; expr subst
+                    r__5 = fla_max(r__5, r__6);
+                    r__6 = (r__1 = bcoeff.r, f2c_abs(r__1))
+                           + (r__2 = r_imag(&bcoeff), f2c_abs(r__2)); // ; expr subst
                     r__3 = scale;
-                    r__4 = 1.f / (safmin * fla_max(r__5,r__6)); // , expr subst
-                    scale = fla_min(r__3,r__4);
-                    if (lsa)
+                    r__4 = 1.f / (safmin * fla_max(r__5, r__6)); // , expr subst
+                    scale = fla_min(r__3, r__4);
+                    if(lsa)
                     {
                         acoeff = ascale * (scale * sbeta);
                     }
@@ -919,7 +970,7 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                     }
                 }
                 acoefa = f2c_abs(acoeff);
-                bcoefa = (r__1 = bcoeff.r, f2c_abs(r__1)) + (r__2 = r_imag(& bcoeff), f2c_abs(r__2));
+                bcoefa = (r__1 = bcoeff.r, f2c_abs(r__1)) + (r__2 = r_imag(&bcoeff), f2c_abs(r__2));
                 xmax = 1.f;
                 i__1 = *n;
                 for(jr = 1; jr <= i__1; ++jr)
@@ -935,8 +986,8 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                 /* Computing MAX */
                 r__1 = ulp * acoefa * anorm;
                 r__2 = ulp * bcoefa * bnorm;
-                r__1 = fla_max(r__1,r__2); // ; expr subst
-                dmin__ = fla_max(r__1,safmin);
+                r__1 = fla_max(r__1, r__2); // ; expr subst
+                dmin__ = fla_max(r__1, safmin);
                 /* Triangular solve of (a A - b B) x = 0 (columnwise) */
                 /* WORK(1:j-1) contains sums w, */
                 /* WORK(j+1:JE) contains x */
@@ -948,17 +999,17 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                     q__2.real = acoeff * s[i__3].real;
                     q__2.imag = acoeff * s[i__3].imag; // , expr subst
                     i__4 = jr + je * p_dim1;
-                    q__3.real = bcoeff.real * p[i__4].real - bcoeff.imag * p[i__4].imag;
-                    q__3.imag = bcoeff.real * p[i__4].imag + bcoeff.imag * p[i__4].real; // , expr subst
-                    q__1.real = q__2.real - q__3.real;
-                    q__1.imag = q__2.imag - q__3.imag; // , expr subst
-                    work[i__2].real = q__1.real;
-                    work[i__2].imag = q__1.imag; // , expr subst
+                    q__3.r = bcoeff.r * p[i__4].r - bcoeff.i * p[i__4].i;
+                    q__3.i = bcoeff.r * p[i__4].i + bcoeff.i * p[i__4].r; // , expr subst
+                    q__1.r = q__2.r - q__3.r;
+                    q__1.i = q__2.i - q__3.i; // , expr subst
+                    work[i__2].r = q__1.r;
+                    work[i__2].i = q__1.i; // , expr subst
                     /* L170: */
                 }
                 i__1 = je;
-                work[i__1].real = 1.f;
-                work[i__1].imag = 0.f; // , expr subst
+                work[i__1].r = 1.f;
+                work[i__1].i = 0.f; // , expr subst
                 for(j = je - 1; j >= 1; --j)
                 {
                     /* Form x(j) := - w(j) / d */
@@ -968,25 +1019,32 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                     q__2.imag = acoeff * s[i__1].imag; // , expr subst
                     i__2 = j + j * p_dim1;
                     q__3.r = bcoeff.r * p[i__2].r - bcoeff.i * p[i__2].i;
-                    q__3.i = bcoeff.r * p[i__2].i + bcoeff.i * p[i__2] .r; // , expr subst
+                    q__3.i = bcoeff.r * p[i__2].i + bcoeff.i * p[i__2].r; // , expr subst
                     q__1.r = q__2.r - q__3.r;
                     q__1.i = q__2.i - q__3.i; // , expr subst
                     d__.r = q__1.r;
                     d__.i = q__1.i; // , expr subst
-                    if ((r__1 = d__.r, f2c_abs(r__1)) + (r__2 = r_imag(&d__), f2c_abs( r__2)) <= dmin__)
+                    if((r__1 = d__.r, f2c_abs(r__1)) + (r__2 = r_imag(&d__), f2c_abs(r__2))
+                       <= dmin__)
                     {
                         q__1.real = dmin__;
                         q__1.imag = 0.f; // , expr subst
                         d__.real = q__1.real;
                         d__.imag = q__1.imag; // , expr subst
                     }
-                    if ((r__1 = d__.r, f2c_abs(r__1)) + (r__2 = r_imag(&d__), f2c_abs( r__2)) < 1.f)
+                    if((r__1 = d__.r, f2c_abs(r__1)) + (r__2 = r_imag(&d__), f2c_abs(r__2)) < 1.f)
                     {
                         i__1 = j;
-                        if ((r__1 = work[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag( &work[j]), f2c_abs(r__2)) >= bignum * ((r__3 = d__.r, f2c_abs(r__3)) + (r__4 = r_imag(&d__), f2c_abs( r__4))))
+                        if((r__1 = work[i__1].r, f2c_abs(r__1))
+                               + (r__2 = r_imag(&work[j]), f2c_abs(r__2))
+                           >= bignum
+                                  * ((r__3 = d__.r, f2c_abs(r__3))
+                                     + (r__4 = r_imag(&d__), f2c_abs(r__4))))
                         {
                             i__1 = j;
-                            temp = 1.f / ((r__1 = work[i__1].r, f2c_abs(r__1)) + ( r__2 = r_imag(&work[j]), f2c_abs(r__2)));
+                            temp = 1.f
+                                   / ((r__1 = work[i__1].r, f2c_abs(r__1))
+                                      + (r__2 = r_imag(&work[j]), f2c_abs(r__2)));
                             i__1 = je;
                             for(jr = 1; jr <= i__1; ++jr)
                             {
@@ -1007,15 +1065,19 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                     cladiv_f2c_(&q__1, &q__2, &d__);
                     work[i__1].r = q__1.r;
                     work[i__1].i = q__1.i; // , expr subst
-                    if (j > 1)
+                    if(j > 1)
                     {
                         /* w = w + x(j)*(a S(*,j) - b P(*,j) ) with scaling */
                         i__1 = j;
-                        if ((r__1 = work[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag( &work[j]), f2c_abs(r__2)) > 1.f)
+                        if((r__1 = work[i__1].r, f2c_abs(r__1))
+                               + (r__2 = r_imag(&work[j]), f2c_abs(r__2))
+                           > 1.f)
                         {
                             i__1 = j;
-                            temp = 1.f / ((r__1 = work[i__1].r, f2c_abs(r__1)) + ( r__2 = r_imag(&work[j]), f2c_abs(r__2)));
-                            if (acoefa * rwork[j] + bcoefa * rwork[*n + j] >= bignum * temp)
+                            temp = 1.f
+                                   / ((r__1 = work[i__1].r, f2c_abs(r__1))
+                                      + (r__2 = r_imag(&work[j]), f2c_abs(r__2)));
+                            if(acoefa * rwork[j] + bcoefa * rwork[*n + j] >= bignum * temp)
                             {
                                 i__1 = je;
                                 for(jr = 1; jr <= i__1; ++jr)
@@ -1036,27 +1098,27 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                         ca.real = q__1.real;
                         ca.imag = q__1.imag; // , expr subst
                         i__1 = j;
-                        q__1.real = bcoeff.real * work[i__1].real - bcoeff.imag * work[i__1].imag;
-                        q__1.imag = bcoeff.real * work[i__1].imag + bcoeff.imag * work[i__1].real; // , expr subst
-                        cb.real = q__1.real;
-                        cb.imag = q__1.imag; // , expr subst
+                        q__1.r = bcoeff.r * work[i__1].r - bcoeff.i * work[i__1].i;
+                        q__1.i = bcoeff.r * work[i__1].i + bcoeff.i * work[i__1].r; // , expr subst
+                        cb.r = q__1.r;
+                        cb.i = q__1.i; // , expr subst
                         i__1 = j - 1;
                         for(jr = 1; jr <= i__1; ++jr)
                         {
                             i__2 = jr;
                             i__3 = jr;
                             i__4 = jr + j * s_dim1;
-                            q__3.real = ca.real * s[i__4].real - ca.imag * s[i__4].imag;
-                            q__3.imag = ca.real * s[i__4].imag + ca.imag * s[i__4].real; // , expr subst
-                            q__2.real = work[i__3].real + q__3.real;
-                            q__2.imag = work[i__3].imag + q__3.imag; // , expr subst
+                            q__3.r = ca.r * s[i__4].r - ca.i * s[i__4].i;
+                            q__3.i = ca.r * s[i__4].i + ca.i * s[i__4].r; // , expr subst
+                            q__2.r = work[i__3].r + q__3.r;
+                            q__2.i = work[i__3].i + q__3.i; // , expr subst
                             i__5 = jr + j * p_dim1;
-                            q__4.real = cb.real * p[i__5].real - cb.imag * p[i__5].imag;
-                            q__4.imag = cb.real * p[i__5].imag + cb.imag * p[i__5].real; // , expr subst
-                            q__1.real = q__2.real - q__4.real;
-                            q__1.imag = q__2.imag - q__4.imag; // , expr subst
-                            work[i__2].real = q__1.real;
-                            work[i__2].imag = q__1.imag; // , expr subst
+                            q__4.r = cb.r * p[i__5].r - cb.i * p[i__5].i;
+                            q__4.i = cb.r * p[i__5].i + cb.i * p[i__5].r; // , expr subst
+                            q__1.r = q__2.r - q__4.r;
+                            q__1.i = q__2.i - q__4.i; // , expr subst
+                            work[i__2].r = q__1.r;
+                            work[i__2].i = q__1.i; // , expr subst
                             /* L200: */
                         }
                     }
@@ -1065,8 +1127,8 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                 /* Back transform eigenvector if HOWMNY='B'. */
                 if(ilback)
                 {
-                    aocl_blas_cgemv("N", n, &je, &c_b2, &vr[vr_offset], ldvr, &work[1], &c__1,
-                                    &c_b1, &work[*n + 1], &c__1);
+                    cgemv_("N", n, &je, &c_b2, &vr[vr_offset], ldvr, &work[1], &c__1, &c_b1,
+                           &work[*n + 1], &c__1);
                     isrc = 2;
                     iend = *n;
                 }
@@ -1083,8 +1145,10 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                     /* Computing MAX */
                     i__2 = (isrc - 1) * *n + jr;
                     r__3 = xmax;
-                    r__4 = (r__1 = work[i__2].r, f2c_abs(r__1)) + ( r__2 = r_imag(&work[(isrc - 1) * *n + jr]), f2c_abs( r__2)); // , expr subst
-                    xmax = fla_max(r__3,r__4);
+                    r__4 = (r__1 = work[i__2].r, f2c_abs(r__1))
+                           + (r__2 = r_imag(&work[(isrc - 1) * *n + jr]),
+                              f2c_abs(r__2)); // , expr subst
+                    xmax = fla_max(r__3, r__4);
                     /* L220: */
                 }
                 if(xmax > safmin)
@@ -1095,10 +1159,10 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                     {
                         i__2 = jr + ieig * vr_dim1;
                         i__3 = (isrc - 1) * *n + jr;
-                        q__1.real = temp * work[i__3].real;
-                        q__1.imag = temp * work[i__3].imag; // , expr subst
-                        vr[i__2].real = q__1.real;
-                        vr[i__2].imag = q__1.imag; // , expr subst
+                        q__1.r = temp * work[i__3].r;
+                        q__1.i = temp * work[i__3].i; // , expr subst
+                        vr[i__2].r = q__1.r;
+                        vr[i__2].i = q__1.i; // , expr subst
                         /* L230: */
                     }
                 }

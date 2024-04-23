@@ -153,15 +153,18 @@
 /* > \ingroup complexGBauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integer *ldab, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, char *equed)
+void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integer *ldab,
+             real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, char *equed)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"claqgb inputs: m %lld, n %lld, kl %lld, ku %lld, ldab %lld",*m, *n, *kl, *ku, *ldab);
+    snprintf(buffer, 256, "claqgb inputs: m %lld, n %lld, kl %lld, ku %lld, ldab %lld", *m, *n, *kl,
+             *ku, *ldab);
 #else
-    snprintf(buffer, 256,"claqgb inputs: m %d, n %d, kl %d, ku %d, ldab %d",*m, *n, *kl, *ku, *ldab);
+    snprintf(buffer, 256, "claqgb inputs: m %d, n %d, kl %d, ku %d, ldab %d", *m, *n, *kl, *ku,
+             *ldab);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -208,7 +211,7 @@ void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
     /* Initialize LARGE and SMALL. */
     small_val = slamch_("Safe minimum") / slamch_("Precision");
     large = 1.f / small_val;
-    if (*rowcnd >= .1f && *amax >= small_val && *amax <= large)
+    if(*rowcnd >= .1f && *amax >= small_val && *amax <= large)
     {
         /* No row scaling */
         if(*colcnd >= .1f)
@@ -229,10 +232,8 @@ void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
                 /* Computing MIN */
                 i__5 = *m;
                 i__6 = j + *kl; // , expr subst
-                i__4 = fla_min(i__5,i__6);
-                for (i__ = fla_max(i__2,i__3);
-                        i__ <= i__4;
-                        ++i__)
+                i__4 = fla_min(i__5, i__6);
+                for(i__ = fla_max(i__2, i__3); i__ <= i__4; ++i__)
                 {
                     i__2 = *ku + 1 + i__ - j + j * ab_dim1;
                     i__3 = *ku + 1 + i__ - j + j * ab_dim1;
@@ -259,18 +260,16 @@ void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
             /* Computing MIN */
             i__5 = *m;
             i__6 = j + *kl; // , expr subst
-            i__3 = fla_min(i__5,i__6);
-            for (i__ = fla_max(i__4,i__2);
-                    i__ <= i__3;
-                    ++i__)
+            i__3 = fla_min(i__5, i__6);
+            for(i__ = fla_max(i__4, i__2); i__ <= i__3; ++i__)
             {
                 i__4 = *ku + 1 + i__ - j + j * ab_dim1;
                 i__2 = i__;
                 i__5 = *ku + 1 + i__ - j + j * ab_dim1;
-                q__1.real = r__[i__2] * ab[i__5].real;
-                q__1.imag = r__[i__2] * ab[i__5].imag; // , expr subst
-                ab[i__4].real = q__1.real;
-                ab[i__4].imag = q__1.imag; // , expr subst
+                q__1.r = r__[i__2] * ab[i__5].r;
+                q__1.i = r__[i__2] * ab[i__5].i; // , expr subst
+                ab[i__4].r = q__1.r;
+                ab[i__4].i = q__1.i; // , expr subst
                 /* L30: */
             }
             /* L40: */
@@ -290,10 +289,8 @@ void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
             /* Computing MIN */
             i__5 = *m;
             i__6 = j + *kl; // , expr subst
-            i__2 = fla_min(i__5,i__6);
-            for (i__ = fla_max(i__3,i__4);
-                    i__ <= i__2;
-                    ++i__)
+            i__2 = fla_min(i__5, i__6);
+            for(i__ = fla_max(i__3, i__4); i__ <= i__2; ++i__)
             {
                 i__3 = *ku + 1 + i__ - j + j * ab_dim1;
                 r__1 = cj * r__[i__];

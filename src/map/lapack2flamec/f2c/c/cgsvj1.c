@@ -1,20 +1,30 @@
-/* ../netlib/v3.9.0/cgsvj1.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/cgsvj1.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__0 = 0;
 static real c_b18 = 1.f;
-/* > \brief \b CGSVJ1 pre-processor for the routine cgesvj, applies Jacobi rotations targeting only particular pivots. */
+/* > \brief \b CGSVJ1 pre-processor for the routine cgesvj, applies Jacobi rotations targeting only
+ * particular pivots. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CGSVJ1 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgsvj1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgsvj1.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgsvj1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgsvj1.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgsvj1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgsvj1.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -224,15 +234,22 @@ static real c_b18 = 1.f;
 /* > Zlatko Drmac (Zagreb, Croatia) */
 /* ===================================================================== */
 /* Subroutine */
-void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, integer *lda, complex *d__, real *sva, integer *mv, complex *v, integer *ldv, real *eps, real *sfmin, real *tol, integer * nsweep, complex *work, integer *lwork, integer *info)
+void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, integer *lda,
+             complex *d__, real *sva, integer *mv, complex *v, integer *ldv, real *eps, real *sfmin,
+             real *tol, integer *nsweep, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgsvj1 inputs: jobv %c, m %lld, n %lld, n1 %lld, lda %lld, mv %lld, ldv %lld, nsweep %lld",*jobv, *m, *n, *n1, *lda, *mv, *ldv, *nsweep);
+    snprintf(
+        buffer, 256,
+        "cgsvj1 inputs: jobv %c, m %lld, n %lld, n1 %lld, lda %lld, mv %lld, ldv %lld, nsweep %lld",
+        *jobv, *m, *n, *n1, *lda, *mv, *ldv, *nsweep);
 #else
-    snprintf(buffer, 256,"cgsvj1 inputs: jobv %c, m %d, n %d, n1 %d, lda %d, mv %d, ldv %d, nsweep %d",*jobv, *m, *n, *n1, *lda, *mv, *ldv, *nsweep);
+    snprintf(buffer, 256,
+             "cgsvj1 inputs: jobv %c, m %d, n %d, n1 %d, lda %d, mv %d, ldv %d, nsweep %d", *jobv,
+             *m, *n, *n1, *lda, *mv, *ldv, *nsweep);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -256,28 +273,37 @@ void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, intege
     real aaqq;
     integer nblr, ierr;
     extern /* Subroutine */
-    void crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
+        void
+        crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
     complex ompq;
     real aapp0, aapq1, temp1;
     extern /* Complex */
-    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+        VOID
+        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     real apoaq, aqoap;
     extern logical lsame_(char *, char *, integer, integer);
     real theta, small_val;
     extern /* Subroutine */
-    void ccopy_(integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *),
+        cswap_(integer *, complex *, integer *, complex *, integer *);
     logical applv, rsvec;
     extern /* Subroutine */
-    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+        void
+        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical rotok;
     extern real scnrm2_(integer *, complex *, integer *);
     extern /* Subroutine */
-    void clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
+                integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer ijblsk, swband;
     extern integer isamax_(integer *, real *, integer *);
     integer blskip;
     extern /* Subroutine */
-    void classq_(integer *, complex *, integer *, real *, real *);
+        void
+        classq_(integer *, complex *, integer *, real *, real *);
     real mxaapq, thsign, mxsinj;
     integer emptsw, notrot, iswrot;
     real rootbig, rooteps;
@@ -320,43 +346,43 @@ void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, intege
     /* Function Body */
     applv = lsame_(jobv, "A", 1, 1);
     rsvec = lsame_(jobv, "V", 1, 1);
-    if (! (rsvec || applv || lsame_(jobv, "N", 1, 1)))
+    if(!(rsvec || applv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -2;
     }
-    else if (*n < 0 || *n > *m)
+    else if(*n < 0 || *n > *m)
     {
         *info = -3;
     }
-    else if (*n1 < 0)
+    else if(*n1 < 0)
     {
         *info = -4;
     }
-    else if (*lda < *m)
+    else if(*lda < *m)
     {
         *info = -6;
     }
-    else if ((rsvec || applv) && *mv < 0)
+    else if((rsvec || applv) && *mv < 0)
     {
         *info = -9;
     }
-    else if (rsvec && *ldv < *n || applv && *ldv < *mv)
+    else if(rsvec && *ldv < *n || applv && *ldv < *mv)
     {
         *info = -11;
     }
-    else if (*tol <= *eps)
+    else if(*tol <= *eps)
     {
         *info = -14;
     }
-    else if (*nsweep < 0)
+    else if(*nsweep < 0)
     {
         *info = -15;
     }
-    else if (*lwork < *m)
+    else if(*lwork < *m)
     {
         *info = -17;
     }
@@ -365,18 +391,18 @@ void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, intege
         *info = 0;
     }
     /* #:( */
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CGSVJ1", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (rsvec)
+    if(rsvec)
     {
         mvl = *n;
     }
-    else if (applv)
+    else if(applv)
     {
         mvl = *mv;
     }
@@ -394,15 +420,15 @@ void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, intege
     emptsw = *n1 * (*n - *n1);
     notrot = 0;
     /* .. Row-cyclic pivot strategy with de Rijk's pivoting .. */
-    kbl = fla_min(8,*n);
+    kbl = fla_min(8, *n);
     nblr = *n1 / kbl;
-    if (nblr * kbl != *n1)
+    if(nblr * kbl != *n1)
     {
         ++nblr;
     }
     /* .. the tiling is nblr-by-nblc [tiles] */
     nblc = (*n - *n1) / kbl;
-    if (nblc * kbl != *n - *n1)
+    if(nblc * kbl != *n - *n1)
     {
         ++nblc;
     }
@@ -410,7 +436,7 @@ void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, intege
     i__1 = kbl;
     blskip = i__1 * i__1 + 1;
     /* [TP] BLKSKIP is a tuning parameter that depends on SWBAND and KBL. */
-    rowskip = fla_min(5,kbl);
+    rowskip = fla_min(5, kbl);
     /* [TP] ROWSKIP is a tuning parameter. */
     swband = 0;
     /* [TP] SWBAND is a tuning parameter. It is meaningful and effective */
@@ -423,9 +449,7 @@ void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, intege
     /* |[x] [x] [x] * * * | */
     /* |[x] [x] [x] * * * | */
     i__1 = *nsweep;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* .. go go go ... */
         mxaapq = 0.f;
@@ -438,49 +462,41 @@ void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, intege
         /* of the rotations. New implementation, based on block transformations, */
         /* is under development. */
         i__2 = nblr;
-        for (ibr = 1;
-                ibr <= i__2;
-                ++ibr)
+        for(ibr = 1; ibr <= i__2; ++ibr)
         {
             igl = (ibr - 1) * kbl + 1;
             /* ... go to the off diagonal blocks */
             igl = (ibr - 1) * kbl + 1;
             /* DO 2010 jbc = ibr + 1, NBL */
             i__3 = nblc;
-            for (jbc = 1;
-                    jbc <= i__3;
-                    ++jbc)
+            for(jbc = 1; jbc <= i__3; ++jbc)
             {
                 jgl = (jbc - 1) * kbl + *n1 + 1;
                 /* doing the block at ( ibr, jbc ) */
                 ijblsk = 0;
                 /* Computing MIN */
                 i__5 = igl + kbl - 1;
-                i__4 = fla_min(i__5,*n1);
-                for (p = igl;
-                        p <= i__4;
-                        ++p)
+                i__4 = fla_min(i__5, *n1);
+                for(p = igl; p <= i__4; ++p)
                 {
                     aapp = sva[p];
-                    if (aapp > 0.f)
+                    if(aapp > 0.f)
                     {
                         pskipped = 0;
                         /* Computing MIN */
                         i__6 = jgl + kbl - 1;
-                        i__5 = fla_min(i__6,*n);
-                        for (q = jgl;
-                                q <= i__5;
-                                ++q)
+                        i__5 = fla_min(i__6, *n);
+                        for(q = jgl; q <= i__5; ++q)
                         {
                             aaqq = sva[q];
-                            if (aaqq > 0.f)
+                            if(aaqq > 0.f)
                             {
                                 aapp0 = aapp;
                                 /* .. M x 2 Jacobi SVD .. */
                                 /* Safe Gram matrix computation */
-                                if (aaqq >= 1.f)
+                                if(aaqq >= 1.f)
                                 {
-                                    if (aapp >= aaqq)
+                                    if(aapp >= aaqq)
                                     {
                                         rotok = small_val * aapp <= aaqq;
                                     }
@@ -488,9 +504,10 @@ void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, intege
                                     {
                                         rotok = small_val * aaqq <= aapp;
                                     }
-                                    if (aapp < big / aaqq)
+                                    if(aapp < big / aaqq)
                                     {
-                                        cdotc_f2c_(&q__3, m, &a[p * a_dim1 + 1], & c__1, &a[q * a_dim1 + 1], & c__1);
+                                        cdotc_f2c_(&q__3, m, &a[p * a_dim1 + 1], &c__1,
+                                                   &a[q * a_dim1 + 1], &c__1);
                                         q__2.r = q__3.r / aaqq;
                                         q__2.i = q__3.i / aaqq; // , expr subst
                                         q__1.r = q__2.r / aapp;
@@ -500,9 +517,11 @@ void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, intege
                                     }
                                     else
                                     {
-                                        ccopy_(m, &a[p * a_dim1 + 1], &c__1, & work[1], &c__1);
-                                        clascl_("G", &c__0, &c__0, &aapp, & c_b18, m, &c__1, &work[1], lda, &ierr);
-                                        cdotc_f2c_(&q__2, m, &work[1], &c__1, &a[ q * a_dim1 + 1], &c__1);
+                                        ccopy_(m, &a[p * a_dim1 + 1], &c__1, &work[1], &c__1);
+                                        clascl_("G", &c__0, &c__0, &aapp, &c_b18, m, &c__1,
+                                                &work[1], lda, &ierr);
+                                        cdotc_f2c_(&q__2, m, &work[1], &c__1, &a[q * a_dim1 + 1],
+                                                   &c__1);
                                         q__1.r = q__2.r / aaqq;
                                         q__1.i = q__2.i / aaqq; // , expr subst
                                         aapq.r = q__1.r;
@@ -511,7 +530,7 @@ void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, intege
                                 }
                                 else
                                 {
-                                    if (aapp >= aaqq)
+                                    if(aapp >= aaqq)
                                     {
                                         rotok = aapp <= aaqq / small_val;
                                     }
@@ -519,13 +538,14 @@ void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, intege
                                     {
                                         rotok = aaqq <= aapp / small_val;
                                     }
-                                    if (aapp > small_val / aaqq)
+                                    if(aapp > small_val / aaqq)
                                     {
-                                        cdotc_f2c_(&q__3, m, &a[p * a_dim1 + 1], & c__1, &a[q * a_dim1 + 1], & c__1);
-                                        r__1 = fla_max(aaqq,aapp);
+                                        cdotc_f2c_(&q__3, m, &a[p * a_dim1 + 1], &c__1,
+                                                   &a[q * a_dim1 + 1], &c__1);
+                                        r__1 = fla_max(aaqq, aapp);
                                         q__2.r = q__3.r / r__1;
                                         q__2.i = q__3.i / r__1; // , expr subst
-                                        r__2 = fla_min(aaqq,aapp);
+                                        r__2 = fla_min(aaqq, aapp);
                                         q__1.r = q__2.r / r__2;
                                         q__1.i = q__2.i / r__2; // , expr subst
                                         aapq.r = q__1.r;
@@ -533,9 +553,11 @@ void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, intege
                                     }
                                     else
                                     {
-                                        ccopy_(m, &a[q * a_dim1 + 1], &c__1, & work[1], &c__1);
-                                        clascl_("G", &c__0, &c__0, &aaqq, & c_b18, m, &c__1, &work[1], lda, &ierr);
-                                        cdotc_f2c_(&q__2, m, &a[p * a_dim1 + 1], & c__1, &work[1], &c__1);
+                                        ccopy_(m, &a[q * a_dim1 + 1], &c__1, &work[1], &c__1);
+                                        clascl_("G", &c__0, &c__0, &aaqq, &c_b18, m, &c__1,
+                                                &work[1], lda, &ierr);
+                                        cdotc_f2c_(&q__2, m, &a[p * a_dim1 + 1], &c__1, &work[1],
+                                                   &c__1);
                                         q__1.r = q__2.r / aapp;
                                         q__1.i = q__2.i / aapp; // , expr subst
                                         aapq.r = q__1.r;
@@ -547,9 +569,9 @@ void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, intege
                                 /* Computing MAX */
                                 r__1 = mxaapq;
                                 r__2 = -aapq1; // , expr subst
-                                mxaapq = fla_max(r__1,r__2);
+                                mxaapq = fla_max(r__1, r__2);
                                 /* TO rotate or NOT to rotate, THAT is the question ... */
-                                if (f2c_abs(aapq1) > *tol)
+                                if(f2c_abs(aapq1) > *tol)
                                 {
                                     r__1 = c_abs(&aapq);
                                     q__1.r = aapq.r / r__1;
@@ -560,29 +582,32 @@ void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, intege
                                     /* [RTD] ROTATED = ROTATED + 1 */
                                     pskipped = 0;
                                     ++iswrot;
-                                    if (rotok)
+                                    if(rotok)
                                     {
                                         aqoap = aaqq / aapp;
                                         apoaq = aapp / aaqq;
-                                        theta = (r__1 = aqoap - apoaq, f2c_abs( r__1)) * -.5f / aapq1;
-                                        if (aaqq > aapp0)
+                                        theta
+                                            = (r__1 = aqoap - apoaq, f2c_abs(r__1)) * -.5f / aapq1;
+                                        if(aaqq > aapp0)
                                         {
                                             theta = -theta;
                                         }
-                                        if (f2c_abs(theta) > bigtheta)
+                                        if(f2c_abs(theta) > bigtheta)
                                         {
                                             t = .5f / theta;
                                             cs = 1.f;
                                             r_cnjg(&q__2, &ompq);
                                             q__1.r = t * q__2.r;
                                             q__1.i = t * q__2.i; // , expr subst
-                                            crot_(m, &a[p * a_dim1 + 1], & c__1, &a[q * a_dim1 + 1], &c__1, &cs, &q__1);
-                                            if (rsvec)
+                                            crot_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1],
+                                                  &c__1, &cs, &q__1);
+                                            if(rsvec)
                                             {
                                                 r_cnjg(&q__2, &ompq);
                                                 q__1.r = t * q__2.r;
                                                 q__1.i = t * q__2.i; // , expr subst
-                                                crot_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], &c__1, &cs, &q__1);
+                                                crot_(&mvl, &v[p * v_dim1 + 1], &c__1,
+                                                      &v[q * v_dim1 + 1], &c__1, &cs, &q__1);
                                             }
                                             /* Computing MAX */
                                             r__1 = 0.f;
@@ -591,27 +616,27 @@ void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, intege
                                             /* Computing MAX */
                                             r__1 = 0.f;
                                             r__2 = 1.f - t * aqoap * aapq1; // , expr subst
-                                            aapp *= sqrt((fla_max(r__1,r__2)));
+                                            aapp *= sqrt((fla_max(r__1, r__2)));
                                             /* Computing MAX */
                                             r__1 = mxsinj;
                                             r__2 = f2c_abs(t); // , expr subst
-                                            mxsinj = fla_max(r__1,r__2);
+                                            mxsinj = fla_max(r__1, r__2);
                                         }
                                         else
                                         {
                                             /* .. choose correct signum for THETA and rotate */
                                             thsign = -r_sign(&c_b18, &aapq1);
-                                            if (aaqq > aapp0)
+                                            if(aaqq > aapp0)
                                             {
                                                 thsign = -thsign;
                                             }
-                                            t = 1.f / (theta + thsign * sqrt( theta * theta + 1.f));
+                                            t = 1.f / (theta + thsign * sqrt(theta * theta + 1.f));
                                             cs = sqrt(1.f / (t * t + 1.f));
                                             sn = t * cs;
                                             /* Computing MAX */
                                             r__1 = mxsinj;
                                             r__2 = f2c_abs(sn); // , expr subst
-                                            mxsinj = fla_max(r__1,r__2);
+                                            mxsinj = fla_max(r__1, r__2);
                                             /* Computing MAX */
                                             r__1 = 0.f;
                                             r__2 = t * apoaq * aapq1 + 1.f; // , expr subst
@@ -619,23 +644,25 @@ void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, intege
                                             /* Computing MAX */
                                             r__1 = 0.f;
                                             r__2 = 1.f - t * aqoap * aapq1; // , expr subst
-                                            aapp *= sqrt((fla_max(r__1,r__2)));
+                                            aapp *= sqrt((fla_max(r__1, r__2)));
                                             r_cnjg(&q__2, &ompq);
                                             q__1.r = sn * q__2.r;
                                             q__1.i = sn * q__2.i; // , expr subst
-                                            crot_(m, &a[p * a_dim1 + 1], & c__1, &a[q * a_dim1 + 1], &c__1, &cs, &q__1);
-                                            if (rsvec)
+                                            crot_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1],
+                                                  &c__1, &cs, &q__1);
+                                            if(rsvec)
                                             {
                                                 r_cnjg(&q__2, &ompq);
                                                 q__1.r = sn * q__2.r;
                                                 q__1.i = sn * q__2.i; // , expr subst
-                                                crot_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], &c__1, &cs, &q__1);
+                                                crot_(&mvl, &v[p * v_dim1 + 1], &c__1,
+                                                      &v[q * v_dim1 + 1], &c__1, &cs, &q__1);
                                             }
                                         }
                                         i__6 = p;
                                         i__7 = q;
                                         q__2.r = -d__[i__7].r;
-                                        q__2.i = -d__[ i__7].i; // , expr subst
+                                        q__2.i = -d__[i__7].i; // , expr subst
                                         q__1.r = q__2.r * ompq.r - q__2.i * ompq.i;
                                         q__1.i = q__2.r * ompq.i + q__2.i * ompq.r; // , expr subst
                                         d__[i__6].r = q__1.r;
@@ -643,37 +670,46 @@ void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, intege
                                     }
                                     else
                                     {
-                                        /* .. have to use modified Gram-Schmidt like transformation */
-                                        if (aapp > aaqq)
+                                        /* .. have to use modified Gram-Schmidt like transformation
+                                         */
+                                        if(aapp > aaqq)
                                         {
-                                            ccopy_(m, &a[p * a_dim1 + 1], & c__1, &work[1], &c__1);
-                                            clascl_("G", &c__0, &c__0, &aapp, &c_b18, m, &c__1, &work[1], lda, &ierr);
-                                            clascl_("G", &c__0, &c__0, &aaqq, &c_b18, m, &c__1, &a[q * a_dim1 + 1], lda, &ierr);
+                                            ccopy_(m, &a[p * a_dim1 + 1], &c__1, &work[1], &c__1);
+                                            clascl_("G", &c__0, &c__0, &aapp, &c_b18, m, &c__1,
+                                                    &work[1], lda, &ierr);
+                                            clascl_("G", &c__0, &c__0, &aaqq, &c_b18, m, &c__1,
+                                                    &a[q * a_dim1 + 1], lda, &ierr);
                                             q__1.r = -aapq.r;
                                             q__1.i = -aapq.i; // , expr subst
-                                            caxpy_(m, &q__1, &work[1], &c__1, &a[q * a_dim1 + 1], &c__1) ;
-                                            clascl_("G", &c__0, &c__0, &c_b18, &aaqq, m, &c__1, &a[q * a_dim1 + 1], lda, &ierr);
+                                            caxpy_(m, &q__1, &work[1], &c__1, &a[q * a_dim1 + 1],
+                                                   &c__1);
+                                            clascl_("G", &c__0, &c__0, &c_b18, &aaqq, m, &c__1,
+                                                    &a[q * a_dim1 + 1], lda, &ierr);
                                             /* Computing MAX */
                                             r__1 = 0.f;
                                             r__2 = 1.f - aapq1 * aapq1; // , expr subst
                                             sva[q] = aaqq * sqrt((fla_max(r__1, r__2)));
-                                            mxsinj = fla_max(mxsinj,*sfmin);
+                                            mxsinj = fla_max(mxsinj, *sfmin);
                                         }
                                         else
                                         {
-                                            ccopy_(m, &a[q * a_dim1 + 1], & c__1, &work[1], &c__1);
-                                            clascl_("G", &c__0, &c__0, &aaqq, &c_b18, m, &c__1, &work[1], lda, &ierr);
-                                            clascl_("G", &c__0, &c__0, &aapp, &c_b18, m, &c__1, &a[p * a_dim1 + 1], lda, &ierr);
+                                            ccopy_(m, &a[q * a_dim1 + 1], &c__1, &work[1], &c__1);
+                                            clascl_("G", &c__0, &c__0, &aaqq, &c_b18, m, &c__1,
+                                                    &work[1], lda, &ierr);
+                                            clascl_("G", &c__0, &c__0, &aapp, &c_b18, m, &c__1,
+                                                    &a[p * a_dim1 + 1], lda, &ierr);
                                             r_cnjg(&q__2, &aapq);
                                             q__1.r = -q__2.r;
                                             q__1.i = -q__2.i; // , expr subst
-                                            caxpy_(m, &q__1, &work[1], &c__1, &a[p * a_dim1 + 1], &c__1) ;
-                                            clascl_("G", &c__0, &c__0, &c_b18, &aapp, m, &c__1, &a[p * a_dim1 + 1], lda, &ierr);
+                                            caxpy_(m, &q__1, &work[1], &c__1, &a[p * a_dim1 + 1],
+                                                   &c__1);
+                                            clascl_("G", &c__0, &c__0, &c_b18, &aapp, m, &c__1,
+                                                    &a[p * a_dim1 + 1], lda, &ierr);
                                             /* Computing MAX */
                                             r__1 = 0.f;
                                             r__2 = 1.f - aapq1 * aapq1; // , expr subst
                                             sva[p] = aapp * sqrt((fla_max(r__1, r__2)));
-                                            mxsinj = fla_max(mxsinj,*sfmin);
+                                            mxsinj = fla_max(mxsinj, *sfmin);
                                         }
                                     }
                                     /* END IF ROTOK THEN ... ELSE */
@@ -681,9 +717,9 @@ void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, intege
                                     /* .. recompute SVA(q), SVA(p) */
                                     /* Computing 2nd power */
                                     r__1 = sva[q] / aaqq;
-                                    if (r__1 * r__1 <= rooteps)
+                                    if(r__1 * r__1 <= rooteps)
                                     {
-                                        if (aaqq < rootbig && aaqq > rootsfmin)
+                                        if(aaqq < rootbig && aaqq > rootsfmin)
                                         {
                                             sva[q] = scnrm2_(m, &a[q * a_dim1 + 1], &c__1);
                                         }
@@ -691,15 +727,15 @@ void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, intege
                                         {
                                             t = 0.f;
                                             aaqq = 1.f;
-                                            classq_(m, &a[q * a_dim1 + 1], & c__1, &t, &aaqq);
+                                            classq_(m, &a[q * a_dim1 + 1], &c__1, &t, &aaqq);
                                             sva[q] = t * sqrt(aaqq);
                                         }
                                     }
                                     /* Computing 2nd power */
                                     r__1 = aapp / aapp0;
-                                    if (r__1 * r__1 <= rooteps)
+                                    if(r__1 * r__1 <= rooteps)
                                     {
-                                        if (aapp < rootbig && aapp > rootsfmin)
+                                        if(aapp < rootbig && aapp > rootsfmin)
                                         {
                                             aapp = scnrm2_(m, &a[p * a_dim1 + 1], &c__1);
                                         }
@@ -707,7 +743,7 @@ void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, intege
                                         {
                                             t = 0.f;
                                             aapp = 1.f;
-                                            classq_(m, &a[p * a_dim1 + 1], & c__1, &t, &aapp);
+                                            classq_(m, &a[p * a_dim1 + 1], &c__1, &t, &aapp);
                                             aapp = t * sqrt(aapp);
                                         }
                                         sva[p] = aapp;
@@ -728,13 +764,13 @@ void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, intege
                                 ++pskipped;
                                 ++ijblsk;
                             }
-                            if (i__ <= swband && ijblsk >= blskip)
+                            if(i__ <= swband && ijblsk >= blskip)
                             {
                                 sva[p] = aapp;
                                 notrot = 0;
                                 goto L2011;
                             }
-                            if (i__ <= swband && pskipped > rowskip)
+                            if(i__ <= swband && pskipped > rowskip)
                             {
                                 aapp = -aapp;
                                 notrot = 0;
@@ -743,18 +779,18 @@ void cgsvj1_(char *jobv, integer *m, integer *n, integer *n1, complex *a, intege
                             /* L2200: */
                         }
                         /* end of the q-loop */
-L2203:
+                    L2203:
                         sva[p] = aapp;
                     }
                     else
                     {
-                        if (aapp == 0.f)
+                        if(aapp == 0.f)
                         {
                             /* Computing MIN */
                             i__5 = jgl + kbl - 1;
-                            notrot = notrot + fla_min(i__5,*n) - jgl + 1;
+                            notrot = notrot + fla_min(i__5, *n) - jgl + 1;
                         }
-                        if (aapp < 0.f)
+                        if(aapp < 0.f)
                         {
                             notrot = 0;
                         }
@@ -765,13 +801,11 @@ L2203:
                 /* L2010: */
             }
             /* end of the jbc-loop */
-L2011: /* 2011 bailed out of the jbc-loop */
+        L2011: /* 2011 bailed out of the jbc-loop */
             /* Computing MIN */
             i__4 = igl + kbl - 1;
-            i__3 = fla_min(i__4,*n);
-            for (p = igl;
-                    p <= i__3;
-                    ++p)
+            i__3 = fla_min(i__4, *n);
+            for(p = igl; p <= i__3; ++p)
             {
                 sva[p] = (r__1 = sva[p], f2c_abs(r__1));
                 /* L2012: */
@@ -781,7 +815,7 @@ L2011: /* 2011 bailed out of the jbc-loop */
         }
         /* 2000 :: end of the ibr-loop */
         /* .. update SVA(N) */
-        if (sva[*n] < rootbig && sva[*n] > rootsfmin)
+        if(sva[*n] < rootbig && sva[*n] > rootsfmin)
         {
             sva[*n] = scnrm2_(m, &a[*n * a_dim1 + 1], &c__1);
         }
@@ -793,15 +827,16 @@ L2011: /* 2011 bailed out of the jbc-loop */
             sva[*n] = t * sqrt(aapp);
         }
         /* Additional steering devices */
-        if (i__ < swband && (mxaapq <= roottol || iswrot <= *n))
+        if(i__ < swband && (mxaapq <= roottol || iswrot <= *n))
         {
             swband = i__;
         }
-        if (i__ > swband + 1 && mxaapq < sqrt((real) (*n)) * *tol && (real) (* n) * mxaapq * mxsinj < *tol)
+        if(i__ > swband + 1 && mxaapq < sqrt((real)(*n)) * *tol
+           && (real)(*n) * mxaapq * mxsinj < *tol)
         {
             goto L1994;
         }
-        if (notrot >= emptsw)
+        if(notrot >= emptsw)
         {
             goto L1994;
         }
@@ -817,13 +852,11 @@ L1994: /* #:) Reaching this point means numerical convergence after the i-th */
     /* #:) INFO = 0 confirms successful iterations. */
 L1995: /* Sort the vector SVA() of column norms. */
     i__1 = *n - 1;
-    for (p = 1;
-            p <= i__1;
-            ++p)
+    for(p = 1; p <= i__1; ++p)
     {
         i__2 = *n - p + 1;
         q = isamax_(&i__2, &sva[p], &c__1) + p - 1;
-        if (p != q)
+        if(p != q)
         {
             temp1 = sva[p];
             sva[p] = sva[q];
@@ -839,9 +872,9 @@ L1995: /* Sort the vector SVA() of column norms. */
             d__[i__2].r = aapq.r;
             d__[i__2].i = aapq.i; // , expr subst
             cswap_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1);
-            if (rsvec)
+            if(rsvec)
             {
-                cswap_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], & c__1);
+                cswap_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], &c__1);
             }
         }
         /* L5991: */
@@ -853,4 +886,3 @@ L1995: /* Sort the vector SVA() of column norms. */
     /* .. */
 }
 /* cgsvj1_ */
-

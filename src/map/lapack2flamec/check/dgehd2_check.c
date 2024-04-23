@@ -1,7 +1,8 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int dgehd2_check(integer *n, integer *ilo, integer *ihi, double *a, integer *lda, double *tau, double *work, integer *info)
+int dgehd2_check(integer *n, integer *ilo, integer *ihi, double *a, integer *lda, double *tau,
+                 double *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
@@ -18,15 +19,15 @@ int dgehd2_check(integer *n, integer *ilo, integer *ihi, double *a, integer *lda
     {
         *info = -1;
     }
-    else if (*ilo < 1 || *ilo > fla_max(1,*n))
+    else if(*ilo < 1 || *ilo > fla_max(1, *n))
     {
         *info = -2;
     }
-    else if (*ihi < fla_min(*ilo,*n) || *ihi > *n)
+    else if(*ihi < fla_min(*ilo, *n) || *ihi > *n)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }

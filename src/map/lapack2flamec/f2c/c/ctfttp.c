@@ -207,15 +207,15 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, integer *info)
+void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctfttp inputs: transr %c, uplo %c, n %lld",*transr, *uplo, *n);
+    snprintf(buffer, 256, "ctfttp inputs: transr %c, uplo %c, n %lld", *transr, *uplo, *n);
 #else
-    snprintf(buffer, 256,"ctfttp inputs: transr %c, uplo %c, n %d",*transr, *uplo, *n);
+    snprintf(buffer, 256, "ctfttp inputs: transr %c, uplo %c, n %d", *transr, *uplo, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -230,7 +230,8 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
     extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -258,11 +259,11 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
     *info = 0;
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
-    if (! normaltransr && ! lsame_(transr, "C", 1, 1))
+    if(!normaltransr && !lsame_(transr, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U", 1, 1))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }

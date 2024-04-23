@@ -4,11 +4,11 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {0.f, 0.f};
-static scomplex c_b2 = {1.f, 0.f};
-static aocl_int64_t c__0 = 0;
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c__2 = 2;
+static complex c_b1 = {0.f, 0.f};
+static complex c_b2 = {1.f, 0.f};
+static integer c__0 = 0;
+static integer c__1 = 1;
+static integer c__2 = 2;
 static real c_b41 = 1.f;
 /* > \brief \b CSTEQR */
 /* =========== DOCUMENTATION =========== */
@@ -136,15 +136,16 @@ on exit, D */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void csteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer *ldz, real *work, integer *info)
+void csteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer *ldz, real *work,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"csteqr inputs: compz %c, n %lld, ldz %lld",*compz, *n, *ldz);
+    snprintf(buffer, 256, "csteqr inputs: compz %c, n %lld, ldz %lld", *compz, *n, *ldz);
 #else
-    snprintf(buffer, 256,"csteqr inputs: compz %c, n %d, ldz %d",*compz, *n, *ldz);
+    snprintf(buffer, 256, "csteqr inputs: compz %c, n %d, ldz %d", *compz, *n, *ldz);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -163,38 +164,48 @@ void csteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     real tst, eps2;
     aocl_int64_t lend, jtot;
     extern /* Subroutine */
-    void slae2_(real *, real *, real *, real *, real *) ;
+        void
+        slae2_(real *, real *, real *, real *, real *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void clasr_(char *, char *, char *, integer *, integer *, real *, real *, complex *, integer *);
+        void
+        clasr_(char *, char *, char *, integer *, integer *, real *, real *, complex *, integer *);
     real anorm;
     aocl_int64_t lendm1, lendp1;
     extern /* Subroutine */
-    void cswap_(integer *, complex *, integer *, complex *, integer *);
+        void
+        cswap_(integer *, complex *, integer *, complex *, integer *);
     integer lendm1, lendp1;
     extern /* Subroutine */
-    void slaev2_(real *, real *, real *, real *, real *, real *, real *);
+        void
+        slaev2_(real *, real *, real *, real *, real *, real *, real *);
     extern real slapy2_(real *, real *);
     aocl_int64_t iscale;
     extern real slamch_(char *);
     extern /* Subroutine */
-    void claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
+        void
+        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real safmax;
     aocl_int64_t lendsv;
     extern /* Subroutine */
-    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
+                integer *, integer *);
     integer lendsv;
     extern /* Subroutine */
-    void slartg_(real *, real *, real *, real *, real * );
+        void
+        slartg_(real *, real *, real *, real *, real *);
     real ssfmin;
     aocl_int64_t nmaxit, icompz;
     real ssfmax;
     extern real slanst_(char *, integer *, real *, real *);
     extern /* Subroutine */
-    void slasrt_(char *, integer *, real *, integer *);
+        void
+        slasrt_(char *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -225,15 +236,15 @@ void csteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     --work;
     /* Function Body */
     *info = 0;
-    if (lsame_(compz, "N", 1, 1))
+    if(lsame_(compz, "N", 1, 1))
     {
         icompz = 0;
     }
-    else if (lsame_(compz, "V", 1, 1))
+    else if(lsame_(compz, "V", 1, 1))
     {
         icompz = 1;
     }
-    else if (lsame_(compz, "I", 1, 1))
+    else if(lsame_(compz, "I", 1, 1))
     {
         icompz = 2;
     }
@@ -249,7 +260,7 @@ void csteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     {
         *info = -2;
     }
-    else if (*ldz < 1 || icompz > 0 && *ldz < fla_max(1,*n))
+    else if(*ldz < 1 || icompz > 0 && *ldz < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -314,11 +325,12 @@ L10:
         for(m = l1; m <= i__1; ++m)
         {
             tst = (r__1 = e[m], f2c_abs(r__1));
-            if (tst == 0.f)
+            if(tst == 0.f)
             {
                 goto L30;
             }
-            if (tst <= sqrt((r__1 = d__[m], f2c_abs(r__1))) * sqrt((r__2 = d__[m + 1], f2c_abs(r__2))) * eps)
+            if(tst <= sqrt((r__1 = d__[m], f2c_abs(r__1)))
+                          * sqrt((r__2 = d__[m + 1], f2c_abs(r__2))) * eps)
             {
                 e[m] = 0.f;
                 goto L30;
@@ -362,7 +374,7 @@ L30:
         aocl_lapack_slascl("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &e[l], n, info);
     }
     /* Choose between QL and QR iteration */
-    if ((r__1 = d__[lend], f2c_abs(r__1)) < (r__2 = d__[l], f2c_abs(r__2)))
+    if((r__1 = d__[lend], f2c_abs(r__1)) < (r__2 = d__[l], f2c_abs(r__2)))
     {
         lend = lsv;
         l = lendsv;
@@ -381,7 +393,8 @@ L30:
                 /* Computing 2nd power */
                 r__2 = (r__1 = e[m], f2c_abs(r__1));
                 tst = r__2 * r__2;
-                if (tst <= eps2 * (r__1 = d__[m], f2c_abs(r__1)) * (r__2 = d__[m + 1], f2c_abs(r__2)) + safmin)
+                if(tst <= eps2 * (r__1 = d__[m], f2c_abs(r__1)) * (r__2 = d__[m + 1], f2c_abs(r__2))
+                              + safmin)
                 {
                     goto L60;
                 }
@@ -408,8 +421,8 @@ L30:
                 slaev2_(&d__[l], &e[l], &d__[l + 1], &rt1, &rt2, &c__, &s);
                 work[l] = c__;
                 work[*n - 1 + l] = s;
-                aocl_lapack_clasr("R", "V", "B", n, &c__2, &work[l], &work[*n - 1 + l],
-                                  &z__[l * z_dim1 + 1], ldz);
+                clasr_("R", "V", "B", n, &c__2, &work[l], &work[*n - 1 + l], &z__[l * z_dim1 + 1],
+                       ldz);
             }
             else
             {
@@ -496,7 +509,8 @@ L30:
                 /* Computing 2nd power */
                 r__2 = (r__1 = e[m - 1], f2c_abs(r__1));
                 tst = r__2 * r__2;
-                if (tst <= eps2 * (r__1 = d__[m], f2c_abs(r__1)) * (r__2 = d__[m - 1], f2c_abs(r__2)) + safmin)
+                if(tst <= eps2 * (r__1 = d__[m], f2c_abs(r__1)) * (r__2 = d__[m - 1], f2c_abs(r__2))
+                              + safmin)
                 {
                     goto L110;
                 }
@@ -523,8 +537,8 @@ L30:
                 slaev2_(&d__[l - 1], &e[l - 1], &d__[l], &rt1, &rt2, &c__, &s);
                 work[m] = c__;
                 work[*n - 1 + m] = s;
-                aocl_lapack_clasr("R", "V", "F", n, &c__2, &work[m], &work[*n - 1 + m],
-                                  &z__[(l - 1) * z_dim1 + 1], ldz);
+                clasr_("R", "V", "F", n, &c__2, &work[m], &work[*n - 1 + m],
+                       &z__[(l - 1) * z_dim1 + 1], ldz);
             }
             else
             {

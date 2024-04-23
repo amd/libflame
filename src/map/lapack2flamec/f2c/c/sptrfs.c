@@ -159,12 +159,15 @@ static real c_b11 = 1.f;
 /* > \ingroup realPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, real *b, integer *ldb, real *x, integer *ldx, real *ferr, real *berr, real *work, integer *info)
+void sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, real *b,
+             integer *ldb, real *x, integer *ldx, real *ferr, real *berr, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sptrfs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*n, *nrhs, *ldb, *ldx);
+    snprintf(buffer, 256,
+             "sptrfs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "", *n,
+             *nrhs, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -177,15 +180,18 @@ void sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, 
     real eps, safe1, safe2;
     integer count;
     extern /* Subroutine */
-    void saxpy_(integer *, real *, real *, integer *, real *, integer *);
+        void
+        saxpy_(integer *, real *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real lstres;
     extern /* Subroutine */
-    void spttrs_(integer *, integer *, real *, real *, real *, integer *, integer *);
+        void
+        spttrs_(integer *, integer *, real *, real *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -231,11 +237,11 @@ void sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, 
     {
         *info = -2;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -10;
     }
@@ -274,7 +280,7 @@ void sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, 
     L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - A * X. Also compute */
         /* f2c_abs(A)*f2c_abs(x) + f2c_abs(b) for use in the backward error bound. */
-        if (*n == 1)
+        if(*n == 1)
         {
             bi = b[j * b_dim1 + 1];
             dx = d__[1] * x[j * x_dim1 + 1];
@@ -319,15 +325,16 @@ void sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, 
             {
                 /* Computing MAX */
                 r__2 = s;
-                r__3 = (r__1 = work[*n + i__], f2c_abs(r__1)) / work[ i__]; // , expr subst
-                s = fla_max(r__2,r__3);
+                r__3 = (r__1 = work[*n + i__], f2c_abs(r__1)) / work[i__]; // , expr subst
+                s = fla_max(r__2, r__3);
             }
             else
             {
                 /* Computing MAX */
                 r__2 = s;
-                r__3 = ((r__1 = work[*n + i__], f2c_abs(r__1)) + safe1) / (work[i__] + safe1); // , expr subst
-                s = fla_max(r__2,r__3);
+                r__3 = ((r__1 = work[*n + i__], f2c_abs(r__1)) + safe1)
+                       / (work[i__] + safe1); // , expr subst
+                s = fla_max(r__2, r__3);
             }
             /* L40: */
         }
@@ -340,8 +347,8 @@ void sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, 
         if(berr[j] > eps && berr[j] * 2.f <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            aocl_lapack_spttrs(n, &c__1, &df[1], &ef[1], &work[*n + 1], n, info);
-            aocl_blas_saxpy(n, &c_b11, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            spttrs_(n, &c__1, &df[1], &ef[1], &work[*n + 1], n, info);
+            saxpy_(n, &c_b11, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;
@@ -406,7 +413,7 @@ void sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, 
             /* Computing MAX */
             r__2 = lstres;
             r__3 = (r__1 = x[i__ + j * x_dim1], f2c_abs(r__1)); // , expr subst
-            lstres = fla_max(r__2,r__3);
+            lstres = fla_max(r__2, r__3);
             /* L80: */
         }
         if(lstres != 0.f)

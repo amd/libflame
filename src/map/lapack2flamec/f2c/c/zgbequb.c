@@ -155,10 +155,14 @@
 /* > \ingroup complex16GBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zgbequb_(integer *m, integer *n, integer *kl, integer * ku, doublecomplex *ab, integer *ldab, doublereal *r__, doublereal * c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax, integer *info)
+void zgbequb_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab, integer *ldab,
+              doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd,
+              doublereal *amax, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgbequb inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS "",*m, *n, *kl, *ku, *ldab);
+    AOCL_DTL_SNPRINTF("zgbequb inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
+                      ", ldab %" FLA_IS "",
+                      *m, *n, *kl, *ku, *ldab);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2, d__3, d__4;
@@ -169,7 +173,8 @@ void zgbequb_(integer *m, integer *n, integer *kl, integer * ku, doublecomplex *
     doublereal radix, rcmin, rcmax;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum, logrdx, smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -228,7 +233,7 @@ void zgbequb_(integer *m, integer *n, integer *kl, integer * ku, doublecomplex *
     {
         i__1 = -(*info);
         xerbla_("ZGBEQUB", &i__1, (ftnlen)7);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible. */
@@ -237,7 +242,7 @@ void zgbequb_(integer *m, integer *n, integer *kl, integer * ku, doublecomplex *
         *rowcnd = 1.;
         *colcnd = 1.;
         *amax = 0.;
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants. Assume SMLNUM is a power of the radix. */
@@ -261,16 +266,16 @@ void zgbequb_(integer *m, integer *n, integer *kl, integer * ku, doublecomplex *
         i__2 = j - *ku;
         /* Computing MIN */
         i__4 = j + *kl;
-        i__3 = fla_min(i__4,*m);
-        for (i__ = fla_max(i__2,1);
-                i__ <= i__3;
-                ++i__)
+        i__3 = fla_min(i__4, *m);
+        for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
         {
             /* Computing MAX */
             i__2 = kd + i__ - j + j * ab_dim1;
             d__3 = r__[i__];
-            d__4 = (d__1 = ab[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&ab[kd + i__ - j + j * ab_dim1]), f2c_dabs(d__2)); // , expr subst
-            r__[i__] = fla_max(d__3,d__4);
+            d__4 = (d__1 = ab[i__2].r, f2c_dabs(d__1))
+                   + (d__2 = d_imag(&ab[kd + i__ - j + j * ab_dim1]),
+                      f2c_dabs(d__2)); // , expr subst
+            r__[i__] = fla_max(d__3, d__4);
             /* L20: */
         }
         /* L30: */
@@ -293,11 +298,11 @@ void zgbequb_(integer *m, integer *n, integer *kl, integer * ku, doublecomplex *
         /* Computing MAX */
         d__1 = rcmax;
         d__2 = r__[i__]; // , expr subst
-        rcmax = fla_max(d__1,d__2);
+        rcmax = fla_max(d__1, d__2);
         /* Computing MIN */
         d__1 = rcmin;
         d__2 = r__[i__]; // , expr subst
-        rcmin = fla_min(d__1,d__2);
+        rcmin = fla_min(d__1, d__2);
         /* L40: */
     }
     *amax = rcmax;
@@ -310,7 +315,7 @@ void zgbequb_(integer *m, integer *n, integer *kl, integer * ku, doublecomplex *
             if(r__[i__] == 0.)
             {
                 *info = i__;
-    AOCL_DTL_TRACE_LOG_EXIT
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L50: */
@@ -325,12 +330,12 @@ void zgbequb_(integer *m, integer *n, integer *kl, integer * ku, doublecomplex *
             /* Computing MIN */
             /* Computing MAX */
             d__2 = r__[i__];
-            d__1 = fla_max(d__2,smlnum);
-            r__[i__] = 1. / fla_min(d__1,bignum);
+            d__1 = fla_max(d__2, smlnum);
+            r__[i__] = 1. / fla_min(d__1, bignum);
             /* L60: */
         }
         /* Compute ROWCND = fla_min(R(I)) / fla_max(R(I)). */
-        *rowcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+        *rowcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
     }
     /* Compute column scale factors. */
     i__1 = *n;
@@ -348,16 +353,16 @@ void zgbequb_(integer *m, integer *n, integer *kl, integer * ku, doublecomplex *
         i__3 = j - *ku;
         /* Computing MIN */
         i__4 = j + *kl;
-        i__2 = fla_min(i__4,*m);
-        for (i__ = fla_max(i__3,1);
-                i__ <= i__2;
-                ++i__)
+        i__2 = fla_min(i__4, *m);
+        for(i__ = fla_max(i__3, 1); i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             i__3 = kd + i__ - j + j * ab_dim1;
             d__3 = c__[j];
-            d__4 = ((d__1 = ab[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&ab[kd + i__ - j + j * ab_dim1]), f2c_dabs(d__2))) * r__[i__]; // , expr subst
-            c__[j] = fla_max(d__3,d__4);
+            d__4 = ((d__1 = ab[i__3].r, f2c_dabs(d__1))
+                    + (d__2 = d_imag(&ab[kd + i__ - j + j * ab_dim1]), f2c_dabs(d__2)))
+                   * r__[i__]; // , expr subst
+            c__[j] = fla_max(d__3, d__4);
             /* L80: */
         }
         if(c__[j] > 0.)
@@ -376,11 +381,11 @@ void zgbequb_(integer *m, integer *n, integer *kl, integer * ku, doublecomplex *
         /* Computing MIN */
         d__1 = rcmin;
         d__2 = c__[j]; // , expr subst
-        rcmin = fla_min(d__1,d__2);
+        rcmin = fla_min(d__1, d__2);
         /* Computing MAX */
         d__1 = rcmax;
         d__2 = c__[j]; // , expr subst
-        rcmax = fla_max(d__1,d__2);
+        rcmax = fla_max(d__1, d__2);
         /* L100: */
     }
     if(rcmin == 0.)
@@ -392,7 +397,7 @@ void zgbequb_(integer *m, integer *n, integer *kl, integer * ku, doublecomplex *
             if(c__[j] == 0.)
             {
                 *info = *m + j;
-    AOCL_DTL_TRACE_LOG_EXIT
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L110: */
@@ -407,12 +412,12 @@ void zgbequb_(integer *m, integer *n, integer *kl, integer * ku, doublecomplex *
             /* Computing MIN */
             /* Computing MAX */
             d__2 = c__[j];
-            d__1 = fla_max(d__2,smlnum);
-            c__[j] = 1. / fla_min(d__1,bignum);
+            d__1 = fla_max(d__2, smlnum);
+            c__[j] = 1. / fla_min(d__1, bignum);
             /* L120: */
         }
         /* Compute COLCND = fla_min(C(J)) / fla_max(C(J)). */
-        *colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+        *colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

@@ -119,15 +119,22 @@ the unit diagonal elements of L are not stored. */
 /* > \ingroup doubleGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-void dgesv_(integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipiv, doublereal *b, integer *ldb, integer *info)
+void dgesv_(integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipiv, doublereal *b,
+            integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgesv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *lda, *ldb);
+    AOCL_DTL_SNPRINTF("dgesv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS
+                      "",
+                      *n, *nrhs, *lda, *ldb);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    void dgetrf_(integer *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dgetrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dgetrf_(integer *, integer *, doublereal *, integer *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        dgetrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *,
+                integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -161,11 +168,11 @@ void dgesv_(integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipi
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
@@ -177,12 +184,11 @@ void dgesv_(integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipi
         return;
     }
     /* Compute the LU factorization of A. */
-    aocl_lapack_dgetrf(n, n, &a[a_offset], lda, &ipiv[1], info);
+    dgetrf_(n, n, &a[a_offset], lda, &ipiv[1], info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */
-        aocl_lapack_dgetrs("No transpose", n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb,
-                           info);
+        dgetrs_("No transpose", n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

@@ -1,7 +1,9 @@
 #include "FLA_f2c.h" /* Table of constant values */
+#include "FLA_lapack2flame_return_defs.h"
 static integer c__1 = 1;
 static integer c_n1 = -1;
-int cgeqrfp_check(integer *m, integer *n, scomplex *a, integer * lda, scomplex *tau, scomplex *work, integer *lwork, integer *info)
+int cgeqrfp_check(integer *m, integer *n, scomplex *a, integer *lda, scomplex *tau, scomplex *work,
+                  integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
@@ -30,11 +32,11 @@ int cgeqrfp_check(integer *m, integer *n, scomplex *a, integer * lda, scomplex *
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
-    else if (*lwork < fla_max(1,*n) && ! lquery)
+    else if(*lwork < fla_max(1, *n) && !lquery)
     {
         *info = -7;
     }
@@ -49,8 +51,8 @@ int cgeqrfp_check(integer *m, integer *n, scomplex *a, integer * lda, scomplex *
         return LAPACK_QUERY_RETURN;
     }
     /* Quick return if possible */
-    k = fla_min(*m,*n);
-    if (k == 0)
+    k = fla_min(*m, *n);
+    if(k == 0)
     {
         work[1].real = 1.f;
         work[1].imag = 0.f; // , expr subst

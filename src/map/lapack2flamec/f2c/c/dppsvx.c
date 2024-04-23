@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief <b> DPPSVX computes the solution to system of linear equations A * X = B for OTHER
  * matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -314,10 +314,15 @@ if EQUED = 'Y', */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap, doublereal *afp, char *equed, doublereal *s, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal * rcond, doublereal *ferr, doublereal *berr, doublereal *work, integer * iwork, integer *info)
+void dppsvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublereal *ap, doublereal *afp,
+             char *equed, doublereal *s, doublereal *b, integer *ldb, doublereal *x, integer *ldx,
+             doublereal *rcond, doublereal *ferr, doublereal *berr, doublereal *work,
+             integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dppsvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *uplo, *n, *nrhs, *equed, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("dppsvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS
+                      ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS "",
+                      *fact, *uplo, *n, *nrhs, *equed, *ldb, *ldx);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -327,22 +332,35 @@ void dppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap,
     extern logical lsame_(char *, char *, integer, integer);
     doublereal scond, anorm;
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical equil, rcequ;
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern doublereal dlansp_(char *, char *, integer *, doublereal *, doublereal *);
     extern /* Subroutine */
-    void dppcon_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dlaqsp_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, char *);
+        void
+        dppcon_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
+                integer *, integer *),
+        dlaqsp_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, char *);
     integer infequ;
     extern /* Subroutine */
-    void dppequ_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dpprfs_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dpptrf_(char *, integer *, doublereal *, integer *);
+        void
+        dppequ_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
+                integer *),
+        dpprfs_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *,
+                doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *,
+                integer *),
+        dpptrf_(char *, integer *, doublereal *, integer *);
     doublereal smlnum;
     extern /* Subroutine */
-    void dpptrs_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *);
+        void
+        dpptrs_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -383,7 +401,7 @@ void dppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap,
     equil = lsame_(fact, "E", 1, 1);
     smlnum = 0.;
     bignum = 0.;
-    if (nofact || equil)
+    if(nofact || equil)
     {
         *(unsigned char *)equed = 'N';
         rcequ = FALSE_;
@@ -395,11 +413,11 @@ void dppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap,
         bignum = 1. / smlnum;
     }
     /* Test the input parameters. */
-    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    else if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -411,7 +429,7 @@ void dppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap,
     {
         *info = -4;
     }
-    else if (lsame_(fact, "F", 1, 1) && ! (rcequ || lsame_(equed, "N", 1, 1)))
+    else if(lsame_(fact, "F", 1, 1) && !(rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -7;
     }
@@ -427,11 +445,11 @@ void dppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap,
                 /* Computing MIN */
                 d__1 = smin;
                 d__2 = s[j]; // , expr subst
-                smin = fla_min(d__1,d__2);
+                smin = fla_min(d__1, d__2);
                 /* Computing MAX */
                 d__1 = smax;
                 d__2 = s[j]; // , expr subst
-                smax = fla_max(d__1,d__2);
+                smax = fla_max(d__1, d__2);
                 /* L10: */
             }
             if(smin <= 0.)
@@ -440,7 +458,7 @@ void dppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap,
             }
             else if(*n > 0)
             {
-                scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
+                scond = fla_max(smin, smlnum) / fla_min(smax, bignum);
             }
             else
             {
@@ -449,11 +467,11 @@ void dppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap,
         }
         if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -10;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -12;
             }
@@ -469,7 +487,7 @@ void dppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap,
     if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        aocl_lapack_dppequ(uplo, n, &ap[1], &s[1], &scond, &amax, &infequ);
+        dppequ_(uplo, n, &ap[1], &s[1], &scond, &amax, &infequ);
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
@@ -515,8 +533,8 @@ void dppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap,
     aocl_lapack_dpptrs(uplo, n, nrhs, &afp[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    aocl_lapack_dpprfs(uplo, n, nrhs, &ap[1], &afp[1], &b[b_offset], ldb, &x[x_offset], ldx,
-                       &ferr[1], &berr[1], &work[1], &iwork[1], info);
+    dpprfs_(uplo, n, nrhs, &ap[1], &afp[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1],
+            &berr[1], &work[1], &iwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(rcequ)

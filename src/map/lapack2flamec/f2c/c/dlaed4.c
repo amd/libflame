@@ -1,5 +1,8 @@
-/* dlaed4.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dlaed4.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLAED4 used by DSTEDC. Finds a single root of the secular equation. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -135,10 +138,11 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho, doublereal *dlam, integer *info)
+void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublereal *delta,
+             doublereal *rho, doublereal *dlam, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaed4 inputs: n %" FLA_IS ", i__ %" FLA_IS "",*n, *i__);
+    AOCL_DTL_SNPRINTF("dlaed4 inputs: n %" FLA_IS ", i__ %" FLA_IS "", *n, *i__);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     doublereal d__1;
@@ -159,7 +163,10 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
     aocl_int64_t niter;
     logical swtch;
     extern /* Subroutine */
-    void dlaed5_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlaed6_(integer *, logical *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
+        void
+        dlaed5_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
+        dlaed6_(integer *, logical *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *, integer *);
     logical swtch3;
     extern doublereal dlamch_(char *);
     logical orgati;
@@ -313,18 +320,18 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
         erretm = (-phi - psi) * 8. + erretm - phi + rhoinv + f2c_dabs(tau) * (dpsi + dphi);
         w = rhoinv + phi + psi;
         /* Test for convergence */
-        if (f2c_dabs(w) <= eps * erretm)
+        if(f2c_dabs(w) <= eps * erretm)
         {
             *dlam = d__[*i__] + tau;
             goto L250;
         }
         if(w <= 0.)
         {
-            dltlb = fla_max(dltlb,tau);
+            dltlb = fla_max(dltlb, tau);
         }
         else
         {
-            dltub = fla_min(dltub,tau);
+            dltub = fla_min(dltub, tau);
         }
         /* Calculate the new step */
         ++niter;
@@ -349,7 +356,7 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
         }
         else
         {
-            eta = b * 2. / (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1))) );
+            eta = b * 2. / (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1))));
         }
         /* Note, eta should be positive if w is negative, and */
         /* eta should be negative otherwise. However, */
@@ -404,18 +411,18 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
         for(niter = iter; niter <= 30; ++niter)
         {
             /* Test for convergence */
-            if (f2c_dabs(w) <= eps * erretm)
+            if(f2c_dabs(w) <= eps * erretm)
             {
                 *dlam = d__[*i__] + tau;
                 goto L250;
             }
             if(w <= 0.)
             {
-                dltlb = fla_max(dltlb,tau);
+                dltlb = fla_max(dltlb, tau);
             }
             else
             {
-                dltub = fla_min(dltub,tau);
+                dltub = fla_min(dltub, tau);
             }
             /* Calculate the new step */
             c__ = w - delta[*n - 1] * dpsi - delta[*n] * dphi;
@@ -423,11 +430,11 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
             b = delta[*n - 1] * delta[*n] * w;
             if(a >= 0.)
             {
-                eta = (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1)))) / ( c__ * 2.);
+                eta = (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1)))) / (c__ * 2.);
             }
             else
             {
-                eta = b * 2. / (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs( d__1))));
+                eta = b * 2. / (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1))));
             }
             /* Note, eta should be positive if w is negative, and */
             /* eta should be negative otherwise. However, */
@@ -475,7 +482,7 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
             temp = z__[*n] / delta[*n];
             phi = z__[*n] * temp;
             dphi = temp * temp;
-            erretm = (-phi - psi) * 8. + erretm - phi + rhoinv + f2c_dabs(tau) * ( dpsi + dphi);
+            erretm = (-phi - psi) * 8. + erretm - phi + rhoinv + f2c_dabs(tau) * (dpsi + dphi);
             w = rhoinv + phi + psi;
             /* L90: */
         }
@@ -496,20 +503,20 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
         psi = 0.;
         phi = 0.;
         i__1 = *n;
-        i__2 = *i__ - 1;
-
-        for(j = 1; j <= i__2; ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             delta[j] = d__[j] - d__[*i__] - midpt;
+            /* L100: */
+        }
+        psi = 0.;
+        i__1 = *i__ - 1;
+        for(j = 1; j <= i__1; ++j)
+        {
             psi += z__[j] * z__[j] / delta[j];
         }
-
-        delta[j] = d__[j] - d__[*i__] - midpt;
-        j++;
-        delta[j] = d__[j] - d__[*i__] - midpt;
-        j++;
-
-        for(; j <= i__1; ++j)
+        phi = 0.;
+        i__1 = *i__ + 2;
+        for(j = *n; j >= i__1; --j)
         {
             delta[j] = d__[j] - d__[*i__] - midpt;
             phi += z__[j] * z__[j] / delta[j];
@@ -525,11 +532,11 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
             b = z__[*i__] * z__[*i__] * del;
             if(a > 0.)
             {
-                tau = b * 2. / (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs( d__1))));
+                tau = b * 2. / (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1))));
             }
             else
             {
-                tau = (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1)))) / ( c__ * 2.);
+                tau = (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1)))) / (c__ * 2.);
             }
             dltlb = 0.;
             dltub = midpt;
@@ -543,7 +550,7 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
             b = z__[ip1] * z__[ip1] * del;
             if(a < 0.)
             {
-                tau = b * 2. / (a - sqrt((d__1 = a * a + b * 4. * c__, f2c_dabs( d__1))));
+                tau = b * 2. / (a - sqrt((d__1 = a * a + b * 4. * c__, f2c_dabs(d__1))));
             }
             else
             {
@@ -634,7 +641,7 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
         w += temp;
         erretm = (phi - psi) * 8. + erretm + rhoinv * 2. + f2c_dabs(temp) * 3. + f2c_dabs(tau) * dw;
         /* Test for convergence */
-        if (f2c_dabs(w) <= eps * erretm)
+        if(f2c_dabs(w) <= eps * erretm)
         {
             if(orgati)
             {
@@ -648,11 +655,11 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
         }
         if(w <= 0.)
         {
-            dltlb = fla_max(dltlb,tau);
+            dltlb = fla_max(dltlb, tau);
         }
         else
         {
-            dltub = fla_min(dltub,tau);
+            dltub = fla_min(dltub, tau);
         }
         /* Calculate the new step */
         ++niter;
@@ -689,11 +696,11 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
             }
             else if(a <= 0.)
             {
-                eta = (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1)))) / ( c__ * 2.);
+                eta = (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1)))) / (c__ * 2.);
             }
             else
             {
-                eta = b * 2. / (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs( d__1))));
+                eta = b * 2. / (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1))));
             }
         }
         else
@@ -717,7 +724,7 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
                 zz[2] = z__[iip1] * z__[iip1];
             }
             zz[1] = z__[ii] * z__[ii];
-            aocl_lapack_dlaed6(&niter, &orgati, &c__, &delta[iim1], zz, &w, &eta, info);
+            dlaed6_(&niter, &orgati, &c__, &delta[iim1], zz, &w, &eta, info);
             if(*info != 0)
             {
                 goto L250;
@@ -781,18 +788,19 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
         dw = dpsi + dphi + temp * temp;
         temp = z__[ii] * temp;
         w = rhoinv + phi + psi + temp;
-        erretm = (phi - psi) * 8. + erretm + rhoinv * 2. + f2c_dabs(temp) * 3. + ( d__1 = tau + eta, f2c_dabs(d__1)) * dw;
+        erretm = (phi - psi) * 8. + erretm + rhoinv * 2. + f2c_dabs(temp) * 3.
+                 + (d__1 = tau + eta, f2c_dabs(d__1)) * dw;
         swtch = FALSE_;
         if(orgati)
         {
-            if (-w > f2c_dabs(prew) / 10.)
+            if(-w > f2c_dabs(prew) / 10.)
             {
                 swtch = TRUE_;
             }
         }
         else
         {
-            if (w > f2c_dabs(prew) / 10.)
+            if(w > f2c_dabs(prew) / 10.)
             {
                 swtch = TRUE_;
             }
@@ -803,7 +811,7 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
         for(niter = iter; niter <= 30; ++niter)
         {
             /* Test for convergence */
-            if (f2c_dabs(w) <= eps * erretm)
+            if(f2c_dabs(w) <= eps * erretm)
             {
                 if(orgati)
                 {
@@ -817,11 +825,11 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
             }
             if(w <= 0.)
             {
-                dltlb = fla_max(dltlb,tau);
+                dltlb = fla_max(dltlb, tau);
             }
             else
             {
-                dltub = fla_min(dltub,tau);
+                dltub = fla_min(dltub, tau);
             }
             /* Calculate the new step */
             if(!swtch3)
@@ -916,7 +924,7 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
                         zz[2] = z__[iip1] * z__[iip1];
                     }
                 }
-                aocl_lapack_dlaed6(&niter, &orgati, &c__, &delta[iim1], zz, &w, &eta, info);
+                dlaed6_(&niter, &orgati, &c__, &delta[iim1], zz, &w, &eta, info);
                 if(*info != 0)
                 {
                     goto L250;
@@ -981,8 +989,9 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
             dw = dpsi + dphi + temp * temp;
             temp = z__[ii] * temp;
             w = rhoinv + phi + psi + temp;
-            erretm = (phi - psi) * 8. + erretm + rhoinv * 2. + f2c_dabs(temp) * 3. + f2c_dabs(tau) * dw;
-            if (w * prew > 0. && f2c_dabs(w) > f2c_dabs(prew) / 10.)
+            erretm = (phi - psi) * 8. + erretm + rhoinv * 2. + f2c_dabs(temp) * 3.
+                     + f2c_dabs(tau) * dw;
+            if(w * prew > 0. && f2c_dabs(w) > f2c_dabs(prew) / 10.)
             {
                 swtch = !swtch;
             }

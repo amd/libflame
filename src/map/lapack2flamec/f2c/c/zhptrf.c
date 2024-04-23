@@ -3,11 +3,6 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-
-/*
- *     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
- */
-
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZHPTRF */
@@ -164,7 +159,7 @@ static aocl_int64_t c__1 = 1;
 void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhptrf inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
+    AOCL_DTL_SNPRINTF("zhptrf inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3, i__4, i__5, i__6;
     doublereal d__1, d__2, d__3, d__4;
@@ -188,17 +183,21 @@ void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
     doublecomplex wkm1, wkp1;
     integer imax, jmax;
     extern /* Subroutine */
-    void zhpr_(char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *);
+        void
+        zhpr_(char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *);
     doublereal alpha;
     extern logical lsame_(char *, char *, integer, integer);
     integer kstep;
     logical upper;
     extern /* Subroutine */
-    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlapy2_(doublereal *, doublereal *);
     doublereal absakk;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_( integer *, doublereal *, doublecomplex *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal colmax;
     doublereal rowmax;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -234,7 +233,7 @@ void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
     upper = lsame_(uplo, "U", 1, 1);
     imax = 0;
     jmax = 0;
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -277,13 +276,14 @@ void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
             i__1 = k - 1;
             imax = aocl_blas_izamax(&i__1, &ap[kc], &c__1);
             i__1 = kc + imax - 1;
-            colmax = (d__1 = ap[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&ap[kc + imax - 1]), f2c_dabs(d__2));
+            colmax = (d__1 = ap[i__1].r, f2c_dabs(d__1))
+                     + (d__2 = d_imag(&ap[kc + imax - 1]), f2c_dabs(d__2));
         }
         else
         {
             colmax = 0.;
         }
-        if (fla_max(absakk,colmax) == 0.)
+        if(fla_max(absakk, colmax) == 0.)
         {
             /* Column K is zero: set INFO and continue */
             if(*info == 0)
@@ -314,10 +314,13 @@ void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
                 for(j = imax + 1; j <= i__1; ++j)
                 {
                     i__2 = kx;
-                    if ((d__1 = ap[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&ap[ kx]), f2c_dabs(d__2)) > rowmax)
+                    if((d__1 = ap[i__2].r, f2c_dabs(d__1))
+                           + (d__2 = d_imag(&ap[kx]), f2c_dabs(d__2))
+                       > rowmax)
                     {
                         i__2 = kx;
-                        rowmax = (d__1 = ap[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&ap[kx]), f2c_dabs(d__2));
+                        rowmax = (d__1 = ap[i__2].r, f2c_dabs(d__1))
+                                 + (d__2 = d_imag(&ap[kx]), f2c_dabs(d__2));
                         jmax = j;
                     }
                     kx += j;
@@ -331,8 +334,9 @@ void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
                     /* Computing MAX */
                     i__1 = kpc + jmax - 1;
                     d__3 = rowmax;
-                    d__4 = (d__1 = ap[i__1].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&ap[kpc + jmax - 1]), f2c_dabs(d__2)); // , expr subst
-                    rowmax = fla_max(d__3,d__4);
+                    d__4 = (d__1 = ap[i__1].r, f2c_dabs(d__1))
+                           + (d__2 = d_imag(&ap[kpc + jmax - 1]), f2c_dabs(d__2)); // , expr subst
+                    rowmax = fla_max(d__3, d__4);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
@@ -342,7 +346,7 @@ void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
                 else /* if(complicated condition) */
                 {
                     i__1 = kpc + imax - 1;
-                    if ((d__1 = ap[i__1].r, f2c_dabs(d__1)) >= alpha * rowmax)
+                    if((d__1 = ap[i__1].r, f2c_dabs(d__1)) >= alpha * rowmax)
                     {
                         /* interchange rows and columns K and IMAX, use 1-by-1 */
                         /* pivot block */
@@ -397,8 +401,8 @@ void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
                 ap[i__1].real = d__1;
                 ap[i__1].imag = 0.; // , expr subst
                 i__1 = kpc + kp - 1;
-                ap[i__1].real = r1;
-                ap[i__1].imag = 0.; // , expr subst
+                ap[i__1].r = r1;
+                ap[i__1].i = 0.; // , expr subst
                 if(kstep == 2)
                 {
                     i__1 = kc + k - 1;
@@ -422,9 +426,9 @@ void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
             {
                 i__1 = kc + k - 1;
                 i__2 = kc + k - 1;
-                d__1 = ap[i__2].real;
-                ap[i__1].real = d__1;
-                ap[i__1].imag = 0.; // , expr subst
+                d__1 = ap[i__2].r;
+                ap[i__1].r = d__1;
+                ap[i__1].i = 0.; // , expr subst
                 if(kstep == 2)
                 {
                     i__1 = kc - 1;
@@ -484,44 +488,44 @@ void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
                         z__3.imag = d11 * ap[i__1].imag; // , expr subst
                         d_cnjg(&z__5, &d12);
                         i__2 = j + (k - 1) * k / 2;
-                        z__4.real = z__5.real * ap[i__2].real - z__5.imag * ap[i__2].imag;
-                        z__4.imag = z__5.real * ap[i__2].imag + z__5.imag * ap[i__2].real; // , expr subst
-                        z__2.real = z__3.real - z__4.real;
-                        z__2.imag = z__3.imag - z__4.imag; // , expr subst
-                        z__1.real = d__ * z__2.real;
-                        z__1.imag = d__ * z__2.imag; // , expr subst
-                        wkm1.real = z__1.real;
-                        wkm1.imag = z__1.imag; // , expr subst
+                        z__4.r = z__5.r * ap[i__2].r - z__5.i * ap[i__2].i;
+                        z__4.i = z__5.r * ap[i__2].i + z__5.i * ap[i__2].r; // , expr subst
+                        z__2.r = z__3.r - z__4.r;
+                        z__2.i = z__3.i - z__4.i; // , expr subst
+                        z__1.r = d__ * z__2.r;
+                        z__1.i = d__ * z__2.i; // , expr subst
+                        wkm1.r = z__1.r;
+                        wkm1.i = z__1.i; // , expr subst
                         i__1 = j + (k - 1) * k / 2;
                         z__3.real = d22 * ap[i__1].real;
                         z__3.imag = d22 * ap[i__1].imag; // , expr subst
                         i__2 = j + (k - 2) * (k - 1) / 2;
-                        z__4.real = d12.real * ap[i__2].real - d12.imag * ap[i__2].imag;
-                        z__4.imag = d12.real * ap[i__2].imag + d12.imag * ap[i__2].real; // , expr subst
-                        z__2.real = z__3.real - z__4.real;
-                        z__2.imag = z__3.imag - z__4.imag; // , expr subst
-                        z__1.real = d__ * z__2.real;
-                        z__1.imag = d__ * z__2.imag; // , expr subst
-                        wk.real = z__1.real;
-                        wk.imag = z__1.imag; // , expr subst
+                        z__4.r = d12.r * ap[i__2].r - d12.i * ap[i__2].i;
+                        z__4.i = d12.r * ap[i__2].i + d12.i * ap[i__2].r; // , expr subst
+                        z__2.r = z__3.r - z__4.r;
+                        z__2.i = z__3.i - z__4.i; // , expr subst
+                        z__1.r = d__ * z__2.r;
+                        z__1.i = d__ * z__2.i; // , expr subst
+                        wk.r = z__1.r;
+                        wk.i = z__1.i; // , expr subst
                         for(i__ = j; i__ >= 1; --i__)
                         {
                             i__1 = i__ + (j - 1) * j / 2;
                             i__2 = i__ + (j - 1) * j / 2;
                             i__3 = i__ + (k - 1) * k / 2;
                             d_cnjg(&z__4, &wk);
-                            z__3.real = ap[i__3].real * z__4.real - ap[i__3].imag * z__4.imag;
-                            z__3.imag = ap[i__3].real * z__4.imag + ap[i__3].imag * z__4.real; // , expr subst
-                            z__2.real = ap[i__2].real - z__3.real;
-                            z__2.imag = ap[i__2].imag - z__3.imag; // , expr subst
+                            z__3.r = ap[i__3].r * z__4.r - ap[i__3].i * z__4.i;
+                            z__3.i = ap[i__3].r * z__4.i + ap[i__3].i * z__4.r; // , expr subst
+                            z__2.r = ap[i__2].r - z__3.r;
+                            z__2.i = ap[i__2].i - z__3.i; // , expr subst
                             i__4 = i__ + (k - 2) * (k - 1) / 2;
                             d_cnjg(&z__6, &wkm1);
-                            z__5.real = ap[i__4].real * z__6.real - ap[i__4].imag * z__6.imag;
-                            z__5.imag = ap[i__4].real * z__6.imag + ap[i__4].imag * z__6.real; // , expr subst
-                            z__1.real = z__2.real - z__5.real;
-                            z__1.imag = z__2.imag - z__5.imag; // , expr subst
-                            ap[i__1].real = z__1.real;
-                            ap[i__1].imag = z__1.imag; // , expr subst
+                            z__5.r = ap[i__4].r * z__6.r - ap[i__4].i * z__6.i;
+                            z__5.i = ap[i__4].r * z__6.i + ap[i__4].i * z__6.r; // , expr subst
+                            z__1.r = z__2.r - z__5.r;
+                            z__1.i = z__2.i - z__5.i; // , expr subst
+                            ap[i__1].r = z__1.r;
+                            ap[i__1].i = z__1.i; // , expr subst
                             /* L40: */
                         }
                         i__1 = j + (k - 1) * k / 2;
@@ -584,13 +588,14 @@ void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
             i__1 = *n - k;
             imax = k + aocl_blas_izamax(&i__1, &ap[kc + 1], &c__1);
             i__1 = kc + imax - k;
-            colmax = (d__1 = ap[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&ap[kc + imax - k]), f2c_dabs(d__2));
+            colmax = (d__1 = ap[i__1].r, f2c_dabs(d__1))
+                     + (d__2 = d_imag(&ap[kc + imax - k]), f2c_dabs(d__2));
         }
         else
         {
             colmax = 0.;
         }
-        if (fla_max(absakk,colmax) == 0.)
+        if(fla_max(absakk, colmax) == 0.)
         {
             /* Column K is zero: set INFO and continue */
             if(*info == 0)
@@ -621,10 +626,13 @@ void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
                 for(j = k; j <= i__1; ++j)
                 {
                     i__2 = kx;
-                    if ((d__1 = ap[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&ap[ kx]), f2c_dabs(d__2)) > rowmax)
+                    if((d__1 = ap[i__2].r, f2c_dabs(d__1))
+                           + (d__2 = d_imag(&ap[kx]), f2c_dabs(d__2))
+                       > rowmax)
                     {
                         i__2 = kx;
-                        rowmax = (d__1 = ap[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&ap[kx]), f2c_dabs(d__2));
+                        rowmax = (d__1 = ap[i__2].r, f2c_dabs(d__1))
+                                 + (d__2 = d_imag(&ap[kx]), f2c_dabs(d__2));
                         jmax = j;
                     }
                     kx = kx + *n - j;
@@ -638,8 +646,10 @@ void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
                     /* Computing MAX */
                     i__1 = kpc + jmax - imax;
                     d__3 = rowmax;
-                    d__4 = (d__1 = ap[i__1].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&ap[kpc + jmax - imax]), f2c_dabs(d__2)); // , expr subst
-                    rowmax = fla_max(d__3,d__4);
+                    d__4
+                        = (d__1 = ap[i__1].r, f2c_dabs(d__1))
+                          + (d__2 = d_imag(&ap[kpc + jmax - imax]), f2c_dabs(d__2)); // , expr subst
+                    rowmax = fla_max(d__3, d__4);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
@@ -649,7 +659,7 @@ void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
                 else /* if(complicated condition) */
                 {
                     i__1 = kpc;
-                    if ((d__1 = ap[i__1].r, f2c_dabs(d__1)) >= alpha * rowmax)
+                    if((d__1 = ap[i__1].r, f2c_dabs(d__1)) >= alpha * rowmax)
                     {
                         /* interchange rows and columns K and IMAX, use 1-by-1 */
                         /* pivot block */
@@ -707,8 +717,8 @@ void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
                 ap[i__1].real = d__1;
                 ap[i__1].imag = 0.; // , expr subst
                 i__1 = kpc;
-                ap[i__1].real = r1;
-                ap[i__1].imag = 0.; // , expr subst
+                ap[i__1].r = r1;
+                ap[i__1].i = 0.; // , expr subst
                 if(kstep == 2)
                 {
                     i__1 = kc;
@@ -732,9 +742,9 @@ void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
             {
                 i__1 = kc;
                 i__2 = kc;
-                d__1 = ap[i__2].real;
-                ap[i__1].real = d__1;
-                ap[i__1].imag = 0.; // , expr subst
+                d__1 = ap[i__2].r;
+                ap[i__1].r = d__1;
+                ap[i__1].i = 0.; // , expr subst
                 if(kstep == 2)
                 {
                     i__1 = knc;
@@ -799,27 +809,27 @@ void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
                         z__3.real = d11 * ap[i__2].real;
                         z__3.imag = d11 * ap[i__2].imag; // , expr subst
                         i__3 = j + k * ((*n << 1) - k - 1) / 2;
-                        z__4.real = d21.real * ap[i__3].real - d21.imag * ap[i__3].imag;
-                        z__4.imag = d21.real * ap[i__3].imag + d21.imag * ap[i__3].real; // , expr subst
-                        z__2.real = z__3.real - z__4.real;
-                        z__2.imag = z__3.imag - z__4.imag; // , expr subst
-                        z__1.real = d__ * z__2.real;
-                        z__1.imag = d__ * z__2.imag; // , expr subst
-                        wk.real = z__1.real;
-                        wk.imag = z__1.imag; // , expr subst
+                        z__4.r = d21.r * ap[i__3].r - d21.i * ap[i__3].i;
+                        z__4.i = d21.r * ap[i__3].i + d21.i * ap[i__3].r; // , expr subst
+                        z__2.r = z__3.r - z__4.r;
+                        z__2.i = z__3.i - z__4.i; // , expr subst
+                        z__1.r = d__ * z__2.r;
+                        z__1.i = d__ * z__2.i; // , expr subst
+                        wk.r = z__1.r;
+                        wk.i = z__1.i; // , expr subst
                         i__2 = j + k * ((*n << 1) - k - 1) / 2;
                         z__3.real = d22 * ap[i__2].real;
                         z__3.imag = d22 * ap[i__2].imag; // , expr subst
                         d_cnjg(&z__5, &d21);
                         i__3 = j + (k - 1) * ((*n << 1) - k) / 2;
-                        z__4.real = z__5.real * ap[i__3].real - z__5.imag * ap[i__3].imag;
-                        z__4.imag = z__5.real * ap[i__3].imag + z__5.imag * ap[i__3].real; // , expr subst
-                        z__2.real = z__3.real - z__4.real;
-                        z__2.imag = z__3.imag - z__4.imag; // , expr subst
-                        z__1.real = d__ * z__2.real;
-                        z__1.imag = d__ * z__2.imag; // , expr subst
-                        wkp1.real = z__1.real;
-                        wkp1.imag = z__1.imag; // , expr subst
+                        z__4.r = z__5.r * ap[i__3].r - z__5.i * ap[i__3].i;
+                        z__4.i = z__5.r * ap[i__3].i + z__5.i * ap[i__3].r; // , expr subst
+                        z__2.r = z__3.r - z__4.r;
+                        z__2.i = z__3.i - z__4.i; // , expr subst
+                        z__1.r = d__ * z__2.r;
+                        z__1.i = d__ * z__2.i; // , expr subst
+                        wkp1.r = z__1.r;
+                        wkp1.i = z__1.i; // , expr subst
                         i__2 = *n;
                         for(i__ = j; i__ <= i__2; ++i__)
                         {
@@ -827,18 +837,18 @@ void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
                             i__4 = i__ + (j - 1) * ((*n << 1) - j) / 2;
                             i__5 = i__ + (k - 1) * ((*n << 1) - k) / 2;
                             d_cnjg(&z__4, &wk);
-                            z__3.real = ap[i__5].real * z__4.real - ap[i__5].imag * z__4.imag;
-                            z__3.imag = ap[i__5].real * z__4.imag + ap[i__5].imag * z__4.real; // , expr subst
-                            z__2.real = ap[i__4].real - z__3.real;
-                            z__2.imag = ap[i__4].imag - z__3.imag; // , expr subst
+                            z__3.r = ap[i__5].r * z__4.r - ap[i__5].i * z__4.i;
+                            z__3.i = ap[i__5].r * z__4.i + ap[i__5].i * z__4.r; // , expr subst
+                            z__2.r = ap[i__4].r - z__3.r;
+                            z__2.i = ap[i__4].i - z__3.i; // , expr subst
                             i__6 = i__ + k * ((*n << 1) - k - 1) / 2;
                             d_cnjg(&z__6, &wkp1);
-                            z__5.real = ap[i__6].real * z__6.real - ap[i__6].imag * z__6.imag;
-                            z__5.imag = ap[i__6].real * z__6.imag + ap[i__6].imag * z__6.real; // , expr subst
-                            z__1.real = z__2.real - z__5.real;
-                            z__1.imag = z__2.imag - z__5.imag; // , expr subst
-                            ap[i__3].real = z__1.real;
-                            ap[i__3].imag = z__1.imag; // , expr subst
+                            z__5.r = ap[i__6].r * z__6.r - ap[i__6].i * z__6.i;
+                            z__5.i = ap[i__6].r * z__6.i + ap[i__6].i * z__6.r; // , expr subst
+                            z__1.r = z__2.r - z__5.r;
+                            z__1.i = z__2.i - z__5.i; // , expr subst
+                            ap[i__3].r = z__1.r;
+                            ap[i__3].i = z__1.i; // , expr subst
                             /* L90: */
                         }
                         i__2 = j + (k - 1) * ((*n << 1) - k) / 2;

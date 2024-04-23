@@ -137,12 +137,14 @@ for 1 <= i <= N, row i of the matrix was */
 /* > \ingroup realGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, real *ab, integer *ldab, integer *ipiv, real *b, integer *ldb, integer *info)
+void sgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, real *ab,
+             integer *ldab, integer *ipiv, real *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sgbtrs inputs: trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldb %d",*trans, *n, *kl, *ku, *nrhs, *ldab, *ldb);
+    snprintf(buffer, 256, "sgbtrs inputs: trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldb %d",
+             *trans, *n, *kl, *ku, *nrhs, *ldab, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -150,13 +152,20 @@ void sgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
     /* Local variables */
     integer i__, j, l, kd, lm;
     extern /* Subroutine */
-    void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
+        void
+        sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+              integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+               real *, integer *);
     logical lnoti;
     extern /* Subroutine */
-    void sswap_(integer *, real *, integer *, real *, integer *), stbsv_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sswap_(integer *, real *, integer *, real *, integer *),
+        stbsv_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -190,7 +199,7 @@ void sgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
     /* Function Body */
     *info = 0;
     notran = lsame_(trans, "N", 1, 1);
-    if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
@@ -214,7 +223,7 @@ void sgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -10;
     }
@@ -249,14 +258,14 @@ void sgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
                 /* Computing MIN */
                 i__2 = *kl;
                 i__3 = *n - j; // , expr subst
-                lm = fla_min(i__2,i__3);
+                lm = fla_min(i__2, i__3);
                 l = ipiv[j];
                 if(l != j)
                 {
                     aocl_blas_sswap(nrhs, &b[l + b_dim1], ldb, &b[j + b_dim1], ldb);
                 }
-                aocl_blas_sger(&lm, nrhs, &c_b7, &ab[kd + 1 + j * ab_dim1], &c__1, &b[j + b_dim1],
-                               ldb, &b[j + 1 + b_dim1], ldb);
+                sger_(&lm, nrhs, &c_b7, &ab[kd + 1 + j * ab_dim1], &c__1, &b[j + b_dim1], ldb,
+                      &b[j + 1 + b_dim1], ldb);
                 /* L10: */
             }
         }
@@ -265,8 +274,8 @@ void sgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
         {
             /* Solve U*X = B, overwriting B with X. */
             i__2 = *kl + *ku;
-            aocl_blas_stbsv("Upper", "No transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
-                            &b[i__ * b_dim1 + 1], &c__1);
+            stbsv_("Upper", "No transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
+                   &b[i__ * b_dim1 + 1], &c__1);
             /* L20: */
         }
     }
@@ -278,8 +287,8 @@ void sgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
         {
             /* Solve U**T*X = B, overwriting B with X. */
             i__2 = *kl + *ku;
-            aocl_blas_stbsv("Upper", "Transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
-                            &b[i__ * b_dim1 + 1], &c__1);
+            stbsv_("Upper", "Transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
+                   &b[i__ * b_dim1 + 1], &c__1);
             /* L30: */
         }
         /* Solve L**T*X = B, overwriting B with X. */
@@ -290,8 +299,9 @@ void sgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
                 /* Computing MIN */
                 i__1 = *kl;
                 i__2 = *n - j; // , expr subst
-                lm = fla_min(i__1,i__2);
-                sgemv_("Transpose", &lm, nrhs, &c_b7, &b[j + 1 + b_dim1], ldb, &ab[kd + 1 + j * ab_dim1], &c__1, &c_b23, &b[j + b_dim1], ldb);
+                lm = fla_min(i__1, i__2);
+                sgemv_("Transpose", &lm, nrhs, &c_b7, &b[j + 1 + b_dim1], ldb,
+                       &ab[kd + 1 + j * ab_dim1], &c__1, &c_b23, &b[j + b_dim1], ldb);
                 l = ipiv[j];
                 if(l != j)
                 {

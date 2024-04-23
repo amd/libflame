@@ -163,7 +163,15 @@ void aocl_lapack_stzrqf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
     /* Local variables */
     integer i__, k, m1;
     extern /* Subroutine */
-    void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
+        void
+        sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+              integer *),
+        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+               real *, integer *),
+        scopy_(integer *, real *, integer *, real *, integer *),
+        saxpy_(integer *, real *, real *, integer *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -198,7 +206,7 @@ void aocl_lapack_stzrqf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
@@ -226,15 +234,13 @@ void aocl_lapack_stzrqf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
     {
         /* Computing MIN */
         i__1 = *m + 1;
-        m1 = fla_min(i__1,*n);
-        for (k = *m;
-                k >= 1;
-                --k)
+        m1 = fla_min(i__1, *n);
+        for(k = *m; k >= 1; --k)
         {
             /* Use a Householder reflection to zero the kth row of A. */
             /* First set up the reflection. */
             i__1 = *n - *m + 1;
-            aocl_lapack_slarfg(&i__1, &a[k + k * a_dim1], &a[k + m1 * a_dim1], lda, &tau[k]);
+            slarfg_(&i__1, &a[k + k * a_dim1], &a[k + m1 * a_dim1], lda, &tau[k]);
             if(tau[k] != 0.f && k > 1)
             {
                 /* We now perform the operation A := A*P( k ). */
@@ -247,17 +253,18 @@ void aocl_lapack_stzrqf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
                 /* Form w = a( k ) + B*z( k ) in TAU. */
                 i__1 = k - 1;
                 i__2 = *n - *m;
-                aocl_blas_sgemv("No transpose", &i__1, &i__2, &c_b8, &a[m1 * a_dim1 + 1], lda,
-                                &a[k + m1 * a_dim1], lda, &c_b8, &tau[1], &c__1);
+                sgemv_("No transpose", &i__1, &i__2, &c_b8, &a[m1 * a_dim1 + 1], lda,
+                       &a[k + m1 * a_dim1], lda, &c_b8, &tau[1], &c__1);
                 /* Now form a( k ) := a( k ) - tau*w */
                 /* and B := B - tau*w*z( k )**T. */
                 i__1 = k - 1;
                 r__1 = -tau[k];
-                aocl_blas_saxpy(&i__1, &r__1, &tau[1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                saxpy_(&i__1, &r__1, &tau[1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 i__1 = k - 1;
                 i__2 = *n - *m;
                 r__1 = -tau[k];
-                sger_(&i__1, &i__2, &r__1, &tau[1], &c__1, &a[k + m1 * a_dim1], lda, &a[m1 * a_dim1 + 1], lda);
+                sger_(&i__1, &i__2, &r__1, &tau[1], &c__1, &a[k + m1 * a_dim1], lda,
+                      &a[m1 * a_dim1 + 1], lda);
             }
             /* L20: */
         }

@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b ZLARFX applies an elementary reflector to a general rectangular matrix, with loop
  * unrolling whe n the reflector has order ≤ 10. */
 /* =========== DOCUMENTATION =========== */
@@ -117,23 +117,27 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlarfx_(char *side, integer *m, integer *n, doublecomplex *v, doublecomplex *tau, doublecomplex *c__, integer * ldc, doublecomplex *work)
+void zlarfx_(char *side, integer *m, integer *n, doublecomplex *v, doublecomplex *tau,
+             doublecomplex *c__, integer *ldc, doublecomplex *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlarfx inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *ldc);
+    AOCL_DTL_SNPRINTF("zlarfx inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",
+                      *side, *m, *n, *ldc);
     /* System generated locals */
-    aocl_int64_t c_dim1, c_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9, i__10,
-        i__11;
-    dcomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7, z__8, z__9, z__10, z__11, z__12, z__13,
+    integer c_dim1, c_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9, i__10, i__11;
+    doublecomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7, z__8, z__9, z__10, z__11, z__12, z__13,
         z__14, z__15, z__16, z__17, z__18, z__19;
     /* Builtin functions */
     void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
     integer j;
-    doublecomplex t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, v8, v9, t10, v10, sum;
+    doublecomplex t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, v8, v9, t10, v10,
+        sum;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+        void
+        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -161,12 +165,12 @@ void zlarfx_(char *side, integer *m, integer *n, doublecomplex *v, doublecomplex
     c__ -= c_offset;
     --work;
     /* Function Body */
-    if(tau->real == 0. && tau->imag == 0.)
+    if(tau->r == 0. && tau->i == 0.)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (lsame_(side, "L", 1, 1))
+    if(lsame_(side, "L", 1, 1))
     {
         /* Form H * C, where H has order m. */
         switch(*m)
@@ -196,8 +200,8 @@ void zlarfx_(char *side, integer *m, integer *n, doublecomplex *v, doublecomplex
         aocl_lapack_zlarf(side, m, n, &v[1], &c__1, tau, &c__[c_offset], ldc, &work[1]);
         goto L410;
     L10: /* Special code for 1 x 1 Householder */
-        z__3.real = tau->real * v[1].real - tau->imag * v[1].imag;
-        z__3.imag = tau->real * v[1].imag + tau->imag * v[1].real; // , expr subst
+        z__3.r = tau->r * v[1].r - tau->i * v[1].i;
+        z__3.i = tau->r * v[1].i + tau->i * v[1].r; // , expr subst
         d_cnjg(&z__4, &v[1]);
         z__2.real = z__3.real * z__4.real - z__3.imag * z__4.imag;
         z__2.imag = z__3.real * z__4.imag + z__3.imag * z__4.real; // , expr subst
@@ -1445,8 +1449,8 @@ void zlarfx_(char *side, integer *m, integer *n, doublecomplex *v, doublecomplex
         aocl_lapack_zlarf(side, m, n, &v[1], &c__1, tau, &c__[c_offset], ldc, &work[1]);
         goto L410;
     L210: /* Special code for 1 x 1 Householder */
-        z__3.real = tau->real * v[1].real - tau->imag * v[1].imag;
-        z__3.imag = tau->real * v[1].imag + tau->imag * v[1].real; // , expr subst
+        z__3.r = tau->r * v[1].r - tau->i * v[1].i;
+        z__3.i = tau->r * v[1].i + tau->i * v[1].r; // , expr subst
         d_cnjg(&z__4, &v[1]);
         z__2.real = z__3.real * z__4.real - z__3.imag * z__4.imag;
         z__2.imag = z__3.real * z__4.imag + z__3.imag * z__4.real; // , expr subst
@@ -1467,8 +1471,8 @@ void zlarfx_(char *side, integer *m, integer *n, doublecomplex *v, doublecomplex
         }
         goto L410;
     L230: /* Special code for 2 x 2 Householder */
-        v1.real = v[1].real;
-        v1.imag = v[1].imag; // , expr subst
+        v1.r = v[1].r;
+        v1.i = v[1].i; // , expr subst
         d_cnjg(&z__2, &v1);
         z__1.real = tau->real * z__2.real - tau->imag * z__2.imag;
         z__1.imag = tau->real * z__2.imag + tau->imag * z__2.real; // , expr subst
@@ -1514,8 +1518,8 @@ void zlarfx_(char *side, integer *m, integer *n, doublecomplex *v, doublecomplex
         }
         goto L410;
     L250: /* Special code for 3 x 3 Householder */
-        v1.real = v[1].real;
-        v1.imag = v[1].imag; // , expr subst
+        v1.r = v[1].r;
+        v1.i = v[1].i; // , expr subst
         d_cnjg(&z__2, &v1);
         z__1.real = tau->real * z__2.real - tau->imag * z__2.imag;
         z__1.imag = tau->real * z__2.imag + tau->imag * z__2.real; // , expr subst
@@ -1581,8 +1585,8 @@ void zlarfx_(char *side, integer *m, integer *n, doublecomplex *v, doublecomplex
         }
         goto L410;
     L270: /* Special code for 4 x 4 Householder */
-        v1.real = v[1].real;
-        v1.imag = v[1].imag; // , expr subst
+        v1.r = v[1].r;
+        v1.i = v[1].i; // , expr subst
         d_cnjg(&z__2, &v1);
         z__1.real = tau->real * z__2.real - tau->imag * z__2.imag;
         z__1.imag = tau->real * z__2.imag + tau->imag * z__2.real; // , expr subst
@@ -1668,8 +1672,8 @@ void zlarfx_(char *side, integer *m, integer *n, doublecomplex *v, doublecomplex
         }
         goto L410;
     L290: /* Special code for 5 x 5 Householder */
-        v1.real = v[1].real;
-        v1.imag = v[1].imag; // , expr subst
+        v1.r = v[1].r;
+        v1.i = v[1].i; // , expr subst
         d_cnjg(&z__2, &v1);
         z__1.real = tau->real * z__2.real - tau->imag * z__2.imag;
         z__1.imag = tau->real * z__2.imag + tau->imag * z__2.real; // , expr subst
@@ -1775,8 +1779,8 @@ void zlarfx_(char *side, integer *m, integer *n, doublecomplex *v, doublecomplex
         }
         goto L410;
     L310: /* Special code for 6 x 6 Householder */
-        v1.real = v[1].real;
-        v1.imag = v[1].imag; // , expr subst
+        v1.r = v[1].r;
+        v1.i = v[1].i; // , expr subst
         d_cnjg(&z__2, &v1);
         z__1.real = tau->real * z__2.real - tau->imag * z__2.imag;
         z__1.imag = tau->real * z__2.imag + tau->imag * z__2.real; // , expr subst
@@ -1902,8 +1906,8 @@ void zlarfx_(char *side, integer *m, integer *n, doublecomplex *v, doublecomplex
         }
         goto L410;
     L330: /* Special code for 7 x 7 Householder */
-        v1.real = v[1].real;
-        v1.imag = v[1].imag; // , expr subst
+        v1.r = v[1].r;
+        v1.i = v[1].i; // , expr subst
         d_cnjg(&z__2, &v1);
         z__1.real = tau->real * z__2.real - tau->imag * z__2.imag;
         z__1.imag = tau->real * z__2.imag + tau->imag * z__2.real; // , expr subst
@@ -2049,8 +2053,8 @@ void zlarfx_(char *side, integer *m, integer *n, doublecomplex *v, doublecomplex
         }
         goto L410;
     L350: /* Special code for 8 x 8 Householder */
-        v1.real = v[1].real;
-        v1.imag = v[1].imag; // , expr subst
+        v1.r = v[1].r;
+        v1.i = v[1].i; // , expr subst
         d_cnjg(&z__2, &v1);
         z__1.real = tau->real * z__2.real - tau->imag * z__2.imag;
         z__1.imag = tau->real * z__2.imag + tau->imag * z__2.real; // , expr subst
@@ -2216,8 +2220,8 @@ void zlarfx_(char *side, integer *m, integer *n, doublecomplex *v, doublecomplex
         }
         goto L410;
     L370: /* Special code for 9 x 9 Householder */
-        v1.real = v[1].real;
-        v1.imag = v[1].imag; // , expr subst
+        v1.r = v[1].r;
+        v1.i = v[1].i; // , expr subst
         d_cnjg(&z__2, &v1);
         z__1.real = tau->real * z__2.real - tau->imag * z__2.imag;
         z__1.imag = tau->real * z__2.imag + tau->imag * z__2.real; // , expr subst
@@ -2403,8 +2407,8 @@ void zlarfx_(char *side, integer *m, integer *n, doublecomplex *v, doublecomplex
         }
         goto L410;
     L390: /* Special code for 10 x 10 Householder */
-        v1.real = v[1].real;
-        v1.imag = v[1].imag; // , expr subst
+        v1.r = v[1].r;
+        v1.i = v[1].i; // , expr subst
         d_cnjg(&z__2, &v1);
         z__1.real = tau->real * z__2.real - tau->imag * z__2.imag;
         z__1.imag = tau->real * z__2.imag + tau->imag * z__2.real; // , expr subst

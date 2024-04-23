@@ -179,7 +179,8 @@
 /* > \ingroup realGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku, real *alpha, real *ab, integer *ldab, real * x, integer *incx, real *beta, real *y, integer *incy)
+void sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku, real *alpha,
+                real *ab, integer *ldab, real *x, integer *incx, real *beta, real *y, integer *incy)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sla_gbamv(trans, m, n, kl, ku, alpha, ab, ldab, x, incx, beta, y, incy);
@@ -221,7 +222,8 @@ void aocl_lapack_sla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
     real safe1;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -359,12 +361,10 @@ void aocl_lapack_sla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
                     i__2 = i__ - *kl;
                     /* Computing MIN */
                     i__4 = i__ + *ku;
-                    i__3 = fla_min(i__4,lenx);
-                    for (j = fla_max(i__2,1);
-                            j <= i__3;
-                            ++j)
+                    i__3 = fla_min(i__4, lenx);
+                    for(j = fla_max(i__2, 1); j <= i__3; ++j)
                     {
-                        temp = (r__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs( r__1));
+                        temp = (r__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs(r__1));
                         symb_zero__ = symb_zero__ && (x[j] == 0.f || temp == 0.f);
                         y[iy] += *alpha * (r__1 = x[j], f2c_abs(r__1)) * temp;
                     }
@@ -401,12 +401,10 @@ void aocl_lapack_sla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
                     i__3 = i__ - *kl;
                     /* Computing MIN */
                     i__4 = i__ + *ku;
-                    i__2 = fla_min(i__4,lenx);
-                    for (j = fla_max(i__3,1);
-                            j <= i__2;
-                            ++j)
+                    i__2 = fla_min(i__4, lenx);
+                    for(j = fla_max(i__3, 1); j <= i__2; ++j)
                     {
-                        temp = (r__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_abs( r__1));
+                        temp = (r__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_abs(r__1));
                         symb_zero__ = symb_zero__ && (x[j] == 0.f || temp == 0.f);
                         y[iy] += *alpha * (r__1 = x[j], f2c_abs(r__1)) * temp;
                     }
@@ -447,12 +445,10 @@ void aocl_lapack_sla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
                     i__2 = i__ - *kl;
                     /* Computing MIN */
                     i__4 = i__ + *ku;
-                    i__3 = fla_min(i__4,lenx);
-                    for (j = fla_max(i__2,1);
-                            j <= i__3;
-                            ++j)
+                    i__3 = fla_min(i__4, lenx);
+                    for(j = fla_max(i__2, 1); j <= i__3; ++j)
                     {
-                        temp = (r__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs( r__1));
+                        temp = (r__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs(r__1));
                         symb_zero__ = symb_zero__ && (x[jx] == 0.f || temp == 0.f);
                         y[iy] += *alpha * (r__1 = x[jx], f2c_abs(r__1)) * temp;
                         jx += *incx;
@@ -491,12 +487,10 @@ void aocl_lapack_sla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
                     i__3 = i__ - *kl;
                     /* Computing MIN */
                     i__4 = i__ + *ku;
-                    i__2 = fla_min(i__4,lenx);
-                    for (j = fla_max(i__3,1);
-                            j <= i__2;
-                            ++j)
+                    i__2 = fla_min(i__4, lenx);
+                    for(j = fla_max(i__3, 1); j <= i__2; ++j)
                     {
-                        temp = (r__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_abs( r__1));
+                        temp = (r__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_abs(r__1));
                         symb_zero__ = symb_zero__ && (x[jx] == 0.f || temp == 0.f);
                         y[iy] += *alpha * (r__1 = x[jx], f2c_abs(r__1)) * temp;
                         jx += *incx;

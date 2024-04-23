@@ -151,7 +151,8 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, real *d__, integer *in, integer *info)
+void slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, real *d__,
+             integer *in, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slagtf(n, a, lambda, b, c__, tol, d__, in, info);
@@ -178,7 +179,8 @@ void aocl_lapack_slagtf(aocl_int64_t *n, real *a, real *lambda, real *b, real *c
     real tl, eps, piv1, piv2, temp, mult, scale1, scale2;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -229,14 +231,14 @@ void aocl_lapack_slagtf(aocl_int64_t *n, real *a, real *lambda, real *b, real *c
         return;
     }
     eps = slamch_("Epsilon");
-    tl = fla_max(*tol,eps);
+    tl = fla_max(*tol, eps);
     scale1 = f2c_abs(a[1]) + f2c_abs(b[1]);
     i__1 = *n - 1;
     for(k = 1; k <= i__1; ++k)
     {
         a[k + 1] -= *lambda;
         scale2 = (r__1 = c__[k], f2c_abs(r__1)) + (r__2 = a[k + 1], f2c_abs(r__2));
-        if (k < *n - 1)
+        if(k < *n - 1)
         {
             scale2 += (r__1 = b[k + 1], f2c_abs(r__1));
         }
@@ -261,7 +263,7 @@ void aocl_lapack_slagtf(aocl_int64_t *n, real *a, real *lambda, real *b, real *c
         else
         {
             piv2 = (r__1 = c__[k], f2c_abs(r__1)) / scale2;
-            if (piv2 <= piv1)
+            if(piv2 <= piv1)
             {
                 in[k] = 0;
                 scale1 = scale2;
@@ -288,13 +290,13 @@ void aocl_lapack_slagtf(aocl_int64_t *n, real *a, real *lambda, real *b, real *c
                 c__[k] = mult;
             }
         }
-        if (fla_max(piv1,piv2) <= tl && in[*n] == 0)
+        if(fla_max(piv1, piv2) <= tl && in[*n] == 0)
         {
             in[*n] = (aocl_int_t)(k);
         }
         /* L10: */
     }
-    if ((r__1 = a[*n], f2c_abs(r__1)) <= scale1 * tl && in[*n] == 0)
+    if((r__1 = a[*n], f2c_abs(r__1)) <= scale1 * tl && in[*n] == 0)
     {
         in[*n] = (aocl_int_t)(*n);
     }

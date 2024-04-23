@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief <b> CSPSVX computes the solution to system of linear equations A * X = B for OTHER
  * matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -275,15 +275,19 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, complex *afp, integer *ipiv, complex *b, integer * ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, real *rwork, integer *info)
+void cspsvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *ap, complex *afp,
+             integer *ipiv, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond,
+             real *ferr, real *berr, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cspsvx inputs: fact %c, uplo %c, n %lld, nrhs %lld, ldb %lld, ldx %lld",*fact, *uplo, *n, *nrhs, *ldb, *ldx);
+    snprintf(buffer, 256, "cspsvx inputs: fact %c, uplo %c, n %lld, nrhs %lld, ldb %lld, ldx %lld",
+             *fact, *uplo, *n, *nrhs, *ldb, *ldx);
 #else
-    snprintf(buffer, 256,"cspsvx inputs: fact %c, uplo %c, n %d, nrhs %d, ldb %d, ldx %d",*fact, *uplo, *n, *nrhs, *ldb, *ldx);
+    snprintf(buffer, 256, "cspsvx inputs: fact %c, uplo %c, n %d, nrhs %d, ldb %d, ldx %d", *fact,
+             *uplo, *n, *nrhs, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -293,14 +297,23 @@ void cspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, co
     extern logical lsame_(char *, char *, integer, integer);
     real anorm;
     extern /* Subroutine */
-    void ccopy_(integer *, complex *, integer *, complex *, integer *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *);
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern real clansp_(char *, char *, integer *, complex *, real *);
     extern /* Subroutine */
-    void cspcon_(char *, integer *, complex *, integer *, real *, real *, complex *, integer *), csprfs_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), csptrf_(char *, integer *, complex *, integer *, integer *), csptrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
+        void
+        cspcon_(char *, integer *, complex *, integer *, real *, real *, complex *, integer *),
+        csprfs_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
+                complex *, integer *, real *, real *, complex *, real *, integer *),
+        csptrf_(char *, integer *, complex *, integer *, integer *),
+        csptrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *,
+                integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -339,11 +352,11 @@ void cspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, co
     /* Function Body */
     *info = 0;
     nofact = lsame_(fact, "N", 1, 1);
-    if (! nofact && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    else if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -355,11 +368,11 @@ void cspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, co
     {
         *info = -4;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -11;
     }
@@ -393,8 +406,8 @@ void cspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, co
     aocl_lapack_csptrs(uplo, n, nrhs, &afp[1], &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solutions and */
     /* compute error bounds and backward error estimates for them. */
-    aocl_lapack_csprfs(uplo, n, nrhs, &ap[1], &afp[1], &ipiv[1], &b[b_offset], ldb, &x[x_offset],
-                       ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
+    csprfs_(uplo, n, nrhs, &ap[1], &afp[1], &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx,
+            &ferr[1], &berr[1], &work[1], &rwork[1], info);
     /* Set INFO = N+1 if the matrix is singular to working precision. */
     if(*rcond < slamch_("Epsilon"))
     {

@@ -1,22 +1,27 @@
-/* ../netlib/zsytrs2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zsytrs2.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b1 = {1., 0.};
 /* > \brief \b ZSYTRS2 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZSYTRS2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsytrs2 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsytrs2
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsytrs2 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsytrs2
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsytrs2 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsytrs2
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -48,7 +53,7 @@ static doublecomplex c_b1 =
 /* > Specifies whether the details of the factorization are stored */
 /* > as an upper or lower triangular matrix. */
 /* > = 'U': Upper triangular, form is A = U*D*U**T;
-*/
+ */
 /* > = 'L': Lower triangular, form is A = L*D*L**T. */
 /* > \endverbatim */
 /* > */
@@ -124,10 +129,13 @@ static doublecomplex c_b1 =
 /* > \ingroup complex16SYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *b, integer *ldb, doublecomplex *work, integer *info)
+void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *ipiv,
+              doublecomplex *b, integer *ldb, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zsytrs2 inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb);
+    AOCL_DTL_SNPRINTF("zsytrs2 inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS "",
+                      *uplo, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     doublecomplex z__1, z__2, z__3;
@@ -142,10 +150,17 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
     doublecomplex denom;
     integer iinfo;
     extern /* Subroutine */
-    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     logical upper;
     extern /* Subroutine */
-    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zsyconv_(char *, char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *);
+        void
+        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zsyconv_(char *, char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *,
+                 integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -178,54 +193,54 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZSYTRS2", &i__1, (ftnlen)7);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
-    if (*n == 0 || *nrhs == 0)
+    if(*n == 0 || *nrhs == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Convert A */
     zsyconv_(uplo, "C", n, &a[a_offset], lda, &ipiv[1], &work[1], &iinfo);
-    if (upper)
+    if(upper)
     {
         /* Solve A*X = B, where A = U*D*U**T. */
         /* P**T * B */
         k = *n;
         while(k >= 1)
         {
-            if (ipiv[k] > 0)
+            if(ipiv[k] > 0)
             {
                 /* 1 x 1 diagonal block */
                 /* Interchange rows K and IPIV(K). */
                 kp = ipiv[k];
-                if (kp != k)
+                if(kp != k)
                 {
                     zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
@@ -236,7 +251,7 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
                 /* 2 x 2 diagonal block */
                 /* Interchange rows K-1 and -IPIV(K). */
                 kp = -ipiv[k];
-                if (kp == -ipiv[k - 1])
+                if(kp == -ipiv[k - 1])
                 {
                     zswap_(nrhs, &b[k - 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
@@ -244,19 +259,19 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
             }
         }
         /* Compute (U \P**T * B) -> B [ (U \P**T * B) ] */
-        ztrsm_("L", "U", "N", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[ b_offset], ldb);
+        ztrsm_("L", "U", "N", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
         /* Compute D \ B -> B [ D \ (U \P**T * B) ] */
         i__ = *n;
         while(i__ >= 1)
         {
-            if (ipiv[i__] > 0)
+            if(ipiv[i__] > 0)
             {
                 z_div(&z__1, &c_b1, &a[i__ + i__ * a_dim1]);
                 zscal_(nrhs, &z__1, &b[i__ + b_dim1], ldb);
             }
-            else if (i__ > 1)
+            else if(i__ > 1)
             {
-                if (ipiv[i__ - 1] == ipiv[i__])
+                if(ipiv[i__ - 1] == ipiv[i__])
                 {
                     i__1 = i__;
                     akm1k.r = work[i__1].r;
@@ -274,9 +289,7 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
                     denom.r = z__1.r;
                     denom.i = z__1.i; // , expr subst
                     i__1 = *nrhs;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
                         z_div(&z__1, &b[i__ - 1 + j * b_dim1], &akm1k);
                         bkm1.r = z__1.r;
@@ -308,17 +321,17 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
             --i__;
         }
         /* Compute (U**T \ B) -> B [ U**T \ (D \ (U \P**T * B) ) ] */
-        ztrsm_("L", "U", "T", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[ b_offset], ldb);
+        ztrsm_("L", "U", "T", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
         /* P * B [ P * (U**T \ (D \ (U \P**T * B) )) ] */
         k = 1;
         while(k <= *n)
         {
-            if (ipiv[k] > 0)
+            if(ipiv[k] > 0)
             {
                 /* 1 x 1 diagonal block */
                 /* Interchange rows K and IPIV(K). */
                 kp = ipiv[k];
-                if (kp != k)
+                if(kp != k)
                 {
                     zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
@@ -329,7 +342,7 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
                 /* 2 x 2 diagonal block */
                 /* Interchange rows K-1 and -IPIV(K). */
                 kp = -ipiv[k];
-                if (k < *n && kp == -ipiv[k + 1])
+                if(k < *n && kp == -ipiv[k + 1])
                 {
                     zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
@@ -344,12 +357,12 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
         k = 1;
         while(k <= *n)
         {
-            if (ipiv[k] > 0)
+            if(ipiv[k] > 0)
             {
                 /* 1 x 1 diagonal block */
                 /* Interchange rows K and IPIV(K). */
                 kp = ipiv[k];
-                if (kp != k)
+                if(kp != k)
                 {
                     zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
@@ -360,7 +373,7 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
                 /* 2 x 2 diagonal block */
                 /* Interchange rows K and -IPIV(K+1). */
                 kp = -ipiv[k + 1];
-                if (kp == -ipiv[k])
+                if(kp == -ipiv[k])
                 {
                     zswap_(nrhs, &b[k + 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
@@ -368,12 +381,12 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
             }
         }
         /* Compute (L \P**T * B) -> B [ (L \P**T * B) ] */
-        ztrsm_("L", "L", "N", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[ b_offset], ldb);
+        ztrsm_("L", "L", "N", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
         /* Compute D \ B -> B [ D \ (L \P**T * B) ] */
         i__ = 1;
         while(i__ <= *n)
         {
-            if (ipiv[i__] > 0)
+            if(ipiv[i__] > 0)
             {
                 z_div(&z__1, &c_b1, &a[i__ + i__ * a_dim1]);
                 zscal_(nrhs, &z__1, &b[i__ + b_dim1], ldb);
@@ -396,9 +409,7 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
                 denom.r = z__1.r;
                 denom.i = z__1.i; // , expr subst
                 i__1 = *nrhs;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     z_div(&z__1, &b[i__ + j * b_dim1], &akm1k);
                     bkm1.r = z__1.r;
@@ -429,17 +440,17 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
             ++i__;
         }
         /* Compute (L**T \ B) -> B [ L**T \ (D \ (L \P**T * B) ) ] */
-        ztrsm_("L", "L", "T", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[ b_offset], ldb);
+        ztrsm_("L", "L", "T", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
         /* P * B [ P * (L**T \ (D \ (L \P**T * B) )) ] */
         k = *n;
         while(k >= 1)
         {
-            if (ipiv[k] > 0)
+            if(ipiv[k] > 0)
             {
                 /* 1 x 1 diagonal block */
                 /* Interchange rows K and IPIV(K). */
                 kp = ipiv[k];
-                if (kp != k)
+                if(kp != k)
                 {
                     zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
@@ -450,7 +461,7 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
                 /* 2 x 2 diagonal block */
                 /* Interchange rows K-1 and -IPIV(K). */
                 kp = -ipiv[k];
-                if (k > 1 && kp == -ipiv[k - 1])
+                if(k > 1 && kp == -ipiv[k - 1])
                 {
                     zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }

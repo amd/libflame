@@ -70,15 +70,15 @@ integer ilatrans_(char *trans)
     /* .. External Functions .. */
     /* .. */
     /* .. Executable Statements .. */
-    if (lsame_(trans, "N", 1, 1))
+    if(lsame_(trans, "N", 1, 1))
     {
         ret_val = 111;
     }
-    else if (lsame_(trans, "T", 1, 1))
+    else if(lsame_(trans, "T", 1, 1))
     {
         ret_val = 112;
     }
-    else if (lsame_(trans, "C", 1, 1))
+    else if(lsame_(trans, "C", 1, 1))
     {
         ret_val = 113;
     }

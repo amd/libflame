@@ -105,7 +105,7 @@
 void dlas2_(doublereal *f, doublereal *g, doublereal *h__, doublereal *ssmin, doublereal *ssmax)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlas2 inputs: f %lf, g %lf, h__ %lf",*f, *g, *h__);
+    AOCL_DTL_SNPRINTF("dlas2 inputs: f %lf, g %lf, h__ %lf", *f, *g, *h__);
     /* System generated locals */
     doublereal d__1, d__2;
     /* Builtin functions */
@@ -129,9 +129,9 @@ void dlas2_(doublereal *f, doublereal *g, doublereal *h__, doublereal *ssmin, do
     fa = f2c_dabs(*f);
     ga = f2c_dabs(*g);
     ha = f2c_dabs(*h__);
-    fhmn = fla_min(fa,ha);
-    fhmx = fla_max(fa,ha);
-    if (fhmn == 0.)
+    fhmn = fla_min(fa, ha);
+    fhmx = fla_max(fa, ha);
+    if(fhmn == 0.)
     {
         *ssmin = 0.;
         if(fhmx == 0.)
@@ -141,8 +141,8 @@ void dlas2_(doublereal *f, doublereal *g, doublereal *h__, doublereal *ssmin, do
         else
         {
             /* Computing 2nd power */
-            d__1 = fla_min(fhmx,ga) / fla_max(fhmx,ga);
-            *ssmax = fla_max(fhmx,ga) * sqrt(d__1 * d__1 + 1.);
+            d__1 = fla_min(fhmx, ga) / fla_max(fhmx, ga);
+            *ssmax = fla_max(fhmx, ga) * sqrt(d__1 * d__1 + 1.);
         }
     }
     else

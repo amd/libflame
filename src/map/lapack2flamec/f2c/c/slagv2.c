@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__2 = 2;
-static aocl_int64_t c__1 = 1;
+static integer c__2 = 2;
+static integer c__1 = 1;
 /* > \brief \b SLAGV2 computes the Generalized Schur factorization of a real 2-by-2 matrix pencil
  * (A,B) where B is upper triangular. */
 /* =========== DOCUMENTATION =========== */
@@ -154,7 +154,8 @@ static aocl_int64_t c__1 = 1;
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-void slagv2_(real *a, integer *lda, real *b, integer *ldb, real *alphar, real *alphai, real *beta, real *csl, real *snl, real * csr, real *snr)
+void slagv2_(real *a, integer *lda, real *b, integer *ldb, real *alphar, real *alphai, real *beta,
+             real *csl, real *snl, real *csr, real *snr)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slagv2(a, lda, b, ldb, alphar, alphai, beta, csl, snl, csr, snr);
@@ -177,16 +178,21 @@ void aocl_lapack_slagv2(real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb, 
     /* Local variables */
     real r__, t, h1, h2, h3, wi, qq, rr, wr1, wr2, ulp;
     extern /* Subroutine */
-    void srot_(integer *, real *, integer *, real *, integer *, real *, real *), slag2_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *);
+        void
+        srot_(integer *, real *, integer *, real *, integer *, real *, real *),
+        slag2_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *,
+               real *);
     real anorm, bnorm, scale1, scale2;
     extern /* Subroutine */
-    void slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
+        void
+        slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
     extern real slapy2_(real *, real *);
     real ascale, bscale;
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    void slartg_(real *, real *, real *, real *, real * );
+        void
+        slartg_(real *, real *, real *, real *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -222,10 +228,11 @@ void aocl_lapack_slagv2(real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb, 
     ulp = slamch_("P");
     /* Scale A */
     /* Computing MAX */
-    r__5 = (r__1 = a[a_dim1 + 1], f2c_abs(r__1)) + (r__2 = a[a_dim1 + 2], f2c_abs( r__2));
-    r__6 = (r__3 = a[(a_dim1 << 1) + 1], f2c_abs(r__3)) + (r__4 = a[(a_dim1 << 1) + 2], f2c_abs(r__4));
-    r__5 = fla_max(r__5,r__6); // ; expr subst
-    anorm = fla_max(r__5,safmin);
+    r__5 = (r__1 = a[a_dim1 + 1], f2c_abs(r__1)) + (r__2 = a[a_dim1 + 2], f2c_abs(r__2));
+    r__6 = (r__3 = a[(a_dim1 << 1) + 1], f2c_abs(r__3))
+           + (r__4 = a[(a_dim1 << 1) + 2], f2c_abs(r__4));
+    r__5 = fla_max(r__5, r__6); // ; expr subst
+    anorm = fla_max(r__5, safmin);
     ascale = 1.f / anorm;
     a[a_dim1 + 1] = ascale * a[a_dim1 + 1];
     a[(a_dim1 << 1) + 1] = ascale * a[(a_dim1 << 1) + 1];
@@ -234,15 +241,16 @@ void aocl_lapack_slagv2(real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb, 
     /* Scale B */
     /* Computing MAX */
     r__4 = (r__3 = b[b_dim1 + 1], f2c_abs(r__3));
-    r__5 = (r__1 = b[(b_dim1 << 1) + 1], f2c_abs(r__1)) + (r__2 = b[(b_dim1 << 1) + 2], f2c_abs(r__2));
-    r__4 = fla_max(r__4,r__5); // ; expr subst
-    bnorm = fla_max(r__4,safmin);
+    r__5 = (r__1 = b[(b_dim1 << 1) + 1], f2c_abs(r__1))
+           + (r__2 = b[(b_dim1 << 1) + 2], f2c_abs(r__2));
+    r__4 = fla_max(r__4, r__5); // ; expr subst
+    bnorm = fla_max(r__4, safmin);
     bscale = 1.f / bnorm;
     b[b_dim1 + 1] = bscale * b[b_dim1 + 1];
     b[(b_dim1 << 1) + 1] = bscale * b[(b_dim1 << 1) + 1];
     b[(b_dim1 << 1) + 2] = bscale * b[(b_dim1 << 1) + 2];
     /* Check if A can be deflated */
-    if ((r__1 = a[a_dim1 + 2], f2c_abs(r__1)) <= ulp)
+    if((r__1 = a[a_dim1 + 2], f2c_abs(r__1)) <= ulp)
     {
         *csl = 1.f;
         *snl = 0.f;
@@ -253,7 +261,7 @@ void aocl_lapack_slagv2(real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb, 
         wi = 0.f;
         /* Check if B is singular */
     }
-    else if ((r__1 = b[b_dim1 + 1], f2c_abs(r__1)) <= ulp)
+    else if((r__1 = b[b_dim1 + 1], f2c_abs(r__1)) <= ulp)
     {
         slartg_(&a[a_dim1 + 1], &a[a_dim1 + 2], csl, snl, &r__);
         *csr = 1.f;
@@ -265,7 +273,7 @@ void aocl_lapack_slagv2(real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb, 
         b[b_dim1 + 2] = 0.f;
         wi = 0.f;
     }
-    else if ((r__1 = b[(b_dim1 << 1) + 2], f2c_abs(r__1)) <= ulp)
+    else if((r__1 = b[(b_dim1 << 1) + 2], f2c_abs(r__1)) <= ulp)
     {
         slartg_(&a[(a_dim1 << 1) + 2], &a[a_dim1 + 2], csr, snr, &t);
         *snr = -(*snr);
@@ -281,8 +289,7 @@ void aocl_lapack_slagv2(real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb, 
     else
     {
         /* B is nonsingular, first compute the eigenvalues of (A,B) */
-        aocl_lapack_slag2(&a[a_offset], lda, &b[b_offset], ldb, &safmin, &scale1, &scale2, &wr1,
-                          &wr2, &wi);
+        slag2_(&a[a_offset], lda, &b[b_offset], ldb, &safmin, &scale1, &scale2, &wr1, &wr2, &wi);
         if(wi == 0.f)
         {
             /* two real eigenvalues, compute s*A-w*B */
@@ -310,14 +317,18 @@ void aocl_lapack_slagv2(real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb, 
             aocl_blas_srot(&c__2, &b[b_dim1 + 1], &c__1, &b[(b_dim1 << 1) + 1], &c__1, csr, snr);
             /* compute inf norms of A and B */
             /* Computing MAX */
-            r__5 = (r__1 = a[a_dim1 + 1], f2c_abs(r__1)) + (r__2 = a[(a_dim1 << 1) + 1], f2c_abs(r__2));
-            r__6 = (r__3 = a[a_dim1 + 2], f2c_abs(r__3) ) + (r__4 = a[(a_dim1 << 1) + 2], f2c_abs(r__4)); // , expr subst
-            h1 = fla_max(r__5,r__6);
+            r__5 = (r__1 = a[a_dim1 + 1], f2c_abs(r__1))
+                   + (r__2 = a[(a_dim1 << 1) + 1], f2c_abs(r__2));
+            r__6 = (r__3 = a[a_dim1 + 2], f2c_abs(r__3))
+                   + (r__4 = a[(a_dim1 << 1) + 2], f2c_abs(r__4)); // , expr subst
+            h1 = fla_max(r__5, r__6);
             /* Computing MAX */
-            r__5 = (r__1 = b[b_dim1 + 1], f2c_abs(r__1)) + (r__2 = b[(b_dim1 << 1) + 1], f2c_abs(r__2));
-            r__6 = (r__3 = b[b_dim1 + 2], f2c_abs(r__3) ) + (r__4 = b[(b_dim1 << 1) + 2], f2c_abs(r__4)); // , expr subst
-            h2 = fla_max(r__5,r__6);
-            if (scale1 * h1 >= f2c_abs(wr1) * h2)
+            r__5 = (r__1 = b[b_dim1 + 1], f2c_abs(r__1))
+                   + (r__2 = b[(b_dim1 << 1) + 1], f2c_abs(r__2));
+            r__6 = (r__3 = b[b_dim1 + 2], f2c_abs(r__3))
+                   + (r__4 = b[(b_dim1 << 1) + 2], f2c_abs(r__4)); // , expr subst
+            h2 = fla_max(r__5, r__6);
+            if(scale1 * h1 >= f2c_abs(wr1) * h2)
             {
                 /* find left rotation matrix Q to zero out B(2,1) */
                 slartg_(&b[b_dim1 + 1], &b[b_dim1 + 2], csl, snl, &r__);

@@ -81,7 +81,7 @@ static aocl_int64_t c__1 = 1;
 /* > first KD+1 rows of the array. The j-th column of U or L is */
 /* > stored in the j-th column of the array AB as follows: */
 /* > if UPLO ='U', AB(kd+1+i-j,j) = U(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO ='L', AB(1+i-j,j) = L(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > \endverbatim */
 /* > */
@@ -120,15 +120,18 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, complex *ab, integer *ldab, complex *b, integer *ldb, integer * info)
+void cpbtrs_(char *uplo, integer *n, integer *kd, integer *nrhs, complex *ab, integer *ldab,
+             complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cpbtrs inputs: uplo %c, n %lld, kd %lld, nrhs %lld, ldab %lld, ldb %lld",*uplo, *n, *kd, *nrhs, *ldab, *ldb);
+    snprintf(buffer, 256, "cpbtrs inputs: uplo %c, n %lld, kd %lld, nrhs %lld, ldab %lld, ldb %lld",
+             *uplo, *n, *kd, *nrhs, *ldab, *ldb);
 #else
-    snprintf(buffer, 256,"cpbtrs inputs: uplo %c, n %d, kd %d, nrhs %d, ldab %d, ldb %d",*uplo, *n, *kd, *nrhs, *ldab, *ldb);
+    snprintf(buffer, 256, "cpbtrs inputs: uplo %c, n %d, kd %d, nrhs %d, ldab %d, ldb %d", *uplo,
+             *n, *kd, *nrhs, *ldab, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -138,10 +141,13 @@ void cpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, complex *ab, i
     integer j;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void ctbsv_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *, integer *);
+        void
+        ctbsv_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *,
+               integer *);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -171,7 +177,7 @@ void cpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, complex *ab, i
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -191,7 +197,7 @@ void cpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, complex *ab, i
     {
         *info = -6;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
@@ -215,11 +221,11 @@ void cpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, complex *ab, i
         for(j = 1; j <= i__1; ++j)
         {
             /* Solve U**H *X = B, overwriting B with X. */
-            aocl_blas_ctbsv("Upper", "Conjugate transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
-                            &b[j * b_dim1 + 1], &c__1);
+            ctbsv_("Upper", "Conjugate transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
+                   &b[j * b_dim1 + 1], &c__1);
             /* Solve U*X = B, overwriting B with X. */
-            aocl_blas_ctbsv("Upper", "No transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
-                            &b[j * b_dim1 + 1], &c__1);
+            ctbsv_("Upper", "No transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
+                   &b[j * b_dim1 + 1], &c__1);
             /* L10: */
         }
     }
@@ -230,11 +236,11 @@ void cpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, complex *ab, i
         for(j = 1; j <= i__1; ++j)
         {
             /* Solve L*X = B, overwriting B with X. */
-            aocl_blas_ctbsv("Lower", "No transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
-                            &b[j * b_dim1 + 1], &c__1);
+            ctbsv_("Lower", "No transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
+                   &b[j * b_dim1 + 1], &c__1);
             /* Solve L**H *X = B, overwriting B with X. */
-            aocl_blas_ctbsv("Lower", "Conjugate transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
-                            &b[j * b_dim1 + 1], &c__1);
+            ctbsv_("Lower", "Conjugate transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
+                   &b[j * b_dim1 + 1], &c__1);
             /* L20: */
         }
     }

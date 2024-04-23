@@ -100,10 +100,11 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlasdt_(integer *n, integer *lvl, integer *nd, integer * inode, integer *ndiml, integer *ndimr, integer *msub)
+void dlasdt_(integer *n, integer *lvl, integer *nd, integer *inode, integer *ndiml, integer *ndimr,
+             integer *msub)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlasdt inputs: n %" FLA_IS ", msub %" FLA_IS "",*n, *msub);
+    AOCL_DTL_SNPRINTF("dlasdt inputs: n %" FLA_IS ", msub %" FLA_IS "", *n, *msub);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     /* Builtin functions */
@@ -134,9 +135,9 @@ void dlasdt_(integer *n, integer *lvl, integer *nd, integer * inode, integer *nd
     --ndiml;
     --inode;
     /* Function Body */
-    maxn = fla_max(1,*n);
-    temp = log((doublereal) maxn / (doublereal) (*msub + 1)) / log(2.);
-    *lvl = (integer) temp + 1;
+    maxn = fla_max(1, *n);
+    temp = log((doublereal)maxn / (doublereal)(*msub + 1)) / log(2.);
+    *lvl = (integer)temp + 1;
     i__ = *n / 2;
     inode[1] = (aocl_int_t)(i__ + 1);
     ndiml[1] = (aocl_int_t)(i__);

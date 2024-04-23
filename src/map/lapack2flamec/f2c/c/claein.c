@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b CLAEIN computes a specified right or left eigenvector of an upper Hessenberg matrix
  * by inverse iteration. */
 /* =========== DOCUMENTATION =========== */
@@ -150,15 +150,17 @@ V is set to the */
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer *ldh, complex *w, complex *v, complex *b, integer *ldb, real *rwork, real *eps3, real *smlnum, integer *info)
+void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer *ldh, complex *w,
+             complex *v, complex *b, integer *ldb, real *rwork, real *eps3, real *smlnum,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"claein inputs: n %lld, ldh %lld, ldb %lld",*n, *ldh, *ldb);
+    snprintf(buffer, 256, "claein inputs: n %lld, ldh %lld, ldb %lld", *n, *ldh, *ldb);
 #else
-    snprintf(buffer, 256,"claein inputs: n %d, ldh %d, ldb %d",*n, *ldh, *ldb);
+    snprintf(buffer, 256, "claein inputs: n %d, ldh %d, ldb %d", *n, *ldh, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -177,9 +179,13 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
     char trans[1];
     real rtemp, rootn, vnorm;
     extern /* Complex */
-    void cladiv_f2c_(complex *, complex *, complex *);
+        void
+        cladiv_f2c_(complex *, complex *, complex *);
     extern /* Subroutine */
-    void csscal_(integer *, real *, complex *, integer *), clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *, real *, integer *);
+        void
+        csscal_(integer *, real *, complex *, integer *),
+        clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *,
+                real *, integer *);
     extern real scasum_(integer *, complex *, integer *);
     char normin[1];
     real nrmsml, growto;
@@ -225,7 +231,7 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
     /* Computing MAX */
     r__1 = 1.f;
     r__2 = *eps3 * rootn; // , expr subst
-    nrmsml = fla_max(r__1,r__2) * *smlnum;
+    nrmsml = fla_max(r__1, r__2) * *smlnum;
     /* Form B = H - W*I (except that the subdiagonal elements are not */
     /* stored). */
     i__1 = *n;
@@ -264,7 +270,7 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
     {
         /* Scale supplied initial vector. */
         vnorm = scnrm2_(n, &v[1], &c__1);
-        r__1 = *eps3 * rootn / fla_max(vnorm,nrmsml);
+        r__1 = *eps3 * rootn / fla_max(vnorm, nrmsml);
         csscal_(n, &r__1, &v[1], &c__1);
     }
     if(*rightv)
@@ -278,7 +284,9 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
             ei.real = h__[i__2].real;
             ei.imag = h__[i__2].imag; // , expr subst
             i__2 = i__ + i__ * b_dim1;
-            if ((r__1 = b[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&b[i__ + i__ * b_dim1]), f2c_abs(r__2)) < (r__3 = ei.r, f2c_abs(r__3)) + (r__4 = r_imag(&ei), f2c_abs(r__4)))
+            if((r__1 = b[i__2].r, f2c_abs(r__1))
+                   + (r__2 = r_imag(&b[i__ + i__ * b_dim1]), f2c_abs(r__2))
+               < (r__3 = ei.r, f2c_abs(r__3)) + (r__4 = r_imag(&ei), f2c_abs(r__4)))
             {
                 /* Interchange rows and eliminate. */
                 cladiv_f2c_(&q__1, &b[i__ + i__ * b_dim1], &ei);
@@ -311,7 +319,7 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
             {
                 /* Eliminate without interchange. */
                 i__2 = i__ + i__ * b_dim1;
-                if(b[i__2].real == 0.f && b[i__2].imag == 0.f)
+                if(b[i__2].r == 0.f && b[i__2].i == 0.f)
                 {
                     i__3 = i__ + i__ * b_dim1;
                     b[i__3].real = *eps3;
@@ -320,7 +328,7 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
                 cladiv_f2c_(&q__1, &ei, &b[i__ + i__ * b_dim1]);
                 x.r = q__1.r;
                 x.i = q__1.i; // , expr subst
-                if (x.r != 0.f || x.i != 0.f)
+                if(x.r != 0.f || x.i != 0.f)
                 {
                     i__2 = *n;
                     for(j = i__ + 1; j <= i__2; ++j)
@@ -341,7 +349,7 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
             /* L60: */
         }
         i__1 = *n + *n * b_dim1;
-        if(b[i__1].real == 0.f && b[i__1].imag == 0.f)
+        if(b[i__1].r == 0.f && b[i__1].i == 0.f)
         {
             i__2 = *n + *n * b_dim1;
             b[i__2].real = *eps3;
@@ -359,7 +367,9 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
             ej.real = h__[i__1].real;
             ej.imag = h__[i__1].imag; // , expr subst
             i__1 = j + j * b_dim1;
-            if ((r__1 = b[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&b[j + j * b_dim1]), f2c_abs(r__2)) < (r__3 = ej.r, f2c_abs(r__3)) + (r__4 = r_imag(&ej), f2c_abs(r__4)))
+            if((r__1 = b[i__1].r, f2c_abs(r__1))
+                   + (r__2 = r_imag(&b[j + j * b_dim1]), f2c_abs(r__2))
+               < (r__3 = ej.r, f2c_abs(r__3)) + (r__4 = r_imag(&ej), f2c_abs(r__4)))
             {
                 /* Interchange columns and eliminate. */
                 cladiv_f2c_(&q__1, &b[j + j * b_dim1], &ej);
@@ -392,7 +402,7 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
             {
                 /* Eliminate without interchange. */
                 i__1 = j + j * b_dim1;
-                if(b[i__1].real == 0.f && b[i__1].imag == 0.f)
+                if(b[i__1].r == 0.f && b[i__1].i == 0.f)
                 {
                     i__2 = j + j * b_dim1;
                     b[i__2].real = *eps3;
@@ -401,7 +411,7 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
                 cladiv_f2c_(&q__1, &ej, &b[j + j * b_dim1]);
                 x.r = q__1.r;
                 x.i = q__1.i; // , expr subst
-                if (x.r != 0.f || x.i != 0.f)
+                if(x.r != 0.f || x.i != 0.f)
                 {
                     i__1 = j - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
@@ -422,7 +432,7 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
             /* L90: */
         }
         i__1 = b_dim1 + 1;
-        if(b[i__1].real == 0.f && b[i__1].imag == 0.f)
+        if(b[i__1].r == 0.f && b[i__1].i == 0.f)
         {
             i__2 = b_dim1 + 1;
             b[i__2].real = *eps3;
@@ -437,10 +447,11 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
         /* Solve U*x = scale*v for a right eigenvector */
         /* or U**H *x = scale*v for a left eigenvector, */
         /* overwriting x on v. */
-        clatrs_("Upper", trans, "Nonunit", normin, n, &b[b_offset], ldb, &v[1], &scale, &rwork[1], &ierr);
+        clatrs_("Upper", trans, "Nonunit", normin, n, &b[b_offset], ldb, &v[1], &scale, &rwork[1],
+                &ierr);
         *(unsigned char *)normin = 'Y';
         /* Test for sufficient growth in the norm of v. */
-        vnorm = aocl_blas_scasum(n, &v[1], &c__1);
+        vnorm = scasum_(n, &v[1], &c__1);
         if(vnorm >= growto * scale)
         {
             goto L120;

@@ -1,5 +1,8 @@
-/* ../netlib/sgsvj0.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sgsvj0.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__0 = 0;
@@ -10,11 +13,17 @@ static real c_b42 = 1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SGSVJ0 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgsvj0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgsvj0.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgsvj0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgsvj0.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgsvj0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgsvj0.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -206,7 +215,9 @@ static real c_b42 = 1.f;
 /* > drmac@math.hr. Thank you. */
 /* ===================================================================== */
 /* Subroutine */
-void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d__, real *sva, integer *mv, real *v, integer * ldv, real *eps, real *sfmin, real *tol, integer *nsweep, real *work, integer *lwork, integer *info)
+void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d__, real *sva,
+             integer *mv, real *v, integer *ldv, real *eps, real *sfmin, real *tol, integer *nsweep,
+             real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4, i__5, i__6;
@@ -230,18 +241,26 @@ void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d_
     real theta, small_val, fastr[5];
     logical applv, rsvec;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     logical rotok;
     extern /* Subroutine */
-    void sswap_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), srotm_(integer *, real *, integer *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sswap_(integer *, real *, integer *, real *, integer *),
+        saxpy_(integer *, real *, real *, integer *, real *, integer *),
+        srotm_(integer *, real *, integer *, real *, integer *, real *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer ijblsk, swband;
     extern /* Subroutine */
-    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
+                integer *, integer *);
     extern integer isamax_(integer *, real *, integer *);
     integer blskip;
     real mxaapq, thsign;
     extern /* Subroutine */
-    void slassq_(integer *, real *, integer *, real *, real *);
+        void
+        slassq_(integer *, real *, integer *, real *, real *);
     real mxsinj;
     integer emptsw, notrot, iswrot, lkahead;
     real rootbig, rooteps;
@@ -283,39 +302,39 @@ void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d_
     /* Function Body */
     applv = lsame_(jobv, "A", 1, 1);
     rsvec = lsame_(jobv, "V", 1, 1);
-    if (! (rsvec || applv || lsame_(jobv, "N", 1, 1)))
+    if(!(rsvec || applv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -2;
     }
-    else if (*n < 0 || *n > *m)
+    else if(*n < 0 || *n > *m)
     {
         *info = -3;
     }
-    else if (*lda < *m)
+    else if(*lda < *m)
     {
         *info = -5;
     }
-    else if ((rsvec || applv) && *mv < 0)
+    else if((rsvec || applv) && *mv < 0)
     {
         *info = -8;
     }
-    else if (rsvec && *ldv < *n || applv && *ldv < *mv)
+    else if(rsvec && *ldv < *n || applv && *ldv < *mv)
     {
         *info = -10;
     }
-    else if (*tol <= *eps)
+    else if(*tol <= *eps)
     {
         *info = -13;
     }
-    else if (*nsweep < 0)
+    else if(*nsweep < 0)
     {
         *info = -14;
     }
-    else if (*lwork < *m)
+    else if(*lwork < *m)
     {
         *info = -16;
     }
@@ -324,17 +343,17 @@ void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d_
         *info = 0;
     }
     /* #:( */
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SGSVJ0", &i__1, (ftnlen)6);
         return;
     }
-    if (rsvec)
+    if(rsvec)
     {
         mvl = *n;
     }
-    else if (applv)
+    else if(applv)
     {
         mvl = *mv;
     }
@@ -356,13 +375,13 @@ void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d_
     /* if SGESVJ is used as a computational routine in the preconditioned */
     /* Jacobi SVD algorithm SGESVJ. For sweeps i=1:SWBAND the procedure */
     /* ...... */
-    kbl = fla_min(8,*n);
+    kbl = fla_min(8, *n);
     /* [TP] KBL is a tuning parameter that defines the tile size in the */
     /* tiling of the p-q loops of pivot pairs. In general, an optimal */
     /* value of KBL depends on the matrix dimensions and on the */
     /* parameters of the computer's memory. */
     nbl = *n / kbl;
-    if (nbl * kbl != *n)
+    if(nbl * kbl != *n)
     {
         ++nbl;
     }
@@ -370,16 +389,14 @@ void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d_
     i__1 = kbl;
     blskip = i__1 * i__1 + 1;
     /* [TP] BLKSKIP is a tuning parameter that depends on SWBAND and KBL. */
-    rowskip = fla_min(5,kbl);
+    rowskip = fla_min(5, kbl);
     /* [TP] ROWSKIP is a tuning parameter. */
     lkahead = 1;
     /* [TP] LKAHEAD is a tuning parameter. */
     swband = 0;
     pskipped = 0;
     i__1 = *nsweep;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* .. go go go ... */
         mxaapq = 0.f;
@@ -388,35 +405,29 @@ void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d_
         notrot = 0;
         pskipped = 0;
         i__2 = nbl;
-        for (ibr = 1;
-                ibr <= i__2;
-                ++ibr)
+        for(ibr = 1; ibr <= i__2; ++ibr)
         {
             igl = (ibr - 1) * kbl + 1;
             /* Computing MIN */
             i__4 = lkahead;
             i__5 = nbl - ibr; // , expr subst
-            i__3 = fla_min(i__4,i__5);
-            for (ir1 = 0;
-                    ir1 <= i__3;
-                    ++ir1)
+            i__3 = fla_min(i__4, i__5);
+            for(ir1 = 0; ir1 <= i__3; ++ir1)
             {
                 igl += ir1 * kbl;
                 /* Computing MIN */
                 i__5 = igl + kbl - 1;
                 i__6 = *n - 1; // , expr subst
-                i__4 = fla_min(i__5,i__6);
-                for (p = igl;
-                        p <= i__4;
-                        ++p)
+                i__4 = fla_min(i__5, i__6);
+                for(p = igl; p <= i__4; ++p)
                 {
                     /* .. de Rijk's pivoting */
                     i__5 = *n - p + 1;
                     q = isamax_(&i__5, &sva[p], &c__1) + p - 1;
-                    if (p != q)
+                    if(p != q)
                     {
                         sswap_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1);
-                        if (rsvec)
+                        if(rsvec)
                         {
                             sswap_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], &c__1);
                         }
@@ -427,7 +438,7 @@ void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d_
                         d__[p] = d__[q];
                         d__[q] = temp1;
                     }
-                    if (ir1 == 0)
+                    if(ir1 == 0)
                     {
                         /* Column norms are periodically updated by explicit */
                         /* norm computation. */
@@ -440,7 +451,7 @@ void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d_
                         /* the true norm is far from the under(over)flow boundaries. */
                         /* If properly implemented SNRM2 is available, the IF-THEN-ELSE */
                         /* below should read "AAPP = SNRM2( M, A(1,p), 1 ) * D(p)". */
-                        if (sva[p] < rootbig && sva[p] > rootsfmin)
+                        if(sva[p] < rootbig && sva[p] > rootsfmin)
                         {
                             sva[p] = snrm2_(m, &a[p * a_dim1 + 1], &c__1) * d__[p];
                         }
@@ -448,7 +459,7 @@ void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d_
                         {
                             temp1 = 0.f;
                             aapp = 1.f;
-                            slassq_(m, &a[p * a_dim1 + 1], &c__1, &temp1, & aapp);
+                            slassq_(m, &a[p * a_dim1 + 1], &c__1, &temp1, &aapp);
                             sva[p] = temp1 * sqrt(aapp) * d__[p];
                         }
                         aapp = sva[p];
@@ -457,77 +468,85 @@ void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d_
                     {
                         aapp = sva[p];
                     }
-                    if (aapp > 0.f)
+                    if(aapp > 0.f)
                     {
                         pskipped = 0;
                         /* Computing MIN */
                         i__6 = igl + kbl - 1;
-                        i__5 = fla_min(i__6,*n);
-                        for (q = p + 1;
-                                q <= i__5;
-                                ++q)
+                        i__5 = fla_min(i__6, *n);
+                        for(q = p + 1; q <= i__5; ++q)
                         {
                             aaqq = sva[q];
-                            if (aaqq > 0.f)
+                            if(aaqq > 0.f)
                             {
                                 aapp0 = aapp;
-                                if (aaqq >= 1.f)
+                                if(aaqq >= 1.f)
                                 {
                                     rotok = small_val * aapp <= aaqq;
-                                    if (aapp < big / aaqq)
+                                    if(aapp < big / aaqq)
                                     {
-                                        aapq = sdot_(m, &a[p * a_dim1 + 1], & c__1, &a[q * a_dim1 + 1], & c__1) * d__[p] * d__[q] / aaqq / aapp;
+                                        aapq = sdot_(m, &a[p * a_dim1 + 1], &c__1,
+                                                     &a[q * a_dim1 + 1], &c__1)
+                                               * d__[p] * d__[q] / aaqq / aapp;
                                     }
                                     else
                                     {
-                                        scopy_(m, &a[p * a_dim1 + 1], &c__1, & work[1], &c__1);
-                                        slascl_("G", &c__0, &c__0, &aapp, & d__[p], m, &c__1, &work[1], lda, &ierr);
-                                        aapq = sdot_(m, &work[1], &c__1, &a[q * a_dim1 + 1], &c__1) * d__[q] / aaqq;
+                                        scopy_(m, &a[p * a_dim1 + 1], &c__1, &work[1], &c__1);
+                                        slascl_("G", &c__0, &c__0, &aapp, &d__[p], m, &c__1,
+                                                &work[1], lda, &ierr);
+                                        aapq = sdot_(m, &work[1], &c__1, &a[q * a_dim1 + 1], &c__1)
+                                               * d__[q] / aaqq;
                                     }
                                 }
                                 else
                                 {
                                     rotok = aapp <= aaqq / small_val;
-                                    if (aapp > small_val / aaqq)
+                                    if(aapp > small_val / aaqq)
                                     {
-                                        aapq = sdot_(m, &a[p * a_dim1 + 1], & c__1, &a[q * a_dim1 + 1], & c__1) * d__[p] * d__[q] / aaqq / aapp;
+                                        aapq = sdot_(m, &a[p * a_dim1 + 1], &c__1,
+                                                     &a[q * a_dim1 + 1], &c__1)
+                                               * d__[p] * d__[q] / aaqq / aapp;
                                     }
                                     else
                                     {
-                                        scopy_(m, &a[q * a_dim1 + 1], &c__1, & work[1], &c__1);
-                                        slascl_("G", &c__0, &c__0, &aaqq, & d__[q], m, &c__1, &work[1], lda, &ierr);
-                                        aapq = sdot_(m, &work[1], &c__1, &a[p * a_dim1 + 1], &c__1) * d__[p] / aapp;
+                                        scopy_(m, &a[q * a_dim1 + 1], &c__1, &work[1], &c__1);
+                                        slascl_("G", &c__0, &c__0, &aaqq, &d__[q], m, &c__1,
+                                                &work[1], lda, &ierr);
+                                        aapq = sdot_(m, &work[1], &c__1, &a[p * a_dim1 + 1], &c__1)
+                                               * d__[p] / aapp;
                                     }
                                 }
                                 /* Computing MAX */
                                 r__1 = mxaapq;
                                 r__2 = f2c_abs(aapq); // , expr subst
-                                mxaapq = fla_max(r__1,r__2);
+                                mxaapq = fla_max(r__1, r__2);
                                 /* TO rotate or NOT to rotate, THAT is the question ... */
-                                if (f2c_abs(aapq) > *tol)
+                                if(f2c_abs(aapq) > *tol)
                                 {
                                     /* .. rotate */
                                     /* ROTATED = ROTATED + ONE */
-                                    if (ir1 == 0)
+                                    if(ir1 == 0)
                                     {
                                         notrot = 0;
                                         pskipped = 0;
                                         ++iswrot;
                                     }
-                                    if (rotok)
+                                    if(rotok)
                                     {
                                         aqoap = aaqq / aapp;
                                         apoaq = aapp / aaqq;
-                                        theta = (r__1 = aqoap - apoaq, f2c_abs( r__1)) * -.5f / aapq;
-                                        if (f2c_abs(theta) > bigtheta)
+                                        theta = (r__1 = aqoap - apoaq, f2c_abs(r__1)) * -.5f / aapq;
+                                        if(f2c_abs(theta) > bigtheta)
                                         {
                                             t = .5f / theta;
                                             fastr[2] = t * d__[p] / d__[q];
                                             fastr[3] = -t * d__[q] / d__[p];
-                                            srotm_(m, &a[p * a_dim1 + 1], & c__1, &a[q * a_dim1 + 1], &c__1, fastr);
-                                            if (rsvec)
+                                            srotm_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1],
+                                                   &c__1, fastr);
+                                            if(rsvec)
                                             {
-                                                srotm_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], &c__1, fastr);
+                                                srotm_(&mvl, &v[p * v_dim1 + 1], &c__1,
+                                                       &v[q * v_dim1 + 1], &c__1, fastr);
                                             }
                                             /* Computing MAX */
                                             r__1 = 0.f;
@@ -536,23 +555,23 @@ void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d_
                                             /* Computing MAX */
                                             r__1 = 0.f;
                                             r__2 = 1.f - t * aqoap * aapq; // , expr subst
-                                            aapp *= sqrt((fla_max(r__1,r__2)));
+                                            aapp *= sqrt((fla_max(r__1, r__2)));
                                             /* Computing MAX */
                                             r__1 = mxsinj;
                                             r__2 = f2c_abs(t); // , expr subst
-                                            mxsinj = fla_max(r__1,r__2);
+                                            mxsinj = fla_max(r__1, r__2);
                                         }
                                         else
                                         {
                                             /* .. choose correct signum for THETA and rotate */
                                             thsign = -r_sign(&c_b42, &aapq);
-                                            t = 1.f / (theta + thsign * sqrt( theta * theta + 1.f));
+                                            t = 1.f / (theta + thsign * sqrt(theta * theta + 1.f));
                                             cs = sqrt(1.f / (t * t + 1.f));
                                             sn = t * cs;
                                             /* Computing MAX */
                                             r__1 = mxsinj;
                                             r__2 = f2c_abs(sn); // , expr subst
-                                            mxsinj = fla_max(r__1,r__2);
+                                            mxsinj = fla_max(r__1, r__2);
                                             /* Computing MAX */
                                             r__1 = 0.f;
                                             r__2 = t * apoaq * aapq + 1.f; // , expr subst
@@ -560,90 +579,112 @@ void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d_
                                             /* Computing MAX */
                                             r__1 = 0.f;
                                             r__2 = 1.f - t * aqoap * aapq; // , expr subst
-                                            aapp *= sqrt((fla_max(r__1,r__2)));
+                                            aapp *= sqrt((fla_max(r__1, r__2)));
                                             apoaq = d__[p] / d__[q];
                                             aqoap = d__[q] / d__[p];
-                                            if (d__[p] >= 1.f)
+                                            if(d__[p] >= 1.f)
                                             {
-                                                if (d__[q] >= 1.f)
+                                                if(d__[q] >= 1.f)
                                                 {
                                                     fastr[2] = t * apoaq;
                                                     fastr[3] = -t * aqoap;
                                                     d__[p] *= cs;
                                                     d__[q] *= cs;
-                                                    srotm_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1, fastr);
-                                                    if (rsvec)
+                                                    srotm_(m, &a[p * a_dim1 + 1], &c__1,
+                                                           &a[q * a_dim1 + 1], &c__1, fastr);
+                                                    if(rsvec)
                                                     {
-                                                        srotm_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[ q * v_dim1 + 1], &c__1, fastr);
+                                                        srotm_(&mvl, &v[p * v_dim1 + 1], &c__1,
+                                                               &v[q * v_dim1 + 1], &c__1, fastr);
                                                     }
                                                 }
                                                 else
                                                 {
                                                     r__1 = -t * aqoap;
-                                                    saxpy_(m, &r__1, &a[q * a_dim1 + 1], &c__1, &a[ p * a_dim1 + 1], &c__1);
+                                                    saxpy_(m, &r__1, &a[q * a_dim1 + 1], &c__1,
+                                                           &a[p * a_dim1 + 1], &c__1);
                                                     r__1 = cs * sn * apoaq;
-                                                    saxpy_(m, &r__1, &a[p * a_dim1 + 1], &c__1, &a[ q * a_dim1 + 1], &c__1);
+                                                    saxpy_(m, &r__1, &a[p * a_dim1 + 1], &c__1,
+                                                           &a[q * a_dim1 + 1], &c__1);
                                                     d__[p] *= cs;
                                                     d__[q] /= cs;
-                                                    if (rsvec)
+                                                    if(rsvec)
                                                     {
                                                         r__1 = -t * aqoap;
-                                                        saxpy_(&mvl, &r__1, &v[q * v_dim1 + 1], & c__1, &v[p * v_dim1 + 1], &c__1);
+                                                        saxpy_(&mvl, &r__1, &v[q * v_dim1 + 1],
+                                                               &c__1, &v[p * v_dim1 + 1], &c__1);
                                                         r__1 = cs * sn * apoaq;
-                                                        saxpy_(&mvl, &r__1, &v[p * v_dim1 + 1], & c__1, &v[q * v_dim1 + 1], &c__1);
+                                                        saxpy_(&mvl, &r__1, &v[p * v_dim1 + 1],
+                                                               &c__1, &v[q * v_dim1 + 1], &c__1);
                                                     }
                                                 }
                                             }
                                             else
                                             {
-                                                if (d__[q] >= 1.f)
+                                                if(d__[q] >= 1.f)
                                                 {
                                                     r__1 = t * apoaq;
-                                                    saxpy_(m, &r__1, &a[p * a_dim1 + 1], &c__1, &a[ q * a_dim1 + 1], &c__1);
+                                                    saxpy_(m, &r__1, &a[p * a_dim1 + 1], &c__1,
+                                                           &a[q * a_dim1 + 1], &c__1);
                                                     r__1 = -cs * sn * aqoap;
-                                                    saxpy_(m, &r__1, &a[q * a_dim1 + 1], &c__1, &a[ p * a_dim1 + 1], &c__1);
+                                                    saxpy_(m, &r__1, &a[q * a_dim1 + 1], &c__1,
+                                                           &a[p * a_dim1 + 1], &c__1);
                                                     d__[p] /= cs;
                                                     d__[q] *= cs;
-                                                    if (rsvec)
+                                                    if(rsvec)
                                                     {
                                                         r__1 = t * apoaq;
-                                                        saxpy_(&mvl, &r__1, &v[p * v_dim1 + 1], & c__1, &v[q * v_dim1 + 1], &c__1);
+                                                        saxpy_(&mvl, &r__1, &v[p * v_dim1 + 1],
+                                                               &c__1, &v[q * v_dim1 + 1], &c__1);
                                                         r__1 = -cs * sn * aqoap;
-                                                        saxpy_(&mvl, &r__1, &v[q * v_dim1 + 1], & c__1, &v[p * v_dim1 + 1], &c__1);
+                                                        saxpy_(&mvl, &r__1, &v[q * v_dim1 + 1],
+                                                               &c__1, &v[p * v_dim1 + 1], &c__1);
                                                     }
                                                 }
                                                 else
                                                 {
-                                                    if (d__[p] >= d__[q])
+                                                    if(d__[p] >= d__[q])
                                                     {
                                                         r__1 = -t * aqoap;
-                                                        saxpy_(m, &r__1, &a[q * a_dim1 + 1], &c__1, &a[p * a_dim1 + 1], &c__1);
+                                                        saxpy_(m, &r__1, &a[q * a_dim1 + 1], &c__1,
+                                                               &a[p * a_dim1 + 1], &c__1);
                                                         r__1 = cs * sn * apoaq;
-                                                        saxpy_(m, &r__1, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1);
+                                                        saxpy_(m, &r__1, &a[p * a_dim1 + 1], &c__1,
+                                                               &a[q * a_dim1 + 1], &c__1);
                                                         d__[p] *= cs;
                                                         d__[q] /= cs;
-                                                        if (rsvec)
+                                                        if(rsvec)
                                                         {
                                                             r__1 = -t * aqoap;
-                                                            saxpy_(&mvl, &r__1, &v[q * v_dim1 + 1], &c__1, &v[p * v_dim1 + 1], & c__1);
+                                                            saxpy_(&mvl, &r__1, &v[q * v_dim1 + 1],
+                                                                   &c__1, &v[p * v_dim1 + 1],
+                                                                   &c__1);
                                                             r__1 = cs * sn * apoaq;
-                                                            saxpy_(&mvl, &r__1, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], & c__1);
+                                                            saxpy_(&mvl, &r__1, &v[p * v_dim1 + 1],
+                                                                   &c__1, &v[q * v_dim1 + 1],
+                                                                   &c__1);
                                                         }
                                                     }
                                                     else
                                                     {
                                                         r__1 = t * apoaq;
-                                                        saxpy_(m, &r__1, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1);
+                                                        saxpy_(m, &r__1, &a[p * a_dim1 + 1], &c__1,
+                                                               &a[q * a_dim1 + 1], &c__1);
                                                         r__1 = -cs * sn * aqoap;
-                                                        saxpy_(m, &r__1, &a[q * a_dim1 + 1], &c__1, &a[p * a_dim1 + 1], &c__1);
+                                                        saxpy_(m, &r__1, &a[q * a_dim1 + 1], &c__1,
+                                                               &a[p * a_dim1 + 1], &c__1);
                                                         d__[p] /= cs;
                                                         d__[q] *= cs;
-                                                        if (rsvec)
+                                                        if(rsvec)
                                                         {
                                                             r__1 = t * apoaq;
-                                                            saxpy_(&mvl, &r__1, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], & c__1);
+                                                            saxpy_(&mvl, &r__1, &v[p * v_dim1 + 1],
+                                                                   &c__1, &v[q * v_dim1 + 1],
+                                                                   &c__1);
                                                             r__1 = -cs * sn * aqoap;
-                                                            saxpy_(&mvl, &r__1, &v[q * v_dim1 + 1], &c__1, &v[p * v_dim1 + 1], & c__1);
+                                                            saxpy_(&mvl, &r__1, &v[q * v_dim1 + 1],
+                                                                   &c__1, &v[p * v_dim1 + 1],
+                                                                   &c__1);
                                                         }
                                                     }
                                                 }
@@ -652,27 +693,32 @@ void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d_
                                     }
                                     else
                                     {
-                                        /* .. have to use modified Gram-Schmidt like transformation */
-                                        scopy_(m, &a[p * a_dim1 + 1], &c__1, & work[1], &c__1);
-                                        slascl_("G", &c__0, &c__0, &aapp, & c_b42, m, &c__1, &work[1], lda, &ierr);
-                                        slascl_("G", &c__0, &c__0, &aaqq, & c_b42, m, &c__1, &a[q * a_dim1 + 1], lda, &ierr);
+                                        /* .. have to use modified Gram-Schmidt like transformation
+                                         */
+                                        scopy_(m, &a[p * a_dim1 + 1], &c__1, &work[1], &c__1);
+                                        slascl_("G", &c__0, &c__0, &aapp, &c_b42, m, &c__1,
+                                                &work[1], lda, &ierr);
+                                        slascl_("G", &c__0, &c__0, &aaqq, &c_b42, m, &c__1,
+                                                &a[q * a_dim1 + 1], lda, &ierr);
                                         temp1 = -aapq * d__[p] / d__[q];
-                                        saxpy_(m, &temp1, &work[1], &c__1, &a[ q * a_dim1 + 1], &c__1);
-                                        slascl_("G", &c__0, &c__0, &c_b42, & aaqq, m, &c__1, &a[q * a_dim1 + 1], lda, &ierr);
+                                        saxpy_(m, &temp1, &work[1], &c__1, &a[q * a_dim1 + 1],
+                                               &c__1);
+                                        slascl_("G", &c__0, &c__0, &c_b42, &aaqq, m, &c__1,
+                                                &a[q * a_dim1 + 1], lda, &ierr);
                                         /* Computing MAX */
                                         r__1 = 0.f;
                                         r__2 = 1.f - aapq * aapq; // , expr subst
-                                        sva[q] = aaqq * sqrt((fla_max(r__1,r__2))) ;
-                                        mxsinj = fla_max(mxsinj,*sfmin);
+                                        sva[q] = aaqq * sqrt((fla_max(r__1, r__2)));
+                                        mxsinj = fla_max(mxsinj, *sfmin);
                                     }
                                     /* END IF ROTOK THEN ... ELSE */
                                     /* In the case of cancellation in updating SVA(q), SVA(p) */
                                     /* recompute SVA(q), SVA(p). */
                                     /* Computing 2nd power */
                                     r__1 = sva[q] / aaqq;
-                                    if (r__1 * r__1 <= rooteps)
+                                    if(r__1 * r__1 <= rooteps)
                                     {
-                                        if (aaqq < rootbig && aaqq > rootsfmin)
+                                        if(aaqq < rootbig && aaqq > rootsfmin)
                                         {
                                             sva[q] = snrm2_(m, &a[q * a_dim1 + 1], &c__1) * d__[q];
                                         }
@@ -680,13 +726,13 @@ void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d_
                                         {
                                             t = 0.f;
                                             aaqq = 1.f;
-                                            slassq_(m, &a[q * a_dim1 + 1], & c__1, &t, &aaqq);
+                                            slassq_(m, &a[q * a_dim1 + 1], &c__1, &t, &aaqq);
                                             sva[q] = t * sqrt(aaqq) * d__[q];
                                         }
                                     }
-                                    if (aapp / aapp0 <= rooteps)
+                                    if(aapp / aapp0 <= rooteps)
                                     {
-                                        if (aapp < rootbig && aapp > rootsfmin)
+                                        if(aapp < rootbig && aapp > rootsfmin)
                                         {
                                             aapp = snrm2_(m, &a[p * a_dim1 + 1], &c__1) * d__[p];
                                         }
@@ -694,7 +740,7 @@ void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d_
                                         {
                                             t = 0.f;
                                             aapp = 1.f;
-                                            slassq_(m, &a[p * a_dim1 + 1], & c__1, &t, &aapp);
+                                            slassq_(m, &a[p * a_dim1 + 1], &c__1, &t, &aapp);
                                             aapp = t * sqrt(aapp) * d__[p];
                                         }
                                         sva[p] = aapp;
@@ -703,7 +749,7 @@ void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d_
                                 else
                                 {
                                     /* A(:,p) and A(:,q) already numerically orthogonal */
-                                    if (ir1 == 0)
+                                    if(ir1 == 0)
                                     {
                                         ++notrot;
                                     }
@@ -713,15 +759,15 @@ void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d_
                             else
                             {
                                 /* A(:,q) is zero column */
-                                if (ir1 == 0)
+                                if(ir1 == 0)
                                 {
                                     ++notrot;
                                 }
                                 ++pskipped;
                             }
-                            if (i__ <= swband && pskipped > rowskip)
+                            if(i__ <= swband && pskipped > rowskip)
                             {
-                                if (ir1 == 0)
+                                if(ir1 == 0)
                                 {
                                     aapp = -aapp;
                                 }
@@ -731,17 +777,17 @@ void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d_
                             /* L2002: */
                         }
                         /* END q-LOOP */
-L2103: /* bailed out of q-loop */
+                    L2103: /* bailed out of q-loop */
                         sva[p] = aapp;
                     }
                     else
                     {
                         sva[p] = aapp;
-                        if (ir1 == 0 && aapp == 0.f)
+                        if(ir1 == 0 && aapp == 0.f)
                         {
                             /* Computing MIN */
                             i__5 = igl + kbl - 1;
-                            notrot = notrot + fla_min(i__5,*n) - p;
+                            notrot = notrot + fla_min(i__5, *n) - p;
                         }
                     }
                     /* L2001: */
@@ -755,40 +801,34 @@ L2103: /* bailed out of q-loop */
             /* ... go to the off diagonal blocks */
             igl = (ibr - 1) * kbl + 1;
             i__3 = nbl;
-            for (jbc = ibr + 1;
-                    jbc <= i__3;
-                    ++jbc)
+            for(jbc = ibr + 1; jbc <= i__3; ++jbc)
             {
                 jgl = (jbc - 1) * kbl + 1;
                 /* doing the block at ( ibr, jbc ) */
                 ijblsk = 0;
                 /* Computing MIN */
                 i__5 = igl + kbl - 1;
-                i__4 = fla_min(i__5,*n);
-                for (p = igl;
-                        p <= i__4;
-                        ++p)
+                i__4 = fla_min(i__5, *n);
+                for(p = igl; p <= i__4; ++p)
                 {
                     aapp = sva[p];
-                    if (aapp > 0.f)
+                    if(aapp > 0.f)
                     {
                         pskipped = 0;
                         /* Computing MIN */
                         i__6 = jgl + kbl - 1;
-                        i__5 = fla_min(i__6,*n);
-                        for (q = jgl;
-                                q <= i__5;
-                                ++q)
+                        i__5 = fla_min(i__6, *n);
+                        for(q = jgl; q <= i__5; ++q)
                         {
                             aaqq = sva[q];
-                            if (aaqq > 0.f)
+                            if(aaqq > 0.f)
                             {
                                 aapp0 = aapp;
                                 /* .. M x 2 Jacobi SVD .. */
                                 /* .. Safe Gram matrix computation .. */
-                                if (aaqq >= 1.f)
+                                if(aaqq >= 1.f)
                                 {
-                                    if (aapp >= aaqq)
+                                    if(aapp >= aaqq)
                                     {
                                         rotok = small_val * aapp <= aaqq;
                                     }
@@ -796,20 +836,24 @@ L2103: /* bailed out of q-loop */
                                     {
                                         rotok = small_val * aaqq <= aapp;
                                     }
-                                    if (aapp < big / aaqq)
+                                    if(aapp < big / aaqq)
                                     {
-                                        aapq = sdot_(m, &a[p * a_dim1 + 1], & c__1, &a[q * a_dim1 + 1], & c__1) * d__[p] * d__[q] / aaqq / aapp;
+                                        aapq = sdot_(m, &a[p * a_dim1 + 1], &c__1,
+                                                     &a[q * a_dim1 + 1], &c__1)
+                                               * d__[p] * d__[q] / aaqq / aapp;
                                     }
                                     else
                                     {
-                                        scopy_(m, &a[p * a_dim1 + 1], &c__1, & work[1], &c__1);
-                                        slascl_("G", &c__0, &c__0, &aapp, & d__[p], m, &c__1, &work[1], lda, &ierr);
-                                        aapq = sdot_(m, &work[1], &c__1, &a[q * a_dim1 + 1], &c__1) * d__[q] / aaqq;
+                                        scopy_(m, &a[p * a_dim1 + 1], &c__1, &work[1], &c__1);
+                                        slascl_("G", &c__0, &c__0, &aapp, &d__[p], m, &c__1,
+                                                &work[1], lda, &ierr);
+                                        aapq = sdot_(m, &work[1], &c__1, &a[q * a_dim1 + 1], &c__1)
+                                               * d__[q] / aaqq;
                                     }
                                 }
                                 else
                                 {
-                                    if (aapp >= aaqq)
+                                    if(aapp >= aaqq)
                                     {
                                         rotok = aapp <= aaqq / small_val;
                                     }
@@ -817,46 +861,52 @@ L2103: /* bailed out of q-loop */
                                     {
                                         rotok = aaqq <= aapp / small_val;
                                     }
-                                    if (aapp > small_val / aaqq)
+                                    if(aapp > small_val / aaqq)
                                     {
-                                        aapq = sdot_(m, &a[p * a_dim1 + 1], & c__1, &a[q * a_dim1 + 1], & c__1) * d__[p] * d__[q] / aaqq / aapp;
+                                        aapq = sdot_(m, &a[p * a_dim1 + 1], &c__1,
+                                                     &a[q * a_dim1 + 1], &c__1)
+                                               * d__[p] * d__[q] / aaqq / aapp;
                                     }
                                     else
                                     {
-                                        scopy_(m, &a[q * a_dim1 + 1], &c__1, & work[1], &c__1);
-                                        slascl_("G", &c__0, &c__0, &aaqq, & d__[q], m, &c__1, &work[1], lda, &ierr);
-                                        aapq = sdot_(m, &work[1], &c__1, &a[p * a_dim1 + 1], &c__1) * d__[p] / aapp;
+                                        scopy_(m, &a[q * a_dim1 + 1], &c__1, &work[1], &c__1);
+                                        slascl_("G", &c__0, &c__0, &aaqq, &d__[q], m, &c__1,
+                                                &work[1], lda, &ierr);
+                                        aapq = sdot_(m, &work[1], &c__1, &a[p * a_dim1 + 1], &c__1)
+                                               * d__[p] / aapp;
                                     }
                                 }
                                 /* Computing MAX */
                                 r__1 = mxaapq;
                                 r__2 = f2c_abs(aapq); // , expr subst
-                                mxaapq = fla_max(r__1,r__2);
+                                mxaapq = fla_max(r__1, r__2);
                                 /* TO rotate or NOT to rotate, THAT is the question ... */
-                                if (f2c_abs(aapq) > *tol)
+                                if(f2c_abs(aapq) > *tol)
                                 {
                                     notrot = 0;
                                     /* ROTATED = ROTATED + 1 */
                                     pskipped = 0;
                                     ++iswrot;
-                                    if (rotok)
+                                    if(rotok)
                                     {
                                         aqoap = aaqq / aapp;
                                         apoaq = aapp / aaqq;
-                                        theta = (r__1 = aqoap - apoaq, f2c_abs( r__1)) * -.5f / aapq;
-                                        if (aaqq > aapp0)
+                                        theta = (r__1 = aqoap - apoaq, f2c_abs(r__1)) * -.5f / aapq;
+                                        if(aaqq > aapp0)
                                         {
                                             theta = -theta;
                                         }
-                                        if (f2c_abs(theta) > bigtheta)
+                                        if(f2c_abs(theta) > bigtheta)
                                         {
                                             t = .5f / theta;
                                             fastr[2] = t * d__[p] / d__[q];
                                             fastr[3] = -t * d__[q] / d__[p];
-                                            srotm_(m, &a[p * a_dim1 + 1], & c__1, &a[q * a_dim1 + 1], &c__1, fastr);
-                                            if (rsvec)
+                                            srotm_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1],
+                                                   &c__1, fastr);
+                                            if(rsvec)
                                             {
-                                                srotm_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], &c__1, fastr);
+                                                srotm_(&mvl, &v[p * v_dim1 + 1], &c__1,
+                                                       &v[q * v_dim1 + 1], &c__1, fastr);
                                             }
                                             /* Computing MAX */
                                             r__1 = 0.f;
@@ -865,27 +915,27 @@ L2103: /* bailed out of q-loop */
                                             /* Computing MAX */
                                             r__1 = 0.f;
                                             r__2 = 1.f - t * aqoap * aapq; // , expr subst
-                                            aapp *= sqrt((fla_max(r__1,r__2)));
+                                            aapp *= sqrt((fla_max(r__1, r__2)));
                                             /* Computing MAX */
                                             r__1 = mxsinj;
                                             r__2 = f2c_abs(t); // , expr subst
-                                            mxsinj = fla_max(r__1,r__2);
+                                            mxsinj = fla_max(r__1, r__2);
                                         }
                                         else
                                         {
                                             /* .. choose correct signum for THETA and rotate */
                                             thsign = -r_sign(&c_b42, &aapq);
-                                            if (aaqq > aapp0)
+                                            if(aaqq > aapp0)
                                             {
                                                 thsign = -thsign;
                                             }
-                                            t = 1.f / (theta + thsign * sqrt( theta * theta + 1.f));
+                                            t = 1.f / (theta + thsign * sqrt(theta * theta + 1.f));
                                             cs = sqrt(1.f / (t * t + 1.f));
                                             sn = t * cs;
                                             /* Computing MAX */
                                             r__1 = mxsinj;
                                             r__2 = f2c_abs(sn); // , expr subst
-                                            mxsinj = fla_max(r__1,r__2);
+                                            mxsinj = fla_max(r__1, r__2);
                                             /* Computing MAX */
                                             r__1 = 0.f;
                                             r__2 = t * apoaq * aapq + 1.f; // , expr subst
@@ -893,35 +943,41 @@ L2103: /* bailed out of q-loop */
                                             /* Computing MAX */
                                             r__1 = 0.f;
                                             r__2 = 1.f - t * aqoap * aapq; // , expr subst
-                                            aapp *= sqrt((fla_max(r__1,r__2)));
+                                            aapp *= sqrt((fla_max(r__1, r__2)));
                                             apoaq = d__[p] / d__[q];
                                             aqoap = d__[q] / d__[p];
-                                            if (d__[p] >= 1.f)
+                                            if(d__[p] >= 1.f)
                                             {
-                                                if (d__[q] >= 1.f)
+                                                if(d__[q] >= 1.f)
                                                 {
                                                     fastr[2] = t * apoaq;
                                                     fastr[3] = -t * aqoap;
                                                     d__[p] *= cs;
                                                     d__[q] *= cs;
-                                                    srotm_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1, fastr);
-                                                    if (rsvec)
+                                                    srotm_(m, &a[p * a_dim1 + 1], &c__1,
+                                                           &a[q * a_dim1 + 1], &c__1, fastr);
+                                                    if(rsvec)
                                                     {
-                                                        srotm_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[ q * v_dim1 + 1], &c__1, fastr);
+                                                        srotm_(&mvl, &v[p * v_dim1 + 1], &c__1,
+                                                               &v[q * v_dim1 + 1], &c__1, fastr);
                                                     }
                                                 }
                                                 else
                                                 {
                                                     r__1 = -t * aqoap;
-                                                    saxpy_(m, &r__1, &a[q * a_dim1 + 1], &c__1, &a[ p * a_dim1 + 1], &c__1);
+                                                    saxpy_(m, &r__1, &a[q * a_dim1 + 1], &c__1,
+                                                           &a[p * a_dim1 + 1], &c__1);
                                                     r__1 = cs * sn * apoaq;
-                                                    saxpy_(m, &r__1, &a[p * a_dim1 + 1], &c__1, &a[ q * a_dim1 + 1], &c__1);
-                                                    if (rsvec)
+                                                    saxpy_(m, &r__1, &a[p * a_dim1 + 1], &c__1,
+                                                           &a[q * a_dim1 + 1], &c__1);
+                                                    if(rsvec)
                                                     {
                                                         r__1 = -t * aqoap;
-                                                        saxpy_(&mvl, &r__1, &v[q * v_dim1 + 1], & c__1, &v[p * v_dim1 + 1], &c__1);
+                                                        saxpy_(&mvl, &r__1, &v[q * v_dim1 + 1],
+                                                               &c__1, &v[p * v_dim1 + 1], &c__1);
                                                         r__1 = cs * sn * apoaq;
-                                                        saxpy_(&mvl, &r__1, &v[p * v_dim1 + 1], & c__1, &v[q * v_dim1 + 1], &c__1);
+                                                        saxpy_(&mvl, &r__1, &v[p * v_dim1 + 1],
+                                                               &c__1, &v[q * v_dim1 + 1], &c__1);
                                                     }
                                                     d__[p] *= cs;
                                                     d__[q] /= cs;
@@ -929,54 +985,70 @@ L2103: /* bailed out of q-loop */
                                             }
                                             else
                                             {
-                                                if (d__[q] >= 1.f)
+                                                if(d__[q] >= 1.f)
                                                 {
                                                     r__1 = t * apoaq;
-                                                    saxpy_(m, &r__1, &a[p * a_dim1 + 1], &c__1, &a[ q * a_dim1 + 1], &c__1);
+                                                    saxpy_(m, &r__1, &a[p * a_dim1 + 1], &c__1,
+                                                           &a[q * a_dim1 + 1], &c__1);
                                                     r__1 = -cs * sn * aqoap;
-                                                    saxpy_(m, &r__1, &a[q * a_dim1 + 1], &c__1, &a[ p * a_dim1 + 1], &c__1);
-                                                    if (rsvec)
+                                                    saxpy_(m, &r__1, &a[q * a_dim1 + 1], &c__1,
+                                                           &a[p * a_dim1 + 1], &c__1);
+                                                    if(rsvec)
                                                     {
                                                         r__1 = t * apoaq;
-                                                        saxpy_(&mvl, &r__1, &v[p * v_dim1 + 1], & c__1, &v[q * v_dim1 + 1], &c__1);
+                                                        saxpy_(&mvl, &r__1, &v[p * v_dim1 + 1],
+                                                               &c__1, &v[q * v_dim1 + 1], &c__1);
                                                         r__1 = -cs * sn * aqoap;
-                                                        saxpy_(&mvl, &r__1, &v[q * v_dim1 + 1], & c__1, &v[p * v_dim1 + 1], &c__1);
+                                                        saxpy_(&mvl, &r__1, &v[q * v_dim1 + 1],
+                                                               &c__1, &v[p * v_dim1 + 1], &c__1);
                                                     }
                                                     d__[p] /= cs;
                                                     d__[q] *= cs;
                                                 }
                                                 else
                                                 {
-                                                    if (d__[p] >= d__[q])
+                                                    if(d__[p] >= d__[q])
                                                     {
                                                         r__1 = -t * aqoap;
-                                                        saxpy_(m, &r__1, &a[q * a_dim1 + 1], &c__1, &a[p * a_dim1 + 1], &c__1);
+                                                        saxpy_(m, &r__1, &a[q * a_dim1 + 1], &c__1,
+                                                               &a[p * a_dim1 + 1], &c__1);
                                                         r__1 = cs * sn * apoaq;
-                                                        saxpy_(m, &r__1, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1);
+                                                        saxpy_(m, &r__1, &a[p * a_dim1 + 1], &c__1,
+                                                               &a[q * a_dim1 + 1], &c__1);
                                                         d__[p] *= cs;
                                                         d__[q] /= cs;
-                                                        if (rsvec)
+                                                        if(rsvec)
                                                         {
                                                             r__1 = -t * aqoap;
-                                                            saxpy_(&mvl, &r__1, &v[q * v_dim1 + 1], &c__1, &v[p * v_dim1 + 1], & c__1);
+                                                            saxpy_(&mvl, &r__1, &v[q * v_dim1 + 1],
+                                                                   &c__1, &v[p * v_dim1 + 1],
+                                                                   &c__1);
                                                             r__1 = cs * sn * apoaq;
-                                                            saxpy_(&mvl, &r__1, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], & c__1);
+                                                            saxpy_(&mvl, &r__1, &v[p * v_dim1 + 1],
+                                                                   &c__1, &v[q * v_dim1 + 1],
+                                                                   &c__1);
                                                         }
                                                     }
                                                     else
                                                     {
                                                         r__1 = t * apoaq;
-                                                        saxpy_(m, &r__1, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1);
+                                                        saxpy_(m, &r__1, &a[p * a_dim1 + 1], &c__1,
+                                                               &a[q * a_dim1 + 1], &c__1);
                                                         r__1 = -cs * sn * aqoap;
-                                                        saxpy_(m, &r__1, &a[q * a_dim1 + 1], &c__1, &a[p * a_dim1 + 1], &c__1);
+                                                        saxpy_(m, &r__1, &a[q * a_dim1 + 1], &c__1,
+                                                               &a[p * a_dim1 + 1], &c__1);
                                                         d__[p] /= cs;
                                                         d__[q] *= cs;
-                                                        if (rsvec)
+                                                        if(rsvec)
                                                         {
                                                             r__1 = t * apoaq;
-                                                            saxpy_(&mvl, &r__1, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], & c__1);
+                                                            saxpy_(&mvl, &r__1, &v[p * v_dim1 + 1],
+                                                                   &c__1, &v[q * v_dim1 + 1],
+                                                                   &c__1);
                                                             r__1 = -cs * sn * aqoap;
-                                                            saxpy_(&mvl, &r__1, &v[q * v_dim1 + 1], &c__1, &v[p * v_dim1 + 1], & c__1);
+                                                            saxpy_(&mvl, &r__1, &v[q * v_dim1 + 1],
+                                                                   &c__1, &v[p * v_dim1 + 1],
+                                                                   &c__1);
                                                         }
                                                     }
                                                 }
@@ -985,33 +1057,41 @@ L2103: /* bailed out of q-loop */
                                     }
                                     else
                                     {
-                                        if (aapp > aaqq)
+                                        if(aapp > aaqq)
                                         {
-                                            scopy_(m, &a[p * a_dim1 + 1], & c__1, &work[1], &c__1);
-                                            slascl_("G", &c__0, &c__0, &aapp, &c_b42, m, &c__1, &work[1], lda, &ierr);
-                                            slascl_("G", &c__0, &c__0, &aaqq, &c_b42, m, &c__1, &a[q * a_dim1 + 1], lda, &ierr);
+                                            scopy_(m, &a[p * a_dim1 + 1], &c__1, &work[1], &c__1);
+                                            slascl_("G", &c__0, &c__0, &aapp, &c_b42, m, &c__1,
+                                                    &work[1], lda, &ierr);
+                                            slascl_("G", &c__0, &c__0, &aaqq, &c_b42, m, &c__1,
+                                                    &a[q * a_dim1 + 1], lda, &ierr);
                                             temp1 = -aapq * d__[p] / d__[q];
-                                            saxpy_(m, &temp1, &work[1], &c__1, &a[q * a_dim1 + 1], & c__1);
-                                            slascl_("G", &c__0, &c__0, &c_b42, &aaqq, m, &c__1, &a[q * a_dim1 + 1], lda, &ierr);
+                                            saxpy_(m, &temp1, &work[1], &c__1, &a[q * a_dim1 + 1],
+                                                   &c__1);
+                                            slascl_("G", &c__0, &c__0, &c_b42, &aaqq, m, &c__1,
+                                                    &a[q * a_dim1 + 1], lda, &ierr);
                                             /* Computing MAX */
                                             r__1 = 0.f;
                                             r__2 = 1.f - aapq * aapq; // , expr subst
                                             sva[q] = aaqq * sqrt((fla_max(r__1, r__2)));
-                                            mxsinj = fla_max(mxsinj,*sfmin);
+                                            mxsinj = fla_max(mxsinj, *sfmin);
                                         }
                                         else
                                         {
-                                            scopy_(m, &a[q * a_dim1 + 1], & c__1, &work[1], &c__1);
-                                            slascl_("G", &c__0, &c__0, &aaqq, &c_b42, m, &c__1, &work[1], lda, &ierr);
-                                            slascl_("G", &c__0, &c__0, &aapp, &c_b42, m, &c__1, &a[p * a_dim1 + 1], lda, &ierr);
+                                            scopy_(m, &a[q * a_dim1 + 1], &c__1, &work[1], &c__1);
+                                            slascl_("G", &c__0, &c__0, &aaqq, &c_b42, m, &c__1,
+                                                    &work[1], lda, &ierr);
+                                            slascl_("G", &c__0, &c__0, &aapp, &c_b42, m, &c__1,
+                                                    &a[p * a_dim1 + 1], lda, &ierr);
                                             temp1 = -aapq * d__[q] / d__[p];
-                                            saxpy_(m, &temp1, &work[1], &c__1, &a[p * a_dim1 + 1], & c__1);
-                                            slascl_("G", &c__0, &c__0, &c_b42, &aapp, m, &c__1, &a[p * a_dim1 + 1], lda, &ierr);
+                                            saxpy_(m, &temp1, &work[1], &c__1, &a[p * a_dim1 + 1],
+                                                   &c__1);
+                                            slascl_("G", &c__0, &c__0, &c_b42, &aapp, m, &c__1,
+                                                    &a[p * a_dim1 + 1], lda, &ierr);
                                             /* Computing MAX */
                                             r__1 = 0.f;
                                             r__2 = 1.f - aapq * aapq; // , expr subst
                                             sva[p] = aapp * sqrt((fla_max(r__1, r__2)));
-                                            mxsinj = fla_max(mxsinj,*sfmin);
+                                            mxsinj = fla_max(mxsinj, *sfmin);
                                         }
                                     }
                                     /* END IF ROTOK THEN ... ELSE */
@@ -1019,9 +1099,9 @@ L2103: /* bailed out of q-loop */
                                     /* .. recompute SVA(q) */
                                     /* Computing 2nd power */
                                     r__1 = sva[q] / aaqq;
-                                    if (r__1 * r__1 <= rooteps)
+                                    if(r__1 * r__1 <= rooteps)
                                     {
-                                        if (aaqq < rootbig && aaqq > rootsfmin)
+                                        if(aaqq < rootbig && aaqq > rootsfmin)
                                         {
                                             sva[q] = snrm2_(m, &a[q * a_dim1 + 1], &c__1) * d__[q];
                                         }
@@ -1029,15 +1109,15 @@ L2103: /* bailed out of q-loop */
                                         {
                                             t = 0.f;
                                             aaqq = 1.f;
-                                            slassq_(m, &a[q * a_dim1 + 1], & c__1, &t, &aaqq);
+                                            slassq_(m, &a[q * a_dim1 + 1], &c__1, &t, &aaqq);
                                             sva[q] = t * sqrt(aaqq) * d__[q];
                                         }
                                     }
                                     /* Computing 2nd power */
                                     r__1 = aapp / aapp0;
-                                    if (r__1 * r__1 <= rooteps)
+                                    if(r__1 * r__1 <= rooteps)
                                     {
-                                        if (aapp < rootbig && aapp > rootsfmin)
+                                        if(aapp < rootbig && aapp > rootsfmin)
                                         {
                                             aapp = snrm2_(m, &a[p * a_dim1 + 1], &c__1) * d__[p];
                                         }
@@ -1045,7 +1125,7 @@ L2103: /* bailed out of q-loop */
                                         {
                                             t = 0.f;
                                             aapp = 1.f;
-                                            slassq_(m, &a[p * a_dim1 + 1], & c__1, &t, &aapp);
+                                            slassq_(m, &a[p * a_dim1 + 1], &c__1, &t, &aapp);
                                             aapp = t * sqrt(aapp) * d__[p];
                                         }
                                         sva[p] = aapp;
@@ -1065,13 +1145,13 @@ L2103: /* bailed out of q-loop */
                                 ++pskipped;
                                 ++ijblsk;
                             }
-                            if (i__ <= swband && ijblsk >= blskip)
+                            if(i__ <= swband && ijblsk >= blskip)
                             {
                                 sva[p] = aapp;
                                 notrot = 0;
                                 goto L2011;
                             }
-                            if (i__ <= swband && pskipped > rowskip)
+                            if(i__ <= swband && pskipped > rowskip)
                             {
                                 aapp = -aapp;
                                 notrot = 0;
@@ -1080,18 +1160,18 @@ L2103: /* bailed out of q-loop */
                             /* L2200: */
                         }
                         /* end of the q-loop */
-L2203:
+                    L2203:
                         sva[p] = aapp;
                     }
                     else
                     {
-                        if (aapp == 0.f)
+                        if(aapp == 0.f)
                         {
                             /* Computing MIN */
                             i__5 = jgl + kbl - 1;
-                            notrot = notrot + fla_min(i__5,*n) - jgl + 1;
+                            notrot = notrot + fla_min(i__5, *n) - jgl + 1;
                         }
-                        if (aapp < 0.f)
+                        if(aapp < 0.f)
                         {
                             notrot = 0;
                         }
@@ -1102,13 +1182,11 @@ L2203:
                 /* L2010: */
             }
             /* end of the jbc-loop */
-L2011: /* 2011 bailed out of the jbc-loop */
+        L2011: /* 2011 bailed out of the jbc-loop */
             /* Computing MIN */
             i__4 = igl + kbl - 1;
-            i__3 = fla_min(i__4,*n);
-            for (p = igl;
-                    p <= i__3;
-                    ++p)
+            i__3 = fla_min(i__4, *n);
+            for(p = igl; p <= i__3; ++p)
             {
                 sva[p] = (r__1 = sva[p], f2c_abs(r__1));
                 /* L2012: */
@@ -1117,7 +1195,7 @@ L2011: /* 2011 bailed out of the jbc-loop */
         }
         /* 2000 :: end of the ibr-loop */
         /* .. update SVA(N) */
-        if (sva[*n] < rootbig && sva[*n] > rootsfmin)
+        if(sva[*n] < rootbig && sva[*n] > rootsfmin)
         {
             sva[*n] = snrm2_(m, &a[*n * a_dim1 + 1], &c__1) * d__[*n];
         }
@@ -1129,15 +1207,15 @@ L2011: /* 2011 bailed out of the jbc-loop */
             sva[*n] = t * sqrt(aapp) * d__[*n];
         }
         /* Additional steering devices */
-        if (i__ < swband && (mxaapq <= roottol || iswrot <= *n))
+        if(i__ < swband && (mxaapq <= roottol || iswrot <= *n))
         {
             swband = i__;
         }
-        if (i__ > swband + 1 && mxaapq < (real) (*n) * *tol && (real) (*n) * mxaapq * mxsinj < *tol)
+        if(i__ > swband + 1 && mxaapq < (real)(*n) * *tol && (real)(*n) * mxaapq * mxsinj < *tol)
         {
             goto L1994;
         }
-        if (notrot >= emptsw)
+        if(notrot >= emptsw)
         {
             goto L1994;
         }
@@ -1154,13 +1232,11 @@ L1994: /* #:) Reaching this point means that during the i-th sweep all pivots we
     /* #:) INFO = 0 confirms successful iterations. */
 L1995: /* Sort the vector D. */
     i__1 = *n - 1;
-    for (p = 1;
-            p <= i__1;
-            ++p)
+    for(p = 1; p <= i__1; ++p)
     {
         i__2 = *n - p + 1;
         q = isamax_(&i__2, &sva[p], &c__1) + p - 1;
-        if (p != q)
+        if(p != q)
         {
             temp1 = sva[p];
             sva[p] = sva[q];
@@ -1169,9 +1245,9 @@ L1995: /* Sort the vector D. */
             d__[p] = d__[q];
             d__[q] = temp1;
             sswap_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1);
-            if (rsvec)
+            if(rsvec)
             {
-                sswap_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], & c__1);
+                sswap_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], &c__1);
             }
         }
         /* L5991: */

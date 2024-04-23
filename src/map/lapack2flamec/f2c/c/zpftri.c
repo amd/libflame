@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {1., 0.};
+static doublecomplex c_b1 = {1., 0.};
 static doublereal c_b12 = 1.;
 /* > \brief \b ZPFTRI */
 /* =========== DOCUMENTATION =========== */
@@ -218,7 +218,7 @@ k=N/2. IF TRANSR = 'C' then RFP is */
 void zpftri_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zpftri inputs: transr %c, uplo %c, n %" FLA_IS "",*transr, *uplo, *n);
+    AOCL_DTL_SNPRINTF("zpftri inputs: transr %c, uplo %c, n %" FLA_IS "", *transr, *uplo, *n);
 
     /* System generated locals */
     aocl_int64_t i__1, i__2;
@@ -227,13 +227,20 @@ void zpftri_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
     logical normaltransr;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
+        void
+        zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *,
+               doublereal *, doublecomplex *, integer *);
     logical lower;
     extern /* Subroutine */
-    void ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     extern /* Subroutine */
-    void zlauum_(char *, integer *, doublecomplex *, integer *, integer *), ztftri_(char *, char *, char *, integer *, doublecomplex *, integer *);
+        void
+        zlauum_(char *, integer *, doublecomplex *, integer *, integer *),
+        ztftri_(char *, char *, char *, integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -257,11 +264,11 @@ void zpftri_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
     *info = 0;
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
-    if (! normaltransr && ! lsame_(transr, "C", 1, 1))
+    if(!normaltransr && !lsame_(transr, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U", 1, 1))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }
@@ -283,7 +290,7 @@ void zpftri_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
         return;
     }
     /* Invert the triangular Cholesky factor U or L. */
-    aocl_lapack_ztftri(transr, uplo, "N", n, a, info);
+    ztftri_(transr, uplo, "N", n, a, info);
     if(*info > 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
@@ -378,7 +385,7 @@ void zpftri_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
                 aocl_lapack_zlauum("L", &k, &a[1], &i__1, info);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                aocl_blas_zherk("L", "C", &k, &k, &c_b12, &a[k + 1], &i__1, &c_b12, &a[1], &i__2);
+                zherk_("L", "C", &k, &k, &c_b12, &a[k + 1], &i__1, &c_b12, &a[1], &i__2);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
                 aocl_blas_ztrmm("L", "U", "N", "N", &k, &k, &c_b1, a, &i__1, &a[k + 1], &i__2);
@@ -397,7 +404,7 @@ void zpftri_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
                 aocl_blas_zherk("L", "N", &k, &k, &c_b12, a, &i__1, &c_b12, &a[k + 1], &i__2);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                aocl_blas_ztrmm("R", "U", "C", "N", &k, &k, &c_b1, &a[k], &i__1, a, &i__2);
+                ztrmm_("R", "U", "C", "N", &k, &k, &c_b1, &a[k], &i__1, a, &i__2);
                 i__1 = *n + 1;
                 aocl_lapack_zlauum("U", &k, &a[k], &i__1, info);
             }
@@ -422,10 +429,10 @@ void zpftri_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
                 /* T1 -> B(0,k+1), T2 -> B(0,k), S -> B(0,0), */
                 /* T1 -> a(0+k*(k+1)), T2 -> a(0+k*k), S -> a(0+0));
                 lda=k */
-                aocl_lapack_zlauum("U", &k, &a[k * (k + 1)], &k, info);
-                aocl_blas_zherk("U", "C", &k, &k, &c_b12, a, &k, &c_b12, &a[k * (k + 1)], &k);
-                aocl_blas_ztrmm("L", "L", "C", "N", &k, &k, &c_b1, &a[k * k], &k, a, &k);
-                aocl_lapack_zlauum("L", &k, &a[k * k], &k, info);
+                zlauum_("U", &k, &a[k * (k + 1)], &k, info);
+                zherk_("U", "C", &k, &k, &c_b12, a, &k, &c_b12, &a[k * (k + 1)], &k);
+                ztrmm_("L", "L", "C", "N", &k, &k, &c_b1, &a[k * k], &k, a, &k);
+                zlauum_("L", &k, &a[k * k], &k, info);
             }
         }
     }

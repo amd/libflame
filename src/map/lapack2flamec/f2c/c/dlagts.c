@@ -156,10 +156,12 @@
 /* > \ingroup auxOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, integer *in, doublereal *y, doublereal *tol, integer *info)
+void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal *c__,
+             doublereal *d__, integer *in, doublereal *y, doublereal *tol, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlagts inputs: job %" FLA_IS ", n %" FLA_IS ", in %" FLA_IS "",*job, *n, *in);
+    AOCL_DTL_SNPRINTF("dlagts inputs: job %" FLA_IS ", n %" FLA_IS ", in %" FLA_IS "", *job, *n,
+                      *in);
     /* System generated locals */
     aocl_int64_t i__1;
     doublereal d__1, d__2, d__3, d__4, d__5;
@@ -170,7 +172,8 @@ void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal 
     doublereal ak, eps, temp, pert, absak, sfmin;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -201,7 +204,7 @@ void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal 
     --a;
     /* Function Body */
     *info = 0;
-    if (f2c_dabs(*job) > 2 || *job == 0)
+    if(f2c_dabs(*job) > 2 || *job == 0)
     {
         *info = -1;
     }
@@ -229,22 +232,23 @@ void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal 
         if(*tol <= 0.)
         {
             *tol = f2c_dabs(a[1]);
-            if (*n > 1)
+            if(*n > 1)
             {
                 /* Computing MAX */
                 d__1 = *tol, d__2 = f2c_dabs(a[2]);
-                d__1 = fla_max(d__1,d__2);
+                d__1 = fla_max(d__1, d__2);
                 d__2 = f2c_dabs(b[1]); // ; expr subst
-                *tol = fla_max(d__1,d__2);
+                *tol = fla_max(d__1, d__2);
             }
             i__1 = *n;
             for(k = 3; k <= i__1; ++k)
             {
                 /* Computing MAX */
-                d__4 = *tol, d__5 = (d__1 = a[k], f2c_dabs(d__1)), d__4 = fla_max(d__4, d__5), d__5 = (d__2 = b[k - 1], f2c_dabs(d__2));
-                d__4 = fla_max(d__4,d__5);
+                d__4 = *tol, d__5 = (d__1 = a[k], f2c_dabs(d__1)), d__4 = fla_max(d__4, d__5),
+                d__5 = (d__2 = b[k - 1], f2c_dabs(d__2));
+                d__4 = fla_max(d__4, d__5);
                 d__5 = (d__3 = d__[k - 2], f2c_dabs(d__3)); // ; expr subst
-                *tol = fla_max(d__4,d__5);
+                *tol = fla_max(d__4, d__5);
                 /* L10: */
             }
             *tol *= eps;
@@ -254,7 +258,7 @@ void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal 
             }
         }
     }
-    if (f2c_dabs(*job) == 1)
+    if(f2c_dabs(*job) == 1)
     {
         i__1 = *n;
         for(k = 2; k <= i__1; ++k)
@@ -289,11 +293,11 @@ void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal 
                 }
                 ak = a[k];
                 absak = f2c_dabs(ak);
-                if (absak < 1.)
+                if(absak < 1.)
                 {
                     if(absak < sfmin)
                     {
-                        if (absak == 0. || f2c_dabs(temp) * sfmin > absak)
+                        if(absak == 0. || f2c_dabs(temp) * sfmin > absak)
                         {
                             *info = k;
                             AOCL_DTL_TRACE_LOG_EXIT
@@ -305,7 +309,7 @@ void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal 
                             ak *= bignum;
                         }
                     }
-                    else if (f2c_dabs(temp) > absak * bignum)
+                    else if(f2c_dabs(temp) > absak * bignum)
                     {
                         *info = k;
                         AOCL_DTL_TRACE_LOG_EXIT
@@ -334,13 +338,13 @@ void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal 
                 }
                 ak = a[k];
                 pert = d_sign(tol, &ak);
-L40:
+            L40:
                 absak = f2c_dabs(ak);
-                if (absak < 1.)
+                if(absak < 1.)
                 {
                     if(absak < sfmin)
                     {
-                        if (absak == 0. || f2c_dabs(temp) * sfmin > absak)
+                        if(absak == 0. || f2c_dabs(temp) * sfmin > absak)
                         {
                             ak += pert;
                             pert *= 2;
@@ -352,7 +356,7 @@ L40:
                             ak *= bignum;
                         }
                     }
-                    else if (f2c_dabs(temp) > absak * bignum)
+                    else if(f2c_dabs(temp) > absak * bignum)
                     {
                         ak += pert;
                         pert *= 2;
@@ -386,11 +390,11 @@ L40:
                 }
                 ak = a[k];
                 absak = f2c_dabs(ak);
-                if (absak < 1.)
+                if(absak < 1.)
                 {
                     if(absak < sfmin)
                     {
-                        if (absak == 0. || f2c_dabs(temp) * sfmin > absak)
+                        if(absak == 0. || f2c_dabs(temp) * sfmin > absak)
                         {
                             *info = k;
                             AOCL_DTL_TRACE_LOG_EXIT
@@ -402,7 +406,7 @@ L40:
                             ak *= bignum;
                         }
                     }
-                    else if (f2c_dabs(temp) > absak * bignum)
+                    else if(f2c_dabs(temp) > absak * bignum)
                     {
                         *info = k;
                         AOCL_DTL_TRACE_LOG_EXIT
@@ -432,13 +436,13 @@ L40:
                 }
                 ak = a[k];
                 pert = d_sign(tol, &ak);
-L70:
+            L70:
                 absak = f2c_dabs(ak);
-                if (absak < 1.)
+                if(absak < 1.)
                 {
                     if(absak < sfmin)
                     {
-                        if (absak == 0. || f2c_dabs(temp) * sfmin > absak)
+                        if(absak == 0. || f2c_dabs(temp) * sfmin > absak)
                         {
                             ak += pert;
                             pert *= 2;
@@ -450,7 +454,7 @@ L70:
                             ak *= bignum;
                         }
                     }
-                    else if (f2c_dabs(temp) > absak * bignum)
+                    else if(f2c_dabs(temp) > absak * bignum)
                     {
                         ak += pert;
                         pert *= 2;

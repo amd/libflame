@@ -1,10 +1,11 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int sgebd2_check(integer *m, integer *n, float *a, integer *lda, float *d__, float *e, float *tauq, float *taup, float *work, integer *info)
+int sgebd2_check(integer *m, integer *n, float *a, integer *lda, float *d__, float *e, float *tauq,
+                 float *taup, float *work, integer *info)
 {
     /* System generated locals */
-  integer a_dim1, a_offset, i__1;
+    integer a_dim1, a_offset, i__1;
 
     /* Parameter adjustments */
     a_dim1 = *lda;
@@ -25,7 +26,7 @@ int sgebd2_check(integer *m, integer *n, float *a, integer *lda, float *d__, flo
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }

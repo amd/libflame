@@ -136,10 +136,12 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ztrcon_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *a, integer *lda, doublereal *rcond, doublecomplex * work, doublereal *rwork, integer *info)
+void ztrcon_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *a, integer *lda,
+             doublereal *rcond, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztrcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "",*norm, *uplo, *diag, *n, *lda);
+    AOCL_DTL_SNPRINTF("ztrcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "",
+                      *norm, *uplo, *diag, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
     doublereal d__1, d__2;
@@ -154,19 +156,26 @@ void ztrcon_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *a, i
     logical upper;
     doublereal xnorm;
     extern /* Subroutine */
-    void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
+        void
+        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical onenrm;
     extern /* Subroutine */
-    void zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
+        void
+        zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
     char normin[1];
+    extern doublereal zlantr_(char *, char *, char *, integer *, integer *, doublecomplex *,
+                              integer *, doublereal *);
     doublereal smlnum;
     logical nounit;
     extern /* Subroutine */
-    void zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, doublereal *, integer *);
+        void
+        zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *,
+                doublecomplex *, doublereal *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -205,15 +214,15 @@ void ztrcon_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *a, i
     upper = lsame_(uplo, "U", 1, 1);
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
-    if (! onenrm && ! lsame_(norm, "I", 1, 1))
+    if(!onenrm && !lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
@@ -221,7 +230,7 @@ void ztrcon_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *a, i
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -229,18 +238,18 @@ void ztrcon_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *a, i
     {
         i__1 = -(*info);
         xerbla_("ZTRCON", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *rcond = 1.;
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     *rcond = 0.;
-    smlnum = dlamch_("Safe minimum") * (doublereal) fla_max(1,*n);
+    smlnum = dlamch_("Safe minimum") * (doublereal)fla_max(1, *n);
     /* Compute the norm of the triangular matrix A. */
     anorm = aocl_lapack_zlantr(norm, uplo, diag, n, n, &a[a_offset], lda, &rwork[1]);
     /* Continue only if ANORM > 0. */
@@ -259,20 +268,20 @@ void ztrcon_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *a, i
         }
         kase = 0;
     L10:
-        aocl_lapack_zlacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+        zlacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
         if(kase != 0)
         {
             if(kase == kase1)
             {
                 /* Multiply by inv(A). */
-                aocl_lapack_zlatrs(uplo, "No transpose", diag, normin, n, &a[a_offset], lda,
-                                   &work[1], &scale, &rwork[1], info);
+                zlatrs_(uplo, "No transpose", diag, normin, n, &a[a_offset], lda, &work[1], &scale,
+                        &rwork[1], info);
             }
             else
             {
                 /* Multiply by inv(A**H). */
-                aocl_lapack_zlatrs(uplo, "Conjugate transpose", diag, normin, n, &a[a_offset], lda,
-                                   &work[1], &scale, &rwork[1], info);
+                zlatrs_(uplo, "Conjugate transpose", diag, normin, n, &a[a_offset], lda, &work[1],
+                        &scale, &rwork[1], info);
             }
             *(unsigned char *)normin = 'Y';
             /* Multiply by 1/SCALE if doing so will not cause overflow. */
@@ -280,8 +289,9 @@ void ztrcon_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *a, i
             {
                 ix = aocl_blas_izamax(n, &work[1], &c__1);
                 i__1 = ix;
-                xnorm = (d__1 = work[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(& work[ix]), f2c_dabs(d__2));
-                if (scale < xnorm * smlnum || scale == 0.)
+                xnorm = (d__1 = work[i__1].r, f2c_dabs(d__1))
+                        + (d__2 = d_imag(&work[ix]), f2c_dabs(d__2));
+                if(scale < xnorm * smlnum || scale == 0.)
                 {
                     goto L20;
                 }

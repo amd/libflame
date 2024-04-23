@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b SSYTF2_ROOK computes the factorization of a real symmetric indefinite matrix using
  * the bounded Bunch-Kaufman ("rook") diagonal pivoting method (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
@@ -190,12 +190,13 @@ static aocl_int64_t c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv, integer *info)
+void ssytf2_rook_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"ssytf2_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
+    snprintf(buffer, 256, "ssytf2_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
+             *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -211,21 +212,25 @@ void ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv,
     logical done;
     integer imax, jmax;
     extern /* Subroutine */
-    void ssyr_(char *, integer *, real *, real *, integer *, real *, integer *);
+        void
+        ssyr_(char *, integer *, real *, real *, integer *, real *, integer *);
     real alpha;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     real sfmin;
     aocl_int64_t itemp, kstep;
     real stemp;
     logical upper;
     extern /* Subroutine */
-    void sswap_(integer *, real *, integer *, real *, integer *);
+        void
+        sswap_(integer *, real *, integer *, real *, integer *);
     real absakk;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real colmax, rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */
@@ -259,7 +264,7 @@ void ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv,
     upper = lsame_(uplo, "U", 1, 1);
     jmax = 0;
     imax = 0;
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -267,7 +272,7 @@ void ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv,
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -311,7 +316,7 @@ void ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv,
         {
             colmax = 0.f;
         }
-        if (fla_max(absakk,colmax) == 0.f)
+        if(fla_max(absakk, colmax) == 0.f)
         {
             /* Column K is zero or underflow: set INFO and continue */
             if(*info == 0)
@@ -354,7 +359,7 @@ void ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv,
                     i__1 = imax - 1;
                     itemp = isamax_(&i__1, &a[imax * a_dim1 + 1], &c__1);
                     stemp = (r__1 = a[itemp + imax * a_dim1], f2c_abs(r__1));
-                    if (stemp > rowmax)
+                    if(stemp > rowmax)
                     {
                         rowmax = stemp;
                         jmax = itemp;
@@ -362,7 +367,7 @@ void ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv,
                 }
                 /* Equivalent to testing for (used to handle NaN and Inf) */
                 /* ABS( A( IMAX, IMAX ) ).GE.ALPHA*ROWMAX */
-                if (! ((r__1 = a[imax + imax * a_dim1], f2c_abs(r__1)) < alpha * rowmax))
+                if(!((r__1 = a[imax + imax * a_dim1], f2c_abs(r__1)) < alpha * rowmax))
                 {
                     /* interchange rows and columns K and IMAX, */
                     /* use 1-by-1 pivot block */
@@ -427,8 +432,7 @@ void ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv,
                 if(kk > 1 && kp < kk - 1)
                 {
                     i__1 = kk - kp - 1;
-                    aocl_blas_sswap(&i__1, &a[kp + 1 + kk * a_dim1], &c__1,
-                                    &a[kp + (kp + 1) * a_dim1], lda);
+                    sswap_(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + (kp + 1) * a_dim1], lda);
                 }
                 t = a[kk + kk * a_dim1];
                 a[kk + kk * a_dim1] = a[kp + kp * a_dim1];
@@ -450,7 +454,7 @@ void ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv,
                 {
                     /* Perform a rank-1 update of A(1:k-1,1:k-1) and */
                     /* store U(k) in column k */
-                    if ((r__1 = a[k + k * a_dim1], f2c_abs(r__1)) >= sfmin)
+                    if((r__1 = a[k + k * a_dim1], f2c_abs(r__1)) >= sfmin)
                     {
                         /* Perform a rank-1 update of A(1:k-1,1:k-1) as */
                         /* A := A - U(k)*D(k)*U(k)**T */
@@ -458,8 +462,7 @@ void ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv,
                         d11 = 1.f / a[k + k * a_dim1];
                         i__1 = k - 1;
                         r__1 = -d11;
-                        aocl_blas_ssyr(uplo, &i__1, &r__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset],
-                                       lda);
+                        ssyr_(uplo, &i__1, &r__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
                         /* Store U(k) in column k */
                         i__1 = k - 1;
                         aocl_blas_sscal(&i__1, &d11, &a[k * a_dim1 + 1], &c__1);
@@ -480,8 +483,7 @@ void ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv,
                         /* = A - (W(k)/D(k))*(D(k))*(W(k)/D(K))**T */
                         i__1 = k - 1;
                         r__1 = -d11;
-                        aocl_blas_ssyr(uplo, &i__1, &r__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset],
-                                       lda);
+                        ssyr_(uplo, &i__1, &r__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
                     }
                 }
             }
@@ -563,7 +565,7 @@ void ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv,
         {
             colmax = 0.f;
         }
-        if (fla_max(absakk,colmax) == 0.f)
+        if(fla_max(absakk, colmax) == 0.f)
         {
             /* Column K is zero or underflow: set INFO and continue */
             if(*info == 0)
@@ -605,7 +607,7 @@ void ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv,
                     i__1 = *n - imax;
                     itemp = imax + isamax_(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
                     stemp = (r__1 = a[itemp + imax * a_dim1], f2c_abs(r__1));
-                    if (stemp > rowmax)
+                    if(stemp > rowmax)
                     {
                         rowmax = stemp;
                         jmax = itemp;
@@ -613,7 +615,7 @@ void ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv,
                 }
                 /* Equivalent to testing for (used to handle NaN and Inf) */
                 /* ABS( A( IMAX, IMAX ) ).GE.ALPHA*ROWMAX */
-                if (! ((r__1 = a[imax + imax * a_dim1], f2c_abs(r__1)) < alpha * rowmax))
+                if(!((r__1 = a[imax + imax * a_dim1], f2c_abs(r__1)) < alpha * rowmax))
                 {
                     /* interchange rows and columns K and IMAX, */
                     /* use 1-by-1 pivot block */
@@ -680,8 +682,7 @@ void ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv,
                 if(kk < *n && kp > kk + 1)
                 {
                     i__1 = kp - kk - 1;
-                    aocl_blas_sswap(&i__1, &a[kk + 1 + kk * a_dim1], &c__1,
-                                    &a[kp + (kk + 1) * a_dim1], lda);
+                    sswap_(&i__1, &a[kk + 1 + kk * a_dim1], &c__1, &a[kp + (kk + 1) * a_dim1], lda);
                 }
                 t = a[kk + kk * a_dim1];
                 a[kk + kk * a_dim1] = a[kp + kp * a_dim1];
@@ -703,7 +704,7 @@ void ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv,
                 {
                     /* Perform a rank-1 update of A(k+1:n,k+1:n) and */
                     /* store L(k) in column k */
-                    if ((r__1 = a[k + k * a_dim1], f2c_abs(r__1)) >= sfmin)
+                    if((r__1 = a[k + k * a_dim1], f2c_abs(r__1)) >= sfmin)
                     {
                         /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
                         /* A := A - L(k)*D(k)*L(k)**T */
@@ -711,8 +712,8 @@ void ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv,
                         d11 = 1.f / a[k + k * a_dim1];
                         i__1 = *n - k;
                         r__1 = -d11;
-                        aocl_blas_ssyr(uplo, &i__1, &r__1, &a[k + 1 + k * a_dim1], &c__1,
-                                       &a[k + 1 + (k + 1) * a_dim1], lda);
+                        ssyr_(uplo, &i__1, &r__1, &a[k + 1 + k * a_dim1], &c__1,
+                              &a[k + 1 + (k + 1) * a_dim1], lda);
                         /* Store L(k) in column k */
                         i__1 = *n - k;
                         aocl_blas_sscal(&i__1, &d11, &a[k + 1 + k * a_dim1], &c__1);
@@ -733,8 +734,8 @@ void ssytf2_rook_(char *uplo, integer *n, real *a, integer * lda, integer *ipiv,
                         /* = A - (W(k)/D(k))*(D(k))*(W(k)/D(K))**T */
                         i__1 = *n - k;
                         r__1 = -d11;
-                        aocl_blas_ssyr(uplo, &i__1, &r__1, &a[k + 1 + k * a_dim1], &c__1,
-                                       &a[k + 1 + (k + 1) * a_dim1], lda);
+                        ssyr_(uplo, &i__1, &r__1, &a[k + 1 + k * a_dim1], &c__1,
+                              &a[k + 1 + (k + 1) * a_dim1], lda);
                     }
                 }
             }

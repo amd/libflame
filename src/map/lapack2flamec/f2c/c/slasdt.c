@@ -100,12 +100,14 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slasdt_(integer *n, integer *lvl, integer *nd, integer * inode, integer *ndiml, integer *ndimr, integer *msub)
+void slasdt_(integer *n, integer *lvl, integer *nd, integer *inode, integer *ndiml, integer *ndimr,
+             integer *msub)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slasdt inputs: n %d, ndiml %d, ndimr %d, msub %d",*n,  *ndiml, *ndimr, *msub);
+    snprintf(buffer, 256, "slasdt inputs: n %d, ndiml %d, ndimr %d, msub %d", *n, *ndiml, *ndimr,
+             *msub);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -138,9 +140,9 @@ void slasdt_(integer *n, integer *lvl, integer *nd, integer * inode, integer *nd
     --ndiml;
     --inode;
     /* Function Body */
-    maxn = fla_max(1,*n);
-    temp = log((real) maxn / (real) (*msub + 1)) / log(2.f);
-    *lvl = (integer) temp + 1;
+    maxn = fla_max(1, *n);
+    temp = log((real)maxn / (real)(*msub + 1)) / log(2.f);
+    *lvl = (integer)temp + 1;
     i__ = *n / 2;
     inode[1] = (aocl_int_t)(i__ + 1);
     ndiml[1] = (aocl_int_t)(i__);

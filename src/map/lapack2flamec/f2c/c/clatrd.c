@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {0.f, 0.f};
-static scomplex c_b2 = {1.f, 0.f};
-static aocl_int64_t c__1 = 1;
+static complex c_b1 = {0.f, 0.f};
+static complex c_b2 = {1.f, 0.f};
+static integer c__1 = 1;
 /* > \brief \b CLATRD reduces the first nb rows and columns of a symmetric/Hermitian matrix A to
  * real tridiago nal form by an unitary similarity transformation. */
 /* =========== DOCUMENTATION =========== */
@@ -206,15 +206,18 @@ v(i+1:n) is stored on exit in A(i+1:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void clatrd_(char *uplo, integer *n, integer *nb, complex *a, integer *lda, real *e, complex *tau, complex *w, integer *ldw)
+void clatrd_(char *uplo, integer *n, integer *nb, complex *a, integer *lda, real *e, complex *tau,
+             complex *w, integer *ldw)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clatrd inputs: uplo %c, n %lld, nb %lld, lda %lld, ldw %lld",*uplo, *n, *nb, *lda, *ldw);
+    snprintf(buffer, 256, "clatrd inputs: uplo %c, n %lld, nb %lld, lda %lld, ldw %lld", *uplo, *n,
+             *nb, *lda, *ldw);
 #else
-    snprintf(buffer, 256,"clatrd inputs: uplo %c, n %d, nb %d, lda %d, ldw %d",*uplo, *n, *nb, *lda, *ldw);
+    snprintf(buffer, 256, "clatrd inputs: uplo %c, n %d, nb %d, lda %d, ldw %d", *uplo, *n, *nb,
+             *lda, *ldw);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -226,14 +229,23 @@ void clatrd_(char *uplo, integer *n, integer *nb, complex *a, integer *lda, real
     integer i__, iw;
     complex alpha;
     extern /* Subroutine */
-    void cscal_(integer *, complex *, complex *, integer *);
+        void
+        cscal_(integer *, complex *, complex *, integer *);
     extern /* Complex */
-    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+        VOID
+        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern /* Subroutine */
-    void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), chemv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+        void
+        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
+               complex *, complex *, integer *),
+        chemv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *,
+               complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *), clacgv_(integer *, complex *, integer *);
+        void
+        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *),
+        clarfg_(integer *, complex *, complex *, integer *, complex *),
+        clacgv_(integer *, complex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -270,7 +282,7 @@ void clatrd_(char *uplo, integer *n, integer *nb, complex *a, integer *lda, real
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (lsame_(uplo, "U", 1, 1))
+    if(lsame_(uplo, "U", 1, 1))
     {
         /* Reduce last NB columns of upper triangle */
         i__1 = *n - *nb + 1;
@@ -288,21 +300,19 @@ void clatrd_(char *uplo, integer *n, integer *nb, complex *a, integer *lda, real
                 i__2 = *n - i__;
                 aocl_lapack_clacgv(&i__2, &w[i__ + (iw + 1) * w_dim1], ldw);
                 i__2 = *n - i__;
-                q__1.real = -1.f;
-                q__1.imag = -0.f; // , expr subst
-                aocl_blas_cgemv("No transpose", &i__, &i__2, &q__1, &a[(i__ + 1) * a_dim1 + 1], lda,
-                                &w[i__ + (iw + 1) * w_dim1], ldw, &c_b2, &a[i__ * a_dim1 + 1],
-                                &c__1);
+                q__1.r = -1.f;
+                q__1.i = -0.f; // , expr subst
+                cgemv_("No transpose", &i__, &i__2, &q__1, &a[(i__ + 1) * a_dim1 + 1], lda,
+                       &w[i__ + (iw + 1) * w_dim1], ldw, &c_b2, &a[i__ * a_dim1 + 1], &c__1);
                 i__2 = *n - i__;
                 aocl_lapack_clacgv(&i__2, &w[i__ + (iw + 1) * w_dim1], ldw);
                 i__2 = *n - i__;
                 aocl_lapack_clacgv(&i__2, &a[i__ + (i__ + 1) * a_dim1], lda);
                 i__2 = *n - i__;
-                q__1.real = -1.f;
-                q__1.imag = -0.f; // , expr subst
-                aocl_blas_cgemv("No transpose", &i__, &i__2, &q__1, &w[(iw + 1) * w_dim1 + 1], ldw,
-                                &a[i__ + (i__ + 1) * a_dim1], lda, &c_b2, &a[i__ * a_dim1 + 1],
-                                &c__1);
+                q__1.r = -1.f;
+                q__1.i = -0.f; // , expr subst
+                cgemv_("No transpose", &i__, &i__2, &q__1, &w[(iw + 1) * w_dim1 + 1], ldw,
+                       &a[i__ + (i__ + 1) * a_dim1], lda, &c_b2, &a[i__ * a_dim1 + 1], &c__1);
                 i__2 = *n - i__;
                 aocl_lapack_clacgv(&i__2, &a[i__ + (i__ + 1) * a_dim1], lda);
                 i__2 = i__ + i__ * a_dim1;
@@ -327,34 +337,32 @@ void clatrd_(char *uplo, integer *n, integer *nb, complex *a, integer *lda, real
                 a[i__2].imag = 0.f; // , expr subst
                 /* Compute W(1:i-1,i) */
                 i__2 = i__ - 1;
-                aocl_blas_chemv("Upper", &i__2, &c_b2, &a[a_offset], lda, &a[i__ * a_dim1 + 1],
-                                &c__1, &c_b1, &w[iw * w_dim1 + 1], &c__1);
+                chemv_("Upper", &i__2, &c_b2, &a[a_offset], lda, &a[i__ * a_dim1 + 1], &c__1, &c_b1,
+                       &w[iw * w_dim1 + 1], &c__1);
                 if(i__ < *n)
                 {
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
-                    aocl_blas_cgemv("Conjugate transpose", &i__2, &i__3, &c_b2,
-                                    &w[(iw + 1) * w_dim1 + 1], ldw, &a[i__ * a_dim1 + 1], &c__1,
-                                    &c_b1, &w[i__ + 1 + iw * w_dim1], &c__1);
+                    cgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &w[(iw + 1) * w_dim1 + 1],
+                           ldw, &a[i__ * a_dim1 + 1], &c__1, &c_b1, &w[i__ + 1 + iw * w_dim1],
+                           &c__1);
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
-                    q__1.real = -1.f;
-                    q__1.imag = -0.f; // , expr subst
-                    aocl_blas_cgemv("No transpose", &i__2, &i__3, &q__1, &a[(i__ + 1) * a_dim1 + 1],
-                                    lda, &w[i__ + 1 + iw * w_dim1], &c__1, &c_b2,
-                                    &w[iw * w_dim1 + 1], &c__1);
+                    q__1.r = -1.f;
+                    q__1.i = -0.f; // , expr subst
+                    cgemv_("No transpose", &i__2, &i__3, &q__1, &a[(i__ + 1) * a_dim1 + 1], lda,
+                           &w[i__ + 1 + iw * w_dim1], &c__1, &c_b2, &w[iw * w_dim1 + 1], &c__1);
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
-                    aocl_blas_cgemv("Conjugate transpose", &i__2, &i__3, &c_b2,
-                                    &a[(i__ + 1) * a_dim1 + 1], lda, &a[i__ * a_dim1 + 1], &c__1,
-                                    &c_b1, &w[i__ + 1 + iw * w_dim1], &c__1);
+                    cgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[(i__ + 1) * a_dim1 + 1],
+                           lda, &a[i__ * a_dim1 + 1], &c__1, &c_b1, &w[i__ + 1 + iw * w_dim1],
+                           &c__1);
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
-                    q__1.real = -1.f;
-                    q__1.imag = -0.f; // , expr subst
-                    aocl_blas_cgemv("No transpose", &i__2, &i__3, &q__1, &w[(iw + 1) * w_dim1 + 1],
-                                    ldw, &w[i__ + 1 + iw * w_dim1], &c__1, &c_b2,
-                                    &w[iw * w_dim1 + 1], &c__1);
+                    q__1.r = -1.f;
+                    q__1.i = -0.f; // , expr subst
+                    cgemv_("No transpose", &i__2, &i__3, &q__1, &w[(iw + 1) * w_dim1 + 1], ldw,
+                           &w[i__ + 1 + iw * w_dim1], &c__1, &c_b2, &w[iw * w_dim1 + 1], &c__1);
                 }
                 i__2 = i__ - 1;
                 aocl_blas_cscal(&i__2, &tau[i__ - 1], &w[iw * w_dim1 + 1], &c__1);
@@ -392,27 +400,27 @@ void clatrd_(char *uplo, integer *n, integer *nb, complex *a, integer *lda, real
             aocl_lapack_clacgv(&i__2, &w[i__ + w_dim1], ldw);
             i__2 = *n - i__ + 1;
             i__3 = i__ - 1;
-            q__1.real = -1.f;
-            q__1.imag = -0.f; // , expr subst
-            aocl_blas_cgemv("No transpose", &i__2, &i__3, &q__1, &a[i__ + a_dim1], lda,
-                            &w[i__ + w_dim1], ldw, &c_b2, &a[i__ + i__ * a_dim1], &c__1);
+            q__1.r = -1.f;
+            q__1.i = -0.f; // , expr subst
+            cgemv_("No transpose", &i__2, &i__3, &q__1, &a[i__ + a_dim1], lda, &w[i__ + w_dim1],
+                   ldw, &c_b2, &a[i__ + i__ * a_dim1], &c__1);
             i__2 = i__ - 1;
             aocl_lapack_clacgv(&i__2, &w[i__ + w_dim1], ldw);
             i__2 = i__ - 1;
             aocl_lapack_clacgv(&i__2, &a[i__ + a_dim1], lda);
             i__2 = *n - i__ + 1;
             i__3 = i__ - 1;
-            q__1.real = -1.f;
-            q__1.imag = -0.f; // , expr subst
-            aocl_blas_cgemv("No transpose", &i__2, &i__3, &q__1, &w[i__ + w_dim1], ldw,
-                            &a[i__ + a_dim1], lda, &c_b2, &a[i__ + i__ * a_dim1], &c__1);
+            q__1.r = -1.f;
+            q__1.i = -0.f; // , expr subst
+            cgemv_("No transpose", &i__2, &i__3, &q__1, &w[i__ + w_dim1], ldw, &a[i__ + a_dim1],
+                   lda, &c_b2, &a[i__ + i__ * a_dim1], &c__1);
             i__2 = i__ - 1;
             aocl_lapack_clacgv(&i__2, &a[i__ + a_dim1], lda);
             i__2 = i__ + i__ * a_dim1;
             i__3 = i__ + i__ * a_dim1;
-            r__1 = a[i__3].real;
-            a[i__2].real = r__1;
-            a[i__2].imag = 0.f; // , expr subst
+            r__1 = a[i__3].r;
+            a[i__2].r = r__1;
+            a[i__2].i = 0.f; // , expr subst
             if(i__ < *n)
             {
                 /* Generate elementary reflector H(i) to annihilate */
@@ -423,7 +431,7 @@ void clatrd_(char *uplo, integer *n, integer *nb, complex *a, integer *lda, real
                 i__2 = *n - i__;
                 /* Computing MIN */
                 i__3 = i__ + 2;
-                clarfg_(&i__2, &alpha, &a[fla_min(i__3,*n) + i__ * a_dim1], &c__1, &tau[i__]);
+                clarfg_(&i__2, &alpha, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &tau[i__]);
                 i__2 = i__;
                 e[i__2] = alpha.real;
                 i__2 = i__ + 1 + i__ * a_dim1;
@@ -431,31 +439,28 @@ void clatrd_(char *uplo, integer *n, integer *nb, complex *a, integer *lda, real
                 a[i__2].imag = 0.f; // , expr subst
                 /* Compute W(i+1:n,i) */
                 i__2 = *n - i__;
-                chemv_("Lower", &i__2, &c_b2, &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &w[ i__ + 1 + i__ * w_dim1], &c__1);
+                chemv_("Lower", &i__2, &c_b2, &a[i__ + 1 + (i__ + 1) * a_dim1], lda,
+                       &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &w[i__ + 1 + i__ * w_dim1], &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
-                aocl_blas_cgemv("Conjugate transpose", &i__2, &i__3, &c_b2, &w[i__ + 1 + w_dim1],
-                                ldw, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &w[i__ * w_dim1 + 1],
-                                &c__1);
+                cgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &w[i__ + 1 + w_dim1], ldw,
+                       &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &w[i__ * w_dim1 + 1], &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
-                q__1.real = -1.f;
-                q__1.imag = -0.f; // , expr subst
-                aocl_blas_cgemv("No transpose", &i__2, &i__3, &q__1, &a[i__ + 1 + a_dim1], lda,
-                                &w[i__ * w_dim1 + 1], &c__1, &c_b2, &w[i__ + 1 + i__ * w_dim1],
-                                &c__1);
+                q__1.r = -1.f;
+                q__1.i = -0.f; // , expr subst
+                cgemv_("No transpose", &i__2, &i__3, &q__1, &a[i__ + 1 + a_dim1], lda,
+                       &w[i__ * w_dim1 + 1], &c__1, &c_b2, &w[i__ + 1 + i__ * w_dim1], &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
-                aocl_blas_cgemv("Conjugate transpose", &i__2, &i__3, &c_b2, &a[i__ + 1 + a_dim1],
-                                lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &w[i__ * w_dim1 + 1],
-                                &c__1);
+                cgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[i__ + 1 + a_dim1], lda,
+                       &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &w[i__ * w_dim1 + 1], &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
-                q__1.real = -1.f;
-                q__1.imag = -0.f; // , expr subst
-                aocl_blas_cgemv("No transpose", &i__2, &i__3, &q__1, &w[i__ + 1 + w_dim1], ldw,
-                                &w[i__ * w_dim1 + 1], &c__1, &c_b2, &w[i__ + 1 + i__ * w_dim1],
-                                &c__1);
+                q__1.r = -1.f;
+                q__1.i = -0.f; // , expr subst
+                cgemv_("No transpose", &i__2, &i__3, &q__1, &w[i__ + 1 + w_dim1], ldw,
+                       &w[i__ * w_dim1 + 1], &c__1, &c_b2, &w[i__ + 1 + i__ * w_dim1], &c__1);
                 i__2 = *n - i__;
                 aocl_blas_cscal(&i__2, &tau[i__], &w[i__ + 1 + i__ * w_dim1], &c__1);
                 q__3.real = -.5f;
@@ -464,15 +469,15 @@ void clatrd_(char *uplo, integer *n, integer *nb, complex *a, integer *lda, real
                 q__2.real = q__3.real * tau[i__2].real - q__3.imag * tau[i__2].imag;
                 q__2.imag = q__3.real * tau[i__2].imag + q__3.imag * tau[i__2].real; // , expr subst
                 i__3 = *n - i__;
-                aocl_lapack_cdotc_f2c(&q__4, &i__3, &w[i__ + 1 + i__ * w_dim1], &c__1,
+                cdotc_f2c_(&q__4, &i__3, &w[i__ + 1 + i__ * w_dim1], &c__1,
                            &a[i__ + 1 + i__ * a_dim1], &c__1);
-                q__1.real = q__2.real * q__4.real - q__2.imag * q__4.imag;
-                q__1.imag = q__2.real * q__4.imag + q__2.imag * q__4.real; // , expr subst
-                alpha.real = q__1.real;
-                alpha.imag = q__1.imag; // , expr subst
+                q__1.r = q__2.r * q__4.r - q__2.i * q__4.i;
+                q__1.i = q__2.r * q__4.i + q__2.i * q__4.r; // , expr subst
+                alpha.r = q__1.r;
+                alpha.i = q__1.i; // , expr subst
                 i__2 = *n - i__;
-                aocl_blas_caxpy(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1,
-                                &w[i__ + 1 + i__ * w_dim1], &c__1);
+                caxpy_(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1, &w[i__ + 1 + i__ * w_dim1],
+                       &c__1);
             }
             /* L20: */
         }

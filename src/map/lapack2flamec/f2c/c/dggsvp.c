@@ -259,12 +259,19 @@ LDQ >= 1 otherwise. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *tola, doublereal *tolb, integer *k, integer *l, doublereal *u, integer *ldu, doublereal *v, integer *ldv, doublereal *q, integer *ldq, integer *iwork, doublereal *tau, doublereal *work, integer *info)
+void dggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, doublereal *a,
+             integer *lda, doublereal *b, integer *ldb, doublereal *tola, doublereal *tolb,
+             integer *k, integer *l, doublereal *u, integer *ldu, doublereal *v, integer *ldv,
+             doublereal *q, integer *ldq, integer *iwork, doublereal *tau, doublereal *work,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dggsvp inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", p %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS ", ldq %" FLA_IS "",*jobu, *jobv, *jobq, *m, *p, *n, *lda, *ldb, *ldu, *ldv, *ldq);
+    AOCL_DTL_SNPRINTF("dggsvp inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", p %" FLA_IS
+                      ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldu %" FLA_IS
+                      ", ldv %" FLA_IS ", ldq %" FLA_IS "",
+                      *jobu, *jobv, *jobq, *m, *p, *n, *lda, *ldb, *ldu, *ldv, *ldq);
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
         v_offset, i__1, i__2, i__3;
     doublereal d__1;
     /* Local variables */
@@ -272,7 +279,23 @@ void dggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     extern logical lsame_(char *, char *, integer, integer);
     logical wantq, wantu, wantv;
     extern /* Subroutine */
-    void dgeqr2_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dgerq2_( integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dorg2r_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dorm2r_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dormr2_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dgeqpf_(integer *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlapmt_(logical *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dgeqr2_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                integer *),
+        dgerq2_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                integer *),
+        dorg2r_(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, integer *),
+        dorm2r_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, doublereal *, integer *, doublereal *, integer *),
+        dormr2_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, doublereal *, integer *, doublereal *, integer *),
+        dgeqpf_(integer *, integer *, doublereal *, integer *, integer *, doublereal *,
+                doublereal *, integer *),
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        dlapmt_(logical *, integer *, integer *, doublereal *, integer *, integer *);
     logical forwrd;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -320,15 +343,15 @@ void dggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     wantq = lsame_(jobq, "Q", 1, 1);
     forwrd = TRUE_;
     *info = 0;
-    if (! (wantu || lsame_(jobu, "N", 1, 1)))
+    if(!(wantu || lsame_(jobu, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (wantv || lsame_(jobv, "N", 1, 1)))
+    else if(!(wantv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (wantq || lsame_(jobq, "N", 1, 1)))
+    else if(!(wantq || lsame_(jobq, "N", 1, 1)))
     {
         *info = -3;
     }
@@ -344,11 +367,11 @@ void dggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     {
         *info = -6;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -8;
     }
-    else if (*ldb < fla_max(1,*p))
+    else if(*ldb < fla_max(1, *p))
     {
         *info = -10;
     }
@@ -384,12 +407,10 @@ void dggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     aocl_lapack_dlapmt(&forwrd, m, n, &a[a_offset], lda, &iwork[1]);
     /* Determine the effective rank of matrix B. */
     *l = 0;
-    i__1 = fla_min(*p,*n);
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    i__1 = fla_min(*p, *n);
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((d__1 = b[i__ + i__ * b_dim1], f2c_dabs(d__1)) > *tolb)
+        if((d__1 = b[i__ + i__ * b_dim1], f2c_dabs(d__1)) > *tolb)
         {
             ++(*l);
         }
@@ -398,13 +419,13 @@ void dggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     if(wantv)
     {
         /* Copy the details of V, and form V. */
-        aocl_lapack_dlaset("Full", p, p, &c_b12, &c_b12, &v[v_offset], ldv);
+        dlaset_("Full", p, p, &c_b12, &c_b12, &v[v_offset], ldv);
         if(*p > 1)
         {
             i__1 = *p - 1;
             aocl_lapack_dlacpy("Lower", &i__1, n, &b[b_dim1 + 2], ldb, &v[v_dim1 + 2], ldv);
         }
-        i__1 = fla_min(*p,*n);
+        i__1 = fla_min(*p, *n);
         dorg2r_(p, p, &i__1, &v[v_offset], ldv, &tau[1], &work[1], info);
     }
     /* Clean up B */
@@ -435,13 +456,13 @@ void dggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
         /* RQ factorization of (S11 S12): ( S11 S12 ) = ( 0 S12 )*Z */
         aocl_lapack_dgerq2(l, n, &b[b_offset], ldb, &tau[1], &work[1], info);
         /* Update A := A*Z**T */
-        aocl_lapack_dormr2("Right", "Transpose", m, n, l, &b[b_offset], ldb, &tau[1], &a[a_offset],
-                           lda, &work[1], info);
+        dormr2_("Right", "Transpose", m, n, l, &b[b_offset], ldb, &tau[1], &a[a_offset], lda,
+                &work[1], info);
         if(wantq)
         {
             /* Update Q := Q*Z**T */
-            aocl_lapack_dormr2("Right", "Transpose", n, n, l, &b[b_offset], ldb, &tau[1],
-                               &q[q_offset], ldq, &work[1], info);
+            dormr2_("Right", "Transpose", n, n, l, &b[b_offset], ldb, &tau[1], &q[q_offset], ldq,
+                    &work[1], info);
         }
         /* Clean up B */
         i__1 = *n - *l;
@@ -476,12 +497,10 @@ void dggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     /* Computing MIN */
     i__2 = *m;
     i__3 = *n - *l; // , expr subst
-    i__1 = fla_min(i__2,i__3);
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    i__1 = fla_min(i__2, i__3);
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((d__1 = a[i__ + i__ * a_dim1], f2c_dabs(d__1)) > *tola)
+        if((d__1 = a[i__ + i__ * a_dim1], f2c_dabs(d__1)) > *tola)
         {
             ++(*k);
         }
@@ -491,12 +510,13 @@ void dggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     /* Computing MIN */
     i__2 = *m;
     i__3 = *n - *l; // , expr subst
-    i__1 = fla_min(i__2,i__3);
-    dorm2r_("Left", "Transpose", m, l, &i__1, &a[a_offset], lda, &tau[1], &a[( *n - *l + 1) * a_dim1 + 1], lda, &work[1], info);
-    if (wantu)
+    i__1 = fla_min(i__2, i__3);
+    dorm2r_("Left", "Transpose", m, l, &i__1, &a[a_offset], lda, &tau[1],
+            &a[(*n - *l + 1) * a_dim1 + 1], lda, &work[1], info);
+    if(wantu)
     {
         /* Copy the details of U, and form U */
-        aocl_lapack_dlaset("Full", m, m, &c_b12, &c_b12, &u[u_offset], ldu);
+        dlaset_("Full", m, m, &c_b12, &c_b12, &u[u_offset], ldu);
         if(*m > 1)
         {
             i__1 = *m - 1;
@@ -506,7 +526,7 @@ void dggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
         /* Computing MIN */
         i__2 = *m;
         i__3 = *n - *l; // , expr subst
-        i__1 = fla_min(i__2,i__3);
+        i__1 = fla_min(i__2, i__3);
         dorg2r_(m, m, &i__1, &u[u_offset], ldu, &tau[1], &work[1], info);
     }
     if(wantq)
@@ -538,13 +558,13 @@ void dggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     {
         /* RQ factorization of ( T11 T12 ) = ( 0 T12 )*Z1 */
         i__1 = *n - *l;
-        aocl_lapack_dgerq2(k, &i__1, &a[a_offset], lda, &tau[1], &work[1], info);
+        dgerq2_(k, &i__1, &a[a_offset], lda, &tau[1], &work[1], info);
         if(wantq)
         {
             /* Update Q( 1:N,1:N-L ) = Q( 1:N,1:N-L )*Z1**T */
             i__1 = *n - *l;
-            aocl_lapack_dormr2("Right", "Transpose", n, &i__1, k, &a[a_offset], lda, &tau[1],
-                               &q[q_offset], ldq, &work[1], info);
+            dormr2_("Right", "Transpose", n, &i__1, k, &a[a_offset], lda, &tau[1], &q[q_offset],
+                    ldq, &work[1], info);
         }
         /* Clean up A */
         i__1 = *n - *l - *k;
@@ -565,16 +585,16 @@ void dggsvp_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     {
         /* QR factorization of A( K+1:M,N-L+1:N ) */
         i__1 = *m - *k;
-        aocl_lapack_dgeqr2(&i__1, l, &a[*k + 1 + (*n - *l + 1) * a_dim1], lda, &tau[1], &work[1],
-                           info);
+        dgeqr2_(&i__1, l, &a[*k + 1 + (*n - *l + 1) * a_dim1], lda, &tau[1], &work[1], info);
         if(wantu)
         {
             /* Update U(:,K+1:M) := U(:,K+1:M)*U1 */
             i__1 = *m - *k;
             /* Computing MIN */
             i__3 = *m - *k;
-            i__2 = fla_min(i__3,*l);
-            dorm2r_("Right", "No transpose", m, &i__1, &i__2, &a[*k + 1 + (*n - *l + 1) * a_dim1], lda, &tau[1], &u[(*k + 1) * u_dim1 + 1], ldu, &work[1], info);
+            i__2 = fla_min(i__3, *l);
+            dorm2r_("Right", "No transpose", m, &i__1, &i__2, &a[*k + 1 + (*n - *l + 1) * a_dim1],
+                    lda, &tau[1], &u[(*k + 1) * u_dim1 + 1], ldu, &work[1], info);
         }
         /* Clean up */
         i__1 = *n;

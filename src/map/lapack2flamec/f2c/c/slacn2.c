@@ -1,8 +1,12 @@
-/* slacn2.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* slacn2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b SLACN2 estimates the 1-norm of a square matrix, using reverse communication for evaluating matr ix-vector products. */
+/* > \brief \b SLACN2 estimates the 1-norm of a square matrix, using reverse communication for
+ * evaluating matr ix-vector products. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -130,7 +134,9 @@ static integer c__1 = 1;
 void slacn2_(integer *n, real *v, real *x, integer *isgn, real *est, integer *kase, integer *isave)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slacn2 inputs: n %" FLA_IS ", isgn %" FLA_IS ", kase %" FLA_IS ", isave %" FLA_IS "",*n, *isgn, *kase, *isave);
+    AOCL_DTL_SNPRINTF("slacn2 inputs: n %" FLA_IS ", isgn %" FLA_IS ", kase %" FLA_IS
+                      ", isave %" FLA_IS "",
+                      *n, *isgn, *kase, *isave);
     /* System generated locals */
     aocl_int64_t i__1;
     real r__1;
@@ -142,7 +148,8 @@ void slacn2_(integer *n, real *v, real *x, integer *isgn, real *est, integer *ka
     integer jlast;
     extern real sasum_(integer *, real *, integer *);
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     extern integer isamax_(integer *, real *, integer *);
     real altsgn, estold;
     /* -- LAPACK auxiliary routine -- */
@@ -180,7 +187,7 @@ void slacn2_(integer *n, real *v, real *x, integer *isgn, real *est, integer *ka
         }
         *kase = 1;
         isave[1] = 1;
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     switch(isave[1])
@@ -210,7 +217,7 @@ L20:
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (x[i__] >= 0.f)
+        if(x[i__] >= 0.f)
         {
             x[i__] = 1.f;
         }
@@ -252,7 +259,7 @@ L70:
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (x[i__] >= 0.f)
+        if(x[i__] >= 0.f)
         {
             xs = 1.f;
         }
@@ -260,7 +267,7 @@ L70:
         {
             xs = -1.f;
         }
-        if (fla_i_nint(&xs) != isgn[i__])
+        if(fla_i_nint(&xs) != isgn[i__])
         {
             goto L90;
         }
@@ -276,7 +283,7 @@ L90: /* TEST FOR CYCLING. */
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (x[i__] >= 0.f)
+        if(x[i__] >= 0.f)
         {
             x[i__] = 1.f;
         }
@@ -296,7 +303,7 @@ L90: /* TEST FOR CYCLING. */
 L110:
     jlast = isave[2];
     isave[2] = isamax_(n, &x[1], &c__1);
-    if (x[jlast] != (r__1 = x[isave[2]], f2c_abs(r__1)) && isave[3] < 5)
+    if(x[jlast] != (r__1 = x[isave[2]], f2c_abs(r__1)) && isave[3] < 5)
     {
         ++isave[3];
         goto L50;
@@ -318,7 +325,7 @@ L120:
     /* ................ ENTRY (ISAVE( 1 ) = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L140:
-    temp = aocl_blas_sasum(n, &x[1], &c__1) / (real)(*n * 3) * 2.f;
+    temp = sasum_(n, &x[1], &c__1) / (real)(*n * 3) * 2.f;
     if(temp > *est)
     {
         aocl_blas_scopy(n, &x[1], &c__1, &v[1], &c__1);

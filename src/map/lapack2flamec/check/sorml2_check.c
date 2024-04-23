@@ -1,5 +1,7 @@
 #include "FLA_f2c.h"
-int sorml2_check(char *side, char *trans, integer *m, integer *n, integer *k, float *a, integer *lda, float *tau, float *c__, integer *ldc, float *work, integer *info)
+#include "FLA_lapack2flame_return_defs.h"
+int sorml2_check(char *side, char *trans, integer *m, integer *n, integer *k, float *a,
+                 integer *lda, float *tau, float *c__, integer *ldc, float *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__1;
@@ -30,11 +32,11 @@ int sorml2_check(char *side, char *trans, integer *m, integer *n, integer *k, fl
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1))
     {
         *info = -2;
     }
@@ -50,11 +52,11 @@ int sorml2_check(char *side, char *trans, integer *m, integer *n, integer *k, fl
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*k))
+    else if(*lda < fla_max(1, *k))
     {
         *info = -7;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -10;
     }

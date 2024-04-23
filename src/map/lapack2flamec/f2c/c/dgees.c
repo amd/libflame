@@ -1,12 +1,12 @@
-/* ./dgees.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dgees.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c__0 = 0;
-static aocl_int64_t c_n1 = -1;
+static integer c__1 = 1;
+static integer c__0 = 0;
+static integer c_n1 = -1;
 /* > \brief <b> DGEES computes the eigenvalues, the Schur form, and, optionally, the matrix of Schur
  * vectors f or GE matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -223,10 +223,14 @@ if */
 /* > \ingroup gees */
 /* ===================================================================== */
 /* Subroutine */
-void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, integer *lda, integer *sdim, doublereal *wr, doublereal *wi, doublereal *vs, integer *ldvs, doublereal *work, integer *lwork, logical *bwork, integer *info)
+void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, integer *lda,
+            integer *sdim, doublereal *wr, doublereal *wi, doublereal *vs, integer *ldvs,
+            doublereal *work, integer *lwork, logical *bwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgees inputs: jobvs %c, sort %c, n %" FLA_IS ", lda %" FLA_IS ", ldvs %" FLA_IS ", lwork %" FLA_IS "",*jobvs, *sort, *n, *lda, *ldvs, *lwork);
+    AOCL_DTL_SNPRINTF("dgees inputs: jobvs %c, sort %c, n %" FLA_IS ", lda %" FLA_IS
+                      ", ldvs %" FLA_IS ", lwork %" FLA_IS "",
+                      *jobvs, *sort, *n, *lda, *ldvs, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, vs_dim1, vs_offset, i__1, i__2, i__3;
     /* Builtin functions */
@@ -241,20 +245,41 @@ void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, i
     integer idum[1], ierr, itau, iwrk, inxt, icond, ieval;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical cursl;
     extern /* Subroutine */
-    void dlabad_(doublereal *, doublereal *), dgebak_( char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dgebal_(char *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *);
+        void
+        dlabad_(doublereal *, doublereal *),
+        dgebak_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, integer *, integer *),
+        dgebal_(char *, integer *, doublereal *, integer *, integer *, integer *, doublereal *,
+                integer *);
     logical lst2sl, scalea;
     extern doublereal dlamch_(char *);
     doublereal cscale;
     extern doublereal dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
-    void dgehrd_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dgehrd_(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, integer *, integer *),
+        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *),
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     doublereal bignum;
     extern /* Subroutine */
-    void dorghr_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dhseqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dtrsen_(char *, char *, logical *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *);
+        void
+        dorghr_(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, integer *, integer *),
+        dhseqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+                integer *),
+        dtrsen_(char *, char *, logical *, integer *, doublereal *, integer *, doublereal *,
+                integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, integer *, integer *, integer *, integer *);
     logical lastsl;
     aocl_int64_t minwrk, maxwrk;
     doublereal smlnum;
@@ -300,11 +325,11 @@ void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, i
     lquery = *lwork == -1;
     wantvs = lsame_(jobvs, "V", 1, 1);
     wantst = lsame_(sort, "S", 1, 1);
-    if (! wantvs && ! lsame_(jobvs, "N", 1, 1))
+    if(!wantvs && !lsame_(jobvs, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (! wantst && ! lsame_(sort, "N", 1, 1))
+    else if(!wantst && !lsame_(sort, "N", 1, 1))
     {
         *info = -2;
     }
@@ -312,7 +337,7 @@ void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, i
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -340,25 +365,28 @@ void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, i
         {
             maxwrk = (*n << 1) + *n * aocl_lapack_ilaenv(&c__1, "DGEHRD", " ", n, &c__1, n, &c__0);
             minwrk = *n * 3;
-            dhseqr_("S", jobvs, n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[1], &vs[vs_offset], ldvs, &work[1], &c_n1, &ieval);
-            hswork = (integer) work[1];
-            if (! wantvs)
+            dhseqr_("S", jobvs, n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[1], &vs[vs_offset],
+                    ldvs, &work[1], &c_n1, &ieval);
+            hswork = (integer)work[1];
+            if(!wantvs)
             {
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n + hswork; // , expr subst
-                maxwrk = fla_max(i__1,i__2);
+                maxwrk = fla_max(i__1, i__2);
             }
             else
             {
                 /* Computing MAX */
                 i__1 = maxwrk;
-                i__2 = (*n << 1) + (*n - 1) * ilaenv_(&c__1, "DORGHR", " ", n, &c__1, n, &c_n1); // , expr subst
-                maxwrk = fla_max(i__1,i__2);
+                i__2 = (*n << 1)
+                       + (*n - 1)
+                             * ilaenv_(&c__1, "DORGHR", " ", n, &c__1, n, &c_n1); // , expr subst
+                maxwrk = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n + hswork; // , expr subst
-                maxwrk = fla_max(i__1,i__2);
+                maxwrk = fla_max(i__1, i__2);
             }
         }
         work[1] = (doublereal)maxwrk;
@@ -407,7 +435,7 @@ void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, i
     }
     if(scalea)
     {
-        aocl_lapack_dlascl("G", &c__0, &c__0, &anrm, &cscale, n, n, &a[a_offset], lda, &ierr);
+        dlascl_("G", &c__0, &c__0, &anrm, &cscale, n, n, &a[a_offset], lda, &ierr);
     }
     /* Permute the matrix to make it more nearly triangular */
     /* (Workspace: need N) */
@@ -418,11 +446,11 @@ void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, i
     itau = *n + ibal;
     iwrk = *n + itau;
     i__1 = *lwork - iwrk + 1;
-    aocl_lapack_dgehrd(n, &ilo, &ihi, &a[a_offset], lda, &work[itau], &work[iwrk], &i__1, &ierr);
+    dgehrd_(n, &ilo, &ihi, &a[a_offset], lda, &work[itau], &work[iwrk], &i__1, &ierr);
     if(wantvs)
     {
         /* Copy Householder vectors to VS */
-        aocl_lapack_dlacpy("L", n, n, &a[a_offset], lda, &vs[vs_offset], ldvs);
+        dlacpy_("L", n, n, &a[a_offset], lda, &vs[vs_offset], ldvs);
         /* Generate orthogonal matrix in VS */
         /* (Workspace: need 3*N-1, prefer 2*N+(N-1)*NB) */
         i__1 = *lwork - iwrk + 1;
@@ -434,8 +462,8 @@ void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, i
     /* (Workspace: need N+1, prefer N+HSWORK (see comments) ) */
     iwrk = itau;
     i__1 = *lwork - iwrk + 1;
-    aocl_lapack_dhseqr("S", jobvs, n, &ilo, &ihi, &a[a_offset], lda, &wr[1], &wi[1], &vs[vs_offset],
-                       ldvs, &work[iwrk], &i__1, &ieval);
+    dhseqr_("S", jobvs, n, &ilo, &ihi, &a[a_offset], lda, &wr[1], &wi[1], &vs[vs_offset], ldvs,
+            &work[iwrk], &i__1, &ieval);
     if(ieval > 0)
     {
         *info = ieval;
@@ -445,8 +473,8 @@ void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, i
     {
         if(scalea)
         {
-            aocl_lapack_dlascl("G", &c__0, &c__0, &cscale, &anrm, n, &c__1, &wr[1], n, &ierr);
-            aocl_lapack_dlascl("G", &c__0, &c__0, &cscale, &anrm, n, &c__1, &wi[1], n, &ierr);
+            dlascl_("G", &c__0, &c__0, &cscale, &anrm, n, &c__1, &wr[1], n, &ierr);
+            dlascl_("G", &c__0, &c__0, &cscale, &anrm, n, &c__1, &wi[1], n, &ierr);
         }
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
@@ -457,8 +485,8 @@ void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, i
         /* Reorder eigenvalues and transform Schur vectors */
         /* (Workspace: none needed) */
         i__1 = *lwork - iwrk + 1;
-        aocl_lapack_dtrsen("N", jobvs, &bwork[1], n, &a[a_offset], lda, &vs[vs_offset], ldvs,
-                           &wr[1], &wi[1], sdim, &s, &sep, &work[iwrk], &i__1, idum, &c__1, &icond);
+        dtrsen_("N", jobvs, &bwork[1], n, &a[a_offset], lda, &vs[vs_offset], ldvs, &wr[1], &wi[1],
+                sdim, &s, &sep, &work[iwrk], &i__1, idum, &c__1, &icond);
         if(icond > 0)
         {
             *info = *n + icond;
@@ -473,9 +501,9 @@ void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, i
     if(scalea)
     {
         /* Undo scaling for the Schur form of A */
-        aocl_lapack_dlascl("H", &c__0, &c__0, &cscale, &anrm, n, n, &a[a_offset], lda, &ierr);
+        dlascl_("H", &c__0, &c__0, &cscale, &anrm, n, n, &a[a_offset], lda, &ierr);
         i__1 = *lda + 1;
-        aocl_blas_dcopy(n, &a[a_offset], &i__1, &wr[1], &c__1);
+        dcopy_(n, &a[a_offset], &i__1, &wr[1], &c__1);
         if(cscale == smlnum)
         {
             /* If scaling back towards underflow, adjust WI if an */
@@ -488,8 +516,8 @@ void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, i
                 i__1 = ilo - 1;
                 /* Computing MAX */
                 i__3 = ilo - 1;
-                i__2 = fla_max(i__3,1);
-                dlascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &wi[ 1], &i__2, &ierr);
+                i__2 = fla_max(i__3, 1);
+                dlascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &wi[1], &i__2, &ierr);
             }
             else if(wantst)
             {
@@ -527,19 +555,19 @@ void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, i
                         if(i__ > 1)
                         {
                             i__2 = i__ - 1;
-                            aocl_blas_dswap(&i__2, &a[i__ * a_dim1 + 1], &c__1,
-                                            &a[(i__ + 1) * a_dim1 + 1], &c__1);
+                            dswap_(&i__2, &a[i__ * a_dim1 + 1], &c__1, &a[(i__ + 1) * a_dim1 + 1],
+                                   &c__1);
                         }
                         if(*n > i__ + 1)
                         {
                             i__2 = *n - i__ - 1;
-                            aocl_blas_dswap(&i__2, &a[i__ + (i__ + 2) * a_dim1], lda,
-                                            &a[i__ + 1 + (i__ + 2) * a_dim1], lda);
+                            dswap_(&i__2, &a[i__ + (i__ + 2) * a_dim1], lda,
+                                   &a[i__ + 1 + (i__ + 2) * a_dim1], lda);
                         }
                         if(wantvs)
                         {
-                            aocl_blas_dswap(n, &vs[i__ * vs_dim1 + 1], &c__1,
-                                            &vs[(i__ + 1) * vs_dim1 + 1], &c__1);
+                            dswap_(n, &vs[i__ * vs_dim1 + 1], &c__1, &vs[(i__ + 1) * vs_dim1 + 1],
+                                   &c__1);
                         }
                         a[i__ + (i__ + 1) * a_dim1] = a[i__ + 1 + i__ * a_dim1];
                         a[i__ + 1 + i__ * a_dim1] = 0.;
@@ -553,7 +581,7 @@ void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, i
         i__1 = *n - ieval;
         /* Computing MAX */
         i__3 = *n - ieval;
-        i__2 = fla_max(i__3,1);
+        i__2 = fla_max(i__3, 1);
         dlascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &wi[ieval + 1], &i__2, &ierr);
     }
     if(wantst && *info == 0)
@@ -607,7 +635,7 @@ void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, i
             /* L30: */
         }
     }
-    work[1] = (doublereal) maxwrk;
+    work[1] = (doublereal)maxwrk;
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DGEES */

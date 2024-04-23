@@ -82,7 +82,7 @@ static aocl_int64_t c__33 = 33;
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > */
 /* > On exit, if INFO = 0, the triangular factor U or L from the */
@@ -148,7 +148,7 @@ void spbtrf_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"spbtrf inputs: uplo %c, n %d, kd %d, ldab %d",*uplo, *n, *kd, *ldab);
+    snprintf(buffer, 256, "spbtrf inputs: uplo %c, n %d, kd %d, ldab %d", *uplo, *n, *kd, *ldab);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -156,10 +156,19 @@ void spbtrf_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
     /* Local variables */
     aocl_int64_t i__, j, i2, i3, ib, nb, ii, jj;
     real work[1056] /* was [33][32] */
-    ;
+        ;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *, integer *), spbtf2_(char *, integer *, integer *, real *, integer *, integer *), spotf2_(char *, integer *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *),
+        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
+               real *, integer *),
+        ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *,
+               integer *),
+        spbtf2_(char *, integer *, integer *, real *, integer *, integer *),
+        spotf2_(char *, integer *, real *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -190,7 +199,7 @@ void spbtrf_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
     ab -= ab_offset;
     /* Function Body */
     *info = 0;
-    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -223,8 +232,8 @@ void spbtrf_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
     nb = aocl_lapack_ilaenv(&c__1, "SPBTRF", uplo, n, kd, &c_n1, &c_n1);
     /* The block size must not exceed the semi-bandwidth KD, and must not */
     /* exceed the limit set by the size of the local array WORK. */
-    nb = fla_min(nb,32);
-    if (nb <= 1 || nb > *kd)
+    nb = fla_min(nb, 32);
+    if(nb <= 1 || nb > *kd)
     {
         /* Use unblocked code */
         aocl_lapack_spbtf2(uplo, n, kd, &ab[ab_offset], ldab, info);
@@ -232,7 +241,7 @@ void spbtrf_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
     else
     {
         /* Use blocked code */
-        if (lsame_(uplo, "U", 1, 1))
+        if(lsame_(uplo, "U", 1, 1))
         {
             /* Compute the Cholesky factorization of a symmetric band */
             /* matrix, given the upper triangle of the matrix in band */
@@ -257,10 +266,10 @@ void spbtrf_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
                 /* Computing MIN */
                 i__3 = nb;
                 i__4 = *n - i__ + 1; // , expr subst
-                ib = fla_min(i__3,i__4);
+                ib = fla_min(i__3, i__4);
                 /* Factorize the diagonal block */
                 i__3 = *ldab - 1;
-                aocl_lapack_spotf2(uplo, &ib, &ab[*kd + 1 + i__ * ab_dim1], &i__3, &ii);
+                spotf2_(uplo, &ib, &ab[*kd + 1 + i__ * ab_dim1], &i__3, &ii);
                 if(ii != 0)
                 {
                     *info = i__ + ii - 1;
@@ -282,23 +291,25 @@ void spbtrf_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
                     /* Computing MIN */
                     i__3 = *kd - ib;
                     i__4 = *n - i__ - ib + 1; // , expr subst
-                    i2 = fla_min(i__3,i__4);
+                    i2 = fla_min(i__3, i__4);
                     /* Computing MIN */
                     i__3 = ib;
                     i__4 = *n - i__ - *kd + 1; // , expr subst
-                    i3 = fla_min(i__3,i__4);
-                    if (i2 > 0)
+                    i3 = fla_min(i__3, i__4);
+                    if(i2 > 0)
                     {
                         /* Update A12 */
                         i__3 = *ldab - 1;
                         i__4 = *ldab - 1;
-                        strsm_("Left", "Upper", "Transpose", "Non-unit", &ib, &i2, &c_b18, &ab[*kd + 1 + i__ * ab_dim1], & i__3, &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1], &i__4);
+                        strsm_("Left", "Upper", "Transpose", "Non-unit", &ib, &i2, &c_b18,
+                               &ab[*kd + 1 + i__ * ab_dim1], &i__3,
+                               &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1], &i__4);
                         /* Update A22 */
                         i__3 = *ldab - 1;
                         i__4 = *ldab - 1;
-                        aocl_blas_ssyrk("Upper", "Transpose", &i2, &ib, &c_b21,
-                                        &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1], &i__3, &c_b18,
-                                        &ab[*kd + 1 + (i__ + ib) * ab_dim1], &i__4);
+                        ssyrk_("Upper", "Transpose", &i2, &ib, &c_b21,
+                               &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1], &i__3, &c_b18,
+                               &ab[*kd + 1 + (i__ + ib) * ab_dim1], &i__4);
                     }
                     if(i3 > 0)
                     {
@@ -317,22 +328,21 @@ void spbtrf_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
                         }
                         /* Update A13 (in the work array). */
                         i__3 = *ldab - 1;
-                        aocl_blas_strsm("Left", "Upper", "Transpose", "Non-unit", &ib, &i3, &c_b18,
-                                        &ab[*kd + 1 + i__ * ab_dim1], &i__3, work, &c__33);
+                        strsm_("Left", "Upper", "Transpose", "Non-unit", &ib, &i3, &c_b18,
+                               &ab[*kd + 1 + i__ * ab_dim1], &i__3, work, &c__33);
                         /* Update A23 */
                         if(i2 > 0)
                         {
                             i__3 = *ldab - 1;
                             i__4 = *ldab - 1;
-                            aocl_blas_sgemm("Transpose", "No Transpose", &i2, &i3, &ib, &c_b21,
-                                            &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1], &i__3, work,
-                                            &c__33, &c_b18, &ab[ib + 1 + (i__ + *kd) * ab_dim1],
-                                            &i__4);
+                            sgemm_("Transpose", "No Transpose", &i2, &i3, &ib, &c_b21,
+                                   &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1], &i__3, work, &c__33,
+                                   &c_b18, &ab[ib + 1 + (i__ + *kd) * ab_dim1], &i__4);
                         }
                         /* Update A33 */
                         i__3 = *ldab - 1;
-                        aocl_blas_ssyrk("Upper", "Transpose", &i3, &ib, &c_b21, work, &c__33,
-                                        &c_b18, &ab[*kd + 1 + (i__ + *kd) * ab_dim1], &i__3);
+                        ssyrk_("Upper", "Transpose", &i3, &ib, &c_b21, work, &c__33, &c_b18,
+                               &ab[*kd + 1 + (i__ + *kd) * ab_dim1], &i__3);
                         /* Copy the lower triangle of A13 back into place. */
                         i__3 = i3;
                         for(jj = 1; jj <= i__3; ++jj)
@@ -376,10 +386,10 @@ void spbtrf_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
                 /* Computing MIN */
                 i__3 = nb;
                 i__4 = *n - i__ + 1; // , expr subst
-                ib = fla_min(i__3,i__4);
+                ib = fla_min(i__3, i__4);
                 /* Factorize the diagonal block */
                 i__3 = *ldab - 1;
-                aocl_lapack_spotf2(uplo, &ib, &ab[i__ * ab_dim1 + 1], &i__3, &ii);
+                spotf2_(uplo, &ib, &ab[i__ * ab_dim1 + 1], &i__3, &ii);
                 if(ii != 0)
                 {
                     *info = i__ + ii - 1;
@@ -401,25 +411,24 @@ void spbtrf_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
                     /* Computing MIN */
                     i__3 = *kd - ib;
                     i__4 = *n - i__ - ib + 1; // , expr subst
-                    i2 = fla_min(i__3,i__4);
+                    i2 = fla_min(i__3, i__4);
                     /* Computing MIN */
                     i__3 = ib;
                     i__4 = *n - i__ - *kd + 1; // , expr subst
-                    i3 = fla_min(i__3,i__4);
-                    if (i2 > 0)
+                    i3 = fla_min(i__3, i__4);
+                    if(i2 > 0)
                     {
                         /* Update A21 */
                         i__3 = *ldab - 1;
                         i__4 = *ldab - 1;
-                        aocl_blas_strsm("Right", "Lower", "Transpose", "Non-unit", &i2, &ib, &c_b18,
-                                        &ab[i__ * ab_dim1 + 1], &i__3, &ab[ib + 1 + i__ * ab_dim1],
-                                        &i__4);
+                        strsm_("Right", "Lower", "Transpose", "Non-unit", &i2, &ib, &c_b18,
+                               &ab[i__ * ab_dim1 + 1], &i__3, &ab[ib + 1 + i__ * ab_dim1], &i__4);
                         /* Update A22 */
                         i__3 = *ldab - 1;
                         i__4 = *ldab - 1;
-                        aocl_blas_ssyrk("Lower", "No Transpose", &i2, &ib, &c_b21,
-                                        &ab[ib + 1 + i__ * ab_dim1], &i__3, &c_b18,
-                                        &ab[(i__ + ib) * ab_dim1 + 1], &i__4);
+                        ssyrk_("Lower", "No Transpose", &i2, &ib, &c_b21,
+                               &ab[ib + 1 + i__ * ab_dim1], &i__3, &c_b18,
+                               &ab[(i__ + ib) * ab_dim1 + 1], &i__4);
                     }
                     if(i3 > 0)
                     {
@@ -427,10 +436,8 @@ void spbtrf_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
                         i__3 = ib;
                         for(jj = 1; jj <= i__3; ++jj)
                         {
-                            i__4 = fla_min(jj,i3);
-                            for (ii = 1;
-                                    ii <= i__4;
-                                    ++ii)
+                            i__4 = fla_min(jj, i3);
+                            for(ii = 1; ii <= i__4; ++ii)
                             {
                                 work[ii + jj * 33 - 34]
                                     = ab[*kd + 1 - jj + ii + (jj + i__ - 1) * ab_dim1];
@@ -440,30 +447,27 @@ void spbtrf_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
                         }
                         /* Update A31 (in the work array). */
                         i__3 = *ldab - 1;
-                        aocl_blas_strsm("Right", "Lower", "Transpose", "Non-unit", &i3, &ib, &c_b18,
-                                        &ab[i__ * ab_dim1 + 1], &i__3, work, &c__33);
+                        strsm_("Right", "Lower", "Transpose", "Non-unit", &i3, &ib, &c_b18,
+                               &ab[i__ * ab_dim1 + 1], &i__3, work, &c__33);
                         /* Update A32 */
                         if(i2 > 0)
                         {
                             i__3 = *ldab - 1;
                             i__4 = *ldab - 1;
-                            aocl_blas_sgemm("No transpose", "Transpose", &i3, &i2, &ib, &c_b21,
-                                            work, &c__33, &ab[ib + 1 + i__ * ab_dim1], &i__3,
-                                            &c_b18, &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1],
-                                            &i__4);
+                            sgemm_("No transpose", "Transpose", &i3, &i2, &ib, &c_b21, work, &c__33,
+                                   &ab[ib + 1 + i__ * ab_dim1], &i__3, &c_b18,
+                                   &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1], &i__4);
                         }
                         /* Update A33 */
                         i__3 = *ldab - 1;
-                        aocl_blas_ssyrk("Lower", "No Transpose", &i3, &ib, &c_b21, work, &c__33,
-                                        &c_b18, &ab[(i__ + *kd) * ab_dim1 + 1], &i__3);
+                        ssyrk_("Lower", "No Transpose", &i3, &ib, &c_b21, work, &c__33, &c_b18,
+                               &ab[(i__ + *kd) * ab_dim1 + 1], &i__3);
                         /* Copy the upper triangle of A31 back into place. */
                         i__3 = ib;
                         for(jj = 1; jj <= i__3; ++jj)
                         {
-                            i__4 = fla_min(jj,i3);
-                            for (ii = 1;
-                                    ii <= i__4;
-                                    ++ii)
+                            i__4 = fla_min(jj, i3);
+                            for(ii = 1; ii <= i__4; ++ii)
                             {
                                 ab[*kd + 1 - jj + ii + (jj + i__ - 1) * ab_dim1]
                                     = work[ii + jj * 33 - 34];

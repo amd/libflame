@@ -147,7 +147,7 @@ LDA >= fla_max(1,N) if SIDE = 'R'. */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If SIDE = 'L', LWORK >= fla_max(1,N);
-*/
+ */
 /* > if SIDE = 'R', LWORK >= fla_max(1,M). */
 /* > For optimum performance LWORK >= N*NB if SIDE = 'L', and */
 /* > LWORK >=M*NB if SIDE = 'R', where NB is the optimal */
@@ -176,7 +176,9 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *c__, integer *ldc, complex *work, integer *lwork, integer *info)
+void cunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, complex *a,
+                integer *lda, complex *tau, complex *c__, integer *ldc, complex *work,
+                integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
@@ -191,10 +193,15 @@ void cunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, com
     integer iinfo;
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void cunmql_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *), cunmqr_fla(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+        void
+        cunmql_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
+                complex *, integer *, complex *, integer *, integer *),
+        cunmqr_fla(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
+                   complex *, integer *, complex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -241,15 +248,15 @@ void cunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, com
         nq = *n;
         nw = *m;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!lsame_(trans, "N", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -3;
     }
@@ -261,15 +268,15 @@ void cunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, com
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,nq))
+    else if(*lda < fla_max(1, nq))
     {
         *info = -7;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -10;
     }
-    else if (*lwork < fla_max(1,nw) && ! lquery)
+    else if(*lwork < fla_max(1, nw) && !lquery)
     {
         *info = -12;
     }
@@ -305,8 +312,8 @@ void cunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, com
                 nb = aocl_lapack_ilaenv(&c__1, "CUNMQR", ch__1, m, &i__2, &i__3, &c_n1);
             }
         }
-        lwkopt = fla_max(1,nw) * nb;
-        work[1].r = (real) lwkopt;
+        lwkopt = fla_max(1, nw) * nb;
+        work[1].r = (real)lwkopt;
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
@@ -340,8 +347,8 @@ void cunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, com
     {
         /* Q was determined by a call to CHETRD with UPLO = 'U' */
         i__2 = nq - 1;
-        aocl_lapack_cunmql(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &tau[1],
-                           &c__[c_offset], ldc, &work[1], lwork, &iinfo);
+        cunmql_(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &tau[1], &c__[c_offset],
+                ldc, &work[1], lwork, &iinfo);
     }
     else
     {
@@ -360,7 +367,7 @@ void cunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, com
         cunmqr_fla(side, trans, &mi, &ni, &i__2, &a[a_dim1 + 2], lda, &tau[1],
                    &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
     }
-    work[1].r = (real) lwkopt;
+    work[1].r = (real)lwkopt;
     work[1].i = 0.f; // , expr subst
     return;
     /* End of CUNMTR */

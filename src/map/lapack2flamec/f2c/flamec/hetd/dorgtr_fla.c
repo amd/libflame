@@ -123,7 +123,8 @@ the routine */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dorgtr_fla(char *uplo, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *lwork, integer *info)
+void dorgtr_fla(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *tau,
+                doublereal *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
@@ -133,10 +134,15 @@ void dorgtr_fla(char *uplo, integer *n, doublereal *a, integer * lda, doublereal
     integer iinfo;
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void dorgql_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), lapack_dorgqr(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
+        void
+        dorgql_(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, integer *, integer *),
+        lapack_dorgqr(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                      doublereal *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -170,7 +176,7 @@ void dorgtr_fla(char *uplo, integer *n, doublereal *a, integer * lda, doublereal
     *info = 0;
     lquery = *lwork == -1;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -178,7 +184,7 @@ void dorgtr_fla(char *uplo, integer *n, doublereal *a, integer * lda, doublereal
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -187,7 +193,7 @@ void dorgtr_fla(char *uplo, integer *n, doublereal *a, integer * lda, doublereal
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
-        if (*lwork < fla_max(i__1,i__2) && ! lquery)
+        if(*lwork < fla_max(i__1, i__2) && !lquery)
         {
             *info = -7;
         }
@@ -211,8 +217,8 @@ void dorgtr_fla(char *uplo, integer *n, doublereal *a, integer * lda, doublereal
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
-        lwkopt = fla_max(i__1,i__2) * nb;
-        work[1] = (doublereal) lwkopt;
+        lwkopt = fla_max(i__1, i__2) * nb;
+        work[1] = (doublereal)lwkopt;
     }
     if(*info != 0)
     {
@@ -292,10 +298,11 @@ void dorgtr_fla(char *uplo, integer *n, doublereal *a, integer * lda, doublereal
             i__1 = *n - 1;
             i__2 = *n - 1;
             i__3 = *n - 1;
-            lapack_dorgqr(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1], lwork, &iinfo);
+            lapack_dorgqr(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1], lwork,
+                          &iinfo);
         }
     }
-    work[1] = (doublereal) lwkopt;
+    work[1] = (doublereal)lwkopt;
     return;
     /* End of DORGTR */
 }

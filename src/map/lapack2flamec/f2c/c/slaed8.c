@@ -1,12 +1,12 @@
-/* ./slaed8.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slaed8.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b3 = -1.f;
-static aocl_int64_t c__1 = 1;
-/* > \brief \b SLAED8 used by SSTEDC. Merges eigenvalues and deflates secular equation. Used when
+static integer c__1 = 1;
+/* > \brief \b SLAED8 used by sstedc. Merges eigenvalues and deflates secular equation. Used when
  * the original matrix is dense. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -238,7 +238,10 @@ static aocl_int64_t c__1 = 1;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void slaed8_(integer *icompq, integer *k, integer *n, integer *qsiz, real *d__, real *q, integer *ldq, integer *indxq, real *rho, integer *cutpnt, real *z__, real *dlamda, real *q2, integer *ldq2, real *w, integer *perm, integer *givptr, integer *givcol, real * givnum, integer *indxp, integer *indx, integer *info)
+void slaed8_(integer *icompq, integer *k, integer *n, integer *qsiz, real *d__, real *q,
+             integer *ldq, integer *indxq, real *rho, integer *cutpnt, real *z__, real *dlamda,
+             real *q2, integer *ldq2, real *w, integer *perm, integer *givptr, integer *givcol,
+             real *givnum, integer *indxp, integer *indx, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slaed8(icompq, k, n, qsiz, d__, q, ldq, indxq, rho, cutpnt, z__, dlambda, q2, ldq2,
@@ -289,13 +292,19 @@ void aocl_lapack_slaed8(aocl_int64_t *icompq, aocl_int64_t *k, aocl_int64_t *n, 
     real eps, tau, tol;
     integer jlam, imax, jmax;
     extern /* Subroutine */
-    void srot_(integer *, real *, integer *, real *, integer *, real *, real *), sscal_(integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer * );
+        void
+        srot_(integer *, real *, integer *, real *, integer *, real *, real *),
+        sscal_(integer *, real *, real *, integer *),
+        scopy_(integer *, real *, integer *, real *, integer *);
     extern real slapy2_(real *, real *), slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    void slamrg_(integer *, integer *, real *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+        void
+        slamrg_(integer *, integer *, real *, integer *, integer *, integer *),
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -336,7 +345,7 @@ void aocl_lapack_slaed8(aocl_int64_t *icompq, aocl_int64_t *k, aocl_int64_t *n, 
     /* Function Body */
     *info = 0;
     jlam = 0;
-    if (*icompq < 0 || *icompq > 1)
+    if(*icompq < 0 || *icompq > 1)
     {
         *info = -1;
     }
@@ -348,15 +357,15 @@ void aocl_lapack_slaed8(aocl_int64_t *icompq, aocl_int64_t *k, aocl_int64_t *n, 
     {
         *info = -4;
     }
-    else if (*ldq < fla_max(1,*n))
+    else if(*ldq < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*cutpnt < fla_min(1,*n) || *cutpnt > *n)
+    else if(*cutpnt < fla_min(1, *n) || *cutpnt > *n)
     {
         *info = -10;
     }
-    else if (*ldq2 < fla_max(1,*n))
+    else if(*ldq2 < fla_max(1, *n))
     {
         *info = -14;
     }
@@ -425,7 +434,7 @@ void aocl_lapack_slaed8(aocl_int64_t *icompq, aocl_int64_t *k, aocl_int64_t *n, 
     /* If the rank-1 modifier is small enough, no more needs to be done */
     /* except to reorganize Q so that its columns correspond with the */
     /* elements in D. */
-    if (*rho * (r__1 = z__[imax], f2c_abs(r__1)) <= tol)
+    if(*rho * (r__1 = z__[imax], f2c_abs(r__1)) <= tol)
     {
         *k = 0;
         if(*icompq == 0)
@@ -460,11 +469,11 @@ void aocl_lapack_slaed8(aocl_int64_t *icompq, aocl_int64_t *k, aocl_int64_t *n, 
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {
-        if (*rho * (r__1 = z__[j], f2c_abs(r__1)) <= tol)
+        if(*rho * (r__1 = z__[j], f2c_abs(r__1)) <= tol)
         {
             /* Deflate due to small z component. */
             --k2;
-            indxp[k2] = (aocl_int_t)(j);
+            indxp[k2] = j;
             if(j == *n)
             {
                 goto L110;
@@ -483,7 +492,7 @@ L80:
     {
         goto L100;
     }
-    if (*rho * (r__1 = z__[j], f2c_abs(r__1)) <= tol)
+    if(*rho * (r__1 = z__[j], f2c_abs(r__1)) <= tol)
     {
         /* Deflate due to small z component. */
         --k2;
@@ -500,7 +509,7 @@ L80:
         t = d__[j] - d__[jlam];
         c__ /= tau;
         s = -s / tau;
-        if ((r__1 = t * c__ * s, f2c_abs(r__1)) <= tol)
+        if((r__1 = t * c__ * s, f2c_abs(r__1)) <= tol)
         {
             /* Deflation is possible. */
             z__[j] = tau;
@@ -513,8 +522,8 @@ L80:
             givnum[(*givptr << 1) + 2] = s;
             if(*icompq == 1)
             {
-                aocl_blas_srot(qsiz, &q[indxq[indx[jlam]] * q_dim1 + 1], &c__1,
-                               &q[indxq[indx[j]] * q_dim1 + 1], &c__1, &c__, &s);
+                srot_(qsiz, &q[indxq[indx[jlam]] * q_dim1 + 1], &c__1,
+                      &q[indxq[indx[j]] * q_dim1 + 1], &c__1, &c__, &s);
             }
             t = d__[jlam] * c__ * c__ + d__[j] * s * s;
             d__[j] = d__[jlam] * s * s + d__[j] * c__ * c__;
@@ -598,8 +607,8 @@ L110: /* Sort the eigenvalues and corresponding eigenvectors into DLAMBDA */
             i__1 = *n - *k;
             aocl_blas_scopy(&i__1, &dlambda[*k + 1], &c__1, &d__[*k + 1], &c__1);
             i__1 = *n - *k;
-            aocl_lapack_slacpy("A", qsiz, &i__1, &q2[(*k + 1) * q2_dim1 + 1], ldq2,
-                               &q[(*k + 1) * q_dim1 + 1], ldq);
+            slacpy_("A", qsiz, &i__1, &q2[(*k + 1) * q2_dim1 + 1], ldq2, &q[(*k + 1) * q_dim1 + 1],
+                    ldq);
         }
     }
     return;

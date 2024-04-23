@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b DLARFX applies an elementary reflector to a general rectangular matrix, with loop
  * unrolling whe n the reflector has order ≤ 10. */
 /* =========== DOCUMENTATION =========== */
@@ -118,17 +118,22 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlarfx_(char *side, integer *m, integer *n, doublereal * v, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work)
+void dlarfx_(char *side, integer *m, integer *n, doublereal *v, doublereal *tau, doublereal *c__,
+             integer *ldc, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlarfx inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *ldc);
+    AOCL_DTL_SNPRINTF("dlarfx inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",
+                      *side, *m, *n, *ldc);
     /* System generated locals */
     aocl_int64_t c_dim1, c_offset, i__1;
     /* Local variables */
     integer j;
-    doublereal t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, v8, v9, t10, v10, sum;
+    doublereal t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, v8, v9, t10, v10,
+        sum;
     extern /* Subroutine */
-    void dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+        void
+        dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *);
     extern logical lsame_(char *, char *, integer, integer);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -160,7 +165,7 @@ void dlarfx_(char *side, integer *m, integer *n, doublereal * v, doublereal *tau
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (lsame_(side, "L", 1, 1))
+    if(lsame_(side, "L", 1, 1))
     {
         /* Form H * C, where H has order m. */
         switch(*m)

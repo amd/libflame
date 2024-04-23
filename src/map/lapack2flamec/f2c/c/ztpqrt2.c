@@ -1,28 +1,31 @@
-/* ../netlib/ztpqrt2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ztpqrt2.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-static doublecomplex c_b7 =
-{
-    1.,0.
-}
-;
-static doublecomplex c_b13 =
-{
-    0.,0.
-}
-;
-/* > \brief \b ZTPQRT2 computes a QR factorization of a real or complex "triangular-pentagonal" matrix, which is composed of a triangular block and a pentagonal block, using the compact WY representation for Q. */
+static doublecomplex c_b7 = {1., 0.};
+static doublecomplex c_b13 = {0., 0.};
+/* > \brief \b ZTPQRT2 computes a QR factorization of a real or complex "triangular-pentagonal"
+ * matrix, which is composed of a triangular block and a pentagonal block, using the compact WY
+ * representation for Q. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZTPQRT2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztpqrt2 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztpqrt2
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztpqrt2 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztpqrt2
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztpqrt2 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztpqrt2
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -173,10 +176,13 @@ that is, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ztpqrt2_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *t, integer *ldt, integer *info)
+void ztpqrt2_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda, doublecomplex *b,
+              integer *ldb, doublecomplex *t, integer *ldt, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztpqrt2 inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldt %" FLA_IS "",*m, *n, *l, *lda, *ldb, *ldt);
+    AOCL_DTL_SNPRINTF("ztpqrt2 inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS ", ldt %" FLA_IS "",
+                      *m, *n, *l, *lda, *ldb, *ldt);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
     doublecomplex z__1, z__2, z__3;
@@ -186,7 +192,15 @@ void ztpqrt2_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda
     integer i__, j, p, mp, np;
     doublecomplex alpha;
     extern /* Subroutine */
-    void zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), ztrmv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+        void
+        zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+               integer *, doublecomplex *, integer *),
+        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
+               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
+        ztrmv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *,
+               integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -218,59 +232,55 @@ void ztpqrt2_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda
     t -= t_offset;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*l < 0 || *l > fla_min(*m,*n))
+    else if(*l < 0 || *l > fla_min(*m, *n))
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*m))
+    else if(*ldb < fla_max(1, *m))
     {
         *info = -7;
     }
-    else if (*ldt < fla_max(1,*n))
+    else if(*ldt < fla_max(1, *n))
     {
         *info = -9;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZTPQRT2", &i__1, (ftnlen)7);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
-    if (*n == 0 || *m == 0)
+    if(*n == 0 || *m == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Generate elementary reflector H(I) to annihilate B(:,I) */
-        p = *m - *l + fla_min(*l,i__);
+        p = *m - *l + fla_min(*l, i__);
         i__2 = p + 1;
-        zlarfg_(&i__2, &a[i__ + i__ * a_dim1], &b[i__ * b_dim1 + 1], &c__1, & t[i__ + t_dim1]);
-        if (i__ < *n)
+        zlarfg_(&i__2, &a[i__ + i__ * a_dim1], &b[i__ * b_dim1 + 1], &c__1, &t[i__ + t_dim1]);
+        if(i__ < *n)
         {
             /* W(1:N-I) := C(I:M,I+1:N)**H * C(I:M,I) [use W = T(:,N)] */
             i__2 = *n - i__;
-            for (j = 1;
-                    j <= i__2;
-                    ++j)
+            for(j = 1; j <= i__2; ++j)
             {
                 i__3 = j + *n * t_dim1;
                 d_cnjg(&z__1, &a[i__ + (i__ + j) * a_dim1]);
@@ -278,7 +288,8 @@ void ztpqrt2_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda
                 t[i__3].i = z__1.i; // , expr subst
             }
             i__2 = *n - i__;
-            zgemv_("C", &p, &i__2, &c_b7, &b[(i__ + 1) * b_dim1 + 1], ldb, &b[ i__ * b_dim1 + 1], &c__1, &c_b7, &t[*n * t_dim1 + 1], & c__1);
+            zgemv_("C", &p, &i__2, &c_b7, &b[(i__ + 1) * b_dim1 + 1], ldb, &b[i__ * b_dim1 + 1],
+                   &c__1, &c_b7, &t[*n * t_dim1 + 1], &c__1);
             /* C(I:M,I+1:N) = C(I:m,I+1:N) + alpha*C(I:M,I)*W(1:N-1)**H */
             d_cnjg(&z__2, &t[i__ + t_dim1]);
             z__1.r = -z__2.r;
@@ -286,9 +297,7 @@ void ztpqrt2_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda
             alpha.r = z__1.r;
             alpha.i = z__1.i; // , expr subst
             i__2 = *n - i__;
-            for (j = 1;
-                    j <= i__2;
-                    ++j)
+            for(j = 1; j <= i__2; ++j)
             {
                 i__3 = i__ + (i__ + j) * a_dim1;
                 i__4 = i__ + (i__ + j) * a_dim1;
@@ -301,13 +310,12 @@ void ztpqrt2_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda
                 a[i__3].i = z__1.i; // , expr subst
             }
             i__2 = *n - i__;
-            zgerc_(&p, &i__2, &alpha, &b[i__ * b_dim1 + 1], &c__1, &t[*n * t_dim1 + 1], &c__1, &b[(i__ + 1) * b_dim1 + 1], ldb);
+            zgerc_(&p, &i__2, &alpha, &b[i__ * b_dim1 + 1], &c__1, &t[*n * t_dim1 + 1], &c__1,
+                   &b[(i__ + 1) * b_dim1 + 1], ldb);
         }
     }
     i__1 = *n;
-    for (i__ = 2;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 2; i__ <= i__1; ++i__)
     {
         /* T(1:I-1,I) := C(I:M,1:I-1)**H * (alpha * C(I:M,I)) */
         i__2 = i__ + t_dim1;
@@ -316,9 +324,7 @@ void ztpqrt2_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda
         alpha.r = z__1.r;
         alpha.i = z__1.i; // , expr subst
         i__2 = i__ - 1;
-        for (j = 1;
-                j <= i__2;
-                ++j)
+        for(j = 1; j <= i__2; ++j)
         {
             i__3 = j + i__ * t_dim1;
             t[i__3].r = 0.;
@@ -326,18 +332,16 @@ void ztpqrt2_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda
         }
         /* Computing MIN */
         i__2 = i__ - 1;
-        p = fla_min(i__2,*l);
+        p = fla_min(i__2, *l);
         /* Computing MIN */
         i__2 = *m - *l + 1;
-        mp = fla_min(i__2,*m);
+        mp = fla_min(i__2, *m);
         /* Computing MIN */
         i__2 = p + 1;
-        np = fla_min(i__2,*n);
+        np = fla_min(i__2, *n);
         /* Triangular part of B2 */
         i__2 = p;
-        for (j = 1;
-                j <= i__2;
-                ++j)
+        for(j = 1; j <= i__2; ++j)
         {
             i__3 = j + i__ * t_dim1;
             i__4 = *m - *l + j + i__ * b_dim1;
@@ -349,11 +353,13 @@ void ztpqrt2_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda
         ztrmv_("U", "C", "N", &p, &b[mp + b_dim1], ldb, &t[i__ * t_dim1 + 1], &c__1);
         /* Rectangular part of B2 */
         i__2 = i__ - 1 - p;
-        zgemv_("C", l, &i__2, &alpha, &b[mp + np * b_dim1], ldb, &b[mp + i__ * b_dim1], &c__1, &c_b13, &t[np + i__ * t_dim1], &c__1);
+        zgemv_("C", l, &i__2, &alpha, &b[mp + np * b_dim1], ldb, &b[mp + i__ * b_dim1], &c__1,
+               &c_b13, &t[np + i__ * t_dim1], &c__1);
         /* B1 */
         i__2 = *m - *l;
         i__3 = i__ - 1;
-        zgemv_("C", &i__2, &i__3, &alpha, &b[b_offset], ldb, &b[i__ * b_dim1 + 1], &c__1, &c_b7, &t[i__ * t_dim1 + 1], &c__1);
+        zgemv_("C", &i__2, &i__3, &alpha, &b[b_offset], ldb, &b[i__ * b_dim1 + 1], &c__1, &c_b7,
+               &t[i__ * t_dim1 + 1], &c__1);
         /* T(1:I-1,I) := T(1:I-1,1:I-1) * T(1:I-1,I) */
         i__2 = i__ - 1;
         ztrmv_("U", "N", "N", &i__2, &t[t_offset], ldt, &t[i__ * t_dim1 + 1], &c__1);

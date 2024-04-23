@@ -119,15 +119,16 @@
 /* > \ingroup complexGTsolve */
 /* ===================================================================== */
 /* Subroutine */
-void cgtsv_(integer *n, integer *nrhs, complex *dl, complex * d__, complex *du, complex *b, integer *ldb, integer *info)
+void cgtsv_(integer *n, integer *nrhs, complex *dl, complex *d__, complex *du, complex *b,
+            integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgtsv inputs: n %lld, nrhs %lld, ldb %lld",*n, *nrhs, *ldb);
+    snprintf(buffer, 256, "cgtsv inputs: n %lld, nrhs %lld, ldb %lld", *n, *nrhs, *ldb);
 #else
-    snprintf(buffer, 256,"cgtsv inputs: n %d, nrhs %d, ldb %d",*n, *nrhs, *ldb);
+    snprintf(buffer, 256, "cgtsv inputs: n %d, nrhs %d, ldb %d", *n, *nrhs, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -142,7 +143,8 @@ void cgtsv_(integer *n, integer *nrhs, complex *dl, complex * d__, complex *du, 
     integer j, k;
     complex temp, mult;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -182,7 +184,7 @@ void cgtsv_(integer *n, integer *nrhs, complex *dl, complex * d__, complex *du, 
     {
         *info = -2;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
@@ -202,11 +204,11 @@ void cgtsv_(integer *n, integer *nrhs, complex *dl, complex * d__, complex *du, 
     for(k = 1; k <= i__1; ++k)
     {
         i__2 = k;
-        if(dl[i__2].real == 0.f && dl[i__2].imag == 0.f)
+        if(dl[i__2].r == 0.f && dl[i__2].i == 0.f)
         {
             /* Subdiagonal is zero, no elimination is required. */
             i__2 = k;
-            if(d__[i__2].real == 0.f && d__[i__2].imag == 0.f)
+            if(d__[i__2].r == 0.f && d__[i__2].i == 0.f)
             {
                 /* Diagonal is zero: set INFO = K and return;
                 a unique */
@@ -220,7 +222,8 @@ void cgtsv_(integer *n, integer *nrhs, complex *dl, complex * d__, complex *du, 
         {
             i__2 = k;
             i__3 = k;
-            if ((r__1 = d__[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&d__[k]), f2c_abs(r__2)) >= (r__3 = dl[i__3].r, f2c_abs(r__3)) + (r__4 = r_imag(&dl[k]), f2c_abs(r__4)))
+            if((r__1 = d__[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&d__[k]), f2c_abs(r__2))
+               >= (r__3 = dl[i__3].r, f2c_abs(r__3)) + (r__4 = r_imag(&dl[k]), f2c_abs(r__4)))
             {
                 /* No row interchange required */
                 c_div(&q__1, &dl[k], &d__[k]);
@@ -271,12 +274,12 @@ void cgtsv_(integer *n, integer *nrhs, complex *dl, complex * d__, complex *du, 
                 temp.imag = d__[i__2].imag; // , expr subst
                 i__2 = k + 1;
                 i__3 = k;
-                q__2.real = mult.real * temp.real - mult.imag * temp.imag;
-                q__2.imag = mult.real * temp.imag + mult.imag * temp.real; // , expr subst
-                q__1.real = du[i__3].real - q__2.real;
-                q__1.imag = du[i__3].imag - q__2.imag; // , expr subst
-                d__[i__2].real = q__1.real;
-                d__[i__2].imag = q__1.imag; // , expr subst
+                q__2.r = mult.r * temp.r - mult.i * temp.i;
+                q__2.i = mult.r * temp.i + mult.i * temp.r; // , expr subst
+                q__1.r = du[i__3].r - q__2.r;
+                q__1.i = du[i__3].i - q__2.i; // , expr subst
+                d__[i__2].r = q__1.r;
+                d__[i__2].i = q__1.i; // , expr subst
                 if(k < *n - 1)
                 {
                     i__2 = k;
@@ -287,10 +290,10 @@ void cgtsv_(integer *n, integer *nrhs, complex *dl, complex * d__, complex *du, 
                     q__2.real = -mult.real;
                     q__2.imag = -mult.imag; // , expr subst
                     i__3 = k;
-                    q__1.real = q__2.real * dl[i__3].real - q__2.imag * dl[i__3].imag;
-                    q__1.imag = q__2.real * dl[i__3].imag + q__2.imag * dl[i__3].real; // , expr subst
-                    du[i__2].real = q__1.real;
-                    du[i__2].imag = q__1.imag; // , expr subst
+                    q__1.r = q__2.r * dl[i__3].r - q__2.i * dl[i__3].i;
+                    q__1.i = q__2.r * dl[i__3].i + q__2.i * dl[i__3].r; // , expr subst
+                    du[i__2].r = q__1.r;
+                    du[i__2].i = q__1.i; // , expr subst
                 }
                 i__2 = k;
                 du[i__2].real = temp.real;
@@ -320,7 +323,7 @@ void cgtsv_(integer *n, integer *nrhs, complex *dl, complex * d__, complex *du, 
         /* L30: */
     }
     i__1 = *n;
-    if(d__[i__1].real == 0.f && d__[i__1].imag == 0.f)
+    if(d__[i__1].r == 0.f && d__[i__1].i == 0.f)
     {
         *info = *n;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -332,8 +335,8 @@ void cgtsv_(integer *n, integer *nrhs, complex *dl, complex * d__, complex *du, 
     {
         i__2 = *n + j * b_dim1;
         c_div(&q__1, &b[*n + j * b_dim1], &d__[*n]);
-        b[i__2].real = q__1.real;
-        b[i__2].imag = q__1.imag; // , expr subst
+        b[i__2].r = q__1.r;
+        b[i__2].i = q__1.i; // , expr subst
         if(*n > 1)
         {
             i__2 = *n - 1 + j * b_dim1;

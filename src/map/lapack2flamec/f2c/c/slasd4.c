@@ -1,16 +1,25 @@
-/* ../netlib/slasd4.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slasd4.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLASD4 computes the square root of the i-th updated eigenvalue of a positive symmetric rank-one modification to a positive diagonal matrix. Used by sbdsdc. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLASD4 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasd4. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasd4.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasd4. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasd4.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasd4. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasd4.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -138,12 +147,13 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *rho, real *sigma, real *work, integer *info)
+void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *rho, real *sigma,
+             real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slasd4 inputs: n %d, i__ %d",*n, *i__);
+    snprintf(buffer, 256, "slasd4 inputs: n %d, i__ %d", *n, *i__);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -168,10 +178,12 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
     logical swtch;
     real dtnsq;
     extern /* Subroutine */
-    void slaed6_(integer *, logical *, real *, real *, real *, real *, real *, integer *);
+        void
+        slaed6_(integer *, logical *, real *, real *, real *, real *, real *, integer *);
     real delsq2;
     extern /* Subroutine */
-    void slasd5_(integer *, real *, real *, real *, real *, real *, real *);
+        void
+        slasd5_(integer *, real *, real *, real *, real *, real *, real *);
     real dtnsq1;
     logical swtch3;
     extern real slamch_(char *);
@@ -210,7 +222,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
     --d__;
     /* Function Body */
     *info = 0;
-    if (*n == 1)
+    if(*n == 1)
     {
         /* Presumably, I=1 upon entry */
         *sigma = sqrt(d__[1] * d__[1] + *rho * z__[1] * z__[1]);
@@ -219,7 +231,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (*n == 2)
+    if(*n == 2)
     {
         slasd5_(i__, &d__[1], &z__[1], &delta[1], rho, sigma, &work[1]);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -230,7 +242,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
     rhoinv = 1.f / *rho;
     tau2 = 0.f;
     /* The case I = N */
-    if (*i__ == *n)
+    if(*i__ == *n)
     {
         /* Initialize some basic variables */
         ii = *n - 1;
@@ -241,9 +253,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         /* RHO * ||Z||_2^2 / TWO */
         temp1 = temp / (d__[*n] + sqrt(d__[*n] * d__[*n] + temp));
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             work[j] = d__[j] + d__[*n] + temp1;
             delta[j] = d__[j] - d__[*n] - temp1;
@@ -251,31 +261,33 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         }
         psi = 0.f;
         i__1 = *n - 2;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             psi += z__[j] * z__[j] / (delta[j] * work[j]);
             /* L20: */
         }
         c__ = rhoinv + psi;
-        w = c__ + z__[ii] * z__[ii] / (delta[ii] * work[ii]) + z__[*n] * z__[* n] / (delta[*n] * work[*n]);
-        if (w <= 0.f)
+        w = c__ + z__[ii] * z__[ii] / (delta[ii] * work[ii])
+            + z__[*n] * z__[*n] / (delta[*n] * work[*n]);
+        if(w <= 0.f)
         {
             temp1 = sqrt(d__[*n] * d__[*n] + *rho);
-            temp = z__[*n - 1] * z__[*n - 1] / ((d__[*n - 1] + temp1) * (d__[* n] - d__[*n - 1] + *rho / (d__[*n] + temp1))) + z__[*n] * z__[*n] / *rho;
+            temp
+                = z__[*n - 1] * z__[*n - 1]
+                      / ((d__[*n - 1] + temp1) * (d__[*n] - d__[*n - 1] + *rho / (d__[*n] + temp1)))
+                  + z__[*n] * z__[*n] / *rho;
             /* The following TAU2 is to approximate */
             /* SIGMA_n^2 - D( N )*D( N ) */
-            if (c__ <= temp)
+            if(c__ <= temp)
             {
                 tau = *rho;
             }
             else
             {
                 delsq = (d__[*n] - d__[*n - 1]) * (d__[*n] + d__[*n - 1]);
-                a = -c__ * delsq + z__[*n - 1] * z__[*n - 1] + z__[*n] * z__[* n];
+                a = -c__ * delsq + z__[*n - 1] * z__[*n - 1] + z__[*n] * z__[*n];
                 b = z__[*n] * z__[*n] * delsq;
-                if (a < 0.f)
+                if(a < 0.f)
                 {
                     tau2 = b * 2.f / (sqrt(a * a + b * 4.f * c__) - a);
                 }
@@ -295,7 +307,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             b = z__[*n] * z__[*n] * delsq;
             /* The following TAU2 is to approximate */
             /* SIGMA_n^2 - D( N )*D( N ) */
-            if (a < 0.f)
+            if(a < 0.f)
             {
                 tau2 = b * 2.f / (sqrt(a * a + b * 4.f * c__) - a);
             }
@@ -311,9 +323,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         /* TAU = TAU2 / ( D( N )+SQRT( D( N )*D( N )+TAU2 ) ) */
         *sigma = d__[*n] + tau;
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             delta[j] = d__[j] - d__[*n] - tau;
             work[j] = d__[j] + d__[*n] + tau;
@@ -324,9 +334,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         psi = 0.f;
         erretm = 0.f;
         i__1 = ii;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             temp = z__[j] / (delta[j] * work[j]);
             psi += z__[j] * temp;
@@ -343,7 +351,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         /* $ + ABS( TAU2 )*( DPSI+DPHI ) */
         w = rhoinv + phi + psi;
         /* Test for convergence */
-        if (f2c_abs(w) <= eps * erretm)
+        if(f2c_abs(w) <= eps * erretm)
         {
             goto L240;
         }
@@ -354,33 +362,33 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         c__ = w - dtnsq1 * dpsi - dtnsq * dphi;
         a = (dtnsq + dtnsq1) * w - dtnsq * dtnsq1 * (dpsi + dphi);
         b = dtnsq * dtnsq1 * w;
-        if (c__ < 0.f)
+        if(c__ < 0.f)
         {
             c__ = f2c_abs(c__);
         }
-        if (c__ == 0.f)
+        if(c__ == 0.f)
         {
             eta = *rho - *sigma * *sigma;
         }
-        else if (a >= 0.f)
+        else if(a >= 0.f)
         {
-            eta = (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1)))) / ( c__ * 2.f);
+            eta = (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1)))) / (c__ * 2.f);
         }
         else
         {
-            eta = b * 2.f / (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1) )));
+            eta = b * 2.f / (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1))));
         }
         /* Note, eta should be positive if w is negative, and */
         /* eta should be negative otherwise. However, */
         /* if for some reason caused by roundoff, eta*w > 0, */
         /* we simply use one Newton step instead. This way */
         /* will guarantee eta*w < 0. */
-        if (w * eta > 0.f)
+        if(w * eta > 0.f)
         {
             eta = -w / (dpsi + dphi);
         }
         temp = eta - dtnsq;
-        if (temp > *rho)
+        if(temp > *rho)
         {
             eta = *rho + dtnsq;
         }
@@ -388,9 +396,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         tau += eta;
         *sigma += eta;
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             delta[j] -= eta;
             work[j] += eta;
@@ -401,9 +407,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         psi = 0.f;
         erretm = 0.f;
         i__1 = ii;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             temp = z__[j] / (work[j] * delta[j]);
             psi += z__[j] * temp;
@@ -422,12 +426,10 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         w = rhoinv + phi + psi;
         /* Main loop to update the values of the array DELTA */
         iter = niter + 1;
-        for (niter = iter;
-                niter <= 400;
-                ++niter)
+        for(niter = iter; niter <= 400; ++niter)
         {
             /* Test for convergence */
-            if (f2c_abs(w) <= eps * erretm)
+            if(f2c_abs(w) <= eps * erretm)
             {
                 goto L240;
             }
@@ -437,25 +439,25 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             c__ = w - dtnsq1 * dpsi - dtnsq * dphi;
             a = (dtnsq + dtnsq1) * w - dtnsq1 * dtnsq * (dpsi + dphi);
             b = dtnsq1 * dtnsq * w;
-            if (a >= 0.f)
+            if(a >= 0.f)
             {
                 eta = (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1)))) / (c__ * 2.f);
             }
             else
             {
-                eta = b * 2.f / (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs( r__1))));
+                eta = b * 2.f / (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1))));
             }
             /* Note, eta should be positive if w is negative, and */
             /* eta should be negative otherwise. However, */
             /* if for some reason caused by roundoff, eta*w > 0, */
             /* we simply use one Newton step instead. This way */
             /* will guarantee eta*w < 0. */
-            if (w * eta > 0.f)
+            if(w * eta > 0.f)
             {
                 eta = -w / (dpsi + dphi);
             }
             temp = eta - dtnsq;
-            if (temp <= 0.f)
+            if(temp <= 0.f)
             {
                 eta /= 2.f;
             }
@@ -463,9 +465,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             tau += eta;
             *sigma += eta;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 delta[j] -= eta;
                 work[j] += eta;
@@ -476,9 +476,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             psi = 0.f;
             erretm = 0.f;
             i__1 = ii;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 temp = z__[j] / (work[j] * delta[j]);
                 psi += z__[j] * temp;
@@ -513,9 +511,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         sq2 = sqrt((d__[*i__] * d__[*i__] + d__[ip1] * d__[ip1]) / 2.f);
         temp = delsq2 / (d__[*i__] + sq2);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             work[j] = d__[j] + d__[*i__] + temp;
             delta[j] = d__[j] - d__[*i__] - temp;
@@ -523,26 +519,23 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         }
         psi = 0.f;
         i__1 = *i__ - 1;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             psi += z__[j] * z__[j] / (work[j] * delta[j]);
             /* L110: */
         }
         phi = 0.f;
         i__1 = *i__ + 2;
-        for (j = *n;
-                j >= i__1;
-                --j)
+        for(j = *n; j >= i__1; --j)
         {
             phi += z__[j] * z__[j] / (work[j] * delta[j]);
             /* L120: */
         }
         c__ = rhoinv + psi + phi;
-        w = c__ + z__[*i__] * z__[*i__] / (work[*i__] * delta[*i__]) + z__[ ip1] * z__[ip1] / (work[ip1] * delta[ip1]);
+        w = c__ + z__[*i__] * z__[*i__] / (work[*i__] * delta[*i__])
+            + z__[ip1] * z__[ip1] / (work[ip1] * delta[ip1]);
         geomavg = FALSE_;
-        if (w > 0.f)
+        if(w > 0.f)
         {
             /* d(i)^2 < the ith sigma^2 < (d(i)^2+d(i+1)^2)/2 */
             /* We choose d(i) as origin. */
@@ -552,9 +545,9 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             sgub = delsq2 / (d__[*i__] + sq2);
             a = c__ * delsq + z__[*i__] * z__[*i__] + z__[ip1] * z__[ip1];
             b = z__[*i__] * z__[*i__] * delsq;
-            if (a > 0.f)
+            if(a > 0.f)
             {
-                tau2 = b * 2.f / (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs( r__1))));
+                tau2 = b * 2.f / (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1))));
             }
             else
             {
@@ -565,11 +558,12 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             /* SIGMA - D( I ). */
             tau = tau2 / (d__[*i__] + sqrt(d__[*i__] * d__[*i__] + tau2));
             temp = sqrt(eps);
-            if (d__[*i__] <= temp * d__[ip1] && (r__1 = z__[*i__], f2c_abs(r__1)) <= temp && d__[*i__] > 0.f)
+            if(d__[*i__] <= temp * d__[ip1] && (r__1 = z__[*i__], f2c_abs(r__1)) <= temp
+               && d__[*i__] > 0.f)
             {
                 /* Computing MIN */
                 r__1 = d__[*i__] * 10.f;
-                tau = fla_min(r__1,sgub);
+                tau = fla_min(r__1, sgub);
                 geomavg = TRUE_;
             }
         }
@@ -583,9 +577,9 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             sgub = 0.f;
             a = c__ * delsq - z__[*i__] * z__[*i__] - z__[ip1] * z__[ip1];
             b = z__[ip1] * z__[ip1] * delsq;
-            if (a < 0.f)
+            if(a < 0.f)
             {
-                tau2 = b * 2.f / (a - sqrt((r__1 = a * a + b * 4.f * c__, f2c_abs( r__1))));
+                tau2 = b * 2.f / (a - sqrt((r__1 = a * a + b * 4.f * c__, f2c_abs(r__1))));
             }
             else
             {
@@ -598,9 +592,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         }
         *sigma = d__[ii] + tau;
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             work[j] = d__[j] + d__[ii] + tau;
             delta[j] = d__[j] - d__[ii] - tau;
@@ -613,9 +605,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         psi = 0.f;
         erretm = 0.f;
         i__1 = iim1;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             temp = z__[j] / (work[j] * delta[j]);
             psi += z__[j] * temp;
@@ -628,9 +618,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         dphi = 0.f;
         phi = 0.f;
         i__1 = iip1;
-        for (j = *n;
-                j >= i__1;
-                --j)
+        for(j = *n; j >= i__1; --j)
         {
             temp = z__[j] / (work[j] * delta[j]);
             phi += z__[j] * temp;
@@ -642,21 +630,21 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         /* W is the value of the secular function with */
         /* its ii-th element removed. */
         swtch3 = FALSE_;
-        if (orgati)
+        if(orgati)
         {
-            if (w < 0.f)
+            if(w < 0.f)
             {
                 swtch3 = TRUE_;
             }
         }
         else
         {
-            if (w > 0.f)
+            if(w > 0.f)
             {
                 swtch3 = TRUE_;
             }
         }
-        if (ii == 1 || ii == *n)
+        if(ii == 1 || ii == *n)
         {
             swtch3 = FALSE_;
         }
@@ -667,25 +655,25 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         erretm = (phi - psi) * 8.f + erretm + rhoinv * 2.f + f2c_abs(temp) * 3.f;
         /* $ + ABS( TAU2 )*DW */
         /* Test for convergence */
-        if (f2c_abs(w) <= eps * erretm)
+        if(f2c_abs(w) <= eps * erretm)
         {
             goto L240;
         }
-        if (w <= 0.f)
+        if(w <= 0.f)
         {
-            sglb = fla_max(sglb,tau);
+            sglb = fla_max(sglb, tau);
         }
         else
         {
-            sgub = fla_min(sgub,tau);
+            sgub = fla_min(sgub, tau);
         }
         /* Calculate the new step */
         ++niter;
-        if (! swtch3)
+        if(!swtch3)
         {
             dtipsq = work[ip1] * delta[ip1];
             dtisq = work[*i__] * delta[*i__];
-            if (orgati)
+            if(orgati)
             {
                 /* Computing 2nd power */
                 r__1 = z__[*i__] / dtisq;
@@ -699,11 +687,11 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             }
             a = (dtipsq + dtisq) * w - dtipsq * dtisq * dw;
             b = dtipsq * dtisq * w;
-            if (c__ == 0.f)
+            if(c__ == 0.f)
             {
-                if (a == 0.f)
+                if(a == 0.f)
                 {
-                    if (orgati)
+                    if(orgati)
                     {
                         a = z__[*i__] * z__[*i__] + dtipsq * dtipsq * (dpsi + dphi);
                     }
@@ -714,13 +702,13 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
                 }
                 eta = b / a;
             }
-            else if (a <= 0.f)
+            else if(a <= 0.f)
             {
                 eta = (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1)))) / (c__ * 2.f);
             }
             else
             {
-                eta = b * 2.f / (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs( r__1))));
+                eta = b * 2.f / (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1))));
             }
         }
         else
@@ -729,13 +717,14 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             dtiim = work[iim1] * delta[iim1];
             dtiip = work[iip1] * delta[iip1];
             temp = rhoinv + psi + phi;
-            if (orgati)
+            if(orgati)
             {
                 temp1 = z__[iim1] / dtiim;
                 temp1 *= temp1;
-                c__ = temp - dtiip * (dpsi + dphi) - (d__[iim1] - d__[iip1]) * (d__[iim1] + d__[iip1]) * temp1;
+                c__ = temp - dtiip * (dpsi + dphi)
+                      - (d__[iim1] - d__[iip1]) * (d__[iim1] + d__[iip1]) * temp1;
                 zz[0] = z__[iim1] * z__[iim1];
-                if (dpsi < temp1)
+                if(dpsi < temp1)
                 {
                     zz[2] = dtiip * dtiip * dphi;
                 }
@@ -748,8 +737,9 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             {
                 temp1 = z__[iip1] / dtiip;
                 temp1 *= temp1;
-                c__ = temp - dtiim * (dpsi + dphi) - (d__[iip1] - d__[iim1]) * (d__[iim1] + d__[iip1]) * temp1;
-                if (dphi < temp1)
+                c__ = temp - dtiim * (dpsi + dphi)
+                      - (d__[iip1] - d__[iim1]) * (d__[iim1] + d__[iip1]) * temp1;
+                if(dphi < temp1)
                 {
                     zz[0] = dtiim * dtiim * dpsi;
                 }
@@ -764,7 +754,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             dd[1] = delta[ii] * work[ii];
             dd[2] = dtiip;
             slaed6_(&niter, &orgati, &c__, dd, zz, &w, &eta, info);
-            if (*info != 0)
+            if(*info != 0)
             {
                 /* If INFO is not 0, i.e., SLAED6 failed, switch back */
                 /* to 2 pole interpolation. */
@@ -772,7 +762,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
                 *info = 0;
                 dtipsq = work[ip1] * delta[ip1];
                 dtisq = work[*i__] * delta[*i__];
-                if (orgati)
+                if(orgati)
                 {
                     /* Computing 2nd power */
                     r__1 = z__[*i__] / dtisq;
@@ -786,13 +776,13 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
                 }
                 a = (dtipsq + dtisq) * w - dtipsq * dtisq * dw;
                 b = dtipsq * dtisq * w;
-                if (c__ == 0.f)
+                if(c__ == 0.f)
                 {
-                    if (a == 0.f)
+                    if(a == 0.f)
                     {
-                        if (orgati)
+                        if(orgati)
                         {
-                            a = z__[*i__] * z__[*i__] + dtipsq * dtipsq * ( dpsi + dphi);
+                            a = z__[*i__] * z__[*i__] + dtipsq * dtipsq * (dpsi + dphi);
                         }
                         else
                         {
@@ -801,9 +791,9 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
                     }
                     eta = b / a;
                 }
-                else if (a <= 0.f)
+                else if(a <= 0.f)
                 {
-                    eta = (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1))) ) / (c__ * 2.f);
+                    eta = (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1)))) / (c__ * 2.f);
                 }
                 else
                 {
@@ -816,15 +806,15 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         /* if for some reason caused by roundoff, eta*w > 0, */
         /* we simply use one Newton step instead. This way */
         /* will guarantee eta*w < 0. */
-        if (w * eta >= 0.f)
+        if(w * eta >= 0.f)
         {
             eta = -w / dw;
         }
         eta /= *sigma + sqrt(*sigma * *sigma + eta);
         temp = tau + eta;
-        if (temp > sgub || temp < sglb)
+        if(temp > sgub || temp < sglb)
         {
-            if (w < 0.f)
+            if(w < 0.f)
             {
                 eta = (sgub - tau) / 2.f;
             }
@@ -832,18 +822,18 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             {
                 eta = (sglb - tau) / 2.f;
             }
-            if (geomavg)
+            if(geomavg)
             {
-                if (w < 0.f)
+                if(w < 0.f)
                 {
-                    if (tau > 0.f)
+                    if(tau > 0.f)
                     {
                         eta = sqrt(sgub * tau) - tau;
                     }
                 }
                 else
                 {
-                    if (sglb > 0.f)
+                    if(sglb > 0.f)
                     {
                         eta = sqrt(sglb * tau) - tau;
                     }
@@ -854,9 +844,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         tau += eta;
         *sigma += eta;
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             work[j] += eta;
             delta[j] -= eta;
@@ -867,9 +855,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         psi = 0.f;
         erretm = 0.f;
         i__1 = iim1;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             temp = z__[j] / (work[j] * delta[j]);
             psi += z__[j] * temp;
@@ -882,9 +868,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         dphi = 0.f;
         phi = 0.f;
         i__1 = iip1;
-        for (j = *n;
-                j >= i__1;
-                --j)
+        for(j = *n; j >= i__1; --j)
         {
             temp = z__[j] / (work[j] * delta[j]);
             phi += z__[j] * temp;
@@ -900,48 +884,46 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         erretm = (phi - psi) * 8.f + erretm + rhoinv * 2.f + f2c_abs(temp) * 3.f;
         /* $ + ABS( TAU2 )*DW */
         swtch = FALSE_;
-        if (orgati)
+        if(orgati)
         {
-            if (-w > f2c_abs(prew) / 10.f)
+            if(-w > f2c_abs(prew) / 10.f)
             {
                 swtch = TRUE_;
             }
         }
         else
         {
-            if (w > f2c_abs(prew) / 10.f)
+            if(w > f2c_abs(prew) / 10.f)
             {
                 swtch = TRUE_;
             }
         }
         /* Main loop to update the values of the array DELTA and WORK */
         iter = niter + 1;
-        for (niter = iter;
-                niter <= 400;
-                ++niter)
+        for(niter = iter; niter <= 400; ++niter)
         {
             /* Test for convergence */
-            if (f2c_abs(w) <= eps * erretm)
+            if(f2c_abs(w) <= eps * erretm)
             {
                 /* $ .OR. (SGUB-SGLB).LE.EIGHT*ABS(SGUB+SGLB) ) THEN */
                 goto L240;
             }
-            if (w <= 0.f)
+            if(w <= 0.f)
             {
-                sglb = fla_max(sglb,tau);
+                sglb = fla_max(sglb, tau);
             }
             else
             {
-                sgub = fla_min(sgub,tau);
+                sgub = fla_min(sgub, tau);
             }
             /* Calculate the new step */
-            if (! swtch3)
+            if(!swtch3)
             {
                 dtipsq = work[ip1] * delta[ip1];
                 dtisq = work[*i__] * delta[*i__];
-                if (! swtch)
+                if(!swtch)
                 {
-                    if (orgati)
+                    if(orgati)
                     {
                         /* Computing 2nd power */
                         r__1 = z__[*i__] / dtisq;
@@ -957,7 +939,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
                 else
                 {
                     temp = z__[ii] / (work[ii] * delta[ii]);
-                    if (orgati)
+                    if(orgati)
                     {
                         dpsi += temp * temp;
                     }
@@ -969,19 +951,19 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
                 }
                 a = (dtipsq + dtisq) * w - dtipsq * dtisq * dw;
                 b = dtipsq * dtisq * w;
-                if (c__ == 0.f)
+                if(c__ == 0.f)
                 {
-                    if (a == 0.f)
+                    if(a == 0.f)
                     {
-                        if (! swtch)
+                        if(!swtch)
                         {
-                            if (orgati)
+                            if(orgati)
                             {
                                 a = z__[*i__] * z__[*i__] + dtipsq * dtipsq * (dpsi + dphi);
                             }
                             else
                             {
-                                a = z__[ip1] * z__[ip1] + dtisq * dtisq * ( dpsi + dphi);
+                                a = z__[ip1] * z__[ip1] + dtisq * dtisq * (dpsi + dphi);
                             }
                         }
                         else
@@ -991,9 +973,9 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
                     }
                     eta = b / a;
                 }
-                else if (a <= 0.f)
+                else if(a <= 0.f)
                 {
-                    eta = (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1))) ) / (c__ * 2.f);
+                    eta = (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1)))) / (c__ * 2.f);
                 }
                 else
                 {
@@ -1006,7 +988,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
                 dtiim = work[iim1] * delta[iim1];
                 dtiip = work[iip1] * delta[iip1];
                 temp = rhoinv + psi + phi;
-                if (swtch)
+                if(swtch)
                 {
                     c__ = temp - dtiim * dpsi - dtiip * dphi;
                     zz[0] = dtiim * dtiim * dpsi;
@@ -1014,14 +996,14 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
                 }
                 else
                 {
-                    if (orgati)
+                    if(orgati)
                     {
                         temp1 = z__[iim1] / dtiim;
                         temp1 *= temp1;
-                        temp2 = (d__[iim1] - d__[iip1]) * (d__[iim1] + d__[ iip1]) * temp1;
+                        temp2 = (d__[iim1] - d__[iip1]) * (d__[iim1] + d__[iip1]) * temp1;
                         c__ = temp - dtiip * (dpsi + dphi) - temp2;
                         zz[0] = z__[iim1] * z__[iim1];
-                        if (dpsi < temp1)
+                        if(dpsi < temp1)
                         {
                             zz[2] = dtiip * dtiip * dphi;
                         }
@@ -1034,9 +1016,9 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
                     {
                         temp1 = z__[iip1] / dtiip;
                         temp1 *= temp1;
-                        temp2 = (d__[iip1] - d__[iim1]) * (d__[iim1] + d__[ iip1]) * temp1;
+                        temp2 = (d__[iip1] - d__[iim1]) * (d__[iim1] + d__[iip1]) * temp1;
                         c__ = temp - dtiim * (dpsi + dphi) - temp2;
-                        if (dphi < temp1)
+                        if(dphi < temp1)
                         {
                             zz[0] = dtiim * dtiim * dpsi;
                         }
@@ -1051,7 +1033,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
                 dd[1] = delta[ii] * work[ii];
                 dd[2] = dtiip;
                 slaed6_(&niter, &orgati, &c__, dd, zz, &w, &eta, info);
-                if (*info != 0)
+                if(*info != 0)
                 {
                     /* If INFO is not 0, i.e., SLAED6 failed, switch */
                     /* back to two pole interpolation */
@@ -1059,9 +1041,9 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
                     *info = 0;
                     dtipsq = work[ip1] * delta[ip1];
                     dtisq = work[*i__] * delta[*i__];
-                    if (! swtch)
+                    if(!swtch)
                     {
-                        if (orgati)
+                        if(orgati)
                         {
                             /* Computing 2nd power */
                             r__1 = z__[*i__] / dtisq;
@@ -1077,7 +1059,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
                     else
                     {
                         temp = z__[ii] / (work[ii] * delta[ii]);
-                        if (orgati)
+                        if(orgati)
                         {
                             dpsi += temp * temp;
                         }
@@ -1089,13 +1071,13 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
                     }
                     a = (dtipsq + dtisq) * w - dtipsq * dtisq * dw;
                     b = dtipsq * dtisq * w;
-                    if (c__ == 0.f)
+                    if(c__ == 0.f)
                     {
-                        if (a == 0.f)
+                        if(a == 0.f)
                         {
-                            if (! swtch)
+                            if(!swtch)
                             {
-                                if (orgati)
+                                if(orgati)
                                 {
                                     a = z__[*i__] * z__[*i__] + dtipsq * dtipsq * (dpsi + dphi);
                                 }
@@ -1111,9 +1093,10 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
                         }
                         eta = b / a;
                     }
-                    else if (a <= 0.f)
+                    else if(a <= 0.f)
                     {
-                        eta = (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs( r__1)))) / (c__ * 2.f);
+                        eta = (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1))))
+                              / (c__ * 2.f);
                     }
                     else
                     {
@@ -1126,15 +1109,15 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             /* if for some reason caused by roundoff, eta*w > 0, */
             /* we simply use one Newton step instead. This way */
             /* will guarantee eta*w < 0. */
-            if (w * eta >= 0.f)
+            if(w * eta >= 0.f)
             {
                 eta = -w / dw;
             }
             eta /= *sigma + sqrt(*sigma * *sigma + eta);
             temp = tau + eta;
-            if (temp > sgub || temp < sglb)
+            if(temp > sgub || temp < sglb)
             {
-                if (w < 0.f)
+                if(w < 0.f)
                 {
                     eta = (sgub - tau) / 2.f;
                 }
@@ -1142,18 +1125,18 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
                 {
                     eta = (sglb - tau) / 2.f;
                 }
-                if (geomavg)
+                if(geomavg)
                 {
-                    if (w < 0.f)
+                    if(w < 0.f)
                     {
-                        if (tau > 0.f)
+                        if(tau > 0.f)
                         {
                             eta = sqrt(sgub * tau) - tau;
                         }
                     }
                     else
                     {
-                        if (sglb > 0.f)
+                        if(sglb > 0.f)
                         {
                             eta = sqrt(sglb * tau) - tau;
                         }
@@ -1164,9 +1147,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             tau += eta;
             *sigma += eta;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 work[j] += eta;
                 delta[j] -= eta;
@@ -1177,9 +1158,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             psi = 0.f;
             erretm = 0.f;
             i__1 = iim1;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 temp = z__[j] / (work[j] * delta[j]);
                 psi += z__[j] * temp;
@@ -1192,9 +1171,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             dphi = 0.f;
             phi = 0.f;
             i__1 = iip1;
-            for (j = *n;
-                    j >= i__1;
-                    --j)
+            for(j = *n; j >= i__1; --j)
             {
                 temp = z__[j] / (work[j] * delta[j]);
                 phi += z__[j] * temp;
@@ -1209,9 +1186,9 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             w = rhoinv + phi + psi + temp;
             erretm = (phi - psi) * 8.f + erretm + rhoinv * 2.f + f2c_abs(temp) * 3.f;
             /* $ + ABS( TAU2 )*DW */
-            if (w * prew > 0.f && f2c_abs(w) > f2c_abs(prew) / 10.f)
+            if(w * prew > 0.f && f2c_abs(w) > f2c_abs(prew) / 10.f)
             {
-                swtch = ! swtch;
+                swtch = !swtch;
             }
             /* L230: */
         }
@@ -1224,4 +1201,3 @@ L240:
     /* End of SLASD4 */
 }
 /* slasd4_ */
-

@@ -110,7 +110,7 @@ static aocl_int64_t c__65 = 65;
 /* > LDA is INTEGER */
 /* > The leading dimension of the array A. */
 /* > If SIDE = 'L', LDA >= fla_max(1,M);
-*/
+ */
 /* > if SIDE = 'R', LDA >= fla_max(1,N). */
 /* > \endverbatim */
 /* > */
@@ -145,7 +145,7 @@ static aocl_int64_t c__65 = 65;
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If SIDE = 'L', LWORK >= fla_max(1,N);
-*/
+ */
 /* > if SIDE = 'R', LWORK >= fla_max(1,M). */
 /* > For optimum performance LWORK >= N*NB if SIDE = 'L', and */
 /* > LWORK >= M*NB if SIDE = 'R', where NB is the optimal */
@@ -174,7 +174,9 @@ the routine */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zunmqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *lwork, integer *info)
+void zunmqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a,
+                integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc,
+                doublecomplex *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__4, i__5;
@@ -183,22 +185,30 @@ void zunmqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, dou
     /* Subroutine */
 
     /* Local variables */
-    aocl_int64_t i__;
-    dcomplex t[4160] /* was [65][64] */
+    integer i__;
+    doublecomplex t[4160] /* was [65][64] */
         ;
-    aocl_int64_t i1, i2, i3, ib, ic, jc, nb, mi, ni, nq, nw, iws;
+    integer i1, i2, i3, ib, ic, jc, nb, mi, ni, nq, nw, iws;
     logical left;
     extern logical lsame_(char *, char *, integer, integer);
     integer nbmin, iinfo;
     extern /* Subroutine */
-    void zunm2r_fla(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zunm2r_fla(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
+                   doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void zlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublecomplex *,
+                integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *);
     logical notran;
     integer ldwork;
     extern /* Subroutine */
-    void zlarft_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zlarft_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                doublecomplex *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -249,11 +259,11 @@ void zunmqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, dou
         nq = *n;
         nw = *m;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -269,15 +279,15 @@ void zunmqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, dou
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,nq))
+    else if(*lda < fla_max(1, nq))
     {
         *info = -7;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -10;
     }
-    else if (*lwork < fla_max(1,nw) && ! lquery)
+    else if(*lwork < fla_max(1, nw) && !lquery)
     {
         *info = -12;
     }
@@ -288,9 +298,9 @@ void zunmqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, dou
         /* Computing MIN */
         i__1 = 64;
         i__2 = ilaenv_(&c__1, "ZUNMQR", ch__1, m, n, k, &c_n1); // , expr subst
-        nb = fla_min(i__1,i__2);
-        lwkopt = fla_max(1,nw) * nb;
-        work[1].r = (doublereal) lwkopt;
+        nb = fla_min(i__1, i__2);
+        lwkopt = fla_max(1, nw) * nb;
+        work[1].r = (doublereal)lwkopt;
         work[1].i = 0.; // , expr subst
     }
     if(*info != 0)
@@ -321,7 +331,7 @@ void zunmqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, dou
             /* Computing MAX */
             i__1 = 2;
             i__2 = ilaenv_(&c__2, "ZUNMQR", ch__1, m, n, k, &c_n1); // , expr subst
-            nbmin = fla_max(i__1,i__2);
+            nbmin = fla_max(i__1, i__2);
         }
     }
     else
@@ -366,12 +376,12 @@ void zunmqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, dou
             /* Computing MIN */
             i__4 = nb;
             i__5 = *k - i__ + 1; // , expr subst
-            ib = fla_min(i__4,i__5);
+            ib = fla_min(i__4, i__5);
             /* Form the triangular factor of the block reflector */
             /* H = H(i) H(i+1) . . . H(i+ib-1) */
             i__4 = nq - i__ + 1;
-            aocl_lapack_zlarft("Forward", "Columnwise", &i__4, &ib, &a[i__ + i__ * a_dim1], lda,
-                               &tau[i__], t, &c__65);
+            zlarft_("Forward", "Columnwise", &i__4, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__], t,
+                    &c__65);
             if(left)
             {
                 /* H or H**H is applied to C(i:m,1:n) */
@@ -385,13 +395,12 @@ void zunmqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, dou
                 jc = i__;
             }
             /* Apply H or H**H */
-            aocl_lapack_zlarfb(side, trans, "Forward", "Columnwise", &mi, &ni, &ib,
-                               &a[i__ + i__ * a_dim1], lda, t, &c__65, &c__[ic + jc * c_dim1], ldc,
-                               &work[1], &ldwork);
+            zlarfb_(side, trans, "Forward", "Columnwise", &mi, &ni, &ib, &a[i__ + i__ * a_dim1],
+                    lda, t, &c__65, &c__[ic + jc * c_dim1], ldc, &work[1], &ldwork);
             /* L10: */
         }
     }
-    work[1].r = (doublereal) lwkopt;
+    work[1].r = (doublereal)lwkopt;
     work[1].i = 0.; // , expr subst
     return;
     /* End of ZUNMQR */

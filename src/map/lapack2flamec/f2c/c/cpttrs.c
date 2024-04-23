@@ -119,15 +119,17 @@ static aocl_int64_t c_n1 = -1;
 /* > \ingroup complexPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cpttrs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, complex *b, integer *ldb, integer *info)
+void cpttrs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, complex *b, integer *ldb,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cpttrs inputs: uplo %c, n %lld, nrhs %lld, ldb %lld",*uplo, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "cpttrs inputs: uplo %c, n %lld, nrhs %lld, ldb %lld", *uplo, *n, *nrhs,
+             *ldb);
 #else
-    snprintf(buffer, 256,"cpttrs inputs: uplo %c, n %d, nrhs %d, ldb %d",*uplo, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "cpttrs inputs: uplo %c, n %d, nrhs %d, ldb %d", *uplo, *n, *nrhs, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -137,7 +139,9 @@ void cpttrs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, compl
     aocl_int64_t j, jb, nb, iuplo;
     logical upper;
     extern /* Subroutine */
-    void cptts2_(integer *, integer *, integer *, real *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        cptts2_(integer *, integer *, integer *, real *, complex *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -179,7 +183,7 @@ void cpttrs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, compl
     {
         *info = -3;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
@@ -206,7 +210,7 @@ void cpttrs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, compl
         /* Computing MAX */
         i__1 = 1;
         i__2 = ilaenv_(&c__1, "CPTTRS", uplo, n, nrhs, &c_n1, &c_n1); // , expr subst
-        nb = fla_max(i__1,i__2);
+        nb = fla_max(i__1, i__2);
     }
     /* Decode UPLO */
     if(upper)
@@ -229,7 +233,7 @@ void cpttrs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, compl
         {
             /* Computing MIN */
             i__3 = *nrhs - j + 1;
-            jb = fla_min(i__3,nb);
+            jb = fla_min(i__3, nb);
             cptts2_(&iuplo, n, &jb, &d__[1], &e[1], &b[j * b_dim1 + 1], ldb);
             /* L10: */
         }

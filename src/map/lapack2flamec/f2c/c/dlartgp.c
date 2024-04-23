@@ -1,5 +1,8 @@
-/* dlartgp.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dlartgp.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b6 = 1.;
 /* > \brief \b DLARTGP generates a plane rotation so that the diagonal is nonnegative. */
@@ -96,8 +99,8 @@ void dlartgp_(doublereal *f, doublereal *g, doublereal *cs, doublereal *sn, doub
     aocl_int64_t i__1;
     doublereal d__1, d__2;
     /* Builtin functions */
-    double log(doublereal), pow_di(doublereal *, aocl_int64_t *),
-        d_sign(doublereal *, doublereal *), sqrt(doublereal);
+    double log(doublereal), pow_di(doublereal *, integer *), d_sign(doublereal *, doublereal *),
+        sqrt(doublereal);
     /* Local variables */
     aocl_int64_t i__;
     doublereal f1, g1, eps, scale;
@@ -155,8 +158,8 @@ void dlartgp_(doublereal *f, doublereal *g, doublereal *cs, doublereal *sn, doub
         /* Computing MAX */
         d__1 = f2c_dabs(f1);
         d__2 = f2c_dabs(g1); // , expr subst
-        scale = fla_max(d__1,d__2);
-        if (scale >= safmx2)
+        scale = fla_max(d__1, d__2);
+        if(scale >= safmx2)
         {
             count = 0;
         L10:
@@ -166,8 +169,8 @@ void dlartgp_(doublereal *f, doublereal *g, doublereal *cs, doublereal *sn, doub
             /* Computing MAX */
             d__1 = f2c_dabs(f1);
             d__2 = f2c_dabs(g1); // , expr subst
-            scale = fla_max(d__1,d__2);
-            if (scale >= safmx2 && count < 20)
+            scale = fla_max(d__1, d__2);
+            if(scale >= safmx2 && count < 20)
             {
                 goto L10;
             }
@@ -195,8 +198,8 @@ void dlartgp_(doublereal *f, doublereal *g, doublereal *cs, doublereal *sn, doub
             /* Computing MAX */
             d__1 = f2c_dabs(f1);
             d__2 = f2c_dabs(g1); // , expr subst
-            scale = fla_max(d__1,d__2);
-            if (scale <= safmn2)
+            scale = fla_max(d__1, d__2);
+            if(scale <= safmn2)
             {
                 goto L30;
             }

@@ -264,26 +264,44 @@ and if */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-void zlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, doublecomplex *b, integer *ldb, doublecomplex *bx, integer *ldbx, doublereal *u, integer *ldu, doublereal *vt, integer * k, doublereal *difl, doublereal *difr, doublereal *z__, doublereal * poles, integer *givptr, integer *givcol, integer *ldgcol, integer * perm, doublereal *givnum, doublereal *c__, doublereal *s, doublereal * rwork, integer *iwork, integer *info)
+void zlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, doublecomplex *b,
+             integer *ldb, doublecomplex *bx, integer *ldbx, doublereal *u, integer *ldu,
+             doublereal *vt, integer *k, doublereal *difl, doublereal *difr, doublereal *z__,
+             doublereal *poles, integer *givptr, integer *givcol, integer *ldgcol, integer *perm,
+             doublereal *givnum, doublereal *c__, doublereal *s, doublereal *rwork, integer *iwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlalsa inputs: icompq %" FLA_IS ", smlsiz %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldbx %" FLA_IS ", ldu %" FLA_IS ", ldgcol %" FLA_IS "",*icompq, *smlsiz, *n, *nrhs, *ldb, *ldbx, *ldu, *ldgcol);
+    AOCL_DTL_SNPRINTF("zlalsa inputs: icompq %" FLA_IS ", smlsiz %" FLA_IS ", n %" FLA_IS
+                      ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldbx %" FLA_IS ", ldu %" FLA_IS
+                      ", ldgcol %" FLA_IS "",
+                      *icompq, *smlsiz, *n, *nrhs, *ldb, *ldbx, *ldu, *ldgcol);
     /* System generated locals */
-    aocl_int64_t givcol_dim1, givcol_offset, perm_dim1, perm_offset, difl_dim1, difl_offset,
-        difr_dim1, difr_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, u_dim1,
-        u_offset, vt_dim1, vt_offset, z_dim1, z_offset, b_dim1, b_offset, bx_dim1, bx_offset, i__1,
-        i__2, i__3, i__4, i__5, i__6;
-    dcomplex z__1;
+    integer givcol_dim1, givcol_offset, perm_dim1, perm_offset, difl_dim1, difl_offset, difr_dim1,
+        difr_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, u_dim1, u_offset,
+        vt_dim1, vt_offset, z_dim1, z_offset, b_dim1, b_offset, bx_dim1, bx_offset, i__1, i__2,
+        i__3, i__4, i__5, i__6;
+    doublecomplex z__1;
     /* Builtin functions */
     double d_imag(dcomplex *);
     integer pow_ii(aocl_int64_t *, aocl_int64_t *);
     /* Local variables */
-    integer i__, j, i1, ic, lf, nd, ll, nl, nr, im1, nlf, nrf, lvl, ndb1, nlp1, lvl2, nrp1, jcol, nlvl, sqre, jrow, jimag;
+    integer i__, j, i1, ic, lf, nd, ll, nl, nr, im1, nlf, nrf, lvl, ndb1, nlp1, lvl2, nrp1, jcol,
+        nlvl, sqre, jrow, jimag;
     extern /* Subroutine */
-    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer jreal, inode, ndiml, ndimr;
     extern /* Subroutine */
-    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlals0_(integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zlals0_(integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *, integer *, integer *, integer *, integer *,
+                doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
+                integer *, doublereal *, doublereal *, doublereal *, integer *),
+        dlasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -432,8 +450,8 @@ void zlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, double
             }
             /* L20: */
         }
-        aocl_blas_dgemm("T", "N", &nl, nrhs, &nl, &c_b9, &u[nlf + u_dim1], ldu,
-                        &rwork[(nl * *nrhs << 1) + 1], &nl, &c_b10, &rwork[1], &nl);
+        dgemm_("T", "N", &nl, nrhs, &nl, &c_b9, &u[nlf + u_dim1], ldu,
+               &rwork[(nl * *nrhs << 1) + 1], &nl, &c_b10, &rwork[1], &nl);
         j = nl * *nrhs << 1;
         i__2 = *nrhs;
         for(jcol = 1; jcol <= i__2; ++jcol)
@@ -447,8 +465,8 @@ void zlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, double
             }
             /* L40: */
         }
-        aocl_blas_dgemm("T", "N", &nl, nrhs, &nl, &c_b9, &u[nlf + u_dim1], ldu,
-                        &rwork[(nl * *nrhs << 1) + 1], &nl, &c_b10, &rwork[nl * *nrhs + 1], &nl);
+        dgemm_("T", "N", &nl, nrhs, &nl, &c_b9, &u[nlf + u_dim1], ldu,
+               &rwork[(nl * *nrhs << 1) + 1], &nl, &c_b10, &rwork[nl * *nrhs + 1], &nl);
         jreal = 0;
         jimag = nl * *nrhs;
         i__2 = *nrhs;
@@ -488,8 +506,8 @@ void zlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, double
             }
             /* L80: */
         }
-        aocl_blas_dgemm("T", "N", &nr, nrhs, &nr, &c_b9, &u[nrf + u_dim1], ldu,
-                        &rwork[(nr * *nrhs << 1) + 1], &nr, &c_b10, &rwork[1], &nr);
+        dgemm_("T", "N", &nr, nrhs, &nr, &c_b9, &u[nrf + u_dim1], ldu,
+               &rwork[(nr * *nrhs << 1) + 1], &nr, &c_b10, &rwork[1], &nr);
         j = nr * *nrhs << 1;
         i__2 = *nrhs;
         for(jcol = 1; jcol <= i__2; ++jcol)
@@ -503,8 +521,8 @@ void zlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, double
             }
             /* L100: */
         }
-        aocl_blas_dgemm("T", "N", &nr, nrhs, &nr, &c_b9, &u[nrf + u_dim1], ldu,
-                        &rwork[(nr * *nrhs << 1) + 1], &nr, &c_b10, &rwork[nr * *nrhs + 1], &nr);
+        dgemm_("T", "N", &nr, nrhs, &nr, &c_b9, &u[nrf + u_dim1], ldu,
+               &rwork[(nr * *nrhs << 1) + 1], &nr, &c_b10, &rwork[nr * *nrhs + 1], &nr);
         jreal = 0;
         jimag = nr * *nrhs;
         i__2 = *nrhs;
@@ -567,16 +585,11 @@ void zlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, double
             nlf = ic - nl;
             nrf = ic + 1;
             --j;
-            givptr_sca = givptr[j];
-            k_sca = k[j];
-            aocl_lapack_zlals0(
-                icompq, &nl, &nr, &sqre, nrhs, &bx[nlf + bx_dim1], ldbx, &b[nlf + b_dim1], ldb,
-                &perm[nlf + lvl * perm_dim1], &givptr_sca, &givcol[nlf + lvl2 * givcol_dim1], ldgcol,
-                &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1],
-                &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1],
-                &z__[nlf + lvl * z_dim1], &k_sca, &c__[j], &s[j], &rwork[1], info);
-            givptr[j] = (aocl_int_t)givptr_sca;
-            k[j] = (aocl_int_t)k_sca;
+            zlals0_(icompq, &nl, &nr, &sqre, nrhs, &bx[nlf + bx_dim1], ldbx, &b[nlf + b_dim1], ldb,
+                    &perm[nlf + lvl * perm_dim1], &givptr[j], &givcol[nlf + lvl2 * givcol_dim1],
+                    ldgcol, &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1],
+                    &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1],
+                    &z__[nlf + lvl * z_dim1], &k[j], &c__[j], &s[j], &rwork[1], info);
             /* L150: */
         }
         /* L160: */
@@ -621,16 +634,11 @@ L170: /* First now go through the right singular vector matrices of all */
                 sqre = 1;
             }
             ++j;
-            givptr_sca = givptr[j];
-            k_sca = k[j];
-            aocl_lapack_zlals0(
-                icompq, &nl, &nr, &sqre, nrhs, &b[nlf + b_dim1], ldb, &bx[nlf + bx_dim1], ldbx,
-                &perm[nlf + lvl * perm_dim1], &givptr_sca, &givcol[nlf + lvl2 * givcol_dim1], ldgcol,
-                &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1],
-                &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1],
-                &z__[nlf + lvl * z_dim1], &k_sca, &c__[j], &s[j], &rwork[1], info);
-            givptr[j] = (aocl_int_t)givptr_sca;
-            k[j] = (aocl_int_t)k_sca;
+            zlals0_(icompq, &nl, &nr, &sqre, nrhs, &b[nlf + b_dim1], ldb, &bx[nlf + bx_dim1], ldbx,
+                    &perm[nlf + lvl * perm_dim1], &givptr[j], &givcol[nlf + lvl2 * givcol_dim1],
+                    ldgcol, &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1],
+                    &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1],
+                    &z__[nlf + lvl * z_dim1], &k[j], &c__[j], &s[j], &rwork[1], info);
             /* L180: */
         }
         /* L190: */
@@ -675,8 +683,8 @@ L170: /* First now go through the right singular vector matrices of all */
             }
             /* L210: */
         }
-        aocl_blas_dgemm("T", "N", &nlp1, nrhs, &nlp1, &c_b9, &vt[nlf + vt_dim1], ldu,
-                        &rwork[(nlp1 * *nrhs << 1) + 1], &nlp1, &c_b10, &rwork[1], &nlp1);
+        dgemm_("T", "N", &nlp1, nrhs, &nlp1, &c_b9, &vt[nlf + vt_dim1], ldu,
+               &rwork[(nlp1 * *nrhs << 1) + 1], &nlp1, &c_b10, &rwork[1], &nlp1);
         j = nlp1 * *nrhs << 1;
         i__2 = *nrhs;
         for(jcol = 1; jcol <= i__2; ++jcol)
@@ -690,9 +698,8 @@ L170: /* First now go through the right singular vector matrices of all */
             }
             /* L230: */
         }
-        aocl_blas_dgemm("T", "N", &nlp1, nrhs, &nlp1, &c_b9, &vt[nlf + vt_dim1], ldu,
-                        &rwork[(nlp1 * *nrhs << 1) + 1], &nlp1, &c_b10, &rwork[nlp1 * *nrhs + 1],
-                        &nlp1);
+        dgemm_("T", "N", &nlp1, nrhs, &nlp1, &c_b9, &vt[nlf + vt_dim1], ldu,
+               &rwork[(nlp1 * *nrhs << 1) + 1], &nlp1, &c_b10, &rwork[nlp1 * *nrhs + 1], &nlp1);
         jreal = 0;
         jimag = nlp1 * *nrhs;
         i__2 = *nrhs;
@@ -732,8 +739,8 @@ L170: /* First now go through the right singular vector matrices of all */
             }
             /* L270: */
         }
-        aocl_blas_dgemm("T", "N", &nrp1, nrhs, &nrp1, &c_b9, &vt[nrf + vt_dim1], ldu,
-                        &rwork[(nrp1 * *nrhs << 1) + 1], &nrp1, &c_b10, &rwork[1], &nrp1);
+        dgemm_("T", "N", &nrp1, nrhs, &nrp1, &c_b9, &vt[nrf + vt_dim1], ldu,
+               &rwork[(nrp1 * *nrhs << 1) + 1], &nrp1, &c_b10, &rwork[1], &nrp1);
         j = nrp1 * *nrhs << 1;
         i__2 = *nrhs;
         for(jcol = 1; jcol <= i__2; ++jcol)
@@ -747,9 +754,8 @@ L170: /* First now go through the right singular vector matrices of all */
             }
             /* L290: */
         }
-        aocl_blas_dgemm("T", "N", &nrp1, nrhs, &nrp1, &c_b9, &vt[nrf + vt_dim1], ldu,
-                        &rwork[(nrp1 * *nrhs << 1) + 1], &nrp1, &c_b10, &rwork[nrp1 * *nrhs + 1],
-                        &nrp1);
+        dgemm_("T", "N", &nrp1, nrhs, &nrp1, &c_b9, &vt[nrf + vt_dim1], ldu,
+               &rwork[(nrp1 * *nrhs << 1) + 1], &nrp1, &c_b10, &rwork[nrp1 * *nrhs + 1], &nrp1);
         jreal = 0;
         jimag = nrp1 * *nrhs;
         i__2 = *nrhs;

@@ -1,6 +1,9 @@
 #ifdef FLA_ENABLE_XBLAS
-/* ../netlib/zgbsvxx.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zgbsvxx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief <b> ZGBSVXX computes the solution to system of linear equations A * X = B for GB matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -562,10 +565,21 @@ defaults */
 /* > \ingroup complex16GBsolve */
 /* ===================================================================== */
 /* Subroutine */
-void zgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, integer *nrhs, doublecomplex *ab, integer *ldab, doublecomplex *afb, integer *ldafb, integer *ipiv, char *equed, doublereal *r__, doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *rpvgrw, doublereal *berr, integer *n_err_bnds__, doublereal *err_bnds_norm__, doublereal *err_bnds_comp__, integer *nparams, doublereal *params, doublecomplex *work, doublereal *rwork, integer *info)
+void zgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integer *nrhs,
+              doublecomplex *ab, integer *ldab, doublecomplex *afb, integer *ldafb, integer *ipiv,
+              char *equed, doublereal *r__, doublereal *c__, doublecomplex *b, integer *ldb,
+              doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *rpvgrw,
+              doublereal *berr, integer *n_err_bnds__, doublereal *err_bnds_norm__,
+              doublereal *err_bnds_comp__, integer *nparams, doublereal *params,
+              doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgbsvxx inputs: fact %c, trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS ", n_err_bnds__ %" FLA_IS ", nparams %" FLA_IS "",*fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx, *n_err_bnds__, *nparams);
+    AOCL_DTL_SNPRINTF("zgbsvxx inputs: fact %c, trans %c, n %" FLA_IS ", kl %" FLA_IS
+                      ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS
+                      ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS ", n_err_bnds__ %" FLA_IS
+                      ", nparams %" FLA_IS "",
+                      *fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx,
+                      *n_err_bnds__, *nparams);
     /* System generated locals */
     integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset,
         err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1,
@@ -574,7 +588,8 @@ void zgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
     /* Local variables */
     integer i__, j;
     doublereal amax;
-    extern doublereal zla_gbrpvgrw_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    extern doublereal zla_gbrpvgrw_(integer *, integer *, integer *, integer *, doublecomplex *,
+                                    integer *, doublecomplex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     doublereal rcmin, rcmax;
     logical equil;
@@ -582,22 +597,39 @@ void zgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
     doublereal colcnd;
     logical nofact;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlaqgb_( integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, char *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zlaqgb_(integer *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, char *);
     doublereal bignum;
     integer infequ;
     logical colequ;
     doublereal rowcnd;
     extern /* Subroutine */
-    void zgbtrf_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, integer *);
+        void
+        zgbtrf_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *,
+                integer *);
     logical notran;
     extern /* Subroutine */
-    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *);
     doublereal smlnum;
     extern /* Subroutine */
-    void zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *,
+                integer *, doublecomplex *, integer *, integer *);
     logical rowequ;
     extern /* Subroutine */
-    void zlascl2_(integer *, integer *, doublereal *, doublecomplex *, integer *), zgbequb_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), zgbrfsx_(char *, char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublecomplex *, doublereal *, integer *);
+        void
+        zlascl2_(integer *, integer *, doublereal *, doublecomplex *, integer *),
+        zgbequb_(integer *, integer *, integer *, integer *, doublecomplex *, integer *,
+                 doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *),
+        zgbrfsx_(char *, char *, integer *, integer *, integer *, integer *, doublecomplex *,
+                 integer *, doublecomplex *, integer *, integer *, doublereal *, doublereal *,
+                 doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
+                 integer *, doublereal *, doublereal *, integer *, doublereal *, doublecomplex *,
+                 doublereal *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -667,11 +699,11 @@ void zgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
     /* pivot growth is set here, the rest is initialized in ZGBRFSX. */
     *rpvgrw = 0.;
     /* Test the input parameters. PARAMS is not tested until DGERFSX. */
-    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -699,7 +731,7 @@ void zgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
     {
         *info = -10;
     }
-    else if (lsame_(fact, "F", 1, 1) && ! (rowequ || colequ || lsame_(equed, "N", 1, 1)))
+    else if(lsame_(fact, "F", 1, 1) && !(rowequ || colequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -12;
     }
@@ -715,11 +747,11 @@ void zgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
                 /* Computing MIN */
                 d__1 = rcmin;
                 d__2 = r__[j]; // , expr subst
-                rcmin = fla_min(d__1,d__2);
+                rcmin = fla_min(d__1, d__2);
                 /* Computing MAX */
                 d__1 = rcmax;
                 d__2 = r__[j]; // , expr subst
-                rcmax = fla_max(d__1,d__2);
+                rcmax = fla_max(d__1, d__2);
                 /* L10: */
             }
             if(rcmin <= 0.)
@@ -728,7 +760,7 @@ void zgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
             }
             else if(*n > 0)
             {
-                rowcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+                rowcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
             }
             else
             {
@@ -745,11 +777,11 @@ void zgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
                 /* Computing MIN */
                 d__1 = rcmin;
                 d__2 = c__[j]; // , expr subst
-                rcmin = fla_min(d__1,d__2);
+                rcmin = fla_min(d__1, d__2);
                 /* Computing MAX */
                 d__1 = rcmax;
                 d__2 = c__[j]; // , expr subst
-                rcmax = fla_max(d__1,d__2);
+                rcmax = fla_max(d__1, d__2);
                 /* L20: */
             }
             if(rcmin <= 0.)
@@ -758,7 +790,7 @@ void zgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
             }
             else if(*n > 0)
             {
-                colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+                colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
             }
             else
             {
@@ -767,11 +799,11 @@ void zgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
         }
         if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -15;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -16;
             }
@@ -781,7 +813,7 @@ void zgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
     {
         i__1 = -(*info);
         xerbla_("ZGBSVXX", &i__1, (ftnlen)7);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(equil)
@@ -792,7 +824,8 @@ void zgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            zlaqgb_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], & rowcnd, &colcnd, &amax, equed);
+            zlaqgb_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], &rowcnd, &colcnd, &amax,
+                    equed);
             rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
             colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }
@@ -853,8 +886,8 @@ void zgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
             /* Pivot in column INFO is exactly 0 */
             /* Compute the reciprocal pivot growth factor of the */
             /* leading rank-deficient INFO columns of A. */
-            *rpvgrw = zla_gbrpvgrw_(n, kl, ku, info, &ab[ab_offset], ldab, & afb[afb_offset], ldafb);
-    AOCL_DTL_TRACE_LOG_EXIT
+            *rpvgrw = zla_gbrpvgrw_(n, kl, ku, info, &ab[ab_offset], ldab, &afb[afb_offset], ldafb);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }

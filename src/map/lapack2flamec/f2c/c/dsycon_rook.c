@@ -140,22 +140,30 @@ static aocl_int64_t c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void dsycon_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *anorm, doublereal *rcond, doublereal *work, integer *iwork, integer *info)
+void dsycon_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv,
+                  doublereal *anorm, doublereal *rcond, doublereal *work, integer *iwork,
+                  integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsycon_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
+    AOCL_DTL_SNPRINTF("dsycon_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
+                      *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
     /* Local variables */
     integer i__;
     extern /* Subroutine */
-    void dsytrs_rook_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dsytrs_rook_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *,
+                     integer *, integer *);
     integer kase;
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     /* -- LAPACK computational routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -190,7 +198,7 @@ void dsycon_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -198,7 +206,7 @@ void dsycon_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -257,7 +265,7 @@ void dsycon_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
     /* Estimate the 1-norm of the inverse. */
     kase = 0;
 L30:
-    aocl_lapack_dlacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+    dlacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         /* Multiply by inv(L*D*L**T) or inv(U*D*U**T). */

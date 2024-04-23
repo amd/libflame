@@ -97,20 +97,25 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlapll_(integer *n, doublereal *x, integer *incx, doublereal *y, integer *incy, doublereal *ssmin)
+void dlapll_(integer *n, doublereal *x, integer *incx, doublereal *y, integer *incy,
+             doublereal *ssmin)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlapll inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*n, *incx, *incy);
+    AOCL_DTL_SNPRINTF("dlapll inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "", *n, *incx,
+                      *incy);
     /* System generated locals */
     aocl_int64_t i__1;
     /* Local variables */
     doublereal c__, a11, a12, a22, tau;
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern /* Subroutine */
-    void dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     doublereal ssmax;
     extern /* Subroutine */
-    void dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+        void
+        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

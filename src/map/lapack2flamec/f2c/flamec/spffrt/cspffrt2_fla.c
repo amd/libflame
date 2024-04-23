@@ -25,7 +25,7 @@ extern void cspr_(char *, integer *, complex *, complex *, integer *, complex *)
 
     * @param[in,out] ap
     ap is COMPLEX array, dimension (N*(N+1)/2)
-    On entry, the lower triangle of the symmetric matrix A, packed columnwise in a 
+    On entry, the lower triangle of the symmetric matrix A, packed columnwise in a
     linear array. The j-th column of A is stored in the array AP as follows:
             AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n.
     On exit, the block diagonal matrix D and the multipliers used
@@ -70,41 +70,38 @@ extern void cspr_(char *, integer *, complex *, complex *, integer *, complex *)
     \endverbatim
     *  */
 
-void  cspffrt2_fla(complex *ap, integer *n, integer *ncolm, complex *work, complex *work2 )
+void cspffrt2_fla(complex *ap, integer *n, integer *ncolm, complex *work, complex *work2)
 {
     complex c__1;
     integer i__1, k, kc;
     complex r1;
-    complex c_b1 =
-    {
-        1.,0.
-    };
+    complex c_b1 = {1., 0.};
     integer ic__1 = 1;
 
     --ap;
     /* Factorize A as L*D*L**T using the lower triangle of A */
     /* K is the main loop index, increasing from 1 to ncolm in steps of 1 */
     kc = 1;
-    for( k = 1; k <= *ncolm; k++ )
+    for(k = 1; k <= *ncolm; k++)
     {
-       /* Update the trailing submatrix */
-       /* W(k) = L(k)*D(k) */
-       /* where L(k) is the k-th column of L */
+        /* Update the trailing submatrix */
+        /* W(k) = L(k)*D(k) */
+        /* where L(k) is the k-th column of L */
 
-       c_div(&c__1, &c_b1, &ap[kc]);
+        c_div(&c__1, &c_b1, &ap[kc]);
 
-       r1.r = -c__1.r;
-       r1.i = -c__1.i;
+        r1.r = -c__1.r;
+        r1.i = -c__1.i;
 
-       /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
-       /* A := A - L(k)*D(k)*L(k)**T = A - W(k)*(1/D(k))*W(k)**T */
-       i__1 = *n - k;
-       cspr_("Lower", &i__1, &r1, &ap[kc + 1], &ic__1, &ap[kc + *n - k + 1]);
+        /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
+        /* A := A - L(k)*D(k)*L(k)**T = A - W(k)*(1/D(k))*W(k)**T */
+        i__1 = *n - k;
+        cspr_("Lower", &i__1, &r1, &ap[kc + 1], &ic__1, &ap[kc + *n - k + 1]);
 
-       ap[kc].r = c__1.r;
-       ap[kc].i = c__1.i;
+        ap[kc].r = c__1.r;
+        ap[kc].i = c__1.i;
 
-       kc = kc + *n - k + 1;
+        kc = kc + *n - k + 1;
     }
     return;
 }

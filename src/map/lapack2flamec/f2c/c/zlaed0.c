@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__9 = 9;
-static aocl_int64_t c__0 = 0;
-static aocl_int64_t c__2 = 2;
-static aocl_int64_t c__1 = 1;
+static integer c__9 = 9;
+static integer c__0 = 0;
+static integer c__2 = 2;
+static integer c__1 = 1;
 /* > \brief \b ZLAED0 used by sstedc. Computes all eigenvalues and corresponding eigenvectors of an
  * unreduced symmetric tridiagonal matrix using the divide and conquer method. */
 /* =========== DOCUMENTATION =========== */
@@ -145,10 +145,14 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zlaed0_(integer *qsiz, integer *n, doublereal *d__, doublereal *e, doublecomplex *q, integer *ldq, doublecomplex *qstore, integer *ldqs, doublereal *rwork, integer *iwork, integer *info)
+void zlaed0_(integer *qsiz, integer *n, doublereal *d__, doublereal *e, doublecomplex *q,
+             integer *ldq, doublecomplex *qstore, integer *ldqs, doublereal *rwork, integer *iwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaed0 inputs: qsiz %" FLA_IS ", n %" FLA_IS ", ldq %" FLA_IS ", ldqs %" FLA_IS "",*qsiz, *n, *ldq, *ldqs);
+    AOCL_DTL_SNPRINTF("zlaed0 inputs: qsiz %" FLA_IS ", n %" FLA_IS ", ldq %" FLA_IS
+                      ", ldqs %" FLA_IS "",
+                      *qsiz, *n, *ldq, *ldqs);
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, qstore_dim1, qstore_offset, i__1, i__2;
     doublereal d__1;
@@ -160,19 +164,30 @@ void zlaed0_(integer *qsiz, integer *n, doublereal *d__, doublereal *e, doubleco
     doublereal temp;
     integer curr, iperm;
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer indxq, iwrem, iqptr, tlvls;
     extern /* Subroutine */
-    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaed7_(integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublecomplex *, doublereal *, integer *, integer *) ;
+        void
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zlaed7_(integer *, integer *, integer *, integer *, integer *, integer *, doublereal *,
+                doublecomplex *, integer *, doublereal *, integer *, doublereal *, integer *,
+                integer *, integer *, integer *, integer *, doublereal *, doublecomplex *,
+                doublereal *, integer *, integer *);
     integer igivcl;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void zlacrm_(integer *, integer *, doublecomplex *, integer *, doublereal *, integer *, doublecomplex *, integer *, doublereal *);
+        void
+        zlacrm_(integer *, integer *, doublecomplex *, integer *, doublereal *, integer *,
+                doublecomplex *, integer *, doublereal *);
     integer igivnm, submat, curprb, subpbs, igivpt;
     extern /* Subroutine */
-    void dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *,
+                doublereal *, integer *);
     integer curlvl, matsiz, iprmpt, smlsiz;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -213,7 +228,7 @@ void zlaed0_(integer *qsiz, integer *n, doublereal *d__, doublereal *e, doubleco
     /* INFO = -1 */
     /* ELSE IF( ( ICOMPQ .EQ. 1 ) .AND. ( QSIZ .LT. MAX( 0, N ) ) ) */
     /* $ THEN */
-    if (*qsiz < fla_max(0,*n))
+    if(*qsiz < fla_max(0, *n))
     {
         *info = -1;
     }
@@ -221,11 +236,11 @@ void zlaed0_(integer *qsiz, integer *n, doublereal *d__, doublereal *e, doubleco
     {
         *info = -2;
     }
-    else if (*ldq < fla_max(1,*n))
+    else if(*ldq < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldqs < fla_max(1,*n))
+    else if(*ldqs < fla_max(1, *n))
     {
         *info = -8;
     }
@@ -233,13 +248,13 @@ void zlaed0_(integer *qsiz, integer *n, doublereal *d__, doublereal *e, doubleco
     {
         i__1 = -(*info);
         xerbla_("ZLAED0", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     smlsiz = aocl_lapack_ilaenv(&c__9, "ZLAED0", " ", &c__0, &c__0, &c__0, &c__0);
@@ -328,10 +343,9 @@ L10:
             matsiz = iwork[i__ + 1] - iwork[i__];
         }
         ll = iq - 1 + iwork[iqptr + curr];
-        aocl_lapack_dsteqr("I", &matsiz, &d__[submat], &e[submat], &rwork[ll], &matsiz, &rwork[1],
-                           info);
-        aocl_lapack_zlacrm(qsiz, &matsiz, &q[submat * q_dim1 + 1], ldq, &rwork[ll], &matsiz,
-                           &qstore[submat * qstore_dim1 + 1], ldqs, &rwork[iwrem]);
+        dsteqr_("I", &matsiz, &d__[submat], &e[submat], &rwork[ll], &matsiz, &rwork[1], info);
+        zlacrm_(qsiz, &matsiz, &q[submat * q_dim1 + 1], ldq, &rwork[ll], &matsiz,
+                &qstore[submat * qstore_dim1 + 1], ldqs, &rwork[iwrem]);
         /* Computing 2nd power */
         i__2 = matsiz;
         iwork[iqptr + curr + 1] = (aocl_int_t)(iwork[iqptr + curr] + i__2 * i__2);
@@ -339,7 +353,7 @@ L10:
         if(*info > 0)
         {
             *info = submat * (*n + 1) + submat + matsiz - 1;
-    AOCL_DTL_TRACE_LOG_EXIT
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         k = 1;
@@ -382,15 +396,15 @@ L80:
             /* when the eigenvectors of a full or band Hermitian matrix (which */
             /* was reduced to tridiagonal form) are desired. */
             /* I am free to use Q as a valuable working space until Loop 150. */
-            aocl_lapack_zlaed7(&matsiz, &msd2, qsiz, &tlvls, &curlvl, &curprb, &d__[submat],
-                               &qstore[submat * qstore_dim1 + 1], ldqs, &e[submat + msd2 - 1],
-                               &iwork[indxq + submat], &rwork[iq], &iwork[iqptr], &iwork[iprmpt],
-                               &iwork[iperm], &iwork[igivpt], &iwork[igivcl], &rwork[igivnm],
-                               &q[submat * q_dim1 + 1], &rwork[iwrem], &iwork[subpbs + 1], info);
+            zlaed7_(&matsiz, &msd2, qsiz, &tlvls, &curlvl, &curprb, &d__[submat],
+                    &qstore[submat * qstore_dim1 + 1], ldqs, &e[submat + msd2 - 1],
+                    &iwork[indxq + submat], &rwork[iq], &iwork[iqptr], &iwork[iprmpt],
+                    &iwork[iperm], &iwork[igivpt], &iwork[igivcl], &rwork[igivnm],
+                    &q[submat * q_dim1 + 1], &rwork[iwrem], &iwork[subpbs + 1], info);
             if(*info > 0)
             {
                 *info = submat * (*n + 1) + submat + matsiz - 1;
-    AOCL_DTL_TRACE_LOG_EXIT
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             iwork[i__ / 2 + 1] = iwork[i__ + 2];

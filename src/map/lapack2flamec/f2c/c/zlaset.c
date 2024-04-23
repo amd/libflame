@@ -83,7 +83,7 @@
 /* > A is COMPLEX*16 array, dimension (LDA,N) */
 /* > On entry, the m by n matrix A. */
 /* > On exit, A(i,j) = ALPHA, 1 <= i <= m, 1 <= j <= n, i.ne.j;
-*/
+ */
 /* > A(i,i) = BETA , 1 <= i <= fla_min(m,n) */
 /* > \endverbatim */
 /* > */
@@ -102,10 +102,12 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlaset_(char *uplo, integer *m, integer *n, doublecomplex *alpha, doublecomplex *beta, doublecomplex *a, integer * lda)
+void zlaset_(char *uplo, integer *m, integer *n, doublecomplex *alpha, doublecomplex *beta,
+             doublecomplex *a, integer *lda)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaset inputs: uplo %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*uplo, *m, *n, *lda);
+    AOCL_DTL_SNPRINTF("zlaset inputs: uplo %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",
+                      *uplo, *m, *n, *lda);
 
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
@@ -133,7 +135,7 @@ void zlaset_(char *uplo, integer *m, integer *n, doublecomplex *alpha, doublecom
     a_offset = 1 + a_dim1;
     a -= a_offset;
     /* Function Body */
-    if (lsame_(uplo, "U", 1, 1))
+    if(lsame_(uplo, "U", 1, 1))
     {
         /* Set the diagonal to BETA and the strictly upper triangular */
         /* part of the array to ALPHA. */
@@ -142,10 +144,8 @@ void zlaset_(char *uplo, integer *m, integer *n, doublecomplex *alpha, doublecom
         {
             /* Computing MIN */
             i__3 = j - 1;
-            i__2 = fla_min(i__3,*m);
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            i__2 = fla_min(i__3, *m);
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 a[i__3].real = alpha->real;
@@ -154,10 +154,8 @@ void zlaset_(char *uplo, integer *m, integer *n, doublecomplex *alpha, doublecom
             }
             /* L20: */
         }
-        i__1 = fla_min(*n,*m);
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        i__1 = fla_min(*n, *m);
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
             a[i__2].real = beta->real;
@@ -165,14 +163,12 @@ void zlaset_(char *uplo, integer *m, integer *n, doublecomplex *alpha, doublecom
             /* L30: */
         }
     }
-    else if (lsame_(uplo, "L", 1, 1))
+    else if(lsame_(uplo, "L", 1, 1))
     {
         /* Set the diagonal to BETA and the strictly lower triangular */
         /* part of the array to ALPHA. */
-        i__1 = fla_min(*m,*n);
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        i__1 = fla_min(*m, *n);
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
             for(i__ = j + 1; i__ <= i__2; ++i__)
@@ -184,10 +180,8 @@ void zlaset_(char *uplo, integer *m, integer *n, doublecomplex *alpha, doublecom
             }
             /* L50: */
         }
-        i__1 = fla_min(*n,*m);
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        i__1 = fla_min(*n, *m);
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
             a[i__2].real = beta->real;
@@ -212,10 +206,8 @@ void zlaset_(char *uplo, integer *m, integer *n, doublecomplex *alpha, doublecom
             }
             /* L80: */
         }
-        i__1 = fla_min(*m,*n);
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        i__1 = fla_min(*m, *n);
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
             a[i__2].real = beta->real;

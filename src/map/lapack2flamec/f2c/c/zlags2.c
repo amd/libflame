@@ -1,16 +1,25 @@
-/* ../netlib/zlags2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlags2.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZLAGS2 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLAGS2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlags2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlags2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlags2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlags2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlags2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlags2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -143,7 +152,9 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlags2_(logical *upper, doublereal *a1, doublecomplex * a2, doublereal *a3, doublereal *b1, doublecomplex *b2, doublereal *b3, doublereal *csu, doublecomplex *snu, doublereal *csv, doublecomplex * snv, doublereal *csq, doublecomplex *snq)
+void zlags2_(logical *upper, doublereal *a1, doublecomplex *a2, doublereal *a3, doublereal *b1,
+             doublecomplex *b2, doublereal *b3, doublereal *csu, doublecomplex *snu,
+             doublereal *csv, doublecomplex *snv, doublereal *csq, doublecomplex *snq)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
@@ -159,9 +170,13 @@ void zlags2_(logical *upper, doublereal *a1, doublecomplex * a2, doublereal *a3,
     doublecomplex r__, d1;
     doublereal s1, s2, fb, fc;
     doublecomplex ua11, ua12, ua21, ua22, vb11, vb12, vb21, vb22;
-    doublereal csl, csr, snl, snr, aua11, aua12, aua21, aua22, avb12, avb11, avb21, avb22, ua11r, ua22r, vb11r, vb22r;
+    doublereal csl, csr, snl, snr, aua11, aua12, aua21, aua22, avb12, avb11, avb21, avb22, ua11r,
+        ua22r, vb11r, vb22r;
     extern /* Subroutine */
-    void dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *) ;
+        void
+        dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *, doublereal *, doublereal *),
+        zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -182,7 +197,7 @@ void zlags2_(logical *upper, doublereal *a1, doublecomplex * a2, doublereal *a3,
     /* .. Statement Function definitions .. */
     /* .. */
     /* .. Executable Statements .. */
-    if (*upper)
+    if(*upper)
     {
         /* Input matrices A and B are upper triangular matrices */
         /* Form matrix C = A*adj(B) = ( a b ) */
@@ -202,7 +217,7 @@ void zlags2_(logical *upper, doublereal *a1, doublecomplex * a2, doublereal *a3,
         /* diagonal matrix diag(1,D1). */
         d1.r = 1.;
         d1.i = 0.; // , expr subst
-        if (fb != 0.)
+        if(fb != 0.)
         {
             z__1.r = b.r / fb;
             z__1.i = b.i / fb; // , expr subst
@@ -213,7 +228,7 @@ void zlags2_(logical *upper, doublereal *a1, doublecomplex * a2, doublereal *a3,
         /* ( CSL -SNL )*( A B )*( CSR SNR ) = ( R 0 ) */
         /* ( SNL CSL ) ( 0 D ) ( -SNR CSR ) ( 0 T ) */
         dlasv2_(&a, &fb, &d__, &s1, &s2, &snr, &csr, &snl, &csl);
-        if (f2c_abs(csl) >= f2c_abs(snl) || f2c_abs(csr) >= f2c_abs(snr))
+        if(f2c_abs(csl) >= f2c_abs(snl) || f2c_abs(csr) >= f2c_abs(snr))
         {
             /* Compute the (1,1) and (1,2) elements of U**H *A and V**H *B, */
             /* and (1,2) element of |U|**H *|A| and |V|**H *|B|. */
@@ -239,10 +254,16 @@ void zlags2_(logical *upper, doublereal *a1, doublecomplex * a2, doublereal *a3,
             z__1.i = z__2.i + z__3.i; // , expr subst
             vb12.r = z__1.r;
             vb12.i = z__1.i; // , expr subst
-            aua12 = f2c_abs(csl) * ((d__1 = a2->r, f2c_abs(d__1)) + (d__2 = d_imag(a2), f2c_abs(d__2))) + f2c_abs(snl) * f2c_abs(*a3);
-            avb12 = f2c_abs(csr) * ((d__1 = b2->r, f2c_abs(d__1)) + (d__2 = d_imag(b2), f2c_abs(d__2))) + f2c_abs(snr) * f2c_abs(*b3);
+            aua12 = f2c_abs(csl)
+                        * ((d__1 = a2->r, f2c_abs(d__1)) + (d__2 = d_imag(a2), f2c_abs(d__2)))
+                    + f2c_abs(snl) * f2c_abs(*a3);
+            avb12 = f2c_abs(csr)
+                        * ((d__1 = b2->r, f2c_abs(d__1)) + (d__2 = d_imag(b2), f2c_abs(d__2)))
+                    + f2c_abs(snr) * f2c_abs(*b3);
             /* zero (1,2) elements of U**H *A and V**H *B */
-            if (f2c_abs(ua11r) + ((d__1 = ua12.r, f2c_abs(d__1)) + (d__2 = d_imag(& ua12), f2c_abs(d__2))) == 0.)
+            if(f2c_abs(ua11r)
+                   + ((d__1 = ua12.r, f2c_abs(d__1)) + (d__2 = d_imag(&ua12), f2c_abs(d__2)))
+               == 0.)
             {
                 z__2.r = vb11r;
                 z__2.i = 0.; // , expr subst
@@ -251,7 +272,9 @@ void zlags2_(logical *upper, doublereal *a1, doublecomplex * a2, doublereal *a3,
                 d_cnjg(&z__3, &vb12);
                 zlartg_(&z__1, &z__3, csq, snq, &r__);
             }
-            else if (f2c_abs(vb11r) + ((d__1 = vb12.r, f2c_abs(d__1)) + (d__2 = d_imag(&vb12), f2c_abs(d__2))) == 0.)
+            else if(f2c_abs(vb11r)
+                        + ((d__1 = vb12.r, f2c_abs(d__1)) + (d__2 = d_imag(&vb12), f2c_abs(d__2)))
+                    == 0.)
             {
                 z__2.r = ua11r;
                 z__2.i = 0.; // , expr subst
@@ -260,7 +283,14 @@ void zlags2_(logical *upper, doublereal *a1, doublecomplex * a2, doublereal *a3,
                 d_cnjg(&z__3, &ua12);
                 zlartg_(&z__1, &z__3, csq, snq, &r__);
             }
-            else if (aua12 / (f2c_abs(ua11r) + ((d__1 = ua12.r, f2c_abs(d__1)) + ( d__2 = d_imag(&ua12), f2c_abs(d__2)))) <= avb12 / (f2c_abs(vb11r) + ((d__3 = vb12.r, f2c_abs(d__3)) + (d__4 = d_imag(&vb12), f2c_abs(d__4)))))
+            else if(aua12
+                        / (f2c_abs(ua11r)
+                           + ((d__1 = ua12.r, f2c_abs(d__1))
+                              + (d__2 = d_imag(&ua12), f2c_abs(d__2))))
+                    <= avb12
+                           / (f2c_abs(vb11r)
+                              + ((d__3 = vb12.r, f2c_abs(d__3))
+                                 + (d__4 = d_imag(&vb12), f2c_abs(d__4)))))
             {
                 z__2.r = ua11r;
                 z__2.i = 0.; // , expr subst
@@ -337,10 +367,16 @@ void zlags2_(logical *upper, doublereal *a1, doublecomplex * a2, doublereal *a3,
             z__1.i = z__2.i; // , expr subst
             vb22.r = z__1.r;
             vb22.i = z__1.i; // , expr subst
-            aua22 = f2c_abs(snl) * ((d__1 = a2->r, f2c_abs(d__1)) + (d__2 = d_imag(a2), f2c_abs(d__2))) + f2c_abs(csl) * f2c_abs(*a3);
-            avb22 = f2c_abs(snr) * ((d__1 = b2->r, f2c_abs(d__1)) + (d__2 = d_imag(b2), f2c_abs(d__2))) + f2c_abs(csr) * f2c_abs(*b3);
+            aua22 = f2c_abs(snl)
+                        * ((d__1 = a2->r, f2c_abs(d__1)) + (d__2 = d_imag(a2), f2c_abs(d__2)))
+                    + f2c_abs(csl) * f2c_abs(*a3);
+            avb22 = f2c_abs(snr)
+                        * ((d__1 = b2->r, f2c_abs(d__1)) + (d__2 = d_imag(b2), f2c_abs(d__2)))
+                    + f2c_abs(csr) * f2c_abs(*b3);
             /* zero (2,2) elements of U**H *A and V**H *B, and then swap. */
-            if ((d__1 = ua21.r, f2c_abs(d__1)) + (d__2 = d_imag(&ua21), f2c_abs(d__2)) + ((d__3 = ua22.r, f2c_abs(d__3)) + (d__4 = d_imag(&ua22), f2c_abs(d__4))) == 0.)
+            if((d__1 = ua21.r, f2c_abs(d__1)) + (d__2 = d_imag(&ua21), f2c_abs(d__2))
+                   + ((d__3 = ua22.r, f2c_abs(d__3)) + (d__4 = d_imag(&ua22), f2c_abs(d__4)))
+               == 0.)
             {
                 d_cnjg(&z__2, &vb21);
                 z__1.r = -z__2.r;
@@ -348,7 +384,9 @@ void zlags2_(logical *upper, doublereal *a1, doublecomplex * a2, doublereal *a3,
                 d_cnjg(&z__3, &vb22);
                 zlartg_(&z__1, &z__3, csq, snq, &r__);
             }
-            else if ((d__1 = vb21.r, f2c_abs(d__1)) + (d__2 = d_imag(&vb21), f2c_abs(d__2)) + z_abs(&vb22) == 0.)
+            else if((d__1 = vb21.r, f2c_abs(d__1)) + (d__2 = d_imag(&vb21), f2c_abs(d__2))
+                        + z_abs(&vb22)
+                    == 0.)
             {
                 d_cnjg(&z__2, &ua21);
                 z__1.r = -z__2.r;
@@ -356,7 +394,14 @@ void zlags2_(logical *upper, doublereal *a1, doublecomplex * a2, doublereal *a3,
                 d_cnjg(&z__3, &ua22);
                 zlartg_(&z__1, &z__3, csq, snq, &r__);
             }
-            else if (aua22 / ((d__1 = ua21.r, f2c_abs(d__1)) + (d__2 = d_imag(& ua21), f2c_abs(d__2)) + ((d__3 = ua22.r, f2c_abs(d__3)) + (d__4 = d_imag(&ua22), f2c_abs(d__4)))) <= avb22 / ((d__5 = vb21.r, f2c_abs(d__5)) + (d__6 = d_imag(&vb21), f2c_abs(d__6)) + ((d__7 = vb22.r, f2c_abs(d__7)) + (d__8 = d_imag(&vb22), f2c_abs(d__8)))))
+            else if(aua22
+                        / ((d__1 = ua21.r, f2c_abs(d__1)) + (d__2 = d_imag(&ua21), f2c_abs(d__2))
+                           + ((d__3 = ua22.r, f2c_abs(d__3))
+                              + (d__4 = d_imag(&ua22), f2c_abs(d__4))))
+                    <= avb22
+                           / ((d__5 = vb21.r, f2c_abs(d__5)) + (d__6 = d_imag(&vb21), f2c_abs(d__6))
+                              + ((d__7 = vb22.r, f2c_abs(d__7))
+                                 + (d__8 = d_imag(&vb22), f2c_abs(d__8)))))
             {
                 d_cnjg(&z__2, &ua21);
                 z__1.r = -z__2.r;
@@ -402,7 +447,7 @@ void zlags2_(logical *upper, doublereal *a1, doublecomplex * a2, doublereal *a3,
         /* diagonal matrix diag(d1,1). */
         d1.r = 1.;
         d1.i = 0.; // , expr subst
-        if (fc != 0.)
+        if(fc != 0.)
         {
             z__1.r = c__.r / fc;
             z__1.i = c__.i / fc; // , expr subst
@@ -413,7 +458,7 @@ void zlags2_(logical *upper, doublereal *a1, doublecomplex * a2, doublereal *a3,
         /* ( CSL -SNL )*( A 0 )*( CSR SNR ) = ( R 0 ) */
         /* ( SNL CSL ) ( C D ) ( -SNR CSR ) ( 0 T ) */
         dlasv2_(&a, &fc, &d__, &s1, &s2, &snr, &csr, &snl, &csl);
-        if (f2c_abs(csr) >= f2c_abs(snr) || f2c_abs(csl) >= f2c_abs(snl))
+        if(f2c_abs(csr) >= f2c_abs(snr) || f2c_abs(csl) >= f2c_abs(snl))
         {
             /* Compute the (2,1) and (2,2) elements of U**H *A and V**H *B, */
             /* and (2,1) element of |U|**H *|A| and |V|**H *|B|. */
@@ -443,22 +488,35 @@ void zlags2_(logical *upper, doublereal *a1, doublecomplex * a2, doublereal *a3,
             vb21.r = z__1.r;
             vb21.i = z__1.i; // , expr subst
             vb22r = csl * *b3;
-            aua21 = f2c_abs(snr) * f2c_abs(*a1) + f2c_abs(csr) * ((d__1 = a2->r, f2c_abs(d__1) ) + (d__2 = d_imag(a2), f2c_abs(d__2)));
-            avb21 = f2c_abs(snl) * f2c_abs(*b1) + f2c_abs(csl) * ((d__1 = b2->r, f2c_abs(d__1) ) + (d__2 = d_imag(b2), f2c_abs(d__2)));
+            aua21 = f2c_abs(snr) * f2c_abs(*a1)
+                    + f2c_abs(csr)
+                          * ((d__1 = a2->r, f2c_abs(d__1)) + (d__2 = d_imag(a2), f2c_abs(d__2)));
+            avb21 = f2c_abs(snl) * f2c_abs(*b1)
+                    + f2c_abs(csl)
+                          * ((d__1 = b2->r, f2c_abs(d__1)) + (d__2 = d_imag(b2), f2c_abs(d__2)));
             /* zero (2,1) elements of U**H *A and V**H *B. */
-            if ((d__1 = ua21.r, f2c_abs(d__1)) + (d__2 = d_imag(&ua21), f2c_abs(d__2)) + f2c_abs(ua22r) == 0.)
+            if((d__1 = ua21.r, f2c_abs(d__1)) + (d__2 = d_imag(&ua21), f2c_abs(d__2))
+                   + f2c_abs(ua22r)
+               == 0.)
             {
                 z__1.r = vb22r;
                 z__1.i = 0.; // , expr subst
                 zlartg_(&z__1, &vb21, csq, snq, &r__);
             }
-            else if ((d__1 = vb21.r, f2c_abs(d__1)) + (d__2 = d_imag(&vb21), f2c_abs(d__2)) + f2c_abs(vb22r) == 0.)
+            else if((d__1 = vb21.r, f2c_abs(d__1)) + (d__2 = d_imag(&vb21), f2c_abs(d__2))
+                        + f2c_abs(vb22r)
+                    == 0.)
             {
                 z__1.r = ua22r;
                 z__1.i = 0.; // , expr subst
                 zlartg_(&z__1, &ua21, csq, snq, &r__);
             }
-            else if (aua21 / ((d__1 = ua21.r, f2c_abs(d__1)) + (d__2 = d_imag(& ua21), f2c_abs(d__2)) + f2c_abs(ua22r)) <= avb21 / ((d__3 = vb21.r, f2c_abs(d__3)) + (d__4 = d_imag(&vb21), f2c_abs(d__4)) + f2c_abs(vb22r)))
+            else if(aua21
+                        / ((d__1 = ua21.r, f2c_abs(d__1)) + (d__2 = d_imag(&ua21), f2c_abs(d__2))
+                           + f2c_abs(ua22r))
+                    <= avb21
+                           / ((d__3 = vb21.r, f2c_abs(d__3)) + (d__4 = d_imag(&vb21), f2c_abs(d__4))
+                              + f2c_abs(vb22r)))
             {
                 z__1.r = ua22r;
                 z__1.i = 0.; // , expr subst
@@ -523,18 +581,33 @@ void zlags2_(logical *upper, doublereal *a1, doublecomplex * a2, doublereal *a3,
             z__1.i = *b3 * z__2.i; // , expr subst
             vb12.r = z__1.r;
             vb12.i = z__1.i; // , expr subst
-            aua11 = f2c_abs(csr) * f2c_abs(*a1) + f2c_abs(snr) * ((d__1 = a2->r, f2c_abs(d__1) ) + (d__2 = d_imag(a2), f2c_abs(d__2)));
-            avb11 = f2c_abs(csl) * f2c_abs(*b1) + f2c_abs(snl) * ((d__1 = b2->r, f2c_abs(d__1) ) + (d__2 = d_imag(b2), f2c_abs(d__2)));
+            aua11 = f2c_abs(csr) * f2c_abs(*a1)
+                    + f2c_abs(snr)
+                          * ((d__1 = a2->r, f2c_abs(d__1)) + (d__2 = d_imag(a2), f2c_abs(d__2)));
+            avb11 = f2c_abs(csl) * f2c_abs(*b1)
+                    + f2c_abs(snl)
+                          * ((d__1 = b2->r, f2c_abs(d__1)) + (d__2 = d_imag(b2), f2c_abs(d__2)));
             /* zero (1,1) elements of U**H *A and V**H *B, and then swap. */
-            if ((d__1 = ua11.r, f2c_abs(d__1)) + (d__2 = d_imag(&ua11), f2c_abs(d__2)) + ((d__3 = ua12.r, f2c_abs(d__3)) + (d__4 = d_imag(&ua12), f2c_abs(d__4))) == 0.)
+            if((d__1 = ua11.r, f2c_abs(d__1)) + (d__2 = d_imag(&ua11), f2c_abs(d__2))
+                   + ((d__3 = ua12.r, f2c_abs(d__3)) + (d__4 = d_imag(&ua12), f2c_abs(d__4)))
+               == 0.)
             {
                 zlartg_(&vb12, &vb11, csq, snq, &r__);
             }
-            else if ((d__1 = vb11.r, f2c_abs(d__1)) + (d__2 = d_imag(&vb11), f2c_abs(d__2)) + ((d__3 = vb12.r, f2c_abs(d__3)) + (d__4 = d_imag( &vb12), f2c_abs(d__4))) == 0.)
+            else if((d__1 = vb11.r, f2c_abs(d__1)) + (d__2 = d_imag(&vb11), f2c_abs(d__2))
+                        + ((d__3 = vb12.r, f2c_abs(d__3)) + (d__4 = d_imag(&vb12), f2c_abs(d__4)))
+                    == 0.)
             {
                 zlartg_(&ua12, &ua11, csq, snq, &r__);
             }
-            else if (aua11 / ((d__1 = ua11.r, f2c_abs(d__1)) + (d__2 = d_imag(& ua11), f2c_abs(d__2)) + ((d__3 = ua12.r, f2c_abs(d__3)) + (d__4 = d_imag(&ua12), f2c_abs(d__4)))) <= avb11 / ((d__5 = vb11.r, f2c_abs(d__5)) + (d__6 = d_imag(&vb11), f2c_abs(d__6)) + ((d__7 = vb12.r, f2c_abs(d__7)) + (d__8 = d_imag(&vb12), f2c_abs(d__8)))))
+            else if(aua11
+                        / ((d__1 = ua11.r, f2c_abs(d__1)) + (d__2 = d_imag(&ua11), f2c_abs(d__2))
+                           + ((d__3 = ua12.r, f2c_abs(d__3))
+                              + (d__4 = d_imag(&ua12), f2c_abs(d__4))))
+                    <= avb11
+                           / ((d__5 = vb11.r, f2c_abs(d__5)) + (d__6 = d_imag(&vb11), f2c_abs(d__6))
+                              + ((d__7 = vb12.r, f2c_abs(d__7))
+                                 + (d__8 = d_imag(&vb12), f2c_abs(d__8)))))
             {
                 zlartg_(&ua12, &ua11, csq, snq, &r__);
             }

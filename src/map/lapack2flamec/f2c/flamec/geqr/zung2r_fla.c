@@ -111,7 +111,8 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zung2r_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex * work, integer *info)
+void zung2r_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda,
+                doublecomplex *tau, doublecomplex *work, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
@@ -119,7 +120,11 @@ void zung2r_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *l
     /* Local variables */
     integer i__, j, l;
     extern /* Subroutine */
-    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
+        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -159,7 +164,7 @@ void zung2r_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *l
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
@@ -201,8 +206,8 @@ void zung2r_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *l
             a[i__1].imag = 0.; // , expr subst
             i__1 = *m - i__ + 1;
             i__2 = *n - i__;
-            aocl_lapack_zlarf("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
-                              &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
+            zlarf_("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
+                   &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
         }
         if(i__ < *m)
         {

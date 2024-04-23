@@ -4,11 +4,11 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {0., 0.};
-static dcomplex c_b2 = {1., 0.};
-static aocl_int64_t c__0 = 0;
-static aocl_int64_t c__2 = 2;
-static aocl_int64_t c__1 = 1;
+static doublecomplex c_b1 = {0., 0.};
+static doublecomplex c_b2 = {1., 0.};
+static integer c__0 = 0;
+static integer c__2 = 2;
+static integer c__1 = 1;
 /* > \brief <b> ZGELSX solves overdetermined or underdetermined systems for GE matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -186,10 +186,14 @@ only the remaining */
 /* > \ingroup complex16GEsolve */
 /* ===================================================================== */
 /* Subroutine */
-void zgelsx_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, integer *jpvt, doublereal *rcond, integer *rank, doublecomplex *work, doublereal *rwork, integer *info)
+void zgelsx_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *lda,
+             doublecomplex *b, integer *ldb, integer *jpvt, doublereal *rcond, integer *rank,
+             doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgelsx inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", rank %" FLA_IS "",*m, *n, *nrhs, *lda, *ldb, *rank);
+    AOCL_DTL_SNPRINTF("zgelsx inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS ", rank %" FLA_IS "",
+                      *m, *n, *nrhs, *lda, *ldb, *rank);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
     dcomplex z__1;
@@ -203,17 +207,35 @@ void zgelsx_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *l
     doublereal anrm, bnrm, smin, smax;
     integer iascl, ibscl, ismin, ismax;
     extern /* Subroutine */
-    void ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlaic1_(integer *, integer *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *), dlabad_(doublereal *, doublereal *);
+        void
+        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *, integer *),
+        zlaic1_(integer *, integer *, doublecomplex *, doublereal *, doublecomplex *,
+                doublecomplex *, doublereal *, doublecomplex *, doublecomplex *),
+        dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    void zunm2r_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
+        void
+        zunm2r_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *,
+                              doublereal *);
     doublereal bignum;
     extern /* Subroutine */
-    void zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, integer *), zgeqpf_(integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, doublecomplex *, doublereal *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublecomplex *, integer *, integer *),
+        zgeqpf_(integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *,
+                doublecomplex *, doublereal *, integer *),
+        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
+                integer *);
     doublereal sminpr, smaxpr, smlnum;
     extern /* Subroutine */
-    void zlatzm_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), ztzrqf_( integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zlatzm_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                doublecomplex *, doublecomplex *, integer *, doublecomplex *),
+        ztzrqf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -245,7 +267,7 @@ void zgelsx_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *l
     --work;
     --rwork;
     /* Function Body */
-    mn = fla_min(*m,*n);
+    mn = fla_min(*m, *n);
     ismin = mn + 1;
     ismax = (mn << 1) + 1;
     /* Test the input arguments. */
@@ -262,15 +284,15 @@ void zgelsx_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *l
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
     else /* if(complicated condition) */
     {
         /* Computing MAX */
-        i__1 = fla_max(1,*m);
-        if (*ldb < fla_max(i__1,*n))
+        i__1 = fla_max(1, *m);
+        if(*ldb < fla_max(i__1, *n))
         {
             *info = -7;
         }
@@ -279,16 +301,16 @@ void zgelsx_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *l
     {
         i__1 = -(*info);
         xerbla_("ZGELSX", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     /* Computing MIN */
-    i__1 = fla_min(*m,*n);
-    if (fla_min(i__1,*nrhs) == 0)
+    i__1 = fla_min(*m, *n);
+    if(fla_min(i__1, *nrhs) == 0)
     {
         *rank = 0;
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine parameters */
@@ -312,7 +334,7 @@ void zgelsx_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *l
     else if(anrm == 0.)
     {
         /* Matrix all zero. Return zero solution. */
-        i__1 = fla_max(*m,*n);
+        i__1 = fla_max(*m, *n);
         zlaset_("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         *rank = 0;
         goto L100;
@@ -333,8 +355,8 @@ void zgelsx_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *l
     }
     /* Compute QR factorization with column pivoting of A: */
     /* A * P = Q * R */
-    aocl_lapack_zgeqpf(m, n, &a[a_offset], lda, &jpvt[1], &work[1], &work[mn + 1], &rwork[1], info);
-    /* scomplex workspace MN+N. Real workspace 2*N. Details of Householder */
+    zgeqpf_(m, n, &a[a_offset], lda, &jpvt[1], &work[1], &work[mn + 1], &rwork[1], info);
+    /* complex workspace MN+N. Real workspace 2*N. Details of Householder */
     /* rotations stored in WORK(1:MN). */
     /* Determine RANK using incremental condition estimation */
     i__1 = ismin;
@@ -345,10 +367,10 @@ void zgelsx_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *l
     work[i__1].i = 0.; // , expr subst
     smax = z_abs(&a[a_dim1 + 1]);
     smin = smax;
-    if (z_abs(&a[a_dim1 + 1]) == 0.)
+    if(z_abs(&a[a_dim1 + 1]) == 0.)
     {
         *rank = 0;
-        i__1 = fla_max(*m,*n);
+        i__1 = fla_max(*m, *n);
         zlaset_("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         goto L100;
     }
@@ -360,10 +382,10 @@ L10:
     if(*rank < mn)
     {
         i__ = *rank + 1;
-        aocl_lapack_zlaic1(&c__2, rank, &work[ismin], &smin, &a[i__ * a_dim1 + 1],
-                           &a[i__ + i__ * a_dim1], &sminpr, &s1, &c1);
-        aocl_lapack_zlaic1(&c__1, rank, &work[ismax], &smax, &a[i__ * a_dim1 + 1],
-                           &a[i__ + i__ * a_dim1], &smaxpr, &s2, &c2);
+        zlaic1_(&c__2, rank, &work[ismin], &smin, &a[i__ * a_dim1 + 1], &a[i__ + i__ * a_dim1],
+                &sminpr, &s1, &c1);
+        zlaic1_(&c__1, rank, &work[ismax], &smax, &a[i__ * a_dim1 + 1], &a[i__ + i__ * a_dim1],
+                &smaxpr, &s2, &c2);
         if(smaxpr * *rcond <= sminpr)
         {
             i__1 = *rank;
@@ -405,12 +427,12 @@ L10:
     }
     /* Details of Householder rotations stored in WORK(MN+1:2*MN) */
     /* B(1:M,1:NRHS) := Q**H * B(1:M,1:NRHS) */
-    aocl_lapack_zunm2r("Left", "Conjugate transpose", m, nrhs, &mn, &a[a_offset], lda, &work[1],
-                       &b[b_offset], ldb, &work[(mn << 1) + 1], info);
+    zunm2r_("Left", "Conjugate transpose", m, nrhs, &mn, &a[a_offset], lda, &work[1], &b[b_offset],
+            ldb, &work[(mn << 1) + 1], info);
     /* workspace NRHS */
     /* B(1:RANK,1:NRHS) := inv(T11) * B(1:RANK,1:NRHS) */
-    aocl_blas_ztrsm("Left", "Upper", "No transpose", "Non-unit", rank, nrhs, &c_b2, &a[a_offset],
-                    lda, &b[b_offset], ldb);
+    ztrsm_("Left", "Upper", "No transpose", "Non-unit", rank, nrhs, &c_b2, &a[a_offset], lda,
+           &b[b_offset], ldb);
     i__1 = *n;
     for(i__ = *rank + 1; i__ <= i__1; ++i__)
     {
@@ -432,7 +454,7 @@ L10:
         {
             i__2 = *n - *rank + 1;
             d_cnjg(&z__1, &work[mn + i__]);
-            aocl_lapack_zlatzm("Left", &i__2, nrhs, &a[i__ + (*rank + 1) * a_dim1], lda, &z__1,
+            zlatzm_("Left", &i__2, nrhs, &a[i__ + (*rank + 1) * a_dim1], lda, &z__1,
                     &b[i__ + b_dim1], &b[*rank + 1 + b_dim1], ldb, &work[(mn << 1) + 1]);
             /* L50: */
         }
@@ -454,7 +476,7 @@ L10:
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = (mn << 1) + i__;
-            if(work[i__3].real == 1. && work[i__3].imag == 0.)
+            if(work[i__3].r == 1. && work[i__3].i == 0.)
             {
                 if(jpvt[i__] != i__)
                 {
@@ -463,8 +485,8 @@ L10:
                     t1.real = b[i__3].real;
                     t1.imag = b[i__3].imag; // , expr subst
                     i__3 = jpvt[k] + j * b_dim1;
-                    t2.real = b[i__3].real;
-                    t2.imag = b[i__3].imag; // , expr subst
+                    t2.r = b[i__3].r;
+                    t2.i = b[i__3].i; // , expr subst
                 L70:
                     i__3 = jpvt[k] + j * b_dim1;
                     b[i__3].real = t1.real;
@@ -476,8 +498,8 @@ L10:
                     t1.imag = t2.imag; // , expr subst
                     k = jpvt[k];
                     i__3 = jpvt[k] + j * b_dim1;
-                    t2.real = b[i__3].real;
-                    t2.imag = b[i__3].imag; // , expr subst
+                    t2.r = b[i__3].r;
+                    t2.i = b[i__3].i; // , expr subst
                     if(jpvt[k] != i__)
                     {
                         goto L70;

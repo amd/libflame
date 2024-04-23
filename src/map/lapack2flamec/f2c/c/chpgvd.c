@@ -1,5 +1,8 @@
-/* chpgvd.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* chpgvd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b CHPGVD */
@@ -226,10 +229,14 @@ the */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-void chpgvd_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, complex *bp, real *w, complex *z__, integer *ldz, complex *work, integer *lwork, real *rwork, integer *lrwork, integer * iwork, integer *liwork, integer *info)
+void chpgvd_(integer *itype, char *jobz, char *uplo, integer *n, complex *ap, complex *bp, real *w,
+             complex *z__, integer *ldz, complex *work, integer *lwork, real *rwork,
+             integer *lrwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("chpgvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "",*itype, *jobz, *uplo, *n, *ldz);
+    AOCL_DTL_SNPRINTF("chpgvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS
+                      ", ldz %" FLA_IS "",
+                      *itype, *jobz, *uplo, *n, *ldz);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1;
     real r__1, r__2;
@@ -239,13 +246,20 @@ void chpgvd_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, c
     integer lwmin;
     char trans[1];
     extern /* Subroutine */
-    void ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
+        void
+        ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    void ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *);
+        void
+        ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical wantz;
     extern /* Subroutine */
-    void chpevd_(char *, char *, integer *, complex *, real *, complex *, integer *, complex *, integer *, real *, integer *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), chpgst_(integer *, char *, integer *, complex *, complex *, integer *), cpptrf_(char *, integer *, complex *, integer *);
+        void
+        chpevd_(char *, char *, integer *, complex *, real *, complex *, integer *, complex *,
+                integer *, real *, integer *, integer *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        chpgst_(integer *, char *, integer *, complex *, complex *, integer *),
+        cpptrf_(char *, integer *, complex *, integer *);
     integer liwmin, lrwmin;
     logical lquery;
     /* -- LAPACK driver routine -- */
@@ -285,11 +299,11 @@ void chpgvd_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, c
     {
         *info = -1;
     }
-    else if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    else if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (upper || lsame_(uplo, "L", 1, 1)))
+    else if(!(upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -3;
     }
@@ -326,11 +340,10 @@ void chpgvd_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, c
                 liwmin = 1;
             }
         }
-        r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-        work[1].real = r__1;
-        work[1].imag = 0.f; // , expr subst
+        work[1].r = (real)lwmin;
+        work[1].i = 0.f; // , expr subst
         rwork[1] = (real)lrwmin;
-        iwork[1] = (aocl_int_t)(liwmin);
+        iwork[1] = liwmin;
         if(*lwork < lwmin && !lquery)
         {
             *info = -11;
@@ -348,44 +361,44 @@ void chpgvd_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, c
     {
         i__1 = -(*info);
         xerbla_("CHPGVD", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Form a Cholesky factorization of B. */
-    aocl_lapack_cpptrf(uplo, n, &bp[1], info);
+    cpptrf_(uplo, n, &bp[1], info);
     if(*info != 0)
     {
         *info = *n + *info;
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    aocl_lapack_chpgst(itype, uplo, n, &ap[1], &bp[1], info);
-    aocl_lapack_chpevd(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], lwork,
-                       &rwork[1], lrwork, &iwork[1], liwork, info);
+    chpgst_(itype, uplo, n, &ap[1], &bp[1], info);
+    chpevd_(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], lwork, &rwork[1], lrwork,
+            &iwork[1], liwork, info);
     /* Computing MAX */
-    r__1 = (real) lwmin;
+    r__1 = (real)lwmin;
     r__2 = work[1].r; // , expr subst
-    lwmin = (integer) fla_max(r__1,r__2);
+    lwmin = (integer)fla_max(r__1, r__2);
     /* Computing MAX */
-    r__1 = (real) lrwmin;
-    lrwmin = (integer) fla_max(r__1,rwork[1]);
+    r__1 = (real)lrwmin;
+    lrwmin = (integer)fla_max(r__1, rwork[1]);
     /* Computing MAX */
-    r__1 = (real) liwmin;
-    r__2 = (real) iwork[1]; // , expr subst
-    liwmin = (integer) fla_max(r__1,r__2);
-    if (wantz)
+    r__1 = (real)liwmin;
+    r__2 = (real)iwork[1]; // , expr subst
+    liwmin = (integer)fla_max(r__1, r__2);
+    if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */
         neig = *n;
@@ -434,9 +447,9 @@ void chpgvd_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, c
             }
         }
     }
-    work[1].r = (real) lwmin;
+    work[1].r = (real)lwmin;
     work[1].i = 0.f; // , expr subst
-    rwork[1] = (real) lrwmin;
+    rwork[1] = (real)lrwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
     return;

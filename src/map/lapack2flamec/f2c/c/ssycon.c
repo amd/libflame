@@ -127,12 +127,14 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup realSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ssycon_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real *anorm, real *rcond, real *work, integer *iwork, integer *info)
+void ssycon_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real *anorm, real *rcond,
+             real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"ssycon inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
+    snprintf(buffer, 256, "ssycon inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
+             *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -143,10 +145,14 @@ void ssycon_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    void slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     extern /* Subroutine */
-    void ssytrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        ssytrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *,
+                integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -180,7 +186,7 @@ void ssycon_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -188,7 +194,7 @@ void ssycon_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -247,7 +253,7 @@ void ssycon_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
     /* Estimate the 1-norm of the inverse. */
     kase = 0;
 L30:
-    aocl_lapack_slacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+    slacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         /* Multiply by inv(L*D*L**T) or inv(U*D*U**T). */

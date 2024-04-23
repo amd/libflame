@@ -337,20 +337,29 @@ LDQ >= 1 otherwise. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer *p, integer *k, integer *l, complex *a, integer * lda, complex *b, integer *ldb, real *alpha, real *beta, complex *u, integer *ldu, complex *v, integer *ldv, complex *q, integer *ldq, complex *work, real *rwork, integer *iwork, integer *info)
+void cggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer *p, integer *k,
+             integer *l, complex *a, integer *lda, complex *b, integer *ldb, real *alpha,
+             real *beta, complex *u, integer *ldu, complex *v, integer *ldv, complex *q,
+             integer *ldq, complex *work, real *rwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cggsvd inputs: jobu %c, jobv %c, jobq %c, m %lld, n %lld, p %lld, lda %lld, ldb %lld, ldu %lld, ldv %lld, ldq %lld",*jobu, *jobv, *jobq, *m, *n, *p, *lda, *ldb, *ldu, *ldv, *ldq);
+    snprintf(buffer, 256,
+             "cggsvd inputs: jobu %c, jobv %c, jobq %c, m %lld, n %lld, p %lld, lda %lld, ldb "
+             "%lld, ldu %lld, ldv %lld, ldq %lld",
+             *jobu, *jobv, *jobq, *m, *n, *p, *lda, *ldb, *ldu, *ldv, *ldq);
 #else
-    snprintf(buffer, 256,"cggsvd inputs: jobu %c, jobv %c, jobq %c, m %d, n %d, p %d, lda %d, ldb %d, ldu %d, ldv %d, ldq %d",*jobu, *jobv, *jobq, *m, *n, *p, *lda, *ldb, *ldu, *ldv, *ldq);
+    snprintf(buffer, 256,
+             "cggsvd inputs: jobu %c, jobv %c, jobq %c, m %d, n %d, p %d, lda %d, ldb %d, ldu %d, "
+             "ldv %d, ldq %d",
+             *jobu, *jobv, *jobq, *m, *n, *p, *lda, *ldb, *ldu, *ldv, *ldq);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
         v_offset, i__1, i__2;
     /* Local variables */
     aocl_int64_t i__, j;
@@ -363,14 +372,25 @@ void cggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer
     real anorm, bnorm;
     logical wantq;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     logical wantu, wantv;
-    extern real clange_(char *, integer *, integer *, complex *, integer *, real *), slamch_(char *);
+    extern real clange_(char *, integer *, integer *, complex *, integer *, real *),
+        slamch_(char *);
     extern /* Subroutine */
-    void ctgsja_(char *, char *, char *, integer *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, real *, real *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
+        void
+        ctgsja_(char *, char *, char *, integer *, integer *, integer *, integer *, integer *,
+                complex *, integer *, complex *, integer *, real *, real *, real *, real *,
+                complex *, integer *, complex *, integer *, complex *, integer *, complex *,
+                integer *, integer *);
     integer ncycle;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), cggsvp_( char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, real *, complex *, complex *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        cggsvp_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *,
+                complex *, integer *, real *, real *, integer *, integer *, complex *, integer *,
+                complex *, integer *, complex *, integer *, integer *, real *, complex *, complex *,
+                integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -416,15 +436,15 @@ void cggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer
     wantv = lsame_(jobv, "V", 1, 1);
     wantq = lsame_(jobq, "Q", 1, 1);
     *info = 0;
-    if (! (wantu || lsame_(jobu, "N", 1, 1)))
+    if(!(wantu || lsame_(jobu, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (wantv || lsame_(jobv, "N", 1, 1)))
+    else if(!(wantv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (wantq || lsame_(jobq, "N", 1, 1)))
+    else if(!(wantq || lsame_(jobq, "N", 1, 1)))
     {
         *info = -3;
     }
@@ -440,11 +460,11 @@ void cggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer
     {
         *info = -6;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -10;
     }
-    else if (*ldb < fla_max(1,*p))
+    else if(*ldb < fla_max(1, *p))
     {
         *info = -12;
     }
@@ -474,20 +494,22 @@ void cggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer
     /* the effective numerical rank of the matrices A and B. */
     ulp = slamch_("Precision");
     unfl = slamch_("Safe Minimum");
-    tola = fla_max(*m,*n) * fla_max(anorm,unfl) * ulp;
-    tolb = fla_max(*p,*n) * fla_max(bnorm,unfl) * ulp;
-    cggsvp_(jobu, jobv, jobq, m, p, n, &a[a_offset], lda, &b[b_offset], ldb, & tola, &tolb, k, l, &u[u_offset], ldu, &v[v_offset], ldv, &q[ q_offset], ldq, &iwork[1], &rwork[1], &work[1], &work[*n + 1], info);
+    tola = fla_max(*m, *n) * fla_max(anorm, unfl) * ulp;
+    tolb = fla_max(*p, *n) * fla_max(bnorm, unfl) * ulp;
+    cggsvp_(jobu, jobv, jobq, m, p, n, &a[a_offset], lda, &b[b_offset], ldb, &tola, &tolb, k, l,
+            &u[u_offset], ldu, &v[v_offset], ldv, &q[q_offset], ldq, &iwork[1], &rwork[1], &work[1],
+            &work[*n + 1], info);
     /* Compute the GSVD of two upper "triangular" matrices */
-    aocl_lapack_ctgsja(jobu, jobv, jobq, m, p, n, k, l, &a[a_offset], lda, &b[b_offset], ldb, &tola,
-                       &tolb, &alpha[1], &beta[1], &u[u_offset], ldu, &v[v_offset], ldv,
-                       &q[q_offset], ldq, &work[1], &ncycle, info);
+    ctgsja_(jobu, jobv, jobq, m, p, n, k, l, &a[a_offset], lda, &b[b_offset], ldb, &tola, &tolb,
+            &alpha[1], &beta[1], &u[u_offset], ldu, &v[v_offset], ldv, &q[q_offset], ldq, &work[1],
+            &ncycle, info);
     /* Sort the singular values and store the pivot indices in IWORK */
     /* Copy ALPHA to RWORK, then sort ALPHA in RWORK */
     aocl_blas_scopy(n, &alpha[1], &c__1, &rwork[1], &c__1);
     /* Computing MIN */
     i__1 = *l;
     i__2 = *m - *k; // , expr subst
-    ibnd = fla_min(i__1,i__2);
+    ibnd = fla_min(i__1, i__2);
     i__1 = ibnd;
     for(i__ = 1; i__ <= i__1; ++i__)
     {

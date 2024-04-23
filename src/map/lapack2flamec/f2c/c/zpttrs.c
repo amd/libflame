@@ -119,10 +119,12 @@ static aocl_int64_t c_n1 = -1;
 /* > \ingroup complex16PTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zpttrs_(char *uplo, integer *n, integer *nrhs, doublereal *d__, doublecomplex *e, doublecomplex *b, integer *ldb, integer *info)
+void zpttrs_(char *uplo, integer *n, integer *nrhs, doublereal *d__, doublecomplex *e,
+             doublecomplex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zpttrs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *ldb);
+    AOCL_DTL_SNPRINTF("zpttrs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",
+                      *uplo, *n, *nrhs, *ldb);
 
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1, i__2, i__3;
@@ -130,7 +132,10 @@ void zpttrs_(char *uplo, integer *n, integer *nrhs, doublereal *d__, doublecompl
     aocl_int64_t j, jb, nb, iuplo;
     logical upper;
     extern /* Subroutine */
-    void zptts2_(integer *, integer *, integer *, doublereal *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zptts2_(integer *, integer *, integer *, doublereal *, doublecomplex *, doublecomplex *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -172,7 +177,7 @@ void zpttrs_(char *uplo, integer *n, integer *nrhs, doublereal *d__, doublecompl
     {
         *info = -3;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
@@ -199,7 +204,7 @@ void zpttrs_(char *uplo, integer *n, integer *nrhs, doublereal *d__, doublecompl
         /* Computing MAX */
         i__1 = 1;
         i__2 = ilaenv_(&c__1, "ZPTTRS", uplo, n, nrhs, &c_n1, &c_n1); // , expr subst
-        nb = fla_max(i__1,i__2);
+        nb = fla_max(i__1, i__2);
     }
     /* Decode UPLO */
     if(upper)
@@ -222,7 +227,7 @@ void zpttrs_(char *uplo, integer *n, integer *nrhs, doublereal *d__, doublecompl
         {
             /* Computing MIN */
             i__3 = *nrhs - j + 1;
-            jb = fla_min(i__3,nb);
+            jb = fla_min(i__3, nb);
             zptts2_(&iuplo, n, &jb, &d__[1], &e[1], &b[j * b_dim1 + 1], ldb);
             /* L10: */
         }

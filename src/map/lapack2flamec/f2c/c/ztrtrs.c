@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b2 = {1., 0.};
+static doublecomplex c_b2 = {1., 0.};
 /* > \brief \b ZTRTRS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -138,16 +138,22 @@ static dcomplex c_b2 = {1., 0.};
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ztrtrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, integer *info)
+void ztrtrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, doublecomplex *a,
+             integer *lda, doublecomplex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztrtrs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *trans, *diag, *n, *nrhs, *lda, *ldb);
+    AOCL_DTL_SNPRINTF("ztrtrs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", nrhs %" FLA_IS
+                      ", lda %" FLA_IS ", ldb %" FLA_IS "",
+                      *uplo, *trans, *diag, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -180,15 +186,15 @@ void ztrtrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
     /* Function Body */
     *info = 0;
     nounit = lsame_(diag, "N", 1, 1);
-    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!lsame_(trans, "N", 1, 1) && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
@@ -200,11 +206,11 @@ void ztrtrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
@@ -212,13 +218,13 @@ void ztrtrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
     {
         i__1 = -(*info);
         xerbla_("ZTRTRS", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Check for singularity. */
@@ -228,9 +234,9 @@ void ztrtrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
         for(*info = 1; *info <= i__1; ++(*info))
         {
             i__2 = *info + *info * a_dim1;
-            if(a[i__2].real == 0. && a[i__2].imag == 0.)
+            if(a[i__2].r == 0. && a[i__2].i == 0.)
             {
-    AOCL_DTL_TRACE_LOG_EXIT
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L10: */
@@ -238,7 +244,7 @@ void ztrtrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
     }
     *info = 0;
     /* Solve A * x = b, A**T * x = b, or A**H * x = b. */
-    ztrsm_("Left", uplo, trans, diag, n, nrhs, &c_b2, &a[a_offset], lda, &b[ b_offset], ldb);
+    ztrsm_("Left", uplo, trans, diag, n, nrhs, &c_b2, &a[a_offset], lda, &b[b_offset], ldb);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZTRTRS */

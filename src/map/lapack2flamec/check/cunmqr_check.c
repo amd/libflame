@@ -1,8 +1,11 @@
 #include "FLA_f2c.h"
+#include "FLA_lapack2flame_return_defs.h"
 static integer c__1 = 1;
 static integer c_n1 = -1;
 
-int cunmqr_check(char *side, char *trans, integer *m, integer *n, integer *k, scomplex *a, integer *lda, scomplex *tau, scomplex *c__, integer *ldc, scomplex *work, integer *lwork, integer *info)
+int cunmqr_check(char *side, char *trans, integer *m, integer *n, integer *k, scomplex *a,
+                 integer *lda, scomplex *tau, scomplex *c__, integer *ldc, scomplex *work,
+                 integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
@@ -40,11 +43,11 @@ int cunmqr_check(char *side, char *trans, integer *m, integer *n, integer *k, sc
         nq = *n;
         nw = *m;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -60,15 +63,15 @@ int cunmqr_check(char *side, char *trans, integer *m, integer *n, integer *k, sc
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,nq))
+    else if(*lda < fla_max(1, nq))
     {
         *info = -7;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -10;
     }
-    else if (*lwork < fla_max(1,nw) && ! lquery)
+    else if(*lwork < fla_max(1, nw) && !lquery)
     {
         *info = -12;
     }
@@ -79,9 +82,9 @@ int cunmqr_check(char *side, char *trans, integer *m, integer *n, integer *k, sc
         /* Computing MIN */
         i__1 = 64;
         i__2 = ilaenv_(&c__1, "CUNMQR", ch__1, m, n, k, &c_n1); // , expr subst
-        nb = fla_min(i__1,i__2);
-        lwkopt = fla_max(1,nw) * nb;
-        work[1].real = (float) lwkopt;
+        nb = fla_min(i__1, i__2);
+        lwkopt = fla_max(1, nw) * nb;
+        work[1].real = (float)lwkopt;
         work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)

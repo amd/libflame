@@ -1,9 +1,12 @@
 #include "FLA_f2c.h"
+#include "FLA_lapack2flame_return_defs.h"
 static integer c__6 = 6;
 static integer c__0 = 0;
 static integer c_n1 = -1;
 
-int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, integer *lda, double *s, dcomplex *u, integer *ldu, dcomplex *vt, integer *ldvt, dcomplex *work, integer *lwork, double *rwork, integer *info)
+int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, integer *lda,
+                 double *s, dcomplex *u, integer *ldu, dcomplex *vt, integer *ldvt, dcomplex *work,
+                 integer *lwork, double *rwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__2, i__3;
@@ -14,16 +17,22 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
     integer minmn;
     integer wrkbl, mnthr;
     logical wntua, wntva, wntun, wntuo, wntvn, wntvo, wntus, wntvs;
-    extern void
-      zgebrd_(integer*, integer*, dcomplex*, integer*, double*, double*, dcomplex*, dcomplex*, dcomplex*, integer*, integer*),
-      zgelqf_(integer*, integer*, dcomplex*, integer*, dcomplex*, dcomplex*, integer*, integer* ),
-      zgeqrf_(integer*, integer*, dcomplex*, integer*, dcomplex*, dcomplex*, integer*, integer* ),
-      zungbr_(char*, integer*, integer*, integer*, dcomplex*, integer*, dcomplex*, dcomplex*, integer*, integer*),
-      zunglq_(integer*, integer*, integer*, dcomplex*, integer*, dcomplex*, dcomplex*, integer*, integer*),
-      zungqr_(integer*, integer*, integer*, dcomplex*, integer*, dcomplex*, dcomplex*, integer*, integer*);
+    extern void zgebrd_(integer *, integer *, dcomplex *, integer *, double *, double *, dcomplex *,
+                        dcomplex *, dcomplex *, integer *, integer *),
+        zgelqf_(integer *, integer *, dcomplex *, integer *, dcomplex *, dcomplex *, integer *,
+                integer *),
+        zgeqrf_(integer *, integer *, dcomplex *, integer *, dcomplex *, dcomplex *, integer *,
+                integer *),
+        zungbr_(char *, integer *, integer *, integer *, dcomplex *, integer *, dcomplex *,
+                dcomplex *, integer *, integer *),
+        zunglq_(integer *, integer *, integer *, dcomplex *, integer *, dcomplex *, dcomplex *,
+                integer *, integer *),
+        zungqr_(integer *, integer *, integer *, dcomplex *, integer *, dcomplex *, dcomplex *,
+                integer *, integer *);
     integer minwrk, maxwrk;
     logical lquery, wntuas, wntvas;
-    integer lwork_zungbr_p__, lwork_zungbr_q__, lwork_zunglq_m__, lwork_zunglq_n__, lwork_zungqr_m__, lwork_zungqr_n__;    
+    integer lwork_zungbr_p__, lwork_zungbr_q__, lwork_zunglq_m__, lwork_zunglq_n__,
+        lwork_zungqr_m__, lwork_zungqr_n__;
 
     /* Parameter adjustments */
     a_dim1 = *lda;
@@ -40,7 +49,7 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
     --rwork;
     /* Function Body */
     *info = 0;
-    minmn = fla_min(*m,*n);
+    minmn = fla_min(*m, *n);
     wntua = lsame_(jobu, "A", 1, 1);
     wntus = lsame_(jobu, "S", 1, 1);
     wntuas = wntua || wntus;
@@ -68,7 +77,7 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -6;
     }
@@ -96,22 +105,25 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
             /* Space needed for ZBDSQR is BDSPAC = 5*N */
             mnthr = aocl_lapack_ilaenv(&c__6, "ZGESVD", ch__1, m, n, &c__0, &c__0);
             /* Compute space needed for ZGEQRF */
-            zgeqrf_(m, n, &a[a_offset], lda, (dcomplex*)dum, (dcomplex*)dum, &c_n1, &ierr);
-            lwork_zgeqrf__ = (integer) dum[0];
+            zgeqrf_(m, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
+            lwork_zgeqrf__ = (integer)dum[0];
             /* Compute space needed for ZUNGQR */
-            zungqr_(m, n, n, &a[a_offset], lda, (dcomplex*)dum, (dcomplex*)dum, &c_n1, &ierr);
-            lwork_zungqr_n__ = (integer) dum[0];
-            zungqr_(m, m, n, &a[a_offset], lda, (dcomplex*)dum, (dcomplex*)dum, &c_n1, &ierr);
-            lwork_zungqr_m__ = (integer) dum[0];
+            zungqr_(m, n, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
+            lwork_zungqr_n__ = (integer)dum[0];
+            zungqr_(m, m, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
+            lwork_zungqr_m__ = (integer)dum[0];
             /* Compute space needed for ZGEBRD */
-            zgebrd_(n, n, &a[a_offset], lda, &s[1], dum, (dcomplex*)dum, (dcomplex*)dum, (dcomplex*)dum, &c_n1, &ierr);
-            lwork_zgebrd__ = (integer) dum[0];
+            zgebrd_(n, n, &a[a_offset], lda, &s[1], dum, (dcomplex *)dum, (dcomplex *)dum,
+                    (dcomplex *)dum, &c_n1, &ierr);
+            lwork_zgebrd__ = (integer)dum[0];
             /* Compute space needed for ZUNGBR */
-            zungbr_("P", n, n, n, &a[a_offset], lda, (dcomplex*)dum, (dcomplex*)dum, &c_n1, &ierr);
-            lwork_zungbr_p__ = (integer) dum[0];
-            zungbr_("Q", n, n, n, &a[a_offset], lda, (dcomplex*)dum, (dcomplex*)dum, &c_n1, &ierr);
-            lwork_zungbr_q__ = (integer) dum[0];
-            if (*m >= mnthr)
+            zungbr_("P", n, n, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum, &c_n1,
+                    &ierr);
+            lwork_zungbr_p__ = (integer)dum[0];
+            zungbr_("Q", n, n, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum, &c_n1,
+                    &ierr);
+            lwork_zungbr_q__ = (integer)dum[0];
+            if(*m >= mnthr)
             {
                 if(wntun)
                 {
@@ -120,13 +132,13 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = (*n << 1) + lwork_zgebrd__; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
-                    if (wntvo || wntvas)
+                    maxwrk = fla_max(i__2, i__3);
+                    if(wntvo || wntvas)
                     {
                         /* Computing MAX */
                         i__2 = maxwrk;
                         i__3 = (*n << 1) + lwork_zungbr_p__; // , expr subst
-                        maxwrk = fla_max(i__2,i__3);
+                        maxwrk = fla_max(i__2, i__3);
                     }
                     minwrk = *n * 3;
                 }
@@ -137,19 +149,19 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_zungqr_n__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*n << 1) + lwork_zgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*n << 1) + lwork_zungbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = *n * *n + wrkbl;
                     i__3 = *n * *n + *m * *n; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
+                    maxwrk = fla_max(i__2, i__3);
                     minwrk = (*n << 1) + *m;
                 }
                 else if(wntuo && wntvas)
@@ -160,23 +172,23 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_zungqr_n__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*n << 1) + lwork_zgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*n << 1) + lwork_zungbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*n << 1) + lwork_zungbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = *n * *n + wrkbl;
                     i__3 = *n * *n + *m * *n; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
+                    maxwrk = fla_max(i__2, i__3);
                     minwrk = (*n << 1) + *m;
                 }
                 else if(wntus && wntvn)
@@ -186,15 +198,15 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_zungqr_n__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*n << 1) + lwork_zgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*n << 1) + lwork_zungbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     maxwrk = *n * *n + wrkbl;
                     minwrk = (*n << 1) + *m;
                 }
@@ -205,19 +217,19 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_zungqr_n__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*n << 1) + lwork_zgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*n << 1) + lwork_zungbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*n << 1) + lwork_zungbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     maxwrk = (*n << 1) * *n + wrkbl;
                     minwrk = (*n << 1) + *m;
                 }
@@ -229,19 +241,19 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_zungqr_n__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*n << 1) + lwork_zgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*n << 1) + lwork_zungbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*n << 1) + lwork_zungbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     maxwrk = *n * *n + wrkbl;
                     minwrk = (*n << 1) + *m;
                 }
@@ -252,15 +264,15 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_zungqr_m__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*n << 1) + lwork_zgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*n << 1) + lwork_zungbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     maxwrk = *n * *n + wrkbl;
                     minwrk = (*n << 1) + *m;
                 }
@@ -271,19 +283,19 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_zungqr_m__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*n << 1) + lwork_zgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*n << 1) + lwork_zungbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*n << 1) + lwork_zungbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     maxwrk = (*n << 1) * *n + wrkbl;
                     minwrk = (*n << 1) + *m;
                 }
@@ -295,19 +307,19 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_zungqr_m__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*n << 1) + lwork_zgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*n << 1) + lwork_zungbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*n << 1) + lwork_zungbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     maxwrk = *n * *n + wrkbl;
                     minwrk = (*n << 1) + *m;
                 }
@@ -315,33 +327,36 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
             else
             {
                 /* Path 10 (M at least N, but not much larger) */
-                zgebrd_(m, n, &a[a_offset], lda, &s[1], dum, (dcomplex*)dum, (dcomplex*)dum, (dcomplex*)dum, & c_n1, &ierr);
-                lwork_zgebrd__ = (integer) dum[0];
+                zgebrd_(m, n, &a[a_offset], lda, &s[1], dum, (dcomplex *)dum, (dcomplex *)dum,
+                        (dcomplex *)dum, &c_n1, &ierr);
+                lwork_zgebrd__ = (integer)dum[0];
                 maxwrk = (*n << 1) + lwork_zgebrd__;
                 if(wntus || wntuo)
                 {
-                    zungbr_("Q", m, n, n, &a[a_offset], lda, (dcomplex*)dum, (dcomplex*)dum, &c_n1, &ierr);
-                    lwork_zungbr_q__ = (integer) dum[0];
+                    zungbr_("Q", m, n, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum,
+                            &c_n1, &ierr);
+                    lwork_zungbr_q__ = (integer)dum[0];
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = (*n << 1) + lwork_zungbr_q__; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
+                    maxwrk = fla_max(i__2, i__3);
                 }
                 if(wntua)
                 {
-                    zungbr_("Q", m, m, n, &a[a_offset], lda, (dcomplex*)dum, (dcomplex*)dum, &c_n1, &ierr);
-                    lwork_zungbr_q__ = (integer) dum[0];
+                    zungbr_("Q", m, m, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum,
+                            &c_n1, &ierr);
+                    lwork_zungbr_q__ = (integer)dum[0];
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = (*n << 1) + lwork_zungbr_q__; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
+                    maxwrk = fla_max(i__2, i__3);
                 }
                 if(!wntvn)
                 {
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = (*n << 1) + lwork_zungbr_p__; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
+                    maxwrk = fla_max(i__2, i__3);
                     minwrk = (*n << 1) + *m;
                 }
             }
@@ -351,23 +366,24 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
             /* Space needed for ZBDSQR is BDSPAC = 5*M */
             mnthr = aocl_lapack_ilaenv(&c__6, "ZGESVD", ch__1, m, n, &c__0, &c__0);
             /* Compute space needed for ZGELQF */
-            zgelqf_(m, n, &a[a_offset], lda, (dcomplex*)dum, (dcomplex*)dum, &c_n1, &ierr);
-            lwork_zgelqf__ = (integer) dum[0];
+            zgelqf_(m, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
+            lwork_zgelqf__ = (integer)dum[0];
             /* Compute space needed for ZUNGLQ */
-            zunglq_(n, n, m, (dcomplex*)dum, n, (dcomplex*)dum, (dcomplex*)dum, &c_n1, &ierr);
-            lwork_zunglq_n__ = (integer) dum[0];
-            zunglq_(m, n, m, &a[a_offset], lda, (dcomplex*)dum, (dcomplex*)dum, &c_n1, &ierr);
-            lwork_zunglq_m__ = (integer) dum[0];
+            zunglq_(n, n, m, (dcomplex *)dum, n, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
+            lwork_zunglq_n__ = (integer)dum[0];
+            zunglq_(m, n, m, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
+            lwork_zunglq_m__ = (integer)dum[0];
             /* Compute space needed for ZGEBRD */
-            zgebrd_(m, m, &a[a_offset], lda, &s[1], dum, (dcomplex*)dum, (dcomplex*)dum, (dcomplex*)dum, &c_n1, &ierr);
-            lwork_zgebrd__ = (integer) dum[0];
+            zgebrd_(m, m, &a[a_offset], lda, &s[1], dum, (dcomplex *)dum, (dcomplex *)dum,
+                    (dcomplex *)dum, &c_n1, &ierr);
+            lwork_zgebrd__ = (integer)dum[0];
             /* Compute space needed for ZUNGBR P */
-            zungbr_("P", m, m, m, &a[a_offset], n, (dcomplex*)dum, (dcomplex*)dum, &c_n1, &ierr);
-            lwork_zungbr_p__ = (integer) dum[0];
+            zungbr_("P", m, m, m, &a[a_offset], n, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
+            lwork_zungbr_p__ = (integer)dum[0];
             /* Compute space needed for ZUNGBR Q */
-            zungbr_("Q", m, m, m, &a[a_offset], n, (dcomplex*)dum, (dcomplex*)dum, &c_n1, &ierr);
-            lwork_zungbr_q__ = (integer) dum[0];
-            if (*n >= mnthr)
+            zungbr_("Q", m, m, m, &a[a_offset], n, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
+            lwork_zungbr_q__ = (integer)dum[0];
+            if(*n >= mnthr)
             {
                 if(wntvn)
                 {
@@ -376,13 +392,13 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = (*m << 1) + lwork_zgebrd__; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
-                    if (wntuo || wntuas)
+                    maxwrk = fla_max(i__2, i__3);
+                    if(wntuo || wntuas)
                     {
                         /* Computing MAX */
                         i__2 = maxwrk;
                         i__3 = (*m << 1) + lwork_zungbr_q__; // , expr subst
-                        maxwrk = fla_max(i__2,i__3);
+                        maxwrk = fla_max(i__2, i__3);
                     }
                     minwrk = *m * 3;
                 }
@@ -393,19 +409,19 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_zunglq_m__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*m << 1) + lwork_zgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*m << 1) + lwork_zungbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = *m * *m + wrkbl;
                     i__3 = *m * *m + *m * *n; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
+                    maxwrk = fla_max(i__2, i__3);
                     minwrk = (*m << 1) + *n;
                 }
                 else if(wntvo && wntuas)
@@ -416,23 +432,23 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_zunglq_m__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*m << 1) + lwork_zgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*m << 1) + lwork_zungbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*m << 1) + lwork_zungbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = *m * *m + wrkbl;
                     i__3 = *m * *m + *m * *n; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
+                    maxwrk = fla_max(i__2, i__3);
                     minwrk = (*m << 1) + *n;
                 }
                 else if(wntvs && wntun)
@@ -442,15 +458,15 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_zunglq_m__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*m << 1) + lwork_zgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*m << 1) + lwork_zungbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     maxwrk = *m * *m + wrkbl;
                     minwrk = (*m << 1) + *n;
                 }
@@ -461,19 +477,19 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_zunglq_m__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*m << 1) + lwork_zgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*m << 1) + lwork_zungbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*m << 1) + lwork_zungbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     maxwrk = (*m << 1) * *m + wrkbl;
                     minwrk = (*m << 1) + *n;
                 }
@@ -485,19 +501,19 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_zunglq_m__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*m << 1) + lwork_zgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*m << 1) + lwork_zungbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*m << 1) + lwork_zungbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     maxwrk = *m * *m + wrkbl;
                     minwrk = (*m << 1) + *n;
                 }
@@ -508,15 +524,15 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_zunglq_n__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*m << 1) + lwork_zgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*m << 1) + lwork_zungbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     maxwrk = *m * *m + wrkbl;
                     minwrk = (*m << 1) + *n;
                 }
@@ -527,19 +543,19 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_zunglq_n__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*m << 1) + lwork_zgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*m << 1) + lwork_zungbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*m << 1) + lwork_zungbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     maxwrk = (*m << 1) * *m + wrkbl;
                     minwrk = (*m << 1) + *n;
                 }
@@ -551,19 +567,19 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_zunglq_n__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*m << 1) + lwork_zgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*m << 1) + lwork_zungbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = (*m << 1) + lwork_zungbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     maxwrk = *m * *m + wrkbl;
                     minwrk = (*m << 1) + *n;
                 }
@@ -571,40 +587,43 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
             else
             {
                 /* Path 10t(N greater than M, but not much larger) */
-                zgebrd_(m, n, &a[a_offset], lda, &s[1], dum, (dcomplex*)dum, (dcomplex*)dum, (dcomplex*)dum, & c_n1, &ierr);
-                lwork_zgebrd__ = (integer) dum[0];
+                zgebrd_(m, n, &a[a_offset], lda, &s[1], dum, (dcomplex *)dum, (dcomplex *)dum,
+                        (dcomplex *)dum, &c_n1, &ierr);
+                lwork_zgebrd__ = (integer)dum[0];
                 maxwrk = (*m << 1) + lwork_zgebrd__;
                 if(wntvs || wntvo)
                 {
                     /* Compute space needed for ZUNGBR P */
-                    zungbr_("P", m, n, m, &a[a_offset], n, (dcomplex*)dum, (dcomplex*)dum, &c_n1, & ierr);
-                    lwork_zungbr_p__ = (integer) dum[0];
+                    zungbr_("P", m, n, m, &a[a_offset], n, (dcomplex *)dum, (dcomplex *)dum, &c_n1,
+                            &ierr);
+                    lwork_zungbr_p__ = (integer)dum[0];
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = (*m << 1) + lwork_zungbr_p__; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
+                    maxwrk = fla_max(i__2, i__3);
                 }
                 if(wntva)
                 {
-                    zungbr_("P", n, n, m, &a[a_offset], n, (dcomplex*)dum, (dcomplex*)dum, &c_n1, & ierr);
-                    lwork_zungbr_p__ = (integer) dum[0];
+                    zungbr_("P", n, n, m, &a[a_offset], n, (dcomplex *)dum, (dcomplex *)dum, &c_n1,
+                            &ierr);
+                    lwork_zungbr_p__ = (integer)dum[0];
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = (*m << 1) + lwork_zungbr_p__; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
+                    maxwrk = fla_max(i__2, i__3);
                 }
                 if(!wntun)
                 {
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = (*m << 1) + lwork_zungbr_q__; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
+                    maxwrk = fla_max(i__2, i__3);
                     minwrk = (*m << 1) + *n;
                 }
             }
         }
-        maxwrk = fla_max(maxwrk,minwrk);
-        work[1].real = (double) maxwrk;
+        maxwrk = fla_max(maxwrk, minwrk);
+        work[1].real = (double)maxwrk;
         work[1].imag = 0.; // , expr subst
         if(*lwork < minwrk && !lquery)
         {

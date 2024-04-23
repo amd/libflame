@@ -183,13 +183,17 @@ for 1<=i<=N, row i of the */
 /* > \ingroup doubleGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dgerfs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *af, integer *ldaf, integer * ipiv, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal *ferr, doublereal *berr, doublereal *work, integer *iwork, integer *info)
+void dgerfs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *af,
+             integer *ldaf, integer *ipiv, doublereal *b, integer *ldb, doublereal *x, integer *ldx,
+             doublereal *ferr, doublereal *berr, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgerfs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*trans, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("dgerfs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
+                      ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",
+                      *trans, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
-        i__2, i__3;
+    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2,
+        i__3;
     doublereal d__1, d__2, d__3;
     /* Local variables */
     aocl_int64_t i__, j, k;
@@ -200,17 +204,26 @@ void dgerfs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda
     doublereal safe1, safe2;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *);
     integer isave[3];
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     integer count;
     extern /* Subroutine */
-    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+                integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dgetrs_( char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        dgetrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *,
+                integer *, integer *);
     logical notran;
     char transt[1];
     doublereal lstres;
@@ -258,7 +271,7 @@ void dgerfs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda
     /* Function Body */
     *info = 0;
     notran = lsame_(trans, "N", 1, 1);
-    if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
@@ -270,19 +283,19 @@ void dgerfs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -10;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -12;
     }
@@ -329,9 +342,9 @@ void dgerfs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda
     L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - op(A) * X, */
         /* where op(A) = A, A**T, or A**H, depending on TRANS. */
-        aocl_blas_dcopy(n, &b[j * b_dim1 + 1], &c__1, &work[*n + 1], &c__1);
-        aocl_blas_dgemv(trans, n, n, &c_b15, &a[a_offset], lda, &x[j * x_dim1 + 1], &c__1, &c_b17,
-                        &work[*n + 1], &c__1);
+        dcopy_(n, &b[j * b_dim1 + 1], &c__1, &work[*n + 1], &c__1);
+        dgemv_(trans, n, n, &c_b15, &a[a_offset], lda, &x[j * x_dim1 + 1], &c__1, &c_b17,
+               &work[*n + 1], &c__1);
         /* Compute componentwise relative backward error from formula */
         /* fla_max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(op(A))*f2c_dabs(X) + f2c_dabs(B) )(i) ) */
         /* where f2c_dabs(Z) is the componentwise absolute value of the matrix */
@@ -345,7 +358,7 @@ void dgerfs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda
             /* L30: */
         }
         /* Compute f2c_dabs(op(A))*f2c_dabs(X) + f2c_dabs(B). */
-        if (notran)
+        if(notran)
         {
             i__2 = *n;
             for(k = 1; k <= i__2; ++k)
@@ -369,7 +382,8 @@ void dgerfs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda
                 i__3 = *n;
                 for(i__ = 1; i__ <= i__3; ++i__)
                 {
-                    s += (d__1 = a[i__ + k * a_dim1], f2c_dabs(d__1)) * (d__2 = x[ i__ + j * x_dim1], f2c_dabs(d__2));
+                    s += (d__1 = a[i__ + k * a_dim1], f2c_dabs(d__1))
+                         * (d__2 = x[i__ + j * x_dim1], f2c_dabs(d__2));
                     /* L60: */
                 }
                 work[k] += s;
@@ -384,15 +398,16 @@ void dgerfs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda
             {
                 /* Computing MAX */
                 d__2 = s;
-                d__3 = (d__1 = work[*n + i__], f2c_dabs(d__1)) / work[ i__]; // , expr subst
-                s = fla_max(d__2,d__3);
+                d__3 = (d__1 = work[*n + i__], f2c_dabs(d__1)) / work[i__]; // , expr subst
+                s = fla_max(d__2, d__3);
             }
             else
             {
                 /* Computing MAX */
                 d__2 = s;
-                d__3 = ((d__1 = work[*n + i__], f2c_dabs(d__1)) + safe1) / (work[i__] + safe1); // , expr subst
-                s = fla_max(d__2,d__3);
+                d__3 = ((d__1 = work[*n + i__], f2c_dabs(d__1)) + safe1)
+                       / (work[i__] + safe1); // , expr subst
+                s = fla_max(d__2, d__3);
             }
             /* L80: */
         }
@@ -405,9 +420,8 @@ void dgerfs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda
         if(berr[j] > eps && berr[j] * 2. <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            aocl_lapack_dgetrs(trans, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[*n + 1], n,
-                               info);
-            aocl_blas_daxpy(n, &c_b17, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            dgetrs_(trans, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[*n + 1], n, info);
+            daxpy_(n, &c_b17, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;
@@ -444,15 +458,13 @@ void dgerfs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda
         }
         kase = 0;
     L100:
-        aocl_lapack_dlacn2(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase,
-                           isave);
+        dlacn2_(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(op(A)**T). */
-                aocl_lapack_dgetrs(transt, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[*n + 1],
-                                   n, info);
+                dgetrs_(transt, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[*n + 1], n, info);
                 i__2 = *n;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
@@ -469,8 +481,7 @@ void dgerfs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda
                     work[*n + i__] = work[i__] * work[*n + i__];
                     /* L120: */
                 }
-                aocl_lapack_dgetrs(trans, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[*n + 1],
-                                   n, info);
+                dgetrs_(trans, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[*n + 1], n, info);
             }
             goto L100;
         }
@@ -482,7 +493,7 @@ void dgerfs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda
             /* Computing MAX */
             d__2 = lstres;
             d__3 = (d__1 = x[i__ + j * x_dim1], f2c_dabs(d__1)); // , expr subst
-            lstres = fla_max(d__2,d__3);
+            lstres = fla_max(d__2, d__3);
             /* L130: */
         }
         if(lstres != 0.)

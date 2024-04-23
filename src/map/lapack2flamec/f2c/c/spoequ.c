@@ -112,7 +112,7 @@ void spoequ_(integer *n, real *a, integer *lda, real *s, real *scond, real *amax
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"spoequ inputs: n %d, lda %d",*n, *lda);
+    snprintf(buffer, 256, "spoequ inputs: n %d, lda %d", *n, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -124,7 +124,8 @@ void spoequ_(integer *n, real *a, integer *lda, real *s, real *scond, real *amax
     aocl_int64_t i__;
     real smin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -155,7 +156,7 @@ void spoequ_(integer *n, real *a, integer *lda, real *s, real *scond, real *amax
     {
         *info = -1;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -3;
     }
@@ -185,11 +186,11 @@ void spoequ_(integer *n, real *a, integer *lda, real *s, real *scond, real *amax
         /* Computing MIN */
         r__1 = smin;
         r__2 = s[i__]; // , expr subst
-        smin = fla_min(r__1,r__2);
+        smin = fla_min(r__1, r__2);
         /* Computing MAX */
         r__1 = *amax;
         r__2 = s[i__]; // , expr subst
-        *amax = fla_max(r__1,r__2);
+        *amax = fla_max(r__1, r__2);
         /* L10: */
     }
     if(smin <= 0.f)

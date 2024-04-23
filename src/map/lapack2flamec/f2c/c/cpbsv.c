@@ -89,7 +89,7 @@
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(KD+1+i-j,j) = A(i,j) for fla_max(1,j-KD)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(N,j+KD). */
 /* > See below for further details. */
 /* > */
@@ -161,15 +161,18 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cpbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, complex *ab, integer *ldab, complex *b, integer *ldb, integer * info)
+void cpbsv_(char *uplo, integer *n, integer *kd, integer *nrhs, complex *ab, integer *ldab,
+            complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cpbsv inputs: uplo %c, n %lld, kd %lld, nrhs %lld, ldab %lld, ldb %lld",*uplo, *n, *kd, *nrhs, *ldab, *ldb);
+    snprintf(buffer, 256, "cpbsv inputs: uplo %c, n %lld, kd %lld, nrhs %lld, ldab %lld, ldb %lld",
+             *uplo, *n, *kd, *nrhs, *ldab, *ldb);
 #else
-    snprintf(buffer, 256,"cpbsv inputs: uplo %c, n %d, kd %d, nrhs %d, ldab %d, ldb %d",*uplo, *n, *kd, *nrhs, *ldab, *ldb);
+    snprintf(buffer, 256, "cpbsv inputs: uplo %c, n %d, kd %d, nrhs %d, ldab %d, ldb %d", *uplo, *n,
+             *kd, *nrhs, *ldab, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -178,7 +181,11 @@ void cpbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, complex *ab, in
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), cpbtrf_( char *, integer *, integer *, complex *, integer *, integer *), cpbtrs_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        cpbtrf_(char *, integer *, integer *, complex *, integer *, integer *),
+        cpbtrs_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *,
+                integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -205,7 +212,7 @@ void cpbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, complex *ab, in
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -225,7 +232,7 @@ void cpbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, complex *ab, in
     {
         *info = -6;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
@@ -237,7 +244,7 @@ void cpbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, complex *ab, in
         return;
     }
     /* Compute the Cholesky factorization A = U**H*U or A = L*L**H. */
-    aocl_lapack_cpbtrf(uplo, n, kd, &ab[ab_offset], ldab, info);
+    cpbtrf_(uplo, n, kd, &ab[ab_offset], ldab, info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */

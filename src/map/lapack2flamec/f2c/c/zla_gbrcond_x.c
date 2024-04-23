@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b ZLA_GBRCOND_X computes the infinity norm condition number of op(A)*diag(x) for
  * general banded m atrices. */
 /* =========== DOCUMENTATION =========== */
@@ -150,14 +150,14 @@ row i of the matrix was interchanged */
 /* > \date September 2012 */
 /* > \ingroup complex16GBcomputational */
 /* ===================================================================== */
-/** Generated wrapper function */
-doublereal zla_gbrcond_x_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku,
-                          dcomplex *ab, aocl_int_t *ldab, dcomplex *afb,
-                          aocl_int_t *ldafb, aocl_int_t *ipiv, dcomplex *x, aocl_int_t *info,
-                          dcomplex *work, doublereal *rwork)
+doublereal zla_gbrcond_x_(char *trans, integer *n, integer *kl, integer *ku, doublecomplex *ab,
+                          integer *ldab, doublecomplex *afb, integer *ldafb, integer *ipiv,
+                          doublecomplex *x, integer *info, doublecomplex *work, doublereal *rwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zla_gbrcond_x inputs: trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS "", *trans, *n, *kl, *ku, *ldab, *ldafb);
+    AOCL_DTL_SNPRINTF("zla_gbrcond_x inputs: trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
+                      ", ldab %" FLA_IS ", ldafb %" FLA_IS "",
+                      *trans, *n, *kl, *ku, *ldab, *ldafb);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, afb_dim1, afb_offset, i__1, i__2, i__3, i__4;
     doublereal ret_val, d__1, d__2;
@@ -173,10 +173,14 @@ doublereal zla_gbrcond_x_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t
     integer isave[3];
     doublereal anorm;
     extern /* Subroutine */
-    void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     extern /* Subroutine */
-    void zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *,
+                integer *, doublecomplex *, integer *, integer *);
     logical notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -216,7 +220,7 @@ doublereal zla_gbrcond_x_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t
     ret_val = 0.;
     *info = 0;
     notrans = lsame_(trans, "N", 1, 1);
-    if (! notrans && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    if(!notrans && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
@@ -260,21 +264,19 @@ doublereal zla_gbrcond_x_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t
             i__2 = i__ - *kl;
             /* Computing MIN */
             i__4 = i__ + *ku;
-            i__3 = fla_min(i__4,*n);
-            for (j = fla_max(i__2,1);
-                    j <= i__3;
-                    ++j)
+            i__3 = fla_min(i__4, *n);
+            for(j = fla_max(i__2, 1); j <= i__3; ++j)
             {
                 i__2 = kd + i__ - j + j * ab_dim1;
                 i__4 = j;
                 z__2.r = ab[i__2].r * x[i__4].r - ab[i__2].i * x[i__4].i;
-                z__2.i = ab[i__2].r * x[i__4].i + ab[i__2].i * x[i__4] .r; // , expr subst
+                z__2.i = ab[i__2].r * x[i__4].i + ab[i__2].i * x[i__4].r; // , expr subst
                 z__1.r = z__2.r;
                 z__1.i = z__2.i; // , expr subst
                 tmp += (d__1 = z__1.r, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1), f2c_dabs(d__2));
             }
             rwork[i__] = tmp;
-            anorm = fla_max(anorm,tmp);
+            anorm = fla_max(anorm, tmp);
         }
     }
     else
@@ -287,21 +289,19 @@ doublereal zla_gbrcond_x_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t
             i__3 = i__ - *kl;
             /* Computing MIN */
             i__4 = i__ + *ku;
-            i__2 = fla_min(i__4,*n);
-            for (j = fla_max(i__3,1);
-                    j <= i__2;
-                    ++j)
+            i__2 = fla_min(i__4, *n);
+            for(j = fla_max(i__3, 1); j <= i__2; ++j)
             {
                 i__3 = ke - i__ + j + i__ * ab_dim1;
                 i__4 = j;
                 z__2.r = ab[i__3].r * x[i__4].r - ab[i__3].i * x[i__4].i;
-                z__2.i = ab[i__3].r * x[i__4].i + ab[i__3].i * x[i__4] .r; // , expr subst
+                z__2.i = ab[i__3].r * x[i__4].i + ab[i__3].i * x[i__4].r; // , expr subst
                 z__1.r = z__2.r;
                 z__1.i = z__2.i; // , expr subst
                 tmp += (d__1 = z__1.r, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1), f2c_dabs(d__2));
             }
             rwork[i__] = tmp;
-            anorm = fla_max(anorm,tmp);
+            anorm = fla_max(anorm, tmp);
         }
     }
     /* Quick return if possible. */
@@ -320,7 +320,7 @@ doublereal zla_gbrcond_x_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t
     ainvnm = 0.;
     kase = 0;
 L10:
-    aocl_lapack_zlacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    zlacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == 2)
@@ -339,13 +339,13 @@ L10:
             }
             if(notrans)
             {
-                aocl_lapack_zgbtrs("No transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb,
-                                   &ipiv[1], &work[1], n, info);
+                zgbtrs_("No transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1],
+                        &work[1], n, info);
             }
             else
             {
-                aocl_lapack_zgbtrs("Conjugate transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb,
-                                   &ipiv[1], &work[1], n, info);
+                zgbtrs_("Conjugate transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1],
+                        &work[1], n, info);
             }
             /* Multiply by inv(X). */
             i__1 = *n;
@@ -370,13 +370,13 @@ L10:
             }
             if(notrans)
             {
-                aocl_lapack_zgbtrs("Conjugate transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb,
-                                   &ipiv[1], &work[1], n, info);
+                zgbtrs_("Conjugate transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1],
+                        &work[1], n, info);
             }
             else
             {
-                aocl_lapack_zgbtrs("No transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb,
-                                   &ipiv[1], &work[1], n, info);
+                zgbtrs_("No transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1],
+                        &work[1], n, info);
             }
             /* Multiply by R. */
             i__1 = *n;

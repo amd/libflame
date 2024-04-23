@@ -214,15 +214,18 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, complex *arf, integer *info)
+void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, complex *arf,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctrttf inputs: transr %c, uplo %c, n %lld, lda %lld",*transr, *uplo, *n, *lda);
+    snprintf(buffer, 256, "ctrttf inputs: transr %c, uplo %c, n %lld, lda %lld", *transr, *uplo, *n,
+             *lda);
 #else
-    snprintf(buffer, 256,"ctrttf inputs: transr %c, uplo %c, n %d, lda %d",*transr, *uplo, *n, *lda);
+    snprintf(buffer, 256, "ctrttf inputs: transr %c, uplo %c, n %d, lda %d", *transr, *uplo, *n,
+             *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -237,7 +240,8 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
     extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -268,11 +272,11 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
     *info = 0;
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
-    if (! normaltransr && ! lsame_(transr, "C", 1, 1))
+    if(!normaltransr && !lsame_(transr, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U", 1, 1))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }
@@ -280,7 +284,7 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }

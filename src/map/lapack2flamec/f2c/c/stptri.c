@@ -122,7 +122,7 @@ void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"stptri inputs: uplo %c, diag %c, n %d",*uplo, *diag, *n);
+    snprintf(buffer, 256, "stptri inputs: uplo %c, diag %c, n %d", *uplo, *diag, *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -132,10 +132,13 @@ void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
     real ajj;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     logical upper;
     extern /* Subroutine */
-    void stpmv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        stpmv_(char *, char *, char *, integer *, real *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer jclast;
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -164,11 +167,11 @@ void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
     upper = lsame_(uplo, "U", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
     jclast = 0;
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -2;
     }
@@ -236,7 +239,7 @@ void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
             }
             /* Compute elements 1:j-1 of j-th column. */
             i__2 = j - 1;
-            aocl_blas_stpmv("Upper", "No transpose", diag, &i__2, &ap[1], &ap[jc], &c__1);
+            stpmv_("Upper", "No transpose", diag, &i__2, &ap[1], &ap[jc], &c__1);
             i__2 = j - 1;
             aocl_blas_sscal(&i__2, &ajj, &ap[jc], &c__1);
             jc += j;
@@ -262,8 +265,7 @@ void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
             {
                 /* Compute elements j+1:n of j-th column. */
                 i__1 = *n - j;
-                aocl_blas_stpmv("Lower", "No transpose", diag, &i__1, &ap[jclast], &ap[jc + 1],
-                                &c__1);
+                stpmv_("Lower", "No transpose", diag, &i__1, &ap[jclast], &ap[jc + 1], &c__1);
                 i__1 = *n - j;
                 aocl_blas_sscal(&i__1, &ajj, &ap[jc + 1], &c__1);
             }

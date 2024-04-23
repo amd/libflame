@@ -147,10 +147,11 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup doublePTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal *z__, integer *ldz, doublereal *work, integer *info)
+void dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal *z__, integer *ldz,
+             doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dpteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "",*compz, *n, *ldz);
+    AOCL_DTL_SNPRINTF("dpteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "", *compz, *n, *ldz);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1;
     /* Builtin functions */
@@ -158,16 +159,22 @@ void dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
     /* Local variables */
     doublereal c__[1] /* was [1][1] */
         ;
-    aocl_int64_t i__;
+    integer i__;
     doublereal vt[1] /* was [1][1] */
-    ;
+        ;
     integer nru;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dbdsqr_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        dbdsqr_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *,
+                doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
+                doublereal *, integer *);
     integer icompz;
     extern /* Subroutine */
-    void dpttrf_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dpttrf_(integer *, doublereal *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -200,15 +207,15 @@ void dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
     --work;
     /* Function Body */
     *info = 0;
-    if (lsame_(compz, "N", 1, 1))
+    if(lsame_(compz, "N", 1, 1))
     {
         icompz = 0;
     }
-    else if (lsame_(compz, "V", 1, 1))
+    else if(lsame_(compz, "V", 1, 1))
     {
         icompz = 1;
     }
-    else if (lsame_(compz, "I", 1, 1))
+    else if(lsame_(compz, "I", 1, 1))
     {
         icompz = 2;
     }
@@ -224,7 +231,7 @@ void dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
     {
         *info = -2;
     }
-    else if (*ldz < 1 || icompz > 0 && *ldz < fla_max(1,*n))
+    else if(*ldz < 1 || icompz > 0 && *ldz < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -255,7 +262,7 @@ void dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
         aocl_lapack_dlaset("Full", n, n, &c_b7, &c_b8, &z__[z_offset], ldz);
     }
     /* Call DPTTRF to factor the matrix. */
-    aocl_lapack_dpttrf(n, &d__[1], &e[1], info);
+    dpttrf_(n, &d__[1], &e[1], info);
     if(*info != 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
@@ -283,8 +290,8 @@ void dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
     {
         nru = 0;
     }
-    aocl_lapack_dbdsqr("Lower", n, &c__0, &nru, &c__0, &d__[1], &e[1], vt, &c__1, &z__[z_offset],
-                       ldz, c__, &c__1, &work[1], info);
+    dbdsqr_("Lower", n, &c__0, &nru, &c__0, &d__[1], &e[1], vt, &c__1, &z__[z_offset], ldz, c__,
+            &c__1, &work[1], info);
     /* Square the singular values. */
     if(*info == 0)
     {

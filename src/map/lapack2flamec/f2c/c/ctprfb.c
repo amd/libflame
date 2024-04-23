@@ -1,27 +1,29 @@
-/* ../netlib/ctprfb.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ctprfb.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
-static complex c_b2 =
-{
-    0.f,0.f
-}
-;
-/* > \brief \b CTPRFB applies a real or complex "triangular-pentagonal" blocked reflector to a real or complex matrix, which is composed of two blocks. */
+static complex c_b1 = {1.f, 0.f};
+static complex c_b2 = {0.f, 0.f};
+/* > \brief \b CTPRFB applies a real or complex "triangular-pentagonal" blocked reflector to a real
+ * or complex matrix, which is composed of two blocks. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CTPRFB + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctprfb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctprfb.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctprfb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctprfb.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctprfb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctprfb.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -124,9 +126,9 @@ static complex c_b2 =
 /* > LDV is INTEGER */
 /* > The leading dimension of the array V. */
 /* > If STOREV = 'C' and SIDE = 'L', LDV >= fla_max(1,M);
-*/
+ */
 /* > if STOREV = 'C' and SIDE = 'R', LDV >= fla_max(1,N);
-*/
+ */
 /* > if STOREV = 'R', LDV >= K. */
 /* > \endverbatim */
 /* > */
@@ -158,7 +160,7 @@ static complex c_b2 =
 /* > LDA is INTEGER */
 /* > The leading dimension of the array A. */
 /* > If SIDE = 'L', LDA >= fla_max(1,K);
-*/
+ */
 /* > If SIDE = 'R', LDA >= fla_max(1,M). */
 /* > \endverbatim */
 /* > */
@@ -189,7 +191,7 @@ static complex c_b2 =
 /* > LDWORK is INTEGER */
 /* > The leading dimension of the array WORK. */
 /* > If SIDE = 'L', LDWORK >= K;
-*/
+ */
 /* > if SIDE = 'R', LDWORK >= M. */
 /* > \endverbatim */
 /* Authors: */
@@ -223,7 +225,7 @@ if SIDE = 'R', A is of size M-by-K, */
 /* > The pentagonal matrix V is composed of a rectangular block V1 and a */
 /* > trapezoidal block V2. The size of the trapezoidal block is determined by */
 /* > the parameter L, where 0<=L<=K. If L=K, the V2 block of V is triangular;
-*/
+ */
 /* > if L=0, there is no trapezoidal block, thus V = V1 is rectangular. */
 /* > */
 /* > If DIRECT = 'F' and STOREV = 'C': V = [V1] */
@@ -253,31 +255,44 @@ if SIDE = 'R', A is of size M-by-K, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, integer *l, complex *v, integer *ldv, complex *t, integer *ldt, complex *a, integer *lda, complex *b, integer *ldb, complex *work, integer *ldwork)
+void ctprfb_(char *side, char *trans, char *direct, char *storev, integer *m, integer *n,
+             integer *k, integer *l, complex *v, integer *ldv, complex *t, integer *ldt, complex *a,
+             integer *lda, complex *b, integer *ldb, complex *work, integer *ldwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctprfb inputs: side %c, trans %c, direct %c, storev %c, m %lld, n %lld, k %lld, l %lld, ldv %lld, ldt %lld, lda %lld, ldb %lld, ldwork %lld",*side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *lda, *ldb, *ldwork);
+    snprintf(buffer, 256,
+             "ctprfb inputs: side %c, trans %c, direct %c, storev %c, m %lld, n %lld, k %lld, l "
+             "%lld, ldv %lld, ldt %lld, lda %lld, ldb %lld, ldwork %lld",
+             *side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *lda, *ldb, *ldwork);
 #else
-    snprintf(buffer, 256,"ctprfb inputs: side %c, trans %c, direct %c, storev %c, m %d, n %d, k %d, l %d, ldv %d, ldt %d, lda %d, ldb %d, ldwork %d",*side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *lda, *ldb, *ldwork);
+    snprintf(buffer, 256,
+             "ctprfb inputs: side %c, trans %c, direct %c, storev %c, m %d, n %d, k %d, l %d, ldv "
+             "%d, ldt %d, lda %d, ldb %d, ldwork %d",
+             *side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *lda, *ldb, *ldwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1, i__2, i__3, i__4, i__5;
+    integer a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1,
+        work_offset, i__1, i__2, i__3, i__4, i__5;
     complex q__1;
     /* Local variables */
     logical backward;
     integer i__, j, kp, mp, np;
     logical row, left;
     extern /* Subroutine */
-    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+        void
+        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
+               complex *, integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     logical right;
     extern /* Subroutine */
-    void ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+        void
+        ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
+               integer *, complex *, integer *);
     logical column, forward;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -317,17 +332,17 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
     work_offset = 1 + work_dim1;
     work -= work_offset;
     /* Function Body */
-    if (*m <= 0 || *n <= 0 || *k <= 0 || *l < 0)
+    if(*m <= 0 || *n <= 0 || *k <= 0 || *l < 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (lsame_(storev, "C", 1, 1))
+    if(lsame_(storev, "C", 1, 1))
     {
         column = TRUE_;
         row = FALSE_;
     }
-    else if (lsame_(storev, "R", 1, 1))
+    else if(lsame_(storev, "R", 1, 1))
     {
         column = FALSE_;
         row = TRUE_;
@@ -337,12 +352,12 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         column = FALSE_;
         row = FALSE_;
     }
-    if (lsame_(side, "L", 1, 1))
+    if(lsame_(side, "L", 1, 1))
     {
         left = TRUE_;
         right = FALSE_;
     }
-    else if (lsame_(side, "R", 1, 1))
+    else if(lsame_(side, "R", 1, 1))
     {
         left = FALSE_;
         right = TRUE_;
@@ -352,12 +367,12 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         left = FALSE_;
         right = FALSE_;
     }
-    if (lsame_(direct, "F", 1, 1))
+    if(lsame_(direct, "F", 1, 1))
     {
         forward = TRUE_;
         backward = FALSE_;
     }
-    else if (lsame_(direct, "B", 1, 1))
+    else if(lsame_(direct, "B", 1, 1))
     {
         forward = FALSE_;
         backward = TRUE_;
@@ -368,7 +383,7 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         backward = FALSE_;
     }
     /* --------------------------------------------------------------------------- */
-    if (column && forward && left)
+    if(column && forward && left)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ I ] (K-by-K) */
@@ -381,19 +396,15 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *m - *l + 1;
-        mp = fla_min(i__1,*m);
+        mp = fla_min(i__1, *m);
         /* Computing MIN */
         i__1 = *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = *m - *l + i__ + j * b_dim1;
@@ -401,46 +412,40 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                 work[i__3].i = b[i__4].i; // , expr subst
             }
         }
-        ctrmm_("L", "U", "C", "N", l, n, &c_b1, &v[mp + v_dim1], ldv, &work[ work_offset], ldwork);
+        ctrmm_("L", "U", "C", "N", l, n, &c_b1, &v[mp + v_dim1], ldv, &work[work_offset], ldwork);
         i__1 = *m - *l;
-        cgemm_("C", "N", l, n, &i__1, &c_b1, &v[v_offset], ldv, &b[b_offset], ldb, &c_b1, &work[work_offset], ldwork);
+        cgemm_("C", "N", l, n, &i__1, &c_b1, &v[v_offset], ldv, &b[b_offset], ldb, &c_b1,
+               &work[work_offset], ldwork);
         i__1 = *k - *l;
-        cgemm_("C", "N", &i__1, n, m, &c_b1, &v[kp * v_dim1 + 1], ldv, &b[ b_offset], ldb, &c_b2, &work[kp + work_dim1], ldwork);
+        cgemm_("C", "N", &i__1, n, m, &c_b1, &v[kp * v_dim1 + 1], ldv, &b[b_offset], ldb, &c_b2,
+               &work[kp + work_dim1], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
                 q__1.r = work[i__4].r + a[i__5].r;
-                q__1.i = work[i__4].i + a[ i__5].i; // , expr subst
+                q__1.i = work[i__4].i + a[i__5].i; // , expr subst
                 work[i__3].r = q__1.r;
                 work[i__3].i = q__1.i; // , expr subst
             }
         }
-        ctrmm_("L", "U", trans, "N", k, n, &c_b1, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        ctrmm_("L", "U", trans, "N", k, n, &c_b1, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
                 q__1.r = a[i__4].r - work[i__5].r;
-                q__1.i = a[i__4].i - work[ i__5].i; // , expr subst
+                q__1.i = a[i__4].i - work[i__5].i; // , expr subst
                 a[i__3].r = q__1.r;
                 a[i__3].i = q__1.i; // , expr subst
             }
@@ -448,34 +453,32 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         i__1 = *m - *l;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemm_("N", "N", &i__1, n, k, &q__1, &v[v_offset], ldv, &work[ work_offset], ldwork, &c_b1, &b[b_offset], ldb);
+        cgemm_("N", "N", &i__1, n, k, &q__1, &v[v_offset], ldv, &work[work_offset], ldwork, &c_b1,
+               &b[b_offset], ldb);
         i__1 = *k - *l;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemm_("N", "N", l, n, &i__1, &q__1, &v[mp + kp * v_dim1], ldv, &work[ kp + work_dim1], ldwork, &c_b1, &b[mp + b_dim1], ldb);
-        ctrmm_("L", "U", "N", "N", l, n, &c_b1, &v[mp + v_dim1], ldv, &work[ work_offset], ldwork);
+        cgemm_("N", "N", l, n, &i__1, &q__1, &v[mp + kp * v_dim1], ldv, &work[kp + work_dim1],
+               ldwork, &c_b1, &b[mp + b_dim1], ldb);
+        ctrmm_("L", "U", "N", "N", l, n, &c_b1, &v[mp + v_dim1], ldv, &work[work_offset], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = *m - *l + i__ + j * b_dim1;
                 i__4 = *m - *l + i__ + j * b_dim1;
                 i__5 = i__ + j * work_dim1;
                 q__1.r = b[i__4].r - work[i__5].r;
-                q__1.i = b[i__4].i - work[ i__5].i; // , expr subst
+                q__1.i = b[i__4].i - work[i__5].i; // , expr subst
                 b[i__3].r = q__1.r;
                 b[i__3].i = q__1.i; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
     }
-    else if (column && forward && right)
+    else if(column && forward && right)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ I ] (K-by-K) */
@@ -487,19 +490,15 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *n - *l + 1;
-        np = fla_min(i__1,*n);
+        np = fla_min(i__1, *n);
         /* Computing MIN */
         i__1 = *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + (*n - *l + j) * b_dim1;
@@ -507,46 +506,40 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                 work[i__3].i = b[i__4].i; // , expr subst
             }
         }
-        ctrmm_("R", "U", "N", "N", m, l, &c_b1, &v[np + v_dim1], ldv, &work[ work_offset], ldwork);
+        ctrmm_("R", "U", "N", "N", m, l, &c_b1, &v[np + v_dim1], ldv, &work[work_offset], ldwork);
         i__1 = *n - *l;
-        cgemm_("N", "N", m, l, &i__1, &c_b1, &b[b_offset], ldb, &v[v_offset], ldv, &c_b1, &work[work_offset], ldwork);
+        cgemm_("N", "N", m, l, &i__1, &c_b1, &b[b_offset], ldb, &v[v_offset], ldv, &c_b1,
+               &work[work_offset], ldwork);
         i__1 = *k - *l;
-        cgemm_("N", "N", m, &i__1, n, &c_b1, &b[b_offset], ldb, &v[kp * v_dim1 + 1], ldv, &c_b2, &work[kp * work_dim1 + 1], ldwork);
+        cgemm_("N", "N", m, &i__1, n, &c_b1, &b[b_offset], ldb, &v[kp * v_dim1 + 1], ldv, &c_b2,
+               &work[kp * work_dim1 + 1], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
                 q__1.r = work[i__4].r + a[i__5].r;
-                q__1.i = work[i__4].i + a[ i__5].i; // , expr subst
+                q__1.i = work[i__4].i + a[i__5].i; // , expr subst
                 work[i__3].r = q__1.r;
                 work[i__3].i = q__1.i; // , expr subst
             }
         }
-        ctrmm_("R", "U", trans, "N", m, k, &c_b1, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        ctrmm_("R", "U", trans, "N", m, k, &c_b1, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
                 q__1.r = a[i__4].r - work[i__5].r;
-                q__1.i = a[i__4].i - work[ i__5].i; // , expr subst
+                q__1.i = a[i__4].i - work[i__5].i; // , expr subst
                 a[i__3].r = q__1.r;
                 a[i__3].i = q__1.i; // , expr subst
             }
@@ -554,34 +547,32 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         i__1 = *n - *l;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemm_("N", "C", m, &i__1, k, &q__1, &work[work_offset], ldwork, &v[ v_offset], ldv, &c_b1, &b[b_offset], ldb);
+        cgemm_("N", "C", m, &i__1, k, &q__1, &work[work_offset], ldwork, &v[v_offset], ldv, &c_b1,
+               &b[b_offset], ldb);
         i__1 = *k - *l;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemm_("N", "C", m, l, &i__1, &q__1, &work[kp * work_dim1 + 1], ldwork, &v[np + kp * v_dim1], ldv, &c_b1, &b[np * b_dim1 + 1], ldb);
-        ctrmm_("R", "U", "C", "N", m, l, &c_b1, &v[np + v_dim1], ldv, &work[ work_offset], ldwork);
+        cgemm_("N", "C", m, l, &i__1, &q__1, &work[kp * work_dim1 + 1], ldwork,
+               &v[np + kp * v_dim1], ldv, &c_b1, &b[np * b_dim1 + 1], ldb);
+        ctrmm_("R", "U", "C", "N", m, l, &c_b1, &v[np + v_dim1], ldv, &work[work_offset], ldwork);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + (*n - *l + j) * b_dim1;
                 i__4 = i__ + (*n - *l + j) * b_dim1;
                 i__5 = i__ + j * work_dim1;
                 q__1.r = b[i__4].r - work[i__5].r;
-                q__1.i = b[i__4].i - work[ i__5].i; // , expr subst
+                q__1.i = b[i__4].i - work[i__5].i; // , expr subst
                 b[i__3].r = q__1.r;
                 b[i__3].i = q__1.i; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
     }
-    else if (column && backward && left)
+    else if(column && backward && left)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ V ] (M-by-K) */
@@ -594,19 +585,15 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *l + 1;
-        mp = fla_min(i__1,*m);
+        mp = fla_min(i__1, *m);
         /* Computing MIN */
         i__1 = *k - *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = *k - *l + i__ + j * work_dim1;
                 i__4 = i__ + j * b_dim1;
@@ -614,46 +601,41 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                 work[i__3].i = b[i__4].i; // , expr subst
             }
         }
-        ctrmm_("L", "L", "C", "N", l, n, &c_b1, &v[kp * v_dim1 + 1], ldv, & work[kp + work_dim1], ldwork);
+        ctrmm_("L", "L", "C", "N", l, n, &c_b1, &v[kp * v_dim1 + 1], ldv, &work[kp + work_dim1],
+               ldwork);
         i__1 = *m - *l;
-        cgemm_("C", "N", l, n, &i__1, &c_b1, &v[mp + kp * v_dim1], ldv, &b[mp + b_dim1], ldb, &c_b1, &work[kp + work_dim1], ldwork);
+        cgemm_("C", "N", l, n, &i__1, &c_b1, &v[mp + kp * v_dim1], ldv, &b[mp + b_dim1], ldb, &c_b1,
+               &work[kp + work_dim1], ldwork);
         i__1 = *k - *l;
-        cgemm_("C", "N", &i__1, n, m, &c_b1, &v[v_offset], ldv, &b[b_offset], ldb, &c_b2, &work[work_offset], ldwork);
+        cgemm_("C", "N", &i__1, n, m, &c_b1, &v[v_offset], ldv, &b[b_offset], ldb, &c_b2,
+               &work[work_offset], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
                 q__1.r = work[i__4].r + a[i__5].r;
-                q__1.i = work[i__4].i + a[ i__5].i; // , expr subst
+                q__1.i = work[i__4].i + a[i__5].i; // , expr subst
                 work[i__3].r = q__1.r;
                 work[i__3].i = q__1.i; // , expr subst
             }
         }
-        ctrmm_("L", "L", trans, "N", k, n, &c_b1, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        ctrmm_("L", "L", trans, "N", k, n, &c_b1, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
                 q__1.r = a[i__4].r - work[i__5].r;
-                q__1.i = a[i__4].i - work[ i__5].i; // , expr subst
+                q__1.i = a[i__4].i - work[i__5].i; // , expr subst
                 a[i__3].r = q__1.r;
                 a[i__3].i = q__1.i; // , expr subst
             }
@@ -661,34 +643,33 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         i__1 = *m - *l;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemm_("N", "N", &i__1, n, k, &q__1, &v[mp + v_dim1], ldv, &work[ work_offset], ldwork, &c_b1, &b[mp + b_dim1], ldb);
+        cgemm_("N", "N", &i__1, n, k, &q__1, &v[mp + v_dim1], ldv, &work[work_offset], ldwork,
+               &c_b1, &b[mp + b_dim1], ldb);
         i__1 = *k - *l;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemm_("N", "N", l, n, &i__1, &q__1, &v[v_offset], ldv, &work[ work_offset], ldwork, &c_b1, &b[b_offset], ldb);
-        ctrmm_("L", "L", "N", "N", l, n, &c_b1, &v[kp * v_dim1 + 1], ldv, & work[kp + work_dim1], ldwork);
+        cgemm_("N", "N", l, n, &i__1, &q__1, &v[v_offset], ldv, &work[work_offset], ldwork, &c_b1,
+               &b[b_offset], ldb);
+        ctrmm_("L", "L", "N", "N", l, n, &c_b1, &v[kp * v_dim1 + 1], ldv, &work[kp + work_dim1],
+               ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * b_dim1;
                 i__5 = *k - *l + i__ + j * work_dim1;
                 q__1.r = b[i__4].r - work[i__5].r;
-                q__1.i = b[i__4].i - work[ i__5].i; // , expr subst
+                q__1.i = b[i__4].i - work[i__5].i; // , expr subst
                 b[i__3].r = q__1.r;
                 b[i__3].i = q__1.i; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
     }
-    else if (column && backward && right)
+    else if(column && backward && right)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ V ] (N-by-K) */
@@ -700,19 +681,15 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *l + 1;
-        np = fla_min(i__1,*n);
+        np = fla_min(i__1, *n);
         /* Computing MIN */
         i__1 = *k - *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + (*k - *l + j) * work_dim1;
                 i__4 = i__ + j * b_dim1;
@@ -720,46 +697,41 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                 work[i__3].i = b[i__4].i; // , expr subst
             }
         }
-        ctrmm_("R", "L", "N", "N", m, l, &c_b1, &v[kp * v_dim1 + 1], ldv, & work[kp * work_dim1 + 1], ldwork);
+        ctrmm_("R", "L", "N", "N", m, l, &c_b1, &v[kp * v_dim1 + 1], ldv, &work[kp * work_dim1 + 1],
+               ldwork);
         i__1 = *n - *l;
-        cgemm_("N", "N", m, l, &i__1, &c_b1, &b[np * b_dim1 + 1], ldb, &v[np + kp * v_dim1], ldv, &c_b1, &work[kp * work_dim1 + 1], ldwork);
+        cgemm_("N", "N", m, l, &i__1, &c_b1, &b[np * b_dim1 + 1], ldb, &v[np + kp * v_dim1], ldv,
+               &c_b1, &work[kp * work_dim1 + 1], ldwork);
         i__1 = *k - *l;
-        cgemm_("N", "N", m, &i__1, n, &c_b1, &b[b_offset], ldb, &v[v_offset], ldv, &c_b2, &work[work_offset], ldwork);
+        cgemm_("N", "N", m, &i__1, n, &c_b1, &b[b_offset], ldb, &v[v_offset], ldv, &c_b2,
+               &work[work_offset], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
                 q__1.r = work[i__4].r + a[i__5].r;
-                q__1.i = work[i__4].i + a[ i__5].i; // , expr subst
+                q__1.i = work[i__4].i + a[i__5].i; // , expr subst
                 work[i__3].r = q__1.r;
                 work[i__3].i = q__1.i; // , expr subst
             }
         }
-        ctrmm_("R", "L", trans, "N", m, k, &c_b1, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        ctrmm_("R", "L", trans, "N", m, k, &c_b1, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
                 q__1.r = a[i__4].r - work[i__5].r;
-                q__1.i = a[i__4].i - work[ i__5].i; // , expr subst
+                q__1.i = a[i__4].i - work[i__5].i; // , expr subst
                 a[i__3].r = q__1.r;
                 a[i__3].i = q__1.i; // , expr subst
             }
@@ -767,34 +739,33 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         i__1 = *n - *l;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemm_("N", "C", m, &i__1, k, &q__1, &work[work_offset], ldwork, &v[ np + v_dim1], ldv, &c_b1, &b[np * b_dim1 + 1], ldb);
+        cgemm_("N", "C", m, &i__1, k, &q__1, &work[work_offset], ldwork, &v[np + v_dim1], ldv,
+               &c_b1, &b[np * b_dim1 + 1], ldb);
         i__1 = *k - *l;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemm_("N", "C", m, l, &i__1, &q__1, &work[work_offset], ldwork, &v[ v_offset], ldv, &c_b1, &b[b_offset], ldb);
-        ctrmm_("R", "L", "C", "N", m, l, &c_b1, &v[kp * v_dim1 + 1], ldv, & work[kp * work_dim1 + 1], ldwork);
+        cgemm_("N", "C", m, l, &i__1, &q__1, &work[work_offset], ldwork, &v[v_offset], ldv, &c_b1,
+               &b[b_offset], ldb);
+        ctrmm_("R", "L", "C", "N", m, l, &c_b1, &v[kp * v_dim1 + 1], ldv, &work[kp * work_dim1 + 1],
+               ldwork);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * b_dim1;
                 i__5 = i__ + (*k - *l + j) * work_dim1;
                 q__1.r = b[i__4].r - work[i__5].r;
-                q__1.i = b[i__4].i - work[ i__5].i; // , expr subst
+                q__1.i = b[i__4].i - work[i__5].i; // , expr subst
                 b[i__3].r = q__1.r;
                 b[i__3].i = q__1.i; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
     }
-    else if (row && forward && left)
+    else if(row && forward && left)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ I V ] ( I is K-by-K, V is K-by-M ) */
@@ -806,19 +777,15 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *m - *l + 1;
-        mp = fla_min(i__1,*m);
+        mp = fla_min(i__1, *m);
         /* Computing MIN */
         i__1 = *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = *m - *l + i__ + j * b_dim1;
@@ -826,46 +793,40 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                 work[i__3].i = b[i__4].i; // , expr subst
             }
         }
-        ctrmm_("L", "L", "N", "N", l, n, &c_b1, &v[mp * v_dim1 + 1], ldv, & work[work_offset], ldb);
+        ctrmm_("L", "L", "N", "N", l, n, &c_b1, &v[mp * v_dim1 + 1], ldv, &work[work_offset], ldb);
         i__1 = *m - *l;
-        cgemm_("N", "N", l, n, &i__1, &c_b1, &v[v_offset], ldv, &b[b_offset], ldb, &c_b1, &work[work_offset], ldwork);
+        cgemm_("N", "N", l, n, &i__1, &c_b1, &v[v_offset], ldv, &b[b_offset], ldb, &c_b1,
+               &work[work_offset], ldwork);
         i__1 = *k - *l;
-        cgemm_("N", "N", &i__1, n, m, &c_b1, &v[kp + v_dim1], ldv, &b[ b_offset], ldb, &c_b2, &work[kp + work_dim1], ldwork);
+        cgemm_("N", "N", &i__1, n, m, &c_b1, &v[kp + v_dim1], ldv, &b[b_offset], ldb, &c_b2,
+               &work[kp + work_dim1], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
                 q__1.r = work[i__4].r + a[i__5].r;
-                q__1.i = work[i__4].i + a[ i__5].i; // , expr subst
+                q__1.i = work[i__4].i + a[i__5].i; // , expr subst
                 work[i__3].r = q__1.r;
                 work[i__3].i = q__1.i; // , expr subst
             }
         }
-        ctrmm_("L", "U", trans, "N", k, n, &c_b1, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        ctrmm_("L", "U", trans, "N", k, n, &c_b1, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
                 q__1.r = a[i__4].r - work[i__5].r;
-                q__1.i = a[i__4].i - work[ i__5].i; // , expr subst
+                q__1.i = a[i__4].i - work[i__5].i; // , expr subst
                 a[i__3].r = q__1.r;
                 a[i__3].i = q__1.i; // , expr subst
             }
@@ -873,34 +834,33 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         i__1 = *m - *l;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemm_("C", "N", &i__1, n, k, &q__1, &v[v_offset], ldv, &work[ work_offset], ldwork, &c_b1, &b[b_offset], ldb);
+        cgemm_("C", "N", &i__1, n, k, &q__1, &v[v_offset], ldv, &work[work_offset], ldwork, &c_b1,
+               &b[b_offset], ldb);
         i__1 = *k - *l;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemm_("C", "N", l, n, &i__1, &q__1, &v[kp + mp * v_dim1], ldv, &work[ kp + work_dim1], ldwork, &c_b1, &b[mp + b_dim1], ldb);
-        ctrmm_("L", "L", "C", "N", l, n, &c_b1, &v[mp * v_dim1 + 1], ldv, & work[work_offset], ldwork);
+        cgemm_("C", "N", l, n, &i__1, &q__1, &v[kp + mp * v_dim1], ldv, &work[kp + work_dim1],
+               ldwork, &c_b1, &b[mp + b_dim1], ldb);
+        ctrmm_("L", "L", "C", "N", l, n, &c_b1, &v[mp * v_dim1 + 1], ldv, &work[work_offset],
+               ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = *m - *l + i__ + j * b_dim1;
                 i__4 = *m - *l + i__ + j * b_dim1;
                 i__5 = i__ + j * work_dim1;
                 q__1.r = b[i__4].r - work[i__5].r;
-                q__1.i = b[i__4].i - work[ i__5].i; // , expr subst
+                q__1.i = b[i__4].i - work[i__5].i; // , expr subst
                 b[i__3].r = q__1.r;
                 b[i__3].i = q__1.i; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
     }
-    else if (row && forward && right)
+    else if(row && forward && right)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ I V ] ( I is K-by-K, V is K-by-N ) */
@@ -911,19 +871,15 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *n - *l + 1;
-        np = fla_min(i__1,*n);
+        np = fla_min(i__1, *n);
         /* Computing MIN */
         i__1 = *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + (*n - *l + j) * b_dim1;
@@ -931,46 +887,41 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                 work[i__3].i = b[i__4].i; // , expr subst
             }
         }
-        ctrmm_("R", "L", "C", "N", m, l, &c_b1, &v[np * v_dim1 + 1], ldv, & work[work_offset], ldwork);
+        ctrmm_("R", "L", "C", "N", m, l, &c_b1, &v[np * v_dim1 + 1], ldv, &work[work_offset],
+               ldwork);
         i__1 = *n - *l;
-        cgemm_("N", "C", m, l, &i__1, &c_b1, &b[b_offset], ldb, &v[v_offset], ldv, &c_b1, &work[work_offset], ldwork);
+        cgemm_("N", "C", m, l, &i__1, &c_b1, &b[b_offset], ldb, &v[v_offset], ldv, &c_b1,
+               &work[work_offset], ldwork);
         i__1 = *k - *l;
-        cgemm_("N", "C", m, &i__1, n, &c_b1, &b[b_offset], ldb, &v[kp + v_dim1], ldv, &c_b2, &work[kp * work_dim1 + 1], ldwork);
+        cgemm_("N", "C", m, &i__1, n, &c_b1, &b[b_offset], ldb, &v[kp + v_dim1], ldv, &c_b2,
+               &work[kp * work_dim1 + 1], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
                 q__1.r = work[i__4].r + a[i__5].r;
-                q__1.i = work[i__4].i + a[ i__5].i; // , expr subst
+                q__1.i = work[i__4].i + a[i__5].i; // , expr subst
                 work[i__3].r = q__1.r;
                 work[i__3].i = q__1.i; // , expr subst
             }
         }
-        ctrmm_("R", "U", trans, "N", m, k, &c_b1, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        ctrmm_("R", "U", trans, "N", m, k, &c_b1, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
                 q__1.r = a[i__4].r - work[i__5].r;
-                q__1.i = a[i__4].i - work[ i__5].i; // , expr subst
+                q__1.i = a[i__4].i - work[i__5].i; // , expr subst
                 a[i__3].r = q__1.r;
                 a[i__3].i = q__1.i; // , expr subst
             }
@@ -978,34 +929,33 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         i__1 = *n - *l;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemm_("N", "N", m, &i__1, k, &q__1, &work[work_offset], ldwork, &v[ v_offset], ldv, &c_b1, &b[b_offset], ldb);
+        cgemm_("N", "N", m, &i__1, k, &q__1, &work[work_offset], ldwork, &v[v_offset], ldv, &c_b1,
+               &b[b_offset], ldb);
         i__1 = *k - *l;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemm_("N", "N", m, l, &i__1, &q__1, &work[kp * work_dim1 + 1], ldwork, &v[kp + np * v_dim1], ldv, &c_b1, &b[np * b_dim1 + 1], ldb);
-        ctrmm_("R", "L", "N", "N", m, l, &c_b1, &v[np * v_dim1 + 1], ldv, & work[work_offset], ldwork);
+        cgemm_("N", "N", m, l, &i__1, &q__1, &work[kp * work_dim1 + 1], ldwork,
+               &v[kp + np * v_dim1], ldv, &c_b1, &b[np * b_dim1 + 1], ldb);
+        ctrmm_("R", "L", "N", "N", m, l, &c_b1, &v[np * v_dim1 + 1], ldv, &work[work_offset],
+               ldwork);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + (*n - *l + j) * b_dim1;
                 i__4 = i__ + (*n - *l + j) * b_dim1;
                 i__5 = i__ + j * work_dim1;
                 q__1.r = b[i__4].r - work[i__5].r;
-                q__1.i = b[i__4].i - work[ i__5].i; // , expr subst
+                q__1.i = b[i__4].i - work[i__5].i; // , expr subst
                 b[i__3].r = q__1.r;
                 b[i__3].i = q__1.i; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
     }
-    else if (row && backward && left)
+    else if(row && backward && left)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ V I ] ( I is K-by-K, V is K-by-M ) */
@@ -1017,19 +967,15 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *l + 1;
-        mp = fla_min(i__1,*m);
+        mp = fla_min(i__1, *m);
         /* Computing MIN */
         i__1 = *k - *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = *k - *l + i__ + j * work_dim1;
                 i__4 = i__ + j * b_dim1;
@@ -1037,46 +983,41 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                 work[i__3].i = b[i__4].i; // , expr subst
             }
         }
-        ctrmm_("L", "U", "N", "N", l, n, &c_b1, &v[kp + v_dim1], ldv, &work[ kp + work_dim1], ldwork);
+        ctrmm_("L", "U", "N", "N", l, n, &c_b1, &v[kp + v_dim1], ldv, &work[kp + work_dim1],
+               ldwork);
         i__1 = *m - *l;
-        cgemm_("N", "N", l, n, &i__1, &c_b1, &v[kp + mp * v_dim1], ldv, &b[mp + b_dim1], ldb, &c_b1, &work[kp + work_dim1], ldwork);
+        cgemm_("N", "N", l, n, &i__1, &c_b1, &v[kp + mp * v_dim1], ldv, &b[mp + b_dim1], ldb, &c_b1,
+               &work[kp + work_dim1], ldwork);
         i__1 = *k - *l;
-        cgemm_("N", "N", &i__1, n, m, &c_b1, &v[v_offset], ldv, &b[b_offset], ldb, &c_b2, &work[work_offset], ldwork);
+        cgemm_("N", "N", &i__1, n, m, &c_b1, &v[v_offset], ldv, &b[b_offset], ldb, &c_b2,
+               &work[work_offset], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
                 q__1.r = work[i__4].r + a[i__5].r;
-                q__1.i = work[i__4].i + a[ i__5].i; // , expr subst
+                q__1.i = work[i__4].i + a[i__5].i; // , expr subst
                 work[i__3].r = q__1.r;
                 work[i__3].i = q__1.i; // , expr subst
             }
         }
-        ctrmm_("L", "L ", trans, "N", k, n, &c_b1, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        ctrmm_("L", "L ", trans, "N", k, n, &c_b1, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
                 q__1.r = a[i__4].r - work[i__5].r;
-                q__1.i = a[i__4].i - work[ i__5].i; // , expr subst
+                q__1.i = a[i__4].i - work[i__5].i; // , expr subst
                 a[i__3].r = q__1.r;
                 a[i__3].i = q__1.i; // , expr subst
             }
@@ -1084,34 +1025,33 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         i__1 = *m - *l;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemm_("C", "N", &i__1, n, k, &q__1, &v[mp * v_dim1 + 1], ldv, &work[ work_offset], ldwork, &c_b1, &b[mp + b_dim1], ldb);
+        cgemm_("C", "N", &i__1, n, k, &q__1, &v[mp * v_dim1 + 1], ldv, &work[work_offset], ldwork,
+               &c_b1, &b[mp + b_dim1], ldb);
         i__1 = *k - *l;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemm_("C", "N", l, n, &i__1, &q__1, &v[v_offset], ldv, &work[ work_offset], ldwork, &c_b1, &b[b_offset], ldb);
-        ctrmm_("L", "U", "C", "N", l, n, &c_b1, &v[kp + v_dim1], ldv, &work[ kp + work_dim1], ldwork);
+        cgemm_("C", "N", l, n, &i__1, &q__1, &v[v_offset], ldv, &work[work_offset], ldwork, &c_b1,
+               &b[b_offset], ldb);
+        ctrmm_("L", "U", "C", "N", l, n, &c_b1, &v[kp + v_dim1], ldv, &work[kp + work_dim1],
+               ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * b_dim1;
                 i__5 = *k - *l + i__ + j * work_dim1;
                 q__1.r = b[i__4].r - work[i__5].r;
-                q__1.i = b[i__4].i - work[ i__5].i; // , expr subst
+                q__1.i = b[i__4].i - work[i__5].i; // , expr subst
                 b[i__3].r = q__1.r;
                 b[i__3].i = q__1.i; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
     }
-    else if (row && backward && right)
+    else if(row && backward && right)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ V I ] ( I is K-by-K, V is K-by-N ) */
@@ -1122,19 +1062,15 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *l + 1;
-        np = fla_min(i__1,*n);
+        np = fla_min(i__1, *n);
         /* Computing MIN */
         i__1 = *k - *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + (*k - *l + j) * work_dim1;
                 i__4 = i__ + j * b_dim1;
@@ -1142,46 +1078,41 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                 work[i__3].i = b[i__4].i; // , expr subst
             }
         }
-        ctrmm_("R", "U", "C", "N", m, l, &c_b1, &v[kp + v_dim1], ldv, &work[ kp * work_dim1 + 1], ldwork);
+        ctrmm_("R", "U", "C", "N", m, l, &c_b1, &v[kp + v_dim1], ldv, &work[kp * work_dim1 + 1],
+               ldwork);
         i__1 = *n - *l;
-        cgemm_("N", "C", m, l, &i__1, &c_b1, &b[np * b_dim1 + 1], ldb, &v[kp + np * v_dim1], ldv, &c_b1, &work[kp * work_dim1 + 1], ldwork);
+        cgemm_("N", "C", m, l, &i__1, &c_b1, &b[np * b_dim1 + 1], ldb, &v[kp + np * v_dim1], ldv,
+               &c_b1, &work[kp * work_dim1 + 1], ldwork);
         i__1 = *k - *l;
-        cgemm_("N", "C", m, &i__1, n, &c_b1, &b[b_offset], ldb, &v[v_offset], ldv, &c_b2, &work[work_offset], ldwork);
+        cgemm_("N", "C", m, &i__1, n, &c_b1, &b[b_offset], ldb, &v[v_offset], ldv, &c_b2,
+               &work[work_offset], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
                 q__1.r = work[i__4].r + a[i__5].r;
-                q__1.i = work[i__4].i + a[ i__5].i; // , expr subst
+                q__1.i = work[i__4].i + a[i__5].i; // , expr subst
                 work[i__3].r = q__1.r;
                 work[i__3].i = q__1.i; // , expr subst
             }
         }
-        ctrmm_("R", "L", trans, "N", m, k, &c_b1, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        ctrmm_("R", "L", trans, "N", m, k, &c_b1, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
                 q__1.r = a[i__4].r - work[i__5].r;
-                q__1.i = a[i__4].i - work[ i__5].i; // , expr subst
+                q__1.i = a[i__4].i - work[i__5].i; // , expr subst
                 a[i__3].r = q__1.r;
                 a[i__3].i = q__1.i; // , expr subst
             }
@@ -1189,27 +1120,26 @@ void ctprfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         i__1 = *n - *l;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemm_("N", "N", m, &i__1, k, &q__1, &work[work_offset], ldwork, &v[ np * v_dim1 + 1], ldv, &c_b1, &b[np * b_dim1 + 1], ldb);
+        cgemm_("N", "N", m, &i__1, k, &q__1, &work[work_offset], ldwork, &v[np * v_dim1 + 1], ldv,
+               &c_b1, &b[np * b_dim1 + 1], ldb);
         i__1 = *k - *l;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemm_("N", "N", m, l, &i__1, &q__1, &work[work_offset], ldwork, &v[ v_offset], ldv, &c_b1, &b[b_offset], ldb);
-        ctrmm_("R", "U", "N", "N", m, l, &c_b1, &v[kp + v_dim1], ldv, &work[ kp * work_dim1 + 1], ldwork);
+        cgemm_("N", "N", m, l, &i__1, &q__1, &work[work_offset], ldwork, &v[v_offset], ldv, &c_b1,
+               &b[b_offset], ldb);
+        ctrmm_("R", "U", "N", "N", m, l, &c_b1, &v[kp + v_dim1], ldv, &work[kp * work_dim1 + 1],
+               ldwork);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * b_dim1;
                 i__5 = i__ + (*k - *l + j) * work_dim1;
                 q__1.r = b[i__4].r - work[i__5].r;
-                q__1.i = b[i__4].i - work[ i__5].i; // , expr subst
+                q__1.i = b[i__4].i - work[i__5].i; // , expr subst
                 b[i__3].r = q__1.r;
                 b[i__3].i = q__1.i; // , expr subst
             }

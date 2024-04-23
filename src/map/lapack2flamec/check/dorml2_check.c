@@ -1,7 +1,8 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int dorml2_check(char *side, char *trans, integer *m, integer *n, integer *k, double *a, integer *lda, double *tau, double * c__, integer *ldc, double *work, integer *info)
+int dorml2_check(char *side, char *trans, integer *m, integer *n, integer *k, double *a,
+                 integer *lda, double *tau, double *c__, integer *ldc, double *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__1;
@@ -32,11 +33,11 @@ int dorml2_check(char *side, char *trans, integer *m, integer *n, integer *k, do
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1))
     {
         *info = -2;
     }
@@ -52,11 +53,11 @@ int dorml2_check(char *side, char *trans, integer *m, integer *n, integer *k, do
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*k))
+    else if(*lda < fla_max(1, *k))
     {
         *info = -7;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -10;
     }

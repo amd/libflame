@@ -1,8 +1,10 @@
 #include "FLA_f2c.h"
+#include "FLA_lapack2flame_return_defs.h"
 static integer c__1 = 1;
 static integer c_n1 = -1;
 
-int cungqr_check(integer *m, integer *n, integer *k, scomplex *a, integer *lda, scomplex *tau, scomplex *work, integer *lwork, integer * info)
+int cungqr_check(integer *m, integer *n, integer *k, scomplex *a, integer *lda, scomplex *tau,
+                 scomplex *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
@@ -20,27 +22,27 @@ int cungqr_check(integer *m, integer *n, integer *k, scomplex *a, integer *lda, 
     /* Function Body */
     *info = 0;
     nb = ilaenv_(&c__1, "CUNGQR", " ", m, n, k, &c_n1);
-    lwkopt = fla_max(1,*n) * nb;
-    work[1].real = (float) lwkopt;
+    lwkopt = fla_max(1, *n) * nb;
+    work[1].real = (float)lwkopt;
     work[1].imag = 0.f; // , expr subst
     lquery = *lwork == -1;
     if(*m < 0)
     {
         *info = -1;
     }
-    else if(*n < *m)
+    else if(*n < 0 || *n > *m)
     {
         *info = -2;
     }
-    else if(*k < 0 || *k > *m)
+    else if(*k < 0 || *k > *n)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
-    else if (*lwork < fla_max(1,*n) && ! lquery)
+    else if(*lwork < fla_max(1, *n) && !lquery)
     {
         *info = -8;
     }
@@ -55,7 +57,7 @@ int cungqr_check(integer *m, integer *n, integer *k, scomplex *a, integer *lda, 
         return LAPACK_QUERY_RETURN;
     }
     /* Quick return if possible */
-    if(*m <= 0)
+    if(*n <= 0)
     {
         work[1].real = 1.f;
         work[1].imag = 0.f; // , expr subst

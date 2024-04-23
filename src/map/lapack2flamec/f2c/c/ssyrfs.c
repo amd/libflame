@@ -189,17 +189,22 @@ static real c_b14 = 1.f;
 /* > \ingroup realSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ssyrfs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *af, integer *ldaf, integer *ipiv, real *b, integer *ldb, real *x, integer *ldx, real *ferr, real *berr, real * work, integer *iwork, integer *info)
+void ssyrfs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *af, integer *ldaf,
+             integer *ipiv, real *b, integer *ldb, real *x, integer *ldx, real *ferr, real *berr,
+             real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"ssyrfs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
+    snprintf(buffer, 256,
+             "ssyrfs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
+             ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",
+             *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
-        i__2, i__3;
+    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2,
+        i__3;
     real r__1, r__2, r__3;
     /* Local variables */
     aocl_int64_t i__, j, k;
@@ -212,14 +217,22 @@ void ssyrfs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real 
     integer isave[3], count;
     logical upper;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), ssymv_(char *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), slacn2_( integer *, real *, real *, integer *, real *, integer *, integer * );
+        void
+        scopy_(integer *, real *, integer *, real *, integer *),
+        saxpy_(integer *, real *, real *, integer *, real *, integer *),
+        ssymv_(char *, integer *, real *, real *, integer *, real *, integer *, real *, real *,
+               integer *),
+        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real lstres;
     extern /* Subroutine */
-    void ssytrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        ssytrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *,
+                integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -264,7 +277,7 @@ void ssyrfs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real 
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -276,19 +289,19 @@ void ssyrfs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real 
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -10;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -12;
     }
@@ -326,9 +339,9 @@ void ssyrfs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real 
         lstres = 3.f;
     L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - A * X */
-        aocl_blas_scopy(n, &b[j * b_dim1 + 1], &c__1, &work[*n + 1], &c__1);
-        aocl_blas_ssymv(uplo, n, &c_b12, &a[a_offset], lda, &x[j * x_dim1 + 1], &c__1, &c_b14,
-                        &work[*n + 1], &c__1);
+        scopy_(n, &b[j * b_dim1 + 1], &c__1, &work[*n + 1], &c__1);
+        ssymv_(uplo, n, &c_b12, &a[a_offset], lda, &x[j * x_dim1 + 1], &c__1, &c_b14, &work[*n + 1],
+               &c__1);
         /* Compute componentwise relative backward error from formula */
         /* fla_max(i) ( f2c_abs(R(i)) / ( f2c_abs(A)*f2c_abs(X) + f2c_abs(B) )(i) ) */
         /* where f2c_abs(Z) is the componentwise absolute value of the matrix */
@@ -342,7 +355,7 @@ void ssyrfs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real 
             /* L30: */
         }
         /* Compute f2c_abs(A)*f2c_abs(X) + f2c_abs(B). */
-        if (upper)
+        if(upper)
         {
             i__2 = *n;
             for(k = 1; k <= i__2; ++k)
@@ -353,7 +366,8 @@ void ssyrfs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real 
                 for(i__ = 1; i__ <= i__3; ++i__)
                 {
                     work[i__] += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1)) * xk;
-                    s += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1)) * (r__2 = x[ i__ + j * x_dim1], f2c_abs(r__2));
+                    s += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1))
+                         * (r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
                     /* L40: */
                 }
                 work[k] = work[k] + (r__1 = a[k + k * a_dim1], f2c_abs(r__1)) * xk + s;
@@ -372,7 +386,8 @@ void ssyrfs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real 
                 for(i__ = k + 1; i__ <= i__3; ++i__)
                 {
                     work[i__] += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1)) * xk;
-                    s += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1)) * (r__2 = x[ i__ + j * x_dim1], f2c_abs(r__2));
+                    s += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1))
+                         * (r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
                     /* L60: */
                 }
                 work[k] += s;
@@ -387,15 +402,16 @@ void ssyrfs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real 
             {
                 /* Computing MAX */
                 r__2 = s;
-                r__3 = (r__1 = work[*n + i__], f2c_abs(r__1)) / work[ i__]; // , expr subst
-                s = fla_max(r__2,r__3);
+                r__3 = (r__1 = work[*n + i__], f2c_abs(r__1)) / work[i__]; // , expr subst
+                s = fla_max(r__2, r__3);
             }
             else
             {
                 /* Computing MAX */
                 r__2 = s;
-                r__3 = ((r__1 = work[*n + i__], f2c_abs(r__1)) + safe1) / (work[i__] + safe1); // , expr subst
-                s = fla_max(r__2,r__3);
+                r__3 = ((r__1 = work[*n + i__], f2c_abs(r__1)) + safe1)
+                       / (work[i__] + safe1); // , expr subst
+                s = fla_max(r__2, r__3);
             }
             /* L80: */
         }
@@ -408,9 +424,8 @@ void ssyrfs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real 
         if(berr[j] > eps && berr[j] * 2.f <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            aocl_lapack_ssytrs(uplo, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[*n + 1], n,
-                               info);
-            aocl_blas_saxpy(n, &c_b14, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            ssytrs_(uplo, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[*n + 1], n, info);
+            saxpy_(n, &c_b14, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;
@@ -447,15 +462,13 @@ void ssyrfs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real 
         }
         kase = 0;
     L100:
-        aocl_lapack_slacn2(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase,
-                           isave);
+        slacn2_(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(A**T). */
-                aocl_lapack_ssytrs(uplo, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[*n + 1], n,
-                                   info);
+                ssytrs_(uplo, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[*n + 1], n, info);
                 i__2 = *n;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
@@ -472,8 +485,7 @@ void ssyrfs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real 
                     work[*n + i__] = work[i__] * work[*n + i__];
                     /* L120: */
                 }
-                aocl_lapack_ssytrs(uplo, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[*n + 1], n,
-                                   info);
+                ssytrs_(uplo, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[*n + 1], n, info);
             }
             goto L100;
         }
@@ -485,7 +497,7 @@ void ssyrfs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real 
             /* Computing MAX */
             r__2 = lstres;
             r__3 = (r__1 = x[i__ + j * x_dim1], f2c_abs(r__1)); // , expr subst
-            lstres = fla_max(r__2,r__3);
+            lstres = fla_max(r__2, r__3);
             /* L130: */
         }
         if(lstres != 0.f)

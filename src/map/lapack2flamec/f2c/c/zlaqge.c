@@ -136,10 +136,11 @@
 /* > \ingroup complex16GEauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlaqge_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax, char *equed)
+void zlaqge_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *r__,
+             doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax, char *equed)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaqge inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
+    AOCL_DTL_SNPRINTF("zlaqge inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1;
@@ -175,13 +176,13 @@ void zlaqge_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
     if(*m <= 0 || *n <= 0)
     {
         *(unsigned char *)equed = 'N';
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize LARGE and SMALL. */
     small_val = dlamch_("Safe minimum") / dlamch_("Precision");
     large = 1. / small_val;
-    if (*rowcnd >= .1 && *amax >= small_val && *amax <= large)
+    if(*rowcnd >= .1 && *amax >= small_val && *amax <= large)
     {
         /* No row scaling */
         if(*colcnd >= .1)
@@ -224,10 +225,10 @@ void zlaqge_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__;
                 i__5 = i__ + j * a_dim1;
-                z__1.real = r__[i__4] * a[i__5].real;
-                z__1.imag = r__[i__4] * a[i__5].imag; // , expr subst
-                a[i__3].real = z__1.real;
-                a[i__3].imag = z__1.imag; // , expr subst
+                z__1.r = r__[i__4] * a[i__5].r;
+                z__1.i = r__[i__4] * a[i__5].i; // , expr subst
+                a[i__3].r = z__1.r;
+                a[i__3].i = z__1.i; // , expr subst
                 /* L30: */
             }
             /* L40: */

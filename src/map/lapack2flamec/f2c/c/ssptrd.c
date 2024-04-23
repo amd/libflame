@@ -159,7 +159,7 @@ void ssptrd_(char *uplo, integer *n, real *ap, real *d__, real *e, real *tau, in
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"ssptrd inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
+    snprintf(buffer, 256, "ssptrd inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -169,12 +169,17 @@ void ssptrd_(char *uplo, integer *n, real *ap, real *d__, real *e, real *tau, in
     real taui;
     extern real sdot_(integer *, real *, integer *, real *, integer *);
     extern /* Subroutine */
-    void sspr2_(char *, integer *, real *, real *, integer *, real *, integer *, real *);
+        void
+        sspr2_(char *, integer *, real *, real *, integer *, real *, integer *, real *);
     real alpha;
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    void saxpy_(integer *, real *, real *, integer *, real *, integer *), sspmv_(char *, integer *, real *, real *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
+        void
+        saxpy_(integer *, real *, real *, integer *, real *, integer *),
+        sspmv_(char *, integer *, real *, real *, real *, integer *, real *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -202,7 +207,7 @@ void ssptrd_(char *uplo, integer *n, real *ap, real *d__, real *e, real *tau, in
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -239,13 +244,13 @@ void ssptrd_(char *uplo, integer *n, real *ap, real *d__, real *e, real *tau, in
                 /* Apply H(i) from both sides to A(1:i,1:i) */
                 ap[i1 + i__ - 1] = 1.f;
                 /* Compute y := tau * A * v storing y in TAU(1:i) */
-                aocl_blas_sspmv(uplo, &i__, &taui, &ap[1], &ap[i1], &c__1, &c_b8, &tau[1], &c__1);
+                sspmv_(uplo, &i__, &taui, &ap[1], &ap[i1], &c__1, &c_b8, &tau[1], &c__1);
                 /* Compute w := y - 1/2 * tau * (y**T *v) * v */
-                alpha = taui * -.5f * aocl_blas_sdot(&i__, &tau[1], &c__1, &ap[i1], &c__1);
-                aocl_blas_saxpy(&i__, &alpha, &ap[i1], &c__1, &tau[1], &c__1);
+                alpha = taui * -.5f * sdot_(&i__, &tau[1], &c__1, &ap[i1], &c__1);
+                saxpy_(&i__, &alpha, &ap[i1], &c__1, &tau[1], &c__1);
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**T - w * v**T */
-                aocl_blas_sspr2(uplo, &i__, &c_b14, &ap[i1], &c__1, &tau[1], &c__1, &ap[1]);
+                sspr2_(uplo, &i__, &c_b14, &ap[i1], &c__1, &tau[1], &c__1, &ap[1]);
                 ap[i1 + i__ - 1] = e[i__];
             }
             d__[i__ + 1] = ap[i1 + i__];
@@ -275,8 +280,7 @@ void ssptrd_(char *uplo, integer *n, real *ap, real *d__, real *e, real *tau, in
                 ap[ii + 1] = 1.f;
                 /* Compute y := tau * A * v storing y in TAU(i:n-1) */
                 i__2 = *n - i__;
-                aocl_blas_sspmv(uplo, &i__2, &taui, &ap[i1i1], &ap[ii + 1], &c__1, &c_b8, &tau[i__],
-                                &c__1);
+                sspmv_(uplo, &i__2, &taui, &ap[i1i1], &ap[ii + 1], &c__1, &c_b8, &tau[i__], &c__1);
                 /* Compute w := y - 1/2 * tau * (y**T *v) * v */
                 i__2 = *n - i__;
                 alpha = taui * -.5f * aocl_blas_sdot(&i__2, &tau[i__], &c__1, &ap[ii + 1], &c__1);
@@ -285,8 +289,7 @@ void ssptrd_(char *uplo, integer *n, real *ap, real *d__, real *e, real *tau, in
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**T - w * v**T */
                 i__2 = *n - i__;
-                aocl_blas_sspr2(uplo, &i__2, &c_b14, &ap[ii + 1], &c__1, &tau[i__], &c__1,
-                                &ap[i1i1]);
+                sspr2_(uplo, &i__2, &c_b14, &ap[ii + 1], &c__1, &tau[i__], &c__1, &ap[i1i1]);
                 ap[ii + 1] = e[i__];
             }
             d__[i__] = ap[ii];

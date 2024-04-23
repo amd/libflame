@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b CGEHD2 reduces a general square matrix to upper Hessenberg form using an unblocked
  * algorithm. */
 /* =========== DOCUMENTATION =========== */
@@ -149,15 +149,17 @@ v(i+2:ihi) is stored on */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgehd2_(integer *n, integer *ilo, integer *ihi, complex * a, integer *lda, complex *tau, complex *work, integer *info)
+void cgehd2_(integer *n, integer *ilo, integer *ihi, complex *a, integer *lda, complex *tau,
+             complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgehd2 inputs: n %lld, ilo %lld, ihi %lld, lda %lld",*n, *ilo, *ihi, *lda);
+    snprintf(buffer, 256, "cgehd2 inputs: n %lld, ilo %lld, ihi %lld, lda %lld", *n, *ilo, *ihi,
+             *lda);
 #else
-    snprintf(buffer, 256,"cgehd2 inputs: n %d, ilo %d, ihi %d, lda %d",*n, *ilo, *ihi, *lda);
+    snprintf(buffer, 256, "cgehd2 inputs: n %d, ilo %d, ihi %d, lda %d", *n, *ilo, *ihi, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -168,7 +170,11 @@ void cgehd2_(integer *n, integer *ilo, integer *ihi, complex * a, integer *lda, 
     integer i__;
     complex alpha;
     extern /* Subroutine */
-    void clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), clarfg_(integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+               complex *),
+        clarfg_(integer *, complex *, complex *, integer *, complex *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -200,15 +206,15 @@ void cgehd2_(integer *n, integer *ilo, integer *ihi, complex * a, integer *lda, 
     {
         *info = -1;
     }
-    else if (*ilo < 1 || *ilo > fla_max(1,*n))
+    else if(*ilo < 1 || *ilo > fla_max(1, *n))
     {
         *info = -2;
     }
-    else if (*ihi < fla_min(*ilo,*n) || *ihi > *n)
+    else if(*ihi < fla_min(*ilo, *n) || *ihi > *n)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
@@ -229,20 +235,21 @@ void cgehd2_(integer *n, integer *ilo, integer *ihi, complex * a, integer *lda, 
         i__2 = *ihi - i__;
         /* Computing MIN */
         i__3 = i__ + 2;
-        clarfg_(&i__2, &alpha, &a[fla_min(i__3,*n) + i__ * a_dim1], &c__1, &tau[ i__]);
+        clarfg_(&i__2, &alpha, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &tau[i__]);
         i__2 = i__ + 1 + i__ * a_dim1;
         a[i__2].real = 1.f;
         a[i__2].imag = 0.f; // , expr subst
         /* Apply H(i) to A(1:ihi,i+1:ihi) from the right */
         i__2 = *ihi - i__;
-        aocl_lapack_clarf("Right", ihi, &i__2, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__],
-                          &a[(i__ + 1) * a_dim1 + 1], lda, &work[1]);
+        clarf_("Right", ihi, &i__2, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__],
+               &a[(i__ + 1) * a_dim1 + 1], lda, &work[1]);
         /* Apply H(i)**H to A(i+1:ihi,i+1:n) from the left */
         i__2 = *ihi - i__;
         i__3 = *n - i__;
-        q__1.r =  tau[i__].r;
+        q__1.r = tau[i__].r;
         q__1.i = -tau[i__].i;
-        clarf_("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &q__1, &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
+        clarf_("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &q__1,
+               &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
         i__2 = i__ + 1 + i__ * a_dim1;
         a[i__2].real = alpha.real;
         a[i__2].imag = alpha.imag; // , expr subst

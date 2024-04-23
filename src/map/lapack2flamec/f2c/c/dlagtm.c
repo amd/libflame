@@ -141,10 +141,14 @@ otherwise, */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doublereal *dl, doublereal *d__, doublereal *du, doublereal *x, integer *ldx, doublereal *beta, doublereal *b, integer *ldb)
+void dlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doublereal *dl,
+             doublereal *d__, doublereal *du, doublereal *x, integer *ldx, doublereal *beta,
+             doublereal *b, integer *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlagtm inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldx %" FLA_IS ", ldb %" FLA_IS "",*trans, *n, *nrhs, *ldx, *ldb);
+    AOCL_DTL_SNPRINTF("dlagtm inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldx %" FLA_IS
+                      ", ldb %" FLA_IS "",
+                      *trans, *n, *nrhs, *ldx, *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
     /* Local variables */
@@ -213,7 +217,7 @@ void dlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doublere
     }
     if(*alpha == 1.)
     {
-        if (lsame_(trans, "N", 1, 1))
+        if(lsame_(trans, "N", 1, 1))
         {
             /* Compute B := B + A*X */
             i__1 = *nrhs;
@@ -272,7 +276,7 @@ void dlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doublere
     }
     else if(*alpha == -1.)
     {
-        if (lsame_(trans, "N", 1, 1))
+        if(lsame_(trans, "N", 1, 1))
         {
             /* Compute B := B - A*X */
             i__1 = *nrhs;

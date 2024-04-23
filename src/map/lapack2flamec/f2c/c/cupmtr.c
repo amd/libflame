@@ -150,12 +150,16 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex *ap, complex *tau, complex *c__, integer *ldc, complex *work, integer *info)
+void cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex *ap, complex *tau,
+             complex *c__, integer *ldc, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"cupmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",*side, *uplo, *trans, *m, *n, *ldc);
+    snprintf(buffer, 256,
+             "cupmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS
+             "",
+             *side, *uplo, *trans, *m, *n, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -169,11 +173,14 @@ void cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
     logical left;
     complex taui;
     extern /* Subroutine */
-    void clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
+        void
+        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+               complex *);
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, forwrd;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -217,15 +224,15 @@ void cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (! notran && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "C", 1, 1))
     {
         *info = -3;
     }
@@ -237,7 +244,7 @@ void cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
     {
         *info = -5;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -9;
     }
@@ -311,13 +318,12 @@ void cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
             aii.real = ap[i__3].real;
             aii.imag = ap[i__3].imag; // , expr subst
             i__3 = ii;
-            ap[i__3].real = 1.f;
-            ap[i__3].imag = 0.f; // , expr subst
-            aocl_lapack_clarf(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &taui, &c__[c_offset], ldc,
-                              &work[1]);
+            ap[i__3].r = 1.f;
+            ap[i__3].i = 0.f; // , expr subst
+            clarf_(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &taui, &c__[c_offset], ldc, &work[1]);
             i__3 = ii;
-            ap[i__3].real = aii.real;
-            ap[i__3].imag = aii.imag; // , expr subst
+            ap[i__3].r = aii.r;
+            ap[i__3].i = aii.i; // , expr subst
             if(forwrd)
             {
                 ii = ii + i__ + 2;
@@ -365,8 +371,8 @@ void cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
             aii.real = ap[i__3].real;
             aii.imag = ap[i__3].imag; // , expr subst
             i__3 = ii;
-            ap[i__3].real = 1.f;
-            ap[i__3].imag = 0.f; // , expr subst
+            ap[i__3].r = 1.f;
+            ap[i__3].i = 0.f; // , expr subst
             if(left)
             {
                 /* H(i) or H(i)**H is applied to C(i+1:m,1:n) */
@@ -395,8 +401,8 @@ void cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
             aocl_lapack_clarf(side, &mi, &ni, &ap[ii], &c__1, &taui, &c__[ic + jc * c_dim1], ldc,
                               &work[1]);
             i__3 = ii;
-            ap[i__3].real = aii.real;
-            ap[i__3].imag = aii.imag; // , expr subst
+            ap[i__3].r = aii.r;
+            ap[i__3].i = aii.i; // , expr subst
             if(forwrd)
             {
                 ii = ii + nq - i__ + 1;

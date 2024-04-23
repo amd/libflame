@@ -1,16 +1,25 @@
-/* ../netlib/dlarrk.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlarrk.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLARRK computes one eigenvalue of a symmetric tridiagonal matrix T to suitable accuracy. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLARRK + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarrk. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarrk.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarrk. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarrk.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarrk. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarrk.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -34,7 +43,8 @@
 /* > called from DSTEMR. */
 /* > */
 /* > To avoid overflow, the matrix must be scaled so that its */
-/* > largest element is no greater than overflow**(1/2) * underflow**(1/4) in absolute value, and for greatest */
+/* > largest element is no greater than overflow**(1/2) * underflow**(1/4) in absolute value, and
+ * for greatest */
 /* > accuracy, it should not be much smaller than that. */
 /* > */
 /* > See W. Kahan "Accurate Eigenvalues of a Symmetric Tridiagonal */
@@ -129,10 +139,12 @@
 /* > \ingroup OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlarrk_(integer *n, integer *iw, doublereal *gl, doublereal *gu, doublereal *d__, doublereal *e2, doublereal *pivmin, doublereal *reltol, doublereal *w, doublereal *werr, integer *info)
+void dlarrk_(integer *n, integer *iw, doublereal *gl, doublereal *gu, doublereal *d__,
+             doublereal *e2, doublereal *pivmin, doublereal *reltol, doublereal *w,
+             doublereal *werr, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlarrk inputs: n %" FLA_IS ", iw %" FLA_IS "",*n, *iw);
+    AOCL_DTL_SNPRINTF("dlarrk inputs: n %" FLA_IS ", iw %" FLA_IS "", *n, *iw);
     /* System generated locals */
     integer i__1;
     doublereal d__1, d__2;
@@ -168,7 +180,7 @@ void dlarrk_(integer *n, integer *iw, doublereal *gl, doublereal *gu, doublereal
     --e2;
     --d__;
     /* Function Body */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         *info = 0;
         AOCL_DTL_TRACE_LOG_EXIT
@@ -179,10 +191,10 @@ void dlarrk_(integer *n, integer *iw, doublereal *gl, doublereal *gu, doublereal
     /* Computing MAX */
     d__1 = f2c_abs(*gl);
     d__2 = f2c_abs(*gu); // , expr subst
-    tnorm = fla_max(d__1,d__2);
+    tnorm = fla_max(d__1, d__2);
     rtoli = *reltol;
     atoli = *pivmin * 4.;
-    itmax = (integer) ((log(tnorm + *pivmin) - log(*pivmin)) / log(2.)) + 2;
+    itmax = (integer)((log(tnorm + *pivmin) - log(*pivmin)) / log(2.)) + 2;
     *info = -1;
     left = *gl - tnorm * 2. * eps * *n - *pivmin * 4.;
     right = *gu + tnorm * 2. * eps * *n + *pivmin * 4.;
@@ -192,16 +204,16 @@ L10: /* Check if interval converged or maximum number of iterations reached */
     /* Computing MAX */
     d__1 = f2c_abs(right);
     d__2 = f2c_abs(left); // , expr subst
-    tmp2 = fla_max(d__1,d__2);
+    tmp2 = fla_max(d__1, d__2);
     /* Computing MAX */
-    d__1 = fla_max(atoli,*pivmin);
+    d__1 = fla_max(atoli, *pivmin);
     d__2 = rtoli * tmp2; // , expr subst
-    if (tmp1 < fla_max(d__1,d__2))
+    if(tmp1 < fla_max(d__1, d__2))
     {
         *info = 0;
         goto L30;
     }
-    if (it > itmax)
+    if(it > itmax)
     {
         goto L30;
     }
@@ -210,31 +222,29 @@ L10: /* Check if interval converged or maximum number of iterations reached */
     mid = (left + right) * .5;
     negcnt = 0;
     tmp1 = d__[1] - mid;
-    if (f2c_abs(tmp1) < *pivmin)
+    if(f2c_abs(tmp1) < *pivmin)
     {
         tmp1 = -(*pivmin);
     }
-    if (tmp1 <= 0.)
+    if(tmp1 <= 0.)
     {
         ++negcnt;
     }
     i__1 = *n;
-    for (i__ = 2;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 2; i__ <= i__1; ++i__)
     {
         tmp1 = d__[i__] - e2[i__ - 1] / tmp1 - mid;
-        if (f2c_abs(tmp1) < *pivmin)
+        if(f2c_abs(tmp1) < *pivmin)
         {
             tmp1 = -(*pivmin);
         }
-        if (tmp1 <= 0.)
+        if(tmp1 <= 0.)
         {
             ++negcnt;
         }
         /* L20: */
     }
-    if (negcnt >= *iw)
+    if(negcnt >= *iw)
     {
         right = mid;
     }

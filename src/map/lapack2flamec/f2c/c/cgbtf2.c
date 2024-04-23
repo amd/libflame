@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {1.f, 0.f};
-static aocl_int64_t c__1 = 1;
+static complex c_b1 = {1.f, 0.f};
+static integer c__1 = 1;
 /* > \brief \b CGBTF2 computes the LU factorization of a general band matrix using the unblocked
  * version of th e algorithm. */
 /* =========== DOCUMENTATION =========== */
@@ -147,15 +147,18 @@ elements marked */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgbtf2_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integer *ldab, integer *ipiv, integer *info)
+void cgbtf2_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integer *ldab,
+             integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgbtf2 inputs: m %lld, n %lld, kl %lld, ku %lld, ldab %lld",*m, *n, *kl, *ku, *ldab);
+    snprintf(buffer, 256, "cgbtf2 inputs: m %lld, n %lld, kl %lld, ku %lld, ldab %lld", *m, *n, *kl,
+             *ku, *ldab);
 #else
-    snprintf(buffer, 256,"cgbtf2 inputs: m %d, n %d, kl %d, ku %d, ldab %d",*m, *n, *kl, *ku, *ldab);
+    snprintf(buffer, 256, "cgbtf2 inputs: m %d, n %d, kl %d, ku %d, ldab %d", *m, *n, *kl, *ku,
+             *ldab);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -167,10 +170,15 @@ void cgbtf2_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
     /* Local variables */
     integer i__, j, km, jp, ju, kv;
     extern /* Subroutine */
-    void cscal_(integer *, complex *, complex *, integer *), cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), cswap_( integer *, complex *, integer *, complex *, integer *);
+        void
+        cscal_(integer *, complex *, complex *, integer *),
+        cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *,
+               complex *, integer *),
+        cswap_(integer *, complex *, integer *, complex *, integer *);
     extern integer icamax_(integer *, complex *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -198,9 +206,9 @@ void cgbtf2_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
     ab_offset = 1 + ab_dim1;
     ab -= ab_offset;
     --ipiv;
-    #if AOCL_FLA_PROGRESS_H
-        AOCL_FLA_PROGRESS_VAR;
-    #endif
+#if AOCL_FLA_PROGRESS_H
+    AOCL_FLA_PROGRESS_VAR;
+#endif
 
     /* Function Body */
     kv = *ku + *kl;
@@ -239,20 +247,18 @@ void cgbtf2_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    #if AOCL_FLA_PROGRESS_H
-        progress_step_count =0;
-         #ifndef FLA_ENABLE_WINDOWS_BUILD
-                if(!aocl_fla_progress_ptr)
-                    aocl_fla_progress_ptr=aocl_fla_progress;
-         #endif
-    #endif
+#if AOCL_FLA_PROGRESS_H
+    progress_step_count = 0;
+#ifndef FLA_ENABLE_WINDOWS_BUILD
+    if(!aocl_fla_progress_ptr)
+        aocl_fla_progress_ptr = aocl_fla_progress;
+#endif
+#endif
 
     /* Gaussian elimination with partial pivoting */
     /* Set fill-in elements in columns KU+2 to KV to zero. */
-    i__1 = fla_min(kv,*n);
-    for (j = *ku + 2;
-            j <= i__1;
-            ++j)
+    i__1 = fla_min(kv, *n);
+    for(j = *ku + 2; j <= i__1; ++j)
     {
         i__2 = *kl;
         for(i__ = kv - j + 2; i__ <= i__2; ++i__)
@@ -267,19 +273,20 @@ void cgbtf2_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
     /* JU is the index of the last column affected by the current stage */
     /* of the factorization. */
     ju = 1;
-    i__1 = fla_min(*m,*n);
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    i__1 = fla_min(*m, *n);
+    for(j = 1; j <= i__1; ++j)
     {
-	#if AOCL_FLA_PROGRESS_H
-            if(aocl_fla_progress_ptr){
-                if(j%32==0 || j==i__1){
-                        progress_step_count = j;
-                        AOCL_FLA_PROGRESS_FUNC_PTR("CGBTF2",6,&progress_step_count,&progress_thread_id,&progress_total_threads);
-                }
+#if AOCL_FLA_PROGRESS_H
+        if(aocl_fla_progress_ptr)
+        {
+            if(j % 32 == 0 || j == i__1)
+            {
+                progress_step_count = j;
+                AOCL_FLA_PROGRESS_FUNC_PTR("CGBTF2", 6, &progress_step_count, &progress_thread_id,
+                                           &progress_total_threads);
             }
-    #endif
+        }
+#endif
 
         /* Set fill-in elements in column J+KV to zero. */
         if(j + kv <= *n)
@@ -298,19 +305,19 @@ void cgbtf2_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
         /* Computing MIN */
         i__2 = *kl;
         i__3 = *m - j; // , expr subst
-        km = fla_min(i__2,i__3);
+        km = fla_min(i__2, i__3);
         i__2 = km + 1;
         jp = aocl_blas_icamax(&i__2, &ab[kv + 1 + j * ab_dim1], &c__1);
         ipiv[j] = (aocl_int_t)(jp + j - 1);
         i__2 = kv + jp + j * ab_dim1;
-        if(ab[i__2].real != 0.f || ab[i__2].imag != 0.f)
+        if(ab[i__2].r != 0.f || ab[i__2].i != 0.f)
         {
             /* Computing MAX */
             /* Computing MIN */
             i__4 = j + *ku + jp - 1;
             i__2 = ju;
-            i__3 = fla_min(i__4,*n); // , expr subst
-            ju = fla_max(i__2,i__3);
+            i__3 = fla_min(i__4, *n); // , expr subst
+            ju = fla_max(i__2, i__3);
             /* Apply interchange to columns J to JU. */
             if(jp != 1)
             {
@@ -333,9 +340,9 @@ void cgbtf2_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
                     q__1.imag = -0.f; // , expr subst
                     i__3 = *ldab - 1;
                     i__4 = *ldab - 1;
-                    aocl_blas_cgeru(&km, &i__2, &q__1, &ab[kv + 2 + j * ab_dim1], &c__1,
-                                    &ab[kv + (j + 1) * ab_dim1], &i__3,
-                                    &ab[kv + 1 + (j + 1) * ab_dim1], &i__4);
+                    cgeru_(&km, &i__2, &q__1, &ab[kv + 2 + j * ab_dim1], &c__1,
+                           &ab[kv + (j + 1) * ab_dim1], &i__3, &ab[kv + 1 + (j + 1) * ab_dim1],
+                           &i__4);
                 }
             }
         }

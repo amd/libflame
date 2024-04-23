@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b SORM2R multiplies a general matrix by the orthogonal matrix from a QR factorization
  * determined by sgeqrf (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
@@ -111,7 +111,7 @@ static aocl_int64_t c__1 = 1;
 /* > LDA is INTEGER */
 /* > The leading dimension of the array A. */
 /* > If SIDE = 'L', LDA >= fla_max(1,M);
-*/
+ */
 /* > if SIDE = 'R', LDA >= fla_max(1,N). */
 /* > \endverbatim */
 /* > */
@@ -158,7 +158,8 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *info)
+void sorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda,
+                real *tau, real *c__, integer *ldc, real *work, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
@@ -168,7 +169,9 @@ void sorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, rea
     logical left;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -213,11 +216,11 @@ void sorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, rea
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1))
     {
         *info = -2;
     }
@@ -233,11 +236,11 @@ void sorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, rea
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,nq))
+    else if(*lda < fla_max(1, nq))
     {
         *info = -7;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -10;
     }
@@ -293,8 +296,8 @@ void sorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, rea
         /* Apply H(i) */
         aii = a[i__ + i__ * a_dim1];
         a[i__ + i__ * a_dim1] = 1.f;
-        aocl_lapack_slarf(side, &mi, &ni, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
-                          &c__[ic + jc * c_dim1], ldc, &work[1]);
+        slarf_(side, &mi, &ni, &a[i__ + i__ * a_dim1], &c__1, &tau[i__], &c__[ic + jc * c_dim1],
+               ldc, &work[1]);
         a[i__ + i__ * a_dim1] = aii;
         /* L10: */
     }

@@ -149,19 +149,28 @@ static doublereal c_b5 = 1.;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dlatzm_(char *side, integer *m, integer *n, doublereal * v, integer *incv, doublereal *tau, doublereal *c1, doublereal *c2, integer *ldc, doublereal *work)
+void dlatzm_(char *side, integer *m, integer *n, doublereal *v, integer *incv, doublereal *tau,
+             doublereal *c1, doublereal *c2, integer *ldc, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlatzm inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *incv, *ldc);
+    AOCL_DTL_SNPRINTF("dlatzm inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS
+                      ", ldc %" FLA_IS "",
+                      *side, *m, *n, *incv, *ldc);
     /* System generated locals */
     aocl_int64_t c1_dim1, c1_offset, c2_dim1, c2_offset, i__1;
     doublereal d__1;
     /* Local variables */
     extern /* Subroutine */
-    void dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+              doublereal *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *) ;
+        void
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *),
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -190,18 +199,18 @@ void dlatzm_(char *side, integer *m, integer *n, doublereal * v, integer *incv, 
     c1 -= c1_offset;
     --work;
     /* Function Body */
-    if (fla_min(*m,*n) == 0 || *tau == 0.)
+    if(fla_min(*m, *n) == 0 || *tau == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (lsame_(side, "L", 1, 1))
+    if(lsame_(side, "L", 1, 1))
     {
         /* w := (C1 + v**T * C2)**T */
         aocl_blas_dcopy(n, &c1[c1_offset], ldc, &work[1], &c__1);
         i__1 = *m - 1;
-        aocl_blas_dgemv("Transpose", &i__1, n, &c_b5, &c2[c2_offset], ldc, &v[1], incv, &c_b5,
-                        &work[1], &c__1);
+        dgemv_("Transpose", &i__1, n, &c_b5, &c2[c2_offset], ldc, &v[1], incv, &c_b5, &work[1],
+               &c__1);
         /* [ C1 ] := [ C1 ] - tau* [ 1 ] * w**T */
         /* [ C2 ] [ C2 ] [ v ] */
         d__1 = -(*tau);
@@ -210,13 +219,13 @@ void dlatzm_(char *side, integer *m, integer *n, doublereal * v, integer *incv, 
         d__1 = -(*tau);
         aocl_blas_dger(&i__1, n, &d__1, &v[1], incv, &work[1], &c__1, &c2[c2_offset], ldc);
     }
-    else if (lsame_(side, "R", 1, 1))
+    else if(lsame_(side, "R", 1, 1))
     {
         /* w := C1 + C2 * v */
         aocl_blas_dcopy(m, &c1[c1_offset], &c__1, &work[1], &c__1);
         i__1 = *n - 1;
-        aocl_blas_dgemv("No transpose", m, &i__1, &c_b5, &c2[c2_offset], ldc, &v[1], incv, &c_b5,
-                        &work[1], &c__1);
+        dgemv_("No transpose", m, &i__1, &c_b5, &c2[c2_offset], ldc, &v[1], incv, &c_b5, &work[1],
+               &c__1);
         /* [ C1, C2 ] := [ C1, C2 ] - tau* w * [ 1 , v**T] */
         d__1 = -(*tau);
         aocl_blas_daxpy(m, &d__1, &work[1], &c__1, &c1[c1_offset], &c__1);

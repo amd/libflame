@@ -2,10 +2,10 @@
  * Copyright (c) 2021-2022 Advanced Micro Devices, Inc. All rights reserved.
  * */
 
-#include "FLA_lapack2flame_return_defs.h"
 #include "FLA_f2c.h"
+#include "FLA_lapack2flame_return_defs.h"
 
-int sgetrfnpi_check(integer *m, integer *n, integer *nfact, float *a, integer * lda, integer *info)
+int sgetrfnpi_check(integer *m, integer *n, integer *nfact, float *a, integer *lda, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
@@ -16,30 +16,30 @@ int sgetrfnpi_check(integer *m, integer *n, integer *nfact, float *a, integer * 
 
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if ((*nfact < 0) || (*nfact > fla_min(*m,*n)))
+    else if((*nfact < 0) || (*nfact > fla_min(*m, *n)))
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SGETRFNPI", &i__1, (ftnlen)9);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0|| *nfact == 0)
+    if(*m == 0 || *n == 0 || *nfact == 0)
     {
         return LAPACK_QUICK_RETURN;
     }

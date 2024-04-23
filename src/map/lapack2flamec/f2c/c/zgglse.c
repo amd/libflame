@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {1., 0.};
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static doublecomplex c_b1 = {1., 0.};
+static integer c__1 = 1;
+static integer c_n1 = -1;
 /* > \brief <b> ZGGLSE solves overdetermined or underdetermined systems for OTHER matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -181,24 +181,43 @@ the least squares solution could not */
 /* > \ingroup complex16OTHERsolve */
 /* ===================================================================== */
 /* Subroutine */
-void zgglse_(integer *m, integer *n, integer *p, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *c__, doublecomplex *d__, doublecomplex *x, doublecomplex *work, integer *lwork, integer *info)
+void zgglse_(integer *m, integer *n, integer *p, doublecomplex *a, integer *lda, doublecomplex *b,
+             integer *ldb, doublecomplex *c__, doublecomplex *d__, doublecomplex *x,
+             doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgglse inputs: m %" FLA_IS ", n %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*m, *n, *p, *lda, *ldb);
+    AOCL_DTL_SNPRINTF("zgglse inputs: m %" FLA_IS ", n %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS "",
+                      *m, *n, *p, *lda, *ldb);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     dcomplex z__1;
     /* Local variables */
     integer nb, mn, nr, nb1, nb2, nb3, nb4, lopt;
     extern /* Subroutine */
-    void zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), ztrmv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
+               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
+        ztrmv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *,
+               integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void zggrqf_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *) ;
+        void
+        zggrqf_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
     integer lwkmin, lwkopt;
     logical lquery;
     extern /* Subroutine */
-    void zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zunmrq_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), ztrtrs_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *),
+        zunmrq_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *),
+        ztrtrs_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -233,7 +252,7 @@ void zgglse_(integer *m, integer *n, integer *p, doublecomplex *a, integer *lda,
     --work;
     /* Function Body */
     *info = 0;
-    mn = fla_min(*m,*n);
+    mn = fla_min(*m, *n);
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -247,11 +266,11 @@ void zgglse_(integer *m, integer *n, integer *p, doublecomplex *a, integer *lda,
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*p))
+    else if(*ldb < fla_max(1, *p))
     {
         *info = -7;
     }
@@ -270,14 +289,14 @@ void zgglse_(integer *m, integer *n, integer *p, doublecomplex *a, integer *lda,
             nb3 = aocl_lapack_ilaenv(&c__1, "ZUNMQR", " ", m, n, p, &c_n1);
             nb4 = aocl_lapack_ilaenv(&c__1, "ZUNMRQ", " ", m, n, p, &c_n1);
             /* Computing MAX */
-            i__1 = fla_max(nb1,nb2);
-            i__1 = fla_max(i__1,nb3); // , expr subst
-            nb = fla_max(i__1,nb4);
+            i__1 = fla_max(nb1, nb2);
+            i__1 = fla_max(i__1, nb3); // , expr subst
+            nb = fla_max(i__1, nb4);
             lwkmin = *m + *n + *p;
-            lwkopt = *p + mn + fla_max(*m,*n) * nb;
+            lwkopt = *p + mn + fla_max(*m, *n) * nb;
         }
-        work[1].real = (doublereal)lwkopt;
-        work[1].imag = 0.; // , expr subst
+        work[1].r = (doublereal)lwkopt;
+        work[1].i = 0.; // , expr subst
         if(*lwork < lwkmin && !lquery)
         {
             *info = -12;
@@ -287,18 +306,18 @@ void zgglse_(integer *m, integer *n, integer *p, doublecomplex *a, integer *lda,
     {
         i__1 = -(*info);
         xerbla_("ZGGLSE", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute the GRQ factorization of matrices B and A: */
@@ -308,30 +327,30 @@ void zgglse_(integer *m, integer *n, integer *p, doublecomplex *a, integer *lda,
     /* where T12 and R11 are upper triangular, and Q and Z are */
     /* unitary. */
     i__1 = *lwork - *p - mn;
-    aocl_lapack_zggrqf(p, m, n, &b[b_offset], ldb, &work[1], &a[a_offset], lda, &work[*p + 1],
-                       &work[*p + mn + 1], &i__1, info);
+    zggrqf_(p, m, n, &b[b_offset], ldb, &work[1], &a[a_offset], lda, &work[*p + 1],
+            &work[*p + mn + 1], &i__1, info);
     i__1 = *p + mn + 1;
-    lopt = (integer)work[i__1].real;
+    lopt = (integer)work[i__1].r;
     /* Update c = Z**H *c = ( c1 ) N-P */
     /* ( c2 ) M+P-N */
-    i__1 = fla_max(1,*m);
+    i__1 = fla_max(1, *m);
     i__2 = *lwork - *p - mn;
-    aocl_lapack_zunmqr("Left", "Conjugate Transpose", m, &c__1, &mn, &a[a_offset], lda,
-                       &work[*p + 1], &c__[1], &i__1, &work[*p + mn + 1], &i__2, info);
+    zunmqr_("Left", "Conjugate Transpose", m, &c__1, &mn, &a[a_offset], lda, &work[*p + 1], &c__[1],
+            &i__1, &work[*p + mn + 1], &i__2, info);
     /* Computing MAX */
     i__3 = *p + mn + 1;
     i__1 = lopt;
-    i__2 = (integer) work[i__3].r; // , expr subst
-    lopt = fla_max(i__1,i__2);
+    i__2 = (integer)work[i__3].r; // , expr subst
+    lopt = fla_max(i__1, i__2);
     /* Solve T12*x2 = d for x2 */
     if(*p > 0)
     {
-        aocl_lapack_ztrtrs("Upper", "No transpose", "Non-unit", p, &c__1,
-                           &b[(*n - *p + 1) * b_dim1 + 1], ldb, &d__[1], p, info);
+        ztrtrs_("Upper", "No transpose", "Non-unit", p, &c__1, &b[(*n - *p + 1) * b_dim1 + 1], ldb,
+                &d__[1], p, info);
         if(*info > 0)
         {
             *info = 1;
-    AOCL_DTL_TRACE_LOG_EXIT
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         /* Put the solution in X */
@@ -340,19 +359,20 @@ void zgglse_(integer *m, integer *n, integer *p, doublecomplex *a, integer *lda,
         i__1 = *n - *p;
         z__1.r = -1.;
         z__1.i = -0.; // , expr subst
-        zgemv_("No transpose", &i__1, p, &z__1, &a[(*n - *p + 1) * a_dim1 + 1], lda, &d__[1], &c__1, &c_b1, &c__[1], &c__1);
+        zgemv_("No transpose", &i__1, p, &z__1, &a[(*n - *p + 1) * a_dim1 + 1], lda, &d__[1], &c__1,
+               &c_b1, &c__[1], &c__1);
     }
     /* Solve R11*x1 = c1 for x1 */
     if(*n > *p)
     {
         i__1 = *n - *p;
         i__2 = *n - *p;
-        aocl_lapack_ztrtrs("Upper", "No transpose", "Non-unit", &i__1, &c__1, &a[a_offset], lda,
-                           &c__[1], &i__2, info);
+        ztrtrs_("Upper", "No transpose", "Non-unit", &i__1, &c__1, &a[a_offset], lda, &c__[1],
+                &i__2, info);
         if(*info > 0)
         {
             *info = 2;
-    AOCL_DTL_TRACE_LOG_EXIT
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         /* Put the solutions in X */
@@ -366,10 +386,10 @@ void zgglse_(integer *m, integer *n, integer *p, doublecomplex *a, integer *lda,
         if(nr > 0)
         {
             i__1 = *n - *m;
-            z__1.real = -1.;
-            z__1.imag = -0.; // , expr subst
-            aocl_blas_zgemv("No transpose", &nr, &i__1, &z__1, &a[*n - *p + 1 + (*m + 1) * a_dim1],
-                            lda, &d__[nr + 1], &c__1, &c_b1, &c__[*n - *p + 1], &c__1);
+            z__1.r = -1.;
+            z__1.i = -0.; // , expr subst
+            zgemv_("No transpose", &nr, &i__1, &z__1, &a[*n - *p + 1 + (*m + 1) * a_dim1], lda,
+                   &d__[nr + 1], &c__1, &c_b1, &c__[*n - *p + 1], &c__1);
         }
     }
     else
@@ -378,22 +398,22 @@ void zgglse_(integer *m, integer *n, integer *p, doublecomplex *a, integer *lda,
     }
     if(nr > 0)
     {
-        aocl_blas_ztrmv("Upper", "No transpose", "Non unit", &nr,
-                        &a[*n - *p + 1 + (*n - *p + 1) * a_dim1], lda, &d__[1], &c__1);
-        z__1.real = -1.;
-        z__1.imag = -0.; // , expr subst
-        aocl_blas_zaxpy(&nr, &z__1, &d__[1], &c__1, &c__[*n - *p + 1], &c__1);
+        ztrmv_("Upper", "No transpose", "Non unit", &nr, &a[*n - *p + 1 + (*n - *p + 1) * a_dim1],
+               lda, &d__[1], &c__1);
+        z__1.r = -1.;
+        z__1.i = -0.; // , expr subst
+        zaxpy_(&nr, &z__1, &d__[1], &c__1, &c__[*n - *p + 1], &c__1);
     }
     /* Backward transformation x = Q**H*x */
     i__1 = *lwork - *p - mn;
-    aocl_lapack_zunmrq("Left", "Conjugate Transpose", n, &c__1, p, &b[b_offset], ldb, &work[1],
-                       &x[1], n, &work[*p + mn + 1], &i__1, info);
+    zunmrq_("Left", "Conjugate Transpose", n, &c__1, p, &b[b_offset], ldb, &work[1], &x[1], n,
+            &work[*p + mn + 1], &i__1, info);
     /* Computing MAX */
     i__4 = *p + mn + 1;
     i__2 = lopt;
-    i__3 = (integer) work[i__4].r; // , expr subst
-    i__1 = *p + mn + fla_max(i__2,i__3);
-    work[1].r = (doublereal) i__1;
+    i__3 = (integer)work[i__4].r; // , expr subst
+    i__1 = *p + mn + fla_max(i__2, i__3);
+    work[1].r = (doublereal)i__1;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

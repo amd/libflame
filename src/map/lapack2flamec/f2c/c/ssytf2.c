@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b SSYTF2 computes the factorization of a real symmetric indefinite matrix, using the
  * diagonal piv oting method (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
@@ -196,7 +196,8 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"ssytf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
+    snprintf(buffer, 256, "ssytf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
+             *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -211,18 +212,22 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
     real wk, wkm1, wkp1;
     integer imax, jmax;
     extern /* Subroutine */
-    void ssyr_(char *, integer *, real *, real *, integer *, real *, integer *);
+        void
+        ssyr_(char *, integer *, real *, real *, integer *, real *, integer *);
     real alpha;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     integer kstep;
     logical upper;
     extern /* Subroutine */
-    void sswap_(integer *, real *, integer *, real *, integer *);
+        void
+        sswap_(integer *, real *, integer *, real *, integer *);
     real absakk;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real colmax;
     extern logical sisnan_(real *);
@@ -257,7 +262,7 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     imax = 0;
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -265,7 +270,7 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -306,7 +311,7 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
         {
             colmax = 0.f;
         }
-        if (fla_max(absakk,colmax) == 0.f || sisnan_(&absakk))
+        if(fla_max(absakk, colmax) == 0.f || sisnan_(&absakk))
         {
             /* Column K is zero or underflow, or contains a NaN: */
             /* set INFO and continue */
@@ -330,21 +335,21 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
                 i__1 = k - imax;
                 jmax = imax + isamax_(&i__1, &a[imax + (imax + 1) * a_dim1], lda);
                 rowmax = (r__1 = a[imax + jmax * a_dim1], f2c_abs(r__1));
-                if (imax > 1)
+                if(imax > 1)
                 {
                     i__1 = imax - 1;
                     jmax = aocl_blas_isamax(&i__1, &a[imax * a_dim1 + 1], &c__1);
                     /* Computing MAX */
                     r__2 = rowmax;
                     r__3 = (r__1 = a[jmax + imax * a_dim1], f2c_abs(r__1)); // , expr subst
-                    rowmax = fla_max(r__2,r__3);
+                    rowmax = fla_max(r__2, r__3);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
                     /* no interchange, use 1-by-1 pivot block */
                     kp = k;
                 }
-                else if ((r__1 = a[imax + imax * a_dim1], f2c_abs(r__1)) >= alpha * rowmax)
+                else if((r__1 = a[imax + imax * a_dim1], f2c_abs(r__1)) >= alpha * rowmax)
                 {
                     /* interchange rows and columns K and IMAX, use 1-by-1 */
                     /* pivot block */
@@ -389,7 +394,7 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
                 r1 = 1.f / a[k + k * a_dim1];
                 i__1 = k - 1;
                 r__1 = -r1;
-                aocl_blas_ssyr(uplo, &i__1, &r__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
+                ssyr_(uplo, &i__1, &r__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
                 /* Store U(k) in column k */
                 i__1 = k - 1;
                 aocl_blas_sscal(&i__1, &r1, &a[k * a_dim1 + 1], &c__1);
@@ -469,7 +474,7 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
         {
             colmax = 0.f;
         }
-        if (fla_max(absakk,colmax) == 0.f || sisnan_(&absakk))
+        if(fla_max(absakk, colmax) == 0.f || sisnan_(&absakk))
         {
             /* Column K is zero or underflow, or contains a NaN: */
             /* set INFO and continue */
@@ -493,21 +498,21 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
                 i__1 = imax - k;
                 jmax = k - 1 + isamax_(&i__1, &a[imax + k * a_dim1], lda);
                 rowmax = (r__1 = a[imax + jmax * a_dim1], f2c_abs(r__1));
-                if (imax < *n)
+                if(imax < *n)
                 {
                     i__1 = *n - imax;
                     jmax = imax + aocl_blas_isamax(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
                     /* Computing MAX */
                     r__2 = rowmax;
                     r__3 = (r__1 = a[jmax + imax * a_dim1], f2c_abs(r__1)); // , expr subst
-                    rowmax = fla_max(r__2,r__3);
+                    rowmax = fla_max(r__2, r__3);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
                     /* no interchange, use 1-by-1 pivot block */
                     kp = k;
                 }
-                else if ((r__1 = a[imax + imax * a_dim1], f2c_abs(r__1)) >= alpha * rowmax)
+                else if((r__1 = a[imax + imax * a_dim1], f2c_abs(r__1)) >= alpha * rowmax)
                 {
                     /* interchange rows and columns K and IMAX, use 1-by-1 */
                     /* pivot block */
@@ -558,8 +563,8 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
                     d11 = 1.f / a[k + k * a_dim1];
                     i__1 = *n - k;
                     r__1 = -d11;
-                    aocl_blas_ssyr(uplo, &i__1, &r__1, &a[k + 1 + k * a_dim1], &c__1,
-                                   &a[k + 1 + (k + 1) * a_dim1], lda);
+                    ssyr_(uplo, &i__1, &r__1, &a[k + 1 + k * a_dim1], &c__1,
+                          &a[k + 1 + (k + 1) * a_dim1], lda);
                     /* Store L(k) in column K */
                     i__1 = *n - k;
                     aocl_blas_sscal(&i__1, &d11, &a[k + 1 + k * a_dim1], &c__1);

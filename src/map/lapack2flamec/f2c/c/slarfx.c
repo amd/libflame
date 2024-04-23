@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b SLARFX applies an elementary reflector to a general rectangular matrix, with loop
  * unrolling whe n the reflector has order ≤ 10. */
 /* =========== DOCUMENTATION =========== */
@@ -118,7 +118,8 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slarfx_(char *side, integer *m, integer *n, real *v, real *tau, real *c__, integer *ldc, real *work)
+void slarfx_(char *side, integer *m, integer *n, real *v, real *tau, real *c__, integer *ldc,
+             real *work)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slarfx(side, m, n, v, tau, c__, ldc, work);
@@ -144,7 +145,8 @@ void aocl_lapack_slarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, r
     real t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, v8, v9, t10, v10, sum;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
+        void
+        slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -174,7 +176,7 @@ void aocl_lapack_slarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, r
     {
         return;
     }
-    if (lsame_(side, "L", 1, 1))
+    if(lsame_(side, "L", 1, 1))
     {
         /* Form H * C, where H has order m. */
         switch(*m)

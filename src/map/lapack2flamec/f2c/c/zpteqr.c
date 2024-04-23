@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {0., 0.};
-static dcomplex c_b2 = {1., 0.};
-static aocl_int64_t c__0 = 0;
-static aocl_int64_t c__1 = 1;
+static doublecomplex c_b1 = {0., 0.};
+static doublecomplex c_b2 = {1., 0.};
+static integer c__0 = 0;
+static integer c__1 = 1;
 /* > \brief \b ZPTEQR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -147,27 +147,35 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16PTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomplex *z__, integer *ldz, doublereal *work, integer *info)
+void zpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomplex *z__,
+             integer *ldz, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zpteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "",*compz, *n, *ldz);
+    AOCL_DTL_SNPRINTF("zpteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "", *compz, *n, *ldz);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     doublecomplex c__[1] /* was [1][1] */
-    ;
+        ;
     integer i__;
     doublecomplex vt[1] /* was [1][1] */
-    ;
+        ;
     integer nru;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer icompz;
     extern /* Subroutine */
-    void zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), dpttrf_(integer *, doublereal *, doublereal *, integer *), zbdsqr_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *);
+        void
+        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
+                integer *),
+        dpttrf_(integer *, doublereal *, doublereal *, integer *),
+        zbdsqr_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *,
+                doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
+                doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -200,15 +208,15 @@ void zpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomp
     --work;
     /* Function Body */
     *info = 0;
-    if (lsame_(compz, "N", 1, 1))
+    if(lsame_(compz, "N", 1, 1))
     {
         icompz = 0;
     }
-    else if (lsame_(compz, "V", 1, 1))
+    else if(lsame_(compz, "V", 1, 1))
     {
         icompz = 1;
     }
-    else if (lsame_(compz, "I", 1, 1))
+    else if(lsame_(compz, "I", 1, 1))
     {
         icompz = 2;
     }
@@ -224,7 +232,7 @@ void zpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomp
     {
         *info = -2;
     }
-    else if (*ldz < 1 || icompz > 0 && *ldz < fla_max(1,*n))
+    else if(*ldz < 1 || icompz > 0 && *ldz < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -232,13 +240,13 @@ void zpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomp
     {
         i__1 = -(*info);
         xerbla_("ZPTEQR", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 1)
@@ -249,7 +257,7 @@ void zpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomp
             z__[i__1].real = 1.;
             z__[i__1].imag = 0.; // , expr subst
         }
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(icompz == 2)
@@ -257,10 +265,10 @@ void zpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomp
         aocl_lapack_zlaset("Full", n, n, &c_b1, &c_b2, &z__[z_offset], ldz);
     }
     /* Call DPTTRF to factor the matrix. */
-    aocl_lapack_dpttrf(n, &d__[1], &e[1], info);
+    dpttrf_(n, &d__[1], &e[1], info);
     if(*info != 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     i__1 = *n;
@@ -285,8 +293,8 @@ void zpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomp
     {
         nru = 0;
     }
-    aocl_lapack_zbdsqr("Lower", n, &c__0, &nru, &c__0, &d__[1], &e[1], vt, &c__1, &z__[z_offset],
-                       ldz, c__, &c__1, &work[1], info);
+    zbdsqr_("Lower", n, &c__0, &nru, &c__0, &d__[1], &e[1], vt, &c__1, &z__[z_offset], ldz, c__,
+            &c__1, &work[1], info);
     /* Square the singular values. */
     if(*info == 0)
     {

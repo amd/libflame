@@ -224,10 +224,16 @@ is largest */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void dlar1v_(integer *n, integer *b1, integer *bn, doublereal *lambda, doublereal *d__, doublereal *l, doublereal *ld, doublereal * lld, doublereal *pivmin, doublereal *gaptol, doublereal *z__, logical *wantnc, integer *negcnt, doublereal *ztz, doublereal *mingma, integer *r__, integer *isuppz, doublereal *nrminv, doublereal *resid, doublereal *rqcorr, doublereal *work)
+void dlar1v_(integer *n, integer *b1, integer *bn, doublereal *lambda, doublereal *d__,
+             doublereal *l, doublereal *ld, doublereal *lld, doublereal *pivmin, doublereal *gaptol,
+             doublereal *z__, logical *wantnc, integer *negcnt, doublereal *ztz, doublereal *mingma,
+             integer *r__, integer *isuppz, doublereal *nrminv, doublereal *resid,
+             doublereal *rqcorr, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlar1v inputs: n %" FLA_IS ", b1 %" FLA_IS ", bn %" FLA_IS ", r__ %" FLA_IS "",*n, *b1, *bn, *r__);
+    AOCL_DTL_SNPRINTF("dlar1v inputs: n %" FLA_IS ", b1 %" FLA_IS ", bn %" FLA_IS ", r__ %" FLA_IS
+                      "",
+                      *n, *b1, *bn, *r__);
     /* System generated locals */
     aocl_int64_t i__1;
     doublereal d__1, d__2, d__3;
@@ -340,7 +346,7 @@ L60:
         for(i__ = *b1; i__ <= i__1; ++i__)
         {
             dplus = d__[i__] + s;
-            if (f2c_dabs(dplus) < *pivmin)
+            if(f2c_dabs(dplus) < *pivmin)
             {
                 dplus = -(*pivmin);
             }
@@ -361,7 +367,7 @@ L60:
         for(i__ = r1; i__ <= i__1; ++i__)
         {
             dplus = d__[i__] + s;
-            if (f2c_dabs(dplus) < *pivmin)
+            if(f2c_dabs(dplus) < *pivmin)
             {
                 dplus = -(*pivmin);
             }
@@ -403,7 +409,7 @@ L60:
         for(i__ = *bn - 1; i__ >= i__1; --i__)
         {
             dminus = lld[i__] + work[indp + i__];
-            if (f2c_dabs(dminus) < *pivmin)
+            if(f2c_dabs(dminus) < *pivmin)
             {
                 dminus = -(*pivmin);
             }
@@ -436,7 +442,7 @@ L60:
     {
         *negcnt = -1;
     }
-    if (f2c_dabs(*mingma) == 0.)
+    if(f2c_dabs(*mingma) == 0.)
     {
         *mingma = eps * work[inds + r1 - 1];
     }
@@ -449,7 +455,7 @@ L60:
         {
             tmp = eps * work[inds + i__];
         }
-        if (f2c_dabs(tmp) <= f2c_dabs(*mingma))
+        if(f2c_dabs(tmp) <= f2c_dabs(*mingma))
         {
             *mingma = tmp;
             *r__ = i__ + 1;
@@ -468,7 +474,9 @@ L60:
         for(i__ = *r__ - 1; i__ >= i__1; --i__)
         {
             z__[i__] = -(work[indlpl + i__] * z__[i__ + 1]);
-            if (((d__1 = z__[i__], f2c_dabs(d__1)) + (d__2 = z__[i__ + 1], f2c_dabs( d__2))) * (d__3 = ld[i__], f2c_dabs(d__3)) < *gaptol)
+            if(((d__1 = z__[i__], f2c_dabs(d__1)) + (d__2 = z__[i__ + 1], f2c_dabs(d__2)))
+                   * (d__3 = ld[i__], f2c_dabs(d__3))
+               < *gaptol)
             {
                 z__[i__] = 0.;
                 isuppz[1] = (aocl_int_t)(i__ + 1);
@@ -493,7 +501,9 @@ L60:
             {
                 z__[i__] = -(work[indlpl + i__] * z__[i__ + 1]);
             }
-            if (((d__1 = z__[i__], f2c_dabs(d__1)) + (d__2 = z__[i__ + 1], f2c_dabs( d__2))) * (d__3 = ld[i__], f2c_dabs(d__3)) < *gaptol)
+            if(((d__1 = z__[i__], f2c_dabs(d__1)) + (d__2 = z__[i__ + 1], f2c_dabs(d__2)))
+                   * (d__3 = ld[i__], f2c_dabs(d__3))
+               < *gaptol)
             {
                 z__[i__] = 0.;
                 isuppz[1] = (aocl_int_t)(i__ + 1);
@@ -511,7 +521,9 @@ L60:
         for(i__ = *r__; i__ <= i__1; ++i__)
         {
             z__[i__ + 1] = -(work[indumn + i__] * z__[i__]);
-            if (((d__1 = z__[i__], f2c_dabs(d__1)) + (d__2 = z__[i__ + 1], f2c_dabs( d__2))) * (d__3 = ld[i__], f2c_dabs(d__3)) < *gaptol)
+            if(((d__1 = z__[i__], f2c_dabs(d__1)) + (d__2 = z__[i__ + 1], f2c_dabs(d__2)))
+                   * (d__3 = ld[i__], f2c_dabs(d__3))
+               < *gaptol)
             {
                 z__[i__ + 1] = 0.;
                 isuppz[2] = (aocl_int_t)(i__);
@@ -536,7 +548,9 @@ L60:
             {
                 z__[i__ + 1] = -(work[indumn + i__] * z__[i__]);
             }
-            if (((d__1 = z__[i__], f2c_dabs(d__1)) + (d__2 = z__[i__ + 1], f2c_dabs( d__2))) * (d__3 = ld[i__], f2c_dabs(d__3)) < *gaptol)
+            if(((d__1 = z__[i__], f2c_dabs(d__1)) + (d__2 = z__[i__ + 1], f2c_dabs(d__2)))
+                   * (d__3 = ld[i__], f2c_dabs(d__3))
+               < *gaptol)
             {
                 z__[i__ + 1] = 0.;
                 isuppz[2] = (aocl_int_t)(i__);

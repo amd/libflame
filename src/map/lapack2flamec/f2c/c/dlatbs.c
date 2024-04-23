@@ -111,7 +111,7 @@ static doublereal c_b36 = .5;
 /* > first KD+1 rows of the array. The j-th column of A is stored */
 /* > in the j-th column of the array AB as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > \endverbatim */
 /* > */
@@ -245,10 +245,14 @@ b(i), i=1,..,n}
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, integer *kd, doublereal *ab, integer *ldab, doublereal *x, doublereal *scale, doublereal *cnorm, integer *info)
+void dlatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, integer *kd,
+             doublereal *ab, integer *ldab, doublereal *x, doublereal *scale, doublereal *cnorm,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlatbs inputs: uplo %c, trans %c, diag %c, normin %c, kd %" FLA_IS ", ldab %" FLA_IS "", *uplo, *trans, *diag, *normin, *kd, *ldab);
+    AOCL_DTL_SNPRINTF("dlatbs inputs: uplo %c, trans %c, diag %c, normin %c, kd %" FLA_IS
+                      ", ldab %" FLA_IS "",
+                      *uplo, *trans, *diag, *normin, *kd, *ldab);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2, d__3;
@@ -260,19 +264,24 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
     aocl_int64_t imax;
     doublereal tmax, tjjs, xmax, grow, sumj;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     integer maind;
     extern logical lsame_(char *, char *, integer, integer);
     doublereal tscal, uscal;
     extern doublereal dasum_(integer *, doublereal *, integer *);
     integer jlast;
     extern /* Subroutine */
-    void dtbsv_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dtbsv_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
+               integer *),
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical notran;
     aocl_int64_t jfirst;
@@ -311,19 +320,19 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
     nounit = lsame_(diag, "N", 1, 1);
     tjjs = 0.;
     /* Test the input parameters. */
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
-    else if (! lsame_(normin, "Y", 1, 1) && ! lsame_(normin, "N", 1, 1))
+    else if(!lsame_(normin, "Y", 1, 1) && !lsame_(normin, "N", 1, 1))
     {
         *info = -4;
     }
@@ -356,7 +365,7 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
     smlnum = dlamch_("Safe minimum") / dlamch_("Precision");
     bignum = 1. / smlnum;
     *scale = 1.;
-    if (lsame_(normin, "N", 1, 1))
+    if(lsame_(normin, "N", 1, 1))
     {
         /* Compute the 1-norm of each column, not including the diagonal. */
         if(upper)
@@ -368,8 +377,8 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
                 /* Computing MIN */
                 i__2 = *kd;
                 i__3 = j - 1; // , expr subst
-                jlen = fla_min(i__2,i__3);
-                cnorm[j] = dasum_(&jlen, &ab[*kd + 1 - jlen + j * ab_dim1], & c__1);
+                jlen = fla_min(i__2, i__3);
+                cnorm[j] = dasum_(&jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1);
                 /* L10: */
             }
         }
@@ -382,8 +391,8 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
                 /* Computing MIN */
                 i__2 = *kd;
                 i__3 = *n - j; // , expr subst
-                jlen = fla_min(i__2,i__3);
-                if (jlen > 0)
+                jlen = fla_min(i__2, i__3);
+                if(jlen > 0)
                 {
                     cnorm[j] = aocl_blas_dasum(&jlen, &ab[j * ab_dim1 + 2], &c__1);
                 }
@@ -442,7 +451,7 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
             /* Initially, G(0) = max{
             x(i), i=1,...,n}
             . */
-            grow = 1. / fla_max(xbnd,smlnum);
+            grow = 1. / fla_max(xbnd, smlnum);
             xbnd = grow;
             i__1 = jlast;
             i__2 = jinc;
@@ -457,9 +466,9 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
                 tjj = (d__1 = ab[maind + j * ab_dim1], f2c_dabs(d__1));
                 /* Computing MIN */
                 d__1 = xbnd;
-                d__2 = fla_min(1.,tjj) * grow; // , expr subst
-                xbnd = fla_min(d__1,d__2);
-                if (tjj + cnorm[j] >= smlnum)
+                d__2 = fla_min(1., tjj) * grow; // , expr subst
+                xbnd = fla_min(d__1, d__2);
+                if(tjj + cnorm[j] >= smlnum)
                 {
                     /* G(j) = G(j-1)*( 1 + CNORM(j) / f2c_dabs(A(j,j)) ) */
                     grow *= tjj / (tjj + cnorm[j]);
@@ -481,8 +490,8 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
             . */
             /* Computing MIN */
             d__1 = 1.;
-            d__2 = 1. / fla_max(xbnd,smlnum); // , expr subst
-            grow = fla_min(d__1,d__2);
+            d__2 = 1. / fla_max(xbnd, smlnum); // , expr subst
+            grow = fla_min(d__1, d__2);
             i__2 = jlast;
             i__1 = jinc;
             for(j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1)
@@ -528,7 +537,7 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
             /* Initially, M(0) = max{
             x(i), i=1,...,n}
             . */
-            grow = 1. / fla_max(xbnd,smlnum);
+            grow = 1. / fla_max(xbnd, smlnum);
             xbnd = grow;
             i__1 = jlast;
             i__2 = jinc;
@@ -544,16 +553,16 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
                 /* Computing MIN */
                 d__1 = grow;
                 d__2 = xbnd / xj; // , expr subst
-                grow = fla_min(d__1,d__2);
+                grow = fla_min(d__1, d__2);
                 /* M(j) = M(j-1)*( 1 + CNORM(j) ) / f2c_dabs(A(j,j)) */
                 tjj = (d__1 = ab[maind + j * ab_dim1], f2c_dabs(d__1));
-                if (xj > tjj)
+                if(xj > tjj)
                 {
                     xbnd *= tjj / xj;
                 }
                 /* L60: */
             }
-            grow = fla_min(grow,xbnd);
+            grow = fla_min(grow, xbnd);
         }
         else
         {
@@ -563,8 +572,8 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
             . */
             /* Computing MIN */
             d__1 = 1.;
-            d__2 = 1. / fla_max(xbnd,smlnum); // , expr subst
-            grow = fla_min(d__1,d__2);
+            d__2 = 1. / fla_max(xbnd, smlnum); // , expr subst
+            grow = fla_min(d__1, d__2);
             i__2 = jlast;
             i__1 = jinc;
             for(j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1)
@@ -608,7 +617,7 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
             {
                 /* Compute x(j) = b(j) / A(j,j), scaling x if necessary. */
                 xj = (d__1 = x[j], f2c_dabs(d__1));
-                if (nounit)
+                if(nounit)
                 {
                     tjjs = ab[maind + j * ab_dim1] * tscal;
                 }
@@ -621,10 +630,10 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
                     }
                 }
                 tjj = f2c_dabs(tjjs);
-                if (tjj > smlnum)
+                if(tjj > smlnum)
                 {
                     /* f2c_dabs(A(j,j)) > SMLNUM: */
-                    if (tjj < 1.)
+                    if(tjj < 1.)
                     {
                         if(xj > tjj * bignum)
                         {
@@ -641,7 +650,7 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
                 else if(tjj > 0.)
                 {
                     /* 0 < f2c_dabs(A(j,j)) <= SMLNUM: */
-                    if (xj > tjj * bignum)
+                    if(xj > tjj * bignum)
                     {
                         /* Scale x by (1/f2c_dabs(x(j)))*f2c_dabs(A(j,j))*BIGNUM */
                         /* to avoid overflow when dividing by A(j,j). */
@@ -703,9 +712,10 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
-                        jlen = fla_min(i__3,i__4);
+                        jlen = fla_min(i__3, i__4);
                         d__1 = -x[j] * tscal;
-                        daxpy_(&jlen, &d__1, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1, &x[j - jlen], &c__1);
+                        daxpy_(&jlen, &d__1, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1, &x[j - jlen],
+                               &c__1);
                         i__3 = j - 1;
                         i__ = idamax_(&i__3, &x[1], &c__1);
                         xmax = (d__1 = x[i__], f2c_dabs(d__1));
@@ -719,12 +729,11 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
                     /* Computing MIN */
                     i__3 = *kd;
                     i__4 = *n - j; // , expr subst
-                    jlen = fla_min(i__3,i__4);
-                    if (jlen > 0)
+                    jlen = fla_min(i__3, i__4);
+                    if(jlen > 0)
                     {
                         d__1 = -x[j] * tscal;
-                        aocl_blas_daxpy(&jlen, &d__1, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1],
-                                        &c__1);
+                        daxpy_(&jlen, &d__1, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1], &c__1);
                     }
                     i__3 = *n - j;
                     i__ = j + idamax_(&i__3, &x[j + 1], &c__1);
@@ -744,8 +753,8 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
                 /* k<>j */
                 xj = (d__1 = x[j], f2c_dabs(d__1));
                 uscal = tscal;
-                rec = 1. / fla_max(xmax,1.);
-                if (cnorm[j] > (bignum - xj) * rec)
+                rec = 1. / fla_max(xmax, 1.);
+                if(cnorm[j] > (bignum - xj) * rec)
                 {
                     /* If x(j) could overflow, scale x by 1/(2*XMAX). */
                     rec *= .5;
@@ -758,13 +767,13 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
                         tjjs = tscal;
                     }
                     tjj = f2c_dabs(tjjs);
-                    if (tjj > 1.)
+                    if(tjj > 1.)
                     {
                         /* Divide by A(j,j) when scaling x if A(j,j) > 1. */
                         /* Computing MIN */
                         d__1 = 1.;
                         d__2 = rec * tjj; // , expr subst
-                        rec = fla_min(d__1,d__2);
+                        rec = fla_min(d__1, d__2);
                         uscal /= tjjs;
                     }
                     if(rec < 1.)
@@ -784,19 +793,19 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
-                        jlen = fla_min(i__3,i__4);
-                        sumj = ddot_(&jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1, &x[j - jlen], &c__1);
+                        jlen = fla_min(i__3, i__4);
+                        sumj = ddot_(&jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1, &x[j - jlen],
+                                     &c__1);
                     }
                     else
                     {
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = *n - j; // , expr subst
-                        jlen = fla_min(i__3,i__4);
-                        if (jlen > 0)
+                        jlen = fla_min(i__3, i__4);
+                        if(jlen > 0)
                         {
-                            sumj = aocl_blas_ddot(&jlen, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1],
-                                                  &c__1);
+                            sumj = ddot_(&jlen, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1], &c__1);
                         }
                     }
                 }
@@ -808,7 +817,7 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
-                        jlen = fla_min(i__3,i__4);
+                        jlen = fla_min(i__3, i__4);
                         i__3 = jlen;
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
@@ -822,7 +831,7 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = *n - j; // , expr subst
-                        jlen = fla_min(i__3,i__4);
+                        jlen = fla_min(i__3, i__4);
                         i__3 = jlen;
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
@@ -837,7 +846,7 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
                     /* was not used to scale the dotproduct. */
                     x[j] -= sumj;
                     xj = (d__1 = x[j], f2c_dabs(d__1));
-                    if (nounit)
+                    if(nounit)
                     {
                         /* Compute x(j) = x(j) / A(j,j), scaling if necessary. */
                         tjjs = ab[maind + j * ab_dim1] * tscal;
@@ -851,10 +860,10 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
                         }
                     }
                     tjj = f2c_dabs(tjjs);
-                    if (tjj > smlnum)
+                    if(tjj > smlnum)
                     {
                         /* f2c_dabs(A(j,j)) > SMLNUM: */
-                        if (tjj < 1.)
+                        if(tjj < 1.)
                         {
                             if(xj > tjj * bignum)
                             {
@@ -870,7 +879,7 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
                     else if(tjj > 0.)
                     {
                         /* 0 < f2c_dabs(A(j,j)) <= SMLNUM: */
-                        if (xj > tjj * bignum)
+                        if(xj > tjj * bignum)
                         {
                             /* Scale x by (1/f2c_dabs(x(j)))*f2c_dabs(A(j,j))*BIGNUM. */
                             rec = tjj * bignum / xj;
@@ -905,7 +914,7 @@ void dlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
                 /* Computing MAX */
                 d__2 = xmax;
                 d__3 = (d__1 = x[j], f2c_dabs(d__1)); // , expr subst
-                xmax = fla_max(d__2,d__3);
+                xmax = fla_max(d__2, d__3);
                 /* L160: */
             }
         }

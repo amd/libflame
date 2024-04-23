@@ -89,7 +89,7 @@ void slasrt_(char *id, integer *n, real *d__, integer *info)
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slasrt inputs: id %c, n %d",*id, *n);
+    snprintf(buffer, 256, "slasrt inputs: id %c, n %d", *id, *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -106,7 +106,8 @@ void slasrt_(char *id, integer *n, real *d__, integer *info)
     real dmnmx;
     integer start;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer stkpnt;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -134,11 +135,11 @@ void slasrt_(char *id, integer *n, real *d__, integer *info)
     /* Function Body */
     *info = 0;
     dir = -1;
-    if (lsame_(id, "D", 1, 1))
+    if(lsame_(id, "D", 1, 1))
     {
         dir = 0;
     }
-    else if (lsame_(id, "I", 1, 1))
+    else if(lsame_(id, "I", 1, 1))
     {
         dir = 1;
     }

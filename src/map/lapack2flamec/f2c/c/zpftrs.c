@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {1., 0.};
+static doublecomplex c_b1 = {1., 0.};
 /* > \brief \b ZPFTRS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -220,10 +220,13 @@ static dcomplex c_b1 = {1., 0.};
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, doublecomplex *a, doublecomplex *b, integer *ldb, integer *info)
+void zpftrs_(char *transr, char *uplo, integer *n, integer *nrhs, doublecomplex *a,
+             doublecomplex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zpftrs inputs: transr %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*transr, *uplo, *n, *nrhs, *ldb);
+    AOCL_DTL_SNPRINTF("zpftrs inputs: transr %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS
+                      ", ldb %" FLA_IS "",
+                      *transr, *uplo, *n, *nrhs, *ldb);
 
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1;
@@ -232,7 +235,10 @@ void zpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, doublecomplex
     extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
-    void ztfsm_(char *, char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ztfsm_(char *, char *, char *, char *, char *, integer *, integer *, doublecomplex *,
+               doublecomplex *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -262,11 +268,11 @@ void zpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, doublecomplex
     *info = 0;
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
-    if (! normaltransr && ! lsame_(transr, "C", 1, 1))
+    if(!normaltransr && !lsame_(transr, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U", 1, 1))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }
@@ -278,7 +284,7 @@ void zpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, doublecomplex
     {
         *info = -4;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }

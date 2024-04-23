@@ -1,8 +1,12 @@
-/* dlacn2.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dlacn2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b DLACN2 estimates the 1-norm of a square matrix, using reverse communication for evaluating matr ix-vector products. */
+/* > \brief \b DLACN2 estimates the 1-norm of a square matrix, using reverse communication for
+ * evaluating matr ix-vector products. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -127,10 +131,13 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlacn2_(integer *n, doublereal *v, doublereal *x, integer *isgn, doublereal *est, integer *kase, integer *isave)
+void dlacn2_(integer *n, doublereal *v, doublereal *x, integer *isgn, doublereal *est,
+             integer *kase, integer *isave)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlacn2 inputs: n %" FLA_IS ", isgn %" FLA_IS ", kase %" FLA_IS ", isave %" FLA_IS "",*n, *isgn, *kase, *isave);
+    AOCL_DTL_SNPRINTF("dlacn2 inputs: n %" FLA_IS ", isgn %" FLA_IS ", kase %" FLA_IS
+                      ", isave %" FLA_IS "",
+                      *n, *isgn, *kase, *isave);
     /* System generated locals */
     aocl_int64_t i__1;
     doublereal d__1;
@@ -142,7 +149,8 @@ void dlacn2_(integer *n, doublereal *v, doublereal *x, integer *isgn, doublereal
     extern doublereal dasum_(integer *, doublereal *, integer *);
     integer jlast;
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     doublereal altsgn, estold;
     /* -- LAPACK auxiliary routine -- */
@@ -210,7 +218,7 @@ L20:
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (x[i__] >= 0.)
+        if(x[i__] >= 0.)
         {
             x[i__] = 1.;
         }
@@ -252,7 +260,7 @@ L70:
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (x[i__] >= 0.)
+        if(x[i__] >= 0.)
         {
             xs = 1.;
         }
@@ -260,7 +268,7 @@ L70:
         {
             xs = -1.;
         }
-        if (i_dnnt(&xs) != isgn[i__])
+        if(i_dnnt(&xs) != isgn[i__])
         {
             goto L90;
         }
@@ -276,7 +284,7 @@ L90: /* TEST FOR CYCLING. */
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (x[i__] >= 0.)
+        if(x[i__] >= 0.)
         {
             x[i__] = 1.;
         }
@@ -296,7 +304,7 @@ L90: /* TEST FOR CYCLING. */
 L110:
     jlast = isave[2];
     isave[2] = idamax_(n, &x[1], &c__1);
-    if (x[jlast] != (d__1 = x[isave[2]], f2c_dabs(d__1)) && isave[3] < 5)
+    if(x[jlast] != (d__1 = x[isave[2]], f2c_dabs(d__1)) && isave[3] < 5)
     {
         ++isave[3];
         goto L50;
@@ -318,7 +326,7 @@ L120:
     /* ................ ENTRY (ISAVE( 1 ) = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L140:
-    temp = aocl_blas_dasum(n, &x[1], &c__1) / (doublereal)(*n * 3) * 2.;
+    temp = dasum_(n, &x[1], &c__1) / (doublereal)(*n * 3) * 2.;
     if(temp > *est)
     {
         aocl_blas_dcopy(n, &x[1], &c__1, &v[1], &c__1);

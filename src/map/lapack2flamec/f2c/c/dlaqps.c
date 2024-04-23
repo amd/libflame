@@ -177,10 +177,14 @@ static doublereal c_b16 = 0.;
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-void dlaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, doublereal *a, integer *lda, integer *jpvt, doublereal *tau, doublereal *vn1, doublereal *vn2, doublereal *auxv, doublereal *f, integer *ldf)
+void dlaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, doublereal *a,
+             integer *lda, integer *jpvt, doublereal *tau, doublereal *vn1, doublereal *vn2,
+             doublereal *auxv, doublereal *f, integer *ldf)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaqps inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldf %" FLA_IS "",*m, *n, *offset, *nb, *lda, *ldf);
+    AOCL_DTL_SNPRINTF("dlaqps inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS ", nb %" FLA_IS
+                      ", lda %" FLA_IS ", ldf %" FLA_IS "",
+                      *m, *n, *offset, *nb, *lda, *ldf);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, f_dim1, f_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -194,13 +198,19 @@ void dlaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, 
     doublereal temp;
     doublereal temp2, tol3z;
     extern /* Subroutine */
-    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *),
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *);
     integer itemp;
     extern /* Subroutine */
-    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    void dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+        void
+        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     extern integer idamax_(integer *, doublereal *, integer *);
     integer lsticc, lastrk;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -239,7 +249,7 @@ void dlaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, 
     /* Computing MIN */
     i__1 = *m;
     i__2 = *n + *offset; // , expr subst
-    lastrk = fla_min(i__1,i__2);
+    lastrk = fla_min(i__1, i__2);
     lsticc = 0;
     k = 0;
     tol3z = sqrt(dlamch_("Epsilon"));
@@ -258,7 +268,7 @@ L10:
         rk = *offset + k;
         /* Determine ith pivot column and swap if necessary */
         i__1 = *n - k + 1;
-        pvt = k - 1 + aocl_blas_idamax(&i__1, &vn1[k], &c__1);
+        pvt = k - 1 + idamax_(&i__1, &vn1[k], &c__1);
         if(pvt != k)
         {
             aocl_blas_dswap(m, &a[pvt * a_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
@@ -276,18 +286,18 @@ L10:
         {
             i__1 = *m - rk + 1;
             i__2 = k - 1;
-            aocl_blas_dgemv("No transpose", &i__1, &i__2, &c_b8, &a[rk + a_dim1], lda,
-                            &f[k + f_dim1], ldf, &c_b9, &a[rk + k * a_dim1], &c__1);
+            dgemv_("No transpose", &i__1, &i__2, &c_b8, &a[rk + a_dim1], lda, &f[k + f_dim1], ldf,
+                   &c_b9, &a[rk + k * a_dim1], &c__1);
         }
         /* Generate elementary reflector H(k). */
         if(rk < *m)
         {
             i__1 = *m - rk + 1;
-            aocl_lapack_dlarfg(&i__1, &a[rk + k * a_dim1], &a[rk + 1 + k * a_dim1], &c__1, &tau[k]);
+            dlarfg_(&i__1, &a[rk + k * a_dim1], &a[rk + 1 + k * a_dim1], &c__1, &tau[k]);
         }
         else
         {
-            aocl_lapack_dlarfg(&c__1, &a[rk + k * a_dim1], &a[rk + k * a_dim1], &c__1, &tau[k]);
+            dlarfg_(&c__1, &a[rk + k * a_dim1], &a[rk + k * a_dim1], &c__1, &tau[k]);
         }
         akk = a[rk + k * a_dim1];
         a[rk + k * a_dim1] = 1.;
@@ -297,8 +307,8 @@ L10:
         {
             i__1 = *m - rk + 1;
             i__2 = *n - k;
-            aocl_blas_dgemv("Transpose", &i__1, &i__2, &tau[k], &a[rk + (k + 1) * a_dim1], lda,
-                            &a[rk + k * a_dim1], &c__1, &c_b16, &f[k + 1 + k * f_dim1], &c__1);
+            dgemv_("Transpose", &i__1, &i__2, &tau[k], &a[rk + (k + 1) * a_dim1], lda,
+                   &a[rk + k * a_dim1], &c__1, &c_b16, &f[k + 1 + k * f_dim1], &c__1);
         }
         /* Padding F(1:K,K) with zeros. */
         i__1 = k;
@@ -315,19 +325,19 @@ L10:
             i__1 = *m - rk + 1;
             i__2 = k - 1;
             d__1 = -tau[k];
-            aocl_blas_dgemv("Transpose", &i__1, &i__2, &d__1, &a[rk + a_dim1], lda,
-                            &a[rk + k * a_dim1], &c__1, &c_b16, &auxv[1], &c__1);
+            dgemv_("Transpose", &i__1, &i__2, &d__1, &a[rk + a_dim1], lda, &a[rk + k * a_dim1],
+                   &c__1, &c_b16, &auxv[1], &c__1);
             i__1 = k - 1;
-            aocl_blas_dgemv("No transpose", n, &i__1, &c_b9, &f[f_dim1 + 1], ldf, &auxv[1], &c__1,
-                            &c_b9, &f[k * f_dim1 + 1], &c__1);
+            dgemv_("No transpose", n, &i__1, &c_b9, &f[f_dim1 + 1], ldf, &auxv[1], &c__1, &c_b9,
+                   &f[k * f_dim1 + 1], &c__1);
         }
         /* Update the current row of A: */
         /* A(RK,K+1:N) := A(RK,K+1:N) - A(RK,1:K)*F(K+1:N,1:K)**T. */
         if(k < *n)
         {
             i__1 = *n - k;
-            aocl_blas_dgemv("No transpose", &i__1, &k, &c_b8, &f[k + 1 + f_dim1], ldf,
-                            &a[rk + a_dim1], lda, &c_b9, &a[rk + (k + 1) * a_dim1], lda);
+            dgemv_("No transpose", &i__1, &k, &c_b8, &f[k + 1 + f_dim1], ldf, &a[rk + a_dim1], lda,
+                   &c_b9, &a[rk + (k + 1) * a_dim1], lda);
         }
         /* Update partial column norms. */
         if(rk < lastrk)
@@ -343,7 +353,7 @@ L10:
                     /* Computing MAX */
                     d__1 = 0.;
                     d__2 = (temp + 1.) * (1. - temp); // , expr subst
-                    temp = fla_max(d__1,d__2);
+                    temp = fla_max(d__1, d__2);
                     /* Computing 2nd power */
                     d__1 = vn1[j] / vn2[j];
                     temp2 = temp * (d__1 * d__1);
@@ -376,13 +386,12 @@ L10:
     /* Computing MIN */
     i__1 = *n;
     i__2 = *m - *offset; // , expr subst
-    if (*kb < fla_min(i__1,i__2))
+    if(*kb < fla_min(i__1, i__2))
     {
         i__1 = *m - rk;
         i__2 = *n - *kb;
-        aocl_blas_dgemm("No transpose", "Transpose", &i__1, &i__2, kb, &c_b8, &a[rk + 1 + a_dim1],
-                        lda, &f[*kb + 1 + f_dim1], ldf, &c_b9, &a[rk + 1 + (*kb + 1) * a_dim1],
-                        lda);
+        dgemm_("No transpose", "Transpose", &i__1, &i__2, kb, &c_b8, &a[rk + 1 + a_dim1], lda,
+               &f[*kb + 1 + f_dim1], ldf, &c_b9, &a[rk + 1 + (*kb + 1) * a_dim1], lda);
     }
     /* Recomputation of difficult columns. */
 L40:

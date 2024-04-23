@@ -108,10 +108,11 @@
 /* > \ingroup complex16POcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zpoequb_(integer *n, doublecomplex *a, integer *lda, doublereal *s, doublereal *scond, doublereal *amax, integer *info)
+void zpoequb_(integer *n, doublecomplex *a, integer *lda, doublereal *s, doublereal *scond,
+              doublereal *amax, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zpoequb inputs: n %" FLA_IS ", lda %" FLA_IS "",*n, *lda);
+    AOCL_DTL_SNPRINTF("zpoequb inputs: n %" FLA_IS ", lda %" FLA_IS "", *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1, d__2;
@@ -122,7 +123,8 @@ void zpoequb_(integer *n, doublecomplex *a, integer *lda, doublereal *s, doubler
     doublereal tmp, base, smin;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -156,7 +158,7 @@ void zpoequb_(integer *n, doublecomplex *a, integer *lda, doublereal *s, doubler
     {
         *info = -1;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -3;
     }
@@ -164,7 +166,7 @@ void zpoequb_(integer *n, doublecomplex *a, integer *lda, doublereal *s, doubler
     {
         i__1 = -(*info);
         xerbla_("ZPOEQUB", &i__1, (ftnlen)7);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible. */
@@ -172,7 +174,7 @@ void zpoequb_(integer *n, doublecomplex *a, integer *lda, doublereal *s, doubler
     {
         *scond = 1.;
         *amax = 0.;
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     base = dlamch_("B");
@@ -191,11 +193,11 @@ void zpoequb_(integer *n, doublecomplex *a, integer *lda, doublereal *s, doubler
         /* Computing MIN */
         d__1 = smin;
         d__2 = s[i__]; // , expr subst
-        smin = fla_min(d__1,d__2);
+        smin = fla_min(d__1, d__2);
         /* Computing MAX */
         d__1 = *amax;
         d__2 = s[i__]; // , expr subst
-        *amax = fla_max(d__1,d__2);
+        *amax = fla_max(d__1, d__2);
         /* L10: */
     }
     if(smin <= 0.)
@@ -207,7 +209,7 @@ void zpoequb_(integer *n, doublecomplex *a, integer *lda, doublereal *s, doubler
             if(s[i__] <= 0.)
             {
                 *info = i__;
-    AOCL_DTL_TRACE_LOG_EXIT
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L20: */

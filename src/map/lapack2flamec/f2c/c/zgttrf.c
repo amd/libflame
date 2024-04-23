@@ -121,10 +121,11 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complex16GTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zgttrf_(integer *n, doublecomplex *dl, doublecomplex * d__, doublecomplex *du, doublecomplex *du2, integer *ipiv, integer * info)
+void zgttrf_(integer *n, doublecomplex *dl, doublecomplex *d__, doublecomplex *du,
+             doublecomplex *du2, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgttrf inputs: n %" FLA_IS "",*n);
+    AOCL_DTL_SNPRINTF("zgttrf inputs: n %" FLA_IS "", *n);
 
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3, i__4;
@@ -137,7 +138,8 @@ void zgttrf_(integer *n, doublecomplex *dl, doublecomplex * d__, doublecomplex *
     integer i__;
     doublecomplex fact, temp;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -202,11 +204,13 @@ void zgttrf_(integer *n, doublecomplex *dl, doublecomplex * d__, doublecomplex *
     {
         i__2 = i__;
         i__3 = i__;
-        if ((d__1 = d__[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs( d__2)) >= (d__3 = dl[i__3].r, f2c_dabs(d__3)) + (d__4 = d_imag(&dl[ i__]), f2c_dabs(d__4)))
+        if((d__1 = d__[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
+           >= (d__3 = dl[i__3].r, f2c_dabs(d__3)) + (d__4 = d_imag(&dl[i__]), f2c_dabs(d__4)))
         {
             /* No row interchange required, eliminate DL(I) */
             i__2 = i__;
-            if ((d__1 = d__[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2)) != 0.)
+            if((d__1 = d__[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
+               != 0.)
             {
                 z_div(&z__1, &dl[i__], &d__[i__]);
                 fact.real = z__1.real;
@@ -274,10 +278,12 @@ void zgttrf_(integer *n, doublecomplex *dl, doublecomplex * d__, doublecomplex *
         i__ = *n - 1;
         i__1 = i__;
         i__2 = i__;
-        if ((d__1 = d__[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs( d__2)) >= (d__3 = dl[i__2].r, f2c_dabs(d__3)) + (d__4 = d_imag(&dl[ i__]), f2c_dabs(d__4)))
+        if((d__1 = d__[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
+           >= (d__3 = dl[i__2].r, f2c_dabs(d__3)) + (d__4 = d_imag(&dl[i__]), f2c_dabs(d__4)))
         {
             i__1 = i__;
-            if ((d__1 = d__[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2)) != 0.)
+            if((d__1 = d__[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
+               != 0.)
             {
                 z_div(&z__1, &dl[i__], &d__[i__]);
                 fact.real = z__1.real;
@@ -331,7 +337,7 @@ void zgttrf_(integer *n, doublecomplex *dl, doublecomplex * d__, doublecomplex *
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        if ((d__1 = d__[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs( d__2)) == 0.)
+        if((d__1 = d__[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2)) == 0.)
         {
             *info = i__;
             goto L50;

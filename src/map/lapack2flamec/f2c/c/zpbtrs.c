@@ -81,7 +81,7 @@ static aocl_int64_t c__1 = 1;
 /* > first KD+1 rows of the array. The j-th column of U or L is */
 /* > stored in the j-th column of the array AB as follows: */
 /* > if UPLO ='U', AB(kd+1+i-j,j) = U(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO ='L', AB(1+i-j,j) = L(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > \endverbatim */
 /* > */
@@ -120,10 +120,13 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, doublecomplex *ab, integer *ldab, doublecomplex *b, integer * ldb, integer *info)
+void zpbtrs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublecomplex *ab, integer *ldab,
+             doublecomplex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zpbtrs inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *kd, *nrhs, *ldab, *ldb);
+    AOCL_DTL_SNPRINTF("zpbtrs inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS
+                      ", ldab %" FLA_IS ", ldb %" FLA_IS "",
+                      *uplo, *n, *kd, *nrhs, *ldab, *ldb);
 
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, i__1;
@@ -132,7 +135,10 @@ void zpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, doublecomplex 
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    void ztbsv_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ztbsv_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *,
+               doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -162,7 +168,7 @@ void zpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, doublecomplex 
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -182,7 +188,7 @@ void zpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, doublecomplex 
     {
         *info = -6;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
@@ -206,11 +212,11 @@ void zpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, doublecomplex 
         for(j = 1; j <= i__1; ++j)
         {
             /* Solve U**H *X = B, overwriting B with X. */
-            aocl_blas_ztbsv("Upper", "Conjugate transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
-                            &b[j * b_dim1 + 1], &c__1);
+            ztbsv_("Upper", "Conjugate transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
+                   &b[j * b_dim1 + 1], &c__1);
             /* Solve U*X = B, overwriting B with X. */
-            aocl_blas_ztbsv("Upper", "No transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
-                            &b[j * b_dim1 + 1], &c__1);
+            ztbsv_("Upper", "No transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
+                   &b[j * b_dim1 + 1], &c__1);
             /* L10: */
         }
     }
@@ -221,11 +227,11 @@ void zpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, doublecomplex 
         for(j = 1; j <= i__1; ++j)
         {
             /* Solve L*X = B, overwriting B with X. */
-            aocl_blas_ztbsv("Lower", "No transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
-                            &b[j * b_dim1 + 1], &c__1);
+            ztbsv_("Lower", "No transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
+                   &b[j * b_dim1 + 1], &c__1);
             /* Solve L**H *X = B, overwriting B with X. */
-            aocl_blas_ztbsv("Lower", "Conjugate transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
-                            &b[j * b_dim1 + 1], &c__1);
+            ztbsv_("Lower", "Conjugate transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
+                   &b[j * b_dim1 + 1], &c__1);
             /* L20: */
         }
     }

@@ -173,10 +173,13 @@ v(i+k+1:n) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlahrd_(integer *n, integer *k, integer *nb, doublereal * a, integer *lda, doublereal *tau, doublereal *t, integer *ldt, doublereal *y, integer *ldy)
+void dlahrd_(integer *n, integer *k, integer *nb, doublereal *a, integer *lda, doublereal *tau,
+             doublereal *t, integer *ldt, doublereal *y, integer *ldy)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlahrd inputs: n %" FLA_IS ", k %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS ", ldy %" FLA_IS "",*n, *k, *nb, *lda, *ldt, *ldy);
+    AOCL_DTL_SNPRINTF("dlahrd inputs: n %" FLA_IS ", k %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS
+                      ", ldt %" FLA_IS ", ldy %" FLA_IS "",
+                      *n, *k, *nb, *lda, *ldt, *ldy);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, y_dim1, y_offset, i__1, i__2, i__3;
     doublereal d__1;
@@ -184,7 +187,14 @@ void dlahrd_(integer *n, integer *k, integer *nb, doublereal * a, integer *lda, 
     aocl_int64_t i__;
     doublereal ei;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *), dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *),
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *),
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *),
+        dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *),
+        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -217,7 +227,7 @@ void dlahrd_(integer *n, integer *k, integer *nb, doublereal * a, integer *lda, 
     y -= y_offset;
     /* Function Body */
     ei = 0.;
-    if (*n <= 1)
+    if(*n <= 1)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -230,8 +240,8 @@ void dlahrd_(integer *n, integer *k, integer *nb, doublereal * a, integer *lda, 
             /* Update A(1:n,i) */
             /* Compute i-th column of A - Y * V**T */
             i__2 = i__ - 1;
-            aocl_blas_dgemv("No transpose", n, &i__2, &c_b4, &y[y_offset], ldy,
-                            &a[*k + i__ - 1 + a_dim1], lda, &c_b5, &a[i__ * a_dim1 + 1], &c__1);
+            dgemv_("No transpose", n, &i__2, &c_b4, &y[y_offset], ldy, &a[*k + i__ - 1 + a_dim1],
+                   lda, &c_b5, &a[i__ * a_dim1 + 1], &c__1);
             /* Apply I - V * T**T * V**T to this column (call it b) from the */
             /* left, using the last column of T as workspace */
             /* Let V = ( V1 ) and b = ( b1 ) (first I-1 rows) */
@@ -241,25 +251,26 @@ void dlahrd_(integer *n, integer *k, integer *nb, doublereal * a, integer *lda, 
             i__2 = i__ - 1;
             aocl_blas_dcopy(&i__2, &a[*k + 1 + i__ * a_dim1], &c__1, &t[*nb * t_dim1 + 1], &c__1);
             i__2 = i__ - 1;
-            aocl_blas_dtrmv("Lower", "Transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda,
-                            &t[*nb * t_dim1 + 1], &c__1);
+            dtrmv_("Lower", "Transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda,
+                   &t[*nb * t_dim1 + 1], &c__1);
             /* w := w + V2**T *b2 */
             i__2 = *n - *k - i__ + 1;
             i__3 = i__ - 1;
-            aocl_blas_dgemv("Transpose", &i__2, &i__3, &c_b5, &a[*k + i__ + a_dim1], lda,
-                            &a[*k + i__ + i__ * a_dim1], &c__1, &c_b5, &t[*nb * t_dim1 + 1], &c__1);
+            dgemv_("Transpose", &i__2, &i__3, &c_b5, &a[*k + i__ + a_dim1], lda,
+                   &a[*k + i__ + i__ * a_dim1], &c__1, &c_b5, &t[*nb * t_dim1 + 1], &c__1);
             /* w := T**T *w */
             i__2 = i__ - 1;
-            aocl_blas_dtrmv("Upper", "Transpose", "Non-unit", &i__2, &t[t_offset], ldt,
-                            &t[*nb * t_dim1 + 1], &c__1);
+            dtrmv_("Upper", "Transpose", "Non-unit", &i__2, &t[t_offset], ldt, &t[*nb * t_dim1 + 1],
+                   &c__1);
             /* b2 := b2 - V2*w */
             i__2 = *n - *k - i__ + 1;
             i__3 = i__ - 1;
-            aocl_blas_dgemv("No transpose", &i__2, &i__3, &c_b4, &a[*k + i__ + a_dim1], lda,
-                            &t[*nb * t_dim1 + 1], &c__1, &c_b5, &a[*k + i__ + i__ * a_dim1], &c__1);
+            dgemv_("No transpose", &i__2, &i__3, &c_b4, &a[*k + i__ + a_dim1], lda,
+                   &t[*nb * t_dim1 + 1], &c__1, &c_b5, &a[*k + i__ + i__ * a_dim1], &c__1);
             /* b1 := b1 - V1*w */
             i__2 = i__ - 1;
-            dtrmv_("Lower", "No transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda, &t[*nb * t_dim1 + 1], &c__1);
+            dtrmv_("Lower", "No transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda,
+                   &t[*nb * t_dim1 + 1], &c__1);
             i__2 = i__ - 1;
             aocl_blas_daxpy(&i__2, &c_b4, &t[*nb * t_dim1 + 1], &c__1, &a[*k + 1 + i__ * a_dim1],
                             &c__1);
@@ -270,28 +281,29 @@ void dlahrd_(integer *n, integer *k, integer *nb, doublereal * a, integer *lda, 
         i__2 = *n - *k - i__ + 1;
         /* Computing MIN */
         i__3 = *k + i__ + 1;
-        dlarfg_(&i__2, &a[*k + i__ + i__ * a_dim1], &a[fla_min(i__3,*n) + i__ * a_dim1], &c__1, &tau[i__]);
+        dlarfg_(&i__2, &a[*k + i__ + i__ * a_dim1], &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1,
+                &tau[i__]);
         ei = a[*k + i__ + i__ * a_dim1];
         a[*k + i__ + i__ * a_dim1] = 1.;
         /* Compute Y(1:n,i) */
         i__2 = *n - *k - i__ + 1;
-        aocl_blas_dgemv("No transpose", n, &i__2, &c_b5, &a[(i__ + 1) * a_dim1 + 1], lda,
-                        &a[*k + i__ + i__ * a_dim1], &c__1, &c_b38, &y[i__ * y_dim1 + 1], &c__1);
+        dgemv_("No transpose", n, &i__2, &c_b5, &a[(i__ + 1) * a_dim1 + 1], lda,
+               &a[*k + i__ + i__ * a_dim1], &c__1, &c_b38, &y[i__ * y_dim1 + 1], &c__1);
         i__2 = *n - *k - i__ + 1;
         i__3 = i__ - 1;
-        aocl_blas_dgemv("Transpose", &i__2, &i__3, &c_b5, &a[*k + i__ + a_dim1], lda,
-                        &a[*k + i__ + i__ * a_dim1], &c__1, &c_b38, &t[i__ * t_dim1 + 1], &c__1);
+        dgemv_("Transpose", &i__2, &i__3, &c_b5, &a[*k + i__ + a_dim1], lda,
+               &a[*k + i__ + i__ * a_dim1], &c__1, &c_b38, &t[i__ * t_dim1 + 1], &c__1);
         i__2 = i__ - 1;
-        aocl_blas_dgemv("No transpose", n, &i__2, &c_b4, &y[y_offset], ldy, &t[i__ * t_dim1 + 1],
-                        &c__1, &c_b5, &y[i__ * y_dim1 + 1], &c__1);
-        aocl_blas_dscal(n, &tau[i__], &y[i__ * y_dim1 + 1], &c__1);
+        dgemv_("No transpose", n, &i__2, &c_b4, &y[y_offset], ldy, &t[i__ * t_dim1 + 1], &c__1,
+               &c_b5, &y[i__ * y_dim1 + 1], &c__1);
+        dscal_(n, &tau[i__], &y[i__ * y_dim1 + 1], &c__1);
         /* Compute T(1:i,i) */
         i__2 = i__ - 1;
         d__1 = -tau[i__];
         aocl_blas_dscal(&i__2, &d__1, &t[i__ * t_dim1 + 1], &c__1);
         i__2 = i__ - 1;
-        aocl_blas_dtrmv("Upper", "No transpose", "Non-unit", &i__2, &t[t_offset], ldt,
-                        &t[i__ * t_dim1 + 1], &c__1);
+        dtrmv_("Upper", "No transpose", "Non-unit", &i__2, &t[t_offset], ldt, &t[i__ * t_dim1 + 1],
+               &c__1);
         t[i__ + i__ * t_dim1] = tau[i__];
         /* L10: */
     }

@@ -3,11 +3,6 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-
-/*
- *     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
- */
-
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static real c_b30 = 0.f;
@@ -277,7 +272,10 @@ and entries in the second half */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slasd2_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, real *z__, real *alpha, real *beta, real *u, integer * ldu, real *vt, integer *ldvt, real *dsigma, real *u2, integer *ldu2, real *vt2, integer *ldvt2, integer *idxp, integer *idx, integer *idxc, integer *idxq, integer *coltyp, integer *info)
+void slasd2_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, real *z__, real *alpha,
+             real *beta, real *u, integer *ldu, real *vt, integer *ldvt, real *dsigma, real *u2,
+             integer *ldu2, real *vt2, integer *ldvt2, integer *idxp, integer *idx, integer *idxc,
+             integer *idxq, integer *coltyp, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slasd2(nl, nr, sqre, k, d__, z__, alpha, beta, u, ldu, vt, ldvt, dsigma, u2, ldu2,
@@ -326,16 +324,22 @@ void aocl_lapack_slasd2(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     real eps, tau, tol;
     integer psm[4], nlp1, nlp2, idxi, idxj, ctot[4];
     extern /* Subroutine */
-    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+        void
+        srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     integer idxjp, jprev;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     extern real slapy2_(real *, real *), slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slamrg_( integer *, integer *, real *, integer *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
     real hlftol;
     extern /* Subroutine */
-    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+        void
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -383,7 +387,7 @@ void aocl_lapack_slasd2(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     /* Function Body */
     *info = 0;
     jprev = 0;
-    if (*nl < 1)
+    if(*nl < 1)
     {
         *info = -1;
     }
@@ -485,10 +489,10 @@ void aocl_lapack_slasd2(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     /* Computing MAX */
     r__1 = f2c_abs(*alpha);
     r__2 = f2c_abs(*beta); // , expr subst
-    tol = fla_max(r__1,r__2);
+    tol = fla_max(r__1, r__2);
     /* Computing MAX */
     r__2 = (r__1 = d__[n], f2c_abs(r__1));
-    tol = eps * 8.f * fla_max(r__2,tol);
+    tol = eps * 8.f * fla_max(r__2, tol);
     /* There are 2 kinds of deflation -- first a value in the z-vector */
     /* is small, second two (or more) singular values are very close */
     /* together (their difference is (*small_val). */
@@ -509,7 +513,7 @@ void aocl_lapack_slasd2(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     i__1 = n;
     for(j = 2; j <= i__1; ++j)
     {
-        if ((r__1 = z__[j], f2c_abs(r__1)) <= tol)
+        if((r__1 = z__[j], f2c_abs(r__1)) <= tol)
         {
             /* Deflate due to small z component. */
             --k2;
@@ -535,7 +539,7 @@ L100:
     {
         goto L110;
     }
-    if ((r__1 = z__[j], f2c_abs(r__1)) <= tol)
+    if((r__1 = z__[j], f2c_abs(r__1)) <= tol)
     {
         /* Deflate due to small z component. */
         --k2;
@@ -545,7 +549,7 @@ L100:
     else
     {
         /* Check if singular values are close enough to allow deflation. */
-        if ((r__1 = d__[j] - d__[jprev], f2c_abs(r__1)) <= tol)
+        if((r__1 = d__[j] - d__[jprev], f2c_abs(r__1)) <= tol)
         {
             /* Deflation is possible. */
             s = z__[jprev];
@@ -569,9 +573,8 @@ L100:
             {
                 --idxj;
             }
-            aocl_blas_srot(&n, &u[idxjp * u_dim1 + 1], &c__1, &u[idxj * u_dim1 + 1], &c__1, &c__,
-                           &s);
-            aocl_blas_srot(&m, &vt[idxjp + vt_dim1], ldvt, &vt[idxj + vt_dim1], ldvt, &c__, &s);
+            srot_(&n, &u[idxjp * u_dim1 + 1], &c__1, &u[idxj * u_dim1 + 1], &c__1, &c__, &s);
+            srot_(&m, &vt[idxjp + vt_dim1], ldvt, &vt[idxj + vt_dim1], ldvt, &c__, &s);
             if(coltyp[j] != coltyp[jprev])
             {
                 coltyp[j] = 3;
@@ -653,7 +656,7 @@ L120: /* Count up the total number of the various types of columns, then */
     /* Determine DSIGMA(1), DSIGMA(2) and Z(1) */
     dsigma[1] = 0.f;
     hlftol = tol / 2.f;
-    if (f2c_abs(dsigma[2]) <= hlftol)
+    if(f2c_abs(dsigma[2]) <= hlftol)
     {
         dsigma[2] = hlftol;
     }
@@ -674,7 +677,7 @@ L120: /* Count up the total number of the various types of columns, then */
     }
     else
     {
-        if (f2c_abs(z1) <= tol)
+        if(f2c_abs(z1) <= tol)
         {
             z__[1] = tol;
         }

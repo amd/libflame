@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static integer c__1 = 1;
+static integer c_n1 = -1;
 /* > \brief \b DLAED1 used by sstedc. Computes the updated eigensystem of a diagonal matrix after
  * modification by a rank-one symmetric matrix. Used when the original matrix is tridiagonal. */
 /* =========== DOCUMENTATION =========== */
@@ -161,22 +161,34 @@ static aocl_int64_t c_n1 = -1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlaed1_(integer *n, doublereal *d__, doublereal *q, integer *ldq, integer *indxq, doublereal *rho, integer *cutpnt, doublereal *work, integer *iwork, integer *info)
+void dlaed1_(integer *n, doublereal *d__, doublereal *q, integer *ldq, integer *indxq,
+             doublereal *rho, integer *cutpnt, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaed1 inputs: n %" FLA_IS ", ldq %" FLA_IS ", indxq %" FLA_IS ", cutpnt %" FLA_IS "",*n, *ldq, *indxq, *cutpnt);
+    AOCL_DTL_SNPRINTF("dlaed1 inputs: n %" FLA_IS ", ldq %" FLA_IS ", indxq %" FLA_IS
+                      ", cutpnt %" FLA_IS "",
+                      *n, *ldq, *indxq, *cutpnt);
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, i__1, i__2;
     /* Local variables */
     integer i__, k, n1, n2, is, iw, iz, iq2, zpp1, indx, indxc;
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer indxp;
     extern /* Subroutine */
-    void dlaed2_(integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, integer *), dlaed3_(integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dlaed2_(integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *,
+                integer *, integer *, integer *, integer *),
+        dlaed3_(integer *, integer *, integer *, doublereal *, doublereal *, integer *,
+                doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *,
+                doublereal *, integer *);
     integer idlmda;
     extern /* Subroutine */
-    void dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer coltyp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -209,7 +221,7 @@ void dlaed1_(integer *n, doublereal *d__, doublereal *q, integer *ldq, integer *
     {
         *info = -1;
     }
-    else if (*ldq < fla_max(1,*n))
+    else if(*ldq < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -218,7 +230,7 @@ void dlaed1_(integer *n, doublereal *d__, doublereal *q, integer *ldq, integer *
         /* Computing MIN */
         i__1 = 1;
         i__2 = *n / 2; // , expr subst
-        if (fla_min(i__1,i__2) > *cutpnt || *n / 2 < *cutpnt)
+        if(fla_min(i__1, i__2) > *cutpnt || *n / 2 < *cutpnt)
         {
             *info = -7;
         }
@@ -254,9 +266,9 @@ void dlaed1_(integer *n, doublereal *d__, doublereal *q, integer *ldq, integer *
     i__1 = *n - *cutpnt;
     aocl_blas_dcopy(&i__1, &q[zpp1 + zpp1 * q_dim1], ldq, &work[iz + *cutpnt], &c__1);
     /* Deflate eigenvalues. */
-    aocl_lapack_dlaed2(&k, n, cutpnt, &d__[1], &q[q_offset], ldq, &indxq[1], rho, &work[iz],
-                       &work[idlmda], &work[iw], &work[iq2], &iwork[indx], &iwork[indxc],
-                       &iwork[indxp], &iwork[coltyp], info);
+    dlaed2_(&k, n, cutpnt, &d__[1], &q[q_offset], ldq, &indxq[1], rho, &work[iz], &work[idlmda],
+            &work[iw], &work[iq2], &iwork[indx], &iwork[indxc], &iwork[indxp], &iwork[coltyp],
+            info);
     if(*info != 0)
     {
         goto L20;
@@ -266,8 +278,8 @@ void dlaed1_(integer *n, doublereal *d__, doublereal *q, integer *ldq, integer *
     {
         is = (iwork[coltyp] + iwork[coltyp + 1]) * *cutpnt
              + (iwork[coltyp + 1] + iwork[coltyp + 2]) * (*n - *cutpnt) + iq2;
-        aocl_lapack_dlaed3(&k, n, cutpnt, &d__[1], &q[q_offset], ldq, rho, &work[idlmda],
-                           &work[iq2], &iwork[indxc], &iwork[coltyp], &work[iw], &work[is], info);
+        dlaed3_(&k, n, cutpnt, &d__[1], &q[q_offset], ldq, rho, &work[idlmda], &work[iq2],
+                &iwork[indxc], &iwork[coltyp], &work[iw], &work[is], info);
         if(*info != 0)
         {
             goto L20;

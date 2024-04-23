@@ -10,19 +10,18 @@
 #endif
 
 #ifdef _WIN32
-doublereal dsecnd_( void )
+doublereal dsecnd_(void)
 {
 
     clock_t rusage = clock();
     return (doublereal)(rusage) / CLK_TCK;
 }
 #else
-doublereal dsecnd_( void )
+doublereal dsecnd_(void)
 {
     struct tms rusage;
 
     times(&rusage);
     return (doublereal)(rusage.tms_utime) / CLK_TCK;
-
-} 
+}
 #endif /* dsecnd_ */

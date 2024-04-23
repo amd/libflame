@@ -116,10 +116,11 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zptcon_(integer *n, doublereal *d__, doublecomplex *e, doublereal *anorm, doublereal *rcond, doublereal *rwork, integer * info)
+void zptcon_(integer *n, doublereal *d__, doublecomplex *e, doublereal *anorm, doublereal *rcond,
+             doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zptcon inputs: n %" FLA_IS ", anorm %lf",*n, *anorm);
+    AOCL_DTL_SNPRINTF("zptcon inputs: n %" FLA_IS ", anorm %lf", *n, *anorm);
 
     /* System generated locals */
     aocl_int64_t i__1;
@@ -130,7 +131,8 @@ void zptcon_(integer *n, doublereal *d__, doublecomplex *e, doublereal *anorm, d
     integer i__, ix;
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

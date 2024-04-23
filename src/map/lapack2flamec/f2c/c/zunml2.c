@@ -154,10 +154,14 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zunml2_(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *info)
+void zunml2_(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a,
+             integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc,
+             doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zunml2 inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",*side, *trans, *m, *n, *k, *lda, *ldc);
+    AOCL_DTL_SNPRINTF("zunml2 inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
+                      ", lda %" FLA_IS ", ldc %" FLA_IS "",
+                      *side, *trans, *m, *n, *k, *lda, *ldc);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3;
     dcomplex z__1;
@@ -170,7 +174,11 @@ void zunml2_(char *side, char *trans, integer *m, integer *n, integer *k, double
     doublecomplex taui;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_(integer *, doublecomplex *, integer *);
+        void
+        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zlacgv_(integer *, doublecomplex *, integer *);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -215,11 +223,11 @@ void zunml2_(char *side, char *trans, integer *m, integer *n, integer *k, double
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -235,11 +243,11 @@ void zunml2_(char *side, char *trans, integer *m, integer *n, integer *k, double
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*k))
+    else if(*lda < fla_max(1, *k))
     {
         *info = -7;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -10;
     }
@@ -247,13 +255,13 @@ void zunml2_(char *side, char *trans, integer *m, integer *n, integer *k, double
     {
         i__1 = -(*info);
         xerbla_("ZUNML2", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || *k == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(left && notran || !left && !notran)
@@ -316,13 +324,13 @@ void zunml2_(char *side, char *trans, integer *m, integer *n, integer *k, double
         aii.real = a[i__3].real;
         aii.imag = a[i__3].imag; // , expr subst
         i__3 = i__ + i__ * a_dim1;
-        a[i__3].real = 1.;
-        a[i__3].imag = 0.; // , expr subst
-        aocl_lapack_zlarf(side, &mi, &ni, &a[i__ + i__ * a_dim1], lda, &taui,
-                          &c__[ic + jc * c_dim1], ldc, &work[1]);
+        a[i__3].r = 1.;
+        a[i__3].i = 0.; // , expr subst
+        zlarf_(side, &mi, &ni, &a[i__ + i__ * a_dim1], lda, &taui, &c__[ic + jc * c_dim1], ldc,
+               &work[1]);
         i__3 = i__ + i__ * a_dim1;
-        a[i__3].real = aii.real;
-        a[i__3].imag = aii.imag; // , expr subst
+        a[i__3].r = aii.r;
+        a[i__3].i = aii.i; // , expr subst
         if(i__ < nq)
         {
             i__3 = nq - i__;

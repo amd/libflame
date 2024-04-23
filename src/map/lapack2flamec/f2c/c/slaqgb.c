@@ -152,12 +152,14 @@
 /* > \ingroup realGBauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slaqgb_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer *ldab, real *r__, real *c__, real *rowcnd, real * colcnd, real *amax, char *equed)
+void slaqgb_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer *ldab, real *r__,
+             real *c__, real *rowcnd, real *colcnd, real *amax, char *equed)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slaqgb inputs: m %d, n %d, kl %d, ku %d, ldab %d",*m, *n, *kl, *ku, *ldab);
+    snprintf(buffer, 256, "slaqgb inputs: m %d, n %d, kl %d, ku %d, ldab %d", *m, *n, *kl, *ku,
+             *ldab);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -201,7 +203,7 @@ void slaqgb_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer
     /* Initialize LARGE and SMALL. */
     small_val = slamch_("Safe minimum") / slamch_("Precision");
     large = 1.f / small_val;
-    if (*rowcnd >= .1f && *amax >= small_val && *amax <= large)
+    if(*rowcnd >= .1f && *amax >= small_val && *amax <= large)
     {
         /* No row scaling */
         if(*colcnd >= .1f)
@@ -222,10 +224,8 @@ void slaqgb_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer
                 /* Computing MIN */
                 i__5 = *m;
                 i__6 = j + *kl; // , expr subst
-                i__4 = fla_min(i__5,i__6);
-                for (i__ = fla_max(i__2,i__3);
-                        i__ <= i__4;
-                        ++i__)
+                i__4 = fla_min(i__5, i__6);
+                for(i__ = fla_max(i__2, i__3); i__ <= i__4; ++i__)
                 {
                     ab[*ku + 1 + i__ - j + j * ab_dim1] = cj * ab[*ku + 1 + i__ - j + j * ab_dim1];
                     /* L10: */
@@ -247,10 +247,8 @@ void slaqgb_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer
             /* Computing MIN */
             i__5 = *m;
             i__6 = j + *kl; // , expr subst
-            i__3 = fla_min(i__5,i__6);
-            for (i__ = fla_max(i__4,i__2);
-                    i__ <= i__3;
-                    ++i__)
+            i__3 = fla_min(i__5, i__6);
+            for(i__ = fla_max(i__4, i__2); i__ <= i__3; ++i__)
             {
                 ab[*ku + 1 + i__ - j + j * ab_dim1]
                     = r__[i__] * ab[*ku + 1 + i__ - j + j * ab_dim1];
@@ -273,10 +271,8 @@ void slaqgb_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer
             /* Computing MIN */
             i__5 = *m;
             i__6 = j + *kl; // , expr subst
-            i__2 = fla_min(i__5,i__6);
-            for (i__ = fla_max(i__3,i__4);
-                    i__ <= i__2;
-                    ++i__)
+            i__2 = fla_min(i__5, i__6);
+            for(i__ = fla_max(i__3, i__4); i__ <= i__2; ++i__)
             {
                 ab[*ku + 1 + i__ - j + j * ab_dim1]
                     = cj * r__[i__] * ab[*ku + 1 + i__ - j + j * ab_dim1];

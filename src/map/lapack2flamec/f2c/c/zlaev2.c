@@ -117,7 +117,8 @@ higher precision or correctly rounded or */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlaev2_(doublecomplex *a, doublecomplex *b, doublecomplex *c__, doublereal *rt1, doublereal *rt2, doublereal *cs1, doublecomplex *sn1)
+void zlaev2_(doublecomplex *a, doublecomplex *b, doublecomplex *c__, doublereal *rt1,
+             doublereal *rt2, doublereal *cs1, doublecomplex *sn1)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
@@ -130,7 +131,9 @@ void zlaev2_(doublecomplex *a, doublecomplex *b, doublecomplex *c__, doublereal 
     doublereal t;
     dcomplex w;
     extern /* Subroutine */
-    void dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -147,7 +150,7 @@ void zlaev2_(doublecomplex *a, doublecomplex *b, doublecomplex *c__, doublereal 
     /* .. Intrinsic Functions .. */
     /* .. */
     /* .. Executable Statements .. */
-    if (z_abs(b) == 0.)
+    if(z_abs(b) == 0.)
     {
         w.real = 1.;
         w.imag = 0.; // , expr subst

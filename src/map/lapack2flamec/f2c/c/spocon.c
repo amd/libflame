@@ -118,12 +118,13 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup realPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void spocon_(char *uplo, integer *n, real *a, integer *lda, real *anorm, real *rcond, real *work, integer *iwork, integer *info)
+void spocon_(char *uplo, integer *n, real *a, integer *lda, real *anorm, real *rcond, real *work,
+             integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"spocon inputs: uplo %c, n %d, lda %d",*uplo, *n, *lda);
+    snprintf(buffer, 256, "spocon inputs: uplo %c, n %d, lda %d", *uplo, *n, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -135,20 +136,25 @@ void spocon_(char *uplo, integer *n, real *a, integer *lda, real *anorm, real *r
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    void srscl_(integer *, real *, real *, integer *);
+        void
+        srscl_(integer *, real *, real *, integer *);
     logical upper;
     extern /* Subroutine */
-    void slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     real scalel;
     extern real slamch_(char *);
     real scaleu;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real ainvnm;
     char normin[1];
     extern /* Subroutine */
-    void slatrs_(char *, char *, char *, char *, integer *, real *, integer *, real *, real *, real *, integer *);
+        void
+        slatrs_(char *, char *, char *, char *, integer *, real *, integer *, real *, real *,
+                real *, integer *);
     real smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -182,7 +188,7 @@ void spocon_(char *uplo, integer *n, real *a, integer *lda, real *anorm, real *r
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -190,7 +196,7 @@ void spocon_(char *uplo, integer *n, real *a, integer *lda, real *anorm, real *r
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -223,35 +229,35 @@ void spocon_(char *uplo, integer *n, real *a, integer *lda, real *anorm, real *r
     kase = 0;
     *(unsigned char *)normin = 'N';
 L10:
-    aocl_lapack_slacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+    slacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(upper)
         {
             /* Multiply by inv(U**T). */
-            aocl_lapack_slatrs("Upper", "Transpose", "Non-unit", normin, n, &a[a_offset], lda,
-                               &work[1], &scalel, &work[(*n << 1) + 1], info);
+            slatrs_("Upper", "Transpose", "Non-unit", normin, n, &a[a_offset], lda, &work[1],
+                    &scalel, &work[(*n << 1) + 1], info);
             *(unsigned char *)normin = 'Y';
             /* Multiply by inv(U). */
-            aocl_lapack_slatrs("Upper", "No transpose", "Non-unit", normin, n, &a[a_offset], lda,
-                               &work[1], &scaleu, &work[(*n << 1) + 1], info);
+            slatrs_("Upper", "No transpose", "Non-unit", normin, n, &a[a_offset], lda, &work[1],
+                    &scaleu, &work[(*n << 1) + 1], info);
         }
         else
         {
             /* Multiply by inv(L). */
-            aocl_lapack_slatrs("Lower", "No transpose", "Non-unit", normin, n, &a[a_offset], lda,
-                               &work[1], &scalel, &work[(*n << 1) + 1], info);
+            slatrs_("Lower", "No transpose", "Non-unit", normin, n, &a[a_offset], lda, &work[1],
+                    &scalel, &work[(*n << 1) + 1], info);
             *(unsigned char *)normin = 'Y';
             /* Multiply by inv(L**T). */
-            aocl_lapack_slatrs("Lower", "Transpose", "Non-unit", normin, n, &a[a_offset], lda,
-                               &work[1], &scaleu, &work[(*n << 1) + 1], info);
+            slatrs_("Lower", "Transpose", "Non-unit", normin, n, &a[a_offset], lda, &work[1],
+                    &scaleu, &work[(*n << 1) + 1], info);
         }
         /* Multiply by 1/SCALE if doing so will not cause overflow. */
         scale = scalel * scaleu;
         if(scale != 1.f)
         {
             ix = isamax_(n, &work[1], &c__1);
-            if (scale < (r__1 = work[ix], f2c_abs(r__1)) * smlnum || scale == 0.f)
+            if(scale < (r__1 = work[ix], f2c_abs(r__1)) * smlnum || scale == 0.f)
             {
                 goto L20;
             }

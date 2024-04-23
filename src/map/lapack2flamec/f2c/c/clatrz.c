@@ -134,15 +134,16 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void clatrz_(integer *m, integer *n, integer *l, complex *a, integer *lda, complex *tau, complex *work)
+void clatrz_(integer *m, integer *n, integer *l, complex *a, integer *lda, complex *tau,
+             complex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clatrz inputs: m %lld, n %lld, l %lld, lda %lld",*m, *n, *l, *lda);
+    snprintf(buffer, 256, "clatrz inputs: m %lld, n %lld, l %lld, lda %lld", *m, *n, *l, *lda);
 #else
-    snprintf(buffer, 256,"clatrz inputs: m %d, n %d, l %d, lda %d",*m, *n, *l, *lda);
+    snprintf(buffer, 256, "clatrz inputs: m %d, n %d, l %d, lda %d", *m, *n, *l, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -155,7 +156,11 @@ void clatrz_(integer *m, integer *n, integer *l, complex *a, integer *lda, compl
     integer i__;
     complex alpha;
     extern /* Subroutine */
-    void clarz_(char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex * ), clarfg_(integer *, complex *, complex *, integer *, complex *), clacgv_(integer *, complex *, integer *);
+        void
+        clarz_(char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+               integer *, complex *),
+        clarfg_(integer *, complex *, complex *, integer *, complex *),
+        clacgv_(integer *, complex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -209,7 +214,7 @@ void clatrz_(integer *m, integer *n, integer *l, complex *a, integer *lda, compl
         alpha.real = q__1.real;
         alpha.imag = q__1.imag; // , expr subst
         i__1 = *l + 1;
-        aocl_lapack_clarfg(&i__1, &alpha, &a[i__ + (*n - *l + 1) * a_dim1], lda, &tau[i__]);
+        clarfg_(&i__1, &alpha, &a[i__ + (*n - *l + 1) * a_dim1], lda, &tau[i__]);
         i__1 = i__;
         r_cnjg(&q__1, &tau[i__]);
         tau[i__1].real = q__1.real;
@@ -218,8 +223,8 @@ void clatrz_(integer *m, integer *n, integer *l, complex *a, integer *lda, compl
         i__1 = i__ - 1;
         i__2 = *n - i__ + 1;
         r_cnjg(&q__1, &tau[i__]);
-        aocl_lapack_clarz("Right", &i__1, &i__2, l, &a[i__ + (*n - *l + 1) * a_dim1], lda, &q__1,
-                          &a[i__ * a_dim1 + 1], lda, &work[1]);
+        clarz_("Right", &i__1, &i__2, l, &a[i__ + (*n - *l + 1) * a_dim1], lda, &q__1,
+               &a[i__ * a_dim1 + 1], lda, &work[1]);
         i__1 = i__ + i__ * a_dim1;
         r_cnjg(&q__1, &alpha);
         a[i__1].real = q__1.real;

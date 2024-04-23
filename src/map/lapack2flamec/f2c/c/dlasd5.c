@@ -111,10 +111,11 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlasd5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho, doublereal *dsigma, doublereal * work)
+void dlasd5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho,
+             doublereal *dsigma, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlasd5 inputs: i__ %" FLA_IS "",*i__);
+    AOCL_DTL_SNPRINTF("dlasd5 inputs: i__ %" FLA_IS "", *i__);
     /* System generated locals */
     doublereal d__1;
     /* Builtin functions */

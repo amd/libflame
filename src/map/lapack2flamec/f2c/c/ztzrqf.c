@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {1., 0.};
-static aocl_int64_t c__1 = 1;
+static doublecomplex c_b1 = {1., 0.};
+static integer c__1 = 1;
 /* > \brief \b ZTZRQF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -136,10 +136,11 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ztzrqf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau, integer *info)
+void ztzrqf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztzrqf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
+    AOCL_DTL_SNPRINTF("ztzrqf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     dcomplex z__1, z__2;
@@ -149,7 +150,16 @@ void ztzrqf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     integer i__, k, m1;
     doublecomplex alpha;
     extern /* Subroutine */
-    void zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zlacgv_(integer *, doublecomplex *, integer *);
+        void
+        zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+               integer *, doublecomplex *, integer *),
+        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
+               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *),
+        zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -184,7 +194,7 @@ void ztzrqf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
@@ -192,13 +202,13 @@ void ztzrqf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     {
         i__1 = -(*info);
         xerbla_("ZTZRQF", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Perform the factorization. */
     if(*m == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*m == *n)
@@ -216,10 +226,8 @@ void ztzrqf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     {
         /* Computing MIN */
         i__1 = *m + 1;
-        m1 = fla_min(i__1,*n);
-        for (k = *m;
-                k >= 1;
-                --k)
+        m1 = fla_min(i__1, *n);
+        for(k = *m; k >= 1; --k)
         {
             /* Use a Householder reflection to zero the kth row of A. */
             /* First set up the reflection. */
@@ -242,7 +250,7 @@ void ztzrqf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
             tau[i__1].real = z__1.real;
             tau[i__1].imag = z__1.imag; // , expr subst
             i__1 = k;
-            if((tau[i__1].real != 0. || tau[i__1].imag != 0.) && k > 1)
+            if((tau[i__1].r != 0. || tau[i__1].i != 0.) && k > 1)
             {
                 /* We now perform the operation A := A*P( k )**H. */
                 /* Use the first ( k - 1 ) elements of TAU to store a( k ), */
@@ -254,22 +262,22 @@ void ztzrqf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
                 /* Form w = a( k ) + B*z( k ) in TAU. */
                 i__1 = k - 1;
                 i__2 = *n - *m;
-                aocl_blas_zgemv("No transpose", &i__1, &i__2, &c_b1, &a[m1 * a_dim1 + 1], lda,
-                                &a[k + m1 * a_dim1], lda, &c_b1, &tau[1], &c__1);
+                zgemv_("No transpose", &i__1, &i__2, &c_b1, &a[m1 * a_dim1 + 1], lda,
+                       &a[k + m1 * a_dim1], lda, &c_b1, &tau[1], &c__1);
                 /* Now form a( k ) := a( k ) - conjg(tau)*w */
                 /* and B := B - conjg(tau)*w*z( k )**H. */
                 i__1 = k - 1;
                 d_cnjg(&z__2, &tau[k]);
-                z__1.real = -z__2.real;
-                z__1.imag = -z__2.imag; // , expr subst
-                aocl_blas_zaxpy(&i__1, &z__1, &tau[1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                z__1.r = -z__2.r;
+                z__1.i = -z__2.i; // , expr subst
+                zaxpy_(&i__1, &z__1, &tau[1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 i__1 = k - 1;
                 i__2 = *n - *m;
                 d_cnjg(&z__2, &tau[k]);
-                z__1.real = -z__2.real;
-                z__1.imag = -z__2.imag; // , expr subst
-                aocl_blas_zgerc(&i__1, &i__2, &z__1, &tau[1], &c__1, &a[k + m1 * a_dim1], lda,
-                                &a[m1 * a_dim1 + 1], lda);
+                z__1.r = -z__2.r;
+                z__1.i = -z__2.i; // , expr subst
+                zgerc_(&i__1, &i__2, &z__1, &tau[1], &c__1, &a[k + m1 * a_dim1], lda,
+                       &a[m1 * a_dim1 + 1], lda);
             }
             /* L20: */
         }

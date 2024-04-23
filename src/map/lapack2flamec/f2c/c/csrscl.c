@@ -1,8 +1,8 @@
-/* ./csrscl.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/csrscl.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CSRSCL multiplies a vector by the reciprocal of a real scalar. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -84,9 +84,9 @@ void csrscl_(integer *n, real *sa, complex *sx, integer *incx)
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"csrscl inputs: n %d, incx %d\n", *n, *incx);
+    snprintf(buffer, 256, "csrscl inputs: n %d, incx %d\n", *n, *incx);
 #else
-    snprintf(buffer, 256,"csrscl inputs: n %d, incx %d\n", *n, *incx);
+    snprintf(buffer, 256, "csrscl inputs: n %d, incx %d\n", *n, *incx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -94,10 +94,12 @@ void csrscl_(integer *n, real *sa, complex *sx, integer *incx)
     logical done;
     real cnum, cden1, cnum1;
     extern /* Subroutine */
-    void slabad_(real *, real *);
+        void
+        slabad_(real *, real *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    void csscal_(integer *, real *, complex *, integer *);
+        void
+        csscal_(integer *, real *, complex *, integer *);
     real bignum, smlnum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -136,14 +138,14 @@ void csrscl_(integer *n, real *sa, complex *sx, integer *incx)
 L10:
     cden1 = cden * smlnum;
     cnum1 = cnum / bignum;
-    if (f2c_abs(cden1) > f2c_abs(cnum) && cnum != 0.f)
+    if(f2c_abs(cden1) > f2c_abs(cnum) && cnum != 0.f)
     {
         /* Pre-multiply X by SMLNUM if CDEN is large compared to CNUM. */
         mul = smlnum;
         done = FALSE_;
         cden = cden1;
     }
-    else if (f2c_abs(cnum1) > f2c_abs(cden))
+    else if(f2c_abs(cnum1) > f2c_abs(cden))
     {
         /* Pre-multiply X by BIGNUM if CDEN is small compared to CNUM. */
         mul = bignum;
@@ -157,7 +159,7 @@ L10:
         done = TRUE_;
     }
     /* Scale the vector X by MUL */
-    aocl_blas_csscal(n, &mul, &sx[1], incx);
+    csscal_(n, &mul, &sx[1], incx);
     if(!done)
     {
         goto L10;

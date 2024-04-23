@@ -114,9 +114,9 @@ void cpoequb_(integer *n, complex *a, integer *lda, real *s, real *scond, real *
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cpoequb inputs: n %lld, lda %lld",*n, *lda);
+    snprintf(buffer, 256, "cpoequb inputs: n %lld, lda %lld", *n, *lda);
 #else
-    snprintf(buffer, 256,"cpoequb inputs: n %d, lda %d",*n, *lda);
+    snprintf(buffer, 256, "cpoequb inputs: n %d, lda %d", *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -130,7 +130,8 @@ void cpoequb_(integer *n, complex *a, integer *lda, real *s, real *scond, real *
     real tmp, base, smin;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -164,7 +165,7 @@ void cpoequb_(integer *n, complex *a, integer *lda, real *s, real *scond, real *
     {
         *info = -1;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -3;
     }
@@ -199,11 +200,11 @@ void cpoequb_(integer *n, complex *a, integer *lda, real *s, real *scond, real *
         /* Computing MIN */
         r__1 = smin;
         r__2 = s[i__]; // , expr subst
-        smin = fla_min(r__1,r__2);
+        smin = fla_min(r__1, r__2);
         /* Computing MAX */
         r__1 = *amax;
         r__2 = s[i__]; // , expr subst
-        *amax = fla_max(r__1,r__2);
+        *amax = fla_max(r__1, r__2);
         /* L10: */
     }
     if(smin <= 0.f)

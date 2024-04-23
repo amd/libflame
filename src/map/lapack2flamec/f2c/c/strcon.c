@@ -136,12 +136,15 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void strcon_(char *norm, char *uplo, char *diag, integer *n, real *a, integer *lda, real *rcond, real *work, integer *iwork, integer *info)
+void strcon_(char *norm, char *uplo, char *diag, integer *n, real *a, integer *lda, real *rcond,
+             real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"strcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "",*norm, *uplo, *diag, *n, *lda);
+    snprintf(buffer, 256,
+             "strcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "", *norm,
+             *uplo, *diag, *n, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -154,21 +157,26 @@ void strcon_(char *norm, char *uplo, char *diag, integer *n, real *a, integer *l
     integer isave[3];
     real anorm;
     extern /* Subroutine */
-    void srscl_(integer *, real *, real *, integer *);
+        void
+        srscl_(integer *, real *, real *, integer *);
     logical upper;
     real xnorm;
     extern /* Subroutine */
-    void slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real ainvnm;
     logical onenrm;
     char normin[1];
     extern real slantr_(char *, char *, char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    void slatrs_(char *, char *, char *, char *, integer *, real *, integer *, real *, real *, real *, integer *);
+        void
+        slatrs_(char *, char *, char *, char *, integer *, real *, integer *, real *, real *,
+                real *, integer *);
     real smlnum;
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -205,15 +213,15 @@ void strcon_(char *norm, char *uplo, char *diag, integer *n, real *a, integer *l
     upper = lsame_(uplo, "U", 1, 1);
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
-    if (! onenrm && ! lsame_(norm, "I", 1, 1))
+    if(!onenrm && !lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
@@ -221,7 +229,7 @@ void strcon_(char *norm, char *uplo, char *diag, integer *n, real *a, integer *l
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -240,7 +248,7 @@ void strcon_(char *norm, char *uplo, char *diag, integer *n, real *a, integer *l
         return;
     }
     *rcond = 0.f;
-    smlnum = slamch_("Safe minimum") * (real) fla_max(1,*n);
+    smlnum = slamch_("Safe minimum") * (real)fla_max(1, *n);
     /* Compute the norm of the triangular matrix A. */
     anorm = aocl_lapack_slantr(norm, uplo, diag, n, n, &a[a_offset], lda, &work[1]);
     /* Continue only if ANORM > 0. */
@@ -259,20 +267,20 @@ void strcon_(char *norm, char *uplo, char *diag, integer *n, real *a, integer *l
         }
         kase = 0;
     L10:
-        aocl_lapack_slacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+        slacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
         if(kase != 0)
         {
             if(kase == kase1)
             {
                 /* Multiply by inv(A). */
-                aocl_lapack_slatrs(uplo, "No transpose", diag, normin, n, &a[a_offset], lda,
-                                   &work[1], &scale, &work[(*n << 1) + 1], info);
+                slatrs_(uplo, "No transpose", diag, normin, n, &a[a_offset], lda, &work[1], &scale,
+                        &work[(*n << 1) + 1], info);
             }
             else
             {
                 /* Multiply by inv(A**T). */
-                aocl_lapack_slatrs(uplo, "Transpose", diag, normin, n, &a[a_offset], lda, &work[1],
-                                   &scale, &work[(*n << 1) + 1], info);
+                slatrs_(uplo, "Transpose", diag, normin, n, &a[a_offset], lda, &work[1], &scale,
+                        &work[(*n << 1) + 1], info);
             }
             *(unsigned char *)normin = 'Y';
             /* Multiply by 1/SCALE if doing so will not cause overflow. */
@@ -280,7 +288,7 @@ void strcon_(char *norm, char *uplo, char *diag, integer *n, real *a, integer *l
             {
                 ix = isamax_(n, &work[1], &c__1);
                 xnorm = (r__1 = work[ix], f2c_abs(r__1));
-                if (scale < xnorm * smlnum || scale == 0.f)
+                if(scale < xnorm * smlnum || scale == 0.f)
                 {
                     goto L20;
                 }

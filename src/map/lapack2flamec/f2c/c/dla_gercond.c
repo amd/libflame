@@ -147,13 +147,14 @@ row i of the matrix was interchanged */
 /* > \date September 2012 */
 /* > \ingroup doubleGEcomputational */
 /* ===================================================================== */
-/** Generated wrapper function */
-doublereal dla_gercond_(char *trans, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *af,
-                        aocl_int_t *ldaf, aocl_int_t *ipiv, aocl_int_t *cmode, doublereal *c__,
-                        aocl_int_t *info, doublereal *work, aocl_int_t *iwork)
+doublereal dla_gercond_(char *trans, integer *n, doublereal *a, integer *lda, doublereal *af,
+                        integer *ldaf, integer *ipiv, integer *cmode, doublereal *c__,
+                        integer *info, doublereal *work, integer *iwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dla_gercond inputs: trans %c, n %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", cmode %" FLA_IS ", work %" FLA_IS ", iwork %" FLA_IS "",*trans, *n, *lda, *ldaf, *cmode, *work, *iwork);
+    AOCL_DTL_SNPRINTF("dla_gercond inputs: trans %c, n %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS
+                      ", cmode %" FLA_IS ", work %" FLA_IS ", iwork %" FLA_IS "",
+                      *trans, *n, *lda, *ldaf, *cmode, *work, *iwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, i__1, i__2;
     doublereal ret_val, d__1;
@@ -164,10 +165,15 @@ doublereal dla_gercond_(char *trans, aocl_int_t *n, doublereal *a, aocl_int_t *l
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     extern /* Subroutine */
-    void dgetrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dgetrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *,
+                integer *, integer *);
     logical notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -204,7 +210,7 @@ doublereal dla_gercond_(char *trans, aocl_int_t *n, doublereal *a, aocl_int_t *l
     ret_val = 0.;
     *info = 0;
     notrans = lsame_(trans, "N", 1, 1);
-    if (! notrans && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    if(!notrans && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
@@ -212,11 +218,11 @@ doublereal dla_gercond_(char *trans, aocl_int_t *n, doublereal *a, aocl_int_t *l
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -305,7 +311,7 @@ doublereal dla_gercond_(char *trans, aocl_int_t *n, doublereal *a, aocl_int_t *l
     ainvnm = 0.;
     kase = 0;
 L10:
-    aocl_lapack_dlacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+    dlacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == 2)
@@ -318,8 +324,8 @@ L10:
             }
             if(notrans)
             {
-                aocl_lapack_dgetrs("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1],
-                                   &work[1], n, info);
+                dgetrs_("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
+                        info);
             }
             else
             {
@@ -370,8 +376,8 @@ L10:
             }
             else
             {
-                aocl_lapack_dgetrs("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1],
-                                   &work[1], n, info);
+                dgetrs_("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
+                        info);
             }
             /* Multiply by R. */
             i__1 = *n;

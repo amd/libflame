@@ -1,8 +1,8 @@
-/* ./ctrsyl.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ctrsyl.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CTRSYL */
@@ -155,15 +155,22 @@ perturbed */
 /* > \ingroup trsyl */
 /* ===================================================================== */
 /* Subroutine */
-void ctrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, complex *a, integer *lda, complex *b, integer *ldb, complex *c__, integer *ldc, real *scale, integer *info)
+void ctrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, complex *a,
+             integer *lda, complex *b, integer *ldb, complex *c__, integer *ldc, real *scale,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctrsyl inputs: trana %c, tranb %c, isgn %lld, m %lld, n %lld, lda %lld, ldb %lld, ldc %lld",*trana, *tranb, *isgn, *m, *n, *lda, *ldb, *ldc);
+    snprintf(buffer, 256,
+             "ctrsyl inputs: trana %c, tranb %c, isgn %lld, m %lld, n %lld, lda %lld, ldb %lld, "
+             "ldc %lld",
+             *trana, *tranb, *isgn, *m, *n, *lda, *ldb, *ldc);
 #else
-    snprintf(buffer, 256,"ctrsyl inputs: trana %c, tranb %c, isgn %d, m %d, n %d, lda %d, ldb %d, ldc %d",*trana, *tranb, *isgn, *m, *n, *lda, *ldb, *ldc);
+    snprintf(buffer, 256,
+             "ctrsyl inputs: trana %c, tranb %c, isgn %d, m %d, n %d, lda %d, ldb %d, ldc %d",
+             *trana, *tranb, *isgn, *m, *n, *lda, *ldb, *ldc);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -185,19 +192,25 @@ void ctrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, co
     scomplex suml, sumr;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     extern /* Complex */
-    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+        VOID
+        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Complex */
-    VOID cdotu_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+        VOID
+        cdotu_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern /* Subroutine */
-    void slabad_(real *, real *);
+        void
+        slabad_(real *, real *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Complex */
-    void cladiv_f2c_(complex *, complex *, complex *);
+        void
+        cladiv_f2c_(complex *, complex *, complex *);
     real scaloc;
     extern real slamch_(char *);
     extern /* Subroutine */
-    void csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        csscal_(integer *, real *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     logical notrna, notrnb;
     real smlnum;
@@ -237,11 +250,11 @@ void ctrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, co
     notrna = lsame_(trana, "N", 1, 1);
     notrnb = lsame_(tranb, "N", 1, 1);
     *info = 0;
-    if (! notrna && ! lsame_(trana, "C", 1, 1))
+    if(!notrna && !lsame_(trana, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (! notrnb && ! lsame_(tranb, "C", 1, 1))
+    else if(!notrnb && !lsame_(tranb, "C", 1, 1))
     {
         *info = -2;
     }
@@ -257,15 +270,15 @@ void ctrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, co
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -11;
     }
@@ -287,15 +300,16 @@ void ctrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, co
     eps = slamch_("P");
     smlnum = slamch_("S");
     bignum = 1.f / smlnum;
+    slabad_(&smlnum, &bignum);
     smlnum = smlnum * (real)(*m * *n) / eps;
     bignum = 1.f / smlnum;
     /* Computing MAX */
     r__1 = smlnum, r__2 = eps * clange_("M", m, m, &a[a_offset], lda, dum);
-    r__1 = fla_max(r__1,r__2);
+    r__1 = fla_max(r__1, r__2);
     r__2 = eps * clange_("M", n, n, &b[b_offset], ldb, dum); // ; expr subst
-    smin = fla_max(r__1,r__2);
-    sgn = (real) (*isgn);
-    if (notrna && notrnb)
+    smin = fla_max(r__1, r__2);
+    sgn = (real)(*isgn);
+    if(notrna && notrnb)
     {
         /* Solve A*X + ISGN*X*B = scale*C. */
         /* The (K,L)th block of X is determined starting from */
@@ -315,7 +329,8 @@ void ctrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, co
                 i__3 = k + 1;
                 /* Computing MIN */
                 i__4 = k + 1;
-                cdotu_f2c_(&q__1, &i__2, &a[k + fla_min(i__3,*m) * a_dim1], lda, &c__[ fla_min(i__4,*m) + l * c_dim1], &c__1);
+                cdotu_f2c_(&q__1, &i__2, &a[k + fla_min(i__3, *m) * a_dim1], lda,
+                           &c__[fla_min(i__4, *m) + l * c_dim1], &c__1);
                 suml.r = q__1.r;
                 suml.i = q__1.i; // , expr subst
                 i__2 = l - 1;
@@ -340,16 +355,16 @@ void ctrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, co
                 q__1.i = a[i__2].i + q__2.i; // , expr subst
                 a11.r = q__1.r;
                 a11.i = q__1.i; // , expr subst
-                da11 = (r__1 = a11.r, f2c_abs(r__1)) + (r__2 = r_imag(&a11), f2c_abs( r__2));
-                if (da11 <= smin)
+                da11 = (r__1 = a11.r, f2c_abs(r__1)) + (r__2 = r_imag(&a11), f2c_abs(r__2));
+                if(da11 <= smin)
                 {
                     a11.real = smin;
                     a11.imag = 0.f; // , expr subst
                     da11 = smin;
                     *info = 1;
                 }
-                db = (r__1 = vec.r, f2c_abs(r__1)) + (r__2 = r_imag(&vec), f2c_abs( r__2));
-                if (da11 < 1.f && db > 1.f)
+                db = (r__1 = vec.r, f2c_abs(r__1)) + (r__2 = r_imag(&vec), f2c_abs(r__2));
+                if(da11 < 1.f && db > 1.f)
                 {
                     if(db > bignum * da11)
                     {
@@ -363,7 +378,7 @@ void ctrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, co
                 cladiv_f2c_(&q__1, &q__2, &a11);
                 x11.r = q__1.r;
                 x11.i = q__1.i; // , expr subst
-                if (scaloc != 1.f)
+                if(scaloc != 1.f)
                 {
                     i__2 = *n;
                     for(j = 1; j <= i__2; ++j)
@@ -423,16 +438,16 @@ void ctrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, co
                 q__1.i = q__2.i + q__3.i; // , expr subst
                 a11.r = q__1.r;
                 a11.i = q__1.i; // , expr subst
-                da11 = (r__1 = a11.r, f2c_abs(r__1)) + (r__2 = r_imag(&a11), f2c_abs( r__2));
-                if (da11 <= smin)
+                da11 = (r__1 = a11.r, f2c_abs(r__1)) + (r__2 = r_imag(&a11), f2c_abs(r__2));
+                if(da11 <= smin)
                 {
                     a11.real = smin;
                     a11.imag = 0.f; // , expr subst
                     da11 = smin;
                     *info = 1;
                 }
-                db = (r__1 = vec.r, f2c_abs(r__1)) + (r__2 = r_imag(&vec), f2c_abs( r__2));
-                if (da11 < 1.f && db > 1.f)
+                db = (r__1 = vec.r, f2c_abs(r__1)) + (r__2 = r_imag(&vec), f2c_abs(r__2));
+                if(da11 < 1.f && db > 1.f)
                 {
                     if(db > bignum * da11)
                     {
@@ -446,7 +461,7 @@ void ctrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, co
                 cladiv_f2c_(&q__1, &q__2, &a11);
                 x11.r = q__1.r;
                 x11.i = q__1.i; // , expr subst
-                if (scaloc != 1.f)
+                if(scaloc != 1.f)
                 {
                     i__3 = *n;
                     for(j = 1; j <= i__3; ++j)
@@ -491,7 +506,8 @@ void ctrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, co
                 i__3 = l + 1;
                 /* Computing MIN */
                 i__4 = l + 1;
-                cdotc_f2c_(&q__1, &i__2, &c__[k + fla_min(i__3,*n) * c_dim1], ldc, &b[ l + fla_min(i__4,*n) * b_dim1], ldb);
+                cdotc_f2c_(&q__1, &i__2, &c__[k + fla_min(i__3, *n) * c_dim1], ldc,
+                           &b[l + fla_min(i__4, *n) * b_dim1], ldb);
                 sumr.r = q__1.r;
                 sumr.i = q__1.i; // , expr subst
                 i__2 = k + l * c_dim1;
@@ -514,16 +530,16 @@ void ctrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, co
                 r_cnjg(&q__1, &q__2);
                 a11.r = q__1.r;
                 a11.i = q__1.i; // , expr subst
-                da11 = (r__1 = a11.r, f2c_abs(r__1)) + (r__2 = r_imag(&a11), f2c_abs( r__2));
-                if (da11 <= smin)
+                da11 = (r__1 = a11.r, f2c_abs(r__1)) + (r__2 = r_imag(&a11), f2c_abs(r__2));
+                if(da11 <= smin)
                 {
                     a11.real = smin;
                     a11.imag = 0.f; // , expr subst
                     da11 = smin;
                     *info = 1;
                 }
-                db = (r__1 = vec.r, f2c_abs(r__1)) + (r__2 = r_imag(&vec), f2c_abs( r__2));
-                if (da11 < 1.f && db > 1.f)
+                db = (r__1 = vec.r, f2c_abs(r__1)) + (r__2 = r_imag(&vec), f2c_abs(r__2));
+                if(da11 < 1.f && db > 1.f)
                 {
                     if(db > bignum * da11)
                     {
@@ -537,7 +553,7 @@ void ctrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, co
                 cladiv_f2c_(&q__1, &q__2, &a11);
                 x11.r = q__1.r;
                 x11.i = q__1.i; // , expr subst
-                if (scaloc != 1.f)
+                if(scaloc != 1.f)
                 {
                     i__2 = *n;
                     for(j = 1; j <= i__2; ++j)
@@ -574,7 +590,8 @@ void ctrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, co
                 i__2 = k + 1;
                 /* Computing MIN */
                 i__3 = k + 1;
-                cdotu_f2c_(&q__1, &i__1, &a[k + fla_min(i__2,*m) * a_dim1], lda, &c__[ fla_min(i__3,*m) + l * c_dim1], &c__1);
+                cdotu_f2c_(&q__1, &i__1, &a[k + fla_min(i__2, *m) * a_dim1], lda,
+                           &c__[fla_min(i__3, *m) + l * c_dim1], &c__1);
                 suml.r = q__1.r;
                 suml.i = q__1.i; // , expr subst
                 i__1 = *n - l;
@@ -582,7 +599,8 @@ void ctrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, co
                 i__2 = l + 1;
                 /* Computing MIN */
                 i__3 = l + 1;
-                cdotc_f2c_(&q__1, &i__1, &c__[k + fla_min(i__2,*n) * c_dim1], ldc, &b[ l + fla_min(i__3,*n) * b_dim1], ldb);
+                cdotc_f2c_(&q__1, &i__1, &c__[k + fla_min(i__2, *n) * c_dim1], ldc,
+                           &b[l + fla_min(i__3, *n) * b_dim1], ldb);
                 sumr.r = q__1.r;
                 sumr.i = q__1.i; // , expr subst
                 i__1 = k + l * c_dim1;
@@ -604,16 +622,16 @@ void ctrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, co
                 q__1.i = a[i__1].i + q__2.i; // , expr subst
                 a11.r = q__1.r;
                 a11.i = q__1.i; // , expr subst
-                da11 = (r__1 = a11.r, f2c_abs(r__1)) + (r__2 = r_imag(&a11), f2c_abs( r__2));
-                if (da11 <= smin)
+                da11 = (r__1 = a11.r, f2c_abs(r__1)) + (r__2 = r_imag(&a11), f2c_abs(r__2));
+                if(da11 <= smin)
                 {
                     a11.real = smin;
                     a11.imag = 0.f; // , expr subst
                     da11 = smin;
                     *info = 1;
                 }
-                db = (r__1 = vec.r, f2c_abs(r__1)) + (r__2 = r_imag(&vec), f2c_abs( r__2));
-                if (da11 < 1.f && db > 1.f)
+                db = (r__1 = vec.r, f2c_abs(r__1)) + (r__2 = r_imag(&vec), f2c_abs(r__2));
+                if(da11 < 1.f && db > 1.f)
                 {
                     if(db > bignum * da11)
                     {
@@ -627,7 +645,7 @@ void ctrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, co
                 cladiv_f2c_(&q__1, &q__2, &a11);
                 x11.r = q__1.r;
                 x11.i = q__1.i; // , expr subst
-                if (scaloc != 1.f)
+                if(scaloc != 1.f)
                 {
                     i__1 = *n;
                     for(j = 1; j <= i__1; ++j)

@@ -123,7 +123,8 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cungtr_fla(char *uplo, integer *n, complex *a, integer *lda, complex *tau, complex *work, integer *lwork, integer *info)
+void cungtr_fla(char *uplo, integer *n, complex *a, integer *lda, complex *tau, complex *work,
+                integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
@@ -133,10 +134,15 @@ void cungtr_fla(char *uplo, integer *n, complex *a, integer *lda, complex *tau, 
     integer iinfo;
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void cungql_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), cungqr_fla(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+        void
+        cungql_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *, integer *),
+        cungqr_fla(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+                   integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -170,7 +176,7 @@ void cungtr_fla(char *uplo, integer *n, complex *a, integer *lda, complex *tau, 
     *info = 0;
     lquery = *lwork == -1;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -178,7 +184,7 @@ void cungtr_fla(char *uplo, integer *n, complex *a, integer *lda, complex *tau, 
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -187,7 +193,7 @@ void cungtr_fla(char *uplo, integer *n, complex *a, integer *lda, complex *tau, 
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
-        if (*lwork < fla_max(i__1,i__2) && ! lquery)
+        if(*lwork < fla_max(i__1, i__2) && !lquery)
         {
             *info = -7;
         }
@@ -211,8 +217,8 @@ void cungtr_fla(char *uplo, integer *n, complex *a, integer *lda, complex *tau, 
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
-        lwkopt = fla_max(i__1,i__2) * nb;
-        work[1].r = (real) lwkopt;
+        lwkopt = fla_max(i__1, i__2) * nb;
+        work[1].r = (real)lwkopt;
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
@@ -316,7 +322,7 @@ void cungtr_fla(char *uplo, integer *n, complex *a, integer *lda, complex *tau, 
                        &iinfo);
         }
     }
-    work[1].r = (real) lwkopt;
+    work[1].r = (real)lwkopt;
     work[1].i = 0.f; // , expr subst
     return;
     /* End of CUNGTR */

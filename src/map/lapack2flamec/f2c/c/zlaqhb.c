@@ -74,7 +74,7 @@
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > */
 /* > On exit, if INFO = 0, the triangular factor U or L from the */
@@ -136,10 +136,12 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlaqhb_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ldab, doublereal *s, doublereal *scond, doublereal *amax, char *equed)
+void zlaqhb_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ldab, doublereal *s,
+             doublereal *scond, doublereal *amax, char *equed)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaqhb inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",*uplo, *n, *kd, *ldab);
+    AOCL_DTL_SNPRINTF("zlaqhb inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",
+                      *uplo, *n, *kd, *ldab);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     doublereal d__1;
@@ -178,13 +180,13 @@ void zlaqhb_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
     if(*n <= 0)
     {
         *(unsigned char *)equed = 'N';
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize LARGE and SMALL. */
     small_val = dlamch_("Safe minimum") / dlamch_("Precision");
     large = 1. / small_val;
-    if (*scond >= .1 && *amax >= small_val && *amax <= large)
+    if(*scond >= .1 && *amax >= small_val && *amax <= large)
     {
         /* No equilibration */
         *(unsigned char *)equed = 'N';
@@ -192,7 +194,7 @@ void zlaqhb_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
     else
     {
         /* Replace A by diag(S) * A * diag(S). */
-        if (lsame_(uplo, "U", 1, 1))
+        if(lsame_(uplo, "U", 1, 1))
         {
             /* Upper triangle of A is stored in band format. */
             i__1 = *n;
@@ -203,9 +205,7 @@ void zlaqhb_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
                 i__2 = 1;
                 i__3 = j - *kd; // , expr subst
                 i__4 = j - 1;
-                for (i__ = fla_max(i__2,i__3);
-                        i__ <= i__4;
-                        ++i__)
+                for(i__ = fla_max(i__2, i__3); i__ <= i__4; ++i__)
                 {
                     i__2 = *kd + 1 + i__ - j + j * ab_dim1;
                     d__1 = cj * s[i__];
@@ -239,10 +239,8 @@ void zlaqhb_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
                 /* Computing MIN */
                 i__2 = *n;
                 i__3 = j + *kd; // , expr subst
-                i__4 = fla_min(i__2,i__3);
-                for (i__ = j + 1;
-                        i__ <= i__4;
-                        ++i__)
+                i__4 = fla_min(i__2, i__3);
+                for(i__ = j + 1; i__ <= i__4; ++i__)
                 {
                     i__2 = i__ + 1 - j + j * ab_dim1;
                     d__1 = cj * s[i__];

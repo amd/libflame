@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {0.f, 0.f};
-static scomplex c_b2 = {1.f, 0.f};
-static aocl_int64_t c__0 = 0;
-static aocl_int64_t c__1 = 1;
+static complex c_b1 = {0.f, 0.f};
+static complex c_b2 = {1.f, 0.f};
+static integer c__0 = 0;
+static integer c__1 = 1;
 /* > \brief \b CPTEQR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -147,15 +147,16 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer *ldz, real *work, integer *info)
+void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer *ldz, real *work,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cpteqr inputs: compz %c, n %lld, ldz %lld",*compz, *n, *ldz);
+    snprintf(buffer, 256, "cpteqr inputs: compz %c, n %lld, ldz %lld", *compz, *n, *ldz);
 #else
-    snprintf(buffer, 256,"cpteqr inputs: compz %c, n %d, ldz %d",*compz, *n, *ldz);
+    snprintf(buffer, 256, "cpteqr inputs: compz %c, n %d, ldz %d", *compz, *n, *ldz);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -165,17 +166,22 @@ void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     double sqrt(doublereal);
     /* Local variables */
     complex c__[1] /* was [1][1] */
-    ;
+        ;
     integer i__;
     complex vt[1] /* was [1][1] */
-    ;
+        ;
     integer nru;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, complex *, integer *, complex *, integer *, complex *, integer *, real *, integer *);
+        void
+        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        cbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, complex *,
+                integer *, complex *, integer *, complex *, integer *, real *, integer *);
     integer icompz;
     extern /* Subroutine */
-    void spttrf_(integer *, real *, real *, integer *);
+        void
+        spttrf_(integer *, real *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -208,15 +214,15 @@ void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     --work;
     /* Function Body */
     *info = 0;
-    if (lsame_(compz, "N", 1, 1))
+    if(lsame_(compz, "N", 1, 1))
     {
         icompz = 0;
     }
-    else if (lsame_(compz, "V", 1, 1))
+    else if(lsame_(compz, "V", 1, 1))
     {
         icompz = 1;
     }
-    else if (lsame_(compz, "I", 1, 1))
+    else if(lsame_(compz, "I", 1, 1))
     {
         icompz = 2;
     }
@@ -232,7 +238,7 @@ void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     {
         *info = -2;
     }
-    else if (*ldz < 1 || icompz > 0 && *ldz < fla_max(1,*n))
+    else if(*ldz < 1 || icompz > 0 && *ldz < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -265,7 +271,7 @@ void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
         aocl_lapack_claset("Full", n, n, &c_b1, &c_b2, &z__[z_offset], ldz);
     }
     /* Call SPTTRF to factor the matrix. */
-    aocl_lapack_spttrf(n, &d__[1], &e[1], info);
+    spttrf_(n, &d__[1], &e[1], info);
     if(*info != 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -293,8 +299,8 @@ void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     {
         nru = 0;
     }
-    aocl_lapack_cbdsqr("Lower", n, &c__0, &nru, &c__0, &d__[1], &e[1], vt, &c__1, &z__[z_offset],
-                       ldz, c__, &c__1, &work[1], info);
+    cbdsqr_("Lower", n, &c__0, &nru, &c__0, &d__[1], &e[1], vt, &c__1, &z__[z_offset], ldz, c__,
+            &c__1, &work[1], info);
     /* Square the singular values. */
     if(*info == 0)
     {

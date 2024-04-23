@@ -1,5 +1,8 @@
-/* zlargv.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* zlargv.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZLARGV generates a vector of plane rotations with real cosines and complex sines. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -113,18 +116,21 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlargv_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, integer *incy, doublereal *c__, integer *incc)
+void zlargv_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, integer *incy,
+             doublereal *c__, integer *incc)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlargv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS ", incc %" FLA_IS "",*n, *incx, *incy, *incc);
+    AOCL_DTL_SNPRINTF("zlargv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS
+                      ", incc %" FLA_IS "",
+                      *n, *incx, *incy, *incc);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6, d__7, d__8, d__9, d__10;
     dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    double log(doublereal), pow_di(doublereal *, aocl_int64_t *), d_imag(dcomplex *),
+    double log(doublereal), pow_di(doublereal *, integer *), d_imag(doublecomplex *),
         sqrt(doublereal);
-    void d_cnjg(dcomplex *, dcomplex *);
+    void d_cnjg(doublecomplex *, doublecomplex *);
     /* Local variables */
     doublereal d__;
     dcomplex f, g;
@@ -206,10 +212,10 @@ void zlargv_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, inte
         d__8 = (d__2 = d_imag(&f), f2c_dabs(d__2)); // , expr subst
         /* Computing MAX */
         d__9 = (d__3 = g.r, f2c_dabs(d__3));
-        d__10 = (d__4 = d_imag(&g), f2c_dabs(d__4)) ; // , expr subst
-        d__5 = fla_max(d__7,d__8);
-        d__6 = fla_max(d__9,d__10); // , expr subst
-        scale = fla_max(d__5,d__6);
+        d__10 = (d__4 = d_imag(&g), f2c_dabs(d__4)); // , expr subst
+        d__5 = fla_max(d__7, d__8);
+        d__6 = fla_max(d__9, d__10); // , expr subst
+        scale = fla_max(d__5, d__6);
         fs.r = f.r;
         fs.i = f.i; // , expr subst
         gs.r = g.r;
@@ -228,14 +234,14 @@ void zlargv_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, inte
             gs.real = z__1.real;
             gs.imag = z__1.imag; // , expr subst
             scale *= safmn2;
-            if (scale >= safmx2 && count < 20)
+            if(scale >= safmx2 && count < 20)
             {
                 goto L10;
             }
         }
         else if(scale <= safmn2)
         {
-            if(g.real == 0. && g.imag == 0.)
+            if(g.r == 0. && g.i == 0.)
             {
                 cs = 1.;
                 sn.real = 0.;
@@ -270,10 +276,10 @@ void zlargv_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, inte
         /* Computing 2nd power */
         d__2 = d_imag(&gs);
         g2 = d__1 * d__1 + d__2 * d__2;
-        if (f2 <= fla_max(g2,1.) * safmin)
+        if(f2 <= fla_max(g2, 1.) * safmin)
         {
             /* This is a rare case: F is very small. */
-            if(f.real == 0. && f.imag == 0.)
+            if(f.r == 0. && f.i == 0.)
             {
                 cs = 0.;
                 d__2 = g.real;
@@ -312,8 +318,8 @@ void zlargv_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, inte
             /* Do complex/real division explicitly with 2 real divisions */
             /* Computing MAX */
             d__3 = (d__1 = f.r, f2c_dabs(d__1));
-            d__4 = (d__2 = d_imag(&f), f2c_dabs( d__2)); // , expr subst
-            if (fla_max(d__3,d__4) > 1.)
+            d__4 = (d__2 = d_imag(&f), f2c_dabs(d__2)); // , expr subst
+            if(fla_max(d__3, d__4) > 1.)
             {
                 d__1 = f.real;
                 d__2 = d_imag(&f);
@@ -378,10 +384,10 @@ void zlargv_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, inte
             sn.real = z__1.real;
             sn.imag = z__1.imag; // , expr subst
             d_cnjg(&z__2, &gs);
-            z__1.real = sn.real * z__2.real - sn.imag * z__2.imag;
-            z__1.imag = sn.real * z__2.imag + sn.imag * z__2.real; // , expr subst
-            sn.real = z__1.real;
-            sn.imag = z__1.imag; // , expr subst
+            z__1.r = sn.r * z__2.r - sn.i * z__2.i;
+            z__1.i = sn.r * z__2.i + sn.i * z__2.r; // , expr subst
+            sn.r = z__1.r;
+            sn.i = z__1.i; // , expr subst
             if(count != 0)
             {
                 if(count > 0)

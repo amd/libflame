@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b CROT applies a plane rotation with real cosine and scomplex sine to a pair of scomplex vectors. */
+#include "FLA_f2c.h" /* > \brief \b CROT applies a plane rotation with real cosine and complex sine to a pair of complex vectors. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -98,15 +98,16 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void crot_(integer *n, complex *cx, integer *incx, complex * cy, integer *incy, real *c__, complex *s)
+void crot_(integer *n, complex *cx, integer *incx, complex *cy, integer *incy, real *c__,
+           complex *s)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"crot inputs: n %lld, incx %lld, incy %lld",*n, *incx, *incy);
+    snprintf(buffer, 256, "crot inputs: n %lld, incx %lld, incy %lld", *n, *incx, *incy);
 #else
-    snprintf(buffer, 256,"crot inputs: n %d, incx %d, incy %d",*n, *incx, *incy);
+    snprintf(buffer, 256, "crot inputs: n %d, incx %d, incy %d", *n, *incx, *incy);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -155,11 +156,9 @@ void crot_(integer *n, complex *cx, integer *incx, complex * cy, integer *incy, 
         iy = (-(*n) + 1) * *incy + 1;
     }
     i__1 = *n;
-	real sr = s->r;
+    real sr = s->r;
     real si = s->i;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         q__2.r = *c__ * cx[ix].r;
         q__2.i = *c__ * cx[ix].i; // , expr subst
@@ -187,7 +186,7 @@ void crot_(integer *n, complex *cx, integer *incx, complex * cy, integer *incy, 
     return;
     /* Code for both increments equal to 1 */
 L20:
-	sr = s->r;
+    sr = s->r;
     si = s->i;
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)

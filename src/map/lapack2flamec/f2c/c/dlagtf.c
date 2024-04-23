@@ -151,10 +151,11 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dlagtf_(integer *n, doublereal *a, doublereal *lambda, doublereal *b, doublereal *c__, doublereal *tol, doublereal *d__, integer *in, integer *info)
+void dlagtf_(integer *n, doublereal *a, doublereal *lambda, doublereal *b, doublereal *c__,
+             doublereal *tol, doublereal *d__, integer *in, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlagtf inputs: n %" FLA_IS "",*n);
+    AOCL_DTL_SNPRINTF("dlagtf inputs: n %" FLA_IS "", *n);
     /* System generated locals */
     aocl_int64_t i__1;
     doublereal d__1, d__2;
@@ -163,7 +164,8 @@ void dlagtf_(integer *n, doublereal *a, doublereal *lambda, doublereal *b, doubl
     doublereal tl, eps, piv1, piv2, temp, mult, scale1, scale2;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -217,14 +219,14 @@ void dlagtf_(integer *n, doublereal *a, doublereal *lambda, doublereal *b, doubl
         return;
     }
     eps = dlamch_("Epsilon");
-    tl = fla_max(*tol,eps);
+    tl = fla_max(*tol, eps);
     scale1 = f2c_dabs(a[1]) + f2c_dabs(b[1]);
     i__1 = *n - 1;
     for(k = 1; k <= i__1; ++k)
     {
         a[k + 1] -= *lambda;
         scale2 = (d__1 = c__[k], f2c_dabs(d__1)) + (d__2 = a[k + 1], f2c_dabs(d__2));
-        if (k < *n - 1)
+        if(k < *n - 1)
         {
             scale2 += (d__1 = b[k + 1], f2c_dabs(d__1));
         }
@@ -249,7 +251,7 @@ void dlagtf_(integer *n, doublereal *a, doublereal *lambda, doublereal *b, doubl
         else
         {
             piv2 = (d__1 = c__[k], f2c_dabs(d__1)) / scale2;
-            if (piv2 <= piv1)
+            if(piv2 <= piv1)
             {
                 in[k] = 0;
                 scale1 = scale2;
@@ -276,13 +278,13 @@ void dlagtf_(integer *n, doublereal *a, doublereal *lambda, doublereal *b, doubl
                 c__[k] = mult;
             }
         }
-        if (fla_max(piv1,piv2) <= tl && in[*n] == 0)
+        if(fla_max(piv1, piv2) <= tl && in[*n] == 0)
         {
             in[*n] = (aocl_int_t)(k);
         }
         /* L10: */
     }
-    if ((d__1 = a[*n], f2c_dabs(d__1)) <= scale1 * tl && in[*n] == 0)
+    if((d__1 = a[*n], f2c_dabs(d__1)) <= scale1 * tl && in[*n] == 0)
     {
         in[*n] = (aocl_int_t)(*n);
     }

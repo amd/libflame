@@ -1,16 +1,11 @@
-/* ../netlib/v3.9.0/chetrd_he2hb.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/chetrd_he2hb.f -- translated by f2c (version 20160102). You must link the
+ resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
+ Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
+ with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    0.f,0.f
-}
-;
-static complex c_b2 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {0.f, 0.f};
+static complex c_b2 = {1.f, 0.f};
 static integer c__4 = 4;
 static integer c_n1 = -1;
 static integer c__1 = 1;
@@ -22,11 +17,17 @@ static real c_b33 = 1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CHETRD_HE2HB + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetrd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -57,7 +58,7 @@ static real c_b33 = 1.f;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -112,7 +113,7 @@ if UPLO */
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > \endverbatim */
 /* > */
@@ -247,15 +248,19 @@ v(i+kd+2:n) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void chetrd_he2hb_(char *uplo, integer *n, integer *kd, complex *a, integer *lda, complex *ab, integer *ldab, complex *tau, complex *work, integer *lwork, integer *info)
+void chetrd_he2hb_(char *uplo, integer *n, integer *kd, complex *a, integer *lda, complex *ab,
+                   integer *ldab, complex *tau, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chetrd_he2hb inputs: uplo %c, n %lld, kd %lld, lda %lld, ldab %lld, lwork %lld",*uplo, *n, *kd, *lda, *ldab, *lwork);
+    snprintf(buffer, 256,
+             "chetrd_he2hb inputs: uplo %c, n %lld, kd %lld, lda %lld, ldab %lld, lwork %lld",
+             *uplo, *n, *kd, *lda, *ldab, *lwork);
 #else
-    snprintf(buffer, 256,"chetrd_he2hb inputs: uplo %c, n %d, kd %d, lda %d, ldab %d, lwork %d",*uplo, *n, *kd, *lda, *ldab, *lwork);
+    snprintf(buffer, 256, "chetrd_he2hb inputs: uplo %c, n %d, kd %d, lda %d, ldab %d, lwork %d",
+             *uplo, *n, *kd, *lda, *ldab, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -264,18 +269,34 @@ void chetrd_he2hb_(char *uplo, integer *n, integer *kd, complex *a, integer *lda
     complex q__1;
     /* Local variables */
     integer i__, j, lk, pk, pn, lt, lw, ls1, ls2, ldt, ldw, lds1, lds2;
-    extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *,
+                                 integer *);
     integer tpos, wpos, s1pos, s2pos;
     extern /* Subroutine */
-    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), chemm_(char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+        void
+        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
+               complex *, integer *, complex *, complex *, integer *),
+        chemm_(char *, char *, integer *, integer *, complex *, complex *, integer *, complex *,
+               integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
-    void ccopy_(integer *, complex *, integer *, complex *, integer *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *);
     integer lwmin;
     logical upper;
     extern /* Subroutine */
-    void cher2k_(char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, real *, complex *, integer *), cgelqf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clarft_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        cher2k_(char *, char *, integer *, integer *, complex *, complex *, integer *, complex *,
+                integer *, real *, complex *, integer *),
+        cgelqf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+                integer *),
+        cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+                integer *),
+        clarft_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *),
+        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -313,19 +334,19 @@ void chetrd_he2hb_(char *uplo, integer *n, integer *kd, complex *a, integer *lda
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
     lwmin = ilaenv2stage_(&c__4, "CHETRD_HE2HB", "", n, kd, &c_n1, &c_n1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*kd < 0)
+    else if(*kd < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
@@ -334,58 +355,55 @@ void chetrd_he2hb_(char *uplo, integer *n, integer *kd, complex *a, integer *lda
         /* Computing MAX */
         i__1 = 1;
         i__2 = *kd + 1; // , expr subst
-        if (*ldab < fla_max(i__1,i__2))
+        if(*ldab < fla_max(i__1, i__2))
         {
             *info = -7;
         }
-        else if (*lwork < lwmin && ! lquery)
+        else if(*lwork < lwmin && !lquery)
         {
             *info = -10;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CHETRD_HE2HB", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-        work[1].r = (real) lwmin;
+        work[1].r = (real)lwmin;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Quick return if possible */
     /* Copy the upper/lower portion of A into AB */
-    if (*n <= *kd + 1)
+    if(*n <= *kd + 1)
     {
-        if (upper)
+        if(upper)
         {
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 /* Computing MIN */
                 i__2 = *kd + 1;
-                lk = fla_min(i__2,i__);
-                ccopy_(&lk, &a[i__ - lk + 1 + i__ * a_dim1], &c__1, &ab[*kd + 1 - lk + 1 + i__ * ab_dim1], &c__1);
+                lk = fla_min(i__2, i__);
+                ccopy_(&lk, &a[i__ - lk + 1 + i__ * a_dim1], &c__1,
+                       &ab[*kd + 1 - lk + 1 + i__ * ab_dim1], &c__1);
                 /* L100: */
             }
         }
         else
         {
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 /* Computing MIN */
                 i__2 = *kd + 1;
                 i__3 = *n - i__ + 1; // , expr subst
-                lk = fla_min(i__2,i__3);
+                lk = fla_min(i__2, i__3);
                 ccopy_(&lk, &a[i__ + i__ * a_dim1], &c__1, &ab[i__ * ab_dim1 + 1], &c__1);
                 /* L110: */
             }
@@ -407,7 +425,7 @@ void chetrd_he2hb_(char *uplo, integer *n, integer *kd, complex *a, integer *lda
     wpos = tpos + lt;
     s1pos = wpos + lw;
     s2pos = s1pos + ls1;
-    if (upper)
+    if(upper)
     {
         ldw = *kd;
         lds2 = *kd;
@@ -420,63 +438,64 @@ void chetrd_he2hb_(char *uplo, integer *n, integer *kd, complex *a, integer *lda
     /* Set the workspace of the triangular matrix T to zero once such a */
     /* way every time T is generated the upper/lower portion will be always zero */
     claset_("A", &ldt, kd, &c_b1, &c_b1, &work[tpos], &ldt);
-    if (upper)
+    if(upper)
     {
         i__1 = *n - *kd;
         i__2 = *kd;
-        for (i__ = 1;
-                i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-                i__ += i__2)
+        for(i__ = 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
         {
             pn = *n - i__ - *kd + 1;
             /* Computing MIN */
             i__3 = *n - i__ - *kd + 1;
-            pk = fla_min(i__3,*kd);
+            pk = fla_min(i__3, *kd);
             /* Compute the LQ factorization of the current block */
-            cgelqf_(kd, &pn, &a[i__ + (i__ + *kd) * a_dim1], lda, &tau[i__], & work[s2pos], &ls2, &iinfo);
+            cgelqf_(kd, &pn, &a[i__ + (i__ + *kd) * a_dim1], lda, &tau[i__], &work[s2pos], &ls2,
+                    &iinfo);
             /* Copy the upper portion of A into AB */
             i__3 = i__ + pk - 1;
-            for (j = i__;
-                    j <= i__3;
-                    ++j)
+            for(j = i__; j <= i__3; ++j)
             {
                 /* Computing MIN */
                 i__4 = *kd;
                 i__5 = *n - j; // , expr subst
-                lk = fla_min(i__4,i__5) + 1;
+                lk = fla_min(i__4, i__5) + 1;
                 i__4 = *ldab - 1;
                 ccopy_(&lk, &a[j + j * a_dim1], lda, &ab[*kd + 1 + j * ab_dim1], &i__4);
                 /* L20: */
             }
             claset_("Lower", &pk, &pk, &c_b1, &c_b2, &a[i__ + (i__ + *kd) * a_dim1], lda);
             /* Form the matrix T */
-            clarft_("Forward", "Rowwise", &pn, &pk, &a[i__ + (i__ + *kd) * a_dim1], lda, &tau[i__], &work[tpos], &ldt);
+            clarft_("Forward", "Rowwise", &pn, &pk, &a[i__ + (i__ + *kd) * a_dim1], lda, &tau[i__],
+                    &work[tpos], &ldt);
             /* Compute W: */
-            cgemm_("Conjugate", "No transpose", &pk, &pn, &pk, &c_b2, &work[ tpos], &ldt, &a[i__ + (i__ + *kd) * a_dim1], lda, &c_b1, & work[s2pos], &lds2);
-            chemm_("Right", uplo, &pk, &pn, &c_b2, &a[i__ + *kd + (i__ + *kd) * a_dim1], lda, &work[s2pos], &lds2, &c_b1, &work[wpos], & ldw);
-            cgemm_("No transpose", "Conjugate", &pk, &pk, &pn, &c_b2, &work[ wpos], &ldw, &work[s2pos], &lds2, &c_b1, &work[s1pos], & lds1);
+            cgemm_("Conjugate", "No transpose", &pk, &pn, &pk, &c_b2, &work[tpos], &ldt,
+                   &a[i__ + (i__ + *kd) * a_dim1], lda, &c_b1, &work[s2pos], &lds2);
+            chemm_("Right", uplo, &pk, &pn, &c_b2, &a[i__ + *kd + (i__ + *kd) * a_dim1], lda,
+                   &work[s2pos], &lds2, &c_b1, &work[wpos], &ldw);
+            cgemm_("No transpose", "Conjugate", &pk, &pk, &pn, &c_b2, &work[wpos], &ldw,
+                   &work[s2pos], &lds2, &c_b1, &work[s1pos], &lds1);
             q__1.r = -.5f;
             q__1.i = -0.f; // , expr subst
-            cgemm_("No transpose", "No transpose", &pk, &pn, &pk, &q__1, & work[s1pos], &lds1, &a[i__ + (i__ + *kd) * a_dim1], lda, & c_b2, &work[wpos], &ldw);
+            cgemm_("No transpose", "No transpose", &pk, &pn, &pk, &q__1, &work[s1pos], &lds1,
+                   &a[i__ + (i__ + *kd) * a_dim1], lda, &c_b2, &work[wpos], &ldw);
             /* Update the unreduced submatrix A(i+kd:n,i+kd:n), using */
             /* an update of the form: A := A - V'*W - W'*V */
             q__1.r = -1.f;
             q__1.i = -0.f; // , expr subst
-            cher2k_(uplo, "Conjugate", &pn, &pk, &q__1, &a[i__ + (i__ + *kd) * a_dim1], lda, &work[wpos], &ldw, &c_b33, &a[i__ + *kd + ( i__ + *kd) * a_dim1], lda);
+            cher2k_(uplo, "Conjugate", &pn, &pk, &q__1, &a[i__ + (i__ + *kd) * a_dim1], lda,
+                    &work[wpos], &ldw, &c_b33, &a[i__ + *kd + (i__ + *kd) * a_dim1], lda);
             /* L10: */
         }
         /* Copy the upper band to AB which is the band storage matrix */
         i__2 = *n;
-        for (j = *n - *kd + 1;
-                j <= i__2;
-                ++j)
+        for(j = *n - *kd + 1; j <= i__2; ++j)
         {
             /* Computing MIN */
             i__1 = *kd;
             i__3 = *n - j; // , expr subst
-            lk = fla_min(i__1,i__3) + 1;
+            lk = fla_min(i__1, i__3) + 1;
             i__1 = *ldab - 1;
-            ccopy_(&lk, &a[j + j * a_dim1], lda, &ab[*kd + 1 + j * ab_dim1], & i__1);
+            ccopy_(&lk, &a[j + j * a_dim1], lda, &ab[*kd + 1 + j * ab_dim1], &i__1);
             /* L30: */
         }
     }
@@ -485,44 +504,49 @@ void chetrd_he2hb_(char *uplo, integer *n, integer *kd, complex *a, integer *lda
         /* Reduce the lower triangle of A to lower band matrix */
         i__2 = *n - *kd;
         i__1 = *kd;
-        for (i__ = 1;
-                i__1 < 0 ? i__ >= i__2 : i__ <= i__2;
-                i__ += i__1)
+        for(i__ = 1; i__1 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__1)
         {
             pn = *n - i__ - *kd + 1;
             /* Computing MIN */
             i__3 = *n - i__ - *kd + 1;
-            pk = fla_min(i__3,*kd);
+            pk = fla_min(i__3, *kd);
             /* Compute the QR factorization of the current block */
-            cgeqrf_(&pn, kd, &a[i__ + *kd + i__ * a_dim1], lda, &tau[i__], & work[s2pos], &ls2, &iinfo);
+            cgeqrf_(&pn, kd, &a[i__ + *kd + i__ * a_dim1], lda, &tau[i__], &work[s2pos], &ls2,
+                    &iinfo);
             /* Copy the upper portion of A into AB */
             i__3 = i__ + pk - 1;
-            for (j = i__;
-                    j <= i__3;
-                    ++j)
+            for(j = i__; j <= i__3; ++j)
             {
                 /* Computing MIN */
                 i__4 = *kd;
                 i__5 = *n - j; // , expr subst
-                lk = fla_min(i__4,i__5) + 1;
-                ccopy_(&lk, &a[j + j * a_dim1], &c__1, &ab[j * ab_dim1 + 1], & c__1);
+                lk = fla_min(i__4, i__5) + 1;
+                ccopy_(&lk, &a[j + j * a_dim1], &c__1, &ab[j * ab_dim1 + 1], &c__1);
                 /* L50: */
             }
             claset_("Upper", &pk, &pk, &c_b1, &c_b2, &a[i__ + *kd + i__ * a_dim1], lda);
             /* Form the matrix T */
-            clarft_("Forward", "Columnwise", &pn, &pk, &a[i__ + *kd + i__ * a_dim1], lda, &tau[i__], &work[tpos], &ldt);
+            clarft_("Forward", "Columnwise", &pn, &pk, &a[i__ + *kd + i__ * a_dim1], lda, &tau[i__],
+                    &work[tpos], &ldt);
             /* Compute W: */
-            cgemm_("No transpose", "No transpose", &pn, &pk, &pk, &c_b2, &a[ i__ + *kd + i__ * a_dim1], lda, &work[tpos], &ldt, &c_b1, &work[s2pos], &lds2);
-            chemm_("Left", uplo, &pn, &pk, &c_b2, &a[i__ + *kd + (i__ + *kd) * a_dim1], lda, &work[s2pos], &lds2, &c_b1, &work[wpos], & ldw);
-            cgemm_("Conjugate", "No transpose", &pk, &pk, &pn, &c_b2, &work[ s2pos], &lds2, &work[wpos], &ldw, &c_b1, &work[s1pos], & lds1);
+            cgemm_("No transpose", "No transpose", &pn, &pk, &pk, &c_b2,
+                   &a[i__ + *kd + i__ * a_dim1], lda, &work[tpos], &ldt, &c_b1, &work[s2pos],
+                   &lds2);
+            chemm_("Left", uplo, &pn, &pk, &c_b2, &a[i__ + *kd + (i__ + *kd) * a_dim1], lda,
+                   &work[s2pos], &lds2, &c_b1, &work[wpos], &ldw);
+            cgemm_("Conjugate", "No transpose", &pk, &pk, &pn, &c_b2, &work[s2pos], &lds2,
+                   &work[wpos], &ldw, &c_b1, &work[s1pos], &lds1);
             q__1.r = -.5f;
             q__1.i = -0.f; // , expr subst
-            cgemm_("No transpose", "No transpose", &pn, &pk, &pk, &q__1, &a[ i__ + *kd + i__ * a_dim1], lda, &work[s1pos], &lds1, & c_b2, &work[wpos], &ldw);
+            cgemm_("No transpose", "No transpose", &pn, &pk, &pk, &q__1,
+                   &a[i__ + *kd + i__ * a_dim1], lda, &work[s1pos], &lds1, &c_b2, &work[wpos],
+                   &ldw);
             /* Update the unreduced submatrix A(i+kd:n,i+kd:n), using */
             /* an update of the form: A := A - V*W' - W*V' */
             q__1.r = -1.f;
             q__1.i = -0.f; // , expr subst
-            cher2k_(uplo, "No transpose", &pn, &pk, &q__1, &a[i__ + *kd + i__ * a_dim1], lda, &work[wpos], &ldw, &c_b33, &a[i__ + *kd + (i__ + *kd) * a_dim1], lda);
+            cher2k_(uplo, "No transpose", &pn, &pk, &q__1, &a[i__ + *kd + i__ * a_dim1], lda,
+                    &work[wpos], &ldw, &c_b33, &a[i__ + *kd + (i__ + *kd) * a_dim1], lda);
             /* ================================================================== */
             /* RESTORE A FOR COMPARISON AND CHECKING TO BE REMOVED */
             /* DO 45 J = I, I+PK-1 */
@@ -534,19 +558,17 @@ void chetrd_he2hb_(char *uplo, integer *n, integer *kd, complex *a, integer *lda
         }
         /* Copy the lower band to AB which is the band storage matrix */
         i__1 = *n;
-        for (j = *n - *kd + 1;
-                j <= i__1;
-                ++j)
+        for(j = *n - *kd + 1; j <= i__1; ++j)
         {
             /* Computing MIN */
             i__2 = *kd;
             i__3 = *n - j; // , expr subst
-            lk = fla_min(i__2,i__3) + 1;
-            ccopy_(&lk, &a[j + j * a_dim1], &c__1, &ab[j * ab_dim1 + 1], & c__1);
+            lk = fla_min(i__2, i__3) + 1;
+            ccopy_(&lk, &a[j + j * a_dim1], &c__1, &ab[j * ab_dim1 + 1], &c__1);
             /* L60: */
         }
     }
-    work[1].r = (real) lwmin;
+    work[1].r = (real)lwmin;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

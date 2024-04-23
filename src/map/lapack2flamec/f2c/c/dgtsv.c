@@ -122,10 +122,12 @@
 /* > \ingroup doubleGTsolve */
 /* ===================================================================== */
 /* Subroutine */
-void dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublereal *du, doublereal *b, integer *ldb, integer *info)
+void dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublereal *du,
+            doublereal *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgtsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *ldb);
+    AOCL_DTL_SNPRINTF("dgtsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n, *nrhs,
+                      *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -133,7 +135,8 @@ void dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublere
     aocl_int64_t i__, j;
     doublereal fact, temp;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -169,7 +172,7 @@ void dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublere
     {
         *info = -2;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
@@ -190,7 +193,7 @@ void dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublere
         i__1 = *n - 2;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if ((d__1 = d__[i__], f2c_dabs(d__1)) >= (d__2 = dl[i__], f2c_dabs(d__2)))
+            if((d__1 = d__[i__], f2c_dabs(d__1)) >= (d__2 = dl[i__], f2c_dabs(d__2)))
             {
                 /* No row interchange required */
                 if(d__[i__] != 0.)
@@ -226,7 +229,7 @@ void dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublere
         if(*n > 1)
         {
             i__ = *n - 1;
-            if ((d__1 = d__[i__], f2c_dabs(d__1)) >= (d__2 = dl[i__], f2c_dabs(d__2)))
+            if((d__1 = d__[i__], f2c_dabs(d__1)) >= (d__2 = dl[i__], f2c_dabs(d__2)))
             {
                 if(d__[i__] != 0.)
                 {
@@ -265,7 +268,7 @@ void dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublere
         i__1 = *n - 2;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if ((d__1 = d__[i__], f2c_dabs(d__1)) >= (d__2 = dl[i__], f2c_dabs(d__2)))
+            if((d__1 = d__[i__], f2c_dabs(d__1)) >= (d__2 = dl[i__], f2c_dabs(d__2)))
             {
                 /* No row interchange required */
                 if(d__[i__] != 0.)
@@ -311,7 +314,7 @@ void dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublere
         if(*n > 1)
         {
             i__ = *n - 1;
-            if ((d__1 = d__[i__], f2c_dabs(d__1)) >= (d__2 = dl[i__], f2c_dabs(d__2)))
+            if((d__1 = d__[i__], f2c_dabs(d__1)) >= (d__2 = dl[i__], f2c_dabs(d__2)))
             {
                 if(d__[i__] != 0.)
                 {

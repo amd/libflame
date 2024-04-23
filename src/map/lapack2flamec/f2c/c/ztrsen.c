@@ -167,9 +167,9 @@ and if COMPQ = 'V', LDQ >= N. */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If JOB = 'N', LWORK >= 1;
-*/
+ */
 /* > if JOB = 'E', LWORK = fla_max(1,M*(N-M));
-*/
+ */
 /* > if JOB = 'V' or 'B', LWORK >= fla_max(1,2*M*(N-M)). */
 /* > */
 /* > If LWORK = -1, then a workspace query is assumed;
@@ -269,10 +269,14 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ztrsen_(char *job, char *compq, logical *select, integer *n, doublecomplex *t, integer *ldt, doublecomplex *q, integer *ldq, doublecomplex *w, integer *m, doublereal *s, doublereal *sep, doublecomplex *work, integer *lwork, integer *info)
+void ztrsen_(char *job, char *compq, logical *select, integer *n, doublecomplex *t, integer *ldt,
+             doublecomplex *q, integer *ldq, doublecomplex *w, integer *m, doublereal *s,
+             doublereal *sep, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztrsen inputs: job %c, compq %c, n %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS ", m %" FLA_IS "",*job, *compq, *n, *ldt, *ldq, *m);
+    AOCL_DTL_SNPRINTF("ztrsen inputs: job %c, compq %c, n %" FLA_IS ", ldt %" FLA_IS
+                      ", ldq %" FLA_IS ", m %" FLA_IS "",
+                      *job, *compq, *n, *ldt, *ldq, *m);
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, t_dim1, t_offset, i__1, i__2, i__3;
     /* Builtin functions */
@@ -287,17 +291,26 @@ void ztrsen_(char *job, char *compq, logical *select, integer *n, doublecomplex 
     logical wantq, wants;
     doublereal rnorm, rwork[1];
     extern /* Subroutine */
-    void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
+        void
+        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *,
+                              doublereal *);
     logical wantbh;
     extern /* Subroutine */
-    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *);
     logical wantsp;
     extern /* Subroutine */
-    void ztrexc_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, integer *);
+        void
+        ztrexc_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
+                integer *, integer *, integer *);
     logical lquery;
     extern /* Subroutine */
-    void ztrsyl_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *);
+        void
+        ztrsyl_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -358,21 +371,21 @@ void ztrsen_(char *job, char *compq, logical *select, integer *n, doublecomplex 
         /* Computing MAX */
         i__1 = 1;
         i__2 = nn << 1; // , expr subst
-        lwmin = fla_max(i__1,i__2);
+        lwmin = fla_max(i__1, i__2);
     }
-    else if (lsame_(job, "N", 1, 1))
+    else if(lsame_(job, "N", 1, 1))
     {
         lwmin = 1;
     }
-    else if (lsame_(job, "E", 1, 1))
+    else if(lsame_(job, "E", 1, 1))
     {
-        lwmin = fla_max(1,nn);
+        lwmin = fla_max(1, nn);
     }
-    if (! lsame_(job, "N", 1, 1) && ! wants && ! wantsp)
+    if(!lsame_(job, "N", 1, 1) && !wants && !wantsp)
     {
         *info = -1;
     }
-    else if (! lsame_(compq, "N", 1, 1) && ! wantq)
+    else if(!lsame_(compq, "N", 1, 1) && !wantq)
     {
         *info = -2;
     }
@@ -380,7 +393,7 @@ void ztrsen_(char *job, char *compq, logical *select, integer *n, doublecomplex 
     {
         *info = -4;
     }
-    else if (*ldt < fla_max(1,*n))
+    else if(*ldt < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -394,19 +407,19 @@ void ztrsen_(char *job, char *compq, logical *select, integer *n, doublecomplex 
     }
     if(*info == 0)
     {
-        work[1].real = (doublereal)lwmin;
-        work[1].imag = 0.; // , expr subst
+        work[1].r = (doublereal)lwmin;
+        work[1].i = 0.; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZTRSEN", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -433,7 +446,7 @@ void ztrsen_(char *job, char *compq, logical *select, integer *n, doublecomplex 
             /* Swap the K-th eigenvalue to position KS. */
             if(k != ks)
             {
-                aocl_lapack_ztrexc(compq, n, &t[t_offset], ldt, &q[q_offset], ldq, &k, &ks, &ierr);
+                ztrexc_(compq, n, &t[t_offset], ldt, &q[q_offset], ldq, &k, &ks, &ierr);
             }
         }
         /* L20: */
@@ -442,12 +455,12 @@ void ztrsen_(char *job, char *compq, logical *select, integer *n, doublecomplex 
     {
         /* Solve the Sylvester equation for R: */
         /* T11*R - R*T22 = scale*T12 */
-        aocl_lapack_zlacpy("F", &n1, &n2, &t[(n1 + 1) * t_dim1 + 1], ldt, &work[1], &n1);
-        aocl_lapack_ztrsyl("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt,
-                           &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, &ierr);
+        zlacpy_("F", &n1, &n2, &t[(n1 + 1) * t_dim1 + 1], ldt, &work[1], &n1);
+        ztrsyl_("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt, &t[n1 + 1 + (n1 + 1) * t_dim1], ldt,
+                &work[1], &n1, &scale, &ierr);
         /* Estimate the reciprocal of the condition number of the cluster */
         /* of eigenvalues. */
-        rnorm = aocl_lapack_zlange("F", &n1, &n2, &work[1], &n1, rwork);
+        rnorm = zlange_("F", &n1, &n2, &work[1], &n1, rwork);
         if(rnorm == 0.)
         {
             *s = 1.;
@@ -463,22 +476,20 @@ void ztrsen_(char *job, char *compq, logical *select, integer *n, doublecomplex 
         est = 0.;
         kase = 0;
     L30:
-        aocl_lapack_zlacn2(&nn, &work[nn + 1], &work[1], &est, &kase, isave);
+        zlacn2_(&nn, &work[nn + 1], &work[1], &est, &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Solve T11*R - R*T22 = scale*X. */
-                aocl_lapack_ztrsyl("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt,
-                                   &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale,
-                                   &ierr);
+                ztrsyl_("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt,
+                        &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, &ierr);
             }
             else
             {
                 /* Solve T11**H*R - R*T22**H = scale*X. */
-                aocl_lapack_ztrsyl("C", "C", &c_n1, &n1, &n2, &t[t_offset], ldt,
-                                   &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale,
-                                   &ierr);
+                ztrsyl_("C", "C", &c_n1, &n1, &n2, &t[t_offset], ldt,
+                        &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, &ierr);
             }
             goto L30;
         }
@@ -494,7 +505,7 @@ L40: /* Copy reordered eigenvalues to W. */
         w[i__2].imag = t[i__3].imag; // , expr subst
         /* L50: */
     }
-    work[1].r = (doublereal) lwmin;
+    work[1].r = (doublereal)lwmin;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b ZLANHT returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
- * or the ele ment of largest absolute value of a scomplex Hermitian tridiagonal matrix. */
+ * or the ele ment of largest absolute value of a complex Hermitian tridiagonal matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -102,7 +102,7 @@ static aocl_int64_t c__1 = 1;
 doublereal zlanht_(char *norm, aocl_int_t *n, doublereal *d__, dcomplex *e)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlanht inputs: norm %c, n %" FLA_IS "",*norm, *n);
+    AOCL_DTL_SNPRINTF("zlanht inputs: norm %c, n %" FLA_IS "", *norm, *n);
 
     /* System generated locals */
     aocl_int64_t i__1;
@@ -116,7 +116,9 @@ doublereal zlanht_(char *norm, aocl_int_t *n, doublereal *d__, dcomplex *e)
     doublereal anorm;
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
-    void dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *), zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
+        void
+        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *),
+        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -142,11 +144,11 @@ doublereal zlanht_(char *norm, aocl_int_t *n, doublereal *d__, dcomplex *e)
     --d__;
     /* Function Body */
     anorm = 0.;
-    if (*n <= 0)
+    if(*n <= 0)
     {
         anorm = 0.;
     }
-    else if (lsame_(norm, "M", 1, 1))
+    else if(lsame_(norm, "M", 1, 1))
     {
         /* Find fla_max(f2c_dabs(A(i,j))). */
         anorm = (d__1 = d__[*n], f2c_dabs(d__1));
@@ -154,19 +156,19 @@ doublereal zlanht_(char *norm, aocl_int_t *n, doublereal *d__, dcomplex *e)
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             sum = (d__1 = d__[i__], f2c_dabs(d__1));
-            if (anorm < sum || disnan_(&sum))
+            if(anorm < sum || disnan_(&sum))
             {
                 anorm = sum;
             }
             sum = z_abs(&e[i__]);
-            if (anorm < sum || disnan_(&sum))
+            if(anorm < sum || disnan_(&sum))
             {
                 anorm = sum;
             }
             /* L10: */
         }
     }
-    else if (lsame_(norm, "O", 1, 1) || *(unsigned char *) norm == '1' || lsame_(norm, "I", 1, 1))
+    else if(lsame_(norm, "O", 1, 1) || *(unsigned char *)norm == '1' || lsame_(norm, "I", 1, 1))
     {
         /* Find norm1(A). */
         if(*n == 1)
@@ -177,15 +179,15 @@ doublereal zlanht_(char *norm, aocl_int_t *n, doublereal *d__, dcomplex *e)
         {
             anorm = f2c_dabs(d__[1]) + z_abs(&e[1]);
             sum = z_abs(&e[*n - 1]) + (d__1 = d__[*n], f2c_dabs(d__1));
-            if (anorm < sum || disnan_(&sum))
+            if(anorm < sum || disnan_(&sum))
             {
                 anorm = sum;
             }
             i__1 = *n - 1;
             for(i__ = 2; i__ <= i__1; ++i__)
             {
-                sum = (d__1 = d__[i__], f2c_dabs(d__1)) + z_abs(&e[i__]) + z_abs(& e[i__ - 1]);
-                if (anorm < sum || disnan_(&sum))
+                sum = (d__1 = d__[i__], f2c_dabs(d__1)) + z_abs(&e[i__]) + z_abs(&e[i__ - 1]);
+                if(anorm < sum || disnan_(&sum))
                 {
                     anorm = sum;
                 }
@@ -193,7 +195,7 @@ doublereal zlanht_(char *norm, aocl_int_t *n, doublereal *d__, dcomplex *e)
             }
         }
     }
-    else if (lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
+    else if(lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
     {
         /* Find normF(A). */
         scale = 0.;

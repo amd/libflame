@@ -171,7 +171,7 @@ tauq is stored in TAUQ(i) and taup in TAUP(i). */
 /* > */
 /* > H(i) = I - tauq * v * v**H and G(i) = I - taup * u * u**H */
 /* > */
-/* > where tauq and taup are scomplex scalars, v and u are scomplex vectors;
+/* > where tauq and taup are complex scalars, v and u are complex vectors;
  */
 /* > v(1:i) = 0, v(i+1) = 1, and v(i+2:m) is stored on exit in A(i+2:m,i);
  */
@@ -197,10 +197,11 @@ tauq is stored in TAUQ(i) and taup in TAUP(i). */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgebd2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *d__, doublereal *e, doublecomplex *tauq, doublecomplex *taup, doublecomplex *work, integer *info)
+void zgebd2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *d__, doublereal *e,
+             doublecomplex *tauq, doublecomplex *taup, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgebd2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
+    AOCL_DTL_SNPRINTF("zgebd2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *lda);
 
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
@@ -211,7 +212,12 @@ void zgebd2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
     integer i__;
     doublecomplex alpha;
     extern /* Subroutine */
-    void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zlacgv_(integer *, doublecomplex *, integer *);
+        void
+        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *),
+        zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -250,7 +256,7 @@ void zgebd2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
@@ -274,7 +280,7 @@ void zgebd2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
             i__2 = *m - i__ + 1;
             /* Computing MIN */
             i__3 = i__ + 1;
-            zlarfg_(&i__2, &alpha, &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, & tauq[i__]);
+            zlarfg_(&i__2, &alpha, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1, &tauq[i__]);
             i__2 = i__;
             d__[i__2] = alpha.real;
             i__2 = i__ + i__ * a_dim1;
@@ -286,13 +292,13 @@ void zgebd2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
                 i__2 = *m - i__ + 1;
                 i__3 = *n - i__;
                 d_cnjg(&z__1, &tauq[i__]);
-                aocl_lapack_zlarf("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &z__1,
-                                  &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
+                zlarf_("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &z__1,
+                       &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
             }
             i__2 = i__ + i__ * a_dim1;
             i__3 = i__;
-            a[i__2].real = d__[i__3];
-            a[i__2].imag = 0.; // , expr subst
+            a[i__2].r = d__[i__3];
+            a[i__2].i = 0.; // , expr subst
             if(i__ < *n)
             {
                 /* Generate elementary reflector G(i) to annihilate */
@@ -305,7 +311,7 @@ void zgebd2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
                 i__2 = *n - i__;
                 /* Computing MIN */
                 i__3 = i__ + 2;
-                zlarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3,*n) * a_dim1], lda, & taup[i__]);
+                zlarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda, &taup[i__]);
                 i__2 = i__;
                 e[i__2] = alpha.real;
                 i__2 = i__ + (i__ + 1) * a_dim1;
@@ -314,8 +320,8 @@ void zgebd2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
                 /* Apply G(i) to A(i+1:m,i+1:n) from the right */
                 i__2 = *m - i__;
                 i__3 = *n - i__;
-                aocl_lapack_zlarf("Right", &i__2, &i__3, &a[i__ + (i__ + 1) * a_dim1], lda,
-                                  &taup[i__], &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
+                zlarf_("Right", &i__2, &i__3, &a[i__ + (i__ + 1) * a_dim1], lda, &taup[i__],
+                       &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
                 i__2 = *n - i__;
                 aocl_lapack_zlacgv(&i__2, &a[i__ + (i__ + 1) * a_dim1], lda);
                 i__2 = i__ + (i__ + 1) * a_dim1;
@@ -347,7 +353,7 @@ void zgebd2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
             i__2 = *n - i__ + 1;
             /* Computing MIN */
             i__3 = i__ + 1;
-            zlarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3,*n) * a_dim1], lda, & taup[i__]);
+            zlarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda, &taup[i__]);
             i__2 = i__;
             d__[i__2] = alpha.real;
             i__2 = i__ + i__ * a_dim1;
@@ -358,15 +364,15 @@ void zgebd2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
             {
                 i__2 = *m - i__;
                 i__3 = *n - i__ + 1;
-                aocl_lapack_zlarf("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &taup[i__],
-                                  &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
+                zlarf_("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &taup[i__],
+                       &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
             }
             i__2 = *n - i__ + 1;
             aocl_lapack_zlacgv(&i__2, &a[i__ + i__ * a_dim1], lda);
             i__2 = i__ + i__ * a_dim1;
             i__3 = i__;
-            a[i__2].real = d__[i__3];
-            a[i__2].imag = 0.; // , expr subst
+            a[i__2].r = d__[i__3];
+            a[i__2].i = 0.; // , expr subst
             if(i__ < *m)
             {
                 /* Generate elementary reflector H(i) to annihilate */
@@ -377,7 +383,7 @@ void zgebd2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
                 i__2 = *m - i__;
                 /* Computing MIN */
                 i__3 = i__ + 2;
-                zlarfg_(&i__2, &alpha, &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, &tauq[i__]);
+                zlarfg_(&i__2, &alpha, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1, &tauq[i__]);
                 i__2 = i__;
                 e[i__2] = alpha.real;
                 i__2 = i__ + 1 + i__ * a_dim1;
@@ -387,8 +393,8 @@ void zgebd2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
                 i__2 = *m - i__;
                 i__3 = *n - i__;
                 d_cnjg(&z__1, &tauq[i__]);
-                aocl_lapack_zlarf("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &z__1,
-                                  &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
+                zlarf_("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &z__1,
+                       &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
                 i__2 = i__ + 1 + i__ * a_dim1;
                 i__3 = i__;
                 a[i__2].real = e[i__3];

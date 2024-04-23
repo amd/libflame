@@ -108,7 +108,8 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sorgl2_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work, integer *info)
+void sorgl2_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work,
+                integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
@@ -116,7 +117,10 @@ void sorgl2_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real 
     /* Local variables */
     integer i__, j, l;
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *), slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sscal_(integer *, real *, real *, integer *),
+        slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -156,7 +160,7 @@ void sorgl2_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real 
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
@@ -200,8 +204,8 @@ void sorgl2_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real 
                 a[i__ + i__ * a_dim1] = 1.f;
                 i__1 = *m - i__;
                 i__2 = *n - i__ + 1;
-                aocl_lapack_slarf("Right", &i__1, &i__2, &a[i__ + i__ * a_dim1], lda, &tau[i__],
-                                  &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
+                slarf_("Right", &i__1, &i__2, &a[i__ + i__ * a_dim1], lda, &tau[i__],
+                       &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
             }
             i__1 = *n - i__;
             r__1 = -tau[i__];

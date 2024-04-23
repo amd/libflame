@@ -1,11 +1,11 @@
-/* ./slaed9.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slaed9.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-/* > \brief \b SLAED9 used by SSTEDC. Finds the roots of the secular equation and updates the
+static integer c__1 = 1;
+/* > \brief \b SLAED9 used by sstedc. Finds the roots of the secular equation and updates the
  * eigenvectors. Us ed when the original matrix is dense. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -151,7 +151,8 @@ static aocl_int64_t c__1 = 1;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void slaed9_(integer *k, integer *kstart, integer *kstop, integer *n, real *d__, real *q, integer *ldq, real *rho, real *dlamda, real *w, real *s, integer *lds, integer *info)
+void slaed9_(integer *k, integer *kstart, integer *kstop, integer *n, real *d__, real *q,
+             integer *ldq, real *rho, real *dlamda, real *w, real *s, integer *lds, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slaed9(k, kstart, kstop, n, d__, q, ldq, rho, dlambda, w, s, lds, info);
@@ -189,10 +190,13 @@ void aocl_lapack_slaed9(aocl_int64_t *k, aocl_int64_t *kstart, aocl_int64_t *kst
     real temp;
     extern real snrm2_(integer *, real *, integer *);
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *), slaed4_(integer *, integer *, real *, real *, real *, real *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *),
+        slaed4_(integer *, integer *, real *, real *, real *, real *, real *, integer *);
     extern real slamc3_(real *, real *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -227,11 +231,11 @@ void aocl_lapack_slaed9(aocl_int64_t *k, aocl_int64_t *kstart, aocl_int64_t *kst
     {
         *info = -1;
     }
-    else if (*kstart < 1 || *kstart > fla_max(1,*k))
+    else if(*kstart < 1 || *kstart > fla_max(1, *k))
     {
         *info = -2;
     }
-    else if (fla_max(1,*kstop) < *kstart || *kstop > fla_max(1,*k))
+    else if(fla_max(1, *kstop) < *kstart || *kstop > fla_max(1, *k))
     {
         *info = -3;
     }
@@ -239,11 +243,11 @@ void aocl_lapack_slaed9(aocl_int64_t *k, aocl_int64_t *kstart, aocl_int64_t *kst
     {
         *info = -4;
     }
-    else if (*ldq < fla_max(1,*k))
+    else if(*ldq < fla_max(1, *k))
     {
         *info = -7;
     }
-    else if (*lds < fla_max(1,*k))
+    else if(*lds < fla_max(1, *k))
     {
         *info = -12;
     }
@@ -276,9 +280,7 @@ void aocl_lapack_slaed9(aocl_int64_t *k, aocl_int64_t *kstart, aocl_int64_t *kst
     /* 2*DLAMBDA(I) to prevent optimizing compilers from eliminating */
     /* this code. */
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         dlamda[i__] = slamc3_(&dlamda[i__], &dlamda[i__]) - dlamda[i__];
         /* L10: */

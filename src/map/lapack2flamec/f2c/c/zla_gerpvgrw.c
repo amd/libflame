@@ -3,7 +3,7 @@
  systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b ZLA_GERPVGRW multiplies a square real matrix by a scomplex matrix. */
+#include "FLA_f2c.h" /* > \brief \b ZLA_GERPVGRW multiplies a square real matrix by a complex matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -93,12 +93,13 @@
 /* > \date September 2012 */
 /* > \ingroup complex16GEcomputational */
 /* ===================================================================== */
-/** Generated wrapper function */
-doublereal zla_gerpvgrw_(aocl_int_t *n, aocl_int_t *ncols, dcomplex *a, aocl_int_t *lda,
-                         dcomplex *af, aocl_int_t *ldaf)
+doublereal zla_gerpvgrw_(integer *n, integer *ncols, doublecomplex *a, integer *lda,
+                         doublecomplex *af, integer *ldaf)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zla_gerpvgrw inputs: n %" FLA_IS ", ncols %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS "", *n, *ncols, *lda, *ldaf);
+    AOCL_DTL_SNPRINTF("zla_gerpvgrw inputs: n %" FLA_IS ", ncols %" FLA_IS ", lda %" FLA_IS
+                      ", ldaf %" FLA_IS "",
+                      *n, *ncols, *lda, *ldaf);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, i__1, i__2, i__3;
     doublereal ret_val, d__1, d__2, d__3;
@@ -144,22 +145,24 @@ doublereal zla_gerpvgrw_(aocl_int_t *n, aocl_int_t *ncols, dcomplex *a, aocl_int
         {
             /* Computing MAX */
             i__3 = i__ + j * a_dim1;
-            d__3 = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2));
-            amax = fla_max(d__3,amax);
+            d__3 = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                   + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2));
+            amax = fla_max(d__3, amax);
         }
         i__2 = j;
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             i__3 = i__ + j * af_dim1;
-            d__3 = (d__1 = af[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&af[i__ + j * af_dim1]), f2c_dabs(d__2));
-            umax = fla_max(d__3,umax);
+            d__3 = (d__1 = af[i__3].r, f2c_dabs(d__1))
+                   + (d__2 = d_imag(&af[i__ + j * af_dim1]), f2c_dabs(d__2));
+            umax = fla_max(d__3, umax);
         }
         if(umax != 0.)
         {
             /* Computing MIN */
             d__1 = amax / umax;
-            rpvgrw = fla_min(d__1,rpvgrw);
+            rpvgrw = fla_min(d__1, rpvgrw);
         }
     }
     ret_val = rpvgrw;

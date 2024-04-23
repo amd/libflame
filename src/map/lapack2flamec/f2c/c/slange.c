@@ -1,18 +1,28 @@
-/* slange.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* slange.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b SLANGE returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest absolute value of any element of a general rectangular matrix. */
+/* > \brief \b SLANGE returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest
+ * absolute value of any element of a general rectangular matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLANGE + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slange. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slange.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slange. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slange.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slange. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slange.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -101,10 +111,11 @@ otherwise, WORK is not */
 /* > \author NAG Ltd. */
 /* > \ingroup realGEauxiliary */
 /* ===================================================================== */
-real slange_(char *norm, integer *m, integer *n, real *a, integer *lda, real * work)
+real slange_(char *norm, integer *m, integer *n, real *a, integer *lda, real *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slange inputs: norm %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*norm, *m, *n, *lda);
+    AOCL_DTL_SNPRINTF("slange inputs: norm %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",
+                      *norm, *m, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     real ret_val, r__1;
@@ -116,7 +127,8 @@ real slange_(char *norm, integer *m, integer *n, real *a, integer *lda, real * w
     extern logical lsame_(char *, char *, integer, integer);
     real value;
     extern /* Subroutine */
-    void slassq_(integer *, real *, integer *, real *, real *);
+        void
+        slassq_(integer *, real *, integer *, real *, real *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -143,26 +155,22 @@ real slange_(char *norm, integer *m, integer *n, real *a, integer *lda, real * w
     --work;
     /* Function Body */
     value = 0.f;
-    if (fla_min(*m,*n) == 0)
+    if(fla_min(*m, *n) == 0)
     {
         value = 0.f;
     }
-    else if (lsame_(norm, "M", 1, 1))
+    else if(lsame_(norm, "M", 1, 1))
     {
         /* Find fla_max(abs(A(i,j))). */
         value = 0.f;
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 temp = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
-                if (value < temp || temp != temp)
+                if(value < temp || temp != temp)
                 {
                     value = temp;
                 }
@@ -171,51 +179,41 @@ real slange_(char *norm, integer *m, integer *n, real *a, integer *lda, real * w
             /* L20: */
         }
     }
-    else if (lsame_(norm, "O", 1, 1) || *(unsigned char *) norm == '1')
+    else if(lsame_(norm, "O", 1, 1) || *(unsigned char *)norm == '1')
     {
         /* Find norm1(A). */
         value = 0.f;
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             sum = 0.f;
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 sum += (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
                 /* L30: */
             }
-            if (value < sum || sum != sum)
+            if(value < sum || sum != sum)
             {
                 value = sum;
             }
             /* L40: */
         }
     }
-    else if (lsame_(norm, "I", 1, 1))
+    else if(lsame_(norm, "I", 1, 1))
     {
         /* Find normI(A). */
         i__1 = *m;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             work[i__] = 0.f;
             /* L50: */
         }
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 work[i__] += (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
                 /* L60: */
@@ -224,27 +222,23 @@ real slange_(char *norm, integer *m, integer *n, real *a, integer *lda, real * w
         }
         value = 0.f;
         i__1 = *m;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             temp = work[i__];
-            if (value < temp || temp != temp)
+            if(value < temp || temp != temp)
             {
                 value = temp;
             }
             /* L80: */
         }
     }
-    else if (lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
+    else if(lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
     {
         /* Find normF(A). */
         scale = 0.f;
         sum = 1.f;
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             slassq_(m, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
             /* L90: */

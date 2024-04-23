@@ -148,7 +148,8 @@ void aocl_lapack_sdisna(char *job, aocl_int64_t *m, aocl_int64_t *n, real *d__, 
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real newgap, thresh;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -186,7 +187,7 @@ void aocl_lapack_sdisna(char *job, aocl_int64_t *m, aocl_int64_t *n, real *d__, 
     }
     else if(sing)
     {
-        k = fla_min(*m,*n);
+        k = fla_min(*m, *n);
     }
     if(!eigen && !sing)
     {
@@ -257,7 +258,7 @@ void aocl_lapack_sdisna(char *job, aocl_int64_t *m, aocl_int64_t *n, real *d__, 
         for(i__ = 2; i__ <= i__1; ++i__)
         {
             newgap = (r__1 = d__[i__ + 1] - d__[i__], f2c_abs(r__1));
-            sep[i__] = fla_min(oldgap,newgap);
+            sep[i__] = fla_min(oldgap, newgap);
             oldgap = newgap;
             /* L20: */
         }
@@ -269,14 +270,14 @@ void aocl_lapack_sdisna(char *job, aocl_int64_t *m, aocl_int64_t *n, real *d__, 
         {
             if(incr)
             {
-                sep[1] = fla_min(sep[1],d__[1]);
+                sep[1] = fla_min(sep[1], d__[1]);
             }
             if(decr)
             {
                 /* Computing MIN */
                 r__1 = sep[k];
                 r__2 = d__[k]; // , expr subst
-                sep[k] = fla_min(r__1,r__2);
+                sep[k] = fla_min(r__1, r__2);
             }
         }
     }
@@ -287,8 +288,8 @@ void aocl_lapack_sdisna(char *job, aocl_int64_t *m, aocl_int64_t *n, real *d__, 
     /* Computing MAX */
     r__2 = f2c_abs(d__[1]);
     r__3 = (r__1 = d__[k], f2c_abs(r__1)); // , expr subst
-    anorm = fla_max(r__2,r__3);
-    if (anorm == 0.f)
+    anorm = fla_max(r__2, r__3);
+    if(anorm == 0.f)
     {
         thresh = eps;
     }
@@ -296,14 +297,14 @@ void aocl_lapack_sdisna(char *job, aocl_int64_t *m, aocl_int64_t *n, real *d__, 
     {
         /* Computing MAX */
         r__1 = eps * anorm;
-        thresh = fla_max(r__1,safmin);
+        thresh = fla_max(r__1, safmin);
     }
     i__1 = k;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Computing MAX */
         r__1 = sep[i__];
-        sep[i__] = fla_max(r__1,thresh);
+        sep[i__] = fla_max(r__1, thresh);
         /* L30: */
     }
     return;

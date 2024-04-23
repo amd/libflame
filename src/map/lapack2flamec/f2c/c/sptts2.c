@@ -102,7 +102,8 @@ void sptts2_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ld
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sptts2 inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *ldb);
+    snprintf(buffer, 256, "sptts2 inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n,
+             *nrhs, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -111,7 +112,8 @@ void sptts2_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ld
     /* Local variables */
     integer i__, j;
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

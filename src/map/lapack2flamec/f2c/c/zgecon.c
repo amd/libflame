@@ -1,8 +1,8 @@
-/* ./zgecon.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zgecon.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZGECON */
@@ -128,10 +128,11 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup gecon */
 /* ===================================================================== */
 /* Subroutine */
-void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal *anorm, doublereal *rcond, doublecomplex * work, doublereal *rwork, integer *info)
+void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal *anorm,
+             doublereal *rcond, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgecon inputs: norm %c, n %" FLA_IS ", lda %" FLA_IS "",*norm, *n, *lda);
+    AOCL_DTL_SNPRINTF("zgecon inputs: norm %c, n %" FLA_IS ", lda %" FLA_IS "", *norm, *n, *lda);
 
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
@@ -147,18 +148,23 @@ void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal 
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
+        void
+        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical onenrm;
     extern /* Subroutine */
-    void zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
+        void
+        zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
     char normin[1];
     doublereal smlnum;
     extern /* Subroutine */
-    void zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, doublereal *, integer *);
+        void
+        zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *,
+                doublecomplex *, doublereal *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -195,7 +201,7 @@ void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal 
     /* Test the input parameters. */
     *info = 0;
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
-    if (! onenrm && ! lsame_(norm, "I", 1, 1))
+    if(!onenrm && !lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }
@@ -203,7 +209,7 @@ void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal 
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -245,26 +251,26 @@ void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal 
     }
     kase = 0;
 L10:
-    aocl_lapack_zlacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    zlacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == kase1)
         {
             /* Multiply by inv(L). */
-            aocl_lapack_zlatrs("Lower", "No transpose", "Unit", normin, n, &a[a_offset], lda,
-                               &work[1], &sl, &rwork[1], info);
+            zlatrs_("Lower", "No transpose", "Unit", normin, n, &a[a_offset], lda, &work[1], &sl,
+                    &rwork[1], info);
             /* Multiply by inv(U). */
-            aocl_lapack_zlatrs("Upper", "No transpose", "Non-unit", normin, n, &a[a_offset], lda,
-                               &work[1], &su, &rwork[*n + 1], info);
+            zlatrs_("Upper", "No transpose", "Non-unit", normin, n, &a[a_offset], lda, &work[1],
+                    &su, &rwork[*n + 1], info);
         }
         else
         {
             /* Multiply by inv(U**H). */
-            aocl_lapack_zlatrs("Upper", "Conjugate transpose", "Non-unit", normin, n, &a[a_offset],
-                               lda, &work[1], &su, &rwork[*n + 1], info);
+            zlatrs_("Upper", "Conjugate transpose", "Non-unit", normin, n, &a[a_offset], lda,
+                    &work[1], &su, &rwork[*n + 1], info);
             /* Multiply by inv(L**H). */
-            aocl_lapack_zlatrs("Lower", "Conjugate transpose", "Unit", normin, n, &a[a_offset], lda,
-                               &work[1], &sl, &rwork[1], info);
+            zlatrs_("Lower", "Conjugate transpose", "Unit", normin, n, &a[a_offset], lda, &work[1],
+                    &sl, &rwork[1], info);
         }
         /* Divide X by 1/(SL*SU) if doing so will not cause overflow. */
         scale = sl * su;
@@ -273,7 +279,10 @@ L10:
         {
             ix = aocl_blas_izamax(n, &work[1], &c__1);
             i__1 = ix;
-            if (scale < ((d__1 = work[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(& work[ix]), f2c_dabs(d__2))) * smlnum || scale == 0.)
+            if(scale < ((d__1 = work[i__1].r, f2c_dabs(d__1))
+                        + (d__2 = d_imag(&work[ix]), f2c_dabs(d__2)))
+                           * smlnum
+               || scale == 0.)
             {
                 goto L20;
             }

@@ -181,7 +181,7 @@ void aocl_lapack_slapmt(logical *forwrd, aocl_int64_t *m, aocl_int64_t *n, real 
             in = k[in];
             goto L20;
         L40: /* L60: */
-            ;
+             ;
         }
     }
     else
@@ -213,7 +213,7 @@ void aocl_lapack_slapmt(logical *forwrd, aocl_int64_t *m, aocl_int64_t *n, real 
             j = k[j];
             goto L80;
         L100: /* L110: */
-            ;
+              ;
         }
     }
     return;

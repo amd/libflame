@@ -102,7 +102,9 @@
 void dlapmt_(logical *forwrd, integer *m, integer *n, doublereal *x, integer *ldx, integer *k)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlapmt inputs: forward %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", ldx %" FLA_IS ", k %" FLA_IS "", *forwrd, * m, *n, *ldx, *k);
+    AOCL_DTL_SNPRINTF("dlapmt inputs: forward %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS
+                      ", ldx %" FLA_IS ", k %" FLA_IS "",
+                      *forwrd, *m, *n, *ldx, *k);
     /* System generated locals */
     aocl_int64_t x_dim1, x_offset, i__1, i__2;
     /* Local variables */
@@ -168,7 +170,7 @@ void dlapmt_(logical *forwrd, integer *m, integer *n, doublereal *x, integer *ld
             in = k[in];
             goto L20;
         L40: /* L50: */
-            ;
+             ;
         }
     }
     else
@@ -200,7 +202,7 @@ void dlapmt_(logical *forwrd, integer *m, integer *n, doublereal *x, integer *ld
             j = k[j];
             goto L60;
         L80: /* L90: */
-            ;
+             ;
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

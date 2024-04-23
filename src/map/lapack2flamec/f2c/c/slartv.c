@@ -103,7 +103,8 @@
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slartv_(integer *n, real *x, integer *incx, real *y, integer *incy, real *c__, real *s, integer *incc)
+void slartv_(integer *n, real *x, integer *incx, real *y, integer *incy, real *c__, real *s,
+             integer *incc)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slartv(n, x, incx, y, incy, c__, s, incc);

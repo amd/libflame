@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b DZSUM1 forms the 1-norm of the scomplex vector using the true absolute value. */
+#include "FLA_f2c.h" /* > \brief \b DZSUM1 forms the 1-norm of the complex vector using the true absolute value. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -114,7 +114,7 @@ doublereal aocl_lapack_dzsum1(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx)
     /* Logging and tracing code */
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dzsum1 inputs: n %d, incx %d \n", *n, *incx);
-    
+
     /* Parameter adjustments */
     --cx;
     /* Function Body */

@@ -178,12 +178,17 @@ static real c_b14 = 1.f;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ssprfs_(char *uplo, integer *n, integer *nrhs, real *ap, real *afp, integer *ipiv, real *b, integer *ldb, real *x, integer * ldx, real *ferr, real *berr, real *work, integer *iwork, integer * info)
+void ssprfs_(char *uplo, integer *n, integer *nrhs, real *ap, real *afp, integer *ipiv, real *b,
+             integer *ldb, real *x, integer *ldx, real *ferr, real *berr, real *work,
+             integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"ssprfs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*uplo, *n, *nrhs, *ldb, *ldx);
+    snprintf(buffer, 256,
+             "ssprfs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS
+             ", ldx %" FLA_IS "",
+             *uplo, *n, *nrhs, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -202,14 +207,20 @@ void ssprfs_(char *uplo, integer *n, integer *nrhs, real *ap, real *afp, integer
     integer isave[3], count;
     logical upper;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), sspmv_(char *, integer *, real *, real *, real *, integer *, real *, real *, integer *), slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *),
+        saxpy_(integer *, real *, real *, integer *, real *, integer *),
+        sspmv_(char *, integer *, real *, real *, real *, integer *, real *, real *, integer *),
+        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real lstres;
     extern /* Subroutine */
-    void ssptrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
+        void
+        ssptrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -250,7 +261,7 @@ void ssprfs_(char *uplo, integer *n, integer *nrhs, real *ap, real *afp, integer
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -262,11 +273,11 @@ void ssprfs_(char *uplo, integer *n, integer *nrhs, real *ap, real *afp, integer
     {
         *info = -3;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -10;
     }
@@ -304,9 +315,8 @@ void ssprfs_(char *uplo, integer *n, integer *nrhs, real *ap, real *afp, integer
         lstres = 3.f;
     L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - A * X */
-        aocl_blas_scopy(n, &b[j * b_dim1 + 1], &c__1, &work[*n + 1], &c__1);
-        aocl_blas_sspmv(uplo, n, &c_b12, &ap[1], &x[j * x_dim1 + 1], &c__1, &c_b14, &work[*n + 1],
-                        &c__1);
+        scopy_(n, &b[j * b_dim1 + 1], &c__1, &work[*n + 1], &c__1);
+        sspmv_(uplo, n, &c_b12, &ap[1], &x[j * x_dim1 + 1], &c__1, &c_b14, &work[*n + 1], &c__1);
         /* Compute componentwise relative backward error from formula */
         /* fla_max(i) ( f2c_abs(R(i)) / ( f2c_abs(A)*f2c_abs(X) + f2c_abs(B) )(i) ) */
         /* where f2c_abs(Z) is the componentwise absolute value of the matrix */
@@ -333,7 +343,8 @@ void ssprfs_(char *uplo, integer *n, integer *nrhs, real *ap, real *afp, integer
                 for(i__ = 1; i__ <= i__3; ++i__)
                 {
                     work[i__] += (r__1 = ap[ik], f2c_abs(r__1)) * xk;
-                    s += (r__1 = ap[ik], f2c_abs(r__1)) * (r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
+                    s += (r__1 = ap[ik], f2c_abs(r__1))
+                         * (r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
                     ++ik;
                     /* L40: */
                 }
@@ -355,7 +366,8 @@ void ssprfs_(char *uplo, integer *n, integer *nrhs, real *ap, real *afp, integer
                 for(i__ = k + 1; i__ <= i__3; ++i__)
                 {
                     work[i__] += (r__1 = ap[ik], f2c_abs(r__1)) * xk;
-                    s += (r__1 = ap[ik], f2c_abs(r__1)) * (r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
+                    s += (r__1 = ap[ik], f2c_abs(r__1))
+                         * (r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
                     ++ik;
                     /* L60: */
                 }
@@ -372,15 +384,16 @@ void ssprfs_(char *uplo, integer *n, integer *nrhs, real *ap, real *afp, integer
             {
                 /* Computing MAX */
                 r__2 = s;
-                r__3 = (r__1 = work[*n + i__], f2c_abs(r__1)) / work[ i__]; // , expr subst
-                s = fla_max(r__2,r__3);
+                r__3 = (r__1 = work[*n + i__], f2c_abs(r__1)) / work[i__]; // , expr subst
+                s = fla_max(r__2, r__3);
             }
             else
             {
                 /* Computing MAX */
                 r__2 = s;
-                r__3 = ((r__1 = work[*n + i__], f2c_abs(r__1)) + safe1) / (work[i__] + safe1); // , expr subst
-                s = fla_max(r__2,r__3);
+                r__3 = ((r__1 = work[*n + i__], f2c_abs(r__1)) + safe1)
+                       / (work[i__] + safe1); // , expr subst
+                s = fla_max(r__2, r__3);
             }
             /* L80: */
         }
@@ -393,8 +406,8 @@ void ssprfs_(char *uplo, integer *n, integer *nrhs, real *ap, real *afp, integer
         if(berr[j] > eps && berr[j] * 2.f <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            aocl_lapack_ssptrs(uplo, n, &c__1, &afp[1], &ipiv[1], &work[*n + 1], n, info);
-            aocl_blas_saxpy(n, &c_b14, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            ssptrs_(uplo, n, &c__1, &afp[1], &ipiv[1], &work[*n + 1], n, info);
+            saxpy_(n, &c_b14, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;
@@ -431,8 +444,7 @@ void ssprfs_(char *uplo, integer *n, integer *nrhs, real *ap, real *afp, integer
         }
         kase = 0;
     L100:
-        aocl_lapack_slacn2(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase,
-                           isave);
+        slacn2_(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
@@ -467,7 +479,7 @@ void ssprfs_(char *uplo, integer *n, integer *nrhs, real *ap, real *afp, integer
             /* Computing MAX */
             r__2 = lstres;
             r__3 = (r__1 = x[i__ + j * x_dim1], f2c_abs(r__1)); // , expr subst
-            lstres = fla_max(r__2,r__3);
+            lstres = fla_max(r__2, r__3);
             /* L130: */
         }
         if(lstres != 0.f)

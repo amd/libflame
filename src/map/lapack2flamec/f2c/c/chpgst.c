@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {1.f, 0.f};
-static aocl_int64_t c__1 = 1;
+static complex c_b1 = {1.f, 0.f};
+static integer c__1 = 1;
 /* > \brief \b CHPGST */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -114,15 +114,15 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, integer *info)
+void chpgst_(integer *itype, char *uplo, integer *n, complex *ap, complex *bp, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chpgst inputs: itype %lld, uplo %c, n %lld",*itype, *uplo, *n);
+    snprintf(buffer, 256, "chpgst inputs: itype %lld, uplo %c, n %lld", *itype, *uplo, *n);
 #else
-    snprintf(buffer, 256,"chpgst inputs: itype %d, uplo %c, n %d",*itype, *uplo, *n);
+    snprintf(buffer, 256, "chpgst inputs: itype %d, uplo %c, n %d", *itype, *uplo, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -139,15 +139,24 @@ void chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, 
     aocl_int64_t k1k1;
     real bjj, bkk;
     extern /* Subroutine */
-    void chpr2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *);
+        void
+        chpr2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *);
     extern /* Complex */
-    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+        VOID
+        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void chpmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *), ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
+        void
+        chpmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *,
+               integer *),
+        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *),
+        ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    void ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *), csscal_( integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *),
+        csscal_(integer *, real *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -175,11 +184,11 @@ void chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, 
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (*itype < 1 || *itype > 3)
+    if(*itype < 1 || *itype > 3)
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -213,13 +222,12 @@ void chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, 
                 ap[i__2].real = r__1;
                 ap[i__2].imag = 0.f; // , expr subst
                 i__2 = jj;
-                bjj = bp[i__2].real;
-                aocl_blas_ctpsv(uplo, "Conjugate transpose", "Non-unit", &j, &bp[1], &ap[j1],
-                                &c__1);
+                bjj = bp[i__2].r;
+                ctpsv_(uplo, "Conjugate transpose", "Non-unit", &j, &bp[1], &ap[j1], &c__1);
                 i__2 = j - 1;
-                q__1.real = -1.f;
-                q__1.imag = -0.f; // , expr subst
-                aocl_blas_chpmv(uplo, &i__2, &q__1, &ap[1], &bp[j1], &c__1, &c_b1, &ap[j1], &c__1);
+                q__1.r = -1.f;
+                q__1.i = -0.f; // , expr subst
+                chpmv_(uplo, &i__2, &q__1, &ap[1], &bp[j1], &c__1, &c_b1, &ap[j1], &c__1);
                 i__2 = j - 1;
                 r__1 = 1.f / bjj;
                 aocl_blas_csscal(&i__2, &r__1, &ap[j1], &c__1);
@@ -254,8 +262,8 @@ void chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, 
                 r__1 = bkk;
                 akk /= r__1 * r__1;
                 i__2 = kk;
-                ap[i__2].real = akk;
-                ap[i__2].imag = 0.f; // , expr subst
+                ap[i__2].r = akk;
+                ap[i__2].i = 0.f; // , expr subst
                 if(k < *n)
                 {
                     i__2 = *n - k;
@@ -265,13 +273,13 @@ void chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, 
                     ct.real = r__1;
                     ct.imag = 0.f; // , expr subst
                     i__2 = *n - k;
-                    aocl_blas_caxpy(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
+                    caxpy_(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
                     i__2 = *n - k;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
                     chpr2_(uplo, &i__2, &q__1, &ap[kk + 1], &c__1, &bp[kk + 1], &c__1, &ap[k1k1]);
                     i__2 = *n - k;
-                    aocl_blas_caxpy(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
+                    caxpy_(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
                     i__2 = *n - k;
                     aocl_blas_ctpsv(uplo, "No transpose", "Non-unit", &i__2, &bp[k1k1], &ap[kk + 1],
                                     &c__1);
@@ -299,14 +307,14 @@ void chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, 
                 i__2 = kk;
                 bkk = bp[i__2].real;
                 i__2 = k - 1;
-                aocl_blas_ctpmv(uplo, "No transpose", "Non-unit", &i__2, &bp[1], &ap[k1], &c__1);
+                ctpmv_(uplo, "No transpose", "Non-unit", &i__2, &bp[1], &ap[k1], &c__1);
                 r__1 = akk * .5f;
                 ct.real = r__1;
                 ct.imag = 0.f; // , expr subst
                 i__2 = k - 1;
                 aocl_blas_caxpy(&i__2, &ct, &bp[k1], &c__1, &ap[k1], &c__1);
                 i__2 = k - 1;
-                aocl_blas_chpr2(uplo, &i__2, &c_b1, &ap[k1], &c__1, &bp[k1], &c__1, &ap[1]);
+                chpr2_(uplo, &i__2, &c_b1, &ap[k1], &c__1, &bp[k1], &c__1, &ap[1]);
                 i__2 = k - 1;
                 aocl_blas_caxpy(&i__2, &ct, &bp[k1], &c__1, &ap[k1], &c__1);
                 i__2 = k - 1;
@@ -345,8 +353,8 @@ void chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, 
                 i__2 = *n - j;
                 aocl_blas_csscal(&i__2, &bjj, &ap[jj + 1], &c__1);
                 i__2 = *n - j;
-                aocl_blas_chpmv(uplo, &i__2, &c_b1, &ap[j1j1], &bp[jj + 1], &c__1, &c_b1,
-                                &ap[jj + 1], &c__1);
+                chpmv_(uplo, &i__2, &c_b1, &ap[j1j1], &bp[jj + 1], &c__1, &c_b1, &ap[jj + 1],
+                       &c__1);
                 i__2 = *n - j + 1;
                 ctpmv_(uplo, "Conjugate transpose", "Non-unit", &i__2, &bp[jj], &ap[jj], &c__1);
                 jj = j1j1;

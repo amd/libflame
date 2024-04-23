@@ -109,10 +109,12 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zungr2_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex * work, integer *info)
+void zungr2_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau,
+             doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zungr2 inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",*m, *n, *k, *lda);
+    AOCL_DTL_SNPRINTF("zungr2 inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",
+                      *m, *n, *k, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     dcomplex z__1, z__2;
@@ -121,7 +123,12 @@ void zungr2_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda,
     /* Local variables */
     integer i__, j, l, ii;
     extern /* Subroutine */
-    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_(integer *, doublecomplex *, integer *);
+        void
+        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
+        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -161,7 +168,7 @@ void zungr2_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda,
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
@@ -169,13 +176,13 @@ void zungr2_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda,
     {
         i__1 = -(*info);
         xerbla_("ZUNGR2", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*m <= 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*k < *m)
@@ -214,8 +221,7 @@ void zungr2_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda,
         i__2 = ii - 1;
         i__3 = *n - *m + ii;
         d_cnjg(&z__1, &tau[i__]);
-        aocl_lapack_zlarf("Right", &i__2, &i__3, &a[ii + a_dim1], lda, &z__1, &a[a_offset], lda,
-                          &work[1]);
+        zlarf_("Right", &i__2, &i__3, &a[ii + a_dim1], lda, &z__1, &a[a_offset], lda, &work[1]);
         i__2 = *n - *m + ii - 1;
         i__3 = i__;
         z__1.real = -tau[i__3].real;

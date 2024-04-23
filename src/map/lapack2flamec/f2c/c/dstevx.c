@@ -1,10 +1,10 @@
-/* ./dstevx.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dstevx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief <b> DSTEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for OTHER matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -227,10 +227,15 @@ if RANGE = 'V', the exact value of M */
 /* > \ingroup stevx */
 /* ===================================================================== */
 /* Subroutine */
-void dstevx_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *abstol, integer *m, doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *iwork, integer *ifail, integer *info)
+void dstevx_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e, doublereal *vl,
+             doublereal *vu, integer *il, integer *iu, doublereal *abstol, integer *m,
+             doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *iwork,
+             integer *ifail, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dstevx inputs: jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS "",*jobz, *range, *n, *il, *iu, *ldz);
+    AOCL_DTL_SNPRINTF("dstevx inputs: jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS
+                      ", ldz %" FLA_IS "",
+                      *jobz, *range, *n, *il, *iu, *ldz);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -245,12 +250,15 @@ void dstevx_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *
     doublereal tnrm;
     integer itmp1;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
     extern logical lsame_(char *, char *, integer, integer);
     char order[1];
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical wantz;
     extern doublereal dlamch_(char *);
     logical alleig, indeig;
@@ -258,18 +266,27 @@ void dstevx_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *
     logical valeig;
     doublereal safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
     integer indisp;
     extern /* Subroutine */
-    void dstein_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *), dsterf_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dstein_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+                integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *),
+        dsterf_(integer *, doublereal *, doublereal *, integer *);
     integer indiwo;
     extern /* Subroutine */
-    void dstebz_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dstebz_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *,
+                integer *, integer *, doublereal *, integer *, integer *);
     integer indwrk;
     extern /* Subroutine */
-    void dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *,
+                doublereal *, integer *);
     integer nsplit;
     doublereal smlnum;
     /* -- LAPACK driver routine -- */
@@ -308,7 +325,7 @@ void dstevx_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *
     valeig = lsame_(range, "V", 1, 1);
     indeig = lsame_(range, "I", 1, 1);
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
@@ -331,11 +348,11 @@ void dstevx_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *
         }
         else if(indeig)
         {
-            if (*il < 1 || *il > fla_max(1,*n))
+            if(*il < 1 || *il > fla_max(1, *n))
             {
                 *info = -8;
             }
-            else if (*iu < fla_min(*n,*il) || *iu > *n)
+            else if(*iu < fla_min(*n, *il) || *iu > *n)
             {
                 *info = -9;
             }
@@ -393,7 +410,7 @@ void dstevx_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *
     /* Computing MIN */
     d__1 = sqrt(bignum);
     d__2 = 1. / sqrt(sqrt(safmin)); // , expr subst
-    rmax = fla_min(d__1,d__2);
+    rmax = fla_min(d__1, d__2);
     /* Scale matrix to allowable range, if necessary. */
     iscale = 0;
     if(valeig)
@@ -406,7 +423,7 @@ void dstevx_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *
         vll = 0.;
         vuu = 0.;
     }
-    tnrm = aocl_lapack_dlanst("M", n, &d__[1], &e[1]);
+    tnrm = dlanst_("M", n, &d__[1], &e[1]);
     if(tnrm > 0. && tnrm < rmin)
     {
         iscale = 1;
@@ -421,7 +438,7 @@ void dstevx_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *
     {
         aocl_blas_dscal(n, &sigma, &d__[1], &c__1);
         i__1 = *n - 1;
-        aocl_blas_dscal(&i__1, &sigma, &e[1], &c__1);
+        dscal_(&i__1, &sigma, &e[1], &c__1);
         if(valeig)
         {
             vll = *vl * sigma;
@@ -452,7 +469,7 @@ void dstevx_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *
         }
         else
         {
-            aocl_lapack_dsteqr("I", n, &w[1], &work[1], &z__[z_offset], ldz, &work[indwrk], info);
+            dsteqr_("I", n, &w[1], &work[1], &z__[z_offset], ldz, &work[indwrk], info);
             if(*info == 0)
             {
                 i__1 = *n;
@@ -482,12 +499,12 @@ void dstevx_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *
     indwrk = 1;
     indisp = indibl + *n;
     indiwo = indisp + *n;
-    aocl_lapack_dstebz(range, order, n, &vll, &vuu, il, iu, abstol, &d__[1], &e[1], m, &nsplit,
-                       &w[1], &iwork[1], &iwork[indisp], &work[indwrk], &iwork[indiwo], info);
+    dstebz_(range, order, n, &vll, &vuu, il, iu, abstol, &d__[1], &e[1], m, &nsplit, &w[1],
+            &iwork[indibl], &iwork[indisp], &work[indwrk], &iwork[indiwo], info);
     if(wantz)
     {
-        aocl_lapack_dstein(n, &d__[1], &e[1], m, &w[1], &iwork[1], &iwork[indisp], &z__[z_offset],
-                           ldz, &work[indwrk], &iwork[indiwo], &ifail[1], info);
+        dstein_(n, &d__[1], &e[1], m, &w[1], &iwork[indibl], &iwork[indisp], &z__[z_offset], ldz,
+                &work[indwrk], &iwork[indiwo], &ifail[1], info);
     }
 /* If matrix was scaled, then rescale eigenvalues appropriately. */
 L20:
@@ -529,8 +546,8 @@ L20:
                 w[i__] = w[j];
                 iwork[i__] = iwork[j];
                 w[j] = tmp1;
-                iwork[j] = (aocl_int_t)(itmp1);
-                aocl_blas_dswap(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
+                iwork[indibl + j - 1] = itmp1;
+                dswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
                 if(*info != 0)
                 {
                     itmp1 = ifail[i__];

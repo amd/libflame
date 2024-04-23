@@ -93,10 +93,10 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dpptri_(char *uplo, integer *n, doublereal *ap, integer * info)
+void dpptri_(char *uplo, integer *n, doublereal *ap, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dpptri inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
+    AOCL_DTL_SNPRINTF("dpptri inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     /* Local variables */
@@ -105,13 +105,18 @@ void dpptri_(char *uplo, integer *n, doublereal *ap, integer * info)
     integer jjn;
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern /* Subroutine */
-    void dspr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *), dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dspr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *),
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dtptri_( char *, char *, integer *, doublereal *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        dtptri_(char *, char *, integer *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -136,7 +141,7 @@ void dpptri_(char *uplo, integer *n, doublereal *ap, integer * info)
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -158,7 +163,7 @@ void dpptri_(char *uplo, integer *n, doublereal *ap, integer * info)
         return;
     }
     /* Invert the triangular Cholesky factor U or L. */
-    aocl_lapack_dtptri(uplo, "Non-unit", n, &ap[1], info);
+    dtptri_(uplo, "Non-unit", n, &ap[1], info);
     if(*info > 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
@@ -192,12 +197,11 @@ void dpptri_(char *uplo, integer *n, doublereal *ap, integer * info)
         {
             jjn = jj + *n - j + 1;
             i__2 = *n - j + 1;
-            ap[jj] = aocl_blas_ddot(&i__2, &ap[jj], &c__1, &ap[jj], &c__1);
+            ap[jj] = ddot_(&i__2, &ap[jj], &c__1, &ap[jj], &c__1);
             if(j < *n)
             {
                 i__2 = *n - j;
-                aocl_blas_dtpmv("Lower", "Transpose", "Non-unit", &i__2, &ap[jjn], &ap[jj + 1],
-                                &c__1);
+                dtpmv_("Lower", "Transpose", "Non-unit", &i__2, &ap[jjn], &ap[jj + 1], &c__1);
             }
             jj = jjn;
             /* L20: */

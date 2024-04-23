@@ -127,10 +127,11 @@
 /* > \ingroup doubleSYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlaqsy_(char *uplo, integer *n, doublereal *a, integer * lda, doublereal *s, doublereal *scond, doublereal *amax, char *equed)
+void dlaqsy_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *s, doublereal *scond,
+             doublereal *amax, char *equed)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaqsy inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
+    AOCL_DTL_SNPRINTF("dlaqsy inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -171,7 +172,7 @@ void dlaqsy_(char *uplo, integer *n, doublereal *a, integer * lda, doublereal *s
     /* Initialize LARGE and SMALL. */
     small_val = dlamch_("Safe minimum") / dlamch_("Precision");
     large = 1. / small_val;
-    if (*scond >= .1 && *amax >= small_val && *amax <= large)
+    if(*scond >= .1 && *amax >= small_val && *amax <= large)
     {
         /* No equilibration */
         *(unsigned char *)equed = 'N';
@@ -179,7 +180,7 @@ void dlaqsy_(char *uplo, integer *n, doublereal *a, integer * lda, doublereal *s
     else
     {
         /* Replace A by diag(S) * A * diag(S). */
-        if (lsame_(uplo, "U", 1, 1))
+        if(lsame_(uplo, "U", 1, 1))
         {
             /* Upper triangle of A is stored. */
             i__1 = *n;

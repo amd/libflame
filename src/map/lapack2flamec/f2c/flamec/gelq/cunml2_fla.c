@@ -154,7 +154,9 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cunml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau, complex *c__, integer *ldc, complex *work, integer *info)
+void cunml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, complex *a,
+                integer *lda, complex *tau, complex *c__, integer *ldc, complex *work,
+                integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3;
@@ -167,10 +169,14 @@ void cunml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, com
     logical left;
     complex taui;
     extern /* Subroutine */
-    void clarf_(char *, integer *, integer *, complex * , integer *, complex *, complex *, integer *, complex *);
+        void
+        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+               complex *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clacgv_(integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -215,11 +221,11 @@ void cunml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, com
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -235,11 +241,11 @@ void cunml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, com
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*k))
+    else if(*lda < fla_max(1, *k))
     {
         *info = -7;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -10;
     }
@@ -314,13 +320,13 @@ void cunml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, com
         aii.real = a[i__3].real;
         aii.imag = a[i__3].imag; // , expr subst
         i__3 = i__ + i__ * a_dim1;
-        a[i__3].real = 1.f;
-        a[i__3].imag = 0.f; // , expr subst
-        aocl_lapack_clarf(side, &mi, &ni, &a[i__ + i__ * a_dim1], lda, &taui,
-                          &c__[ic + jc * c_dim1], ldc, &work[1]);
+        a[i__3].r = 1.f;
+        a[i__3].i = 0.f; // , expr subst
+        clarf_(side, &mi, &ni, &a[i__ + i__ * a_dim1], lda, &taui, &c__[ic + jc * c_dim1], ldc,
+               &work[1]);
         i__3 = i__ + i__ * a_dim1;
-        a[i__3].real = aii.real;
-        a[i__3].imag = aii.imag; // , expr subst
+        a[i__3].r = aii.r;
+        a[i__3].i = aii.i; // , expr subst
         if(i__ < nq)
         {
             i__3 = nq - i__;

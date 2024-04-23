@@ -4,11 +4,11 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {0., 0.};
-static dcomplex c_b2 = {1., 0.};
-static aocl_int64_t c__0 = 0;
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c__2 = 2;
+static doublecomplex c_b1 = {0., 0.};
+static doublecomplex c_b2 = {1., 0.};
+static integer c__0 = 0;
+static integer c__1 = 1;
+static integer c__2 = 2;
 static doublereal c_b41 = 1.;
 /* > \brief \b ZSTEQR */
 /* =========== DOCUMENTATION =========== */
@@ -136,10 +136,11 @@ on exit, D */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomplex *z__, integer *ldz, doublereal *work, integer *info)
+void zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomplex *z__,
+             integer *ldz, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zsteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "",*compz, *n, *ldz);
+    AOCL_DTL_SNPRINTF("zsteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "", *compz, *n, *ldz);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -155,31 +156,44 @@ void zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomp
     doublereal tst, eps2;
     aocl_int64_t lend, jtot;
     extern /* Subroutine */
-    void dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     extern logical lsame_(char *, char *, integer, integer);
     doublereal anorm;
     extern /* Subroutine */
-    void zlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        zlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
+               doublecomplex *, integer *),
+        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *);
     integer lendm1, lendp1;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
     integer iscale;
     extern /* Subroutine */
-    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-    void dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal safmax;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
     extern /* Subroutine */
-    void dlasrt_(char *, integer *, doublereal *, integer *);
+        void
+        dlasrt_(char *, integer *, doublereal *, integer *);
     integer lendsv;
     doublereal ssfmin;
     aocl_int64_t nmaxit, icompz;
     doublereal ssfmax;
     extern /* Subroutine */
-    void zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
+                integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -210,15 +224,15 @@ void zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomp
     --work;
     /* Function Body */
     *info = 0;
-    if (lsame_(compz, "N", 1, 1))
+    if(lsame_(compz, "N", 1, 1))
     {
         icompz = 0;
     }
-    else if (lsame_(compz, "V", 1, 1))
+    else if(lsame_(compz, "V", 1, 1))
     {
         icompz = 1;
     }
-    else if (lsame_(compz, "I", 1, 1))
+    else if(lsame_(compz, "I", 1, 1))
     {
         icompz = 2;
     }
@@ -234,7 +248,7 @@ void zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomp
     {
         *info = -2;
     }
-    else if (*ldz < 1 || icompz > 0 && *ldz < fla_max(1,*n))
+    else if(*ldz < 1 || icompz > 0 && *ldz < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -242,13 +256,13 @@ void zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomp
     {
         i__1 = -(*info);
         xerbla_("ZSTEQR", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 1)
@@ -259,7 +273,7 @@ void zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomp
             z__[i__1].real = 1.;
             z__[i__1].imag = 0.; // , expr subst
         }
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine the unit roundoff and over/underflow thresholds. */
@@ -299,11 +313,12 @@ L10:
         for(m = l1; m <= i__1; ++m)
         {
             tst = (d__1 = e[m], f2c_dabs(d__1));
-            if (tst == 0.)
+            if(tst == 0.)
             {
                 goto L30;
             }
-            if (tst <= sqrt((d__1 = d__[m], f2c_dabs(d__1))) * sqrt((d__2 = d__[m + 1], f2c_dabs(d__2))) * eps)
+            if(tst <= sqrt((d__1 = d__[m], f2c_dabs(d__1)))
+                          * sqrt((d__2 = d__[m + 1], f2c_dabs(d__2))) * eps)
             {
                 e[m] = 0.;
                 goto L30;
@@ -347,7 +362,7 @@ L30:
         aocl_lapack_dlascl("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &e[l], n, info);
     }
     /* Choose between QL and QR iteration */
-    if ((d__1 = d__[lend], f2c_dabs(d__1)) < (d__2 = d__[l], f2c_dabs(d__2)))
+    if((d__1 = d__[lend], f2c_dabs(d__1)) < (d__2 = d__[l], f2c_dabs(d__2)))
     {
         lend = lsv;
         l = lendsv;
@@ -366,7 +381,9 @@ L30:
                 /* Computing 2nd power */
                 d__2 = (d__1 = e[m], f2c_dabs(d__1));
                 tst = d__2 * d__2;
-                if (tst <= eps2 * (d__1 = d__[m], f2c_dabs(d__1)) * (d__2 = d__[m + 1], f2c_dabs(d__2)) + safmin)
+                if(tst
+                   <= eps2 * (d__1 = d__[m], f2c_dabs(d__1)) * (d__2 = d__[m + 1], f2c_dabs(d__2))
+                          + safmin)
                 {
                     goto L60;
                 }
@@ -393,8 +410,8 @@ L30:
                 dlaev2_(&d__[l], &e[l], &d__[l + 1], &rt1, &rt2, &c__, &s);
                 work[l] = c__;
                 work[*n - 1 + l] = s;
-                aocl_lapack_zlasr("R", "V", "B", n, &c__2, &work[l], &work[*n - 1 + l],
-                                  &z__[l * z_dim1 + 1], ldz);
+                zlasr_("R", "V", "B", n, &c__2, &work[l], &work[*n - 1 + l], &z__[l * z_dim1 + 1],
+                       ldz);
             }
             else
             {
@@ -481,7 +498,9 @@ L30:
                 /* Computing 2nd power */
                 d__2 = (d__1 = e[m - 1], f2c_dabs(d__1));
                 tst = d__2 * d__2;
-                if (tst <= eps2 * (d__1 = d__[m], f2c_dabs(d__1)) * (d__2 = d__[m - 1], f2c_dabs(d__2)) + safmin)
+                if(tst
+                   <= eps2 * (d__1 = d__[m], f2c_dabs(d__1)) * (d__2 = d__[m - 1], f2c_dabs(d__2))
+                          + safmin)
                 {
                     goto L110;
                 }
@@ -508,8 +527,8 @@ L30:
                 dlaev2_(&d__[l - 1], &e[l - 1], &d__[l], &rt1, &rt2, &c__, &s);
                 work[m] = c__;
                 work[*n - 1 + m] = s;
-                aocl_lapack_zlasr("R", "V", "F", n, &c__2, &work[m], &work[*n - 1 + m],
-                                  &z__[(l - 1) * z_dim1 + 1], ldz);
+                zlasr_("R", "V", "F", n, &c__2, &work[m], &work[*n - 1 + m],
+                       &z__[(l - 1) * z_dim1 + 1], ldz);
             }
             else
             {
@@ -611,7 +630,7 @@ L140:
             }
             /* L150: */
         }
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     goto L10;

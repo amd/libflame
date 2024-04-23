@@ -1,5 +1,8 @@
-/* dgeqp3.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dgeqp3.f -- translated by f2c (version 20160102). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -11,11 +14,17 @@ static integer c__2 = 2;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DGEQP3 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgeqp3. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgeqp3.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgeqp3. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgeqp3.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgeqp3. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgeqp3.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -144,7 +153,8 @@ v(i+1:m) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dgeqp3_fla(integer *m, integer *n, doublereal *a, integer * lda, integer *jpvt, doublereal *tau, doublereal *work, integer *lwork, integer *info)
+void dgeqp3_fla(integer *m, integer *n, doublereal *a, integer *lda, integer *jpvt, doublereal *tau,
+                doublereal *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -153,16 +163,27 @@ void dgeqp3_fla(integer *m, integer *n, doublereal *a, integer * lda, integer *j
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     integer nbmin, minmn;
     extern /* Subroutine */
-    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer minws;
     extern /* Subroutine */
-    void dlaqp2_(integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *), dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlaqp2_(integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *,
+                doublereal *, doublereal *, doublereal *),
+        dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void dlaqps_(integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
+        void
+        dlaqps_(integer *, integer *, integer *, integer *, integer *, doublereal *, integer *,
+                integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+                integer *);
     integer topbmn, sminmn;
     extern /* Subroutine */
-    void dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
@@ -197,22 +218,22 @@ void dgeqp3_fla(integer *m, integer *n, doublereal *a, integer * lda, integer *j
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        minmn = fla_min(*m,*n);
-        if (minmn == 0)
+        minmn = fla_min(*m, *n);
+        if(minmn == 0)
         {
             iws = 1;
             lwkopt = 1;
@@ -227,34 +248,32 @@ void dgeqp3_fla(integer *m, integer *n, doublereal *a, integer * lda, integer *j
 #endif
             lwkopt = (*n << 1) + (*n + 1) * nb;
         }
-        work[1] = (doublereal) lwkopt;
-        if (*lwork < iws && ! lquery)
+        work[1] = (doublereal)lwkopt;
+        if(*lwork < iws && !lquery)
         {
             *info = -8;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DGEQP3", &i__1, (ftnlen)6);
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         return;
     }
     /* Move initial columns up front. */
     nfxd = 1;
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
-        if (jpvt[j] != 0)
+        if(jpvt[j] != 0)
         {
-            if (j != nfxd)
+            if(j != nfxd)
             {
-                dswap_(m, &a[j * a_dim1 + 1], &c__1, &a[nfxd * a_dim1 + 1], & c__1);
+                dswap_(m, &a[j * a_dim1 + 1], &c__1, &a[nfxd * a_dim1 + 1], &c__1);
                 jpvt[j] = jpvt[nfxd];
                 jpvt[nfxd] = j;
             }
@@ -275,30 +294,31 @@ void dgeqp3_fla(integer *m, integer *n, doublereal *a, integer * lda, integer *j
     /* ======================= */
     /* Compute the QR factorization of fixed columns and update */
     /* remaining columns. */
-    if (nfxd > 0)
+    if(nfxd > 0)
     {
-        na = fla_min(*m,nfxd);
+        na = fla_min(*m, nfxd);
         /* CC CALL DGEQR2( M, NA, A, LDA, TAU, WORK, INFO ) */
         dgeqrf_(m, &na, &a[a_offset], lda, &tau[1], &work[1], lwork, info);
         /* Computing MAX */
         i__1 = iws;
-        i__2 = (integer) work[1]; // , expr subst
-        iws = fla_max(i__1,i__2);
-        if (na < *n)
+        i__2 = (integer)work[1]; // , expr subst
+        iws = fla_max(i__1, i__2);
+        if(na < *n)
         {
             /* CC CALL DORM2R( 'Left', 'Transpose', M, N-NA, NA, A, LDA, */
             /* CC $ TAU, A( 1, NA+1 ), LDA, WORK, INFO ) */
             i__1 = *n - na;
-            dormqr_("Left", "Transpose", m, &i__1, &na, &a[a_offset], lda, & tau[1], &a[(na + 1) * a_dim1 + 1], lda, &work[1], lwork, info);
+            dormqr_("Left", "Transpose", m, &i__1, &na, &a[a_offset], lda, &tau[1],
+                    &a[(na + 1) * a_dim1 + 1], lda, &work[1], lwork, info);
             /* Computing MAX */
             i__1 = iws;
-            i__2 = (integer) work[1]; // , expr subst
-            iws = fla_max(i__1,i__2);
+            i__2 = (integer)work[1]; // , expr subst
+            iws = fla_max(i__1, i__2);
         }
     }
     /* Factorize free columns */
     /* ====================== */
-    if (nfxd < minmn)
+    if(nfxd < minmn)
     {
         sm = *m - nfxd;
         sn = *n - nfxd;
@@ -311,59 +331,59 @@ void dgeqp3_fla(integer *m, integer *n, doublereal *a, integer * lda, integer *j
 #endif
         nbmin = 2;
         nx = 0;
-        if (nb > 1 && nb < sminmn)
+        if(nb > 1 && nb < sminmn)
         {
             /* Determine when to cross over from blocked to unblocked code. */
             /* Computing MAX */
             i__1 = 0;
-            i__2 = ilaenv_(&c__3, "DGEQRF", " ", &sm, &sn, &c_n1, & c_n1); // , expr subst
-            nx = fla_max(i__1,i__2);
-            if (nx < sminmn)
+            i__2 = ilaenv_(&c__3, "DGEQRF", " ", &sm, &sn, &c_n1, &c_n1); // , expr subst
+            nx = fla_max(i__1, i__2);
+            if(nx < sminmn)
             {
                 /* Determine if workspace is large enough for blocked code. */
                 minws = (sn << 1) + (sn + 1) * nb;
-                iws = fla_max(iws,minws);
-                if (*lwork < minws)
+                iws = fla_max(iws, minws);
+                if(*lwork < minws)
                 {
                     /* Not enough workspace to use optimal NB: Reduce NB and */
                     /* determine the minimum value of NB. */
                     nb = (*lwork - (sn << 1)) / (sn + 1);
                     /* Computing MAX */
                     i__1 = 2;
-                    i__2 = ilaenv_(&c__2, "DGEQRF", " ", &sm, &sn, & c_n1, &c_n1); // , expr subst
-                    nbmin = fla_max(i__1,i__2);
+                    i__2 = ilaenv_(&c__2, "DGEQRF", " ", &sm, &sn, &c_n1, &c_n1); // , expr subst
+                    nbmin = fla_max(i__1, i__2);
                 }
             }
         }
         /* Initialize partial column norms. The first N elements of work */
         /* store the exact column norms. */
         i__1 = *n;
-        for (j = nfxd + 1;
-                j <= i__1;
-                ++j)
+        for(j = nfxd + 1; j <= i__1; ++j)
         {
             work[j] = dnrm2_(&sm, &a[nfxd + 1 + j * a_dim1], &c__1);
             work[*n + j] = work[j];
             /* L20: */
         }
-        if (nb >= nbmin && nb < sminmn && nx < sminmn)
+        if(nb >= nbmin && nb < sminmn && nx < sminmn)
         {
             /* Use blocked code initially. */
             j = nfxd + 1;
             /* Compute factorization: while loop. */
             topbmn = minmn - nx;
-L30:
-            if (j <= topbmn)
+        L30:
+            if(j <= topbmn)
             {
                 /* Computing MIN */
                 i__1 = nb;
                 i__2 = topbmn - j + 1; // , expr subst
-                jb = fla_min(i__1,i__2);
+                jb = fla_min(i__1, i__2);
                 /* Factorize JB columns among columns J:N. */
                 i__1 = *n - j + 1;
                 i__2 = j - 1;
                 i__3 = *n - j + 1;
-                dlaqps_(m, &i__1, &i__2, &jb, &fjb, &a[j * a_dim1 + 1], lda, & jpvt[j], &tau[j], &work[j], &work[*n + j], &work[(*n << 1) + 1], &work[(*n << 1) + jb + 1], &i__3);
+                dlaqps_(m, &i__1, &i__2, &jb, &fjb, &a[j * a_dim1 + 1], lda, &jpvt[j], &tau[j],
+                        &work[j], &work[*n + j], &work[(*n << 1) + 1], &work[(*n << 1) + jb + 1],
+                        &i__3);
                 j += fjb;
                 goto L30;
             }
@@ -373,14 +393,15 @@ L30:
             j = nfxd + 1;
         }
         /* Use unblocked code to factor the last or only block. */
-        if (j <= minmn)
+        if(j <= minmn)
         {
             i__1 = *n - j + 1;
             i__2 = j - 1;
-            dlaqp2_(m, &i__1, &i__2, &a[j * a_dim1 + 1], lda, &jpvt[j], &tau[ j], &work[j], &work[*n + j], &work[(*n << 1) + 1]);
+            dlaqp2_(m, &i__1, &i__2, &a[j * a_dim1 + 1], lda, &jpvt[j], &tau[j], &work[j],
+                    &work[*n + j], &work[(*n << 1) + 1]);
         }
     }
-    work[1] = (doublereal) iws;
+    work[1] = (doublereal)iws;
     return;
     /* End of DGEQP3_FLA */
 }

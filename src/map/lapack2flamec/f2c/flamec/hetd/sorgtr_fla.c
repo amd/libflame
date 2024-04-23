@@ -123,7 +123,8 @@ the routine */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info)
+void sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *work,
+                integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
@@ -133,10 +134,15 @@ void sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *
     integer iinfo;
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void sorgql_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *), sorgqr_fla( integer *, integer *, integer *, real *, integer *, real *, real * , integer *, integer *);
+        void
+        sorgql_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *,
+                integer *),
+        sorgqr_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer *,
+                   integer *);
     logical lquery;
     aocl_int64_t lwkopt;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -170,7 +176,7 @@ void sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *
     *info = 0;
     lquery = *lwork == -1;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -178,7 +184,7 @@ void sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -187,7 +193,7 @@ void sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
-        if (*lwork < fla_max(i__1,i__2) && ! lquery)
+        if(*lwork < fla_max(i__1, i__2) && !lquery)
         {
             *info = -7;
         }
@@ -211,8 +217,8 @@ void sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
-        lwkopt = fla_max(i__1,i__2) * nb;
-        work[1] = (real) lwkopt;
+        lwkopt = fla_max(i__1, i__2) * nb;
+        work[1] = (real)lwkopt;
     }
     if(*info != 0)
     {
@@ -296,7 +302,7 @@ void sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *
                        &iinfo);
         }
     }
-    work[1] = (real) lwkopt;
+    work[1] = (real)lwkopt;
     return;
     /* End of SORGTR */
 }

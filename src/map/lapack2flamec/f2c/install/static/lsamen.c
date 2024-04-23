@@ -153,7 +153,7 @@ logical aocl_lapack_lsamen(const aocl_int64_t *n, const char *ca, const char *cb
 
         /*        Test if the characters are equal using LSAME. */
 
-        if (! lsame_(ca + (i__ - 1), cb + (i__ - 1), 1, 1))
+        if(!lsame_(ca + (i__ - 1), cb + (i__ - 1), 1, 1))
         {
             goto L20;
         }

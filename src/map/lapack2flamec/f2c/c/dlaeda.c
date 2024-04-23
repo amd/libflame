@@ -165,10 +165,15 @@ static doublereal c_b26 = 0.;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void dlaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integer *prmptr, integer *perm, integer *givptr, integer *givcol, doublereal *givnum, doublereal *q, integer *qptr, doublereal *z__, doublereal *ztemp, integer *info)
+void dlaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integer *prmptr,
+             integer *perm, integer *givptr, integer *givcol, doublereal *givnum, doublereal *q,
+             integer *qptr, doublereal *z__, doublereal *ztemp, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaeda inputs: n %" FLA_IS ", tlvls %" FLA_IS ", curlvl %" FLA_IS ", curpbm %" FLA_IS ", prmptr %" FLA_IS ", perm %" FLA_IS ", givptr %" FLA_IS ", givcol %" FLA_IS ", qptr %" FLA_IS "",*n, *tlvls, *curlvl, *curpbm, *prmptr, *perm, *givptr, *givcol, *qptr);
+    AOCL_DTL_SNPRINTF("dlaeda inputs: n %" FLA_IS ", tlvls %" FLA_IS ", curlvl %" FLA_IS
+                      ", curpbm %" FLA_IS ", prmptr %" FLA_IS ", perm %" FLA_IS ", givptr %" FLA_IS
+                      ", givcol %" FLA_IS ", qptr %" FLA_IS "",
+                      *n, *tlvls, *curlvl, *curpbm, *prmptr, *perm, *givptr, *givcol, *qptr);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3;
     /* Builtin functions */
@@ -177,10 +182,16 @@ void dlaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integ
     /* Local variables */
     integer i__, k, mid, ptr;
     extern /* Subroutine */
-    void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+        void
+        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+              doublereal *);
     integer curr, bsiz1, bsiz2, psiz1, psiz2, zptr1;
     extern /* Subroutine */
-    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *),
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -248,8 +259,8 @@ void dlaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integ
         z__[k] = 0.;
         /* L10: */
     }
-    aocl_blas_dcopy(&bsiz1, &q[qptr[curr] + bsiz1 - 1], &bsiz1, &z__[mid - bsiz1], &c__1);
-    aocl_blas_dcopy(&bsiz2, &q[qptr[curr + 1]], &bsiz2, &z__[mid], &c__1);
+    dcopy_(&bsiz1, &q[qptr[curr] + bsiz1 - 1], &bsiz1, &z__[mid - bsiz1], &c__1);
+    dcopy_(&bsiz2, &q[qptr[curr + 1]], &bsiz2, &z__[mid], &c__1);
     i__1 = *n;
     for(k = mid + bsiz2; k <= i__1; ++k)
     {
@@ -273,17 +284,17 @@ void dlaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integ
         i__2 = givptr[curr + 1] - 1;
         for(i__ = givptr[curr]; i__ <= i__2; ++i__)
         {
-            aocl_blas_drot(&c__1, &z__[zptr1 + givcol[(i__ << 1) + 1] - 1], &c__1,
-                           &z__[zptr1 + givcol[(i__ << 1) + 2] - 1], &c__1, &givnum[(i__ << 1) + 1],
-                           &givnum[(i__ << 1) + 2]);
+            drot_(&c__1, &z__[zptr1 + givcol[(i__ << 1) + 1] - 1], &c__1,
+                  &z__[zptr1 + givcol[(i__ << 1) + 2] - 1], &c__1, &givnum[(i__ << 1) + 1],
+                  &givnum[(i__ << 1) + 2]);
             /* L30: */
         }
         i__2 = givptr[curr + 2] - 1;
         for(i__ = givptr[curr + 1]; i__ <= i__2; ++i__)
         {
-            aocl_blas_drot(&c__1, &z__[mid - 1 + givcol[(i__ << 1) + 1]], &c__1,
-                           &z__[mid - 1 + givcol[(i__ << 1) + 2]], &c__1, &givnum[(i__ << 1) + 1],
-                           &givnum[(i__ << 1) + 2]);
+            drot_(&c__1, &z__[mid - 1 + givcol[(i__ << 1) + 1]], &c__1,
+                  &z__[mid - 1 + givcol[(i__ << 1) + 2]], &c__1, &givnum[(i__ << 1) + 1],
+                  &givnum[(i__ << 1) + 2]);
             /* L40: */
         }
         psiz1 = prmptr[curr + 1] - prmptr[curr];
@@ -308,18 +319,18 @@ void dlaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integ
         bsiz2 = (integer)(sqrt((doublereal)(qptr[curr + 2] - qptr[curr + 1])) + .5);
         if(bsiz1 > 0)
         {
-            aocl_blas_dgemv("T", &bsiz1, &bsiz1, &c_b24, &q[qptr[curr]], &bsiz1, &ztemp[1], &c__1,
-                            &c_b26, &z__[zptr1], &c__1);
+            dgemv_("T", &bsiz1, &bsiz1, &c_b24, &q[qptr[curr]], &bsiz1, &ztemp[1], &c__1, &c_b26,
+                   &z__[zptr1], &c__1);
         }
         i__2 = psiz1 - bsiz1;
-        aocl_blas_dcopy(&i__2, &ztemp[bsiz1 + 1], &c__1, &z__[zptr1 + bsiz1], &c__1);
+        dcopy_(&i__2, &ztemp[bsiz1 + 1], &c__1, &z__[zptr1 + bsiz1], &c__1);
         if(bsiz2 > 0)
         {
-            aocl_blas_dgemv("T", &bsiz2, &bsiz2, &c_b24, &q[qptr[curr + 1]], &bsiz2,
-                            &ztemp[psiz1 + 1], &c__1, &c_b26, &z__[mid], &c__1);
+            dgemv_("T", &bsiz2, &bsiz2, &c_b24, &q[qptr[curr + 1]], &bsiz2, &ztemp[psiz1 + 1],
+                   &c__1, &c_b26, &z__[mid], &c__1);
         }
         i__2 = psiz2 - bsiz2;
-        aocl_blas_dcopy(&i__2, &ztemp[psiz1 + bsiz2 + 1], &c__1, &z__[mid + bsiz2], &c__1);
+        dcopy_(&i__2, &ztemp[psiz1 + bsiz2 + 1], &c__1, &z__[mid + bsiz2], &c__1);
         i__2 = *tlvls - k;
         ptr += pow_ii(&c__2, &i__2);
         /* L70: */

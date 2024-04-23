@@ -107,10 +107,11 @@
 /* > \ingroup doublePOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dpoequb_(integer *n, doublereal *a, integer *lda, doublereal *s, doublereal *scond, doublereal *amax, integer *info)
+void dpoequb_(integer *n, doublereal *a, integer *lda, doublereal *s, doublereal *scond,
+              doublereal *amax, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dpoequb inputs: n %" FLA_IS ", lda %" FLA_IS "",*n, *lda);
+    AOCL_DTL_SNPRINTF("dpoequb inputs: n %" FLA_IS ", lda %" FLA_IS "", *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -121,7 +122,8 @@ void dpoequb_(integer *n, doublereal *a, integer *lda, doublereal *s, doublereal
     doublereal tmp, base, smin;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -155,7 +157,7 @@ void dpoequb_(integer *n, doublereal *a, integer *lda, doublereal *s, doublereal
     {
         *info = -1;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -3;
     }
@@ -187,11 +189,11 @@ void dpoequb_(integer *n, doublereal *a, integer *lda, doublereal *s, doublereal
         /* Computing MIN */
         d__1 = smin;
         d__2 = s[i__]; // , expr subst
-        smin = fla_min(d__1,d__2);
+        smin = fla_min(d__1, d__2);
         /* Computing MAX */
         d__1 = *amax;
         d__2 = s[i__]; // , expr subst
-        *amax = fla_max(d__1,d__2);
+        *amax = fla_max(d__1, d__2);
         /* L10: */
     }
     if(smin <= 0.)

@@ -147,7 +147,7 @@ LDA >= fla_max(1,N) if SIDE = 'R'. */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If SIDE = 'L', LWORK >= fla_max(1,N);
-*/
+ */
 /* > if SIDE = 'R', LWORK >= fla_max(1,M). */
 /* > For optimum performance LWORK >= N*NB if SIDE = 'L', and */
 /* > LWORK >= M*NB if SIDE = 'R', where NB is the optimal */
@@ -176,7 +176,8 @@ the routine */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, real *a, integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *lwork, integer *info)
+void sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, real *a, integer *lda,
+                real *tau, real *c__, integer *ldc, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
@@ -191,14 +192,19 @@ void sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, rea
     integer iinfo;
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void sormql_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        sormql_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
+                integer *, real *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    void sormqr_fla(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        sormqr_fla(char *, char *, integer *, integer *, integer *, real *, integer *, real *,
+                   real *, integer *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -243,15 +249,15 @@ void sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, rea
         nq = *n;
         nw = *m;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "T", 1, 1))
+    else if(!lsame_(trans, "N", 1, 1) && !lsame_(trans, "T", 1, 1))
     {
         *info = -3;
     }
@@ -263,15 +269,15 @@ void sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, rea
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,nq))
+    else if(*lda < fla_max(1, nq))
     {
         *info = -7;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -10;
     }
-    else if (*lwork < fla_max(1,nw) && ! lquery)
+    else if(*lwork < fla_max(1, nw) && !lquery)
     {
         *info = -12;
     }
@@ -307,8 +313,8 @@ void sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, rea
                 nb = aocl_lapack_ilaenv(&c__1, "SORMQR", ch__1, m, &i__2, &i__3, &c_n1);
             }
         }
-        lwkopt = fla_max(1,nw) * nb;
-        work[1] = (real) lwkopt;
+        lwkopt = fla_max(1, nw) * nb;
+        work[1] = (real)lwkopt;
     }
     if(*info != 0)
     {
@@ -340,8 +346,8 @@ void sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, rea
     {
         /* Q was determined by a call to SSYTRD with UPLO = 'U' */
         i__2 = nq - 1;
-        aocl_lapack_sormql(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &tau[1],
-                           &c__[c_offset], ldc, &work[1], lwork, &iinfo);
+        sormql_(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &tau[1], &c__[c_offset],
+                ldc, &work[1], lwork, &iinfo);
     }
     else
     {
@@ -360,7 +366,7 @@ void sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, rea
         sormqr_fla(side, trans, &mi, &ni, &i__2, &a[a_dim1 + 2], lda, &tau[1],
                    &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
     }
-    work[1] = (real) lwkopt;
+    work[1] = (real)lwkopt;
     return;
     /* End of SORMTR */
 }

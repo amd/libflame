@@ -109,17 +109,23 @@
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dorgr2_(integer *m, integer *n, integer *k, doublereal * a, integer *lda, doublereal *tau, doublereal *work, integer *info)
+void dorgr2_(integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau,
+             doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dorgr2 inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",*m, *n, *k, *lda);
+    AOCL_DTL_SNPRINTF("dorgr2 inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",
+                      *m, *n, *k, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1;
     /* Local variables */
     integer i__, j, l, ii;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *), dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *),
+        dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -159,7 +165,7 @@ void dorgr2_(integer *m, integer *n, integer *k, doublereal * a, integer *lda, d
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
@@ -203,8 +209,7 @@ void dorgr2_(integer *m, integer *n, integer *k, doublereal * a, integer *lda, d
         a[ii + (*n - *m + ii) * a_dim1] = 1.;
         i__2 = ii - 1;
         i__3 = *n - *m + ii;
-        aocl_lapack_dlarf("Right", &i__2, &i__3, &a[ii + a_dim1], lda, &tau[i__], &a[a_offset], lda,
-                          &work[1]);
+        dlarf_("Right", &i__2, &i__3, &a[ii + a_dim1], lda, &tau[i__], &a[a_offset], lda, &work[1]);
         i__2 = *n - *m + ii - 1;
         d__1 = -tau[i__];
         aocl_blas_dscal(&i__2, &d__1, &a[ii + a_dim1], lda);

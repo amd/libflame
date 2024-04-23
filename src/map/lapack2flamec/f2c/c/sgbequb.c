@@ -154,7 +154,8 @@
 /* > \ingroup realGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sgbequb_(integer *m, integer *n, integer *kl, integer * ku, real *ab, integer *ldab, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, integer *info)
+void sgbequb_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer *ldab, real *r__,
+              real *c__, real *rowcnd, real *colcnd, real *amax, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgbequb(m, n, kl, ku, ab, ldab, r__, c__, rowcnd, colcnd, amax, info);
@@ -191,7 +192,8 @@ void aocl_lapack_sgbequb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aoc
     real radix, rcmin, rcmax;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum, logrdx, smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -277,15 +279,13 @@ void aocl_lapack_sgbequb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aoc
         i__2 = j - *ku;
         /* Computing MIN */
         i__4 = j + *kl;
-        i__3 = fla_min(i__4,*m);
-        for (i__ = fla_max(i__2,1);
-                i__ <= i__3;
-                ++i__)
+        i__3 = fla_min(i__4, *m);
+        for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
         {
             /* Computing MAX */
             r__2 = r__[i__];
             r__3 = (r__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs(r__1)); // , expr subst
-            r__[i__] = fla_max(r__2,r__3);
+            r__[i__] = fla_max(r__2, r__3);
             /* L20: */
         }
         /* L30: */
@@ -308,11 +308,11 @@ void aocl_lapack_sgbequb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aoc
         /* Computing MAX */
         r__1 = rcmax;
         r__2 = r__[i__]; // , expr subst
-        rcmax = fla_max(r__1,r__2);
+        rcmax = fla_max(r__1, r__2);
         /* Computing MIN */
         r__1 = rcmin;
         r__2 = r__[i__]; // , expr subst
-        rcmin = fla_min(r__1,r__2);
+        rcmin = fla_min(r__1, r__2);
         /* L40: */
     }
     *amax = rcmax;
@@ -339,12 +339,12 @@ void aocl_lapack_sgbequb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aoc
             /* Computing MIN */
             /* Computing MAX */
             r__2 = r__[i__];
-            r__1 = fla_max(r__2,smlnum);
-            r__[i__] = 1.f / fla_min(r__1,bignum);
+            r__1 = fla_max(r__2, smlnum);
+            r__[i__] = 1.f / fla_min(r__1, bignum);
             /* L60: */
         }
         /* Compute ROWCND = fla_min(R(I)) / fla_max(R(I)). */
-        *rowcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+        *rowcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
     }
     /* Compute column scale factors. */
     i__1 = *n;
@@ -362,15 +362,14 @@ void aocl_lapack_sgbequb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aoc
         i__3 = j - *ku;
         /* Computing MIN */
         i__4 = j + *kl;
-        i__2 = fla_min(i__4,*m);
-        for (i__ = fla_max(i__3,1);
-                i__ <= i__2;
-                ++i__)
+        i__2 = fla_min(i__4, *m);
+        for(i__ = fla_max(i__3, 1); i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             r__2 = c__[j];
-            r__3 = (r__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs( r__1)) * r__[i__]; // , expr subst
-            c__[j] = fla_max(r__2,r__3);
+            r__3
+                = (r__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs(r__1)) * r__[i__]; // , expr subst
+            c__[j] = fla_max(r__2, r__3);
             /* L80: */
         }
         if(c__[j] > 0.f)
@@ -389,11 +388,11 @@ void aocl_lapack_sgbequb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aoc
         /* Computing MIN */
         r__1 = rcmin;
         r__2 = c__[j]; // , expr subst
-        rcmin = fla_min(r__1,r__2);
+        rcmin = fla_min(r__1, r__2);
         /* Computing MAX */
         r__1 = rcmax;
         r__2 = c__[j]; // , expr subst
-        rcmax = fla_max(r__1,r__2);
+        rcmax = fla_max(r__1, r__2);
         /* L100: */
     }
     if(rcmin == 0.f)
@@ -419,12 +418,12 @@ void aocl_lapack_sgbequb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aoc
             /* Computing MIN */
             /* Computing MAX */
             r__2 = c__[j];
-            r__1 = fla_max(r__2,smlnum);
-            c__[j] = 1.f / fla_min(r__1,bignum);
+            r__1 = fla_max(r__2, smlnum);
+            c__[j] = 1.f / fla_min(r__1, bignum);
             /* L120: */
         }
         /* Compute COLCND = fla_min(C(J)) / fla_max(C(J)). */
-        *colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+        *colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
     }
     return;
     /* End of SGBEQUB */

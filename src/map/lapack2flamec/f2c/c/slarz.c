@@ -142,12 +142,14 @@ static real c_b5 = 1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slarz_(char *side, integer *m, integer *n, integer *l, real *v, integer *incv, real *tau, real *c__, integer *ldc, real * work)
+void slarz_(char *side, integer *m, integer *n, integer *l, real *v, integer *incv, real *tau,
+            real *c__, integer *ldc, real *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slarz inputs: side %c, m %d, n %d, l %d, incv %d, ldc %d",*side, *m, *n, *l, *incv, *ldc);
+    snprintf(buffer, 256, "slarz inputs: side %c, m %d, n %d, l %d, incv %d, ldc %d", *side, *m, *n,
+             *l, *incv, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -155,10 +157,16 @@ void slarz_(char *side, integer *m, integer *n, integer *l, real *v, integer *in
     real r__1;
     /* Local variables */
     extern /* Subroutine */
-    void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
+        void
+        sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+              integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *);
+        void
+        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+               real *, integer *),
+        scopy_(integer *, real *, integer *, real *, integer *),
+        saxpy_(integer *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -182,7 +190,7 @@ void slarz_(char *side, integer *m, integer *n, integer *l, real *v, integer *in
     c__ -= c_offset;
     --work;
     /* Function Body */
-    if (lsame_(side, "L", 1, 1))
+    if(lsame_(side, "L", 1, 1))
     {
         /* Form H * C */
         if(*tau != 0.f)
@@ -190,8 +198,8 @@ void slarz_(char *side, integer *m, integer *n, integer *l, real *v, integer *in
             /* w( 1:n ) = C( 1, 1:n ) */
             aocl_blas_scopy(n, &c__[c_offset], ldc, &work[1], &c__1);
             /* w( 1:n ) = w( 1:n ) + C( m-l+1:m, 1:n )**T * v( 1:l ) */
-            aocl_blas_sgemv("Transpose", l, n, &c_b5, &c__[*m - *l + 1 + c_dim1], ldc, &v[1], incv,
-                            &c_b5, &work[1], &c__1);
+            sgemv_("Transpose", l, n, &c_b5, &c__[*m - *l + 1 + c_dim1], ldc, &v[1], incv, &c_b5,
+                   &work[1], &c__1);
             /* C( 1, 1:n ) = C( 1, 1:n ) - tau * w( 1:n ) */
             r__1 = -(*tau);
             aocl_blas_saxpy(n, &r__1, &work[1], &c__1, &c__[c_offset], ldc);
@@ -210,8 +218,8 @@ void slarz_(char *side, integer *m, integer *n, integer *l, real *v, integer *in
             /* w( 1:m ) = C( 1:m, 1 ) */
             aocl_blas_scopy(m, &c__[c_offset], &c__1, &work[1], &c__1);
             /* w( 1:m ) = w( 1:m ) + C( 1:m, n-l+1:n, 1:n ) * v( 1:l ) */
-            aocl_blas_sgemv("No transpose", m, l, &c_b5, &c__[(*n - *l + 1) * c_dim1 + 1], ldc,
-                            &v[1], incv, &c_b5, &work[1], &c__1);
+            sgemv_("No transpose", m, l, &c_b5, &c__[(*n - *l + 1) * c_dim1 + 1], ldc, &v[1], incv,
+                   &c_b5, &work[1], &c__1);
             /* C( 1:m, 1 ) = C( 1:m, 1 ) - tau * w( 1:m ) */
             r__1 = -(*tau);
             aocl_blas_saxpy(m, &r__1, &work[1], &c__1, &c__[c_offset], &c__1);

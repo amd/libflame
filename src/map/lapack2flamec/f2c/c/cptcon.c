@@ -116,15 +116,16 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cptcon_(integer *n, real *d__, complex *e, real *anorm, real *rcond, real *rwork, integer *info)
+void cptcon_(integer *n, real *d__, complex *e, real *anorm, real *rcond, real *rwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cptcon inputs: n %lld",*n);
+    snprintf(buffer, 256, "cptcon inputs: n %lld", *n);
 #else
-    snprintf(buffer, 256,"cptcon inputs: n %d",*n);
+    snprintf(buffer, 256, "cptcon inputs: n %d", *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -136,7 +137,8 @@ void cptcon_(integer *n, real *d__, complex *e, real *anorm, real *rcond, real *
     /* Local variables */
     integer i__, ix;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real ainvnm;
     /* -- LAPACK computational routine (version 3.4.2) -- */

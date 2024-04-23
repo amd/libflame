@@ -123,10 +123,12 @@ the routine */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zungtr_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *work, integer *lwork, integer *info)
+void zungtr_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau,
+             doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zungtr inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "", *uplo, *n, *lda, *lwork);
+    AOCL_DTL_SNPRINTF("zungtr inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",
+                      *uplo, *n, *lda, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
@@ -135,12 +137,17 @@ void zungtr_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecompl
     integer iinfo;
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    void zungql_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *), zungqr_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
+        void
+        zungql_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                doublecomplex *, integer *, integer *),
+        zungqr_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -172,7 +179,7 @@ void zungtr_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecompl
     *info = 0;
     lquery = *lwork == -1;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -180,7 +187,7 @@ void zungtr_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecompl
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -189,7 +196,7 @@ void zungtr_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecompl
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
-        if (*lwork < fla_max(i__1,i__2) && ! lquery)
+        if(*lwork < fla_max(i__1, i__2) && !lquery)
         {
             *info = -7;
         }
@@ -213,20 +220,20 @@ void zungtr_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecompl
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
-        lwkopt = fla_max(i__1,i__2) * nb;
-        work[1].r = (doublereal) lwkopt;
+        lwkopt = fla_max(i__1, i__2) * nb;
+        work[1].r = (doublereal)lwkopt;
         work[1].i = 0.; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZUNGTR", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -234,7 +241,7 @@ void zungtr_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecompl
     {
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(upper)
@@ -317,11 +324,11 @@ void zungtr_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecompl
             i__1 = *n - 1;
             i__2 = *n - 1;
             i__3 = *n - 1;
-            aocl_lapack_zungqr(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1],
-                               lwork, &iinfo);
+            zungqr_(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1], lwork,
+                    &iinfo);
         }
     }
-    work[1].r = (doublereal) lwkopt;
+    work[1].r = (doublereal)lwkopt;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

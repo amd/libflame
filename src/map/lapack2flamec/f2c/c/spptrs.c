@@ -112,7 +112,7 @@ void spptrs_(char *uplo, integer *n, integer *nrhs, real *ap, real *b, integer *
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"spptrs inputs: uplo %c, n %d, nrhs %d, ldb %d",*uplo, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "spptrs inputs: uplo %c, n %d, nrhs %d, ldb %d", *uplo, *n, *nrhs, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -122,7 +122,9 @@ void spptrs_(char *uplo, integer *n, integer *nrhs, real *ap, real *b, integer *
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    void stpsv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        stpsv_(char *, char *, char *, integer *, real *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -150,7 +152,7 @@ void spptrs_(char *uplo, integer *n, integer *nrhs, real *ap, real *b, integer *
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -162,7 +164,7 @@ void spptrs_(char *uplo, integer *n, integer *nrhs, real *ap, real *b, integer *
     {
         *info = -3;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -6;
     }

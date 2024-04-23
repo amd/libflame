@@ -1,16 +1,25 @@
-/* ../netlib/drscl.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/drscl.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DRSCL multiplies a vector by the reciprocal of a real scalar. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DRSCL + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/drscl.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/drscl.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/drscl.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/drscl.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/drscl.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/drscl.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -76,7 +85,9 @@ void drscl_(integer *n, doublereal *sa, doublereal *sx, integer *incx)
     logical done;
     doublereal cnum, cden1, cnum1;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *), dlabad_(doublereal *, doublereal *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *),
+        dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     doublereal bignum, smlnum;
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
@@ -107,7 +118,7 @@ void drscl_(integer *n, doublereal *sa, doublereal *sx, integer *incx)
 
     --sx;
     /* Function Body */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         return;
     }
@@ -121,14 +132,14 @@ void drscl_(integer *n, doublereal *sa, doublereal *sx, integer *incx)
 L10:
     cden1 = cden * smlnum;
     cnum1 = cnum / bignum;
-    if (f2c_abs(cden1) > f2c_abs(cnum) && cnum != 0.)
+    if(f2c_abs(cden1) > f2c_abs(cnum) && cnum != 0.)
     {
         /* Pre-multiply X by SMLNUM if CDEN is large compared to CNUM. */
         mul = smlnum;
         done = FALSE_;
         cden = cden1;
     }
-    else if (f2c_abs(cnum1) > f2c_abs(cden))
+    else if(f2c_abs(cnum1) > f2c_abs(cden))
     {
         /* Pre-multiply X by BIGNUM if CDEN is small compared to CNUM. */
         mul = bignum;
@@ -143,7 +154,7 @@ L10:
     }
     /* Scale the vector X by MUL */
     dscal_(n, &mul, &sx[1], incx);
-    if (! done)
+    if(!done)
     {
         goto L10;
     }
@@ -152,4 +163,3 @@ L10:
     /* End of DRSCL */
 }
 /* drscl_ */
-

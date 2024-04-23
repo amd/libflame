@@ -198,7 +198,8 @@ v(i+2:n) is stored on exit in A(i+2:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tau, complex *work, integer *lwork, integer *info)
+void chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tau,
+                complex *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
@@ -209,7 +210,13 @@ void chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, rea
     integer nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
-    void chetd2_fla(char *, integer *, complex *, integer *, real *, real *, complex *, integer *), cher2k_(char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, real *, complex *, integer *), clatrd_(char *, integer *, integer *, complex *, integer *, real *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        chetd2_fla(char *, integer *, complex *, integer *, real *, real *, complex *, integer *),
+        cher2k_(char *, char *, integer *, integer *, complex *, complex *, integer *, complex *,
+                integer *, real *, complex *, integer *),
+        clatrd_(char *, integer *, integer *, complex *, integer *, real *, complex *, complex *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
@@ -246,7 +253,7 @@ void chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, rea
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -254,7 +261,7 @@ void chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, rea
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -267,8 +274,8 @@ void chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, rea
         /* Determine the block size. */
         nb = aocl_lapack_ilaenv(&c__1, "CHETRD", uplo, n, &c_n1, &c_n1, &c_n1);
         lwkopt = *n * nb;
-        work[1].real = (real)lwkopt;
-        work[1].imag = 0.f; // , expr subst
+        work[1].r = (real)lwkopt;
+        work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -295,9 +302,9 @@ void chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, rea
         /* (last block is always handled by unblocked code). */
         /* Computing MAX */
         i__1 = nb;
-        i__2 = ilaenv_(&c__3, "CHETRD", uplo, n, &c_n1, &c_n1, & c_n1); // , expr subst
-        nx = fla_max(i__1,i__2);
-        if (nx < *n)
+        i__2 = ilaenv_(&c__3, "CHETRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+        nx = fla_max(i__1, i__2);
+        if(nx < *n)
         {
             /* Determine if workspace is large enough for blocked code. */
             ldwork = *n;
@@ -309,9 +316,9 @@ void chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, rea
                 /* unblocked code by setting NX = N. */
                 /* Computing MAX */
                 i__1 = *lwork / ldwork;
-                nb = fla_max(i__1,1);
+                nb = fla_max(i__1, 1);
                 nbmin = ilaenv_(&c__2, "CHETRD", uplo, n, &c_n1, &c_n1, &c_n1);
-                if (nb < nbmin)
+                if(nb < nbmin)
                 {
                     nx = *n;
                 }
@@ -339,15 +346,14 @@ void chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, rea
             /* matrix W which is needed to update the unreduced part of */
             /* the matrix */
             i__3 = i__ + nb - 1;
-            aocl_lapack_clatrd(uplo, &i__3, &nb, &a[a_offset], lda, &e[1], &tau[1], &work[1],
-                               &ldwork);
+            clatrd_(uplo, &i__3, &nb, &a[a_offset], lda, &e[1], &tau[1], &work[1], &ldwork);
             /* Update the unreduced submatrix A(1:i-1,1:i-1), using an */
             /* update of the form: A := A - V*W**H - W*V**H */
             i__3 = i__ - 1;
-            q__1.real = -1.f;
-            q__1.imag = -0.f; // , expr subst
-            aocl_blas_cher2k(uplo, "No transpose", &i__3, &nb, &q__1, &a[i__ * a_dim1 + 1], lda,
-                             &work[1], &ldwork, &c_b23, &a[a_offset], lda);
+            q__1.r = -1.f;
+            q__1.i = -0.f; // , expr subst
+            cher2k_(uplo, "No transpose", &i__3, &nb, &q__1, &a[i__ * a_dim1 + 1], lda, &work[1],
+                    &ldwork, &c_b23, &a[a_offset], lda);
             /* Copy superdiagonal elements back into A, and diagonal */
             /* elements into D */
             i__3 = i__ + nb - 1;
@@ -378,16 +384,15 @@ void chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, rea
             /* matrix W which is needed to update the unreduced part of */
             /* the matrix */
             i__3 = *n - i__ + 1;
-            aocl_lapack_clatrd(uplo, &i__3, &nb, &a[i__ + i__ * a_dim1], lda, &e[i__], &tau[i__],
-                               &work[1], &ldwork);
+            clatrd_(uplo, &i__3, &nb, &a[i__ + i__ * a_dim1], lda, &e[i__], &tau[i__], &work[1],
+                    &ldwork);
             /* Update the unreduced submatrix A(i+nb:n,i+nb:n), using */
             /* an update of the form: A := A - V*W**H - W*V**H */
             i__3 = *n - i__ - nb + 1;
-            q__1.real = -1.f;
-            q__1.imag = -0.f; // , expr subst
-            aocl_blas_cher2k(uplo, "No transpose", &i__3, &nb, &q__1, &a[i__ + nb + i__ * a_dim1],
-                             lda, &work[nb + 1], &ldwork, &c_b23,
-                             &a[i__ + nb + (i__ + nb) * a_dim1], lda);
+            q__1.r = -1.f;
+            q__1.i = -0.f; // , expr subst
+            cher2k_(uplo, "No transpose", &i__3, &nb, &q__1, &a[i__ + nb + i__ * a_dim1], lda,
+                    &work[nb + 1], &ldwork, &c_b23, &a[i__ + nb + (i__ + nb) * a_dim1], lda);
             /* Copy subdiagonal elements back into A, and diagonal */
             /* elements into D */
             i__3 = i__ + nb - 1;
@@ -408,7 +413,7 @@ void chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, rea
         i__1 = *n - i__ + 1;
         chetd2_fla(uplo, &i__1, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__], &tau[i__], &iinfo);
     }
-    work[1].r = (real) lwkopt;
+    work[1].r = (real)lwkopt;
     work[1].i = 0.f; // , expr subst
     return;
     /* End of CHETRD */

@@ -177,10 +177,12 @@ static aocl_int64_t c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zhetrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *work, integer *lwork, integer *info)
+void zhetrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv,
+             doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhetrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *lda, *lwork);
+    AOCL_DTL_SNPRINTF("zhetrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",
+                      *uplo, *n, *lda, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -189,7 +191,11 @@ void zhetrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
     integer nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
-    void zhetf2_(char *, integer *, doublecomplex *, integer *, integer *, integer *), zlahef_(char *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zhetf2_(char *, integer *, doublecomplex *, integer *, integer *, integer *),
+        zlahef_(char *, integer *, integer *, integer *, doublecomplex *, integer *, integer *,
+                doublecomplex *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
@@ -222,7 +228,7 @@ void zhetrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -230,7 +236,7 @@ void zhetrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -243,8 +249,8 @@ void zhetrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
         /* Determine the block size */
         nb = aocl_lapack_ilaenv(&c__1, "ZHETRF", uplo, n, &c_n1, &c_n1, &c_n1);
         lwkopt = *n * nb;
-        work[1].real = (doublereal)lwkopt;
-        work[1].imag = 0.; // , expr subst
+        work[1].r = (doublereal)lwkopt;
+        work[1].i = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -267,11 +273,11 @@ void zhetrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
         {
             /* Computing MAX */
             i__1 = *lwork / ldwork;
-            nb = fla_max(i__1,1);
+            nb = fla_max(i__1, 1);
             /* Computing MAX */
             i__1 = 2;
-            i__2 = ilaenv_(&c__2, "ZHETRF", uplo, n, &c_n1, &c_n1, & c_n1); // , expr subst
-            nbmin = fla_max(i__1,i__2);
+            i__2 = ilaenv_(&c__2, "ZHETRF", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+            nbmin = fla_max(i__1, i__2);
         }
     }
     else
@@ -369,7 +375,7 @@ void zhetrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
         goto L20;
     }
 L40:
-    work[1].r = (doublereal) lwkopt;
+    work[1].r = (doublereal)lwkopt;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

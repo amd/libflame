@@ -108,7 +108,8 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zungl2_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex * work, integer *info)
+void zungl2_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda,
+                doublecomplex *tau, doublecomplex *work, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
@@ -118,7 +119,12 @@ void zungl2_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *l
     /* Local variables */
     integer i__, j, l;
     extern /* Subroutine */
-    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacgv_(integer *, doublecomplex *, integer *);
+        void
+        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
+        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -158,7 +164,7 @@ void zungl2_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *l
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
@@ -202,7 +208,7 @@ void zungl2_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *l
         if(i__ < *n)
         {
             i__1 = *n - i__;
-            aocl_lapack_zlacgv(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda);
+            zlacgv_(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda);
             if(i__ < *m)
             {
                 i__1 = i__ + i__ * a_dim1;
@@ -211,8 +217,8 @@ void zungl2_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *l
                 i__1 = *m - i__;
                 i__2 = *n - i__ + 1;
                 d_cnjg(&z__1, &tau[i__]);
-                aocl_lapack_zlarf("Right", &i__1, &i__2, &a[i__ + i__ * a_dim1], lda, &z__1,
-                                  &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
+                zlarf_("Right", &i__1, &i__2, &a[i__ + i__ * a_dim1], lda, &z__1,
+                       &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
             }
             i__1 = *n - i__;
             i__2 = i__;

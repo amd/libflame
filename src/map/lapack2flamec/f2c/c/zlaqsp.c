@@ -121,10 +121,11 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlaqsp_(char *uplo, integer *n, doublecomplex *ap, doublereal *s, doublereal *scond, doublereal *amax, char *equed)
+void zlaqsp_(char *uplo, integer *n, doublecomplex *ap, doublereal *s, doublereal *scond,
+             doublereal *amax, char *equed)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaqsp inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
+    AOCL_DTL_SNPRINTF("zlaqsp inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3, i__4;
     doublereal d__1;
@@ -159,13 +160,13 @@ void zlaqsp_(char *uplo, integer *n, doublecomplex *ap, doublereal *s, doublerea
     if(*n <= 0)
     {
         *(unsigned char *)equed = 'N';
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize LARGE and SMALL. */
     small_val = dlamch_("Safe minimum") / dlamch_("Precision");
     large = 1. / small_val;
-    if (*scond >= .1 && *amax >= small_val && *amax <= large)
+    if(*scond >= .1 && *amax >= small_val && *amax <= large)
     {
         /* No equilibration */
         *(unsigned char *)equed = 'N';
@@ -173,7 +174,7 @@ void zlaqsp_(char *uplo, integer *n, doublecomplex *ap, doublereal *s, doublerea
     else
     {
         /* Replace A by diag(S) * A * diag(S). */
-        if (lsame_(uplo, "U", 1, 1))
+        if(lsame_(uplo, "U", 1, 1))
         {
             /* Upper triangle of A is stored. */
             jc = 1;

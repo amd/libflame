@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief <b> ZPPSVX computes the solution to system of linear equations A * X = B for OTHER
  * matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -313,10 +313,15 @@ if EQUED = 'Y', */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *ap, doublecomplex *afp, char *equed, doublereal * s, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr, doublecomplex * work, doublereal *rwork, integer *info)
+void zppsvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *ap,
+             doublecomplex *afp, char *equed, doublereal *s, doublecomplex *b, integer *ldb,
+             doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr,
+             doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zppsvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *uplo, *n, *nrhs, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("zppsvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS
+                      ", ldb %" FLA_IS ", ldx %" FLA_IS "",
+                      *fact, *uplo, *n, *nrhs, *ldb, *ldx);
 
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5;
@@ -329,19 +334,35 @@ void zppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *
     doublereal scond, anorm;
     logical equil, rcequ;
     extern /* Subroutine */
-    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     integer infequ;
     extern doublereal zlanhp_(char *, char *, integer *, doublecomplex *, doublereal *);
     extern /* Subroutine */
-    void zlaqhp_(char *, integer *, doublecomplex *, doublereal *, doublereal *, doublereal *, char *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zppcon_(char *, integer *, doublecomplex *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *);
+        void
+        zlaqhp_(char *, integer *, doublecomplex *, doublereal *, doublereal *, doublereal *,
+                char *),
+        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *),
+        zppcon_(char *, integer *, doublecomplex *, doublereal *, doublereal *, doublecomplex *,
+                doublereal *, integer *);
     doublereal smlnum;
     extern /* Subroutine */
-    void zppequ_(char *, integer *, doublecomplex *, doublereal *, doublereal *, doublereal *, integer *), zpprfs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zpptrf_(char *, integer *, doublecomplex *, integer *), zpptrs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
+        void
+        zppequ_(char *, integer *, doublecomplex *, doublereal *, doublereal *, doublereal *,
+                integer *),
+        zpprfs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
+                integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *,
+                doublereal *, integer *),
+        zpptrf_(char *, integer *, doublecomplex *, integer *),
+        zpptrs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
+                integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -382,7 +403,7 @@ void zppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *
     equil = lsame_(fact, "E", 1, 1);
     smlnum = 0.;
     bignum = 0.;
-    if (nofact || equil)
+    if(nofact || equil)
     {
         *(unsigned char *)equed = 'N';
         rcequ = FALSE_;
@@ -394,11 +415,11 @@ void zppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *
         bignum = 1. / smlnum;
     }
     /* Test the input parameters. */
-    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    else if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -410,7 +431,7 @@ void zppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *
     {
         *info = -4;
     }
-    else if (lsame_(fact, "F", 1, 1) && ! (rcequ || lsame_(equed, "N", 1, 1)))
+    else if(lsame_(fact, "F", 1, 1) && !(rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -7;
     }
@@ -426,11 +447,11 @@ void zppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *
                 /* Computing MIN */
                 d__1 = smin;
                 d__2 = s[j]; // , expr subst
-                smin = fla_min(d__1,d__2);
+                smin = fla_min(d__1, d__2);
                 /* Computing MAX */
                 d__1 = smax;
                 d__2 = s[j]; // , expr subst
-                smax = fla_max(d__1,d__2);
+                smax = fla_max(d__1, d__2);
                 /* L10: */
             }
             if(smin <= 0.)
@@ -439,7 +460,7 @@ void zppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *
             }
             else if(*n > 0)
             {
-                scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
+                scond = fla_max(smin, smlnum) / fla_min(smax, bignum);
             }
             else
             {
@@ -448,11 +469,11 @@ void zppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *
         }
         if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -10;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -12;
             }
@@ -468,7 +489,7 @@ void zppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *
     if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        aocl_lapack_zppequ(uplo, n, &ap[1], &s[1], &scond, &amax, &infequ);
+        zppequ_(uplo, n, &ap[1], &s[1], &scond, &amax, &infequ);
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
@@ -520,8 +541,8 @@ void zppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *
     aocl_lapack_zpptrs(uplo, n, nrhs, &afp[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    aocl_lapack_zpprfs(uplo, n, nrhs, &ap[1], &afp[1], &b[b_offset], ldb, &x[x_offset], ldx,
-                       &ferr[1], &berr[1], &work[1], &rwork[1], info);
+    zpprfs_(uplo, n, nrhs, &ap[1], &afp[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1],
+            &berr[1], &work[1], &rwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(rcequ)

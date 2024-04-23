@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b DORG2L generates all or part of the orthogonal matrix Q from a QL factorization
  * determined by s geqlf (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
@@ -112,17 +112,23 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dorg2l_(integer *m, integer *n, integer *k, doublereal * a, integer *lda, doublereal *tau, doublereal *work, integer *info)
+void dorg2l_(integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau,
+             doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dorg2l inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",*m, *n, *k, *lda);
+    AOCL_DTL_SNPRINTF("dorg2l inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",
+                      *m, *n, *k, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1;
     /* Local variables */
     integer i__, j, l, ii;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *), dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *),
+        dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -162,7 +168,7 @@ void dorg2l_(integer *m, integer *n, integer *k, doublereal * a, integer *lda, d
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
@@ -200,8 +206,8 @@ void dorg2l_(integer *m, integer *n, integer *k, doublereal * a, integer *lda, d
         a[*m - *n + ii + ii * a_dim1] = 1.;
         i__2 = *m - *n + ii;
         i__3 = ii - 1;
-        aocl_lapack_dlarf("Left", &i__2, &i__3, &a[ii * a_dim1 + 1], &c__1, &tau[i__], &a[a_offset],
-                          lda, &work[1]);
+        dlarf_("Left", &i__2, &i__3, &a[ii * a_dim1 + 1], &c__1, &tau[i__], &a[a_offset], lda,
+               &work[1]);
         i__2 = *m - *n + ii - 1;
         d__1 = -tau[i__];
         aocl_blas_dscal(&i__2, &d__1, &a[ii * a_dim1 + 1], &c__1);

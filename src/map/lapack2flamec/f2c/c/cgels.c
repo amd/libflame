@@ -1,13 +1,13 @@
-/* ./cgels.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cgels.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {0.f, 0.f};
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
-static aocl_int64_t c__0 = 0;
+static complex c_b1 = {0.f, 0.f};
+static integer c__1 = 1;
+static integer c_n1 = -1;
+static integer c__0 = 0;
 /* > \brief <b> CGELS solves overdetermined or underdetermined systems for GE matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -191,15 +191,19 @@ the least squares solution could not be */
 /* > \ingroup gels */
 /* ===================================================================== */
 /* Subroutine */
-void cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, integer *lda, complex *b, integer *ldb, complex * work, integer *lwork, integer *info)
+void cgels_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, integer *lda,
+            complex *b, integer *ldb, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgels inputs: trans %c, m %lld, n %lld, nrhs %lld, lda %lld, ldb %lld, lwork %lld",*trans, *m, *n, *nrhs, *lda, *ldb, *lwork);
+    snprintf(buffer, 256,
+             "cgels inputs: trans %c, m %lld, n %lld, nrhs %lld, lda %lld, ldb %lld, lwork %lld",
+             *trans, *m, *n, *nrhs, *lda, *ldb, *lwork);
 #else
-    snprintf(buffer, 256,"cgels inputs: trans %c, m %d, n %d, nrhs %d, lda %d, ldb %d, lwork %d",*trans, *m, *n, *nrhs, *lda, *ldb, *lwork);
+    snprintf(buffer, 256, "cgels inputs: trans %c, m %d, n %d, nrhs %d, lda %d, ldb %d, lwork %d",
+             *trans, *m, *n, *nrhs, *lda, *ldb, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -216,22 +220,37 @@ void cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
     integer wsize;
     real rwork[1];
     extern /* Subroutine */
-    void slabad_(real *, real *);
+        void
+        slabad_(real *, real *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    void cgelqf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clascl_( char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
+        void
+        cgelqf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+                integer *),
+        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
+                integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    void cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), claset_( char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+                integer *),
+        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer scllen;
     real bignum;
     extern /* Subroutine */
-    void cunmlq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *), cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+        void
+        cunmlq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
+                complex *, integer *, complex *, integer *, integer *),
+        cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
+                complex *, integer *, complex *, integer *, integer *);
     real smlnum;
     logical lquery;
     extern /* Subroutine */
-    void ctrtrs_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
+        void
+        ctrtrs_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *,
+                integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -264,9 +283,9 @@ void cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
     --work;
     /* Function Body */
     *info = 0;
-    mn = fla_min(*m,*n);
+    mn = fla_min(*m, *n);
     lquery = *lwork == -1;
-    if (! (lsame_(trans, "N", 1, 1) || lsame_(trans, "C", 1, 1)))
+    if(!(lsame_(trans, "N", 1, 1) || lsame_(trans, "C", 1, 1)))
     {
         *info = -1;
     }
@@ -282,15 +301,15 @@ void cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -6;
     }
     else /* if(complicated condition) */
     {
         /* Computing MAX */
-        i__1 = fla_max(1,*m);
-        if (*ldb < fla_max(i__1,*n))
+        i__1 = fla_max(1, *m);
+        if(*ldb < fla_max(i__1, *n))
         {
             *info = -8;
         }
@@ -298,8 +317,8 @@ void cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
         {
             /* Computing MAX */
             i__1 = 1;
-            i__2 = mn + fla_max(mn,*nrhs); // , expr subst
-            if (*lwork < fla_max(i__1,i__2) && ! lquery)
+            i__2 = mn + fla_max(mn, *nrhs); // , expr subst
+            if(*lwork < fla_max(i__1, i__2) && !lquery)
             {
                 *info = -10;
             }
@@ -309,51 +328,51 @@ void cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
     if(*info == 0 || *info == -10)
     {
         tpsd = TRUE_;
-        if (lsame_(trans, "N", 1, 1))
+        if(lsame_(trans, "N", 1, 1))
         {
             tpsd = FALSE_;
         }
         if(*m >= *n)
         {
-            nb = aocl_lapack_ilaenv(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
+            nb = ilaenv_(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
             if(tpsd)
             {
                 /* Computing MAX */
                 i__1 = nb;
-                i__2 = ilaenv_(&c__1, "CUNMQR", "LN", m, nrhs, n, & c_n1); // , expr subst
-                nb = fla_max(i__1,i__2);
+                i__2 = ilaenv_(&c__1, "CUNMQR", "LN", m, nrhs, n, &c_n1); // , expr subst
+                nb = fla_max(i__1, i__2);
             }
             else
             {
                 /* Computing MAX */
                 i__1 = nb;
-                i__2 = ilaenv_(&c__1, "CUNMQR", "LC", m, nrhs, n, & c_n1); // , expr subst
-                nb = fla_max(i__1,i__2);
+                i__2 = ilaenv_(&c__1, "CUNMQR", "LC", m, nrhs, n, &c_n1); // , expr subst
+                nb = fla_max(i__1, i__2);
             }
         }
         else
         {
-            nb = aocl_lapack_ilaenv(&c__1, "CGELQF", " ", m, n, &c_n1, &c_n1);
+            nb = ilaenv_(&c__1, "CGELQF", " ", m, n, &c_n1, &c_n1);
             if(tpsd)
             {
                 /* Computing MAX */
                 i__1 = nb;
-                i__2 = ilaenv_(&c__1, "CUNMLQ", "LC", n, nrhs, m, & c_n1); // , expr subst
-                nb = fla_max(i__1,i__2);
+                i__2 = ilaenv_(&c__1, "CUNMLQ", "LC", n, nrhs, m, &c_n1); // , expr subst
+                nb = fla_max(i__1, i__2);
             }
             else
             {
                 /* Computing MAX */
                 i__1 = nb;
-                i__2 = ilaenv_(&c__1, "CUNMLQ", "LN", n, nrhs, m, & c_n1); // , expr subst
-                nb = fla_max(i__1,i__2);
+                i__2 = ilaenv_(&c__1, "CUNMLQ", "LN", n, nrhs, m, &c_n1); // , expr subst
+                nb = fla_max(i__1, i__2);
             }
         }
         /* Computing MAX */
         i__1 = 1;
-        i__2 = mn + fla_max(mn,*nrhs) * nb; // , expr subst
-        wsize = fla_max(i__1,i__2);
-        r__1 = (real) wsize;
+        i__2 = mn + fla_max(mn, *nrhs) * nb; // , expr subst
+        wsize = fla_max(i__1, i__2);
+        r__1 = (real)wsize;
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
     }
@@ -371,10 +390,10 @@ void cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
     }
     /* Quick return if possible */
     /* Computing MIN */
-    i__1 = fla_min(*m,*n);
-    if (fla_min(i__1,*nrhs) == 0)
+    i__1 = fla_min(*m, *n);
+    if(fla_min(i__1, *nrhs) == 0)
     {
-        i__1 = fla_max(*m,*n);
+        i__1 = fla_max(*m, *n);
         claset_("Full", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -400,7 +419,7 @@ void cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
     else if(anrm == 0.f)
     {
         /* Matrix all zero. Return zero solution. */
-        i__1 = fla_max(*m,*n);
+        i__1 = fla_max(*m, *n);
         claset_("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         goto L50;
     }
@@ -427,19 +446,20 @@ void cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
     {
         /* compute QR factorization of A */
         i__1 = *lwork - mn;
-        aocl_lapack_cgeqrf(m, n, &a[a_offset], lda, &work[1], &work[mn + 1], &i__1, info);
+        cgeqrf_(m, n, &a[a_offset], lda, &work[1], &work[mn + 1], &i__1, info);
         /* workspace at least N, optimally N*NB */
         if(!tpsd)
         {
             /* Least-Squares Problem min || A * X - B || */
             /* B(1:M,1:NRHS) := Q**H * B(1:M,1:NRHS) */
             i__1 = *lwork - mn;
-            aocl_lapack_cunmqr("Left", "Conjugate transpose", m, nrhs, n, &a[a_offset], lda,
-                               &work[1], &b[b_offset], ldb, &work[mn + 1], &i__1, info);
+            cunmqr_("Left", "Conjugate transpose", m, nrhs, n, &a[a_offset], lda, &work[1],
+                    &b[b_offset], ldb, &work[mn + 1], &i__1, info);
             /* workspace at least NRHS, optimally NRHS*NB */
             /* B(1:N,1:NRHS) := inv(R) * B(1:N,1:NRHS) */
-            ctrtrs_("Upper", "No transpose", "Non-unit", n, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
-            if (*info > 0)
+            ctrtrs_("Upper", "No transpose", "Non-unit", n, nrhs, &a[a_offset], lda, &b[b_offset],
+                    ldb, info);
+            if(*info > 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                 return;
@@ -450,8 +470,8 @@ void cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
         {
             /* Underdetermined system of equations A**T * X = B */
             /* B(1:N,1:NRHS) := inv(R**H) * B(1:N,1:NRHS) */
-            aocl_lapack_ctrtrs("Upper", "Conjugate transpose", "Non-unit", n, nrhs, &a[a_offset],
-                               lda, &b[b_offset], ldb, info);
+            ctrtrs_("Upper", "Conjugate transpose", "Non-unit", n, nrhs, &a[a_offset], lda,
+                    &b[b_offset], ldb, info);
             if(*info > 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -473,8 +493,8 @@ void cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
             }
             /* B(1:M,1:NRHS) := Q(1:N,:) * B(1:N,1:NRHS) */
             i__1 = *lwork - mn;
-            aocl_lapack_cunmqr("Left", "No transpose", m, nrhs, n, &a[a_offset], lda, &work[1],
-                               &b[b_offset], ldb, &work[mn + 1], &i__1, info);
+            cunmqr_("Left", "No transpose", m, nrhs, n, &a[a_offset], lda, &work[1], &b[b_offset],
+                    ldb, &work[mn + 1], &i__1, info);
             /* workspace at least NRHS, optimally NRHS*NB */
             scllen = *m;
         }
@@ -483,14 +503,15 @@ void cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
     {
         /* Compute LQ factorization of A */
         i__1 = *lwork - mn;
-        aocl_lapack_cgelqf(m, n, &a[a_offset], lda, &work[1], &work[mn + 1], &i__1, info);
+        cgelqf_(m, n, &a[a_offset], lda, &work[1], &work[mn + 1], &i__1, info);
         /* workspace at least M, optimally M*NB. */
         if(!tpsd)
         {
             /* underdetermined system of equations A * X = B */
             /* B(1:M,1:NRHS) := inv(L) * B(1:M,1:NRHS) */
-            ctrtrs_("Lower", "No transpose", "Non-unit", m, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
-            if (*info > 0)
+            ctrtrs_("Lower", "No transpose", "Non-unit", m, nrhs, &a[a_offset], lda, &b[b_offset],
+                    ldb, info);
+            if(*info > 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                 return;
@@ -511,8 +532,8 @@ void cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
             }
             /* B(1:N,1:NRHS) := Q(1:N,:)**H * B(1:M,1:NRHS) */
             i__1 = *lwork - mn;
-            aocl_lapack_cunmlq("Left", "Conjugate transpose", n, nrhs, m, &a[a_offset], lda,
-                               &work[1], &b[b_offset], ldb, &work[mn + 1], &i__1, info);
+            cunmlq_("Left", "Conjugate transpose", n, nrhs, m, &a[a_offset], lda, &work[1],
+                    &b[b_offset], ldb, &work[mn + 1], &i__1, info);
             /* workspace at least NRHS, optimally NRHS*NB */
             scllen = *n;
         }
@@ -521,12 +542,12 @@ void cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
             /* overdetermined system min || A**H * X - B || */
             /* B(1:N,1:NRHS) := Q * B(1:N,1:NRHS) */
             i__1 = *lwork - mn;
-            aocl_lapack_cunmlq("Left", "No transpose", n, nrhs, m, &a[a_offset], lda, &work[1],
-                               &b[b_offset], ldb, &work[mn + 1], &i__1, info);
+            cunmlq_("Left", "No transpose", n, nrhs, m, &a[a_offset], lda, &work[1], &b[b_offset],
+                    ldb, &work[mn + 1], &i__1, info);
             /* workspace at least NRHS, optimally NRHS*NB */
             /* B(1:M,1:NRHS) := inv(L**H) * B(1:M,1:NRHS) */
-            aocl_lapack_ctrtrs("Lower", "Conjugate transpose", "Non-unit", m, nrhs, &a[a_offset],
-                               lda, &b[b_offset], ldb, info);
+            ctrtrs_("Lower", "Conjugate transpose", "Non-unit", m, nrhs, &a[a_offset], lda,
+                    &b[b_offset], ldb, info);
             if(*info > 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -553,7 +574,7 @@ void cgels_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
         clascl_("G", &c__0, &c__0, &bignum, &bnrm, &scllen, nrhs, &b[b_offset], ldb, info);
     }
 L50:
-    r__1 = (real) wsize;
+    r__1 = (real)wsize;
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

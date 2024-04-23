@@ -91,24 +91,7 @@
 /* > \date November 2011 */
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
-/** Generated wrapper function */
-real sla_gerpvgrw_(aocl_int_t *n, aocl_int_t *ncols, real *a, aocl_int_t *lda, real *af,
-                   aocl_int_t *ldaf)
-{
-#if FLA_ENABLE_ILP64
-    return aocl_lapack_sla_gerpvgrw(n, ncols, a, lda, af, ldaf);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ncols_64 = *ncols;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldaf_64 = *ldaf;
-
-    return aocl_lapack_sla_gerpvgrw(&n_64, &ncols_64, a, &lda_64, af, &ldaf_64);
-#endif
-}
-
-real aocl_lapack_sla_gerpvgrw(aocl_int64_t *n, aocl_int64_t *ncols, real *a, aocl_int64_t *lda,
-                              real *af, aocl_int64_t *ldaf)
+real sla_gerpvgrw_(integer *n, integer *ncols, real *a, integer *lda, real *af, integer *ldaf)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, i__1, i__2;
@@ -149,20 +132,20 @@ real aocl_lapack_sla_gerpvgrw(aocl_int64_t *n, aocl_int64_t *ncols, real *a, aoc
         {
             /* Computing MAX */
             r__2 = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
-            amax = fla_max(r__2,amax);
+            amax = fla_max(r__2, amax);
         }
         i__2 = j;
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             r__2 = (r__1 = af[i__ + j * af_dim1], f2c_abs(r__1));
-            umax = fla_max(r__2,umax);
+            umax = fla_max(r__2, umax);
         }
         if(umax != 0.f)
         {
             /* Computing MIN */
             r__1 = amax / umax;
-            rpvgrw = fla_min(r__1,rpvgrw);
+            rpvgrw = fla_min(r__1, rpvgrw);
         }
     }
     ret_val = rpvgrw;

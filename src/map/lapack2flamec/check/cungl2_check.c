@@ -1,5 +1,7 @@
 #include "FLA_f2c.h"
-int cungl2_check(integer *m, integer *n, integer *k, scomplex *a, integer *lda, scomplex *tau, scomplex *work, integer *info)
+#include "FLA_lapack2flame_return_defs.h"
+int cungl2_check(integer *m, integer *n, integer *k, scomplex *a, integer *lda, scomplex *tau,
+                 scomplex *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
@@ -25,7 +27,7 @@ int cungl2_check(integer *m, integer *n, integer *k, scomplex *a, integer *lda, 
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }

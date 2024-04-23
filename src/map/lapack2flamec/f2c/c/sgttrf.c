@@ -121,12 +121,12 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup realGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sgttrf_(integer *n, real *dl, real *d__, real *du, real * du2, integer *ipiv, integer *info)
+void sgttrf_(integer *n, real *dl, real *d__, real *du, real *du2, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sgttrf inputs: n %d",*n);
+    snprintf(buffer, 256, "sgttrf inputs: n %d", *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -136,7 +136,8 @@ void sgttrf_(integer *n, real *dl, real *d__, real *du, real * du2, integer *ipi
     aocl_int64_t i__;
     real fact, temp;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -193,7 +194,7 @@ void sgttrf_(integer *n, real *dl, real *d__, real *du, real * du2, integer *ipi
     i__1 = *n - 2;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
+        if((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
         {
             /* No row interchange required, eliminate DL(I) */
             if(d__[i__] != 0.f)
@@ -221,7 +222,7 @@ void sgttrf_(integer *n, real *dl, real *d__, real *du, real * du2, integer *ipi
     if(*n > 1)
     {
         i__ = *n - 1;
-        if ((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
+        if((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
         {
             if(d__[i__] != 0.f)
             {

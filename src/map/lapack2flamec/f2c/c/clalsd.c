@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {0.f, 0.f};
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c__0 = 0;
+static complex c_b1 = {0.f, 0.f};
+static integer c__1 = 1;
+static integer c__0 = 0;
 static real c_b10 = 1.f;
 static real c_b35 = 0.f;
 /* > \brief \b CLALSD uses the singular value decomposition of A to solve the least squares problem.
@@ -187,15 +187,19 @@ in this case a minimum norm solution is returned. */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, real *e, complex *b, integer *ldb, real *rcond, integer *rank, complex *work, real *rwork, integer *iwork, integer * info)
+void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, real *e, complex *b,
+             integer *ldb, real *rcond, integer *rank, complex *work, real *rwork, integer *iwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clalsd inputs: uplo %c, smlsiz %lld, n %lld, nrhs %lld, ldb %lld",*uplo, *smlsiz, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "clalsd inputs: uplo %c, smlsiz %lld, n %lld, nrhs %lld, ldb %lld", *uplo,
+             *smlsiz, *n, *nrhs, *ldb);
 #else
-    snprintf(buffer, 256,"clalsd inputs: uplo %c, smlsiz %d, n %d, nrhs %d, ldb %d",*uplo, *smlsiz, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "clalsd inputs: uplo %c, smlsiz %d, n %d, nrhs %d, ldb %d", *uplo,
+             *smlsiz, *n, *nrhs, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -220,28 +224,51 @@ void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
     real rcnd;
     integer jcol, irwb, perm, nsub, nlvl, sqre, bxst, jrow, irwu, jimag, jreal;
     extern /* Subroutine */
-    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *);
     integer irwib;
     extern /* Subroutine */
-    void ccopy_(integer *, complex *, integer *, complex *, integer *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *);
     integer poles, sizei, irwrb, nsize;
     extern /* Subroutine */
-    void csrot_(integer *, complex *, integer *, complex *, integer *, real *, real *);
+        void
+        csrot_(integer *, complex *, integer *, complex *, integer *, real *, real *);
     integer irwvt, icmpq1, icmpq2;
     extern /* Subroutine */
-    void clalsa_(integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *), clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
+        void
+        clalsa_(integer *, integer *, integer *, integer *, complex *, integer *, complex *,
+                integer *, real *, integer *, real *, integer *, real *, real *, real *, real *,
+                integer *, integer *, integer *, integer *, real *, real *, real *, real *,
+                integer *, integer *),
+        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
+                integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    void slasda_(integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer * );
+        void
+        slasda_(integer *, integer *, integer *, integer *, real *, real *, real *, integer *,
+                real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *,
+                integer *, real *, real *, real *, real *, integer *, integer *),
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
+                integer *, integer *);
     extern integer isamax_(integer *, real *, integer *);
     integer givcol;
     extern /* Subroutine */
-    void slasdq_(char *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real * );
+        void
+        slasdq_(char *, integer *, integer *, integer *, integer *, integer *, real *, real *,
+                real *, integer *, real *, integer *, real *, integer *, real *, integer *),
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *),
+        slartg_(real *, real *, real *, real *, real *);
     real orgnrm;
     integer givnum;
     extern real slanst_(char *, integer *, real *, real *);
     extern /* Subroutine */
-    void slasrt_(char *, integer *, real *, integer *);
+        void
+        slasrt_(char *, integer *, real *, integer *);
     integer givptr, nrwork, irwwrk, smlszp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -320,7 +347,7 @@ void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
         else
         {
             *rank = 1;
-            clascl_("G", &c__0, &c__0, &d__[1], &c_b10, &c__1, nrhs, &b[ b_offset], ldb, info);
+            clascl_("G", &c__0, &c__0, &d__[1], &c_b10, &c__1, nrhs, &b[b_offset], ldb, info);
             d__[1] = f2c_dabs(d__[1]);
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -338,8 +365,7 @@ void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
             d__[i__ + 1] = cs * d__[i__ + 1];
             if(*nrhs == 1)
             {
-                aocl_blas_csrot(&c__1, &b[i__ + b_dim1], &c__1, &b[i__ + 1 + b_dim1], &c__1, &cs,
-                                &sn);
+                csrot_(&c__1, &b[i__ + b_dim1], &c__1, &b[i__ + 1 + b_dim1], &c__1, &cs, &sn);
             }
             else
             {
@@ -358,8 +384,8 @@ void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
                 {
                     cs = rwork[(j << 1) - 1];
                     sn = rwork[j * 2];
-                    aocl_blas_csrot(&c__1, &b[j + i__ * b_dim1], &c__1, &b[j + 1 + i__ * b_dim1],
-                                    &c__1, &cs, &sn);
+                    csrot_(&c__1, &b[j + i__ * b_dim1], &c__1, &b[j + 1 + i__ * b_dim1], &c__1, &cs,
+                           &sn);
                     /* L20: */
                 }
                 /* L30: */
@@ -368,7 +394,7 @@ void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
     }
     /* Scale. */
     nm1 = *n - 1;
-    orgnrm = aocl_lapack_slanst("M", n, &d__[1], &e[1]);
+    orgnrm = slanst_("M", n, &d__[1], &e[1]);
     if(orgnrm == 0.f)
     {
         claset_("A", n, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
@@ -387,10 +413,10 @@ void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
         irwrb = irwwrk;
         irwib = irwrb + *n * *nrhs;
         irwb = irwib + *n * *nrhs;
-        aocl_lapack_slaset("A", n, n, &c_b35, &c_b10, &rwork[irwu], n);
-        aocl_lapack_slaset("A", n, n, &c_b35, &c_b10, &rwork[irwvt], n);
-        aocl_lapack_slasdq("U", &c__0, n, n, n, &c__0, &d__[1], &e[1], &rwork[irwvt], n,
-                           &rwork[irwu], n, &rwork[irwwrk], &c__1, &rwork[irwwrk], info);
+        slaset_("A", n, n, &c_b35, &c_b10, &rwork[irwu], n);
+        slaset_("A", n, n, &c_b35, &c_b10, &rwork[irwvt], n);
+        slasdq_("U", &c__0, n, n, n, &c__0, &d__[1], &e[1], &rwork[irwvt], n, &rwork[irwu], n,
+                &rwork[irwwrk], &c__1, &rwork[irwwrk], info);
         if(*info != 0)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -413,8 +439,8 @@ void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
             }
             /* L50: */
         }
-        aocl_blas_sgemm("T", "N", n, nrhs, n, &c_b10, &rwork[irwu], n, &rwork[irwb], n, &c_b35,
-                        &rwork[irwrb], n);
+        sgemm_("T", "N", n, nrhs, n, &c_b10, &rwork[irwu], n, &rwork[irwb], n, &c_b35,
+               &rwork[irwrb], n);
         j = irwb - 1;
         i__1 = *nrhs;
         for(jcol = 1; jcol <= i__1; ++jcol)
@@ -428,8 +454,8 @@ void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
             }
             /* L70: */
         }
-        aocl_blas_sgemm("T", "N", n, nrhs, n, &c_b10, &rwork[irwu], n, &rwork[irwb], n, &c_b35,
-                        &rwork[irwib], n);
+        sgemm_("T", "N", n, nrhs, n, &c_b10, &rwork[irwu], n, &rwork[irwb], n, &c_b35,
+               &rwork[irwib], n);
         jreal = irwrb - 1;
         jimag = irwib - 1;
         i__1 = *nrhs;
@@ -461,8 +487,8 @@ void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
             }
             else
             {
-                aocl_lapack_clascl("G", &c__0, &c__0, &d__[i__], &c_b10, &c__1, nrhs,
-                                   &b[i__ + b_dim1], ldb, info);
+                clascl_("G", &c__0, &c__0, &d__[i__], &c_b10, &c__1, nrhs, &b[i__ + b_dim1], ldb,
+                        info);
                 ++(*rank);
             }
             /* L100: */
@@ -486,8 +512,8 @@ void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
             }
             /* L120: */
         }
-        aocl_blas_sgemm("T", "N", n, nrhs, n, &c_b10, &rwork[irwvt], n, &rwork[irwb], n, &c_b35,
-                        &rwork[irwrb], n);
+        sgemm_("T", "N", n, nrhs, n, &c_b10, &rwork[irwvt], n, &rwork[irwb], n, &c_b35,
+               &rwork[irwrb], n);
         j = irwb - 1;
         i__1 = *nrhs;
         for(jcol = 1; jcol <= i__1; ++jcol)
@@ -501,8 +527,8 @@ void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
             }
             /* L140: */
         }
-        aocl_blas_sgemm("T", "N", n, nrhs, n, &c_b10, &rwork[irwvt], n, &rwork[irwb], n, &c_b35,
-                        &rwork[irwib], n);
+        sgemm_("T", "N", n, nrhs, n, &c_b10, &rwork[irwvt], n, &rwork[irwb], n, &c_b35,
+               &rwork[irwib], n);
         jreal = irwrb - 1;
         jimag = irwib - 1;
         i__1 = *nrhs;
@@ -562,7 +588,7 @@ void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((r__1 = d__[i__], f2c_abs(r__1)) < eps)
+        if((r__1 = d__[i__], f2c_abs(r__1)) < eps)
         {
             d__[i__] = r_sign(&eps, &d__[i__]);
         }
@@ -571,7 +597,7 @@ void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
     i__1 = nm1;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((r__1 = e[i__], f2c_abs(r__1)) < eps || i__ == nm1)
+        if((r__1 = e[i__], f2c_abs(r__1)) < eps || i__ == nm1)
         {
             ++nsub;
             iwork[nsub] = (aocl_int_t)(st);
@@ -583,7 +609,7 @@ void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
                 nsize = i__ - st + 1;
                 iwork[sizei + nsub - 1] = (aocl_int_t)(nsize);
             }
-            else if ((r__1 = e[i__], f2c_abs(r__1)) >= eps)
+            else if((r__1 = e[i__], f2c_abs(r__1)) >= eps)
             {
                 /* A subproblem with E(NM1) not too small but I = NM1. */
                 nsize = *n - st + 1;
@@ -611,11 +637,11 @@ void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
             else if(nsize <= *smlsiz)
             {
                 /* This is a small subproblem and is solved by SLASDQ. */
-                aocl_lapack_slaset("A", &nsize, &nsize, &c_b35, &c_b10, &rwork[vt + st1], n);
-                aocl_lapack_slaset("A", &nsize, &nsize, &c_b35, &c_b10, &rwork[u + st1], n);
-                aocl_lapack_slasdq("U", &c__0, &nsize, &nsize, &nsize, &c__0, &d__[st], &e[st],
-                                   &rwork[vt + st1], n, &rwork[u + st1], n, &rwork[nrwork], &c__1,
-                                   &rwork[nrwork], info);
+                slaset_("A", &nsize, &nsize, &c_b35, &c_b10, &rwork[vt + st1], n);
+                slaset_("A", &nsize, &nsize, &c_b35, &c_b10, &rwork[u + st1], n);
+                slasdq_("U", &c__0, &nsize, &nsize, &nsize, &c__0, &d__[st], &e[st],
+                        &rwork[vt + st1], n, &rwork[u + st1], n, &rwork[nrwork], &c__1,
+                        &rwork[nrwork], info);
                 if(*info != 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -638,7 +664,8 @@ void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
                     }
                     /* L190: */
                 }
-                sgemm_("T", "N", &nsize, nrhs, &nsize, &c_b10, &rwork[u + st1], n, &rwork[irwb], &nsize, &c_b35, &rwork[irwrb], & nsize);
+                sgemm_("T", "N", &nsize, nrhs, &nsize, &c_b10, &rwork[u + st1], n, &rwork[irwb],
+                       &nsize, &c_b35, &rwork[irwrb], &nsize);
                 j = irwb - 1;
                 i__2 = *nrhs;
                 for(jcol = 1; jcol <= i__2; ++jcol)
@@ -652,7 +679,8 @@ void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
                     }
                     /* L210: */
                 }
-                sgemm_("T", "N", &nsize, nrhs, &nsize, &c_b10, &rwork[u + st1], n, &rwork[irwb], &nsize, &c_b35, &rwork[irwib], & nsize);
+                sgemm_("T", "N", &nsize, nrhs, &nsize, &c_b10, &rwork[u + st1], n, &rwork[irwb],
+                       &nsize, &c_b35, &rwork[irwib], &nsize);
                 jreal = irwrb - 1;
                 jimag = irwib - 1;
                 i__2 = *nrhs;
@@ -679,20 +707,24 @@ void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
             else
             {
                 /* A large problem. Solve it using divide and conquer. */
-                aocl_lapack_slasda(&icmpq1, smlsiz, &nsize, &sqre, &d__[st], &e[st],
-                                   &rwork[u + st1], n, &rwork[vt + st1], &iwork[k + st1],
-                                   &rwork[difl + st1], &rwork[difr + st1], &rwork[z__ + st1],
-                                   &rwork[poles + st1], &iwork[givptr + st1], &iwork[givcol + st1],
-                                   n, &iwork[perm + st1], &rwork[givnum + st1], &rwork[c__ + st1],
-                                   &rwork[s + st1], &rwork[nrwork], &iwork[iwk], info);
+                slasda_(&icmpq1, smlsiz, &nsize, &sqre, &d__[st], &e[st], &rwork[u + st1], n,
+                        &rwork[vt + st1], &iwork[k + st1], &rwork[difl + st1], &rwork[difr + st1],
+                        &rwork[z__ + st1], &rwork[poles + st1], &iwork[givptr + st1],
+                        &iwork[givcol + st1], n, &iwork[perm + st1], &rwork[givnum + st1],
+                        &rwork[c__ + st1], &rwork[s + st1], &rwork[nrwork], &iwork[iwk], info);
                 if(*info != 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
                 }
                 bxst = bx + st1;
-                clalsa_(&icmpq2, smlsiz, &nsize, nrhs, &b[st + b_dim1], ldb, & work[bxst], n, &rwork[u + st1], n, &rwork[vt + st1], & iwork[k + st1], &rwork[difl + st1], &rwork[difr + st1], &rwork[z__ + st1], &rwork[poles + st1], &iwork[ givptr + st1], &iwork[givcol + st1], n, &iwork[perm + st1], &rwork[givnum + st1], &rwork[c__ + st1], &rwork[ s + st1], &rwork[nrwork], &iwork[iwk], info);
-                if (*info != 0)
+                clalsa_(&icmpq2, smlsiz, &nsize, nrhs, &b[st + b_dim1], ldb, &work[bxst], n,
+                        &rwork[u + st1], n, &rwork[vt + st1], &iwork[k + st1], &rwork[difl + st1],
+                        &rwork[difr + st1], &rwork[z__ + st1], &rwork[poles + st1],
+                        &iwork[givptr + st1], &iwork[givcol + st1], n, &iwork[perm + st1],
+                        &rwork[givnum + st1], &rwork[c__ + st1], &rwork[s + st1], &rwork[nrwork],
+                        &iwork[iwk], info);
+                if(*info != 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
@@ -709,15 +741,15 @@ void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
     {
         /* Some of the elements in D can be negative because 1-by-1 */
         /* subproblems were not solved explicitly. */
-        if ((r__1 = d__[i__], f2c_abs(r__1)) <= tol)
+        if((r__1 = d__[i__], f2c_abs(r__1)) <= tol)
         {
             aocl_lapack_claset("A", &c__1, nrhs, &c_b1, &c_b1, &work[bx + i__ - 1], n);
         }
         else
         {
             ++(*rank);
-            aocl_lapack_clascl("G", &c__0, &c__0, &d__[i__], &c_b10, &c__1, nrhs,
-                               &work[bx + i__ - 1], n, info);
+            clascl_("G", &c__0, &c__0, &d__[i__], &c_b10, &c__1, nrhs, &work[bx + i__ - 1], n,
+                    info);
         }
         d__[i__] = (r__1 = d__[i__], f2c_abs(r__1));
         /* L250: */
@@ -758,8 +790,8 @@ void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
                 }
                 /* L270: */
             }
-            aocl_blas_sgemm("T", "N", &nsize, nrhs, &nsize, &c_b10, &rwork[vt + st1], n,
-                            &rwork[irwb], &nsize, &c_b35, &rwork[irwrb], &nsize);
+            sgemm_("T", "N", &nsize, nrhs, &nsize, &c_b10, &rwork[vt + st1], n, &rwork[irwb],
+                   &nsize, &c_b35, &rwork[irwrb], &nsize);
             j = bxst - *n - 1;
             jimag = irwb - 1;
             i__2 = *nrhs;
@@ -775,8 +807,8 @@ void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
                 }
                 /* L290: */
             }
-            aocl_blas_sgemm("T", "N", &nsize, nrhs, &nsize, &c_b10, &rwork[vt + st1], n,
-                            &rwork[irwb], &nsize, &c_b35, &rwork[irwib], &nsize);
+            sgemm_("T", "N", &nsize, nrhs, &nsize, &c_b10, &rwork[vt + st1], n, &rwork[irwb],
+                   &nsize, &c_b35, &rwork[irwib], &nsize);
             jreal = irwrb - 1;
             jimag = irwib - 1;
             i__2 = *nrhs;
@@ -801,12 +833,12 @@ void clalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
         }
         else
         {
-            aocl_lapack_clalsa(&icmpq2, smlsiz, &nsize, nrhs, &work[bxst], n, &b[st + b_dim1], ldb,
-                               &rwork[u + st1], n, &rwork[vt + st1], &iwork[k + st1],
-                               &rwork[difl + st1], &rwork[difr + st1], &rwork[z__ + st1],
-                               &rwork[poles + st1], &iwork[givptr + st1], &iwork[givcol + st1], n,
-                               &iwork[perm + st1], &rwork[givnum + st1], &rwork[c__ + st1],
-                               &rwork[s + st1], &rwork[nrwork], &iwork[iwk], info);
+            clalsa_(&icmpq2, smlsiz, &nsize, nrhs, &work[bxst], n, &b[st + b_dim1], ldb,
+                    &rwork[u + st1], n, &rwork[vt + st1], &iwork[k + st1], &rwork[difl + st1],
+                    &rwork[difr + st1], &rwork[z__ + st1], &rwork[poles + st1],
+                    &iwork[givptr + st1], &iwork[givcol + st1], n, &iwork[perm + st1],
+                    &rwork[givnum + st1], &rwork[c__ + st1], &rwork[s + st1], &rwork[nrwork],
+                    &iwork[iwk], info);
             if(*info != 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

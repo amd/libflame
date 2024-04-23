@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b DORM2R multiplies a general matrix by the orthogonal matrix from a QR factorization
  * determined by sgeqrf (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
@@ -111,7 +111,7 @@ static aocl_int64_t c__1 = 1;
 /* > LDA is INTEGER */
 /* > The leading dimension of the array A. */
 /* > If SIDE = 'L', LDA >= fla_max(1,M);
-*/
+ */
 /* > if SIDE = 'R', LDA >= fla_max(1,N). */
 /* > \endverbatim */
 /* > */
@@ -158,7 +158,9 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau, doublereal * c__, integer *ldc, doublereal *work, integer *info)
+void dorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a,
+                integer *lda, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work,
+                integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
@@ -167,10 +169,13 @@ void dorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, dou
     doublereal aii;
     logical left;
     extern /* Subroutine */
-    void dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+        void
+        dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -215,11 +220,11 @@ void dorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, dou
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1))
     {
         *info = -2;
     }
@@ -235,11 +240,11 @@ void dorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, dou
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,nq))
+    else if(*lda < fla_max(1, nq))
     {
         *info = -7;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -10;
     }
@@ -295,8 +300,8 @@ void dorm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, dou
         /* Apply H(i) */
         aii = a[i__ + i__ * a_dim1];
         a[i__ + i__ * a_dim1] = 1.;
-        aocl_lapack_dlarf(side, &mi, &ni, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
-                          &c__[ic + jc * c_dim1], ldc, &work[1]);
+        dlarf_(side, &mi, &ni, &a[i__ + i__ * a_dim1], &c__1, &tau[i__], &c__[ic + jc * c_dim1],
+               ldc, &work[1]);
         a[i__ + i__ * a_dim1] = aii;
         /* L10: */
     }

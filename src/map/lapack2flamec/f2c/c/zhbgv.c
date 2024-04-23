@@ -1,9 +1,9 @@
-/* ./zhbgv.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b ZHBGV */
+/* ../netlib/zhbgv.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+#include "FLA_f2c.h" /* > \brief \b ZHBGST */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -91,7 +91,7 @@
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(ka+1+i-j,j) = A(i,j) for fla_max(1,j-ka)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+ka). */
 /* > */
 /* > On exit, the contents of AB are destroyed. */
@@ -111,7 +111,7 @@
 /* > j-th column of B is stored in the j-th column of the array BB */
 /* > as follows: */
 /* > if UPLO = 'U', BB(kb+1+i-j,j) = B(i,j) for fla_max(1,j-kb)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', BB(1+i-j,j) = B(i,j) for j<=i<=fla_min(n,j+kb). */
 /* > */
 /* > On exit, the factor S from the split Cholesky factorization */
@@ -181,10 +181,14 @@
 /* > \ingroup hbgv */
 /* ===================================================================== */
 /* Subroutine */
-void zhbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, doublecomplex *ab, integer *ldab, doublecomplex *bb, integer *ldbb, doublereal *w, doublecomplex *z__, integer *ldz, doublecomplex *work, doublereal *rwork, integer *info)
+void zhbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, doublecomplex *ab,
+            integer *ldab, doublecomplex *bb, integer *ldbb, doublereal *w, doublecomplex *z__,
+            integer *ldz, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhbgv inputs: jobz %c, uplo %c, n %" FLA_IS ", ka %" FLA_IS ", kb %" FLA_IS ", ldab %" FLA_IS ", ldbb %" FLA_IS ", ldz %" FLA_IS "",*jobz, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldz);
+    AOCL_DTL_SNPRINTF("zhbgv inputs: jobz %c, uplo %c, n %" FLA_IS ", ka %" FLA_IS ", kb %" FLA_IS
+                      ", ldab %" FLA_IS ", ldbb %" FLA_IS ", ldz %" FLA_IS "",
+                      *jobz, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldz);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, bb_dim1, bb_offset, z_dim1, z_offset, i__1;
     /* Local variables */
@@ -194,10 +198,20 @@ void zhbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, double
     integer iinfo;
     logical upper, wantz;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dsterf_( integer *, doublereal *, doublereal *, integer *), zhbtrd_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        dsterf_(integer *, doublereal *, doublereal *, integer *),
+        zhbtrd_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *,
+                doublereal *, doublecomplex *, integer *, doublecomplex *, integer *);
     integer indwrk;
     extern /* Subroutine */
-    void zhbgst_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, integer *), zpbstf_(char *, integer *, integer *, doublecomplex *, integer *, integer *), zsteqr_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublereal *, integer *);
+        void
+        zhbgst_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                doublereal *, integer *),
+        zpbstf_(char *, integer *, integer *, doublecomplex *, integer *, integer *),
+        zsteqr_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *,
+                doublereal *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -231,11 +245,11 @@ void zhbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, double
     wantz = lsame_(jobz, "V", 1, 1);
     upper = lsame_(uplo, "U", 1, 1);
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (upper || lsame_(uplo, "L", 1, 1)))
+    else if(!(upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -2;
     }
@@ -267,28 +281,28 @@ void zhbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, double
     {
         i__1 = -(*info);
         xerbla_("ZHBGV ", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Form a split Cholesky factorization of B. */
-    aocl_lapack_zpbstf(uplo, n, kb, &bb[bb_offset], ldbb, info);
+    zpbstf_(uplo, n, kb, &bb[bb_offset], ldbb, info);
     if(*info != 0)
     {
         *info = *n + *info;
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Transform problem to standard eigenvalue problem. */
     inde = 1;
     indwrk = inde + *n;
-    aocl_lapack_zhbgst(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb,
-                       &z__[z_offset], ldz, &work[1], &rwork[indwrk], &iinfo);
+    zhbgst_(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb, &z__[z_offset], ldz,
+            &work[1], &rwork[indwrk], &iinfo);
     /* Reduce to tridiagonal form. */
     if(wantz)
     {
@@ -298,8 +312,8 @@ void zhbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, double
     {
         *(unsigned char *)vect = 'N';
     }
-    aocl_lapack_zhbtrd(vect, uplo, n, ka, &ab[ab_offset], ldab, &w[1], &rwork[inde], &z__[z_offset],
-                       ldz, &work[1], &iinfo);
+    zhbtrd_(vect, uplo, n, ka, &ab[ab_offset], ldab, &w[1], &rwork[inde], &z__[z_offset], ldz,
+            &work[1], &iinfo);
     /* For eigenvalues only, call DSTERF. For eigenvectors, call ZSTEQR. */
     if(!wantz)
     {
@@ -307,7 +321,7 @@ void zhbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, double
     }
     else
     {
-        aocl_lapack_zsteqr(jobz, n, &w[1], &rwork[inde], &z__[z_offset], ldz, &rwork[indwrk], info);
+        zsteqr_(jobz, n, &w[1], &rwork[inde], &z__[z_offset], ldz, &rwork[indwrk], info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

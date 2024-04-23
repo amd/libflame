@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static integer c__1 = 1;
+static integer c_n1 = -1;
 /* > \brief <b> DSYEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for SY mat rices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -249,10 +249,15 @@ the routine */
 /* > \ingroup doubleSYeigen */
 /* ===================================================================== */
 /* Subroutine */
-void dsyevx_(char *jobz, char *range, char *uplo, integer *n, doublereal *a, integer *lda, doublereal *vl, doublereal *vu, integer * il, integer *iu, doublereal *abstol, integer *m, doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *iwork, integer *ifail, integer *info)
+void dsyevx_(char *jobz, char *range, char *uplo, integer *n, doublereal *a, integer *lda,
+             doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *abstol,
+             integer *m, doublereal *w, doublereal *z__, integer *ldz, doublereal *work,
+             integer *lwork, integer *iwork, integer *ifail, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsyevx inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS "",*jobz, *range, *uplo, *n, *lda, *il, *iu, *ldz, *lwork);
+    AOCL_DTL_SNPRINTF("dsyevx inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS
+                      ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS "",
+                      *jobz, *range, *uplo, *n, *lda, *il, *iu, *ldz, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, z_dim1, z_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -268,39 +273,58 @@ void dsyevx_(char *jobz, char *range, char *uplo, integer *n, doublereal *a, int
     logical test;
     integer itmp1, indee;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
     extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     char order[1];
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical lower, wantz;
     extern doublereal dlamch_(char *);
     logical alleig, indeig;
     aocl_int64_t iscale, indibl;
     logical valeig;
     extern /* Subroutine */
-    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal safmin;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal abstll, bignum;
     integer indtau, indisp;
     extern /* Subroutine */
-    void dstein_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *), dsterf_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dstein_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+                integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *),
+        dsterf_(integer *, doublereal *, doublereal *, integer *);
     integer indiwo, indwkn;
     extern doublereal dlansy_(char *, char *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
-    void dstebz_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dstebz_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *,
+                integer *, integer *, doublereal *, integer *, integer *);
     integer indwrk, lwkmin;
     extern /* Subroutine */
-    void dorgtr_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *), dormtr_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dorgtr_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *,
+                integer *),
+        dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *,
+                doublereal *, integer *),
+        dormtr_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, integer *, doublereal *, integer *, integer *);
     integer llwrkn, llwork, nsplit;
     doublereal smlnum;
     extern /* Subroutine */
-    void dsytrd_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+        void
+        dsytrd_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, doublereal *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK driver routine (version 3.4.0) -- */
@@ -344,7 +368,7 @@ void dsyevx_(char *jobz, char *range, char *uplo, integer *n, doublereal *a, int
     lquery = *lwork == -1;
     *info = 0;
     lwkopt = 0;
-    if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
@@ -352,7 +376,7 @@ void dsyevx_(char *jobz, char *range, char *uplo, integer *n, doublereal *a, int
     {
         *info = -2;
     }
-    else if (! (lower || lsame_(uplo, "U", 1, 1)))
+    else if(!(lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -3;
     }
@@ -360,7 +384,7 @@ void dsyevx_(char *jobz, char *range, char *uplo, integer *n, doublereal *a, int
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -375,11 +399,11 @@ void dsyevx_(char *jobz, char *range, char *uplo, integer *n, doublereal *a, int
         }
         else if(indeig)
         {
-            if (*il < 1 || *il > fla_max(1,*n))
+            if(*il < 1 || *il > fla_max(1, *n))
             {
                 *info = -9;
             }
-            else if (*iu < fla_min(*n,*il) || *iu > *n)
+            else if(*iu < fla_min(*n, *il) || *iu > *n)
             {
                 *info = -10;
             }
@@ -406,12 +430,12 @@ void dsyevx_(char *jobz, char *range, char *uplo, integer *n, doublereal *a, int
             /* Computing MAX */
             i__1 = nb;
             i__2 = ilaenv_(&c__1, "DORMTR", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
-            nb = fla_max(i__1,i__2);
+            nb = fla_max(i__1, i__2);
             /* Computing MAX */
             i__1 = lwkmin;
             i__2 = (nb + 3) * *n; // , expr subst
-            lwkopt = fla_max(i__1,i__2);
-            work[1] = (doublereal) lwkopt;
+            lwkopt = fla_max(i__1, i__2);
+            work[1] = (doublereal)lwkopt;
         }
         if(*lwork < lwkmin && !lquery)
         {
@@ -468,7 +492,7 @@ void dsyevx_(char *jobz, char *range, char *uplo, integer *n, doublereal *a, int
     /* Computing MIN */
     d__1 = sqrt(bignum);
     d__2 = 1. / sqrt(sqrt(safmin)); // , expr subst
-    rmax = fla_min(d__1,d__2);
+    rmax = fla_min(d__1, d__2);
     /* Scale matrix to allowable range, if necessary. */
     iscale = 0;
     abstll = *abstol;
@@ -477,7 +501,7 @@ void dsyevx_(char *jobz, char *range, char *uplo, integer *n, doublereal *a, int
         vll = *vl;
         vuu = *vu;
     }
-    anrm = aocl_lapack_dlansy("M", uplo, n, &a[a_offset], lda, &work[1]);
+    anrm = dlansy_("M", uplo, n, &a[a_offset], lda, &work[1]);
     if(anrm > 0. && anrm < rmin)
     {
         iscale = 1;
@@ -525,8 +549,8 @@ void dsyevx_(char *jobz, char *range, char *uplo, integer *n, doublereal *a, int
     indd = inde + *n;
     indwrk = indd + *n;
     llwork = *lwork - indwrk + 1;
-    aocl_lapack_dsytrd(uplo, n, &a[a_offset], lda, &work[indd], &work[inde], &work[indtau],
-                       &work[indwrk], &llwork, &iinfo);
+    dsytrd_(uplo, n, &a[a_offset], lda, &work[indd], &work[inde], &work[indtau], &work[indwrk],
+            &llwork, &iinfo);
     /* If all eigenvalues are desired and ABSTOL is less than or equal to */
     /* zero, then call DSTERF or DORGTR and SSTEQR. If this fails for */
     /* some eigenvalue, then try DSTEBZ. */
@@ -553,9 +577,8 @@ void dsyevx_(char *jobz, char *range, char *uplo, integer *n, doublereal *a, int
             dlacpy_("A", n, n, &a[a_offset], lda, &z__[z_offset], ldz);
             dorgtr_(uplo, n, &z__[z_offset], ldz, &work[indtau], &work[indwrk], &llwork, &iinfo);
             i__1 = *n - 1;
-            aocl_blas_dcopy(&i__1, &work[inde], &c__1, &work[indee], &c__1);
-            aocl_lapack_dsteqr(jobz, n, &w[1], &work[indee], &z__[z_offset], ldz, &work[indwrk],
-                               info);
+            dcopy_(&i__1, &work[inde], &c__1, &work[indee], &c__1);
+            dsteqr_(jobz, n, &w[1], &work[indee], &z__[z_offset], ldz, &work[indwrk], info);
             if(*info == 0)
             {
                 i__1 = *n;
@@ -585,19 +608,18 @@ void dsyevx_(char *jobz, char *range, char *uplo, integer *n, doublereal *a, int
     indibl = 1;
     indisp = indibl + *n;
     indiwo = indisp + *n;
-    aocl_lapack_dstebz(range, order, n, &vll, &vuu, il, iu, &abstll, &work[indd], &work[inde], m,
-                       &nsplit, &w[1], &iwork[indibl], &iwork[indisp], &work[indwrk],
-                       &iwork[indiwo], info);
+    dstebz_(range, order, n, &vll, &vuu, il, iu, &abstll, &work[indd], &work[inde], m, &nsplit,
+            &w[1], &iwork[indibl], &iwork[indisp], &work[indwrk], &iwork[indiwo], info);
     if(wantz)
     {
-        aocl_lapack_dstein(n, &work[indd], &work[inde], m, &w[1], &iwork[indibl], &iwork[indisp],
-                           &z__[z_offset], ldz, &work[indwrk], &iwork[indiwo], &ifail[1], info);
+        dstein_(n, &work[indd], &work[inde], m, &w[1], &iwork[indibl], &iwork[indisp],
+                &z__[z_offset], ldz, &work[indwrk], &iwork[indiwo], &ifail[1], info);
         /* Apply orthogonal matrix used in reduction to tridiagonal */
         /* form to eigenvectors returned by DSTEIN. */
         indwkn = inde;
         llwrkn = *lwork - indwkn + 1;
-        aocl_lapack_dormtr("L", uplo, "N", n, m, &a[a_offset], lda, &work[indtau], &z__[z_offset],
-                           ldz, &work[indwkn], &llwrkn, &iinfo);
+        dormtr_("L", uplo, "N", n, m, &a[a_offset], lda, &work[indtau], &z__[z_offset], ldz,
+                &work[indwkn], &llwrkn, &iinfo);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
 L40:
@@ -639,8 +661,8 @@ L40:
                 w[i__] = w[j];
                 iwork[indibl + i__ - 1] = iwork[indibl + j - 1];
                 w[j] = tmp1;
-                iwork[indibl + j - 1] = (aocl_int_t)(itmp1);
-                aocl_blas_dswap(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
+                iwork[indibl + j - 1] = itmp1;
+                dswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
                 if(*info != 0)
                 {
                     itmp1 = ifail[i__];
@@ -652,7 +674,7 @@ L40:
         }
     }
     /* Set WORK(1) to optimal workspace size. */
-    work[1] = (doublereal) lwkopt;
+    work[1] = (doublereal)lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DSYEVX */

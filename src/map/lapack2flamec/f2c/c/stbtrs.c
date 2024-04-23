@@ -101,7 +101,7 @@ static aocl_int64_t c__1 = 1;
 /* > first kd+1 rows of AB. The j-th column of A is stored */
 /* > in the j-th column of the array AB as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > If DIAG = 'U', the diagonal elements of A are not referenced */
 /* > and are assumed to be 1. */
@@ -145,12 +145,16 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void stbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integer *nrhs, real *ab, integer *ldab, real *b, integer *ldb, integer *info)
+void stbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integer *nrhs, real *ab,
+             integer *ldab, real *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"stbtrs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",*uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb);
+    snprintf(buffer, 256,
+             "stbtrs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", kd %" FLA_IS
+             ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",
+             *uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -160,7 +164,9 @@ void stbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    void stbsv_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        stbsv_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -194,15 +200,15 @@ void stbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
     *info = 0;
     nounit = lsame_(diag, "N", 1, 1);
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!lsame_(trans, "N", 1, 1) && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
@@ -222,7 +228,7 @@ void stbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
     {
         *info = -8;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -10;
     }

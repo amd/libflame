@@ -26,7 +26,7 @@ use or performance of this software.
 
 /**  barf  [ba:rf]  2.  "He suggested using FORTRAN, and everybody barfed."
 
-	- From The Shogakukan DICTIONARY OF NEW ENGLISH (Second edition) */
+    - From The Shogakukan DICTIONARY OF NEW ENGLISH (Second edition) */
 
 #ifndef F2C_INCLUDE
 #define F2C_INCLUDE
@@ -34,18 +34,18 @@ use or performance of this software.
 #include <math.h>
 #include <string.h>
 #ifdef _MSC_VER
-# include "f2c_types_win.h"
+#include "f2c_types_win.h"
 #else
-# include "f2c_types.h"
+#include "f2c_types.h"
 #endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#ifdef INTEGER_STAR_8	/* Adjust for integer*8. */
-#define qbit_clear(a,b)	((a) & ~((ulongint)1 << (b)))
-#define qbit_set(a,b)	((a) |  ((ulongint)1 << (b)))
+#ifdef INTEGER_STAR_8 /* Adjust for integer*8. */
+#define qbit_clear(a, b) ((a) & ~((ulongint)1 << (b)))
+#define qbit_set(a, b) ((a) | ((ulongint)1 << (b)))
 #endif
 
 #define TRUE_ (1)
@@ -60,114 +60,123 @@ extern "C" {
 
 /*external read, write*/
 typedef struct
-{	flag cierr;
-	ftnint ciunit;
-	flag ciend;
-	char *cifmt;
-	ftnint cirec;
+{
+    flag cierr;
+    ftnint ciunit;
+    flag ciend;
+    char *cifmt;
+    ftnint cirec;
 } cilist;
 
 /*internal read, write*/
 typedef struct
-{	flag icierr;
-	char *iciunit;
-	flag iciend;
-	char *icifmt;
-	ftnint icirlen;
-	ftnint icirnum;
+{
+    flag icierr;
+    char *iciunit;
+    flag iciend;
+    char *icifmt;
+    ftnint icirlen;
+    ftnint icirnum;
 } icilist;
 
 /*open*/
 typedef struct
-{	flag oerr;
-	ftnint ounit;
-	char *ofnm;
-	ftnlen ofnmlen;
-	char *osta;
-	char *oacc;
-	char *ofm;
-	ftnint orl;
-	char *oblnk;
+{
+    flag oerr;
+    ftnint ounit;
+    char *ofnm;
+    ftnlen ofnmlen;
+    char *osta;
+    char *oacc;
+    char *ofm;
+    ftnint orl;
+    char *oblnk;
 } olist;
 
 /*close*/
 typedef struct
-{	flag cerr;
-	ftnint cunit;
-	char *csta;
+{
+    flag cerr;
+    ftnint cunit;
+    char *csta;
 } cllist;
 
 /*rewind, backspace, endfile*/
 typedef struct
-{	flag aerr;
-	ftnint aunit;
+{
+    flag aerr;
+    ftnint aunit;
 } alist;
 
 /* inquire */
 typedef struct
-{	flag inerr;
-	ftnint inunit;
-	char *infile;
-	ftnlen infilen;
-	ftnint	*inex;	/*parameters in standard's order*/
-	ftnint	*inopen;
-	ftnint	*innum;
-	ftnint	*innamed;
-	char	*inname;
-	ftnlen	innamlen;
-	char	*inacc;
-	ftnlen	inacclen;
-	char	*inseq;
-	ftnlen	inseqlen;
-	char 	*indir;
-	ftnlen	indirlen;
-	char	*infmt;
-	ftnlen	infmtlen;
-	char	*inform;
-	ftnint	informlen;
-	char	*inunf;
-	ftnlen	inunflen;
-	ftnint	*inrecl;
-	ftnint	*innrec;
-	char	*inblank;
-	ftnlen	inblanklen;
+{
+    flag inerr;
+    ftnint inunit;
+    char *infile;
+    ftnlen infilen;
+    ftnint *inex; /*parameters in standard's order*/
+    ftnint *inopen;
+    ftnint *innum;
+    ftnint *innamed;
+    char *inname;
+    ftnlen innamlen;
+    char *inacc;
+    ftnlen inacclen;
+    char *inseq;
+    ftnlen inseqlen;
+    char *indir;
+    ftnlen indirlen;
+    char *infmt;
+    ftnlen infmtlen;
+    char *inform;
+    ftnint informlen;
+    char *inunf;
+    ftnlen inunflen;
+    ftnint *inrecl;
+    ftnint *innrec;
+    char *inblank;
+    ftnlen inblanklen;
 } inlist;
 
-union Multitype {	/* for multiple entry points */
-	integer1 g;
-	shortint h;
-	integer i;
-	/* longint j; */
-	real r;
-	doublereal d;
-	complex c;
-	doublecomplex z;
+union Multitype
+{ /* for multiple entry points */
+    integer1 g;
+    shortint h;
+    integer i;
+    /* longint j; */
+    real r;
+    doublereal d;
+    complex c;
+    doublecomplex z;
 };
 
 typedef union Multitype Multitype;
 
-struct Vardesc {	/* for Namelist */
-	char *name;
-	char *addr;
-	ftnlen *dims;
-	int  type;
+struct Vardesc
+{ /* for Namelist */
+    char *name;
+    char *addr;
+    ftnlen *dims;
+    int type;
 };
 typedef struct Vardesc Vardesc;
 
-struct Namelist {
-	char *name;
-	Vardesc **vars;
-	int nvars;
+struct Namelist
+{
+    char *name;
+    Vardesc **vars;
+    int nvars;
 };
 typedef struct Namelist Namelist;
 
 #define abs(x) ((x) >= 0 ? (x) : -(x))
-#define dabs(x) (doublereal)abs(x)
-#define dmin(a,b) (doublereal)min(a,b)
-#define dmax(a,b) (doublereal)max(a,b)
-#define bit_test(a,b)	((a) >> (b) & 1)
-#define bit_clear(a,b)	((a) & ~((uinteger)1 << (b)))
-#define bit_set(a,b)	((a) |  ((uinteger)1 << (b)))
+#define dabs(x) (doublereal) abs(x)
+#define dmin(a, b) (doublereal) min(a, b)
+#define dmax(a, b) (doublereal) max(a, b)
+#define bit_test(a, b) ((a) >> (b)&1)
+#define bit_clear(a, b) ((a) & ~((uinteger)1 << (b)))
+#define bit_set(a, b) ((a) | ((uinteger)1 << (b)))
 
 /* undef any lower-case symbols that your C compiler predefines, e.g.: */
 
@@ -208,7 +217,7 @@ extern doublereal _0;
 
 double f__cabs(double, double);
 char *F77_aloc(integer Len, const char *whence);
-void sig_die(const char*, int);
+void sig_die(const char *, int);
 void _uninit_f2c(void *x, int type, long len);
 
 /*
@@ -256,7 +265,7 @@ integer pow_ii(integer *ap, integer *bp);
 longint pow_qq(longint *ap, longint *bp);
 #endif
 double pow_ri(real *ap, integer *bp);
-void pow_zi(doublecomplex*, doublecomplex*, integer*);
+void pow_zi(doublecomplex *, doublecomplex *, integer *);
 void pow_zz(doublecomplex *r, doublecomplex *a, doublecomplex *b);
 
 #ifdef INTEGER_STAR_8
@@ -297,7 +306,7 @@ int s_stop(char *s, ftnlen n);
 ftnint signal_(integer *sigp, void *proc);
 integer system_(register char *s, ftnlen n);
 
-void z_div(doublecomplex*, doublecomplex*, doublecomplex*);
+void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
 void z_cos(doublecomplex *r, doublecomplex *z);
 void z_exp(doublecomplex *r, doublecomplex *z);
 void z_log(doublecomplex *r, doublecomplex *z);
@@ -305,9 +314,9 @@ void z_sin(doublecomplex *r, doublecomplex *z);
 void z_sqrt(doublecomplex *r, doublecomplex *z);
 
 #ifndef F2C_NO_INLINE_H
-# if defined(__GNUC__)
-#  include "f2c_inline.h"
-# endif
+#if defined(__GNUC__)
+#include "f2c_inline.h"
+#endif
 #endif
 
 #if !defined(F2C_INLINE_H)

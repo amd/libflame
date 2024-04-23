@@ -123,7 +123,8 @@ the routine */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zungtr_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *work, integer *lwork, integer *info)
+void zungtr_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau,
+                doublecomplex *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
@@ -133,12 +134,17 @@ void zungtr_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
     integer iinfo;
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    void zungql_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *), zungqr_fla(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
+        void
+        zungql_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                doublecomplex *, integer *, integer *),
+        zungqr_fla(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                   doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -170,7 +176,7 @@ void zungtr_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
     *info = 0;
     lquery = *lwork == -1;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -178,7 +184,7 @@ void zungtr_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -187,7 +193,7 @@ void zungtr_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
-        if (*lwork < fla_max(i__1,i__2) && ! lquery)
+        if(*lwork < fla_max(i__1, i__2) && !lquery)
         {
             *info = -7;
         }
@@ -211,8 +217,8 @@ void zungtr_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
-        lwkopt = fla_max(i__1,i__2) * nb;
-        work[1].r = (doublereal) lwkopt;
+        lwkopt = fla_max(i__1, i__2) * nb;
+        work[1].r = (doublereal)lwkopt;
         work[1].i = 0.; // , expr subst
     }
     if(*info != 0)
@@ -316,7 +322,7 @@ void zungtr_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
                        &iinfo);
         }
     }
-    work[1].r = (doublereal) lwkopt;
+    work[1].r = (doublereal)lwkopt;
     work[1].i = 0.; // , expr subst
     return;
     /* End of ZUNGTR */

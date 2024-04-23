@@ -112,7 +112,7 @@ void slaset_(char *uplo, integer *m, integer *n, real *alpha, real *beta, real *
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slaset inputs: uplo %c, m %d, n %d, lda %d",*uplo, *m, *n, *lda);
+    snprintf(buffer, 256, "slaset inputs: uplo %c, m %d, n %d, lda %d", *uplo, *m, *n, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -141,7 +141,7 @@ void slaset_(char *uplo, integer *m, integer *n, real *alpha, real *beta, real *
     a_offset = 1 + a_dim1;
     a -= a_offset;
     /* Function Body */
-    if (lsame_(uplo, "U", 1, 1))
+    if(lsame_(uplo, "U", 1, 1))
     {
         /* Set the strictly upper triangular or trapezoidal part of the */
         /* array to ALPHA. */
@@ -150,10 +150,8 @@ void slaset_(char *uplo, integer *m, integer *n, real *alpha, real *beta, real *
         {
             /* Computing MIN */
             i__3 = j - 1;
-            i__2 = fla_min(i__3,*m);
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            i__2 = fla_min(i__3, *m);
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 a[i__ + j * a_dim1] = *alpha;
                 /* L10: */
@@ -161,14 +159,12 @@ void slaset_(char *uplo, integer *m, integer *n, real *alpha, real *beta, real *
             /* L20: */
         }
     }
-    else if (lsame_(uplo, "L", 1, 1))
+    else if(lsame_(uplo, "L", 1, 1))
     {
         /* Set the strictly lower triangular or trapezoidal part of the */
         /* array to ALPHA. */
-        i__1 = fla_min(*m,*n);
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        i__1 = fla_min(*m, *n);
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
             for(i__ = j + 1; i__ <= i__2; ++i__)
@@ -195,10 +191,8 @@ void slaset_(char *uplo, integer *m, integer *n, real *alpha, real *beta, real *
         }
     }
     /* Set the first fla_min(M,N) diagonal elements to BETA. */
-    i__1 = fla_min(*m,*n);
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    i__1 = fla_min(*m, *n);
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         a[i__ + i__ * a_dim1] = *beta;
         /* L70: */

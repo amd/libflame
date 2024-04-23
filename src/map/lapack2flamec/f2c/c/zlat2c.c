@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b ZLAT2C converts a double scomplex triangular matrix to a scomplex triangular matrix. */
+#include "FLA_f2c.h" /* > \brief \b ZLAT2C converts a double complex triangular matrix to a complex triangular matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -108,10 +108,12 @@ if INFO>0, the content of */
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlat2c_(char *uplo, integer *n, doublecomplex *a, integer *lda, complex *sa, integer *ldsa, integer *info)
+void zlat2c_(char *uplo, integer *n, doublecomplex *a, integer *lda, complex *sa, integer *ldsa,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlat2c inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldsa %" FLA_IS "",*uplo, *n, *lda, *ldsa);
+    AOCL_DTL_SNPRINTF("zlat2c inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldsa %" FLA_IS "",
+                      *uplo, *n, *lda, *ldsa);
 
     /* System generated locals */
     aocl_int64_t sa_dim1, sa_offset, a_dim1, a_offset, i__1, i__2, i__3, i__4;
@@ -149,7 +151,7 @@ void zlat2c_(char *uplo, integer *n, doublecomplex *a, integer *lda, complex *sa
     /* Function Body */
     rmax = slamch_("O");
     upper = lsame_(uplo, "U", 1, 1);
-    if (upper)
+    if(upper)
     {
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
@@ -159,7 +161,7 @@ void zlat2c_(char *uplo, integer *n, doublecomplex *a, integer *lda, complex *sa
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
-                if(a[i__3].real < -rmax || a[i__4].real > rmax || d_imag(&a[i__ + j * a_dim1]) < -rmax
+                if(a[i__3].r < -rmax || a[i__4].r > rmax || d_imag(&a[i__ + j * a_dim1]) < -rmax
                    || d_imag(&a[i__ + j * a_dim1]) > rmax)
                 {
                     *info = 1;
@@ -184,7 +186,7 @@ void zlat2c_(char *uplo, integer *n, doublecomplex *a, integer *lda, complex *sa
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
-                if(a[i__3].real < -rmax || a[i__4].real > rmax || d_imag(&a[i__ + j * a_dim1]) < -rmax
+                if(a[i__3].r < -rmax || a[i__4].r > rmax || d_imag(&a[i__ + j * a_dim1]) < -rmax
                    || d_imag(&a[i__ + j * a_dim1]) > rmax)
                 {
                     *info = 1;

@@ -114,10 +114,10 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ddisna_(char *job, integer *m, integer *n, doublereal * d__, doublereal *sep, integer *info)
+void ddisna_(char *job, integer *m, integer *n, doublereal *d__, doublereal *sep, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ddisna inputs: job %c, m %" FLA_IS ", n %" FLA_IS "",*job, *m, *n);
+    AOCL_DTL_SNPRINTF("ddisna inputs: job %c, m %" FLA_IS ", n %" FLA_IS "", *job, *m, *n);
     /* System generated locals */
     aocl_int64_t i__1;
     doublereal d__1, d__2, d__3;
@@ -131,7 +131,8 @@ void ddisna_(char *job, integer *m, integer *n, doublereal * d__, doublereal *se
     extern doublereal dlamch_(char *);
     doublereal oldgap, safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal newgap, thresh;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -169,7 +170,7 @@ void ddisna_(char *job, integer *m, integer *n, doublereal * d__, doublereal *se
     }
     else if(sing)
     {
-        k = fla_min(*m,*n);
+        k = fla_min(*m, *n);
     }
     if(!eigen && !sing)
     {
@@ -242,7 +243,7 @@ void ddisna_(char *job, integer *m, integer *n, doublereal * d__, doublereal *se
         for(i__ = 2; i__ <= i__1; ++i__)
         {
             newgap = (d__1 = d__[i__ + 1] - d__[i__], f2c_dabs(d__1));
-            sep[i__] = fla_min(oldgap,newgap);
+            sep[i__] = fla_min(oldgap, newgap);
             oldgap = newgap;
             /* L20: */
         }
@@ -254,14 +255,14 @@ void ddisna_(char *job, integer *m, integer *n, doublereal * d__, doublereal *se
         {
             if(incr)
             {
-                sep[1] = fla_min(sep[1],d__[1]);
+                sep[1] = fla_min(sep[1], d__[1]);
             }
             if(decr)
             {
                 /* Computing MIN */
                 d__1 = sep[k];
                 d__2 = d__[k]; // , expr subst
-                sep[k] = fla_min(d__1,d__2);
+                sep[k] = fla_min(d__1, d__2);
             }
         }
     }
@@ -272,8 +273,8 @@ void ddisna_(char *job, integer *m, integer *n, doublereal * d__, doublereal *se
     /* Computing MAX */
     d__2 = f2c_dabs(d__[1]);
     d__3 = (d__1 = d__[k], f2c_dabs(d__1)); // , expr subst
-    anorm = fla_max(d__2,d__3);
-    if (anorm == 0.)
+    anorm = fla_max(d__2, d__3);
+    if(anorm == 0.)
     {
         thresh = eps;
     }
@@ -281,14 +282,14 @@ void ddisna_(char *job, integer *m, integer *n, doublereal * d__, doublereal *se
     {
         /* Computing MAX */
         d__1 = eps * anorm;
-        thresh = fla_max(d__1,safmin);
+        thresh = fla_max(d__1, safmin);
     }
     i__1 = k;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Computing MAX */
         d__1 = sep[i__];
-        sep[i__] = fla_max(d__1,thresh);
+        sep[i__] = fla_max(d__1, thresh);
         /* L30: */
     }
     AOCL_DTL_TRACE_LOG_EXIT

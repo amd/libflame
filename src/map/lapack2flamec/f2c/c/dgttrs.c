@@ -137,16 +137,22 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup doubleGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dgttrs_(char *trans, integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublereal *du, doublereal *du2, integer *ipiv, doublereal *b, integer *ldb, integer *info)
+void dgttrs_(char *trans, integer *n, integer *nrhs, doublereal *dl, doublereal *d__,
+             doublereal *du, doublereal *du2, integer *ipiv, doublereal *b, integer *ldb,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgttrs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*trans, *n, *nrhs, *ldb);
+    AOCL_DTL_SNPRINTF("dgttrs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",
+                      *trans, *n, *nrhs, *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1, i__2, i__3;
     /* Local variables */
     integer j, jb, nb;
     extern /* Subroutine */
-    void dgtts2_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dgtts2_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *,
+                doublereal *, integer *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer itrans;
     logical notran;
@@ -193,7 +199,7 @@ void dgttrs_(char *trans, integer *n, integer *nrhs, doublereal *dl, doublereal 
     {
         *info = -3;
     }
-    else if (*ldb < fla_max(*n,1))
+    else if(*ldb < fla_max(*n, 1))
     {
         *info = -10;
     }
@@ -228,8 +234,8 @@ void dgttrs_(char *trans, integer *n, integer *nrhs, doublereal *dl, doublereal 
     {
         /* Computing MAX */
         i__1 = 1;
-        i__2 = ilaenv_(&c__1, "DGTTRS", trans, n, nrhs, &c_n1, & c_n1); // , expr subst
-        nb = fla_max(i__1,i__2);
+        i__2 = ilaenv_(&c__1, "DGTTRS", trans, n, nrhs, &c_n1, &c_n1); // , expr subst
+        nb = fla_max(i__1, i__2);
     }
     if(nb >= *nrhs)
     {
@@ -244,8 +250,9 @@ void dgttrs_(char *trans, integer *n, integer *nrhs, doublereal *dl, doublereal 
         {
             /* Computing MIN */
             i__3 = *nrhs - j + 1;
-            jb = fla_min(i__3,nb);
-            dgtts2_(&itrans, n, &jb, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[ 1], &b[j * b_dim1 + 1], ldb);
+            jb = fla_min(i__3, nb);
+            dgtts2_(&itrans, n, &jb, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &b[j * b_dim1 + 1],
+                    ldb);
             /* L10: */
         }
     }

@@ -1,11 +1,10 @@
-/* clarfb_gett.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* clarfb_gett.f -- translated by f2c (version 20160102). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {1.f, 0.f};
 static integer c__1 = 1;
 /* > \brief \b CLARFB_GETT */
 /* =========== DOCUMENTATION =========== */
@@ -13,11 +12,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLARFB_GETT + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarfb_ gett.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarfb_
+ * gett.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarfb_ gett.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarfb_
+ * gett.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarfb_ gett.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarfb_
+ * gett.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* > */
@@ -210,7 +215,7 @@ static integer c__1 = 1;
 /* > */
 /* > where: */
 /* > 1) if IDENT == 'I',V1 is a K-by-K identity matrix, not stored;
-*/
+ */
 /* > 2) if IDENT != 'I',V1 is a K-by-K unit lower-triangular matrix, */
 /* > stored in the lower-triangular part of the array */
 /* > A(1:K,1:K) (ones are not stored), */
@@ -385,19 +390,27 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void clarfb_gett_(char *ident, integer *m, integer *n, integer *k, complex *t, integer *ldt, complex *a, integer *lda, complex *b, integer *ldb, complex *work, integer *ldwork)
+void clarfb_gett_(char *ident, integer *m, integer *n, integer *k, complex *t, integer *ldt,
+                  complex *a, integer *lda, complex *b, integer *ldb, complex *work,
+                  integer *ldwork)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, work_dim1, work_offset, i__1, i__2, i__3, i__4, i__5;
+    integer a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, work_dim1, work_offset, i__1,
+        i__2, i__3, i__4, i__5;
     complex q__1;
     /* Local variables */
     integer i__, j;
     logical lnotident;
     extern /* Subroutine */
-    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+        void
+        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
+               complex *, integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void ccopy_(integer *, complex *, integer *, complex *, integer *), ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *),
+        ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
+               integer *, complex *, integer *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -430,81 +443,79 @@ void clarfb_gett_(char *ident, integer *m, integer *n, integer *k, complex *t, i
     work_offset = 1 + work_dim1;
     work -= work_offset;
     /* Function Body */
-    if (*m < 0 || *n <= 0 || *k == 0 || *k > *n)
+    if(*m < 0 || *n <= 0 || *k == 0 || *k > *n)
     {
         return;
     }
-    lnotident = ! lsame_(ident, "I", 1, 1);
+    lnotident = !lsame_(ident, "I", 1, 1);
     /* ------------------------------------------------------------------ */
     /* First Step. Computation of the Column Block 2: */
     /* ( A2 ) := H * ( A2 ) */
     /* ( B2 ) ( B2 ) */
     /* ------------------------------------------------------------------ */
-    if (*n > *k)
+    if(*n > *k)
     {
         /* col2_(1) Compute W2: = A2. Therefore, copy A2 = A(1:K, K+1:N) */
         /* into W2=WORK(1:K, 1:N-K) column-by-column. */
         i__1 = *n - *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             ccopy_(k, &a[(*k + j) * a_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
         }
-        if (lnotident)
+        if(lnotident)
         {
             /* col2_(2) Compute W2: = (V1**H) * W2 = (A1**H) * W2, */
             /* V1 is not an identy matrix, but unit lower-triangular */
             /* V1 stored in A1 (diagonal ones are not stored). */
             i__1 = *n - *k;
-            ctrmm_("L", "L", "C", "U", k, &i__1, &c_b1, &a[a_offset], lda, & work[work_offset], ldwork);
+            ctrmm_("L", "L", "C", "U", k, &i__1, &c_b1, &a[a_offset], lda, &work[work_offset],
+                   ldwork);
         }
         /* col2_(3) Compute W2: = W2 + (V2**H) * B2 = W2 + (B1**H) * B2 */
         /* V2 stored in B1. */
-        if (*m > 0)
+        if(*m > 0)
         {
             i__1 = *n - *k;
-            cgemm_("C", "N", k, &i__1, m, &c_b1, &b[b_offset], ldb, &b[(*k + 1) * b_dim1 + 1], ldb, &c_b1, &work[work_offset], ldwork);
+            cgemm_("C", "N", k, &i__1, m, &c_b1, &b[b_offset], ldb, &b[(*k + 1) * b_dim1 + 1], ldb,
+                   &c_b1, &work[work_offset], ldwork);
         }
         /* col2_(4) Compute W2: = T * W2, */
         /* T is upper-triangular. */
         i__1 = *n - *k;
-        ctrmm_("L", "U", "N", "N", k, &i__1, &c_b1, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        ctrmm_("L", "U", "N", "N", k, &i__1, &c_b1, &t[t_offset], ldt, &work[work_offset], ldwork);
         /* col2_(5) Compute B2: = B2 - V2 * W2 = B2 - B1 * W2, */
         /* V2 stored in B1. */
-        if (*m > 0)
+        if(*m > 0)
         {
             i__1 = *n - *k;
             q__1.r = -1.f;
             q__1.i = -0.f; // , expr subst
-            cgemm_("N", "N", m, &i__1, k, &q__1, &b[b_offset], ldb, &work[ work_offset], ldwork, &c_b1, &b[(*k + 1) * b_dim1 + 1], ldb);
+            cgemm_("N", "N", m, &i__1, k, &q__1, &b[b_offset], ldb, &work[work_offset], ldwork,
+                   &c_b1, &b[(*k + 1) * b_dim1 + 1], ldb);
         }
-        if (lnotident)
+        if(lnotident)
         {
             /* col2_(6) Compute W2: = V1 * W2 = A1 * W2, */
             /* V1 is not an identity matrix, but unit lower-triangular, */
             /* V1 stored in A1 (diagonal ones are not stored). */
             i__1 = *n - *k;
-            ctrmm_("L", "L", "N", "U", k, &i__1, &c_b1, &a[a_offset], lda, & work[work_offset], ldwork);
+            ctrmm_("L", "L", "N", "U", k, &i__1, &c_b1, &a[a_offset], lda, &work[work_offset],
+                   ldwork);
         }
         /* col2_(7) Compute A2: = A2 - W2 = */
         /* = A(1:K, K+1:N-K) - WORK(1:K, 1:N-K), */
         /* column-by-column. */
         i__1 = *n - *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + (*k + j) * a_dim1;
                 i__4 = i__ + (*k + j) * a_dim1;
                 i__5 = i__ + j * work_dim1;
                 q__1.r = a[i__4].r - work[i__5].r;
-                q__1.i = a[i__4].i - work[ i__5].i; // , expr subst
+                q__1.i = a[i__4].i - work[i__5].i; // , expr subst
                 a[i__3].r = q__1.r;
                 a[i__3].i = q__1.i; // , expr subst
             }
@@ -519,56 +530,50 @@ void clarfb_gett_(char *ident, integer *m, integer *n, integer *k, complex *t, i
     /* A1 = A(1:K, 1:K) into the upper-triangular */
     /* W1 = WORK(1:K, 1:K) column-by-column. */
     i__1 = *k;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
-        ccopy_(&j, &a[j * a_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1) ;
+        ccopy_(&j, &a[j * a_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
     }
     /* Set the subdiagonal elements of W1 to zero column-by-column. */
     i__1 = *k - 1;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         i__2 = *k;
-        for (i__ = j + 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = j + 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * work_dim1;
             work[i__3].r = 0.f;
             work[i__3].i = 0.f; // , expr subst
         }
     }
-    if (lnotident)
+    if(lnotident)
     {
         /* col1_(2) Compute W1: = (V1**H) * W1 = (A1**H) * W1, */
         /* V1 is not an identity matrix, but unit lower-triangular */
         /* V1 stored in A1 (diagonal ones are not stored), */
         /* W1 is upper-triangular with zeroes below the diagonal. */
-        ctrmm_("L", "L", "C", "U", k, k, &c_b1, &a[a_offset], lda, &work[ work_offset], ldwork);
+        ctrmm_("L", "L", "C", "U", k, k, &c_b1, &a[a_offset], lda, &work[work_offset], ldwork);
     }
     /* col1_(3) Compute W1: = T * W1, */
     /* T is upper-triangular, */
     /* W1 is upper-triangular with zeroes below the diagonal. */
-    ctrmm_("L", "U", "N", "N", k, k, &c_b1, &t[t_offset], ldt, &work[ work_offset], ldwork);
+    ctrmm_("L", "U", "N", "N", k, k, &c_b1, &t[t_offset], ldt, &work[work_offset], ldwork);
     /* col1_(4) Compute B1: = - V2 * W1 = - B1 * W1, */
     /* V2 = B1, W1 is upper-triangular with zeroes below the diagonal. */
-    if (*m > 0)
+    if(*m > 0)
     {
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        ctrmm_("R", "U", "N", "N", m, k, &q__1, &work[work_offset], ldwork, & b[b_offset], ldb);
+        ctrmm_("R", "U", "N", "N", m, k, &q__1, &work[work_offset], ldwork, &b[b_offset], ldb);
     }
-    if (lnotident)
+    if(lnotident)
     {
         /* col1_(5) Compute W1: = V1 * W1 = A1 * W1, */
         /* V1 is not an identity matrix, but unit lower-triangular */
         /* V1 stored in A1 (diagonal ones are not stored), */
         /* W1 is upper-triangular on input with zeroes below the diagonal, */
         /* and square on output. */
-        ctrmm_("L", "L", "N", "U", k, k, &c_b1, &a[a_offset], lda, &work[ work_offset], ldwork);
+        ctrmm_("L", "L", "N", "U", k, k, &c_b1, &a[a_offset], lda, &work[work_offset], ldwork);
         /* col1_(6) Compute A1: = A1 - W1 = A(1:K, 1:K) - WORK(1:K, 1:K) */
         /* column-by-column. A1 is upper-triangular on input. */
         /* If IDENT, A1 is square on output, and W1 is square, */
@@ -576,14 +581,10 @@ void clarfb_gett_(char *ident, integer *m, integer *n, integer *k, complex *t, i
         /* W1 is upper-triangular. */
         /* col1_(6)_a Compute elements of A1 below the diagonal. */
         i__1 = *k - 1;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = j + 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = j + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * work_dim1;
@@ -596,20 +597,16 @@ void clarfb_gett_(char *ident, integer *m, integer *n, integer *k, complex *t, i
     }
     /* col1_(6)_b Compute elements of A1 on and above the diagonal. */
     i__1 = *k;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         i__2 = j;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * a_dim1;
             i__4 = i__ + j * a_dim1;
             i__5 = i__ + j * work_dim1;
             q__1.r = a[i__4].r - work[i__5].r;
-            q__1.i = a[i__4].i - work[i__5] .i; // , expr subst
+            q__1.i = a[i__4].i - work[i__5].i; // , expr subst
             a[i__3].r = q__1.r;
             a[i__3].i = q__1.i; // , expr subst
         }

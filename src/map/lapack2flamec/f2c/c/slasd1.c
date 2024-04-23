@@ -6,8 +6,8 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__0 = 0;
 static real c_b7 = 1.f;
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static integer c__1 = 1;
+static integer c_n1 = -1;
 /* > \brief \b SLASD1 computes the SVD of an upper bidiagonal matrix B of the specified size. Used
  * by sbdsdc. */
 /* =========== DOCUMENTATION =========== */
@@ -208,7 +208,9 @@ VT(NL+2:M, NL+2:M)**T contains */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slasd1_(integer *nl, integer *nr, integer *sqre, real * d__, real *alpha, real *beta, real *u, integer *ldu, real *vt, integer *ldvt, integer *idxq, integer *iwork, real *work, integer * info)
+void slasd1_(integer *nl, integer *nr, integer *sqre, real *d__, real *alpha, real *beta, real *u,
+             integer *ldu, real *vt, integer *ldvt, integer *idxq, integer *iwork, real *work,
+             integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slasd1(nl, nr, sqre, d__, alpha, beta, u, ldu, vt, ldvt, idxq, iwork, work, info);
@@ -242,10 +244,20 @@ void aocl_lapack_slasd1(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     /* Local variables */
     integer i__, k, m, n, n1, n2, iq, iz, iu2, ldq, idx, ldu2, ivt2, idxc, idxp, ldvt2;
     extern /* Subroutine */
-    void slasd2_(integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, integer *, integer *), slasd3_(integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *);
+        void
+        slasd2_(integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *,
+                integer *, real *, integer *, real *, real *, integer *, real *, integer *,
+                integer *, integer *, integer *, integer *, integer *, integer *),
+        slasd3_(integer *, integer *, integer *, integer *, real *, real *, integer *, real *,
+                real *, integer *, real *, integer *, real *, integer *, real *, integer *,
+                integer *, integer *, real *, integer *);
     integer isigma;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slascl_( char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
+                integer *, integer *),
+        slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
     real orgnrm;
     aocl_int64_t coltyp;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -318,12 +330,12 @@ void aocl_lapack_slasd1(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     /* Computing MAX */
     r__1 = f2c_abs(*alpha);
     r__2 = f2c_abs(*beta); // , expr subst
-    orgnrm = fla_max(r__1,r__2);
+    orgnrm = fla_max(r__1, r__2);
     d__[*nl + 1] = 0.f;
     i__1 = n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((r__1 = d__[i__], f2c_abs(r__1)) > orgnrm)
+        if((r__1 = d__[i__], f2c_abs(r__1)) > orgnrm)
         {
             orgnrm = (r__1 = d__[i__], f2c_abs(r__1));
         }
@@ -333,14 +345,14 @@ void aocl_lapack_slasd1(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     *alpha /= orgnrm;
     *beta /= orgnrm;
     /* Deflate singular values. */
-    aocl_lapack_slasd2(nl, nr, sqre, &k, &d__[1], &work[iz], alpha, beta, &u[u_offset], ldu,
-                       &vt[vt_offset], ldvt, &work[isigma], &work[iu2], &ldu2, &work[ivt2], &ldvt2,
-                       &iwork[idxp], &iwork[idx], &iwork[idxc], &idxq[1], &iwork[coltyp], info);
+    slasd2_(nl, nr, sqre, &k, &d__[1], &work[iz], alpha, beta, &u[u_offset], ldu, &vt[vt_offset],
+            ldvt, &work[isigma], &work[iu2], &ldu2, &work[ivt2], &ldvt2, &iwork[idxp], &iwork[idx],
+            &iwork[idxc], &idxq[1], &iwork[coltyp], info);
     /* Solve Secular Equation and update singular vectors. */
     ldq = k;
-    aocl_lapack_slasd3(nl, nr, sqre, &k, &d__[1], &work[iq], &ldq, &work[isigma], &u[u_offset], ldu,
-                       &work[iu2], &ldu2, &vt[vt_offset], ldvt, &work[ivt2], &ldvt2, &iwork[idxc],
-                       &iwork[coltyp], &work[iz], info);
+    slasd3_(nl, nr, sqre, &k, &d__[1], &work[iq], &ldq, &work[isigma], &u[u_offset], ldu,
+            &work[iu2], &ldu2, &vt[vt_offset], ldvt, &work[ivt2], &ldvt2, &iwork[idxc],
+            &iwork[coltyp], &work[iz], info);
     if(*info != 0)
     {
         return;

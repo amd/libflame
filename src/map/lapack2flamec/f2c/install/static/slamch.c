@@ -1,11 +1,12 @@
 #include "FLAME.h"
+
 #include <float.h>
 
 /* Table of constant values */
 
-static TLS_CLASS_SPEC const real half  = 0.5f;
-static TLS_CLASS_SPEC const real one   = 1.f;
-static TLS_CLASS_SPEC const real zero  = 0.f;
+static TLS_CLASS_SPEC const real half = 0.5f;
+static TLS_CLASS_SPEC const real one = 1.f;
+static TLS_CLASS_SPEC const real zero = 0.f;
 
 real slamch_(char *cmach)
 {
@@ -16,7 +17,7 @@ real slamch_(char *cmach)
     real ret_val;
 
     /* Local variables */
-    static TLS_CLASS_SPEC real  eps, sfmin, base, prec, t, rnd, emin, rmin, emax, rmax;
+    static TLS_CLASS_SPEC real eps, sfmin, base, prec, t, rnd, emin, rmin, emax, rmax;
     real rmach, small_val;
 
     extern logical lsame_(char *, char *, integer, integer);
@@ -82,57 +83,57 @@ real slamch_(char *cmach)
         prec = eps * base;
         sfmin = FLT_MIN;
         small_val = one / FLT_MAX;
-        if ( small_val >= sfmin)
+        if(small_val >= sfmin)
             sfmin = small_val * (one + eps);
 
-		// For t, we need the number of base-2 digits, not base-10 digits.
-		// Here, we hardcode the value obtained from netlib LAPACK.
-        //t    = FLT_DIG;
-        //t    = 24;
-        t    = FLT_MANT_DIG;
+        // For t, we need the number of base-2 digits, not base-10 digits.
+        // Here, we hardcode the value obtained from netlib LAPACK.
+        // t    = FLT_DIG;
+        // t    = 24;
+        t = FLT_MANT_DIG;
         emin = FLT_MIN_EXP;
         emax = FLT_MAX_EXP;
         rmin = FLT_MIN;
         rmax = FLT_MAX;
     }
 
-    if (lsame_(cmach, "E", 1, 1))
+    if(lsame_(cmach, "E", 1, 1))
     {
         rmach = eps;
     }
-    else if (lsame_(cmach, "S", 1, 1))
+    else if(lsame_(cmach, "S", 1, 1))
     {
         rmach = sfmin;
     }
-    else if (lsame_(cmach, "B", 1, 1))
+    else if(lsame_(cmach, "B", 1, 1))
     {
         rmach = base;
     }
-    else if (lsame_(cmach, "P", 1, 1))
+    else if(lsame_(cmach, "P", 1, 1))
     {
         rmach = prec;
     }
-    else if (lsame_(cmach, "N", 1, 1))
+    else if(lsame_(cmach, "N", 1, 1))
     {
         rmach = t;
     }
-    else if (lsame_(cmach, "R", 1, 1))
+    else if(lsame_(cmach, "R", 1, 1))
     {
         rmach = rnd;
     }
-    else if (lsame_(cmach, "M", 1, 1))
+    else if(lsame_(cmach, "M", 1, 1))
     {
         rmach = emin;
     }
-    else if (lsame_(cmach, "U", 1, 1))
+    else if(lsame_(cmach, "U", 1, 1))
     {
         rmach = rmin;
     }
-    else if (lsame_(cmach, "L", 1, 1))
+    else if(lsame_(cmach, "L", 1, 1))
     {
         rmach = emax;
     }
-    else if (lsame_(cmach, "O", 1, 1))
+    else if(lsame_(cmach, "O", 1, 1))
     {
         rmach = rmax;
     }

@@ -141,22 +141,25 @@ otherwise, */
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clagtm_(char *trans, integer *n, integer *nrhs, real * alpha, complex *dl, complex *d__, complex *du, complex *x, integer * ldx, real *beta, complex *b, integer *ldb)
+void clagtm_(char *trans, integer *n, integer *nrhs, real *alpha, complex *dl, complex *d__,
+             complex *du, complex *x, integer *ldx, real *beta, complex *b, integer *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clagtm inputs: trans %c, n %lld, nrhs %lld, ldx %lld, ldb %lld",*trans, *n, *nrhs, *ldx, *ldb);
+    snprintf(buffer, 256, "clagtm inputs: trans %c, n %lld, nrhs %lld, ldx %lld, ldb %lld", *trans,
+             *n, *nrhs, *ldx, *ldb);
 #else
-    snprintf(buffer, 256,"clagtm inputs: trans %c, n %d, nrhs %d, ldx %d, ldb %d",*trans, *n, *nrhs, *ldx, *ldb);
+    snprintf(buffer, 256, "clagtm inputs: trans %c, n %d, nrhs %d, ldx %d, ldb %d", *trans, *n,
+             *nrhs, *ldx, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8,
+    integer b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8,
         i__9, i__10;
-    scomplex q__1, q__2, q__3, q__4, q__5, q__6, q__7, q__8, q__9;
+    complex q__1, q__2, q__3, q__4, q__5, q__6, q__7, q__8, q__9;
     /* Builtin functions */
     void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
@@ -234,7 +237,7 @@ void clagtm_(char *trans, integer *n, integer *nrhs, real * alpha, complex *dl, 
     }
     if(*alpha == 1.f)
     {
-        if (lsame_(trans, "N", 1, 1))
+        if(lsame_(trans, "N", 1, 1))
         {
             /* Compute B := B + A*X */
             i__1 = *nrhs;
@@ -245,45 +248,45 @@ void clagtm_(char *trans, integer *n, integer *nrhs, real * alpha, complex *dl, 
                     i__2 = j * b_dim1 + 1;
                     i__3 = j * b_dim1 + 1;
                     i__4 = j * x_dim1 + 1;
-                    q__2.real = d__[1].real * x[i__4].real - d__[1].imag * x[i__4].imag;
-                    q__2.imag = d__[1].real * x[i__4].imag + d__[1].imag * x[i__4].real; // , expr subst
-                    q__1.real = b[i__3].real + q__2.real;
-                    q__1.imag = b[i__3].imag + q__2.imag; // , expr subst
-                    b[i__2].real = q__1.real;
-                    b[i__2].imag = q__1.imag; // , expr subst
+                    q__2.r = d__[1].r * x[i__4].r - d__[1].i * x[i__4].i;
+                    q__2.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4].r; // , expr subst
+                    q__1.r = b[i__3].r + q__2.r;
+                    q__1.i = b[i__3].i + q__2.i; // , expr subst
+                    b[i__2].r = q__1.r;
+                    b[i__2].i = q__1.i; // , expr subst
                 }
                 else
                 {
                     i__2 = j * b_dim1 + 1;
                     i__3 = j * b_dim1 + 1;
                     i__4 = j * x_dim1 + 1;
-                    q__3.real = d__[1].real * x[i__4].real - d__[1].imag * x[i__4].imag;
-                    q__3.imag = d__[1].real * x[i__4].imag + d__[1].imag * x[i__4].real; // , expr subst
-                    q__2.real = b[i__3].real + q__3.real;
-                    q__2.imag = b[i__3].imag + q__3.imag; // , expr subst
+                    q__3.r = d__[1].r * x[i__4].r - d__[1].i * x[i__4].i;
+                    q__3.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4].r; // , expr subst
+                    q__2.r = b[i__3].r + q__3.r;
+                    q__2.i = b[i__3].i + q__3.i; // , expr subst
                     i__5 = j * x_dim1 + 2;
-                    q__4.real = du[1].real * x[i__5].real - du[1].imag * x[i__5].imag;
-                    q__4.imag = du[1].real * x[i__5].imag + du[1].imag * x[i__5].real; // , expr subst
-                    q__1.real = q__2.real + q__4.real;
-                    q__1.imag = q__2.imag + q__4.imag; // , expr subst
-                    b[i__2].real = q__1.real;
-                    b[i__2].imag = q__1.imag; // , expr subst
+                    q__4.r = du[1].r * x[i__5].r - du[1].i * x[i__5].i;
+                    q__4.i = du[1].r * x[i__5].i + du[1].i * x[i__5].r; // , expr subst
+                    q__1.r = q__2.r + q__4.r;
+                    q__1.i = q__2.i + q__4.i; // , expr subst
+                    b[i__2].r = q__1.r;
+                    b[i__2].i = q__1.i; // , expr subst
                     i__2 = *n + j * b_dim1;
                     i__3 = *n + j * b_dim1;
                     i__4 = *n - 1;
                     i__5 = *n - 1 + j * x_dim1;
-                    q__3.real = dl[i__4].real * x[i__5].real - dl[i__4].imag * x[i__5].imag;
-                    q__3.imag = dl[i__4].real * x[i__5].imag + dl[i__4].imag * x[i__5].real; // , expr subst
-                    q__2.real = b[i__3].real + q__3.real;
-                    q__2.imag = b[i__3].imag + q__3.imag; // , expr subst
+                    q__3.r = dl[i__4].r * x[i__5].r - dl[i__4].i * x[i__5].i;
+                    q__3.i = dl[i__4].r * x[i__5].i + dl[i__4].i * x[i__5].r; // , expr subst
+                    q__2.r = b[i__3].r + q__3.r;
+                    q__2.i = b[i__3].i + q__3.i; // , expr subst
                     i__6 = *n;
                     i__7 = *n + j * x_dim1;
-                    q__4.real = d__[i__6].real * x[i__7].real - d__[i__6].imag * x[i__7].imag;
-                    q__4.imag = d__[i__6].real * x[i__7].imag + d__[i__6].imag * x[i__7].real; // , expr subst
-                    q__1.real = q__2.real + q__4.real;
-                    q__1.imag = q__2.imag + q__4.imag; // , expr subst
-                    b[i__2].real = q__1.real;
-                    b[i__2].imag = q__1.imag; // , expr subst
+                    q__4.r = d__[i__6].r * x[i__7].r - d__[i__6].i * x[i__7].i;
+                    q__4.i = d__[i__6].r * x[i__7].i + d__[i__6].i * x[i__7].r; // , expr subst
+                    q__1.r = q__2.r + q__4.r;
+                    q__1.i = q__2.i + q__4.i; // , expr subst
+                    b[i__2].r = q__1.r;
+                    b[i__2].i = q__1.i; // , expr subst
                     i__2 = *n - 1;
                     for(i__ = 2; i__ <= i__2; ++i__)
                     {
@@ -291,31 +294,31 @@ void clagtm_(char *trans, integer *n, integer *nrhs, real * alpha, complex *dl, 
                         i__4 = i__ + j * b_dim1;
                         i__5 = i__ - 1;
                         i__6 = i__ - 1 + j * x_dim1;
-                        q__4.real = dl[i__5].real * x[i__6].real - dl[i__5].imag * x[i__6].imag;
-                        q__4.imag = dl[i__5].real * x[i__6].imag + dl[i__5].imag * x[i__6].real; // , expr subst
-                        q__3.real = b[i__4].real + q__4.real;
-                        q__3.imag = b[i__4].imag + q__4.imag; // , expr subst
+                        q__4.r = dl[i__5].r * x[i__6].r - dl[i__5].i * x[i__6].i;
+                        q__4.i = dl[i__5].r * x[i__6].i + dl[i__5].i * x[i__6].r; // , expr subst
+                        q__3.r = b[i__4].r + q__4.r;
+                        q__3.i = b[i__4].i + q__4.i; // , expr subst
                         i__7 = i__;
                         i__8 = i__ + j * x_dim1;
-                        q__5.real = d__[i__7].real * x[i__8].real - d__[i__7].imag * x[i__8].imag;
-                        q__5.imag = d__[i__7].real * x[i__8].imag + d__[i__7].imag * x[i__8].real; // , expr subst
-                        q__2.real = q__3.real + q__5.real;
-                        q__2.imag = q__3.imag + q__5.imag; // , expr subst
+                        q__5.r = d__[i__7].r * x[i__8].r - d__[i__7].i * x[i__8].i;
+                        q__5.i = d__[i__7].r * x[i__8].i + d__[i__7].i * x[i__8].r; // , expr subst
+                        q__2.r = q__3.r + q__5.r;
+                        q__2.i = q__3.i + q__5.i; // , expr subst
                         i__9 = i__;
                         i__10 = i__ + 1 + j * x_dim1;
-                        q__6.real = du[i__9].real * x[i__10].real - du[i__9].imag * x[i__10].imag;
-                        q__6.imag = du[i__9].real * x[i__10].imag + du[i__9].imag * x[i__10].real; // , expr subst
-                        q__1.real = q__2.real + q__6.real;
-                        q__1.imag = q__2.imag + q__6.imag; // , expr subst
-                        b[i__3].real = q__1.real;
-                        b[i__3].imag = q__1.imag; // , expr subst
+                        q__6.r = du[i__9].r * x[i__10].r - du[i__9].i * x[i__10].i;
+                        q__6.i = du[i__9].r * x[i__10].i + du[i__9].i * x[i__10].r; // , expr subst
+                        q__1.r = q__2.r + q__6.r;
+                        q__1.i = q__2.i + q__6.i; // , expr subst
+                        b[i__3].r = q__1.r;
+                        b[i__3].i = q__1.i; // , expr subst
                         /* L50: */
                     }
                 }
                 /* L60: */
             }
         }
-        else if (lsame_(trans, "T", 1, 1))
+        else if(lsame_(trans, "T", 1, 1))
         {
             /* Compute B := B + A**T * X */
             i__1 = *nrhs;
@@ -326,45 +329,45 @@ void clagtm_(char *trans, integer *n, integer *nrhs, real * alpha, complex *dl, 
                     i__2 = j * b_dim1 + 1;
                     i__3 = j * b_dim1 + 1;
                     i__4 = j * x_dim1 + 1;
-                    q__2.real = d__[1].real * x[i__4].real - d__[1].imag * x[i__4].imag;
-                    q__2.imag = d__[1].real * x[i__4].imag + d__[1].imag * x[i__4].real; // , expr subst
-                    q__1.real = b[i__3].real + q__2.real;
-                    q__1.imag = b[i__3].imag + q__2.imag; // , expr subst
-                    b[i__2].real = q__1.real;
-                    b[i__2].imag = q__1.imag; // , expr subst
+                    q__2.r = d__[1].r * x[i__4].r - d__[1].i * x[i__4].i;
+                    q__2.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4].r; // , expr subst
+                    q__1.r = b[i__3].r + q__2.r;
+                    q__1.i = b[i__3].i + q__2.i; // , expr subst
+                    b[i__2].r = q__1.r;
+                    b[i__2].i = q__1.i; // , expr subst
                 }
                 else
                 {
                     i__2 = j * b_dim1 + 1;
                     i__3 = j * b_dim1 + 1;
                     i__4 = j * x_dim1 + 1;
-                    q__3.real = d__[1].real * x[i__4].real - d__[1].imag * x[i__4].imag;
-                    q__3.imag = d__[1].real * x[i__4].imag + d__[1].imag * x[i__4].real; // , expr subst
-                    q__2.real = b[i__3].real + q__3.real;
-                    q__2.imag = b[i__3].imag + q__3.imag; // , expr subst
+                    q__3.r = d__[1].r * x[i__4].r - d__[1].i * x[i__4].i;
+                    q__3.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4].r; // , expr subst
+                    q__2.r = b[i__3].r + q__3.r;
+                    q__2.i = b[i__3].i + q__3.i; // , expr subst
                     i__5 = j * x_dim1 + 2;
-                    q__4.real = dl[1].real * x[i__5].real - dl[1].imag * x[i__5].imag;
-                    q__4.imag = dl[1].real * x[i__5].imag + dl[1].imag * x[i__5].real; // , expr subst
-                    q__1.real = q__2.real + q__4.real;
-                    q__1.imag = q__2.imag + q__4.imag; // , expr subst
-                    b[i__2].real = q__1.real;
-                    b[i__2].imag = q__1.imag; // , expr subst
+                    q__4.r = dl[1].r * x[i__5].r - dl[1].i * x[i__5].i;
+                    q__4.i = dl[1].r * x[i__5].i + dl[1].i * x[i__5].r; // , expr subst
+                    q__1.r = q__2.r + q__4.r;
+                    q__1.i = q__2.i + q__4.i; // , expr subst
+                    b[i__2].r = q__1.r;
+                    b[i__2].i = q__1.i; // , expr subst
                     i__2 = *n + j * b_dim1;
                     i__3 = *n + j * b_dim1;
                     i__4 = *n - 1;
                     i__5 = *n - 1 + j * x_dim1;
-                    q__3.real = du[i__4].real * x[i__5].real - du[i__4].imag * x[i__5].imag;
-                    q__3.imag = du[i__4].real * x[i__5].imag + du[i__4].imag * x[i__5].real; // , expr subst
-                    q__2.real = b[i__3].real + q__3.real;
-                    q__2.imag = b[i__3].imag + q__3.imag; // , expr subst
+                    q__3.r = du[i__4].r * x[i__5].r - du[i__4].i * x[i__5].i;
+                    q__3.i = du[i__4].r * x[i__5].i + du[i__4].i * x[i__5].r; // , expr subst
+                    q__2.r = b[i__3].r + q__3.r;
+                    q__2.i = b[i__3].i + q__3.i; // , expr subst
                     i__6 = *n;
                     i__7 = *n + j * x_dim1;
-                    q__4.real = d__[i__6].real * x[i__7].real - d__[i__6].imag * x[i__7].imag;
-                    q__4.imag = d__[i__6].real * x[i__7].imag + d__[i__6].imag * x[i__7].real; // , expr subst
-                    q__1.real = q__2.real + q__4.real;
-                    q__1.imag = q__2.imag + q__4.imag; // , expr subst
-                    b[i__2].real = q__1.real;
-                    b[i__2].imag = q__1.imag; // , expr subst
+                    q__4.r = d__[i__6].r * x[i__7].r - d__[i__6].i * x[i__7].i;
+                    q__4.i = d__[i__6].r * x[i__7].i + d__[i__6].i * x[i__7].r; // , expr subst
+                    q__1.r = q__2.r + q__4.r;
+                    q__1.i = q__2.i + q__4.i; // , expr subst
+                    b[i__2].r = q__1.r;
+                    b[i__2].i = q__1.i; // , expr subst
                     i__2 = *n - 1;
                     for(i__ = 2; i__ <= i__2; ++i__)
                     {
@@ -372,31 +375,31 @@ void clagtm_(char *trans, integer *n, integer *nrhs, real * alpha, complex *dl, 
                         i__4 = i__ + j * b_dim1;
                         i__5 = i__ - 1;
                         i__6 = i__ - 1 + j * x_dim1;
-                        q__4.real = du[i__5].real * x[i__6].real - du[i__5].imag * x[i__6].imag;
-                        q__4.imag = du[i__5].real * x[i__6].imag + du[i__5].imag * x[i__6].real; // , expr subst
-                        q__3.real = b[i__4].real + q__4.real;
-                        q__3.imag = b[i__4].imag + q__4.imag; // , expr subst
+                        q__4.r = du[i__5].r * x[i__6].r - du[i__5].i * x[i__6].i;
+                        q__4.i = du[i__5].r * x[i__6].i + du[i__5].i * x[i__6].r; // , expr subst
+                        q__3.r = b[i__4].r + q__4.r;
+                        q__3.i = b[i__4].i + q__4.i; // , expr subst
                         i__7 = i__;
                         i__8 = i__ + j * x_dim1;
-                        q__5.real = d__[i__7].real * x[i__8].real - d__[i__7].imag * x[i__8].imag;
-                        q__5.imag = d__[i__7].real * x[i__8].imag + d__[i__7].imag * x[i__8].real; // , expr subst
-                        q__2.real = q__3.real + q__5.real;
-                        q__2.imag = q__3.imag + q__5.imag; // , expr subst
+                        q__5.r = d__[i__7].r * x[i__8].r - d__[i__7].i * x[i__8].i;
+                        q__5.i = d__[i__7].r * x[i__8].i + d__[i__7].i * x[i__8].r; // , expr subst
+                        q__2.r = q__3.r + q__5.r;
+                        q__2.i = q__3.i + q__5.i; // , expr subst
                         i__9 = i__;
                         i__10 = i__ + 1 + j * x_dim1;
-                        q__6.real = dl[i__9].real * x[i__10].real - dl[i__9].imag * x[i__10].imag;
-                        q__6.imag = dl[i__9].real * x[i__10].imag + dl[i__9].imag * x[i__10].real; // , expr subst
-                        q__1.real = q__2.real + q__6.real;
-                        q__1.imag = q__2.imag + q__6.imag; // , expr subst
-                        b[i__3].real = q__1.real;
-                        b[i__3].imag = q__1.imag; // , expr subst
+                        q__6.r = dl[i__9].r * x[i__10].r - dl[i__9].i * x[i__10].i;
+                        q__6.i = dl[i__9].r * x[i__10].i + dl[i__9].i * x[i__10].r; // , expr subst
+                        q__1.r = q__2.r + q__6.r;
+                        q__1.i = q__2.i + q__6.i; // , expr subst
+                        b[i__3].r = q__1.r;
+                        b[i__3].i = q__1.i; // , expr subst
                         /* L70: */
                     }
                 }
                 /* L80: */
             }
         }
-        else if (lsame_(trans, "C", 1, 1))
+        else if(lsame_(trans, "C", 1, 1))
         {
             /* Compute B := B + A**H * X */
             i__1 = *nrhs;
@@ -456,24 +459,24 @@ void clagtm_(char *trans, integer *n, integer *nrhs, real * alpha, complex *dl, 
                         i__4 = i__ + j * b_dim1;
                         r_cnjg(&q__5, &du[i__ - 1]);
                         i__5 = i__ - 1 + j * x_dim1;
-                        q__4.real = q__5.real * x[i__5].real - q__5.imag * x[i__5].imag;
-                        q__4.imag = q__5.real * x[i__5].imag + q__5.imag * x[i__5].real; // , expr subst
-                        q__3.real = b[i__4].real + q__4.real;
-                        q__3.imag = b[i__4].imag + q__4.imag; // , expr subst
+                        q__4.r = q__5.r * x[i__5].r - q__5.i * x[i__5].i;
+                        q__4.i = q__5.r * x[i__5].i + q__5.i * x[i__5].r; // , expr subst
+                        q__3.r = b[i__4].r + q__4.r;
+                        q__3.i = b[i__4].i + q__4.i; // , expr subst
                         r_cnjg(&q__7, &d__[i__]);
                         i__6 = i__ + j * x_dim1;
-                        q__6.real = q__7.real * x[i__6].real - q__7.imag * x[i__6].imag;
-                        q__6.imag = q__7.real * x[i__6].imag + q__7.imag * x[i__6].real; // , expr subst
-                        q__2.real = q__3.real + q__6.real;
-                        q__2.imag = q__3.imag + q__6.imag; // , expr subst
+                        q__6.r = q__7.r * x[i__6].r - q__7.i * x[i__6].i;
+                        q__6.i = q__7.r * x[i__6].i + q__7.i * x[i__6].r; // , expr subst
+                        q__2.r = q__3.r + q__6.r;
+                        q__2.i = q__3.i + q__6.i; // , expr subst
                         r_cnjg(&q__9, &dl[i__]);
                         i__7 = i__ + 1 + j * x_dim1;
-                        q__8.real = q__9.real * x[i__7].real - q__9.imag * x[i__7].imag;
-                        q__8.imag = q__9.real * x[i__7].imag + q__9.imag * x[i__7].real; // , expr subst
-                        q__1.real = q__2.real + q__8.real;
-                        q__1.imag = q__2.imag + q__8.imag; // , expr subst
-                        b[i__3].real = q__1.real;
-                        b[i__3].imag = q__1.imag; // , expr subst
+                        q__8.r = q__9.r * x[i__7].r - q__9.i * x[i__7].i;
+                        q__8.i = q__9.r * x[i__7].i + q__9.i * x[i__7].r; // , expr subst
+                        q__1.r = q__2.r + q__8.r;
+                        q__1.i = q__2.i + q__8.i; // , expr subst
+                        b[i__3].r = q__1.r;
+                        b[i__3].i = q__1.i; // , expr subst
                         /* L90: */
                     }
                 }
@@ -483,7 +486,7 @@ void clagtm_(char *trans, integer *n, integer *nrhs, real * alpha, complex *dl, 
     }
     else if(*alpha == -1.f)
     {
-        if (lsame_(trans, "N", 1, 1))
+        if(lsame_(trans, "N", 1, 1))
         {
             /* Compute B := B - A*X */
             i__1 = *nrhs;
@@ -494,45 +497,45 @@ void clagtm_(char *trans, integer *n, integer *nrhs, real * alpha, complex *dl, 
                     i__2 = j * b_dim1 + 1;
                     i__3 = j * b_dim1 + 1;
                     i__4 = j * x_dim1 + 1;
-                    q__2.real = d__[1].real * x[i__4].real - d__[1].imag * x[i__4].imag;
-                    q__2.imag = d__[1].real * x[i__4].imag + d__[1].imag * x[i__4].real; // , expr subst
-                    q__1.real = b[i__3].real - q__2.real;
-                    q__1.imag = b[i__3].imag - q__2.imag; // , expr subst
-                    b[i__2].real = q__1.real;
-                    b[i__2].imag = q__1.imag; // , expr subst
+                    q__2.r = d__[1].r * x[i__4].r - d__[1].i * x[i__4].i;
+                    q__2.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4].r; // , expr subst
+                    q__1.r = b[i__3].r - q__2.r;
+                    q__1.i = b[i__3].i - q__2.i; // , expr subst
+                    b[i__2].r = q__1.r;
+                    b[i__2].i = q__1.i; // , expr subst
                 }
                 else
                 {
                     i__2 = j * b_dim1 + 1;
                     i__3 = j * b_dim1 + 1;
                     i__4 = j * x_dim1 + 1;
-                    q__3.real = d__[1].real * x[i__4].real - d__[1].imag * x[i__4].imag;
-                    q__3.imag = d__[1].real * x[i__4].imag + d__[1].imag * x[i__4].real; // , expr subst
-                    q__2.real = b[i__3].real - q__3.real;
-                    q__2.imag = b[i__3].imag - q__3.imag; // , expr subst
+                    q__3.r = d__[1].r * x[i__4].r - d__[1].i * x[i__4].i;
+                    q__3.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4].r; // , expr subst
+                    q__2.r = b[i__3].r - q__3.r;
+                    q__2.i = b[i__3].i - q__3.i; // , expr subst
                     i__5 = j * x_dim1 + 2;
-                    q__4.real = du[1].real * x[i__5].real - du[1].imag * x[i__5].imag;
-                    q__4.imag = du[1].real * x[i__5].imag + du[1].imag * x[i__5].real; // , expr subst
-                    q__1.real = q__2.real - q__4.real;
-                    q__1.imag = q__2.imag - q__4.imag; // , expr subst
-                    b[i__2].real = q__1.real;
-                    b[i__2].imag = q__1.imag; // , expr subst
+                    q__4.r = du[1].r * x[i__5].r - du[1].i * x[i__5].i;
+                    q__4.i = du[1].r * x[i__5].i + du[1].i * x[i__5].r; // , expr subst
+                    q__1.r = q__2.r - q__4.r;
+                    q__1.i = q__2.i - q__4.i; // , expr subst
+                    b[i__2].r = q__1.r;
+                    b[i__2].i = q__1.i; // , expr subst
                     i__2 = *n + j * b_dim1;
                     i__3 = *n + j * b_dim1;
                     i__4 = *n - 1;
                     i__5 = *n - 1 + j * x_dim1;
-                    q__3.real = dl[i__4].real * x[i__5].real - dl[i__4].imag * x[i__5].imag;
-                    q__3.imag = dl[i__4].real * x[i__5].imag + dl[i__4].imag * x[i__5].real; // , expr subst
-                    q__2.real = b[i__3].real - q__3.real;
-                    q__2.imag = b[i__3].imag - q__3.imag; // , expr subst
+                    q__3.r = dl[i__4].r * x[i__5].r - dl[i__4].i * x[i__5].i;
+                    q__3.i = dl[i__4].r * x[i__5].i + dl[i__4].i * x[i__5].r; // , expr subst
+                    q__2.r = b[i__3].r - q__3.r;
+                    q__2.i = b[i__3].i - q__3.i; // , expr subst
                     i__6 = *n;
                     i__7 = *n + j * x_dim1;
-                    q__4.real = d__[i__6].real * x[i__7].real - d__[i__6].imag * x[i__7].imag;
-                    q__4.imag = d__[i__6].real * x[i__7].imag + d__[i__6].imag * x[i__7].real; // , expr subst
-                    q__1.real = q__2.real - q__4.real;
-                    q__1.imag = q__2.imag - q__4.imag; // , expr subst
-                    b[i__2].real = q__1.real;
-                    b[i__2].imag = q__1.imag; // , expr subst
+                    q__4.r = d__[i__6].r * x[i__7].r - d__[i__6].i * x[i__7].i;
+                    q__4.i = d__[i__6].r * x[i__7].i + d__[i__6].i * x[i__7].r; // , expr subst
+                    q__1.r = q__2.r - q__4.r;
+                    q__1.i = q__2.i - q__4.i; // , expr subst
+                    b[i__2].r = q__1.r;
+                    b[i__2].i = q__1.i; // , expr subst
                     i__2 = *n - 1;
                     for(i__ = 2; i__ <= i__2; ++i__)
                     {
@@ -540,31 +543,31 @@ void clagtm_(char *trans, integer *n, integer *nrhs, real * alpha, complex *dl, 
                         i__4 = i__ + j * b_dim1;
                         i__5 = i__ - 1;
                         i__6 = i__ - 1 + j * x_dim1;
-                        q__4.real = dl[i__5].real * x[i__6].real - dl[i__5].imag * x[i__6].imag;
-                        q__4.imag = dl[i__5].real * x[i__6].imag + dl[i__5].imag * x[i__6].real; // , expr subst
-                        q__3.real = b[i__4].real - q__4.real;
-                        q__3.imag = b[i__4].imag - q__4.imag; // , expr subst
+                        q__4.r = dl[i__5].r * x[i__6].r - dl[i__5].i * x[i__6].i;
+                        q__4.i = dl[i__5].r * x[i__6].i + dl[i__5].i * x[i__6].r; // , expr subst
+                        q__3.r = b[i__4].r - q__4.r;
+                        q__3.i = b[i__4].i - q__4.i; // , expr subst
                         i__7 = i__;
                         i__8 = i__ + j * x_dim1;
-                        q__5.real = d__[i__7].real * x[i__8].real - d__[i__7].imag * x[i__8].imag;
-                        q__5.imag = d__[i__7].real * x[i__8].imag + d__[i__7].imag * x[i__8].real; // , expr subst
-                        q__2.real = q__3.real - q__5.real;
-                        q__2.imag = q__3.imag - q__5.imag; // , expr subst
+                        q__5.r = d__[i__7].r * x[i__8].r - d__[i__7].i * x[i__8].i;
+                        q__5.i = d__[i__7].r * x[i__8].i + d__[i__7].i * x[i__8].r; // , expr subst
+                        q__2.r = q__3.r - q__5.r;
+                        q__2.i = q__3.i - q__5.i; // , expr subst
                         i__9 = i__;
                         i__10 = i__ + 1 + j * x_dim1;
-                        q__6.real = du[i__9].real * x[i__10].real - du[i__9].imag * x[i__10].imag;
-                        q__6.imag = du[i__9].real * x[i__10].imag + du[i__9].imag * x[i__10].real; // , expr subst
-                        q__1.real = q__2.real - q__6.real;
-                        q__1.imag = q__2.imag - q__6.imag; // , expr subst
-                        b[i__3].real = q__1.real;
-                        b[i__3].imag = q__1.imag; // , expr subst
+                        q__6.r = du[i__9].r * x[i__10].r - du[i__9].i * x[i__10].i;
+                        q__6.i = du[i__9].r * x[i__10].i + du[i__9].i * x[i__10].r; // , expr subst
+                        q__1.r = q__2.r - q__6.r;
+                        q__1.i = q__2.i - q__6.i; // , expr subst
+                        b[i__3].r = q__1.r;
+                        b[i__3].i = q__1.i; // , expr subst
                         /* L110: */
                     }
                 }
                 /* L120: */
             }
         }
-        else if (lsame_(trans, "T", 1, 1))
+        else if(lsame_(trans, "T", 1, 1))
         {
             /* Compute B := B - A**T*X */
             i__1 = *nrhs;
@@ -575,45 +578,45 @@ void clagtm_(char *trans, integer *n, integer *nrhs, real * alpha, complex *dl, 
                     i__2 = j * b_dim1 + 1;
                     i__3 = j * b_dim1 + 1;
                     i__4 = j * x_dim1 + 1;
-                    q__2.real = d__[1].real * x[i__4].real - d__[1].imag * x[i__4].imag;
-                    q__2.imag = d__[1].real * x[i__4].imag + d__[1].imag * x[i__4].real; // , expr subst
-                    q__1.real = b[i__3].real - q__2.real;
-                    q__1.imag = b[i__3].imag - q__2.imag; // , expr subst
-                    b[i__2].real = q__1.real;
-                    b[i__2].imag = q__1.imag; // , expr subst
+                    q__2.r = d__[1].r * x[i__4].r - d__[1].i * x[i__4].i;
+                    q__2.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4].r; // , expr subst
+                    q__1.r = b[i__3].r - q__2.r;
+                    q__1.i = b[i__3].i - q__2.i; // , expr subst
+                    b[i__2].r = q__1.r;
+                    b[i__2].i = q__1.i; // , expr subst
                 }
                 else
                 {
                     i__2 = j * b_dim1 + 1;
                     i__3 = j * b_dim1 + 1;
                     i__4 = j * x_dim1 + 1;
-                    q__3.real = d__[1].real * x[i__4].real - d__[1].imag * x[i__4].imag;
-                    q__3.imag = d__[1].real * x[i__4].imag + d__[1].imag * x[i__4].real; // , expr subst
-                    q__2.real = b[i__3].real - q__3.real;
-                    q__2.imag = b[i__3].imag - q__3.imag; // , expr subst
+                    q__3.r = d__[1].r * x[i__4].r - d__[1].i * x[i__4].i;
+                    q__3.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4].r; // , expr subst
+                    q__2.r = b[i__3].r - q__3.r;
+                    q__2.i = b[i__3].i - q__3.i; // , expr subst
                     i__5 = j * x_dim1 + 2;
-                    q__4.real = dl[1].real * x[i__5].real - dl[1].imag * x[i__5].imag;
-                    q__4.imag = dl[1].real * x[i__5].imag + dl[1].imag * x[i__5].real; // , expr subst
-                    q__1.real = q__2.real - q__4.real;
-                    q__1.imag = q__2.imag - q__4.imag; // , expr subst
-                    b[i__2].real = q__1.real;
-                    b[i__2].imag = q__1.imag; // , expr subst
+                    q__4.r = dl[1].r * x[i__5].r - dl[1].i * x[i__5].i;
+                    q__4.i = dl[1].r * x[i__5].i + dl[1].i * x[i__5].r; // , expr subst
+                    q__1.r = q__2.r - q__4.r;
+                    q__1.i = q__2.i - q__4.i; // , expr subst
+                    b[i__2].r = q__1.r;
+                    b[i__2].i = q__1.i; // , expr subst
                     i__2 = *n + j * b_dim1;
                     i__3 = *n + j * b_dim1;
                     i__4 = *n - 1;
                     i__5 = *n - 1 + j * x_dim1;
-                    q__3.real = du[i__4].real * x[i__5].real - du[i__4].imag * x[i__5].imag;
-                    q__3.imag = du[i__4].real * x[i__5].imag + du[i__4].imag * x[i__5].real; // , expr subst
-                    q__2.real = b[i__3].real - q__3.real;
-                    q__2.imag = b[i__3].imag - q__3.imag; // , expr subst
+                    q__3.r = du[i__4].r * x[i__5].r - du[i__4].i * x[i__5].i;
+                    q__3.i = du[i__4].r * x[i__5].i + du[i__4].i * x[i__5].r; // , expr subst
+                    q__2.r = b[i__3].r - q__3.r;
+                    q__2.i = b[i__3].i - q__3.i; // , expr subst
                     i__6 = *n;
                     i__7 = *n + j * x_dim1;
-                    q__4.real = d__[i__6].real * x[i__7].real - d__[i__6].imag * x[i__7].imag;
-                    q__4.imag = d__[i__6].real * x[i__7].imag + d__[i__6].imag * x[i__7].real; // , expr subst
-                    q__1.real = q__2.real - q__4.real;
-                    q__1.imag = q__2.imag - q__4.imag; // , expr subst
-                    b[i__2].real = q__1.real;
-                    b[i__2].imag = q__1.imag; // , expr subst
+                    q__4.r = d__[i__6].r * x[i__7].r - d__[i__6].i * x[i__7].i;
+                    q__4.i = d__[i__6].r * x[i__7].i + d__[i__6].i * x[i__7].r; // , expr subst
+                    q__1.r = q__2.r - q__4.r;
+                    q__1.i = q__2.i - q__4.i; // , expr subst
+                    b[i__2].r = q__1.r;
+                    b[i__2].i = q__1.i; // , expr subst
                     i__2 = *n - 1;
                     for(i__ = 2; i__ <= i__2; ++i__)
                     {
@@ -621,31 +624,31 @@ void clagtm_(char *trans, integer *n, integer *nrhs, real * alpha, complex *dl, 
                         i__4 = i__ + j * b_dim1;
                         i__5 = i__ - 1;
                         i__6 = i__ - 1 + j * x_dim1;
-                        q__4.real = du[i__5].real * x[i__6].real - du[i__5].imag * x[i__6].imag;
-                        q__4.imag = du[i__5].real * x[i__6].imag + du[i__5].imag * x[i__6].real; // , expr subst
-                        q__3.real = b[i__4].real - q__4.real;
-                        q__3.imag = b[i__4].imag - q__4.imag; // , expr subst
+                        q__4.r = du[i__5].r * x[i__6].r - du[i__5].i * x[i__6].i;
+                        q__4.i = du[i__5].r * x[i__6].i + du[i__5].i * x[i__6].r; // , expr subst
+                        q__3.r = b[i__4].r - q__4.r;
+                        q__3.i = b[i__4].i - q__4.i; // , expr subst
                         i__7 = i__;
                         i__8 = i__ + j * x_dim1;
-                        q__5.real = d__[i__7].real * x[i__8].real - d__[i__7].imag * x[i__8].imag;
-                        q__5.imag = d__[i__7].real * x[i__8].imag + d__[i__7].imag * x[i__8].real; // , expr subst
-                        q__2.real = q__3.real - q__5.real;
-                        q__2.imag = q__3.imag - q__5.imag; // , expr subst
+                        q__5.r = d__[i__7].r * x[i__8].r - d__[i__7].i * x[i__8].i;
+                        q__5.i = d__[i__7].r * x[i__8].i + d__[i__7].i * x[i__8].r; // , expr subst
+                        q__2.r = q__3.r - q__5.r;
+                        q__2.i = q__3.i - q__5.i; // , expr subst
                         i__9 = i__;
                         i__10 = i__ + 1 + j * x_dim1;
-                        q__6.real = dl[i__9].real * x[i__10].real - dl[i__9].imag * x[i__10].imag;
-                        q__6.imag = dl[i__9].real * x[i__10].imag + dl[i__9].imag * x[i__10].real; // , expr subst
-                        q__1.real = q__2.real - q__6.real;
-                        q__1.imag = q__2.imag - q__6.imag; // , expr subst
-                        b[i__3].real = q__1.real;
-                        b[i__3].imag = q__1.imag; // , expr subst
+                        q__6.r = dl[i__9].r * x[i__10].r - dl[i__9].i * x[i__10].i;
+                        q__6.i = dl[i__9].r * x[i__10].i + dl[i__9].i * x[i__10].r; // , expr subst
+                        q__1.r = q__2.r - q__6.r;
+                        q__1.i = q__2.i - q__6.i; // , expr subst
+                        b[i__3].r = q__1.r;
+                        b[i__3].i = q__1.i; // , expr subst
                         /* L130: */
                     }
                 }
                 /* L140: */
             }
         }
-        else if (lsame_(trans, "C", 1, 1))
+        else if(lsame_(trans, "C", 1, 1))
         {
             /* Compute B := B - A**H*X */
             i__1 = *nrhs;
@@ -705,24 +708,24 @@ void clagtm_(char *trans, integer *n, integer *nrhs, real * alpha, complex *dl, 
                         i__4 = i__ + j * b_dim1;
                         r_cnjg(&q__5, &du[i__ - 1]);
                         i__5 = i__ - 1 + j * x_dim1;
-                        q__4.real = q__5.real * x[i__5].real - q__5.imag * x[i__5].imag;
-                        q__4.imag = q__5.real * x[i__5].imag + q__5.imag * x[i__5].real; // , expr subst
-                        q__3.real = b[i__4].real - q__4.real;
-                        q__3.imag = b[i__4].imag - q__4.imag; // , expr subst
+                        q__4.r = q__5.r * x[i__5].r - q__5.i * x[i__5].i;
+                        q__4.i = q__5.r * x[i__5].i + q__5.i * x[i__5].r; // , expr subst
+                        q__3.r = b[i__4].r - q__4.r;
+                        q__3.i = b[i__4].i - q__4.i; // , expr subst
                         r_cnjg(&q__7, &d__[i__]);
                         i__6 = i__ + j * x_dim1;
-                        q__6.real = q__7.real * x[i__6].real - q__7.imag * x[i__6].imag;
-                        q__6.imag = q__7.real * x[i__6].imag + q__7.imag * x[i__6].real; // , expr subst
-                        q__2.real = q__3.real - q__6.real;
-                        q__2.imag = q__3.imag - q__6.imag; // , expr subst
+                        q__6.r = q__7.r * x[i__6].r - q__7.i * x[i__6].i;
+                        q__6.i = q__7.r * x[i__6].i + q__7.i * x[i__6].r; // , expr subst
+                        q__2.r = q__3.r - q__6.r;
+                        q__2.i = q__3.i - q__6.i; // , expr subst
                         r_cnjg(&q__9, &dl[i__]);
                         i__7 = i__ + 1 + j * x_dim1;
-                        q__8.real = q__9.real * x[i__7].real - q__9.imag * x[i__7].imag;
-                        q__8.imag = q__9.real * x[i__7].imag + q__9.imag * x[i__7].real; // , expr subst
-                        q__1.real = q__2.real - q__8.real;
-                        q__1.imag = q__2.imag - q__8.imag; // , expr subst
-                        b[i__3].real = q__1.real;
-                        b[i__3].imag = q__1.imag; // , expr subst
+                        q__8.r = q__9.r * x[i__7].r - q__9.i * x[i__7].i;
+                        q__8.i = q__9.r * x[i__7].i + q__9.i * x[i__7].r; // , expr subst
+                        q__1.r = q__2.r - q__8.r;
+                        q__1.i = q__2.i - q__8.i; // , expr subst
+                        b[i__3].r = q__1.r;
+                        b[i__3].i = q__1.i; // , expr subst
                         /* L150: */
                     }
                 }

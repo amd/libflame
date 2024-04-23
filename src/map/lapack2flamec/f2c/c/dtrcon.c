@@ -136,10 +136,12 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dtrcon_(char *norm, char *uplo, char *diag, integer *n, doublereal *a, integer *lda, doublereal *rcond, doublereal *work, integer *iwork, integer *info)
+void dtrcon_(char *norm, char *uplo, char *diag, integer *n, doublereal *a, integer *lda,
+             doublereal *rcond, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dtrcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "",*norm, *uplo, *diag, *n, *lda);
+    AOCL_DTL_SNPRINTF("dtrcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "",
+                      *norm, *uplo, *diag, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
     doublereal d__1;
@@ -149,20 +151,27 @@ void dtrcon_(char *norm, char *uplo, char *diag, integer *n, doublereal *a, inte
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    void drscl_(integer *, doublereal *, doublereal *, integer *);
+        void
+        drscl_(integer *, doublereal *, doublereal *, integer *);
     doublereal anorm;
     logical upper;
     doublereal xnorm;
     extern /* Subroutine */
-    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+                integer *);
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern doublereal dlantr_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern doublereal dlantr_(char *, char *, char *, integer *, integer *, doublereal *, integer *,
+                              doublereal *);
     doublereal ainvnm;
     extern /* Subroutine */
-    void dlatrs_(char *, char *, char *, char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+        void
+        dlatrs_(char *, char *, char *, char *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, doublereal *, integer *);
     logical onenrm;
     char normin[1];
     doublereal smlnum;
@@ -201,15 +210,15 @@ void dtrcon_(char *norm, char *uplo, char *diag, integer *n, doublereal *a, inte
     upper = lsame_(uplo, "U", 1, 1);
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
-    if (! onenrm && ! lsame_(norm, "I", 1, 1))
+    if(!onenrm && !lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
@@ -217,7 +226,7 @@ void dtrcon_(char *norm, char *uplo, char *diag, integer *n, doublereal *a, inte
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -236,7 +245,7 @@ void dtrcon_(char *norm, char *uplo, char *diag, integer *n, doublereal *a, inte
         return;
     }
     *rcond = 0.;
-    smlnum = dlamch_("Safe minimum") * (doublereal) fla_max(1,*n);
+    smlnum = dlamch_("Safe minimum") * (doublereal)fla_max(1, *n);
     /* Compute the norm of the triangular matrix A. */
     anorm = aocl_lapack_dlantr(norm, uplo, diag, n, n, &a[a_offset], lda, &work[1]);
     /* Continue only if ANORM > 0. */
@@ -255,20 +264,20 @@ void dtrcon_(char *norm, char *uplo, char *diag, integer *n, doublereal *a, inte
         }
         kase = 0;
     L10:
-        aocl_lapack_dlacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+        dlacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
         if(kase != 0)
         {
             if(kase == kase1)
             {
                 /* Multiply by inv(A). */
-                aocl_lapack_dlatrs(uplo, "No transpose", diag, normin, n, &a[a_offset], lda,
-                                   &work[1], &scale, &work[(*n << 1) + 1], info);
+                dlatrs_(uplo, "No transpose", diag, normin, n, &a[a_offset], lda, &work[1], &scale,
+                        &work[(*n << 1) + 1], info);
             }
             else
             {
                 /* Multiply by inv(A**T). */
-                aocl_lapack_dlatrs(uplo, "Transpose", diag, normin, n, &a[a_offset], lda, &work[1],
-                                   &scale, &work[(*n << 1) + 1], info);
+                dlatrs_(uplo, "Transpose", diag, normin, n, &a[a_offset], lda, &work[1], &scale,
+                        &work[(*n << 1) + 1], info);
             }
             *(unsigned char *)normin = 'Y';
             /* Multiply by 1/SCALE if doing so will not cause overflow. */
@@ -276,7 +285,7 @@ void dtrcon_(char *norm, char *uplo, char *diag, integer *n, doublereal *a, inte
             {
                 ix = idamax_(n, &work[1], &c__1);
                 xnorm = (d__1 = work[ix], f2c_dabs(d__1));
-                if (scale < xnorm * smlnum || scale == 0.)
+                if(scale < xnorm * smlnum || scale == 0.)
                 {
                     goto L20;
                 }

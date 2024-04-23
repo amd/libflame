@@ -1,18 +1,13 @@
 #ifdef FLA_ENABLE_XBLAS
-/* ../netlib/cla_gbrfsx_extended.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cla_gbrfsx_extended.f -- translated by f2c (version 20100827). You must link the
+ resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
+ Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
+ with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-static complex c_b6 =
-{
-    -1.f,0.f
-    }
-;
-static complex c_b8 =
-{
-    1.f,0.f
-}
-;
+static complex c_b6 = {-1.f, 0.f};
+static complex c_b8 = {1.f, 0.f};
 static real c_b31 = 1.f;
 /* > \brief \b CLA_GBRFSX_EXTENDED improves the computed solution to a system of linear equations
  * for general banded matrices by performing extra-precise iterative refinement and provides error
@@ -421,15 +416,31 @@ i+1}
 /* > \ingroup complexGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer *n, integer *kl, integer *ku, integer *nrhs, complex *ab, integer *ldab, complex *afb, integer *ldafb, integer * ipiv, logical *colequ, real *c__, complex *b, integer *ldb, complex * y, integer *ldy, real *berr_out__, integer *n_norms__, real * err_bnds_norm__, real *err_bnds_comp__, complex *res, real *ayb, complex *dy, complex *y_tail__, real *rcond, integer *ithresh, real * rthresh, real *dz_ub__, logical *ignore_cwise__, integer *info)
+void cla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *n, integer *kl,
+                          integer *ku, integer *nrhs, complex *ab, integer *ldab, complex *afb,
+                          integer *ldafb, integer *ipiv, logical *colequ, real *c__, complex *b,
+                          integer *ldb, complex *y, integer *ldy, real *berr_out__,
+                          integer *n_norms__, real *err_bnds_norm__, real *err_bnds_comp__,
+                          complex *res, real *ayb, complex *dy, complex *y_tail__, real *rcond,
+                          integer *ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__,
+                          integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cla_gbrfsx_extended inputs: prec_type__ %lld, trans_type__ %lld, n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, ldafb %lld, ldb %lld, ldy %lld, n_norms__ %lld, ithresh %lld",*prec_type__, *trans_type__, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldy, *n_norms__, *ithresh);
+    snprintf(
+        buffer, 256,
+        "cla_gbrfsx_extended inputs: prec_type__ %lld, trans_type__ %lld, n %lld, kl %lld, ku "
+        "%lld, nrhs %lld, ldab %lld, ldafb %lld, ldb %lld, ldy %lld, n_norms__ %lld, ithresh %lld",
+        *prec_type__, *trans_type__, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldy, *n_norms__,
+        *ithresh);
 #else
-    snprintf(buffer, 256,"cla_gbrfsx_extended inputs: prec_type__ %d, trans_type__ %d, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldafb %d, ldb %d, ldy %d, n_norms__ %d, ithresh %d",*prec_type__, *trans_type__, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldy, *n_norms__, *ithresh);
+    snprintf(buffer, 256,
+             "cla_gbrfsx_extended inputs: prec_type__ %d, trans_type__ %d, n %d, kl %d, ku %d, "
+             "nrhs %d, ldab %d, ldafb %d, ldb %d, ldy %d, n_norms__ %d, ithresh %d",
+             *prec_type__, *trans_type__, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldy,
+             *n_norms__, *ithresh);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -445,39 +456,48 @@ void cla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer 
     real dxratmax, dzratmax;
     integer i__, j, m;
     extern /* Subroutine */
-    void cla_gbamv_(integer *, integer *, integer *, integer *, integer *, real *, complex *, integer *, complex *, integer *, real *, real *, integer *);
+        void
+        cla_gbamv_(integer *, integer *, integer *, integer *, integer *, real *, complex *,
+                   integer *, complex *, integer *, real *, real *, integer *);
     logical incr_prec__;
     real prev_dz_z__, yk, final_dx_x__;
     extern /* Subroutine */
-    void cla_wwaddw_(integer *, complex *, complex *, complex *);
+        void
+        cla_wwaddw_(integer *, complex *, complex *, complex *);
     real final_dz_z__, prevnormdx;
     integer cnt;
     real dyk, eps, incr_thresh__, dx_x__, dz_z__;
     extern /* Subroutine */
-    void cla_lin_berr_(integer *, integer *, integer *, complex *, real *, real *);
+        void
+        cla_lin_berr_(integer *, integer *, integer *, complex *, real *, real *);
     real ymin;
     extern /* Subroutine */
-    int blas_cgbmv_x_(integer *, integer *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+        int
+        blas_cgbmv_x_(integer *, integer *, integer *, integer *, integer *, complex *, complex *,
+                      integer *, complex *, integer *, complex *, complex *, integer *, integer *);
     integer y_prec_state__;
     extern /* Subroutine */
         int
-        blas_cgbmv2_x_(integer *, integer *, integer *, integer *, integer *, scomplex *, scomplex *,
-                       integer *, scomplex *, scomplex *, integer *, scomplex *, scomplex *, integer *,
+        blas_cgbmv2_x_(integer *, integer *, integer *, integer *, integer *, complex *, complex *,
+                       integer *, complex *, complex *, integer *, complex *, complex *, integer *,
                        integer *),
-        cgbmv_(char *, integer *, integer *, integer *, integer *, scomplex *, scomplex *, integer *,
-               scomplex *, integer *, scomplex *, scomplex *, integer *),
-        ccopy_(integer *, scomplex *, integer *, scomplex *, integer *);
+        cgbmv_(char *, integer *, integer *, integer *, integer *, complex *, complex *, integer *,
+               complex *, integer *, complex *, complex *, integer *),
+        ccopy_(integer *, complex *, integer *, complex *, integer *);
     real dxrat, dzrat;
     extern /* Subroutine */
-    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+        void
+        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     char trans[1];
     real normx, normy;
     extern real slamch_(char *);
     extern /* Subroutine */
-    void cgbtrs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+        void
+        cgbtrs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *,
+                complex *, integer *, integer *);
     real normdx;
     extern /* Character */
-        void
+        VOID
         chla_transtype_(char *, integer *);
     real hugeval;
     integer x_state__, z_state__;
@@ -606,37 +626,38 @@ void cla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer 
             for(i__ = 1; i__ <= i__3; ++i__)
             {
                 i__4 = i__ + j * y_dim1;
-                yk = (r__1 = y[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&y[i__ + j * y_dim1]), f2c_abs(r__2));
+                yk = (r__1 = y[i__4].r, f2c_abs(r__1))
+                     + (r__2 = r_imag(&y[i__ + j * y_dim1]), f2c_abs(r__2));
                 i__4 = i__;
-                dyk = (r__1 = dy[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&dy[i__] ), f2c_abs(r__2));
-                if (yk != 0.f)
+                dyk = (r__1 = dy[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&dy[i__]), f2c_abs(r__2));
+                if(yk != 0.f)
                 {
                     /* Computing MAX */
                     r__1 = dz_z__;
                     r__2 = dyk / yk; // , expr subst
-                    dz_z__ = fla_max(r__1,r__2);
+                    dz_z__ = fla_max(r__1, r__2);
                 }
                 else if(dyk != 0.f)
                 {
                     dz_z__ = hugeval;
                 }
-                ymin = fla_min(ymin,yk);
-                normy = fla_max(normy,yk);
-                if (*colequ)
+                ymin = fla_min(ymin, yk);
+                normy = fla_max(normy, yk);
+                if(*colequ)
                 {
                     /* Computing MAX */
                     r__1 = normx;
                     r__2 = yk * c__[i__]; // , expr subst
-                    normx = fla_max(r__1,r__2);
+                    normx = fla_max(r__1, r__2);
                     /* Computing MAX */
                     r__1 = normdx;
                     r__2 = dyk * c__[i__]; // , expr subst
-                    normdx = fla_max(r__1,r__2);
+                    normdx = fla_max(r__1, r__2);
                 }
                 else
                 {
                     normx = normy;
-                    normdx = fla_max(normdx,dyk);
+                    normdx = fla_max(normdx, dyk);
                 }
             }
             if(normx != 0.f)
@@ -808,10 +829,12 @@ void cla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer 
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            ayb[i__] = (r__1 = b[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&b[i__ + j * b_dim1]), f2c_abs(r__2));
+            ayb[i__] = (r__1 = b[i__3].r, f2c_abs(r__1))
+                       + (r__2 = r_imag(&b[i__ + j * b_dim1]), f2c_abs(r__2));
         }
         /* Compute f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s). */
-        cla_gbamv_(trans_type__, n, n, kl, ku, &c_b31, &ab[ab_offset], ldab, &y[j * y_dim1 + 1], &c__1, &c_b31, &ayb[1], &c__1);
+        cla_gbamv_(trans_type__, n, n, kl, ku, &c_b31, &ab[ab_offset], ldab, &y[j * y_dim1 + 1],
+                   &c__1, &c_b31, &ayb[1], &c__1);
         cla_lin_berr_(n, n, &c__1, &res[1], &ayb[1], &berr_out__[j]);
         /* End of loop for each RHS. */
     }

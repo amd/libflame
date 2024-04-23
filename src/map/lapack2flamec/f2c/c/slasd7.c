@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b SLASD7 merges the two sets of singular values together into a single sorted set. Then
  * it tries to deflate the size of the problem. Used by sbdsdc. */
 /* =========== DOCUMENTATION =========== */
@@ -278,12 +278,18 @@ and entries in the second half */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *k, real *d__, real *z__, real *zw, real *vf, real *vfw, real *vl, real *vlw, real *alpha, real *beta, real *dsigma, integer *idx, integer *idxp, integer *idxq, integer *perm, integer * givptr, integer *givcol, integer *ldgcol, real *givnum, integer * ldgnum, real *c__, real *s, integer *info)
+void slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *k, real *d__,
+             real *z__, real *zw, real *vf, real *vfw, real *vl, real *vlw, real *alpha, real *beta,
+             real *dsigma, integer *idx, integer *idxp, integer *idxq, integer *perm,
+             integer *givptr, integer *givcol, integer *ldgcol, real *givnum, integer *ldgnum,
+             real *c__, real *s, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slasd7 inputs: icompq %d, nl %d, nr %d, sqre %d, idxq %d, ldgcol %d, ldgnum %d",*icompq, *nl, *nr, *sqre,  *idxq,  *ldgcol, *ldgnum);
+    snprintf(buffer, 256,
+             "slasd7 inputs: icompq %d, nl %d, nr %d, sqre %d, idxq %d, ldgcol %d, ldgnum %d",
+             *icompq, *nl, *nr, *sqre, *idxq, *ldgcol, *ldgnum);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -296,13 +302,17 @@ void slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
     real eps, tau, tol;
     integer nlp1, nlp2, idxi, idxj;
     extern /* Subroutine */
-    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+        void
+        srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     integer idxjp, jprev;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     extern real slapy2_(real *, real *), slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slamrg_( integer *, integer *, real *, integer *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
     real hlftol;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -349,7 +359,7 @@ void slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
     n = *nl + *nr + 1;
     m = n + *sqre;
     jprev = 0;
-    if (*icompq < 0 || *icompq > 1)
+    if(*icompq < 0 || *icompq > 1)
     {
         *info = -1;
     }
@@ -442,10 +452,10 @@ void slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
     /* Computing MAX */
     r__1 = f2c_abs(*alpha);
     r__2 = f2c_abs(*beta); // , expr subst
-    tol = fla_max(r__1,r__2);
+    tol = fla_max(r__1, r__2);
     /* Computing MAX */
     r__2 = (r__1 = d__[n], f2c_abs(r__1));
-    tol = eps * 64.f * fla_max(r__2,tol);
+    tol = eps * 64.f * fla_max(r__2, tol);
     /* There are 2 kinds of deflation -- first a value in the z-vector */
     /* is small, second two (or more) singular values are very close */
     /* together (their difference is (*small_val). */
@@ -466,11 +476,11 @@ void slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
     i__1 = n;
     for(j = 2; j <= i__1; ++j)
     {
-        if ((r__1 = z__[j], f2c_abs(r__1)) <= tol)
+        if((r__1 = z__[j], f2c_abs(r__1)) <= tol)
         {
             /* Deflate due to small z component. */
             --k2;
-            idxp[k2] = (aocl_int_t)(j);
+            idxp[k2] = j;
             if(j == n)
             {
                 goto L100;
@@ -491,7 +501,7 @@ L80:
     {
         goto L90;
     }
-    if ((r__1 = z__[j], f2c_abs(r__1)) <= tol)
+    if((r__1 = z__[j], f2c_abs(r__1)) <= tol)
     {
         /* Deflate due to small z component. */
         --k2;
@@ -500,7 +510,7 @@ L80:
     else
     {
         /* Check if singular values are close enough to allow deflation. */
-        if ((r__1 = d__[j] - d__[jprev], f2c_abs(r__1)) <= tol)
+        if((r__1 = d__[j] - d__[jprev], f2c_abs(r__1)) <= tol)
         {
             /* Deflation is possible. */
             *s = z__[jprev];
@@ -586,7 +596,7 @@ L100: /* Sort the singular values into DSIGMA. The singular values which */
     /* VL(M). */
     dsigma[1] = 0.f;
     hlftol = tol / 2.f;
-    if (f2c_abs(dsigma[2]) <= hlftol)
+    if(f2c_abs(dsigma[2]) <= hlftol)
     {
         dsigma[2] = hlftol;
     }
@@ -609,7 +619,7 @@ L100: /* Sort the singular values into DSIGMA. The singular values which */
     }
     else
     {
-        if (f2c_abs(z1) <= tol)
+        if(f2c_abs(z1) <= tol)
         {
             z__[1] = tol;
         }

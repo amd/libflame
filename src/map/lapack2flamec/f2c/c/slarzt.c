@@ -186,12 +186,14 @@ the corresponding */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slarzt_(char *direct, char *storev, integer *n, integer * k, real *v, integer *ldv, real *tau, real *t, integer *ldt)
+void slarzt_(char *direct, char *storev, integer *n, integer *k, real *v, integer *ldv, real *tau,
+             real *t, integer *ldt)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slarzt inputs: direct %c, storev %c, n %d, k %d, ldv %d, ldt %d",*direct, *storev, *n, *k, *ldv, *ldt);
+    snprintf(buffer, 256, "slarzt inputs: direct %c, storev %c, n %d, k %d, ldv %d, ldt %d",
+             *direct, *storev, *n, *k, *ldv, *ldt);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -201,7 +203,11 @@ void slarzt_(char *direct, char *storev, integer *n, integer * k, real *v, integ
     integer i__, j, info;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+               real *, integer *),
+        strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -231,11 +237,11 @@ void slarzt_(char *direct, char *storev, integer *n, integer * k, real *v, integ
     t -= t_offset;
     /* Function Body */
     info = 0;
-    if (! lsame_(direct, "B", 1, 1))
+    if(!lsame_(direct, "B", 1, 1))
     {
         info = -1;
     }
-    else if (! lsame_(storev, "R", 1, 1))
+    else if(!lsame_(storev, "R", 1, 1))
     {
         info = -2;
     }
@@ -266,11 +272,12 @@ void slarzt_(char *direct, char *storev, integer *n, integer * k, real *v, integ
                 /* T(i+1:k,i) = - tau(i) * V(i+1:k,1:n) * V(i,1:n)**T */
                 i__1 = *k - i__;
                 r__1 = -tau[i__];
-                aocl_blas_sgemv("No transpose", &i__1, n, &r__1, &v[i__ + 1 + v_dim1], ldv,
-                                &v[i__ + v_dim1], ldv, &c_b8, &t[i__ + 1 + i__ * t_dim1], &c__1);
+                sgemv_("No transpose", &i__1, n, &r__1, &v[i__ + 1 + v_dim1], ldv, &v[i__ + v_dim1],
+                       ldv, &c_b8, &t[i__ + 1 + i__ * t_dim1], &c__1);
                 /* T(i+1:k,i) = T(i+1:k,i+1:k) * T(i+1:k,i) */
                 i__1 = *k - i__;
-                strmv_("Lower", "No transpose", "Non-unit", &i__1, &t[i__ + 1 + (i__ + 1) * t_dim1], ldt, &t[i__ + 1 + i__ * t_dim1], &c__1);
+                strmv_("Lower", "No transpose", "Non-unit", &i__1, &t[i__ + 1 + (i__ + 1) * t_dim1],
+                       ldt, &t[i__ + 1 + i__ * t_dim1], &c__1);
             }
             t[i__ + i__ * t_dim1] = tau[i__];
         }

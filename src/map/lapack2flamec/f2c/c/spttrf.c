@@ -92,7 +92,7 @@ void spttrf_(integer *n, real *d__, real *e, integer *info)
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"spttrf inputs: n %" FLA_IS "",*n);
+    snprintf(buffer, 256, "spttrf inputs: n %" FLA_IS "", *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -101,7 +101,8 @@ void spttrf_(integer *n, real *d__, real *e, integer *info)
     aocl_int64_t i__, i4;
     real ei;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

@@ -3,190 +3,9 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-
-/*
-   Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
-*/
-
-#include "FLAME.h" /* Table of constant values */
-#if FLA_ENABLE_AOCL_BLAS
-#include "blis.h"
-#endif
-
-static aocl_int64_t c__1 = 1;
+#include "FLA_f2c.h" /* Table of constant values */
+static integer c__1 = 1;
 static doublereal c_b9 = -1.;
-
-#if FLA_ENABLE_AOCL_BLAS
-
-/* This function is an implementation of dgbtf2 using AOCL-BLAS compute kernels */
-void dgbtf2_aocl_blas_ver(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
-                          doublereal *ab, aocl_int64_t *ldab, aocl_int_t *ipiv,
-                          aocl_int64_t *info)
-{
-    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
-    doublereal d__1;
-    aocl_int64_t i__, j, km, jp, ju, kv;
-    doublereal alpha;
-    doublereal *x, *y, *r;
-    dim_t index;
-
-    /* Make a copy of AOCL-BLAS framework context. This information is needed to query the
-     * architecture specific details of compute kernel */
-    cntx_t *cntx = bli_gks_query_cntx();
-
-    /* Query names of compute kernel from AOCL-BLAS framework context */
-    damaxv_ker_ft idamax_blas_ptr = bli_cntx_get_l1v_ker_dt(BLIS_DOUBLE, BLIS_AMAXV_KER, cntx);
-    dswapv_ker_ft dswap_blas_ptr = bli_cntx_get_l1v_ker_dt(BLIS_DOUBLE, BLIS_SWAPV_KER, cntx);
-    dscalv_ker_ft dscal_blas_ptr = bli_cntx_get_l1v_ker_dt(BLIS_DOUBLE, BLIS_SCALV_KER, cntx);
-    daxpyv_ker_ft daxpy_blas_ptr = bli_cntx_get_l1v_ker_dt(BLIS_DOUBLE, BLIS_AXPYV_KER, cntx);
-
-    /* Parameter adjustments */
-    ab_dim1 = *ldab;
-    ab_offset = 1 + ab_dim1;
-    ab -= ab_offset;
-    --ipiv;
-
-    /* Function Body */
-    /* KV is the number of superdiagonals in the factor U, allowing for fill-in. */
-    kv = *ku + *kl;
-
-    /* Test the input parameters. */
-    *info = 0;
-    if(*m < 0)
-    {
-        *info = -1;
-    }
-    else if(*n < 0)
-    {
-        *info = -2;
-    }
-    else if(*kl < 0)
-    {
-        *info = -3;
-    }
-    else if(*ku < 0)
-    {
-        *info = -4;
-    }
-    else if(*ldab < *kl + kv + 1)
-    {
-        *info = -6;
-    }
-    if(*info != 0)
-    {
-        i__1 = -(*info);
-        aocl_blas_xerbla("DGBTF2", &i__1, (ftnlen)6);
-        return;
-    }
-
-    /* Gaussian elimination with partial pivoting */
-    /* Set fill-in elements in columns KU+2 to KV to zero. */
-    i__1 = fla_min(kv, *n);
-    for(j = *ku + 2; j <= i__1; ++j)
-    {
-        i__2 = *kl;
-        for(i__ = kv - j + 2; i__ <= i__2; ++i__)
-        {
-            ab[i__ + j * ab_dim1] = 0.;
-        }
-    }
-
-    /* JU is the index of the last column affected by the current stage */
-    /* of the factorization. */
-    ju = 1;
-    i__1 = fla_min(*m, *n);
-    for(j = 1; j <= i__1; ++j)
-    {
-        /* Set fill-in elements in column J+KV to zero. */
-        if(j + kv <= *n)
-        {
-            i__2 = *kl;
-            for(i__ = 1; i__ <= i__2; ++i__)
-            {
-                ab[i__ + (j + kv) * ab_dim1] = 0.;
-            }
-        }
-
-        /* Find pivot and test for singularity. KM is the number of */
-        /* subdiagonal elements in the current column. */
-        /* Computing MIN */
-        i__2 = *kl;
-        i__3 = *m - j; // , expr subst
-        km = fla_min(i__2, i__3);
-        i__2 = km + 1;
-
-        /* idamax_blas_ptr finds the index of the first element having maximum absolute value */
-        idamax_blas_ptr((dim_t)i__2, &ab[kv + 1 + j * ab_dim1], (dim_t)c__1, &index, cntx);
-
-        jp = (integer)index + 1;
-        ipiv[j] = jp + j - 1;
-        if(ab[kv + jp + j * ab_dim1] != 0.)
-        {
-            /* Computing MAX */
-            /* Computing MIN */
-            i__4 = j + *ku + jp - 1;
-            i__2 = ju;
-            i__3 = fla_min(i__4, *n); // , expr subst
-            ju = fla_max(i__2, i__3);
-            /* Apply interchange to columns J to JU. */
-            if(jp != 1)
-            {
-                i__2 = ju - j + 1;
-                i__3 = *ldab - 1;
-                i__4 = *ldab - 1;
-
-                /* dswap_blas_ptr swaps two vectors using AOCL-BLAS */
-                dswap_blas_ptr((dim_t)i__2, &ab[kv + jp + j * ab_dim1], (dim_t)i__3,
-                               &ab[kv + 1 + j * ab_dim1], (dim_t)i__4, cntx);
-            }
-
-            if(km > 0)
-            {
-                /* Compute multipliers. */
-                d__1 = 1. / ab[kv + 1 + j * ab_dim1];
-
-                /* dscal_blas_ptr scales a vector by a constant */
-                dscal_blas_ptr(BLIS_NO_CONJUGATE, (dim_t)km, &d__1, &ab[kv + 2 + j * ab_dim1],
-                               (dim_t)c__1, cntx);
-
-                /* Update trailing submatrix within the band. */
-                if(ju > j)
-                {
-                    i__2 = ju - j;
-                    i__3 = *ldab - 1;
-                    i__4 = *ldab - 1;
-                    x = &ab[kv + 2 + j * ab_dim1];
-                    y = &ab[kv + (j + 1) * ab_dim1];
-                    r = &ab[kv + 1 + (j + 1) * ab_dim1];
-
-                    for(aocl_int64_t i = 0; i < i__2; i++)
-                    {
-                        alpha = -y[i * i__4];
-
-                        if(alpha)
-                            /* daxpy_blas_ptr performs the operation y = alpha * x + y */
-                            daxpy_blas_ptr(BLIS_NO_CONJUGATE, (dim_t)km, &alpha, x, (dim_t)c__1,
-                                           &r[i * i__3], (dim_t)c__1, cntx);
-                    }
-                }
-            }
-        }
-        else
-        {
-            /* If pivot is zero, set INFO to the index of the pivot */
-            /* unless a zero pivot has already been found. */
-            if(*info == 0)
-            {
-                *info = j;
-            }
-        }
-    }
-    return;
-    /* End of dgbtf2_blas_ver */
-}
-
-#endif
-
 /* > \brief \b DGBTF2 computes the LU factorization of a general band matrix using the unblocked
  * version of th e algorithm. */
 /* =========== DOCUMENTATION =========== */
@@ -328,20 +147,28 @@ elements marked */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dgbtf2_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, integer *ldab, integer *ipiv, integer *info)
+void dgbtf2_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, integer *ldab,
+             integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgbtf2 inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS "",*m, *n, *kl, *ku, *ldab);
+    AOCL_DTL_SNPRINTF("dgbtf2 inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
+                      ", ldab %" FLA_IS "",
+                      *m, *n, *kl, *ku, *ldab);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     doublereal d__1;
     /* Local variables */
     integer i__, j, km, jp, ju, kv;
     extern /* Subroutine */
-    void dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dscal_(integer *, doublereal *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+              doublereal *, integer *),
+        dscal_(integer *, doublereal *, doublereal *, integer *),
+        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -378,9 +205,9 @@ void dgbtf2_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
     ab_offset = 1 + ab_dim1;
     ab -= ab_offset;
     --ipiv;
-    #if AOCL_FLA_PROGRESS_H
-        AOCL_FLA_PROGRESS_VAR;
-    #endif
+#if AOCL_FLA_PROGRESS_H
+    AOCL_FLA_PROGRESS_VAR;
+#endif
 
     /* Function Body */
     kv = *ku + *kl;
@@ -419,20 +246,18 @@ void dgbtf2_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    #if AOCL_FLA_PROGRESS_H
-        progress_step_count =0;
-     #ifndef FLA_ENABLE_WINDOWS_BUILD
-        if(!aocl_fla_progress_ptr)
-              aocl_fla_progress_ptr=aocl_fla_progress;
-     #endif
-    #endif
+#if AOCL_FLA_PROGRESS_H
+    progress_step_count = 0;
+#ifndef FLA_ENABLE_WINDOWS_BUILD
+    if(!aocl_fla_progress_ptr)
+        aocl_fla_progress_ptr = aocl_fla_progress;
+#endif
+#endif
 
     /* Gaussian elimination with partial pivoting */
     /* Set fill-in elements in columns KU+2 to KV to zero. */
-    i__1 = fla_min(kv,*n);
-    for (j = *ku + 2;
-            j <= i__1;
-            ++j)
+    i__1 = fla_min(kv, *n);
+    for(j = *ku + 2; j <= i__1; ++j)
     {
         i__2 = *kl;
         for(i__ = kv - j + 2; i__ <= i__2; ++i__)
@@ -445,19 +270,20 @@ void dgbtf2_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
     /* JU is the index of the last column affected by the current stage */
     /* of the factorization. */
     ju = 1;
-    i__1 = fla_min(*m,*n);
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    i__1 = fla_min(*m, *n);
+    for(j = 1; j <= i__1; ++j)
     {
-     	#if AOCL_FLA_PROGRESS_H
-            if(aocl_fla_progress_ptr){
-                if(j%32==0 || j==i__1){
-                        progress_step_count=j;
-                        AOCL_FLA_PROGRESS_FUNC_PTR("DGBTF2",6,&progress_step_count,&progress_thread_id,&progress_total_threads);
-                }
+#if AOCL_FLA_PROGRESS_H
+        if(aocl_fla_progress_ptr)
+        {
+            if(j % 32 == 0 || j == i__1)
+            {
+                progress_step_count = j;
+                AOCL_FLA_PROGRESS_FUNC_PTR("DGBTF2", 6, &progress_step_count, &progress_thread_id,
+                                           &progress_total_threads);
             }
-        #endif
+        }
+#endif
 
         /* Set fill-in elements in column J+KV to zero. */
         if(j + kv <= *n)
@@ -474,18 +300,18 @@ void dgbtf2_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
         /* Computing MIN */
         i__2 = *kl;
         i__3 = *m - j; // , expr subst
-        km = fla_min(i__2,i__3);
+        km = fla_min(i__2, i__3);
         i__2 = km + 1;
-        jp = aocl_blas_idamax(&i__2, &ab[kv + 1 + j * ab_dim1], &c__1);
-        ipiv[j] = (aocl_int_t)(jp + j - 1);
+        jp = idamax_(&i__2, &ab[kv + 1 + j * ab_dim1], &c__1);
+        ipiv[j] = jp + j - 1;
         if(ab[kv + jp + j * ab_dim1] != 0.)
         {
             /* Computing MAX */
             /* Computing MIN */
             i__4 = j + *ku + jp - 1;
             i__2 = ju;
-            i__3 = fla_min(i__4,*n); // , expr subst
-            ju = fla_max(i__2,i__3);
+            i__3 = fla_min(i__4, *n); // , expr subst
+            ju = fla_max(i__2, i__3);
             /* Apply interchange to columns J to JU. */
             if(jp != 1)
             {
@@ -506,9 +332,9 @@ void dgbtf2_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
                     i__2 = ju - j;
                     i__3 = *ldab - 1;
                     i__4 = *ldab - 1;
-                    aocl_blas_dger(&km, &i__2, &c_b9, &ab[kv + 2 + j * ab_dim1], &c__1,
-                                   &ab[kv + (j + 1) * ab_dim1], &i__3,
-                                   &ab[kv + 1 + (j + 1) * ab_dim1], &i__4);
+                    dger_(&km, &i__2, &c_b9, &ab[kv + 2 + j * ab_dim1], &c__1,
+                          &ab[kv + (j + 1) * ab_dim1], &i__3, &ab[kv + 1 + (j + 1) * ab_dim1],
+                          &i__4);
                 }
             }
         }

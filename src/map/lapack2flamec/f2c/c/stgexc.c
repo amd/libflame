@@ -1,8 +1,8 @@
-/* ./stgexc.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/stgexc.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c__2 = 2;
@@ -221,12 +221,17 @@ A Direct Method for Reordering Eigenvalues in the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, real *b, integer *ldb, real *q, integer *ldq, real * z__, integer *ldz, integer *ifst, integer *ilst, real *work, integer * lwork, integer *info)
+void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, real *b,
+             integer *ldb, real *q, integer *ldq, real *z__, integer *ldz, integer *ifst,
+             integer *ilst, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"stgexc inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", ifst %" FLA_IS ", ilst %" FLA_IS "",*n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
+    snprintf(buffer, 256,
+             "stgexc inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS
+             ", ldz %" FLA_IS ", ifst %" FLA_IS ", ilst %" FLA_IS "",
+             *n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -234,7 +239,11 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
     /* Local variables */
     integer nbf, nbl, here, lwmin;
     extern /* Subroutine */
-    void stgex2_(logical *, logical *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *, integer *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        stgex2_(logical *, logical *, integer *, real *, integer *, real *, integer *, real *,
+                integer *, real *, integer *, integer *, integer *, integer *, real *, integer *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer nbnext;
     logical lquery;
     /* -- LAPACK computational routine -- */
@@ -278,19 +287,19 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldq < 1 || *wantq && *ldq < fla_max(1,*n))
+    else if(*ldq < 1 || *wantq && *ldq < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldz < 1 || *wantz && *ldz < fla_max(1,*n))
+    else if(*ldz < 1 || *wantz && *ldz < fla_max(1, *n))
     {
         *info = -11;
     }
@@ -399,9 +408,8 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
                     nbnext = 2;
                 }
             }
-            aocl_lapack_stgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
-                               ldq, &z__[z_offset], ldz, &here, &nbf, &nbnext, &work[1], lwork,
-                               info);
+            stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                    &z__[z_offset], ldz, &here, &nbf, &nbnext, &work[1], lwork, info);
             if(*info != 0)
             {
                 *ilst = here;
@@ -431,9 +439,8 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
                 }
             }
             i__1 = here + 1;
-            aocl_lapack_stgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
-                               ldq, &z__[z_offset], ldz, &i__1, &c__1, &nbnext, &work[1], lwork,
-                               info);
+            stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                    &z__[z_offset], ldz, &i__1, &c__1, &nbnext, &work[1], lwork, info);
             if(*info != 0)
             {
                 *ilst = here;
@@ -443,9 +450,8 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
             if(nbnext == 1)
             {
                 /* Swap two 1-by-1 blocks. */
-                aocl_lapack_stgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
-                                   &q[q_offset], ldq, &z__[z_offset], ldz, &here, &c__1, &c__1,
-                                   &work[1], lwork, info);
+                stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                        &z__[z_offset], ldz, &here, &c__1, &c__1, &work[1], lwork, info);
                 if(*info != 0)
                 {
                     *ilst = here;
@@ -464,9 +470,8 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
                 if(nbnext == 2)
                 {
                     /* 2-by-2 block did not split. */
-                    aocl_lapack_stgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
-                                       &q[q_offset], ldq, &z__[z_offset], ldz, &here, &c__1,
-                                       &nbnext, &work[1], lwork, info);
+                    stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
+                            ldq, &z__[z_offset], ldz, &here, &c__1, &nbnext, &work[1], lwork, info);
                     if(*info != 0)
                     {
                         *ilst = here;
@@ -478,9 +483,8 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
                 else
                 {
                     /* 2-by-2 block did split. */
-                    aocl_lapack_stgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
-                                       &q[q_offset], ldq, &z__[z_offset], ldz, &here, &c__1, &c__1,
-                                       &work[1], lwork, info);
+                    stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
+                            ldq, &z__[z_offset], ldz, &here, &c__1, &c__1, &work[1], lwork, info);
                     if(*info != 0)
                     {
                         *ilst = here;
@@ -488,9 +492,8 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
                         return;
                     }
                     ++here;
-                    aocl_lapack_stgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
-                                       &q[q_offset], ldq, &z__[z_offset], ldz, &here, &c__1, &c__1,
-                                       &work[1], lwork, info);
+                    stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
+                            ldq, &z__[z_offset], ldz, &here, &c__1, &c__1, &work[1], lwork, info);
                     if(*info != 0)
                     {
                         *ilst = here;
@@ -522,9 +525,8 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
                 }
             }
             i__1 = here - nbnext;
-            aocl_lapack_stgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
-                               ldq, &z__[z_offset], ldz, &i__1, &nbnext, &nbf, &work[1], lwork,
-                               info);
+            stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                    &z__[z_offset], ldz, &i__1, &nbnext, &nbf, &work[1], lwork, info);
             if(*info != 0)
             {
                 *ilst = here;
@@ -554,9 +556,8 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
                 }
             }
             i__1 = here - nbnext;
-            aocl_lapack_stgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
-                               ldq, &z__[z_offset], ldz, &i__1, &nbnext, &c__1, &work[1], lwork,
-                               info);
+            stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                    &z__[z_offset], ldz, &i__1, &nbnext, &c__1, &work[1], lwork, info);
             if(*info != 0)
             {
                 *ilst = here;
@@ -566,9 +567,8 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
             if(nbnext == 1)
             {
                 /* Swap two 1-by-1 blocks. */
-                aocl_lapack_stgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
-                                   &q[q_offset], ldq, &z__[z_offset], ldz, &here, &nbnext, &c__1,
-                                   &work[1], lwork, info);
+                stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                        &z__[z_offset], ldz, &here, &nbnext, &c__1, &work[1], lwork, info);
                 if(*info != 0)
                 {
                     *ilst = here;
@@ -588,9 +588,8 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
                 {
                     /* 2-by-2 block did not split. */
                     i__1 = here - 1;
-                    aocl_lapack_stgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
-                                       &q[q_offset], ldq, &z__[z_offset], ldz, &i__1, &c__2, &c__1,
-                                       &work[1], lwork, info);
+                    stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
+                            ldq, &z__[z_offset], ldz, &i__1, &c__2, &c__1, &work[1], lwork, info);
                     if(*info != 0)
                     {
                         *ilst = here;
@@ -602,9 +601,8 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
                 else
                 {
                     /* 2-by-2 block did split. */
-                    aocl_lapack_stgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
-                                       &q[q_offset], ldq, &z__[z_offset], ldz, &here, &c__1, &c__1,
-                                       &work[1], lwork, info);
+                    stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
+                            ldq, &z__[z_offset], ldz, &here, &c__1, &c__1, &work[1], lwork, info);
                     if(*info != 0)
                     {
                         *ilst = here;
@@ -612,9 +610,8 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
                         return;
                     }
                     --here;
-                    aocl_lapack_stgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
-                                       &q[q_offset], ldq, &z__[z_offset], ldz, &here, &c__1, &c__1,
-                                       &work[1], lwork, info);
+                    stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
+                            ldq, &z__[z_offset], ldz, &here, &c__1, &c__1, &work[1], lwork, info);
                     if(*info != 0)
                     {
                         *ilst = here;
@@ -631,7 +628,7 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
         }
     }
     *ilst = here;
-    work[1] = (real) lwmin;
+    work[1] = (real)lwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of STGEXC */

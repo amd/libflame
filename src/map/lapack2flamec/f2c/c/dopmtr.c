@@ -150,10 +150,13 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doublereal *ap, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work, integer *info)
+void dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doublereal *ap,
+             doublereal *tau, doublereal *c__, integer *ldc, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dopmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",*side, *uplo, *trans, *m, *n, *ldc);
+    AOCL_DTL_SNPRINTF("dopmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS
+                      ", ldc %" FLA_IS "",
+                      *side, *uplo, *trans, *m, *n, *ldc);
     /* System generated locals */
     aocl_int64_t c_dim1, c_offset, i__1, i__2;
     /* Local variables */
@@ -161,11 +164,14 @@ void dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, double
     doublereal aii;
     logical left;
     extern /* Subroutine */
-    void dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+        void
+        dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *);
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, forwrd;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -209,15 +215,15 @@ void dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, double
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1))
     {
         *info = -3;
     }
@@ -229,7 +235,7 @@ void dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, double
     {
         *info = -5;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -9;
     }
@@ -289,8 +295,8 @@ void dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, double
             /* Apply H(i) */
             aii = ap[ii];
             ap[ii] = 1.;
-            aocl_lapack_dlarf(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &tau[i__], &c__[c_offset],
-                              ldc, &work[1]);
+            dlarf_(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &tau[i__], &c__[c_offset], ldc,
+                   &work[1]);
             ap[ii] = aii;
             if(forwrd)
             {
@@ -350,8 +356,8 @@ void dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, double
                 jc = i__ + 1;
             }
             /* Apply H(i) */
-            aocl_lapack_dlarf(side, &mi, &ni, &ap[ii], &c__1, &tau[i__], &c__[ic + jc * c_dim1],
-                              ldc, &work[1]);
+            dlarf_(side, &mi, &ni, &ap[ii], &c__1, &tau[i__], &c__[ic + jc * c_dim1], ldc,
+                   &work[1]);
             ap[ii] = aii;
             if(forwrd)
             {

@@ -159,15 +159,17 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void chpsv_(char *uplo, integer *n, integer *nrhs, complex * ap, integer *ipiv, complex *b, integer *ldb, integer *info)
+void chpsv_(char *uplo, integer *n, integer *nrhs, complex *ap, integer *ipiv, complex *b,
+            integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chpsv inputs: uplo %c, n %lld, nrhs %lld, ldb %lld",*uplo, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "chpsv inputs: uplo %c, n %lld, nrhs %lld, ldb %lld", *uplo, *n, *nrhs,
+             *ldb);
 #else
-    snprintf(buffer, 256,"chpsv inputs: uplo %c, n %d, nrhs %d, ldb %d",*uplo, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "chpsv inputs: uplo %c, n %d, nrhs %d, ldb %d", *uplo, *n, *nrhs, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -176,7 +178,11 @@ void chpsv_(char *uplo, integer *n, integer *nrhs, complex * ap, integer *ipiv, 
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), chptrf_( char *, integer *, complex *, integer *, integer *), chptrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        chptrf_(char *, integer *, complex *, integer *, integer *),
+        chptrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *,
+                integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -202,7 +208,7 @@ void chpsv_(char *uplo, integer *n, integer *nrhs, complex * ap, integer *ipiv, 
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -214,7 +220,7 @@ void chpsv_(char *uplo, integer *n, integer *nrhs, complex * ap, integer *ipiv, 
     {
         *info = -3;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
@@ -226,7 +232,7 @@ void chpsv_(char *uplo, integer *n, integer *nrhs, complex * ap, integer *ipiv, 
         return;
     }
     /* Compute the factorization A = U*D*U**H or A = L*D*L**H. */
-    aocl_lapack_chptrf(uplo, n, &ap[1], &ipiv[1], info);
+    chptrf_(uplo, n, &ap[1], &ipiv[1], info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */

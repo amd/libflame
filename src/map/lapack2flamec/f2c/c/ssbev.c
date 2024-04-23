@@ -5,7 +5,7 @@
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b11 = 1.f;
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief <b> SSBEV computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for OTHER m atrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -84,7 +84,7 @@ static aocl_int64_t c__1 = 1;
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > */
 /* > On exit, AB is overwritten by values generated during the */
@@ -148,12 +148,16 @@ i */
 /* > \ingroup realOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void ssbev_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real *w, real *z__, integer *ldz, real *work, integer *info)
+void ssbev_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real *w,
+            real *z__, integer *ldz, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"ssbev inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS ", ldz %" FLA_IS "",*jobz, *uplo, *n, *kd, *ldab, *ldz);
+    snprintf(buffer, 256,
+             "ssbev inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS
+             ", ldz %" FLA_IS "",
+             *jobz, *uplo, *n, *kd, *ldab, *ldz);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -170,23 +174,31 @@ void ssbev_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer *
     extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     logical lower, wantz;
     aocl_int64_t iscale;
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern real slansb_(char *, char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
+                integer *, integer *);
     integer indwrk;
     extern /* Subroutine */
-    void ssbtrd_(char *, char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, real *, integer *), ssterf_(integer *, real *, real *, integer *);
+        void
+        ssbtrd_(char *, char *, integer *, integer *, real *, integer *, real *, real *, real *,
+                integer *, real *, integer *),
+        ssterf_(integer *, real *, real *, integer *);
     real smlnum;
     extern /* Subroutine */
-    void ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
+        void
+        ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -221,11 +233,11 @@ void ssbev_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer *
     wantz = lsame_(jobz, "V", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (lower || lsame_(uplo, "U", 1, 1)))
+    else if(!(lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -2;
     }
@@ -309,8 +321,8 @@ void ssbev_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer *
     /* Call SSBTRD to reduce symmetric band matrix to tridiagonal form. */
     inde = 1;
     indwrk = inde + *n;
-    aocl_lapack_ssbtrd(jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &work[inde], &z__[z_offset],
-                       ldz, &work[indwrk], &iinfo);
+    ssbtrd_(jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &work[inde], &z__[z_offset], ldz,
+            &work[indwrk], &iinfo);
     /* For eigenvalues only, call SSTERF. For eigenvectors, call SSTEQR. */
     if(!wantz)
     {
@@ -318,7 +330,7 @@ void ssbev_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer *
     }
     else
     {
-        aocl_lapack_ssteqr(jobz, n, &w[1], &work[inde], &z__[z_offset], ldz, &work[indwrk], info);
+        ssteqr_(jobz, n, &w[1], &work[inde], &z__[z_offset], ldz, &work[indwrk], info);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)

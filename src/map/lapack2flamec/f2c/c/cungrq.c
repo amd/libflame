@@ -1,8 +1,8 @@
-/* ./cungrq.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cungrq.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
@@ -128,12 +128,16 @@ the routine */
 /* > \ingroup ungrq */
 /* ===================================================================== */
 /* Subroutine */
-void cungrq_(integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau, complex *work, integer *lwork, integer * info)
+void cungrq_(integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau,
+             complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"cungrq inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",*m, *n, *k, *lda, *lwork);
+    snprintf(buffer, 256,
+             "cungrq inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS
+             ", lwork %" FLA_IS "",
+             *m, *n, *k, *lda, *lwork);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -142,7 +146,14 @@ void cungrq_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
     /* Local variables */
     integer i__, j, l, ib, nb, ii, kk, nx, iws, nbmin, iinfo;
     extern /* Subroutine */
-    void cungr2_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), clarfb_( char *, char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *), clarft_( char *, char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        cungr2_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *),
+        clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *,
+                integer *, complex *, integer *, complex *, integer *, complex *, integer *),
+        clarft_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
@@ -188,7 +199,7 @@ void cungrq_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
@@ -203,9 +214,9 @@ void cungrq_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
             nb = aocl_lapack_ilaenv(&c__1, "CUNGRQ", " ", m, n, k, &c_n1);
             lwkopt = *m * nb;
         }
-        work[1].r = (real) lwkopt;
+        work[1].r = (real)lwkopt;
         work[1].i = 0.f; // , expr subst
-        if (*lwork < fla_max(1,*m) && ! lquery)
+        if(*lwork < fla_max(1, *m) && !lquery)
         {
             *info = -8;
         }
@@ -237,8 +248,8 @@ void cungrq_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
         /* Computing MAX */
         i__1 = 0;
         i__2 = ilaenv_(&c__3, "CUNGRQ", " ", m, n, k, &c_n1); // , expr subst
-        nx = fla_max(i__1,i__2);
-        if (nx < *k)
+        nx = fla_max(i__1, i__2);
+        if(nx < *k)
         {
             /* Determine if workspace is large enough for blocked code. */
             ldwork = *m;
@@ -251,7 +262,7 @@ void cungrq_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
                 /* Computing MAX */
                 i__1 = 2;
                 i__2 = ilaenv_(&c__2, "CUNGRQ", " ", m, n, k, &c_n1); // , expr subst
-                nbmin = fla_max(i__1,i__2);
+                nbmin = fla_max(i__1, i__2);
             }
         }
     }
@@ -262,7 +273,7 @@ void cungrq_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
         /* Computing MIN */
         i__1 = *k;
         i__2 = (*k - nx + nb - 1) / nb * nb; // , expr subst
-        kk = fla_min(i__1,i__2);
+        kk = fla_min(i__1, i__2);
         /* Set A(1:m-kk,n-kk+1:n) to zero. */
         i__1 = *n;
         for(j = *n - kk + 1; j <= i__1; ++j)
@@ -286,7 +297,7 @@ void cungrq_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
     i__1 = *m - kk;
     i__2 = *n - kk;
     i__3 = *k - kk;
-    aocl_lapack_cungr2(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
+    cungr2_(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
     if(kk > 0)
     {
         /* Use blocked code */
@@ -297,21 +308,21 @@ void cungrq_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
             /* Computing MIN */
             i__3 = nb;
             i__4 = *k - i__ + 1; // , expr subst
-            ib = fla_min(i__3,i__4);
+            ib = fla_min(i__3, i__4);
             ii = *m - *k + i__;
             if(ii > 1)
             {
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i+ib-1) . . . H(i+1) H(i) */
                 i__3 = *n - *k + i__ + ib - 1;
-                aocl_lapack_clarft("Backward", "Rowwise", &i__3, &ib, &a[ii + a_dim1], lda,
-                                   &tau[i__], &work[1], &ldwork);
+                clarft_("Backward", "Rowwise", &i__3, &ib, &a[ii + a_dim1], lda, &tau[i__],
+                        &work[1], &ldwork);
                 /* Apply H**H to A(1:m-k+i-1,1:n-k+i+ib-1) from the right */
                 i__3 = ii - 1;
                 i__4 = *n - *k + i__ + ib - 1;
-                aocl_lapack_clarfb("Right", "Conjugate transpose", "Backward", "Rowwise", &i__3,
-                                   &i__4, &ib, &a[ii + a_dim1], lda, &work[1], &ldwork,
-                                   &a[a_offset], lda, &work[ib + 1], &ldwork);
+                clarfb_("Right", "Conjugate transpose", "Backward", "Rowwise", &i__3, &i__4, &ib,
+                        &a[ii + a_dim1], lda, &work[1], &ldwork, &a[a_offset], lda, &work[ib + 1],
+                        &ldwork);
             }
             /* Apply H**H to columns 1:n-k+i+ib-1 of current block */
             i__3 = *n - *k + i__ + ib - 1;
@@ -333,7 +344,7 @@ void cungrq_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
             /* L50: */
         }
     }
-    work[1].r = (real) iws;
+    work[1].r = (real)iws;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

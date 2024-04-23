@@ -104,7 +104,8 @@ void slacpy_(char *uplo, integer *m, integer *n, real *a, integer *lda, real *b,
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slacpy inputs: uplo %c, m %d, n %d, lda %d, ldb %d",*uplo, *m, *n, *lda, *ldb);
+    snprintf(buffer, 256, "slacpy inputs: uplo %c, m %d, n %d, lda %d, ldb %d", *uplo, *m, *n, *lda,
+             *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -136,15 +137,13 @@ void slacpy_(char *uplo, integer *m, integer *n, real *a, integer *lda, real *b,
     b_offset = 1 + b_dim1;
     b -= b_offset;
     /* Function Body */
-    if (lsame_(uplo, "U", 1, 1))
+    if(lsame_(uplo, "U", 1, 1))
     {
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
         {
-            i__2 = fla_min(j,*m);
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            i__2 = fla_min(j, *m);
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 b[i__ + j * b_dim1] = a[i__ + j * a_dim1];
                 /* L10: */
@@ -152,7 +151,7 @@ void slacpy_(char *uplo, integer *m, integer *n, real *a, integer *lda, real *b,
             /* L20: */
         }
     }
-    else if (lsame_(uplo, "L", 1, 1))
+    else if(lsame_(uplo, "L", 1, 1))
     {
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)

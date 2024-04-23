@@ -121,15 +121,16 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complexGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cgttrf_(integer *n, complex *dl, complex *d__, complex * du, complex *du2, integer *ipiv, integer *info)
+void cgttrf_(integer *n, complex *dl, complex *d__, complex *du, complex *du2, integer *ipiv,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgttrf inputs: n %lld",*n);
+    snprintf(buffer, 256, "cgttrf inputs: n %lld", *n);
 #else
-    snprintf(buffer, 256,"cgttrf inputs: n %d",*n);
+    snprintf(buffer, 256, "cgttrf inputs: n %d", *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -144,7 +145,8 @@ void cgttrf_(integer *n, complex *dl, complex *d__, complex * du, complex *du2, 
     integer i__;
     complex fact, temp;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -209,11 +211,13 @@ void cgttrf_(integer *n, complex *dl, complex *d__, complex * du, complex *du2, 
     {
         i__2 = i__;
         i__3 = i__;
-        if ((r__1 = d__[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&d__[i__]), f2c_abs( r__2)) >= (r__3 = dl[i__3].r, f2c_abs(r__3)) + (r__4 = r_imag(&dl[ i__]), f2c_abs(r__4)))
+        if((r__1 = d__[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&d__[i__]), f2c_abs(r__2))
+           >= (r__3 = dl[i__3].r, f2c_abs(r__3)) + (r__4 = r_imag(&dl[i__]), f2c_abs(r__4)))
         {
             /* No row interchange required, eliminate DL(I) */
             i__2 = i__;
-            if ((r__1 = d__[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&d__[i__]), f2c_abs(r__2)) != 0.f)
+            if((r__1 = d__[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&d__[i__]), f2c_abs(r__2))
+               != 0.f)
             {
                 c_div(&q__1, &dl[i__], &d__[i__]);
                 fact.real = q__1.real;
@@ -281,10 +285,12 @@ void cgttrf_(integer *n, complex *dl, complex *d__, complex * du, complex *du2, 
         i__ = *n - 1;
         i__1 = i__;
         i__2 = i__;
-        if ((r__1 = d__[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&d__[i__]), f2c_abs( r__2)) >= (r__3 = dl[i__2].r, f2c_abs(r__3)) + (r__4 = r_imag(&dl[ i__]), f2c_abs(r__4)))
+        if((r__1 = d__[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&d__[i__]), f2c_abs(r__2))
+           >= (r__3 = dl[i__2].r, f2c_abs(r__3)) + (r__4 = r_imag(&dl[i__]), f2c_abs(r__4)))
         {
             i__1 = i__;
-            if ((r__1 = d__[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&d__[i__]), f2c_abs(r__2)) != 0.f)
+            if((r__1 = d__[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&d__[i__]), f2c_abs(r__2))
+               != 0.f)
             {
                 c_div(&q__1, &dl[i__], &d__[i__]);
                 fact.real = q__1.real;
@@ -338,7 +344,7 @@ void cgttrf_(integer *n, complex *dl, complex *d__, complex * du, complex *du2, 
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        if ((r__1 = d__[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&d__[i__]), f2c_abs( r__2)) == 0.f)
+        if((r__1 = d__[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&d__[i__]), f2c_abs(r__2)) == 0.f)
         {
             *info = i__;
             goto L50;

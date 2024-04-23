@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b SCSUM1 forms the 1-norm of the scomplex vector using the true absolute value. */
+#include "FLA_f2c.h" /* > \brief \b SCSUM1 forms the 1-norm of the complex vector using the true absolute value. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -80,7 +80,7 @@ real scsum1_(aocl_int_t *n, scomplex *cx, aocl_int_t *incx)
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"scsum1 inputs: n %d, incx %d",*n, *incx);
+    snprintf(buffer, 256, "scsum1 inputs: n %d, incx %d", *n, *incx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */

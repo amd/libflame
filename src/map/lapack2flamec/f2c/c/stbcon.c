@@ -98,7 +98,7 @@ static aocl_int64_t c__1 = 1;
 /* > first kd+1 rows of the array. The j-th column of A is stored */
 /* > in the j-th column of the array AB as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > If DIAG = 'U', the diagonal elements of A are not referenced */
 /* > and are assumed to be 1. */
@@ -143,12 +143,16 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void stbcon_(char *norm, char *uplo, char *diag, integer *n, integer *kd, real *ab, integer *ldab, real *rcond, real *work, integer *iwork, integer *info)
+void stbcon_(char *norm, char *uplo, char *diag, integer *n, integer *kd, real *ab, integer *ldab,
+             real *rcond, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"stbcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",*norm, *uplo, *diag, *n, *kd, *ldab);
+    snprintf(buffer, 256,
+             "stbcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS ", kd %" FLA_IS
+             ", ldab %" FLA_IS "",
+             *norm, *uplo, *diag, *n, *kd, *ldab);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -161,19 +165,24 @@ void stbcon_(char *norm, char *uplo, char *diag, integer *n, integer *kd, real *
     integer isave[3];
     real anorm;
     extern /* Subroutine */
-    void srscl_(integer *, real *, real *, integer *);
+        void
+        srscl_(integer *, real *, real *, integer *);
     logical upper;
     real xnorm;
     extern /* Subroutine */
-    void slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     extern real slantb_(char *, char *, char *, integer *, integer *, real *, integer *, real *);
     real ainvnm;
     extern /* Subroutine */
-    void slatbs_(char *, char *, char *, char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *);
+        void
+        slatbs_(char *, char *, char *, char *, integer *, integer *, real *, integer *, real *,
+                real *, real *, integer *);
     logical onenrm;
     char normin[1];
     real smlnum;
@@ -212,15 +221,15 @@ void stbcon_(char *norm, char *uplo, char *diag, integer *n, integer *kd, real *
     upper = lsame_(uplo, "U", 1, 1);
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
-    if (! onenrm && ! lsame_(norm, "I", 1, 1))
+    if(!onenrm && !lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
@@ -251,7 +260,7 @@ void stbcon_(char *norm, char *uplo, char *diag, integer *n, integer *kd, real *
         return;
     }
     *rcond = 0.f;
-    smlnum = slamch_("Safe minimum") * (real) fla_max(1,*n);
+    smlnum = slamch_("Safe minimum") * (real)fla_max(1, *n);
     /* Compute the norm of the triangular matrix A. */
     anorm = aocl_lapack_slantb(norm, uplo, diag, n, kd, &ab[ab_offset], ldab, &work[1]);
     /* Continue only if ANORM > 0. */
@@ -270,19 +279,20 @@ void stbcon_(char *norm, char *uplo, char *diag, integer *n, integer *kd, real *
         }
         kase = 0;
     L10:
-        aocl_lapack_slacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+        slacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
         if(kase != 0)
         {
             if(kase == kase1)
             {
                 /* Multiply by inv(A). */
-                aocl_lapack_slatbs(uplo, "No transpose", diag, normin, n, kd, &ab[ab_offset], ldab,
-                                   &work[1], &scale, &work[(*n << 1) + 1], info);
+                slatbs_(uplo, "No transpose", diag, normin, n, kd, &ab[ab_offset], ldab, &work[1],
+                        &scale, &work[(*n << 1) + 1], info);
             }
             else
             {
                 /* Multiply by inv(A**T). */
-                slatbs_(uplo, "Transpose", diag, normin, n, kd, &ab[ab_offset], ldab, &work[1], &scale, &work[(*n << 1) + 1], info);
+                slatbs_(uplo, "Transpose", diag, normin, n, kd, &ab[ab_offset], ldab, &work[1],
+                        &scale, &work[(*n << 1) + 1], info);
             }
             *(unsigned char *)normin = 'Y';
             /* Multiply by 1/SCALE if doing so will not cause overflow. */
@@ -290,7 +300,7 @@ void stbcon_(char *norm, char *uplo, char *diag, integer *n, integer *kd, real *
             {
                 ix = isamax_(n, &work[1], &c__1);
                 xnorm = (r__1 = work[ix], f2c_abs(r__1));
-                if (scale < xnorm * smlnum || scale == 0.f)
+                if(scale < xnorm * smlnum || scale == 0.f)
                 {
                     goto L20;
                 }

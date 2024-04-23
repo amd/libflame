@@ -6,7 +6,8 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b11 = 1.f;
-/* > \brief \b SLACON estimates the 1-norm of a square matrix, using reverse communication for evaluating matr ix-vector products. */
+/* > \brief \b SLACON estimates the 1-norm of a square matrix, using reverse communication for
+ * evaluating matr ix-vector products. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -146,7 +147,8 @@ void aocl_lapack_slacon(aocl_int64_t *n, real *v, real *x, aocl_int_t *isgn, rea
     integer jlast;
     extern real sasum_(integer *, real *, integer *);
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     extern integer isamax_(integer *, real *, integer *);
     real altsgn, estold;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -190,18 +192,18 @@ void aocl_lapack_slacon(aocl_int64_t *n, real *v, real *x, aocl_int_t *isgn, rea
     }
     switch(jump)
     {
-    case 1:
-        goto L20;
-    case 2:
-        goto L40;
-    case 3:
-        goto L70;
-    case 4:
-        goto L110;
-    case 5:
-        goto L140;
-    default:
-        goto L150;
+        case 1:
+            goto L20;
+        case 2:
+            goto L40;
+        case 3:
+            goto L70;
+        case 4:
+            goto L110;
+        case 5:
+            goto L140;
+        default:
+            goto L150;
     }
     /* ................ ENTRY (JUMP = 1) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY A*X. */
@@ -251,7 +253,7 @@ L70:
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         r__1 = r_sign(&c_b11, &x[i__]);
-        if (fla_i_nint(&r__1) != isgn[i__])
+        if(fla_i_nint(&r__1) != isgn[i__])
         {
             goto L90;
         }
@@ -279,7 +281,7 @@ L90: /* TEST FOR CYCLING. */
 L110:
     jlast = j;
     j = isamax_(n, &x[1], &c__1);
-    if (x[jlast] != (r__1 = x[j], f2c_abs(r__1)) && iter < 5)
+    if(x[jlast] != (r__1 = x[j], f2c_abs(r__1)) && iter < 5)
     {
         ++iter;
         goto L50;
@@ -300,7 +302,7 @@ L120:
     /* ................ ENTRY (JUMP = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L140:
-    temp = aocl_blas_sasum(n, &x[1], &c__1) / (real)(*n * 3) * 2.f;
+    temp = sasum_(n, &x[1], &c__1) / (real)(*n * 3) * 2.f;
     if(temp > *est)
     {
         aocl_blas_scopy(n, &x[1], &c__1, &v[1], &c__1);

@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b ZUNG2L generates all or part of the unitary matrix Q from a QL factorization
  * determined by cgeq lf (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
@@ -112,17 +112,23 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zung2l_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex * work, integer *info)
+void zung2l_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau,
+             doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zung2l inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",*m, *n, *k, *lda);
+    AOCL_DTL_SNPRINTF("zung2l inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",
+                      *m, *n, *k, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     dcomplex z__1;
     /* Local variables */
     integer i__, j, l, ii;
     extern /* Subroutine */
-    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
+        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -162,7 +168,7 @@ void zung2l_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda,
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
@@ -170,13 +176,13 @@ void zung2l_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda,
     {
         i__1 = -(*info);
         xerbla_("ZUNG2L", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n <= 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialise columns 1:n-k to columns of the unit matrix */
@@ -206,8 +212,8 @@ void zung2l_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda,
         a[i__2].imag = 0.; // , expr subst
         i__2 = *m - *n + ii;
         i__3 = ii - 1;
-        aocl_lapack_zlarf("Left", &i__2, &i__3, &a[ii * a_dim1 + 1], &c__1, &tau[i__], &a[a_offset],
-                          lda, &work[1]);
+        zlarf_("Left", &i__2, &i__3, &a[ii * a_dim1 + 1], &c__1, &tau[i__], &a[a_offset], lda,
+               &work[1]);
         i__2 = *m - *n + ii - 1;
         i__3 = i__;
         z__1.real = -tau[i__3].real;

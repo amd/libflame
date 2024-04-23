@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b CUNM2R multiplies a general matrix by the unitary matrix from a QR factorization
  * determined by cgeqrf (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
@@ -111,7 +111,7 @@ static aocl_int64_t c__1 = 1;
 /* > LDA is INTEGER */
 /* > The leading dimension of the array A. */
 /* > If SIDE = 'L', LDA >= fla_max(1,M);
-*/
+ */
 /* > if SIDE = 'R', LDA >= fla_max(1,N). */
 /* > \endverbatim */
 /* > */
@@ -158,7 +158,9 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cunm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau, complex *c__, integer *ldc, complex *work, integer *info)
+void cunm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, complex *a,
+                integer *lda, complex *tau, complex *c__, integer *ldc, complex *work,
+                integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3;
@@ -171,10 +173,13 @@ void cunm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, com
     logical left;
     complex taui;
     extern /* Subroutine */
-    void clarf_(char *, integer *, integer *, complex * , integer *, complex *, complex *, integer *, complex *);
+        void
+        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+               complex *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -219,11 +224,11 @@ void cunm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, com
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -239,11 +244,11 @@ void cunm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, com
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,nq))
+    else if(*lda < fla_max(1, nq))
     {
         *info = -7;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -10;
     }
@@ -313,10 +318,10 @@ void cunm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, com
         aii.real = a[i__3].real;
         aii.imag = a[i__3].imag; // , expr subst
         i__3 = i__ + i__ * a_dim1;
-        a[i__3].real = 1.f;
-        a[i__3].imag = 0.f; // , expr subst
-        aocl_lapack_clarf(side, &mi, &ni, &a[i__ + i__ * a_dim1], &c__1, &taui,
-                          &c__[ic + jc * c_dim1], ldc, &work[1]);
+        a[i__3].r = 1.f;
+        a[i__3].i = 0.f; // , expr subst
+        clarf_(side, &mi, &ni, &a[i__ + i__ * a_dim1], &c__1, &taui, &c__[ic + jc * c_dim1], ldc,
+               &work[1]);
         i__3 = i__ + i__ * a_dim1;
         a[i__3].real = aii.real;
         a[i__3].imag = aii.imag; // , expr subst

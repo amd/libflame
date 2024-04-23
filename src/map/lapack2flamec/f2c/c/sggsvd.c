@@ -333,7 +333,10 @@ LDQ >= 1 otherwise. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer *p, integer *k, integer *l, real *a, integer *lda, real *b, integer *ldb, real *alpha, real *beta, real *u, integer * ldu, real *v, integer *ldv, real *q, integer *ldq, real *work, integer *iwork, integer *info)
+void sggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer *p, integer *k,
+             integer *l, real *a, integer *lda, real *b, integer *ldb, real *alpha, real *beta,
+             real *u, integer *ldu, real *v, integer *ldv, real *q, integer *ldq, real *work,
+             integer *iwork, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sggsvd(jobu, jobv, jobq, m, n, p, k, l, a, lda, b, ldb, alpha, beta, u, ldu, v, ldv, q, ldq, work, iwork, info);
@@ -370,7 +373,7 @@ void aocl_lapack_sggsvd(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
                       ",ldv %" FLA_IS ",ldq %" FLA_IS "",
                       *jobu, *jobv, *jobq, *m, *n, *p, *l, *lda, *ldb, *ldu, *ldv, *ldq);
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
         v_offset, i__1, i__2;
     /* Local variables */
     aocl_int64_t i__, j;
@@ -383,12 +386,20 @@ void aocl_lapack_sggsvd(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     real anorm, bnorm;
     logical wantq;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     logical wantu, wantv;
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     integer ncycle;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), stgsja_( char *, char *, char *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *), sggsvp_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, real *, real *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        stgsja_(char *, char *, char *, integer *, integer *, integer *, integer *, integer *,
+                real *, integer *, real *, integer *, real *, real *, real *, real *, real *,
+                integer *, real *, integer *, real *, integer *, real *, integer *, integer *),
+        sggsvp_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *,
+                integer *, real *, real *, integer *, integer *, real *, integer *, real *,
+                integer *, real *, integer *, integer *, real *, real *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -433,15 +444,15 @@ void aocl_lapack_sggsvd(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     wantv = lsame_(jobv, "V", 1, 1);
     wantq = lsame_(jobq, "Q", 1, 1);
     *info = 0;
-    if (! (wantu || lsame_(jobu, "N", 1, 1)))
+    if(!(wantu || lsame_(jobu, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (wantv || lsame_(jobv, "N", 1, 1)))
+    else if(!(wantv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (wantq || lsame_(jobq, "N", 1, 1)))
+    else if(!(wantq || lsame_(jobq, "N", 1, 1)))
     {
         *info = -3;
     }
@@ -457,11 +468,11 @@ void aocl_lapack_sggsvd(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     {
         *info = -6;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -10;
     }
-    else if (*ldb < fla_max(1,*p))
+    else if(*ldb < fla_max(1, *p))
     {
         *info = -12;
     }
@@ -490,23 +501,23 @@ void aocl_lapack_sggsvd(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     /* the effective numerical rank of the matrices A and B. */
     ulp = slamch_("Precision");
     unfl = slamch_("Safe Minimum");
-    tola = fla_max(*m,*n) * fla_max(anorm,unfl) * ulp;
-    tolb = fla_max(*p,*n) * fla_max(bnorm,unfl) * ulp;
+    tola = fla_max(*m, *n) * fla_max(anorm, unfl) * ulp;
+    tolb = fla_max(*p, *n) * fla_max(bnorm, unfl) * ulp;
     /* Preprocessing */
-    aocl_lapack_sggsvp(jobu, jobv, jobq, m, p, n, &a[a_offset], lda, &b[b_offset], ldb, &tola, &tolb, k, l,
+    sggsvp_(jobu, jobv, jobq, m, p, n, &a[a_offset], lda, &b[b_offset], ldb, &tola, &tolb, k, l,
             &u[u_offset], ldu, &v[v_offset], ldv, &q[q_offset], ldq, &iwork[1], &work[1],
             &work[*n + 1], info);
     /* Compute the GSVD of two upper "triangular" matrices */
-    aocl_lapack_stgsja(jobu, jobv, jobq, m, p, n, k, l, &a[a_offset], lda, &b[b_offset], ldb, &tola,
-                       &tolb, &alpha[1], &beta[1], &u[u_offset], ldu, &v[v_offset], ldv,
-                       &q[q_offset], ldq, &work[1], &ncycle, info);
+    stgsja_(jobu, jobv, jobq, m, p, n, k, l, &a[a_offset], lda, &b[b_offset], ldb, &tola, &tolb,
+            &alpha[1], &beta[1], &u[u_offset], ldu, &v[v_offset], ldv, &q[q_offset], ldq, &work[1],
+            &ncycle, info);
     /* Sort the singular values and store the pivot indices in IWORK */
     /* Copy ALPHA to WORK, then sort ALPHA in WORK */
     aocl_blas_scopy(n, &alpha[1], &c__1, &work[1], &c__1);
     /* Computing MIN */
     i__1 = *l;
     i__2 = *m - *k; // , expr subst
-    ibnd = fla_min(i__1,i__2);
+    ibnd = fla_min(i__1, i__2);
     i__1 = ibnd;
     for(i__ = 1; i__ <= i__1; ++i__)
     {

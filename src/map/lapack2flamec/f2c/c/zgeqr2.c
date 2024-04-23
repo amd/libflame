@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b ZGEQR2 computes the QR factorization of a general rectangular matrix using an
  * unblocked algorit hm. */
 /* =========== DOCUMENTATION =========== */
@@ -121,10 +121,11 @@ v(i+1:m) is stored on exit in A(i+1:m,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgeqr2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *work, integer *info)
+void zgeqr2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau,
+             doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgeqr2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
+    AOCL_DTL_SNPRINTF("zgeqr2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     dcomplex z__1;
@@ -134,7 +135,11 @@ void zgeqr2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     integer i__, k;
     doublecomplex alpha;
     extern /* Subroutine */
-    void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+        void
+        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -170,7 +175,7 @@ void zgeqr2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
@@ -181,7 +186,7 @@ void zgeqr2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    k = fla_min(*m,*n);
+    k = fla_min(*m, *n);
     i__1 = k;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
@@ -189,8 +194,9 @@ void zgeqr2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
         i__2 = *m - i__ + 1;
         /* Computing MIN */
         i__3 = i__ + 1;
-        zlarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, &tau[i__]);
-        if (i__ < *n)
+        zlarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1,
+                &tau[i__]);
+        if(i__ < *n)
         {
             /* Apply H(i)**H to A(i:m,i+1:n) from the left */
             i__2 = i__ + i__ * a_dim1;
@@ -202,8 +208,8 @@ void zgeqr2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
             i__2 = *m - i__ + 1;
             i__3 = *n - i__;
             d_cnjg(&z__1, &tau[i__]);
-            aocl_lapack_zlarf("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &z__1,
-                              &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
+            zlarf_("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &z__1,
+                   &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
             i__2 = i__ + i__ * a_dim1;
             a[i__2].real = alpha.real;
             a[i__2].imag = alpha.imag; // , expr subst

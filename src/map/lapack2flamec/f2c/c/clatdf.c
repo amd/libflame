@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {1.f, 0.f};
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static complex c_b1 = {1.f, 0.f};
+static integer c__1 = 1;
+static integer c_n1 = -1;
 static real c_b24 = 1.f;
 /* > \brief \b CLATDF uses the LU factorization of the n-by-n matrix computed by sgetc2 and computes
  * a contrib ution to the reciprocal Dif-estimate. */
@@ -168,15 +168,16 @@ for 1 <= j <= N, column j of the */
 /* > 1995. */
 /* ===================================================================== */
 /* Subroutine */
-void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs, real *rdsum, real *rdscal, integer *ipiv, integer *jpiv)
+void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs, real *rdsum,
+             real *rdscal, integer *ipiv, integer *jpiv)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clatdf inputs: ijob %lld, n %lld, ldz %lld",*ijob, *n, *ldz);
+    snprintf(buffer, 256, "clatdf inputs: ijob %lld, n %lld, ldz %lld", *ijob, *n, *ldz);
 #else
-    snprintf(buffer, 256,"clatdf inputs: ijob %d, n %d, ldz %d",*ijob, *n, *ldz);
+    snprintf(buffer, 256, "clatdf inputs: ijob %d, n %d, ldz %d", *ijob, *n, *ldz);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -193,18 +194,27 @@ void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs
     integer info;
     complex temp, work[8];
     extern /* Subroutine */
-    void cscal_(integer *, complex *, complex *, integer *);
+        void
+        cscal_(integer *, complex *, complex *, integer *);
     real scale;
     extern /* Complex */
-    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+        VOID
+        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern /* Subroutine */
-    void ccopy_(integer *, complex *, integer *, complex *, integer *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *);
     complex pmone;
     extern /* Subroutine */
-    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+        void
+        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     real rtemp, sminu, rwork[2], splus;
     extern /* Subroutine */
-    void cgesc2_(integer *, complex *, integer *, complex *, integer *, integer *, real *), cgecon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), classq_(integer *, complex *, integer *, real *, real *), claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
+        void
+        cgesc2_(integer *, complex *, integer *, complex *, integer *, integer *, real *),
+        cgecon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *,
+                integer *),
+        classq_(integer *, complex *, integer *, real *, real *),
+        claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
     extern real scasum_(integer *, complex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -263,14 +273,14 @@ void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs
             /* Lockahead for L- part RHS(1:N-1) = +-1 */
             /* SPLUS and SMIN computed more efficiently than in BSOLVE[1]. */
             i__2 = *n - j;
-            aocl_lapack_cdotc_f2c(&q__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &z__[j + 1 + j * z_dim1],
+            cdotc_f2c_(&q__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &z__[j + 1 + j * z_dim1],
                        &c__1);
-            splus += q__1.real;
+            splus += q__1.r;
             i__2 = *n - j;
             aocl_lapack_cdotc_f2c(&q__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1], &c__1);
             sminu = q__1.real;
             i__2 = j;
-            splus *= rhs[i__2].real;
+            splus *= rhs[i__2].r;
             if(splus > sminu)
             {
                 i__2 = j;
@@ -401,17 +411,17 @@ void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs
     aocl_lapack_cdotc_f2c(&q__3, n, xm, &c__1, xm, &c__1);
     c_sqrt(&q__2, &q__3);
     c_div(&q__1, &c_b1, &q__2);
-    temp.real = q__1.real;
-    temp.imag = q__1.imag; // , expr subst
-    aocl_blas_cscal(n, &temp, xm, &c__1);
-    aocl_blas_ccopy(n, xm, &c__1, xp, &c__1);
-    aocl_blas_caxpy(n, &c_b1, &rhs[1], &c__1, xp, &c__1);
-    q__1.real = -1.f;
-    q__1.imag = -0.f; // , expr subst
-    aocl_blas_caxpy(n, &q__1, xm, &c__1, &rhs[1], &c__1);
-    aocl_lapack_cgesc2(n, &z__[z_offset], ldz, &rhs[1], &ipiv[1], &jpiv[1], &scale);
-    aocl_lapack_cgesc2(n, &z__[z_offset], ldz, xp, &ipiv[1], &jpiv[1], &scale);
-    if(aocl_blas_scasum(n, xp, &c__1) > aocl_blas_scasum(n, &rhs[1], &c__1))
+    temp.r = q__1.r;
+    temp.i = q__1.i; // , expr subst
+    cscal_(n, &temp, xm, &c__1);
+    ccopy_(n, xm, &c__1, xp, &c__1);
+    caxpy_(n, &c_b1, &rhs[1], &c__1, xp, &c__1);
+    q__1.r = -1.f;
+    q__1.i = -0.f; // , expr subst
+    caxpy_(n, &q__1, xm, &c__1, &rhs[1], &c__1);
+    cgesc2_(n, &z__[z_offset], ldz, &rhs[1], &ipiv[1], &jpiv[1], &scale);
+    cgesc2_(n, &z__[z_offset], ldz, xp, &ipiv[1], &jpiv[1], &scale);
+    if(scasum_(n, xp, &c__1) > scasum_(n, &rhs[1], &c__1))
     {
         aocl_blas_ccopy(n, xp, &c__1, &rhs[1], &c__1);
     }

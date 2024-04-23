@@ -136,15 +136,16 @@
 /* > \ingroup complexGEauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void claqge_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, char * equed)
+void claqge_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c__, real *rowcnd,
+             real *colcnd, real *amax, char *equed)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"claqge inputs: m %lld, n %lld, lda %lld",*m, *n, *lda);
+    snprintf(buffer, 256, "claqge inputs: m %lld, n %lld, lda %lld", *m, *n, *lda);
 #else
-    snprintf(buffer, 256,"claqge inputs: m %d, n %d, lda %d",*m, *n, *lda);
+    snprintf(buffer, 256, "claqge inputs: m %d, n %d, lda %d", *m, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -189,7 +190,7 @@ void claqge_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *
     /* Initialize LARGE and SMALL. */
     small_val = slamch_("Safe minimum") / slamch_("Precision");
     large = 1.f / small_val;
-    if (*rowcnd >= .1f && *amax >= small_val && *amax <= large)
+    if(*rowcnd >= .1f && *amax >= small_val && *amax <= large)
     {
         /* No row scaling */
         if(*colcnd >= .1f)
@@ -232,10 +233,10 @@ void claqge_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__;
                 i__5 = i__ + j * a_dim1;
-                q__1.real = r__[i__4] * a[i__5].real;
-                q__1.imag = r__[i__4] * a[i__5].imag; // , expr subst
-                a[i__3].real = q__1.real;
-                a[i__3].imag = q__1.imag; // , expr subst
+                q__1.r = r__[i__4] * a[i__5].r;
+                q__1.i = r__[i__4] * a[i__5].i; // , expr subst
+                a[i__3].r = q__1.r;
+                a[i__3].i = q__1.i; // , expr subst
                 /* L30: */
             }
             /* L40: */

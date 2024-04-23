@@ -123,12 +123,14 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *tau, real *c__, integer *ldc, real *work)
+void slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *tau, real *c__,
+            integer *ldc, real *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slarf inputs: side %c, m %d, n %d, incv %d, ldc %d",*side, *m, *n, *incv, *ldc);
+    snprintf(buffer, 256, "slarf inputs: side %c, m %d, n %d, incv %d, ldc %d", *side, *m, *n,
+             *incv, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -138,13 +140,18 @@ void slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *ta
     aocl_int64_t i__;
     logical applyleft;
     extern /* Subroutine */
-    void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
+        void
+        sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+              integer *);
     extern logical lsame_(char *, char *, integer, integer);
     integer lastc;
     extern /* Subroutine */
-    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+               real *, integer *);
     integer lastv;
-    extern integer ilaslc_(integer *, integer *, real *, integer *), ilaslr_( integer *, integer *, real *, integer *);
+    extern integer ilaslc_(integer *, integer *, real *, integer *),
+        ilaslr_(integer *, integer *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -219,12 +226,11 @@ void slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *ta
         if(lastv > 0)
         {
             /* w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1) */
-            aocl_blas_sgemv("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1], incv,
-                            &c_b5, &work[1], &c__1);
+            sgemv_("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1], incv, &c_b5,
+                   &work[1], &c__1);
             /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T */
             r__1 = -(*tau);
-            aocl_blas_sger(&lastv, &lastc, &r__1, &v[1], incv, &work[1], &c__1, &c__[c_offset],
-                           ldc);
+            sger_(&lastv, &lastc, &r__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
         }
     }
     else
@@ -233,12 +239,11 @@ void slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *ta
         if(lastv > 0)
         {
             /* w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1) */
-            aocl_blas_sgemv("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[1], incv,
-                            &c_b5, &work[1], &c__1);
+            sgemv_("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[1], incv, &c_b5,
+                   &work[1], &c__1);
             /* C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**T */
             r__1 = -(*tau);
-            aocl_blas_sger(&lastc, &lastv, &r__1, &work[1], &c__1, &v[1], incv, &c__[c_offset],
-                           ldc);
+            sger_(&lastc, &lastv, &r__1, &work[1], &c__1, &v[1], incv, &c__[c_offset], ldc);
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

@@ -186,10 +186,13 @@ the corresponding */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlarzt_(char *direct, char *storev, integer *n, integer * k, doublereal *v, integer *ldv, doublereal *tau, doublereal *t, integer *ldt)
+void dlarzt_(char *direct, char *storev, integer *n, integer *k, doublereal *v, integer *ldv,
+             doublereal *tau, doublereal *t, integer *ldt)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlarzt inputs: direct %c, storev %c, n %" FLA_IS ", k %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS "",*direct, *storev, *n, *k, *ldv, *ldt);
+    AOCL_DTL_SNPRINTF("dlarzt inputs: direct %c, storev %c, n %" FLA_IS ", k %" FLA_IS
+                      ", ldv %" FLA_IS ", ldt %" FLA_IS "",
+                      *direct, *storev, *n, *k, *ldv, *ldt);
     /* System generated locals */
     aocl_int64_t t_dim1, t_offset, v_dim1, v_offset, i__1;
     doublereal d__1;
@@ -197,7 +200,11 @@ void dlarzt_(char *direct, char *storev, integer *n, integer * k, doublereal *v,
     integer i__, j, info;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *),
+        dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -227,11 +234,11 @@ void dlarzt_(char *direct, char *storev, integer *n, integer * k, doublereal *v,
     t -= t_offset;
     /* Function Body */
     info = 0;
-    if (! lsame_(direct, "B", 1, 1))
+    if(!lsame_(direct, "B", 1, 1))
     {
         info = -1;
     }
-    else if (! lsame_(storev, "R", 1, 1))
+    else if(!lsame_(storev, "R", 1, 1))
     {
         info = -2;
     }
@@ -262,11 +269,12 @@ void dlarzt_(char *direct, char *storev, integer *n, integer * k, doublereal *v,
                 /* T(i+1:k,i) = - tau(i) * V(i+1:k,1:n) * V(i,1:n)**T */
                 i__1 = *k - i__;
                 d__1 = -tau[i__];
-                aocl_blas_dgemv("No transpose", &i__1, n, &d__1, &v[i__ + 1 + v_dim1], ldv,
-                                &v[i__ + v_dim1], ldv, &c_b8, &t[i__ + 1 + i__ * t_dim1], &c__1);
+                dgemv_("No transpose", &i__1, n, &d__1, &v[i__ + 1 + v_dim1], ldv, &v[i__ + v_dim1],
+                       ldv, &c_b8, &t[i__ + 1 + i__ * t_dim1], &c__1);
                 /* T(i+1:k,i) = T(i+1:k,i+1:k) * T(i+1:k,i) */
                 i__1 = *k - i__;
-                dtrmv_("Lower", "No transpose", "Non-unit", &i__1, &t[i__ + 1 + (i__ + 1) * t_dim1], ldt, &t[i__ + 1 + i__ * t_dim1], &c__1);
+                dtrmv_("Lower", "No transpose", "Non-unit", &i__1, &t[i__ + 1 + (i__ + 1) * t_dim1],
+                       ldt, &t[i__ + 1 + i__ * t_dim1], &c__1);
             }
             t[i__ + i__ * t_dim1] = tau[i__];
         }

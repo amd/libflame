@@ -146,7 +146,7 @@ LDA >= fla_max(1,N) if SIDE = 'R'. */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If SIDE = 'L', LWORK >= fla_max(1,N);
-*/
+ */
 /* > if SIDE = 'R', LWORK >= fla_max(1,M). */
 /* > For optimum performance LWORK >= N*NB if SIDE = 'L', and */
 /* > LWORK >= M*NB if SIDE = 'R', where NB is the optimal */
@@ -175,7 +175,9 @@ the routine */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, doublereal *a, integer *lda, doublereal *tau, doublereal * c__, integer *ldc, doublereal *work, integer *lwork, integer *info)
+void dormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, doublereal *a,
+                integer *lda, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work,
+                integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
@@ -190,10 +192,15 @@ void dormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, dou
     integer iinfo;
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void dormql_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dormqr_fla(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dormql_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, doublereal *, integer *, doublereal *, integer *, integer *),
+        dormqr_fla(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                   doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -240,15 +247,15 @@ void dormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, dou
         nq = *n;
         nw = *m;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "T", 1, 1))
+    else if(!lsame_(trans, "N", 1, 1) && !lsame_(trans, "T", 1, 1))
     {
         *info = -3;
     }
@@ -260,15 +267,15 @@ void dormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, dou
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,nq))
+    else if(*lda < fla_max(1, nq))
     {
         *info = -7;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -10;
     }
-    else if (*lwork < fla_max(1,nw) && ! lquery)
+    else if(*lwork < fla_max(1, nw) && !lquery)
     {
         *info = -12;
     }
@@ -304,8 +311,8 @@ void dormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, dou
                 nb = aocl_lapack_ilaenv(&c__1, "DORMQR", ch__1, m, &i__2, &i__3, &c_n1);
             }
         }
-        lwkopt = fla_max(1,nw) * nb;
-        work[1] = (doublereal) lwkopt;
+        lwkopt = fla_max(1, nw) * nb;
+        work[1] = (doublereal)lwkopt;
     }
     if(*info != 0)
     {
@@ -337,8 +344,8 @@ void dormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, dou
     {
         /* Q was determined by a call to DSYTRD with UPLO = 'U' */
         i__2 = nq - 1;
-        aocl_lapack_dormql(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &tau[1],
-                           &c__[c_offset], ldc, &work[1], lwork, &iinfo);
+        dormql_(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &tau[1], &c__[c_offset],
+                ldc, &work[1], lwork, &iinfo);
     }
     else
     {
@@ -357,7 +364,7 @@ void dormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, dou
         dormqr_fla(side, trans, &mi, &ni, &i__2, &a[a_dim1 + 2], lda, &tau[1],
                    &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
     }
-    work[1] = (doublereal) lwkopt;
+    work[1] = (doublereal)lwkopt;
     return;
     /* End of DORMTR */
 }

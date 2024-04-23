@@ -5,7 +5,7 @@
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b11 = 1.;
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief <b> ZHBEV computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for OTHER m atrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -85,7 +85,7 @@ static aocl_int64_t c__1 = 1;
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > */
 /* > On exit, AB is overwritten by values generated during the */
@@ -154,10 +154,14 @@ i */
 /* > \ingroup complex16OTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void zhbev_(char *jobz, char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ldab, doublereal *w, doublecomplex *z__, integer *ldz, doublecomplex *work, doublereal *rwork, integer *info)
+void zhbev_(char *jobz, char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ldab,
+            doublereal *w, doublecomplex *z__, integer *ldz, doublecomplex *work, doublereal *rwork,
+            integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhbev inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS ", ldz %" FLA_IS "",*jobz, *uplo, *n, *kd, *ldab, *ldz);
+    AOCL_DTL_SNPRINTF("zhbev inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS
+                      ", ldz %" FLA_IS "",
+                      *jobz, *uplo, *n, *kd, *ldab, *ldz);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, z_dim1, z_offset, i__1;
     doublereal d__1;
@@ -170,7 +174,8 @@ void zhbev_(char *jobz, char *uplo, integer *n, integer *kd, doublecomplex *ab, 
     aocl_int64_t imax;
     doublereal rmin, rmax;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
     extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
@@ -178,16 +183,25 @@ void zhbev_(char *jobz, char *uplo, integer *n, integer *kd, doublecomplex *ab, 
     extern doublereal dlamch_(char *);
     aocl_int64_t iscale;
     doublereal safmin;
-    extern doublereal zlanhb_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
+    extern doublereal zlanhb_(char *, char *, integer *, integer *, doublecomplex *, integer *,
+                              doublereal *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern /* Subroutine */
-    void dsterf_(integer *, doublereal *, doublereal *, integer *), zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, integer *), zhbtrd_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        dsterf_(integer *, doublereal *, doublereal *, integer *),
+        zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublecomplex *, integer *, integer *),
+        zhbtrd_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *,
+                doublereal *, doublecomplex *, integer *, doublecomplex *, integer *);
     integer indrwk;
     doublereal smlnum;
     extern /* Subroutine */
-    void zsteqr_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublereal *, integer *);
+        void
+        zsteqr_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *,
+                doublereal *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -223,11 +237,11 @@ void zhbev_(char *jobz, char *uplo, integer *n, integer *kd, doublecomplex *ab, 
     wantz = lsame_(jobz, "V", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (lower || lsame_(uplo, "U", 1, 1)))
+    else if(!(lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -2;
     }
@@ -251,13 +265,13 @@ void zhbev_(char *jobz, char *uplo, integer *n, integer *kd, doublecomplex *ab, 
     {
         i__1 = -(*info);
         xerbla_("ZHBEV ", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 1)
@@ -278,7 +292,7 @@ void zhbev_(char *jobz, char *uplo, integer *n, integer *kd, doublecomplex *ab, 
             z__[i__1].real = 1.;
             z__[i__1].imag = 0.; // , expr subst
         }
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants. */
@@ -314,8 +328,8 @@ void zhbev_(char *jobz, char *uplo, integer *n, integer *kd, doublecomplex *ab, 
     }
     /* Call ZHBTRD to reduce Hermitian band matrix to tridiagonal form. */
     inde = 1;
-    aocl_lapack_zhbtrd(jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &rwork[inde], &z__[z_offset],
-                       ldz, &work[1], &iinfo);
+    zhbtrd_(jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &rwork[inde], &z__[z_offset], ldz,
+            &work[1], &iinfo);
     /* For eigenvalues only, call DSTERF. For eigenvectors, call ZSTEQR. */
     if(!wantz)
     {
@@ -324,7 +338,7 @@ void zhbev_(char *jobz, char *uplo, integer *n, integer *kd, doublecomplex *ab, 
     else
     {
         indrwk = inde + *n;
-        aocl_lapack_zsteqr(jobz, n, &w[1], &rwork[inde], &z__[z_offset], ldz, &rwork[indrwk], info);
+        zsteqr_(jobz, n, &w[1], &rwork[inde], &z__[z_offset], ldz, &rwork[indrwk], info);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)

@@ -77,7 +77,7 @@
 /* > stored in the first KD+1 rows of the array. The j-th column */
 /* > of A is stored in the j-th column of the array AB as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > \endverbatim */
 /* > */
@@ -126,10 +126,12 @@
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dpbequ_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab, doublereal *s, doublereal *scond, doublereal *amax, integer *info)
+void dpbequ_(char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab, doublereal *s,
+             doublereal *scond, doublereal *amax, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dpbequ inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",*uplo, *n, *kd, *ldab);
+    AOCL_DTL_SNPRINTF("dpbequ inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",
+                      *uplo, *n, *kd, *ldab);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, i__1;
     doublereal d__1, d__2;
@@ -141,7 +143,8 @@ void dpbequ_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -171,7 +174,7 @@ void dpbequ_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -222,11 +225,11 @@ void dpbequ_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
         /* Computing MIN */
         d__1 = smin;
         d__2 = s[i__]; // , expr subst
-        smin = fla_min(d__1,d__2);
+        smin = fla_min(d__1, d__2);
         /* Computing MAX */
         d__1 = *amax;
         d__2 = s[i__]; // , expr subst
-        *amax = fla_max(d__1,d__2);
+        *amax = fla_max(d__1, d__2);
         /* L10: */
     }
     if(smin <= 0.)

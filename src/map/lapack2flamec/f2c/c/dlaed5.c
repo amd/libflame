@@ -103,10 +103,11 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlaed5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho, doublereal *dlam)
+void dlaed5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho,
+             doublereal *dlam)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaed5 inputs: i__ %" FLA_IS "",*i__);
+    AOCL_DTL_SNPRINTF("dlaed5 inputs: i__ %" FLA_IS "", *i__);
     /* System generated locals */
     doublereal d__1;
     /* Builtin functions */

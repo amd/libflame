@@ -129,16 +129,27 @@ the routine */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dorgql_(integer *m, integer *n, integer *k, doublereal * a, integer *lda, doublereal *tau, doublereal *work, integer *lwork, integer *info)
+void dorgql_(integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau,
+             doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dorgql inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",*m, *n, *k, *lda, *lwork);
+    AOCL_DTL_SNPRINTF("dorgql inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS
+                      ", lwork %" FLA_IS "",
+                      *m, *n, *k, *lda, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
     integer i__, j, l, ib, nb, kk, nx, iws, nbmin, iinfo;
     extern /* Subroutine */
-    void dorg2l_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dorg2l_(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, integer *),
+        dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *,
+                integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+                integer *),
+        dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
@@ -185,7 +196,7 @@ void dorgql_(integer *m, integer *n, integer *k, doublereal * a, integer *lda, d
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
@@ -200,8 +211,8 @@ void dorgql_(integer *m, integer *n, integer *k, doublereal * a, integer *lda, d
             nb = aocl_lapack_ilaenv(&c__1, "DORGQL", " ", m, n, k, &c_n1);
             lwkopt = *n * nb;
         }
-        work[1] = (doublereal) lwkopt;
-        if (*lwork < fla_max(1,*n) && ! lquery)
+        work[1] = (doublereal)lwkopt;
+        if(*lwork < fla_max(1, *n) && !lquery)
         {
             *info = -8;
         }
@@ -233,8 +244,8 @@ void dorgql_(integer *m, integer *n, integer *k, doublereal * a, integer *lda, d
         /* Computing MAX */
         i__1 = 0;
         i__2 = ilaenv_(&c__3, "DORGQL", " ", m, n, k, &c_n1); // , expr subst
-        nx = fla_max(i__1,i__2);
-        if (nx < *k)
+        nx = fla_max(i__1, i__2);
+        if(nx < *k)
         {
             /* Determine if workspace is large enough for blocked code. */
             ldwork = *n;
@@ -247,7 +258,7 @@ void dorgql_(integer *m, integer *n, integer *k, doublereal * a, integer *lda, d
                 /* Computing MAX */
                 i__1 = 2;
                 i__2 = ilaenv_(&c__2, "DORGQL", " ", m, n, k, &c_n1); // , expr subst
-                nbmin = fla_max(i__1,i__2);
+                nbmin = fla_max(i__1, i__2);
             }
         }
     }
@@ -258,7 +269,7 @@ void dorgql_(integer *m, integer *n, integer *k, doublereal * a, integer *lda, d
         /* Computing MIN */
         i__1 = *k;
         i__2 = (*k - nx + nb - 1) / nb * nb; // , expr subst
-        kk = fla_min(i__1,i__2);
+        kk = fla_min(i__1, i__2);
         /* Set A(m-kk+1:m,1:n-kk) to zero. */
         i__1 = *n - kk;
         for(j = 1; j <= i__1; ++j)
@@ -280,7 +291,7 @@ void dorgql_(integer *m, integer *n, integer *k, doublereal * a, integer *lda, d
     i__1 = *m - kk;
     i__2 = *n - kk;
     i__3 = *k - kk;
-    aocl_lapack_dorg2l(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
+    dorg2l_(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
     if(kk > 0)
     {
         /* Use blocked code */
@@ -291,26 +302,25 @@ void dorgql_(integer *m, integer *n, integer *k, doublereal * a, integer *lda, d
             /* Computing MIN */
             i__3 = nb;
             i__4 = *k - i__ + 1; // , expr subst
-            ib = fla_min(i__3,i__4);
-            if (*n - *k + i__ > 1)
+            ib = fla_min(i__3, i__4);
+            if(*n - *k + i__ > 1)
             {
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i+ib-1) . . . H(i+1) H(i) */
                 i__3 = *m - *k + i__ + ib - 1;
-                aocl_lapack_dlarft("Backward", "Columnwise", &i__3, &ib,
-                                   &a[(*n - *k + i__) * a_dim1 + 1], lda, &tau[i__], &work[1],
-                                   &ldwork);
+                dlarft_("Backward", "Columnwise", &i__3, &ib, &a[(*n - *k + i__) * a_dim1 + 1], lda,
+                        &tau[i__], &work[1], &ldwork);
                 /* Apply H to A(1:m-k+i+ib-1,1:n-k+i-1) from the left */
                 i__3 = *m - *k + i__ + ib - 1;
                 i__4 = *n - *k + i__ - 1;
-                aocl_lapack_dlarfb("Left", "No transpose", "Backward", "Columnwise", &i__3, &i__4,
-                                   &ib, &a[(*n - *k + i__) * a_dim1 + 1], lda, &work[1], &ldwork,
-                                   &a[a_offset], lda, &work[ib + 1], &ldwork);
+                dlarfb_("Left", "No transpose", "Backward", "Columnwise", &i__3, &i__4, &ib,
+                        &a[(*n - *k + i__) * a_dim1 + 1], lda, &work[1], &ldwork, &a[a_offset], lda,
+                        &work[ib + 1], &ldwork);
             }
             /* Apply H to rows 1:m-k+i+ib-1 of current block */
             i__3 = *m - *k + i__ + ib - 1;
-            aocl_lapack_dorg2l(&i__3, &ib, &ib, &a[(*n - *k + i__) * a_dim1 + 1], lda, &tau[i__],
-                               &work[1], &iinfo);
+            dorg2l_(&i__3, &ib, &ib, &a[(*n - *k + i__) * a_dim1 + 1], lda, &tau[i__], &work[1],
+                    &iinfo);
             /* Set rows m-k+i+ib:m of current block to zero */
             i__3 = *n - *k + i__ + ib - 1;
             for(j = *n - *k + i__; j <= i__3; ++j)
@@ -326,7 +336,7 @@ void dorgql_(integer *m, integer *n, integer *k, doublereal * a, integer *lda, d
             /* L50: */
         }
     }
-    work[1] = (doublereal) iws;
+    work[1] = (doublereal)iws;
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DORGQL */

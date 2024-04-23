@@ -108,12 +108,15 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cungl2_(integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau, complex *work, integer *info)
+void cungl2_(integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau,
+             complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"cungl2 inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",*m, *n, *k, *lda);
+    snprintf(buffer, 256,
+             "cungl2 inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "", *m, *n,
+             *k, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -124,7 +127,12 @@ void cungl2_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
     /* Local variables */
     integer i__, j, l;
     extern /* Subroutine */
-    void cscal_(integer *, complex *, complex *, integer *), clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        cscal_(integer *, complex *, complex *, integer *),
+        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+               complex *),
+        clacgv_(integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -164,7 +172,7 @@ void cungl2_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
@@ -210,7 +218,7 @@ void cungl2_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
         if(i__ < *n)
         {
             i__1 = *n - i__;
-            aocl_lapack_clacgv(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda);
+            clacgv_(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda);
             if(i__ < *m)
             {
                 i__1 = i__ + i__ * a_dim1;
@@ -219,8 +227,8 @@ void cungl2_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
                 i__1 = *m - i__;
                 i__2 = *n - i__ + 1;
                 r_cnjg(&q__1, &tau[i__]);
-                aocl_lapack_clarf("Right", &i__1, &i__2, &a[i__ + i__ * a_dim1], lda, &q__1,
-                                  &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
+                clarf_("Right", &i__1, &i__2, &a[i__ + i__ * a_dim1], lda, &q__1,
+                       &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
             }
             i__1 = *n - i__;
             i__2 = i__;

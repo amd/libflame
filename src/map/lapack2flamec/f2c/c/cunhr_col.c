@@ -1,11 +1,10 @@
-/* ../netlib/v3.9.0/cunhr_col.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/cunhr_col.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {1.f, 0.f};
 static integer c__1 = 1;
 /* > \brief \b CUNHR_COL */
 /* =========== DOCUMENTATION =========== */
@@ -13,11 +12,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CUNHR_COL + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cunhr_c ol.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cunhr_c
+ * ol.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cunhr_c ol.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cunhr_c
+ * ol.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cunhr_c ol.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cunhr_c
+ * ol.f"> */
 /* > [TXT]</a> */
 /* > */
 /* Definition: */
@@ -263,12 +268,16 @@ INB-by-M}
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, complex *t, integer *ldt, complex *d__, integer * info)
+void cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, complex *t,
+                integer *ldt, complex *d__, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"cunhr_col inputs: m %" FLA_IS ", n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS "", *m, *n, *nb, *lda, *ldt);
+    snprintf(buffer, 256,
+             "cunhr_col inputs: m %" FLA_IS ", n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS
+             ", ldt %" FLA_IS "",
+             *m, *n, *nb, *lda, *ldt);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -277,10 +286,16 @@ void cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, c
     /* Local variables */
     integer nplusone, i__, j, jb, jnb;
     extern /* Subroutine */
-    void claunhr_col_getrfnp_(integer *, integer *, complex *, integer *, complex *, integer *), cscal_(integer *, complex *, complex *, integer *);
+        void
+        claunhr_col_getrfnp_(integer *, integer *, complex *, integer *, complex *, integer *),
+        cscal_(integer *, complex *, complex *, integer *);
     integer iinfo;
     extern /* Subroutine */
-    void ccopy_(integer *, complex *, integer *, complex *, integer *), ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *),
+        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
+               integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer jbtemp1, jbtemp2;
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -311,19 +326,19 @@ void cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, c
     --d__;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0 || *n > *m)
+    else if(*n < 0 || *n > *m)
     {
         *info = -2;
     }
-    else if (*nb < 1)
+    else if(*nb < 1)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
@@ -331,14 +346,14 @@ void cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, c
     {
         /* Computing MAX */
         i__1 = 1;
-        i__2 = fla_min(*nb,*n); // , expr subst
-        if (*ldt < fla_max(i__1,i__2))
+        i__2 = fla_min(*nb, *n); // , expr subst
+        if(*ldt < fla_max(i__1, i__2))
         {
             *info = -7;
         }
     }
     /* Handle error in the input parameters. */
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CUNHR_COL", &i__1, (ftnlen)9);
@@ -346,7 +361,7 @@ void cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, c
         return;
     }
     /* Quick return if possible */
-    if (fla_min(*m,*n) == 0)
+    if(fla_min(*m, *n) == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -361,7 +376,7 @@ void cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, c
     /* (1-1) Factor V1 and U. */
     claunhr_col_getrfnp_(n, n, &a[a_offset], lda, &d__[1], &iinfo);
     /* (1-2) Solve for V2. */
-    if (*m > *n)
+    if(*m > *n)
     {
         i__1 = *m - *n;
         ctrsm_("R", "U", "N", "N", &i__1, n, &c_b1, &a[a_offset], lda, &a[*n + 1 + a_dim1], lda);
@@ -375,14 +390,12 @@ void cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, c
     nplusone = *n + 1;
     i__1 = *n;
     i__2 = *nb;
-    for (jb = 1;
-            i__2 < 0 ? jb >= i__1 : jb <= i__1;
-            jb += i__2)
+    for(jb = 1; i__2 < 0 ? jb >= i__1 : jb <= i__1; jb += i__2)
     {
         /* (2-0) Determine the column block size JNB. */
         /* Computing MIN */
         i__3 = nplusone - jb;
-        jnb = fla_min(i__3,*nb);
+        jnb = fla_min(i__3, *nb);
         /* (2-1) Copy the upper-triangular part of the current JNB-by-JNB */
         /* diagonal block U(JB) (of the N-by-N matrix U) stored */
         /* in A(JB:JB+JNB-1,JB:JB+JNB-1) into the upper-triangular part */
@@ -390,12 +403,10 @@ void cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, c
         /* column-by-column, total JNB*(JNB+1)/2 elements. */
         jbtemp1 = jb - 1;
         i__3 = jb + jnb - 1;
-        for (j = jb;
-                j <= i__3;
-                ++j)
+        for(j = jb; j <= i__3; ++j)
         {
             i__4 = j - jbtemp1;
-            ccopy_(&i__4, &a[jb + j * a_dim1], &c__1, &t[j * t_dim1 + 1], & c__1);
+            ccopy_(&i__4, &a[jb + j * a_dim1], &c__1, &t[j * t_dim1 + 1], &c__1);
         }
         /* (2-2) Perform on the upper-triangular part of the current */
         /* JNB-by-JNB diagonal block U(JB) (of the N-by-N matrix U) stored */
@@ -408,12 +419,10 @@ void cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, c
         /* U(JB) according to the sign of the diagonal element of the block */
         /* S(JB), i.e. S(J,J) that is stored in the array element D(J). */
         i__3 = jb + jnb - 1;
-        for (j = jb;
-                j <= i__3;
-                ++j)
+        for(j = jb; j <= i__3; ++j)
         {
             i__4 = j;
-            if (d__[i__4].r == 1.f && d__[i__4].i == 0.f)
+            if(d__[i__4].r == 1.f && d__[i__4].i == 0.f)
             {
                 i__4 = j - jbtemp1;
                 q__1.r = -1.f;
@@ -431,11 +440,11 @@ void cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, c
         /* The N-by-N matrix V1 is the upper part */
         /* of the M-by-N lower-trapezoidal matrix V */
         /* stored in A(1:M,1:N);
-        */
+         */
         /* B(JB) is a JNB-by-JNB upper-triangular right-hand */
         /* side block, B(JB) = (-1)*U(JB)*S(JB), and */
         /* B(JB) is stored in T(1:JNB,JB:JB+JNB-1);
-        */
+         */
         /* X(JB) is a JNB-by-JNB upper-triangular solution */
         /* block, X(JB) is the upper-triangular block */
         /* reflector T(JB), and X(JB) is stored */
@@ -452,14 +461,10 @@ void cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, c
         /* (2-3a) Set the elements to zero. */
         jbtemp2 = jb - 2;
         i__3 = jb + jnb - 2;
-        for (j = jb;
-                j <= i__3;
-                ++j)
+        for(j = jb; j <= i__3; ++j)
         {
             i__4 = *nb;
-            for (i__ = j - jbtemp2;
-                    i__ <= i__4;
-                    ++i__)
+            for(i__ = j - jbtemp2; i__ <= i__4; ++i__)
             {
                 i__5 = i__ + j * t_dim1;
                 t[i__5].r = 0.f;
@@ -467,11 +472,11 @@ void cunhr_col_(integer *m, integer *n, integer *nb, complex *a, integer *lda, c
             }
         }
         /* (2-3b) Perform the triangular solve. */
-        ctrsm_("R", "L", "C", "U", &jnb, &jnb, &c_b1, &a[jb + jb * a_dim1], lda, &t[jb * t_dim1 + 1], ldt);
+        ctrsm_("R", "L", "C", "U", &jnb, &jnb, &c_b1, &a[jb + jb * a_dim1], lda,
+               &t[jb * t_dim1 + 1], ldt);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CUNHR_COL */
 }
 /* cunhr_col__ */
-

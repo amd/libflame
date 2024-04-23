@@ -1,4 +1,5 @@
 #include "FLA_f2c.h"
+#include "FLA_lapack2flame_return_defs.h"
 int cgetf2_check(integer *m, integer *n, scomplex *a, integer *lda, integer *ipiv, integer *info)
 {
     /* System generated locals */
@@ -18,7 +19,7 @@ int cgetf2_check(integer *m, integer *n, scomplex *a, integer *lda, integer *ipi
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }

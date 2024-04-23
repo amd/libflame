@@ -136,7 +136,8 @@ static real c_b4 = 1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slasv2_(real *f, real *g, real *h__, real *ssmin, real * ssmax, real *snr, real *csr, real *snl, real *csl)
+void slasv2_(real *f, real *g, real *h__, real *ssmin, real *ssmax, real *snr, real *csr, real *snl,
+             real *csl)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
@@ -190,7 +191,7 @@ void slasv2_(real *f, real *g, real *h__, real *ssmin, real * ssmax, real *snr, 
     }
     gt = *g;
     ga = f2c_abs(gt);
-    if (ga == 0.f)
+    if(ga == 0.f)
     {
         /* Diagonal matrix */
         *ssmin = ha;

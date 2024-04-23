@@ -102,9 +102,9 @@ void cla_lin_berr_(integer *n, integer *nz, integer *nrhs, complex *res, real *a
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cla_lin_berr inputs: n %lld, nz %lld, nrhs %lld",*n, *nz, *nrhs);
+    snprintf(buffer, 256, "cla_lin_berr inputs: n %lld, nz %lld, nrhs %lld", *n, *nz, *nrhs);
 #else
-    snprintf(buffer, 256,"cla_lin_berr inputs: n %d, nz %d, nrhs %d",*n, *nz, *nrhs);
+    snprintf(buffer, 256, "cla_lin_berr inputs: n %d, nz %d, nrhs %d", *n, *nz, *nrhs);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -162,7 +162,8 @@ void cla_lin_berr_(integer *n, integer *nz, integer *nrhs, complex *res, real *a
             if(ayb[i__ + j * ayb_dim1] != 0.f)
             {
                 i__3 = i__ + j * res_dim1;
-                r__3 = (r__1 = res[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&res[ i__ + j * res_dim1]), f2c_abs(r__2));
+                r__3 = (r__1 = res[i__3].r, f2c_abs(r__1))
+                       + (r__2 = r_imag(&res[i__ + j * res_dim1]), f2c_abs(r__2));
                 q__3.r = r__3;
                 q__3.i = 0.f; // , expr subst
                 q__2.r = safe1 + q__3.r;
@@ -173,7 +174,7 @@ void cla_lin_berr_(integer *n, integer *nz, integer *nrhs, complex *res, real *a
                 tmp = q__1.real;
                 /* Computing MAX */
                 r__1 = berr[j];
-                berr[j] = fla_max(r__1,tmp);
+                berr[j] = fla_max(r__1, tmp);
             }
             /* If AYB is exactly 0.0 (and if computed by CLA_yyAMV), then we know */
             /* the true residual also must be exactly 0.0. */

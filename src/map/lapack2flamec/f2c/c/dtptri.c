@@ -117,23 +117,26 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dtptri_(char *uplo, char *diag, integer *n, doublereal * ap, integer *info)
+void dtptri_(char *uplo, char *diag, integer *n, doublereal *ap, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dtptri inputs: uplo %c, diag %c, n %" FLA_IS "",*uplo, *diag, *n);
+    AOCL_DTL_SNPRINTF("dtptri inputs: uplo %c, diag %c, n %" FLA_IS "", *uplo, *diag, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     /* Local variables */
     aocl_int64_t j, jc, jj;
     doublereal ajj;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer jclast;
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -162,11 +165,11 @@ void dtptri_(char *uplo, char *diag, integer *n, doublereal * ap, integer *info)
     upper = lsame_(uplo, "U", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
     jclast = 0;
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -2;
     }
@@ -234,7 +237,7 @@ void dtptri_(char *uplo, char *diag, integer *n, doublereal * ap, integer *info)
             }
             /* Compute elements 1:j-1 of j-th column. */
             i__2 = j - 1;
-            aocl_blas_dtpmv("Upper", "No transpose", diag, &i__2, &ap[1], &ap[jc], &c__1);
+            dtpmv_("Upper", "No transpose", diag, &i__2, &ap[1], &ap[jc], &c__1);
             i__2 = j - 1;
             aocl_blas_dscal(&i__2, &ajj, &ap[jc], &c__1);
             jc += j;
@@ -260,8 +263,7 @@ void dtptri_(char *uplo, char *diag, integer *n, doublereal * ap, integer *info)
             {
                 /* Compute elements j+1:n of j-th column. */
                 i__1 = *n - j;
-                aocl_blas_dtpmv("Lower", "No transpose", diag, &i__1, &ap[jclast], &ap[jc + 1],
-                                &c__1);
+                dtpmv_("Lower", "No transpose", diag, &i__1, &ap[jclast], &ap[jc + 1], &c__1);
                 i__1 = *n - j;
                 aocl_blas_dscal(&i__1, &ajj, &ap[jc + 1], &c__1);
             }

@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief <b> SGBSVX computes the solution to system of linear equations A * X = B for GB
  * matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -371,16 +371,22 @@ if EQUED = 'N' or 'R', C */
 /* > \ingroup realGBsolve */
 /* ===================================================================== */
 /* Subroutine */
-void sgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, real *ab, integer *ldab, real *afb, integer *ldafb, integer *ipiv, char *equed, real *r__, real *c__, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork, integer *info)
+void sgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, real *ab,
+             integer *ldab, real *afb, integer *ldafb, integer *ipiv, char *equed, real *r__,
+             real *c__, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *ferr,
+             real *berr, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sgbsvx inputs: fact %c, trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldafb %d, equed %c, ldb %d, ldx %d",*fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx);
+    snprintf(buffer, 256,
+             "sgbsvx inputs: fact %c, trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldafb %d, "
+             "equed %c, ldb %d, ldx %d",
+             *fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
+    integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
         i__2, i__3, i__4, i__5;
     real r__1, r__2, r__3;
     /* Local variables */
@@ -391,26 +397,43 @@ void sgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     real rcmin, rcmax, anorm;
     logical equil;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     real colcnd;
-    extern real slangb_(char *, integer *, integer *, integer *, real *, integer *, real *), slamch_(char *);
+    extern real slangb_(char *, integer *, integer *, integer *, real *, integer *, real *),
+        slamch_(char *);
     extern /* Subroutine */
-    void slaqgb_(integer *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, char *);
+        void
+        slaqgb_(integer *, integer *, integer *, integer *, real *, integer *, real *, real *,
+                real *, real *, real *, char *);
     logical nofact;
     extern /* Subroutine */
-    void sgbcon_(char *, integer *, integer *, integer *, real *, integer *, integer *, real *, real *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sgbcon_(char *, integer *, integer *, integer *, real *, integer *, integer *, real *,
+                real *, real *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern real slantb_(char *, char *, char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    void sgbequ_(integer *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *);
+        void
+        sgbequ_(integer *, integer *, integer *, integer *, real *, integer *, real *, real *,
+                real *, real *, real *, integer *);
     integer infequ;
     logical colequ;
     extern /* Subroutine */
-    void sgbrfs_(char *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), sgbtrf_(integer *, integer *, integer *, integer *, real *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+        void
+        sgbrfs_(char *, integer *, integer *, integer *, integer *, real *, integer *, real *,
+                integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *,
+                integer *, integer *),
+        sgbtrf_(integer *, integer *, integer *, integer *, real *, integer *, integer *,
+                integer *),
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     real rowcnd;
     logical notran;
     extern /* Subroutine */
-    void sgbtrs_(char *, integer *, integer *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        sgbtrs_(char *, integer *, integer *, integer *, integer *, real *, integer *, integer *,
+                real *, integer *, integer *);
     real smlnum;
     logical rowequ;
     real rpvgrw;
@@ -464,7 +487,7 @@ void sgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     notran = lsame_(trans, "N", 1, 1);
     smlnum = 0.f;
     bignum = 0.f;
-    if (nofact || equil)
+    if(nofact || equil)
     {
         *(unsigned char *)equed = 'N';
         rowequ = FALSE_;
@@ -478,11 +501,11 @@ void sgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
         bignum = 1.f / smlnum;
     }
     /* Test the input parameters. */
-    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -510,7 +533,7 @@ void sgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     {
         *info = -10;
     }
-    else if (lsame_(fact, "F", 1, 1) && ! (rowequ || colequ || lsame_(equed, "N", 1, 1)))
+    else if(lsame_(fact, "F", 1, 1) && !(rowequ || colequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -12;
     }
@@ -526,11 +549,11 @@ void sgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
                 /* Computing MIN */
                 r__1 = rcmin;
                 r__2 = r__[j]; // , expr subst
-                rcmin = fla_min(r__1,r__2);
+                rcmin = fla_min(r__1, r__2);
                 /* Computing MAX */
                 r__1 = rcmax;
                 r__2 = r__[j]; // , expr subst
-                rcmax = fla_max(r__1,r__2);
+                rcmax = fla_max(r__1, r__2);
                 /* L10: */
             }
             if(rcmin <= 0.f)
@@ -539,7 +562,7 @@ void sgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
             }
             else if(*n > 0)
             {
-                rowcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+                rowcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
             }
             else
             {
@@ -556,11 +579,11 @@ void sgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
                 /* Computing MIN */
                 r__1 = rcmin;
                 r__2 = c__[j]; // , expr subst
-                rcmin = fla_min(r__1,r__2);
+                rcmin = fla_min(r__1, r__2);
                 /* Computing MAX */
                 r__1 = rcmax;
                 r__2 = c__[j]; // , expr subst
-                rcmax = fla_max(r__1,r__2);
+                rcmax = fla_max(r__1, r__2);
                 /* L20: */
             }
             if(rcmin <= 0.f)
@@ -569,7 +592,7 @@ void sgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
             }
             else if(*n > 0)
             {
-                colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+                colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
             }
             else
             {
@@ -578,11 +601,11 @@ void sgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
         }
         if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -16;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -18;
             }
@@ -598,12 +621,13 @@ void sgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        aocl_lapack_sgbequ(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], &rowcnd, &colcnd,
-                           &amax, &infequ);
+        sgbequ_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], &rowcnd, &colcnd, &amax,
+                &infequ);
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            slaqgb_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], & rowcnd, &colcnd, &amax, equed);
+            slaqgb_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], &rowcnd, &colcnd, &amax,
+                    equed);
             rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
             colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }
@@ -648,13 +672,13 @@ void sgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
         {
             /* Computing MAX */
             i__2 = j - *ku;
-            j1 = fla_max(i__2,1);
+            j1 = fla_max(i__2, 1);
             /* Computing MIN */
             i__2 = j + *kl;
-            j2 = fla_min(i__2,*n);
+            j2 = fla_min(i__2, *n);
             i__2 = j2 - j1 + 1;
-            aocl_blas_scopy(&i__2, &ab[*ku + 1 - j + j1 + j * ab_dim1], &c__1,
-                            &afb[*kl + *ku + 1 - j + j1 + j * afb_dim1], &c__1);
+            scopy_(&i__2, &ab[*ku + 1 - j + j1 + j * ab_dim1], &c__1,
+                   &afb[*kl + *ku + 1 - j + j1 + j * afb_dim1], &c__1);
             /* L70: */
         }
         aocl_lapack_sgbtrf(n, n, kl, ku, &afb[afb_offset], ldafb, &ipiv[1], info);
@@ -672,15 +696,13 @@ void sgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
                 /* Computing MIN */
                 i__4 = *n + *ku + 1 - j;
                 i__5 = *kl + *ku + 1; // , expr subst
-                i__3 = fla_min(i__4,i__5);
-                for (i__ = fla_max(i__2,1);
-                        i__ <= i__3;
-                        ++i__)
+                i__3 = fla_min(i__4, i__5);
+                for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
                 {
                     /* Computing MAX */
                     r__2 = anorm;
-                    r__3 = (r__1 = ab[i__ + j * ab_dim1], f2c_abs( r__1)); // , expr subst
-                    anorm = fla_max(r__2,r__3);
+                    r__3 = (r__1 = ab[i__ + j * ab_dim1], f2c_abs(r__1)); // , expr subst
+                    anorm = fla_max(r__2, r__3);
                     /* L80: */
                 }
                 /* L90: */
@@ -688,12 +710,13 @@ void sgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
             /* Computing MIN */
             i__3 = *info - 1;
             i__2 = *kl + *ku; // , expr subst
-            i__1 = fla_min(i__3,i__2);
+            i__1 = fla_min(i__3, i__2);
             /* Computing MAX */
             i__4 = 1;
             i__5 = *kl + *ku + 2 - *info; // , expr subst
-            rpvgrw = slantb_("M", "U", "N", info, &i__1, &afb[fla_max(i__4,i__5) + afb_dim1], ldafb, &work[1]);
-            if (rpvgrw == 0.f)
+            rpvgrw = slantb_("M", "U", "N", info, &i__1, &afb[fla_max(i__4, i__5) + afb_dim1],
+                             ldafb, &work[1]);
+            if(rpvgrw == 0.f)
             {
                 rpvgrw = 1.f;
             }
@@ -719,7 +742,7 @@ void sgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     }
     anorm = aocl_lapack_slangb(norm, n, kl, ku, &ab[ab_offset], ldab, &work[1]);
     i__1 = *kl + *ku;
-    rpvgrw = aocl_lapack_slantb("M", "U", "N", n, &i__1, &afb[afb_offset], ldafb, &work[1]);
+    rpvgrw = slantb_("M", "U", "N", n, &i__1, &afb[afb_offset], ldafb, &work[1]);
     if(rpvgrw == 0.f)
     {
         rpvgrw = 1.f;
@@ -729,17 +752,15 @@ void sgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
         rpvgrw = aocl_lapack_slangb("M", n, kl, ku, &ab[ab_offset], ldab, &work[1]) / rpvgrw;
     }
     /* Compute the reciprocal of the condition number of A. */
-    aocl_lapack_sgbcon(norm, n, kl, ku, &afb[afb_offset], ldafb, &ipiv[1], &anorm, rcond, &work[1],
-                       &iwork[1], info);
+    sgbcon_(norm, n, kl, ku, &afb[afb_offset], ldafb, &ipiv[1], &anorm, rcond, &work[1], &iwork[1],
+            info);
     /* Compute the solution matrix X. */
-    aocl_lapack_slacpy("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
-    aocl_lapack_sgbtrs(trans, n, kl, ku, nrhs, &afb[afb_offset], ldafb, &ipiv[1], &x[x_offset], ldx,
-                       info);
+    slacpy_("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
+    sgbtrs_(trans, n, kl, ku, nrhs, &afb[afb_offset], ldafb, &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    aocl_lapack_sgbrfs(trans, n, kl, ku, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb,
-                       &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1],
-                       &iwork[1], info);
+    sgbrfs_(trans, n, kl, ku, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb, &ipiv[1],
+            &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(notran)

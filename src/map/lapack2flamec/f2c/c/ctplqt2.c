@@ -1,16 +1,11 @@
-/* ../netlib/v3.9.0/ctplqt2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/ctplqt2.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    0.f,0.f
-}
-;
-static complex c_b2 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {0.f, 0.f};
+static complex c_b2 = {1.f, 0.f};
 /* > \brief \b CTPLQT2 */
 /* Definition: */
 /* =========== */
@@ -164,15 +159,18 @@ that is, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctplqt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, complex *b, integer *ldb, complex *t, integer *ldt, integer *info)
+void ctplqt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, complex *b,
+              integer *ldb, complex *t, integer *ldt, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctplqt2 inputs: m %lld, n %lld, l %lld, lda %lld, ldb %lld, ldt %lld",*m, *n, *l, *lda, *ldb, *ldt);
+    snprintf(buffer, 256, "ctplqt2 inputs: m %lld, n %lld, l %lld, lda %lld, ldb %lld, ldt %lld",
+             *m, *n, *l, *lda, *ldb, *ldt);
 #else
-    snprintf(buffer, 256,"ctplqt2 inputs: m %d, n %d, l %d, lda %d, ldb %d, ldt %d",*m, *n, *l, *lda, *ldb, *ldt);
+    snprintf(buffer, 256, "ctplqt2 inputs: m %d, n %d, l %d, lda %d, ldb %d, ldt %d", *m, *n, *l,
+             *lda, *ldb, *ldt);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -184,10 +182,17 @@ void ctplqt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, comp
     /* Local variables */
     integer i__, j, p, mp, np;
     extern /* Subroutine */
-    void cgerc_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *);
+        void
+        cgerc_(integer *, integer *, complex *, complex *, integer *, complex *, integer *,
+               complex *, integer *);
     complex alpha;
     extern /* Subroutine */
-    void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
+               complex *, complex *, integer *),
+        ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *),
+        clarfg_(integer *, complex *, complex *, integer *, complex *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -219,31 +224,31 @@ void ctplqt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, comp
     t -= t_offset;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*l < 0 || *l > fla_min(*m,*n))
+    else if(*l < 0 || *l > fla_min(*m, *n))
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*m))
+    else if(*ldb < fla_max(1, *m))
     {
         *info = -7;
     }
-    else if (*ldt < fla_max(1,*m))
+    else if(*ldt < fla_max(1, *m))
     {
         *info = -9;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CTPLQT2", &i__1, (ftnlen)7);
@@ -251,30 +256,26 @@ void ctplqt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, comp
         return;
     }
     /* Quick return if possible */
-    if (*n == 0 || *m == 0)
+    if(*n == 0 || *m == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     i__1 = *m;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Generate elementary reflector H(I) to annihilate B(I,:) */
-        p = *n - *l + fla_min(*l,i__);
+        p = *n - *l + fla_min(*l, i__);
         i__2 = p + 1;
         clarfg_(&i__2, &a[i__ + i__ * a_dim1], &b[i__ + b_dim1], ldb, &t[i__ * t_dim1 + 1]);
         i__2 = i__ * t_dim1 + 1;
         r_cnjg(&q__1, &t[i__ * t_dim1 + 1]);
         t[i__2].r = q__1.r;
         t[i__2].i = q__1.i; // , expr subst
-        if (i__ < *m)
+        if(i__ < *m)
         {
             i__2 = p;
-            for (j = 1;
-                    j <= i__2;
-                    ++j)
+            for(j = 1; j <= i__2; ++j)
             {
                 i__3 = i__ + j * b_dim1;
                 r_cnjg(&q__1, &b[i__ + j * b_dim1]);
@@ -283,9 +284,7 @@ void ctplqt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, comp
             }
             /* W(M-I:1) := C(I+1:M,I:N) * C(I,I:N) [use W = T(M,:)] */
             i__2 = *m - i__;
-            for (j = 1;
-                    j <= i__2;
-                    ++j)
+            for(j = 1; j <= i__2; ++j)
             {
                 i__3 = *m + j * t_dim1;
                 i__4 = i__ + j + i__ * a_dim1;
@@ -293,7 +292,8 @@ void ctplqt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, comp
                 t[i__3].i = a[i__4].i; // , expr subst
             }
             i__2 = *m - i__;
-            cgemv_("N", &i__2, &p, &c_b2, &b[i__ + 1 + b_dim1], ldb, &b[i__ + b_dim1], ldb, &c_b2, &t[*m + t_dim1], ldt);
+            cgemv_("N", &i__2, &p, &c_b2, &b[i__ + 1 + b_dim1], ldb, &b[i__ + b_dim1], ldb, &c_b2,
+                   &t[*m + t_dim1], ldt);
             /* C(I+1:M,I:N) = C(I+1:M,I:N) + alpha * C(I,I:N)*W(M-1:1)^H */
             i__2 = i__ * t_dim1 + 1;
             q__1.r = -t[i__2].r;
@@ -301,9 +301,7 @@ void ctplqt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, comp
             alpha.r = q__1.r;
             alpha.i = q__1.i; // , expr subst
             i__2 = *m - i__;
-            for (j = 1;
-                    j <= i__2;
-                    ++j)
+            for(j = 1; j <= i__2; ++j)
             {
                 i__3 = i__ + j + i__ * a_dim1;
                 i__4 = i__ + j + i__ * a_dim1;
@@ -318,11 +316,10 @@ void ctplqt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, comp
             i__2 = *m - i__;
             q__1.r = alpha.r;
             q__1.i = alpha.i; // , expr subst
-            cgerc_(&i__2, &p, &q__1, &t[*m + t_dim1], ldt, &b[i__ + b_dim1], ldb, &b[i__ + 1 + b_dim1], ldb);
+            cgerc_(&i__2, &p, &q__1, &t[*m + t_dim1], ldt, &b[i__ + b_dim1], ldb,
+                   &b[i__ + 1 + b_dim1], ldb);
             i__2 = p;
-            for (j = 1;
-                    j <= i__2;
-                    ++j)
+            for(j = 1; j <= i__2; ++j)
             {
                 i__3 = i__ + j * b_dim1;
                 r_cnjg(&q__1, &b[i__ + j * b_dim1]);
@@ -332,9 +329,7 @@ void ctplqt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, comp
         }
     }
     i__1 = *m;
-    for (i__ = 2;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 2; i__ <= i__1; ++i__)
     {
         /* T(I,1:I-1) := C(I:I-1,1:N)**H * (alpha * C(I,I:N)) */
         i__2 = i__ * t_dim1 + 1;
@@ -343,9 +338,7 @@ void ctplqt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, comp
         alpha.r = q__1.r;
         alpha.i = q__1.i; // , expr subst
         i__2 = i__ - 1;
-        for (j = 1;
-                j <= i__2;
-                ++j)
+        for(j = 1; j <= i__2; ++j)
         {
             i__3 = i__ + j * t_dim1;
             t[i__3].r = 0.f;
@@ -353,17 +346,15 @@ void ctplqt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, comp
         }
         /* Computing MIN */
         i__2 = i__ - 1;
-        p = fla_min(i__2,*l);
+        p = fla_min(i__2, *l);
         /* Computing MIN */
         i__2 = *n - *l + 1;
-        np = fla_min(i__2,*n);
+        np = fla_min(i__2, *n);
         /* Computing MIN */
         i__2 = p + 1;
-        mp = fla_min(i__2,*m);
+        mp = fla_min(i__2, *m);
         i__2 = *n - *l + p;
-        for (j = 1;
-                j <= i__2;
-                ++j)
+        for(j = 1; j <= i__2; ++j)
         {
             i__3 = i__ + j * b_dim1;
             r_cnjg(&q__1, &b[i__ + j * b_dim1]);
@@ -372,9 +363,7 @@ void ctplqt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, comp
         }
         /* Triangular part of B2 */
         i__2 = p;
-        for (j = 1;
-                j <= i__2;
-                ++j)
+        for(j = 1; j <= i__2; ++j)
         {
             i__3 = i__ + j * t_dim1;
             i__4 = i__ + (*n - *l + j) * b_dim1;
@@ -386,16 +375,16 @@ void ctplqt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, comp
         ctrmv_("L", "N", "N", &p, &b[np * b_dim1 + 1], ldb, &t[i__ + t_dim1], ldt);
         /* Rectangular part of B2 */
         i__2 = i__ - 1 - p;
-        cgemv_("N", &i__2, l, &alpha, &b[mp + np * b_dim1], ldb, &b[i__ + np * b_dim1], ldb, &c_b1, &t[i__ + mp * t_dim1], ldt);
+        cgemv_("N", &i__2, l, &alpha, &b[mp + np * b_dim1], ldb, &b[i__ + np * b_dim1], ldb, &c_b1,
+               &t[i__ + mp * t_dim1], ldt);
         /* B1 */
         i__2 = i__ - 1;
         i__3 = *n - *l;
-        cgemv_("N", &i__2, &i__3, &alpha, &b[b_offset], ldb, &b[i__ + b_dim1], ldb, &c_b2, &t[i__ + t_dim1], ldt);
+        cgemv_("N", &i__2, &i__3, &alpha, &b[b_offset], ldb, &b[i__ + b_dim1], ldb, &c_b2,
+               &t[i__ + t_dim1], ldt);
         /* T(1:I-1,I) := T(1:I-1,1:I-1) * T(I,1:I-1) */
         i__2 = i__ - 1;
-        for (j = 1;
-                j <= i__2;
-                ++j)
+        for(j = 1; j <= i__2; ++j)
         {
             i__3 = i__ + j * t_dim1;
             r_cnjg(&q__1, &t[i__ + j * t_dim1]);
@@ -405,9 +394,7 @@ void ctplqt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, comp
         i__2 = i__ - 1;
         ctrmv_("L", "C", "N", &i__2, &t[t_offset], ldt, &t[i__ + t_dim1], ldt);
         i__2 = i__ - 1;
-        for (j = 1;
-                j <= i__2;
-                ++j)
+        for(j = 1; j <= i__2; ++j)
         {
             i__3 = i__ + j * t_dim1;
             r_cnjg(&q__1, &t[i__ + j * t_dim1]);
@@ -415,9 +402,7 @@ void ctplqt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, comp
             t[i__3].i = q__1.i; // , expr subst
         }
         i__2 = *n - *l + p;
-        for (j = 1;
-                j <= i__2;
-                ++j)
+        for(j = 1; j <= i__2; ++j)
         {
             i__3 = i__ + j * b_dim1;
             r_cnjg(&q__1, &b[i__ + j * b_dim1]);
@@ -434,14 +419,10 @@ void ctplqt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, comp
         t[i__2].i = 0.f; // , expr subst
     }
     i__1 = *m;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = *m;
-        for (j = i__ + 1;
-                j <= i__2;
-                ++j)
+        for(j = i__ + 1; j <= i__2; ++j)
         {
             i__3 = i__ + j * t_dim1;
             i__4 = j + i__ * t_dim1;

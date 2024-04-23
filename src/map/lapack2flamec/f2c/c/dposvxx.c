@@ -1,6 +1,9 @@
 #ifdef FLA_ENABLE_XBLAS
-/* ../netlib/dposvxx.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dposvxx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief <b> DPOSVXX computes the solution to system of linear equations A * X = B for PO matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -494,10 +497,19 @@ defaults */
 /* > \ingroup doublePOsolve */
 /* ===================================================================== */
 /* Subroutine */
-void dposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a, integer *lda, doublereal *af, integer *ldaf, char *equed, doublereal *s, doublereal *b, integer *ldb, doublereal * x, integer *ldx, doublereal *rcond, doublereal *rpvgrw, doublereal * berr, integer *n_err_bnds__, doublereal *err_bnds_norm__, doublereal * err_bnds_comp__, integer *nparams, doublereal *params, doublereal * work, integer *iwork, integer *info)
+void dposvxx_(char *fact, char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda,
+              doublereal *af, integer *ldaf, char *equed, doublereal *s, doublereal *b,
+              integer *ldb, doublereal *x, integer *ldx, doublereal *rcond, doublereal *rpvgrw,
+              doublereal *berr, integer *n_err_bnds__, doublereal *err_bnds_norm__,
+              doublereal *err_bnds_comp__, integer *nparams, doublereal *params, doublereal *work,
+              integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dposvxx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS ", n_err_bnds__ %" FLA_IS ", nparams %" FLA_IS "",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx, *n_err_bnds__, *nparams);
+    AOCL_DTL_SNPRINTF("dposvxx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS
+                      ", lda %" FLA_IS ", ldaf %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS
+                      ", n_err_bnds__ %" FLA_IS ", nparams %" FLA_IS "",
+                      *fact, *uplo, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx, *n_err_bnds__,
+                      *nparams);
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset,
         err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1;
@@ -505,21 +517,36 @@ void dposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a,
     /* Local variables */
     integer j;
     doublereal amax, smin, smax;
-    extern doublereal dla_porpvgrw_(char *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *);
+    extern doublereal dla_porpvgrw_(char *, integer *, doublereal *, integer *, doublereal *,
+                                    integer *, doublereal *);
     extern logical lsame_(char *, char *, integer, integer);
     doublereal scond;
     logical equil, rcequ;
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     integer infequ;
     extern /* Subroutine */
-    void dlaqsy_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, char *), dpotrf_(char *, integer *, doublereal *, integer *, integer *);
+        void
+        dlaqsy_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, char *),
+        dpotrf_(char *, integer *, doublereal *, integer *, integer *);
     doublereal smlnum;
     extern /* Subroutine */
-    void dpotrs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dlascl2_(integer *, integer *, doublereal *, doublereal *, integer *), dpoequb_(integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *), dporfsx_( char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
+        void
+        dpotrs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *,
+                integer *),
+        dlascl2_(integer *, integer *, doublereal *, doublereal *, integer *),
+        dpoequb_(integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *,
+                 integer *),
+        dporfsx_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
+                 integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+                 doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *,
+                 doublereal *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -584,11 +611,11 @@ void dposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a,
     /* pivot growth is set here, the rest is initialized in DPORFSX. */
     *rpvgrw = 0.;
     /* Test the input parameters. PARAMS is not tested until DPORFSX. */
-    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    else if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -600,15 +627,15 @@ void dposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a,
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (lsame_(fact, "F", 1, 1) && ! (rcequ || lsame_(equed, "N", 1, 1)))
+    else if(lsame_(fact, "F", 1, 1) && !(rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -9;
     }
@@ -624,11 +651,11 @@ void dposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a,
                 /* Computing MIN */
                 d__1 = smin;
                 d__2 = s[j]; // , expr subst
-                smin = fla_min(d__1,d__2);
+                smin = fla_min(d__1, d__2);
                 /* Computing MAX */
                 d__1 = smax;
                 d__2 = s[j]; // , expr subst
-                smax = fla_max(d__1,d__2);
+                smax = fla_max(d__1, d__2);
                 /* L10: */
             }
             if(smin <= 0.)
@@ -637,7 +664,7 @@ void dposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a,
             }
             else if(*n > 0)
             {
-                scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
+                scond = fla_max(smin, smlnum) / fla_min(smax, bignum);
             }
             else
             {
@@ -646,11 +673,11 @@ void dposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a,
         }
         if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -12;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -14;
             }
@@ -690,7 +717,7 @@ void dposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a,
             /* Pivot in column INFO is exactly 0 */
             /* Compute the reciprocal pivot growth factor of the */
             /* leading rank-deficient INFO columns of A. */
-            *rpvgrw = dla_porpvgrw_(uplo, info, &a[a_offset], lda, &af[ af_offset], ldaf, &work[1]);
+            *rpvgrw = dla_porpvgrw_(uplo, info, &a[a_offset], lda, &af[af_offset], ldaf, &work[1]);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }

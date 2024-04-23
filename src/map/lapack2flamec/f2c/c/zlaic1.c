@@ -132,10 +132,11 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, doublecomplex *w, doublecomplex *gamma, doublereal * sestpr, doublecomplex *s, doublecomplex *c__)
+void zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, doublecomplex *w,
+             doublecomplex *gamma, doublereal *sestpr, doublecomplex *s, doublecomplex *c__)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaic1 inputs: job %" FLA_IS ", j %" FLA_IS "",*job, *j);
+    AOCL_DTL_SNPRINTF("zlaic1 inputs: job %" FLA_IS ", j %" FLA_IS "", *job, *j);
     /* System generated locals */
     doublereal d__1, d__2;
     dcomplex z__1, z__2, z__3, z__4, z__5, z__6;
@@ -150,6 +151,10 @@ void zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, doubl
     doublereal test, zeta1, zeta2;
     dcomplex alpha;
     doublereal norma;
+    extern /* Double Complex */
+        VOID
+        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                   integer *);
     extern doublereal dlamch_(char *);
     doublereal absgam, absalp;
     dcomplex cosine;
@@ -183,14 +188,14 @@ void zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, doubl
     absalp = z_abs(&alpha);
     absgam = z_abs(gamma);
     absest = f2c_dabs(*sest);
-    if (*job == 1)
+    if(*job == 1)
     {
         /* Estimating largest singular value */
         /* special cases */
         if(*sest == 0.)
         {
-            s1 = fla_max(absgam,absalp);
-            if (s1 == 0.)
+            s1 = fla_max(absgam, absalp);
+            if(s1 == 0.)
             {
                 s->real = 0., s->imag = 0.;
                 c__->real = 1., c__->imag = 0.;
@@ -229,7 +234,7 @@ void zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, doubl
         {
             s->r = 1., s->i = 0.;
             c__->r = 0., c__->i = 0.;
-            tmp = fla_max(absest,absalp);
+            tmp = fla_max(absest, absalp);
             s1 = absest / tmp;
             s2 = absalp / tmp;
             *sestpr = tmp * sqrt(s1 * s1 + s2 * s2);
@@ -301,7 +306,7 @@ void zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, doubl
             zeta2 = absgam / absest;
             b = (1. - zeta1 * zeta1 - zeta2 * zeta2) * .5;
             d__1 = zeta1 * zeta1;
-            c__->real = d__1, c__->imag = 0.;
+            c__->r = d__1, c__->i = 0.;
             if(b > 0.)
             {
                 d__1 = b * b;
@@ -368,7 +373,7 @@ void zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, doubl
         if(*sest == 0.)
         {
             *sestpr = 0.;
-            if (fla_max(absgam,absalp) == 0.)
+            if(fla_max(absgam, absalp) == 0.)
             {
                 sine.real = 1.;
                 sine.imag = 0.; // , expr subst
@@ -389,7 +394,7 @@ void zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, doubl
             /* Computing MAX */
             d__1 = z_abs(&sine);
             d__2 = z_abs(&cosine); // , expr subst
-            s1 = fla_max(d__1,d__2);
+            s1 = fla_max(d__1, d__2);
             z__1.r = sine.r / s1;
             z__1.i = sine.i / s1; // , expr subst
             s->r = z__1.r, s->i = z__1.i;
@@ -497,7 +502,7 @@ void zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, doubl
             /* Computing MAX */
             d__1 = zeta1 * zeta1 + 1. + zeta1 * zeta2;
             d__2 = zeta1 * zeta2 + zeta2 * zeta2; // , expr subst
-            norma = fla_max(d__1,d__2);
+            norma = fla_max(d__1, d__2);
             /* See if root is closer to zero or to ONE */
             test = (zeta1 - zeta2) * 2. * (zeta1 + zeta2) + 1.;
             if(test >= 0.)
@@ -535,7 +540,7 @@ void zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, doubl
                 /* root is closer to ONE, shift by that amount */
                 b = (zeta2 * zeta2 + zeta1 * zeta1 - 1.) * .5;
                 d__1 = zeta1 * zeta1;
-                c__->real = d__1, c__->imag = 0.;
+                c__->r = d__1, c__->i = 0.;
                 if(b >= 0.)
                 {
                     z__2.real = -c__->real;

@@ -159,10 +159,14 @@ static doublereal c_b11 = 1.;
 /* > \ingroup doublePTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dptrfs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublereal *df, doublereal *ef, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal *ferr, doublereal *berr, doublereal *work, integer *info)
+void dptrfs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublereal *df,
+             doublereal *ef, doublereal *b, integer *ldb, doublereal *x, integer *ldx,
+             doublereal *ferr, doublereal *berr, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dptrfs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*n, *nrhs, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("dptrfs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS
+                      ", ldx %" FLA_IS "",
+                      *n, *nrhs, *ldb, *ldx);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
     doublereal d__1, d__2, d__3;
@@ -172,15 +176,19 @@ void dptrfs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublere
     aocl_int64_t ix, nz;
     doublereal eps, safe1, safe2;
     extern /* Subroutine */
-    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     integer count;
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal lstres;
     extern /* Subroutine */
-    void dpttrs_(integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+        void
+        dpttrs_(integer *, integer *, doublereal *, doublereal *, doublereal *, integer *,
+                integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -226,11 +234,11 @@ void dptrfs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublere
     {
         *info = -2;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -10;
     }
@@ -269,7 +277,7 @@ void dptrfs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublere
     L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - A * X. Also compute */
         /* f2c_dabs(A)*f2c_dabs(x) + f2c_dabs(b) for use in the backward error bound. */
-        if (*n == 1)
+        if(*n == 1)
         {
             bi = b[j * b_dim1 + 1];
             dx = d__[1] * x[j * x_dim1 + 1];
@@ -314,15 +322,16 @@ void dptrfs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublere
             {
                 /* Computing MAX */
                 d__2 = s;
-                d__3 = (d__1 = work[*n + i__], f2c_dabs(d__1)) / work[ i__]; // , expr subst
-                s = fla_max(d__2,d__3);
+                d__3 = (d__1 = work[*n + i__], f2c_dabs(d__1)) / work[i__]; // , expr subst
+                s = fla_max(d__2, d__3);
             }
             else
             {
                 /* Computing MAX */
                 d__2 = s;
-                d__3 = ((d__1 = work[*n + i__], f2c_dabs(d__1)) + safe1) / (work[i__] + safe1); // , expr subst
-                s = fla_max(d__2,d__3);
+                d__3 = ((d__1 = work[*n + i__], f2c_dabs(d__1)) + safe1)
+                       / (work[i__] + safe1); // , expr subst
+                s = fla_max(d__2, d__3);
             }
             /* L40: */
         }
@@ -335,8 +344,8 @@ void dptrfs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublere
         if(berr[j] > eps && berr[j] * 2. <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            aocl_lapack_dpttrs(n, &c__1, &df[1], &ef[1], &work[*n + 1], n, info);
-            aocl_blas_daxpy(n, &c_b11, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            dpttrs_(n, &c__1, &df[1], &ef[1], &work[*n + 1], n, info);
+            daxpy_(n, &c_b11, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;
@@ -401,7 +410,7 @@ void dptrfs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublere
             /* Computing MAX */
             d__2 = lstres;
             d__3 = (d__1 = x[i__ + j * x_dim1], f2c_dabs(d__1)); // , expr subst
-            lstres = fla_max(d__2,d__3);
+            lstres = fla_max(d__2, d__3);
             /* L80: */
         }
         if(lstres != 0.)

@@ -126,7 +126,7 @@ void slae2_(real *a, real *b, real *c__, real *rt1, real *rt2)
     adf = f2c_abs(df);
     tb = *b + *b;
     ab = f2c_abs(tb);
-    if (f2c_abs(*a) > f2c_abs(*c__))
+    if(f2c_abs(*a) > f2c_abs(*c__))
     {
         acmx = *a;
         acmn = *c__;

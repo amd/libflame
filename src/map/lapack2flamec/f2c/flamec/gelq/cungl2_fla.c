@@ -108,7 +108,8 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cungl2_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau, complex *work, integer *info)
+void cungl2_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau,
+                complex *work, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
@@ -118,7 +119,12 @@ void cungl2_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, co
     /* Local variables */
     integer i__, j, l;
     extern /* Subroutine */
-    void cscal_(integer *, complex *, complex *, integer *), clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        cscal_(integer *, complex *, complex *, integer *),
+        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+               complex *),
+        clacgv_(integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -158,7 +164,7 @@ void cungl2_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, co
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
@@ -202,7 +208,7 @@ void cungl2_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, co
         if(i__ < *n)
         {
             i__1 = *n - i__;
-            aocl_lapack_clacgv(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda);
+            clacgv_(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda);
             if(i__ < *m)
             {
                 i__1 = i__ + i__ * a_dim1;
@@ -211,8 +217,8 @@ void cungl2_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, co
                 i__1 = *m - i__;
                 i__2 = *n - i__ + 1;
                 r_cnjg(&q__1, &tau[i__]);
-                aocl_lapack_clarf("Right", &i__1, &i__2, &a[i__ + i__ * a_dim1], lda, &q__1,
-                                  &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
+                clarf_("Right", &i__1, &i__2, &a[i__ + i__ * a_dim1], lda, &q__1,
+                       &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
             }
             i__1 = *n - i__;
             i__2 = i__;

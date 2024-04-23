@@ -135,12 +135,13 @@
 /* > \ingroup realGEauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slaqge_(integer *m, integer *n, real *a, integer *lda, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, char * equed)
+void slaqge_(integer *m, integer *n, real *a, integer *lda, real *r__, real *c__, real *rowcnd,
+             real *colcnd, real *amax, char *equed)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slaqge inputs: m %d, n %d, lda %d",*m, *n, *lda);
+    snprintf(buffer, 256, "slaqge inputs: m %d, n %d, lda %d", *m, *n, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -182,7 +183,7 @@ void slaqge_(integer *m, integer *n, real *a, integer *lda, real *r__, real *c__
     /* Initialize LARGE and SMALL. */
     small_val = slamch_("Safe minimum") / slamch_("Precision");
     large = 1.f / small_val;
-    if (*rowcnd >= .1f && *amax >= small_val && *amax <= large)
+    if(*rowcnd >= .1f && *amax >= small_val && *amax <= large)
     {
         /* No row scaling */
         if(*colcnd >= .1f)

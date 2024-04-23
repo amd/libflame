@@ -1,14 +1,14 @@
-/* ./cggesx.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cggesx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {0.f, 0.f};
-static scomplex c_b2 = {1.f, 0.f};
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c__0 = 0;
-static aocl_int64_t c_n1 = -1;
+static complex c_b1 = {0.f, 0.f};
+static complex c_b2 = {1.f, 0.f};
+static integer c__1 = 1;
+static integer c__0 = 0;
+static integer c_n1 = -1;
 /* > \brief <b> CGGESX computes the eigenvalues, the Schur form, and, optionally, the matrix of
  * Schur vectors for GE matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -133,13 +133,13 @@ and computes a reciprocal condition number for */
 /* > \verbatim */
 /* > SENSE is CHARACTER*1 */
 /* > Determines which reciprocal condition numbers are computed. */
-/* > = 'N': None are computed;
+/* > = 'N' : None are computed;
  */
-/* > = 'E': Computed for average of selected eigenvalues only;
+/* > = 'E' : Computed for average of selected eigenvalues only;
  */
-/* > = 'V': Computed for selected deflating subspaces only;
+/* > = 'V' : Computed for selected deflating subspaces only;
  */
-/* > = 'B': Computed for both. */
+/* > = 'B' : Computed for both. */
 /* > If SENSE = 'E', 'V', or 'B', SORT must equal 'S'. */
 /* > \endverbatim */
 /* > */
@@ -338,22 +338,31 @@ the */
 /* > \ingroup ggesx */
 /* ===================================================================== */
 /* Subroutine */
-void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, integer *n, complex *a, integer *lda, complex *b, integer *ldb, integer *sdim, complex *alpha, complex *beta, complex * vsl, integer *ldvsl, complex *vsr, integer *ldvsr, real *rconde, real *rcondv, complex *work, integer *lwork, real *rwork, integer *iwork, integer *liwork, logical *bwork, integer *info)
+void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, integer *n,
+             complex *a, integer *lda, complex *b, integer *ldb, integer *sdim, complex *alpha,
+             complex *beta, complex *vsl, integer *ldvsl, complex *vsr, integer *ldvsr,
+             real *rconde, real *rcondv, complex *work, integer *lwork, real *rwork, integer *iwork,
+             integer *liwork, logical *bwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cggesx inputs: jobvsl %c, jobvsr %c, sort %c, sense %c, n %lld, lda %lld, ldb %lld, ldvsl %lld, ldvsr %lld, lwork %lld, liwork %lld",*jobvsl, *jobvsr, *sort, *sense, *n, *lda, *ldb, *ldvsl, *ldvsr, *lwork, *liwork);
+    snprintf(buffer, 256,
+             "cggesx inputs: jobvsl %c, jobvsr %c, sort %c, sense %c, n %lld, lda %lld, ldb %lld, "
+             "ldvsl %lld, ldvsr %lld, lwork %lld, liwork %lld",
+             *jobvsl, *jobvsr, *sort, *sense, *n, *lda, *ldb, *ldvsl, *ldvsr, *lwork, *liwork);
 #else
-    snprintf(buffer, 256,"cggesx inputs: jobvsl %c, jobvsr %c, sort %c, sense %c, n %d, lda %d, ldb %d, ldvsl %d, ldvsr %d, lwork %d, liwork %d",*jobvsl, *jobvsr, *sort, *sense, *n, *lda, *ldb, *ldvsl, *ldvsr, *lwork, *liwork);
+    snprintf(buffer, 256,
+             "cggesx inputs: jobvsl %c, jobvsr %c, sort %c, sense %c, n %d, lda %d, ldb %d, ldvsl "
+             "%d, ldvsr %d, lwork %d, liwork %d",
+             *jobvsl, *jobvsr, *sort, *sense, *n, *lda, *ldb, *ldvsl, *ldvsr, *lwork, *liwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, vsl_dim1, vsl_offset, vsr_dim1, vsr_offset,
-        i__1, i__2;
-    real r__1;
+    integer a_dim1, a_offset, b_dim1, b_offset, vsl_dim1, vsl_offset, vsr_dim1, vsr_offset, i__1,
+        i__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
@@ -369,30 +378,55 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
     logical cursl, ilvsl, ilvsr;
     integer irwrk, irows;
     extern /* Subroutine */
-    void cggbak_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, complex *, integer *, integer *), cggbal_(char *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, real *, real *, real *, integer *), slabad_(real *, real *);
+        void
+        cggbak_(char *, char *, integer *, integer *, integer *, real *, real *, integer *,
+                complex *, integer *, integer *),
+        cggbal_(char *, integer *, complex *, integer *, complex *, integer *, integer *, integer *,
+                real *, real *, real *, integer *),
+        slabad_(real *, real *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    void cgghrd_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *), clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
+        void
+        cgghrd_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
+                integer *, complex *, integer *, complex *, integer *, integer *),
+        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
+                integer *, integer *);
     logical ilascl, ilbscl;
     extern /* Subroutine */
-    void cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clacpy_( char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+                integer *),
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern real slamch_(char *);
     real bignum;
     extern /* Subroutine */
-    void chgeqz_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *, integer *), ctgsen_(integer *, logical *, logical *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, complex *, integer *, integer *, real *, real *, real *, complex *, integer *, integer *, integer *, integer *);
+        void
+        chgeqz_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *,
+                complex *, integer *, complex *, complex *, complex *, integer *, complex *,
+                integer *, complex *, integer *, real *, integer *),
+        ctgsen_(integer *, logical *, logical *, logical *, integer *, complex *, integer *,
+                complex *, integer *, complex *, complex *, complex *, integer *, complex *,
+                integer *, integer *, real *, real *, real *, complex *, integer *, integer *,
+                integer *, integer *);
     integer ijobvl, iright, ijobvr;
     logical wantsb;
     aocl_int64_t liwmin;
     logical wantse, lastsl;
     real anrmto, bnrmto;
     extern /* Subroutine */
-    void cungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+        void
+        cungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *, integer *);
     integer minwrk, maxwrk;
     logical wantsn;
     real smlnum;
     extern /* Subroutine */
-    void cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+        void
+        cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
+                complex *, integer *, complex *, integer *, integer *);
     logical wantst, lquery, wantsv;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -440,12 +474,12 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
     --iwork;
     --bwork;
     /* Function Body */
-    if (lsame_(jobvsl, "N", 1, 1))
+    if(lsame_(jobvsl, "N", 1, 1))
     {
         ijobvl = 1;
         ilvsl = FALSE_;
     }
-    else if (lsame_(jobvsl, "V", 1, 1))
+    else if(lsame_(jobvsl, "V", 1, 1))
     {
         ijobvl = 2;
         ilvsl = TRUE_;
@@ -455,12 +489,12 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
         ijobvl = -1;
         ilvsl = FALSE_;
     }
-    if (lsame_(jobvsr, "N", 1, 1))
+    if(lsame_(jobvsr, "N", 1, 1))
     {
         ijobvr = 1;
         ilvsr = FALSE_;
     }
-    else if (lsame_(jobvsr, "V", 1, 1))
+    else if(lsame_(jobvsr, "V", 1, 1))
     {
         ijobvr = 2;
         ilvsr = TRUE_;
@@ -502,7 +536,7 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
     {
         *info = -2;
     }
-    else if (! wantst && ! lsame_(sort, "N", 1, 1))
+    else if(!wantst && !lsame_(sort, "N", 1, 1))
     {
         *info = -3;
     }
@@ -514,11 +548,11 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
     {
         *info = -6;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -10;
     }
@@ -544,14 +578,14 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
             maxwrk = *n * (aocl_lapack_ilaenv(&c__1, "CGEQRF", " ", n, &c__1, n, &c__0) + 1);
             /* Computing MAX */
             i__1 = maxwrk;
-            i__2 = *n * (ilaenv_(&c__1, "CUNMQR", " ", n, & c__1, n, &c_n1) + 1); // , expr subst
-            maxwrk = fla_max(i__1,i__2);
-            if (ilvsl)
+            i__2 = *n * (ilaenv_(&c__1, "CUNMQR", " ", n, &c__1, n, &c_n1) + 1); // , expr subst
+            maxwrk = fla_max(i__1, i__2);
+            if(ilvsl)
             {
                 /* Computing MAX */
                 i__1 = maxwrk;
-                i__2 = *n * (ilaenv_(&c__1, "CUNGQR", " ", n, & c__1, n, &c_n1) + 1); // , expr subst
-                maxwrk = fla_max(i__1,i__2);
+                i__2 = *n * (ilaenv_(&c__1, "CUNGQR", " ", n, &c__1, n, &c_n1) + 1); // , expr subst
+                maxwrk = fla_max(i__1, i__2);
             }
             lwrk = maxwrk;
             if(ijob >= 1)
@@ -559,7 +593,7 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
                 /* Computing MAX */
                 i__1 = lwrk;
                 i__2 = *n * *n / 2; // , expr subst
-                lwrk = fla_max(i__1,i__2);
+                lwrk = fla_max(i__1, i__2);
             }
         }
         else
@@ -568,9 +602,8 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
             maxwrk = 1;
             lwrk = 1;
         }
-        r__1 = aocl_lapack_sroundup_lwork(&lwrk);
-        work[1].real = r__1;
-        work[1].imag = 0.f; // , expr subst
+        work[1].r = (real)lwrk;
+        work[1].i = 0.f; // , expr subst
         if(wantsn || *n == 0)
         {
             liwmin = 1;
@@ -579,7 +612,7 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
         {
             liwmin = *n + 2;
         }
-        iwork[1] = (aocl_int_t)(liwmin);
+        iwork[1] = liwmin;
         if(*lwork < minwrk && !lquery)
         {
             *info = -21;
@@ -629,7 +662,7 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
     }
     if(ilascl)
     {
-        aocl_lapack_clascl("G", &c__0, &c__0, &anrm, &anrmto, n, n, &a[a_offset], lda, &ierr);
+        clascl_("G", &c__0, &c__0, &anrm, &anrmto, n, n, &a[a_offset], lda, &ierr);
     }
     /* Scale B if max element outside range [SMLNUM,BIGNUM] */
     bnrm = aocl_lapack_clange("M", n, n, &b[b_offset], ldb, &rwork[1]);
@@ -646,15 +679,15 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
     }
     if(ilbscl)
     {
-        aocl_lapack_clascl("G", &c__0, &c__0, &bnrm, &bnrmto, n, n, &b[b_offset], ldb, &ierr);
+        clascl_("G", &c__0, &c__0, &bnrm, &bnrmto, n, n, &b[b_offset], ldb, &ierr);
     }
     /* Permute the matrix to make it more nearly triangular */
     /* (Real Workspace: need 6*N) */
     ileft = 1;
     iright = *n + 1;
     irwrk = iright + *n;
-    aocl_lapack_cggbal("P", n, &a[a_offset], lda, &b[b_offset], ldb, &ilo, &ihi, &rwork[ileft],
-                       &rwork[iright], &rwork[irwrk], &ierr);
+    cggbal_("P", n, &a[a_offset], lda, &b[b_offset], ldb, &ilo, &ihi, &rwork[ileft], &rwork[iright],
+            &rwork[irwrk], &ierr);
     /* Reduce B to triangular form (QR decomposition of B) */
     /* (Complex Workspace: need N, prefer N*NB) */
     irows = ihi + 1 - ilo;
@@ -662,28 +695,27 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
     itau = 1;
     iwrk = itau + irows;
     i__1 = *lwork + 1 - iwrk;
-    aocl_lapack_cgeqrf(&irows, &icols, &b[ilo + ilo * b_dim1], ldb, &work[itau], &work[iwrk], &i__1,
-                       &ierr);
+    cgeqrf_(&irows, &icols, &b[ilo + ilo * b_dim1], ldb, &work[itau], &work[iwrk], &i__1, &ierr);
     /* Apply the unitary transformation to matrix A */
     /* (Complex Workspace: need N, prefer N*NB) */
     i__1 = *lwork + 1 - iwrk;
-    aocl_lapack_cunmqr("L", "C", &irows, &icols, &irows, &b[ilo + ilo * b_dim1], ldb, &work[itau],
-                       &a[ilo + ilo * a_dim1], lda, &work[iwrk], &i__1, &ierr);
+    cunmqr_("L", "C", &irows, &icols, &irows, &b[ilo + ilo * b_dim1], ldb, &work[itau],
+            &a[ilo + ilo * a_dim1], lda, &work[iwrk], &i__1, &ierr);
     /* Initialize VSL */
     /* (Complex Workspace: need N, prefer N*NB) */
     if(ilvsl)
     {
-        aocl_lapack_claset("Full", n, n, &c_b1, &c_b2, &vsl[vsl_offset], ldvsl);
+        claset_("Full", n, n, &c_b1, &c_b2, &vsl[vsl_offset], ldvsl);
         if(irows > 1)
         {
             i__1 = irows - 1;
             i__2 = irows - 1;
-            aocl_lapack_clacpy("L", &i__1, &i__2, &b[ilo + 1 + ilo * b_dim1], ldb,
-                               &vsl[ilo + 1 + ilo * vsl_dim1], ldvsl);
+            clacpy_("L", &i__1, &i__2, &b[ilo + 1 + ilo * b_dim1], ldb,
+                    &vsl[ilo + 1 + ilo * vsl_dim1], ldvsl);
         }
         i__1 = *lwork + 1 - iwrk;
-        aocl_lapack_cungqr(&irows, &irows, &irows, &vsl[ilo + ilo * vsl_dim1], ldvsl, &work[itau],
-                           &work[iwrk], &i__1, &ierr);
+        cungqr_(&irows, &irows, &irows, &vsl[ilo + ilo * vsl_dim1], ldvsl, &work[itau], &work[iwrk],
+                &i__1, &ierr);
     }
     /* Initialize VSR */
     if(ilvsr)
@@ -692,17 +724,17 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
     }
     /* Reduce to generalized Hessenberg form */
     /* (Workspace: none needed) */
-    aocl_lapack_cgghrd(jobvsl, jobvsr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb,
-                       &vsl[vsl_offset], ldvsl, &vsr[vsr_offset], ldvsr, &ierr);
+    cgghrd_(jobvsl, jobvsr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb, &vsl[vsl_offset],
+            ldvsl, &vsr[vsr_offset], ldvsr, &ierr);
     *sdim = 0;
     /* Perform QZ algorithm, computing Schur vectors if desired */
     /* (Complex Workspace: need N) */
     /* (Real Workspace: need N) */
     iwrk = itau;
     i__1 = *lwork + 1 - iwrk;
-    aocl_lapack_chgeqz("S", jobvsl, jobvsr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb,
-                       &alpha[1], &beta[1], &vsl[vsl_offset], ldvsl, &vsr[vsr_offset], ldvsr,
-                       &work[iwrk], &i__1, &rwork[irwrk], &ierr);
+    chgeqz_("S", jobvsl, jobvsr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb, &alpha[1],
+            &beta[1], &vsl[vsl_offset], ldvsl, &vsr[vsr_offset], ldvsr, &work[iwrk], &i__1,
+            &rwork[irwrk], &ierr);
     if(ierr != 0)
     {
         if(ierr > 0 && ierr <= *n)
@@ -744,16 +776,15 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
         /* (Complex Workspace: If IJOB >= 1, need MAX(1, 2*SDIM*(N-SDIM)) */
         /* otherwise, need 1 ) */
         i__1 = *lwork - iwrk + 1;
-        aocl_lapack_ctgsen(&ijob, &ilvsl, &ilvsr, &bwork[1], n, &a[a_offset], lda, &b[b_offset],
-                           ldb, &alpha[1], &beta[1], &vsl[vsl_offset], ldvsl, &vsr[vsr_offset],
-                           ldvsr, sdim, &pl, &pr, dif, &work[iwrk], &i__1, &iwork[1], liwork,
-                           &ierr);
+        ctgsen_(&ijob, &ilvsl, &ilvsr, &bwork[1], n, &a[a_offset], lda, &b[b_offset], ldb,
+                &alpha[1], &beta[1], &vsl[vsl_offset], ldvsl, &vsr[vsr_offset], ldvsr, sdim, &pl,
+                &pr, dif, &work[iwrk], &i__1, &iwork[1], liwork, &ierr);
         if(ijob >= 1)
         {
             /* Computing MAX */
             i__1 = maxwrk;
             i__2 = (*sdim << 1) * (*n - *sdim); // , expr subst
-            maxwrk = fla_max(i__1,i__2);
+            maxwrk = fla_max(i__1, i__2);
         }
         if(ierr == -21)
         {
@@ -782,24 +813,24 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
     /* (Workspace: none needed) */
     if(ilvsl)
     {
-        aocl_lapack_cggbak("P", "L", n, &ilo, &ihi, &rwork[ileft], &rwork[iright], n,
-                           &vsl[vsl_offset], ldvsl, &ierr);
+        cggbak_("P", "L", n, &ilo, &ihi, &rwork[ileft], &rwork[iright], n, &vsl[vsl_offset], ldvsl,
+                &ierr);
     }
     if(ilvsr)
     {
-        aocl_lapack_cggbak("P", "R", n, &ilo, &ihi, &rwork[ileft], &rwork[iright], n,
-                           &vsr[vsr_offset], ldvsr, &ierr);
+        cggbak_("P", "R", n, &ilo, &ihi, &rwork[ileft], &rwork[iright], n, &vsr[vsr_offset], ldvsr,
+                &ierr);
     }
     /* Undo scaling */
     if(ilascl)
     {
-        aocl_lapack_clascl("U", &c__0, &c__0, &anrmto, &anrm, n, n, &a[a_offset], lda, &ierr);
-        aocl_lapack_clascl("G", &c__0, &c__0, &anrmto, &anrm, n, &c__1, &alpha[1], n, &ierr);
+        clascl_("U", &c__0, &c__0, &anrmto, &anrm, n, n, &a[a_offset], lda, &ierr);
+        clascl_("G", &c__0, &c__0, &anrmto, &anrm, n, &c__1, &alpha[1], n, &ierr);
     }
     if(ilbscl)
     {
-        aocl_lapack_clascl("U", &c__0, &c__0, &bnrmto, &bnrm, n, n, &b[b_offset], ldb, &ierr);
-        aocl_lapack_clascl("G", &c__0, &c__0, &bnrmto, &bnrm, n, &c__1, &beta[1], n, &ierr);
+        clascl_("U", &c__0, &c__0, &bnrmto, &bnrm, n, n, &b[b_offset], ldb, &ierr);
+        clascl_("G", &c__0, &c__0, &bnrmto, &bnrm, n, &c__1, &beta[1], n, &ierr);
     }
     if(wantst)
     {
@@ -823,7 +854,7 @@ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, 
         }
     }
 L40:
-    work[1].r = (real) maxwrk;
+    work[1].r = (real)maxwrk;
     work[1].i = 0.f; // , expr subst
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

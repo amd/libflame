@@ -1,26 +1,32 @@
-/* ../netlib/zpstrf.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zpstrf.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b1 = {1., 0.};
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static doublereal c_b29 = -1.;
 static doublereal c_b30 = 1.;
-/* > \brief \b ZPSTRF computes the Cholesky factorization with complete pivoting of a complex Hermitian positi ve semidefinite matrix. */
+/* > \brief \b ZPSTRF computes the Cholesky factorization with complete pivoting of a complex
+ * Hermitian positi ve semidefinite matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZPSTRF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpstrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpstrf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zpstrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zpstrf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpstrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpstrf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -138,10 +144,12 @@ static doublereal c_b30 = 1.;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *piv, integer *rank, doublereal *tol, doublereal *work, integer *info)
+void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *piv, integer *rank,
+             doublereal *tol, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zpstrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", tol %lf",*uplo, *n, *lda, *tol);
+    AOCL_DTL_SNPRINTF("zpstrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", tol %lf", *uplo, *n,
+                      *lda, *tol);
 
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
@@ -158,24 +166,34 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
     doublereal dtemp;
     integer itemp;
     extern /* Subroutine */
-    void zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *,
+               doublereal *, doublecomplex *, integer *),
+        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
+               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     doublereal dstop;
     logical upper;
     doublecomplex ztemp;
     extern /* Subroutine */
-    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    void zpstf2_(char *, integer *, doublecomplex *, integer *, integer *, integer *, doublereal *, doublereal *, integer *);
+        void
+        zpstf2_(char *, integer *, doublecomplex *, integer *, integer *, integer *, doublereal *,
+                doublereal *, integer *);
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+        void
+        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     extern integer dmaxloc_(doublereal *, integer *);
     extern /* Subroutine */
-    void zlacgv_(integer *, doublecomplex *, integer *) ;
+        void
+        zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -206,19 +224,19 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZPSTRF", &i__1, (ftnlen)6);
@@ -226,14 +244,14 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get block size */
     nb = ilaenv_(&c__1, "ZPOTRF", uplo, n, &c_n1, &c_n1, &c_n1);
-    if (nb <= 1 || nb >= *n)
+    if(nb <= 1 || nb >= *n)
     {
         /* Use unblocked code */
         zpstf2_(uplo, n, &a[a_dim1 + 1], lda, &piv[1], rank, tol, &work[1], info);
@@ -243,18 +261,14 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
     {
         /* Initialize PIV */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             piv[i__] = i__;
             /* L100: */
         }
         /* Compute stopping value */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
             work[i__] = a[i__2].r;
@@ -263,14 +277,14 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
         pvt = dmaxloc_(&work[1], n);
         i__1 = pvt + pvt * a_dim1;
         ajj = a[i__1].r;
-        if (ajj <= 0. || disnan_(&ajj))
+        if(ajj <= 0. || disnan_(&ajj))
         {
             *rank = 0;
             *info = 1;
             goto L230;
         }
         /* Compute stopping value if not supplied */
-        if (*tol < 0.)
+        if(*tol < 0.)
         {
             dstop = *n * dlamch_("Epsilon") * ajj;
         }
@@ -278,62 +292,54 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
         {
             dstop = *tol;
         }
-        if (upper)
+        if(upper)
         {
             /* Compute the Cholesky factorization P**T * A * P = U**H * U */
             i__1 = *n;
             i__2 = nb;
-            for (k = 1;
-                    i__2 < 0 ? k >= i__1 : k <= i__1;
-                    k += i__2)
+            for(k = 1; i__2 < 0 ? k >= i__1 : k <= i__1; k += i__2)
             {
                 /* Account for last block not being NB wide */
                 /* Computing MIN */
                 i__3 = nb;
                 i__4 = *n - k + 1; // , expr subst
-                jb = fla_min(i__3,i__4);
+                jb = fla_min(i__3, i__4);
                 /* Set relevant part of first half of WORK to zero, */
                 /* holds dot products */
                 i__3 = *n;
-                for (i__ = k;
-                        i__ <= i__3;
-                        ++i__)
+                for(i__ = k; i__ <= i__3; ++i__)
                 {
                     work[i__] = 0.;
                     /* L120: */
                 }
                 i__3 = k + jb - 1;
-                for (j = k;
-                        j <= i__3;
-                        ++j)
+                for(j = k; j <= i__3; ++j)
                 {
                     /* Find pivot, test for exit, else swap rows and columns */
                     /* Update dot products, compute possible pivots which are */
                     /* stored in the second half of WORK */
                     i__4 = *n;
-                    for (i__ = j;
-                            i__ <= i__4;
-                            ++i__)
+                    for(i__ = j; i__ <= i__4; ++i__)
                     {
-                        if (j > k)
+                        if(j > k)
                         {
                             d_cnjg(&z__2, &a[j - 1 + i__ * a_dim1]);
                             i__5 = j - 1 + i__ * a_dim1;
                             z__1.r = z__2.r * a[i__5].r - z__2.i * a[i__5].i;
-                            z__1.i = z__2.r * a[i__5].i + z__2.i * a[ i__5].r; // , expr subst
+                            z__1.i = z__2.r * a[i__5].i + z__2.i * a[i__5].r; // , expr subst
                             work[i__] += z__1.r;
                         }
                         i__5 = i__ + i__ * a_dim1;
                         work[*n + i__] = a[i__5].r - work[i__];
                         /* L130: */
                     }
-                    if (j > 1)
+                    if(j > 1)
                     {
                         i__4 = *n - j + 1;
                         itemp = dmaxloc_(&work[*n + j], &i__4);
                         pvt = itemp + j - 1;
                         ajj = work[*n + pvt];
-                        if (ajj <= dstop || disnan_(&ajj))
+                        if(ajj <= dstop || disnan_(&ajj))
                         {
                             i__4 = j + j * a_dim1;
                             a[i__4].r = ajj;
@@ -341,7 +347,7 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                             goto L220;
                         }
                     }
-                    if (j != pvt)
+                    if(j != pvt)
                     {
                         /* Pivot OK, so can now swap pivot rows and columns */
                         i__4 = pvt + pvt * a_dim1;
@@ -350,15 +356,14 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                         a[i__4].i = a[i__5].i; // , expr subst
                         i__4 = j - 1;
                         zswap_(&i__4, &a[j * a_dim1 + 1], &c__1, &a[pvt * a_dim1 + 1], &c__1);
-                        if (pvt < *n)
+                        if(pvt < *n)
                         {
                             i__4 = *n - pvt;
-                            zswap_(&i__4, &a[j + (pvt + 1) * a_dim1], lda, &a[ pvt + (pvt + 1) * a_dim1], lda);
+                            zswap_(&i__4, &a[j + (pvt + 1) * a_dim1], lda,
+                                   &a[pvt + (pvt + 1) * a_dim1], lda);
                         }
                         i__4 = pvt - 1;
-                        for (i__ = j + 1;
-                                i__ <= i__4;
-                                ++i__)
+                        for(i__ = j + 1; i__ <= i__4; ++i__)
                         {
                             d_cnjg(&z__1, &a[j + i__ * a_dim1]);
                             ztemp.r = z__1.r;
@@ -389,7 +394,7 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                     a[i__4].r = ajj;
                     a[i__4].i = 0.; // , expr subst
                     /* Compute elements J+1:N of row J. */
-                    if (j < *n)
+                    if(j < *n)
                     {
                         i__4 = j - 1;
                         zlacgv_(&i__4, &a[j * a_dim1 + 1], &c__1);
@@ -397,7 +402,8 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                         i__5 = *n - j;
                         z__1.r = -1.;
                         z__1.i = -0.; // , expr subst
-                        zgemv_("Trans", &i__4, &i__5, &z__1, &a[k + (j + 1) * a_dim1], lda, &a[k + j * a_dim1], &c__1, & c_b1, &a[j + (j + 1) * a_dim1], lda);
+                        zgemv_("Trans", &i__4, &i__5, &z__1, &a[k + (j + 1) * a_dim1], lda,
+                               &a[k + j * a_dim1], &c__1, &c_b1, &a[j + (j + 1) * a_dim1], lda);
                         i__4 = j - 1;
                         zlacgv_(&i__4, &a[j * a_dim1 + 1], &c__1);
                         i__4 = *n - j;
@@ -407,10 +413,11 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                     /* L150: */
                 }
                 /* Update trailing matrix, J already incremented */
-                if (k + jb <= *n)
+                if(k + jb <= *n)
                 {
                     i__3 = *n - j + 1;
-                    zherk_("Upper", "Conj Trans", &i__3, &jb, &c_b29, &a[k + j * a_dim1], lda, &c_b30, &a[j + j * a_dim1], lda);
+                    zherk_("Upper", "Conj Trans", &i__3, &jb, &c_b29, &a[k + j * a_dim1], lda,
+                           &c_b30, &a[j + j * a_dim1], lda);
                 }
                 /* L160: */
             }
@@ -420,57 +427,49 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
             /* Compute the Cholesky factorization P**T * A * P = L * L**H */
             i__2 = *n;
             i__1 = nb;
-            for (k = 1;
-                    i__1 < 0 ? k >= i__2 : k <= i__2;
-                    k += i__1)
+            for(k = 1; i__1 < 0 ? k >= i__2 : k <= i__2; k += i__1)
             {
                 /* Account for last block not being NB wide */
                 /* Computing MIN */
                 i__3 = nb;
                 i__4 = *n - k + 1; // , expr subst
-                jb = fla_min(i__3,i__4);
+                jb = fla_min(i__3, i__4);
                 /* Set relevant part of first half of WORK to zero, */
                 /* holds dot products */
                 i__3 = *n;
-                for (i__ = k;
-                        i__ <= i__3;
-                        ++i__)
+                for(i__ = k; i__ <= i__3; ++i__)
                 {
                     work[i__] = 0.;
                     /* L170: */
                 }
                 i__3 = k + jb - 1;
-                for (j = k;
-                        j <= i__3;
-                        ++j)
+                for(j = k; j <= i__3; ++j)
                 {
                     /* Find pivot, test for exit, else swap rows and columns */
                     /* Update dot products, compute possible pivots which are */
                     /* stored in the second half of WORK */
                     i__4 = *n;
-                    for (i__ = j;
-                            i__ <= i__4;
-                            ++i__)
+                    for(i__ = j; i__ <= i__4; ++i__)
                     {
-                        if (j > k)
+                        if(j > k)
                         {
                             d_cnjg(&z__2, &a[i__ + (j - 1) * a_dim1]);
                             i__5 = i__ + (j - 1) * a_dim1;
                             z__1.r = z__2.r * a[i__5].r - z__2.i * a[i__5].i;
-                            z__1.i = z__2.r * a[i__5].i + z__2.i * a[ i__5].r; // , expr subst
+                            z__1.i = z__2.r * a[i__5].i + z__2.i * a[i__5].r; // , expr subst
                             work[i__] += z__1.r;
                         }
                         i__5 = i__ + i__ * a_dim1;
                         work[*n + i__] = a[i__5].r - work[i__];
                         /* L180: */
                     }
-                    if (j > 1)
+                    if(j > 1)
                     {
                         i__4 = *n - j + 1;
                         itemp = dmaxloc_(&work[*n + j], &i__4);
                         pvt = itemp + j - 1;
                         ajj = work[*n + pvt];
-                        if (ajj <= dstop || disnan_(&ajj))
+                        if(ajj <= dstop || disnan_(&ajj))
                         {
                             i__4 = j + j * a_dim1;
                             a[i__4].r = ajj;
@@ -478,7 +477,7 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                             goto L220;
                         }
                     }
-                    if (j != pvt)
+                    if(j != pvt)
                     {
                         /* Pivot OK, so can now swap pivot rows and columns */
                         i__4 = pvt + pvt * a_dim1;
@@ -487,15 +486,14 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                         a[i__4].i = a[i__5].i; // , expr subst
                         i__4 = j - 1;
                         zswap_(&i__4, &a[j + a_dim1], lda, &a[pvt + a_dim1], lda);
-                        if (pvt < *n)
+                        if(pvt < *n)
                         {
                             i__4 = *n - pvt;
-                            zswap_(&i__4, &a[pvt + 1 + j * a_dim1], &c__1, &a[ pvt + 1 + pvt * a_dim1], &c__1);
+                            zswap_(&i__4, &a[pvt + 1 + j * a_dim1], &c__1,
+                                   &a[pvt + 1 + pvt * a_dim1], &c__1);
                         }
                         i__4 = pvt - 1;
-                        for (i__ = j + 1;
-                                i__ <= i__4;
-                                ++i__)
+                        for(i__ = j + 1; i__ <= i__4; ++i__)
                         {
                             d_cnjg(&z__1, &a[i__ + j * a_dim1]);
                             ztemp.r = z__1.r;
@@ -526,7 +524,7 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                     a[i__4].r = ajj;
                     a[i__4].i = 0.; // , expr subst
                     /* Compute elements J+1:N of column J. */
-                    if (j < *n)
+                    if(j < *n)
                     {
                         i__4 = j - 1;
                         zlacgv_(&i__4, &a[j + a_dim1], lda);
@@ -534,7 +532,8 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                         i__5 = j - k;
                         z__1.r = -1.;
                         z__1.i = -0.; // , expr subst
-                        zgemv_("No Trans", &i__4, &i__5, &z__1, &a[j + 1 + k * a_dim1], lda, &a[j + k * a_dim1], lda, &c_b1, &a[j + 1 + j * a_dim1], &c__1);
+                        zgemv_("No Trans", &i__4, &i__5, &z__1, &a[j + 1 + k * a_dim1], lda,
+                               &a[j + k * a_dim1], lda, &c_b1, &a[j + 1 + j * a_dim1], &c__1);
                         i__4 = j - 1;
                         zlacgv_(&i__4, &a[j + a_dim1], lda);
                         i__4 = *n - j;
@@ -544,10 +543,11 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                     /* L200: */
                 }
                 /* Update trailing matrix, J already incremented */
-                if (k + jb <= *n)
+                if(k + jb <= *n)
                 {
                     i__3 = *n - j + 1;
-                    zherk_("Lower", "No Trans", &i__3, &jb, &c_b29, &a[j + k * a_dim1], lda, &c_b30, &a[j + j * a_dim1], lda);
+                    zherk_("Lower", "No Trans", &i__3, &jb, &c_b29, &a[j + k * a_dim1], lda, &c_b30,
+                           &a[j + j * a_dim1], lda);
                 }
                 /* L210: */
             }
@@ -566,4 +566,3 @@ L230:
     /* End of ZPSTRF */
 }
 /* zpstrf_ */
-

@@ -1,6 +1,9 @@
 #ifdef FLA_ENABLE_XBLAS
-/* ../netlib/zgesvxx.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zgesvxx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief <b> ZGESVXX computes the solution to system of linear equations A * X = B for GE matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -542,10 +545,19 @@ defaults */
 /* > \ingroup complex16GEsolve */
 /* ===================================================================== */
 /* Subroutine */
-void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex *a, integer *lda, doublecomplex *af, integer * ldaf, integer *ipiv, char *equed, doublereal *r__, doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *rpvgrw, doublereal *berr, integer * n_err_bnds__, doublereal *err_bnds_norm__, doublereal * err_bnds_comp__, integer *nparams, doublereal *params, doublecomplex * work, doublereal *rwork, integer *info)
+void zgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *lda,
+              doublecomplex *af, integer *ldaf, integer *ipiv, char *equed, doublereal *r__,
+              doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx,
+              doublereal *rcond, doublereal *rpvgrw, doublereal *berr, integer *n_err_bnds__,
+              doublereal *err_bnds_norm__, doublereal *err_bnds_comp__, integer *nparams,
+              doublereal *params, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgesvxx inputs: fact %c, trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS ", n_err_bnds__ %" FLA_IS ", nparams %" FLA_IS "",*fact, *trans, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx, *n_err_bnds__, *nparams);
+    AOCL_DTL_SNPRINTF("zgesvxx inputs: fact %c, trans %c, n %" FLA_IS ", nrhs %" FLA_IS
+                      ", lda %" FLA_IS ", ldaf %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS
+                      ", n_err_bnds__ %" FLA_IS ", nparams %" FLA_IS "",
+                      *fact, *trans, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx, *n_err_bnds__,
+                      *nparams);
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset,
         err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1;
@@ -553,7 +565,8 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex
     /* Local variables */
     integer j;
     doublereal amax;
-    extern doublereal zla_gerpvgrw_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    extern doublereal zla_gerpvgrw_(integer *, integer *, doublecomplex *, integer *,
+                                    doublecomplex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     doublereal rcmin, rcmax;
     logical equil;
@@ -561,22 +574,37 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex
     doublereal colcnd;
     logical nofact;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern /* Subroutine */
-    void zlaqge_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, char *);
+        void
+        zlaqge_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
+                doublereal *, doublereal *, doublereal *, char *);
     integer infequ;
     logical colequ;
     doublereal rowcnd;
     logical notran;
     extern /* Subroutine */
-    void zgetrf_(integer *, integer *, doublecomplex *, integer *, integer *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zgetrf_(integer *, integer *, doublecomplex *, integer *, integer *, integer *),
+        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *);
     doublereal smlnum;
     extern /* Subroutine */
-    void zgetrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zgetrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *,
+                doublecomplex *, integer *, integer *);
     logical rowequ;
     extern /* Subroutine */
-    void zlascl2_(integer *, integer *, doublereal *, doublecomplex *, integer *), zgeequb_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), zgerfsx_( char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublecomplex *, doublereal *, integer * );
+        void
+        zlascl2_(integer *, integer *, doublereal *, doublecomplex *, integer *),
+        zgeequb_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
+                 doublereal *, doublereal *, doublereal *, integer *),
+        zgerfsx_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                 integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *,
+                 doublecomplex *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+                 doublereal *, integer *, doublereal *, doublecomplex *, doublereal *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -646,11 +674,11 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex
     /* pivot growth is set here, the rest is initialized in ZGERFSX. */
     *rpvgrw = 0.;
     /* Test the input parameters. PARAMS is not tested until ZGERFSX. */
-    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -662,15 +690,15 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (lsame_(fact, "F", 1, 1) && ! (rowequ || colequ || lsame_(equed, "N", 1, 1)))
+    else if(lsame_(fact, "F", 1, 1) && !(rowequ || colequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -10;
     }
@@ -686,11 +714,11 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex
                 /* Computing MIN */
                 d__1 = rcmin;
                 d__2 = r__[j]; // , expr subst
-                rcmin = fla_min(d__1,d__2);
+                rcmin = fla_min(d__1, d__2);
                 /* Computing MAX */
                 d__1 = rcmax;
                 d__2 = r__[j]; // , expr subst
-                rcmax = fla_max(d__1,d__2);
+                rcmax = fla_max(d__1, d__2);
                 /* L10: */
             }
             if(rcmin <= 0.)
@@ -699,7 +727,7 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex
             }
             else if(*n > 0)
             {
-                rowcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+                rowcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
             }
             else
             {
@@ -716,11 +744,11 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex
                 /* Computing MIN */
                 d__1 = rcmin;
                 d__2 = c__[j]; // , expr subst
-                rcmin = fla_min(d__1,d__2);
+                rcmin = fla_min(d__1, d__2);
                 /* Computing MAX */
                 d__1 = rcmax;
                 d__2 = c__[j]; // , expr subst
-                rcmax = fla_max(d__1,d__2);
+                rcmax = fla_max(d__1, d__2);
                 /* L20: */
             }
             if(rcmin <= 0.)
@@ -729,7 +757,7 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex
             }
             else if(*n > 0)
             {
-                colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+                colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
             }
             else
             {
@@ -738,11 +766,11 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex
         }
         if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -14;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -16;
             }
@@ -752,7 +780,7 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex
     {
         i__1 = -(*info);
         xerbla_("ZGESVXX", &i__1, (ftnlen)7);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(equil)
@@ -762,7 +790,7 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            zlaqge_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, & colcnd, &amax, equed);
+            zlaqge_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, &colcnd, &amax, equed);
             rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
             colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }
@@ -810,8 +838,8 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex
             /* Pivot in column INFO is exactly 0 */
             /* Compute the reciprocal pivot growth factor of the */
             /* leading rank-deficient INFO columns of A. */
-            *rpvgrw = zla_gerpvgrw_(n, info, &a[a_offset], lda, &af[ af_offset], ldaf);
-    AOCL_DTL_TRACE_LOG_EXIT
+            *rpvgrw = zla_gerpvgrw_(n, info, &a[a_offset], lda, &af[af_offset], ldaf);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }

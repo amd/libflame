@@ -116,15 +116,16 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cspcon_(char *uplo, integer *n, complex *ap, integer * ipiv, real *anorm, real *rcond, complex *work, integer *info)
+void cspcon_(char *uplo, integer *n, complex *ap, integer *ipiv, real *anorm, real *rcond,
+             complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cspcon inputs: uplo %c, n %lld",*uplo, *n);
+    snprintf(buffer, 256, "cspcon inputs: uplo %c, n %lld", *uplo, *n);
 #else
-    snprintf(buffer, 256,"cspcon inputs: uplo %c, n %d",*uplo, *n);
+    snprintf(buffer, 256, "cspcon inputs: uplo %c, n %d", *uplo, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -136,10 +137,14 @@ void cspcon_(char *uplo, integer *n, complex *ap, integer * ipiv, real *anorm, r
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clacn2_(integer *, complex *, complex *, real *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     extern /* Subroutine */
-    void csptrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
+        void
+        csptrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *,
+                integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -168,7 +173,7 @@ void cspcon_(char *uplo, integer *n, complex *ap, integer * ipiv, real *anorm, r
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -208,7 +213,7 @@ void cspcon_(char *uplo, integer *n, complex *ap, integer * ipiv, real *anorm, r
         for(i__ = *n; i__ >= 1; --i__)
         {
             i__1 = ip;
-            if(ipiv[i__] > 0 && (ap[i__1].real == 0.f && ap[i__1].imag == 0.f))
+            if(ipiv[i__] > 0 && (ap[i__1].r == 0.f && ap[i__1].i == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                 return;
@@ -225,7 +230,7 @@ void cspcon_(char *uplo, integer *n, complex *ap, integer * ipiv, real *anorm, r
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = ip;
-            if(ipiv[i__] > 0 && (ap[i__2].real == 0.f && ap[i__2].imag == 0.f))
+            if(ipiv[i__] > 0 && (ap[i__2].r == 0.f && ap[i__2].i == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                 return;
@@ -237,7 +242,7 @@ void cspcon_(char *uplo, integer *n, complex *ap, integer * ipiv, real *anorm, r
     /* Estimate the 1-norm of the inverse. */
     kase = 0;
 L30:
-    aocl_lapack_clacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    clacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         /* Multiply by inv(L*D*L**T) or inv(U*D*U**T). */

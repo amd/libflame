@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {1., 0.};
+static doublecomplex c_b1 = {1., 0.};
 static doublereal c_b15 = -1.;
 static doublereal c_b16 = 1.;
 /* > \brief \b ZPFTRF */
@@ -218,7 +218,7 @@ k=N/2. IF TRANSR = 'C' then RFP is */
 void zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zpftrf inputs: transr %c, uplo %c, n %" FLA_IS "",*transr, *uplo, *n);
+    AOCL_DTL_SNPRINTF("zpftrf inputs: transr %c, uplo %c, n %" FLA_IS "", *transr, *uplo, *n);
 
     /* System generated locals */
     aocl_int64_t i__1, i__2;
@@ -227,13 +227,19 @@ void zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
     logical normaltransr;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
+        void
+        zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *,
+               doublereal *, doublecomplex *, integer *);
     logical lower;
     extern /* Subroutine */
-    void ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     extern /* Subroutine */
-    void zpotrf_(char *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zpotrf_(char *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -257,11 +263,11 @@ void zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
     *info = 0;
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
-    if (! normaltransr && ! lsame_(transr, "C", 1, 1))
+    if(!normaltransr && !lsame_(transr, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U", 1, 1))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }
@@ -316,15 +322,15 @@ void zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
                 /* SRPA for LOWER, NORMAL and N is odd ( a(0:n-1,0:n1-1) ) */
                 /* T1 -> a(0,0), T2 -> a(0,1), S -> a(n1,0) */
                 /* T1 -> a(0), T2 -> a(n), S -> a(n1) */
-                aocl_lapack_zpotrf("L", &n1, a, n, info);
+                zpotrf_("L", &n1, a, n, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
-                aocl_blas_ztrsm("R", "L", "C", "N", &n2, &n1, &c_b1, a, n, &a[n1], n);
-                aocl_blas_zherk("U", "N", &n2, &n1, &c_b15, &a[n1], n, &c_b16, &a[*n], n);
-                aocl_lapack_zpotrf("U", &n2, &a[*n], n, info);
+                ztrsm_("R", "L", "C", "N", &n2, &n1, &c_b1, a, n, &a[n1], n);
+                zherk_("U", "N", &n2, &n1, &c_b15, &a[n1], n, &c_b16, &a[*n], n);
+                zpotrf_("U", &n2, &a[*n], n, info);
                 if(*info > 0)
                 {
                     *info += n1;
@@ -335,15 +341,15 @@ void zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
                 /* SRPA for UPPER, NORMAL and N is odd ( a(0:n-1,0:n2-1) */
                 /* T1 -> a(n1+1,0), T2 -> a(n1,0), S -> a(0,0) */
                 /* T1 -> a(n2), T2 -> a(n1), S -> a(0) */
-                aocl_lapack_zpotrf("L", &n1, &a[n2], n, info);
+                zpotrf_("L", &n1, &a[n2], n, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
-                aocl_blas_ztrsm("L", "L", "N", "N", &n1, &n2, &c_b1, &a[n2], n, a, n);
-                aocl_blas_zherk("U", "C", &n2, &n1, &c_b15, a, n, &c_b16, &a[n1], n);
-                aocl_lapack_zpotrf("U", &n2, &a[n1], n, info);
+                ztrsm_("L", "L", "N", "N", &n1, &n2, &c_b1, &a[n2], n, a, n);
+                zherk_("U", "C", &n2, &n1, &c_b15, a, n, &c_b16, &a[n1], n);
+                zpotrf_("U", &n2, &a[n1], n, info);
                 if(*info > 0)
                 {
                     *info += n1;
@@ -359,15 +365,15 @@ void zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
                 /* T1 -> A(0,0) , T2 -> A(1,0) , S -> A(0,n1) */
                 /* T1 -> a(0+0) , T2 -> a(1+0) , S -> a(0+n1*n1);
                 lda=n1 */
-                aocl_lapack_zpotrf("U", &n1, a, &n1, info);
+                zpotrf_("U", &n1, a, &n1, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
-                aocl_blas_ztrsm("L", "U", "C", "N", &n1, &n2, &c_b1, a, &n1, &a[n1 * n1], &n1);
-                aocl_blas_zherk("L", "C", &n2, &n1, &c_b15, &a[n1 * n1], &n1, &c_b16, &a[1], &n1);
-                aocl_lapack_zpotrf("L", &n2, &a[1], &n1, info);
+                ztrsm_("L", "U", "C", "N", &n1, &n2, &c_b1, a, &n1, &a[n1 * n1], &n1);
+                zherk_("L", "C", &n2, &n1, &c_b15, &a[n1 * n1], &n1, &c_b16, &a[1], &n1);
+                zpotrf_("L", &n2, &a[1], &n1, info);
                 if(*info > 0)
                 {
                     *info += n1;
@@ -379,7 +385,7 @@ void zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
                 /* T1 -> A(0,n1+1), T2 -> A(0,n1), S -> A(0,0) */
                 /* T1 -> a(n2*n2), T2 -> a(n1*n2), S -> a(0);
                 lda = n2 */
-                aocl_lapack_zpotrf("U", &n1, &a[n2 * n2], &n2, info);
+                zpotrf_("U", &n1, &a[n2 * n2], &n2, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
@@ -388,7 +394,7 @@ void zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
                 ztrsm_("R", "U", "N", "N", &n2, &n1, &c_b1, &a[n2 * n2], &n2, a, &n2);
                 zherk_("L", "N", &n2, &n1, &c_b15, a, &n2, &c_b16, &a[n1 * n2], &n2);
                 zpotrf_("L", &n2, &a[n1 * n2], &n2, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
                     *info += n1;
                 }
@@ -407,7 +413,7 @@ void zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
                 /* T1 -> a(1,0), T2 -> a(0,0), S -> a(k+1,0) */
                 /* T1 -> a(1), T2 -> a(0), S -> a(k+1) */
                 i__1 = *n + 1;
-                aocl_lapack_zpotrf("L", &k, &a[1], &i__1, info);
+                zpotrf_("L", &k, &a[1], &i__1, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
@@ -420,7 +426,7 @@ void zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
                 i__2 = *n + 1;
                 aocl_blas_zherk("U", "N", &k, &k, &c_b15, &a[k + 1], &i__1, &c_b16, a, &i__2);
                 i__1 = *n + 1;
-                aocl_lapack_zpotrf("U", &k, a, &i__1, info);
+                zpotrf_("U", &k, a, &i__1, info);
                 if(*info > 0)
                 {
                     *info += k;
@@ -432,7 +438,7 @@ void zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
                 /* T1 -> a(k+1,0) , T2 -> a(k,0), S -> a(0,0) */
                 /* T1 -> a(k+1), T2 -> a(k), S -> a(0) */
                 i__1 = *n + 1;
-                aocl_lapack_zpotrf("L", &k, &a[k + 1], &i__1, info);
+                zpotrf_("L", &k, &a[k + 1], &i__1, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
@@ -443,9 +449,9 @@ void zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
                 aocl_blas_ztrsm("L", "L", "N", "N", &k, &k, &c_b1, &a[k + 1], &i__1, a, &i__2);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                aocl_blas_zherk("U", "C", &k, &k, &c_b15, a, &i__1, &c_b16, &a[k], &i__2);
+                zherk_("U", "C", &k, &k, &c_b15, a, &i__1, &c_b16, &a[k], &i__2);
                 i__1 = *n + 1;
-                aocl_lapack_zpotrf("U", &k, &a[k], &i__1, info);
+                zpotrf_("U", &k, &a[k], &i__1, info);
                 if(*info > 0)
                 {
                     *info += k;
@@ -461,15 +467,15 @@ void zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
                 /* T1 -> B(0,1), T2 -> B(0,0), S -> B(0,k+1) */
                 /* T1 -> a(0+k), T2 -> a(0+0), S -> a(0+k*(k+1));
                 lda=k */
-                aocl_lapack_zpotrf("U", &k, &a[k], &k, info);
+                zpotrf_("U", &k, &a[k], &k, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
-                aocl_blas_ztrsm("L", "U", "C", "N", &k, &k, &c_b1, &a[k], &n1, &a[k * (k + 1)], &k);
-                aocl_blas_zherk("L", "C", &k, &k, &c_b15, &a[k * (k + 1)], &k, &c_b16, a, &k);
-                aocl_lapack_zpotrf("L", &k, a, &k, info);
+                ztrsm_("L", "U", "C", "N", &k, &k, &c_b1, &a[k], &n1, &a[k * (k + 1)], &k);
+                zherk_("L", "C", &k, &k, &c_b15, &a[k * (k + 1)], &k, &c_b16, a, &k);
+                zpotrf_("L", &k, a, &k, info);
                 if(*info > 0)
                 {
                     *info += k;
@@ -481,15 +487,15 @@ void zpftrf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
                 /* T1 -> B(0,k+1), T2 -> B(0,k), S -> B(0,0) */
                 /* T1 -> a(0+k*(k+1)), T2 -> a(0+k*k), S -> a(0+0));
                 lda=k */
-                aocl_lapack_zpotrf("U", &k, &a[k * (k + 1)], &k, info);
+                zpotrf_("U", &k, &a[k * (k + 1)], &k, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
-                aocl_blas_ztrsm("R", "U", "N", "N", &k, &k, &c_b1, &a[k * (k + 1)], &k, a, &k);
-                aocl_blas_zherk("L", "N", &k, &k, &c_b15, a, &k, &c_b16, &a[k * k], &k);
-                aocl_lapack_zpotrf("L", &k, &a[k * k], &k, info);
+                ztrsm_("R", "U", "N", "N", &k, &k, &c_b1, &a[k * (k + 1)], &k, a, &k);
+                zherk_("L", "N", &k, &k, &c_b15, a, &k, &c_b16, &a[k * k], &k);
+                zpotrf_("L", &k, &a[k * k], &k, info);
                 if(*info > 0)
                 {
                     *info += k;

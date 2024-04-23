@@ -1,18 +1,13 @@
 #ifdef FLA_ENABLE_XBLAS
-/* ../netlib/zla_syrfsx_extended.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zla_syrfsx_extended.f -- translated by f2c (version 20100827). You must link the
+ resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
+ Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
+ with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-static doublecomplex c_b14 =
-{
-    -1.,0.
-    }
-;
-static doublecomplex c_b15 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b14 = {-1., 0.};
+static doublecomplex c_b15 = {1., 0.};
 static doublereal c_b37 = 1.;
 /* > \brief \b ZLA_SYRFSX_EXTENDED improves the computed solution to a system of linear equations
  * for symmetri c indefinite matrices by performing extra-precise iterative refinement and provides
@@ -407,10 +402,23 @@ i+1}
 /* > \ingroup complex16SYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda, doublecomplex *af, integer *ldaf, integer *ipiv, logical *colequ, doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *y, integer *ldy, doublereal *berr_out__, integer *n_norms__, doublereal * err_bnds_norm__, doublereal *err_bnds_comp__, doublecomplex *res, doublereal *ayb, doublecomplex *dy, doublecomplex *y_tail__, doublereal *rcond, integer *ithresh, doublereal *rthresh, doublereal * dz_ub__, logical *ignore_cwise__, integer *info)
+void zla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs,
+                          doublecomplex *a, integer *lda, doublecomplex *af, integer *ldaf,
+                          integer *ipiv, logical *colequ, doublereal *c__, doublecomplex *b,
+                          integer *ldb, doublecomplex *y, integer *ldy, doublereal *berr_out__,
+                          integer *n_norms__, doublereal *err_bnds_norm__,
+                          doublereal *err_bnds_comp__, doublecomplex *res, doublereal *ayb,
+                          doublecomplex *dy, doublecomplex *y_tail__, doublereal *rcond,
+                          integer *ithresh, doublereal *rthresh, doublereal *dz_ub__,
+                          logical *ignore_cwise__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zla_syrfsx_extended inputs: prec_type__ %" FLA_IS ", uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldy %" FLA_IS ", n_norms__ %" FLA_IS ", rcond %lf, ithresh %" FLA_IS ", rthresh %lf", *prec_type__, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldy, *n_norms__, *rcond, *ithresh, *rthresh);
+    AOCL_DTL_SNPRINTF("zla_syrfsx_extended inputs: prec_type__ %" FLA_IS ", uplo %c, n %" FLA_IS
+                      ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS
+                      ", ldy %" FLA_IS ", n_norms__ %" FLA_IS ", rcond %lf, ithresh %" FLA_IS
+                      ", rthresh %lf",
+                      *prec_type__, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldy, *n_norms__, *rcond,
+                      *ithresh, *rthresh);
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, y_dim1, y_offset,
         err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1,
@@ -424,35 +432,49 @@ void zla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     logical incr_prec__;
     doublereal prev_dz_z__;
     extern /* Subroutine */
-    void zla_syamv_(integer *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *);
+        void
+        zla_syamv_(integer *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *,
+                   integer *, doublereal *, doublereal *, integer *);
     doublereal yk, final_dx_x__, final_dz_z__;
     extern /* Subroutine */
-    void zla_wwaddw_(integer *, doublecomplex *, doublecomplex *, doublecomplex *);
+        void
+        zla_wwaddw_(integer *, doublecomplex *, doublecomplex *, doublecomplex *);
     doublereal prevnormdx;
     integer cnt;
     doublereal dyk, eps, incr_thresh__, dx_x__, dz_z__, ymin;
     extern /* Subroutine */
-    void zla_lin_berr_(integer *, integer *, integer *, doublecomplex *, doublereal *, doublereal *);
+        void
+        zla_lin_berr_(integer *, integer *, integer *, doublecomplex *, doublereal *, doublereal *);
     integer y_prec_state__, uplo2;
     extern /* Subroutine */
-    int blas_zsymv_x_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *) ;
+        int
+        blas_zsymv_x_(integer *, integer *, doublecomplex *, doublecomplex *, integer *,
+                      doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *,
+                      integer *);
     extern logical lsame_(char *, char *, integer, integer);
     doublereal dxrat, dzrat;
     logical upper;
     extern /* Subroutine */
         int
-        blas_zsymv2_x_(integer *, integer *, dcomplex *, dcomplex *, integer *,
-                       dcomplex *, dcomplex *, integer *, dcomplex *,
-                       dcomplex *, integer *, integer *);
+        blas_zsymv2_x_(integer *, integer *, doublecomplex *, doublecomplex *, integer *,
+                       doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+                       doublecomplex *, integer *, integer *);
     doublereal normx, normy;
     extern /* Subroutine */
-    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zsymv_( char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zsymv_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+               integer *, doublecomplex *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal normdx;
     extern /* Subroutine */
-    void zsytrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zsytrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *,
+                doublecomplex *, integer *, integer *);
     doublereal hugeval;
     extern integer ilauplo_(char *);
     integer x_state__, z_state__;
@@ -509,7 +531,7 @@ void zla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -521,19 +543,19 @@ void zla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -13;
     }
-    else if (*ldy < fla_max(1,*n))
+    else if(*ldy < fla_max(1, *n))
     {
         *info = -15;
     }
@@ -549,8 +571,8 @@ void zla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     /* Force HUGEVAL to Inf */
     hugeval *= hugeval;
     /* Using HUGEVAL may lead to spurious underflows. */
-    incr_thresh__ = (doublereal) (*n) * eps;
-    if (lsame_(uplo, "L", 1, 1))
+    incr_thresh__ = (doublereal)(*n) * eps;
+    if(lsame_(uplo, "L", 1, 1))
     {
         uplo2 = ilauplo_("L");
     }
@@ -619,37 +641,39 @@ void zla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
             for(i__ = 1; i__ <= i__3; ++i__)
             {
                 i__4 = i__ + j * y_dim1;
-                yk = (d__1 = y[i__4].r, f2c_dabs(d__1)) + (d__2 = d_imag(&y[i__ + j * y_dim1]), f2c_dabs(d__2));
+                yk = (d__1 = y[i__4].r, f2c_dabs(d__1))
+                     + (d__2 = d_imag(&y[i__ + j * y_dim1]), f2c_dabs(d__2));
                 i__4 = i__;
-                dyk = (d__1 = dy[i__4].r, f2c_dabs(d__1)) + (d__2 = d_imag(&dy[i__] ), f2c_dabs(d__2));
-                if (yk != 0.)
+                dyk = (d__1 = dy[i__4].r, f2c_dabs(d__1))
+                      + (d__2 = d_imag(&dy[i__]), f2c_dabs(d__2));
+                if(yk != 0.)
                 {
                     /* Computing MAX */
                     d__1 = dz_z__;
                     d__2 = dyk / yk; // , expr subst
-                    dz_z__ = fla_max(d__1,d__2);
+                    dz_z__ = fla_max(d__1, d__2);
                 }
                 else if(dyk != 0.)
                 {
                     dz_z__ = hugeval;
                 }
-                ymin = fla_min(ymin,yk);
-                normy = fla_max(normy,yk);
-                if (*colequ)
+                ymin = fla_min(ymin, yk);
+                normy = fla_max(normy, yk);
+                if(*colequ)
                 {
                     /* Computing MAX */
                     d__1 = normx;
                     d__2 = yk * c__[i__]; // , expr subst
-                    normx = fla_max(d__1,d__2);
+                    normx = fla_max(d__1, d__2);
                     /* Computing MAX */
                     d__1 = normdx;
                     d__2 = dyk * c__[i__]; // , expr subst
-                    normdx = fla_max(d__1,d__2);
+                    normdx = fla_max(d__1, d__2);
                 }
                 else
                 {
                     normx = normy;
-                    normdx = fla_max(normdx,dyk);
+                    normdx = fla_max(normdx, dyk);
                 }
             }
             if(normx != 0.)
@@ -807,10 +831,12 @@ void zla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            ayb[i__] = (d__1 = b[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&b[i__ + j * b_dim1]), f2c_dabs(d__2));
+            ayb[i__] = (d__1 = b[i__3].r, f2c_dabs(d__1))
+                       + (d__2 = d_imag(&b[i__ + j * b_dim1]), f2c_dabs(d__2));
         }
         /* Compute f2c_dabs(op(A_s))*f2c_dabs(Y) + f2c_dabs(B_s). */
-        zla_syamv_(&uplo2, n, &c_b37, &a[a_offset], lda, &y[j * y_dim1 + 1], &c__1, &c_b37, &ayb[1], &c__1);
+        zla_syamv_(&uplo2, n, &c_b37, &a[a_offset], lda, &y[j * y_dim1 + 1], &c__1, &c_b37, &ayb[1],
+                   &c__1);
         zla_lin_berr_(n, n, &c__1, &res[1], &ayb[1], &berr_out__[j]);
         /* End of loop for each RHS. */
     }

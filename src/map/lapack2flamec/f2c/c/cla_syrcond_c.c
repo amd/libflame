@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b CLA_SYRCOND_C computes the infinity norm condition number of op(A)*inv(diag(c)) for
  * symmetric i ndefinite matrices. */
 /* =========== DOCUMENTATION =========== */
@@ -135,18 +135,19 @@ static aocl_int64_t c__1 = 1;
 /* > \date September 2012 */
 /* > \ingroup complexSYcomputational */
 /* ===================================================================== */
-/** Generated wrapper function */
-real cla_syrcond_c_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *af,
-                    aocl_int_t *ldaf, aocl_int_t *ipiv, real *c__, logical *capply,
-                    aocl_int_t *info, scomplex *work, real *rwork)
+real cla_syrcond_c_(char *uplo, integer *n, complex *a, integer *lda, complex *af, integer *ldaf,
+                    integer *ipiv, real *c__, logical *capply, integer *info, complex *work,
+                    real *rwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cla_syrcond_c inputs: uplo %c, n %lld, lda %lld, ldaf %lld",*uplo, *n, *lda, *ldaf);
+    snprintf(buffer, 256, "cla_syrcond_c inputs: uplo %c, n %lld, lda %lld, ldaf %lld", *uplo, *n,
+             *lda, *ldaf);
 #else
-    snprintf(buffer, 256,"cla_syrcond_c inputs: uplo %c, n %d, lda %d, ldaf %d",*uplo, *n, *lda, *ldaf);
+    snprintf(buffer, 256, "cla_syrcond_c inputs: uplo %c, n %d, lda %d, ldaf %d", *uplo, *n, *lda,
+             *ldaf);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -166,10 +167,14 @@ real cla_syrcond_c_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sco
     real anorm;
     logical upper;
     extern /* Subroutine */
-    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clacn2_(integer *, complex *, complex *, real *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     extern /* Subroutine */
-    void csytrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+        void
+        csytrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *,
+                integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -209,7 +214,7 @@ real cla_syrcond_c_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sco
     ret_val = 0.f;
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -217,11 +222,11 @@ real cla_syrcond_c_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sco
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -233,7 +238,7 @@ real cla_syrcond_c_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sco
         return ret_val;
     }
     up = FALSE_;
-    if (lsame_(uplo, "U", 1, 1))
+    if(lsame_(uplo, "U", 1, 1))
     {
         up = TRUE_;
     }
@@ -251,13 +256,17 @@ real cla_syrcond_c_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sco
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * a_dim1;
-                    tmp += ((r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ j + i__ * a_dim1]), f2c_abs(r__2))) / c__[j];
+                    tmp += ((r__1 = a[i__3].r, f2c_abs(r__1))
+                            + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2)))
+                           / c__[j];
                 }
                 i__2 = *n;
                 for(j = i__ + 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * a_dim1;
-                    tmp += ((r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ i__ + j * a_dim1]), f2c_abs(r__2))) / c__[j];
+                    tmp += ((r__1 = a[i__3].r, f2c_abs(r__1))
+                            + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)))
+                           / c__[j];
                 }
             }
             else
@@ -266,17 +275,19 @@ real cla_syrcond_c_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sco
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * a_dim1;
-                    tmp += (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ j + i__ * a_dim1]), f2c_abs(r__2));
+                    tmp += (r__1 = a[i__3].r, f2c_abs(r__1))
+                           + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2));
                 }
                 i__2 = *n;
                 for(j = i__ + 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * a_dim1;
-                    tmp += (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ i__ + j * a_dim1]), f2c_abs(r__2));
+                    tmp += (r__1 = a[i__3].r, f2c_abs(r__1))
+                           + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
                 }
             }
             rwork[i__] = tmp;
-            anorm = fla_max(anorm,tmp);
+            anorm = fla_max(anorm, tmp);
         }
     }
     else
@@ -291,13 +302,17 @@ real cla_syrcond_c_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sco
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * a_dim1;
-                    tmp += ((r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ i__ + j * a_dim1]), f2c_abs(r__2))) / c__[j];
+                    tmp += ((r__1 = a[i__3].r, f2c_abs(r__1))
+                            + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)))
+                           / c__[j];
                 }
                 i__2 = *n;
                 for(j = i__ + 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * a_dim1;
-                    tmp += ((r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ j + i__ * a_dim1]), f2c_abs(r__2))) / c__[j];
+                    tmp += ((r__1 = a[i__3].r, f2c_abs(r__1))
+                            + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2)))
+                           / c__[j];
                 }
             }
             else
@@ -306,17 +321,19 @@ real cla_syrcond_c_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sco
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * a_dim1;
-                    tmp += (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ i__ + j * a_dim1]), f2c_abs(r__2));
+                    tmp += (r__1 = a[i__3].r, f2c_abs(r__1))
+                           + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
                 }
                 i__2 = *n;
                 for(j = i__ + 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * a_dim1;
-                    tmp += (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ j + i__ * a_dim1]), f2c_abs(r__2));
+                    tmp += (r__1 = a[i__3].r, f2c_abs(r__1))
+                           + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2));
                 }
             }
             rwork[i__] = tmp;
-            anorm = fla_max(anorm,tmp);
+            anorm = fla_max(anorm, tmp);
         }
     }
     /* Quick return if possible. */
@@ -335,7 +352,7 @@ real cla_syrcond_c_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, sco
     ainvnm = 0.f;
     kase = 0;
 L10:
-    aocl_lapack_clacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    clacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == 2)
@@ -354,13 +371,11 @@ L10:
             }
             if(up)
             {
-                aocl_lapack_csytrs("U", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
-                                   info);
+                csytrs_("U", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
             }
             else
             {
-                aocl_lapack_csytrs("L", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
-                                   info);
+                csytrs_("L", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
             }
             /* Multiply by inv(C). */
             if(*capply)
@@ -397,13 +412,11 @@ L10:
             }
             if(up)
             {
-                aocl_lapack_csytrs("U", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
-                                   info);
+                csytrs_("U", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
             }
             else
             {
-                aocl_lapack_csytrs("L", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
-                                   info);
+                csytrs_("L", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
             }
             /* Multiply by R. */
             i__1 = *n;

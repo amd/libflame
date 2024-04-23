@@ -172,12 +172,16 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cunmr3_(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, complex *a, integer *lda, complex *tau, complex *c__, integer *ldc, complex *work, integer *info)
+void cunmr3_(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, complex *a,
+             integer *lda, complex *tau, complex *c__, integer *ldc, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"cunmr3 inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",*side, *trans, *m, *n, *k, *l, *lda, *ldc);
+    snprintf(buffer, 256,
+             "cunmr3 inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
+             ", l %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",
+             *side, *trans, *m, *n, *k, *l, *lda, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -191,7 +195,10 @@ void cunmr3_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     complex taui;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void clarz_(char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clarz_(char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+               integer *, complex *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -234,11 +241,11 @@ void cunmr3_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -258,11 +265,11 @@ void cunmr3_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     {
         *info = -6;
     }
-    else if (*lda < fla_max(1,*k))
+    else if(*lda < fla_max(1, *k))
     {
         *info = -8;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -11;
     }
@@ -332,8 +339,8 @@ void cunmr3_(char *side, char *trans, integer *m, integer *n, integer *k, intege
             taui.real = q__1.real;
             taui.imag = q__1.imag; // , expr subst
         }
-        aocl_lapack_clarz(side, &mi, &ni, l, &a[i__ + ja * a_dim1], lda, &taui,
-                          &c__[ic + jc * c_dim1], ldc, &work[1]);
+        clarz_(side, &mi, &ni, l, &a[i__ + ja * a_dim1], lda, &taui, &c__[ic + jc * c_dim1], ldc,
+               &work[1]);
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

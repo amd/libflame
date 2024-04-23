@@ -1,11 +1,10 @@
-/* zggglm.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* zggglm.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b2 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b2 = {1., 0.};
 static integer c__1 = 1;
 static integer c_n1 = -1;
 /* > \brief \b ZGGGLM */
@@ -14,11 +13,17 @@ static integer c_n1 = -1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZGGGLM + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zggglm. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zggglm.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zggglm. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zggglm.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zggglm. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zggglm.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -104,7 +109,7 @@ static integer c_n1 = -1;
 /* > On entry, the N-by-P matrix B. */
 /* > On exit, if N <= P, the upper triangle of the subarray */
 /* > B(1:N,P-N+1:P) contains the N-by-N upper triangular matrix T;
-*/
+ */
 /* > if N > P, the elements on and above the (N-P)th subdiagonal */
 /* > contain the N-by-P upper trapezoidal matrix T. */
 /* > \endverbatim */
@@ -181,24 +186,40 @@ the least squares solution could not */
 /* > \ingroup complex16OTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void zggglm_(integer *n, integer *m, integer *p, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *d__, doublecomplex *x, doublecomplex *y, doublecomplex *work, integer *lwork, integer *info)
+void zggglm_(integer *n, integer *m, integer *p, doublecomplex *a, integer *lda, doublecomplex *b,
+             integer *ldb, doublecomplex *d__, doublecomplex *x, doublecomplex *y,
+             doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zggglm inputs: n %" FLA_IS ", m %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*n, *m, *p, *lda, *ldb);
+    AOCL_DTL_SNPRINTF("zggglm inputs: n %" FLA_IS ", m %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS "",
+                      *n, *m, *p, *lda, *ldb);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     doublecomplex z__1;
     /* Local variables */
     integer i__, nb, np, nb1, nb2, nb3, nb4, lopt;
     extern /* Subroutine */
-    void zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
+               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void zggqrf_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *) ;
+        void
+        zggqrf_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
     integer lwkmin, lwkopt;
     logical lquery;
     extern /* Subroutine */
-    void zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zunmrq_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), ztrtrs_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *),
+        zunmrq_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *),
+        ztrtrs_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -232,32 +253,32 @@ void zggglm_(integer *n, integer *m, integer *p, doublecomplex *a, integer *lda,
     --work;
     /* Function Body */
     *info = 0;
-    np = fla_min(*n,*p);
+    np = fla_min(*n, *p);
     lquery = *lwork == -1;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    else if (*m < 0 || *m > *n)
+    else if(*m < 0 || *m > *n)
     {
         *info = -2;
     }
-    else if (*p < 0 || *p < *n - *m)
+    else if(*p < 0 || *p < *n - *m)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
     /* Calculate workspace */
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (*n == 0)
+        if(*n == 0)
         {
             lwkmin = 1;
             lwkopt = 1;
@@ -269,53 +290,49 @@ void zggglm_(integer *n, integer *m, integer *p, doublecomplex *a, integer *lda,
             nb3 = ilaenv_(&c__1, "ZUNMQR", " ", n, m, p, &c_n1);
             nb4 = ilaenv_(&c__1, "ZUNMRQ", " ", n, m, p, &c_n1);
             /* Computing MAX */
-            i__1 = fla_max(nb1,nb2);
-            i__1 = fla_max(i__1,nb3); // , expr subst
-            nb = fla_max(i__1,nb4);
+            i__1 = fla_max(nb1, nb2);
+            i__1 = fla_max(i__1, nb3); // , expr subst
+            nb = fla_max(i__1, nb4);
             lwkmin = *m + *n + *p;
-            lwkopt = *m + np + fla_max(*n,*p) * nb;
+            lwkopt = *m + np + fla_max(*n, *p) * nb;
         }
-        work[1].r = (doublereal) lwkopt;
+        work[1].r = (doublereal)lwkopt;
         work[1].i = 0.; // , expr subst
-        if (*lwork < lwkmin && ! lquery)
+        if(*lwork < lwkmin && !lquery)
         {
             *info = -12;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZGGGLM", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         i__1 = *m;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
             x[i__2].r = 0.;
             x[i__2].i = 0.; // , expr subst
         }
         i__1 = *p;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
             y[i__2].r = 0.;
             y[i__2].i = 0.; // , expr subst
         }
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute the GQR factorization of matrices A and B: */
@@ -325,29 +342,32 @@ void zggglm_(integer *n, integer *m, integer *p, doublecomplex *a, integer *lda,
     /* where R11 and T22 are upper triangular, and Q and Z are */
     /* unitary. */
     i__1 = *lwork - *m - np;
-    zggqrf_(n, m, p, &a[a_offset], lda, &work[1], &b[b_offset], ldb, &work[*m + 1], &work[*m + np + 1], &i__1, info);
+    zggqrf_(n, m, p, &a[a_offset], lda, &work[1], &b[b_offset], ldb, &work[*m + 1],
+            &work[*m + np + 1], &i__1, info);
     i__1 = *m + np + 1;
-    lopt = (integer) work[i__1].r;
+    lopt = (integer)work[i__1].r;
     /* Update left-hand-side vector d = Q**H*d = ( d1 ) M */
     /* ( d2 ) N-M */
-    i__1 = fla_max(1,*n);
+    i__1 = fla_max(1, *n);
     i__2 = *lwork - *m - np;
-    zunmqr_("Left", "Conjugate transpose", n, &c__1, m, &a[a_offset], lda, & work[1], &d__[1], &i__1, &work[*m + np + 1], &i__2, info);
+    zunmqr_("Left", "Conjugate transpose", n, &c__1, m, &a[a_offset], lda, &work[1], &d__[1], &i__1,
+            &work[*m + np + 1], &i__2, info);
     /* Computing MAX */
     i__3 = *m + np + 1;
     i__1 = lopt;
-    i__2 = (integer) work[i__3].r; // , expr subst
-    lopt = fla_max(i__1,i__2);
+    i__2 = (integer)work[i__3].r; // , expr subst
+    lopt = fla_max(i__1, i__2);
     /* Solve T22*y2 = d2 for y2 */
-    if (*n > *m)
+    if(*n > *m)
     {
         i__1 = *n - *m;
         i__2 = *n - *m;
-        ztrtrs_("Upper", "No transpose", "Non unit", &i__1, &c__1, &b[*m + 1 + (*m + *p - *n + 1) * b_dim1], ldb, &d__[*m + 1], &i__2, info);
-        if (*info > 0)
+        ztrtrs_("Upper", "No transpose", "Non unit", &i__1, &c__1,
+                &b[*m + 1 + (*m + *p - *n + 1) * b_dim1], ldb, &d__[*m + 1], &i__2, info);
+        if(*info > 0)
         {
             *info = 1;
-    AOCL_DTL_TRACE_LOG_EXIT
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         i__1 = *n - *m;
@@ -355,9 +375,7 @@ void zggglm_(integer *n, integer *m, integer *p, doublecomplex *a, integer *lda,
     }
     /* Set y1 = 0 */
     i__1 = *m + *p - *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
         y[i__2].r = 0.;
@@ -368,15 +386,16 @@ void zggglm_(integer *n, integer *m, integer *p, doublecomplex *a, integer *lda,
     i__1 = *n - *m;
     z__1.r = -1.;
     z__1.i = -0.; // , expr subst
-    zgemv_("No transpose", m, &i__1, &z__1, &b[(*m + *p - *n + 1) * b_dim1 + 1], ldb, &y[*m + *p - *n + 1], &c__1, &c_b2, &d__[1], &c__1);
+    zgemv_("No transpose", m, &i__1, &z__1, &b[(*m + *p - *n + 1) * b_dim1 + 1], ldb,
+           &y[*m + *p - *n + 1], &c__1, &c_b2, &d__[1], &c__1);
     /* Solve triangular system: R11*x = d1 */
-    if (*m > 0)
+    if(*m > 0)
     {
         ztrtrs_("Upper", "No Transpose", "Non unit", m, &c__1, &a[a_offset], lda, &d__[1], m, info);
-        if (*info > 0)
+        if(*info > 0)
         {
             *info = 2;
-    AOCL_DTL_TRACE_LOG_EXIT
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         /* Copy D to X */
@@ -386,15 +405,16 @@ void zggglm_(integer *n, integer *m, integer *p, doublecomplex *a, integer *lda,
     /* Computing MAX */
     i__1 = 1;
     i__2 = *n - *p + 1; // , expr subst
-    i__3 = fla_max(1,*p);
+    i__3 = fla_max(1, *p);
     i__4 = *lwork - *m - np;
-    zunmrq_("Left", "Conjugate transpose", p, &c__1, &np, &b[fla_max(i__1,i__2) + b_dim1], ldb, &work[*m + 1], &y[1], &i__3, &work[*m + np + 1], & i__4, info);
+    zunmrq_("Left", "Conjugate transpose", p, &c__1, &np, &b[fla_max(i__1, i__2) + b_dim1], ldb,
+            &work[*m + 1], &y[1], &i__3, &work[*m + np + 1], &i__4, info);
     /* Computing MAX */
     i__4 = *m + np + 1;
     i__2 = lopt;
-    i__3 = (integer) work[i__4].r; // , expr subst
-    i__1 = *m + np + fla_max(i__2,i__3);
-    work[1].r = (doublereal) i__1;
+    i__3 = (integer)work[i__4].r; // , expr subst
+    i__1 = *m + np + fla_max(i__2, i__3);
+    work[1].r = (doublereal)i__1;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

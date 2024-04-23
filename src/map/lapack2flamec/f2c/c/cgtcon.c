@@ -140,15 +140,16 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complexGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cgtcon_(char *norm, integer *n, complex *dl, complex * d__, complex *du, complex *du2, integer *ipiv, real *anorm, real * rcond, complex *work, integer *info)
+void cgtcon_(char *norm, integer *n, complex *dl, complex *d__, complex *du, complex *du2,
+             integer *ipiv, real *anorm, real *rcond, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgtcon inputs: norm %c, n %lld",*norm, *n);
+    snprintf(buffer, 256, "cgtcon inputs: norm %c, n %lld", *norm, *n);
 #else
-    snprintf(buffer, 256,"cgtcon inputs: norm %c, n %d",*norm, *n);
+    snprintf(buffer, 256, "cgtcon inputs: norm %c, n %d", *norm, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -159,11 +160,15 @@ void cgtcon_(char *norm, integer *n, complex *dl, complex * d__, complex *du, co
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clacn2_(integer *, complex *, complex *, real *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     logical onenrm;
     extern /* Subroutine */
-    void cgttrs_(char *, integer *, integer *, complex *, complex *, complex *, complex *, integer *, complex *, integer *, integer *);
+        void
+        cgttrs_(char *, integer *, integer *, complex *, complex *, complex *, complex *, integer *,
+                complex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -197,7 +202,7 @@ void cgtcon_(char *norm, integer *n, complex *dl, complex * d__, complex *du, co
     /* Function Body */
     *info = 0;
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
-    if (! onenrm && ! lsame_(norm, "I", 1, 1))
+    if(!onenrm && !lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }
@@ -234,7 +239,7 @@ void cgtcon_(char *norm, integer *n, complex *dl, complex * d__, complex *du, co
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        if(d__[i__2].real == 0.f && d__[i__2].imag == 0.f)
+        if(d__[i__2].r == 0.f && d__[i__2].i == 0.f)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;
@@ -252,19 +257,20 @@ void cgtcon_(char *norm, integer *n, complex *dl, complex * d__, complex *du, co
     }
     kase = 0;
 L20:
-    aocl_lapack_clacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    clacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == kase1)
         {
             /* Multiply by inv(U)*inv(L). */
-            cgttrs_("No transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &work[1], n, info);
+            cgttrs_("No transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &work[1],
+                    n, info);
         }
         else
         {
             /* Multiply by inv(L**H)*inv(U**H). */
-            aocl_lapack_cgttrs("Conjugate transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1],
-                               &ipiv[1], &work[1], n, info);
+            cgttrs_("Conjugate transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1],
+                    &work[1], n, info);
         }
         goto L20;
     }

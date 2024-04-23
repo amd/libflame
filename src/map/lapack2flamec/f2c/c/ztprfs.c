@@ -173,10 +173,14 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ztprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, doublecomplex *ap, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *ferr, doublereal *berr, doublecomplex *work, doublereal *rwork, integer *info)
+void ztprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, doublecomplex *ap,
+             doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *ferr,
+             doublereal *berr, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztprfs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*uplo, *trans, *diag, *n, *nrhs, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("ztprfs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", nrhs %" FLA_IS
+                      ", ldb %" FLA_IS ", ldx %" FLA_IS "",
+                      *uplo, *trans, *diag, *n, *nrhs, *ldb, *ldx);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2, d__3, d__4;
@@ -196,11 +200,17 @@ void ztprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), ztpmv_( char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
+        void
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
+        ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
+        ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
+        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     char transn[1], transt[1];
     logical nounit;
@@ -249,15 +259,15 @@ void ztprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
     upper = lsame_(uplo, "U", 1, 1);
     notran = lsame_(trans, "N", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
@@ -269,11 +279,11 @@ void ztprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -10;
     }
@@ -281,7 +291,7 @@ void ztprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
     {
         i__1 = -(*info);
         xerbla_("ZTPRFS", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -294,7 +304,7 @@ void ztprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
             berr[j] = 0.;
             /* L10: */
         }
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(notran)
@@ -334,13 +344,14 @@ void ztprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            rwork[i__] = (d__1 = b[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&b[ i__ + j * b_dim1]), f2c_dabs(d__2));
+            rwork[i__] = (d__1 = b[i__3].r, f2c_dabs(d__1))
+                         + (d__2 = d_imag(&b[i__ + j * b_dim1]), f2c_dabs(d__2));
             /* L20: */
         }
         if(notran)
         {
             /* Compute f2c_dabs(A)*f2c_dabs(X) + f2c_dabs(B). */
-            if (upper)
+            if(upper)
             {
                 kc = 1;
                 if(nounit)
@@ -349,12 +360,15 @@ void ztprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
                     for(k = 1; k <= i__2; ++k)
                     {
                         i__3 = k + j * x_dim1;
-                        xk = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(& x[k + j * x_dim1]), f2c_dabs(d__2));
+                        xk = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                             + (d__2 = d_imag(&x[k + j * x_dim1]), f2c_dabs(d__2));
                         i__3 = k;
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
                             i__4 = kc + i__ - 1;
-                            rwork[i__] += ((d__1 = ap[i__4].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&ap[kc + i__ - 1]), f2c_dabs( d__2))) * xk;
+                            rwork[i__] += ((d__1 = ap[i__4].r, f2c_dabs(d__1))
+                                           + (d__2 = d_imag(&ap[kc + i__ - 1]), f2c_dabs(d__2)))
+                                          * xk;
                             /* L30: */
                         }
                         kc += k;
@@ -367,12 +381,15 @@ void ztprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
                     for(k = 1; k <= i__2; ++k)
                     {
                         i__3 = k + j * x_dim1;
-                        xk = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(& x[k + j * x_dim1]), f2c_dabs(d__2));
+                        xk = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                             + (d__2 = d_imag(&x[k + j * x_dim1]), f2c_dabs(d__2));
                         i__3 = k - 1;
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
                             i__4 = kc + i__ - 1;
-                            rwork[i__] += ((d__1 = ap[i__4].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&ap[kc + i__ - 1]), f2c_dabs( d__2))) * xk;
+                            rwork[i__] += ((d__1 = ap[i__4].r, f2c_dabs(d__1))
+                                           + (d__2 = d_imag(&ap[kc + i__ - 1]), f2c_dabs(d__2)))
+                                          * xk;
                             /* L50: */
                         }
                         rwork[k] += xk;
@@ -390,12 +407,15 @@ void ztprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
                     for(k = 1; k <= i__2; ++k)
                     {
                         i__3 = k + j * x_dim1;
-                        xk = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(& x[k + j * x_dim1]), f2c_dabs(d__2));
+                        xk = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                             + (d__2 = d_imag(&x[k + j * x_dim1]), f2c_dabs(d__2));
                         i__3 = *n;
                         for(i__ = k; i__ <= i__3; ++i__)
                         {
                             i__4 = kc + i__ - k;
-                            rwork[i__] += ((d__1 = ap[i__4].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&ap[kc + i__ - k]), f2c_dabs( d__2))) * xk;
+                            rwork[i__] += ((d__1 = ap[i__4].r, f2c_dabs(d__1))
+                                           + (d__2 = d_imag(&ap[kc + i__ - k]), f2c_dabs(d__2)))
+                                          * xk;
                             /* L70: */
                         }
                         kc = kc + *n - k + 1;
@@ -408,12 +428,15 @@ void ztprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
                     for(k = 1; k <= i__2; ++k)
                     {
                         i__3 = k + j * x_dim1;
-                        xk = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(& x[k + j * x_dim1]), f2c_dabs(d__2));
+                        xk = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                             + (d__2 = d_imag(&x[k + j * x_dim1]), f2c_dabs(d__2));
                         i__3 = *n;
                         for(i__ = k + 1; i__ <= i__3; ++i__)
                         {
                             i__4 = kc + i__ - k;
-                            rwork[i__] += ((d__1 = ap[i__4].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&ap[kc + i__ - k]), f2c_dabs( d__2))) * xk;
+                            rwork[i__] += ((d__1 = ap[i__4].r, f2c_dabs(d__1))
+                                           + (d__2 = d_imag(&ap[kc + i__ - k]), f2c_dabs(d__2)))
+                                          * xk;
                             /* L90: */
                         }
                         rwork[k] += xk;
@@ -426,7 +449,7 @@ void ztprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
         else
         {
             /* Compute f2c_dabs(A**H)*f2c_dabs(X) + f2c_dabs(B). */
-            if (upper)
+            if(upper)
             {
                 kc = 1;
                 if(nounit)
@@ -440,7 +463,10 @@ void ztprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
                         {
                             i__4 = kc + i__ - 1;
                             i__5 = i__ + j * x_dim1;
-                            s += ((d__1 = ap[i__4].r, f2c_dabs(d__1)) + (d__2 = d_imag(&ap[kc + i__ - 1]), f2c_dabs(d__2))) * ( (d__3 = x[i__5].r, f2c_dabs(d__3)) + (d__4 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__4)));
+                            s += ((d__1 = ap[i__4].r, f2c_dabs(d__1))
+                                  + (d__2 = d_imag(&ap[kc + i__ - 1]), f2c_dabs(d__2)))
+                                 * ((d__3 = x[i__5].r, f2c_dabs(d__3))
+                                    + (d__4 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__4)));
                             /* L110: */
                         }
                         rwork[k] += s;
@@ -454,13 +480,17 @@ void ztprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
                     for(k = 1; k <= i__2; ++k)
                     {
                         i__3 = k + j * x_dim1;
-                        s = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[ k + j * x_dim1]), f2c_dabs(d__2));
+                        s = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                            + (d__2 = d_imag(&x[k + j * x_dim1]), f2c_dabs(d__2));
                         i__3 = k - 1;
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
                             i__4 = kc + i__ - 1;
                             i__5 = i__ + j * x_dim1;
-                            s += ((d__1 = ap[i__4].r, f2c_dabs(d__1)) + (d__2 = d_imag(&ap[kc + i__ - 1]), f2c_dabs(d__2))) * ( (d__3 = x[i__5].r, f2c_dabs(d__3)) + (d__4 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__4)));
+                            s += ((d__1 = ap[i__4].r, f2c_dabs(d__1))
+                                  + (d__2 = d_imag(&ap[kc + i__ - 1]), f2c_dabs(d__2)))
+                                 * ((d__3 = x[i__5].r, f2c_dabs(d__3))
+                                    + (d__4 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__4)));
                             /* L130: */
                         }
                         rwork[k] += s;
@@ -483,7 +513,10 @@ void ztprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
                         {
                             i__4 = kc + i__ - k;
                             i__5 = i__ + j * x_dim1;
-                            s += ((d__1 = ap[i__4].r, f2c_dabs(d__1)) + (d__2 = d_imag(&ap[kc + i__ - k]), f2c_dabs(d__2))) * ( (d__3 = x[i__5].r, f2c_dabs(d__3)) + (d__4 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__4)));
+                            s += ((d__1 = ap[i__4].r, f2c_dabs(d__1))
+                                  + (d__2 = d_imag(&ap[kc + i__ - k]), f2c_dabs(d__2)))
+                                 * ((d__3 = x[i__5].r, f2c_dabs(d__3))
+                                    + (d__4 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__4)));
                             /* L150: */
                         }
                         rwork[k] += s;
@@ -497,13 +530,17 @@ void ztprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
                     for(k = 1; k <= i__2; ++k)
                     {
                         i__3 = k + j * x_dim1;
-                        s = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[ k + j * x_dim1]), f2c_dabs(d__2));
+                        s = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                            + (d__2 = d_imag(&x[k + j * x_dim1]), f2c_dabs(d__2));
                         i__3 = *n;
                         for(i__ = k + 1; i__ <= i__3; ++i__)
                         {
                             i__4 = kc + i__ - k;
                             i__5 = i__ + j * x_dim1;
-                            s += ((d__1 = ap[i__4].r, f2c_dabs(d__1)) + (d__2 = d_imag(&ap[kc + i__ - k]), f2c_dabs(d__2))) * ( (d__3 = x[i__5].r, f2c_dabs(d__3)) + (d__4 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__4)));
+                            s += ((d__1 = ap[i__4].r, f2c_dabs(d__1))
+                                  + (d__2 = d_imag(&ap[kc + i__ - k]), f2c_dabs(d__2)))
+                                 * ((d__3 = x[i__5].r, f2c_dabs(d__3))
+                                    + (d__4 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__4)));
                             /* L170: */
                         }
                         rwork[k] += s;
@@ -522,16 +559,20 @@ void ztprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
                 /* Computing MAX */
                 i__3 = i__;
                 d__3 = s;
-                d__4 = ((d__1 = work[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2))) / rwork[i__]; // , expr subst
-                s = fla_max(d__3,d__4);
+                d__4 = ((d__1 = work[i__3].r, f2c_dabs(d__1))
+                        + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)))
+                       / rwork[i__]; // , expr subst
+                s = fla_max(d__3, d__4);
             }
             else
             {
                 /* Computing MAX */
                 i__3 = i__;
                 d__3 = s;
-                d__4 = ((d__1 = work[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + safe1) / (rwork[i__] + safe1); // , expr subst
-                s = fla_max(d__3,d__4);
+                d__4 = ((d__1 = work[i__3].r, f2c_dabs(d__1))
+                        + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + safe1)
+                       / (rwork[i__] + safe1); // , expr subst
+                s = fla_max(d__3, d__4);
             }
             /* L190: */
         }
@@ -559,18 +600,21 @@ void ztprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
             if(rwork[i__] > safe2)
             {
                 i__3 = i__;
-                rwork[i__] = (d__1 = work[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + nz * eps * rwork[i__] ;
+                rwork[i__] = (d__1 = work[i__3].r, f2c_dabs(d__1))
+                             + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + nz * eps * rwork[i__];
             }
             else
             {
                 i__3 = i__;
-                rwork[i__] = (d__1 = work[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + nz * eps * rwork[i__] + safe1;
+                rwork[i__] = (d__1 = work[i__3].r, f2c_dabs(d__1))
+                             + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + nz * eps * rwork[i__]
+                             + safe1;
             }
             /* L200: */
         }
         kase = 0;
     L210:
-        aocl_lapack_zlacn2(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
+        zlacn2_(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
@@ -617,8 +661,9 @@ void ztprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
             /* Computing MAX */
             i__3 = i__ + j * x_dim1;
             d__3 = lstres;
-            d__4 = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__2)); // , expr subst
-            lstres = fla_max(d__3,d__4);
+            d__4 = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                   + (d__2 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__2)); // , expr subst
+            lstres = fla_max(d__3, d__4);
             /* L240: */
         }
         if(lstres != 0.)

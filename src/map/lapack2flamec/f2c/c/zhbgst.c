@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {0., 0.};
-static dcomplex c_b2 = {1., 0.};
-static aocl_int64_t c__1 = 1;
+static doublecomplex c_b1 = {0., 0.};
+static doublecomplex c_b2 = {1., 0.};
+static integer c__1 = 1;
 /* > \brief \b ZHBGST */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -99,7 +99,7 @@ static aocl_int64_t c__1 = 1;
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(ka+1+i-j,j) = A(i,j) for fla_max(1,j-ka)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+ka). */
 /* > */
 /* > On exit, the transformed matrix X**H*A*X, stored in the same */
@@ -167,13 +167,17 @@ LDX >= 1 otherwise. */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zhbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, doublecomplex *ab, integer *ldab, doublecomplex *bb, integer *ldbb, doublecomplex *x, integer *ldx, doublecomplex *work, doublereal *rwork, integer *info)
+void zhbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, doublecomplex *ab,
+             integer *ldab, doublecomplex *bb, integer *ldbb, doublecomplex *x, integer *ldx,
+             doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhbgst inputs: vect %c, uplo %c, n %" FLA_IS ", ka %" FLA_IS ", kb %" FLA_IS ", ldab %" FLA_IS ", ldbb %" FLA_IS ", ldx %" FLA_IS "",*vect, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldx);
+    AOCL_DTL_SNPRINTF("zhbgst inputs: vect %c, uplo %c, n %" FLA_IS ", ka %" FLA_IS ", kb %" FLA_IS
+                      ", ldab %" FLA_IS ", ldbb %" FLA_IS ", ldx %" FLA_IS "",
+                      *vect, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldx);
     /* System generated locals */
-    aocl_int64_t ab_dim1, ab_offset, bb_dim1, bb_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4,
-        i__5, i__6, i__7, i__8;
+    integer ab_dim1, ab_offset, bb_dim1, bb_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5,
+        i__6, i__7, i__8;
     doublereal d__1;
     dcomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7, z__8, z__9, z__10;
     /* Builtin functions */
@@ -189,19 +193,37 @@ void zhbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, doubl
     doublereal bii;
     integer kbt, nrt, inca;
     extern /* Subroutine */
-    void zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
+        void
+        zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
+              doublecomplex *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+               integer *, doublecomplex *, integer *);
     logical upper;
     extern /* Subroutine */
-    void zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+               integer *, doublecomplex *, integer *);
     logical wantx;
     extern /* Subroutine */
-    void zlar2v_(integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+        void
+        zlar2v_(integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *,
+                doublereal *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     logical update;
     extern /* Subroutine */
-    void zlacgv_(integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), zlartg_( doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *), zlargv_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *), zlartv_( integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
+        void
+        zlacgv_(integer *, doublecomplex *, integer *),
+        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
+                integer *),
+        zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *),
+        zlargv_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
+                integer *),
+        zlartv_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
+                doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -242,11 +264,11 @@ void zhbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, doubl
     kb1 = *kb + 1;
     *info = 0;
     j2 = 0;
-    if (! wantx && ! lsame_(vect, "N", 1, 1))
+    if(!wantx && !lsame_(vect, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -270,7 +292,7 @@ void zhbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, doubl
     {
         *info = -9;
     }
-    else if (*ldx < 1 || wantx && *ldx < fla_max(1,*n))
+    else if(*ldx < 1 || wantx && *ldx < fla_max(1, *n))
     {
         *info = -11;
     }
@@ -278,13 +300,13 @@ void zhbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, doubl
     {
         i__1 = -(*info);
         xerbla_("ZHBGST", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     inca = *ldab * ka1;
@@ -352,12 +374,12 @@ L10:
         /* Computing MIN */
         i__1 = *kb;
         i__2 = i__ - 1; // , expr subst
-        kbt = fla_min(i__1,i__2);
+        kbt = fla_min(i__1, i__2);
         i0 = i__ - 1;
         /* Computing MIN */
         i__1 = *n;
         i__2 = i__ + *ka; // , expr subst
-        i1 = fla_min(i__1,i__2);
+        i1 = fla_min(i__1, i__2);
         i2 = i__ - kbt + ka1;
         if(i__ < m + 1)
         {
@@ -407,9 +429,7 @@ L10:
             i__1 = 1;
             i__2 = i__ - *ka; // , expr subst
             i__3 = i__ - 1;
-            for (j = fla_max(i__1,i__2);
-                    j <= i__3;
-                    ++j)
+            for(j = fla_max(i__1, i__2); j <= i__3; ++j)
             {
                 i__1 = j - i__ + ka1 + i__ * ab_dim1;
                 i__2 = j - i__ + ka1 + i__ * ab_dim1;
@@ -435,10 +455,10 @@ L10:
                     z__3.imag = ab[i__4].imag - z__4.imag; // , expr subst
                     d_cnjg(&z__7, &bb[k - i__ + kb1 + i__ * bb_dim1]);
                     i__6 = j - i__ + ka1 + i__ * ab_dim1;
-                    z__6.real = z__7.real * ab[i__6].real - z__7.imag * ab[i__6].imag;
-                    z__6.imag = z__7.real * ab[i__6].imag + z__7.imag * ab[i__6].real; // , expr subst
-                    z__2.real = z__3.real - z__6.real;
-                    z__2.imag = z__3.imag - z__6.imag; // , expr subst
+                    z__6.r = z__7.r * ab[i__6].r - z__7.i * ab[i__6].i;
+                    z__6.i = z__7.r * ab[i__6].i + z__7.i * ab[i__6].r; // , expr subst
+                    z__2.r = z__3.r - z__6.r;
+                    z__2.i = z__3.i - z__6.i; // , expr subst
                     i__7 = ka1 + i__ * ab_dim1;
                     d__1 = ab[i__7].real;
                     i__8 = j - i__ + kb1 + i__ * bb_dim1;
@@ -457,20 +477,18 @@ L10:
                 i__1 = 1;
                 i__2 = i__ - *ka; // , expr subst
                 i__4 = i__ - kbt - 1;
-                for (j = fla_max(i__1,i__2);
-                        j <= i__4;
-                        ++j)
+                for(j = fla_max(i__1, i__2); j <= i__4; ++j)
                 {
                     i__1 = j - k + ka1 + k * ab_dim1;
                     i__2 = j - k + ka1 + k * ab_dim1;
                     d_cnjg(&z__3, &bb[k - i__ + kb1 + i__ * bb_dim1]);
                     i__5 = j - i__ + ka1 + i__ * ab_dim1;
-                    z__2.real = z__3.real * ab[i__5].real - z__3.imag * ab[i__5].imag;
-                    z__2.imag = z__3.real * ab[i__5].imag + z__3.imag * ab[i__5].real; // , expr subst
-                    z__1.real = ab[i__2].real - z__2.real;
-                    z__1.imag = ab[i__2].imag - z__2.imag; // , expr subst
-                    ab[i__1].real = z__1.real;
-                    ab[i__1].imag = z__1.imag; // , expr subst
+                    z__2.r = z__3.r * ab[i__5].r - z__3.i * ab[i__5].i;
+                    z__2.i = z__3.r * ab[i__5].i + z__3.i * ab[i__5].r; // , expr subst
+                    z__1.r = ab[i__2].r - z__2.r;
+                    z__1.i = ab[i__2].i - z__2.i; // , expr subst
+                    ab[i__1].r = z__1.r;
+                    ab[i__1].i = z__1.i; // , expr subst
                     /* L50: */
                 }
                 /* L60: */
@@ -482,20 +500,18 @@ L10:
                 i__4 = j - *ka;
                 i__1 = i__ - kbt; // , expr subst
                 i__2 = i__ - 1;
-                for (k = fla_max(i__4,i__1);
-                        k <= i__2;
-                        ++k)
+                for(k = fla_max(i__4, i__1); k <= i__2; ++k)
                 {
                     i__4 = k - j + ka1 + j * ab_dim1;
                     i__1 = k - j + ka1 + j * ab_dim1;
                     i__5 = k - i__ + kb1 + i__ * bb_dim1;
                     i__6 = i__ - j + ka1 + j * ab_dim1;
-                    z__2.real = bb[i__5].real * ab[i__6].real - bb[i__5].imag * ab[i__6].imag;
-                    z__2.imag = bb[i__5].real * ab[i__6].imag + bb[i__5].imag * ab[i__6].real; // , expr subst
-                    z__1.real = ab[i__1].real - z__2.real;
-                    z__1.imag = ab[i__1].imag - z__2.imag; // , expr subst
-                    ab[i__4].real = z__1.real;
-                    ab[i__4].imag = z__1.imag; // , expr subst
+                    z__2.r = bb[i__5].r * ab[i__6].r - bb[i__5].i * ab[i__6].i;
+                    z__2.i = bb[i__5].r * ab[i__6].i + bb[i__5].i * ab[i__6].r; // , expr subst
+                    z__1.r = ab[i__1].r - z__2.r;
+                    z__1.i = ab[i__1].i - z__2.i; // , expr subst
+                    ab[i__4].r = z__1.r;
+                    ab[i__4].i = z__1.i; // , expr subst
                     /* L70: */
                 }
                 /* L80: */
@@ -505,15 +521,15 @@ L10:
                 /* post-multiply X by inv(S(i)) */
                 i__3 = *n - m;
                 d__1 = 1. / bii;
-                aocl_blas_zdscal(&i__3, &d__1, &x[m + 1 + i__ * x_dim1], &c__1);
+                zdscal_(&i__3, &d__1, &x[m + 1 + i__ * x_dim1], &c__1);
                 if(kbt > 0)
                 {
                     i__3 = *n - m;
-                    z__1.real = -1.;
-                    z__1.imag = -0.; // , expr subst
-                    aocl_blas_zgerc(&i__3, &kbt, &z__1, &x[m + 1 + i__ * x_dim1], &c__1,
-                                    &bb[kb1 - kbt + i__ * bb_dim1], &c__1,
-                                    &x[m + 1 + (i__ - kbt) * x_dim1], ldx);
+                    z__1.r = -1.;
+                    z__1.i = -0.; // , expr subst
+                    zgerc_(&i__3, &kbt, &z__1, &x[m + 1 + i__ * x_dim1], &c__1,
+                           &bb[kb1 - kbt + i__ * bb_dim1], &c__1, &x[m + 1 + (i__ - kbt) * x_dim1],
+                           ldx);
                 }
             }
             /* store a(i,i1) in RA1 for use in next loop over K */
@@ -534,7 +550,8 @@ L10:
                 if(i__ - k + *ka < *n && i__ - k > 1)
                 {
                     /* generate rotation to annihilate a(i,i-k+ka+1) */
-                    zlartg_(&ab[k + 1 + (i__ - k + *ka) * ab_dim1], &ra1, & rwork[i__ - k + *ka - m], &work[i__ - k + *ka - m], &ra);
+                    zlartg_(&ab[k + 1 + (i__ - k + *ka) * ab_dim1], &ra1, &rwork[i__ - k + *ka - m],
+                            &work[i__ - k + *ka - m], &ra);
                     /* create nonzero element a(i-k,i-k+ka+1) outside the */
                     /* band and store it in WORK(i-k) */
                     i__2 = kb1 - k + i__ * bb_dim1;
@@ -550,12 +567,12 @@ L10:
                     z__2.imag = rwork[i__4] * t.imag; // , expr subst
                     d_cnjg(&z__4, &work[i__ - k + *ka - m]);
                     i__1 = (i__ - k + *ka) * ab_dim1 + 1;
-                    z__3.real = z__4.real * ab[i__1].real - z__4.imag * ab[i__1].imag;
-                    z__3.imag = z__4.real * ab[i__1].imag + z__4.imag * ab[i__1].real; // , expr subst
-                    z__1.real = z__2.real - z__3.real;
-                    z__1.imag = z__2.imag - z__3.imag; // , expr subst
-                    work[i__2].real = z__1.real;
-                    work[i__2].imag = z__1.imag; // , expr subst
+                    z__3.r = z__4.r * ab[i__1].r - z__4.i * ab[i__1].i;
+                    z__3.i = z__4.r * ab[i__1].i + z__4.i * ab[i__1].r; // , expr subst
+                    z__1.r = z__2.r - z__3.r;
+                    z__1.i = z__2.i - z__3.i; // , expr subst
+                    work[i__2].r = z__1.r;
+                    work[i__2].i = z__1.i; // , expr subst
                     i__2 = (i__ - k + *ka) * ab_dim1 + 1;
                     i__4 = i__ - k + *ka - m;
                     z__2.real = work[i__4].real * t.real - work[i__4].imag * t.imag;
@@ -575,7 +592,7 @@ L10:
             /* Computing MAX */
             i__2 = 1;
             i__4 = k - i0 + 2; // , expr subst
-            j2 = i__ - k - 1 + fla_max(i__2,i__4) * ka1;
+            j2 = i__ - k - 1 + fla_max(i__2, i__4) * ka1;
             nr = (*n - j2 + *ka) / ka1;
             j1 = j2 + (nr - 1) * ka1;
             if(update)
@@ -583,7 +600,7 @@ L10:
                 /* Computing MAX */
                 i__2 = j2;
                 i__4 = i__ + (*ka << 1) - k + 1; // , expr subst
-                j2t = fla_max(i__2,i__4);
+                j2t = fla_max(i__2, i__4);
             }
             else
             {
@@ -599,25 +616,25 @@ L10:
                 i__1 = j - m;
                 i__5 = j - m;
                 i__6 = (j + 1) * ab_dim1 + 1;
-                z__1.real = work[i__5].real * ab[i__6].real - work[i__5].imag * ab[i__6].imag;
-                z__1.imag = work[i__5].real * ab[i__6].imag + work[i__5].imag * ab[i__6].real; // , expr subst
-                work[i__1].real = z__1.real;
-                work[i__1].imag = z__1.imag; // , expr subst
+                z__1.r = work[i__5].r * ab[i__6].r - work[i__5].i * ab[i__6].i;
+                z__1.i = work[i__5].r * ab[i__6].i + work[i__5].i * ab[i__6].r; // , expr subst
+                work[i__1].r = z__1.r;
+                work[i__1].i = z__1.i; // , expr subst
                 i__1 = (j + 1) * ab_dim1 + 1;
                 i__5 = j - m;
                 i__6 = (j + 1) * ab_dim1 + 1;
-                z__1.real = rwork[i__5] * ab[i__6].real;
-                z__1.imag = rwork[i__5] * ab[i__6].imag; // , expr subst
-                ab[i__1].real = z__1.real;
-                ab[i__1].imag = z__1.imag; // , expr subst
+                z__1.r = rwork[i__5] * ab[i__6].r;
+                z__1.i = rwork[i__5] * ab[i__6].i; // , expr subst
+                ab[i__1].r = z__1.r;
+                ab[i__1].i = z__1.i; // , expr subst
                 /* L90: */
             }
             /* generate rotations in 1st set to annihilate elements which */
             /* have been created outside the band */
             if(nrt > 0)
             {
-                aocl_lapack_zlargv(&nrt, &ab[j2t * ab_dim1 + 1], &inca, &work[j2t - m], &ka1,
-                                   &rwork[j2t - m], &ka1);
+                zlargv_(&nrt, &ab[j2t * ab_dim1 + 1], &inca, &work[j2t - m], &ka1, &rwork[j2t - m],
+                        &ka1);
             }
             if(nr > 0)
             {
@@ -625,17 +642,16 @@ L10:
                 i__4 = *ka - 1;
                 for(l = 1; l <= i__4; ++l)
                 {
-                    aocl_lapack_zlartv(&nr, &ab[ka1 - l + j2 * ab_dim1], &inca,
-                                       &ab[*ka - l + (j2 + 1) * ab_dim1], &inca, &rwork[j2 - m],
-                                       &work[j2 - m], &ka1);
+                    zlartv_(&nr, &ab[ka1 - l + j2 * ab_dim1], &inca,
+                            &ab[*ka - l + (j2 + 1) * ab_dim1], &inca, &rwork[j2 - m], &work[j2 - m],
+                            &ka1);
                     /* L100: */
                 }
                 /* apply rotations in 1st set from both sides to diagonal */
                 /* blocks */
-                aocl_lapack_zlar2v(&nr, &ab[ka1 + j2 * ab_dim1], &ab[ka1 + (j2 + 1) * ab_dim1],
-                                   &ab[*ka + (j2 + 1) * ab_dim1], &inca, &rwork[j2 - m],
-                                   &work[j2 - m], &ka1);
-                aocl_lapack_zlacgv(&nr, &work[j2 - m], &ka1);
+                zlar2v_(&nr, &ab[ka1 + j2 * ab_dim1], &ab[ka1 + (j2 + 1) * ab_dim1],
+                        &ab[*ka + (j2 + 1) * ab_dim1], &inca, &rwork[j2 - m], &work[j2 - m], &ka1);
+                zlacgv_(&nr, &work[j2 - m], &ka1);
             }
             /* start applying rotations in 1st set from the left */
             i__4 = *kb - k + 1;
@@ -644,9 +660,9 @@ L10:
                 nrt = (*n - j2 + l) / ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_zlartv(&nrt, &ab[l + (j2 + ka1 - l) * ab_dim1], &inca,
-                                       &ab[l + 1 + (j2 + ka1 - l) * ab_dim1], &inca, &rwork[j2 - m],
-                                       &work[j2 - m], &ka1);
+                    zlartv_(&nrt, &ab[l + (j2 + ka1 - l) * ab_dim1], &inca,
+                            &ab[l + 1 + (j2 + ka1 - l) * ab_dim1], &inca, &rwork[j2 - m],
+                            &work[j2 - m], &ka1);
                 }
                 /* L110: */
             }
@@ -659,8 +675,8 @@ L10:
                 {
                     i__1 = *n - m;
                     d_cnjg(&z__1, &work[j - m]);
-                    aocl_lapack_zrot(&i__1, &x[m + 1 + j * x_dim1], &c__1,
-                                     &x[m + 1 + (j + 1) * x_dim1], &c__1, &rwork[j - m], &z__1);
+                    zrot_(&i__1, &x[m + 1 + j * x_dim1], &c__1, &x[m + 1 + (j + 1) * x_dim1], &c__1,
+                          &rwork[j - m], &z__1);
                     /* L120: */
                 }
             }
@@ -689,14 +705,14 @@ L10:
                 /* Computing MAX */
                 i__3 = 2;
                 i__2 = k - i0 + 1; // , expr subst
-                j2 = i__ - k - 1 + fla_max(i__3,i__2) * ka1;
+                j2 = i__ - k - 1 + fla_max(i__3, i__2) * ka1;
             }
             else
             {
                 /* Computing MAX */
                 i__3 = 1;
                 i__2 = k - i0 + 1; // , expr subst
-                j2 = i__ - k - 1 + fla_max(i__3,i__2) * ka1;
+                j2 = i__ - k - 1 + fla_max(i__3, i__2) * ka1;
             }
             /* finish applying rotations in 2nd set from the left */
             for(l = *kb - k; l >= 1; --l)
@@ -704,9 +720,9 @@ L10:
                 nrt = (*n - j2 + *ka + l) / ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_zlartv(&nrt, &ab[l + (j2 - l + 1) * ab_dim1], &inca,
-                                       &ab[l + 1 + (j2 - l + 1) * ab_dim1], &inca, &rwork[j2 - *ka],
-                                       &work[j2 - *ka], &ka1);
+                    zlartv_(&nrt, &ab[l + (j2 - l + 1) * ab_dim1], &inca,
+                            &ab[l + 1 + (j2 - l + 1) * ab_dim1], &inca, &rwork[j2 - *ka],
+                            &work[j2 - *ka], &ka1);
                 }
                 /* L140: */
             }
@@ -732,17 +748,17 @@ L10:
                 i__4 = j;
                 i__1 = j;
                 i__5 = (j + 1) * ab_dim1 + 1;
-                z__1.real = work[i__1].real * ab[i__5].real - work[i__1].imag * ab[i__5].imag;
-                z__1.imag = work[i__1].real * ab[i__5].imag + work[i__1].imag * ab[i__5].real; // , expr subst
-                work[i__4].real = z__1.real;
-                work[i__4].imag = z__1.imag; // , expr subst
+                z__1.r = work[i__1].r * ab[i__5].r - work[i__1].i * ab[i__5].i;
+                z__1.i = work[i__1].r * ab[i__5].i + work[i__1].i * ab[i__5].r; // , expr subst
+                work[i__4].r = z__1.r;
+                work[i__4].i = z__1.i; // , expr subst
                 i__4 = (j + 1) * ab_dim1 + 1;
                 i__1 = j;
                 i__5 = (j + 1) * ab_dim1 + 1;
-                z__1.real = rwork[i__1] * ab[i__5].real;
-                z__1.imag = rwork[i__1] * ab[i__5].imag; // , expr subst
-                ab[i__4].real = z__1.real;
-                ab[i__4].imag = z__1.imag; // , expr subst
+                z__1.r = rwork[i__1] * ab[i__5].r;
+                z__1.i = rwork[i__1] * ab[i__5].i; // , expr subst
+                ab[i__4].r = z__1.r;
+                ab[i__4].i = z__1.i; // , expr subst
                 /* L160: */
             }
             if(update)
@@ -762,30 +778,27 @@ L10:
             /* Computing MAX */
             i__3 = 1;
             i__2 = k - i0 + 1; // , expr subst
-            j2 = i__ - k - 1 + fla_max(i__3,i__2) * ka1;
+            j2 = i__ - k - 1 + fla_max(i__3, i__2) * ka1;
             nr = (*n - j2 + *ka) / ka1;
             j1 = j2 + (nr - 1) * ka1;
             if(nr > 0)
             {
                 /* generate rotations in 2nd set to annihilate elements */
                 /* which have been created outside the band */
-                aocl_lapack_zlargv(&nr, &ab[j2 * ab_dim1 + 1], &inca, &work[j2], &ka1, &rwork[j2],
-                                   &ka1);
+                zlargv_(&nr, &ab[j2 * ab_dim1 + 1], &inca, &work[j2], &ka1, &rwork[j2], &ka1);
                 /* apply rotations in 2nd set from the right */
                 i__3 = *ka - 1;
                 for(l = 1; l <= i__3; ++l)
                 {
-                    aocl_lapack_zlartv(&nr, &ab[ka1 - l + j2 * ab_dim1], &inca,
-                                       &ab[*ka - l + (j2 + 1) * ab_dim1], &inca, &rwork[j2],
-                                       &work[j2], &ka1);
+                    zlartv_(&nr, &ab[ka1 - l + j2 * ab_dim1], &inca,
+                            &ab[*ka - l + (j2 + 1) * ab_dim1], &inca, &rwork[j2], &work[j2], &ka1);
                     /* L180: */
                 }
                 /* apply rotations in 2nd set from both sides to diagonal */
                 /* blocks */
-                aocl_lapack_zlar2v(&nr, &ab[ka1 + j2 * ab_dim1], &ab[ka1 + (j2 + 1) * ab_dim1],
-                                   &ab[*ka + (j2 + 1) * ab_dim1], &inca, &rwork[j2], &work[j2],
-                                   &ka1);
-                aocl_lapack_zlacgv(&nr, &work[j2], &ka1);
+                zlar2v_(&nr, &ab[ka1 + j2 * ab_dim1], &ab[ka1 + (j2 + 1) * ab_dim1],
+                        &ab[*ka + (j2 + 1) * ab_dim1], &inca, &rwork[j2], &work[j2], &ka1);
+                zlacgv_(&nr, &work[j2], &ka1);
             }
             /* start applying rotations in 2nd set from the left */
             i__3 = *kb - k + 1;
@@ -794,9 +807,9 @@ L10:
                 nrt = (*n - j2 + l) / ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_zlartv(&nrt, &ab[l + (j2 + ka1 - l) * ab_dim1], &inca,
-                                       &ab[l + 1 + (j2 + ka1 - l) * ab_dim1], &inca, &rwork[j2],
-                                       &work[j2], &ka1);
+                    zlartv_(&nrt, &ab[l + (j2 + ka1 - l) * ab_dim1], &inca,
+                            &ab[l + 1 + (j2 + ka1 - l) * ab_dim1], &inca, &rwork[j2], &work[j2],
+                            &ka1);
                 }
                 /* L190: */
             }
@@ -809,8 +822,8 @@ L10:
                 {
                     i__4 = *n - m;
                     d_cnjg(&z__1, &work[j]);
-                    aocl_lapack_zrot(&i__4, &x[m + 1 + j * x_dim1], &c__1,
-                                     &x[m + 1 + (j + 1) * x_dim1], &c__1, &rwork[j], &z__1);
+                    zrot_(&i__4, &x[m + 1 + j * x_dim1], &c__1, &x[m + 1 + (j + 1) * x_dim1], &c__1,
+                          &rwork[j], &z__1);
                     /* L200: */
                 }
             }
@@ -822,16 +835,16 @@ L10:
             /* Computing MAX */
             i__3 = 1;
             i__4 = k - i0 + 2; // , expr subst
-            j2 = i__ - k - 1 + fla_max(i__3,i__4) * ka1;
+            j2 = i__ - k - 1 + fla_max(i__3, i__4) * ka1;
             /* finish applying rotations in 1st set from the left */
             for(l = *kb - k; l >= 1; --l)
             {
                 nrt = (*n - j2 + l) / ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_zlartv(&nrt, &ab[l + (j2 + ka1 - l) * ab_dim1], &inca,
-                                       &ab[l + 1 + (j2 + ka1 - l) * ab_dim1], &inca, &rwork[j2 - m],
-                                       &work[j2 - m], &ka1);
+                    zlartv_(&nrt, &ab[l + (j2 + ka1 - l) * ab_dim1], &inca,
+                            &ab[l + 1 + (j2 + ka1 - l) * ab_dim1], &inca, &rwork[j2 - m],
+                            &work[j2 - m], &ka1);
                 }
                 /* L220: */
             }
@@ -879,9 +892,7 @@ L10:
             i__2 = 1;
             i__3 = i__ - *ka; // , expr subst
             i__4 = i__ - 1;
-            for (j = fla_max(i__2,i__3);
-                    j <= i__4;
-                    ++j)
+            for(j = fla_max(i__2, i__3); j <= i__4; ++j)
             {
                 i__2 = i__ - j + 1 + j * ab_dim1;
                 i__3 = i__ - j + 1 + j * ab_dim1;
@@ -907,10 +918,10 @@ L10:
                     z__3.imag = ab[i__1].imag - z__4.imag; // , expr subst
                     d_cnjg(&z__7, &bb[i__ - k + 1 + k * bb_dim1]);
                     i__6 = i__ - j + 1 + j * ab_dim1;
-                    z__6.real = z__7.real * ab[i__6].real - z__7.imag * ab[i__6].imag;
-                    z__6.imag = z__7.real * ab[i__6].imag + z__7.imag * ab[i__6].real; // , expr subst
-                    z__2.real = z__3.real - z__6.real;
-                    z__2.imag = z__3.imag - z__6.imag; // , expr subst
+                    z__6.r = z__7.r * ab[i__6].r - z__7.i * ab[i__6].i;
+                    z__6.i = z__7.r * ab[i__6].i + z__7.i * ab[i__6].r; // , expr subst
+                    z__2.r = z__3.r - z__6.r;
+                    z__2.i = z__3.i - z__6.i; // , expr subst
                     i__7 = i__ * ab_dim1 + 1;
                     d__1 = ab[i__7].real;
                     i__8 = i__ - j + 1 + j * bb_dim1;
@@ -929,20 +940,18 @@ L10:
                 i__2 = 1;
                 i__3 = i__ - *ka; // , expr subst
                 i__1 = i__ - kbt - 1;
-                for (j = fla_max(i__2,i__3);
-                        j <= i__1;
-                        ++j)
+                for(j = fla_max(i__2, i__3); j <= i__1; ++j)
                 {
                     i__2 = k - j + 1 + j * ab_dim1;
                     i__3 = k - j + 1 + j * ab_dim1;
                     d_cnjg(&z__3, &bb[i__ - k + 1 + k * bb_dim1]);
                     i__5 = i__ - j + 1 + j * ab_dim1;
-                    z__2.real = z__3.real * ab[i__5].real - z__3.imag * ab[i__5].imag;
-                    z__2.imag = z__3.real * ab[i__5].imag + z__3.imag * ab[i__5].real; // , expr subst
-                    z__1.real = ab[i__3].real - z__2.real;
-                    z__1.imag = ab[i__3].imag - z__2.imag; // , expr subst
-                    ab[i__2].real = z__1.real;
-                    ab[i__2].imag = z__1.imag; // , expr subst
+                    z__2.r = z__3.r * ab[i__5].r - z__3.i * ab[i__5].i;
+                    z__2.i = z__3.r * ab[i__5].i + z__3.i * ab[i__5].r; // , expr subst
+                    z__1.r = ab[i__3].r - z__2.r;
+                    z__1.i = ab[i__3].i - z__2.i; // , expr subst
+                    ab[i__2].r = z__1.r;
+                    ab[i__2].i = z__1.i; // , expr subst
                     /* L280: */
                 }
                 /* L290: */
@@ -954,20 +963,18 @@ L10:
                 i__1 = j - *ka;
                 i__2 = i__ - kbt; // , expr subst
                 i__3 = i__ - 1;
-                for (k = fla_max(i__1,i__2);
-                        k <= i__3;
-                        ++k)
+                for(k = fla_max(i__1, i__2); k <= i__3; ++k)
                 {
                     i__1 = j - k + 1 + k * ab_dim1;
                     i__2 = j - k + 1 + k * ab_dim1;
                     i__5 = i__ - k + 1 + k * bb_dim1;
                     i__6 = j - i__ + 1 + i__ * ab_dim1;
-                    z__2.real = bb[i__5].real * ab[i__6].real - bb[i__5].imag * ab[i__6].imag;
-                    z__2.imag = bb[i__5].real * ab[i__6].imag + bb[i__5].imag * ab[i__6].real; // , expr subst
-                    z__1.real = ab[i__2].real - z__2.real;
-                    z__1.imag = ab[i__2].imag - z__2.imag; // , expr subst
-                    ab[i__1].real = z__1.real;
-                    ab[i__1].imag = z__1.imag; // , expr subst
+                    z__2.r = bb[i__5].r * ab[i__6].r - bb[i__5].i * ab[i__6].i;
+                    z__2.i = bb[i__5].r * ab[i__6].i + bb[i__5].i * ab[i__6].r; // , expr subst
+                    z__1.r = ab[i__2].r - z__2.r;
+                    z__1.i = ab[i__2].i - z__2.i; // , expr subst
+                    ab[i__1].r = z__1.r;
+                    ab[i__1].i = z__1.i; // , expr subst
                     /* L300: */
                 }
                 /* L310: */
@@ -977,16 +984,16 @@ L10:
                 /* post-multiply X by inv(S(i)) */
                 i__4 = *n - m;
                 d__1 = 1. / bii;
-                aocl_blas_zdscal(&i__4, &d__1, &x[m + 1 + i__ * x_dim1], &c__1);
+                zdscal_(&i__4, &d__1, &x[m + 1 + i__ * x_dim1], &c__1);
                 if(kbt > 0)
                 {
                     i__4 = *n - m;
                     z__1.real = -1.;
                     z__1.imag = -0.; // , expr subst
                     i__3 = *ldbb - 1;
-                    aocl_blas_zgeru(&i__4, &kbt, &z__1, &x[m + 1 + i__ * x_dim1], &c__1,
-                                    &bb[kbt + 1 + (i__ - kbt) * bb_dim1], &i__3,
-                                    &x[m + 1 + (i__ - kbt) * x_dim1], ldx);
+                    zgeru_(&i__4, &kbt, &z__1, &x[m + 1 + i__ * x_dim1], &c__1,
+                           &bb[kbt + 1 + (i__ - kbt) * bb_dim1], &i__3,
+                           &x[m + 1 + (i__ - kbt) * x_dim1], ldx);
                 }
             }
             /* store a(i1,i) in RA1 for use in next loop over K */
@@ -1024,12 +1031,12 @@ L10:
                     z__2.imag = rwork[i__1] * t.imag; // , expr subst
                     d_cnjg(&z__4, &work[i__ - k + *ka - m]);
                     i__2 = ka1 + (i__ - k) * ab_dim1;
-                    z__3.real = z__4.real * ab[i__2].real - z__4.imag * ab[i__2].imag;
-                    z__3.imag = z__4.real * ab[i__2].imag + z__4.imag * ab[i__2].real; // , expr subst
-                    z__1.real = z__2.real - z__3.real;
-                    z__1.imag = z__2.imag - z__3.imag; // , expr subst
-                    work[i__3].real = z__1.real;
-                    work[i__3].imag = z__1.imag; // , expr subst
+                    z__3.r = z__4.r * ab[i__2].r - z__4.i * ab[i__2].i;
+                    z__3.i = z__4.r * ab[i__2].i + z__4.i * ab[i__2].r; // , expr subst
+                    z__1.r = z__2.r - z__3.r;
+                    z__1.i = z__2.i - z__3.i; // , expr subst
+                    work[i__3].r = z__1.r;
+                    work[i__3].i = z__1.i; // , expr subst
                     i__3 = ka1 + (i__ - k) * ab_dim1;
                     i__1 = i__ - k + *ka - m;
                     z__2.real = work[i__1].real * t.real - work[i__1].imag * t.imag;
@@ -1049,7 +1056,7 @@ L10:
             /* Computing MAX */
             i__3 = 1;
             i__1 = k - i0 + 2; // , expr subst
-            j2 = i__ - k - 1 + fla_max(i__3,i__1) * ka1;
+            j2 = i__ - k - 1 + fla_max(i__3, i__1) * ka1;
             nr = (*n - j2 + *ka) / ka1;
             j1 = j2 + (nr - 1) * ka1;
             if(update)
@@ -1057,7 +1064,7 @@ L10:
                 /* Computing MAX */
                 i__3 = j2;
                 i__1 = i__ + (*ka << 1) - k + 1; // , expr subst
-                j2t = fla_max(i__3,i__1);
+                j2t = fla_max(i__3, i__1);
             }
             else
             {
@@ -1073,25 +1080,25 @@ L10:
                 i__2 = j - m;
                 i__5 = j - m;
                 i__6 = ka1 + (j - *ka + 1) * ab_dim1;
-                z__1.real = work[i__5].real * ab[i__6].real - work[i__5].imag * ab[i__6].imag;
-                z__1.imag = work[i__5].real * ab[i__6].imag + work[i__5].imag * ab[i__6].real; // , expr subst
-                work[i__2].real = z__1.real;
-                work[i__2].imag = z__1.imag; // , expr subst
+                z__1.r = work[i__5].r * ab[i__6].r - work[i__5].i * ab[i__6].i;
+                z__1.i = work[i__5].r * ab[i__6].i + work[i__5].i * ab[i__6].r; // , expr subst
+                work[i__2].r = z__1.r;
+                work[i__2].i = z__1.i; // , expr subst
                 i__2 = ka1 + (j - *ka + 1) * ab_dim1;
                 i__5 = j - m;
                 i__6 = ka1 + (j - *ka + 1) * ab_dim1;
-                z__1.real = rwork[i__5] * ab[i__6].real;
-                z__1.imag = rwork[i__5] * ab[i__6].imag; // , expr subst
-                ab[i__2].real = z__1.real;
-                ab[i__2].imag = z__1.imag; // , expr subst
+                z__1.r = rwork[i__5] * ab[i__6].r;
+                z__1.i = rwork[i__5] * ab[i__6].i; // , expr subst
+                ab[i__2].r = z__1.r;
+                ab[i__2].i = z__1.i; // , expr subst
                 /* L320: */
             }
             /* generate rotations in 1st set to annihilate elements which */
             /* have been created outside the band */
             if(nrt > 0)
             {
-                aocl_lapack_zlargv(&nrt, &ab[ka1 + (j2t - *ka) * ab_dim1], &inca, &work[j2t - m],
-                                   &ka1, &rwork[j2t - m], &ka1);
+                zlargv_(&nrt, &ab[ka1 + (j2t - *ka) * ab_dim1], &inca, &work[j2t - m], &ka1,
+                        &rwork[j2t - m], &ka1);
             }
             if(nr > 0)
             {
@@ -1099,15 +1106,16 @@ L10:
                 i__1 = *ka - 1;
                 for(l = 1; l <= i__1; ++l)
                 {
-                    zlartv_(&nr, &ab[l + 1 + (j2 - l) * ab_dim1], &inca, &ab[ l + 2 + (j2 - l) * ab_dim1], &inca, &rwork[j2 - m], &work[j2 - m], &ka1);
+                    zlartv_(&nr, &ab[l + 1 + (j2 - l) * ab_dim1], &inca,
+                            &ab[l + 2 + (j2 - l) * ab_dim1], &inca, &rwork[j2 - m], &work[j2 - m],
+                            &ka1);
                     /* L330: */
                 }
                 /* apply rotations in 1st set from both sides to diagonal */
                 /* blocks */
-                aocl_lapack_zlar2v(&nr, &ab[j2 * ab_dim1 + 1], &ab[(j2 + 1) * ab_dim1 + 1],
-                                   &ab[j2 * ab_dim1 + 2], &inca, &rwork[j2 - m], &work[j2 - m],
-                                   &ka1);
-                aocl_lapack_zlacgv(&nr, &work[j2 - m], &ka1);
+                zlar2v_(&nr, &ab[j2 * ab_dim1 + 1], &ab[(j2 + 1) * ab_dim1 + 1],
+                        &ab[j2 * ab_dim1 + 2], &inca, &rwork[j2 - m], &work[j2 - m], &ka1);
+                zlacgv_(&nr, &work[j2 - m], &ka1);
             }
             /* start applying rotations in 1st set from the right */
             i__1 = *kb - k + 1;
@@ -1116,9 +1124,9 @@ L10:
                 nrt = (*n - j2 + l) / ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_zlartv(&nrt, &ab[ka1 - l + 1 + j2 * ab_dim1], &inca,
-                                       &ab[ka1 - l + (j2 + 1) * ab_dim1], &inca, &rwork[j2 - m],
-                                       &work[j2 - m], &ka1);
+                    zlartv_(&nrt, &ab[ka1 - l + 1 + j2 * ab_dim1], &inca,
+                            &ab[ka1 - l + (j2 + 1) * ab_dim1], &inca, &rwork[j2 - m], &work[j2 - m],
+                            &ka1);
                 }
                 /* L340: */
             }
@@ -1130,9 +1138,8 @@ L10:
                 for(j = j2; i__3 < 0 ? j >= i__1 : j <= i__1; j += i__3)
                 {
                     i__2 = *n - m;
-                    aocl_lapack_zrot(&i__2, &x[m + 1 + j * x_dim1], &c__1,
-                                     &x[m + 1 + (j + 1) * x_dim1], &c__1, &rwork[j - m],
-                                     &work[j - m]);
+                    zrot_(&i__2, &x[m + 1 + j * x_dim1], &c__1, &x[m + 1 + (j + 1) * x_dim1], &c__1,
+                          &rwork[j - m], &work[j - m]);
                     /* L350: */
                 }
             }
@@ -1161,14 +1168,14 @@ L10:
                 /* Computing MAX */
                 i__4 = 2;
                 i__3 = k - i0 + 1; // , expr subst
-                j2 = i__ - k - 1 + fla_max(i__4,i__3) * ka1;
+                j2 = i__ - k - 1 + fla_max(i__4, i__3) * ka1;
             }
             else
             {
                 /* Computing MAX */
                 i__4 = 1;
                 i__3 = k - i0 + 1; // , expr subst
-                j2 = i__ - k - 1 + fla_max(i__4,i__3) * ka1;
+                j2 = i__ - k - 1 + fla_max(i__4, i__3) * ka1;
             }
             /* finish applying rotations in 2nd set from the right */
             for(l = *kb - k; l >= 1; --l)
@@ -1176,9 +1183,9 @@ L10:
                 nrt = (*n - j2 + *ka + l) / ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_zlartv(&nrt, &ab[ka1 - l + 1 + (j2 - *ka) * ab_dim1], &inca,
-                                       &ab[ka1 - l + (j2 - *ka + 1) * ab_dim1], &inca,
-                                       &rwork[j2 - *ka], &work[j2 - *ka], &ka1);
+                    zlartv_(&nrt, &ab[ka1 - l + 1 + (j2 - *ka) * ab_dim1], &inca,
+                            &ab[ka1 - l + (j2 - *ka + 1) * ab_dim1], &inca, &rwork[j2 - *ka],
+                            &work[j2 - *ka], &ka1);
                 }
                 /* L370: */
             }
@@ -1204,17 +1211,17 @@ L10:
                 i__1 = j;
                 i__2 = j;
                 i__5 = ka1 + (j - *ka + 1) * ab_dim1;
-                z__1.real = work[i__2].real * ab[i__5].real - work[i__2].imag * ab[i__5].imag;
-                z__1.imag = work[i__2].real * ab[i__5].imag + work[i__2].imag * ab[i__5].real; // , expr subst
-                work[i__1].real = z__1.real;
-                work[i__1].imag = z__1.imag; // , expr subst
+                z__1.r = work[i__2].r * ab[i__5].r - work[i__2].i * ab[i__5].i;
+                z__1.i = work[i__2].r * ab[i__5].i + work[i__2].i * ab[i__5].r; // , expr subst
+                work[i__1].r = z__1.r;
+                work[i__1].i = z__1.i; // , expr subst
                 i__1 = ka1 + (j - *ka + 1) * ab_dim1;
                 i__2 = j;
                 i__5 = ka1 + (j - *ka + 1) * ab_dim1;
-                z__1.real = rwork[i__2] * ab[i__5].real;
-                z__1.imag = rwork[i__2] * ab[i__5].imag; // , expr subst
-                ab[i__1].real = z__1.real;
-                ab[i__1].imag = z__1.imag; // , expr subst
+                z__1.r = rwork[i__2] * ab[i__5].r;
+                z__1.i = rwork[i__2] * ab[i__5].i; // , expr subst
+                ab[i__1].r = z__1.r;
+                ab[i__1].i = z__1.i; // , expr subst
                 /* L390: */
             }
             if(update)
@@ -1234,28 +1241,28 @@ L10:
             /* Computing MAX */
             i__4 = 1;
             i__3 = k - i0 + 1; // , expr subst
-            j2 = i__ - k - 1 + fla_max(i__4,i__3) * ka1;
+            j2 = i__ - k - 1 + fla_max(i__4, i__3) * ka1;
             nr = (*n - j2 + *ka) / ka1;
             j1 = j2 + (nr - 1) * ka1;
             if(nr > 0)
             {
                 /* generate rotations in 2nd set to annihilate elements */
                 /* which have been created outside the band */
-                zlargv_(&nr, &ab[ka1 + (j2 - *ka) * ab_dim1], &inca, &work[j2], &ka1, &rwork[j2], &ka1);
+                zlargv_(&nr, &ab[ka1 + (j2 - *ka) * ab_dim1], &inca, &work[j2], &ka1, &rwork[j2],
+                        &ka1);
                 /* apply rotations in 2nd set from the left */
                 i__4 = *ka - 1;
                 for(l = 1; l <= i__4; ++l)
                 {
-                    aocl_lapack_zlartv(&nr, &ab[l + 1 + (j2 - l) * ab_dim1], &inca,
-                                       &ab[l + 2 + (j2 - l) * ab_dim1], &inca, &rwork[j2],
-                                       &work[j2], &ka1);
+                    zlartv_(&nr, &ab[l + 1 + (j2 - l) * ab_dim1], &inca,
+                            &ab[l + 2 + (j2 - l) * ab_dim1], &inca, &rwork[j2], &work[j2], &ka1);
                     /* L410: */
                 }
                 /* apply rotations in 2nd set from both sides to diagonal */
                 /* blocks */
-                aocl_lapack_zlar2v(&nr, &ab[j2 * ab_dim1 + 1], &ab[(j2 + 1) * ab_dim1 + 1],
-                                   &ab[j2 * ab_dim1 + 2], &inca, &rwork[j2], &work[j2], &ka1);
-                aocl_lapack_zlacgv(&nr, &work[j2], &ka1);
+                zlar2v_(&nr, &ab[j2 * ab_dim1 + 1], &ab[(j2 + 1) * ab_dim1 + 1],
+                        &ab[j2 * ab_dim1 + 2], &inca, &rwork[j2], &work[j2], &ka1);
+                zlacgv_(&nr, &work[j2], &ka1);
             }
             /* start applying rotations in 2nd set from the right */
             i__4 = *kb - k + 1;
@@ -1264,9 +1271,8 @@ L10:
                 nrt = (*n - j2 + l) / ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_zlartv(&nrt, &ab[ka1 - l + 1 + j2 * ab_dim1], &inca,
-                                       &ab[ka1 - l + (j2 + 1) * ab_dim1], &inca, &rwork[j2],
-                                       &work[j2], &ka1);
+                    zlartv_(&nrt, &ab[ka1 - l + 1 + j2 * ab_dim1], &inca,
+                            &ab[ka1 - l + (j2 + 1) * ab_dim1], &inca, &rwork[j2], &work[j2], &ka1);
                 }
                 /* L420: */
             }
@@ -1278,8 +1284,8 @@ L10:
                 for(j = j2; i__3 < 0 ? j >= i__4 : j <= i__4; j += i__3)
                 {
                     i__1 = *n - m;
-                    aocl_lapack_zrot(&i__1, &x[m + 1 + j * x_dim1], &c__1,
-                                     &x[m + 1 + (j + 1) * x_dim1], &c__1, &rwork[j], &work[j]);
+                    zrot_(&i__1, &x[m + 1 + j * x_dim1], &c__1, &x[m + 1 + (j + 1) * x_dim1], &c__1,
+                          &rwork[j], &work[j]);
                     /* L430: */
                 }
             }
@@ -1291,16 +1297,16 @@ L10:
             /* Computing MAX */
             i__4 = 1;
             i__1 = k - i0 + 2; // , expr subst
-            j2 = i__ - k - 1 + fla_max(i__4,i__1) * ka1;
+            j2 = i__ - k - 1 + fla_max(i__4, i__1) * ka1;
             /* finish applying rotations in 1st set from the right */
             for(l = *kb - k; l >= 1; --l)
             {
                 nrt = (*n - j2 + l) / ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_zlartv(&nrt, &ab[ka1 - l + 1 + j2 * ab_dim1], &inca,
-                                       &ab[ka1 - l + (j2 + 1) * ab_dim1], &inca, &rwork[j2 - m],
-                                       &work[j2 - m], &ka1);
+                    zlartv_(&nrt, &ab[ka1 - l + 1 + j2 * ab_dim1], &inca,
+                            &ab[ka1 - l + (j2 + 1) * ab_dim1], &inca, &rwork[j2 - m], &work[j2 - m],
+                            &ka1);
                 }
                 /* L450: */
             }
@@ -1342,12 +1348,12 @@ L490:
         /* Computing MIN */
         i__3 = *kb;
         i__4 = m - i__; // , expr subst
-        kbt = fla_min(i__3,i__4);
+        kbt = fla_min(i__3, i__4);
         i0 = i__ + 1;
         /* Computing MAX */
         i__3 = 1;
         i__4 = i__ - *ka; // , expr subst
-        i1 = fla_max(i__3,i__4);
+        i1 = fla_max(i__3, i__4);
         i2 = i__ + kbt - ka1;
         if(i__ > m)
         {
@@ -1356,7 +1362,7 @@ L490:
             i0 = m + 1;
             if(*ka == 0)
             {
-    AOCL_DTL_TRACE_LOG_EXIT
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             goto L490;
@@ -1367,7 +1373,7 @@ L490:
         i__ -= *ka;
         if(i__ < 2)
         {
-    AOCL_DTL_TRACE_LOG_EXIT
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -1406,10 +1412,8 @@ L490:
             /* Computing MIN */
             i__4 = *n;
             i__1 = i__ + *ka; // , expr subst
-            i__3 = fla_min(i__4,i__1);
-            for (j = i__ + 1;
-                    j <= i__3;
-                    ++j)
+            i__3 = fla_min(i__4, i__1);
+            for(j = i__ + 1; j <= i__3; ++j)
             {
                 i__4 = i__ - j + ka1 + j * ab_dim1;
                 i__1 = i__ - j + ka1 + j * ab_dim1;
@@ -1435,10 +1439,10 @@ L490:
                     z__3.imag = ab[i__2].imag - z__4.imag; // , expr subst
                     d_cnjg(&z__7, &bb[i__ - k + kb1 + k * bb_dim1]);
                     i__6 = i__ - j + ka1 + j * ab_dim1;
-                    z__6.real = z__7.real * ab[i__6].real - z__7.imag * ab[i__6].imag;
-                    z__6.imag = z__7.real * ab[i__6].imag + z__7.imag * ab[i__6].real; // , expr subst
-                    z__2.real = z__3.real - z__6.real;
-                    z__2.imag = z__3.imag - z__6.imag; // , expr subst
+                    z__6.r = z__7.r * ab[i__6].r - z__7.i * ab[i__6].i;
+                    z__6.i = z__7.r * ab[i__6].i + z__7.i * ab[i__6].r; // , expr subst
+                    z__2.r = z__3.r - z__6.r;
+                    z__2.i = z__3.i - z__6.i; // , expr subst
                     i__7 = ka1 + i__ * ab_dim1;
                     d__1 = ab[i__7].real;
                     i__8 = i__ - j + kb1 + j * bb_dim1;
@@ -1456,21 +1460,19 @@ L490:
                 /* Computing MIN */
                 i__1 = *n;
                 i__2 = i__ + *ka; // , expr subst
-                i__4 = fla_min(i__1,i__2);
-                for (j = i__ + kbt + 1;
-                        j <= i__4;
-                        ++j)
+                i__4 = fla_min(i__1, i__2);
+                for(j = i__ + kbt + 1; j <= i__4; ++j)
                 {
                     i__1 = k - j + ka1 + j * ab_dim1;
                     i__2 = k - j + ka1 + j * ab_dim1;
                     d_cnjg(&z__3, &bb[i__ - k + kb1 + k * bb_dim1]);
                     i__5 = i__ - j + ka1 + j * ab_dim1;
-                    z__2.real = z__3.real * ab[i__5].real - z__3.imag * ab[i__5].imag;
-                    z__2.imag = z__3.real * ab[i__5].imag + z__3.imag * ab[i__5].real; // , expr subst
-                    z__1.real = ab[i__2].real - z__2.real;
-                    z__1.imag = ab[i__2].imag - z__2.imag; // , expr subst
-                    ab[i__1].real = z__1.real;
-                    ab[i__1].imag = z__1.imag; // , expr subst
+                    z__2.r = z__3.r * ab[i__5].r - z__3.i * ab[i__5].i;
+                    z__2.i = z__3.r * ab[i__5].i + z__3.i * ab[i__5].r; // , expr subst
+                    z__1.r = ab[i__2].r - z__2.r;
+                    z__1.i = ab[i__2].i - z__2.i; // , expr subst
+                    ab[i__1].r = z__1.r;
+                    ab[i__1].i = z__1.i; // , expr subst
                     /* L530: */
                 }
                 /* L540: */
@@ -1481,21 +1483,19 @@ L490:
                 /* Computing MIN */
                 i__1 = j + *ka;
                 i__2 = i__ + kbt; // , expr subst
-                i__4 = fla_min(i__1,i__2);
-                for (k = i__ + 1;
-                        k <= i__4;
-                        ++k)
+                i__4 = fla_min(i__1, i__2);
+                for(k = i__ + 1; k <= i__4; ++k)
                 {
                     i__1 = j - k + ka1 + k * ab_dim1;
                     i__2 = j - k + ka1 + k * ab_dim1;
                     i__5 = i__ - k + kb1 + k * bb_dim1;
                     i__6 = j - i__ + ka1 + i__ * ab_dim1;
-                    z__2.real = bb[i__5].real * ab[i__6].real - bb[i__5].imag * ab[i__6].imag;
-                    z__2.imag = bb[i__5].real * ab[i__6].imag + bb[i__5].imag * ab[i__6].real; // , expr subst
-                    z__1.real = ab[i__2].real - z__2.real;
-                    z__1.imag = ab[i__2].imag - z__2.imag; // , expr subst
-                    ab[i__1].real = z__1.real;
-                    ab[i__1].imag = z__1.imag; // , expr subst
+                    z__2.r = bb[i__5].r * ab[i__6].r - bb[i__5].i * ab[i__6].i;
+                    z__2.i = bb[i__5].r * ab[i__6].i + bb[i__5].i * ab[i__6].r; // , expr subst
+                    z__1.r = ab[i__2].r - z__2.r;
+                    z__1.i = ab[i__2].i - z__2.i; // , expr subst
+                    ab[i__1].r = z__1.r;
+                    ab[i__1].i = z__1.i; // , expr subst
                     /* L550: */
                 }
                 /* L560: */
@@ -1504,15 +1504,14 @@ L490:
             {
                 /* post-multiply X by inv(S(i)) */
                 d__1 = 1. / bii;
-                aocl_blas_zdscal(&nx, &d__1, &x[i__ * x_dim1 + 1], &c__1);
+                zdscal_(&nx, &d__1, &x[i__ * x_dim1 + 1], &c__1);
                 if(kbt > 0)
                 {
                     z__1.real = -1.;
                     z__1.imag = -0.; // , expr subst
                     i__3 = *ldbb - 1;
-                    aocl_blas_zgeru(&nx, &kbt, &z__1, &x[i__ * x_dim1 + 1], &c__1,
-                                    &bb[*kb + (i__ + 1) * bb_dim1], &i__3,
-                                    &x[(i__ + 1) * x_dim1 + 1], ldx);
+                    zgeru_(&nx, &kbt, &z__1, &x[i__ * x_dim1 + 1], &c__1,
+                           &bb[*kb + (i__ + 1) * bb_dim1], &i__3, &x[(i__ + 1) * x_dim1 + 1], ldx);
                 }
             }
             /* store a(i1,i) in RA1 for use in next loop over K */
@@ -1549,12 +1548,12 @@ L490:
                     z__2.imag = rwork[i__1] * t.imag; // , expr subst
                     d_cnjg(&z__4, &work[i__ + k - *ka]);
                     i__2 = (i__ + k) * ab_dim1 + 1;
-                    z__3.real = z__4.real * ab[i__2].real - z__4.imag * ab[i__2].imag;
-                    z__3.imag = z__4.real * ab[i__2].imag + z__4.imag * ab[i__2].real; // , expr subst
-                    z__1.real = z__2.real - z__3.real;
-                    z__1.imag = z__2.imag - z__3.imag; // , expr subst
-                    work[i__4].real = z__1.real;
-                    work[i__4].imag = z__1.imag; // , expr subst
+                    z__3.r = z__4.r * ab[i__2].r - z__4.i * ab[i__2].i;
+                    z__3.i = z__4.r * ab[i__2].i + z__4.i * ab[i__2].r; // , expr subst
+                    z__1.r = z__2.r - z__3.r;
+                    z__1.i = z__2.i - z__3.i; // , expr subst
+                    work[i__4].r = z__1.r;
+                    work[i__4].i = z__1.i; // , expr subst
                     i__4 = (i__ + k) * ab_dim1 + 1;
                     i__1 = i__ + k - *ka;
                     z__2.real = work[i__1].real * t.real - work[i__1].imag * t.imag;
@@ -1574,7 +1573,7 @@ L490:
             /* Computing MAX */
             i__4 = 1;
             i__1 = k + i0 - m + 1; // , expr subst
-            j2 = i__ + k + 1 - fla_max(i__4,i__1) * ka1;
+            j2 = i__ + k + 1 - fla_max(i__4, i__1) * ka1;
             nr = (j2 + *ka - 1) / ka1;
             j1 = j2 - (nr - 1) * ka1;
             if(update)
@@ -1582,7 +1581,7 @@ L490:
                 /* Computing MIN */
                 i__4 = j2;
                 i__1 = i__ - (*ka << 1) + k - 1; // , expr subst
-                j2t = fla_min(i__4,i__1);
+                j2t = fla_min(i__4, i__1);
             }
             else
             {
@@ -1598,25 +1597,25 @@ L490:
                 i__2 = j;
                 i__5 = j;
                 i__6 = (j + *ka - 1) * ab_dim1 + 1;
-                z__1.real = work[i__5].real * ab[i__6].real - work[i__5].imag * ab[i__6].imag;
-                z__1.imag = work[i__5].real * ab[i__6].imag + work[i__5].imag * ab[i__6].real; // , expr subst
-                work[i__2].real = z__1.real;
-                work[i__2].imag = z__1.imag; // , expr subst
+                z__1.r = work[i__5].r * ab[i__6].r - work[i__5].i * ab[i__6].i;
+                z__1.i = work[i__5].r * ab[i__6].i + work[i__5].i * ab[i__6].r; // , expr subst
+                work[i__2].r = z__1.r;
+                work[i__2].i = z__1.i; // , expr subst
                 i__2 = (j + *ka - 1) * ab_dim1 + 1;
                 i__5 = j;
                 i__6 = (j + *ka - 1) * ab_dim1 + 1;
-                z__1.real = rwork[i__5] * ab[i__6].real;
-                z__1.imag = rwork[i__5] * ab[i__6].imag; // , expr subst
-                ab[i__2].real = z__1.real;
-                ab[i__2].imag = z__1.imag; // , expr subst
+                z__1.r = rwork[i__5] * ab[i__6].r;
+                z__1.i = rwork[i__5] * ab[i__6].i; // , expr subst
+                ab[i__2].r = z__1.r;
+                ab[i__2].i = z__1.i; // , expr subst
                 /* L570: */
             }
             /* generate rotations in 1st set to annihilate elements which */
             /* have been created outside the band */
             if(nrt > 0)
             {
-                aocl_lapack_zlargv(&nrt, &ab[(j1 + *ka) * ab_dim1 + 1], &inca, &work[j1], &ka1,
-                                   &rwork[j1], &ka1);
+                zlargv_(&nrt, &ab[(j1 + *ka) * ab_dim1 + 1], &inca, &work[j1], &ka1, &rwork[j1],
+                        &ka1);
             }
             if(nr > 0)
             {
@@ -1624,16 +1623,15 @@ L490:
                 i__1 = *ka - 1;
                 for(l = 1; l <= i__1; ++l)
                 {
-                    aocl_lapack_zlartv(&nr, &ab[ka1 - l + (j1 + l) * ab_dim1], &inca,
-                                       &ab[*ka - l + (j1 + l) * ab_dim1], &inca, &rwork[j1],
-                                       &work[j1], &ka1);
+                    zlartv_(&nr, &ab[ka1 - l + (j1 + l) * ab_dim1], &inca,
+                            &ab[*ka - l + (j1 + l) * ab_dim1], &inca, &rwork[j1], &work[j1], &ka1);
                     /* L580: */
                 }
                 /* apply rotations in 1st set from both sides to diagonal */
                 /* blocks */
-                aocl_lapack_zlar2v(&nr, &ab[ka1 + j1 * ab_dim1], &ab[ka1 + (j1 - 1) * ab_dim1],
-                                   &ab[*ka + j1 * ab_dim1], &inca, &rwork[j1], &work[j1], &ka1);
-                aocl_lapack_zlacgv(&nr, &work[j1], &ka1);
+                zlar2v_(&nr, &ab[ka1 + j1 * ab_dim1], &ab[ka1 + (j1 - 1) * ab_dim1],
+                        &ab[*ka + j1 * ab_dim1], &inca, &rwork[j1], &work[j1], &ka1);
+                zlacgv_(&nr, &work[j1], &ka1);
             }
             /* start applying rotations in 1st set from the right */
             i__1 = *kb - k + 1;
@@ -1643,9 +1641,8 @@ L490:
                 j1t = j2 - (nrt - 1) * ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_zlartv(&nrt, &ab[l + j1t * ab_dim1], &inca,
-                                       &ab[l + 1 + (j1t - 1) * ab_dim1], &inca, &rwork[j1t],
-                                       &work[j1t], &ka1);
+                    zlartv_(&nrt, &ab[l + j1t * ab_dim1], &inca, &ab[l + 1 + (j1t - 1) * ab_dim1],
+                            &inca, &rwork[j1t], &work[j1t], &ka1);
                 }
                 /* L590: */
             }
@@ -1656,8 +1653,8 @@ L490:
                 i__4 = ka1;
                 for(j = j1; i__4 < 0 ? j >= i__1 : j <= i__1; j += i__4)
                 {
-                    aocl_lapack_zrot(&nx, &x[j * x_dim1 + 1], &c__1, &x[(j - 1) * x_dim1 + 1],
-                                     &c__1, &rwork[j], &work[j]);
+                    zrot_(&nx, &x[j * x_dim1 + 1], &c__1, &x[(j - 1) * x_dim1 + 1], &c__1,
+                          &rwork[j], &work[j]);
                     /* L600: */
                 }
             }
@@ -1686,14 +1683,14 @@ L490:
                 /* Computing MAX */
                 i__3 = 2;
                 i__4 = k + i0 - m; // , expr subst
-                j2 = i__ + k + 1 - fla_max(i__3,i__4) * ka1;
+                j2 = i__ + k + 1 - fla_max(i__3, i__4) * ka1;
             }
             else
             {
                 /* Computing MAX */
                 i__3 = 1;
                 i__4 = k + i0 - m; // , expr subst
-                j2 = i__ + k + 1 - fla_max(i__3,i__4) * ka1;
+                j2 = i__ + k + 1 - fla_max(i__3, i__4) * ka1;
             }
             /* finish applying rotations in 2nd set from the right */
             for(l = *kb - k; l >= 1; --l)
@@ -1702,10 +1699,9 @@ L490:
                 j1t = j2 - (nrt - 1) * ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_zlartv(&nrt, &ab[l + (j1t + *ka) * ab_dim1], &inca,
-                                       &ab[l + 1 + (j1t + *ka - 1) * ab_dim1], &inca,
-                                       &rwork[m - *kb + j1t + *ka], &work[m - *kb + j1t + *ka],
-                                       &ka1);
+                    zlartv_(&nrt, &ab[l + (j1t + *ka) * ab_dim1], &inca,
+                            &ab[l + 1 + (j1t + *ka - 1) * ab_dim1], &inca,
+                            &rwork[m - *kb + j1t + *ka], &work[m - *kb + j1t + *ka], &ka1);
                 }
                 /* L620: */
             }
@@ -1731,17 +1727,17 @@ L490:
                 i__1 = m - *kb + j;
                 i__2 = m - *kb + j;
                 i__5 = (j + *ka - 1) * ab_dim1 + 1;
-                z__1.real = work[i__2].real * ab[i__5].real - work[i__2].imag * ab[i__5].imag;
-                z__1.imag = work[i__2].real * ab[i__5].imag + work[i__2].imag * ab[i__5].real; // , expr subst
-                work[i__1].real = z__1.real;
-                work[i__1].imag = z__1.imag; // , expr subst
+                z__1.r = work[i__2].r * ab[i__5].r - work[i__2].i * ab[i__5].i;
+                z__1.i = work[i__2].r * ab[i__5].i + work[i__2].i * ab[i__5].r; // , expr subst
+                work[i__1].r = z__1.r;
+                work[i__1].i = z__1.i; // , expr subst
                 i__1 = (j + *ka - 1) * ab_dim1 + 1;
                 i__2 = m - *kb + j;
                 i__5 = (j + *ka - 1) * ab_dim1 + 1;
-                z__1.real = rwork[i__2] * ab[i__5].real;
-                z__1.imag = rwork[i__2] * ab[i__5].imag; // , expr subst
-                ab[i__1].real = z__1.real;
-                ab[i__1].imag = z__1.imag; // , expr subst
+                z__1.r = rwork[i__2] * ab[i__5].r;
+                z__1.i = rwork[i__2] * ab[i__5].i; // , expr subst
+                ab[i__1].r = z__1.r;
+                ab[i__1].i = z__1.i; // , expr subst
                 /* L640: */
             }
             if(update)
@@ -1761,30 +1757,30 @@ L490:
             /* Computing MAX */
             i__3 = 1;
             i__4 = k + i0 - m; // , expr subst
-            j2 = i__ + k + 1 - fla_max(i__3,i__4) * ka1;
+            j2 = i__ + k + 1 - fla_max(i__3, i__4) * ka1;
             nr = (j2 + *ka - 1) / ka1;
             j1 = j2 - (nr - 1) * ka1;
             if(nr > 0)
             {
                 /* generate rotations in 2nd set to annihilate elements */
                 /* which have been created outside the band */
-                aocl_lapack_zlargv(&nr, &ab[(j1 + *ka) * ab_dim1 + 1], &inca, &work[m - *kb + j1],
-                                   &ka1, &rwork[m - *kb + j1], &ka1);
+                zlargv_(&nr, &ab[(j1 + *ka) * ab_dim1 + 1], &inca, &work[m - *kb + j1], &ka1,
+                        &rwork[m - *kb + j1], &ka1);
                 /* apply rotations in 2nd set from the left */
                 i__3 = *ka - 1;
                 for(l = 1; l <= i__3; ++l)
                 {
-                    aocl_lapack_zlartv(&nr, &ab[ka1 - l + (j1 + l) * ab_dim1], &inca,
-                                       &ab[*ka - l + (j1 + l) * ab_dim1], &inca,
-                                       &rwork[m - *kb + j1], &work[m - *kb + j1], &ka1);
+                    zlartv_(&nr, &ab[ka1 - l + (j1 + l) * ab_dim1], &inca,
+                            &ab[*ka - l + (j1 + l) * ab_dim1], &inca, &rwork[m - *kb + j1],
+                            &work[m - *kb + j1], &ka1);
                     /* L660: */
                 }
                 /* apply rotations in 2nd set from both sides to diagonal */
                 /* blocks */
-                aocl_lapack_zlar2v(&nr, &ab[ka1 + j1 * ab_dim1], &ab[ka1 + (j1 - 1) * ab_dim1],
-                                   &ab[*ka + j1 * ab_dim1], &inca, &rwork[m - *kb + j1],
-                                   &work[m - *kb + j1], &ka1);
-                aocl_lapack_zlacgv(&nr, &work[m - *kb + j1], &ka1);
+                zlar2v_(&nr, &ab[ka1 + j1 * ab_dim1], &ab[ka1 + (j1 - 1) * ab_dim1],
+                        &ab[*ka + j1 * ab_dim1], &inca, &rwork[m - *kb + j1], &work[m - *kb + j1],
+                        &ka1);
+                zlacgv_(&nr, &work[m - *kb + j1], &ka1);
             }
             /* start applying rotations in 2nd set from the right */
             i__3 = *kb - k + 1;
@@ -1794,9 +1790,8 @@ L490:
                 j1t = j2 - (nrt - 1) * ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_zlartv(&nrt, &ab[l + j1t * ab_dim1], &inca,
-                                       &ab[l + 1 + (j1t - 1) * ab_dim1], &inca,
-                                       &rwork[m - *kb + j1t], &work[m - *kb + j1t], &ka1);
+                    zlartv_(&nrt, &ab[l + j1t * ab_dim1], &inca, &ab[l + 1 + (j1t - 1) * ab_dim1],
+                            &inca, &rwork[m - *kb + j1t], &work[m - *kb + j1t], &ka1);
                 }
                 /* L670: */
             }
@@ -1807,8 +1802,8 @@ L490:
                 i__4 = ka1;
                 for(j = j1; i__4 < 0 ? j >= i__3 : j <= i__3; j += i__4)
                 {
-                    aocl_lapack_zrot(&nx, &x[j * x_dim1 + 1], &c__1, &x[(j - 1) * x_dim1 + 1],
-                                     &c__1, &rwork[m - *kb + j], &work[m - *kb + j]);
+                    zrot_(&nx, &x[j * x_dim1 + 1], &c__1, &x[(j - 1) * x_dim1 + 1], &c__1,
+                          &rwork[m - *kb + j], &work[m - *kb + j]);
                     /* L680: */
                 }
             }
@@ -1820,7 +1815,7 @@ L490:
             /* Computing MAX */
             i__3 = 1;
             i__1 = k + i0 - m + 1; // , expr subst
-            j2 = i__ + k + 1 - fla_max(i__3,i__1) * ka1;
+            j2 = i__ + k + 1 - fla_max(i__3, i__1) * ka1;
             /* finish applying rotations in 1st set from the right */
             for(l = *kb - k; l >= 1; --l)
             {
@@ -1828,9 +1823,8 @@ L490:
                 j1t = j2 - (nrt - 1) * ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_zlartv(&nrt, &ab[l + j1t * ab_dim1], &inca,
-                                       &ab[l + 1 + (j1t - 1) * ab_dim1], &inca, &rwork[j1t],
-                                       &work[j1t], &ka1);
+                    zlartv_(&nrt, &ab[l + j1t * ab_dim1], &inca, &ab[l + 1 + (j1t - 1) * ab_dim1],
+                            &inca, &rwork[j1t], &work[j1t], &ka1);
                 }
                 /* L700: */
             }
@@ -1877,10 +1871,8 @@ L490:
             /* Computing MIN */
             i__3 = *n;
             i__1 = i__ + *ka; // , expr subst
-            i__4 = fla_min(i__3,i__1);
-            for (j = i__ + 1;
-                    j <= i__4;
-                    ++j)
+            i__4 = fla_min(i__3, i__1);
+            for(j = i__ + 1; j <= i__4; ++j)
             {
                 i__3 = j - i__ + 1 + i__ * ab_dim1;
                 i__1 = j - i__ + 1 + i__ * ab_dim1;
@@ -1906,10 +1898,10 @@ L490:
                     z__3.imag = ab[i__2].imag - z__4.imag; // , expr subst
                     d_cnjg(&z__7, &bb[k - i__ + 1 + i__ * bb_dim1]);
                     i__6 = j - i__ + 1 + i__ * ab_dim1;
-                    z__6.real = z__7.real * ab[i__6].real - z__7.imag * ab[i__6].imag;
-                    z__6.imag = z__7.real * ab[i__6].imag + z__7.imag * ab[i__6].real; // , expr subst
-                    z__2.real = z__3.real - z__6.real;
-                    z__2.imag = z__3.imag - z__6.imag; // , expr subst
+                    z__6.r = z__7.r * ab[i__6].r - z__7.i * ab[i__6].i;
+                    z__6.i = z__7.r * ab[i__6].i + z__7.i * ab[i__6].r; // , expr subst
+                    z__2.r = z__3.r - z__6.r;
+                    z__2.i = z__3.i - z__6.i; // , expr subst
                     i__7 = i__ * ab_dim1 + 1;
                     d__1 = ab[i__7].real;
                     i__8 = j - i__ + 1 + i__ * bb_dim1;
@@ -1927,21 +1919,19 @@ L490:
                 /* Computing MIN */
                 i__1 = *n;
                 i__2 = i__ + *ka; // , expr subst
-                i__3 = fla_min(i__1,i__2);
-                for (j = i__ + kbt + 1;
-                        j <= i__3;
-                        ++j)
+                i__3 = fla_min(i__1, i__2);
+                for(j = i__ + kbt + 1; j <= i__3; ++j)
                 {
                     i__1 = j - k + 1 + k * ab_dim1;
                     i__2 = j - k + 1 + k * ab_dim1;
                     d_cnjg(&z__3, &bb[k - i__ + 1 + i__ * bb_dim1]);
                     i__5 = j - i__ + 1 + i__ * ab_dim1;
-                    z__2.real = z__3.real * ab[i__5].real - z__3.imag * ab[i__5].imag;
-                    z__2.imag = z__3.real * ab[i__5].imag + z__3.imag * ab[i__5].real; // , expr subst
-                    z__1.real = ab[i__2].real - z__2.real;
-                    z__1.imag = ab[i__2].imag - z__2.imag; // , expr subst
-                    ab[i__1].real = z__1.real;
-                    ab[i__1].imag = z__1.imag; // , expr subst
+                    z__2.r = z__3.r * ab[i__5].r - z__3.i * ab[i__5].i;
+                    z__2.i = z__3.r * ab[i__5].i + z__3.i * ab[i__5].r; // , expr subst
+                    z__1.r = ab[i__2].r - z__2.r;
+                    z__1.i = ab[i__2].i - z__2.i; // , expr subst
+                    ab[i__1].r = z__1.r;
+                    ab[i__1].i = z__1.i; // , expr subst
                     /* L760: */
                 }
                 /* L770: */
@@ -1952,21 +1942,19 @@ L490:
                 /* Computing MIN */
                 i__1 = j + *ka;
                 i__2 = i__ + kbt; // , expr subst
-                i__3 = fla_min(i__1,i__2);
-                for (k = i__ + 1;
-                        k <= i__3;
-                        ++k)
+                i__3 = fla_min(i__1, i__2);
+                for(k = i__ + 1; k <= i__3; ++k)
                 {
                     i__1 = k - j + 1 + j * ab_dim1;
                     i__2 = k - j + 1 + j * ab_dim1;
                     i__5 = k - i__ + 1 + i__ * bb_dim1;
                     i__6 = i__ - j + 1 + j * ab_dim1;
-                    z__2.real = bb[i__5].real * ab[i__6].real - bb[i__5].imag * ab[i__6].imag;
-                    z__2.imag = bb[i__5].real * ab[i__6].imag + bb[i__5].imag * ab[i__6].real; // , expr subst
-                    z__1.real = ab[i__2].real - z__2.real;
-                    z__1.imag = ab[i__2].imag - z__2.imag; // , expr subst
-                    ab[i__1].real = z__1.real;
-                    ab[i__1].imag = z__1.imag; // , expr subst
+                    z__2.r = bb[i__5].r * ab[i__6].r - bb[i__5].i * ab[i__6].i;
+                    z__2.i = bb[i__5].r * ab[i__6].i + bb[i__5].i * ab[i__6].r; // , expr subst
+                    z__1.r = ab[i__2].r - z__2.r;
+                    z__1.i = ab[i__2].i - z__2.i; // , expr subst
+                    ab[i__1].r = z__1.r;
+                    ab[i__1].i = z__1.i; // , expr subst
                     /* L780: */
                 }
                 /* L790: */
@@ -1975,13 +1963,13 @@ L490:
             {
                 /* post-multiply X by inv(S(i)) */
                 d__1 = 1. / bii;
-                aocl_blas_zdscal(&nx, &d__1, &x[i__ * x_dim1 + 1], &c__1);
+                zdscal_(&nx, &d__1, &x[i__ * x_dim1 + 1], &c__1);
                 if(kbt > 0)
                 {
-                    z__1.real = -1.;
-                    z__1.imag = -0.; // , expr subst
-                    aocl_blas_zgerc(&nx, &kbt, &z__1, &x[i__ * x_dim1 + 1], &c__1,
-                                    &bb[i__ * bb_dim1 + 2], &c__1, &x[(i__ + 1) * x_dim1 + 1], ldx);
+                    z__1.r = -1.;
+                    z__1.i = -0.; // , expr subst
+                    zgerc_(&nx, &kbt, &z__1, &x[i__ * x_dim1 + 1], &c__1, &bb[i__ * bb_dim1 + 2],
+                           &c__1, &x[(i__ + 1) * x_dim1 + 1], ldx);
                 }
             }
             /* store a(i,i1) in RA1 for use in next loop over K */
@@ -2018,12 +2006,12 @@ L490:
                     z__2.imag = rwork[i__1] * t.imag; // , expr subst
                     d_cnjg(&z__4, &work[i__ + k - *ka]);
                     i__2 = ka1 + (i__ + k - *ka) * ab_dim1;
-                    z__3.real = z__4.real * ab[i__2].real - z__4.imag * ab[i__2].imag;
-                    z__3.imag = z__4.real * ab[i__2].imag + z__4.imag * ab[i__2].real; // , expr subst
-                    z__1.real = z__2.real - z__3.real;
-                    z__1.imag = z__2.imag - z__3.imag; // , expr subst
-                    work[i__3].real = z__1.real;
-                    work[i__3].imag = z__1.imag; // , expr subst
+                    z__3.r = z__4.r * ab[i__2].r - z__4.i * ab[i__2].i;
+                    z__3.i = z__4.r * ab[i__2].i + z__4.i * ab[i__2].r; // , expr subst
+                    z__1.r = z__2.r - z__3.r;
+                    z__1.i = z__2.i - z__3.i; // , expr subst
+                    work[i__3].r = z__1.r;
+                    work[i__3].i = z__1.i; // , expr subst
                     i__3 = ka1 + (i__ + k - *ka) * ab_dim1;
                     i__1 = i__ + k - *ka;
                     z__2.real = work[i__1].real * t.real - work[i__1].imag * t.imag;
@@ -2043,7 +2031,7 @@ L490:
             /* Computing MAX */
             i__3 = 1;
             i__1 = k + i0 - m + 1; // , expr subst
-            j2 = i__ + k + 1 - fla_max(i__3,i__1) * ka1;
+            j2 = i__ + k + 1 - fla_max(i__3, i__1) * ka1;
             nr = (j2 + *ka - 1) / ka1;
             j1 = j2 - (nr - 1) * ka1;
             if(update)
@@ -2051,7 +2039,7 @@ L490:
                 /* Computing MIN */
                 i__3 = j2;
                 i__1 = i__ - (*ka << 1) + k - 1; // , expr subst
-                j2t = fla_min(i__3,i__1);
+                j2t = fla_min(i__3, i__1);
             }
             else
             {
@@ -2067,17 +2055,17 @@ L490:
                 i__2 = j;
                 i__5 = j;
                 i__6 = ka1 + (j - 1) * ab_dim1;
-                z__1.real = work[i__5].real * ab[i__6].real - work[i__5].imag * ab[i__6].imag;
-                z__1.imag = work[i__5].real * ab[i__6].imag + work[i__5].imag * ab[i__6].real; // , expr subst
-                work[i__2].real = z__1.real;
-                work[i__2].imag = z__1.imag; // , expr subst
+                z__1.r = work[i__5].r * ab[i__6].r - work[i__5].i * ab[i__6].i;
+                z__1.i = work[i__5].r * ab[i__6].i + work[i__5].i * ab[i__6].r; // , expr subst
+                work[i__2].r = z__1.r;
+                work[i__2].i = z__1.i; // , expr subst
                 i__2 = ka1 + (j - 1) * ab_dim1;
                 i__5 = j;
                 i__6 = ka1 + (j - 1) * ab_dim1;
-                z__1.real = rwork[i__5] * ab[i__6].real;
-                z__1.imag = rwork[i__5] * ab[i__6].imag; // , expr subst
-                ab[i__2].real = z__1.real;
-                ab[i__2].imag = z__1.imag; // , expr subst
+                z__1.r = rwork[i__5] * ab[i__6].r;
+                z__1.i = rwork[i__5] * ab[i__6].i; // , expr subst
+                ab[i__2].r = z__1.r;
+                ab[i__2].i = z__1.i; // , expr subst
                 /* L800: */
             }
             /* generate rotations in 1st set to annihilate elements which */
@@ -2093,16 +2081,15 @@ L490:
                 i__1 = *ka - 1;
                 for(l = 1; l <= i__1; ++l)
                 {
-                    aocl_lapack_zlartv(&nr, &ab[l + 1 + j1 * ab_dim1], &inca,
-                                       &ab[l + 2 + (j1 - 1) * ab_dim1], &inca, &rwork[j1],
-                                       &work[j1], &ka1);
+                    zlartv_(&nr, &ab[l + 1 + j1 * ab_dim1], &inca, &ab[l + 2 + (j1 - 1) * ab_dim1],
+                            &inca, &rwork[j1], &work[j1], &ka1);
                     /* L810: */
                 }
                 /* apply rotations in 1st set from both sides to diagonal */
                 /* blocks */
-                aocl_lapack_zlar2v(&nr, &ab[j1 * ab_dim1 + 1], &ab[(j1 - 1) * ab_dim1 + 1],
-                                   &ab[(j1 - 1) * ab_dim1 + 2], &inca, &rwork[j1], &work[j1], &ka1);
-                aocl_lapack_zlacgv(&nr, &work[j1], &ka1);
+                zlar2v_(&nr, &ab[j1 * ab_dim1 + 1], &ab[(j1 - 1) * ab_dim1 + 1],
+                        &ab[(j1 - 1) * ab_dim1 + 2], &inca, &rwork[j1], &work[j1], &ka1);
+                zlacgv_(&nr, &work[j1], &ka1);
             }
             /* start applying rotations in 1st set from the left */
             i__1 = *kb - k + 1;
@@ -2112,7 +2099,9 @@ L490:
                 j1t = j2 - (nrt - 1) * ka1;
                 if(nrt > 0)
                 {
-                    zlartv_(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca, &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca, &rwork[j1t], &work[j1t], &ka1);
+                    zlartv_(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca,
+                            &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca, &rwork[j1t],
+                            &work[j1t], &ka1);
                 }
                 /* L820: */
             }
@@ -2124,8 +2113,8 @@ L490:
                 for(j = j1; i__3 < 0 ? j >= i__1 : j <= i__1; j += i__3)
                 {
                     d_cnjg(&z__1, &work[j]);
-                    aocl_lapack_zrot(&nx, &x[j * x_dim1 + 1], &c__1, &x[(j - 1) * x_dim1 + 1],
-                                     &c__1, &rwork[j], &z__1);
+                    zrot_(&nx, &x[j * x_dim1 + 1], &c__1, &x[(j - 1) * x_dim1 + 1], &c__1,
+                          &rwork[j], &z__1);
                     /* L830: */
                 }
             }
@@ -2154,14 +2143,14 @@ L490:
                 /* Computing MAX */
                 i__4 = 2;
                 i__3 = k + i0 - m; // , expr subst
-                j2 = i__ + k + 1 - fla_max(i__4,i__3) * ka1;
+                j2 = i__ + k + 1 - fla_max(i__4, i__3) * ka1;
             }
             else
             {
                 /* Computing MAX */
                 i__4 = 1;
                 i__3 = k + i0 - m; // , expr subst
-                j2 = i__ + k + 1 - fla_max(i__4,i__3) * ka1;
+                j2 = i__ + k + 1 - fla_max(i__4, i__3) * ka1;
             }
             /* finish applying rotations in 2nd set from the left */
             for(l = *kb - k; l >= 1; --l)
@@ -2170,10 +2159,9 @@ L490:
                 j1t = j2 - (nrt - 1) * ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_zlartv(&nrt, &ab[ka1 - l + 1 + (j1t + l - 1) * ab_dim1], &inca,
-                                       &ab[ka1 - l + (j1t + l - 1) * ab_dim1], &inca,
-                                       &rwork[m - *kb + j1t + *ka], &work[m - *kb + j1t + *ka],
-                                       &ka1);
+                    zlartv_(&nrt, &ab[ka1 - l + 1 + (j1t + l - 1) * ab_dim1], &inca,
+                            &ab[ka1 - l + (j1t + l - 1) * ab_dim1], &inca,
+                            &rwork[m - *kb + j1t + *ka], &work[m - *kb + j1t + *ka], &ka1);
                 }
                 /* L850: */
             }
@@ -2199,17 +2187,17 @@ L490:
                 i__1 = m - *kb + j;
                 i__2 = m - *kb + j;
                 i__5 = ka1 + (j - 1) * ab_dim1;
-                z__1.real = work[i__2].real * ab[i__5].real - work[i__2].imag * ab[i__5].imag;
-                z__1.imag = work[i__2].real * ab[i__5].imag + work[i__2].imag * ab[i__5].real; // , expr subst
-                work[i__1].real = z__1.real;
-                work[i__1].imag = z__1.imag; // , expr subst
+                z__1.r = work[i__2].r * ab[i__5].r - work[i__2].i * ab[i__5].i;
+                z__1.i = work[i__2].r * ab[i__5].i + work[i__2].i * ab[i__5].r; // , expr subst
+                work[i__1].r = z__1.r;
+                work[i__1].i = z__1.i; // , expr subst
                 i__1 = ka1 + (j - 1) * ab_dim1;
                 i__2 = m - *kb + j;
                 i__5 = ka1 + (j - 1) * ab_dim1;
-                z__1.real = rwork[i__2] * ab[i__5].real;
-                z__1.imag = rwork[i__2] * ab[i__5].imag; // , expr subst
-                ab[i__1].real = z__1.real;
-                ab[i__1].imag = z__1.imag; // , expr subst
+                z__1.r = rwork[i__2] * ab[i__5].r;
+                z__1.i = rwork[i__2] * ab[i__5].i; // , expr subst
+                ab[i__1].r = z__1.r;
+                ab[i__1].i = z__1.i; // , expr subst
                 /* L870: */
             }
             if(update)
@@ -2229,28 +2217,29 @@ L490:
             /* Computing MAX */
             i__4 = 1;
             i__3 = k + i0 - m; // , expr subst
-            j2 = i__ + k + 1 - fla_max(i__4,i__3) * ka1;
+            j2 = i__ + k + 1 - fla_max(i__4, i__3) * ka1;
             nr = (j2 + *ka - 1) / ka1;
             j1 = j2 - (nr - 1) * ka1;
             if(nr > 0)
             {
                 /* generate rotations in 2nd set to annihilate elements */
                 /* which have been created outside the band */
-                aocl_lapack_zlargv(&nr, &ab[ka1 + j1 * ab_dim1], &inca, &work[m - *kb + j1], &ka1,
-                                   &rwork[m - *kb + j1], &ka1);
+                zlargv_(&nr, &ab[ka1 + j1 * ab_dim1], &inca, &work[m - *kb + j1], &ka1,
+                        &rwork[m - *kb + j1], &ka1);
                 /* apply rotations in 2nd set from the right */
                 i__4 = *ka - 1;
                 for(l = 1; l <= i__4; ++l)
                 {
-                    zlartv_(&nr, &ab[l + 1 + j1 * ab_dim1], &inca, &ab[l + 2 + (j1 - 1) * ab_dim1], &inca, &rwork[m - *kb + j1], &work[m - *kb + j1], &ka1);
+                    zlartv_(&nr, &ab[l + 1 + j1 * ab_dim1], &inca, &ab[l + 2 + (j1 - 1) * ab_dim1],
+                            &inca, &rwork[m - *kb + j1], &work[m - *kb + j1], &ka1);
                     /* L890: */
                 }
                 /* apply rotations in 2nd set from both sides to diagonal */
                 /* blocks */
-                aocl_lapack_zlar2v(&nr, &ab[j1 * ab_dim1 + 1], &ab[(j1 - 1) * ab_dim1 + 1],
-                                   &ab[(j1 - 1) * ab_dim1 + 2], &inca, &rwork[m - *kb + j1],
-                                   &work[m - *kb + j1], &ka1);
-                aocl_lapack_zlacgv(&nr, &work[m - *kb + j1], &ka1);
+                zlar2v_(&nr, &ab[j1 * ab_dim1 + 1], &ab[(j1 - 1) * ab_dim1 + 1],
+                        &ab[(j1 - 1) * ab_dim1 + 2], &inca, &rwork[m - *kb + j1],
+                        &work[m - *kb + j1], &ka1);
+                zlacgv_(&nr, &work[m - *kb + j1], &ka1);
             }
             /* start applying rotations in 2nd set from the left */
             i__4 = *kb - k + 1;
@@ -2260,7 +2249,9 @@ L490:
                 j1t = j2 - (nrt - 1) * ka1;
                 if(nrt > 0)
                 {
-                    zlartv_(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca, &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca, &rwork[m - *kb + j1t], &work[m - *kb + j1t], &ka1);
+                    zlartv_(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca,
+                            &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca, &rwork[m - *kb + j1t],
+                            &work[m - *kb + j1t], &ka1);
                 }
                 /* L900: */
             }
@@ -2272,8 +2263,8 @@ L490:
                 for(j = j1; i__3 < 0 ? j >= i__4 : j <= i__4; j += i__3)
                 {
                     d_cnjg(&z__1, &work[m - *kb + j]);
-                    aocl_lapack_zrot(&nx, &x[j * x_dim1 + 1], &c__1, &x[(j - 1) * x_dim1 + 1],
-                                     &c__1, &rwork[m - *kb + j], &z__1);
+                    zrot_(&nx, &x[j * x_dim1 + 1], &c__1, &x[(j - 1) * x_dim1 + 1], &c__1,
+                          &rwork[m - *kb + j], &z__1);
                     /* L910: */
                 }
             }
@@ -2285,7 +2276,7 @@ L490:
             /* Computing MAX */
             i__4 = 1;
             i__1 = k + i0 - m + 1; // , expr subst
-            j2 = i__ + k + 1 - fla_max(i__4,i__1) * ka1;
+            j2 = i__ + k + 1 - fla_max(i__4, i__1) * ka1;
             /* finish applying rotations in 1st set from the left */
             for(l = *kb - k; l >= 1; --l)
             {
@@ -2293,7 +2284,9 @@ L490:
                 j1t = j2 - (nrt - 1) * ka1;
                 if(nrt > 0)
                 {
-                    zlartv_(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca, &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca, &rwork[j1t], &work[j1t], &ka1);
+                    zlartv_(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca,
+                            &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca, &rwork[j1t],
+                            &work[j1t], &ka1);
                 }
                 /* L930: */
             }

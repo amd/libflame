@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief <b> CGTSVX computes the solution to system of linear equations A * X = B for GT matrices
  * <b> */
 /* =========== DOCUMENTATION =========== */
@@ -292,15 +292,20 @@ IPIV(i) = i indicates */
 /* > \ingroup complexGTsolve */
 /* ===================================================================== */
 /* Subroutine */
-void cgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, complex *dl, complex *d__, complex *du, complex *dlf, complex * df, complex *duf, complex *du2, integer *ipiv, complex *b, integer * ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, real *rwork, integer *info)
+void cgtsvx_(char *fact, char *trans, integer *n, integer *nrhs, complex *dl, complex *d__,
+             complex *du, complex *dlf, complex *df, complex *duf, complex *du2, integer *ipiv,
+             complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *ferr,
+             real *berr, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgtsvx inputs: fact %c, trans %c, n %lld, nrhs %lld, ldb %lld, ldx %lld",*fact, *trans, *n, *nrhs, *ldb, *ldx);
+    snprintf(buffer, 256, "cgtsvx inputs: fact %c, trans %c, n %lld, nrhs %lld, ldb %lld, ldx %lld",
+             *fact, *trans, *n, *nrhs, *ldb, *ldx);
 #else
-    snprintf(buffer, 256,"cgtsvx inputs: fact %c, trans %c, n %d, nrhs %d, ldb %d, ldx %d",*fact, *trans, *n, *nrhs, *ldb, *ldx);
+    snprintf(buffer, 256, "cgtsvx inputs: fact %c, trans %c, n %d, nrhs %d, ldb %d, ldx %d", *fact,
+             *trans, *n, *nrhs, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -311,14 +316,25 @@ void cgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, complex *dl, c
     extern logical lsame_(char *, char *, integer, integer);
     real anorm;
     extern /* Subroutine */
-    void ccopy_(integer *, complex *, integer *, complex *, integer *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *);
     extern real slamch_(char *), clangt_(char *, integer *, complex *, complex *, complex *);
     logical nofact;
     extern /* Subroutine */
-    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), cgtcon_(char *, integer *, complex *, complex *, complex *, complex *, integer *, real *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cgtrfs_(char *, integer *, integer *, complex *, complex *, complex *, complex *, complex *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), cgttrf_(integer *, complex *, complex *, complex *, complex *, integer *, integer *);
+        void
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        cgtcon_(char *, integer *, complex *, complex *, complex *, complex *, integer *, real *,
+                real *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        cgtrfs_(char *, integer *, integer *, complex *, complex *, complex *, complex *, complex *,
+                complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *,
+                real *, complex *, real *, integer *),
+        cgttrf_(integer *, complex *, complex *, complex *, complex *, integer *, integer *);
     logical notran;
     extern /* Subroutine */
-    void cgttrs_(char *, integer *, integer *, complex *, complex *, complex *, complex *, integer *, complex *, integer *, integer *);
+        void
+        cgttrs_(char *, integer *, integer *, complex *, complex *, complex *, complex *, integer *,
+                complex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -362,11 +378,11 @@ void cgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, complex *dl, c
     *info = 0;
     nofact = lsame_(fact, "N", 1, 1);
     notran = lsame_(trans, "N", 1, 1);
-    if (! nofact && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -378,11 +394,11 @@ void cgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, complex *dl, c
     {
         *info = -4;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -14;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -16;
     }
@@ -396,7 +412,7 @@ void cgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, complex *dl, c
     if(nofact)
     {
         /* Compute the LU factorization of A. */
-        aocl_blas_ccopy(n, &d__[1], &c__1, &df[1], &c__1);
+        ccopy_(n, &d__[1], &c__1, &df[1], &c__1);
         if(*n > 1)
         {
             i__1 = *n - 1;
@@ -427,12 +443,12 @@ void cgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, complex *dl, c
     aocl_lapack_cgtcon(norm, n, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &anorm, rcond,
                        &work[1], info);
     /* Compute the solution vectors X. */
-    aocl_lapack_clacpy("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
-    aocl_lapack_cgttrs(trans, n, nrhs, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &x[x_offset],
-                       ldx, info);
+    clacpy_("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
+    cgttrs_(trans, n, nrhs, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solutions and */
     /* compute error bounds and backward error estimates for them. */
-    cgtrfs_(trans, n, nrhs, &dl[1], &d__[1], &du[1], &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
+    cgtrfs_(trans, n, nrhs, &dl[1], &d__[1], &du[1], &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1],
+            &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
     /* Set INFO = N+1 if the matrix is singular to working precision. */
     if(*rcond < slamch_("Epsilon"))
     {

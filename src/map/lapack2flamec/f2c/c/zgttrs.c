@@ -137,17 +137,23 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complex16GTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zgttrs_(char *trans, integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, doublecomplex *du, doublecomplex *du2, integer *ipiv, doublecomplex *b, integer *ldb, integer *info)
+void zgttrs_(char *trans, integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__,
+             doublecomplex *du, doublecomplex *du2, integer *ipiv, doublecomplex *b, integer *ldb,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgttrs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*trans, *n, *nrhs, *ldb);
+    AOCL_DTL_SNPRINTF("zgttrs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",
+                      *trans, *n, *nrhs, *ldb);
 
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1, i__2, i__3;
     /* Local variables */
     integer j, jb, nb;
     extern /* Subroutine */
-    void zgtts2_(integer *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zgtts2_(integer *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
+                doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer itrans;
     logical notran;
@@ -194,7 +200,7 @@ void zgttrs_(char *trans, integer *n, integer *nrhs, doublecomplex *dl, doubleco
     {
         *info = -3;
     }
-    else if (*ldb < fla_max(*n,1))
+    else if(*ldb < fla_max(*n, 1))
     {
         *info = -10;
     }
@@ -233,8 +239,8 @@ void zgttrs_(char *trans, integer *n, integer *nrhs, doublecomplex *dl, doubleco
     {
         /* Computing MAX */
         i__1 = 1;
-        i__2 = ilaenv_(&c__1, "ZGTTRS", trans, n, nrhs, &c_n1, & c_n1); // , expr subst
-        nb = fla_max(i__1,i__2);
+        i__2 = ilaenv_(&c__1, "ZGTTRS", trans, n, nrhs, &c_n1, &c_n1); // , expr subst
+        nb = fla_max(i__1, i__2);
     }
     if(nb >= *nrhs)
     {
@@ -249,8 +255,9 @@ void zgttrs_(char *trans, integer *n, integer *nrhs, doublecomplex *dl, doubleco
         {
             /* Computing MIN */
             i__3 = *nrhs - j + 1;
-            jb = fla_min(i__3,nb);
-            zgtts2_(&itrans, n, &jb, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[ 1], &b[j * b_dim1 + 1], ldb);
+            jb = fla_min(i__3, nb);
+            zgtts2_(&itrans, n, &jb, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &b[j * b_dim1 + 1],
+                    ldb);
             /* L10: */
         }
     }

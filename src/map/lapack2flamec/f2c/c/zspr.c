@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b ZSPR performs the symmetrical rank-1 update of a scomplex symmetric packed matrix. */
+#include "FLA_f2c.h" /* > \brief \b ZSPR performs the symmetrical rank-1 update of a complex symmetric packed matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -127,10 +127,11 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx, doublecomplex *ap)
+void zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx,
+           doublecomplex *ap)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zspr inputs: uplo %c, n %" FLA_IS ", incx %" FLA_IS "",*uplo, *n, *incx);
+    AOCL_DTL_SNPRINTF("zspr inputs: uplo %c, n %" FLA_IS ", incx %" FLA_IS "", *uplo, *n, *incx);
 
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3, i__4, i__5;
@@ -140,7 +141,8 @@ void zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
     doublecomplex temp;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -166,7 +168,7 @@ void zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
     /* Function Body */
     info = 0;
     kx = 0;
-    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         info = 1;
     }
@@ -185,7 +187,7 @@ void zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
         return;
     }
     /* Quick return if possible. */
-    if(*n == 0 || alpha->real == 0. && alpha->imag == 0.)
+    if(*n == 0 || alpha->r == 0. && alpha->i == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -202,7 +204,7 @@ void zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
     /* Start the operations. In this version the elements of the array AP */
     /* are accessed sequentially with one pass through AP. */
     kk = 1;
-    if (lsame_(uplo, "U", 1, 1))
+    if(lsame_(uplo, "U", 1, 1))
     {
         /* Form A when upper triangle is stored in AP. */
         if(*incx == 1)
@@ -211,13 +213,13 @@ void zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
-                if(x[i__2].real != 0. || x[i__2].imag != 0.)
+                if(x[i__2].r != 0. || x[i__2].i != 0.)
                 {
                     i__2 = j;
-                    z__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
-                    z__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
-                    temp.real = z__1.real;
-                    temp.imag = z__1.imag; // , expr subst
+                    z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
+                    z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
+                    temp.r = z__1.r;
+                    temp.i = z__1.i; // , expr subst
                     k = kk;
                     i__2 = j - 1;
                     for(i__ = 1; i__ <= i__2; ++i__)
@@ -262,13 +264,13 @@ void zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = jx;
-                if(x[i__2].real != 0. || x[i__2].imag != 0.)
+                if(x[i__2].r != 0. || x[i__2].i != 0.)
                 {
                     i__2 = jx;
-                    z__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
-                    z__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
-                    temp.real = z__1.real;
-                    temp.imag = z__1.imag; // , expr subst
+                    z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
+                    z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
+                    temp.r = z__1.r;
+                    temp.i = z__1.i; // , expr subst
                     ix = kx;
                     i__2 = kk + j - 2;
                     for(k = kk; k <= i__2; ++k)
@@ -317,13 +319,13 @@ void zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
-                if(x[i__2].real != 0. || x[i__2].imag != 0.)
+                if(x[i__2].r != 0. || x[i__2].i != 0.)
                 {
                     i__2 = j;
-                    z__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
-                    z__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
-                    temp.real = z__1.real;
-                    temp.imag = z__1.imag; // , expr subst
+                    z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
+                    z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
+                    temp.r = z__1.r;
+                    temp.i = z__1.i; // , expr subst
                     i__2 = kk;
                     i__3 = kk;
                     i__4 = j;
@@ -368,13 +370,13 @@ void zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = jx;
-                if(x[i__2].real != 0. || x[i__2].imag != 0.)
+                if(x[i__2].r != 0. || x[i__2].i != 0.)
                 {
                     i__2 = jx;
-                    z__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
-                    z__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
-                    temp.real = z__1.real;
-                    temp.imag = z__1.imag; // , expr subst
+                    z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
+                    z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
+                    temp.r = z__1.r;
+                    temp.i = z__1.i; // , expr subst
                     i__2 = kk;
                     i__3 = kk;
                     i__4 = jx;

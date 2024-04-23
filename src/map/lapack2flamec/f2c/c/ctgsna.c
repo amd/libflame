@@ -1,12 +1,12 @@
-/* ./ctgsna.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ctgsna.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-static scomplex c_b19 = {1.f, 0.f};
-static scomplex c_b20 = {0.f, 0.f};
+static integer c__1 = 1;
+static complex c_b19 = {1.f, 0.f};
+static complex c_b20 = {0.f, 0.f};
 static logical c_false = FALSE_;
 static aocl_int64_t c__3 = 3;
 /* > \brief \b CTGSNA */
@@ -317,15 +317,24 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctgsna_(char *job, char *howmny, logical *select, integer *n, complex *a, integer *lda, complex *b, integer *ldb, complex *vl, integer *ldvl, complex *vr, integer *ldvr, real *s, real *dif, integer *mm, integer *m, complex *work, integer *lwork, integer *iwork, integer *info)
+void ctgsna_(char *job, char *howmny, logical *select, integer *n, complex *a, integer *lda,
+             complex *b, integer *ldb, complex *vl, integer *ldvl, complex *vr, integer *ldvr,
+             real *s, real *dif, integer *mm, integer *m, complex *work, integer *lwork,
+             integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctgsna inputs: job %c, howmny %c, n %lld, lda %lld, ldb %lld, ldvl %lld, ldvr %lld, mm %lld, m %lld, lwork %lld",*job, *howmny, *n, *lda, *ldb, *ldvl, *ldvr, *mm, *m, *lwork);
+    snprintf(buffer, 256,
+             "ctgsna inputs: job %c, howmny %c, n %lld, lda %lld, ldb %lld, ldvl %lld, ldvr %lld, "
+             "mm %lld, m %lld, lwork %lld",
+             *job, *howmny, *n, *lda, *ldb, *ldvl, *ldvr, *mm, *m, *lwork);
 #else
-    snprintf(buffer, 256,"ctgsna inputs: job %c, howmny %c, n %d, lda %d, ldb %d, ldvl %d, ldvr %d, mm %d, m %d, lwork %d",*job, *howmny, *n, *lda, *ldb, *ldvl, *ldvr, *mm, *m, *lwork);
+    snprintf(buffer, 256,
+             "ctgsna inputs: job %c, howmny %c, n %d, lda %d, ldb %d, ldvl %d, ldvr %d, mm %d, m "
+             "%d, lwork %d",
+             *job, *howmny, *n, *lda, *ldb, *ldvl, *ldvr, *mm, *m, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -344,24 +353,35 @@ void ctgsna_(char *job, char *howmny, logical *select, integer *n, complex *a, i
     aocl_int64_t ilst;
     real rnrm, scale;
     extern /* Complex */
-    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+        VOID
+        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+        void
+        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
+               complex *, complex *, integer *);
     integer lwmin;
     logical wants;
     complex dummy[1];
     extern real scnrm2_(integer *, complex *, integer *), slapy2_(real *, real *);
     complex dummy1[1];
     extern /* Subroutine */
-    void slabad_(real *, real *);
+        void
+        slabad_(real *, real *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), ctgexc_(logical *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        ctgexc_(logical *, logical *, integer *, complex *, integer *, complex *, integer *,
+                complex *, integer *, complex *, integer *, integer *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     logical wantbh, wantdf, somcon;
     extern /* Subroutine */
-    void ctgsyl_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, integer *, integer *, integer *);
+        void
+        ctgsyl_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *,
+                complex *, integer *, complex *, integer *, complex *, integer *, complex *,
+                integer *, real *, real *, complex *, integer *, integer *, integer *);
     real smlnum;
     logical lquery;
     /* -- LAPACK computational routine -- */
@@ -415,7 +435,7 @@ void ctgsna_(char *job, char *howmny, logical *select, integer *n, complex *a, i
     {
         *info = -1;
     }
-    else if (! lsame_(howmny, "A", 1, 1) && ! somcon)
+    else if(!lsame_(howmny, "A", 1, 1) && !somcon)
     {
         *info = -2;
     }
@@ -423,11 +443,11 @@ void ctgsna_(char *job, char *howmny, logical *select, integer *n, complex *a, i
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
@@ -464,7 +484,7 @@ void ctgsna_(char *job, char *howmny, logical *select, integer *n, complex *a, i
         {
             lwmin = 1;
         }
-        else if (lsame_(job, "V", 1, 1) || lsame_(job, "B", 1, 1))
+        else if(lsame_(job, "V", 1, 1) || lsame_(job, "B", 1, 1))
         {
             lwmin = (*n << 1) * *n;
         }
@@ -472,9 +492,8 @@ void ctgsna_(char *job, char *howmny, logical *select, integer *n, complex *a, i
         {
             lwmin = *n;
         }
-        r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-        work[1].real = r__1;
-        work[1].imag = 0.f; // , expr subst
+        work[1].r = (real)lwmin;
+        work[1].i = 0.f; // , expr subst
         if(*mm < *m)
         {
             *info = -15;
@@ -523,11 +542,13 @@ void ctgsna_(char *job, char *howmny, logical *select, integer *n, complex *a, i
             /* eigenvalue. */
             rnrm = scnrm2_(n, &vr[ks * vr_dim1 + 1], &c__1);
             lnrm = scnrm2_(n, &vl[ks * vl_dim1 + 1], &c__1);
-            cgemv_("N", n, n, &c_b19, &a[a_offset], lda, &vr[ks * vr_dim1 + 1], &c__1, &c_b20, &work[1], &c__1);
+            cgemv_("N", n, n, &c_b19, &a[a_offset], lda, &vr[ks * vr_dim1 + 1], &c__1, &c_b20,
+                   &work[1], &c__1);
             cdotc_f2c_(&q__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
             yhax.r = q__1.r;
             yhax.i = q__1.i; // , expr subst
-            cgemv_("N", n, n, &c_b19, &b[b_offset], ldb, &vr[ks * vr_dim1 + 1], &c__1, &c_b20, &work[1], &c__1);
+            cgemv_("N", n, n, &c_b19, &b[b_offset], ldb, &vr[ks * vr_dim1 + 1], &c__1, &c_b20,
+                   &work[1], &c__1);
             cdotc_f2c_(&q__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
             yhbx.r = q__1.r;
             yhbx.i = q__1.i; // , expr subst
@@ -561,8 +582,9 @@ void ctgsna_(char *job, char *howmny, logical *select, integer *n, complex *a, i
                 aocl_lapack_clacpy("Full", n, n, &b[b_offset], ldb, &work[*n * *n + 1], n);
                 ifst = k;
                 ilst = 1;
-                ctgexc_(&c_false, &c_false, n, &work[1], n, &work[*n * *n + 1], n, dummy, &c__1, dummy1, &c__1, &ifst, &ilst, &ierr) ;
-                if (ierr > 0)
+                ctgexc_(&c_false, &c_false, n, &work[1], n, &work[*n * *n + 1], n, dummy, &c__1,
+                        dummy1, &c__1, &ifst, &ilst, &ierr);
+                if(ierr > 0)
                 {
                     /* Ill-conditioned problem - swap rejected. */
                     dif[ks] = 0.f;
@@ -577,16 +599,15 @@ void ctgsna_(char *job, char *howmny, logical *select, integer *n, complex *a, i
                     n1 = 1;
                     n2 = *n - n1;
                     i__ = *n * *n + 1;
-                    aocl_lapack_ctgsyl("N", &c__3, &n2, &n1, &work[*n * n1 + n1 + 1], n, &work[1],
-                                       n, &work[n1 + 1], n, &work[*n * n1 + n1 + i__], n,
-                                       &work[i__], n, &work[n1 + i__], n, &scale, &dif[ks], dummy,
-                                       &c__1, &iwork[1], &ierr);
+                    ctgsyl_("N", &c__3, &n2, &n1, &work[*n * n1 + n1 + 1], n, &work[1], n,
+                            &work[n1 + 1], n, &work[*n * n1 + n1 + i__], n, &work[i__], n,
+                            &work[n1 + i__], n, &scale, &dif[ks], dummy, &c__1, &iwork[1], &ierr);
                 }
             }
         }
     L20:;
     }
-    work[1].r = (real) lwmin;
+    work[1].r = (real)lwmin;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

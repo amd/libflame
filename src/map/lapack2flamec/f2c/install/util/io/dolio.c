@@ -21,11 +21,11 @@ other tortious action, arising out of or in connection with the
 use or performance of this software.
 ****************************************************************/
 
-#include "f2c_config.h"
 #include "f2c.h"
+#include "f2c_config.h"
 #include "fio.h"
 
 integer do_lio(ftnint *type, ftnint *number, char *ptr, ftnlen len)
 {
-	return((*f__lioproc)(number,ptr,len,*type));
+    return ((*f__lioproc)(number, ptr, len, *type));
 }

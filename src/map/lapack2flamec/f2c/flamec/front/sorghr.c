@@ -126,17 +126,21 @@ the routine */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sorghr_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info)
+void sorghr_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real *tau, real *work,
+             integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
     aocl_int64_t i__, j, nb, nh, iinfo;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void sorgqr_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+        void
+        sorgqr_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer *,
+                   integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -174,27 +178,27 @@ void sorghr_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real
     {
         *info = -1;
     }
-    else if (*ilo < 1 || *ilo > fla_max(1,*n))
+    else if(*ilo < 1 || *ilo > fla_max(1, *n))
     {
         *info = -2;
     }
-    else if (*ihi < fla_min(*ilo,*n) || *ihi > *n)
+    else if(*ihi < fla_min(*ilo, *n) || *ihi > *n)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*lwork < fla_max(1,nh) && ! lquery)
+    else if(*lwork < fla_max(1, nh) && !lquery)
     {
         *info = -8;
     }
     if(*info == 0)
     {
         nb = ilaenv_(&c__1, "SORGQR", " ", &nh, &nh, &nh, &c_n1);
-        lwkopt = fla_max(1,nh) * nb;
-        work[1] = (real) lwkopt;
+        lwkopt = fla_max(1, nh) * nb;
+        work[1] = (real)lwkopt;
     }
     if(*info != 0)
     {
@@ -268,7 +272,7 @@ void sorghr_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real
         sorgqr_fla(&nh, &nh, &nh, &a[*ilo + 1 + (*ilo + 1) * a_dim1], lda, &tau[*ilo], &work[1],
                    lwork, &iinfo);
     }
-    work[1] = (real) lwkopt;
+    work[1] = (real)lwkopt;
     return;
     /* End of SORGHR */
 }

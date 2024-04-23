@@ -312,10 +312,17 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer *minp, integer *nbmin, doublereal *abstol, doublereal *reltol, doublereal *pivmin, doublereal *d__, doublereal * e, doublereal *e2, integer *nval, doublereal *ab, doublereal *c__, integer *mout, integer *nab, doublereal *work, integer *iwork, integer *info)
+void dlaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer *minp,
+             integer *nbmin, doublereal *abstol, doublereal *reltol, doublereal *pivmin,
+             doublereal *d__, doublereal *e, doublereal *e2, integer *nval, doublereal *ab,
+             doublereal *c__, integer *mout, integer *nab, doublereal *work, integer *iwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaebz inputs: ijob %" FLA_IS ", nitmax %" FLA_IS ", n %" FLA_IS ", mmax %" FLA_IS ", minp %" FLA_IS ", nbmin %" FLA_IS ", nval %" FLA_IS ", nab %" FLA_IS "",*ijob, *nitmax, *n, *mmax, *minp, *nbmin, *nval, *nab);
+    AOCL_DTL_SNPRINTF("dlaebz inputs: ijob %" FLA_IS ", nitmax %" FLA_IS ", n %" FLA_IS
+                      ", mmax %" FLA_IS ", minp %" FLA_IS ", nbmin %" FLA_IS ", nval %" FLA_IS
+                      ", nab %" FLA_IS "",
+                      *ijob, *nitmax, *n, *mmax, *minp, *nbmin, *nval, *nab);
     /* System generated locals */
     aocl_int64_t nab_dim1, nab_offset, ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     doublereal d__1, d__2, d__3, d__4;
@@ -373,7 +380,7 @@ void dlaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
             for(jp = 1; jp <= 2; ++jp)
             {
                 tmp1 = d__[1] - ab[ji + jp * ab_dim1];
-                if (f2c_dabs(tmp1) < *pivmin)
+                if(f2c_dabs(tmp1) < *pivmin)
                 {
                     tmp1 = -(*pivmin);
                 }
@@ -386,7 +393,7 @@ void dlaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
                 for(j = 2; j <= i__2; ++j)
                 {
                     tmp1 = d__[j] - e2[j - 1] / tmp1 - ab[ji + jp * ab_dim1];
-                    if (f2c_dabs(tmp1) < *pivmin)
+                    if(f2c_dabs(tmp1) < *pivmin)
                     {
                         tmp1 = -(*pivmin);
                     }
@@ -441,7 +448,7 @@ void dlaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
                     /* Computing MIN */
                     d__1 = work[ji];
                     d__2 = -(*pivmin); // , expr subst
-                    work[ji] = fla_min(d__1,d__2);
+                    work[ji] = fla_min(d__1, d__2);
                 }
                 i__3 = *n;
                 for(j = 2; j <= i__3; ++j)
@@ -453,7 +460,7 @@ void dlaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
                         /* Computing MIN */
                         d__1 = work[ji];
                         d__2 = -(*pivmin); // , expr subst
-                        work[ji] = fla_min(d__1,d__2);
+                        work[ji] = fla_min(d__1, d__2);
                     }
                     /* L50: */
                 }
@@ -472,8 +479,8 @@ void dlaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
                     i__5 = nab[ji + nab_dim1];
                     i__6 = iwork[ji]; // , expr subst
                     i__3 = nab[ji + (nab_dim1 << 1)];
-                    i__4 = fla_max(i__5,i__6); // , expr subst
-                    iwork[ji] = fla_min(i__3,i__4);
+                    i__4 = fla_max(i__5, i__6); // , expr subst
+                    iwork[ji] = fla_min(i__3, i__4);
                     /* Update the Queue -- add intervals if both halves */
                     /* contain eigenvalues. */
                     if(iwork[ji] == nab[ji + (nab_dim1 << 1)])
@@ -555,7 +562,7 @@ void dlaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
                     /* Computing MIN */
                     d__1 = tmp2;
                     d__2 = -(*pivmin); // , expr subst
-                    tmp2 = fla_min(d__1,d__2);
+                    tmp2 = fla_min(d__1, d__2);
                 }
                 i__3 = *n;
                 for(j = 2; j <= i__3; ++j)
@@ -567,7 +574,7 @@ void dlaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
                         /* Computing MIN */
                         d__1 = tmp2;
                         d__2 = -(*pivmin); // , expr subst
-                        tmp2 = fla_min(d__1,d__2);
+                        tmp2 = fla_min(d__1, d__2);
                     }
                     /* L90: */
                 }
@@ -579,8 +586,8 @@ void dlaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
                     /* Computing MAX */
                     i__5 = nab[ji + nab_dim1];
                     i__3 = nab[ji + (nab_dim1 << 1)];
-                    i__4 = fla_max(i__5,itmp1); // , expr subst
-                    itmp1 = fla_min(i__3,i__4);
+                    i__4 = fla_max(i__5, itmp1); // , expr subst
+                    itmp1 = fla_min(i__3, i__4);
                     /* Update the Queue -- add intervals if both halves */
                     /* contain eigenvalues. */
                     if(itmp1 == nab[ji + (nab_dim1 << 1)])
@@ -637,15 +644,15 @@ void dlaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
         i__2 = kl;
         for(ji = kf; ji <= i__2; ++ji)
         {
-            tmp1 = (d__1 = ab[ji + (ab_dim1 << 1)] - ab[ji + ab_dim1], f2c_dabs( d__1));
+            tmp1 = (d__1 = ab[ji + (ab_dim1 << 1)] - ab[ji + ab_dim1], f2c_dabs(d__1));
             /* Computing MAX */
             d__3 = (d__1 = ab[ji + (ab_dim1 << 1)], f2c_dabs(d__1));
             d__4 = (d__2 = ab[ji + ab_dim1], f2c_dabs(d__2)); // , expr subst
-            tmp2 = fla_max(d__3,d__4);
+            tmp2 = fla_max(d__3, d__4);
             /* Computing MAX */
-            d__1 = fla_max(*abstol,*pivmin);
+            d__1 = fla_max(*abstol, *pivmin);
             d__2 = *reltol * tmp2; // , expr subst
-            if (tmp1 < fla_max(d__1,d__2) || nab[ji + nab_dim1] >= nab[ji + ( nab_dim1 << 1)])
+            if(tmp1 < fla_max(d__1, d__2) || nab[ji + nab_dim1] >= nab[ji + (nab_dim1 << 1)])
             {
                 /* Converged -- Swap with position KFNEW, */
                 /* then increment KFNEW */
@@ -661,8 +668,8 @@ void dlaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
                     nab[ji + (nab_dim1 << 1)] = nab[kfnew + (nab_dim1 << 1)];
                     ab[kfnew + ab_dim1] = tmp1;
                     ab[kfnew + (ab_dim1 << 1)] = tmp2;
-                    nab[kfnew + nab_dim1] = (aocl_int_t)(itmp1);
-                    nab[kfnew + (nab_dim1 << 1)] = (aocl_int_t)(itmp2);
+                    nab[kfnew + nab_dim1] = itmp1;
+                    nab[kfnew + (nab_dim1 << 1)] = itmp2;
                     if(*ijob == 3)
                     {
                         itmp1 = nval[ji];
@@ -692,7 +699,7 @@ void dlaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
     /* Converged */
 L140: /* Computing MAX */
     i__1 = kl + 1 - kf;
-    *info = fla_max(i__1,0);
+    *info = fla_max(i__1, 0);
     *mout = kl;
     AOCL_DTL_TRACE_LOG_EXIT
     return;

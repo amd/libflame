@@ -137,15 +137,18 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complexGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cgttrs_(char *trans, integer *n, integer *nrhs, complex * dl, complex *d__, complex *du, complex *du2, integer *ipiv, complex * b, integer *ldb, integer *info)
+void cgttrs_(char *trans, integer *n, integer *nrhs, complex *dl, complex *d__, complex *du,
+             complex *du2, integer *ipiv, complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgttrs inputs: trans %c, n %lld, nrhs %lld, ldb %lld",*trans, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "cgttrs inputs: trans %c, n %lld, nrhs %lld, ldb %lld", *trans, *n, *nrhs,
+             *ldb);
 #else
-    snprintf(buffer, 256,"cgttrs inputs: trans %c, n %d, nrhs %d, ldb %d",*trans, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "cgttrs inputs: trans %c, n %d, nrhs %d, ldb %d", *trans, *n, *nrhs,
+             *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -154,7 +157,10 @@ void cgttrs_(char *trans, integer *n, integer *nrhs, complex * dl, complex *d__,
     /* Local variables */
     integer j, jb, nb;
     extern /* Subroutine */
-    void cgtts2_(integer *, integer *, integer *, complex *, complex *, complex *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        cgtts2_(integer *, integer *, integer *, complex *, complex *, complex *, complex *,
+                integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer itrans;
     logical notran;
@@ -201,7 +207,7 @@ void cgttrs_(char *trans, integer *n, integer *nrhs, complex * dl, complex *d__,
     {
         *info = -3;
     }
-    else if (*ldb < fla_max(*n,1))
+    else if(*ldb < fla_max(*n, 1))
     {
         *info = -10;
     }
@@ -240,8 +246,8 @@ void cgttrs_(char *trans, integer *n, integer *nrhs, complex * dl, complex *d__,
     {
         /* Computing MAX */
         i__1 = 1;
-        i__2 = ilaenv_(&c__1, "CGTTRS", trans, n, nrhs, &c_n1, & c_n1); // , expr subst
-        nb = fla_max(i__1,i__2);
+        i__2 = ilaenv_(&c__1, "CGTTRS", trans, n, nrhs, &c_n1, &c_n1); // , expr subst
+        nb = fla_max(i__1, i__2);
     }
     if(nb >= *nrhs)
     {
@@ -256,8 +262,9 @@ void cgttrs_(char *trans, integer *n, integer *nrhs, complex * dl, complex *d__,
         {
             /* Computing MIN */
             i__3 = *nrhs - j + 1;
-            jb = fla_min(i__3,nb);
-            cgtts2_(&itrans, n, &jb, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[ 1], &b[j * b_dim1 + 1], ldb);
+            jb = fla_min(i__3, nb);
+            cgtts2_(&itrans, n, &jb, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &b[j * b_dim1 + 1],
+                    ldb);
             /* L10: */
         }
     }

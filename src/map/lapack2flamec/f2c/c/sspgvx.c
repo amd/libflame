@@ -265,12 +265,17 @@ if RANGE = 'V', the exact value of M */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-void sspgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, real *ap, real *bp, real *vl, real *vu, integer *il, integer *iu, real *abstol, integer *m, real *w, real *z__, integer * ldz, real *work, integer *iwork, integer *ifail, integer *info)
+void sspgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, real *ap, real *bp,
+             real *vl, real *vu, integer *il, integer *iu, real *abstol, integer *m, real *w,
+             real *z__, integer *ldz, real *work, integer *iwork, integer *ifail, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sspgvx inputs: itype %" FLA_IS ", jobz %c, range %c, uplo %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS "",*itype, *jobz, *range, *uplo, *n, *il, *iu, *ldz);
+    snprintf(buffer, 256,
+             "sspgvx inputs: itype %" FLA_IS ", jobz %c, range %c, uplo %c, n %" FLA_IS
+             ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS "",
+             *itype, *jobz, *range, *uplo, *n, *il, *iu, *ldz);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -281,10 +286,18 @@ void sspgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, r
     char trans[1];
     logical upper, wantz;
     extern /* Subroutine */
-    void stpmv_(char *, char *, char *, integer *, real *, real *, integer *), stpsv_(char *, char *, char *, integer *, real *, real *, integer *);
+        void
+        stpmv_(char *, char *, char *, integer *, real *, real *, integer *),
+        stpsv_(char *, char *, char *, integer *, real *, real *, integer *);
     logical alleig, indeig, valeig;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), spptrf_( char *, integer *, real *, integer *), sspgst_(integer *, char *, integer *, real *, real *, integer *), sspevx_( char *, char *, char *, integer *, real *, real *, real *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *) ;
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        spptrf_(char *, integer *, real *, integer *),
+        sspgst_(integer *, char *, integer *, real *, real *, integer *),
+        sspevx_(char *, char *, char *, integer *, real *, real *, real *, integer *, integer *,
+                real *, integer *, real *, real *, integer *, real *, integer *, integer *,
+                integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -325,7 +338,7 @@ void sspgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, r
     {
         *info = -1;
     }
-    else if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    else if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -2;
     }
@@ -333,7 +346,7 @@ void sspgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, r
     {
         *info = -3;
     }
-    else if (! (upper || lsame_(uplo, "L", 1, 1)))
+    else if(!(upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -4;
     }
@@ -356,7 +369,7 @@ void sspgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, r
             {
                 *info = -10;
             }
-            else if (*iu < fla_min(*n,*il) || *iu > *n)
+            else if(*iu < fla_min(*n, *il) || *iu > *n)
             {
                 *info = -11;
             }
@@ -384,7 +397,7 @@ void sspgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, r
         return;
     }
     /* Form a Cholesky factorization of B. */
-    aocl_lapack_spptrf(uplo, n, &bp[1], info);
+    spptrf_(uplo, n, &bp[1], info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -392,9 +405,9 @@ void sspgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, r
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    aocl_lapack_sspgst(itype, uplo, n, &ap[1], &bp[1], info);
-    aocl_lapack_sspevx(jobz, range, uplo, n, &ap[1], vl, vu, il, iu, abstol, m, &w[1],
-                       &z__[z_offset], ldz, &work[1], &iwork[1], &ifail[1], info);
+    sspgst_(itype, uplo, n, &ap[1], &bp[1], info);
+    sspevx_(jobz, range, uplo, n, &ap[1], vl, vu, il, iu, abstol, m, &w[1], &z__[z_offset], ldz,
+            &work[1], &iwork[1], &ifail[1], info);
     if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */

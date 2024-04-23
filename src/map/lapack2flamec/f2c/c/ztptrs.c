@@ -130,10 +130,13 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ztptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, doublecomplex *ap, doublecomplex *b, integer *ldb, integer *info)
+void ztptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, doublecomplex *ap,
+             doublecomplex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztptrs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*uplo, *trans, *diag, *n, *nrhs, *ldb);
+    AOCL_DTL_SNPRINTF("ztptrs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", nrhs %" FLA_IS
+                      ", ldb %" FLA_IS "",
+                      *uplo, *trans, *diag, *n, *nrhs, *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1, i__2;
     /* Local variables */
@@ -141,7 +144,9 @@ void ztptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    void ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -173,15 +178,15 @@ void ztptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!lsame_(trans, "N", 1, 1) && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
@@ -193,7 +198,7 @@ void ztptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
@@ -201,13 +206,13 @@ void ztptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
     {
         i__1 = -(*info);
         xerbla_("ZTPTRS", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Check for singularity. */
@@ -220,9 +225,9 @@ void ztptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
             for(*info = 1; *info <= i__1; ++(*info))
             {
                 i__2 = jc + *info - 1;
-                if(ap[i__2].real == 0. && ap[i__2].imag == 0.)
+                if(ap[i__2].r == 0. && ap[i__2].i == 0.)
                 {
-    AOCL_DTL_TRACE_LOG_EXIT
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 jc += *info;
@@ -236,9 +241,9 @@ void ztptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, dou
             for(*info = 1; *info <= i__1; ++(*info))
             {
                 i__2 = jc;
-                if(ap[i__2].real == 0. && ap[i__2].imag == 0.)
+                if(ap[i__2].r == 0. && ap[i__2].i == 0.)
                 {
-    AOCL_DTL_TRACE_LOG_EXIT
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 jc = jc + *n - *info + 1;

@@ -1,16 +1,25 @@
-/* ../netlib/sla_syrpvgrw.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sla_syrpvgrw.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLA_SYRPVGRW computes the reciprocal pivot growth factor norm(A)/norm(U) for a symmetric indefi nite matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLA_SYRPVGRW + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_syr pvgrw.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_syr
+ * pvgrw.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sla_syr pvgrw.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sla_syr
+ * pvgrw.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_syr pvgrw.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_syr
+ * pvgrw.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -44,7 +53,7 @@
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -107,7 +116,8 @@
 /* > \date December 2016 */
 /* > \ingroup realSYcomputational */
 /* ===================================================================== */
-real sla_syrpvgrw_(char *uplo, integer *n, integer *info, real *a, integer * lda, real *af, integer *ldaf, integer *ipiv, real *work)
+real sla_syrpvgrw_(char *uplo, integer *n, integer *info, real *a, integer *lda, real *af,
+                   integer *ldaf, integer *ipiv, real *work)
 {
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, i__1, i__2;
@@ -146,9 +156,9 @@ real sla_syrpvgrw_(char *uplo, integer *n, integer *info, real *a, integer * lda
     --work;
     /* Function Body */
     upper = lsame_("Upper", uplo, 1, 1);
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (upper)
+        if(upper)
         {
             ncols = 1;
         }
@@ -163,58 +173,48 @@ real sla_syrpvgrw_(char *uplo, integer *n, integer *info, real *a, integer * lda
     }
     rpvgrw = 1.f;
     i__1 = *n << 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         work[i__] = 0.f;
     }
     /* Find the max magnitude entry of each column of A. Compute the max */
     /* for all N columns so we can apply the pivot permutation while */
     /* looping below. Assume a full factorization is the common case. */
-    if (upper)
+    if(upper)
     {
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 /* Computing MAX */
                 r__2 = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
-                r__3 = work[* n + i__]; // , expr subst
-                work[*n + i__] = fla_max(r__2,r__3);
+                r__3 = work[*n + i__]; // , expr subst
+                work[*n + i__] = fla_max(r__2, r__3);
                 /* Computing MAX */
                 r__2 = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
-                r__3 = work[* n + j]; // , expr subst
-                work[*n + j] = fla_max(r__2,r__3);
+                r__3 = work[*n + j]; // , expr subst
+                work[*n + j] = fla_max(r__2, r__3);
             }
         }
     }
     else
     {
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *n;
-            for (i__ = j;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = j; i__ <= i__2; ++i__)
             {
                 /* Computing MAX */
                 r__2 = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
-                r__3 = work[* n + i__]; // , expr subst
-                work[*n + i__] = fla_max(r__2,r__3);
+                r__3 = work[*n + i__]; // , expr subst
+                work[*n + i__] = fla_max(r__2, r__3);
                 /* Computing MAX */
                 r__2 = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
-                r__3 = work[* n + j]; // , expr subst
-                work[*n + j] = fla_max(r__2,r__3);
+                r__3 = work[*n + j]; // , expr subst
+                work[*n + j] = fla_max(r__2, r__3);
             }
         }
     }
@@ -223,30 +223,28 @@ real sla_syrpvgrw_(char *uplo, integer *n, integer *info, real *a, integer * lda
     /* the factor. */
     /* The iteration orders and permutations were copied from ssytrs. */
     /* Calls to SSWAP would be severe overkill. */
-    if (upper)
+    if(upper)
     {
         k = *n;
         while(k < ncols && k > 0)
         {
-            if (ipiv[k] > 0)
+            if(ipiv[k] > 0)
             {
                 /* 1x1 pivot */
                 kp = ipiv[k];
-                if (kp != k)
+                if(kp != k)
                 {
                     tmp = work[*n + k];
                     work[*n + k] = work[*n + kp];
                     work[*n + kp] = tmp;
                 }
                 i__1 = k;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     /* Computing MAX */
                     r__2 = (r__1 = af[i__ + k * af_dim1], f2c_abs(r__1));
                     r__3 = work[k]; // , expr subst
-                    work[k] = fla_max(r__2,r__3);
+                    work[k] = fla_max(r__2, r__3);
                 }
                 --k;
             }
@@ -258,33 +256,31 @@ real sla_syrpvgrw_(char *uplo, integer *n, integer *info, real *a, integer * lda
                 work[*n + k - 1] = work[*n + kp];
                 work[*n + kp] = tmp;
                 i__1 = k - 1;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     /* Computing MAX */
                     r__2 = (r__1 = af[i__ + k * af_dim1], f2c_abs(r__1));
                     r__3 = work[k]; // , expr subst
-                    work[k] = fla_max(r__2,r__3);
+                    work[k] = fla_max(r__2, r__3);
                     /* Computing MAX */
                     r__2 = (r__1 = af[i__ + (k - 1) * af_dim1], f2c_abs(r__1));
                     r__3 = work[k - 1]; // , expr subst
-                    work[k - 1] = fla_max(r__2,r__3);
+                    work[k - 1] = fla_max(r__2, r__3);
                 }
                 /* Computing MAX */
                 r__2 = (r__1 = af[k + k * af_dim1], f2c_abs(r__1));
-                r__3 = work[k] ; // , expr subst
-                work[k] = fla_max(r__2,r__3);
+                r__3 = work[k]; // , expr subst
+                work[k] = fla_max(r__2, r__3);
                 k += -2;
             }
         }
         k = ncols;
         while(k <= *n)
         {
-            if (ipiv[k] > 0)
+            if(ipiv[k] > 0)
             {
                 kp = ipiv[k];
-                if (kp != k)
+                if(kp != k)
                 {
                     tmp = work[*n + k];
                     work[*n + k] = work[*n + kp];
@@ -307,25 +303,23 @@ real sla_syrpvgrw_(char *uplo, integer *n, integer *info, real *a, integer * lda
         k = 1;
         while(k <= ncols)
         {
-            if (ipiv[k] > 0)
+            if(ipiv[k] > 0)
             {
                 /* 1x1 pivot */
                 kp = ipiv[k];
-                if (kp != k)
+                if(kp != k)
                 {
                     tmp = work[*n + k];
                     work[*n + k] = work[*n + kp];
                     work[*n + kp] = tmp;
                 }
                 i__1 = *n;
-                for (i__ = k;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = k; i__ <= i__1; ++i__)
                 {
                     /* Computing MAX */
                     r__2 = (r__1 = af[i__ + k * af_dim1], f2c_abs(r__1));
                     r__3 = work[k]; // , expr subst
-                    work[k] = fla_max(r__2,r__3);
+                    work[k] = fla_max(r__2, r__3);
                 }
                 ++k;
             }
@@ -337,33 +331,31 @@ real sla_syrpvgrw_(char *uplo, integer *n, integer *info, real *a, integer * lda
                 work[*n + k + 1] = work[*n + kp];
                 work[*n + kp] = tmp;
                 i__1 = *n;
-                for (i__ = k + 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = k + 1; i__ <= i__1; ++i__)
                 {
                     /* Computing MAX */
                     r__2 = (r__1 = af[i__ + k * af_dim1], f2c_abs(r__1));
                     r__3 = work[k]; // , expr subst
-                    work[k] = fla_max(r__2,r__3);
+                    work[k] = fla_max(r__2, r__3);
                     /* Computing MAX */
                     r__2 = (r__1 = af[i__ + (k + 1) * af_dim1], f2c_abs(r__1));
                     r__3 = work[k + 1]; // , expr subst
-                    work[k + 1] = fla_max(r__2,r__3);
+                    work[k + 1] = fla_max(r__2, r__3);
                 }
                 /* Computing MAX */
                 r__2 = (r__1 = af[k + k * af_dim1], f2c_abs(r__1));
-                r__3 = work[k] ; // , expr subst
-                work[k] = fla_max(r__2,r__3);
+                r__3 = work[k]; // , expr subst
+                work[k] = fla_max(r__2, r__3);
                 k += 2;
             }
         }
         k = ncols;
         while(k >= 1)
         {
-            if (ipiv[k] > 0)
+            if(ipiv[k] > 0)
             {
                 kp = ipiv[k];
-                if (kp != k)
+                if(kp != k)
                 {
                     tmp = work[*n + k];
                     work[*n + k] = work[*n + kp];
@@ -387,37 +379,33 @@ real sla_syrpvgrw_(char *uplo, integer *n, integer *info, real *a, integer * lda
     /* massive pivots made the factor underflow to zero. Neither counts */
     /* as growth in itself, so simply ignore terms with zero */
     /* denominators. */
-    if (upper)
+    if(upper)
     {
         i__1 = *n;
-        for (i__ = ncols;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = ncols; i__ <= i__1; ++i__)
         {
             umax = work[i__];
             amax = work[*n + i__];
-            if (umax != 0.f)
+            if(umax != 0.f)
             {
                 /* Computing MIN */
                 r__1 = amax / umax;
-                rpvgrw = fla_min(r__1,rpvgrw);
+                rpvgrw = fla_min(r__1, rpvgrw);
             }
         }
     }
     else
     {
         i__1 = ncols;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             umax = work[i__];
             amax = work[*n + i__];
-            if (umax != 0.f)
+            if(umax != 0.f)
             {
                 /* Computing MIN */
                 r__1 = amax / umax;
-                rpvgrw = fla_min(r__1,rpvgrw);
+                rpvgrw = fla_min(r__1, rpvgrw);
             }
         }
     }

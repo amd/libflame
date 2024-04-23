@@ -1,11 +1,11 @@
-/* ./ssyevx.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ssyevx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static integer c__1 = 1;
+static integer c_n1 = -1;
 /* > \brief <b> SSYEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for SY mat rices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -256,12 +256,18 @@ the routine */
 /* > \ingroup heevx */
 /* ===================================================================== */
 /* Subroutine */
-void ssyevx_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *lda, real *vl, real *vu, integer *il, integer *iu, real *abstol, integer *m, real *w, real *z__, integer *ldz, real * work, integer *lwork, integer *iwork, integer *ifail, integer *info)
+void ssyevx_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *lda, real *vl,
+             real *vu, integer *il, integer *iu, real *abstol, integer *m, real *w, real *z__,
+             integer *ldz, real *work, integer *lwork, integer *iwork, integer *ifail,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"ssyevx inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS "",*jobz, *range, *uplo, *n, *lda, *il, *iu, *ldz);
+    snprintf(buffer, 256,
+             "ssyevx inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS
+             ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS "",
+             *jobz, *range, *uplo, *n, *lda, *il, *iu, *ldz);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -282,11 +288,14 @@ void ssyevx_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
     extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     char order[1];
     logical lower;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * );
+        void
+        scopy_(integer *, real *, integer *, real *, integer *),
+        sswap_(integer *, real *, integer *, real *, integer *);
     logical wantz, alleig, indeig;
     aocl_int64_t iscale, indibl;
     logical valeig;
@@ -294,23 +303,37 @@ void ssyevx_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
     real safmin;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real abstll, bignum;
     integer indtau, indisp, indiwo, indwkn;
     extern /* Subroutine */
-    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+        void
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     integer indwrk, lwkmin;
     extern /* Subroutine */
-    void sstein_(integer *, real *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *), ssterf_(integer *, real *, real *, integer *);
+        void
+        sstein_(integer *, real *, real *, integer *, real *, integer *, integer *, real *,
+                integer *, real *, integer *, integer *, integer *),
+        ssterf_(integer *, real *, real *, integer *);
     integer llwrkn, llwork, nsplit;
     real smlnum;
     extern real slansy_(char *, char *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    void sstebz_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *, real *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        sstebz_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *,
+                real *, integer *, integer *, real *, integer *, integer *, real *, integer *,
+                integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    void sorgtr_(char *, integer *, real *, integer *, real *, real *, integer *, integer *), ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *), sormtr_(char *, char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), ssytrd_(char *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *);
+        void
+        sorgtr_(char *, integer *, real *, integer *, real *, real *, integer *, integer *),
+        ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *),
+        sormtr_(char *, char *, char *, integer *, integer *, real *, integer *, real *, real *,
+                integer *, real *, integer *, integer *),
+        ssytrd_(char *, integer *, real *, integer *, real *, real *, real *, real *, integer *,
+                integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -351,7 +374,7 @@ void ssyevx_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
     lquery = *lwork == -1;
     *info = 0;
     lwkopt = 0;
-    if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
@@ -359,7 +382,7 @@ void ssyevx_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
     {
         *info = -2;
     }
-    else if (! (lower || lsame_(uplo, "U", 1, 1)))
+    else if(!(lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -3;
     }
@@ -367,7 +390,7 @@ void ssyevx_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -382,11 +405,11 @@ void ssyevx_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
         }
         else if(indeig)
         {
-            if (*il < 1 || *il > fla_max(1,*n))
+            if(*il < 1 || *il > fla_max(1, *n))
             {
                 *info = -9;
             }
-            else if (*iu < fla_min(*n,*il) || *iu > *n)
+            else if(*iu < fla_min(*n, *il) || *iu > *n)
             {
                 *info = -10;
             }
@@ -404,7 +427,7 @@ void ssyevx_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
         if(*n <= 1)
         {
             lwkmin = 1;
-            work[1] = aocl_lapack_sroundup_lwork(&lwkmin);
+            work[1] = (real)lwkmin;
         }
         else
         {
@@ -413,12 +436,12 @@ void ssyevx_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
             /* Computing MAX */
             i__1 = nb;
             i__2 = ilaenv_(&c__1, "SORMTR", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
-            nb = fla_max(i__1,i__2);
+            nb = fla_max(i__1, i__2);
             /* Computing MAX */
             i__1 = lwkmin;
             i__2 = (nb + 3) * *n; // , expr subst
-            lwkopt = fla_max(i__1,i__2);
-            work[1] = (real) lwkopt;
+            lwkopt = fla_max(i__1, i__2);
+            work[1] = (real)lwkopt;
         }
         if(*lwork < lwkmin && !lquery)
         {
@@ -475,7 +498,7 @@ void ssyevx_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
     /* Computing MIN */
     r__1 = sqrt(bignum);
     r__2 = 1.f / sqrt(sqrt(safmin)); // , expr subst
-    rmax = fla_min(r__1,r__2);
+    rmax = fla_min(r__1, r__2);
     /* Scale matrix to allowable range, if necessary. */
     iscale = 0;
     abstll = *abstol;
@@ -484,7 +507,7 @@ void ssyevx_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
         vll = *vl;
         vuu = *vu;
     }
-    anrm = aocl_lapack_slansy("M", uplo, n, &a[a_offset], lda, &work[1]);
+    anrm = slansy_("M", uplo, n, &a[a_offset], lda, &work[1]);
     if(anrm > 0.f && anrm < rmin)
     {
         iscale = 1;
@@ -532,8 +555,8 @@ void ssyevx_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
     indd = inde + *n;
     indwrk = indd + *n;
     llwork = *lwork - indwrk + 1;
-    aocl_lapack_ssytrd(uplo, n, &a[a_offset], lda, &work[indd], &work[inde], &work[indtau],
-                       &work[indwrk], &llwork, &iinfo);
+    ssytrd_(uplo, n, &a[a_offset], lda, &work[indd], &work[inde], &work[indtau], &work[indwrk],
+            &llwork, &iinfo);
     /* If all eigenvalues are desired and ABSTOL is less than or equal to */
     /* zero, then call SSTERF or SORGTR and SSTEQR. If this fails for */
     /* some eigenvalue, then try SSTEBZ. */
@@ -560,9 +583,8 @@ void ssyevx_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
             slacpy_("A", n, n, &a[a_offset], lda, &z__[z_offset], ldz);
             sorgtr_(uplo, n, &z__[z_offset], ldz, &work[indtau], &work[indwrk], &llwork, &iinfo);
             i__1 = *n - 1;
-            aocl_blas_scopy(&i__1, &work[inde], &c__1, &work[indee], &c__1);
-            aocl_lapack_ssteqr(jobz, n, &w[1], &work[indee], &z__[z_offset], ldz, &work[indwrk],
-                               info);
+            scopy_(&i__1, &work[inde], &c__1, &work[indee], &c__1);
+            ssteqr_(jobz, n, &w[1], &work[indee], &z__[z_offset], ldz, &work[indwrk], info);
             if(*info == 0)
             {
                 i__1 = *n;
@@ -592,19 +614,18 @@ void ssyevx_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
     indibl = 1;
     indisp = indibl + *n;
     indiwo = indisp + *n;
-    aocl_lapack_sstebz(range, order, n, &vll, &vuu, il, iu, &abstll, &work[indd], &work[inde], m,
-                       &nsplit, &w[1], &iwork[indibl], &iwork[indisp], &work[indwrk],
-                       &iwork[indiwo], info);
+    sstebz_(range, order, n, &vll, &vuu, il, iu, &abstll, &work[indd], &work[inde], m, &nsplit,
+            &w[1], &iwork[indibl], &iwork[indisp], &work[indwrk], &iwork[indiwo], info);
     if(wantz)
     {
-        aocl_lapack_sstein(n, &work[indd], &work[inde], m, &w[1], &iwork[indibl], &iwork[indisp],
-                           &z__[z_offset], ldz, &work[indwrk], &iwork[indiwo], &ifail[1], info);
+        sstein_(n, &work[indd], &work[inde], m, &w[1], &iwork[indibl], &iwork[indisp],
+                &z__[z_offset], ldz, &work[indwrk], &iwork[indiwo], &ifail[1], info);
         /* Apply orthogonal matrix used in reduction to tridiagonal */
         /* form to eigenvectors returned by SSTEIN. */
         indwkn = inde;
         llwrkn = *lwork - indwkn + 1;
-        aocl_lapack_sormtr("L", uplo, "N", n, m, &a[a_offset], lda, &work[indtau], &z__[z_offset],
-                           ldz, &work[indwkn], &llwrkn, &iinfo);
+        sormtr_("L", uplo, "N", n, m, &a[a_offset], lda, &work[indtau], &z__[z_offset], ldz,
+                &work[indwkn], &llwrkn, &iinfo);
     }
 /* If matrix was scaled, then rescale eigenvalues appropriately. */
 L40:
@@ -646,8 +667,8 @@ L40:
                 w[i__] = w[j];
                 iwork[indibl + i__ - 1] = iwork[indibl + j - 1];
                 w[j] = tmp1;
-                iwork[indibl + j - 1] = (aocl_int_t)(itmp1);
-                aocl_blas_sswap(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
+                iwork[indibl + j - 1] = itmp1;
+                sswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
                 if(*info != 0)
                 {
                     itmp1 = ifail[i__];
@@ -659,7 +680,7 @@ L40:
         }
     }
     /* Set WORK(1) to optimal workspace size. */
-    work[1] = (real) lwkopt;
+    work[1] = (real)lwkopt;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of SSYEVX */

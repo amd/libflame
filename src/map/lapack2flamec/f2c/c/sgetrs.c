@@ -121,7 +121,8 @@ for 1<=i<=N, row i of the */
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sgetrs_(char *trans, integer *n, integer *nrhs, real *a, integer *lda, integer *ipiv, real *b, integer *ldb, integer *info)
+void sgetrs_(char *trans, integer *n, integer *nrhs, real *a, integer *lda, integer *ipiv, real *b,
+             integer *ldb, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgetrs(trans, n, nrhs, a, lda, ipiv, b, ldb, info);
@@ -151,10 +152,14 @@ void aocl_lapack_sgetrs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
+               real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     extern /* Subroutine */
-    void slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
+        void
+        slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -187,7 +192,7 @@ void aocl_lapack_sgetrs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
     /* Function Body */
     *info = 0;
     notran = lsame_(trans, "N", 1, 1);
-    if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
@@ -199,11 +204,11 @@ void aocl_lapack_sgetrs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
@@ -224,21 +229,21 @@ void aocl_lapack_sgetrs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
         /* Apply row interchanges to the right hand sides. */
         aocl_lapack_slaswp(nrhs, &b[b_offset], ldb, &c__1, n, &ipiv[1], &c__1);
         /* Solve L*X = B, overwriting B with X. */
-        aocl_blas_strsm("Left", "Lower", "No transpose", "Unit", n, nrhs, &c_b12, &a[a_offset], lda,
-                        &b[b_offset], ldb);
+        strsm_("Left", "Lower", "No transpose", "Unit", n, nrhs, &c_b12, &a[a_offset], lda,
+               &b[b_offset], ldb);
         /* Solve U*X = B, overwriting B with X. */
-        aocl_blas_strsm("Left", "Upper", "No transpose", "Non-unit", n, nrhs, &c_b12, &a[a_offset],
-                        lda, &b[b_offset], ldb);
+        strsm_("Left", "Upper", "No transpose", "Non-unit", n, nrhs, &c_b12, &a[a_offset], lda,
+               &b[b_offset], ldb);
     }
     else
     {
         /* Solve A**T * X = B. */
         /* Solve U**T *X = B, overwriting B with X. */
-        aocl_blas_strsm("Left", "Upper", "Transpose", "Non-unit", n, nrhs, &c_b12, &a[a_offset],
-                        lda, &b[b_offset], ldb);
+        strsm_("Left", "Upper", "Transpose", "Non-unit", n, nrhs, &c_b12, &a[a_offset], lda,
+               &b[b_offset], ldb);
         /* Solve L**T *X = B, overwriting B with X. */
-        aocl_blas_strsm("Left", "Lower", "Transpose", "Unit", n, nrhs, &c_b12, &a[a_offset], lda,
-                        &b[b_offset], ldb);
+        strsm_("Left", "Lower", "Transpose", "Unit", n, nrhs, &c_b12, &a[a_offset], lda,
+               &b[b_offset], ldb);
         /* Apply row interchanges to the solution vectors. */
         aocl_lapack_slaswp(nrhs, &b[b_offset], ldb, &c__1, n, &ipiv[1], &c_n1);
     }

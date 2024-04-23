@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b CUNG2L generates all or part of the unitary matrix Q from a QL factorization
  * determined by cgeq lf (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
@@ -112,15 +112,16 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cung2l_(integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau, complex *work, integer *info)
+void cung2l_(integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau,
+             complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cung2l inputs: m %lld, n %lld, k %lld, lda %lld",*m, *n, *k, *lda);
+    snprintf(buffer, 256, "cung2l inputs: m %lld, n %lld, k %lld, lda %lld", *m, *n, *k, *lda);
 #else
-    snprintf(buffer, 256,"cung2l inputs: m %d, n %d, k %d, lda %d",*m, *n, *k, *lda);
+    snprintf(buffer, 256, "cung2l inputs: m %d, n %d, k %d, lda %d", *m, *n, *k, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -130,7 +131,11 @@ void cung2l_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
     /* Local variables */
     integer i__, j, l, ii;
     extern /* Subroutine */
-    void cscal_(integer *, complex *, complex *, integer *), clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        cscal_(integer *, complex *, complex *, integer *),
+        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+               complex *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -170,7 +175,7 @@ void cung2l_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
@@ -214,8 +219,8 @@ void cung2l_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
         a[i__2].imag = 0.f; // , expr subst
         i__2 = *m - *n + ii;
         i__3 = ii - 1;
-        aocl_lapack_clarf("Left", &i__2, &i__3, &a[ii * a_dim1 + 1], &c__1, &tau[i__], &a[a_offset],
-                          lda, &work[1]);
+        clarf_("Left", &i__2, &i__3, &a[ii * a_dim1 + 1], &c__1, &tau[i__], &a[a_offset], lda,
+               &work[1]);
         i__2 = *m - *n + ii - 1;
         i__3 = i__;
         q__1.real = -tau[i__3].real;

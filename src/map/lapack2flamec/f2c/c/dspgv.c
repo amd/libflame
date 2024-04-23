@@ -163,24 +163,34 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup doubleOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void dspgv_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *ap, doublereal *bp, doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *info)
+void dspgv_(integer *itype, char *jobz, char *uplo, integer *n, doublereal *ap, doublereal *bp,
+            doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dspgv inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "",*itype, *jobz, *uplo, *n, *ldz);
+    AOCL_DTL_SNPRINTF("dspgv inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS
+                      ", ldz %" FLA_IS "",
+                      *itype, *jobz, *uplo, *n, *ldz);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1;
     /* Local variables */
     integer j, neig;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dspev_(char *, char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dspev_(char *, char *, integer *, doublereal *, doublereal *, doublereal *, integer *,
+               doublereal *, integer *);
     char trans[1];
     logical upper;
     extern /* Subroutine */
-    void dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *), dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *),
+        dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
     logical wantz;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dpptrf_( char *, integer *, doublereal *, integer *), dspgst_( integer *, char *, integer *, doublereal *, doublereal *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        dpptrf_(char *, integer *, doublereal *, integer *),
+        dspgst_(integer *, char *, integer *, doublereal *, doublereal *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -214,11 +224,11 @@ void dspgv_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *ap,
     {
         *info = -1;
     }
-    else if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    else if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (upper || lsame_(uplo, "L", 1, 1)))
+    else if(!(upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -3;
     }
@@ -244,7 +254,7 @@ void dspgv_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *ap,
         return;
     }
     /* Form a Cholesky factorization of B. */
-    aocl_lapack_dpptrf(uplo, n, &bp[1], info);
+    dpptrf_(uplo, n, &bp[1], info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -252,8 +262,8 @@ void dspgv_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *ap,
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    aocl_lapack_dspgst(itype, uplo, n, &ap[1], &bp[1], info);
-    aocl_lapack_dspev(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], info);
+    dspgst_(itype, uplo, n, &ap[1], &bp[1], info);
+    dspev_(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], info);
     if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */

@@ -145,12 +145,13 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup realGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sgtcon_(char *norm, integer *n, real *dl, real *d__, real *du, real *du2, integer *ipiv, real *anorm, real *rcond, real * work, integer *iwork, integer *info)
+void sgtcon_(char *norm, integer *n, real *dl, real *d__, real *du, real *du2, integer *ipiv,
+             real *anorm, real *rcond, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sgtcon inputs: norm %c, n %d",*norm, *n);
+    snprintf(buffer, 256, "sgtcon inputs: norm %c, n %d", *norm, *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -160,11 +161,15 @@ void sgtcon_(char *norm, integer *n, real *dl, real *d__, real *du, real *du2, i
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    void slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     logical onenrm;
     extern /* Subroutine */
-    void sgttrs_(char *, integer *, integer *, real *, real *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        sgttrs_(char *, integer *, integer *, real *, real *, real *, real *, integer *, real *,
+                integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -197,7 +202,7 @@ void sgtcon_(char *norm, integer *n, real *dl, real *d__, real *du, real *du2, i
     /* Function Body */
     *info = 0;
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
-    if (! onenrm && ! lsame_(norm, "I", 1, 1))
+    if(!onenrm && !lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }
@@ -251,19 +256,20 @@ void sgtcon_(char *norm, integer *n, real *dl, real *d__, real *du, real *du2, i
     }
     kase = 0;
 L20:
-    aocl_lapack_slacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+    slacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == kase1)
         {
             /* Multiply by inv(U)*inv(L). */
-            sgttrs_("No transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &work[1], n, info);
+            sgttrs_("No transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &work[1],
+                    n, info);
         }
         else
         {
             /* Multiply by inv(L**T)*inv(U**T). */
-            aocl_lapack_sgttrs("Transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1],
-                               &work[1], n, info);
+            sgttrs_("Transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &work[1], n,
+                    info);
         }
         goto L20;
     }

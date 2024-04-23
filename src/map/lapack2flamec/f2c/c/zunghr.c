@@ -126,21 +126,27 @@ the routine */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zunghr_(integer *n, integer *ilo, integer *ihi, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex * work, integer *lwork, integer *info)
+void zunghr_(integer *n, integer *ilo, integer *ihi, doublecomplex *a, integer *lda,
+             doublecomplex *tau, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zunghr inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "", *n, *ilo, *ihi, *lda, *lwork);
+    AOCL_DTL_SNPRINTF("zunghr inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS
+                      ", lwork %" FLA_IS "",
+                      *n, *ilo, *ihi, *lda, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
     integer i__, j, nb, nh, iinfo;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    void zungqr_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
+        void
+        zungqr_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -176,39 +182,39 @@ void zunghr_(integer *n, integer *ilo, integer *ihi, doublecomplex *a, integer *
     {
         *info = -1;
     }
-    else if (*ilo < 1 || *ilo > fla_max(1,*n))
+    else if(*ilo < 1 || *ilo > fla_max(1, *n))
     {
         *info = -2;
     }
-    else if (*ihi < fla_min(*ilo,*n) || *ihi > *n)
+    else if(*ihi < fla_min(*ilo, *n) || *ihi > *n)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*lwork < fla_max(1,nh) && ! lquery)
+    else if(*lwork < fla_max(1, nh) && !lquery)
     {
         *info = -8;
     }
     if(*info == 0)
     {
         nb = ilaenv_(&c__1, "ZUNGQR", " ", &nh, &nh, &nh, &c_n1);
-        lwkopt = fla_max(1,nh) * nb;
-        work[1].r = (doublereal) lwkopt;
+        lwkopt = fla_max(1, nh) * nb;
+        work[1].r = (doublereal)lwkopt;
         work[1].i = 0.; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZUNGHR", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -216,7 +222,7 @@ void zunghr_(integer *n, integer *ilo, integer *ihi, doublecomplex *a, integer *
     {
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Shift the vectors which define the elementary reflectors one */
@@ -287,10 +293,10 @@ void zunghr_(integer *n, integer *ilo, integer *ihi, doublecomplex *a, integer *
     if(nh > 0)
     {
         /* Generate Q(ilo+1:ihi,ilo+1:ihi) */
-        aocl_lapack_zungqr(&nh, &nh, &nh, &a[*ilo + 1 + (*ilo + 1) * a_dim1], lda, &tau[*ilo],
-                           &work[1], lwork, &iinfo);
+        zungqr_(&nh, &nh, &nh, &a[*ilo + 1 + (*ilo + 1) * a_dim1], lda, &tau[*ilo], &work[1], lwork,
+                &iinfo);
     }
-    work[1].r = (doublereal) lwkopt;
+    work[1].r = (doublereal)lwkopt;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

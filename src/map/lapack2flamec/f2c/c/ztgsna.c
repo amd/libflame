@@ -1,12 +1,12 @@
-/* ./ztgsna.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ztgsna.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-static dcomplex c_b19 = {1., 0.};
-static dcomplex c_b20 = {0., 0.};
+static integer c__1 = 1;
+static doublecomplex c_b19 = {1., 0.};
+static doublecomplex c_b20 = {0., 0.};
 static logical c_false = FALSE_;
 static aocl_int64_t c__3 = 3;
 /* > \brief \b ZTGSNA */
@@ -317,10 +317,16 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *vl, integer *ldvl, doublecomplex *vr, integer * ldvr, doublereal *s, doublereal *dif, integer *mm, integer *m, doublecomplex *work, integer *lwork, integer *iwork, integer *info)
+void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex *a, integer *lda,
+             doublecomplex *b, integer *ldb, doublecomplex *vl, integer *ldvl, doublecomplex *vr,
+             integer *ldvr, doublereal *s, doublereal *dif, integer *mm, integer *m,
+             doublecomplex *work, integer *lwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztgsna inputs: job %c, howmny %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS ", m %" FLA_IS "",*job, *howmny, *n, *lda, *ldb, *ldvl, *ldvr, *mm, *m);
+    AOCL_DTL_SNPRINTF("ztgsna inputs: job %c, howmny %c, n %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS
+                      ", m %" FLA_IS "",
+                      *job, *howmny, *n, *lda, *ldb, *ldvl, *ldvr, *mm, *m);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1;
     doublereal d__1, d__2;
@@ -337,27 +343,42 @@ void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
     doublereal rnrm, scale;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Double Complex */
-    VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        VOID
+        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                   integer *);
     integer lwmin;
     extern /* Subroutine */
-    void zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
+               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical wants;
     dcomplex dummy[1];
     extern doublereal dlapy2_(doublereal *, doublereal *);
     extern /* Subroutine */
-    void dlabad_(doublereal *, doublereal *);
+        void
+        dlabad_(doublereal *, doublereal *);
     doublecomplex dummy1[1];
-    extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_( char *);
+    extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical wantbh, wantdf, somcon;
     extern /* Subroutine */
-    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztgexc_(logical *, logical *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, integer *);
+        void
+        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *),
+        ztgexc_(logical *, logical *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *,
+                integer *, integer *);
     doublereal smlnum;
     logical lquery;
     extern /* Subroutine */
-    void ztgsyl_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, integer *, integer *);
+        void
+        ztgsyl_(char *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
+                doublecomplex *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -409,7 +430,7 @@ void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
     {
         *info = -1;
     }
-    else if (! lsame_(howmny, "A", 1, 1) && ! somcon)
+    else if(!lsame_(howmny, "A", 1, 1) && !somcon)
     {
         *info = -2;
     }
@@ -417,11 +438,11 @@ void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
@@ -458,7 +479,7 @@ void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
         {
             lwmin = 1;
         }
-        else if (lsame_(job, "V", 1, 1) || lsame_(job, "B", 1, 1))
+        else if(lsame_(job, "V", 1, 1) || lsame_(job, "B", 1, 1))
         {
             lwmin = (*n << 1) * *n;
         }
@@ -466,8 +487,8 @@ void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
         {
             lwmin = *n;
         }
-        work[1].real = (doublereal)lwmin;
-        work[1].imag = 0.; // , expr subst
+        work[1].r = (doublereal)lwmin;
+        work[1].i = 0.; // , expr subst
         if(*mm < *m)
         {
             *info = -15;
@@ -481,18 +502,18 @@ void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
     {
         i__1 = -(*info);
         xerbla_("ZTGSNA", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     ks = 0;
@@ -515,11 +536,13 @@ void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
             /* eigenvalue. */
             rnrm = dznrm2_(n, &vr[ks * vr_dim1 + 1], &c__1);
             lnrm = dznrm2_(n, &vl[ks * vl_dim1 + 1], &c__1);
-            zgemv_("N", n, n, &c_b19, &a[a_offset], lda, &vr[ks * vr_dim1 + 1], &c__1, &c_b20, &work[1], &c__1);
+            zgemv_("N", n, n, &c_b19, &a[a_offset], lda, &vr[ks * vr_dim1 + 1], &c__1, &c_b20,
+                   &work[1], &c__1);
             zdotc_f2c_(&z__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
             yhax.r = z__1.r;
             yhax.i = z__1.i; // , expr subst
-            zgemv_("N", n, n, &c_b19, &b[b_offset], ldb, &vr[ks * vr_dim1 + 1], &c__1, &c_b20, &work[1], &c__1);
+            zgemv_("N", n, n, &c_b19, &b[b_offset], ldb, &vr[ks * vr_dim1 + 1], &c__1, &c_b20,
+                   &work[1], &c__1);
             zdotc_f2c_(&z__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
             yhbx.r = z__1.r;
             yhbx.i = z__1.i; // , expr subst
@@ -553,8 +576,9 @@ void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
                 aocl_lapack_zlacpy("Full", n, n, &b[b_offset], ldb, &work[*n * *n + 1], n);
                 ifst = k;
                 ilst = 1;
-                ztgexc_(&c_false, &c_false, n, &work[1], n, &work[*n * *n + 1], n, dummy, &c__1, dummy1, &c__1, &ifst, &ilst, &ierr) ;
-                if (ierr > 0)
+                ztgexc_(&c_false, &c_false, n, &work[1], n, &work[*n * *n + 1], n, dummy, &c__1,
+                        dummy1, &c__1, &ifst, &ilst, &ierr);
+                if(ierr > 0)
                 {
                     /* Ill-conditioned problem - swap rejected. */
                     dif[ks] = 0.;
@@ -569,16 +593,15 @@ void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
                     n1 = 1;
                     n2 = *n - n1;
                     i__ = *n * *n + 1;
-                    aocl_lapack_ztgsyl("N", &c__3, &n2, &n1, &work[*n * n1 + n1 + 1], n, &work[1],
-                                       n, &work[n1 + 1], n, &work[*n * n1 + n1 + i__], n,
-                                       &work[i__], n, &work[n1 + i__], n, &scale, &dif[ks], dummy,
-                                       &c__1, &iwork[1], &ierr);
+                    ztgsyl_("N", &c__3, &n2, &n1, &work[*n * n1 + n1 + 1], n, &work[1], n,
+                            &work[n1 + 1], n, &work[*n * n1 + n1 + i__], n, &work[i__], n,
+                            &work[n1 + i__], n, &scale, &dif[ks], dummy, &c__1, &iwork[1], &ierr);
                 }
             }
         }
     L20:;
     }
-    work[1].r = (doublereal) lwmin;
+    work[1].r = (doublereal)lwmin;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

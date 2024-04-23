@@ -218,10 +218,17 @@ void aocl_lapack_spftri(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
     extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
-    void strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
+               real *, integer *),
+        ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *,
+               integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     extern /* Subroutine */
-    void slauum_(char *, integer *, real *, integer *, integer *), stftri_(char *, char *, char *, integer *, real *, integer *);
+        void
+        slauum_(char *, integer *, real *, integer *, integer *),
+        stftri_(char *, char *, char *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -245,11 +252,11 @@ void aocl_lapack_spftri(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
     *info = 0;
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
-    if (! normaltransr && ! lsame_(transr, "T", 1, 1))
+    if(!normaltransr && !lsame_(transr, "T", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U", 1, 1))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }
@@ -269,7 +276,7 @@ void aocl_lapack_spftri(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
         return;
     }
     /* Invert the triangular Cholesky factor U or L. */
-    aocl_lapack_stftri(transr, uplo, "N", n, a, info);
+    stftri_(transr, uplo, "N", n, a, info);
     if(*info > 0)
     {
         return;
@@ -332,10 +339,10 @@ void aocl_lapack_spftri(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
             {
                 /* SRPA for LOWER, TRANSPOSE, and N is odd */
                 /* T1 -> a(0), T2 -> a(1), S -> a(0+N1*N1) */
-                aocl_lapack_slauum("U", &n1, a, &n1, info);
-                aocl_blas_ssyrk("U", "N", &n1, &n2, &c_b11, &a[n1 * n1], &n1, &c_b11, a, &n1);
-                aocl_blas_strmm("R", "L", "N", "N", &n1, &n2, &c_b11, &a[1], &n1, &a[n1 * n1], &n1);
-                aocl_lapack_slauum("L", &n2, &a[1], &n1, info);
+                slauum_("U", &n1, a, &n1, info);
+                ssyrk_("U", "N", &n1, &n2, &c_b11, &a[n1 * n1], &n1, &c_b11, a, &n1);
+                strmm_("R", "L", "N", "N", &n1, &n2, &c_b11, &a[1], &n1, &a[n1 * n1], &n1);
+                slauum_("L", &n2, &a[1], &n1, info);
             }
             else
             {
@@ -363,7 +370,7 @@ void aocl_lapack_spftri(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 aocl_lapack_slauum("L", &k, &a[1], &i__1, info);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                aocl_blas_ssyrk("L", "T", &k, &k, &c_b11, &a[k + 1], &i__1, &c_b11, &a[1], &i__2);
+                ssyrk_("L", "T", &k, &k, &c_b11, &a[k + 1], &i__1, &c_b11, &a[1], &i__2);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
                 strmm_("L", "U", "N", "N", &k, &k, &c_b11, a, &i__1, &a[k + 1], &i__2);
@@ -382,7 +389,7 @@ void aocl_lapack_spftri(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 aocl_blas_ssyrk("L", "N", &k, &k, &c_b11, a, &i__1, &c_b11, &a[k + 1], &i__2);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                aocl_blas_strmm("R", "U", "T", "N", &k, &k, &c_b11, &a[k], &i__1, a, &i__2);
+                strmm_("R", "U", "T", "N", &k, &k, &c_b11, &a[k], &i__1, a, &i__2);
                 i__1 = *n + 1;
                 aocl_lapack_slauum("U", &k, &a[k], &i__1, info);
             }
@@ -407,10 +414,10 @@ void aocl_lapack_spftri(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 /* T1 -> B(0,k+1), T2 -> B(0,k), S -> B(0,0), */
                 /* T1 -> a(0+k*(k+1)), T2 -> a(0+k*k), S -> a(0+0));
                 lda=k */
-                aocl_lapack_slauum("U", &k, &a[k * (k + 1)], &k, info);
-                aocl_blas_ssyrk("U", "T", &k, &k, &c_b11, a, &k, &c_b11, &a[k * (k + 1)], &k);
-                aocl_blas_strmm("L", "L", "T", "N", &k, &k, &c_b11, &a[k * k], &k, a, &k);
-                aocl_lapack_slauum("L", &k, &a[k * k], &k, info);
+                slauum_("U", &k, &a[k * (k + 1)], &k, info);
+                ssyrk_("U", "T", &k, &k, &c_b11, a, &k, &c_b11, &a[k * (k + 1)], &k);
+                strmm_("L", "L", "T", "N", &k, &k, &c_b11, &a[k * k], &k, a, &k);
+                slauum_("L", &k, &a[k * k], &k, info);
             }
         }
     }

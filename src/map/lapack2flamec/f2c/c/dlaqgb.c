@@ -152,10 +152,14 @@
 /* > \ingroup doubleGBauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlaqgb_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, integer *ldab, doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax, char *equed)
+void dlaqgb_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, integer *ldab,
+             doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd,
+             doublereal *amax, char *equed)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaqgb inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS "",*m, *n, *kl, *ku, *ldab);
+    AOCL_DTL_SNPRINTF("dlaqgb inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
+                      ", ldab %" FLA_IS "",
+                      *m, *n, *kl, *ku, *ldab);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     /* Local variables */
@@ -197,7 +201,7 @@ void dlaqgb_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
     /* Initialize LARGE and SMALL. */
     small_val = dlamch_("Safe minimum") / dlamch_("Precision");
     large = 1. / small_val;
-    if (*rowcnd >= .1 && *amax >= small_val && *amax <= large)
+    if(*rowcnd >= .1 && *amax >= small_val && *amax <= large)
     {
         /* No row scaling */
         if(*colcnd >= .1)
@@ -218,10 +222,8 @@ void dlaqgb_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
                 /* Computing MIN */
                 i__5 = *m;
                 i__6 = j + *kl; // , expr subst
-                i__4 = fla_min(i__5,i__6);
-                for (i__ = fla_max(i__2,i__3);
-                        i__ <= i__4;
-                        ++i__)
+                i__4 = fla_min(i__5, i__6);
+                for(i__ = fla_max(i__2, i__3); i__ <= i__4; ++i__)
                 {
                     ab[*ku + 1 + i__ - j + j * ab_dim1] = cj * ab[*ku + 1 + i__ - j + j * ab_dim1];
                     /* L10: */
@@ -243,10 +245,8 @@ void dlaqgb_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
             /* Computing MIN */
             i__5 = *m;
             i__6 = j + *kl; // , expr subst
-            i__3 = fla_min(i__5,i__6);
-            for (i__ = fla_max(i__4,i__2);
-                    i__ <= i__3;
-                    ++i__)
+            i__3 = fla_min(i__5, i__6);
+            for(i__ = fla_max(i__4, i__2); i__ <= i__3; ++i__)
             {
                 ab[*ku + 1 + i__ - j + j * ab_dim1]
                     = r__[i__] * ab[*ku + 1 + i__ - j + j * ab_dim1];
@@ -269,10 +269,8 @@ void dlaqgb_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
             /* Computing MIN */
             i__5 = *m;
             i__6 = j + *kl; // , expr subst
-            i__2 = fla_min(i__5,i__6);
-            for (i__ = fla_max(i__3,i__4);
-                    i__ <= i__2;
-                    ++i__)
+            i__2 = fla_min(i__5, i__6);
+            for(i__ = fla_max(i__3, i__4); i__ <= i__2; ++i__)
             {
                 ab[*ku + 1 + i__ - j + j * ab_dim1]
                     = cj * r__[i__] * ab[*ku + 1 + i__ - j + j * ab_dim1];

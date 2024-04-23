@@ -88,7 +88,8 @@
 void dlascl2_(integer *m, integer *n, doublereal *d__, doublereal *x, integer *ldx)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlascl2 inputs: m %" FLA_IS ", n %" FLA_IS ", ldx %" FLA_IS "",*m, *n, *ldx);
+    AOCL_DTL_SNPRINTF("dlascl2 inputs: m %" FLA_IS ", n %" FLA_IS ", ldx %" FLA_IS "", *m, *n,
+                      *ldx);
     /* System generated locals */
     aocl_int64_t x_dim1, x_offset, i__1, i__2;
     /* Local variables */

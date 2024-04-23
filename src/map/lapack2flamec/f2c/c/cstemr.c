@@ -1,5 +1,8 @@
-/* ../netlib/cstemr.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cstemr.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b18 = .003f;
@@ -9,11 +12,17 @@ static real c_b18 = .003f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CSTEMR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cstemr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cstemr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cstemr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cstemr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cstemr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cstemr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -117,7 +126,7 @@ n-1}
 /* > \verbatim */
 /* > JOBZ is CHARACTER*1 */
 /* > = 'N': Compute eigenvalues only;
-*/
+ */
 /* > = 'V': Compute eigenvalues and eigenvectors. */
 /* > \endverbatim */
 /* > */
@@ -335,15 +344,24 @@ the */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, real *vu, integer *il, integer *iu, integer *m, real *w, complex *z__, integer *ldz, integer *nzc, integer *isuppz, logical *tryrac, real *work, integer *lwork, integer *iwork, integer * liwork, integer *info)
+void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, real *vu,
+             integer *il, integer *iu, integer *m, real *w, complex *z__, integer *ldz,
+             integer *nzc, integer *isuppz, logical *tryrac, real *work, integer *lwork,
+             integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cstemr inputs: jobz %c, range %c, n %lld, il %lld, iu %lld, m %lld, ldz %lld, nzc %lld, lwork %lld, liwork %lld",*jobz, *range, *n, *il, *iu, *m, *ldz, *nzc, *lwork, *liwork);
+    snprintf(buffer, 256,
+             "cstemr inputs: jobz %c, range %c, n %lld, il %lld, iu %lld, m %lld, ldz %lld, nzc "
+             "%lld, lwork %lld, liwork %lld",
+             *jobz, *range, *n, *il, *iu, *m, *ldz, *nzc, *lwork, *liwork);
 #else
-    snprintf(buffer, 256,"cstemr inputs: jobz %c, range %c, n %d, il %d, iu %d, m %d, ldz %d, nzc %d, lwork %d, liwork %d",*jobz, *range, *n, *il, *iu, *m, *ldz, *nzc, *lwork, *liwork);
+    snprintf(buffer, 256,
+             "cstemr inputs: jobz %c, range %c, n %d, il %d, iu %d, m %d, ldz %d, nzc %d, lwork "
+             "%d, liwork %d",
+             *jobz, *range, *n, *il, *iu, *m, *ldz, *nzc, *lwork, *liwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -367,23 +385,28 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     real tnrm;
     integer inde2;
     extern /* Subroutine */
-    void slae2_(real *, real *, real *, real *, real *) ;
+        void
+        slae2_(real *, real *, real *, real *, real *);
     integer itmp2;
     real rtol1, rtol2, scale;
     integer indgp;
     extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     integer iindw, ilast;
     extern /* Subroutine */
-    void cswap_(integer *, complex *, integer *, complex *, integer *);
+        void
+        cswap_(integer *, complex *, integer *, complex *, integer *);
     integer lwmin;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     logical wantz;
     extern /* Subroutine */
-    void slaev2_(real *, real *, real *, real *, real *, real *, real *);
+        void
+        slaev2_(real *, real *, real *, real *, real *, real *, real *);
     logical alleig;
     integer ibegin;
     logical indeig;
@@ -393,22 +416,35 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     integer wbegin;
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer inderr, iindwk, indgrs, offset;
     extern /* Subroutine */
-    void slarrc_(char *, integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *, integer * ), clarrv_(integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *, real *, integer *, integer *, real *, complex *, integer *, integer *, real *, integer *, integer *), slarre_(char *, integer *, real *, real *, integer *, integer *, real *, real *, real *, real *, real *, real *, integer *, integer *, integer *, real *, real *, real *, integer *, integer *, real *, real *, real *, integer *, integer *);
+        void
+        slarrc_(char *, integer *, real *, real *, real *, real *, real *, integer *, integer *,
+                integer *, integer *),
+        clarrv_(integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *,
+                integer *, real *, real *, real *, real *, real *, real *, integer *, integer *,
+                real *, complex *, integer *, integer *, real *, integer *, integer *),
+        slarre_(char *, integer *, real *, real *, integer *, integer *, real *, real *, real *,
+                real *, real *, real *, integer *, integer *, integer *, real *, real *, real *,
+                integer *, integer *, real *, real *, real *, integer *, integer *);
     integer iinspl, indwrk, ifirst, liwmin, nzcmin;
     real pivmin, thresh;
     extern real slanst_(char *, integer *, real *, real *);
     extern /* Subroutine */
-    void slarrj_(integer *, real *, real *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, real *, real *, integer *);
+        void
+        slarrj_(integer *, real *, real *, integer *, integer *, real *, integer *, real *, real *,
+                real *, integer *, real *, real *, integer *);
     integer nsplit;
     extern /* Subroutine */
-    void slarrr_(integer *, real *, real *, integer *);
+        void
+        slarrr_(integer *, real *, real *, integer *);
     real smlnum;
     extern /* Subroutine */
-    void slasrt_(char *, integer *, real *, integer *);
+        void
+        slasrt_(char *, integer *, real *, integer *);
     logical lquery, zquery;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -452,7 +488,7 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     /* SSTEMR needs WORK of size 6*N, IWORK of size 3*N. */
     /* In addition, SLARRE needs WORK of size 6*N, IWORK of size 5*N. */
     /* Furthermore, CLARRV needs WORK of size 12*N, IWORK of size 7*N. */
-    if (wantz)
+    if(wantz)
     {
         lwmin = *n * 18;
         liwmin = *n * 10;
@@ -468,7 +504,7 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     iil = 0;
     iiu = 0;
     nsplit = 0;
-    if (valeig)
+    if(valeig)
     {
         /* We do not reference VL, VU in the cases RANGE = 'I','A' */
         /* The interval (WL, WU] contains all the wanted eigenvalues. */
@@ -476,46 +512,46 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
         wl = *vl;
         wu = *vu;
     }
-    else if (indeig)
+    else if(indeig)
     {
         /* We do not reference IL, IU in the cases RANGE = 'V','A' */
         iil = *il;
         iiu = *iu;
     }
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (alleig || valeig || indeig))
+    else if(!(alleig || valeig || indeig))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (valeig && *n > 0 && wu <= wl)
+    else if(valeig && *n > 0 && wu <= wl)
     {
         *info = -7;
     }
-    else if (indeig && (iil < 1 || iil > *n))
+    else if(indeig && (iil < 1 || iil > *n))
     {
         *info = -8;
     }
-    else if (indeig && (iiu < iil || iiu > *n))
+    else if(indeig && (iiu < iil || iiu > *n))
     {
         *info = -9;
     }
-    else if (*ldz < 1 || wantz && *ldz < *n)
+    else if(*ldz < 1 || wantz && *ldz < *n)
     {
         *info = -13;
     }
-    else if (*lwork < lwmin && ! lquery)
+    else if(*lwork < lwmin && !lquery)
     {
         *info = -17;
     }
-    else if (*liwork < liwmin && ! lquery)
+    else if(*liwork < liwmin && !lquery)
     {
         *info = -19;
     }
@@ -528,20 +564,20 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     /* Computing MIN */
     r__1 = sqrt(bignum);
     r__2 = 1.f / sqrt(sqrt(safmin)); // , expr subst
-    rmax = fla_min(r__1,r__2);
-    if (*info == 0)
+    rmax = fla_min(r__1, r__2);
+    if(*info == 0)
     {
-        work[1] = (real) lwmin;
+        work[1] = (real)lwmin;
         iwork[1] = liwmin;
-        if (wantz && alleig)
+        if(wantz && alleig)
         {
             nzcmin = *n;
         }
-        else if (wantz && valeig)
+        else if(wantz && valeig)
         {
-            slarrc_("T", n, vl, vu, &d__[1], &e[1], &safmin, &nzcmin, &itmp, & itmp2, info);
+            slarrc_("T", n, vl, vu, &d__[1], &e[1], &safmin, &nzcmin, &itmp, &itmp2, info);
         }
-        else if (wantz && indeig)
+        else if(wantz && indeig)
         {
             nzcmin = iiu - iil + 1;
         }
@@ -550,52 +586,52 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
             /* WANTZ .EQ. FALSE. */
             nzcmin = 0;
         }
-        if (zquery && *info == 0)
+        if(zquery && *info == 0)
         {
             i__1 = z_dim1 + 1;
-            z__[i__1].r = (real) nzcmin;
+            z__[i__1].r = (real)nzcmin;
             z__[i__1].i = 0.f; // , expr subst
         }
-        else if (*nzc < nzcmin && ! zquery)
+        else if(*nzc < nzcmin && !zquery)
         {
             *info = -14;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CSTEMR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    else if (lquery || zquery)
+    else if(lquery || zquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Handle N = 0, 1, and 2 cases immediately */
     *m = 0;
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (alleig || indeig)
+        if(alleig || indeig)
         {
             *m = 1;
             w[1] = d__[1];
         }
         else
         {
-            if (wl < d__[1] && wu >= d__[1])
+            if(wl < d__[1] && wu >= d__[1])
             {
                 *m = 1;
                 w[1] = d__[1];
             }
         }
-        if (wantz && ! zquery)
+        if(wantz && !zquery)
         {
             i__1 = z_dim1 + 1;
             z__[i__1].r = 1.f;
@@ -606,21 +642,21 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (*n == 2)
+    if(*n == 2)
     {
-        if (! wantz)
+        if(!wantz)
         {
             slae2_(&d__[1], &e[1], &d__[2], &r1, &r2);
         }
-        else if (wantz && ! zquery)
+        else if(wantz && !zquery)
         {
             slaev2_(&d__[1], &e[1], &d__[2], &r1, &r2, &cs, &sn);
         }
-        if (alleig || valeig && r2 > wl && r2 <= wu || indeig && iil == 1)
+        if(alleig || valeig && r2 > wl && r2 <= wu || indeig && iil == 1)
         {
             ++(*m);
             w[*m] = r2;
-            if (wantz && ! zquery)
+            if(wantz && !zquery)
             {
                 i__1 = *m * z_dim1 + 1;
                 r__1 = -sn;
@@ -630,9 +666,9 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
                 z__[i__1].r = cs;
                 z__[i__1].i = 0.f; // , expr subst
                 /* Note: At most one of SN and CS can be zero. */
-                if (sn != 0.f)
+                if(sn != 0.f)
                 {
-                    if (cs != 0.f)
+                    if(cs != 0.f)
                     {
                         isuppz[(*m << 1) - 1] = 1;
                         isuppz[*m * 2] = 2;
@@ -650,11 +686,11 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
                 }
             }
         }
-        if (alleig || valeig && r1 > wl && r1 <= wu || indeig && iiu == 2)
+        if(alleig || valeig && r1 > wl && r1 <= wu || indeig && iiu == 2)
         {
             ++(*m);
             w[*m] = r1;
-            if (wantz && ! zquery)
+            if(wantz && !zquery)
             {
                 i__1 = *m * z_dim1 + 1;
                 z__[i__1].r = cs;
@@ -663,9 +699,9 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
                 z__[i__1].r = sn;
                 z__[i__1].i = 0.f; // , expr subst
                 /* Note: At most one of SN and CS can be zero. */
-                if (sn != 0.f)
+                if(sn != 0.f)
                 {
-                    if (cs != 0.f)
+                    if(cs != 0.f)
                     {
                         isuppz[(*m << 1) - 1] = 1;
                         isuppz[*m * 2] = 2;
@@ -706,21 +742,21 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
         /* RMAX threshold. */
         scale = 1.f;
         tnrm = slanst_("M", n, &d__[1], &e[1]);
-        if (tnrm > 0.f && tnrm < rmin)
+        if(tnrm > 0.f && tnrm < rmin)
         {
             scale = rmin / tnrm;
         }
-        else if (tnrm > rmax)
+        else if(tnrm > rmax)
         {
             scale = rmax / tnrm;
         }
-        if (scale != 1.f)
+        if(scale != 1.f)
         {
             sscal_(n, &scale, &d__[1], &c__1);
             i__1 = *n - 1;
             sscal_(&i__1, &scale, &e[1], &c__1);
             tnrm *= scale;
-            if (valeig)
+            if(valeig)
             {
                 /* If eigenvalues in interval have to be found, */
                 /* scale (WL, WU] accordingly */
@@ -735,7 +771,7 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
         /* A negative THRESH forces the old splitting criterion based on the */
         /* size of the off-diagonal. A positive THRESH switches to splitting */
         /* which preserves relative accuracy. */
-        if (*tryrac)
+        if(*tryrac)
         {
             /* Test whether the matrix warrants the more expensive relative approach. */
             slarrr_(n, &d__[1], &e[1], &iinfo);
@@ -746,7 +782,7 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
             iinfo = -1;
         }
         /* Set the splitting criterion */
-        if (iinfo == 0)
+        if(iinfo == 0)
         {
             thresh = eps;
         }
@@ -756,16 +792,14 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
             /* relative accuracy is desired but T does not guarantee it */
             *tryrac = FALSE_;
         }
-        if (*tryrac)
+        if(*tryrac)
         {
             /* Copy original diagonal, needed to guarantee relative accuracy */
             scopy_(n, &d__[1], &c__1, &work[indd], &c__1);
         }
         /* Store the squares of the offdiagonal values of T */
         i__1 = *n - 1;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Computing 2nd power */
             r__1 = e[j];
@@ -773,7 +807,7 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
             /* L5: */
         }
         /* Set the tolerance parameters for bisection */
-        if (! wantz)
+        if(!wantz)
         {
             /* SLARRE computes the eigenvalues to full precision. */
             rtol1 = eps * 4.f;
@@ -788,14 +822,17 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
             /* Computing MAX */
             r__1 = sqrt(eps) * .05f;
             r__2 = eps * 4.f; // , expr subst
-            rtol1 = fla_max(r__1,r__2);
+            rtol1 = fla_max(r__1, r__2);
             /* Computing MAX */
             r__1 = sqrt(eps) * .005f;
             r__2 = eps * 4.f; // , expr subst
-            rtol2 = fla_max(r__1,r__2);
+            rtol2 = fla_max(r__1, r__2);
         }
-        slarre_(range, n, &wl, &wu, &iil, &iiu, &d__[1], &e[1], &work[inde2], &rtol1, &rtol2, &thresh, &nsplit, &iwork[iinspl], m, &w[1], & work[inderr], &work[indgp], &iwork[iindbl], &iwork[iindw], & work[indgrs], &pivmin, &work[indwrk], &iwork[iindwk], &iinfo);
-        if (iinfo != 0)
+        slarre_(range, n, &wl, &wu, &iil, &iiu, &d__[1], &e[1], &work[inde2], &rtol1, &rtol2,
+                &thresh, &nsplit, &iwork[iinspl], m, &w[1], &work[inderr], &work[indgp],
+                &iwork[iindbl], &iwork[iindw], &work[indgrs], &pivmin, &work[indwrk],
+                &iwork[iindwk], &iinfo);
+        if(iinfo != 0)
         {
             *info = f2c_abs(iinfo) + 10;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -804,12 +841,15 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
         /* Note that if RANGE .NE. 'V', SLARRE computes bounds on the desired */
         /* part of the spectrum. All desired eigenvalues are contained in */
         /* (WL,WU] */
-        if (wantz)
+        if(wantz)
         {
             /* Compute the desired eigenvectors corresponding to the computed */
             /* eigenvalues */
-            clarrv_(n, &wl, &wu, &d__[1], &e[1], &pivmin, &iwork[iinspl], m, & c__1, m, &c_b18, &rtol1, &rtol2, &w[1], &work[inderr], & work[indgp], &iwork[iindbl], &iwork[iindw], &work[indgrs], &z__[z_offset], ldz, &isuppz[1], &work[indwrk], &iwork[ iindwk], &iinfo);
-            if (iinfo != 0)
+            clarrv_(n, &wl, &wu, &d__[1], &e[1], &pivmin, &iwork[iinspl], m, &c__1, m, &c_b18,
+                    &rtol1, &rtol2, &w[1], &work[inderr], &work[indgp], &iwork[iindbl],
+                    &iwork[iindw], &work[indgrs], &z__[z_offset], ldz, &isuppz[1], &work[indwrk],
+                    &iwork[iindwk], &iinfo);
+            if(iinfo != 0)
             {
                 *info = f2c_abs(iinfo) + 20;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -824,40 +864,36 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
             /* to apply the corresponding shifts from SLARRE to obtain the */
             /* eigenvalues of the original matrix. */
             i__1 = *m;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 itmp = iwork[iindbl + j - 1];
                 w[j] += e[iwork[iinspl + itmp - 1]];
                 /* L20: */
             }
         }
-        if (*tryrac)
+        if(*tryrac)
         {
             /* Refine computed eigenvalues so that they are relatively accurate */
             /* with respect to the original matrix T. */
             ibegin = 1;
             wbegin = 1;
             i__1 = iwork[iindbl + *m - 1];
-            for (jblk = 1;
-                    jblk <= i__1;
-                    ++jblk)
+            for(jblk = 1; jblk <= i__1; ++jblk)
             {
                 iend = iwork[iinspl + jblk - 1];
                 in = iend - ibegin + 1;
                 wend = wbegin - 1;
                 /* check if any eigenvalues have to be refined in this block */
-L36:
-                if (wend < *m)
+            L36:
+                if(wend < *m)
                 {
-                    if (iwork[iindbl + wend] == jblk)
+                    if(iwork[iindbl + wend] == jblk)
                     {
                         ++wend;
                         goto L36;
                     }
                 }
-                if (wend < wbegin)
+                if(wend < wbegin)
                 {
                     ibegin = iend + 1;
                     goto L39;
@@ -866,15 +902,16 @@ L36:
                 ifirst = iwork[iindw + wbegin - 1];
                 ilast = iwork[iindw + wend - 1];
                 rtol2 = eps * 4.f;
-                slarrj_(&in, &work[indd + ibegin - 1], &work[inde2 + ibegin - 1], &ifirst, &ilast, &rtol2, &offset, &w[wbegin], & work[inderr + wbegin - 1], &work[indwrk], &iwork[ iindwk], &pivmin, &tnrm, &iinfo);
+                slarrj_(&in, &work[indd + ibegin - 1], &work[inde2 + ibegin - 1], &ifirst, &ilast,
+                        &rtol2, &offset, &w[wbegin], &work[inderr + wbegin - 1], &work[indwrk],
+                        &iwork[iindwk], &pivmin, &tnrm, &iinfo);
                 ibegin = iend + 1;
                 wbegin = wend + 1;
-L39:
-                ;
+            L39:;
             }
         }
         /* If matrix was scaled, then rescale eigenvalues appropriately. */
-        if (scale != 1.f)
+        if(scale != 1.f)
         {
             r__1 = 1.f / scale;
             sscal_(m, &r__1, &w[1], &c__1);
@@ -882,12 +919,12 @@ L39:
     }
     /* If eigenvalues are not in increasing order, then sort them, */
     /* possibly along with eigenvectors. */
-    if (nsplit > 1 || *n == 2)
+    if(nsplit > 1 || *n == 2)
     {
-        if (! wantz)
+        if(!wantz)
         {
             slasrt_("I", m, &w[1], &iinfo);
-            if (iinfo != 0)
+            if(iinfo != 0)
             {
                 *info = 3;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -897,29 +934,25 @@ L39:
         else
         {
             i__1 = *m - 1;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__ = 0;
                 tmp = w[j];
                 i__2 = *m;
-                for (jj = j + 1;
-                        jj <= i__2;
-                        ++jj)
+                for(jj = j + 1; jj <= i__2; ++jj)
                 {
-                    if (w[jj] < tmp)
+                    if(w[jj] < tmp)
                     {
                         i__ = jj;
                         tmp = w[jj];
                     }
                     /* L50: */
                 }
-                if (i__ != 0)
+                if(i__ != 0)
                 {
                     w[i__] = w[j];
                     w[j] = tmp;
-                    if (wantz)
+                    if(wantz)
                     {
                         cswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
                         itmp = isuppz[(i__ << 1) - 1];
@@ -934,7 +967,7 @@ L39:
             }
         }
     }
-    work[1] = (real) lwmin;
+    work[1] = (real)lwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

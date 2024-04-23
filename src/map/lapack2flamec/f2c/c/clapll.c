@@ -95,15 +95,15 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clapll_(integer *n, complex *x, integer *incx, complex * y, integer *incy, real *ssmin)
+void clapll_(integer *n, complex *x, integer *incx, complex *y, integer *incy, real *ssmin)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clapll inputs: n %lld, incx %lld, incy %lld",*n, *incx, *incy);
+    snprintf(buffer, 256, "clapll inputs: n %lld, incx %lld, incy %lld", *n, *incx, *incy);
 #else
-    snprintf(buffer, 256,"clapll inputs: n %d, incx %d, incy %d",*n, *incx, *incy);
+    snprintf(buffer, 256, "clapll inputs: n %d, incx %d, incy %d", *n, *incx, *incy);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -117,14 +117,18 @@ void clapll_(integer *n, complex *x, integer *incx, complex * y, integer *incy, 
     /* Local variables */
     scomplex c__, a11, a12, a22, tau;
     extern /* Subroutine */
-    void slas2_(real *, real *, real *, real *, real *) ;
+        void
+        slas2_(real *, real *, real *, real *, real *);
     extern /* Complex */
-    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+        VOID
+        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern /* Subroutine */
-    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+        void
+        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     real ssmax;
     extern /* Subroutine */
-    void clarfg_(integer *, complex *, complex *, integer *, complex *);
+        void
+        clarfg_(integer *, complex *, complex *, integer *, complex *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief <b> DSPSVX computes the solution to system of linear equations A * X = B for OTHER
  * matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -275,24 +275,40 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap, doublereal *afp, integer *ipiv, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr, doublereal *work, integer *iwork, integer *info)
+void dspsvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublereal *ap, doublereal *afp,
+             integer *ipiv, doublereal *b, integer *ldb, doublereal *x, integer *ldx,
+             doublereal *rcond, doublereal *ferr, doublereal *berr, doublereal *work,
+             integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dspsvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *uplo, *n, *nrhs, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("dspsvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS
+                      ", ldb %" FLA_IS ", ldx %" FLA_IS "",
+                      *fact, *uplo, *n, *nrhs, *ldb, *ldx);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1;
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     doublereal anorm;
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal dlansp_(char *, char *, integer *, doublereal *, doublereal *);
     extern /* Subroutine */
-    void dspcon_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dsprfs_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dsptrf_(char *, integer *, doublereal *, integer *, integer *), dsptrs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dspcon_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, integer *, integer *),
+        dsprfs_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+                integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *,
+                integer *, integer *),
+        dsptrf_(char *, integer *, doublereal *, integer *, integer *),
+        dsptrs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *,
+                integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -331,11 +347,11 @@ void dspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap,
     /* Function Body */
     *info = 0;
     nofact = lsame_(fact, "N", 1, 1);
-    if (! nofact && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    else if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -347,11 +363,11 @@ void dspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap,
     {
         *info = -4;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -11;
     }
@@ -385,8 +401,8 @@ void dspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *ap,
     aocl_lapack_dsptrs(uplo, n, nrhs, &afp[1], &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solutions and */
     /* compute error bounds and backward error estimates for them. */
-    aocl_lapack_dsprfs(uplo, n, nrhs, &ap[1], &afp[1], &ipiv[1], &b[b_offset], ldb, &x[x_offset],
-                       ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
+    dsprfs_(uplo, n, nrhs, &ap[1], &afp[1], &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx,
+            &ferr[1], &berr[1], &work[1], &iwork[1], info);
     /* Set INFO = N+1 if the matrix is singular to working precision. */
     if(*rcond < dlamch_("Epsilon"))
     {

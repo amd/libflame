@@ -179,10 +179,15 @@
 /* > \ingroup doubleGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku, doublereal *alpha, doublereal *ab, integer * ldab, doublereal *x, integer *incx, doublereal *beta, doublereal *y, integer *incy)
+void dla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku, doublereal *alpha,
+                doublereal *ab, integer *ldab, doublereal *x, integer *incx, doublereal *beta,
+                doublereal *y, integer *incy)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dla_gbamv inputs: trans %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*trans, *m, *n, *kl, *ku, *ldab, *incx, *incy);
+    AOCL_DTL_SNPRINTF("dla_gbamv inputs: trans %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS
+                      ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", incx %" FLA_IS
+                      ", incy %" FLA_IS "",
+                      *trans, *m, *n, *kl, *ku, *ldab, *incx, *incy);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     doublereal d__1;
@@ -198,7 +203,8 @@ void dla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku
     doublereal safe1;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -338,12 +344,10 @@ void dla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku
                     i__2 = i__ - *kl;
                     /* Computing MIN */
                     i__4 = i__ + *ku;
-                    i__3 = fla_min(i__4,lenx);
-                    for (j = fla_max(i__2,1);
-                            j <= i__3;
-                            ++j)
+                    i__3 = fla_min(i__4, lenx);
+                    for(j = fla_max(i__2, 1); j <= i__3; ++j)
                     {
-                        temp = (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_dabs( d__1));
+                        temp = (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_dabs(d__1));
                         symb_zero__ = symb_zero__ && (x[j] == 0. || temp == 0.);
                         y[iy] += *alpha * (d__1 = x[j], f2c_dabs(d__1)) * temp;
                     }
@@ -380,12 +384,10 @@ void dla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku
                     i__3 = i__ - *kl;
                     /* Computing MIN */
                     i__4 = i__ + *ku;
-                    i__2 = fla_min(i__4,lenx);
-                    for (j = fla_max(i__3,1);
-                            j <= i__2;
-                            ++j)
+                    i__2 = fla_min(i__4, lenx);
+                    for(j = fla_max(i__3, 1); j <= i__2; ++j)
                     {
-                        temp = (d__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_dabs( d__1));
+                        temp = (d__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_dabs(d__1));
                         symb_zero__ = symb_zero__ && (x[j] == 0. || temp == 0.);
                         y[iy] += *alpha * (d__1 = x[j], f2c_dabs(d__1)) * temp;
                     }
@@ -426,12 +428,10 @@ void dla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku
                     i__2 = i__ - *kl;
                     /* Computing MIN */
                     i__4 = i__ + *ku;
-                    i__3 = fla_min(i__4,lenx);
-                    for (j = fla_max(i__2,1);
-                            j <= i__3;
-                            ++j)
+                    i__3 = fla_min(i__4, lenx);
+                    for(j = fla_max(i__2, 1); j <= i__3; ++j)
                     {
-                        temp = (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_dabs( d__1));
+                        temp = (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_dabs(d__1));
                         symb_zero__ = symb_zero__ && (x[jx] == 0. || temp == 0.);
                         y[iy] += *alpha * (d__1 = x[jx], f2c_dabs(d__1)) * temp;
                         jx += *incx;
@@ -470,12 +470,10 @@ void dla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku
                     i__3 = i__ - *kl;
                     /* Computing MIN */
                     i__4 = i__ + *ku;
-                    i__2 = fla_min(i__4,lenx);
-                    for (j = fla_max(i__3,1);
-                            j <= i__2;
-                            ++j)
+                    i__2 = fla_min(i__4, lenx);
+                    for(j = fla_max(i__3, 1); j <= i__2; ++j)
                     {
-                        temp = (d__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_dabs( d__1));
+                        temp = (d__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_dabs(d__1));
                         symb_zero__ = symb_zero__ && (x[jx] == 0. || temp == 0.);
                         y[iy] += *alpha * (d__1 = x[jx], f2c_dabs(d__1)) * temp;
                         jx += *incx;

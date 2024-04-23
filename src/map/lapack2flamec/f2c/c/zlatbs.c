@@ -1,5 +1,8 @@
-/* zlatbs.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* zlatbs.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static doublereal c_b36 = .5;
@@ -9,11 +12,17 @@ static doublereal c_b36 = .5;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLATBS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlatbs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlatbs.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlatbs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlatbs.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlatbs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlatbs.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -103,7 +112,7 @@ static doublereal c_b36 = .5;
 /* > first KD+1 rows of the array. The j-th column of A is stored */
 /* > in the j-th column of the array AB as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=min(n,j+kd). */
 /* > \endverbatim */
 /* > */
@@ -236,10 +245,14 @@ b(i), i=1,..,n}
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, integer *kd, doublecomplex *ab, integer *ldab, doublecomplex *x, doublereal *scale, doublereal *cnorm, integer *info)
+void zlatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, integer *kd,
+             doublecomplex *ab, integer *ldab, doublecomplex *x, doublereal *scale,
+             doublereal *cnorm, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlatbs inputs: uplo %c, trans %c, diag %c, normin %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",*uplo, *trans, *diag, *normin, *n, *kd, *ldab);
+    AOCL_DTL_SNPRINTF("zlatbs inputs: uplo %c, trans %c, diag %c, normin %c, n %" FLA_IS
+                      ", kd %" FLA_IS ", ldab %" FLA_IS "",
+                      *uplo, *trans, *diag, *normin, *n, *kd, *ldab);
     /* System generated locals */
     integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2, d__3, d__4;
@@ -257,7 +270,8 @@ void zlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
     doublecomplex tjjs;
     doublereal xmax, grow;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     integer maind;
     extern logical lsame_(char *, char *, integer, integer);
     doublereal tscal;
@@ -265,20 +279,30 @@ void zlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
     integer jlast;
     doublecomplex csumj;
     extern /* Double Complex */
-    VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        VOID
+        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                   integer *);
     logical upper;
     extern /* Double Complex */
-    VOID zdotu_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        VOID
+        zdotu_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                   integer *);
     extern /* Subroutine */
-    void ztbsv_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        ztbsv_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *,
+               doublecomplex *, integer *),
+        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_( integer *, doublereal *, doublecomplex *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal bignum;
     extern integer izamax_(integer *, doublecomplex *, integer *);
     extern /* Double Complex */
-    void zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
+        void
+        zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
     logical notran;
     integer jfirst;
     extern doublereal dzasum_(integer *, doublecomplex *, integer *);
@@ -319,67 +343,65 @@ void zlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
     notran = lsame_(trans, "N", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
     /* Test the input parameters. */
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
-    else if (! lsame_(normin, "Y", 1, 1) && ! lsame_(normin, "N", 1, 1))
+    else if(!lsame_(normin, "Y", 1, 1) && !lsame_(normin, "N", 1, 1))
     {
         *info = -4;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -5;
     }
-    else if (*kd < 0)
+    else if(*kd < 0)
     {
         *info = -6;
     }
-    else if (*ldab < *kd + 1)
+    else if(*ldab < *kd + 1)
     {
         *info = -8;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZLATBS", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     *scale = 1.;
-    if (*n == 0)
+    if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine machine dependent parameters to control overflow. */
     smlnum = dlamch_("Safe minimum") / dlamch_("Precision");
     bignum = 1. / smlnum;
-    if (lsame_(normin, "N", 1, 1))
+    if(lsame_(normin, "N", 1, 1))
     {
         /* Compute the 1-norm of each column, not including the diagonal. */
-        if (upper)
+        if(upper)
         {
             /* A is upper triangular. */
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Computing MIN */
                 i__2 = *kd;
                 i__3 = j - 1; // , expr subst
-                jlen = fla_min(i__2,i__3);
-                cnorm[j] = dzasum_(&jlen, &ab[*kd + 1 - jlen + j * ab_dim1], & c__1);
+                jlen = fla_min(i__2, i__3);
+                cnorm[j] = dzasum_(&jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1);
                 /* L10: */
             }
         }
@@ -387,15 +409,13 @@ void zlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
         {
             /* A is lower triangular. */
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Computing MIN */
                 i__2 = *kd;
                 i__3 = *n - j; // , expr subst
-                jlen = fla_min(i__2,i__3);
-                if (jlen > 0)
+                jlen = fla_min(i__2, i__3);
+                if(jlen > 0)
                 {
                     cnorm[j] = dzasum_(&jlen, &ab[j * ab_dim1 + 2], &c__1);
                 }
@@ -411,7 +431,7 @@ void zlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
     /* greater than BIGNUM/2. */
     imax = idamax_(n, &cnorm[1], &c__1);
     tmax = cnorm[imax];
-    if (tmax <= bignum * .5)
+    if(tmax <= bignum * .5)
     {
         tscal = 1.;
     }
@@ -424,22 +444,21 @@ void zlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
     /* Level 2 BLAS routine ZTBSV can be used. */
     xmax = 0.;
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         /* Computing MAX */
         i__2 = j;
         d__3 = xmax;
-        d__4 = (d__1 = x[i__2].r / 2., f2c_dabs(d__1)) + (d__2 = d_imag(&x[j]) / 2., f2c_dabs(d__2)); // , expr subst
-        xmax = fla_max(d__3,d__4);
+        d__4 = (d__1 = x[i__2].r / 2., f2c_dabs(d__1))
+               + (d__2 = d_imag(&x[j]) / 2., f2c_dabs(d__2)); // , expr subst
+        xmax = fla_max(d__3, d__4);
         /* L30: */
     }
     xbnd = xmax;
-    if (notran)
+    if(notran)
     {
         /* Compute the growth in A * x = b. */
-        if (upper)
+        if(upper)
         {
             jfirst = *n;
             jlast = 1;
@@ -453,49 +472,47 @@ void zlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
             jinc = 1;
             maind = 1;
         }
-        if (tscal != 1.)
+        if(tscal != 1.)
         {
             grow = 0.;
             goto L60;
         }
-        if (nounit)
+        if(nounit)
         {
             /* A is non-unit triangular. */
             /* Compute GROW = 1/G(j) and XBND = 1/M(j). */
             /* Initially, G(0) = max{
             x(i), i=1,...,n}
             . */
-            grow = .5 / fla_max(xbnd,smlnum);
+            grow = .5 / fla_max(xbnd, smlnum);
             xbnd = grow;
             i__1 = jlast;
             i__2 = jinc;
-            for (j = jfirst;
-                    i__2 < 0 ? j >= i__1 : j <= i__1;
-                    j += i__2)
+            for(j = jfirst; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2)
             {
                 /* Exit the loop if the growth factor is too small. */
-                if (grow <= smlnum)
+                if(grow <= smlnum)
                 {
                     goto L60;
                 }
                 i__3 = maind + j * ab_dim1;
                 tjjs.r = ab[i__3].r;
                 tjjs.i = ab[i__3].i; // , expr subst
-                tjj = (d__1 = tjjs.r, f2c_dabs(d__1)) + (d__2 = d_imag(&tjjs), f2c_dabs( d__2));
-                if (tjj >= smlnum)
+                tjj = (d__1 = tjjs.r, f2c_dabs(d__1)) + (d__2 = d_imag(&tjjs), f2c_dabs(d__2));
+                if(tjj >= smlnum)
                 {
                     /* M(j) = G(j-1) / f2c_dabs(A(j,j)) */
                     /* Computing MIN */
                     d__1 = xbnd;
-                    d__2 = fla_min(1.,tjj) * grow; // , expr subst
-                    xbnd = fla_min(d__1,d__2);
+                    d__2 = fla_min(1., tjj) * grow; // , expr subst
+                    xbnd = fla_min(d__1, d__2);
                 }
                 else
                 {
                     /* M(j) could overflow, set XBND to 0. */
                     xbnd = 0.;
                 }
-                if (tjj + cnorm[j] >= smlnum)
+                if(tjj + cnorm[j] >= smlnum)
                 {
                     /* G(j) = G(j-1)*( 1 + CNORM(j) / f2c_dabs(A(j,j)) ) */
                     grow *= tjj / (tjj + cnorm[j]);
@@ -517,16 +534,14 @@ void zlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
             . */
             /* Computing MIN */
             d__1 = 1.;
-            d__2 = .5 / fla_max(xbnd,smlnum); // , expr subst
-            grow = fla_min(d__1,d__2);
+            d__2 = .5 / fla_max(xbnd, smlnum); // , expr subst
+            grow = fla_min(d__1, d__2);
             i__2 = jlast;
             i__1 = jinc;
-            for (j = jfirst;
-                    i__1 < 0 ? j >= i__2 : j <= i__2;
-                    j += i__1)
+            for(j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1)
             {
                 /* Exit the loop if the growth factor is too small. */
-                if (grow <= smlnum)
+                if(grow <= smlnum)
                 {
                     goto L60;
                 }
@@ -535,13 +550,12 @@ void zlatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, int
                 /* L50: */
             }
         }
-L60:
-        ;
+    L60:;
     }
     else
     {
         /* Compute the growth in A**T * x = b or A**H * x = b. */
-        if (upper)
+        if(upper)
         {
             jfirst = 1;
             jlast = *n;
@@ -555,28 +569,26 @@ L60:
             jinc = -1;
             maind = 1;
         }
-        if (tscal != 1.)
+        if(tscal != 1.)
         {
             grow = 0.;
             goto L90;
         }
-        if (nounit)
+        if(nounit)
         {
             /* A is non-unit triangular. */
             /* Compute GROW = 1/G(j) and XBND = 1/M(j). */
             /* Initially, M(0) = max{
             x(i), i=1,...,n}
             . */
-            grow = .5 / fla_max(xbnd,smlnum);
+            grow = .5 / fla_max(xbnd, smlnum);
             xbnd = grow;
             i__1 = jlast;
             i__2 = jinc;
-            for (j = jfirst;
-                    i__2 < 0 ? j >= i__1 : j <= i__1;
-                    j += i__2)
+            for(j = jfirst; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2)
             {
                 /* Exit the loop if the growth factor is too small. */
-                if (grow <= smlnum)
+                if(grow <= smlnum)
                 {
                     goto L90;
                 }
@@ -585,15 +597,15 @@ L60:
                 /* Computing MIN */
                 d__1 = grow;
                 d__2 = xbnd / xj; // , expr subst
-                grow = fla_min(d__1,d__2);
+                grow = fla_min(d__1, d__2);
                 i__3 = maind + j * ab_dim1;
                 tjjs.r = ab[i__3].r;
                 tjjs.i = ab[i__3].i; // , expr subst
-                tjj = (d__1 = tjjs.r, f2c_dabs(d__1)) + (d__2 = d_imag(&tjjs), f2c_dabs( d__2));
-                if (tjj >= smlnum)
+                tjj = (d__1 = tjjs.r, f2c_dabs(d__1)) + (d__2 = d_imag(&tjjs), f2c_dabs(d__2));
+                if(tjj >= smlnum)
                 {
                     /* M(j) = M(j-1)*( 1 + CNORM(j) ) / f2c_dabs(A(j,j)) */
-                    if (xj > tjj)
+                    if(xj > tjj)
                     {
                         xbnd *= tjj / xj;
                     }
@@ -605,7 +617,7 @@ L60:
                 }
                 /* L70: */
             }
-            grow = fla_min(grow,xbnd);
+            grow = fla_min(grow, xbnd);
         }
         else
         {
@@ -615,16 +627,14 @@ L60:
             . */
             /* Computing MIN */
             d__1 = 1.;
-            d__2 = .5 / fla_max(xbnd,smlnum); // , expr subst
-            grow = fla_min(d__1,d__2);
+            d__2 = .5 / fla_max(xbnd, smlnum); // , expr subst
+            grow = fla_min(d__1, d__2);
             i__2 = jlast;
             i__1 = jinc;
-            for (j = jfirst;
-                    i__1 < 0 ? j >= i__2 : j <= i__2;
-                    j += i__1)
+            for(j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1)
             {
                 /* Exit the loop if the growth factor is too small. */
-                if (grow <= smlnum)
+                if(grow <= smlnum)
                 {
                     goto L90;
                 }
@@ -634,10 +644,9 @@ L60:
                 /* L80: */
             }
         }
-L90:
-        ;
+    L90:;
     }
-    if (grow * tscal > smlnum)
+    if(grow * tscal > smlnum)
     {
         /* Use the Level 2 BLAS solve if the reciprocal of the bound on */
         /* elements of X is not too small. */
@@ -646,7 +655,7 @@ L90:
     else
     {
         /* Use a Level 1 BLAS solve, scaling intermediate results. */
-        if (xmax > bignum * .5)
+        if(xmax > bignum * .5)
         {
             /* Scale X so that its components are less than or equal to */
             /* BIGNUM in absolute value. */
@@ -658,19 +667,17 @@ L90:
         {
             xmax *= 2.;
         }
-        if (notran)
+        if(notran)
         {
             /* Solve A * x = b */
             i__1 = jlast;
             i__2 = jinc;
-            for (j = jfirst;
-                    i__2 < 0 ? j >= i__1 : j <= i__1;
-                    j += i__2)
+            for(j = jfirst; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2)
             {
                 /* Compute x(j) = b(j) / A(j,j), scaling x if necessary. */
                 i__3 = j;
                 xj = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[j]), f2c_dabs(d__2));
-                if (nounit)
+                if(nounit)
                 {
                     i__3 = maind + j * ab_dim1;
                     z__1.r = tscal * ab[i__3].r;
@@ -682,18 +689,18 @@ L90:
                 {
                     tjjs.r = tscal;
                     tjjs.i = 0.; // , expr subst
-                    if (tscal == 1.)
+                    if(tscal == 1.)
                     {
                         goto L110;
                     }
                 }
-                tjj = (d__1 = tjjs.r, f2c_dabs(d__1)) + (d__2 = d_imag(&tjjs), f2c_dabs( d__2));
-                if (tjj > smlnum)
+                tjj = (d__1 = tjjs.r, f2c_dabs(d__1)) + (d__2 = d_imag(&tjjs), f2c_dabs(d__2));
+                if(tjj > smlnum)
                 {
                     /* f2c_dabs(A(j,j)) > SMLNUM: */
-                    if (tjj < 1.)
+                    if(tjj < 1.)
                     {
-                        if (xj > tjj * bignum)
+                        if(xj > tjj * bignum)
                         {
                             /* Scale x by 1/b(j). */
                             rec = 1. / xj;
@@ -707,17 +714,18 @@ L90:
                     x[i__3].r = z__1.r;
                     x[i__3].i = z__1.i; // , expr subst
                     i__3 = j;
-                    xj = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[j]), f2c_dabs(d__2));
+                    xj = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                         + (d__2 = d_imag(&x[j]), f2c_dabs(d__2));
                 }
-                else if (tjj > 0.)
+                else if(tjj > 0.)
                 {
                     /* 0 < f2c_dabs(A(j,j)) <= SMLNUM: */
-                    if (xj > tjj * bignum)
+                    if(xj > tjj * bignum)
                     {
                         /* Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM */
                         /* to avoid overflow when dividing by A(j,j). */
                         rec = tjj * bignum / xj;
-                        if (cnorm[j] > 1.)
+                        if(cnorm[j] > 1.)
                         {
                             /* Scale by 1/CNORM(j) to avoid overflow when */
                             /* multiplying x(j) times column j. */
@@ -732,16 +740,15 @@ L90:
                     x[i__3].r = z__1.r;
                     x[i__3].i = z__1.i; // , expr subst
                     i__3 = j;
-                    xj = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[j]), f2c_dabs(d__2));
+                    xj = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                         + (d__2 = d_imag(&x[j]), f2c_dabs(d__2));
                 }
                 else
                 {
                     /* A(j,j) = 0: Set x(1:n) = 0, x(j) = 1, and */
                     /* scale = 0, and compute a solution to A*x = 0. */
                     i__3 = *n;
-                    for (i__ = 1;
-                            i__ <= i__3;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__3; ++i__)
                     {
                         i__4 = i__;
                         x[i__4].r = 0.;
@@ -755,12 +762,12 @@ L90:
                     *scale = 0.;
                     xmax = 0.;
                 }
-L110: /* Scale x if necessary to avoid overflow when adding a */
+            L110: /* Scale x if necessary to avoid overflow when adding a */
                 /* multiple of column j of A. */
-                if (xj > 1.)
+                if(xj > 1.)
                 {
                     rec = 1. / xj;
-                    if (cnorm[j] > (bignum - xmax) * rec)
+                    if(cnorm[j] > (bignum - xmax) * rec)
                     {
                         /* Scale x by 1/(2*abs(x(j))). */
                         rec *= .5;
@@ -768,15 +775,15 @@ L110: /* Scale x if necessary to avoid overflow when adding a */
                         *scale *= rec;
                     }
                 }
-                else if (xj * cnorm[j] > bignum - xmax)
+                else if(xj * cnorm[j] > bignum - xmax)
                 {
                     /* Scale x by 1/2. */
                     zdscal_(n, &c_b36, &x[1], &c__1);
                     *scale *= .5;
                 }
-                if (upper)
+                if(upper)
                 {
-                    if (j > 1)
+                    if(j > 1)
                     {
                         /* Compute the update */
                         /* x (fla_max(1,j-kd):j-1) := x (fla_max(1,j-kd):j-1) - */
@@ -784,20 +791,22 @@ L110: /* Scale x if necessary to avoid overflow when adding a */
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
-                        jlen = fla_min(i__3,i__4);
+                        jlen = fla_min(i__3, i__4);
                         i__3 = j;
                         z__2.r = -x[i__3].r;
                         z__2.i = -x[i__3].i; // , expr subst
                         z__1.r = tscal * z__2.r;
                         z__1.i = tscal * z__2.i; // , expr subst
-                        zaxpy_(&jlen, &z__1, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1, &x[j - jlen], &c__1);
+                        zaxpy_(&jlen, &z__1, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1, &x[j - jlen],
+                               &c__1);
                         i__3 = j - 1;
                         i__ = izamax_(&i__3, &x[1], &c__1);
                         i__3 = i__;
-                        xmax = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag( &x[i__]), f2c_dabs(d__2));
+                        xmax = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                               + (d__2 = d_imag(&x[i__]), f2c_dabs(d__2));
                     }
                 }
-                else if (j < *n)
+                else if(j < *n)
                 {
                     /* Compute the update */
                     /* x(j+1:min(j+kd,n)) := x(j+1:min(j+kd,n)) - */
@@ -805,32 +814,31 @@ L110: /* Scale x if necessary to avoid overflow when adding a */
                     /* Computing MIN */
                     i__3 = *kd;
                     i__4 = *n - j; // , expr subst
-                    jlen = fla_min(i__3,i__4);
-                    if (jlen > 0)
+                    jlen = fla_min(i__3, i__4);
+                    if(jlen > 0)
                     {
                         i__3 = j;
                         z__2.r = -x[i__3].r;
                         z__2.i = -x[i__3].i; // , expr subst
                         z__1.r = tscal * z__2.r;
                         z__1.i = tscal * z__2.i; // , expr subst
-                        zaxpy_(&jlen, &z__1, &ab[j * ab_dim1 + 2], &c__1, &x[ j + 1], &c__1);
+                        zaxpy_(&jlen, &z__1, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1], &c__1);
                     }
                     i__3 = *n - j;
                     i__ = j + izamax_(&i__3, &x[j + 1], &c__1);
                     i__3 = i__;
-                    xmax = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[ i__]), f2c_dabs(d__2));
+                    xmax = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                           + (d__2 = d_imag(&x[i__]), f2c_dabs(d__2));
                 }
                 /* L120: */
             }
         }
-        else if (lsame_(trans, "T", 1, 1))
+        else if(lsame_(trans, "T", 1, 1))
         {
             /* Solve A**T * x = b */
             i__2 = jlast;
             i__1 = jinc;
-            for (j = jfirst;
-                    i__1 < 0 ? j >= i__2 : j <= i__2;
-                    j += i__1)
+            for(j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1)
             {
                 /* Compute x(j) = b(j) - sum A(k,j)*x(k). */
                 /* k<>j */
@@ -838,16 +846,16 @@ L110: /* Scale x if necessary to avoid overflow when adding a */
                 xj = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[j]), f2c_dabs(d__2));
                 uscal.r = tscal;
                 uscal.i = 0.; // , expr subst
-                rec = 1. / fla_max(xmax,1.);
-                if (cnorm[j] > (bignum - xj) * rec)
+                rec = 1. / fla_max(xmax, 1.);
+                if(cnorm[j] > (bignum - xj) * rec)
                 {
                     /* If x(j) could overflow, scale x by 1/(2*XMAX). */
                     rec *= .5;
-                    if (nounit)
+                    if(nounit)
                     {
                         i__3 = maind + j * ab_dim1;
                         z__1.r = tscal * ab[i__3].r;
-                        z__1.i = tscal * ab[i__3] .i; // , expr subst
+                        z__1.i = tscal * ab[i__3].i; // , expr subst
                         tjjs.r = z__1.r;
                         tjjs.i = z__1.i; // , expr subst
                     }
@@ -857,18 +865,18 @@ L110: /* Scale x if necessary to avoid overflow when adding a */
                         tjjs.i = 0.; // , expr subst
                     }
                     tjj = (d__1 = tjjs.r, f2c_dabs(d__1)) + (d__2 = d_imag(&tjjs), f2c_dabs(d__2));
-                    if (tjj > 1.)
+                    if(tjj > 1.)
                     {
                         /* Divide by A(j,j) when scaling x if A(j,j) > 1. */
                         /* Computing MIN */
                         d__1 = 1.;
                         d__2 = rec * tjj; // , expr subst
-                        rec = fla_min(d__1,d__2);
+                        rec = fla_min(d__1, d__2);
                         zladiv_f2c_(&z__1, &uscal, &tjjs);
                         uscal.r = z__1.r;
                         uscal.i = z__1.i; // , expr subst
                     }
-                    if (rec < 1.)
+                    if(rec < 1.)
                     {
                         zdscal_(n, &rec, &x[1], &c__1);
                         *scale *= rec;
@@ -877,17 +885,18 @@ L110: /* Scale x if necessary to avoid overflow when adding a */
                 }
                 csumj.r = 0.;
                 csumj.i = 0.; // , expr subst
-                if (uscal.r == 1. && uscal.i == 0.)
+                if(uscal.r == 1. && uscal.i == 0.)
                 {
                     /* If the scaling needed for A in the dot product is 1, */
                     /* call ZDOTU to perform the dot product. */
-                    if (upper)
+                    if(upper)
                     {
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
-                        jlen = fla_min(i__3,i__4);
-                        zdotu_f2c_(&z__1, &jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1, &x[j - jlen], &c__1);
+                        jlen = fla_min(i__3, i__4);
+                        zdotu_f2c_(&z__1, &jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1,
+                                   &x[j - jlen], &c__1);
                         csumj.r = z__1.r;
                         csumj.i = z__1.i; // , expr subst
                     }
@@ -896,8 +905,8 @@ L110: /* Scale x if necessary to avoid overflow when adding a */
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = *n - j; // , expr subst
-                        jlen = fla_min(i__3,i__4);
-                        if (jlen > 1)
+                        jlen = fla_min(i__3, i__4);
+                        if(jlen > 1)
                         {
                             zdotu_f2c_(&z__1, &jlen, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1], &c__1);
                             csumj.r = z__1.r;
@@ -908,23 +917,21 @@ L110: /* Scale x if necessary to avoid overflow when adding a */
                 else
                 {
                     /* Otherwise, use in-line code for the dot product. */
-                    if (upper)
+                    if(upper)
                     {
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
-                        jlen = fla_min(i__3,i__4);
+                        jlen = fla_min(i__3, i__4);
                         i__3 = jlen;
-                        for (i__ = 1;
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__3; ++i__)
                         {
                             i__4 = *kd + i__ - jlen + j * ab_dim1;
                             z__3.r = ab[i__4].r * uscal.r - ab[i__4].i * uscal.i;
                             z__3.i = ab[i__4].r * uscal.i + ab[i__4].i * uscal.r; // , expr subst
                             i__5 = j - jlen - 1 + i__;
                             z__2.r = z__3.r * x[i__5].r - z__3.i * x[i__5].i;
-                            z__2.i = z__3.r * x[i__5].i + z__3.i * x[ i__5].r; // , expr subst
+                            z__2.i = z__3.r * x[i__5].i + z__3.i * x[i__5].r; // , expr subst
                             z__1.r = csumj.r + z__2.r;
                             z__1.i = csumj.i + z__2.i; // , expr subst
                             csumj.r = z__1.r;
@@ -937,18 +944,16 @@ L110: /* Scale x if necessary to avoid overflow when adding a */
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = *n - j; // , expr subst
-                        jlen = fla_min(i__3,i__4);
+                        jlen = fla_min(i__3, i__4);
                         i__3 = jlen;
-                        for (i__ = 1;
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__3; ++i__)
                         {
                             i__4 = i__ + 1 + j * ab_dim1;
                             z__3.r = ab[i__4].r * uscal.r - ab[i__4].i * uscal.i;
                             z__3.i = ab[i__4].r * uscal.i + ab[i__4].i * uscal.r; // , expr subst
                             i__5 = j + i__;
                             z__2.r = z__3.r * x[i__5].r - z__3.i * x[i__5].i;
-                            z__2.i = z__3.r * x[i__5].i + z__3.i * x[ i__5].r; // , expr subst
+                            z__2.i = z__3.r * x[i__5].i + z__3.i * x[i__5].r; // , expr subst
                             z__1.r = csumj.r + z__2.r;
                             z__1.i = csumj.i + z__2.i; // , expr subst
                             csumj.r = z__1.r;
@@ -959,7 +964,7 @@ L110: /* Scale x if necessary to avoid overflow when adding a */
                 }
                 z__1.r = tscal;
                 z__1.i = 0.; // , expr subst
-                if (uscal.r == z__1.r && uscal.i == z__1.i)
+                if(uscal.r == z__1.r && uscal.i == z__1.i)
                 {
                     /* Compute x(j) := ( x(j) - CSUMJ ) / A(j,j) if 1/A(j,j) */
                     /* was not used to scale the dotproduct. */
@@ -970,13 +975,14 @@ L110: /* Scale x if necessary to avoid overflow when adding a */
                     x[i__3].r = z__1.r;
                     x[i__3].i = z__1.i; // , expr subst
                     i__3 = j;
-                    xj = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[j]), f2c_dabs(d__2));
-                    if (nounit)
+                    xj = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                         + (d__2 = d_imag(&x[j]), f2c_dabs(d__2));
+                    if(nounit)
                     {
                         /* Compute x(j) = x(j) / A(j,j), scaling if necessary. */
                         i__3 = maind + j * ab_dim1;
                         z__1.r = tscal * ab[i__3].r;
-                        z__1.i = tscal * ab[i__3] .i; // , expr subst
+                        z__1.i = tscal * ab[i__3].i; // , expr subst
                         tjjs.r = z__1.r;
                         tjjs.i = z__1.i; // , expr subst
                     }
@@ -984,18 +990,18 @@ L110: /* Scale x if necessary to avoid overflow when adding a */
                     {
                         tjjs.r = tscal;
                         tjjs.i = 0.; // , expr subst
-                        if (tscal == 1.)
+                        if(tscal == 1.)
                         {
                             goto L160;
                         }
                     }
                     tjj = (d__1 = tjjs.r, f2c_dabs(d__1)) + (d__2 = d_imag(&tjjs), f2c_dabs(d__2));
-                    if (tjj > smlnum)
+                    if(tjj > smlnum)
                     {
                         /* f2c_dabs(A(j,j)) > SMLNUM: */
-                        if (tjj < 1.)
+                        if(tjj < 1.)
                         {
-                            if (xj > tjj * bignum)
+                            if(xj > tjj * bignum)
                             {
                                 /* Scale X by 1/abs(x(j)). */
                                 rec = 1. / xj;
@@ -1009,10 +1015,10 @@ L110: /* Scale x if necessary to avoid overflow when adding a */
                         x[i__3].r = z__1.r;
                         x[i__3].i = z__1.i; // , expr subst
                     }
-                    else if (tjj > 0.)
+                    else if(tjj > 0.)
                     {
                         /* 0 < f2c_dabs(A(j,j)) <= SMLNUM: */
-                        if (xj > tjj * bignum)
+                        if(xj > tjj * bignum)
                         {
                             /* Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM. */
                             rec = tjj * bignum / xj;
@@ -1030,9 +1036,7 @@ L110: /* Scale x if necessary to avoid overflow when adding a */
                         /* A(j,j) = 0: Set x(1:n) = 0, x(j) = 1, and */
                         /* scale = 0 and compute a solution to A**T *x = 0. */
                         i__3 = *n;
-                        for (i__ = 1;
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__3; ++i__)
                         {
                             i__4 = i__;
                             x[i__4].r = 0.;
@@ -1045,8 +1049,7 @@ L110: /* Scale x if necessary to avoid overflow when adding a */
                         *scale = 0.;
                         xmax = 0.;
                     }
-L160:
-                    ;
+                L160:;
                 }
                 else
                 {
@@ -1062,8 +1065,9 @@ L160:
                 /* Computing MAX */
                 i__3 = j;
                 d__3 = xmax;
-                d__4 = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[j]), f2c_dabs(d__2)); // , expr subst
-                xmax = fla_max(d__3,d__4);
+                d__4 = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                       + (d__2 = d_imag(&x[j]), f2c_dabs(d__2)); // , expr subst
+                xmax = fla_max(d__3, d__4);
                 /* L170: */
             }
         }
@@ -1072,9 +1076,7 @@ L160:
             /* Solve A**H * x = b */
             i__1 = jlast;
             i__2 = jinc;
-            for (j = jfirst;
-                    i__2 < 0 ? j >= i__1 : j <= i__1;
-                    j += i__2)
+            for(j = jfirst; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2)
             {
                 /* Compute x(j) = b(j) - sum A(k,j)*x(k). */
                 /* k<>j */
@@ -1082,12 +1084,12 @@ L160:
                 xj = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[j]), f2c_dabs(d__2));
                 uscal.r = tscal;
                 uscal.i = 0.; // , expr subst
-                rec = 1. / fla_max(xmax,1.);
-                if (cnorm[j] > (bignum - xj) * rec)
+                rec = 1. / fla_max(xmax, 1.);
+                if(cnorm[j] > (bignum - xj) * rec)
                 {
                     /* If x(j) could overflow, scale x by 1/(2*XMAX). */
                     rec *= .5;
-                    if (nounit)
+                    if(nounit)
                     {
                         d_cnjg(&z__2, &ab[maind + j * ab_dim1]);
                         z__1.r = tscal * z__2.r;
@@ -1101,18 +1103,18 @@ L160:
                         tjjs.i = 0.; // , expr subst
                     }
                     tjj = (d__1 = tjjs.r, f2c_dabs(d__1)) + (d__2 = d_imag(&tjjs), f2c_dabs(d__2));
-                    if (tjj > 1.)
+                    if(tjj > 1.)
                     {
                         /* Divide by A(j,j) when scaling x if A(j,j) > 1. */
                         /* Computing MIN */
                         d__1 = 1.;
                         d__2 = rec * tjj; // , expr subst
-                        rec = fla_min(d__1,d__2);
+                        rec = fla_min(d__1, d__2);
                         zladiv_f2c_(&z__1, &uscal, &tjjs);
                         uscal.r = z__1.r;
                         uscal.i = z__1.i; // , expr subst
                     }
-                    if (rec < 1.)
+                    if(rec < 1.)
                     {
                         zdscal_(n, &rec, &x[1], &c__1);
                         *scale *= rec;
@@ -1121,17 +1123,18 @@ L160:
                 }
                 csumj.r = 0.;
                 csumj.i = 0.; // , expr subst
-                if (uscal.r == 1. && uscal.i == 0.)
+                if(uscal.r == 1. && uscal.i == 0.)
                 {
                     /* If the scaling needed for A in the dot product is 1, */
                     /* call ZDOTC to perform the dot product. */
-                    if (upper)
+                    if(upper)
                     {
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
-                        jlen = fla_min(i__3,i__4);
-                        zdotc_f2c_(&z__1, &jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1, &x[j - jlen], &c__1);
+                        jlen = fla_min(i__3, i__4);
+                        zdotc_f2c_(&z__1, &jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1,
+                                   &x[j - jlen], &c__1);
                         csumj.r = z__1.r;
                         csumj.i = z__1.i; // , expr subst
                     }
@@ -1140,8 +1143,8 @@ L160:
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = *n - j; // , expr subst
-                        jlen = fla_min(i__3,i__4);
-                        if (jlen > 1)
+                        jlen = fla_min(i__3, i__4);
+                        if(jlen > 1)
                         {
                             zdotc_f2c_(&z__1, &jlen, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1], &c__1);
                             csumj.r = z__1.r;
@@ -1152,23 +1155,21 @@ L160:
                 else
                 {
                     /* Otherwise, use in-line code for the dot product. */
-                    if (upper)
+                    if(upper)
                     {
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
-                        jlen = fla_min(i__3,i__4);
+                        jlen = fla_min(i__3, i__4);
                         i__3 = jlen;
-                        for (i__ = 1;
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__3; ++i__)
                         {
-                            d_cnjg(&z__4, &ab[*kd + i__ - jlen + j * ab_dim1]) ;
+                            d_cnjg(&z__4, &ab[*kd + i__ - jlen + j * ab_dim1]);
                             z__3.r = z__4.r * uscal.r - z__4.i * uscal.i;
                             z__3.i = z__4.r * uscal.i + z__4.i * uscal.r; // , expr subst
                             i__4 = j - jlen - 1 + i__;
                             z__2.r = z__3.r * x[i__4].r - z__3.i * x[i__4].i;
-                            z__2.i = z__3.r * x[i__4].i + z__3.i * x[ i__4].r; // , expr subst
+                            z__2.i = z__3.r * x[i__4].i + z__3.i * x[i__4].r; // , expr subst
                             z__1.r = csumj.r + z__2.r;
                             z__1.i = csumj.i + z__2.i; // , expr subst
                             csumj.r = z__1.r;
@@ -1181,18 +1182,16 @@ L160:
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = *n - j; // , expr subst
-                        jlen = fla_min(i__3,i__4);
+                        jlen = fla_min(i__3, i__4);
                         i__3 = jlen;
-                        for (i__ = 1;
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__3; ++i__)
                         {
                             d_cnjg(&z__4, &ab[i__ + 1 + j * ab_dim1]);
                             z__3.r = z__4.r * uscal.r - z__4.i * uscal.i;
                             z__3.i = z__4.r * uscal.i + z__4.i * uscal.r; // , expr subst
                             i__4 = j + i__;
                             z__2.r = z__3.r * x[i__4].r - z__3.i * x[i__4].i;
-                            z__2.i = z__3.r * x[i__4].i + z__3.i * x[ i__4].r; // , expr subst
+                            z__2.i = z__3.r * x[i__4].i + z__3.i * x[i__4].r; // , expr subst
                             z__1.r = csumj.r + z__2.r;
                             z__1.i = csumj.i + z__2.i; // , expr subst
                             csumj.r = z__1.r;
@@ -1203,7 +1202,7 @@ L160:
                 }
                 z__1.r = tscal;
                 z__1.i = 0.; // , expr subst
-                if (uscal.r == z__1.r && uscal.i == z__1.i)
+                if(uscal.r == z__1.r && uscal.i == z__1.i)
                 {
                     /* Compute x(j) := ( x(j) - CSUMJ ) / A(j,j) if 1/A(j,j) */
                     /* was not used to scale the dotproduct. */
@@ -1214,8 +1213,9 @@ L160:
                     x[i__3].r = z__1.r;
                     x[i__3].i = z__1.i; // , expr subst
                     i__3 = j;
-                    xj = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[j]), f2c_dabs(d__2));
-                    if (nounit)
+                    xj = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                         + (d__2 = d_imag(&x[j]), f2c_dabs(d__2));
+                    if(nounit)
                     {
                         /* Compute x(j) = x(j) / A(j,j), scaling if necessary. */
                         d_cnjg(&z__2, &ab[maind + j * ab_dim1]);
@@ -1228,18 +1228,18 @@ L160:
                     {
                         tjjs.r = tscal;
                         tjjs.i = 0.; // , expr subst
-                        if (tscal == 1.)
+                        if(tscal == 1.)
                         {
                             goto L210;
                         }
                     }
                     tjj = (d__1 = tjjs.r, f2c_dabs(d__1)) + (d__2 = d_imag(&tjjs), f2c_dabs(d__2));
-                    if (tjj > smlnum)
+                    if(tjj > smlnum)
                     {
                         /* f2c_dabs(A(j,j)) > SMLNUM: */
-                        if (tjj < 1.)
+                        if(tjj < 1.)
                         {
-                            if (xj > tjj * bignum)
+                            if(xj > tjj * bignum)
                             {
                                 /* Scale X by 1/abs(x(j)). */
                                 rec = 1. / xj;
@@ -1253,10 +1253,10 @@ L160:
                         x[i__3].r = z__1.r;
                         x[i__3].i = z__1.i; // , expr subst
                     }
-                    else if (tjj > 0.)
+                    else if(tjj > 0.)
                     {
                         /* 0 < f2c_dabs(A(j,j)) <= SMLNUM: */
-                        if (xj > tjj * bignum)
+                        if(xj > tjj * bignum)
                         {
                             /* Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM. */
                             rec = tjj * bignum / xj;
@@ -1274,9 +1274,7 @@ L160:
                         /* A(j,j) = 0: Set x(1:n) = 0, x(j) = 1, and */
                         /* scale = 0 and compute a solution to A**H *x = 0. */
                         i__3 = *n;
-                        for (i__ = 1;
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__3; ++i__)
                         {
                             i__4 = i__;
                             x[i__4].r = 0.;
@@ -1289,8 +1287,7 @@ L160:
                         *scale = 0.;
                         xmax = 0.;
                     }
-L210:
-                    ;
+                L210:;
                 }
                 else
                 {
@@ -1306,15 +1303,16 @@ L210:
                 /* Computing MAX */
                 i__3 = j;
                 d__3 = xmax;
-                d__4 = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[j]), f2c_dabs(d__2)); // , expr subst
-                xmax = fla_max(d__3,d__4);
+                d__4 = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                       + (d__2 = d_imag(&x[j]), f2c_dabs(d__2)); // , expr subst
+                xmax = fla_max(d__3, d__4);
                 /* L220: */
             }
         }
         *scale /= tscal;
     }
     /* Scale the column norms by 1/TSCAL for return. */
-    if (tscal != 1.)
+    if(tscal != 1.)
     {
         d__1 = 1. / tscal;
         dscal_(n, &d__1, &cnorm[1], &c__1);

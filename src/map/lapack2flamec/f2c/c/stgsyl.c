@@ -1,8 +1,8 @@
-/* ./stgsyl.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/stgsyl.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__2 = 2;
 static aocl_int64_t c_n1 = -1;
@@ -299,16 +299,23 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void stgsyl_(char *trans, integer *ijob, integer *m, integer * n, real *a, integer *lda, real *b, integer *ldb, real *c__, integer * ldc, real *d__, integer *ldd, real *e, integer *lde, real *f, integer *ldf, real *scale, real *dif, real *work, integer *lwork, integer * iwork, integer *info)
+void stgsyl_(char *trans, integer *ijob, integer *m, integer *n, real *a, integer *lda, real *b,
+             integer *ldb, real *c__, integer *ldc, real *d__, integer *ldd, real *e, integer *lde,
+             real *f, integer *ldf, real *scale, real *dif, real *work, integer *lwork,
+             integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"stgsyl inputs: trans %c, ijob %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS ", ldd %" FLA_IS ", lde %" FLA_IS ", ldf %" FLA_IS "",*trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf);
+    snprintf(buffer, 256,
+             "stgsyl inputs: trans %c, ijob %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
+             ", ldb %" FLA_IS ", ldc %" FLA_IS ", ldd %" FLA_IS ", lde %" FLA_IS ", ldf %" FLA_IS
+             "",
+             *trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1, d_offset, e_dim1,
+    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1, d_offset, e_dim1,
         e_offset, f_dim1, f_offset, i__1, i__2, i__3, i__4;
     /* Builtin functions */
     double sqrt(doublereal);
@@ -319,20 +326,29 @@ void stgsyl_(char *trans, integer *ijob, integer *m, integer * n, real *a, integ
     extern logical lsame_(char *, char *, integer, integer);
     integer ifunc;
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     integer linfo;
     extern /* Subroutine */
-    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *);
     integer lwmin;
     real scale2, dscale;
     extern /* Subroutine */
-    void stgsy2_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *, integer *);
+        void
+        stgsy2_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *,
+                real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *,
+                real *, real *, integer *, integer *, integer *);
     real scaloc;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+        void
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     integer iround;
     logical notran;
     aocl_int64_t isolve;
@@ -385,7 +401,7 @@ void stgsyl_(char *trans, integer *ijob, integer *m, integer * n, real *a, integ
     notran = lsame_(trans, "N", 1, 1);
     lquery = *lwork == -1;
     scale2 = 0.f;
-    if (! notran && ! lsame_(trans, "T", 1, 1))
+    if(!notran && !lsame_(trans, "T", 1, 1))
     {
         *info = -1;
     }
@@ -406,27 +422,27 @@ void stgsyl_(char *trans, integer *ijob, integer *m, integer * n, real *a, integ
         {
             *info = -4;
         }
-        else if (*lda < fla_max(1,*m))
+        else if(*lda < fla_max(1, *m))
         {
             *info = -6;
         }
-        else if (*ldb < fla_max(1,*n))
+        else if(*ldb < fla_max(1, *n))
         {
             *info = -8;
         }
-        else if (*ldc < fla_max(1,*m))
+        else if(*ldc < fla_max(1, *m))
         {
             *info = -10;
         }
-        else if (*ldd < fla_max(1,*m))
+        else if(*ldd < fla_max(1, *m))
         {
             *info = -12;
         }
-        else if (*lde < fla_max(1,*n))
+        else if(*lde < fla_max(1, *n))
         {
             *info = -14;
         }
-        else if (*ldf < fla_max(1,*m))
+        else if(*ldf < fla_max(1, *m))
         {
             *info = -16;
         }
@@ -440,7 +456,7 @@ void stgsyl_(char *trans, integer *ijob, integer *m, integer * n, real *a, integ
                 /* Computing MAX */
                 i__1 = 1;
                 i__2 = (*m << 1) * *n; // , expr subst
-                lwmin = fla_max(i__1,i__2);
+                lwmin = fla_max(i__1, i__2);
             }
             else
             {
@@ -451,7 +467,7 @@ void stgsyl_(char *trans, integer *ijob, integer *m, integer * n, real *a, integ
         {
             lwmin = 1;
         }
-        work[1] = aocl_lapack_sroundup_lwork(&lwmin);
+        work[1] = (real)lwmin;
         if(*lwork < lwmin && !lquery)
         {
             *info = -20;
@@ -493,8 +509,8 @@ void stgsyl_(char *trans, integer *ijob, integer *m, integer * n, real *a, integ
         if(*ijob >= 3)
         {
             ifunc = *ijob - 2;
-            aocl_lapack_slaset("F", m, n, &c_b14, &c_b14, &c__[c_offset], ldc);
-            aocl_lapack_slaset("F", m, n, &c_b14, &c_b14, &f[f_offset], ldf);
+            slaset_("F", m, n, &c_b14, &c_b14, &c__[c_offset], ldc);
+            slaset_("F", m, n, &c_b14, &c_b14, &f[f_offset], ldf);
         }
         else if(*ijob >= 1 && notran)
         {
@@ -510,9 +526,9 @@ void stgsyl_(char *trans, integer *ijob, integer *m, integer * n, real *a, integ
             dscale = 0.f;
             dsum = 1.f;
             pq = 0;
-            aocl_lapack_stgsy2(trans, &ifunc, m, n, &a[a_offset], lda, &b[b_offset], ldb,
-                               &c__[c_offset], ldc, &d__[d_offset], ldd, &e[e_offset], lde,
-                               &f[f_offset], ldf, scale, &dsum, &dscale, &iwork[1], &pq, info);
+            stgsy2_(trans, &ifunc, m, n, &a[a_offset], lda, &b[b_offset], ldb, &c__[c_offset], ldc,
+                    &d__[d_offset], ldd, &e[e_offset], lde, &f[f_offset], ldf, scale, &dsum,
+                    &dscale, &iwork[1], &pq, info);
             if(dscale != 0.f)
             {
                 if(*ijob == 1 || *ijob == 3)
@@ -568,7 +584,7 @@ L40:
     }
     goto L40;
 L50:
-    iwork[p + 1] = (aocl_int_t)(*m + 1);
+    iwork[p + 1] = *m + 1;
     if(iwork[p] == iwork[p + 1])
     {
         --p;
@@ -594,7 +610,7 @@ L60:
     }
     goto L60;
 L70:
-    iwork[q + 1] = (aocl_int_t)(*n + 1);
+    iwork[q + 1] = *n + 1;
     if(iwork[q] == iwork[q + 1])
     {
         --q;
@@ -625,11 +641,11 @@ L70:
                     ie = iwork[i__ + 1] - 1;
                     mb = ie - is + 1;
                     ppqq = 0;
-                    aocl_lapack_stgsy2(trans, &ifunc, &mb, &nb, &a[is + is * a_dim1], lda,
-                                       &b[js + js * b_dim1], ldb, &c__[is + js * c_dim1], ldc,
-                                       &d__[is + is * d_dim1], ldd, &e[js + js * e_dim1], lde,
-                                       &f[is + js * f_dim1], ldf, &scaloc, &dsum, &dscale,
-                                       &iwork[q + 2], &ppqq, &linfo);
+                    stgsy2_(trans, &ifunc, &mb, &nb, &a[is + is * a_dim1], lda,
+                            &b[js + js * b_dim1], ldb, &c__[is + js * c_dim1], ldc,
+                            &d__[is + is * d_dim1], ldd, &e[js + js * e_dim1], lde,
+                            &f[is + js * f_dim1], ldf, &scaloc, &dsum, &dscale, &iwork[q + 2],
+                            &ppqq, &linfo);
                     if(linfo > 0)
                     {
                         *info = linfo;
@@ -648,7 +664,7 @@ L70:
                         for(k = js; k <= i__3; ++k)
                         {
                             i__4 = is - 1;
-                            aocl_blas_sscal(&i__4, &scaloc, &c__[k * c_dim1 + 1], &c__1);
+                            sscal_(&i__4, &scaloc, &c__[k * c_dim1 + 1], &c__1);
                             i__4 = is - 1;
                             aocl_blas_sscal(&i__4, &scaloc, &f[k * f_dim1 + 1], &c__1);
                             /* L90: */
@@ -659,7 +675,7 @@ L70:
                             i__4 = *m - ie;
                             aocl_blas_sscal(&i__4, &scaloc, &c__[ie + 1 + k * c_dim1], &c__1);
                             i__4 = *m - ie;
-                            aocl_blas_sscal(&i__4, &scaloc, &f[ie + 1 + k * f_dim1], &c__1);
+                            sscal_(&i__4, &scaloc, &f[ie + 1 + k * f_dim1], &c__1);
                             /* L100: */
                         }
                         i__3 = *n;
@@ -676,24 +692,22 @@ L70:
                     if(i__ > 1)
                     {
                         i__3 = is - 1;
-                        aocl_blas_sgemm("N", "N", &i__3, &nb, &mb, &c_b51, &a[is * a_dim1 + 1], lda,
-                                        &c__[is + js * c_dim1], ldc, &c_b52, &c__[js * c_dim1 + 1],
-                                        ldc);
+                        sgemm_("N", "N", &i__3, &nb, &mb, &c_b51, &a[is * a_dim1 + 1], lda,
+                               &c__[is + js * c_dim1], ldc, &c_b52, &c__[js * c_dim1 + 1], ldc);
                         i__3 = is - 1;
-                        aocl_blas_sgemm("N", "N", &i__3, &nb, &mb, &c_b51, &d__[is * d_dim1 + 1],
-                                        ldd, &c__[is + js * c_dim1], ldc, &c_b52,
-                                        &f[js * f_dim1 + 1], ldf);
+                        sgemm_("N", "N", &i__3, &nb, &mb, &c_b51, &d__[is * d_dim1 + 1], ldd,
+                               &c__[is + js * c_dim1], ldc, &c_b52, &f[js * f_dim1 + 1], ldf);
                     }
                     if(j < q)
                     {
                         i__3 = *n - je;
-                        aocl_blas_sgemm("N", "N", &mb, &i__3, &nb, &c_b52, &f[is + js * f_dim1],
-                                        ldf, &b[js + (je + 1) * b_dim1], ldb, &c_b52,
-                                        &c__[is + (je + 1) * c_dim1], ldc);
+                        sgemm_("N", "N", &mb, &i__3, &nb, &c_b52, &f[is + js * f_dim1], ldf,
+                               &b[js + (je + 1) * b_dim1], ldb, &c_b52,
+                               &c__[is + (je + 1) * c_dim1], ldc);
                         i__3 = *n - je;
-                        aocl_blas_sgemm("N", "N", &mb, &i__3, &nb, &c_b52, &f[is + js * f_dim1],
-                                        ldf, &e[js + (je + 1) * e_dim1], lde, &c_b52,
-                                        &f[is + (je + 1) * f_dim1], ldf);
+                        sgemm_("N", "N", &mb, &i__3, &nb, &c_b52, &f[is + js * f_dim1], ldf,
+                               &e[js + (je + 1) * e_dim1], lde, &c_b52, &f[is + (je + 1) * f_dim1],
+                               ldf);
                     }
                     /* L120: */
                 }
@@ -751,11 +765,10 @@ L70:
                 js = iwork[j];
                 je = iwork[j + 1] - 1;
                 nb = je - js + 1;
-                aocl_lapack_stgsy2(trans, &ifunc, &mb, &nb, &a[is + is * a_dim1], lda,
-                                   &b[js + js * b_dim1], ldb, &c__[is + js * c_dim1], ldc,
-                                   &d__[is + is * d_dim1], ldd, &e[js + js * e_dim1], lde,
-                                   &f[is + js * f_dim1], ldf, &scaloc, &dsum, &dscale,
-                                   &iwork[q + 2], &ppqq, &linfo);
+                stgsy2_(trans, &ifunc, &mb, &nb, &a[is + is * a_dim1], lda, &b[js + js * b_dim1],
+                        ldb, &c__[is + js * c_dim1], ldc, &d__[is + is * d_dim1], ldd,
+                        &e[js + js * e_dim1], lde, &f[is + js * f_dim1], ldf, &scaloc, &dsum,
+                        &dscale, &iwork[q + 2], &ppqq, &linfo);
                 if(linfo > 0)
                 {
                     *info = linfo;
@@ -782,9 +795,9 @@ L70:
                     for(k = js; k <= i__3; ++k)
                     {
                         i__4 = *m - ie;
-                        aocl_blas_sscal(&i__4, &scaloc, &c__[ie + 1 + k * c_dim1], &c__1);
+                        sscal_(&i__4, &scaloc, &c__[ie + 1 + k * c_dim1], &c__1);
                         i__4 = *m - ie;
-                        aocl_blas_sscal(&i__4, &scaloc, &f[ie + 1 + k * f_dim1], &c__1);
+                        sscal_(&i__4, &scaloc, &f[ie + 1 + k * f_dim1], &c__1);
                         /* L180: */
                     }
                     i__3 = *n;
@@ -800,29 +813,27 @@ L70:
                 if(j > p + 2)
                 {
                     i__3 = js - 1;
-                    aocl_blas_sgemm("N", "T", &mb, &i__3, &nb, &c_b52, &c__[is + js * c_dim1], ldc,
-                                    &b[js * b_dim1 + 1], ldb, &c_b52, &f[is + f_dim1], ldf);
+                    sgemm_("N", "T", &mb, &i__3, &nb, &c_b52, &c__[is + js * c_dim1], ldc,
+                           &b[js * b_dim1 + 1], ldb, &c_b52, &f[is + f_dim1], ldf);
                     i__3 = js - 1;
-                    aocl_blas_sgemm("N", "T", &mb, &i__3, &nb, &c_b52, &f[is + js * f_dim1], ldf,
-                                    &e[js * e_dim1 + 1], lde, &c_b52, &f[is + f_dim1], ldf);
+                    sgemm_("N", "T", &mb, &i__3, &nb, &c_b52, &f[is + js * f_dim1], ldf,
+                           &e[js * e_dim1 + 1], lde, &c_b52, &f[is + f_dim1], ldf);
                 }
                 if(i__ < p)
                 {
                     i__3 = *m - ie;
-                    aocl_blas_sgemm("T", "N", &i__3, &nb, &mb, &c_b51, &a[is + (ie + 1) * a_dim1],
-                                    lda, &c__[is + js * c_dim1], ldc, &c_b52,
-                                    &c__[ie + 1 + js * c_dim1], ldc);
+                    sgemm_("T", "N", &i__3, &nb, &mb, &c_b51, &a[is + (ie + 1) * a_dim1], lda,
+                           &c__[is + js * c_dim1], ldc, &c_b52, &c__[ie + 1 + js * c_dim1], ldc);
                     i__3 = *m - ie;
-                    aocl_blas_sgemm("T", "N", &i__3, &nb, &mb, &c_b51, &d__[is + (ie + 1) * d_dim1],
-                                    ldd, &f[is + js * f_dim1], ldf, &c_b52,
-                                    &c__[ie + 1 + js * c_dim1], ldc);
+                    sgemm_("T", "N", &i__3, &nb, &mb, &c_b51, &d__[is + (ie + 1) * d_dim1], ldd,
+                           &f[is + js * f_dim1], ldf, &c_b52, &c__[ie + 1 + js * c_dim1], ldc);
                 }
                 /* L200: */
             }
             /* L210: */
         }
     }
-    work[1] = (real) lwmin;
+    work[1] = (real)lwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of STGSYL */

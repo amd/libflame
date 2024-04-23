@@ -116,7 +116,8 @@ higher precision or correctly rounded or */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlaev2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *rt1, doublereal *rt2, doublereal *cs1, doublereal *sn1)
+void dlaev2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *rt1, doublereal *rt2,
+             doublereal *cs1, doublereal *sn1)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
@@ -147,7 +148,7 @@ void dlaev2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *rt1, dou
     adf = f2c_dabs(df);
     tb = *b + *b;
     ab = f2c_dabs(tb);
-    if (f2c_dabs(*a) > f2c_dabs(*c__))
+    if(f2c_dabs(*a) > f2c_dabs(*c__))
     {
         acmx = *a;
         acmn = *c__;
@@ -211,7 +212,7 @@ void dlaev2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *rt1, dou
         sgn2 = -1;
     }
     acs = f2c_dabs(cs);
-    if (acs > ab)
+    if(acs > ab)
     {
         ct = -tb / cs;
         *sn1 = 1. / sqrt(ct * ct + 1.);

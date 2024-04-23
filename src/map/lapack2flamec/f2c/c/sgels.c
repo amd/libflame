@@ -1,8 +1,8 @@
-/* ./sgels.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sgels.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
@@ -192,7 +192,8 @@ the least squares solution could not be */
 /* > \ingroup gels */
 /* ===================================================================== */
 /* Subroutine */
-void sgels_(char *trans, integer *m, integer *n, integer * nrhs, real *a, integer *lda, real *b, integer *ldb, real *work, integer *lwork, integer *info)
+void sgels_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b,
+            integer *ldb, real *work, integer *lwork, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgels(trans, m, n, nrhs, a, lda, b, ldb, work, lwork, info);
@@ -232,21 +233,34 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     integer wsize;
     real rwork[1];
     extern /* Subroutine */
-    void slabad_(real *, real *);
+        void
+        slabad_(real *, real *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer scllen;
     real bignum;
     extern /* Subroutine */
-    void sgelqf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+        void
+        sgelqf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *),
+        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
+                integer *, integer *),
+        sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *),
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     real smlnum;
     extern /* Subroutine */
-    void sormlq_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        sormlq_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
+                integer *, real *, integer *, integer *);
     logical lquery;
     extern /* Subroutine */
-    void sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), strtrs_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
+        void
+        sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
+                integer *, real *, integer *, integer *),
+        strtrs_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *,
+                integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -279,9 +293,9 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     --work;
     /* Function Body */
     *info = 0;
-    mn = fla_min(*m,*n);
+    mn = fla_min(*m, *n);
     lquery = *lwork == -1;
-    if (! (lsame_(trans, "N", 1, 1) || lsame_(trans, "T", 1, 1)))
+    if(!(lsame_(trans, "N", 1, 1) || lsame_(trans, "T", 1, 1)))
     {
         *info = -1;
     }
@@ -297,15 +311,15 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -6;
     }
     else /* if(complicated condition) */
     {
         /* Computing MAX */
-        i__1 = fla_max(1,*m);
-        if (*ldb < fla_max(i__1,*n))
+        i__1 = fla_max(1, *m);
+        if(*ldb < fla_max(i__1, *n))
         {
             *info = -8;
         }
@@ -313,8 +327,8 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
         {
             /* Computing MAX */
             i__1 = 1;
-            i__2 = mn + fla_max(mn,*nrhs); // , expr subst
-            if (*lwork < fla_max(i__1,i__2) && ! lquery)
+            i__2 = mn + fla_max(mn, *nrhs); // , expr subst
+            if(*lwork < fla_max(i__1, i__2) && !lquery)
             {
                 *info = -10;
             }
@@ -324,51 +338,51 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     if(*info == 0 || *info == -10)
     {
         tpsd = TRUE_;
-        if (lsame_(trans, "N", 1, 1))
+        if(lsame_(trans, "N", 1, 1))
         {
             tpsd = FALSE_;
         }
         if(*m >= *n)
         {
-            nb = aocl_lapack_ilaenv(&c__1, "SGEQRF", " ", m, n, &c_n1, &c_n1);
+            nb = ilaenv_(&c__1, "SGEQRF", " ", m, n, &c_n1, &c_n1);
             if(tpsd)
             {
                 /* Computing MAX */
                 i__1 = nb;
-                i__2 = ilaenv_(&c__1, "SORMQR", "LN", m, nrhs, n, & c_n1); // , expr subst
-                nb = fla_max(i__1,i__2);
+                i__2 = ilaenv_(&c__1, "SORMQR", "LN", m, nrhs, n, &c_n1); // , expr subst
+                nb = fla_max(i__1, i__2);
             }
             else
             {
                 /* Computing MAX */
                 i__1 = nb;
-                i__2 = ilaenv_(&c__1, "SORMQR", "LT", m, nrhs, n, & c_n1); // , expr subst
-                nb = fla_max(i__1,i__2);
+                i__2 = ilaenv_(&c__1, "SORMQR", "LT", m, nrhs, n, &c_n1); // , expr subst
+                nb = fla_max(i__1, i__2);
             }
         }
         else
         {
-            nb = aocl_lapack_ilaenv(&c__1, "SGELQF", " ", m, n, &c_n1, &c_n1);
+            nb = ilaenv_(&c__1, "SGELQF", " ", m, n, &c_n1, &c_n1);
             if(tpsd)
             {
                 /* Computing MAX */
                 i__1 = nb;
-                i__2 = ilaenv_(&c__1, "SORMLQ", "LT", n, nrhs, m, & c_n1); // , expr subst
-                nb = fla_max(i__1,i__2);
+                i__2 = ilaenv_(&c__1, "SORMLQ", "LT", n, nrhs, m, &c_n1); // , expr subst
+                nb = fla_max(i__1, i__2);
             }
             else
             {
                 /* Computing MAX */
                 i__1 = nb;
-                i__2 = ilaenv_(&c__1, "SORMLQ", "LN", n, nrhs, m, & c_n1); // , expr subst
-                nb = fla_max(i__1,i__2);
+                i__2 = ilaenv_(&c__1, "SORMLQ", "LN", n, nrhs, m, &c_n1); // , expr subst
+                nb = fla_max(i__1, i__2);
             }
         }
         /* Computing MAX */
         i__1 = 1;
-        i__2 = mn + fla_max(mn,*nrhs) * nb; // , expr subst
-        wsize = fla_max(i__1,i__2);
-        work[1] = (real) wsize;
+        i__2 = mn + fla_max(mn, *nrhs) * nb; // , expr subst
+        wsize = fla_max(i__1, i__2);
+        work[1] = (real)wsize;
     }
     if(*info != 0)
     {
@@ -382,10 +396,10 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     }
     /* Quick return if possible */
     /* Computing MIN */
-    i__1 = fla_min(*m,*n);
-    if (fla_min(i__1,*nrhs) == 0)
+    i__1 = fla_min(*m, *n);
+    if(fla_min(i__1, *nrhs) == 0)
     {
-        i__1 = fla_max(*m,*n);
+        i__1 = fla_max(*m, *n);
         slaset_("Full", &i__1, nrhs, &c_b33, &c_b33, &b[b_offset], ldb);
         return;
     }
@@ -410,7 +424,7 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     else if(anrm == 0.f)
     {
         /* Matrix all zero. Return zero solution. */
-        i__1 = fla_max(*m,*n);
+        i__1 = fla_max(*m, *n);
         slaset_("F", &i__1, nrhs, &c_b33, &c_b33, &b[b_offset], ldb);
         goto L50;
     }
@@ -437,19 +451,20 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     {
         /* compute QR factorization of A */
         i__1 = *lwork - mn;
-        aocl_lapack_sgeqrf(m, n, &a[a_offset], lda, &work[1], &work[mn + 1], &i__1, info);
+        sgeqrf_(m, n, &a[a_offset], lda, &work[1], &work[mn + 1], &i__1, info);
         /* workspace at least N, optimally N*NB */
         if(!tpsd)
         {
             /* Least-Squares Problem min || A * X - B || */
             /* B(1:M,1:NRHS) := Q**T * B(1:M,1:NRHS) */
             i__1 = *lwork - mn;
-            aocl_lapack_sormqr("Left", "Transpose", m, nrhs, n, &a[a_offset], lda, &work[1],
-                               &b[b_offset], ldb, &work[mn + 1], &i__1, info);
+            sormqr_("Left", "Transpose", m, nrhs, n, &a[a_offset], lda, &work[1], &b[b_offset], ldb,
+                    &work[mn + 1], &i__1, info);
             /* workspace at least NRHS, optimally NRHS*NB */
             /* B(1:N,1:NRHS) := inv(R) * B(1:N,1:NRHS) */
-            strtrs_("Upper", "No transpose", "Non-unit", n, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
-            if (*info > 0)
+            strtrs_("Upper", "No transpose", "Non-unit", n, nrhs, &a[a_offset], lda, &b[b_offset],
+                    ldb, info);
+            if(*info > 0)
             {
                 return;
             }
@@ -459,8 +474,8 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
         {
             /* Underdetermined system of equations A**T * X = B */
             /* B(1:N,1:NRHS) := inv(R**T) * B(1:N,1:NRHS) */
-            aocl_lapack_strtrs("Upper", "Transpose", "Non-unit", n, nrhs, &a[a_offset], lda,
-                               &b[b_offset], ldb, info);
+            strtrs_("Upper", "Transpose", "Non-unit", n, nrhs, &a[a_offset], lda, &b[b_offset], ldb,
+                    info);
             if(*info > 0)
             {
                 return;
@@ -479,8 +494,8 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
             }
             /* B(1:M,1:NRHS) := Q(1:N,:) * B(1:N,1:NRHS) */
             i__1 = *lwork - mn;
-            aocl_lapack_sormqr("Left", "No transpose", m, nrhs, n, &a[a_offset], lda, &work[1],
-                               &b[b_offset], ldb, &work[mn + 1], &i__1, info);
+            sormqr_("Left", "No transpose", m, nrhs, n, &a[a_offset], lda, &work[1], &b[b_offset],
+                    ldb, &work[mn + 1], &i__1, info);
             /* workspace at least NRHS, optimally NRHS*NB */
             scllen = *m;
         }
@@ -489,14 +504,15 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     {
         /* Compute LQ factorization of A */
         i__1 = *lwork - mn;
-        aocl_lapack_sgelqf(m, n, &a[a_offset], lda, &work[1], &work[mn + 1], &i__1, info);
+        sgelqf_(m, n, &a[a_offset], lda, &work[1], &work[mn + 1], &i__1, info);
         /* workspace at least M, optimally M*NB. */
         if(!tpsd)
         {
             /* underdetermined system of equations A * X = B */
             /* B(1:M,1:NRHS) := inv(L) * B(1:M,1:NRHS) */
-            strtrs_("Lower", "No transpose", "Non-unit", m, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
-            if (*info > 0)
+            strtrs_("Lower", "No transpose", "Non-unit", m, nrhs, &a[a_offset], lda, &b[b_offset],
+                    ldb, info);
+            if(*info > 0)
             {
                 return;
             }
@@ -514,8 +530,8 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
             }
             /* B(1:N,1:NRHS) := Q(1:N,:)**T * B(1:M,1:NRHS) */
             i__1 = *lwork - mn;
-            aocl_lapack_sormlq("Left", "Transpose", n, nrhs, m, &a[a_offset], lda, &work[1],
-                               &b[b_offset], ldb, &work[mn + 1], &i__1, info);
+            sormlq_("Left", "Transpose", n, nrhs, m, &a[a_offset], lda, &work[1], &b[b_offset], ldb,
+                    &work[mn + 1], &i__1, info);
             /* workspace at least NRHS, optimally NRHS*NB */
             scllen = *n;
         }
@@ -524,12 +540,12 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
             /* overdetermined system min || A**T * X - B || */
             /* B(1:N,1:NRHS) := Q * B(1:N,1:NRHS) */
             i__1 = *lwork - mn;
-            aocl_lapack_sormlq("Left", "No transpose", n, nrhs, m, &a[a_offset], lda, &work[1],
-                               &b[b_offset], ldb, &work[mn + 1], &i__1, info);
+            sormlq_("Left", "No transpose", n, nrhs, m, &a[a_offset], lda, &work[1], &b[b_offset],
+                    ldb, &work[mn + 1], &i__1, info);
             /* workspace at least NRHS, optimally NRHS*NB */
             /* B(1:M,1:NRHS) := inv(L**T) * B(1:M,1:NRHS) */
-            aocl_lapack_strtrs("Lower", "Transpose", "Non-unit", m, nrhs, &a[a_offset], lda,
-                               &b[b_offset], ldb, info);
+            strtrs_("Lower", "Transpose", "Non-unit", m, nrhs, &a[a_offset], lda, &b[b_offset], ldb,
+                    info);
             if(*info > 0)
             {
                 return;
@@ -555,7 +571,7 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
         slascl_("G", &c__0, &c__0, &bignum, &bnrm, &scllen, nrhs, &b[b_offset], ldb, info);
     }
 L50:
-    work[1] = (real) wsize;
+    work[1] = (real)wsize;
     return;
     /* End of SGELS */
 }

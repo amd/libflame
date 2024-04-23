@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/sbdsvdx.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/sbdsvdx.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b10 = 1.f;
 static doublereal c_b14 = -.125;
@@ -12,11 +15,17 @@ static integer c__2 = 2;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SBDSVDX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sbdsvdx .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sbdsvdx
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sbdsvdx .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sbdsvdx
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sbdsvdx .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sbdsvdx
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -84,7 +93,7 @@ e_{
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': B is upper bidiagonal;
-*/
+ */
 /* > = 'L': B is lower bidiagonal. */
 /* > \endverbatim */
 /* > */
@@ -92,7 +101,7 @@ e_{
 /* > \verbatim */
 /* > JOBZ is CHARACTER*1 */
 /* > = 'N': Compute singular values only;
-*/
+ */
 /* > = 'V': Compute singular values and singular vectors. */
 /* > \endverbatim */
 /* > */
@@ -229,7 +238,9 @@ if RANGE = 'V', the exact value of */
 /* > \ingroup realOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *e, real *vl, real *vu, integer *il, integer *iu, integer *ns, real *s, real *z__, integer *ldz, real *work, integer * iwork, integer *info)
+void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *e, real *vl,
+              real *vu, integer *il, integer *iu, integer *ns, real *s, real *z__, integer *ldz,
+              real *work, integer *iwork, integer *info)
 {
     /* System generated locals */
     integer z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
@@ -258,7 +269,8 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
     extern logical lsame_(char *, char *, integer, integer);
     integer idtgk, ietgk;
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     integer iltgk, itemp, icolz;
     logical allsv;
     integer idptr;
@@ -271,24 +283,32 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
     integer isplt;
     real ortol, vutgk;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * );
+        void
+        scopy_(integer *, real *, integer *, real *, integer *),
+        sswap_(integer *, real *, integer *, real *, integer *);
     logical wantz;
     char rngvx[1];
     integer irowu, irowv;
     extern /* Subroutine */
-    void saxpy_(integer *, real *, real *, integer *, real *, integer *);
+        void
+        saxpy_(integer *, real *, real *, integer *, real *, integer *);
     integer irowz, iifail;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real abstol;
     extern /* Subroutine */
-    void slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+        void
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     real thresh;
     integer iiwork;
     extern /* Subroutine */
-    void sstevx_(char *, char *, integer *, real *, real *, real *, real *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *, integer * );
+        void
+        sstevx_(char *, char *, integer *, real *, real *, real *, real *, integer *, integer *,
+                real *, integer *, real *, real *, integer *, real *, integer *, integer *,
+                integer *);
     /* -- LAPACK driver routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -326,55 +346,55 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
     wantz = lsame_(jobz, "V", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
     *info = 0;
-    if (! lsame_(uplo, "U", 1, 1) && ! lower)
+    if(!lsame_(uplo, "U", 1, 1) && !lower)
     {
         *info = -1;
     }
-    else if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    else if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (allsv || valsv || indsv))
+    else if(!(allsv || valsv || indsv))
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*n > 0)
+    else if(*n > 0)
     {
-        if (valsv)
+        if(valsv)
         {
-            if (*vl < 0.f)
+            if(*vl < 0.f)
             {
                 *info = -7;
             }
-            else if (*vu <= *vl)
+            else if(*vu <= *vl)
             {
                 *info = -8;
             }
         }
-        else if (indsv)
+        else if(indsv)
         {
-            if (*il < 1 || *il > fla_max(1,*n))
+            if(*il < 1 || *il > fla_max(1, *n))
             {
                 *info = -9;
             }
-            else if (*iu < fla_min(*n,*il) || *iu > *n)
+            else if(*iu < fla_min(*n, *il) || *iu > *n)
             {
                 *info = -10;
             }
         }
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (*ldz < 1 || wantz && *ldz < *n << 1)
+        if(*ldz < 1 || wantz && *ldz < *n << 1)
         {
             *info = -14;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SBDSVDX", &i__1, (ftnlen)7);
@@ -382,26 +402,26 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
     }
     /* Quick return if possible (N.LE.1) */
     *ns = 0;
-    if (*n == 0)
+    if(*n == 0)
     {
         return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (allsv || indsv)
+        if(allsv || indsv)
         {
             *ns = 1;
             s[1] = f2c_dabs(d__[1]);
         }
         else
         {
-            if (*vl < f2c_dabs(d__[1]) && *vu >= f2c_dabs(d__[1]))
+            if(*vl < f2c_dabs(d__[1]) && *vu >= f2c_dabs(d__[1]))
             {
                 *ns = 1;
                 s[1] = f2c_dabs(d__[1]);
             }
         }
-        if (wantz)
+        if(wantz)
         {
             z__[z_dim1 + 1] = r_sign(&c_b10, &d__[1]);
             z__[z_dim1 + 2] = 1.f;
@@ -419,12 +439,12 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
     /* J. Sci. and Stat. Comput., 11:873–912, 1990.) */
     /* Computing MAX */
     /* Computing MIN */
-    d__1 = (doublereal) eps;
+    d__1 = (doublereal)eps;
     r__3 = 100.f;
     r__4 = pow_dd(&d__1, &c_b14); // , expr subst
     r__1 = 10.f;
-    r__2 = fla_min(r__3,r__4); // , expr subst
-    tol = fla_max(r__1,r__2) * eps;
+    r__2 = fla_min(r__3, r__4); // , expr subst
+    tol = fla_max(r__1, r__2) * eps;
     /* Compute approximate maximum, minimum singular values. */
     i__ = isamax_(n, &d__[1], &c__1);
     smax = (r__1 = d__[i__], f2c_abs(r__1));
@@ -433,45 +453,41 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
     /* Computing MAX */
     r__2 = smax;
     r__3 = (r__1 = e[i__], f2c_abs(r__1)); // , expr subst
-    smax = fla_max(r__2,r__3);
+    smax = fla_max(r__2, r__3);
     /* Compute threshold for neglecting D's and E's. */
     smin = f2c_dabs(d__[1]);
-    if (smin != 0.f)
+    if(smin != 0.f)
     {
         mu = smin;
         i__1 = *n;
-        for (i__ = 2;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 2; i__ <= i__1; ++i__)
         {
-            mu = (r__2 = d__[i__], f2c_abs(r__2)) * (mu / (mu + (r__1 = e[i__ - 1], f2c_abs(r__1))));
-            smin = fla_min(smin,mu);
-            if (smin == 0.f)
+            mu = (r__2 = d__[i__], f2c_abs(r__2))
+                 * (mu / (mu + (r__1 = e[i__ - 1], f2c_abs(r__1))));
+            smin = fla_min(smin, mu);
+            if(smin == 0.f)
             {
                 goto L2;
             }
         }
-L2:
-        ;
+    L2:;
     }
-    smin /= sqrt((real) (*n));
+    smin /= sqrt((real)(*n));
     thresh = tol * smin;
     /* Check for zeros in D and E (splits), i.e. submatrices. */
     i__1 = *n - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((r__1 = d__[i__], f2c_abs(r__1)) <= thresh)
+        if((r__1 = d__[i__], f2c_abs(r__1)) <= thresh)
         {
             d__[i__] = 0.f;
         }
-        if ((r__1 = e[i__], f2c_abs(r__1)) <= thresh)
+        if((r__1 = e[i__], f2c_abs(r__1)) <= thresh)
         {
             e[i__] = 0.f;
         }
     }
-    if ((r__1 = d__[*n], f2c_abs(r__1)) <= thresh)
+    if((r__1 = d__[*n], f2c_abs(r__1)) <= thresh)
     {
         d__[*n] = 0.f;
     }
@@ -488,21 +504,21 @@ L2:
     iutgk = 0;
     vltgk = 0.f;
     vutgk = 0.f;
-    if (allsv)
+    if(allsv)
     {
         /* All singular values will be found. We aim at -s (see */
         /* leading comments) with RNGVX = 'I'. IL and IU are set */
         /* later (as ILTGK and IUTGK) according to the dimension */
         /* of the active submatrix. */
         *(unsigned char *)rngvx = 'I';
-        if (wantz)
+        if(wantz)
         {
             i__1 = *n << 1;
             i__2 = *n + 1;
             slaset_("F", &i__1, &i__2, &c_b20, &c_b20, &z__[z_offset], ldz);
         }
     }
-    else if (valsv)
+    else if(valsv)
     {
         /* Find singular values in a half-open interval. We aim */
         /* at -s (see leading comments) and we swap VL and VU */
@@ -512,9 +528,7 @@ L2:
         vutgk = -(*vl);
         /* WORK( IDTGK:IDTGK+2*N-1 ) = ZERO */
         i__1 = *n << 1;
-        for (j1 = 1;
-                j1 <= i__1;
-                ++j1)
+        for(j1 = 1; j1 <= i__1; ++j1)
         {
             work[idtgk - 1 + j1] = 0.f;
         }
@@ -522,21 +536,23 @@ L2:
         i__1 = *n - 1;
         scopy_(&i__1, &e[1], &c__1, &work[ietgk + 1], &c__2);
         i__1 = *n << 1;
-        sstevx_("N", "V", &i__1, &work[idtgk], &work[ietgk], &vltgk, &vutgk, & iltgk, &iltgk, &abstol, ns, &s[1], &z__[z_offset], ldz, &work[ itemp], &iwork[iiwork], &iwork[iifail], info);
-        if (*ns == 0)
+        sstevx_("N", "V", &i__1, &work[idtgk], &work[ietgk], &vltgk, &vutgk, &iltgk, &iltgk,
+                &abstol, ns, &s[1], &z__[z_offset], ldz, &work[itemp], &iwork[iiwork],
+                &iwork[iifail], info);
+        if(*ns == 0)
         {
             return;
         }
         else
         {
-            if (wantz)
+            if(wantz)
             {
                 i__1 = *n << 1;
                 slaset_("F", &i__1, ns, &c_b20, &c_b20, &z__[z_offset], ldz);
             }
         }
     }
-    else if (indsv)
+    else if(indsv)
     {
         /* Find the IL-th through the IU-th singular values. We aim */
         /* at -s (see leading comments) and indices are mapped into */
@@ -548,9 +564,7 @@ L2:
         *(unsigned char *)rngvx = 'V';
         /* WORK( IDTGK:IDTGK+2*N-1 ) = ZERO */
         i__1 = *n << 1;
-        for (j1 = 1;
-                j1 <= i__1;
-                ++j1)
+        for(j1 = 1; j1 <= i__1; ++j1)
         {
             work[idtgk - 1 + j1] = 0.f;
         }
@@ -558,13 +572,13 @@ L2:
         i__1 = *n - 1;
         scopy_(&i__1, &e[1], &c__1, &work[ietgk + 1], &c__2);
         i__1 = *n << 1;
-        sstevx_("N", "I", &i__1, &work[idtgk], &work[ietgk], &vltgk, &vltgk, & iltgk, &iltgk, &abstol, ns, &s[1], &z__[z_offset], ldz, &work[ itemp], &iwork[iiwork], &iwork[iifail], info);
+        sstevx_("N", "I", &i__1, &work[idtgk], &work[ietgk], &vltgk, &vltgk, &iltgk, &iltgk,
+                &abstol, ns, &s[1], &z__[z_offset], ldz, &work[itemp], &iwork[iiwork],
+                &iwork[iifail], info);
         vltgk = s[1] - smax * 2.f * ulp * *n;
         /* WORK( IDTGK:IDTGK+2*N-1 ) = ZERO */
         i__1 = *n << 1;
-        for (j1 = 1;
-                j1 <= i__1;
-                ++j1)
+        for(j1 = 1; j1 <= i__1; ++j1)
         {
             work[idtgk - 1 + j1] = 0.f;
         }
@@ -572,16 +586,18 @@ L2:
         i__1 = *n - 1;
         scopy_(&i__1, &e[1], &c__1, &work[ietgk + 1], &c__2);
         i__1 = *n << 1;
-        sstevx_("N", "I", &i__1, &work[idtgk], &work[ietgk], &vutgk, &vutgk, & iutgk, &iutgk, &abstol, ns, &s[1], &z__[z_offset], ldz, &work[ itemp], &iwork[iiwork], &iwork[iifail], info);
+        sstevx_("N", "I", &i__1, &work[idtgk], &work[ietgk], &vutgk, &vutgk, &iutgk, &iutgk,
+                &abstol, ns, &s[1], &z__[z_offset], ldz, &work[itemp], &iwork[iiwork],
+                &iwork[iifail], info);
         vutgk = s[1] + smax * 2.f * ulp * *n;
-        vutgk = fla_min(vutgk,0.f);
+        vutgk = fla_min(vutgk, 0.f);
         /* If VLTGK=VUTGK, SSTEVX returns an error message, */
         /* so if needed we change VUTGK slightly. */
-        if (vltgk == vutgk)
+        if(vltgk == vutgk)
         {
             vltgk -= tol;
         }
-        if (wantz)
+        if(wantz)
         {
             i__1 = *n << 1;
             i__2 = *iu - *il + 1;
@@ -607,18 +623,14 @@ L2:
     /* Form the tridiagonal TGK matrix. */
     /* S( 1:N ) = ZERO */
     i__1 = *n;
-    for (j1 = 1;
-            j1 <= i__1;
-            ++j1)
+    for(j1 = 1; j1 <= i__1; ++j1)
     {
         s[j1] = 0.f;
     }
     work[ietgk + (*n << 1) - 1] = 0.f;
     /* WORK( IDTGK:IDTGK+2*N-1 ) = ZERO */
     i__1 = *n << 1;
-    for (j1 = 1;
-            j1 <= i__1;
-            ++j1)
+    for(j1 = 1; j1 <= i__1; ++j1)
     {
         work[idtgk - 1 + j1] = 0.f;
     }
@@ -628,49 +640,45 @@ L2:
     /* Check for splits in two levels, outer level */
     /* in E and inner level in D. */
     i__1 = *n << 1;
-    for (ieptr = 2;
-            ieptr <= i__1;
-            ieptr += 2)
+    for(ieptr = 2; ieptr <= i__1; ieptr += 2)
     {
-        if (work[ietgk + ieptr - 1] == 0.f)
+        if(work[ietgk + ieptr - 1] == 0.f)
         {
             /* Split in E (this piece of B is square) or bottom */
             /* of the (input bidiagonal) matrix. */
             isplt = idbeg;
             idend = ieptr - 1;
             i__2 = idend;
-            for (idptr = idbeg;
-                    idptr <= i__2;
-                    idptr += 2)
+            for(idptr = idbeg; idptr <= i__2; idptr += 2)
             {
-                if (work[ietgk + idptr - 1] == 0.f)
+                if(work[ietgk + idptr - 1] == 0.f)
                 {
                     /* Split in D (rectangular submatrix). Set the number */
                     /* of rows in U and V (NRU and NRV) accordingly. */
-                    if (idptr == idbeg)
+                    if(idptr == idbeg)
                     {
                         /* D=0 at the top. */
                         sveq0 = TRUE_;
-                        if (idbeg == idend)
+                        if(idbeg == idend)
                         {
                             nru = 1;
                             nrv = 1;
                         }
                     }
-                    else if (idptr == idend)
+                    else if(idptr == idend)
                     {
                         /* D=0 at the bottom. */
                         sveq0 = TRUE_;
                         nru = (idend - isplt) / 2 + 1;
                         nrv = nru;
-                        if (isplt != idbeg)
+                        if(isplt != idbeg)
                         {
                             ++nru;
                         }
                     }
                     else
                     {
-                        if (isplt == idbeg)
+                        if(isplt == idbeg)
                         {
                             /* Split: top rectangular submatrix. */
                             nru = (idptr - idbeg) / 2;
@@ -684,10 +692,10 @@ L2:
                         }
                     }
                 }
-                else if (idptr == idend)
+                else if(idptr == idend)
                 {
                     /* Last entry of D in the active submatrix. */
-                    if (isplt == idbeg)
+                    if(isplt == idbeg)
                     {
                         /* No split (trivial case). */
                         nru = (idend - idbeg) / 2 + 1;
@@ -701,7 +709,7 @@ L2:
                     }
                 }
                 ntgk = nru + nrv;
-                if (ntgk > 0)
+                if(ntgk > 0)
                 {
                     /* Compute eigenvalues/vectors of the active */
                     /* submatrix according to RANGE: */
@@ -710,9 +718,9 @@ L2:
                     /* if RANGE='I' (INDSV) then RNGVX = 'V' */
                     iltgk = 1;
                     iutgk = ntgk / 2;
-                    if (allsv || vutgk == 0.f)
+                    if(allsv || vutgk == 0.f)
                     {
-                        if (sveq0 || smin < eps || ntgk % 2 > 0)
+                        if(sveq0 || smin < eps || ntgk % 2 > 0)
                         {
                             /* Special case: eigenvalue equal to zero or very */
                             /* small, additional eigenvector is needed. */
@@ -722,8 +730,11 @@ L2:
                     /* Workspace needed by SSTEVX: */
                     /* WORK( ITEMP: ): 2*5*NTGK */
                     /* IWORK( 1: ): 2*6*NTGK */
-                    sstevx_(jobz, rngvx, &ntgk, &work[idtgk + isplt - 1], & work[ietgk + isplt - 1], &vltgk, &vutgk, &iltgk, & iutgk, &abstol, &nsl, &s[isbeg], &z__[irowz + icolz * z_dim1], ldz, &work[itemp], &iwork[iiwork], &iwork[iifail], info);
-                    if (*info != 0)
+                    sstevx_(jobz, rngvx, &ntgk, &work[idtgk + isplt - 1], &work[ietgk + isplt - 1],
+                            &vltgk, &vutgk, &iltgk, &iutgk, &abstol, &nsl, &s[isbeg],
+                            &z__[irowz + icolz * z_dim1], ldz, &work[itemp], &iwork[iiwork],
+                            &iwork[iifail], info);
+                    if(*info != 0)
                     {
                         /* Exit with the error code from SSTEVX. */
                         return;
@@ -731,17 +742,15 @@ L2:
                     /* EMIN = ABS( MAXVAL( S( ISBEG:ISBEG+NSL-1 ) ) ) */
                     i__3 = nsl;
                     d1 = s[isbeg];
-                    for (j1 = 1;
-                            j1 <= i__3;
-                            ++j1)
+                    for(j1 = 1; j1 <= i__3; ++j1)
                     {
                         /* Computing MAX */
                         r__1 = d1;
                         r__2 = s[j1 - 1 + isbeg]; // , expr subst
-                        d1 = fla_max(r__1,r__2);
+                        d1 = fla_max(r__1, r__2);
                     }
                     emin = f2c_dabs(d1);
-                    if (nsl > 0 && wantz)
+                    if(nsl > 0 && wantz)
                     {
                         /* Normalize u=Z([2,4,...],:) and v=Z([1,3,...],:), */
                         /* changing the sign of v as discussed in the leading */
@@ -750,7 +759,7 @@ L2:
                         /* eigenvalues are very small or too close. We check */
                         /* those norms and, if needed, reorthogonalize the */
                         /* vectors. */
-                        if (nsl > 1 && vutgk == 0.f && ntgk % 2 == 0 && emin == 0.f && ! split)
+                        if(nsl > 1 && vutgk == 0.f && ntgk % 2 == 0 && emin == 0.f && !split)
                         {
                             /* D=0 at the top or bottom of the active submatrix: */
                             /* one eigenvalue is equal to zero;
@@ -763,11 +772,10 @@ L2:
                             /* Z( IROWZ:IROWZ+NTGK-1,ICOLZ+NSL-1 ) = */
                             /* $ ZERO */
                             i__3 = ntgk;
-                            for (j1 = 1;
-                                    j1 <= i__3;
-                                    ++j1)
+                            for(j1 = 1; j1 <= i__3; ++j1)
                             {
-                                z__[j1 - 1 + irowz + (icolz + nsl - 2) * z_dim1] += z__[j1 - 1 + irowz + ( icolz + nsl - 1) * z_dim1];
+                                z__[j1 - 1 + irowz + (icolz + nsl - 2) * z_dim1]
+                                    += z__[j1 - 1 + irowz + (icolz + nsl - 1) * z_dim1];
                                 z__[j1 - 1 + irowz + (icolz + nsl - 1) * z_dim1] = 0.f;
                             }
                             /* IF( IUTGK*2.GT.NTGK ) THEN */
@@ -778,28 +786,26 @@ L2:
                         /* Computing MIN */
                         i__4 = nsl - 1;
                         i__5 = nru - 1; // , expr subst
-                        i__3 = fla_min(i__4,i__5);
-                        for (i__ = 0;
-                                i__ <= i__3;
-                                ++i__)
+                        i__3 = fla_min(i__4, i__5);
+                        for(i__ = 0; i__ <= i__3; ++i__)
                         {
                             nrmu = snrm2_(&nru, &z__[irowu + (icolz + i__) * z_dim1], &c__2);
-                            if (nrmu == 0.f)
+                            if(nrmu == 0.f)
                             {
                                 *info = (*n << 1) + 1;
                                 return;
                             }
                             r__1 = 1.f / nrmu;
                             sscal_(&nru, &r__1, &z__[irowu + (icolz + i__) * z_dim1], &c__2);
-                            if (nrmu != 1.f && (r__1 = nrmu - ortol, f2c_abs(r__1) ) * sqrt2 > 1.f)
+                            if(nrmu != 1.f && (r__1 = nrmu - ortol, f2c_abs(r__1)) * sqrt2 > 1.f)
                             {
                                 i__4 = i__ - 1;
-                                for (j = 0;
-                                        j <= i__4;
-                                        ++j)
+                                for(j = 0; j <= i__4; ++j)
                                 {
-                                    zjtji = -sdot_(&nru, &z__[irowu + (icolz + j) * z_dim1], &c__2, &z__[irowu + (icolz + i__) * z_dim1], &c__2);
-                                    saxpy_(&nru, &zjtji, &z__[irowu + (icolz + j) * z_dim1], &c__2, &z__[irowu + (icolz + i__) * z_dim1], &c__2);
+                                    zjtji = -sdot_(&nru, &z__[irowu + (icolz + j) * z_dim1], &c__2,
+                                                   &z__[irowu + (icolz + i__) * z_dim1], &c__2);
+                                    saxpy_(&nru, &zjtji, &z__[irowu + (icolz + j) * z_dim1], &c__2,
+                                           &z__[irowu + (icolz + i__) * z_dim1], &c__2);
                                 }
                                 nrmu = snrm2_(&nru, &z__[irowu + (icolz + i__) * z_dim1], &c__2);
                                 r__1 = 1.f / nrmu;
@@ -809,35 +815,33 @@ L2:
                         /* Computing MIN */
                         i__4 = nsl - 1;
                         i__5 = nrv - 1; // , expr subst
-                        i__3 = fla_min(i__4,i__5);
-                        for (i__ = 0;
-                                i__ <= i__3;
-                                ++i__)
+                        i__3 = fla_min(i__4, i__5);
+                        for(i__ = 0; i__ <= i__3; ++i__)
                         {
                             nrmv = snrm2_(&nrv, &z__[irowv + (icolz + i__) * z_dim1], &c__2);
-                            if (nrmv == 0.f)
+                            if(nrmv == 0.f)
                             {
                                 *info = (*n << 1) + 1;
                                 return;
                             }
                             r__1 = -1.f / nrmv;
                             sscal_(&nrv, &r__1, &z__[irowv + (icolz + i__) * z_dim1], &c__2);
-                            if (nrmv != 1.f && (r__1 = nrmv - ortol, f2c_abs(r__1) ) * sqrt2 > 1.f)
+                            if(nrmv != 1.f && (r__1 = nrmv - ortol, f2c_abs(r__1)) * sqrt2 > 1.f)
                             {
                                 i__4 = i__ - 1;
-                                for (j = 0;
-                                        j <= i__4;
-                                        ++j)
+                                for(j = 0; j <= i__4; ++j)
                                 {
-                                    zjtji = -sdot_(&nrv, &z__[irowv + (icolz + j) * z_dim1], &c__2, &z__[irowv + (icolz + i__) * z_dim1], &c__2);
-                                    saxpy_(&nru, &zjtji, &z__[irowv + (icolz + j) * z_dim1], &c__2, &z__[irowv + (icolz + i__) * z_dim1], &c__2);
+                                    zjtji = -sdot_(&nrv, &z__[irowv + (icolz + j) * z_dim1], &c__2,
+                                                   &z__[irowv + (icolz + i__) * z_dim1], &c__2);
+                                    saxpy_(&nru, &zjtji, &z__[irowv + (icolz + j) * z_dim1], &c__2,
+                                           &z__[irowv + (icolz + i__) * z_dim1], &c__2);
                                 }
                                 nrmv = snrm2_(&nrv, &z__[irowv + (icolz + i__) * z_dim1], &c__2);
                                 r__1 = 1.f / nrmv;
                                 sscal_(&nrv, &r__1, &z__[irowv + (icolz + i__) * z_dim1], &c__2);
                             }
                         }
-                        if (vutgk == 0.f && idptr < idend && ntgk % 2 > 0)
+                        if(vutgk == 0.f && idptr < idend && ntgk % 2 > 0)
                         {
                             /* D=0 in the middle of the active submatrix (one */
                             /* eigenvalue is equal to zero): save the corresponding */
@@ -849,23 +853,20 @@ L2:
                             /* Z( IROWZ:IROWZ+NTGK-1,NS+NSL ) = */
                             /* $ ZERO */
                             i__3 = ntgk;
-                            for (j1 = 1;
-                                    j1 <= i__3;
-                                    ++j1)
+                            for(j1 = 1; j1 <= i__3; ++j1)
                             {
-                                z__[j1 - 1 + irowz + (*n + 1) * z_dim1] = z__[ j1 - 1 + irowz + (*ns + nsl) * z_dim1] ;
+                                z__[j1 - 1 + irowz + (*n + 1) * z_dim1]
+                                    = z__[j1 - 1 + irowz + (*ns + nsl) * z_dim1];
                                 z__[j1 - 1 + irowz + (*ns + nsl) * z_dim1] = 0.f;
                             }
                         }
                     }
                     /* ** WANTZ **! */
-                    nsl = fla_min(nsl,nru);
+                    nsl = fla_min(nsl, nru);
                     sveq0 = FALSE_;
                     /* Absolute values of the eigenvalues of TGK. */
                     i__3 = nsl - 1;
-                    for (i__ = 0;
-                            i__ <= i__3;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__3; ++i__)
                     {
                         s[isbeg + i__] = (r__1 = s[isbeg + i__], f2c_abs(r__1));
                     }
@@ -881,20 +882,18 @@ L2:
                     nrv = 0;
                 }
                 /* ** NTGK.GT.0 **! */
-                if (irowz < *n << 1 && wantz)
+                if(irowz < *n << 1 && wantz)
                 {
                     /* Z( 1:IROWZ-1, ICOLZ ) = ZERO */
                     i__3 = irowz - 1;
-                    for (j1 = 1;
-                            j1 <= i__3;
-                            ++j1)
+                    for(j1 = 1; j1 <= i__3; ++j1)
                     {
                         z__[j1 + icolz * z_dim1] = 0.f;
                     }
                 }
             }
             /* ** IDPTR loop **! */
-            if (split && wantz)
+            if(split && wantz)
             {
                 /* Bring back eigenvector corresponding */
                 /* to eigenvalue equal to zero. */
@@ -903,11 +902,10 @@ L2:
                 /* $ Z( IDBEG:IDEND-NTGK+1,N+1 ) */
                 /* Z( IDBEG:IDEND-NTGK+1,N+1 ) = 0 */
                 i__2 = idend - ntgk + 2 - idbeg;
-                for (j1 = 1;
-                        j1 <= i__2;
-                        ++j1)
+                for(j1 = 1; j1 <= i__2; ++j1)
                 {
-                    z__[j1 - 1 + idbeg + (isbeg - 1) * z_dim1] += z__[j1 - 1 + idbeg + (*n + 1) * z_dim1];
+                    z__[j1 - 1 + idbeg + (isbeg - 1) * z_dim1]
+                        += z__[j1 - 1 + idbeg + (*n + 1) * z_dim1];
                     z__[j1 - 1 + idbeg + (*n + 1) * z_dim1] = 0.f;
                 }
             }
@@ -923,60 +921,51 @@ L2:
     /* singular values, but only one transposition per singular vector) */
     /* ** IEPTR loop **! */
     i__1 = *ns - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         k = 1;
         smin = s[1];
         i__2 = *ns + 1 - i__;
-        for (j = 2;
-                j <= i__2;
-                ++j)
+        for(j = 2; j <= i__2; ++j)
         {
-            if (s[j] <= smin)
+            if(s[j] <= smin)
             {
                 k = j;
                 smin = s[j];
             }
         }
-        if (k != *ns + 1 - i__)
+        if(k != *ns + 1 - i__)
         {
             s[k] = s[*ns + 1 - i__];
             s[*ns + 1 - i__] = smin;
-            if (wantz)
+            if(wantz)
             {
                 i__2 = *n << 1;
-                sswap_(&i__2, &z__[k * z_dim1 + 1], &c__1, &z__[(*ns + 1 - i__) * z_dim1 + 1], &c__1);
+                sswap_(&i__2, &z__[k * z_dim1 + 1], &c__1, &z__[(*ns + 1 - i__) * z_dim1 + 1],
+                       &c__1);
             }
         }
     }
     /* If RANGE=I, check for singular values/vectors to be discarded. */
-    if (indsv)
+    if(indsv)
     {
         k = *iu - *il + 1;
-        if (k < *ns)
+        if(k < *ns)
         {
             /* S( K+1:NS ) = ZERO */
             i__1 = *ns - k;
-            for (j1 = 1;
-                    j1 <= i__1;
-                    ++j1)
+            for(j1 = 1; j1 <= i__1; ++j1)
             {
                 s[j1 + k] = 0.f;
             }
             /* IF( WANTZ ) Z( 1:N*2,K+1:NS ) = ZERO */
-            if (wantz)
+            if(wantz)
             {
                 i__1 = *ns - k;
-                for (j2 = 1;
-                        j2 <= i__1;
-                        ++j2)
+                for(j2 = 1; j2 <= i__1; ++j2)
                 {
                     i__2 = *n << 1;
-                    for (j1 = 1;
-                            j1 <= i__2;
-                            ++j1)
+                    for(j1 = 1; j1 <= i__2; ++j1)
                     {
                         z__[j1 + (j2 + k) * z_dim1] = 0.f;
                     }
@@ -987,24 +976,22 @@ L2:
     }
     /* Reorder Z: U = Z( 1:N,1:NS ), V = Z( N+1:N*2,1:NS ). */
     /* If B is a lower diagonal, swap U and V. */
-    if (wantz)
+    if(wantz)
     {
         i__1 = *ns;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = *n << 1;
             scopy_(&i__2, &z__[i__ * z_dim1 + 1], &c__1, &work[1], &c__1);
-            if (lower)
+            if(lower)
             {
-                scopy_(n, &work[2], &c__2, &z__[*n + 1 + i__ * z_dim1], &c__1) ;
+                scopy_(n, &work[2], &c__2, &z__[*n + 1 + i__ * z_dim1], &c__1);
                 scopy_(n, &work[1], &c__2, &z__[i__ * z_dim1 + 1], &c__1);
             }
             else
             {
                 scopy_(n, &work[2], &c__2, &z__[i__ * z_dim1 + 1], &c__1);
-                scopy_(n, &work[1], &c__2, &z__[*n + 1 + i__ * z_dim1], &c__1) ;
+                scopy_(n, &work[1], &c__2, &z__[*n + 1 + i__ * z_dim1], &c__1);
             }
         }
     }
@@ -1012,4 +999,3 @@ L2:
     /* End of SBDSVDX */
 }
 /* sbdsvdx_ */
-

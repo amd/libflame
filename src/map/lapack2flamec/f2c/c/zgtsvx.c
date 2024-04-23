@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief <b> ZGTSVX computes the solution to system of linear equations A * X = B for GT matrices
  * <b> */
 /* =========== DOCUMENTATION =========== */
@@ -292,10 +292,16 @@ IPIV(i) = i indicates */
 /* > \ingroup complex16GTsolve */
 /* ===================================================================== */
 /* Subroutine */
-void zgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex *dl, doublecomplex *d__, doublecomplex *du, doublecomplex *dlf, doublecomplex *df, doublecomplex *duf, doublecomplex *du2, integer *ipiv, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr, doublecomplex *work, doublereal *rwork, integer * info)
+void zgtsvx_(char *fact, char *trans, integer *n, integer *nrhs, doublecomplex *dl,
+             doublecomplex *d__, doublecomplex *du, doublecomplex *dlf, doublecomplex *df,
+             doublecomplex *duf, doublecomplex *du2, integer *ipiv, doublecomplex *b, integer *ldb,
+             doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr,
+             doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgtsvx inputs: fact %c, trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *trans, *n, *nrhs, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("zgtsvx inputs: fact %c, trans %c, n %" FLA_IS ", nrhs %" FLA_IS
+                      ", ldb %" FLA_IS ", ldx %" FLA_IS "",
+                      *fact, *trans, *n, *nrhs, *ldb, *ldx);
 
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1;
@@ -304,15 +310,29 @@ void zgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex 
     extern logical lsame_(char *, char *, integer, integer);
     doublereal anorm;
     extern /* Subroutine */
-    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal zlangt_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *);
     logical notran;
     extern /* Subroutine */
-    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgtcon_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zgtrfs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zgttrf_( integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, integer *), zgttrs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *),
+        zgtcon_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
+                doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *),
+        zgtrfs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
+                doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *,
+                doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
+                doublecomplex *, doublereal *, integer *),
+        zgttrf_(integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *,
+                integer *, integer *),
+        zgttrs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
+                doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -356,11 +376,11 @@ void zgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex 
     *info = 0;
     nofact = lsame_(fact, "N", 1, 1);
     notran = lsame_(trans, "N", 1, 1);
-    if (! nofact && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -372,11 +392,11 @@ void zgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex 
     {
         *info = -4;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -14;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -16;
     }
@@ -390,7 +410,7 @@ void zgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex 
     if(nofact)
     {
         /* Compute the LU factorization of A. */
-        aocl_blas_zcopy(n, &d__[1], &c__1, &df[1], &c__1);
+        zcopy_(n, &d__[1], &c__1, &df[1], &c__1);
         if(*n > 1)
         {
             i__1 = *n - 1;
@@ -421,12 +441,12 @@ void zgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, doublecomplex 
     aocl_lapack_zgtcon(norm, n, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &anorm, rcond,
                        &work[1], info);
     /* Compute the solution vectors X. */
-    aocl_lapack_zlacpy("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
-    aocl_lapack_zgttrs(trans, n, nrhs, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &x[x_offset],
-                       ldx, info);
+    zlacpy_("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
+    zgttrs_(trans, n, nrhs, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solutions and */
     /* compute error bounds and backward error estimates for them. */
-    zgtrfs_(trans, n, nrhs, &dl[1], &d__[1], &du[1], &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
+    zgtrfs_(trans, n, nrhs, &dl[1], &d__[1], &du[1], &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1],
+            &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
     /* Set INFO = N+1 if the matrix is singular to working precision. */
     if(*rcond < dlamch_("Epsilon"))
     {

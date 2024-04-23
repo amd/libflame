@@ -111,7 +111,8 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cung2r_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau, complex *work, integer *info)
+void cung2r_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau,
+                complex *work, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
@@ -119,7 +120,11 @@ void cung2r_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, co
     /* Local variables */
     integer i__, j, l;
     extern /* Subroutine */
-    void cscal_(integer *, complex *, complex *, integer *), clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        cscal_(integer *, complex *, complex *, integer *),
+        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+               complex *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -159,7 +164,7 @@ void cung2r_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, co
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
@@ -201,8 +206,8 @@ void cung2r_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, co
             a[i__1].imag = 0.f; // , expr subst
             i__1 = *m - i__ + 1;
             i__2 = *n - i__;
-            aocl_lapack_clarf("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
-                              &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
+            clarf_("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
+                   &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
         }
         if(i__ < *m)
         {

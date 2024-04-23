@@ -304,10 +304,16 @@ if EQUED = 'Y', */
 /* > \ingroup doublePOsolve */
 /* ===================================================================== */
 /* Subroutine */
-void dposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a, integer *lda, doublereal *af, integer *ldaf, char *equed, doublereal *s, doublereal *b, integer *ldb, doublereal * x, integer *ldx, doublereal *rcond, doublereal *ferr, doublereal * berr, doublereal *work, integer *iwork, integer *info)
+void dposvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda,
+             doublereal *af, integer *ldaf, char *equed, doublereal *s, doublereal *b, integer *ldb,
+             doublereal *x, integer *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr,
+             doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dposvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("dposvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS
+                      ", lda %" FLA_IS ", ldaf %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS
+                      "",
+                      *fact, *uplo, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
         i__2;
@@ -321,17 +327,31 @@ void dposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a, 
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern /* Subroutine */
-    void dpocon_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+        void
+        dpocon_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, integer *, integer *);
     integer infequ;
     extern doublereal dlansy_(char *, char *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
-    void dlaqsy_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, char *), dpoequ_(integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *), dporfs_( char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dpotrf_(char *, integer *, doublereal *, integer *, integer *);
+        void
+        dlaqsy_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, char *),
+        dpoequ_(integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *,
+                integer *),
+        dporfs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *,
+                doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, integer *, integer *),
+        dpotrf_(char *, integer *, doublereal *, integer *, integer *);
     doublereal smlnum;
     extern /* Subroutine */
-    void dpotrs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dpotrs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *,
+                integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -376,7 +396,7 @@ void dposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a, 
     equil = lsame_(fact, "E", 1, 1);
     smlnum = 0.;
     bignum = 0.;
-    if (nofact || equil)
+    if(nofact || equil)
     {
         *(unsigned char *)equed = 'N';
         rcequ = FALSE_;
@@ -388,11 +408,11 @@ void dposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a, 
         bignum = 1. / smlnum;
     }
     /* Test the input parameters. */
-    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    else if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -404,15 +424,15 @@ void dposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a, 
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (lsame_(fact, "F", 1, 1) && ! (rcequ || lsame_(equed, "N", 1, 1)))
+    else if(lsame_(fact, "F", 1, 1) && !(rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -9;
     }
@@ -428,11 +448,11 @@ void dposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a, 
                 /* Computing MIN */
                 d__1 = smin;
                 d__2 = s[j]; // , expr subst
-                smin = fla_min(d__1,d__2);
+                smin = fla_min(d__1, d__2);
                 /* Computing MAX */
                 d__1 = smax;
                 d__2 = s[j]; // , expr subst
-                smax = fla_max(d__1,d__2);
+                smax = fla_max(d__1, d__2);
                 /* L10: */
             }
             if(smin <= 0.)
@@ -441,7 +461,7 @@ void dposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a, 
             }
             else if(*n > 0)
             {
-                scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
+                scond = fla_max(smin, smlnum) / fla_min(smax, bignum);
             }
             else
             {
@@ -450,11 +470,11 @@ void dposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a, 
         }
         if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -12;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -14;
             }
@@ -470,7 +490,7 @@ void dposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a, 
     if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        aocl_lapack_dpoequ(n, &a[a_offset], lda, &s[1], &scond, &amax, &infequ);
+        dpoequ_(n, &a[a_offset], lda, &s[1], &scond, &amax, &infequ);
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
@@ -515,8 +535,8 @@ void dposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublereal *a, 
     aocl_lapack_dpotrs(uplo, n, nrhs, &af[af_offset], ldaf, &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    aocl_lapack_dporfs(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &b[b_offset], ldb,
-                       &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
+    dporfs_(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &b[b_offset], ldb, &x[x_offset],
+            ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(rcequ)

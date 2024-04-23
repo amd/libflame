@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {1.f, 0.f};
-static aocl_int64_t c__1 = 1;
+static complex c_b1 = {1.f, 0.f};
+static integer c__1 = 1;
 /* > \brief \b CGBTRS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -136,15 +136,19 @@ for 1 <= i <= N, row i of the matrix was */
 /* > \ingroup complexGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, complex *ab, integer *ldab, integer *ipiv, complex *b, integer *ldb, integer *info)
+void cgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, complex *ab,
+             integer *ldab, integer *ipiv, complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgbtrs inputs: trans %c, n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, ldb %lld",*trans, *n, *kl, *ku, *nrhs, *ldab, *ldb);
+    snprintf(buffer, 256,
+             "cgbtrs inputs: trans %c, n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, ldb %lld",
+             *trans, *n, *kl, *ku, *nrhs, *ldab, *ldb);
 #else
-    snprintf(buffer, 256,"cgbtrs inputs: trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldb %d",*trans, *n, *kl, *ku, *nrhs, *ldab, *ldb);
+    snprintf(buffer, 256, "cgbtrs inputs: trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldb %d",
+             *trans, *n, *kl, *ku, *nrhs, *ldab, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -155,10 +159,19 @@ void cgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
     integer i__, j, l, kd, lm;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *), ctbsv_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *, integer *);
+        void
+        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
+               complex *, complex *, integer *),
+        cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *,
+               complex *, integer *),
+        cswap_(integer *, complex *, integer *, complex *, integer *),
+        ctbsv_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *,
+               integer *);
     logical lnoti;
     extern /* Subroutine */
-    void clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clacgv_(integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -192,7 +205,7 @@ void cgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
     /* Function Body */
     *info = 0;
     notran = lsame_(trans, "N", 1, 1);
-    if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
@@ -216,7 +229,7 @@ void cgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -10;
     }
@@ -251,16 +264,16 @@ void cgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
                 /* Computing MIN */
                 i__2 = *kl;
                 i__3 = *n - j; // , expr subst
-                lm = fla_min(i__2,i__3);
+                lm = fla_min(i__2, i__3);
                 l = ipiv[j];
                 if(l != j)
                 {
                     aocl_blas_cswap(nrhs, &b[l + b_dim1], ldb, &b[j + b_dim1], ldb);
                 }
-                q__1.real = -1.f;
-                q__1.imag = -0.f; // , expr subst
-                aocl_blas_cgeru(&lm, nrhs, &q__1, &ab[kd + 1 + j * ab_dim1], &c__1, &b[j + b_dim1],
-                                ldb, &b[j + 1 + b_dim1], ldb);
+                q__1.r = -1.f;
+                q__1.i = -0.f; // , expr subst
+                cgeru_(&lm, nrhs, &q__1, &ab[kd + 1 + j * ab_dim1], &c__1, &b[j + b_dim1], ldb,
+                       &b[j + 1 + b_dim1], ldb);
                 /* L10: */
             }
         }
@@ -269,12 +282,12 @@ void cgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
         {
             /* Solve U*X = B, overwriting B with X. */
             i__2 = *kl + *ku;
-            aocl_blas_ctbsv("Upper", "No transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
-                            &b[i__ * b_dim1 + 1], &c__1);
+            ctbsv_("Upper", "No transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
+                   &b[i__ * b_dim1 + 1], &c__1);
             /* L20: */
         }
     }
-    else if (lsame_(trans, "T", 1, 1))
+    else if(lsame_(trans, "T", 1, 1))
     {
         /* Solve A**T * X = B. */
         i__1 = *nrhs;
@@ -282,8 +295,8 @@ void cgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
         {
             /* Solve U**T * X = B, overwriting B with X. */
             i__2 = *kl + *ku;
-            aocl_blas_ctbsv("Upper", "Transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
-                            &b[i__ * b_dim1 + 1], &c__1);
+            ctbsv_("Upper", "Transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
+                   &b[i__ * b_dim1 + 1], &c__1);
             /* L30: */
         }
         /* Solve L**T * X = B, overwriting B with X. */
@@ -294,10 +307,11 @@ void cgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
                 /* Computing MIN */
                 i__1 = *kl;
                 i__2 = *n - j; // , expr subst
-                lm = fla_min(i__1,i__2);
+                lm = fla_min(i__1, i__2);
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgemv_("Transpose", &lm, nrhs, &q__1, &b[j + 1 + b_dim1], ldb, &ab[kd + 1 + j * ab_dim1], &c__1, &c_b1, &b[j + b_dim1], ldb);
+                cgemv_("Transpose", &lm, nrhs, &q__1, &b[j + 1 + b_dim1], ldb,
+                       &ab[kd + 1 + j * ab_dim1], &c__1, &c_b1, &b[j + b_dim1], ldb);
                 l = ipiv[j];
                 if(l != j)
                 {
@@ -315,8 +329,8 @@ void cgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
         {
             /* Solve U**H * X = B, overwriting B with X. */
             i__2 = *kl + *ku;
-            aocl_blas_ctbsv("Upper", "Conjugate transpose", "Non-unit", n, &i__2, &ab[ab_offset],
-                            ldab, &b[i__ * b_dim1 + 1], &c__1);
+            ctbsv_("Upper", "Conjugate transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
+                   &b[i__ * b_dim1 + 1], &c__1);
             /* L50: */
         }
         /* Solve L**H * X = B, overwriting B with X. */
@@ -327,11 +341,12 @@ void cgbtrs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
                 /* Computing MIN */
                 i__1 = *kl;
                 i__2 = *n - j; // , expr subst
-                lm = fla_min(i__1,i__2);
+                lm = fla_min(i__1, i__2);
                 clacgv_(nrhs, &b[j + b_dim1], ldb);
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgemv_("Conjugate transpose", &lm, nrhs, &q__1, &b[j + 1 + b_dim1], ldb, &ab[kd + 1 + j * ab_dim1], &c__1, &c_b1, &b[j + b_dim1], ldb);
+                cgemv_("Conjugate transpose", &lm, nrhs, &q__1, &b[j + 1 + b_dim1], ldb,
+                       &ab[kd + 1 + j * ab_dim1], &c__1, &c_b1, &b[j + b_dim1], ldb);
                 clacgv_(nrhs, &b[j + b_dim1], ldb);
                 l = ipiv[j];
                 if(l != j)

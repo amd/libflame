@@ -1,5 +1,8 @@
-/* ../netlib/ctrrfs.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ctrrfs.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b CTRRFS */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CTRRFS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctrrfs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctrrfs.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctrrfs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctrrfs.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrrfs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrrfs.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -47,7 +56,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': A is upper triangular;
-*/
+ */
 /* > = 'L': A is lower triangular. */
 /* > \endverbatim */
 /* > */
@@ -64,7 +73,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > DIAG is CHARACTER*1 */
 /* > = 'N': A is non-unit triangular;
-*/
+ */
 /* > = 'U': A is unit triangular. */
 /* > \endverbatim */
 /* > */
@@ -171,15 +180,22 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, complex *a, integer *lda, complex *b, integer *ldb, complex *x, integer *ldx, real *ferr, real *berr, complex *work, real *rwork, integer *info)
+void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, complex *a,
+             integer *lda, complex *b, integer *ldb, complex *x, integer *ldx, real *ferr,
+             real *berr, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctrrfs inputs: uplo %c, trans %c, diag %c, n %lld, nrhs %lld, lda %lld, ldb %lld, ldx %lld",*uplo, *trans, *diag, *n, *nrhs, *lda, *ldb, *ldx);
+    snprintf(buffer, 256,
+             "ctrrfs inputs: uplo %c, trans %c, diag %c, n %lld, nrhs %lld, lda %lld, ldb %lld, "
+             "ldx %lld",
+             *uplo, *trans, *diag, *n, *nrhs, *lda, *ldb, *ldx);
 #else
-    snprintf(buffer, 256,"ctrrfs inputs: uplo %c, trans %c, diag %c, n %d, nrhs %d, lda %d, ldb %d, ldx %d",*uplo, *trans, *diag, *n, *nrhs, *lda, *ldb, *ldx);
+    snprintf(buffer, 256,
+             "ctrrfs inputs: uplo %c, trans %c, diag %c, n %d, nrhs %d, lda %d, ldb %d, ldx %d",
+             *uplo, *trans, *diag, *n, *nrhs, *lda, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -199,14 +215,20 @@ void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    void ccopy_(integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *),
+        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    void ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), ctrsv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), clacn2_( integer *, complex *, complex *, real *, integer *, integer *);
+        void
+        ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *),
+        ctrsv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *),
+        clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     char transn[1], transt[1];
     logical nounit;
@@ -257,39 +279,39 @@ void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
     upper = lsame_(uplo, "U", 1, 1);
     notran = lsame_(trans, "N", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -11;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CTRRFS", &i__1, (ftnlen)6);
@@ -297,12 +319,10 @@ void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
         return;
     }
     /* Quick return if possible */
-    if (*n == 0 || *nrhs == 0)
+    if(*n == 0 || *nrhs == 0)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             ferr[j] = 0.f;
             berr[j] = 0.f;
@@ -311,7 +331,7 @@ void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (notran)
+    if(notran)
     {
         *(unsigned char *)transn = 'N';
         *(unsigned char *)transt = 'C';
@@ -329,9 +349,7 @@ void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
     safe2 = safe1 / eps;
     /* Do for each right hand side */
     i__1 = *nrhs;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         /* Compute residual R = B - op(A) * X, */
         /* where op(A) = A, A**T, or A**H, depending on TRANS. */
@@ -347,35 +365,33 @@ void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
         /* than SAFE2, then SAFE1 is added to the i-th components of the */
         /* numerator and denominator before dividing. */
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            rwork[i__] = (r__1 = b[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&b[ i__ + j * b_dim1]), f2c_abs(r__2));
+            rwork[i__] = (r__1 = b[i__3].r, f2c_abs(r__1))
+                         + (r__2 = r_imag(&b[i__ + j * b_dim1]), f2c_abs(r__2));
             /* L20: */
         }
-        if (notran)
+        if(notran)
         {
             /* Compute f2c_abs(A)*f2c_abs(X) + f2c_abs(B). */
-            if (upper)
+            if(upper)
             {
-                if (nounit)
+                if(nounit)
                 {
                     i__2 = *n;
-                    for (k = 1;
-                            k <= i__2;
-                            ++k)
+                    for(k = 1; k <= i__2; ++k)
                     {
                         i__3 = k + j * x_dim1;
-                        xk = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(& x[k + j * x_dim1]), f2c_abs(r__2));
+                        xk = (r__1 = x[i__3].r, f2c_abs(r__1))
+                             + (r__2 = r_imag(&x[k + j * x_dim1]), f2c_abs(r__2));
                         i__3 = k;
-                        for (i__ = 1;
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__3; ++i__)
                         {
                             i__4 = i__ + k * a_dim1;
-                            rwork[i__] += ((r__1 = a[i__4].r, f2c_abs(r__1)) + ( r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs( r__2))) * xk;
+                            rwork[i__] += ((r__1 = a[i__4].r, f2c_abs(r__1))
+                                           + (r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs(r__2)))
+                                          * xk;
                             /* L30: */
                         }
                         /* L40: */
@@ -384,19 +400,18 @@ void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
                 else
                 {
                     i__2 = *n;
-                    for (k = 1;
-                            k <= i__2;
-                            ++k)
+                    for(k = 1; k <= i__2; ++k)
                     {
                         i__3 = k + j * x_dim1;
-                        xk = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(& x[k + j * x_dim1]), f2c_abs(r__2));
+                        xk = (r__1 = x[i__3].r, f2c_abs(r__1))
+                             + (r__2 = r_imag(&x[k + j * x_dim1]), f2c_abs(r__2));
                         i__3 = k - 1;
-                        for (i__ = 1;
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__3; ++i__)
                         {
                             i__4 = i__ + k * a_dim1;
-                            rwork[i__] += ((r__1 = a[i__4].r, f2c_abs(r__1)) + ( r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs( r__2))) * xk;
+                            rwork[i__] += ((r__1 = a[i__4].r, f2c_abs(r__1))
+                                           + (r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs(r__2)))
+                                          * xk;
                             /* L50: */
                         }
                         rwork[k] += xk;
@@ -406,22 +421,21 @@ void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
             }
             else
             {
-                if (nounit)
+                if(nounit)
                 {
                     i__2 = *n;
-                    for (k = 1;
-                            k <= i__2;
-                            ++k)
+                    for(k = 1; k <= i__2; ++k)
                     {
                         i__3 = k + j * x_dim1;
-                        xk = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(& x[k + j * x_dim1]), f2c_abs(r__2));
+                        xk = (r__1 = x[i__3].r, f2c_abs(r__1))
+                             + (r__2 = r_imag(&x[k + j * x_dim1]), f2c_abs(r__2));
                         i__3 = *n;
-                        for (i__ = k;
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = k; i__ <= i__3; ++i__)
                         {
                             i__4 = i__ + k * a_dim1;
-                            rwork[i__] += ((r__1 = a[i__4].r, f2c_abs(r__1)) + ( r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs( r__2))) * xk;
+                            rwork[i__] += ((r__1 = a[i__4].r, f2c_abs(r__1))
+                                           + (r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs(r__2)))
+                                          * xk;
                             /* L70: */
                         }
                         /* L80: */
@@ -430,19 +444,18 @@ void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
                 else
                 {
                     i__2 = *n;
-                    for (k = 1;
-                            k <= i__2;
-                            ++k)
+                    for(k = 1; k <= i__2; ++k)
                     {
                         i__3 = k + j * x_dim1;
-                        xk = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(& x[k + j * x_dim1]), f2c_abs(r__2));
+                        xk = (r__1 = x[i__3].r, f2c_abs(r__1))
+                             + (r__2 = r_imag(&x[k + j * x_dim1]), f2c_abs(r__2));
                         i__3 = *n;
-                        for (i__ = k + 1;
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = k + 1; i__ <= i__3; ++i__)
                         {
                             i__4 = i__ + k * a_dim1;
-                            rwork[i__] += ((r__1 = a[i__4].r, f2c_abs(r__1)) + ( r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs( r__2))) * xk;
+                            rwork[i__] += ((r__1 = a[i__4].r, f2c_abs(r__1))
+                                           + (r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs(r__2)))
+                                          * xk;
                             /* L90: */
                         }
                         rwork[k] += xk;
@@ -454,24 +467,23 @@ void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
         else
         {
             /* Compute f2c_abs(A**H)*f2c_abs(X) + f2c_abs(B). */
-            if (upper)
+            if(upper)
             {
-                if (nounit)
+                if(nounit)
                 {
                     i__2 = *n;
-                    for (k = 1;
-                            k <= i__2;
-                            ++k)
+                    for(k = 1; k <= i__2; ++k)
                     {
                         s = 0.f;
                         i__3 = k;
-                        for (i__ = 1;
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__3; ++i__)
                         {
                             i__4 = i__ + k * a_dim1;
                             i__5 = i__ + j * x_dim1;
-                            s += ((r__1 = a[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs(r__2))) * ((r__3 = x[i__5].r, f2c_abs(r__3)) + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4))) ;
+                            s += ((r__1 = a[i__4].r, f2c_abs(r__1))
+                                  + (r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs(r__2)))
+                                 * ((r__3 = x[i__5].r, f2c_abs(r__3))
+                                    + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4)));
                             /* L110: */
                         }
                         rwork[k] += s;
@@ -481,20 +493,20 @@ void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
                 else
                 {
                     i__2 = *n;
-                    for (k = 1;
-                            k <= i__2;
-                            ++k)
+                    for(k = 1; k <= i__2; ++k)
                     {
                         i__3 = k + j * x_dim1;
-                        s = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[ k + j * x_dim1]), f2c_abs(r__2));
+                        s = (r__1 = x[i__3].r, f2c_abs(r__1))
+                            + (r__2 = r_imag(&x[k + j * x_dim1]), f2c_abs(r__2));
                         i__3 = k - 1;
-                        for (i__ = 1;
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__3; ++i__)
                         {
                             i__4 = i__ + k * a_dim1;
                             i__5 = i__ + j * x_dim1;
-                            s += ((r__1 = a[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs(r__2))) * ((r__3 = x[i__5].r, f2c_abs(r__3)) + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4))) ;
+                            s += ((r__1 = a[i__4].r, f2c_abs(r__1))
+                                  + (r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs(r__2)))
+                                 * ((r__3 = x[i__5].r, f2c_abs(r__3))
+                                    + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4)));
                             /* L130: */
                         }
                         rwork[k] += s;
@@ -504,22 +516,21 @@ void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
             }
             else
             {
-                if (nounit)
+                if(nounit)
                 {
                     i__2 = *n;
-                    for (k = 1;
-                            k <= i__2;
-                            ++k)
+                    for(k = 1; k <= i__2; ++k)
                     {
                         s = 0.f;
                         i__3 = *n;
-                        for (i__ = k;
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = k; i__ <= i__3; ++i__)
                         {
                             i__4 = i__ + k * a_dim1;
                             i__5 = i__ + j * x_dim1;
-                            s += ((r__1 = a[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs(r__2))) * ((r__3 = x[i__5].r, f2c_abs(r__3)) + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4))) ;
+                            s += ((r__1 = a[i__4].r, f2c_abs(r__1))
+                                  + (r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs(r__2)))
+                                 * ((r__3 = x[i__5].r, f2c_abs(r__3))
+                                    + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4)));
                             /* L150: */
                         }
                         rwork[k] += s;
@@ -529,20 +540,20 @@ void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
                 else
                 {
                     i__2 = *n;
-                    for (k = 1;
-                            k <= i__2;
-                            ++k)
+                    for(k = 1; k <= i__2; ++k)
                     {
                         i__3 = k + j * x_dim1;
-                        s = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[ k + j * x_dim1]), f2c_abs(r__2));
+                        s = (r__1 = x[i__3].r, f2c_abs(r__1))
+                            + (r__2 = r_imag(&x[k + j * x_dim1]), f2c_abs(r__2));
                         i__3 = *n;
-                        for (i__ = k + 1;
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = k + 1; i__ <= i__3; ++i__)
                         {
                             i__4 = i__ + k * a_dim1;
                             i__5 = i__ + j * x_dim1;
-                            s += ((r__1 = a[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs(r__2))) * ((r__3 = x[i__5].r, f2c_abs(r__3)) + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4))) ;
+                            s += ((r__1 = a[i__4].r, f2c_abs(r__1))
+                                  + (r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs(r__2)))
+                                 * ((r__3 = x[i__5].r, f2c_abs(r__3))
+                                    + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4)));
                             /* L170: */
                         }
                         rwork[k] += s;
@@ -553,25 +564,27 @@ void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
         }
         s = 0.f;
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
-            if (rwork[i__] > safe2)
+            if(rwork[i__] > safe2)
             {
                 /* Computing MAX */
                 i__3 = i__;
                 r__3 = s;
-                r__4 = ((r__1 = work[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2))) / rwork[i__]; // , expr subst
-                s = fla_max(r__3,r__4);
+                r__4 = ((r__1 = work[i__3].r, f2c_abs(r__1))
+                        + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)))
+                       / rwork[i__]; // , expr subst
+                s = fla_max(r__3, r__4);
             }
             else
             {
                 /* Computing MAX */
                 i__3 = i__;
                 r__3 = s;
-                r__4 = ((r__1 = work[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + safe1) / (rwork[i__] + safe1); // , expr subst
-                s = fla_max(r__3,r__4);
+                r__4 = ((r__1 = work[i__3].r, f2c_abs(r__1))
+                        + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + safe1)
+                       / (rwork[i__] + safe1); // , expr subst
+                s = fla_max(r__3, r__4);
             }
             /* L190: */
         }
@@ -594,35 +607,34 @@ void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
         /* inv(op(A)) * diag(W), */
         /* where W = f2c_abs(R) + NZ*EPS*( f2c_abs(op(A))*f2c_abs(X)+f2c_abs(B) ))) */
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
-            if (rwork[i__] > safe2)
+            if(rwork[i__] > safe2)
             {
                 i__3 = i__;
-                rwork[i__] = (r__1 = work[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__] ;
+                rwork[i__] = (r__1 = work[i__3].r, f2c_abs(r__1))
+                             + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__];
             }
             else
             {
                 i__3 = i__;
-                rwork[i__] = (r__1 = work[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__] + safe1;
+                rwork[i__] = (r__1 = work[i__3].r, f2c_abs(r__1))
+                             + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__]
+                             + safe1;
             }
             /* L200: */
         }
         kase = 0;
-L210:
+    L210:
         clacn2_(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
-        if (kase != 0)
+        if(kase != 0)
         {
-            if (kase == 1)
+            if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(op(A)**H). */
-                ctrsv_(uplo, transt, diag, n, &a[a_offset], lda, &work[1], & c__1);
+                ctrsv_(uplo, transt, diag, n, &a[a_offset], lda, &work[1], &c__1);
                 i__2 = *n;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__;
                     i__4 = i__;
@@ -638,9 +650,7 @@ L210:
             {
                 /* Multiply by inv(op(A))*diag(W). */
                 i__2 = *n;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__;
                     i__4 = i__;
@@ -651,25 +661,24 @@ L210:
                     work[i__3].i = q__1.i; // , expr subst
                     /* L230: */
                 }
-                ctrsv_(uplo, transn, diag, n, &a[a_offset], lda, &work[1], & c__1);
+                ctrsv_(uplo, transn, diag, n, &a[a_offset], lda, &work[1], &c__1);
             }
             goto L210;
         }
         /* Normalize error. */
         lstres = 0.f;
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             i__3 = i__ + j * x_dim1;
             r__3 = lstres;
-            r__4 = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__2)); // , expr subst
-            lstres = fla_max(r__3,r__4);
+            r__4 = (r__1 = x[i__3].r, f2c_abs(r__1))
+                   + (r__2 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__2)); // , expr subst
+            lstres = fla_max(r__3, r__4);
             /* L240: */
         }
-        if (lstres != 0.f)
+        if(lstres != 0.f)
         {
             ferr[j] /= lstres;
         }

@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/sgemlq.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/sgemlq.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SGEMLQ */
 /* Definition: */
 /* =========== */
@@ -33,7 +36,7 @@
 /* > \verbatim */
 /* > SIDE is CHARACTER*1 */
 /* > = 'L': apply Q or Q**T from the Left;
-*/
+ */
 /* > = 'R': apply Q or Q**T from the Right. */
 /* > \endverbatim */
 /* > */
@@ -41,7 +44,7 @@
 /* > \verbatim */
 /* > TRANS is CHARACTER*1 */
 /* > = 'N': No transpose, apply Q;
-*/
+ */
 /* > = 'T': Transpose, apply Q**T. */
 /* > \endverbatim */
 /* > */
@@ -63,7 +66,7 @@
 /* > The number of elementary reflectors whose product defines */
 /* > the matrix Q. */
 /* > If SIDE = 'L', M >= K >= 0;
-*/
+ */
 /* > if SIDE = 'R', N >= K >= 0. */
 /* > \endverbatim */
 /* > */
@@ -161,22 +164,29 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda, real *t, integer *tsize, real *c__, integer *ldc, real *work, integer *lwork, integer *info)
+void sgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda,
+             real *t, integer *tsize, real *c__, integer *ldc, real *work, integer *lwork,
+             integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    void slamswlq_(char *, char *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
+        void
+        slamswlq_(char *, char *, integer *, integer *, integer *, integer *, integer *, real *,
+                  integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
     integer mb, nb, mn, lw;
     logical left, tran;
     extern logical lsame_(char *, char *, integer, integer);
     logical right;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, lquery;
     extern /* Subroutine */
-    void sgemlqt_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
+        void
+        sgemlqt_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *,
+                 real *, integer *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -212,9 +222,9 @@ void sgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, real *
     tran = lsame_(trans, "T", 1, 1);
     left = lsame_(side, "L", 1, 1);
     right = lsame_(side, "R", 1, 1);
-    mb = (integer) t[2];
-    nb = (integer) t[3];
-    if (left)
+    mb = (integer)t[2];
+    nb = (integer)t[3];
+    if(left)
     {
         lw = *n * mb;
         mn = *m;
@@ -225,74 +235,76 @@ void sgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, real *
         mn = *n;
     }
     *info = 0;
-    if (! left && ! right)
+    if(!left && !right)
     {
         *info = -1;
     }
-    else if (! tran && ! notran)
+    else if(!tran && !notran)
     {
         *info = -2;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*k < 0 || *k > mn)
+    else if(*k < 0 || *k > mn)
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*k))
+    else if(*lda < fla_max(1, *k))
     {
         *info = -7;
     }
-    else if (*tsize < 5)
+    else if(*tsize < 5)
     {
         *info = -9;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -11;
     }
-    else if (*lwork < fla_max(1,lw) && ! lquery)
+    else if(*lwork < fla_max(1, lw) && !lquery)
     {
         *info = -13;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        work[1] = (real) lw;
+        work[1] = (real)lw;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SGEMLQ", &i__1, (ftnlen)6);
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         return;
     }
     /* Quick return if possible */
     /* Computing MIN */
-    i__1 = fla_min(*m,*n);
-    if (fla_min(i__1,*k) == 0)
+    i__1 = fla_min(*m, *n);
+    if(fla_min(i__1, *k) == 0)
     {
         return;
     }
     /* Computing MAX */
-    i__1 = fla_max(*m,*n);
-    if (left && *m <= *k || right && *n <= *k || nb <= *k || nb >= fla_max(i__1,* k))
+    i__1 = fla_max(*m, *n);
+    if(left && *m <= *k || right && *n <= *k || nb <= *k || nb >= fla_max(i__1, *k))
     {
-        sgemlqt_(side, trans, m, n, k, &mb, &a[a_offset], lda, &t[6], &mb, & c__[c_offset], ldc, &work[1], info);
+        sgemlqt_(side, trans, m, n, k, &mb, &a[a_offset], lda, &t[6], &mb, &c__[c_offset], ldc,
+                 &work[1], info);
     }
     else
     {
-        slamswlq_(side, trans, m, n, k, &mb, &nb, &a[a_offset], lda, &t[6], & mb, &c__[c_offset], ldc, &work[1], lwork, info);
+        slamswlq_(side, trans, m, n, k, &mb, &nb, &a[a_offset], lda, &t[6], &mb, &c__[c_offset],
+                  ldc, &work[1], lwork, info);
     }
-    work[1] = (real) lw;
+    work[1] = (real)lw;
     return;
     /* End of SGEMLQ */
 }

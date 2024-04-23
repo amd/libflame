@@ -1,5 +1,8 @@
-/* slarfb_gett.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* slarfb_gett.f -- translated by f2c (version 20160102). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b9 = 1.f;
@@ -10,11 +13,17 @@ static real c_b21 = -1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLARFB_GETT + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarfb_ gett.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarfb_
+ * gett.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarfb_ gett.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarfb_
+ * gett.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarfb_ gett.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarfb_
+ * gett.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -206,7 +215,7 @@ static real c_b21 = -1.f;
 /* > */
 /* > where: */
 /* > 1) if IDENT == 'I',V1 is a K-by-K identity matrix, not stored;
-*/
+ */
 /* > 2) if IDENT != 'I',V1 is a K-by-K unit lower-triangular matrix, */
 /* > stored in the lower-triangular part of the array */
 /* > A(1:K,1:K) (ones are not stored), */
@@ -381,16 +390,23 @@ static real c_b21 = -1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slarfb_gett_(char *ident, integer *m, integer *n, integer *k, real *t, integer *ldt, real *a, integer *lda, real *b, integer *ldb, real *work, integer *ldwork)
+void slarfb_gett_(char *ident, integer *m, integer *n, integer *k, real *t, integer *ldt, real *a,
+                  integer *lda, real *b, integer *ldb, real *work, integer *ldwork)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, work_dim1, work_offset, i__1, i__2;
+    integer a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, work_dim1, work_offset, i__1,
+        i__2;
     /* Local variables */
     integer i__, j;
     logical lnotident;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *);
+        void
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *),
+        scopy_(integer *, real *, integer *, real *, integer *),
+        strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
+               real *, integer *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -423,73 +439,71 @@ void slarfb_gett_(char *ident, integer *m, integer *n, integer *k, real *t, inte
     work_offset = 1 + work_dim1;
     work -= work_offset;
     /* Function Body */
-    if (*m < 0 || *n <= 0 || *k == 0 || *k > *n)
+    if(*m < 0 || *n <= 0 || *k == 0 || *k > *n)
     {
         return;
     }
-    lnotident = ! lsame_(ident, "I", 1, 1);
+    lnotident = !lsame_(ident, "I", 1, 1);
     /* ------------------------------------------------------------------ */
     /* First Step. Computation of the Column Block 2: */
     /* ( A2 ) := H * ( A2 ) */
     /* ( B2 ) ( B2 ) */
     /* ------------------------------------------------------------------ */
-    if (*n > *k)
+    if(*n > *k)
     {
         /* col2_(1) Compute W2: = A2. Therefore, copy A2 = A(1:K, K+1:N) */
         /* into W2=WORK(1:K, 1:N-K) column-by-column. */
         i__1 = *n - *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             scopy_(k, &a[(*k + j) * a_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
         }
-        if (lnotident)
+        if(lnotident)
         {
             /* col2_(2) Compute W2: = (V1**T) * W2 = (A1**T) * W2, */
             /* V1 is not an identy matrix, but unit lower-triangular */
             /* V1 stored in A1 (diagonal ones are not stored). */
             i__1 = *n - *k;
-            strmm_("L", "L", "T", "U", k, &i__1, &c_b9, &a[a_offset], lda, & work[work_offset], ldwork);
+            strmm_("L", "L", "T", "U", k, &i__1, &c_b9, &a[a_offset], lda, &work[work_offset],
+                   ldwork);
         }
         /* col2_(3) Compute W2: = W2 + (V2**T) * B2 = W2 + (B1**T) * B2 */
         /* V2 stored in B1. */
-        if (*m > 0)
+        if(*m > 0)
         {
             i__1 = *n - *k;
-            sgemm_("T", "N", k, &i__1, m, &c_b9, &b[b_offset], ldb, &b[(*k + 1) * b_dim1 + 1], ldb, &c_b9, &work[work_offset], ldwork);
+            sgemm_("T", "N", k, &i__1, m, &c_b9, &b[b_offset], ldb, &b[(*k + 1) * b_dim1 + 1], ldb,
+                   &c_b9, &work[work_offset], ldwork);
         }
         /* col2_(4) Compute W2: = T * W2, */
         /* T is upper-triangular. */
         i__1 = *n - *k;
-        strmm_("L", "U", "N", "N", k, &i__1, &c_b9, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        strmm_("L", "U", "N", "N", k, &i__1, &c_b9, &t[t_offset], ldt, &work[work_offset], ldwork);
         /* col2_(5) Compute B2: = B2 - V2 * W2 = B2 - B1 * W2, */
         /* V2 stored in B1. */
-        if (*m > 0)
+        if(*m > 0)
         {
             i__1 = *n - *k;
-            sgemm_("N", "N", m, &i__1, k, &c_b21, &b[b_offset], ldb, &work[ work_offset], ldwork, &c_b9, &b[(*k + 1) * b_dim1 + 1], ldb);
+            sgemm_("N", "N", m, &i__1, k, &c_b21, &b[b_offset], ldb, &work[work_offset], ldwork,
+                   &c_b9, &b[(*k + 1) * b_dim1 + 1], ldb);
         }
-        if (lnotident)
+        if(lnotident)
         {
             /* col2_(6) Compute W2: = V1 * W2 = A1 * W2, */
             /* V1 is not an identity matrix, but unit lower-triangular, */
             /* V1 stored in A1 (diagonal ones are not stored). */
             i__1 = *n - *k;
-            strmm_("L", "L", "N", "U", k, &i__1, &c_b9, &a[a_offset], lda, & work[work_offset], ldwork);
+            strmm_("L", "L", "N", "U", k, &i__1, &c_b9, &a[a_offset], lda, &work[work_offset],
+                   ldwork);
         }
         /* col2_(7) Compute A2: = A2 - W2 = */
         /* = A(1:K, K+1:N-K) - WORK(1:K, 1:N-K), */
         /* column-by-column. */
         i__1 = *n - *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 a[i__ + (*k + j) * a_dim1] -= work[i__ + j * work_dim1];
             }
@@ -504,52 +518,46 @@ void slarfb_gett_(char *ident, integer *m, integer *n, integer *k, real *t, inte
     /* A1 = A(1:K, 1:K) into the upper-triangular */
     /* W1 = WORK(1:K, 1:K) column-by-column. */
     i__1 = *k;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
-        scopy_(&j, &a[j * a_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1) ;
+        scopy_(&j, &a[j * a_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
     }
     /* Set the subdiagonal elements of W1 to zero column-by-column. */
     i__1 = *k - 1;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         i__2 = *k;
-        for (i__ = j + 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = j + 1; i__ <= i__2; ++i__)
         {
             work[i__ + j * work_dim1] = 0.f;
         }
     }
-    if (lnotident)
+    if(lnotident)
     {
         /* col1_(2) Compute W1: = (V1**T) * W1 = (A1**T) * W1, */
         /* V1 is not an identity matrix, but unit lower-triangular */
         /* V1 stored in A1 (diagonal ones are not stored), */
         /* W1 is upper-triangular with zeroes below the diagonal. */
-        strmm_("L", "L", "T", "U", k, k, &c_b9, &a[a_offset], lda, &work[ work_offset], ldwork);
+        strmm_("L", "L", "T", "U", k, k, &c_b9, &a[a_offset], lda, &work[work_offset], ldwork);
     }
     /* col1_(3) Compute W1: = T * W1, */
     /* T is upper-triangular, */
     /* W1 is upper-triangular with zeroes below the diagonal. */
-    strmm_("L", "U", "N", "N", k, k, &c_b9, &t[t_offset], ldt, &work[ work_offset], ldwork);
+    strmm_("L", "U", "N", "N", k, k, &c_b9, &t[t_offset], ldt, &work[work_offset], ldwork);
     /* col1_(4) Compute B1: = - V2 * W1 = - B1 * W1, */
     /* V2 = B1, W1 is upper-triangular with zeroes below the diagonal. */
-    if (*m > 0)
+    if(*m > 0)
     {
-        strmm_("R", "U", "N", "N", m, k, &c_b21, &work[work_offset], ldwork, & b[b_offset], ldb);
+        strmm_("R", "U", "N", "N", m, k, &c_b21, &work[work_offset], ldwork, &b[b_offset], ldb);
     }
-    if (lnotident)
+    if(lnotident)
     {
         /* col1_(5) Compute W1: = V1 * W1 = A1 * W1, */
         /* V1 is not an identity matrix, but unit lower-triangular */
         /* V1 stored in A1 (diagonal ones are not stored), */
         /* W1 is upper-triangular on input with zeroes below the diagonal, */
         /* and square on output. */
-        strmm_("L", "L", "N", "U", k, k, &c_b9, &a[a_offset], lda, &work[ work_offset], ldwork);
+        strmm_("L", "L", "N", "U", k, k, &c_b9, &a[a_offset], lda, &work[work_offset], ldwork);
         /* col1_(6) Compute A1: = A1 - W1 = A(1:K, 1:K) - WORK(1:K, 1:K) */
         /* column-by-column. A1 is upper-triangular on input. */
         /* If IDENT, A1 is square on output, and W1 is square, */
@@ -557,14 +565,10 @@ void slarfb_gett_(char *ident, integer *m, integer *n, integer *k, real *t, inte
         /* W1 is upper-triangular. */
         /* col1_(6)_a Compute elements of A1 below the diagonal. */
         i__1 = *k - 1;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = j + 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = j + 1; i__ <= i__2; ++i__)
             {
                 a[i__ + j * a_dim1] = -work[i__ + j * work_dim1];
             }
@@ -572,14 +576,10 @@ void slarfb_gett_(char *ident, integer *m, integer *n, integer *k, real *t, inte
     }
     /* col1_(6)_b Compute elements of A1 on and above the diagonal. */
     i__1 = *k;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         i__2 = j;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             a[i__ + j * a_dim1] -= work[i__ + j * work_dim1];
         }

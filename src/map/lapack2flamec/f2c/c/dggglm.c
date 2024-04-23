@@ -1,5 +1,8 @@
-/* dggglm.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dggglm.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -11,11 +14,17 @@ static doublereal c_b34 = 1.;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DGGGLM + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dggglm. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dggglm.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dggglm. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dggglm.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dggglm. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dggglm.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -101,7 +110,7 @@ static doublereal c_b34 = 1.;
 /* > On entry, the N-by-P matrix B. */
 /* > On exit, if N <= P, the upper triangle of the subarray */
 /* > B(1:N,P-N+1:P) contains the N-by-N upper triangular matrix T;
-*/
+ */
 /* > if N > P, the elements on and above the (N-P)th subdiagonal */
 /* > contain the N-by-P upper trapezoidal matrix T. */
 /* > \endverbatim */
@@ -178,24 +187,40 @@ the least squares solution could not */
 /* > \ingroup doubleOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void dggglm_(integer *n, integer *m, integer *p, doublereal * a, integer *lda, doublereal *b, integer *ldb, doublereal *d__, doublereal *x, doublereal *y, doublereal *work, integer *lwork, integer *info)
+void dggglm_(integer *n, integer *m, integer *p, doublereal *a, integer *lda, doublereal *b,
+             integer *ldb, doublereal *d__, doublereal *x, doublereal *y, doublereal *work,
+             integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dggglm inputs: n %" FLA_IS ", m %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*n, *m, *p, *lda, *ldb, *lwork);
+    AOCL_DTL_SNPRINTF("dggglm inputs: n %" FLA_IS ", m %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS ", lwork %" FLA_IS "",
+                      *n, *m, *p, *lda, *ldb, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
     integer i__, nb, np, nb1, nb2, nb3, nb4, lopt;
     extern /* Subroutine */
-    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dggqrf_( integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *),
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        dggqrf_(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, integer *, doublereal *, doublereal *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwkmin;
     extern /* Subroutine */
-    void dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dormrq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, doublereal *, integer *, doublereal *, integer *, integer *),
+        dormrq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    void dtrtrs_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dtrtrs_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
+                integer *, integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -229,32 +254,32 @@ void dggglm_(integer *n, integer *m, integer *p, doublereal * a, integer *lda, d
     --work;
     /* Function Body */
     *info = 0;
-    np = fla_min(*n,*p);
+    np = fla_min(*n, *p);
     lquery = *lwork == -1;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    else if (*m < 0 || *m > *n)
+    else if(*m < 0 || *m > *n)
     {
         *info = -2;
     }
-    else if (*p < 0 || *p < *n - *m)
+    else if(*p < 0 || *p < *n - *m)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
     /* Calculate workspace */
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (*n == 0)
+        if(*n == 0)
         {
             lwkmin = 1;
             lwkopt = 1;
@@ -266,44 +291,40 @@ void dggglm_(integer *n, integer *m, integer *p, doublereal * a, integer *lda, d
             nb3 = ilaenv_(&c__1, "DORMQR", " ", n, m, p, &c_n1);
             nb4 = ilaenv_(&c__1, "DORMRQ", " ", n, m, p, &c_n1);
             /* Computing MAX */
-            i__1 = fla_max(nb1,nb2);
-            i__1 = fla_max(i__1,nb3); // , expr subst
-            nb = fla_max(i__1,nb4);
+            i__1 = fla_max(nb1, nb2);
+            i__1 = fla_max(i__1, nb3); // , expr subst
+            nb = fla_max(i__1, nb4);
             lwkmin = *m + *n + *p;
-            lwkopt = *m + np + fla_max(*n,*p) * nb;
+            lwkopt = *m + np + fla_max(*n, *p) * nb;
         }
-        work[1] = (doublereal) lwkopt;
-        if (*lwork < lwkmin && ! lquery)
+        work[1] = (doublereal)lwkopt;
+        if(*lwork < lwkmin && !lquery)
         {
             *info = -12;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DGGGLM", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         i__1 = *m;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             x[i__] = 0.;
         }
         i__1 = *p;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             y[i__] = 0.;
         }
@@ -317,24 +338,27 @@ void dggglm_(integer *n, integer *m, integer *p, doublereal * a, integer *lda, d
     /* where R11 and T22 are upper triangular, and Q and Z are */
     /* orthogonal. */
     i__1 = *lwork - *m - np;
-    dggqrf_(n, m, p, &a[a_offset], lda, &work[1], &b[b_offset], ldb, &work[*m + 1], &work[*m + np + 1], &i__1, info);
-    lopt = (integer) work[*m + np + 1];
+    dggqrf_(n, m, p, &a[a_offset], lda, &work[1], &b[b_offset], ldb, &work[*m + 1],
+            &work[*m + np + 1], &i__1, info);
+    lopt = (integer)work[*m + np + 1];
     /* Update left-hand-side vector d = Q**T*d = ( d1 ) M */
     /* ( d2 ) N-M */
-    i__1 = fla_max(1,*n);
+    i__1 = fla_max(1, *n);
     i__2 = *lwork - *m - np;
-    dormqr_("Left", "Transpose", n, &c__1, m, &a[a_offset], lda, &work[1], & d__[1], &i__1, &work[*m + np + 1], &i__2, info);
+    dormqr_("Left", "Transpose", n, &c__1, m, &a[a_offset], lda, &work[1], &d__[1], &i__1,
+            &work[*m + np + 1], &i__2, info);
     /* Computing MAX */
     i__1 = lopt;
-    i__2 = (integer) work[*m + np + 1]; // , expr subst
-    lopt = fla_max(i__1,i__2);
+    i__2 = (integer)work[*m + np + 1]; // , expr subst
+    lopt = fla_max(i__1, i__2);
     /* Solve T22*y2 = d2 for y2 */
-    if (*n > *m)
+    if(*n > *m)
     {
         i__1 = *n - *m;
         i__2 = *n - *m;
-        dtrtrs_("Upper", "No transpose", "Non unit", &i__1, &c__1, &b[*m + 1 + (*m + *p - *n + 1) * b_dim1], ldb, &d__[*m + 1], &i__2, info);
-        if (*info > 0)
+        dtrtrs_("Upper", "No transpose", "Non unit", &i__1, &c__1,
+                &b[*m + 1 + (*m + *p - *n + 1) * b_dim1], ldb, &d__[*m + 1], &i__2, info);
+        if(*info > 0)
         {
             *info = 1;
             AOCL_DTL_TRACE_LOG_EXIT
@@ -345,21 +369,20 @@ void dggglm_(integer *n, integer *m, integer *p, doublereal * a, integer *lda, d
     }
     /* Set y1 = 0 */
     i__1 = *m + *p - *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         y[i__] = 0.;
         /* L10: */
     }
     /* Update d1 = d1 - T12*y2 */
     i__1 = *n - *m;
-    dgemv_("No transpose", m, &i__1, &c_b32, &b[(*m + *p - *n + 1) * b_dim1 + 1], ldb, &y[*m + *p - *n + 1], &c__1, &c_b34, &d__[1], &c__1);
+    dgemv_("No transpose", m, &i__1, &c_b32, &b[(*m + *p - *n + 1) * b_dim1 + 1], ldb,
+           &y[*m + *p - *n + 1], &c__1, &c_b34, &d__[1], &c__1);
     /* Solve triangular system: R11*x = d1 */
-    if (*m > 0)
+    if(*m > 0)
     {
         dtrtrs_("Upper", "No Transpose", "Non unit", m, &c__1, &a[a_offset], lda, &d__[1], m, info);
-        if (*info > 0)
+        if(*info > 0)
         {
             *info = 2;
             AOCL_DTL_TRACE_LOG_EXIT
@@ -372,13 +395,14 @@ void dggglm_(integer *n, integer *m, integer *p, doublereal * a, integer *lda, d
     /* Computing MAX */
     i__1 = 1;
     i__2 = *n - *p + 1; // , expr subst
-    i__3 = fla_max(1,*p);
+    i__3 = fla_max(1, *p);
     i__4 = *lwork - *m - np;
-    dormrq_("Left", "Transpose", p, &c__1, &np, &b[fla_max(i__1,i__2) + b_dim1], ldb, &work[*m + 1], &y[1], &i__3, &work[*m + np + 1], &i__4, info);
+    dormrq_("Left", "Transpose", p, &c__1, &np, &b[fla_max(i__1, i__2) + b_dim1], ldb,
+            &work[*m + 1], &y[1], &i__3, &work[*m + np + 1], &i__4, info);
     /* Computing MAX */
     i__1 = lopt;
-    i__2 = (integer) work[*m + np + 1]; // , expr subst
-    work[1] = (doublereal) (*m + np + fla_max(i__1,i__2));
+    i__2 = (integer)work[*m + np + 1]; // , expr subst
+    work[1] = (doublereal)(*m + np + fla_max(i__1, i__2));
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DGGGLM */

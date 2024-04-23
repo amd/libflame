@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/cgeqr.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/cgeqr.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -28,9 +31,9 @@ static integer c__2 = 2;
 /* > where: */
 /* > */
 /* > Q is a M-by-M orthogonal matrix;
-*/
+ */
 /* > R is an upper-triangular N-by-N matrix;
-*/
+ */
 /* > 0 is a (M-N)-by-N zero matrix, if M > N. */
 /* > */
 /* > \endverbatim */
@@ -55,7 +58,7 @@ static integer c__2 = 2;
 /* > On exit, the elements on and above the diagonal of the array */
 /* > contain the fla_min(M,N)-by-N upper trapezoidal matrix R */
 /* > (R is upper triangular if M >= N);
-*/
+ */
 /* > the elements below the diagonal are used to store part of the */
 /* > data structure to represent Q. */
 /* > \endverbatim */
@@ -169,15 +172,18 @@ static integer c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgeqr_(integer *m, integer *n, complex *a, integer *lda, complex *t, integer *tsize, complex *work, integer *lwork, integer * info)
+void cgeqr_(integer *m, integer *n, complex *a, integer *lda, complex *t, integer *tsize,
+            complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgeqr inputs: m %lld, n %lld, lda %lld, tsize %lld, lwork %lld",*m, *n, *lda, *tsize, *lwork);
+    snprintf(buffer, 256, "cgeqr inputs: m %lld, n %lld, lda %lld, tsize %lld, lwork %lld", *m, *n,
+             *lda, *tsize, *lwork);
 #else
-    snprintf(buffer, 256,"cgeqr inputs: m %d, n %d, lda %d, tsize %d, lwork %d",*m, *n, *lda, *tsize, *lwork);
+    snprintf(buffer, 256, "cgeqr inputs: m %d, n %d, lda %d, tsize %d, lwork %d", *m, *n, *lda,
+             *tsize, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -188,14 +194,19 @@ void cgeqr_(integer *m, integer *n, complex *a, integer *lda, complex *t, intege
     logical mint, minw;
     integer nblcks;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void cgeqrt_(integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *);
+        void
+        cgeqrt_(integer *, integer *, integer *, complex *, integer *, complex *, integer *,
+                complex *, integer *);
     logical lminws, lquery;
     integer mintsz;
     extern /* Subroutine */
-    void clatsqr_(integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
+        void
+        clatsqr_(integer *, integer *, integer *, integer *, complex *, integer *, complex *,
+                 integer *, complex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. -- */
@@ -229,19 +240,19 @@ void cgeqr_(integer *m, integer *n, complex *a, integer *lda, complex *t, intege
     lquery = *tsize == -1 || *tsize == -2 || *lwork == -1 || *lwork == -2;
     mint = FALSE_;
     minw = FALSE_;
-    if (*tsize == -2 || *lwork == -2)
+    if(*tsize == -2 || *lwork == -2)
     {
-        if (*tsize != -1)
+        if(*tsize != -1)
         {
             mint = TRUE_;
         }
-        if (*lwork != -1)
+        if(*lwork != -1)
         {
             minw = TRUE_;
         }
     }
     /* Determine the block size */
-    if (fla_min(*m,*n) > 0)
+    if(fla_min(*m, *n) > 0)
     {
         mb = ilaenv_(&c__1, "CGEQR ", " ", m, n, &c__1, &c_n1);
         nb = ilaenv_(&c__1, "CGEQR ", " ", m, n, &c__2, &c_n1);
@@ -251,18 +262,18 @@ void cgeqr_(integer *m, integer *n, complex *a, integer *lda, complex *t, intege
         mb = *m;
         nb = 1;
     }
-    if (mb > *m || mb <= *n)
+    if(mb > *m || mb <= *n)
     {
         mb = *m;
     }
-    if (nb > fla_min(*m,*n) || nb < 1)
+    if(nb > fla_min(*m, *n) || nb < 1)
     {
         nb = 1;
     }
     mintsz = *n + 5;
-    if (mb > *n && *m > *n)
+    if(mb > *n && *m > *n)
     {
-        if ((*m - *n) % (mb - *n) == 0)
+        if((*m - *n) % (mb - *n) == 0)
         {
             nblcks = (*m - *n) / (mb - *n);
         }
@@ -280,32 +291,33 @@ void cgeqr_(integer *m, integer *n, complex *a, integer *lda, complex *t, intege
     /* Computing MAX */
     i__1 = 1;
     i__2 = nb * *n * nblcks + 5; // , expr subst
-    if ((*tsize < fla_max(i__1,i__2) || *lwork < nb * *n) && *lwork >= *n && * tsize >= mintsz && ! lquery)
+    if((*tsize < fla_max(i__1, i__2) || *lwork < nb * *n) && *lwork >= *n && *tsize >= mintsz
+       && !lquery)
     {
         /* Computing MAX */
         i__1 = 1;
         i__2 = nb * *n * nblcks + 5; // , expr subst
-        if (*tsize < fla_max(i__1,i__2))
+        if(*tsize < fla_max(i__1, i__2))
         {
             lminws = TRUE_;
             nb = 1;
             mb = *m;
         }
-        if (*lwork < nb * *n)
+        if(*lwork < nb * *n)
         {
             lminws = TRUE_;
             nb = 1;
         }
     }
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
@@ -314,7 +326,7 @@ void cgeqr_(integer *m, integer *n, complex *a, integer *lda, complex *t, intege
         /* Computing MAX */
         i__1 = 1;
         i__2 = nb * *n * nblcks + 5; // , expr subst
-        if (*tsize < fla_max(i__1,i__2) && ! lquery && ! lminws)
+        if(*tsize < fla_max(i__1, i__2) && !lquery && !lminws)
         {
             *info = -6;
         }
@@ -323,33 +335,33 @@ void cgeqr_(integer *m, integer *n, complex *a, integer *lda, complex *t, intege
             /* Computing MAX */
             i__1 = 1;
             i__2 = *n * nb; // , expr subst
-            if (*lwork < fla_max(i__1,i__2) && ! lquery && ! lminws)
+            if(*lwork < fla_max(i__1, i__2) && !lquery && !lminws)
             {
                 *info = -8;
             }
         }
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (mint)
+        if(mint)
         {
-            t[1].r = (real) mintsz;
+            t[1].r = (real)mintsz;
             t[1].i = 0.f; // , expr subst
         }
         else
         {
             i__1 = nb * *n * nblcks + 5;
-            t[1].r = (real) i__1;
+            t[1].r = (real)i__1;
             t[1].i = 0.f; // , expr subst
         }
-        t[2].r = (real) mb;
+        t[2].r = (real)mb;
         t[2].i = 0.f; // , expr subst
-        t[3].r = (real) nb;
+        t[3].r = (real)nb;
         t[3].i = 0.f; // , expr subst
-        if (minw)
+        if(minw)
         {
-            i__1 = fla_max(1,*n);
-            work[1].r = (real) i__1;
+            i__1 = fla_max(1, *n);
+            work[1].r = (real)i__1;
             work[1].i = 0.f; // , expr subst
         }
         else
@@ -357,31 +369,31 @@ void cgeqr_(integer *m, integer *n, complex *a, integer *lda, complex *t, intege
             /* Computing MAX */
             i__2 = 1;
             i__3 = nb * *n; // , expr subst
-            i__1 = fla_max(i__2,i__3);
-            work[1].r = (real) i__1;
+            i__1 = fla_max(i__2, i__3);
+            work[1].r = (real)i__1;
             work[1].i = 0.f; // , expr subst
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CGEQR", &i__1, (ftnlen)5);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Quick return if possible */
-    if (fla_min(*m,*n) == 0)
+    if(fla_min(*m, *n) == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* The QR Decomposition */
-    if (*m <= *n || mb <= *n || mb >= *m)
+    if(*m <= *n || mb <= *n || mb >= *m)
     {
         cgeqrt_(m, n, &nb, &a[a_offset], lda, &t[6], &nb, &work[1], info);
     }
@@ -392,8 +404,8 @@ void cgeqr_(integer *m, integer *n, complex *a, integer *lda, complex *t, intege
     /* Computing MAX */
     i__2 = 1;
     i__3 = nb * *n; // , expr subst
-    i__1 = fla_max(i__2,i__3);
-    work[1].r = (real) i__1;
+    i__1 = fla_max(i__2, i__3);
+    work[1].r = (real)i__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

@@ -1,16 +1,25 @@
-/* ../netlib/spoequb.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/spoequb.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SPOEQUB */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SPOEQUB + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spoequb .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spoequb
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spoequb .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spoequb
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spoequb .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spoequb
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -110,7 +119,8 @@ void spoequb_(integer *n, real *a, integer *lda, real *s, real *scond, real *ama
     real tmp, base, smin;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -140,22 +150,22 @@ void spoequb_(integer *n, real *a, integer *lda, real *s, real *scond, real *ama
     --s;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -3;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SPOEQUB", &i__1, (ftnlen)7);
         return;
     }
     /* Quick return if possible. */
-    if (*n == 0)
+    if(*n == 0)
     {
         *scond = 1.f;
         *amax = 0.f;
@@ -168,30 +178,26 @@ void spoequb_(integer *n, real *a, integer *lda, real *s, real *scond, real *ama
     smin = s[1];
     *amax = s[1];
     i__1 = *n;
-    for (i__ = 2;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 2; i__ <= i__1; ++i__)
     {
         s[i__] = a[i__ + i__ * a_dim1];
         /* Computing MIN */
         r__1 = smin;
         r__2 = s[i__]; // , expr subst
-        smin = fla_min(r__1,r__2);
+        smin = fla_min(r__1, r__2);
         /* Computing MAX */
         r__1 = *amax;
         r__2 = s[i__]; // , expr subst
-        *amax = fla_max(r__1,r__2);
+        *amax = fla_max(r__1, r__2);
         /* L10: */
     }
-    if (smin <= 0.f)
+    if(smin <= 0.f)
     {
         /* Find the first non-positive diagonal element and return. */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if (s[i__] <= 0.f)
+            if(s[i__] <= 0.f)
             {
                 *info = i__;
                 return;
@@ -204,11 +210,9 @@ void spoequb_(integer *n, real *a, integer *lda, real *s, real *scond, real *ama
         /* Set the scale factors to the reciprocals */
         /* of the diagonal elements. */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            i__2 = (integer) (tmp * log(s[i__]));
+            i__2 = (integer)(tmp * log(s[i__]));
             s[i__] = pow_ri(&base, &i__2);
             /* L30: */
         }

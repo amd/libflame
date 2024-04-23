@@ -1,16 +1,25 @@
-/* ../netlib/dlas2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlas2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLAS2 computes singular values of a 2-by-2 triangular matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLAS2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlas2.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlas2.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlas2.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlas2.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlas2.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlas2.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -96,7 +105,7 @@
 void dlas2_(doublereal *f, doublereal *g, doublereal *h__, doublereal *ssmin, doublereal *ssmax)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlas2 inputs: f %lf, g %lf, h__ %lf",*f, *g, *h__);
+    AOCL_DTL_SNPRINTF("dlas2 inputs: f %lf, g %lf, h__ %lf", *f, *g, *h__);
     /* System generated locals */
     doublereal d__1, d__2;
     /* Builtin functions */
@@ -120,25 +129,25 @@ void dlas2_(doublereal *f, doublereal *g, doublereal *h__, doublereal *ssmin, do
     fa = f2c_dabs(*f);
     ga = f2c_dabs(*g);
     ha = f2c_dabs(*h__);
-    fhmn = fla_min(fa,ha);
-    fhmx = fla_max(fa,ha);
-    if (fhmn == 0.)
+    fhmn = fla_min(fa, ha);
+    fhmx = fla_max(fa, ha);
+    if(fhmn == 0.)
     {
         *ssmin = 0.;
-        if (fhmx == 0.)
+        if(fhmx == 0.)
         {
             *ssmax = ga;
         }
         else
         {
             /* Computing 2nd power */
-            d__1 = fla_min(fhmx,ga) / fla_max(fhmx,ga);
-            *ssmax = fla_max(fhmx,ga) * sqrt(d__1 * d__1 + 1.);
+            d__1 = fla_min(fhmx, ga) / fla_max(fhmx, ga);
+            *ssmax = fla_max(fhmx, ga) * sqrt(d__1 * d__1 + 1.);
         }
     }
     else
     {
-        if (ga < fhmx)
+        if(ga < fhmx)
         {
             as = fhmn / fhmx + 1.;
             at = (fhmx - fhmn) / fhmx;
@@ -152,7 +161,7 @@ void dlas2_(doublereal *f, doublereal *g, doublereal *h__, doublereal *ssmin, do
         else
         {
             au = fhmx / ga;
-            if (au == 0.)
+            if(au == 0.)
             {
                 /* Avoid possible harmful underflow if exponent range */
                 /* asymmetric (true SSMIN may not underflow even if */

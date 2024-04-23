@@ -1,5 +1,8 @@
-/* ../netlib/cgebd2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cgebd2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b CGEBD2 reduces a general matrix to bidiagonal form using an unblocked algorithm. */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CGEBD2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgebd2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgebd2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgebd2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgebd2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgebd2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgebd2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -63,7 +72,7 @@ the */
 /* > reflectors, and the elements above the first superdiagonal, */
 /* > with the array TAUP, represent the unitary matrix P as */
 /* > a product of elementary reflectors;
-*/
+ */
 /* > if m < n, the diagonal and the first subdiagonal are */
 /* > overwritten with the lower bidiagonal matrix B;
 the */
@@ -93,7 +102,7 @@ the */
 /* > E is REAL array, dimension (fla_min(M,N)-1) */
 /* > The off-diagonal elements of the bidiagonal matrix B: */
 /* > if m >= n, E(i) = A(i,i+1) for i = 1,2,...,n-1;
-*/
+ */
 /* > if m < n, E(i) = A(i+1,i) for i = 1,2,...,m-1. */
 /* > \endverbatim */
 /* > */
@@ -164,11 +173,11 @@ tauq is stored in TAUQ(i) and taup in TAUP(i). */
 /* > H(i) = I - tauq * v * v**H and G(i) = I - taup * u * u**H */
 /* > */
 /* > where tauq and taup are complex scalars, v and u are complex vectors;
-*/
+ */
 /* > v(1:i) = 0, v(i+1) = 1, and v(i+2:m) is stored on exit in A(i+2:m,i);
-*/
+ */
 /* > u(1:i-1) = 0, u(i) = 1, and u(i+1:n) is stored on exit in A(i,i+1:n);
-*/
+ */
 /* > tauq is stored in TAUQ(i) and taup in TAUP(i). */
 /* > */
 /* > The contents of A on exit are illustrated by the following examples: */
@@ -189,15 +198,16 @@ tauq is stored in TAUQ(i) and taup in TAUP(i). */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tauq, complex *taup, complex *work, integer *info)
+void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tauq,
+             complex *taup, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgebd2 inputs: m %lld, n %lld, lda %lld",*m, *n, *lda);
+    snprintf(buffer, 256, "cgebd2 inputs: m %lld, n %lld, lda %lld", *m, *n, *lda);
 #else
-    snprintf(buffer, 256,"cgebd2 inputs: m %d, n %d, lda %d",*m, *n, *lda);
+    snprintf(buffer, 256, "cgebd2 inputs: m %d, n %d, lda %d", *m, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -210,7 +220,12 @@ void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
     integer i__;
     complex alpha;
     extern /* Subroutine */
-    void clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), clarfg_(integer *, complex *, complex *, integer *, complex *), clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+               complex *),
+        clarfg_(integer *, complex *, complex *, integer *, complex *),
+        clacgv_(integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -241,32 +256,30 @@ void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
     --work;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
-    if (*info < 0)
+    if(*info < 0)
     {
         i__1 = -(*info);
         xerbla_("CGEBD2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (*m >= *n)
+    if(*m >= *n)
     {
         /* Reduce to upper bidiagonal form */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* Generate elementary reflector H(i) to annihilate A(i+1:m,i) */
             i__2 = i__ + i__ * a_dim1;
@@ -275,25 +288,26 @@ void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
             i__2 = *m - i__ + 1;
             /* Computing MIN */
             i__3 = i__ + 1;
-            clarfg_(&i__2, &alpha, &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, &tauq[i__]);
+            clarfg_(&i__2, &alpha, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1, &tauq[i__]);
             i__2 = i__;
             d__[i__2] = alpha.r;
             i__2 = i__ + i__ * a_dim1;
             a[i__2].r = 1.f;
             a[i__2].i = 0.f; // , expr subst
             /* Apply H(i)**H to A(i:m,i+1:n) from the left */
-            if (i__ < *n)
+            if(i__ < *n)
             {
                 i__2 = *m - i__ + 1;
                 i__3 = *n - i__;
                 r_cnjg(&q__1, &tauq[i__]);
-                clarf_("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, & q__1, &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
+                clarf_("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &q__1,
+                       &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
             }
             i__2 = i__ + i__ * a_dim1;
             i__3 = i__;
             a[i__2].r = d__[i__3];
             a[i__2].i = 0.f; // , expr subst
-            if (i__ < *n)
+            if(i__ < *n)
             {
                 /* Generate elementary reflector G(i) to annihilate */
                 /* A(i,i+2:n) */
@@ -305,7 +319,7 @@ void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
                 i__2 = *n - i__;
                 /* Computing MIN */
                 i__3 = i__ + 2;
-                clarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3,*n) * a_dim1], lda, & taup[i__]);
+                clarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda, &taup[i__]);
                 i__2 = i__;
                 e[i__2] = alpha.r;
                 i__2 = i__ + (i__ + 1) * a_dim1;
@@ -314,7 +328,8 @@ void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
                 /* Apply G(i) to A(i+1:m,i+1:n) from the right */
                 i__2 = *m - i__;
                 i__3 = *n - i__;
-                clarf_("Right", &i__2, &i__3, &a[i__ + (i__ + 1) * a_dim1], lda, &taup[i__], &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
+                clarf_("Right", &i__2, &i__3, &a[i__ + (i__ + 1) * a_dim1], lda, &taup[i__],
+                       &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
                 i__2 = *n - i__;
                 clacgv_(&i__2, &a[i__ + (i__ + 1) * a_dim1], lda);
                 i__2 = i__ + (i__ + 1) * a_dim1;
@@ -335,9 +350,7 @@ void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
     {
         /* Reduce to lower bidiagonal form */
         i__1 = *m;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* Generate elementary reflector G(i) to annihilate A(i,i+1:n) */
             i__2 = *n - i__ + 1;
@@ -348,18 +361,19 @@ void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
             i__2 = *n - i__ + 1;
             /* Computing MIN */
             i__3 = i__ + 1;
-            clarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3,*n) * a_dim1], lda, & taup[i__]);
+            clarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda, &taup[i__]);
             i__2 = i__;
             d__[i__2] = alpha.r;
             i__2 = i__ + i__ * a_dim1;
             a[i__2].r = 1.f;
             a[i__2].i = 0.f; // , expr subst
             /* Apply G(i) to A(i+1:m,i:n) from the right */
-            if (i__ < *m)
+            if(i__ < *m)
             {
                 i__2 = *m - i__;
                 i__3 = *n - i__ + 1;
-                clarf_("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, & taup[i__], &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
+                clarf_("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &taup[i__],
+                       &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
             }
             i__2 = *n - i__ + 1;
             clacgv_(&i__2, &a[i__ + i__ * a_dim1], lda);
@@ -367,7 +381,7 @@ void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
             i__3 = i__;
             a[i__2].r = d__[i__3];
             a[i__2].i = 0.f; // , expr subst
-            if (i__ < *m)
+            if(i__ < *m)
             {
                 /* Generate elementary reflector H(i) to annihilate */
                 /* A(i+2:m,i) */
@@ -377,7 +391,7 @@ void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
                 i__2 = *m - i__;
                 /* Computing MIN */
                 i__3 = i__ + 2;
-                clarfg_(&i__2, &alpha, &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, &tauq[i__]);
+                clarfg_(&i__2, &alpha, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1, &tauq[i__]);
                 i__2 = i__;
                 e[i__2] = alpha.r;
                 i__2 = i__ + 1 + i__ * a_dim1;
@@ -387,7 +401,8 @@ void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
                 i__2 = *m - i__;
                 i__3 = *n - i__;
                 r_cnjg(&q__1, &tauq[i__]);
-                clarf_("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], & c__1, &q__1, &a[i__ + 1 + (i__ + 1) * a_dim1], lda, & work[1]);
+                clarf_("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &q__1,
+                       &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
                 i__2 = i__ + 1 + i__ * a_dim1;
                 i__3 = i__;
                 a[i__2].r = e[i__3];

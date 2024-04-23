@@ -1,16 +1,25 @@
-/* ../netlib/ztgexc.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ztgexc.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZTGEXC */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZTGEXC + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztgexc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztgexc.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztgexc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztgexc.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztgexc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztgexc.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -50,7 +59,7 @@
 /* > \verbatim */
 /* > WANTQ is LOGICAL */
 /* > .TRUE. : update the left transformation matrix Q;
-*/
+ */
 /* > .FALSE.: do not update Q. */
 /* > \endverbatim */
 /* > */
@@ -58,7 +67,7 @@
 /* > \verbatim */
 /* > WANTZ is LOGICAL */
 /* > .TRUE. : update the right transformation matrix Z;
-*/
+ */
 /* > .FALSE.: do not update Z. */
 /* > \endverbatim */
 /* > */
@@ -106,7 +115,7 @@
 /* > \verbatim */
 /* > LDQ is INTEGER */
 /* > The leading dimension of the array Q. LDQ >= 1;
-*/
+ */
 /* > If WANTQ = .TRUE., LDQ >= N. */
 /* > \endverbatim */
 /* > */
@@ -122,7 +131,7 @@
 /* > \verbatim */
 /* > LDZ is INTEGER */
 /* > The leading dimension of the array Z. LDZ >= 1;
-*/
+ */
 /* > If WANTZ = .TRUE., LDZ >= N. */
 /* > \endverbatim */
 /* > */
@@ -191,16 +200,24 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ztgexc_(logical *wantq, logical *wantz, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *q, integer *ldq, doublecomplex *z__, integer *ldz, integer *ifst, integer *ilst, integer *info)
+void ztgexc_(logical *wantq, logical *wantz, integer *n, doublecomplex *a, integer *lda,
+             doublecomplex *b, integer *ldb, doublecomplex *q, integer *ldq, doublecomplex *z__,
+             integer *ldz, integer *ifst, integer *ilst, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztgexc inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", ifst %" FLA_IS ", ilst %" FLA_IS "",*n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
+    AOCL_DTL_SNPRINTF("ztgexc inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS
+                      ", ldz %" FLA_IS ", ifst %" FLA_IS ", ilst %" FLA_IS "",
+                      *n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1;
     /* Local variables */
     integer here;
     extern /* Subroutine */
-    void ztgex2_(logical *, logical *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ztgex2_(logical *, logical *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -233,65 +250,66 @@ void ztgexc_(logical *wantq, logical *wantz, integer *n, doublecomplex *a, integ
     z__ -= z_offset;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldq < 1 || *wantq && *ldq < fla_max(1,*n))
+    else if(*ldq < 1 || *wantq && *ldq < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldz < 1 || *wantz && *ldz < fla_max(1,*n))
+    else if(*ldz < 1 || *wantz && *ldz < fla_max(1, *n))
     {
         *info = -11;
     }
-    else if (*ifst < 1 || *ifst > *n)
+    else if(*ifst < 1 || *ifst > *n)
     {
         *info = -12;
     }
-    else if (*ilst < 1 || *ilst > *n)
+    else if(*ilst < 1 || *ilst > *n)
     {
         *info = -13;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZTGEXC", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
-    if (*n <= 1)
+    if(*n <= 1)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (*ifst == *ilst)
+    if(*ifst == *ilst)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (*ifst < *ilst)
+    if(*ifst < *ilst)
     {
         here = *ifst;
-L10: /* Swap with next one below */
-        ztgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[ q_offset], ldq, &z__[z_offset], ldz, &here, info);
-        if (*info != 0)
+    L10: /* Swap with next one below */
+        ztgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                &z__[z_offset], ldz, &here, info);
+        if(*info != 0)
         {
             *ilst = here;
-    AOCL_DTL_TRACE_LOG_EXIT
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         ++here;
-        if (here < *ilst)
+        if(here < *ilst)
         {
             goto L10;
         }
@@ -300,16 +318,17 @@ L10: /* Swap with next one below */
     else
     {
         here = *ifst - 1;
-L20: /* Swap with next one above */
-        ztgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[ q_offset], ldq, &z__[z_offset], ldz, &here, info);
-        if (*info != 0)
+    L20: /* Swap with next one above */
+        ztgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                &z__[z_offset], ldz, &here, info);
+        if(*info != 0)
         {
             *ilst = here;
-    AOCL_DTL_TRACE_LOG_EXIT
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         --here;
-        if (here >= *ilst)
+        if(here >= *ilst)
         {
             goto L20;
         }

@@ -1,23 +1,29 @@
-/* ../netlib/zhetd2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zhetd2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b2 =
-{
-    0.,0.
-}
-;
+static doublecomplex c_b2 = {0., 0.};
 static integer c__1 = 1;
-/* > \brief \b ZHETD2 reduces a Hermitian matrix to real symmetric tridiagonal form by an unitary similarity t ransformation (unblocked algorithm). */
+/* > \brief \b ZHETD2 reduces a Hermitian matrix to real symmetric tridiagonal form by an unitary
+ * similarity t ransformation (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZHETD2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhetd2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhetd2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhetd2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhetd2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetd2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetd2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -171,7 +177,8 @@ v(i+2:n) is stored on exit in A(i+2:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zhetd2_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *d__, doublereal *e, doublecomplex *tau, integer *info)
+void zhetd2_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *d__,
+                doublereal *e, doublecomplex *tau, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -181,16 +188,25 @@ void zhetd2_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doublere
     integer i__;
     doublecomplex taui;
     extern /* Subroutine */
-    void zher2_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zher2_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+               integer *, doublecomplex *, integer *);
     doublecomplex alpha;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Double Complex */
-    VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        VOID
+        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                   integer *);
     extern /* Subroutine */
-    void zhemv_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zhemv_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+               integer *, doublecomplex *, doublecomplex *, integer *);
     logical upper;
     extern /* Subroutine */
-    void zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+        void
+        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -222,30 +238,30 @@ void zhetd2_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doublere
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZHETD2", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         return;
     }
-    if (upper)
+    if(upper)
     {
         /* Reduce the upper triangle of A */
         i__1 = *n + *n * a_dim1;
@@ -253,9 +269,7 @@ void zhetd2_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doublere
         d__1 = a[i__2].r;
         a[i__1].r = d__1;
         a[i__1].i = 0.; // , expr subst
-        for (i__ = *n - 1;
-                i__ >= 1;
-                --i__)
+        for(i__ = *n - 1; i__ >= 1; --i__)
         {
             /* Generate elementary reflector H(i) = I - tau * v * v**H */
             /* to annihilate A(1:i-1,i+1) */
@@ -265,30 +279,32 @@ void zhetd2_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doublere
             zlarfg_(&i__, &alpha, &a[(i__ + 1) * a_dim1 + 1], &c__1, &taui);
             i__1 = i__;
             e[i__1] = alpha.r;
-            if (taui.r != 0. || taui.i != 0.)
+            if(taui.r != 0. || taui.i != 0.)
             {
                 /* Apply H(i) from both sides to A(1:i,1:i) */
                 i__1 = i__ + (i__ + 1) * a_dim1;
                 a[i__1].r = 1.;
                 a[i__1].i = 0.; // , expr subst
                 /* Compute x := tau * A * v storing x in TAU(1:i) */
-                zhemv_(uplo, &i__, &taui, &a[a_offset], lda, &a[(i__ + 1) * a_dim1 + 1], &c__1, &c_b2, &tau[1], &c__1);
+                zhemv_(uplo, &i__, &taui, &a[a_offset], lda, &a[(i__ + 1) * a_dim1 + 1], &c__1,
+                       &c_b2, &tau[1], &c__1);
                 /* Compute w := x - 1/2 * tau * (x**H * v) * v */
                 z__3.r = -.5;
                 z__3.i = -0.; // , expr subst
                 z__2.r = z__3.r * taui.r - z__3.i * taui.i;
                 z__2.i = z__3.r * taui.i + z__3.i * taui.r; // , expr subst
-                zdotc_f2c_(&z__4, &i__, &tau[1], &c__1, &a[(i__ + 1) * a_dim1 + 1] , &c__1);
+                zdotc_f2c_(&z__4, &i__, &tau[1], &c__1, &a[(i__ + 1) * a_dim1 + 1], &c__1);
                 z__1.r = z__2.r * z__4.r - z__2.i * z__4.i;
                 z__1.i = z__2.r * z__4.i + z__2.i * z__4.r; // , expr subst
                 alpha.r = z__1.r;
                 alpha.i = z__1.i; // , expr subst
-                zaxpy_(&i__, &alpha, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[ 1], &c__1);
+                zaxpy_(&i__, &alpha, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[1], &c__1);
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**H - w * v**H */
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zher2_(uplo, &i__, &z__1, &a[(i__ + 1) * a_dim1 + 1], &c__1, & tau[1], &c__1, &a[a_offset], lda);
+                zher2_(uplo, &i__, &z__1, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[1], &c__1,
+                       &a[a_offset], lda);
             }
             else
             {
@@ -322,9 +338,7 @@ void zhetd2_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doublere
         a[i__1].r = d__1;
         a[i__1].i = 0.; // , expr subst
         i__1 = *n - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* Generate elementary reflector H(i) = I - tau * v * v**H */
             /* to annihilate A(i+2:n,i) */
@@ -334,10 +348,10 @@ void zhetd2_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doublere
             i__2 = *n - i__;
             /* Computing MIN */
             i__3 = i__ + 2;
-            zlarfg_(&i__2, &alpha, &a[fla_min(i__3,*n) + i__ * a_dim1], &c__1, & taui);
+            zlarfg_(&i__2, &alpha, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &taui);
             i__2 = i__;
             e[i__2] = alpha.r;
-            if (taui.r != 0. || taui.i != 0.)
+            if(taui.r != 0. || taui.i != 0.)
             {
                 /* Apply H(i) from both sides to A(i+1:n,i+1:n) */
                 i__2 = i__ + 1 + i__ * a_dim1;
@@ -345,7 +359,8 @@ void zhetd2_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doublere
                 a[i__2].i = 0.; // , expr subst
                 /* Compute x := tau * A * v storing y in TAU(i:n-1) */
                 i__2 = *n - i__;
-                zhemv_(uplo, &i__2, &taui, &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b2, &tau[ i__], &c__1);
+                zhemv_(uplo, &i__2, &taui, &a[i__ + 1 + (i__ + 1) * a_dim1], lda,
+                       &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b2, &tau[i__], &c__1);
                 /* Compute w := x - 1/2 * tau * (x**H * v) * v */
                 z__3.r = -.5;
                 z__3.i = -0.; // , expr subst
@@ -358,13 +373,14 @@ void zhetd2_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doublere
                 alpha.r = z__1.r;
                 alpha.i = z__1.i; // , expr subst
                 i__2 = *n - i__;
-                zaxpy_(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[ i__], &c__1);
+                zaxpy_(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__], &c__1);
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**H - w * v**H */
                 i__2 = *n - i__;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zher2_(uplo, &i__2, &z__1, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__], &c__1, &a[i__ + 1 + (i__ + 1) * a_dim1], lda);
+                zher2_(uplo, &i__2, &z__1, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__], &c__1,
+                       &a[i__ + 1 + (i__ + 1) * a_dim1], lda);
             }
             else
             {

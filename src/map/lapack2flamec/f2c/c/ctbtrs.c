@@ -1,5 +1,8 @@
-/* ../netlib/ctbtrs.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ctbtrs.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b CTBTRS */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CTBTRS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctbtrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctbtrs.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctbtrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctbtrs.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctbtrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctbtrs.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -44,7 +53,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': A is upper triangular;
-*/
+ */
 /* > = 'L': A is lower triangular. */
 /* > \endverbatim */
 /* > */
@@ -61,7 +70,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > DIAG is CHARACTER*1 */
 /* > = 'N': A is non-unit triangular;
-*/
+ */
 /* > = 'U': A is unit triangular. */
 /* > \endverbatim */
 /* > */
@@ -92,7 +101,7 @@ static integer c__1 = 1;
 /* > first kd+1 rows of AB. The j-th column of A is stored */
 /* > in the j-th column of the array AB as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > If DIAG = 'U', the diagonal elements of A are not referenced */
 /* > and are assumed to be 1. */
@@ -136,15 +145,21 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ctbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integer *nrhs, complex *ab, integer *ldab, complex *b, integer *ldb, integer *info)
+void ctbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integer *nrhs,
+             complex *ab, integer *ldab, complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctbtrs inputs: uplo %c, trans %c, diag %c, n %lld, kd %lld, nrhs %lld, ldab %lld, ldb %lld",*uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb);
+    snprintf(buffer, 256,
+             "ctbtrs inputs: uplo %c, trans %c, diag %c, n %lld, kd %lld, nrhs %lld, ldab %lld, "
+             "ldb %lld",
+             *uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb);
 #else
-    snprintf(buffer, 256,"ctbtrs inputs: uplo %c, trans %c, diag %c, n %d, kd %d, nrhs %d, ldab %d, ldb %d",*uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb);
+    snprintf(buffer, 256,
+             "ctbtrs inputs: uplo %c, trans %c, diag %c, n %d, kd %d, nrhs %d, ldab %d, ldb %d",
+             *uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -154,10 +169,13 @@ void ctbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
     integer j;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void ctbsv_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *, integer *);
+        void
+        ctbsv_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *,
+               integer *);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -191,39 +209,39 @@ void ctbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
     *info = 0;
     nounit = lsame_(diag, "N", 1, 1);
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!lsame_(trans, "N", 1, 1) && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*kd < 0)
+    else if(*kd < 0)
     {
         *info = -5;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -6;
     }
-    else if (*ldab < *kd + 1)
+    else if(*ldab < *kd + 1)
     {
         *info = -8;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -10;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CTBTRS", &i__1, (ftnlen)6);
@@ -231,23 +249,21 @@ void ctbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Check for singularity. */
-    if (nounit)
+    if(nounit)
     {
-        if (upper)
+        if(upper)
         {
             i__1 = *n;
-            for (*info = 1;
-                    *info <= i__1;
-                    ++(*info))
+            for(*info = 1; *info <= i__1; ++(*info))
             {
                 i__2 = *kd + 1 + *info * ab_dim1;
-                if (ab[i__2].r == 0.f && ab[i__2].i == 0.f)
+                if(ab[i__2].r == 0.f && ab[i__2].i == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
@@ -258,12 +274,10 @@ void ctbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
         else
         {
             i__1 = *n;
-            for (*info = 1;
-                    *info <= i__1;
-                    ++(*info))
+            for(*info = 1; *info <= i__1; ++(*info))
             {
                 i__2 = *info * ab_dim1 + 1;
-                if (ab[i__2].r == 0.f && ab[i__2].i == 0.f)
+                if(ab[i__2].r == 0.f && ab[i__2].i == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
@@ -275,9 +289,7 @@ void ctbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
     *info = 0;
     /* Solve A * X = B, A**T * X = B, or A**H * X = B. */
     i__1 = *nrhs;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         ctbsv_(uplo, trans, diag, n, kd, &ab[ab_offset], ldab, &b[j * b_dim1 + 1], &c__1);
         /* L30: */

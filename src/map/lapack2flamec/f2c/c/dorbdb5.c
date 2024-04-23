@@ -1,16 +1,25 @@
-/* ../netlib/dorbdb5.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dorbdb5.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DORBDB5 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DORBDB5 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorbdb5 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorbdb5
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorbdb5 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorbdb5
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorbdb5 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorbdb5
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -141,17 +150,26 @@
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dorbdb5_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *incx1, doublereal *x2, integer *incx2, doublereal *q1, integer *ldq1, doublereal *q2, integer *ldq2, doublereal *work, integer *lwork, integer *info)
+void dorbdb5_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *incx1, doublereal *x2,
+              integer *incx2, doublereal *q1, integer *ldq1, doublereal *q2, integer *ldq2,
+              doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dorbdb5 inputs: m1 %" FLA_IS ", m2 %" FLA_IS ", n %" FLA_IS ", incx1 %" FLA_IS ", incx2 %" FLA_IS ", ldq1 %" FLA_IS ", ldq2 %" FLA_IS ", lwork %" FLA_IS "",*m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2, *lwork);
+    AOCL_DTL_SNPRINTF("dorbdb5 inputs: m1 %" FLA_IS ", m2 %" FLA_IS ", n %" FLA_IS
+                      ", incx1 %" FLA_IS ", incx2 %" FLA_IS ", ldq1 %" FLA_IS ", ldq2 %" FLA_IS
+                      ", lwork %" FLA_IS "",
+                      *m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2, *lwork);
     /* System generated locals */
     integer q1_dim1, q1_offset, q2_dim1, q2_offset, i__1, i__2;
     /* Local variables */
     integer i__, j, childinfo;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dorbdb6_( integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        dorbdb6_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *,
+                 doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
+                 integer *);
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -185,39 +203,39 @@ void dorbdb5_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
     --work;
     /* Function Body */
     *info = 0;
-    if (*m1 < 0)
+    if(*m1 < 0)
     {
         *info = -1;
     }
-    else if (*m2 < 0)
+    else if(*m2 < 0)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*incx1 < 1)
+    else if(*incx1 < 1)
     {
         *info = -5;
     }
-    else if (*incx2 < 1)
+    else if(*incx2 < 1)
     {
         *info = -7;
     }
-    else if (*ldq1 < fla_max(1,*m1))
+    else if(*ldq1 < fla_max(1, *m1))
     {
         *info = -9;
     }
-    else if (*ldq2 < fla_max(1,*m2))
+    else if(*ldq2 < fla_max(1, *m2))
     {
         *info = -11;
     }
-    else if (*lwork < *n)
+    else if(*lwork < *n)
     {
         *info = -13;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DORBDB5", &i__1, (ftnlen)7);
@@ -225,9 +243,10 @@ void dorbdb5_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
         return;
     }
     /* Project X onto the orthogonal complement of Q */
-    dorbdb6_(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1, & q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
+    dorbdb6_(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1, &q2[q2_offset], ldq2,
+             &work[1], lwork, &childinfo);
     /* If the projection is nonzero, then return */
-    if (dnrm2_(m1, &x1[1], incx1) != 0. || dnrm2_(m2, &x2[1], incx2) != 0.)
+    if(dnrm2_(m1, &x1[1], incx1) != 0. || dnrm2_(m2, &x2[1], incx2) != 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -235,27 +254,22 @@ void dorbdb5_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
     /* Project each standard basis vector e_1,...,e_M1 in turn, stopping */
     /* when a nonzero projection is found */
     i__1 = *m1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = *m1;
-        for (j = 1;
-                j <= i__2;
-                ++j)
+        for(j = 1; j <= i__2; ++j)
         {
             x1[j] = 0.;
         }
         x1[i__] = 1.;
         i__2 = *m2;
-        for (j = 1;
-                j <= i__2;
-                ++j)
+        for(j = 1; j <= i__2; ++j)
         {
             x2[j] = 0.;
         }
-        dorbdb6_(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1, &q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
-        if (dnrm2_(m1, &x1[1], incx1) != 0. || dnrm2_(m2, &x2[1], incx2) != 0.)
+        dorbdb6_(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1, &q2[q2_offset],
+                 ldq2, &work[1], lwork, &childinfo);
+        if(dnrm2_(m1, &x1[1], incx1) != 0. || dnrm2_(m2, &x2[1], incx2) != 0.)
         {
             AOCL_DTL_TRACE_LOG_EXIT
             return;
@@ -264,27 +278,22 @@ void dorbdb5_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
     /* Project each standard basis vector e_(M1+1),...,e_(M1+M2) in turn, */
     /* stopping when a nonzero projection is found */
     i__1 = *m2;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = *m1;
-        for (j = 1;
-                j <= i__2;
-                ++j)
+        for(j = 1; j <= i__2; ++j)
         {
             x1[j] = 0.;
         }
         i__2 = *m2;
-        for (j = 1;
-                j <= i__2;
-                ++j)
+        for(j = 1; j <= i__2; ++j)
         {
             x2[j] = 0.;
         }
         x2[i__] = 1.;
-        dorbdb6_(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1, &q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
-        if (dnrm2_(m1, &x1[1], incx1) != 0. || dnrm2_(m2, &x2[1], incx2) != 0.)
+        dorbdb6_(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1, &q2[q2_offset],
+                 ldq2, &work[1], lwork, &childinfo);
+        if(dnrm2_(m1, &x1[1], incx1) != 0. || dnrm2_(m2, &x2[1], incx2) != 0.)
         {
             AOCL_DTL_TRACE_LOG_EXIT
             return;

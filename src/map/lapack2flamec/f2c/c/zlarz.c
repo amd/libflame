@@ -1,11 +1,10 @@
-/* ../netlib/zlarz.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlarz.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b1 = {1., 0.};
 static integer c__1 = 1;
 /* > \brief \b ZLARZ applies an elementary reflector (as returned by stzrzf) to a general matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -13,11 +12,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLARZ + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlarz.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlarz.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlarz.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlarz.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlarz.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlarz.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -139,10 +144,13 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlarz_(char *side, integer *m, integer *n, integer *l, doublecomplex *v, integer *incv, doublecomplex *tau, doublecomplex * c__, integer *ldc, doublecomplex *work)
+void zlarz_(char *side, integer *m, integer *n, integer *l, doublecomplex *v, integer *incv,
+            doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlarz inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *l, *incv, *ldc);
+    AOCL_DTL_SNPRINTF("zlarz inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS
+                      ", incv %" FLA_IS ", ldc %" FLA_IS "",
+                      *side, *m, *n, *l, *incv, *ldc);
 
     /* System generated locals */
     integer c_dim1, c_offset;
@@ -150,7 +158,16 @@ void zlarz_(char *side, integer *m, integer *n, integer *l, doublecomplex *v, in
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlacgv_(integer *, doublecomplex *, integer *);
+        void
+        zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+               integer *, doublecomplex *, integer *),
+        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
+               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
+        zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+               integer *, doublecomplex *, integer *),
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -174,16 +191,17 @@ void zlarz_(char *side, integer *m, integer *n, integer *l, doublecomplex *v, in
     c__ -= c_offset;
     --work;
     /* Function Body */
-    if (lsame_(side, "L", 1, 1))
+    if(lsame_(side, "L", 1, 1))
     {
         /* Form H * C */
-        if (tau->r != 0. || tau->i != 0.)
+        if(tau->r != 0. || tau->i != 0.)
         {
             /* w( 1:n ) = conjg( C( 1, 1:n ) ) */
             zcopy_(n, &c__[c_offset], ldc, &work[1], &c__1);
             zlacgv_(n, &work[1], &c__1);
             /* w( 1:n ) = conjg( w( 1:n ) + C( m-l+1:m, 1:n )**H * v( 1:l ) ) */
-            zgemv_("Conjugate transpose", l, n, &c_b1, &c__[*m - *l + 1 + c_dim1], ldc, &v[1], incv, &c_b1, &work[1], &c__1);
+            zgemv_("Conjugate transpose", l, n, &c_b1, &c__[*m - *l + 1 + c_dim1], ldc, &v[1], incv,
+                   &c_b1, &work[1], &c__1);
             zlacgv_(n, &work[1], &c__1);
             /* C( 1, 1:n ) = C( 1, 1:n ) - tau * w( 1:n ) */
             z__1.r = -tau->r;
@@ -199,12 +217,13 @@ void zlarz_(char *side, integer *m, integer *n, integer *l, doublecomplex *v, in
     else
     {
         /* Form C * H */
-        if (tau->r != 0. || tau->i != 0.)
+        if(tau->r != 0. || tau->i != 0.)
         {
             /* w( 1:m ) = C( 1:m, 1 ) */
             zcopy_(m, &c__[c_offset], &c__1, &work[1], &c__1);
             /* w( 1:m ) = w( 1:m ) + C( 1:m, n-l+1:n, 1:n ) * v( 1:l ) */
-            zgemv_("No transpose", m, l, &c_b1, &c__[(*n - *l + 1) * c_dim1 + 1], ldc, &v[1], incv, &c_b1, &work[1], &c__1);
+            zgemv_("No transpose", m, l, &c_b1, &c__[(*n - *l + 1) * c_dim1 + 1], ldc, &v[1], incv,
+                   &c_b1, &work[1], &c__1);
             /* C( 1:m, 1 ) = C( 1:m, 1 ) - tau * w( 1:m ) */
             z__1.r = -tau->r;
             z__1.i = -tau->i; // , expr subst
@@ -213,7 +232,8 @@ void zlarz_(char *side, integer *m, integer *n, integer *l, doublecomplex *v, in
             /* tau * w( 1:m ) * v( 1:l )**H */
             z__1.r = -tau->r;
             z__1.i = -tau->i; // , expr subst
-            zgerc_(m, l, &z__1, &work[1], &c__1, &v[1], incv, &c__[(*n - *l + 1) * c_dim1 + 1], ldc);
+            zgerc_(m, l, &z__1, &work[1], &c__1, &v[1], incv, &c__[(*n - *l + 1) * c_dim1 + 1],
+                   ldc);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

@@ -1,5 +1,8 @@
-/* ../netlib/dorghr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dorghr.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -9,11 +12,17 @@ static integer c_n1 = -1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DORGHR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorghr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorghr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorghr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorghr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorghr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorghr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -117,17 +126,21 @@ the routine */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dorghr_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda, doublereal *tau, doublereal *work, integer *lwork, integer *info)
+void dorghr_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda, doublereal *tau,
+             doublereal *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
     integer i__, j, nb, nh, iinfo;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int lapack_dorgqr(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
+        int
+        lapack_dorgqr(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                      doublereal *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -161,44 +174,44 @@ void dorghr_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda
     *info = 0;
     nh = *ihi - *ilo;
     lquery = *lwork == -1;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    else if (*ilo < 1 || *ilo > fla_max(1,*n))
+    else if(*ilo < 1 || *ilo > fla_max(1, *n))
     {
         *info = -2;
     }
-    else if (*ihi < fla_min(*ilo,*n) || *ihi > *n)
+    else if(*ihi < fla_min(*ilo, *n) || *ihi > *n)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*lwork < fla_max(1,nh) && ! lquery)
+    else if(*lwork < fla_max(1, nh) && !lquery)
     {
         *info = -8;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
         nb = ilaenv_(&c__1, "DORGQR", " ", &nh, &nh, &nh, &c_n1);
-        lwkopt = fla_max(1,nh) * nb;
-        work[1] = (doublereal) lwkopt;
+        lwkopt = fla_max(1, nh) * nb;
+        work[1] = (doublereal)lwkopt;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DORGHR", &i__1, (ftnlen)6);
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         work[1] = 1.;
         return;
@@ -207,30 +220,22 @@ void dorghr_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda
     /* column to the right, and set the first ilo and the last n-ihi */
     /* rows and columns to those of the unit matrix */
     i__1 = *ilo + 1;
-    for (j = *ihi;
-            j >= i__1;
-            --j)
+    for(j = *ihi; j >= i__1; --j)
     {
         i__2 = j - 1;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             a[i__ + j * a_dim1] = 0.;
             /* L10: */
         }
         i__2 = *ihi;
-        for (i__ = j + 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = j + 1; i__ <= i__2; ++i__)
         {
             a[i__ + j * a_dim1] = a[i__ + (j - 1) * a_dim1];
             /* L20: */
         }
         i__2 = *n;
-        for (i__ = *ihi + 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = *ihi + 1; i__ <= i__2; ++i__)
         {
             a[i__ + j * a_dim1] = 0.;
             /* L30: */
@@ -238,14 +243,10 @@ void dorghr_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda
         /* L40: */
     }
     i__1 = *ilo;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             a[i__ + j * a_dim1] = 0.;
             /* L50: */
@@ -254,14 +255,10 @@ void dorghr_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda
         /* L60: */
     }
     i__1 = *n;
-    for (j = *ihi + 1;
-            j <= i__1;
-            ++j)
+    for(j = *ihi + 1; j <= i__1; ++j)
     {
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             a[i__ + j * a_dim1] = 0.;
             /* L70: */
@@ -269,12 +266,13 @@ void dorghr_(integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda
         a[j + j * a_dim1] = 1.;
         /* L80: */
     }
-    if (nh > 0)
+    if(nh > 0)
     {
         /* Generate Q(ilo+1:ihi,ilo+1:ihi) */
-        lapack_dorgqr(&nh, &nh, &nh, &a[*ilo + 1 + (*ilo + 1) * a_dim1], lda, &tau[* ilo], &work[1], lwork, &iinfo);
+        lapack_dorgqr(&nh, &nh, &nh, &a[*ilo + 1 + (*ilo + 1) * a_dim1], lda, &tau[*ilo], &work[1],
+                      lwork, &iinfo);
     }
-    work[1] = (doublereal) lwkopt;
+    work[1] = (doublereal)lwkopt;
     return;
     /* End of DORGHR */
 }

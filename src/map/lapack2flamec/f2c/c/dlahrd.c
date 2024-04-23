@@ -1,21 +1,32 @@
-/* ../netlib/dlahrd.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlahrd.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b4 = -1.;
 static doublereal c_b5 = 1.;
 static integer c__1 = 1;
 static doublereal c_b38 = 0.;
-/* > \brief \b DLAHRD reduces the first nb columns of a general rectangular matrix A so that elements below th e k-th subdiagonal are zero, and returns auxiliary matrices which are needed to apply the transformati on to the unreduced part of A. */
+/* > \brief \b DLAHRD reduces the first nb columns of a general rectangular matrix A so that
+ * elements below th e k-th subdiagonal are zero, and returns auxiliary matrices which are needed to
+ * apply the transformati on to the unreduced part of A. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLAHRD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlahrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlahrd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlahrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlahrd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlahrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlahrd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -162,10 +173,13 @@ v(i+k+1:n) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlahrd_(integer *n, integer *k, integer *nb, doublereal * a, integer *lda, doublereal *tau, doublereal *t, integer *ldt, doublereal *y, integer *ldy)
+void dlahrd_(integer *n, integer *k, integer *nb, doublereal *a, integer *lda, doublereal *tau,
+             doublereal *t, integer *ldt, doublereal *y, integer *ldy)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlahrd inputs: n %" FLA_IS ", k %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS ", ldy %" FLA_IS "",*n, *k, *nb, *lda, *ldt, *ldy);
+    AOCL_DTL_SNPRINTF("dlahrd inputs: n %" FLA_IS ", k %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS
+                      ", ldt %" FLA_IS ", ldy %" FLA_IS "",
+                      *n, *k, *nb, *lda, *ldt, *ldy);
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, y_dim1, y_offset, i__1, i__2, i__3;
     doublereal d__1;
@@ -173,7 +187,14 @@ void dlahrd_(integer *n, integer *k, integer *nb, doublereal * a, integer *lda, 
     integer i__;
     doublereal ei;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *), dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *),
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *),
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *),
+        dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *),
+        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -206,22 +227,21 @@ void dlahrd_(integer *n, integer *k, integer *nb, doublereal * a, integer *lda, 
     y -= y_offset;
     /* Function Body */
     ei = 0.;
-    if (*n <= 1)
+    if(*n <= 1)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     i__1 = *nb;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (i__ > 1)
+        if(i__ > 1)
         {
             /* Update A(1:n,i) */
             /* Compute i-th column of A - Y * V**T */
             i__2 = i__ - 1;
-            dgemv_("No transpose", n, &i__2, &c_b4, &y[y_offset], ldy, &a[*k + i__ - 1 + a_dim1], lda, &c_b5, &a[i__ * a_dim1 + 1], & c__1);
+            dgemv_("No transpose", n, &i__2, &c_b4, &y[y_offset], ldy, &a[*k + i__ - 1 + a_dim1],
+                   lda, &c_b5, &a[i__ * a_dim1 + 1], &c__1);
             /* Apply I - V * T**T * V**T to this column (call it b) from the */
             /* left, using the last column of T as workspace */
             /* Let V = ( V1 ) and b = ( b1 ) (first I-1 rows) */
@@ -231,21 +251,26 @@ void dlahrd_(integer *n, integer *k, integer *nb, doublereal * a, integer *lda, 
             i__2 = i__ - 1;
             dcopy_(&i__2, &a[*k + 1 + i__ * a_dim1], &c__1, &t[*nb * t_dim1 + 1], &c__1);
             i__2 = i__ - 1;
-            dtrmv_("Lower", "Transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda, &t[*nb * t_dim1 + 1], &c__1);
+            dtrmv_("Lower", "Transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda,
+                   &t[*nb * t_dim1 + 1], &c__1);
             /* w := w + V2**T *b2 */
             i__2 = *n - *k - i__ + 1;
             i__3 = i__ - 1;
-            dgemv_("Transpose", &i__2, &i__3, &c_b5, &a[*k + i__ + a_dim1], lda, &a[*k + i__ + i__ * a_dim1], &c__1, &c_b5, &t[*nb * t_dim1 + 1], &c__1);
+            dgemv_("Transpose", &i__2, &i__3, &c_b5, &a[*k + i__ + a_dim1], lda,
+                   &a[*k + i__ + i__ * a_dim1], &c__1, &c_b5, &t[*nb * t_dim1 + 1], &c__1);
             /* w := T**T *w */
             i__2 = i__ - 1;
-            dtrmv_("Upper", "Transpose", "Non-unit", &i__2, &t[t_offset], ldt, &t[*nb * t_dim1 + 1], &c__1);
+            dtrmv_("Upper", "Transpose", "Non-unit", &i__2, &t[t_offset], ldt, &t[*nb * t_dim1 + 1],
+                   &c__1);
             /* b2 := b2 - V2*w */
             i__2 = *n - *k - i__ + 1;
             i__3 = i__ - 1;
-            dgemv_("No transpose", &i__2, &i__3, &c_b4, &a[*k + i__ + a_dim1], lda, &t[*nb * t_dim1 + 1], &c__1, &c_b5, &a[*k + i__ + i__ * a_dim1], &c__1);
+            dgemv_("No transpose", &i__2, &i__3, &c_b4, &a[*k + i__ + a_dim1], lda,
+                   &t[*nb * t_dim1 + 1], &c__1, &c_b5, &a[*k + i__ + i__ * a_dim1], &c__1);
             /* b1 := b1 - V1*w */
             i__2 = i__ - 1;
-            dtrmv_("Lower", "No transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda, &t[*nb * t_dim1 + 1], &c__1);
+            dtrmv_("Lower", "No transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda,
+                   &t[*nb * t_dim1 + 1], &c__1);
             i__2 = i__ - 1;
             daxpy_(&i__2, &c_b4, &t[*nb * t_dim1 + 1], &c__1, &a[*k + 1 + i__ * a_dim1], &c__1);
             a[*k + i__ - 1 + (i__ - 1) * a_dim1] = ei;
@@ -255,24 +280,29 @@ void dlahrd_(integer *n, integer *k, integer *nb, doublereal * a, integer *lda, 
         i__2 = *n - *k - i__ + 1;
         /* Computing MIN */
         i__3 = *k + i__ + 1;
-        dlarfg_(&i__2, &a[*k + i__ + i__ * a_dim1], &a[fla_min(i__3,*n) + i__ * a_dim1], &c__1, &tau[i__]);
+        dlarfg_(&i__2, &a[*k + i__ + i__ * a_dim1], &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1,
+                &tau[i__]);
         ei = a[*k + i__ + i__ * a_dim1];
         a[*k + i__ + i__ * a_dim1] = 1.;
         /* Compute Y(1:n,i) */
         i__2 = *n - *k - i__ + 1;
-        dgemv_("No transpose", n, &i__2, &c_b5, &a[(i__ + 1) * a_dim1 + 1], lda, &a[*k + i__ + i__ * a_dim1], &c__1, &c_b38, &y[i__ * y_dim1 + 1], &c__1);
+        dgemv_("No transpose", n, &i__2, &c_b5, &a[(i__ + 1) * a_dim1 + 1], lda,
+               &a[*k + i__ + i__ * a_dim1], &c__1, &c_b38, &y[i__ * y_dim1 + 1], &c__1);
         i__2 = *n - *k - i__ + 1;
         i__3 = i__ - 1;
-        dgemv_("Transpose", &i__2, &i__3, &c_b5, &a[*k + i__ + a_dim1], lda, & a[*k + i__ + i__ * a_dim1], &c__1, &c_b38, &t[i__ * t_dim1 + 1], &c__1);
+        dgemv_("Transpose", &i__2, &i__3, &c_b5, &a[*k + i__ + a_dim1], lda,
+               &a[*k + i__ + i__ * a_dim1], &c__1, &c_b38, &t[i__ * t_dim1 + 1], &c__1);
         i__2 = i__ - 1;
-        dgemv_("No transpose", n, &i__2, &c_b4, &y[y_offset], ldy, &t[i__ * t_dim1 + 1], &c__1, &c_b5, &y[i__ * y_dim1 + 1], &c__1);
+        dgemv_("No transpose", n, &i__2, &c_b4, &y[y_offset], ldy, &t[i__ * t_dim1 + 1], &c__1,
+               &c_b5, &y[i__ * y_dim1 + 1], &c__1);
         dscal_(n, &tau[i__], &y[i__ * y_dim1 + 1], &c__1);
         /* Compute T(1:i,i) */
         i__2 = i__ - 1;
         d__1 = -tau[i__];
         dscal_(&i__2, &d__1, &t[i__ * t_dim1 + 1], &c__1);
         i__2 = i__ - 1;
-        dtrmv_("Upper", "No transpose", "Non-unit", &i__2, &t[t_offset], ldt, &t[i__ * t_dim1 + 1], &c__1) ;
+        dtrmv_("Upper", "No transpose", "Non-unit", &i__2, &t[t_offset], ldt, &t[i__ * t_dim1 + 1],
+               &c__1);
         t[i__ + i__ * t_dim1] = tau[i__];
         /* L10: */
     }

@@ -1,22 +1,32 @@
-/* ../netlib/clals0.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/clals0.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b5 = -1.f;
 static integer c__1 = 1;
 static real c_b13 = 1.f;
 static real c_b15 = 0.f;
 static integer c__0 = 0;
-/* > \brief \b CLALS0 applies back multiplying factors in solving the least squares problem using divide and c onquer SVD approach. Used by sgelsd. */
+/* > \brief \b CLALS0 applies back multiplying factors in solving the least squares problem using
+ * divide and c onquer SVD approach. Used by sgelsd. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLALS0 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clals0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clals0.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clals0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clals0.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clals0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clals0.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -52,7 +62,7 @@ static integer c__0 = 0;
 /* > (1L) Givens rotations: the number of such rotations is GIVPTR;
 the */
 /* > pairs of columns/rows they were applied to are stored in GIVCOL;
-*/
+ */
 /* > and the C- and S-values of these rotations are stored in GIVNUM. */
 /* > */
 /* > (2L) Permutation. The (NL+1)-st row of B is to be moved to the first */
@@ -261,20 +271,32 @@ the */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *nrhs, complex *b, integer *ldb, complex *bx, integer *ldbx, integer *perm, integer *givptr, integer *givcol, integer *ldgcol, real *givnum, integer *ldgnum, real *poles, real * difl, real *difr, real *z__, integer *k, real *c__, real *s, real * rwork, integer *info)
+void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *nrhs, complex *b,
+             integer *ldb, complex *bx, integer *ldbx, integer *perm, integer *givptr,
+             integer *givcol, integer *ldgcol, real *givnum, integer *ldgnum, real *poles,
+             real *difl, real *difr, real *z__, integer *k, real *c__, real *s, real *rwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clals0 inputs: icompq %lld, nl %lld, nr %lld, sqre %lld, nrhs %lld, ldb %lld, ldbx %lld, ldgcol %lld, ldgnum %lld, k %lld",*icompq, *nl, *nr, *sqre, *nrhs, *ldb, *ldbx, *ldgcol, *ldgnum, *k);
+    snprintf(buffer, 256,
+             "clals0 inputs: icompq %lld, nl %lld, nr %lld, sqre %lld, nrhs %lld, ldb %lld, ldbx "
+             "%lld, ldgcol %lld, ldgnum %lld, k %lld",
+             *icompq, *nl, *nr, *sqre, *nrhs, *ldb, *ldbx, *ldgcol, *ldgnum, *k);
 #else
-    snprintf(buffer, 256,"clals0 inputs: icompq %d, nl %d, nr %d, sqre %d, nrhs %d, ldb %d, ldbx %d, ldgcol %d, ldgnum %d, k %d",*icompq, *nl, *nr, *sqre, *nrhs, *ldb, *ldbx, *ldgcol, *ldgnum, *k);
+    snprintf(buffer, 256,
+             "clals0 inputs: icompq %d, nl %d, nr %d, sqre %d, nrhs %d, ldb %d, ldbx %d, ldgcol "
+             "%d, ldgnum %d, k %d",
+             *icompq, *nl, *nr, *sqre, *nrhs, *ldb, *ldbx, *ldgcol, *ldgnum, *k);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer givcol_dim1, givcol_offset, difr_dim1, difr_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, b_dim1, b_offset, bx_dim1, bx_offset, i__1, i__2, i__3, i__4, i__5;
+    integer givcol_dim1, givcol_offset, difr_dim1, difr_offset, givnum_dim1, givnum_offset,
+        poles_dim1, poles_offset, b_dim1, b_offset, bx_dim1, bx_offset, i__1, i__2, i__3, i__4,
+        i__5;
     real r__1;
     complex q__1;
     /* Builtin functions */
@@ -288,10 +310,19 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
     extern real snrm2_(integer *, real *, integer *);
     real diflj, difrj, dsigj;
     extern /* Subroutine */
-    void ccopy_(integer *, complex *, integer *, complex *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), csrot_(integer *, complex *, integer *, complex *, integer *, real *, real *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *),
+        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+               real *, integer *),
+        csrot_(integer *, complex *, integer *, complex *, integer *, real *, real *);
     extern real slamc3_(real *, real *);
     extern /* Subroutine */
-    void clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *), csscal_(integer *, real *, complex *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
+                integer *, integer *),
+        csscal_(integer *, real *, complex *, integer *),
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real dsigjp;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -341,51 +372,51 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
     *info = 0;
     n = *nl + *nr + 1;
     difrj = 0.f;
-    if (*icompq < 0 || *icompq > 1)
+    if(*icompq < 0 || *icompq > 1)
     {
         *info = -1;
     }
-    else if (*nl < 1)
+    else if(*nl < 1)
     {
         *info = -2;
     }
-    else if (*nr < 1)
+    else if(*nr < 1)
     {
         *info = -3;
     }
-    else if (*sqre < 0 || *sqre > 1)
+    else if(*sqre < 0 || *sqre > 1)
     {
         *info = -4;
     }
-    else if (*nrhs < 1)
+    else if(*nrhs < 1)
     {
         *info = -5;
     }
-    else if (*ldb < n)
+    else if(*ldb < n)
     {
         *info = -7;
     }
-    else if (*ldbx < n)
+    else if(*ldbx < n)
     {
         *info = -9;
     }
-    else if (*givptr < 0)
+    else if(*givptr < 0)
     {
         *info = -11;
     }
-    else if (*ldgcol < n)
+    else if(*ldgcol < n)
     {
         *info = -13;
     }
-    else if (*ldgnum < n)
+    else if(*ldgnum < n)
     {
         *info = -15;
     }
-    else if (*k < 1)
+    else if(*k < 1)
     {
         *info = -20;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CLALS0", &i__1, (ftnlen)6);
@@ -394,34 +425,32 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
     }
     m = n + *sqre;
     nlp1 = *nl + 1;
-    if (*icompq == 0)
+    if(*icompq == 0)
     {
         /* Apply back orthogonal transformations from the left. */
         /* Step (1L): apply back the Givens rotations performed. */
         i__1 = *givptr;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            csrot_(nrhs, &b[givcol[i__ + (givcol_dim1 << 1)] + b_dim1], ldb, & b[givcol[i__ + givcol_dim1] + b_dim1], ldb, &givnum[i__ + (givnum_dim1 << 1)], &givnum[i__ + givnum_dim1]);
+            csrot_(nrhs, &b[givcol[i__ + (givcol_dim1 << 1)] + b_dim1], ldb,
+                   &b[givcol[i__ + givcol_dim1] + b_dim1], ldb, &givnum[i__ + (givnum_dim1 << 1)],
+                   &givnum[i__ + givnum_dim1]);
             /* L10: */
         }
         /* Step (2L): permute rows of B. */
         ccopy_(nrhs, &b[nlp1 + b_dim1], ldb, &bx[bx_dim1 + 1], ldbx);
         i__1 = n;
-        for (i__ = 2;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 2; i__ <= i__1; ++i__)
         {
             ccopy_(nrhs, &b[perm[i__] + b_dim1], ldb, &bx[i__ + bx_dim1], ldbx);
             /* L20: */
         }
         /* Step (3L): apply the inverse of the left singular vector */
         /* matrix to BX. */
-        if (*k == 1)
+        if(*k == 1)
         {
             ccopy_(nrhs, &bx[bx_offset], ldbx, &b[b_offset], ldb);
-            if (z__[1] < 0.f)
+            if(z__[1] < 0.f)
             {
                 csscal_(nrhs, &c_b5, &b[b_offset], ldb);
             }
@@ -429,53 +458,52 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
         else
         {
             i__1 = *k;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 diflj = difl[j];
                 dj = poles[j + poles_dim1];
                 dsigj = -poles[j + (poles_dim1 << 1)];
-                if (j < *k)
+                if(j < *k)
                 {
                     difrj = -difr[j + difr_dim1];
                     dsigjp = -poles[j + 1 + (poles_dim1 << 1)];
                 }
-                if (z__[j] == 0.f || poles[j + (poles_dim1 << 1)] == 0.f)
+                if(z__[j] == 0.f || poles[j + (poles_dim1 << 1)] == 0.f)
                 {
                     rwork[j] = 0.f;
                 }
                 else
                 {
-                    rwork[j] = -poles[j + (poles_dim1 << 1)] * z__[j] / diflj / (poles[j + (poles_dim1 << 1)] + dj);
+                    rwork[j] = -poles[j + (poles_dim1 << 1)] * z__[j] / diflj
+                               / (poles[j + (poles_dim1 << 1)] + dj);
                 }
                 i__2 = j - 1;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
-                    if (z__[i__] == 0.f || poles[i__ + (poles_dim1 << 1)] == 0.f)
+                    if(z__[i__] == 0.f || poles[i__ + (poles_dim1 << 1)] == 0.f)
                     {
                         rwork[i__] = 0.f;
                     }
                     else
                     {
-                        rwork[i__] = poles[i__ + (poles_dim1 << 1)] * z__[i__] / (slamc3_(&poles[i__ + (poles_dim1 << 1)], & dsigj) - diflj) / (poles[i__ + (poles_dim1 << 1)] + dj);
+                        rwork[i__] = poles[i__ + (poles_dim1 << 1)] * z__[i__]
+                                     / (slamc3_(&poles[i__ + (poles_dim1 << 1)], &dsigj) - diflj)
+                                     / (poles[i__ + (poles_dim1 << 1)] + dj);
                     }
                     /* L30: */
                 }
                 i__2 = *k;
-                for (i__ = j + 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
-                    if (z__[i__] == 0.f || poles[i__ + (poles_dim1 << 1)] == 0.f)
+                    if(z__[i__] == 0.f || poles[i__ + (poles_dim1 << 1)] == 0.f)
                     {
                         rwork[i__] = 0.f;
                     }
                     else
                     {
-                        rwork[i__] = poles[i__ + (poles_dim1 << 1)] * z__[i__] / (slamc3_(&poles[i__ + (poles_dim1 << 1)], & dsigjp) + difrj) / (poles[i__ + (poles_dim1 << 1)] + dj);
+                        rwork[i__] = poles[i__ + (poles_dim1 << 1)] * z__[i__]
+                                     / (slamc3_(&poles[i__ + (poles_dim1 << 1)], &dsigjp) + difrj)
+                                     / (poles[i__ + (poles_dim1 << 1)] + dj);
                     }
                     /* L40: */
                 }
@@ -487,14 +515,10 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                 /* $ B( J, 1 ), LDB ) */
                 i__ = *k + (*nrhs << 1);
                 i__2 = *nrhs;
-                for (jcol = 1;
-                        jcol <= i__2;
-                        ++jcol)
+                for(jcol = 1; jcol <= i__2; ++jcol)
                 {
                     i__3 = *k;
-                    for (jrow = 1;
-                            jrow <= i__3;
-                            ++jrow)
+                    for(jrow = 1; jrow <= i__3; ++jrow)
                     {
                         ++i__;
                         i__4 = jrow + jcol * bx_dim1;
@@ -503,17 +527,14 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                     }
                     /* L60: */
                 }
-                sgemv_("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1], &c__1, &c_b15, &rwork[*k + 1], &c__1);
+                sgemv_("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1], &c__1,
+                       &c_b15, &rwork[*k + 1], &c__1);
                 i__ = *k + (*nrhs << 1);
                 i__2 = *nrhs;
-                for (jcol = 1;
-                        jcol <= i__2;
-                        ++jcol)
+                for(jcol = 1; jcol <= i__2; ++jcol)
                 {
                     i__3 = *k;
-                    for (jrow = 1;
-                            jrow <= i__3;
-                            ++jrow)
+                    for(jrow = 1; jrow <= i__3; ++jrow)
                     {
                         ++i__;
                         rwork[i__] = r_imag(&bx[jrow + jcol * bx_dim1]);
@@ -521,11 +542,10 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                     }
                     /* L80: */
                 }
-                sgemv_("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1], &c__1, &c_b15, &rwork[*k + 1 + *nrhs], & c__1);
+                sgemv_("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1], &c__1,
+                       &c_b15, &rwork[*k + 1 + *nrhs], &c__1);
                 i__2 = *nrhs;
-                for (jcol = 1;
-                        jcol <= i__2;
-                        ++jcol)
+                for(jcol = 1; jcol <= i__2; ++jcol)
                 {
                     i__3 = j + jcol * b_dim1;
                     i__4 = jcol + *k;
@@ -541,7 +561,7 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
             }
         }
         /* Move the deflated rows of BX to B also. */
-        if (*k < fla_max(m,n))
+        if(*k < fla_max(m, n))
         {
             i__1 = n - *k;
             clacpy_("A", &i__1, nrhs, &bx[*k + 1 + bx_dim1], ldbx, &b[*k + 1 + b_dim1], ldb);
@@ -552,55 +572,54 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
         /* Apply back the right orthogonal transformations. */
         /* Step (1R): apply back the new right singular vector matrix */
         /* to B. */
-        if (*k == 1)
+        if(*k == 1)
         {
             ccopy_(nrhs, &b[b_offset], ldb, &bx[bx_offset], ldbx);
         }
         else
         {
             i__1 = *k;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 dsigj = poles[j + (poles_dim1 << 1)];
-                if (z__[j] == 0.f)
+                if(z__[j] == 0.f)
                 {
                     rwork[j] = 0.f;
                 }
                 else
                 {
-                    rwork[j] = -z__[j] / difl[j] / (dsigj + poles[j + poles_dim1]) / difr[j + (difr_dim1 << 1)];
+                    rwork[j] = -z__[j] / difl[j] / (dsigj + poles[j + poles_dim1])
+                               / difr[j + (difr_dim1 << 1)];
                 }
                 i__2 = j - 1;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
-                    if (z__[j] == 0.f)
+                    if(z__[j] == 0.f)
                     {
                         rwork[i__] = 0.f;
                     }
                     else
                     {
                         r__1 = -poles[i__ + 1 + (poles_dim1 << 1)];
-                        rwork[i__] = z__[j] / (slamc3_(&dsigj, &r__1) - difr[ i__ + difr_dim1]) / (dsigj + poles[i__ + poles_dim1]) / difr[i__ + (difr_dim1 << 1)];
+                        rwork[i__] = z__[j] / (slamc3_(&dsigj, &r__1) - difr[i__ + difr_dim1])
+                                     / (dsigj + poles[i__ + poles_dim1])
+                                     / difr[i__ + (difr_dim1 << 1)];
                     }
                     /* L110: */
                 }
                 i__2 = *k;
-                for (i__ = j + 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
-                    if (z__[j] == 0.f)
+                    if(z__[j] == 0.f)
                     {
                         rwork[i__] = 0.f;
                     }
                     else
                     {
                         r__1 = -poles[i__ + (poles_dim1 << 1)];
-                        rwork[i__] = z__[j] / (slamc3_(&dsigj, &r__1) - difl[ i__]) / (dsigj + poles[i__ + poles_dim1]) / difr[i__ + (difr_dim1 << 1)];
+                        rwork[i__] = z__[j] / (slamc3_(&dsigj, &r__1) - difl[i__])
+                                     / (dsigj + poles[i__ + poles_dim1])
+                                     / difr[i__ + (difr_dim1 << 1)];
                     }
                     /* L120: */
                 }
@@ -610,14 +629,10 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                 /* $ BX( J, 1 ), LDBX ) */
                 i__ = *k + (*nrhs << 1);
                 i__2 = *nrhs;
-                for (jcol = 1;
-                        jcol <= i__2;
-                        ++jcol)
+                for(jcol = 1; jcol <= i__2; ++jcol)
                 {
                     i__3 = *k;
-                    for (jrow = 1;
-                            jrow <= i__3;
-                            ++jrow)
+                    for(jrow = 1; jrow <= i__3; ++jrow)
                     {
                         ++i__;
                         i__4 = jrow + jcol * b_dim1;
@@ -626,17 +641,14 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                     }
                     /* L140: */
                 }
-                sgemv_("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1], &c__1, &c_b15, &rwork[*k + 1], &c__1);
+                sgemv_("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1], &c__1,
+                       &c_b15, &rwork[*k + 1], &c__1);
                 i__ = *k + (*nrhs << 1);
                 i__2 = *nrhs;
-                for (jcol = 1;
-                        jcol <= i__2;
-                        ++jcol)
+                for(jcol = 1; jcol <= i__2; ++jcol)
                 {
                     i__3 = *k;
-                    for (jrow = 1;
-                            jrow <= i__3;
-                            ++jrow)
+                    for(jrow = 1; jrow <= i__3; ++jrow)
                     {
                         ++i__;
                         rwork[i__] = r_imag(&b[jrow + jcol * b_dim1]);
@@ -644,11 +656,10 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                     }
                     /* L160: */
                 }
-                sgemv_("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1], &c__1, &c_b15, &rwork[*k + 1 + *nrhs], & c__1);
+                sgemv_("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1], &c__1,
+                       &c_b15, &rwork[*k + 1 + *nrhs], &c__1);
                 i__2 = *nrhs;
-                for (jcol = 1;
-                        jcol <= i__2;
-                        ++jcol)
+                for(jcol = 1; jcol <= i__2; ++jcol)
                 {
                     i__3 = j + jcol * bx_dim1;
                     i__4 = jcol + *k;
@@ -664,37 +675,35 @@ void clals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
         }
         /* Step (2R): if SQRE = 1, apply back the rotation that is */
         /* related to the right null space of the subproblem. */
-        if (*sqre == 1)
+        if(*sqre == 1)
         {
             ccopy_(nrhs, &b[m + b_dim1], ldb, &bx[m + bx_dim1], ldbx);
             csrot_(nrhs, &bx[bx_dim1 + 1], ldbx, &bx[m + bx_dim1], ldbx, c__, s);
         }
-        if (*k < fla_max(m,n))
+        if(*k < fla_max(m, n))
         {
             i__1 = n - *k;
             clacpy_("A", &i__1, nrhs, &b[*k + 1 + b_dim1], ldb, &bx[*k + 1 + bx_dim1], ldbx);
         }
         /* Step (3R): permute rows of B. */
         ccopy_(nrhs, &bx[bx_dim1 + 1], ldbx, &b[nlp1 + b_dim1], ldb);
-        if (*sqre == 1)
+        if(*sqre == 1)
         {
             ccopy_(nrhs, &bx[m + bx_dim1], ldbx, &b[m + b_dim1], ldb);
         }
         i__1 = n;
-        for (i__ = 2;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 2; i__ <= i__1; ++i__)
         {
             ccopy_(nrhs, &bx[i__ + bx_dim1], ldbx, &b[perm[i__] + b_dim1], ldb);
             /* L190: */
         }
         /* Step (4R): apply back the Givens rotations performed. */
-        for (i__ = *givptr;
-                i__ >= 1;
-                --i__)
+        for(i__ = *givptr; i__ >= 1; --i__)
         {
             r__1 = -givnum[i__ + givnum_dim1];
-            csrot_(nrhs, &b[givcol[i__ + (givcol_dim1 << 1)] + b_dim1], ldb, & b[givcol[i__ + givcol_dim1] + b_dim1], ldb, &givnum[i__ + (givnum_dim1 << 1)], &r__1);
+            csrot_(nrhs, &b[givcol[i__ + (givcol_dim1 << 1)] + b_dim1], ldb,
+                   &b[givcol[i__ + givcol_dim1] + b_dim1], ldb, &givnum[i__ + (givnum_dim1 << 1)],
+                   &r__1);
             /* L200: */
         }
     }

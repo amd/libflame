@@ -1,5 +1,8 @@
-/* ../netlib/slatzm.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slatzm.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b5 = 1.f;
@@ -9,11 +12,17 @@ static real c_b5 = 1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLATZM + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slatzm. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slatzm.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slatzm. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slatzm.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slatzm. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slatzm.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -140,17 +149,24 @@ static real c_b5 = 1.f;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void slatzm_(char *side, integer *m, integer *n, real *v, integer *incv, real *tau, real *c1, real *c2, integer *ldc, real * work)
+void slatzm_(char *side, integer *m, integer *n, real *v, integer *incv, real *tau, real *c1,
+             real *c2, integer *ldc, real *work)
 {
     /* System generated locals */
     integer c1_dim1, c1_offset, c2_dim1, c2_offset, i__1;
     real r__1;
     /* Local variables */
     extern /* Subroutine */
-    void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
+        void
+        sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+              integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *);
+        void
+        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+               real *, integer *),
+        scopy_(integer *, real *, integer *, real *, integer *),
+        saxpy_(integer *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -179,16 +195,17 @@ void slatzm_(char *side, integer *m, integer *n, real *v, integer *incv, real *t
     c1 -= c1_offset;
     --work;
     /* Function Body */
-    if (fla_min(*m,*n) == 0 || *tau == 0.f)
+    if(fla_min(*m, *n) == 0 || *tau == 0.f)
     {
         return;
     }
-    if (lsame_(side, "L", 1, 1))
+    if(lsame_(side, "L", 1, 1))
     {
         /* w := (C1 + v**T * C2)**T */
         scopy_(n, &c1[c1_offset], ldc, &work[1], &c__1);
         i__1 = *m - 1;
-        sgemv_("Transpose", &i__1, n, &c_b5, &c2[c2_offset], ldc, &v[1], incv, &c_b5, &work[1], &c__1);
+        sgemv_("Transpose", &i__1, n, &c_b5, &c2[c2_offset], ldc, &v[1], incv, &c_b5, &work[1],
+               &c__1);
         /* [ C1 ] := [ C1 ] - tau* [ 1 ] * w**T */
         /* [ C2 ] [ C2 ] [ v ] */
         r__1 = -(*tau);
@@ -197,12 +214,13 @@ void slatzm_(char *side, integer *m, integer *n, real *v, integer *incv, real *t
         r__1 = -(*tau);
         sger_(&i__1, n, &r__1, &v[1], incv, &work[1], &c__1, &c2[c2_offset], ldc);
     }
-    else if (lsame_(side, "R", 1, 1))
+    else if(lsame_(side, "R", 1, 1))
     {
         /* w := C1 + C2 * v */
         scopy_(m, &c1[c1_offset], &c__1, &work[1], &c__1);
         i__1 = *n - 1;
-        sgemv_("No transpose", m, &i__1, &c_b5, &c2[c2_offset], ldc, &v[1], incv, &c_b5, &work[1], &c__1);
+        sgemv_("No transpose", m, &i__1, &c_b5, &c2[c2_offset], ldc, &v[1], incv, &c_b5, &work[1],
+               &c__1);
         /* [ C1, C2 ] := [ C1, C2 ] - tau* w * [ 1 , v**T] */
         r__1 = -(*tau);
         saxpy_(m, &r__1, &work[1], &c__1, &c1[c1_offset], &c__1);

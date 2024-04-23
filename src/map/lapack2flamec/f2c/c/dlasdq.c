@@ -1,18 +1,28 @@
-/* ../netlib/dlasdq.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlasdq.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b DLASDQ computes the SVD of a real bidiagonal matrix with diagonal d and off-diagonal e. Used by sbdsdc. */
+/* > \brief \b DLASDQ computes the SVD of a real bidiagonal matrix with diagonal d and off-diagonal
+ * e. Used by sbdsdc. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLASDQ + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasdq. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasdq.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasdq. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasdq.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasdq. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasdq.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -198,10 +208,15 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlasdq_(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru, integer *ncc, doublereal *d__, doublereal *e, doublereal *vt, integer *ldvt, doublereal *u, integer *ldu, doublereal *c__, integer *ldc, doublereal *work, integer *info)
+void dlasdq_(char *uplo, integer *sqre, integer *n, integer *ncvt, integer *nru, integer *ncc,
+             doublereal *d__, doublereal *e, doublereal *vt, integer *ldvt, doublereal *u,
+             integer *ldu, doublereal *c__, integer *ldc, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlasdq inputs: uplo %c, sqre %" FLA_IS ", n %" FLA_IS ", ncvt %" FLA_IS ", nru %" FLA_IS ", ncc %" FLA_IS ", ldvt %" FLA_IS ", ldu %" FLA_IS ", ldc %" FLA_IS "",*uplo, *sqre, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
+    AOCL_DTL_SNPRINTF("dlasdq inputs: uplo %c, sqre %" FLA_IS ", n %" FLA_IS ", ncvt %" FLA_IS
+                      ", nru %" FLA_IS ", ncc %" FLA_IS ", ldvt %" FLA_IS ", ldu %" FLA_IS
+                      ", ldc %" FLA_IS "",
+                      *uplo, *sqre, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
     /* System generated locals */
     integer c_dim1, c_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
     /* Local variables */
@@ -212,10 +227,18 @@ void dlasdq_(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru
     integer sqre1;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
+               doublereal *, integer *),
+        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer iuplo;
     extern /* Subroutine */
-    void dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dbdsqr_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        dbdsqr_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *,
+                doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
+                doublereal *, integer *);
     logical rotate;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -254,58 +277,58 @@ void dlasdq_(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru
     /* Function Body */
     *info = 0;
     iuplo = 0;
-    if (lsame_(uplo, "U", 1, 1))
+    if(lsame_(uplo, "U", 1, 1))
     {
         iuplo = 1;
     }
-    if (lsame_(uplo, "L", 1, 1))
+    if(lsame_(uplo, "L", 1, 1))
     {
         iuplo = 2;
     }
-    if (iuplo == 0)
+    if(iuplo == 0)
     {
         *info = -1;
     }
-    else if (*sqre < 0 || *sqre > 1)
+    else if(*sqre < 0 || *sqre > 1)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*ncvt < 0)
+    else if(*ncvt < 0)
     {
         *info = -4;
     }
-    else if (*nru < 0)
+    else if(*nru < 0)
     {
         *info = -5;
     }
-    else if (*ncc < 0)
+    else if(*ncc < 0)
     {
         *info = -6;
     }
-    else if (*ncvt == 0 && *ldvt < 1 || *ncvt > 0 && *ldvt < fla_max(1,*n))
+    else if(*ncvt == 0 && *ldvt < 1 || *ncvt > 0 && *ldvt < fla_max(1, *n))
     {
         *info = -10;
     }
-    else if (*ldu < fla_max(1,*nru))
+    else if(*ldu < fla_max(1, *nru))
     {
         *info = -12;
     }
-    else if (*ncc == 0 && *ldc < 1 || *ncc > 0 && *ldc < fla_max(1,*n))
+    else if(*ncc == 0 && *ldc < 1 || *ncc > 0 && *ldc < fla_max(1, *n))
     {
         *info = -14;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DLASDQ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -316,18 +339,16 @@ void dlasdq_(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru
     sqre1 = *sqre;
     /* If matrix non-square upper bidiagonal, rotate to be lower */
     /* bidiagonal. The rotations are on the right. */
-    if (iuplo == 1 && sqre1 == 1)
+    if(iuplo == 1 && sqre1 == 1)
     {
         i__1 = *n - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             dlartg_(&d__[i__], &e[i__], &cs, &sn, &r__);
             d__[i__] = r__;
             e[i__] = sn * d__[i__ + 1];
             d__[i__ + 1] = cs * d__[i__ + 1];
-            if (rotate)
+            if(rotate)
             {
                 work[i__] = cs;
                 work[*n + i__] = sn;
@@ -337,7 +358,7 @@ void dlasdq_(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru
         dlartg_(&d__[*n], &e[*n], &cs, &sn, &r__);
         d__[*n] = r__;
         e[*n] = 0.;
-        if (rotate)
+        if(rotate)
         {
             work[*n] = cs;
             work[*n + *n] = sn;
@@ -345,25 +366,23 @@ void dlasdq_(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru
         iuplo = 2;
         sqre1 = 0;
         /* Update singular vectors if desired. */
-        if (*ncvt > 0)
+        if(*ncvt > 0)
         {
-            dlasr_("L", "V", "F", &np1, ncvt, &work[1], &work[np1], &vt[ vt_offset], ldvt);
+            dlasr_("L", "V", "F", &np1, ncvt, &work[1], &work[np1], &vt[vt_offset], ldvt);
         }
     }
     /* If matrix lower bidiagonal, rotate to be upper bidiagonal */
     /* by applying Givens rotations on the left. */
-    if (iuplo == 2)
+    if(iuplo == 2)
     {
         i__1 = *n - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             dlartg_(&d__[i__], &e[i__], &cs, &sn, &r__);
             d__[i__] = r__;
             e[i__] = sn * d__[i__ + 1];
             d__[i__ + 1] = cs * d__[i__ + 1];
-            if (rotate)
+            if(rotate)
             {
                 work[i__] = cs;
                 work[*n + i__] = sn;
@@ -372,81 +391,78 @@ void dlasdq_(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru
         }
         /* If matrix (N+1)-by-N lower bidiagonal, one additional */
         /* rotation is needed. */
-        if (sqre1 == 1)
+        if(sqre1 == 1)
         {
             dlartg_(&d__[*n], &e[*n], &cs, &sn, &r__);
             d__[*n] = r__;
-            if (rotate)
+            if(rotate)
             {
                 work[*n] = cs;
                 work[*n + *n] = sn;
             }
         }
         /* Update singular vectors if desired. */
-        if (*nru > 0)
+        if(*nru > 0)
         {
-            if (sqre1 == 0)
+            if(sqre1 == 0)
             {
-                dlasr_("R", "V", "F", nru, n, &work[1], &work[np1], &u[ u_offset], ldu);
+                dlasr_("R", "V", "F", nru, n, &work[1], &work[np1], &u[u_offset], ldu);
             }
             else
             {
-                dlasr_("R", "V", "F", nru, &np1, &work[1], &work[np1], &u[ u_offset], ldu);
+                dlasr_("R", "V", "F", nru, &np1, &work[1], &work[np1], &u[u_offset], ldu);
             }
         }
-        if (*ncc > 0)
+        if(*ncc > 0)
         {
-            if (sqre1 == 0)
+            if(sqre1 == 0)
             {
-                dlasr_("L", "V", "F", n, ncc, &work[1], &work[np1], &c__[ c_offset], ldc);
+                dlasr_("L", "V", "F", n, ncc, &work[1], &work[np1], &c__[c_offset], ldc);
             }
             else
             {
-                dlasr_("L", "V", "F", &np1, ncc, &work[1], &work[np1], &c__[ c_offset], ldc);
+                dlasr_("L", "V", "F", &np1, ncc, &work[1], &work[np1], &c__[c_offset], ldc);
             }
         }
     }
     /* Call DBDSQR to compute the SVD of the reduced real */
     /* N-by-N upper bidiagonal matrix. */
-    dbdsqr_("U", n, ncvt, nru, ncc, &d__[1], &e[1], &vt[vt_offset], ldvt, &u[ u_offset], ldu, &c__[c_offset], ldc, &work[1], info);
+    dbdsqr_("U", n, ncvt, nru, ncc, &d__[1], &e[1], &vt[vt_offset], ldvt, &u[u_offset], ldu,
+            &c__[c_offset], ldc, &work[1], info);
     /* Sort the singular values into ascending order (insertion sort on */
     /* singular values, but only one transposition per singular vector) */
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Scan for smallest D(I). */
         isub = i__;
         smin = d__[i__];
         i__2 = *n;
-        for (j = i__ + 1;
-                j <= i__2;
-                ++j)
+        for(j = i__ + 1; j <= i__2; ++j)
         {
-            if (d__[j] < smin)
+            if(d__[j] < smin)
             {
                 isub = j;
                 smin = d__[j];
             }
             /* L30: */
         }
-        if (isub != i__)
+        if(isub != i__)
         {
             /* Swap singular values and vectors. */
             d__[isub] = d__[i__];
             d__[i__] = smin;
-            if (*ncvt > 0)
+            if(*ncvt > 0)
             {
                 dswap_(ncvt, &vt[isub + vt_dim1], ldvt, &vt[i__ + vt_dim1], ldvt);
             }
-            if (*nru > 0)
+            if(*nru > 0)
             {
                 dswap_(nru, &u[isub * u_dim1 + 1], &c__1, &u[i__ * u_dim1 + 1], &c__1);
             }
-            if (*ncc > 0)
+            if(*ncc > 0)
             {
-                dswap_(ncc, &c__[isub + c_dim1], ldc, &c__[i__ + c_dim1], ldc) ;
+                dswap_(ncc, &c__[isub + c_dim1], ldc, &c__[i__ + c_dim1], ldc);
             }
         }
         /* L40: */

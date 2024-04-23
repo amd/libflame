@@ -1,16 +1,25 @@
-/* ../netlib/sla_gbrpvgrw.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sla_gbrpvgrw.f -- translated by f2c (version 20100827). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLA_GBRPVGRW computes the reciprocal pivot growth factor norm(A)/norm(U) for a general banded m atrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLA_GBRPVGRW + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_gbr pvgrw.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_gbr
+ * pvgrw.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sla_gbr pvgrw.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sla_gbr
+ * pvgrw.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_gbr pvgrw.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_gbr
+ * pvgrw.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -101,7 +110,8 @@
 /* > \date September 2012 */
 /* > \ingroup realGBcomputational */
 /* ===================================================================== */
-real sla_gbrpvgrw_(integer *n, integer *kl, integer *ku, integer *ncols, real *ab, integer *ldab, real *afb, integer *ldafb)
+real sla_gbrpvgrw_(integer *n, integer *kl, integer *ku, integer *ncols, real *ab, integer *ldab,
+                   real *afb, integer *ldafb)
 {
     /* System generated locals */
     integer ab_dim1, ab_offset, afb_dim1, afb_offset, i__1, i__2, i__3, i__4;
@@ -134,9 +144,7 @@ real sla_gbrpvgrw_(integer *n, integer *kl, integer *ku, integer *ncols, real *a
     rpvgrw = 1.f;
     kd = *ku + 1;
     i__1 = *ncols;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         amax = 0.f;
         umax = 0.f;
@@ -144,31 +152,27 @@ real sla_gbrpvgrw_(integer *n, integer *kl, integer *ku, integer *ncols, real *a
         i__2 = j - *ku;
         /* Computing MIN */
         i__4 = j + *kl;
-        i__3 = fla_min(i__4,*n);
-        for (i__ = fla_max(i__2,1);
-                i__ <= i__3;
-                ++i__)
+        i__3 = fla_min(i__4, *n);
+        for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
         {
             /* Computing MAX */
             r__2 = (r__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs(r__1));
-            amax = fla_max(r__2,amax);
+            amax = fla_max(r__2, amax);
         }
         /* Computing MAX */
         i__3 = j - *ku;
         i__2 = j;
-        for (i__ = fla_max(i__3,1);
-                i__ <= i__2;
-                ++i__)
+        for(i__ = fla_max(i__3, 1); i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             r__2 = (r__1 = afb[kd + i__ - j + j * afb_dim1], f2c_abs(r__1));
-            umax = fla_max(r__2,umax);
+            umax = fla_max(r__2, umax);
         }
-        if (umax != 0.f)
+        if(umax != 0.f)
         {
             /* Computing MIN */
             r__1 = amax / umax;
-            rpvgrw = fla_min(r__1,rpvgrw);
+            rpvgrw = fla_min(r__1, rpvgrw);
         }
     }
     ret_val = rpvgrw;

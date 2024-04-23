@@ -1,5 +1,8 @@
-/* ../netlib/slaic1.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slaic1.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b5 = 1.f;
@@ -9,11 +12,17 @@ static real c_b5 = 1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAIC1 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaic1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaic1.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaic1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaic1.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaic1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaic1.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -123,12 +132,13 @@ static real c_b5 = 1.f;
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma, real *sestpr, real *s, real *c__)
+void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma, real *sestpr,
+             real *s, real *c__)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slaic1_ inputs: *job %d, *j %d",*job, *j);
+    snprintf(buffer, 256, "slaic1_ inputs: *job %d, *j %d", *job, *j);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -168,14 +178,14 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
     absalp = f2c_abs(alpha);
     absgam = f2c_abs(*gamma);
     absest = f2c_abs(*sest);
-    if (*job == 1)
+    if(*job == 1)
     {
         /* Estimating largest singular value */
         /* special cases */
-        if (*sest == 0.f)
+        if(*sest == 0.f)
         {
-            s1 = fla_max(absgam,absalp);
-            if (s1 == 0.f)
+            s1 = fla_max(absgam, absalp);
+            if(s1 == 0.f)
             {
                 *s = 0.f;
                 *c__ = 1.f;
@@ -193,22 +203,22 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;
         }
-        else if (absgam <= eps * absest)
+        else if(absgam <= eps * absest)
         {
             *s = 1.f;
             *c__ = 0.f;
-            tmp = fla_max(absest,absalp);
+            tmp = fla_max(absest, absalp);
             s1 = absest / tmp;
             s2 = absalp / tmp;
             *sestpr = tmp * sqrt(s1 * s1 + s2 * s2);
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;
         }
-        else if (absalp <= eps * absest)
+        else if(absalp <= eps * absest)
         {
             s1 = absgam;
             s2 = absest;
-            if (s1 <= s2)
+            if(s1 <= s2)
             {
                 *s = 1.f;
                 *c__ = 0.f;
@@ -223,11 +233,11 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;
         }
-        else if (absest <= eps * absalp || absest <= eps * absgam)
+        else if(absest <= eps * absalp || absest <= eps * absgam)
         {
             s1 = absgam;
             s2 = absalp;
-            if (s1 <= s2)
+            if(s1 <= s2)
             {
                 tmp = s1 / s2;
                 *s = sqrt(tmp * tmp + 1.f);
@@ -253,7 +263,7 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
             zeta2 = *gamma / absest;
             b = (1.f - zeta1 * zeta1 - zeta2 * zeta2) * .5f;
             *c__ = zeta1 * zeta1;
-            if (b > 0.f)
+            if(b > 0.f)
             {
                 t = *c__ / (b + sqrt(b * b + *c__));
             }
@@ -271,14 +281,14 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
             return;
         }
     }
-    else if (*job == 2)
+    else if(*job == 2)
     {
         /* Estimating smallest singular value */
         /* special cases */
-        if (*sest == 0.f)
+        if(*sest == 0.f)
         {
             *sestpr = 0.f;
-            if (fla_max(absgam,absalp) == 0.f)
+            if(fla_max(absgam, absalp) == 0.f)
             {
                 sine = 1.f;
                 cosine = 0.f;
@@ -291,7 +301,7 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
             /* Computing MAX */
             r__1 = f2c_abs(sine);
             r__2 = f2c_abs(cosine); // , expr subst
-            s1 = fla_max(r__1,r__2);
+            s1 = fla_max(r__1, r__2);
             *s = sine / s1;
             *c__ = cosine / s1;
             tmp = sqrt(*s * *s + *c__ * *c__);
@@ -300,7 +310,7 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;
         }
-        else if (absgam <= eps * absest)
+        else if(absgam <= eps * absest)
         {
             *s = 0.f;
             *c__ = 1.f;
@@ -308,11 +318,11 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;
         }
-        else if (absalp <= eps * absest)
+        else if(absalp <= eps * absest)
         {
             s1 = absgam;
             s2 = absest;
-            if (s1 <= s2)
+            if(s1 <= s2)
             {
                 *s = 0.f;
                 *c__ = 1.f;
@@ -327,11 +337,11 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;
         }
-        else if (absest <= eps * absalp || absest <= eps * absgam)
+        else if(absest <= eps * absalp || absest <= eps * absgam)
         {
             s1 = absgam;
             s2 = absalp;
-            if (s1 <= s2)
+            if(s1 <= s2)
             {
                 tmp = s1 / s2;
                 *c__ = sqrt(tmp * tmp + 1.f);
@@ -358,10 +368,10 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
             /* Computing MAX */
             r__3 = zeta1 * zeta1 + 1.f + (r__1 = zeta1 * zeta2, f2c_abs(r__1));
             r__4 = (r__2 = zeta1 * zeta2, f2c_abs(r__2)) + zeta2 * zeta2; // , expr subst
-            norma = fla_max(r__3,r__4);
+            norma = fla_max(r__3, r__4);
             /* See if root is closer to zero or to ONE */
             test = (zeta1 - zeta2) * 2.f * (zeta1 + zeta2) + 1.f;
-            if (test >= 0.f)
+            if(test >= 0.f)
             {
                 /* root is close to zero, compute directly */
                 b = (zeta1 * zeta1 + zeta2 * zeta2 + 1.f) * .5f;
@@ -376,7 +386,7 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
                 /* root is closer to ONE, shift by that amount */
                 b = (zeta2 * zeta2 + zeta1 * zeta1 - 1.f) * .5f;
                 *c__ = zeta1 * zeta1;
-                if (b >= 0.f)
+                if(b >= 0.f)
                 {
                     t = -(*c__) / (b + sqrt(b * b + *c__));
                 }

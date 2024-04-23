@@ -1,20 +1,30 @@
-/* ../netlib/dgeqrt3.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dgeqrt3.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static doublereal c_b8 = 1.;
 static doublereal c_b20 = -1.;
-/* > \brief \b DGEQRT3 recursively computes a QR factorization of a general real or complex matrix using the c ompact WY representation of Q. */
+/* > \brief \b DGEQRT3 recursively computes a QR factorization of a general real or complex matrix
+ * using the c ompact WY representation of Q. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DGEQRT3 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgeqrt3 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgeqrt3
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgeqrt3 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgeqrt3
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgeqrt3 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgeqrt3
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -124,19 +134,28 @@ the elements below the diagonal are not used. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dgeqrt3_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t, integer *ldt, integer *info)
+void dgeqrt3_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *t, integer *ldt,
+              integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgeqrt3 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS "",*m, *n, *lda, *ldt);
+    AOCL_DTL_SNPRINTF("dgeqrt3 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS
+                      "",
+                      *m, *n, *lda, *ldt);
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2;
     /* Local variables */
     integer i__, j, i1, j1, n1, n2;
     extern /* Subroutine */
-    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer iinfo;
     extern /* Subroutine */
-    void dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlarfg_( integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *),
+        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -162,33 +181,33 @@ void dgeqrt3_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *
     t -= t_offset;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -2;
     }
-    else if (*m < *n)
+    else if(*m < *n)
     {
         *info = -1;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
-    else if (*ldt < fla_max(1,*n))
+    else if(*ldt < fla_max(1, *n))
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DGEQRT3", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
         /* Compute Householder transform when N=1 */
-        dlarfg_(m, &a[a_dim1 + 1], &a[fla_min(2,*m) + a_dim1], &c__1, &t[t_dim1 + 1]);
+        dlarfg_(m, &a[a_dim1 + 1], &a[fla_min(2, *m) + a_dim1], &c__1, &t[t_dim1 + 1]);
     }
     else
     {
@@ -197,42 +216,36 @@ void dgeqrt3_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *
         n2 = *n - n1;
         /* Computing MIN */
         i__1 = n1 + 1;
-        j1 = fla_min(i__1,*n);
+        j1 = fla_min(i__1, *n);
         /* Computing MIN */
         i__1 = *n + 1;
-        i1 = fla_min(i__1,*m);
+        i1 = fla_min(i__1, *m);
         /* Compute A(1:M,1:N1) <- (Y1,R1,T1), where Q1 = I - Y1 T1 Y1^H */
         dgeqrt3_(m, &n1, &a[a_offset], lda, &t[t_offset], ldt, &iinfo);
         /* Compute A(1:M,J1:N) = Q1^H A(1:M,J1:N) [workspace: T(1:N1,J1:N)] */
         i__1 = n2;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = n1;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 t[i__ + (j + n1) * t_dim1] = a[i__ + (j + n1) * a_dim1];
             }
         }
-        dtrmm_("L", "L", "T", "U", &n1, &n2, &c_b8, &a[a_offset], lda, &t[j1 * t_dim1 + 1], ldt) ;
+        dtrmm_("L", "L", "T", "U", &n1, &n2, &c_b8, &a[a_offset], lda, &t[j1 * t_dim1 + 1], ldt);
         i__1 = *m - n1;
-        dgemm_("T", "N", &n1, &n2, &i__1, &c_b8, &a[j1 + a_dim1], lda, &a[j1 + j1 * a_dim1], lda, &c_b8, &t[j1 * t_dim1 + 1], ldt);
-        dtrmm_("L", "U", "T", "N", &n1, &n2, &c_b8, &t[t_offset], ldt, &t[j1 * t_dim1 + 1], ldt) ;
+        dgemm_("T", "N", &n1, &n2, &i__1, &c_b8, &a[j1 + a_dim1], lda, &a[j1 + j1 * a_dim1], lda,
+               &c_b8, &t[j1 * t_dim1 + 1], ldt);
+        dtrmm_("L", "U", "T", "N", &n1, &n2, &c_b8, &t[t_offset], ldt, &t[j1 * t_dim1 + 1], ldt);
         i__1 = *m - n1;
-        dgemm_("N", "N", &i__1, &n2, &n1, &c_b20, &a[j1 + a_dim1], lda, &t[j1 * t_dim1 + 1], ldt, &c_b8, &a[j1 + j1 * a_dim1], lda);
-        dtrmm_("L", "L", "N", "U", &n1, &n2, &c_b8, &a[a_offset], lda, &t[j1 * t_dim1 + 1], ldt) ;
+        dgemm_("N", "N", &i__1, &n2, &n1, &c_b20, &a[j1 + a_dim1], lda, &t[j1 * t_dim1 + 1], ldt,
+               &c_b8, &a[j1 + j1 * a_dim1], lda);
+        dtrmm_("L", "L", "N", "U", &n1, &n2, &c_b8, &a[a_offset], lda, &t[j1 * t_dim1 + 1], ldt);
         i__1 = n2;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = n1;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 a[i__ + (j + n1) * a_dim1] -= t[i__ + (j + n1) * t_dim1];
             }
@@ -242,23 +255,22 @@ void dgeqrt3_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *
         dgeqrt3_(&i__1, &n2, &a[j1 + j1 * a_dim1], lda, &t[j1 + j1 * t_dim1], ldt, &iinfo);
         /* Compute T3 = T(1:N1,J1:N) = -T1 Y1^H Y2 T2 */
         i__1 = n1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = n2;
-            for (j = 1;
-                    j <= i__2;
-                    ++j)
+            for(j = 1; j <= i__2; ++j)
             {
                 t[i__ + (j + n1) * t_dim1] = a[j + n1 + i__ * a_dim1];
             }
         }
-        dtrmm_("R", "L", "N", "U", &n1, &n2, &c_b8, &a[j1 + j1 * a_dim1], lda, &t[j1 * t_dim1 + 1], ldt);
+        dtrmm_("R", "L", "N", "U", &n1, &n2, &c_b8, &a[j1 + j1 * a_dim1], lda, &t[j1 * t_dim1 + 1],
+               ldt);
         i__1 = *m - *n;
-        dgemm_("T", "N", &n1, &n2, &i__1, &c_b8, &a[i1 + a_dim1], lda, &a[i1 + j1 * a_dim1], lda, &c_b8, &t[j1 * t_dim1 + 1], ldt);
+        dgemm_("T", "N", &n1, &n2, &i__1, &c_b8, &a[i1 + a_dim1], lda, &a[i1 + j1 * a_dim1], lda,
+               &c_b8, &t[j1 * t_dim1 + 1], ldt);
         dtrmm_("L", "U", "N", "N", &n1, &n2, &c_b20, &t[t_offset], ldt, &t[j1 * t_dim1 + 1], ldt);
-        dtrmm_("R", "U", "N", "N", &n1, &n2, &c_b8, &t[j1 + j1 * t_dim1], ldt, &t[j1 * t_dim1 + 1], ldt);
+        dtrmm_("R", "U", "N", "N", &n1, &n2, &c_b8, &t[j1 + j1 * t_dim1], ldt, &t[j1 * t_dim1 + 1],
+               ldt);
         /* Y = (Y1,Y2);
         R = [ R1 A(1:N1,J1:N) ];
         T = [T1 T3] */

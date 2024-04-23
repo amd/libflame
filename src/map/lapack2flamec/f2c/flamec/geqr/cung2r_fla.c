@@ -1,5 +1,8 @@
-/* ../netlib/cung2r.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cung2r.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b CUNG2R */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CUNG2R + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cung2r. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cung2r.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cung2r. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cung2r.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cung2r. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cung2r.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -102,7 +111,8 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cung2r_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau, complex *work, integer *info)
+void cung2r_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau,
+                complex *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -110,7 +120,11 @@ void cung2r_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, co
     /* Local variables */
     integer i__, j, l;
     extern /* Subroutine */
-    void cscal_(integer *, complex *, complex *, integer *), clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        cscal_(integer *, complex *, complex *, integer *),
+        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+               complex *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -138,43 +152,39 @@ void cung2r_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, co
     --work;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0 || *n > *m)
+    else if(*n < 0 || *n > *m)
     {
         *info = -2;
     }
-    else if (*k < 0 || *k > *n)
+    else if(*k < 0 || *k > *n)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CUNG2R", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         return;
     }
     /* Initialise columns k+1:n to columns of the unit matrix */
     i__1 = *n;
-    for (j = *k + 1;
-            j <= i__1;
-            ++j)
+    for(j = *k + 1; j <= i__1; ++j)
     {
         i__2 = *m;
-        for (l = 1;
-                l <= i__2;
-                ++l)
+        for(l = 1; l <= i__2; ++l)
         {
             i__3 = l + j * a_dim1;
             a[i__3].r = 0.f;
@@ -186,21 +196,20 @@ void cung2r_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, co
         a[i__2].i = 0.f; // , expr subst
         /* L20: */
     }
-    for (i__ = *k;
-            i__ >= 1;
-            --i__)
+    for(i__ = *k; i__ >= 1; --i__)
     {
         /* Apply H(i) to A(i:m,i:n) from the left */
-        if (i__ < *n)
+        if(i__ < *n)
         {
             i__1 = i__ + i__ * a_dim1;
             a[i__1].r = 1.f;
             a[i__1].i = 0.f; // , expr subst
             i__1 = *m - i__ + 1;
             i__2 = *n - i__;
-            clarf_("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[ i__], &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
+            clarf_("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
+                   &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
         }
-        if (i__ < *m)
+        if(i__ < *m)
         {
             i__1 = *m - i__;
             i__2 = i__;
@@ -216,9 +225,7 @@ void cung2r_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, co
         a[i__1].i = q__1.i; // , expr subst
         /* Set A(1:i-1,i) to zero */
         i__1 = i__ - 1;
-        for (l = 1;
-                l <= i__1;
-                ++l)
+        for(l = 1; l <= i__1; ++l)
         {
             i__2 = l + i__ * a_dim1;
             a[i__2].r = 0.f;

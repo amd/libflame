@@ -11,12 +11,11 @@ integer i_sceiling(real *x)
 {
 #define CEIL(x) ((int)(x) + ((x) > 0 && (x) != (int)(x)))
 
-    return (integer) CEIL(*x);
+    return (integer)CEIL(*x);
 }
 #ifdef __cplusplus
 }
 #endif
-
 
 #ifdef KR_headers
 integer i_dceiling(x) doublereal *x;
@@ -29,7 +28,7 @@ integer i_dceiling(doublereal *x)
 {
 #define CEIL(x) ((int)(x) + ((x) > 0 && (x) != (int)(x)))
 
-    return (integer) CEIL(*x);
+    return (integer)CEIL(*x);
 }
 #ifdef __cplusplus
 }

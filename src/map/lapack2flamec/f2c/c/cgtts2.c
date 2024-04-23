@@ -1,16 +1,25 @@
-/* ../netlib/cgtts2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cgtts2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CGTTS2 solves a system of linear equations with a tridiagonal matrix using the LU factorization computed by sgttrf. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CGTTS2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgtts2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgtts2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgtts2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgtts2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgtts2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgtts2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -116,15 +125,18 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complexGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d__, complex *du, complex *du2, integer *ipiv, complex *b, integer *ldb)
+void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d__, complex *du,
+             complex *du2, integer *ipiv, complex *b, integer *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgtts2 inputs: itrans %lld, n %lld, nrhs %lld, ldb %lld",*itrans, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "cgtts2 inputs: itrans %lld, n %lld, nrhs %lld, ldb %lld", *itrans, *n,
+             *nrhs, *ldb);
 #else
-    snprintf(buffer, 256,"cgtts2 inputs: itrans %d, n %d, nrhs %d, ldb %d",*itrans, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "cgtts2 inputs: itrans %d, n %d, nrhs %d, ldb %d", *itrans, *n, *nrhs,
+             *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -161,32 +173,30 @@ void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d
     b_offset = 1 + b_dim1;
     b -= b_offset;
     /* Function Body */
-    if (*n == 0 || *nrhs == 0)
+    if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (*itrans == 0)
+    if(*itrans == 0)
     {
         /* Solve A*X = B using the LU factorization of A, */
         /* overwriting each right hand side vector with its solution. */
-        if (*nrhs <= 1)
+        if(*nrhs <= 1)
         {
             j = 1;
-L10: /* Solve L*x = b. */
+        L10: /* Solve L*x = b. */
             i__1 = *n - 1;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
-                if (ipiv[i__] == i__)
+                if(ipiv[i__] == i__)
                 {
                     i__2 = i__ + 1 + j * b_dim1;
                     i__3 = i__ + 1 + j * b_dim1;
                     i__4 = i__;
                     i__5 = i__ + j * b_dim1;
                     q__2.r = dl[i__4].r * b[i__5].r - dl[i__4].i * b[i__5].i;
-                    q__2.i = dl[i__4].r * b[i__5].i + dl[i__4].i * b[ i__5].r; // , expr subst
+                    q__2.i = dl[i__4].r * b[i__5].i + dl[i__4].i * b[i__5].r; // , expr subst
                     q__1.r = b[i__3].r - q__2.r;
                     q__1.i = b[i__3].i - q__2.i; // , expr subst
                     b[i__2].r = q__1.r;
@@ -205,7 +215,7 @@ L10: /* Solve L*x = b. */
                     i__3 = i__;
                     i__4 = i__ + j * b_dim1;
                     q__2.r = dl[i__3].r * b[i__4].r - dl[i__3].i * b[i__4].i;
-                    q__2.i = dl[i__3].r * b[i__4].i + dl[i__3].i * b[ i__4].r; // , expr subst
+                    q__2.i = dl[i__3].r * b[i__4].i + dl[i__3].i * b[i__4].r; // , expr subst
                     q__1.r = temp.r - q__2.r;
                     q__1.i = temp.i - q__2.i; // , expr subst
                     b[i__2].r = q__1.r;
@@ -218,36 +228,34 @@ L10: /* Solve L*x = b. */
             c_div(&q__1, &b[*n + j * b_dim1], &d__[*n]);
             b[i__1].r = q__1.r;
             b[i__1].i = q__1.i; // , expr subst
-            if (*n > 1)
+            if(*n > 1)
             {
                 i__1 = *n - 1 + j * b_dim1;
                 i__2 = *n - 1 + j * b_dim1;
                 i__3 = *n - 1;
                 i__4 = *n + j * b_dim1;
                 q__3.r = du[i__3].r * b[i__4].r - du[i__3].i * b[i__4].i;
-                q__3.i = du[i__3].r * b[i__4].i + du[i__3].i * b[i__4] .r; // , expr subst
+                q__3.i = du[i__3].r * b[i__4].i + du[i__3].i * b[i__4].r; // , expr subst
                 q__2.r = b[i__2].r - q__3.r;
                 q__2.i = b[i__2].i - q__3.i; // , expr subst
                 c_div(&q__1, &q__2, &d__[*n - 1]);
                 b[i__1].r = q__1.r;
                 b[i__1].i = q__1.i; // , expr subst
             }
-            for (i__ = *n - 2;
-                    i__ >= 1;
-                    --i__)
+            for(i__ = *n - 2; i__ >= 1; --i__)
             {
                 i__1 = i__ + j * b_dim1;
                 i__2 = i__ + j * b_dim1;
                 i__3 = i__;
                 i__4 = i__ + 1 + j * b_dim1;
                 q__4.r = du[i__3].r * b[i__4].r - du[i__3].i * b[i__4].i;
-                q__4.i = du[i__3].r * b[i__4].i + du[i__3].i * b[i__4] .r; // , expr subst
+                q__4.i = du[i__3].r * b[i__4].i + du[i__3].i * b[i__4].r; // , expr subst
                 q__3.r = b[i__2].r - q__4.r;
                 q__3.i = b[i__2].i - q__4.i; // , expr subst
                 i__5 = i__;
                 i__6 = i__ + 2 + j * b_dim1;
                 q__5.r = du2[i__5].r * b[i__6].r - du2[i__5].i * b[i__6].i;
-                q__5.i = du2[i__5].r * b[i__6].i + du2[i__5].i * b[ i__6].r; // , expr subst
+                q__5.i = du2[i__5].r * b[i__6].i + du2[i__5].i * b[i__6].r; // , expr subst
                 q__2.r = q__3.r - q__5.r;
                 q__2.i = q__3.i - q__5.i; // , expr subst
                 c_div(&q__1, &q__2, &d__[i__]);
@@ -255,7 +263,7 @@ L10: /* Solve L*x = b. */
                 b[i__1].i = q__1.i; // , expr subst
                 /* L30: */
             }
-            if (j < *nrhs)
+            if(j < *nrhs)
             {
                 ++j;
                 goto L10;
@@ -264,24 +272,20 @@ L10: /* Solve L*x = b. */
         else
         {
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Solve L*x = b. */
                 i__2 = *n - 1;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
-                    if (ipiv[i__] == i__)
+                    if(ipiv[i__] == i__)
                     {
                         i__3 = i__ + 1 + j * b_dim1;
                         i__4 = i__ + 1 + j * b_dim1;
                         i__5 = i__;
                         i__6 = i__ + j * b_dim1;
-                        q__2.r = dl[i__5].r * b[i__6].r - dl[i__5].i * b[i__6] .i;
-                        q__2.i = dl[i__5].r * b[i__6].i + dl[i__5] .i * b[i__6].r; // , expr subst
+                        q__2.r = dl[i__5].r * b[i__6].r - dl[i__5].i * b[i__6].i;
+                        q__2.i = dl[i__5].r * b[i__6].i + dl[i__5].i * b[i__6].r; // , expr subst
                         q__1.r = b[i__4].r - q__2.r;
                         q__1.i = b[i__4].i - q__2.i; // , expr subst
                         b[i__3].r = q__1.r;
@@ -299,8 +303,8 @@ L10: /* Solve L*x = b. */
                         i__3 = i__ + 1 + j * b_dim1;
                         i__4 = i__;
                         i__5 = i__ + j * b_dim1;
-                        q__2.r = dl[i__4].r * b[i__5].r - dl[i__4].i * b[i__5] .i;
-                        q__2.i = dl[i__4].r * b[i__5].i + dl[i__4] .i * b[i__5].r; // , expr subst
+                        q__2.r = dl[i__4].r * b[i__5].r - dl[i__4].i * b[i__5].i;
+                        q__2.i = dl[i__4].r * b[i__5].i + dl[i__4].i * b[i__5].r; // , expr subst
                         q__1.r = temp.r - q__2.r;
                         q__1.i = temp.i - q__2.i; // , expr subst
                         b[i__3].r = q__1.r;
@@ -313,36 +317,34 @@ L10: /* Solve L*x = b. */
                 c_div(&q__1, &b[*n + j * b_dim1], &d__[*n]);
                 b[i__2].r = q__1.r;
                 b[i__2].i = q__1.i; // , expr subst
-                if (*n > 1)
+                if(*n > 1)
                 {
                     i__2 = *n - 1 + j * b_dim1;
                     i__3 = *n - 1 + j * b_dim1;
                     i__4 = *n - 1;
                     i__5 = *n + j * b_dim1;
                     q__3.r = du[i__4].r * b[i__5].r - du[i__4].i * b[i__5].i;
-                    q__3.i = du[i__4].r * b[i__5].i + du[i__4].i * b[ i__5].r; // , expr subst
+                    q__3.i = du[i__4].r * b[i__5].i + du[i__4].i * b[i__5].r; // , expr subst
                     q__2.r = b[i__3].r - q__3.r;
                     q__2.i = b[i__3].i - q__3.i; // , expr subst
                     c_div(&q__1, &q__2, &d__[*n - 1]);
                     b[i__2].r = q__1.r;
                     b[i__2].i = q__1.i; // , expr subst
                 }
-                for (i__ = *n - 2;
-                        i__ >= 1;
-                        --i__)
+                for(i__ = *n - 2; i__ >= 1; --i__)
                 {
                     i__2 = i__ + j * b_dim1;
                     i__3 = i__ + j * b_dim1;
                     i__4 = i__;
                     i__5 = i__ + 1 + j * b_dim1;
                     q__4.r = du[i__4].r * b[i__5].r - du[i__4].i * b[i__5].i;
-                    q__4.i = du[i__4].r * b[i__5].i + du[i__4].i * b[ i__5].r; // , expr subst
+                    q__4.i = du[i__4].r * b[i__5].i + du[i__4].i * b[i__5].r; // , expr subst
                     q__3.r = b[i__3].r - q__4.r;
                     q__3.i = b[i__3].i - q__4.i; // , expr subst
                     i__6 = i__;
                     i__7 = i__ + 2 + j * b_dim1;
-                    q__5.r = du2[i__6].r * b[i__7].r - du2[i__6].i * b[i__7] .i;
-                    q__5.i = du2[i__6].r * b[i__7].i + du2[i__6] .i * b[i__7].r; // , expr subst
+                    q__5.r = du2[i__6].r * b[i__7].r - du2[i__6].i * b[i__7].i;
+                    q__5.i = du2[i__6].r * b[i__7].i + du2[i__6].i * b[i__7].r; // , expr subst
                     q__2.r = q__3.r - q__5.r;
                     q__2.i = q__3.i - q__5.i; // , expr subst
                     c_div(&q__1, &q__2, &d__[i__]);
@@ -354,18 +356,18 @@ L10: /* Solve L*x = b. */
             }
         }
     }
-    else if (*itrans == 1)
+    else if(*itrans == 1)
     {
         /* Solve A**T * X = B. */
-        if (*nrhs <= 1)
+        if(*nrhs <= 1)
         {
             j = 1;
-L70: /* Solve U**T * x = b. */
+        L70: /* Solve U**T * x = b. */
             i__1 = j * b_dim1 + 1;
             c_div(&q__1, &b[j * b_dim1 + 1], &d__[1]);
             b[i__1].r = q__1.r;
             b[i__1].i = q__1.i; // , expr subst
-            if (*n > 1)
+            if(*n > 1)
             {
                 i__1 = j * b_dim1 + 2;
                 i__2 = j * b_dim1 + 2;
@@ -379,22 +381,20 @@ L70: /* Solve U**T * x = b. */
                 b[i__1].i = q__1.i; // , expr subst
             }
             i__1 = *n;
-            for (i__ = 3;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 3; i__ <= i__1; ++i__)
             {
                 i__2 = i__ + j * b_dim1;
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ - 1;
                 i__5 = i__ - 1 + j * b_dim1;
                 q__4.r = du[i__4].r * b[i__5].r - du[i__4].i * b[i__5].i;
-                q__4.i = du[i__4].r * b[i__5].i + du[i__4].i * b[i__5] .r; // , expr subst
+                q__4.i = du[i__4].r * b[i__5].i + du[i__4].i * b[i__5].r; // , expr subst
                 q__3.r = b[i__3].r - q__4.r;
                 q__3.i = b[i__3].i - q__4.i; // , expr subst
                 i__6 = i__ - 2;
                 i__7 = i__ - 2 + j * b_dim1;
                 q__5.r = du2[i__6].r * b[i__7].r - du2[i__6].i * b[i__7].i;
-                q__5.i = du2[i__6].r * b[i__7].i + du2[i__6].i * b[ i__7].r; // , expr subst
+                q__5.i = du2[i__6].r * b[i__7].i + du2[i__6].i * b[i__7].r; // , expr subst
                 q__2.r = q__3.r - q__5.r;
                 q__2.i = q__3.i - q__5.i; // , expr subst
                 c_div(&q__1, &q__2, &d__[i__]);
@@ -403,18 +403,16 @@ L70: /* Solve U**T * x = b. */
                 /* L80: */
             }
             /* Solve L**T * x = b. */
-            for (i__ = *n - 1;
-                    i__ >= 1;
-                    --i__)
+            for(i__ = *n - 1; i__ >= 1; --i__)
             {
-                if (ipiv[i__] == i__)
+                if(ipiv[i__] == i__)
                 {
                     i__1 = i__ + j * b_dim1;
                     i__2 = i__ + j * b_dim1;
                     i__3 = i__;
                     i__4 = i__ + 1 + j * b_dim1;
                     q__2.r = dl[i__3].r * b[i__4].r - dl[i__3].i * b[i__4].i;
-                    q__2.i = dl[i__3].r * b[i__4].i + dl[i__3].i * b[ i__4].r; // , expr subst
+                    q__2.i = dl[i__3].r * b[i__4].i + dl[i__3].i * b[i__4].r; // , expr subst
                     q__1.r = b[i__2].r - q__2.r;
                     q__1.i = b[i__2].i - q__2.i; // , expr subst
                     b[i__1].r = q__1.r;
@@ -440,7 +438,7 @@ L70: /* Solve U**T * x = b. */
                 }
                 /* L90: */
             }
-            if (j < *nrhs)
+            if(j < *nrhs)
             {
                 ++j;
                 goto L70;
@@ -449,22 +447,20 @@ L70: /* Solve U**T * x = b. */
         else
         {
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Solve U**T * x = b. */
                 i__2 = j * b_dim1 + 1;
                 c_div(&q__1, &b[j * b_dim1 + 1], &d__[1]);
                 b[i__2].r = q__1.r;
                 b[i__2].i = q__1.i; // , expr subst
-                if (*n > 1)
+                if(*n > 1)
                 {
                     i__2 = j * b_dim1 + 2;
                     i__3 = j * b_dim1 + 2;
                     i__4 = j * b_dim1 + 1;
                     q__3.r = du[1].r * b[i__4].r - du[1].i * b[i__4].i;
-                    q__3.i = du[1].r * b[i__4].i + du[1].i * b[i__4] .r; // , expr subst
+                    q__3.i = du[1].r * b[i__4].i + du[1].i * b[i__4].r; // , expr subst
                     q__2.r = b[i__3].r - q__3.r;
                     q__2.i = b[i__3].i - q__3.i; // , expr subst
                     c_div(&q__1, &q__2, &d__[2]);
@@ -472,22 +468,20 @@ L70: /* Solve U**T * x = b. */
                     b[i__2].i = q__1.i; // , expr subst
                 }
                 i__2 = *n;
-                for (i__ = 3;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 3; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + j * b_dim1;
                     i__4 = i__ + j * b_dim1;
                     i__5 = i__ - 1;
                     i__6 = i__ - 1 + j * b_dim1;
                     q__4.r = du[i__5].r * b[i__6].r - du[i__5].i * b[i__6].i;
-                    q__4.i = du[i__5].r * b[i__6].i + du[i__5].i * b[ i__6].r; // , expr subst
+                    q__4.i = du[i__5].r * b[i__6].i + du[i__5].i * b[i__6].r; // , expr subst
                     q__3.r = b[i__4].r - q__4.r;
                     q__3.i = b[i__4].i - q__4.i; // , expr subst
                     i__7 = i__ - 2;
                     i__8 = i__ - 2 + j * b_dim1;
-                    q__5.r = du2[i__7].r * b[i__8].r - du2[i__7].i * b[i__8] .i;
-                    q__5.i = du2[i__7].r * b[i__8].i + du2[i__7] .i * b[i__8].r; // , expr subst
+                    q__5.r = du2[i__7].r * b[i__8].r - du2[i__7].i * b[i__8].i;
+                    q__5.i = du2[i__7].r * b[i__8].i + du2[i__7].i * b[i__8].r; // , expr subst
                     q__2.r = q__3.r - q__5.r;
                     q__2.i = q__3.i - q__5.i; // , expr subst
                     c_div(&q__1, &q__2, &d__[i__]);
@@ -496,18 +490,16 @@ L70: /* Solve U**T * x = b. */
                     /* L100: */
                 }
                 /* Solve L**T * x = b. */
-                for (i__ = *n - 1;
-                        i__ >= 1;
-                        --i__)
+                for(i__ = *n - 1; i__ >= 1; --i__)
                 {
-                    if (ipiv[i__] == i__)
+                    if(ipiv[i__] == i__)
                     {
                         i__2 = i__ + j * b_dim1;
                         i__3 = i__ + j * b_dim1;
                         i__4 = i__;
                         i__5 = i__ + 1 + j * b_dim1;
-                        q__2.r = dl[i__4].r * b[i__5].r - dl[i__4].i * b[i__5] .i;
-                        q__2.i = dl[i__4].r * b[i__5].i + dl[i__4] .i * b[i__5].r; // , expr subst
+                        q__2.r = dl[i__4].r * b[i__5].r - dl[i__4].i * b[i__5].i;
+                        q__2.i = dl[i__4].r * b[i__5].i + dl[i__4].i * b[i__5].r; // , expr subst
                         q__1.r = b[i__3].r - q__2.r;
                         q__1.i = b[i__3].i - q__2.i; // , expr subst
                         b[i__2].r = q__1.r;
@@ -540,16 +532,16 @@ L70: /* Solve U**T * x = b. */
     else
     {
         /* Solve A**H * X = B. */
-        if (*nrhs <= 1)
+        if(*nrhs <= 1)
         {
             j = 1;
-L130: /* Solve U**H * x = b. */
+        L130: /* Solve U**H * x = b. */
             i__1 = j * b_dim1 + 1;
             r_cnjg(&q__2, &d__[1]);
             c_div(&q__1, &b[j * b_dim1 + 1], &q__2);
             b[i__1].r = q__1.r;
             b[i__1].i = q__1.i; // , expr subst
-            if (*n > 1)
+            if(*n > 1)
             {
                 i__1 = j * b_dim1 + 2;
                 i__2 = j * b_dim1 + 2;
@@ -565,9 +557,7 @@ L130: /* Solve U**H * x = b. */
                 b[i__1].i = q__1.i; // , expr subst
             }
             i__1 = *n;
-            for (i__ = 3;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 3; i__ <= i__1; ++i__)
             {
                 i__2 = i__ + j * b_dim1;
                 i__3 = i__ + j * b_dim1;
@@ -590,11 +580,9 @@ L130: /* Solve U**H * x = b. */
                 /* L140: */
             }
             /* Solve L**H * x = b. */
-            for (i__ = *n - 1;
-                    i__ >= 1;
-                    --i__)
+            for(i__ = *n - 1; i__ >= 1; --i__)
             {
-                if (ipiv[i__] == i__)
+                if(ipiv[i__] == i__)
                 {
                     i__1 = i__ + j * b_dim1;
                     i__2 = i__ + j * b_dim1;
@@ -627,7 +615,7 @@ L130: /* Solve U**H * x = b. */
                 }
                 /* L150: */
             }
-            if (j < *nrhs)
+            if(j < *nrhs)
             {
                 ++j;
                 goto L130;
@@ -636,9 +624,7 @@ L130: /* Solve U**H * x = b. */
         else
         {
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Solve U**H * x = b. */
                 i__2 = j * b_dim1 + 1;
@@ -646,7 +632,7 @@ L130: /* Solve U**H * x = b. */
                 c_div(&q__1, &b[j * b_dim1 + 1], &q__2);
                 b[i__2].r = q__1.r;
                 b[i__2].i = q__1.i; // , expr subst
-                if (*n > 1)
+                if(*n > 1)
                 {
                     i__2 = j * b_dim1 + 2;
                     i__3 = j * b_dim1 + 2;
@@ -662,9 +648,7 @@ L130: /* Solve U**H * x = b. */
                     b[i__2].i = q__1.i; // , expr subst
                 }
                 i__2 = *n;
-                for (i__ = 3;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 3; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + j * b_dim1;
                     i__4 = i__ + j * b_dim1;
@@ -687,18 +671,16 @@ L130: /* Solve U**H * x = b. */
                     /* L160: */
                 }
                 /* Solve L**H * x = b. */
-                for (i__ = *n - 1;
-                        i__ >= 1;
-                        --i__)
+                for(i__ = *n - 1; i__ >= 1; --i__)
                 {
-                    if (ipiv[i__] == i__)
+                    if(ipiv[i__] == i__)
                     {
                         i__2 = i__ + j * b_dim1;
                         i__3 = i__ + j * b_dim1;
                         r_cnjg(&q__3, &dl[i__]);
                         i__4 = i__ + 1 + j * b_dim1;
                         q__2.r = q__3.r * b[i__4].r - q__3.i * b[i__4].i;
-                        q__2.i = q__3.r * b[i__4].i + q__3.i * b[i__4] .r; // , expr subst
+                        q__2.i = q__3.r * b[i__4].i + q__3.i * b[i__4].r; // , expr subst
                         q__1.r = b[i__3].r - q__2.r;
                         q__1.i = b[i__3].i - q__2.i; // , expr subst
                         b[i__2].r = q__1.r;

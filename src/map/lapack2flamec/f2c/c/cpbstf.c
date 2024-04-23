@@ -1,5 +1,8 @@
-/* ../netlib/cpbstf.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cpbstf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b9 = -1.f;
@@ -9,11 +12,17 @@ static real c_b9 = -1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CPBSTF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpbstf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpbstf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpbstf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpbstf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpbstf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpbstf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -51,7 +60,7 @@ static real c_b9 = -1.f;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -76,7 +85,7 @@ static real c_b9 = -1.f;
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > */
 /* > On exit, if INFO = 0, the factor S from the split Cholesky */
@@ -153,9 +162,10 @@ void cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, in
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cpbstf inputs: uplo %c, n %lld, kd %lld, ldab %lld",*uplo, *n, *kd, *ldab);
+    snprintf(buffer, 256, "cpbstf inputs: uplo %c, n %lld, kd %lld, ldab %lld", *uplo, *n, *kd,
+             *ldab);
 #else
-    snprintf(buffer, 256,"cpbstf inputs: uplo %c, n %d, kd %d, ldab %d",*uplo, *n, *kd, *ldab);
+    snprintf(buffer, 256, "cpbstf inputs: uplo %c, n %d, kd %d, ldab %d", *uplo, *n, *kd, *ldab);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -169,11 +179,15 @@ void cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, in
     real ajj;
     integer kld;
     extern /* Subroutine */
-    void cher_(char *, integer *, real *, complex *, integer *, complex *, integer *);
+        void
+        cher_(char *, integer *, real *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    void clacgv_(integer *, complex *, integer *), csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clacgv_(integer *, complex *, integer *),
+        csscal_(integer *, real *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -202,23 +216,23 @@ void cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, in
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*kd < 0)
+    else if(*kd < 0)
     {
         *info = -3;
     }
-    else if (*ldab < *kd + 1)
+    else if(*ldab < *kd + 1)
     {
         *info = -5;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CPBSTF", &i__1, (ftnlen)6);
@@ -226,7 +240,7 @@ void cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, in
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -234,21 +248,19 @@ void cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, in
     /* Computing MAX */
     i__1 = 1;
     i__2 = *ldab - 1; // , expr subst
-    kld = fla_max(i__1,i__2);
+    kld = fla_max(i__1, i__2);
     /* Set the splitting point m. */
     m = (*n + *kd) / 2;
-    if (upper)
+    if(upper)
     {
         /* Factorize A(m+1:n,m+1:n) as L**H*L, and update A(1:m,1:m). */
         i__1 = m + 1;
-        for (j = *n;
-                j >= i__1;
-                --j)
+        for(j = *n; j >= i__1; --j)
         {
             /* Compute s(j,j) and test for non-positive-definiteness. */
             i__2 = *kd + 1 + j * ab_dim1;
             ajj = ab[i__2].r;
-            if (ajj <= 0.f)
+            if(ajj <= 0.f)
             {
                 i__2 = *kd + 1 + j * ab_dim1;
                 ab[i__2].r = ajj;
@@ -261,24 +273,23 @@ void cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, in
             ab[i__2].i = 0.f; // , expr subst
             /* Computing MIN */
             i__2 = j - 1;
-            km = fla_min(i__2,*kd);
+            km = fla_min(i__2, *kd);
             /* Compute elements j-km:j-1 of the j-th column and update the */
             /* the leading submatrix within the band. */
             r__1 = 1.f / ajj;
             csscal_(&km, &r__1, &ab[*kd + 1 - km + j * ab_dim1], &c__1);
-            cher_("Upper", &km, &c_b9, &ab[*kd + 1 - km + j * ab_dim1], &c__1, &ab[*kd + 1 + (j - km) * ab_dim1], &kld);
+            cher_("Upper", &km, &c_b9, &ab[*kd + 1 - km + j * ab_dim1], &c__1,
+                  &ab[*kd + 1 + (j - km) * ab_dim1], &kld);
             /* L10: */
         }
         /* Factorize the updated submatrix A(1:m,1:m) as U**H*U. */
         i__1 = m;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Compute s(j,j) and test for non-positive-definiteness. */
             i__2 = *kd + 1 + j * ab_dim1;
             ajj = ab[i__2].r;
-            if (ajj <= 0.f)
+            if(ajj <= 0.f)
             {
                 i__2 = *kd + 1 + j * ab_dim1;
                 ab[i__2].r = ajj;
@@ -292,15 +303,16 @@ void cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, in
             /* Computing MIN */
             i__2 = *kd;
             i__3 = m - j; // , expr subst
-            km = fla_min(i__2,i__3);
+            km = fla_min(i__2, i__3);
             /* Compute elements j+1:j+km of the j-th row and update the */
             /* trailing submatrix within the band. */
-            if (km > 0)
+            if(km > 0)
             {
                 r__1 = 1.f / ajj;
                 csscal_(&km, &r__1, &ab[*kd + (j + 1) * ab_dim1], &kld);
                 clacgv_(&km, &ab[*kd + (j + 1) * ab_dim1], &kld);
-                cher_("Upper", &km, &c_b9, &ab[*kd + (j + 1) * ab_dim1], &kld, &ab[*kd + 1 + (j + 1) * ab_dim1], &kld);
+                cher_("Upper", &km, &c_b9, &ab[*kd + (j + 1) * ab_dim1], &kld,
+                      &ab[*kd + 1 + (j + 1) * ab_dim1], &kld);
                 clacgv_(&km, &ab[*kd + (j + 1) * ab_dim1], &kld);
             }
             /* L20: */
@@ -310,14 +322,12 @@ void cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, in
     {
         /* Factorize A(m+1:n,m+1:n) as L**H*L, and update A(1:m,1:m). */
         i__1 = m + 1;
-        for (j = *n;
-                j >= i__1;
-                --j)
+        for(j = *n; j >= i__1; --j)
         {
             /* Compute s(j,j) and test for non-positive-definiteness. */
             i__2 = j * ab_dim1 + 1;
             ajj = ab[i__2].r;
-            if (ajj <= 0.f)
+            if(ajj <= 0.f)
             {
                 i__2 = j * ab_dim1 + 1;
                 ab[i__2].r = ajj;
@@ -330,26 +340,25 @@ void cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, in
             ab[i__2].i = 0.f; // , expr subst
             /* Computing MIN */
             i__2 = j - 1;
-            km = fla_min(i__2,*kd);
+            km = fla_min(i__2, *kd);
             /* Compute elements j-km:j-1 of the j-th row and update the */
             /* trailing submatrix within the band. */
             r__1 = 1.f / ajj;
             csscal_(&km, &r__1, &ab[km + 1 + (j - km) * ab_dim1], &kld);
             clacgv_(&km, &ab[km + 1 + (j - km) * ab_dim1], &kld);
-            cher_("Lower", &km, &c_b9, &ab[km + 1 + (j - km) * ab_dim1], &kld, &ab[(j - km) * ab_dim1 + 1], &kld);
+            cher_("Lower", &km, &c_b9, &ab[km + 1 + (j - km) * ab_dim1], &kld,
+                  &ab[(j - km) * ab_dim1 + 1], &kld);
             clacgv_(&km, &ab[km + 1 + (j - km) * ab_dim1], &kld);
             /* L30: */
         }
         /* Factorize the updated submatrix A(1:m,1:m) as U**H*U. */
         i__1 = m;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Compute s(j,j) and test for non-positive-definiteness. */
             i__2 = j * ab_dim1 + 1;
             ajj = ab[i__2].r;
-            if (ajj <= 0.f)
+            if(ajj <= 0.f)
             {
                 i__2 = j * ab_dim1 + 1;
                 ab[i__2].r = ajj;
@@ -363,14 +372,15 @@ void cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, in
             /* Computing MIN */
             i__2 = *kd;
             i__3 = m - j; // , expr subst
-            km = fla_min(i__2,i__3);
+            km = fla_min(i__2, i__3);
             /* Compute elements j+1:j+km of the j-th column and update the */
             /* trailing submatrix within the band. */
-            if (km > 0)
+            if(km > 0)
             {
                 r__1 = 1.f / ajj;
                 csscal_(&km, &r__1, &ab[j * ab_dim1 + 2], &c__1);
-                cher_("Lower", &km, &c_b9, &ab[j * ab_dim1 + 2], &c__1, &ab[( j + 1) * ab_dim1 + 1], &kld);
+                cher_("Lower", &km, &c_b9, &ab[j * ab_dim1 + 2], &c__1, &ab[(j + 1) * ab_dim1 + 1],
+                      &kld);
             }
             /* L40: */
         }

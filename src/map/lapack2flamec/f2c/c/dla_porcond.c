@@ -1,18 +1,28 @@
-/* ../netlib/dla_porcond.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dla_porcond.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b DLA_PORCOND estimates the Skeel condition number for a symmetric positive-definite matrix. */
+/* > \brief \b DLA_PORCOND estimates the Skeel condition number for a symmetric positive-definite
+ * matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLA_PORCOND + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dla_por cond.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dla_por
+ * cond.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dla_por cond.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dla_por
+ * cond.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dla_por cond.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dla_por
+ * cond.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -50,7 +60,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -128,10 +138,14 @@ static integer c__1 = 1;
 /* > \date December 2016 */
 /* > \ingroup doublePOcomputational */
 /* ===================================================================== */
-doublereal dla_porcond_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *af, integer *ldaf, integer *cmode, doublereal *c__, integer *info, doublereal *work, integer *iwork)
+doublereal dla_porcond_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *af,
+                        integer *ldaf, integer *cmode, doublereal *c__, integer *info,
+                        doublereal *work, integer *iwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dla_porcond inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", cmode %" FLA_IS "",*uplo, *n, *lda, *ldaf, *cmode);
+    AOCL_DTL_SNPRINTF("dla_porcond inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS
+                      ", cmode %" FLA_IS "",
+                      *uplo, *n, *lda, *ldaf, *cmode);
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, i__1, i__2;
     doublereal ret_val, d__1;
@@ -143,10 +157,15 @@ doublereal dla_porcond_(char *uplo, integer *n, doublereal *a, integer *lda, dou
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     extern /* Subroutine */
-    void dpotrs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dpotrs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *,
+                integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -180,68 +199,58 @@ doublereal dla_porcond_(char *uplo, integer *n, doublereal *a, integer *lda, dou
     /* Function Body */
     ret_val = 0.;
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -2;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DLA_PORCOND", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_LOG_EXIT
         return ret_val;
     }
-    if (*n == 0)
+    if(*n == 0)
     {
         ret_val = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
         return ret_val;
     }
     up = FALSE_;
-    if (lsame_(uplo, "U", 1, 1))
+    if(lsame_(uplo, "U", 1, 1))
     {
         up = TRUE_;
     }
     /* Compute the equilibration matrix R such that */
     /* inv(R)*A*C has unit 1-norm. */
-    if (up)
+    if(up)
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             tmp = 0.;
-            if (*cmode == 1)
+            if(*cmode == 1)
             {
                 i__2 = i__;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     tmp += (d__1 = a[j + i__ * a_dim1] * c__[j], f2c_abs(d__1));
                 }
                 i__2 = *n;
-                for (j = i__ + 1;
-                        j <= i__2;
-                        ++j)
+                for(j = i__ + 1; j <= i__2; ++j)
                 {
                     tmp += (d__1 = a[i__ + j * a_dim1] * c__[j], f2c_abs(d__1));
                 }
             }
-            else if (*cmode == 0)
+            else if(*cmode == 0)
             {
                 i__2 = i__;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     tmp += (d__1 = a[j + i__ * a_dim1], f2c_abs(d__1));
                 }
                 i__2 = *n;
-                for (j = i__ + 1;
-                        j <= i__2;
-                        ++j)
+                for(j = i__ + 1; j <= i__2; ++j)
                 {
                     tmp += (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1));
                 }
@@ -249,16 +258,12 @@ doublereal dla_porcond_(char *uplo, integer *n, doublereal *a, integer *lda, dou
             else
             {
                 i__2 = i__;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     tmp += (d__1 = a[j + i__ * a_dim1] / c__[j], f2c_abs(d__1));
                 }
                 i__2 = *n;
-                for (j = i__ + 1;
-                        j <= i__2;
-                        ++j)
+                for(j = i__ + 1; j <= i__2; ++j)
                 {
                     tmp += (d__1 = a[i__ + j * a_dim1] / c__[j], f2c_abs(d__1));
                 }
@@ -269,41 +274,31 @@ doublereal dla_porcond_(char *uplo, integer *n, doublereal *a, integer *lda, dou
     else
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             tmp = 0.;
-            if (*cmode == 1)
+            if(*cmode == 1)
             {
                 i__2 = i__;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     tmp += (d__1 = a[i__ + j * a_dim1] * c__[j], f2c_abs(d__1));
                 }
                 i__2 = *n;
-                for (j = i__ + 1;
-                        j <= i__2;
-                        ++j)
+                for(j = i__ + 1; j <= i__2; ++j)
                 {
                     tmp += (d__1 = a[j + i__ * a_dim1] * c__[j], f2c_abs(d__1));
                 }
             }
-            else if (*cmode == 0)
+            else if(*cmode == 0)
             {
                 i__2 = i__;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     tmp += (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1));
                 }
                 i__2 = *n;
-                for (j = i__ + 1;
-                        j <= i__2;
-                        ++j)
+                for(j = i__ + 1; j <= i__2; ++j)
                 {
                     tmp += (d__1 = a[j + i__ * a_dim1], f2c_abs(d__1));
                 }
@@ -311,16 +306,12 @@ doublereal dla_porcond_(char *uplo, integer *n, doublereal *a, integer *lda, dou
             else
             {
                 i__2 = i__;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     tmp += (d__1 = a[i__ + j * a_dim1] / c__[j], f2c_abs(d__1));
                 }
                 i__2 = *n;
-                for (j = i__ + 1;
-                        j <= i__2;
-                        ++j)
+                for(j = i__ + 1; j <= i__2; ++j)
                 {
                     tmp += (d__1 = a[j + i__ * a_dim1] / c__[j], f2c_abs(d__1));
                 }
@@ -333,19 +324,17 @@ doublereal dla_porcond_(char *uplo, integer *n, doublereal *a, integer *lda, dou
     kase = 0;
 L10:
     dlacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
-    if (kase != 0)
+    if(kase != 0)
     {
-        if (kase == 2)
+        if(kase == 2)
         {
             /* Multiply by R. */
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 work[i__] *= work[(*n << 1) + i__];
             }
-            if (up)
+            if(up)
             {
                 dpotrs_("Upper", n, &c__1, &af[af_offset], ldaf, &work[1], n, info);
             }
@@ -354,22 +343,18 @@ L10:
                 dpotrs_("Lower", n, &c__1, &af[af_offset], ldaf, &work[1], n, info);
             }
             /* Multiply by inv(C). */
-            if (*cmode == 1)
+            if(*cmode == 1)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     work[i__] /= c__[i__];
                 }
             }
-            else if (*cmode == -1)
+            else if(*cmode == -1)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     work[i__] *= c__[i__];
                 }
@@ -378,27 +363,23 @@ L10:
         else
         {
             /* Multiply by inv(C**T). */
-            if (*cmode == 1)
+            if(*cmode == 1)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     work[i__] /= c__[i__];
                 }
             }
-            else if (*cmode == -1)
+            else if(*cmode == -1)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     work[i__] *= c__[i__];
                 }
             }
-            if (up)
+            if(up)
             {
                 dpotrs_("Upper", n, &c__1, &af[af_offset], ldaf, &work[1], n, info);
             }
@@ -408,9 +389,7 @@ L10:
             }
             /* Multiply by R. */
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 work[i__] *= work[(*n << 1) + i__];
             }
@@ -418,7 +397,7 @@ L10:
         goto L10;
     }
     /* Compute the estimate of the reciprocal condition number. */
-    if (ainvnm != 0.)
+    if(ainvnm != 0.)
     {
         ret_val = 1. / ainvnm;
     }

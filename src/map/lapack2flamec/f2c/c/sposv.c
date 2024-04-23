@@ -1,16 +1,25 @@
-/* ../netlib/sposv.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sposv.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief <b> SPOSV computes the solution to system of linear equations A * X = B for PO matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SPOSV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sposv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sposv.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sposv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sposv.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sposv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sposv.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -46,7 +55,7 @@
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -117,12 +126,14 @@
 /* > \ingroup realPOsolve */
 /* ===================================================================== */
 /* Subroutine */
-void sposv_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb, integer *info)
+void sposv_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb,
+            integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sposv inputs: uplo %c, n %d, nrhs %d, lda %d, ldb %d",*uplo, *n, *nrhs, *lda, *ldb);
+    snprintf(buffer, 256, "sposv inputs: uplo %c, n %d, nrhs %d, lda %d, ldb %d", *uplo, *n, *nrhs,
+             *lda, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -130,7 +141,10 @@ void sposv_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), spotrf_( char *, integer *, real *, integer *, integer *), spotrs_( char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        spotrf_(char *, integer *, real *, integer *, integer *),
+        spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -157,27 +171,27 @@ void sposv_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SPOSV ", &i__1, (ftnlen)6);
@@ -186,7 +200,7 @@ void sposv_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *
     }
     /* Compute the Cholesky factorization A = U**T*U or A = L*L**T. */
     spotrf_(uplo, n, &a[a_offset], lda, info);
-    if (*info == 0)
+    if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */
         spotrs_(uplo, n, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);

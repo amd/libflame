@@ -1,5 +1,8 @@
-/* ../netlib/ztrsen.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ztrsen.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c_n1 = -1;
 /* > \brief \b ZTRSEN */
@@ -8,11 +11,17 @@ static integer c_n1 = -1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZTRSEN + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztrsen. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztrsen.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztrsen. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztrsen.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrsen. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrsen.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -50,11 +59,11 @@ static integer c_n1 = -1;
 /* > Specifies whether condition numbers are required for the */
 /* > cluster of eigenvalues (S) or the invariant subspace (SEP): */
 /* > = 'N': none;
-*/
+ */
 /* > = 'E': for eigenvalues only (S);
-*/
+ */
 /* > = 'V': for invariant subspace only (SEP);
-*/
+ */
 /* > = 'B': for both eigenvalues and invariant subspace (S and */
 /* > SEP). */
 /* > \endverbatim */
@@ -63,7 +72,7 @@ static integer c_n1 = -1;
 /* > \verbatim */
 /* > COMPQ is CHARACTER*1 */
 /* > = 'V': update the matrix Q of Schur vectors;
-*/
+ */
 /* > = 'N': do not update Q. */
 /* > \endverbatim */
 /* > */
@@ -158,9 +167,9 @@ and if COMPQ = 'V', LDQ >= N. */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If JOB = 'N', LWORK >= 1;
-*/
+ */
 /* > if JOB = 'E', LWORK = fla_max(1,M*(N-M));
-*/
+ */
 /* > if JOB = 'V' or 'B', LWORK >= fla_max(1,2*M*(N-M)). */
 /* > */
 /* > If LWORK = -1, then a workspace query is assumed;
@@ -260,10 +269,14 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ztrsen_(char *job, char *compq, logical *select, integer *n, doublecomplex *t, integer *ldt, doublecomplex *q, integer *ldq, doublecomplex *w, integer *m, doublereal *s, doublereal *sep, doublecomplex *work, integer *lwork, integer *info)
+void ztrsen_(char *job, char *compq, logical *select, integer *n, doublecomplex *t, integer *ldt,
+             doublecomplex *q, integer *ldq, doublecomplex *w, integer *m, doublereal *s,
+             doublereal *sep, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztrsen inputs: job %c, compq %c, n %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS ", m %" FLA_IS "",*job, *compq, *n, *ldt, *ldq, *m);
+    AOCL_DTL_SNPRINTF("ztrsen inputs: job %c, compq %c, n %" FLA_IS ", ldt %" FLA_IS
+                      ", ldq %" FLA_IS ", m %" FLA_IS "",
+                      *job, *compq, *n, *ldt, *ldq, *m);
     /* System generated locals */
     integer q_dim1, q_offset, t_dim1, t_offset, i__1, i__2, i__3;
     /* Builtin functions */
@@ -278,17 +291,26 @@ void ztrsen_(char *job, char *compq, logical *select, integer *n, doublecomplex 
     logical wantq, wants;
     doublereal rnorm, rwork[1];
     extern /* Subroutine */
-    void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
+        void
+        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *,
+                              doublereal *);
     logical wantbh;
     extern /* Subroutine */
-    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *);
     logical wantsp;
     extern /* Subroutine */
-    void ztrexc_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, integer *);
+        void
+        ztrexc_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
+                integer *, integer *, integer *);
     logical lquery;
     extern /* Subroutine */
-    void ztrsyl_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *);
+        void
+        ztrsyl_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -331,11 +353,9 @@ void ztrsen_(char *job, char *compq, logical *select, integer *n, doublecomplex 
     /* Set M to the number of selected eigenvalues. */
     *m = 0;
     i__1 = *n;
-    for (k = 1;
-            k <= i__1;
-            ++k)
+    for(k = 1; k <= i__1; ++k)
     {
-        if (select[k])
+        if(select[k])
         {
             ++(*m);
         }
@@ -346,70 +366,70 @@ void ztrsen_(char *job, char *compq, logical *select, integer *n, doublecomplex 
     nn = n1 * n2;
     *info = 0;
     lquery = *lwork == -1;
-    if (wantsp)
+    if(wantsp)
     {
         /* Computing MAX */
         i__1 = 1;
         i__2 = nn << 1; // , expr subst
-        lwmin = fla_max(i__1,i__2);
+        lwmin = fla_max(i__1, i__2);
     }
-    else if (lsame_(job, "N", 1, 1))
+    else if(lsame_(job, "N", 1, 1))
     {
         lwmin = 1;
     }
-    else if (lsame_(job, "E", 1, 1))
+    else if(lsame_(job, "E", 1, 1))
     {
-        lwmin = fla_max(1,nn);
+        lwmin = fla_max(1, nn);
     }
-    if (! lsame_(job, "N", 1, 1) && ! wants && ! wantsp)
+    if(!lsame_(job, "N", 1, 1) && !wants && !wantsp)
     {
         *info = -1;
     }
-    else if (! lsame_(compq, "N", 1, 1) && ! wantq)
+    else if(!lsame_(compq, "N", 1, 1) && !wantq)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*ldt < fla_max(1,*n))
+    else if(*ldt < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldq < 1 || wantq && *ldq < *n)
+    else if(*ldq < 1 || wantq && *ldq < *n)
     {
         *info = -8;
     }
-    else if (*lwork < lwmin && ! lquery)
+    else if(*lwork < lwmin && !lquery)
     {
         *info = -14;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        work[1].r = (doublereal) lwmin;
+        work[1].r = (doublereal)lwmin;
         work[1].i = 0.; // , expr subst
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZTRSEN", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
-    if (*m == *n || *m == 0)
+    if(*m == *n || *m == 0)
     {
-        if (wants)
+        if(wants)
         {
             *s = 1.;
         }
-        if (wantsp)
+        if(wantsp)
         {
             *sep = zlange_("1", n, n, &t[t_offset], ldt, rwork);
         }
@@ -418,31 +438,30 @@ void ztrsen_(char *job, char *compq, logical *select, integer *n, doublecomplex 
     /* Collect the selected eigenvalues at the top left corner of T. */
     ks = 0;
     i__1 = *n;
-    for (k = 1;
-            k <= i__1;
-            ++k)
+    for(k = 1; k <= i__1; ++k)
     {
-        if (select[k])
+        if(select[k])
         {
             ++ks;
             /* Swap the K-th eigenvalue to position KS. */
-            if (k != ks)
+            if(k != ks)
             {
-                ztrexc_(compq, n, &t[t_offset], ldt, &q[q_offset], ldq, &k, & ks, &ierr);
+                ztrexc_(compq, n, &t[t_offset], ldt, &q[q_offset], ldq, &k, &ks, &ierr);
             }
         }
         /* L20: */
     }
-    if (wants)
+    if(wants)
     {
         /* Solve the Sylvester equation for R: */
         /* T11*R - R*T22 = scale*T12 */
         zlacpy_("F", &n1, &n2, &t[(n1 + 1) * t_dim1 + 1], ldt, &work[1], &n1);
-        ztrsyl_("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt, &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, &ierr);
+        ztrsyl_("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt, &t[n1 + 1 + (n1 + 1) * t_dim1], ldt,
+                &work[1], &n1, &scale, &ierr);
         /* Estimate the reciprocal of the condition number of the cluster */
         /* of eigenvalues. */
         rnorm = zlange_("F", &n1, &n2, &work[1], &n1, rwork);
-        if (rnorm == 0.)
+        if(rnorm == 0.)
         {
             *s = 1.;
         }
@@ -451,24 +470,26 @@ void ztrsen_(char *job, char *compq, logical *select, integer *n, doublecomplex 
             *s = scale / (sqrt(scale * scale / rnorm + rnorm) * sqrt(rnorm));
         }
     }
-    if (wantsp)
+    if(wantsp)
     {
         /* Estimate sep(T11,T22). */
         est = 0.;
         kase = 0;
-L30:
+    L30:
         zlacn2_(&nn, &work[nn + 1], &work[1], &est, &kase, isave);
-        if (kase != 0)
+        if(kase != 0)
         {
-            if (kase == 1)
+            if(kase == 1)
             {
                 /* Solve T11*R - R*T22 = scale*X. */
-                ztrsyl_("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt, &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, & ierr);
+                ztrsyl_("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt,
+                        &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, &ierr);
             }
             else
             {
                 /* Solve T11**H*R - R*T22**H = scale*X. */
-                ztrsyl_("C", "C", &c_n1, &n1, &n2, &t[t_offset], ldt, &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, & ierr);
+                ztrsyl_("C", "C", &c_n1, &n1, &n2, &t[t_offset], ldt,
+                        &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, &ierr);
             }
             goto L30;
         }
@@ -476,9 +497,7 @@ L30:
     }
 L40: /* Copy reordered eigenvalues to W. */
     i__1 = *n;
-    for (k = 1;
-            k <= i__1;
-            ++k)
+    for(k = 1; k <= i__1; ++k)
     {
         i__2 = k;
         i__3 = k + k * t_dim1;
@@ -486,7 +505,7 @@ L40: /* Copy reordered eigenvalues to W. */
         w[i__2].i = t[i__3].i; // , expr subst
         /* L50: */
     }
-    work[1].r = (doublereal) lwmin;
+    work[1].r = (doublereal)lwmin;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

@@ -1,11 +1,10 @@
-/* ../netlib/zporfs.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zporfs.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b1 = {1., 0.};
 static integer c__1 = 1;
 /* > \brief \b ZPORFS */
 /* =========== DOCUMENTATION =========== */
@@ -13,11 +12,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZPORFS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zporfs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zporfs.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zporfs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zporfs.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zporfs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zporfs.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -49,7 +54,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -175,13 +180,19 @@ static integer c__1 = 1;
 /* > \ingroup complex16POcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zporfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda, doublecomplex *af, integer *ldaf, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *ferr, doublereal *berr, doublecomplex *work, doublereal * rwork, integer *info)
+void zporfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda,
+             doublecomplex *af, integer *ldaf, doublecomplex *b, integer *ldb, doublecomplex *x,
+             integer *ldx, doublereal *ferr, doublereal *berr, doublecomplex *work,
+             doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zporfs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("zporfs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
+                      ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",
+                      *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
 
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5;
+    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2,
+        i__3, i__4, i__5;
     doublereal d__1, d__2, d__3, d__4;
     doublecomplex z__1;
     /* Builtin functions */
@@ -196,17 +207,25 @@ void zporfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3], count;
     extern /* Subroutine */
-    void zhemv_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zhemv_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+               integer *, doublecomplex *, doublecomplex *, integer *);
     logical upper;
     extern /* Subroutine */
-    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlacn2_( integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
+        void
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal lstres;
     extern /* Subroutine */
-    void zpotrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zpotrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -254,35 +273,35 @@ void zporfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -11;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZPORFS", &i__1, (ftnlen)6);
@@ -290,12 +309,10 @@ void zporfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
         return;
     }
     /* Quick return if possible */
-    if (*n == 0 || *nrhs == 0)
+    if(*n == 0 || *nrhs == 0)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             ferr[j] = 0.;
             berr[j] = 0.;
@@ -312,18 +329,17 @@ void zporfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
     safe2 = safe1 / eps;
     /* Do for each right hand side */
     i__1 = *nrhs;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         count = 1;
         lstres = 3.;
-L20: /* Loop until stopping criterion is satisfied. */
+    L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - A * X */
         zcopy_(n, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
         z__1.r = -1.;
         z__1.i = -0.; // , expr subst
-        zhemv_(uplo, n, &z__1, &a[a_offset], lda, &x[j * x_dim1 + 1], &c__1, & c_b1, &work[1], &c__1);
+        zhemv_(uplo, n, &z__1, &a[a_offset], lda, &x[j * x_dim1 + 1], &c__1, &c_b1, &work[1],
+               &c__1);
         /* Compute componentwise relative backward error from formula */
         /* fla_max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(A)*f2c_dabs(X) + f2c_dabs(B) )(i) ) */
         /* where f2c_dabs(Z) is the componentwise absolute value of the matrix */
@@ -331,35 +347,36 @@ L20: /* Loop until stopping criterion is satisfied. */
         /* than SAFE2, then SAFE1 is added to the i-th components of the */
         /* numerator and denominator before dividing. */
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            rwork[i__] = (d__1 = b[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&b[ i__ + j * b_dim1]), f2c_dabs(d__2));
+            rwork[i__] = (d__1 = b[i__3].r, f2c_dabs(d__1))
+                         + (d__2 = d_imag(&b[i__ + j * b_dim1]), f2c_dabs(d__2));
             /* L30: */
         }
         /* Compute f2c_dabs(A)*f2c_dabs(X) + f2c_dabs(B). */
-        if (upper)
+        if(upper)
         {
             i__2 = *n;
-            for (k = 1;
-                    k <= i__2;
-                    ++k)
+            for(k = 1; k <= i__2; ++k)
             {
                 s = 0.;
                 i__3 = k + j * x_dim1;
-                xk = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[k + j * x_dim1]), f2c_dabs(d__2));
+                xk = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                     + (d__2 = d_imag(&x[k + j * x_dim1]), f2c_dabs(d__2));
                 i__3 = k - 1;
-                for (i__ = 1;
-                        i__ <= i__3;
-                        ++i__)
+                for(i__ = 1; i__ <= i__3; ++i__)
                 {
                     i__4 = i__ + k * a_dim1;
-                    rwork[i__] += ((d__1 = a[i__4].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[i__ + k * a_dim1]), f2c_dabs(d__2))) * xk;
+                    rwork[i__] += ((d__1 = a[i__4].r, f2c_dabs(d__1))
+                                   + (d__2 = d_imag(&a[i__ + k * a_dim1]), f2c_dabs(d__2)))
+                                  * xk;
                     i__4 = i__ + k * a_dim1;
                     i__5 = i__ + j * x_dim1;
-                    s += ((d__1 = a[i__4].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[ i__ + k * a_dim1]), f2c_dabs(d__2))) * ((d__3 = x[i__5] .r, f2c_dabs(d__3)) + (d__4 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__4)));
+                    s += ((d__1 = a[i__4].r, f2c_dabs(d__1))
+                          + (d__2 = d_imag(&a[i__ + k * a_dim1]), f2c_dabs(d__2)))
+                         * ((d__3 = x[i__5].r, f2c_dabs(d__3))
+                            + (d__4 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__4)));
                     /* L40: */
                 }
                 i__3 = k + k * a_dim1;
@@ -370,25 +387,27 @@ L20: /* Loop until stopping criterion is satisfied. */
         else
         {
             i__2 = *n;
-            for (k = 1;
-                    k <= i__2;
-                    ++k)
+            for(k = 1; k <= i__2; ++k)
             {
                 s = 0.;
                 i__3 = k + j * x_dim1;
-                xk = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[k + j * x_dim1]), f2c_dabs(d__2));
+                xk = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                     + (d__2 = d_imag(&x[k + j * x_dim1]), f2c_dabs(d__2));
                 i__3 = k + k * a_dim1;
                 rwork[k] += (d__1 = a[i__3].r, f2c_dabs(d__1)) * xk;
                 i__3 = *n;
-                for (i__ = k + 1;
-                        i__ <= i__3;
-                        ++i__)
+                for(i__ = k + 1; i__ <= i__3; ++i__)
                 {
                     i__4 = i__ + k * a_dim1;
-                    rwork[i__] += ((d__1 = a[i__4].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[i__ + k * a_dim1]), f2c_dabs(d__2))) * xk;
+                    rwork[i__] += ((d__1 = a[i__4].r, f2c_dabs(d__1))
+                                   + (d__2 = d_imag(&a[i__ + k * a_dim1]), f2c_dabs(d__2)))
+                                  * xk;
                     i__4 = i__ + k * a_dim1;
                     i__5 = i__ + j * x_dim1;
-                    s += ((d__1 = a[i__4].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[ i__ + k * a_dim1]), f2c_dabs(d__2))) * ((d__3 = x[i__5] .r, f2c_dabs(d__3)) + (d__4 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__4)));
+                    s += ((d__1 = a[i__4].r, f2c_dabs(d__1))
+                          + (d__2 = d_imag(&a[i__ + k * a_dim1]), f2c_dabs(d__2)))
+                         * ((d__3 = x[i__5].r, f2c_dabs(d__3))
+                            + (d__4 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__4)));
                     /* L60: */
                 }
                 rwork[k] += s;
@@ -397,25 +416,27 @@ L20: /* Loop until stopping criterion is satisfied. */
         }
         s = 0.;
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
-            if (rwork[i__] > safe2)
+            if(rwork[i__] > safe2)
             {
                 /* Computing MAX */
                 i__3 = i__;
                 d__3 = s;
-                d__4 = ((d__1 = work[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2))) / rwork[i__]; // , expr subst
-                s = fla_max(d__3,d__4);
+                d__4 = ((d__1 = work[i__3].r, f2c_dabs(d__1))
+                        + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)))
+                       / rwork[i__]; // , expr subst
+                s = fla_max(d__3, d__4);
             }
             else
             {
                 /* Computing MAX */
                 i__3 = i__;
                 d__3 = s;
-                d__4 = ((d__1 = work[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + safe1) / (rwork[i__] + safe1); // , expr subst
-                s = fla_max(d__3,d__4);
+                d__4 = ((d__1 = work[i__3].r, f2c_dabs(d__1))
+                        + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + safe1)
+                       / (rwork[i__] + safe1); // , expr subst
+                s = fla_max(d__3, d__4);
             }
             /* L80: */
         }
@@ -425,7 +446,7 @@ L20: /* Loop until stopping criterion is satisfied. */
         /* 2) BERR(J) decreased by at least a factor of 2 during the */
         /* last iteration, and */
         /* 3) At most ITMAX iterations tried. */
-        if (berr[j] > eps && berr[j] * 2. <= lstres && count <= 5)
+        if(berr[j] > eps && berr[j] * 2. <= lstres && count <= 5)
         {
             /* Update solution and try again. */
             zpotrs_(uplo, n, &c__1, &af[af_offset], ldaf, &work[1], n, info);
@@ -452,35 +473,34 @@ L20: /* Loop until stopping criterion is satisfied. */
         /* inv(A) * diag(W), */
         /* where W = f2c_dabs(R) + NZ*EPS*( f2c_dabs(A)*f2c_dabs(X)+f2c_dabs(B) ))) */
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
-            if (rwork[i__] > safe2)
+            if(rwork[i__] > safe2)
             {
                 i__3 = i__;
-                rwork[i__] = (d__1 = work[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + nz * eps * rwork[i__] ;
+                rwork[i__] = (d__1 = work[i__3].r, f2c_dabs(d__1))
+                             + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + nz * eps * rwork[i__];
             }
             else
             {
                 i__3 = i__;
-                rwork[i__] = (d__1 = work[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + nz * eps * rwork[i__] + safe1;
+                rwork[i__] = (d__1 = work[i__3].r, f2c_dabs(d__1))
+                             + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + nz * eps * rwork[i__]
+                             + safe1;
             }
             /* L90: */
         }
         kase = 0;
-L100:
+    L100:
         zlacn2_(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
-        if (kase != 0)
+        if(kase != 0)
         {
-            if (kase == 1)
+            if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(A**H). */
                 zpotrs_(uplo, n, &c__1, &af[af_offset], ldaf, &work[1], n, info);
                 i__2 = *n;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__;
                     i__4 = i__;
@@ -492,13 +512,11 @@ L100:
                     /* L110: */
                 }
             }
-            else if (kase == 2)
+            else if(kase == 2)
             {
                 /* Multiply by inv(A)*diag(W). */
                 i__2 = *n;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__;
                     i__4 = i__;
@@ -516,18 +534,17 @@ L100:
         /* Normalize error. */
         lstres = 0.;
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             i__3 = i__ + j * x_dim1;
             d__3 = lstres;
-            d__4 = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__2)); // , expr subst
-            lstres = fla_max(d__3,d__4);
+            d__4 = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                   + (d__2 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__2)); // , expr subst
+            lstres = fla_max(d__3, d__4);
             /* L130: */
         }
-        if (lstres != 0.)
+        if(lstres != 0.)
         {
             ferr[j] /= lstres;
         }

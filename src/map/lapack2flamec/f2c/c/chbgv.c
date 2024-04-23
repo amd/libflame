@@ -1,16 +1,25 @@
-/* ../netlib/chbgv.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/chbgv.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CHBGST */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CHBGV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chbgv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chbgv.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chbgv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chbgv.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chbgv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chbgv.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -42,7 +51,7 @@
 /* > \verbatim */
 /* > JOBZ is CHARACTER*1 */
 /* > = 'N': Compute eigenvalues only;
-*/
+ */
 /* > = 'V': Compute eigenvalues and eigenvectors. */
 /* > \endverbatim */
 /* > */
@@ -50,7 +59,7 @@
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangles of A and B are stored;
-*/
+ */
 /* > = 'L': Lower triangles of A and B are stored. */
 /* > \endverbatim */
 /* > */
@@ -82,7 +91,7 @@
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(ka+1+i-j,j) = A(i,j) for fla_max(1,j-ka)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+ka). */
 /* > */
 /* > On exit, the contents of AB are destroyed. */
@@ -102,7 +111,7 @@
 /* > j-th column of B is stored in the j-th column of the array BB */
 /* > as follows: */
 /* > if UPLO = 'U', BB(kb+1+i-j,j) = B(i,j) for fla_max(1,j-kb)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', BB(1+i-j,j) = B(i,j) for j<=i<=fla_min(n,j+kb). */
 /* > */
 /* > On exit, the factor S from the split Cholesky factorization */
@@ -157,7 +166,7 @@
 /* > <= N: the algorithm failed to converge: */
 /* > i off-diagonal elements of an intermediate */
 /* > tridiagonal form did not converge to zero;
-*/
+ */
 /* > > N: if INFO = N + i, for 1 <= i <= N, then CPBSTF */
 /* > returned INFO = i: B is not positive definite. */
 /* > The factorization of B could not be completed and */
@@ -173,15 +182,22 @@
 /* > \ingroup complexOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, complex *ab, integer *ldab, complex *bb, integer *ldbb, real *w, complex *z__, integer *ldz, complex *work, real *rwork, integer *info)
+void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, complex *ab,
+            integer *ldab, complex *bb, integer *ldbb, real *w, complex *z__, integer *ldz,
+            complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chbgv inputs: jobz %c, uplo %c, n %lld, ka %lld, kb %lld, ldab %lld, ldbb %lld, ldz %lld",*jobz, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldz);
+    snprintf(
+        buffer, 256,
+        "chbgv inputs: jobz %c, uplo %c, n %lld, ka %lld, kb %lld, ldab %lld, ldbb %lld, ldz %lld",
+        *jobz, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldz);
 #else
-    snprintf(buffer, 256,"chbgv inputs: jobz %c, uplo %c, n %d, ka %d, kb %d, ldab %d, ldbb %d, ldz %d",*jobz, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldz);
+    snprintf(buffer, 256,
+             "chbgv inputs: jobz %c, uplo %c, n %d, ka %d, kb %d, ldab %d, ldbb %d, ldz %d", *jobz,
+             *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldz);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -194,10 +210,18 @@ void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
     integer iinfo;
     logical upper, wantz;
     extern /* Subroutine */
-    void chbtrd_(char *, char *, integer *, integer *, complex *, integer *, real *, real *, complex *, integer *, complex *, integer *), chbgst_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cpbstf_(char *, integer *, integer *, complex *, integer *, integer *);
+        void
+        chbtrd_(char *, char *, integer *, integer *, complex *, integer *, real *, real *,
+                complex *, integer *, complex *, integer *),
+        chbgst_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
+                integer *, complex *, integer *, complex *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        cpbstf_(char *, integer *, integer *, complex *, integer *, integer *);
     integer indwrk;
     extern /* Subroutine */
-    void csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *), ssterf_(integer *, real *, real *, integer *);
+        void
+        csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *),
+        ssterf_(integer *, real *, real *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -232,39 +256,39 @@ void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
     wantz = lsame_(jobz, "V", 1, 1);
     upper = lsame_(uplo, "U", 1, 1);
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (upper || lsame_(uplo, "L", 1, 1)))
+    else if(!(upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*ka < 0)
+    else if(*ka < 0)
     {
         *info = -4;
     }
-    else if (*kb < 0 || *kb > *ka)
+    else if(*kb < 0 || *kb > *ka)
     {
         *info = -5;
     }
-    else if (*ldab < *ka + 1)
+    else if(*ldab < *ka + 1)
     {
         *info = -7;
     }
-    else if (*ldbb < *kb + 1)
+    else if(*ldbb < *kb + 1)
     {
         *info = -9;
     }
-    else if (*ldz < 1 || wantz && *ldz < *n)
+    else if(*ldz < 1 || wantz && *ldz < *n)
     {
         *info = -12;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CHBGV ", &i__1, (ftnlen)6);
@@ -272,14 +296,14 @@ void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Form a split Cholesky factorization of B. */
     cpbstf_(uplo, n, kb, &bb[bb_offset], ldbb, info);
-    if (*info != 0)
+    if(*info != 0)
     {
         *info = *n + *info;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -288,9 +312,10 @@ void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
     /* Transform problem to standard eigenvalue problem. */
     inde = 1;
     indwrk = inde + *n;
-    chbgst_(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb, &z__[z_offset], ldz, &work[1], &rwork[indwrk], &iinfo);
+    chbgst_(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb, &z__[z_offset], ldz,
+            &work[1], &rwork[indwrk], &iinfo);
     /* Reduce to tridiagonal form. */
-    if (wantz)
+    if(wantz)
     {
         *(unsigned char *)vect = 'U';
     }
@@ -298,15 +323,16 @@ void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
     {
         *(unsigned char *)vect = 'N';
     }
-    chbtrd_(vect, uplo, n, ka, &ab[ab_offset], ldab, &w[1], &rwork[inde], & z__[z_offset], ldz, &work[1], &iinfo);
+    chbtrd_(vect, uplo, n, ka, &ab[ab_offset], ldab, &w[1], &rwork[inde], &z__[z_offset], ldz,
+            &work[1], &iinfo);
     /* For eigenvalues only, call SSTERF. For eigenvectors, call CSTEQR. */
-    if (! wantz)
+    if(!wantz)
     {
         ssterf_(n, &w[1], &rwork[inde], info);
     }
     else
     {
-        csteqr_(jobz, n, &w[1], &rwork[inde], &z__[z_offset], ldz, &rwork[ indwrk], info);
+        csteqr_(jobz, n, &w[1], &rwork[inde], &z__[z_offset], ldz, &rwork[indwrk], info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

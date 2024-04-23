@@ -1,22 +1,32 @@
-/* ../netlib/slaed7.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slaed7.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__2 = 2;
 static integer c__1 = 1;
 static real c_b10 = 1.f;
 static real c_b11 = 0.f;
 static integer c_n1 = -1;
-/* > \brief \b SLAED7 used by sstedc. Computes the updated eigensystem of a diagonal matrix after modification by a rank-one symmetric matrix. Used when the original matrix is dense. */
+/* > \brief \b SLAED7 used by sstedc. Computes the updated eigensystem of a diagonal matrix after
+ * modification by a rank-one symmetric matrix. Used when the original matrix is dense. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAED7 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed7. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed7.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaed7. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaed7.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed7. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed7.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -248,7 +258,11 @@ static integer c_n1 = -1;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void slaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer *curlvl, integer *curpbm, real *d__, real *q, integer *ldq, integer *indxq, real *rho, integer *cutpnt, real * qstore, integer *qptr, integer *prmptr, integer *perm, integer * givptr, integer *givcol, real *givnum, real *work, integer *iwork, integer *info)
+void slaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer *curlvl,
+             integer *curpbm, real *d__, real *q, integer *ldq, integer *indxq, real *rho,
+             integer *cutpnt, real *qstore, integer *qptr, integer *prmptr, integer *perm,
+             integer *givptr, integer *givcol, real *givnum, real *work, integer *iwork,
+             integer *info)
 {
     /* System generated locals */
     integer q_dim1, q_offset, i__1, i__2;
@@ -257,13 +271,24 @@ void slaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer
     /* Local variables */
     integer i__, k, n1, n2, is, iw, iz, iq2, ptr, ldq2, indx, curr, indxc;
     extern /* Subroutine */
-    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *);
     integer indxp;
     extern /* Subroutine */
-    void slaed8_(integer *, integer *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *, integer *), slaed9_( integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, real *, real *, integer *, integer *), slaeda_(integer *, integer *, integer *, integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, integer *);
+        void
+        slaed8_(integer *, integer *, integer *, integer *, real *, real *, integer *, integer *,
+                real *, integer *, real *, real *, real *, integer *, real *, integer *, integer *,
+                integer *, real *, integer *, integer *, integer *),
+        slaed9_(integer *, integer *, integer *, integer *, real *, real *, integer *, real *,
+                real *, real *, real *, integer *, integer *),
+        slaeda_(integer *, integer *, integer *, integer *, integer *, integer *, integer *,
+                integer *, real *, real *, integer *, real *, real *, integer *);
     integer idlmda;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slamrg_( integer *, integer *, real *, integer *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
     integer coltyp;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -301,41 +326,41 @@ void slaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer
     --iwork;
     /* Function Body */
     *info = 0;
-    if (*icompq < 0 || *icompq > 1)
+    if(*icompq < 0 || *icompq > 1)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*icompq == 1 && *qsiz < *n)
+    else if(*icompq == 1 && *qsiz < *n)
     {
         *info = -3;
     }
-    else if (*ldq < fla_max(1,*n))
+    else if(*ldq < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (fla_min(1,*n) > *cutpnt || *n < *cutpnt)
+    else if(fla_min(1, *n) > *cutpnt || *n < *cutpnt)
     {
         *info = -12;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SLAED7", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         return;
     }
     /* The following values are for bookkeeping purposes only. They are */
     /* integer pointers which indicate the portion of the workspace */
     /* used by a particular array in SLAED8 and SLAED9. */
-    if (*icompq == 1)
+    if(*icompq == 1)
     {
         ldq2 = *qsiz;
     }
@@ -356,40 +381,44 @@ void slaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer
     /* first row of Q_2. */
     ptr = pow_ii(&c__2, tlvls) + 1;
     i__1 = *curlvl - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = *tlvls - i__;
         ptr += pow_ii(&c__2, &i__2);
         /* L10: */
     }
     curr = ptr + *curpbm;
-    slaeda_(n, tlvls, curlvl, curpbm, &prmptr[1], &perm[1], &givptr[1], & givcol[3], &givnum[3], &qstore[1], &qptr[1], &work[iz], &work[iz + *n], info);
+    slaeda_(n, tlvls, curlvl, curpbm, &prmptr[1], &perm[1], &givptr[1], &givcol[3], &givnum[3],
+            &qstore[1], &qptr[1], &work[iz], &work[iz + *n], info);
     /* When solving the final problem, we no longer need the stored data, */
     /* so we will overwrite the data from this level onto the previously */
     /* used storage space. */
-    if (*curlvl == *tlvls)
+    if(*curlvl == *tlvls)
     {
         qptr[curr] = 1;
         prmptr[curr] = 1;
         givptr[curr] = 1;
     }
     /* Sort and Deflate eigenvalues. */
-    slaed8_(icompq, &k, n, qsiz, &d__[1], &q[q_offset], ldq, &indxq[1], rho, cutpnt, &work[iz], &work[idlmda], &work[iq2], &ldq2, &work[iw], & perm[prmptr[curr]], &givptr[curr + 1], &givcol[(givptr[curr] << 1) + 1], &givnum[(givptr[curr] << 1) + 1], &iwork[indxp], &iwork[ indx], info);
+    slaed8_(icompq, &k, n, qsiz, &d__[1], &q[q_offset], ldq, &indxq[1], rho, cutpnt, &work[iz],
+            &work[idlmda], &work[iq2], &ldq2, &work[iw], &perm[prmptr[curr]], &givptr[curr + 1],
+            &givcol[(givptr[curr] << 1) + 1], &givnum[(givptr[curr] << 1) + 1], &iwork[indxp],
+            &iwork[indx], info);
     prmptr[curr + 1] = prmptr[curr] + *n;
     givptr[curr + 1] += givptr[curr];
     /* Solve Secular Equation. */
-    if (k != 0)
+    if(k != 0)
     {
-        slaed9_(&k, &c__1, &k, n, &d__[1], &work[is], &k, rho, &work[idlmda], &work[iw], &qstore[qptr[curr]], &k, info);
-        if (*info != 0)
+        slaed9_(&k, &c__1, &k, n, &d__[1], &work[is], &k, rho, &work[idlmda], &work[iw],
+                &qstore[qptr[curr]], &k, info);
+        if(*info != 0)
         {
             goto L30;
         }
-        if (*icompq == 1)
+        if(*icompq == 1)
         {
-            sgemm_("N", "N", qsiz, &k, &k, &c_b10, &work[iq2], &ldq2, &qstore[ qptr[curr]], &k, &c_b11, &q[q_offset], ldq);
+            sgemm_("N", "N", qsiz, &k, &k, &c_b10, &work[iq2], &ldq2, &qstore[qptr[curr]], &k,
+                   &c_b11, &q[q_offset], ldq);
         }
         /* Computing 2nd power */
         i__1 = k;
@@ -403,9 +432,7 @@ void slaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer
     {
         qptr[curr + 1] = qptr[curr];
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             indxq[i__] = i__;
             /* L20: */

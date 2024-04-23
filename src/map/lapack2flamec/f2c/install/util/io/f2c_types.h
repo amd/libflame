@@ -27,7 +27,7 @@ use or performance of this software.
 
 /**  barf  [ba:rf]  2.  "He suggested using FORTRAN, and everybody barfed."
 
-	- From The Shogakukan DICTIONARY OF NEW ENGLISH (Second edition) */
+    - From The Shogakukan DICTIONARY OF NEW ENGLISH (Second edition) */
 
 #ifndef F2C_TYPES_H
 #define F2C_TYPES_H
@@ -48,17 +48,17 @@ extern "C" {
 typedef int integer;
 typedef unsigned int uinteger;
 #if F2C_INT_BITS == 32
-# if F2C_LONG_BITS == 64
+#if F2C_LONG_BITS == 64
 typedef long int longint;
 typedef unsigned long int ulongint;
-#  define INTEGER_STAR_8
-# elif defined(F2C_LONG_LONG_BITS)
-#  if F2C_LONG_LONG_BITS == 64
+#define INTEGER_STAR_8
+#elif defined(F2C_LONG_LONG_BITS)
+#if F2C_LONG_LONG_BITS == 64
 typedef long long int longint;
 typedef unsigned long long int ulongint;
-#  define INTEGER_STAR_8
-#  endif
-# endif
+#define INTEGER_STAR_8
+#endif
+#endif
 #endif
 
 typedef char integer1;
@@ -66,8 +66,14 @@ typedef char *address;
 typedef short int shortint;
 typedef float real;
 typedef double doublereal;
-typedef struct { real r, i; } complex;
-typedef struct { doublereal r, i; } doublecomplex;
+typedef struct
+{
+    real r, i;
+} complex;
+typedef struct
+{
+    doublereal r, i;
+} doublecomplex;
 typedef integer logical;
 typedef shortint shortlogical;
 typedef integer1 logical1;
@@ -128,11 +134,10 @@ typedef /* Character */ void (*H_fp)();
 typedef /* Subroutine */ int (*S_fp)();
 #endif
 /* E_fp is for real functions when -R is not specified */
-typedef void C_f;	/* complex function */
-typedef void H_f;	/* character function */
-typedef void Z_f;	/* double complex function */
-typedef doublereal E_f;	/* real function with -R not specified */
-
+typedef void C_f; /* complex function */
+typedef void H_f; /* character function */
+typedef void Z_f; /* double complex function */
+typedef doublereal E_f; /* real function with -R not specified */
 
 #ifdef __cplusplus
 }

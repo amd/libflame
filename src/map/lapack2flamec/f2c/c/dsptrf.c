@@ -1,5 +1,8 @@
-/* ../netlib/dsptrf.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dsptrf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b DSPTRF */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DSPTRF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsptrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsptrf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsptrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsptrf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsptrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsptrf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -46,7 +55,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -63,7 +72,7 @@ static integer c__1 = 1;
 /* > A, packed columnwise in a linear array. The j-th column of A */
 /* > is stored in the array AP as follows: */
 /* > if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n. */
 /* > */
 /* > On exit, the block diagonal matrix D and the multipliers used */
@@ -148,10 +157,10 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dsptrf_(char *uplo, integer *n, doublereal *ap, integer * ipiv, integer *info)
+void dsptrf_(char *uplo, integer *n, doublereal *ap, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsptrf inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
+    AOCL_DTL_SNPRINTF("dsptrf inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
     integer i__1, i__2;
     doublereal d__1, d__2, d__3;
@@ -166,19 +175,23 @@ void dsptrf_(char *uplo, integer *n, doublereal *ap, integer * ipiv, integer *in
     doublereal wkm1, wkp1;
     integer imax, jmax;
     extern /* Subroutine */
-    void dspr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+        void
+        dspr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *);
     doublereal alpha;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer kstep;
     logical upper;
     doublereal absakk;
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal colmax, rowmax;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -208,15 +221,15 @@ void dsptrf_(char *uplo, integer *n, doublereal *ap, integer * ipiv, integer *in
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     imax = 0;
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DSPTRF", &i__1, (ftnlen)6);
@@ -225,17 +238,17 @@ void dsptrf_(char *uplo, integer *n, doublereal *ap, integer * ipiv, integer *in
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.) + 1.) / 8.;
-    if (upper)
+    if(upper)
     {
         /* Factorize A as U*D*U**T using the upper triangle of A */
         /* K is the main loop index, decreasing from N to 1 in steps of */
         /* 1 or 2 */
         k = *n;
         kc = (*n - 1) * *n / 2 + 1;
-L10:
+    L10:
         kpc = knc = kc;
         /* If K < 1, exit from loop */
-        if (k < 1)
+        if(k < 1)
         {
             goto L110;
         }
@@ -245,7 +258,7 @@ L10:
         absakk = (d__1 = ap[kc + k - 1], f2c_dabs(d__1));
         /* IMAX is the row-index of the largest off-diagonal element in */
         /* column K, and COLMAX is its absolute value */
-        if (k > 1)
+        if(k > 1)
         {
             i__1 = k - 1;
             imax = idamax_(&i__1, &ap[kc], &c__1);
@@ -255,10 +268,10 @@ L10:
         {
             colmax = 0.;
         }
-        if (fla_max(absakk,colmax) == 0.)
+        if(fla_max(absakk, colmax) == 0.)
         {
             /* Column K is zero: set INFO and continue */
-            if (*info == 0)
+            if(*info == 0)
             {
                 *info = k;
             }
@@ -266,7 +279,7 @@ L10:
         }
         else
         {
-            if (absakk >= alpha * colmax)
+            if(absakk >= alpha * colmax)
             {
                 /* no interchange, use 1-by-1 pivot block */
                 kp = k;
@@ -277,11 +290,9 @@ L10:
                 /* jmax = imax; */
                 kx = imax * (imax + 1) / 2 + imax;
                 i__1 = k;
-                for (j = imax + 1;
-                        j <= i__1;
-                        ++j)
+                for(j = imax + 1; j <= i__1; ++j)
                 {
-                    if ((d__1 = ap[kx], f2c_dabs(d__1)) > rowmax)
+                    if((d__1 = ap[kx], f2c_dabs(d__1)) > rowmax)
                     {
                         rowmax = (d__1 = ap[kx], f2c_dabs(d__1));
                         /* jmax = j; */
@@ -290,21 +301,21 @@ L10:
                     /* L20: */
                 }
                 kpc = (imax - 1) * imax / 2 + 1;
-                if (imax > 1)
+                if(imax > 1)
                 {
                     i__1 = imax - 1;
                     jmax = idamax_(&i__1, &ap[kpc], &c__1);
                     /* Computing MAX */
                     d__2 = rowmax;
-                    d__3 = (d__1 = ap[kpc + jmax - 1], f2c_dabs( d__1)); // , expr subst
-                    rowmax = fla_max(d__2,d__3);
+                    d__3 = (d__1 = ap[kpc + jmax - 1], f2c_dabs(d__1)); // , expr subst
+                    rowmax = fla_max(d__2, d__3);
                 }
-                if (absakk >= alpha * colmax * (colmax / rowmax))
+                if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
                     /* no interchange, use 1-by-1 pivot block */
                     kp = k;
                 }
-                else if ((d__1 = ap[kpc + imax - 1], f2c_dabs(d__1)) >= alpha * rowmax)
+                else if((d__1 = ap[kpc + imax - 1], f2c_dabs(d__1)) >= alpha * rowmax)
                 {
                     /* interchange rows and columns K and IMAX, use 1-by-1 */
                     /* pivot block */
@@ -319,11 +330,11 @@ L10:
                 }
             }
             kk = k - kstep + 1;
-            if (kstep == 2)
+            if(kstep == 2)
             {
                 knc = knc - k + 1;
             }
-            if (kp != kk)
+            if(kp != kk)
             {
                 /* Interchange rows and columns KK and KP in the leading */
                 /* submatrix A(1:k,1:k) */
@@ -331,9 +342,7 @@ L10:
                 dswap_(&i__1, &ap[knc], &c__1, &ap[kpc], &c__1);
                 kx = kpc + kp - 1;
                 i__1 = kk - 1;
-                for (j = kp + 1;
-                        j <= i__1;
-                        ++j)
+                for(j = kp + 1; j <= i__1; ++j)
                 {
                     kx = kx + j - 1;
                     t = ap[knc + j - 1];
@@ -344,7 +353,7 @@ L10:
                 t = ap[knc + kk - 1];
                 ap[knc + kk - 1] = ap[kpc + kp - 1];
                 ap[kpc + kp - 1] = t;
-                if (kstep == 2)
+                if(kstep == 2)
                 {
                     t = ap[kc + k - 2];
                     ap[kc + k - 2] = ap[kc + kp - 1];
@@ -352,7 +361,7 @@ L10:
                 }
             }
             /* Update the leading submatrix */
-            if (kstep == 1)
+            if(kstep == 1)
             {
                 /* 1-by-1 pivot block D(k): column k now holds */
                 /* W(k) = U(k)*D(k) */
@@ -376,24 +385,23 @@ L10:
                 /* Perform a rank-2 update of A(1:k-2,1:k-2) as */
                 /* A := A - ( U(k-1) U(k) )*D(k)*( U(k-1) U(k) )**T */
                 /* = A - ( W(k-1) W(k) )*inv(D(k))*( W(k-1) W(k) )**T */
-                if (k > 2)
+                if(k > 2)
                 {
                     d12 = ap[k - 1 + (k - 1) * k / 2];
                     d22 = ap[k - 1 + (k - 2) * (k - 1) / 2] / d12;
                     d11 = ap[k + (k - 1) * k / 2] / d12;
                     t = 1. / (d11 * d22 - 1.);
                     d12 = t / d12;
-                    for (j = k - 2;
-                            j >= 1;
-                            --j)
+                    for(j = k - 2; j >= 1; --j)
                     {
-                        wkm1 = d12 * (d11 * ap[j + (k - 2) * (k - 1) / 2] - ap[j + (k - 1) * k / 2]);
+                        wkm1
+                            = d12 * (d11 * ap[j + (k - 2) * (k - 1) / 2] - ap[j + (k - 1) * k / 2]);
                         wk = d12 * (d22 * ap[j + (k - 1) * k / 2] - ap[j + (k - 2) * (k - 1) / 2]);
-                        for (i__ = j;
-                                i__ >= 1;
-                                --i__)
+                        for(i__ = j; i__ >= 1; --i__)
                         {
-                            ap[i__ + (j - 1) * j / 2] = ap[i__ + (j - 1) * j / 2] - ap[i__ + (k - 1) * k / 2] * wk - ap[ i__ + (k - 2) * (k - 1) / 2] * wkm1;
+                            ap[i__ + (j - 1) * j / 2] = ap[i__ + (j - 1) * j / 2]
+                                                        - ap[i__ + (k - 1) * k / 2] * wk
+                                                        - ap[i__ + (k - 2) * (k - 1) / 2] * wkm1;
                             /* L40: */
                         }
                         ap[j + (k - 1) * k / 2] = wk;
@@ -404,7 +412,7 @@ L10:
             }
         }
         /* Store details of the interchanges in IPIV */
-        if (kstep == 1)
+        if(kstep == 1)
         {
             ipiv[k] = kp;
         }
@@ -426,10 +434,10 @@ L10:
         k = 1;
         kc = 1;
         npp = *n * (*n + 1) / 2;
-L60:
+    L60:
         knc = kc;
         /* If K > N, exit from loop */
-        if (k > *n)
+        if(k > *n)
         {
             goto L110;
         }
@@ -439,7 +447,7 @@ L60:
         absakk = (d__1 = ap[kc], f2c_dabs(d__1));
         /* IMAX is the row-index of the largest off-diagonal element in */
         /* column K, and COLMAX is its absolute value */
-        if (k < *n)
+        if(k < *n)
         {
             i__1 = *n - k;
             imax = k + idamax_(&i__1, &ap[kc + 1], &c__1);
@@ -449,10 +457,10 @@ L60:
         {
             colmax = 0.;
         }
-        if (fla_max(absakk,colmax) == 0.)
+        if(fla_max(absakk, colmax) == 0.)
         {
             /* Column K is zero: set INFO and continue */
-            if (*info == 0)
+            if(*info == 0)
             {
                 *info = k;
             }
@@ -460,7 +468,7 @@ L60:
         }
         else
         {
-            if (absakk >= alpha * colmax)
+            if(absakk >= alpha * colmax)
             {
                 /* no interchange, use 1-by-1 pivot block */
                 kp = k;
@@ -472,11 +480,9 @@ L60:
                 rowmax = 0.;
                 kx = kc + imax - k;
                 i__1 = imax - 1;
-                for (j = k;
-                        j <= i__1;
-                        ++j)
+                for(j = k; j <= i__1; ++j)
                 {
-                    if ((d__1 = ap[kx], f2c_dabs(d__1)) > rowmax)
+                    if((d__1 = ap[kx], f2c_dabs(d__1)) > rowmax)
                     {
                         rowmax = (d__1 = ap[kx], f2c_dabs(d__1));
                         /* jmax = j; */
@@ -485,21 +491,21 @@ L60:
                     /* L70: */
                 }
                 kpc = npp - (*n - imax + 1) * (*n - imax + 2) / 2 + 1;
-                if (imax < *n)
+                if(imax < *n)
                 {
                     i__1 = *n - imax;
                     jmax = imax + idamax_(&i__1, &ap[kpc + 1], &c__1);
                     /* Computing MAX */
                     d__2 = rowmax;
-                    d__3 = (d__1 = ap[kpc + jmax - imax], f2c_dabs( d__1)); // , expr subst
-                    rowmax = fla_max(d__2,d__3);
+                    d__3 = (d__1 = ap[kpc + jmax - imax], f2c_dabs(d__1)); // , expr subst
+                    rowmax = fla_max(d__2, d__3);
                 }
-                if (absakk >= alpha * colmax * (colmax / rowmax))
+                if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
                     /* no interchange, use 1-by-1 pivot block */
                     kp = k;
                 }
-                else if ((d__1 = ap[kpc], f2c_dabs(d__1)) >= alpha * rowmax)
+                else if((d__1 = ap[kpc], f2c_dabs(d__1)) >= alpha * rowmax)
                 {
                     /* interchange rows and columns K and IMAX, use 1-by-1 */
                     /* pivot block */
@@ -514,24 +520,22 @@ L60:
                 }
             }
             kk = k + kstep - 1;
-            if (kstep == 2)
+            if(kstep == 2)
             {
                 knc = knc + *n - k + 1;
             }
-            if (kp != kk)
+            if(kp != kk)
             {
                 /* Interchange rows and columns KK and KP in the trailing */
                 /* submatrix A(k:n,k:n) */
-                if (kp < *n)
+                if(kp < *n)
                 {
                     i__1 = *n - kp;
                     dswap_(&i__1, &ap[knc + kp - kk + 1], &c__1, &ap[kpc + 1], &c__1);
                 }
                 kx = knc + kp - kk;
                 i__1 = kp - 1;
-                for (j = kk + 1;
-                        j <= i__1;
-                        ++j)
+                for(j = kk + 1; j <= i__1; ++j)
                 {
                     kx = kx + *n - j + 1;
                     t = ap[knc + j - kk];
@@ -542,7 +546,7 @@ L60:
                 t = ap[knc];
                 ap[knc] = ap[kpc];
                 ap[kpc] = t;
-                if (kstep == 2)
+                if(kstep == 2)
                 {
                     t = ap[kc + 1];
                     ap[kc + 1] = ap[kc + kp - k];
@@ -550,12 +554,12 @@ L60:
                 }
             }
             /* Update the trailing submatrix */
-            if (kstep == 1)
+            if(kstep == 1)
             {
                 /* 1-by-1 pivot block D(k): column k now holds */
                 /* W(k) = L(k)*D(k) */
                 /* where L(k) is the k-th column of L */
-                if (k < *n)
+                if(k < *n)
                 {
                     /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
                     /* A := A - L(k)*D(k)*L(k)**T = A - W(k)*(1/D(k))*W(k)**T */
@@ -574,7 +578,7 @@ L60:
                 /* ( W(k) W(k+1) ) = ( L(k) L(k+1) )*D(k) */
                 /* where L(k) and L(k+1) are the k-th and (k+1)-th columns */
                 /* of L */
-                if (k < *n - 1)
+                if(k < *n - 1)
                 {
                     /* Perform a rank-2 update of A(k+2:n,k+2:n) as */
                     /* A := A - ( L(k) L(k+1) )*D(k)*( L(k) L(k+1) )**T */
@@ -587,18 +591,21 @@ L60:
                     t = 1. / (d11 * d22 - 1.);
                     d21 = t / d21;
                     i__1 = *n;
-                    for (j = k + 2;
-                            j <= i__1;
-                            ++j)
+                    for(j = k + 2; j <= i__1; ++j)
                     {
-                        wk = d21 * (d11 * ap[j + (k - 1) * ((*n << 1) - k) / 2] - ap[j + k * ((*n << 1) - k - 1) / 2]);
-                        wkp1 = d21 * (d22 * ap[j + k * ((*n << 1) - k - 1) / 2] - ap[j + (k - 1) * ((*n << 1) - k) / 2]);
+                        wk = d21
+                             * (d11 * ap[j + (k - 1) * ((*n << 1) - k) / 2]
+                                - ap[j + k * ((*n << 1) - k - 1) / 2]);
+                        wkp1 = d21
+                               * (d22 * ap[j + k * ((*n << 1) - k - 1) / 2]
+                                  - ap[j + (k - 1) * ((*n << 1) - k) / 2]);
                         i__2 = *n;
-                        for (i__ = j;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = j; i__ <= i__2; ++i__)
                         {
-                            ap[i__ + (j - 1) * ((*n << 1) - j) / 2] = ap[i__ + (j - 1) * ((*n << 1) - j) / 2] - ap[i__ + (k - 1) * ((*n << 1) - k) / 2] * wk - ap[i__ + k * ((*n << 1) - k - 1) / 2] * wkp1;
+                            ap[i__ + (j - 1) * ((*n << 1) - j) / 2]
+                                = ap[i__ + (j - 1) * ((*n << 1) - j) / 2]
+                                  - ap[i__ + (k - 1) * ((*n << 1) - k) / 2] * wk
+                                  - ap[i__ + k * ((*n << 1) - k - 1) / 2] * wkp1;
                             /* L90: */
                         }
                         ap[j + (k - 1) * ((*n << 1) - k) / 2] = wk;
@@ -609,7 +616,7 @@ L60:
             }
         }
         /* Store details of the interchanges in IPIV */
-        if (kstep == 1)
+        if(kstep == 1)
         {
             ipiv[k] = kp;
         }

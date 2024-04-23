@@ -1,11 +1,10 @@
-/* ../netlib/ztptri.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ztptri.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b1 = {1., 0.};
 static integer c__1 = 1;
 /* > \brief \b ZTPTRI */
 /* =========== DOCUMENTATION =========== */
@@ -13,11 +12,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZTPTRI + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztptri. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztptri.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztptri. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztptri.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztptri. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztptri.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -44,7 +49,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': A is upper triangular;
-*/
+ */
 /* > = 'L': A is lower triangular. */
 /* > \endverbatim */
 /* > */
@@ -52,7 +57,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > DIAG is CHARACTER*1 */
 /* > = 'N': A is non-unit triangular;
-*/
+ */
 /* > = 'U': A is unit triangular. */
 /* > \endverbatim */
 /* > */
@@ -69,7 +74,7 @@ static integer c__1 = 1;
 /* > columnwise in a linear array. The j-th column of A is stored */
 /* > in the array AP as follows: */
 /* > if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AP(i + (j-1)*((2*n-j)/2) = A(i,j) for j<=i<=n. */
 /* > See below for further details. */
 /* > On exit, the (triangular) inverse of the original matrix, in */
@@ -116,7 +121,7 @@ static integer c__1 = 1;
 void ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztptri inputs: uplo %c, diag %c, n %" FLA_IS "",*uplo, *diag, *n);
+    AOCL_DTL_SNPRINTF("ztptri inputs: uplo %c, diag %c, n %" FLA_IS "", *uplo, *diag, *n);
     /* System generated locals */
     integer i__1, i__2;
     doublecomplex z__1;
@@ -127,10 +132,13 @@ void ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *inf
     doublecomplex ajj;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     logical upper;
     extern /* Subroutine */
-    void ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer jclast;
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -159,41 +167,39 @@ void ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *inf
     upper = lsame_(uplo, "U", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
     jclast = 0;
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZTPTRI", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Check for singularity if non-unit. */
-    if (nounit)
+    if(nounit)
     {
-        if (upper)
+        if(upper)
         {
             jj = 0;
             i__1 = *n;
-            for (*info = 1;
-                    *info <= i__1;
-                    ++(*info))
+            for(*info = 1; *info <= i__1; ++(*info))
             {
                 jj += *info;
                 i__2 = jj;
-                if (ap[i__2].r == 0. && ap[i__2].i == 0.)
+                if(ap[i__2].r == 0. && ap[i__2].i == 0.)
                 {
-    AOCL_DTL_TRACE_LOG_EXIT
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 /* L10: */
@@ -203,14 +209,12 @@ void ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *inf
         {
             jj = 1;
             i__1 = *n;
-            for (*info = 1;
-                    *info <= i__1;
-                    ++(*info))
+            for(*info = 1; *info <= i__1; ++(*info))
             {
                 i__2 = jj;
-                if (ap[i__2].r == 0. && ap[i__2].i == 0.)
+                if(ap[i__2].r == 0. && ap[i__2].i == 0.)
                 {
-    AOCL_DTL_TRACE_LOG_EXIT
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 jj = jj + *n - *info + 1;
@@ -219,16 +223,14 @@ void ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *inf
         }
         *info = 0;
     }
-    if (upper)
+    if(upper)
     {
         /* Compute inverse of upper triangular matrix. */
         jc = 1;
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
-            if (nounit)
+            if(nounit)
             {
                 i__2 = jc + j - 1;
                 z_div(&z__1, &c_b1, &ap[jc + j - 1]);
@@ -249,7 +251,7 @@ void ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *inf
             }
             /* Compute elements 1:j-1 of j-th column. */
             i__2 = j - 1;
-            ztpmv_("Upper", "No transpose", diag, &i__2, &ap[1], &ap[jc], & c__1);
+            ztpmv_("Upper", "No transpose", diag, &i__2, &ap[1], &ap[jc], &c__1);
             i__2 = j - 1;
             zscal_(&i__2, &ajj, &ap[jc], &c__1);
             jc += j;
@@ -260,11 +262,9 @@ void ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *inf
     {
         /* Compute inverse of lower triangular matrix. */
         jc = *n * (*n + 1) / 2;
-        for (j = *n;
-                j >= 1;
-                --j)
+        for(j = *n; j >= 1; --j)
         {
-            if (nounit)
+            if(nounit)
             {
                 i__1 = jc;
                 z_div(&z__1, &c_b1, &ap[jc]);
@@ -283,11 +283,11 @@ void ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *inf
                 ajj.r = z__1.r;
                 ajj.i = z__1.i; // , expr subst
             }
-            if (j < *n)
+            if(j < *n)
             {
                 /* Compute elements j+1:n of j-th column. */
                 i__1 = *n - j;
-                ztpmv_("Lower", "No transpose", diag, &i__1, &ap[jclast], &ap[ jc + 1], &c__1);
+                ztpmv_("Lower", "No transpose", diag, &i__1, &ap[jclast], &ap[jc + 1], &c__1);
                 i__1 = *n - j;
                 zscal_(&i__1, &ajj, &ap[jc + 1], &c__1);
             }

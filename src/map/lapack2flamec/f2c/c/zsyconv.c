@@ -1,16 +1,25 @@
-/* ../netlib/zsyconv.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zsyconv.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZSYCONV */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZSYCONV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsyconv .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsyconv
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsyconv .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsyconv
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsyconv .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsyconv
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -41,7 +50,7 @@
 /* > Specifies whether the details of the factorization are stored */
 /* > as an upper or lower triangular matrix. */
 /* > = 'U': Upper triangular, form is A = U*D*U**T;
-*/
+ */
 /* > = 'L': Lower triangular, form is A = L*D*L**T. */
 /* > \endverbatim */
 /* > */
@@ -101,10 +110,12 @@
 /* > \ingroup complex16SYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *e, integer *info)
+void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda, integer *ipiv,
+              doublecomplex *e, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zsyconv inputs: uplo %c, way %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *way, *n, *lda);
+    AOCL_DTL_SNPRINTF("zsyconv inputs: uplo %c, way %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo,
+                      *way, *n, *lda);
 
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -114,7 +125,8 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical convert;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -142,23 +154,23 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     convert = lsame_(way, "C", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! convert && ! lsame_(way, "R", 1, 1))
+    else if(!convert && !lsame_(way, "R", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZSYCONV", &i__1, (ftnlen)7);
@@ -166,15 +178,15 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (upper)
+    if(upper)
     {
         /* A is UPPER */
-        if (convert)
+        if(convert)
         {
             /* Convert A (A is upper) */
             /* Convert VALUE */
@@ -183,7 +195,7 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
             e[1].i = 0.; // , expr subst
             while(i__ > 1)
             {
-                if (ipiv[i__] < 0)
+                if(ipiv[i__] < 0)
                 {
                     i__1 = i__;
                     i__2 = i__ - 1 + i__ * a_dim1;
@@ -209,15 +221,13 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
             i__ = *n;
             while(i__ >= 1)
             {
-                if (ipiv[i__] > 0)
+                if(ipiv[i__] > 0)
                 {
                     ip = ipiv[i__];
-                    if (i__ < *n)
+                    if(i__ < *n)
                     {
                         i__1 = *n;
-                        for (j = i__ + 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = i__ + 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
                             temp.r = a[i__2].r;
@@ -236,12 +246,10 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
                 else
                 {
                     ip = -ipiv[i__];
-                    if (i__ < *n)
+                    if(i__ < *n)
                     {
                         i__1 = *n;
-                        for (j = i__ + 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = i__ + 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
                             temp.r = a[i__2].r;
@@ -268,15 +276,13 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
             i__ = 1;
             while(i__ <= *n)
             {
-                if (ipiv[i__] > 0)
+                if(ipiv[i__] > 0)
                 {
                     ip = ipiv[i__];
-                    if (i__ < *n)
+                    if(i__ < *n)
                     {
                         i__1 = *n;
-                        for (j = i__ + 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = i__ + 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
                             temp.r = a[i__2].r;
@@ -295,12 +301,10 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
                 {
                     ip = -ipiv[i__];
                     ++i__;
-                    if (i__ < *n)
+                    if(i__ < *n)
                     {
                         i__1 = *n;
-                        for (j = i__ + 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = i__ + 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
                             temp.r = a[i__2].r;
@@ -321,7 +325,7 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
             i__ = *n;
             while(i__ > 1)
             {
-                if (ipiv[i__] < 0)
+                if(ipiv[i__] < 0)
                 {
                     i__1 = i__ - 1 + i__ * a_dim1;
                     i__2 = i__;
@@ -336,7 +340,7 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
     else
     {
         /* A is LOWER */
-        if (convert)
+        if(convert)
         {
             /* Convert A (A is lower) */
             /* Convert VALUE */
@@ -346,7 +350,7 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
             e[i__1].i = 0.; // , expr subst
             while(i__ <= *n)
             {
-                if (i__ < *n && ipiv[i__] < 0)
+                if(i__ < *n && ipiv[i__] < 0)
                 {
                     i__1 = i__;
                     i__2 = i__ + 1 + i__ * a_dim1;
@@ -372,15 +376,13 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
             i__ = 1;
             while(i__ <= *n)
             {
-                if (ipiv[i__] > 0)
+                if(ipiv[i__] > 0)
                 {
                     ip = ipiv[i__];
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
                         i__1 = i__ - 1;
-                        for (j = 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
                             temp.r = a[i__2].r;
@@ -399,12 +401,10 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
                 else
                 {
                     ip = -ipiv[i__];
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
                         i__1 = i__ - 1;
-                        for (j = 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
                             temp.r = a[i__2].r;
@@ -431,15 +431,13 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
             i__ = *n;
             while(i__ >= 1)
             {
-                if (ipiv[i__] > 0)
+                if(ipiv[i__] > 0)
                 {
                     ip = ipiv[i__];
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
                         i__1 = i__ - 1;
-                        for (j = 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = 1; j <= i__1; ++j)
                         {
                             i__2 = i__ + j * a_dim1;
                             temp.r = a[i__2].r;
@@ -458,12 +456,10 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
                 {
                     ip = -ipiv[i__];
                     --i__;
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
                         i__1 = i__ - 1;
-                        for (j = 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = 1; j <= i__1; ++j)
                         {
                             i__2 = i__ + 1 + j * a_dim1;
                             temp.r = a[i__2].r;
@@ -484,7 +480,7 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
             i__ = 1;
             while(i__ <= *n - 1)
             {
-                if (ipiv[i__] < 0)
+                if(ipiv[i__] < 0)
                 {
                     i__1 = i__ + 1 + i__ * a_dim1;
                     i__2 = i__;
@@ -501,4 +497,3 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
     /* End of ZSYCONV */
 }
 /* zsyconv_ */
-

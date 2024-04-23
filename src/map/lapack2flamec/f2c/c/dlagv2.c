@@ -1,19 +1,29 @@
-/* ../netlib/dlagv2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlagv2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__2 = 2;
 static integer c__1 = 1;
-/* > \brief \b DLAGV2 computes the Generalized Schur factorization of a real 2-by-2 matrix pencil (A,B) where B is upper triangular. */
+/* > \brief \b DLAGV2 computes the Generalized Schur factorization of a real 2-by-2 matrix pencil
+ * (A,B) where B is upper triangular. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLAGV2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlagv2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlagv2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlagv2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlagv2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlagv2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlagv2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -144,26 +154,35 @@ static integer c__1 = 1;
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-void dlagv2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *alphar, doublereal *alphai, doublereal * beta, doublereal *csl, doublereal *snl, doublereal *csr, doublereal * snr)
+void dlagv2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *alphar,
+             doublereal *alphai, doublereal *beta, doublereal *csl, doublereal *snl,
+             doublereal *csr, doublereal *snr)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlagv2 inputs: lda %" FLA_IS ", ldb %" FLA_IS "",*lda, *ldb);
+    AOCL_DTL_SNPRINTF("dlagv2 inputs: lda %" FLA_IS ", ldb %" FLA_IS "", *lda, *ldb);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6;
     /* Local variables */
     doublereal r__, t, h1, h2, h3, wi, qq, rr, wr1, wr2, ulp;
     extern /* Subroutine */
-    void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *), dlag2_( doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+              doublereal *),
+        dlag2_(doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+               doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal anorm, bnorm, scale1, scale2;
     extern /* Subroutine */
-    void dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *, doublereal *, doublereal *);
     extern doublereal dlapy2_(doublereal *, doublereal *);
     doublereal ascale, bscale;
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
-    void dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -199,10 +218,11 @@ void dlagv2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublerea
     ulp = dlamch_("P");
     /* Scale A */
     /* Computing MAX */
-    d__5 = (d__1 = a[a_dim1 + 1], f2c_dabs(d__1)) + (d__2 = a[a_dim1 + 2], f2c_dabs( d__2));
-    d__6 = (d__3 = a[(a_dim1 << 1) + 1], f2c_dabs(d__3)) + (d__4 = a[(a_dim1 << 1) + 2], f2c_dabs(d__4));
-    d__5 = fla_max(d__5,d__6); // ; expr subst
-    anorm = fla_max(d__5,safmin);
+    d__5 = (d__1 = a[a_dim1 + 1], f2c_dabs(d__1)) + (d__2 = a[a_dim1 + 2], f2c_dabs(d__2));
+    d__6 = (d__3 = a[(a_dim1 << 1) + 1], f2c_dabs(d__3))
+           + (d__4 = a[(a_dim1 << 1) + 2], f2c_dabs(d__4));
+    d__5 = fla_max(d__5, d__6); // ; expr subst
+    anorm = fla_max(d__5, safmin);
     ascale = 1. / anorm;
     a[a_dim1 + 1] = ascale * a[a_dim1 + 1];
     a[(a_dim1 << 1) + 1] = ascale * a[(a_dim1 << 1) + 1];
@@ -211,15 +231,16 @@ void dlagv2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublerea
     /* Scale B */
     /* Computing MAX */
     d__4 = (d__3 = b[b_dim1 + 1], f2c_dabs(d__3));
-    d__5 = (d__1 = b[(b_dim1 << 1) + 1], f2c_dabs(d__1)) + (d__2 = b[(b_dim1 << 1) + 2], f2c_dabs(d__2));
-    d__4 = fla_max(d__4,d__5); // ; expr subst
-    bnorm = fla_max(d__4,safmin);
+    d__5 = (d__1 = b[(b_dim1 << 1) + 1], f2c_dabs(d__1))
+           + (d__2 = b[(b_dim1 << 1) + 2], f2c_dabs(d__2));
+    d__4 = fla_max(d__4, d__5); // ; expr subst
+    bnorm = fla_max(d__4, safmin);
     bscale = 1. / bnorm;
     b[b_dim1 + 1] = bscale * b[b_dim1 + 1];
     b[(b_dim1 << 1) + 1] = bscale * b[(b_dim1 << 1) + 1];
     b[(b_dim1 << 1) + 2] = bscale * b[(b_dim1 << 1) + 2];
     /* Check if A can be deflated */
-    if ((d__1 = a[a_dim1 + 2], f2c_dabs(d__1)) <= ulp)
+    if((d__1 = a[a_dim1 + 2], f2c_dabs(d__1)) <= ulp)
     {
         *csl = 1.;
         *snl = 0.;
@@ -230,7 +251,7 @@ void dlagv2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublerea
         wi = 0.;
         /* Check if B is singular */
     }
-    else if ((d__1 = b[b_dim1 + 1], f2c_dabs(d__1)) <= ulp)
+    else if((d__1 = b[b_dim1 + 1], f2c_dabs(d__1)) <= ulp)
     {
         dlartg_(&a[a_dim1 + 1], &a[a_dim1 + 2], csl, snl, &r__);
         *csr = 1.;
@@ -242,7 +263,7 @@ void dlagv2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublerea
         b[b_dim1 + 2] = 0.;
         wi = 0.;
     }
-    else if ((d__1 = b[(b_dim1 << 1) + 2], f2c_dabs(d__1)) <= ulp)
+    else if((d__1 = b[(b_dim1 << 1) + 2], f2c_dabs(d__1)) <= ulp)
     {
         dlartg_(&a[(a_dim1 << 1) + 2], &a[a_dim1 + 2], csr, snr, &t);
         *snr = -(*snr);
@@ -258,8 +279,8 @@ void dlagv2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublerea
     else
     {
         /* B is nonsingular, first compute the eigenvalues of (A,B) */
-        dlag2_(&a[a_offset], lda, &b[b_offset], ldb, &safmin, &scale1, & scale2, &wr1, &wr2, &wi);
-        if (wi == 0.)
+        dlag2_(&a[a_offset], lda, &b[b_offset], ldb, &safmin, &scale1, &scale2, &wr1, &wr2, &wi);
+        if(wi == 0.)
         {
             /* two real eigenvalues, compute s*A-w*B */
             h1 = scale1 * a[a_dim1 + 1] - wr1 * b[b_dim1 + 1];
@@ -268,7 +289,7 @@ void dlagv2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublerea
             rr = dlapy2_(&h1, &h2);
             d__1 = scale1 * a[a_dim1 + 2];
             qq = dlapy2_(&d__1, &h3);
-            if (rr > qq)
+            if(rr > qq)
             {
                 /* find right rotation matrix to zero 1,1 element of */
                 /* (sA - wB) */
@@ -286,14 +307,18 @@ void dlagv2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublerea
             drot_(&c__2, &b[b_dim1 + 1], &c__1, &b[(b_dim1 << 1) + 1], &c__1, csr, snr);
             /* compute inf norms of A and B */
             /* Computing MAX */
-            d__5 = (d__1 = a[a_dim1 + 1], f2c_dabs(d__1)) + (d__2 = a[(a_dim1 << 1) + 1], f2c_dabs(d__2));
-            d__6 = (d__3 = a[a_dim1 + 2], f2c_dabs(d__3) ) + (d__4 = a[(a_dim1 << 1) + 2], f2c_dabs(d__4)); // , expr subst
-            h1 = fla_max(d__5,d__6);
+            d__5 = (d__1 = a[a_dim1 + 1], f2c_dabs(d__1))
+                   + (d__2 = a[(a_dim1 << 1) + 1], f2c_dabs(d__2));
+            d__6 = (d__3 = a[a_dim1 + 2], f2c_dabs(d__3))
+                   + (d__4 = a[(a_dim1 << 1) + 2], f2c_dabs(d__4)); // , expr subst
+            h1 = fla_max(d__5, d__6);
             /* Computing MAX */
-            d__5 = (d__1 = b[b_dim1 + 1], f2c_dabs(d__1)) + (d__2 = b[(b_dim1 << 1) + 1], f2c_dabs(d__2));
-            d__6 = (d__3 = b[b_dim1 + 2], f2c_dabs(d__3) ) + (d__4 = b[(b_dim1 << 1) + 2], f2c_dabs(d__4)); // , expr subst
-            h2 = fla_max(d__5,d__6);
-            if (scale1 * h1 >= f2c_dabs(wr1) * h2)
+            d__5 = (d__1 = b[b_dim1 + 1], f2c_dabs(d__1))
+                   + (d__2 = b[(b_dim1 << 1) + 1], f2c_dabs(d__2));
+            d__6 = (d__3 = b[b_dim1 + 2], f2c_dabs(d__3))
+                   + (d__4 = b[(b_dim1 << 1) + 2], f2c_dabs(d__4)); // , expr subst
+            h2 = fla_max(d__5, d__6);
+            if(scale1 * h1 >= f2c_dabs(wr1) * h2)
             {
                 /* find left rotation matrix Q to zero out B(2,1) */
                 dlartg_(&b[b_dim1 + 1], &b[b_dim1 + 2], csl, snl, &r__);
@@ -312,7 +337,8 @@ void dlagv2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublerea
         {
             /* a pair of complex conjugate eigenvalues */
             /* first compute the SVD of the matrix B */
-            dlasv2_(&b[b_dim1 + 1], &b[(b_dim1 << 1) + 1], &b[(b_dim1 << 1) + 2], &r__, &t, snr, csr, snl, csl);
+            dlasv2_(&b[b_dim1 + 1], &b[(b_dim1 << 1) + 1], &b[(b_dim1 << 1) + 2], &r__, &t, snr,
+                    csr, snl, csl);
             /* Form (A,B) := Q(A,B)Z**T where Q is left rotation matrix and */
             /* Z is right rotation matrix computed from DLASV2 */
             drot_(&c__2, &a[a_dim1 + 1], lda, &a[a_dim1 + 2], lda, csl, snl);
@@ -332,7 +358,7 @@ void dlagv2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublerea
     b[b_dim1 + 2] = bnorm * b[b_dim1 + 2];
     b[(b_dim1 << 1) + 1] = bnorm * b[(b_dim1 << 1) + 1];
     b[(b_dim1 << 1) + 2] = bnorm * b[(b_dim1 << 1) + 2];
-    if (wi == 0.)
+    if(wi == 0.)
     {
         alphar[1] = a[a_dim1 + 1];
         alphar[2] = a[(a_dim1 << 1) + 2];

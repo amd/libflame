@@ -1,19 +1,29 @@
-/* ctgex2.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ctgex2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__2 = 2;
 static integer c__1 = 1;
-/* > \brief \b CTGEX2 swaps adjacent diagonal blocks in an upper (quasi) triangular matrix pair by an unitary equivalence transformation. */
+/* > \brief \b CTGEX2 swaps adjacent diagonal blocks in an upper (quasi) triangular matrix pair by
+ * an unitary equivalence transformation. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CTGEX2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctgex2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctgex2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctgex2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctgex2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctgex2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctgex2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -53,7 +63,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > WANTQ is LOGICAL */
 /* > .TRUE. : update the left transformation matrix Q;
-*/
+ */
 /* > .FALSE.: do not update Q. */
 /* > \endverbatim */
 /* > */
@@ -61,7 +71,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > WANTZ is LOGICAL */
 /* > .TRUE. : update the right transformation matrix Z;
-*/
+ */
 /* > .FALSE.: do not update Z. */
 /* > \endverbatim */
 /* > */
@@ -109,7 +119,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > LDQ is INTEGER */
 /* > The leading dimension of the array Q. LDQ >= 1;
-*/
+ */
 /* > If WANTQ = .TRUE., LDQ >= N. */
 /* > \endverbatim */
 /* > */
@@ -125,7 +135,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > LDZ is INTEGER */
 /* > The leading dimension of the array Z. LDZ >= 1;
-*/
+ */
 /* > If WANTZ = .TRUE., LDZ >= N. */
 /* > \endverbatim */
 /* > */
@@ -182,12 +192,17 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctgex2_(logical *wantq, logical *wantz, integer *n, complex *a, integer *lda, complex *b, integer *ldb, complex *q, integer *ldq, complex *z__, integer *ldz, integer *j1, integer *info)
+void ctgex2_(logical *wantq, logical *wantz, integer *n, complex *a, integer *lda, complex *b,
+             integer *ldb, complex *q, integer *ldq, complex *z__, integer *ldz, integer *j1,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ctgex2 inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", j1 %" FLA_IS "",*n, *lda, *ldb, *ldq, *ldz, *j1);
+    AOCL_DTL_SNPRINTF("ctgex2 inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS
+                      ", ldz %" FLA_IS ", j1 %" FLA_IS "",
+                      *n, *lda, *ldb, *ldq, *ldz, *j1);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
+        i__3;
     real r__1;
     complex q__1, q__2, q__3;
     /* Builtin functions */
@@ -197,20 +212,25 @@ void ctgex2_(logical *wantq, logical *wantz, integer *n, complex *a, integer *ld
     complex f, g;
     integer i__, m;
     complex s[4] /* was [2][2] */
-    , t[4] /* was [2][2] */
-    ;
+        ,
+        t[4] /* was [2][2] */
+        ;
     real cq, sa, sb, cz;
     complex sq, sz;
     real eps, sum;
     logical weak;
     complex cdum;
     extern /* Subroutine */
-    void crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
+        void
+        crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
     complex work[8];
     real scale;
     extern real slamch_(char *);
     extern /* Subroutine */
-    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), clartg_(complex *, complex *, real *, complex *, complex *), classq_(integer *, complex *, integer *, real *, real *);
+        void
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        clartg_(complex *, complex *, real *, complex *, complex *),
+        classq_(integer *, complex *, integer *, real *, real *);
     real smlnum;
     logical strong;
     real thresha, threshb;
@@ -251,9 +271,9 @@ void ctgex2_(logical *wantq, logical *wantz, integer *n, complex *a, integer *ld
     /* Function Body */
     *info = 0;
     /* Quick return if possible */
-    if (*n <= 1)
+    if(*n <= 1)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     m = 2;
@@ -286,24 +306,24 @@ void ctgex2_(logical *wantq, logical *wantz, integer *n, complex *a, integer *ld
     /* Jim Demmel and Guillaume Revy. See forum post 1783. */
     /* Computing MAX */
     r__1 = eps * 20.f * sa;
-    thresha = fla_max(r__1,smlnum);
+    thresha = fla_max(r__1, smlnum);
     /* Computing MAX */
     r__1 = eps * 20.f * sb;
-    threshb = fla_max(r__1,smlnum);
+    threshb = fla_max(r__1, smlnum);
     /* Compute unitary QL and RQ that swap 1-by-1 and 1-by-1 blocks */
     /* using Givens rotations and perform the swap tentatively. */
     q__2.r = s[3].r * t[0].r - s[3].i * t[0].i;
-    q__2.i = s[3].r * t[0].i + s[ 3].i * t[0].r; // , expr subst
+    q__2.i = s[3].r * t[0].i + s[3].i * t[0].r; // , expr subst
     q__3.r = t[3].r * s[0].r - t[3].i * s[0].i;
-    q__3.i = t[3].r * s[0].i + t[ 3].i * s[0].r; // , expr subst
+    q__3.i = t[3].r * s[0].i + t[3].i * s[0].r; // , expr subst
     q__1.r = q__2.r - q__3.r;
     q__1.i = q__2.i - q__3.i; // , expr subst
     f.r = q__1.r;
     f.i = q__1.i; // , expr subst
     q__2.r = s[3].r * t[2].r - s[3].i * t[2].i;
-    q__2.i = s[3].r * t[2].i + s[ 3].i * t[2].r; // , expr subst
+    q__2.i = s[3].r * t[2].i + s[3].i * t[2].r; // , expr subst
     q__3.r = t[3].r * s[2].r - t[3].i * s[2].i;
-    q__3.i = t[3].r * s[2].i + t[ 3].i * s[2].r; // , expr subst
+    q__3.i = t[3].r * s[2].i + t[3].i * s[2].r; // , expr subst
     q__1.r = q__2.r - q__3.r;
     q__1.i = q__2.i - q__3.i; // , expr subst
     g.r = q__1.r;
@@ -319,7 +339,7 @@ void ctgex2_(logical *wantq, logical *wantz, integer *n, complex *a, integer *ld
     crot_(&c__2, s, &c__1, &s[2], &c__1, &cz, &q__1);
     r_cnjg(&q__1, &sz);
     crot_(&c__2, t, &c__1, &t[2], &c__1, &cz, &q__1);
-    if (sa >= sb)
+    if(sa >= sb)
     {
         clartg_(s, &s[1], &cq, &sq, &cdum);
     }
@@ -332,11 +352,11 @@ void ctgex2_(logical *wantq, logical *wantz, integer *n, complex *a, integer *ld
     /* Weak stability test: |S21| <= O(EPS F-norm((A))) */
     /* and |T21| <= O(EPS F-norm((B))) */
     weak = c_abs(&s[1]) <= thresha && c_abs(&t[1]) <= threshb;
-    if (! weak)
+    if(!weak)
     {
         goto L20;
     }
-    if (TRUE_)
+    if(TRUE_)
     {
         /* Strong stability test: */
         /* F-norm((A-QL**H*S*QR, B-QL**H*T*QR)) <= O(EPS*F-norm((A, B))) */
@@ -356,36 +376,34 @@ void ctgex2_(logical *wantq, logical *wantz, integer *n, complex *a, integer *ld
         q__1.r = -sq.r;
         q__1.i = -sq.i; // , expr subst
         crot_(&c__2, &work[4], &c__2, &work[5], &c__2, &cq, &q__1);
-        for (i__ = 1;
-                i__ <= 2;
-                ++i__)
+        for(i__ = 1; i__ <= 2; ++i__)
         {
             i__1 = i__ - 1;
             i__2 = i__ - 1;
             i__3 = *j1 + i__ - 1 + *j1 * a_dim1;
             q__1.r = work[i__2].r - a[i__3].r;
-            q__1.i = work[i__2].i - a[i__3] .i; // , expr subst
+            q__1.i = work[i__2].i - a[i__3].i; // , expr subst
             work[i__1].r = q__1.r;
             work[i__1].i = q__1.i; // , expr subst
             i__1 = i__ + 1;
             i__2 = i__ + 1;
             i__3 = *j1 + i__ - 1 + (*j1 + 1) * a_dim1;
             q__1.r = work[i__2].r - a[i__3].r;
-            q__1.i = work[i__2].i - a[i__3] .i; // , expr subst
+            q__1.i = work[i__2].i - a[i__3].i; // , expr subst
             work[i__1].r = q__1.r;
             work[i__1].i = q__1.i; // , expr subst
             i__1 = i__ + 3;
             i__2 = i__ + 3;
             i__3 = *j1 + i__ - 1 + *j1 * b_dim1;
             q__1.r = work[i__2].r - b[i__3].r;
-            q__1.i = work[i__2].i - b[i__3] .i; // , expr subst
+            q__1.i = work[i__2].i - b[i__3].i; // , expr subst
             work[i__1].r = q__1.r;
             work[i__1].i = q__1.i; // , expr subst
             i__1 = i__ + 5;
             i__2 = i__ + 5;
             i__3 = *j1 + i__ - 1 + (*j1 + 1) * b_dim1;
             q__1.r = work[i__2].r - b[i__3].r;
-            q__1.i = work[i__2].i - b[i__3] .i; // , expr subst
+            q__1.i = work[i__2].i - b[i__3].i; // , expr subst
             work[i__1].r = q__1.r;
             work[i__1].i = q__1.i; // , expr subst
             /* L10: */
@@ -401,7 +419,7 @@ void ctgex2_(logical *wantq, logical *wantz, integer *n, complex *a, integer *ld
         classq_(&i__1, &work[m * m], &c__1, &scale, &sum);
         sb = scale * sqrt(sum);
         strong = sa <= thresha && sb <= threshb;
-        if (! strong)
+        if(!strong)
         {
             goto L20;
         }
@@ -410,10 +428,10 @@ void ctgex2_(logical *wantq, logical *wantz, integer *n, complex *a, integer *ld
     /* equivalence transformations to the original matrix pair (A,B) */
     i__1 = *j1 + 1;
     r_cnjg(&q__1, &sz);
-    crot_(&i__1, &a[*j1 * a_dim1 + 1], &c__1, &a[(*j1 + 1) * a_dim1 + 1], & c__1, &cz, &q__1);
+    crot_(&i__1, &a[*j1 * a_dim1 + 1], &c__1, &a[(*j1 + 1) * a_dim1 + 1], &c__1, &cz, &q__1);
     i__1 = *j1 + 1;
     r_cnjg(&q__1, &sz);
-    crot_(&i__1, &b[*j1 * b_dim1 + 1], &c__1, &b[(*j1 + 1) * b_dim1 + 1], & c__1, &cz, &q__1);
+    crot_(&i__1, &b[*j1 * b_dim1 + 1], &c__1, &b[(*j1 + 1) * b_dim1 + 1], &c__1, &cz, &q__1);
     i__1 = *n - *j1 + 1;
     crot_(&i__1, &a[*j1 + *j1 * a_dim1], lda, &a[*j1 + 1 + *j1 * a_dim1], lda, &cq, &sq);
     i__1 = *n - *j1 + 1;
@@ -426,15 +444,15 @@ void ctgex2_(logical *wantq, logical *wantz, integer *n, complex *a, integer *ld
     b[i__1].r = 0.f;
     b[i__1].i = 0.f; // , expr subst
     /* Accumulate transformations into Q and Z if requested. */
-    if (*wantz)
+    if(*wantz)
     {
         r_cnjg(&q__1, &sz);
         crot_(n, &z__[*j1 * z_dim1 + 1], &c__1, &z__[(*j1 + 1) * z_dim1 + 1], &c__1, &cz, &q__1);
     }
-    if (*wantq)
+    if(*wantq)
     {
         r_cnjg(&q__1, &sq);
-        crot_(n, &q[*j1 * q_dim1 + 1], &c__1, &q[(*j1 + 1) * q_dim1 + 1], & c__1, &cq, &q__1);
+        crot_(n, &q[*j1 * q_dim1 + 1], &c__1, &q[(*j1 + 1) * q_dim1 + 1], &c__1, &cq, &q__1);
     }
     /* Exit with INFO = 0 if swap was successfully performed. */
     AOCL_DTL_TRACE_LOG_EXIT

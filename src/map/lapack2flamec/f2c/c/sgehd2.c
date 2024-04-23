@@ -1,18 +1,28 @@
-/* ../netlib/sgehd2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sgehd2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b SGEHD2 reduces a general square matrix to upper Hessenberg form using an unblocked algorithm. */
+/* > \brief \b SGEHD2 reduces a general square matrix to upper Hessenberg form using an unblocked
+ * algorithm. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SGEHD2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgehd2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgehd2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgehd2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgehd2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgehd2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgehd2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -139,7 +149,8 @@ v(i+2:ihi) is stored on */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sgehd2_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real *tau, real *work, integer *info)
+void sgehd2_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real *tau, real *work,
+             integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -147,7 +158,10 @@ void sgehd2_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real
     integer i__;
     real aii;
     extern /* Subroutine */
-    void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
+        void
+        slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -175,47 +189,48 @@ void sgehd2_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real
     --work;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    else if (*ilo < 1 || *ilo > fla_max(1,*n))
+    else if(*ilo < 1 || *ilo > fla_max(1, *n))
     {
         *info = -2;
     }
-    else if (*ihi < fla_min(*ilo,*n) || *ihi > *n)
+    else if(*ihi < fla_min(*ilo, *n) || *ihi > *n)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SGEHD2", &i__1, (ftnlen)6);
         return;
     }
     i__1 = *ihi - 1;
-    for (i__ = *ilo;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = *ilo; i__ <= i__1; ++i__)
     {
         /* Compute elementary reflector H(i) to annihilate A(i+2:ihi,i) */
         i__2 = *ihi - i__;
         /* Computing MIN */
         i__3 = i__ + 2;
-        slarfg_(&i__2, &a[i__ + 1 + i__ * a_dim1], &a[fla_min(i__3,*n) + i__ * a_dim1], &c__1, &tau[i__]);
+        slarfg_(&i__2, &a[i__ + 1 + i__ * a_dim1], &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1,
+                &tau[i__]);
         aii = a[i__ + 1 + i__ * a_dim1];
         a[i__ + 1 + i__ * a_dim1] = 1.f;
         /* Apply H(i) to A(1:ihi,i+1:ihi) from the right */
         i__2 = *ihi - i__;
-        slarf_("Right", ihi, &i__2, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[ i__], &a[(i__ + 1) * a_dim1 + 1], lda, &work[1]);
+        slarf_("Right", ihi, &i__2, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__],
+               &a[(i__ + 1) * a_dim1 + 1], lda, &work[1]);
         /* Apply H(i) to A(i+1:ihi,i+1:n) from the left */
         i__2 = *ihi - i__;
         i__3 = *n - i__;
-        slarf_("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[ i__], &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
+        slarf_("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__],
+               &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
         a[i__ + 1 + i__ * a_dim1] = aii;
         /* L10: */
     }

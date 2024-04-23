@@ -1,16 +1,25 @@
-/* ../netlib/sposvx.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sposvx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief <b> SPOSVX computes the solution to system of linear equations A * X = B for PO matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SPOSVX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sposvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sposvx.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sposvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sposvx.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sposvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sposvx.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -104,7 +113,7 @@
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -295,12 +304,16 @@ if EQUED = 'Y', */
 /* > \ingroup realPOsolve */
 /* ===================================================================== */
 /* Subroutine */
-void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integer *lda, real *af, integer *ldaf, char *equed, real *s, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork, integer *info)
+void sposvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *af,
+             integer *ldaf, char *equed, real *s, real *b, integer *ldb, real *x, integer *ldx,
+             real *rcond, real *ferr, real *berr, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sposvx inputs: fact %c, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
+    snprintf(buffer, 256,
+             "sposvx inputs: fact %c, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d",
+             *fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -315,15 +328,24 @@ void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer infequ;
     extern /* Subroutine */
-    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), spocon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
+        void
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
+        spocon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
     extern real slansy_(char *, char *, integer *, real *, integer *, real *);
     real smlnum;
     extern /* Subroutine */
-    void slaqsy_(char *, integer *, real *, integer *, real *, real *, real *, char *), spoequ_(integer *, real *, integer *, real *, real *, real *, integer *), sporfs_( char *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), spotrf_(char *, integer *, real *, integer *, integer *), spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
+        void
+        slaqsy_(char *, integer *, real *, integer *, real *, real *, real *, char *),
+        spoequ_(integer *, real *, integer *, real *, real *, real *, integer *),
+        sporfs_(char *, integer *, integer *, real *, integer *, real *, integer *, real *,
+                integer *, real *, integer *, real *, real *, real *, integer *, integer *),
+        spotrf_(char *, integer *, real *, integer *, integer *),
+        spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -368,7 +390,7 @@ void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
     equil = lsame_(fact, "E", 1, 1);
     smlnum = 0.f;
     bignum = 0.f;
-    if (nofact || equil)
+    if(nofact || equil)
     {
         *(unsigned char *)equed = 'N';
         rcequ = FALSE_;
@@ -380,92 +402,90 @@ void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
         bignum = 1.f / smlnum;
     }
     /* Test the input parameters. */
-    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    else if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (lsame_(fact, "F", 1, 1) && ! (rcequ || lsame_(equed, "N", 1, 1)))
+    else if(lsame_(fact, "F", 1, 1) && !(rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -9;
     }
     else
     {
-        if (rcequ)
+        if(rcequ)
         {
             smin = bignum;
             smax = 0.f;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Computing MIN */
                 r__1 = smin;
                 r__2 = s[j]; // , expr subst
-                smin = fla_min(r__1,r__2);
+                smin = fla_min(r__1, r__2);
                 /* Computing MAX */
                 r__1 = smax;
                 r__2 = s[j]; // , expr subst
-                smax = fla_max(r__1,r__2);
+                smax = fla_max(r__1, r__2);
                 /* L10: */
             }
-            if (smin <= 0.f)
+            if(smin <= 0.f)
             {
                 *info = -10;
             }
-            else if (*n > 0)
+            else if(*n > 0)
             {
-                scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
+                scond = fla_max(smin, smlnum) / fla_min(smax, bignum);
             }
             else
             {
                 scond = 1.f;
             }
         }
-        if (*info == 0)
+        if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -12;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -14;
             }
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SPOSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (equil)
+    if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
         spoequ_(n, &a[a_offset], lda, &s[1], &scond, &amax, &infequ);
-        if (infequ == 0)
+        if(infequ == 0)
         {
             /* Equilibrate the matrix. */
             slaqsy_(uplo, n, &a[a_offset], lda, &s[1], &scond, &amax, equed);
@@ -473,17 +493,13 @@ void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
         }
     }
     /* Scale the right hand side. */
-    if (rcequ)
+    if(rcequ)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *n;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 b[i__ + j * b_dim1] = s[i__] * b[i__ + j * b_dim1];
                 /* L20: */
@@ -491,13 +507,13 @@ void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
             /* L30: */
         }
     }
-    if (nofact || equil)
+    if(nofact || equil)
     {
         /* Compute the Cholesky factorization A = U**T *U or A = L*L**T. */
         slacpy_(uplo, n, n, &a[a_offset], lda, &af[af_offset], ldaf);
         spotrf_(uplo, n, &af[af_offset], ldaf, info);
         /* Return if INFO is non-zero. */
-        if (*info > 0)
+        if(*info > 0)
         {
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -513,20 +529,17 @@ void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
     spotrs_(uplo, n, nrhs, &af[af_offset], ldaf, &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    sporfs_(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &b[ b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], & iwork[1], info);
+    sporfs_(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &b[b_offset], ldb, &x[x_offset],
+            ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
-    if (rcequ)
+    if(rcequ)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *n;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 x[i__ + j * x_dim1] = s[i__] * x[i__ + j * x_dim1];
                 /* L40: */
@@ -534,16 +547,14 @@ void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
             /* L50: */
         }
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             ferr[j] /= scond;
             /* L60: */
         }
     }
     /* Set INFO = N+1 if the matrix is singular to working precision. */
-    if (*rcond < slamch_("Epsilon"))
+    if(*rcond < slamch_("Epsilon"))
     {
         *info = *n + 1;
     }

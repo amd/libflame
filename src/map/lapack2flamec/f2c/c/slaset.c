@@ -1,16 +1,25 @@
-/* ../netlib/slaset.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slaset.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLASET initializes the off-diagonal elements and the diagonal elements of a matrix to given val ues. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLASET + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaset. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaset.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaset. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaset.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaset. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaset.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -103,7 +112,7 @@ void slaset_(char *uplo, integer *m, integer *n, real *alpha, real *beta, real *
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slaset inputs: uplo %c, m %d, n %d, lda %d",*uplo, *m, *n, *lda);
+    snprintf(buffer, 256, "slaset inputs: uplo %c, m %d, n %d, lda %d", *uplo, *m, *n, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -132,21 +141,17 @@ void slaset_(char *uplo, integer *m, integer *n, real *alpha, real *beta, real *
     a_offset = 1 + a_dim1;
     a -= a_offset;
     /* Function Body */
-    if (lsame_(uplo, "U", 1, 1))
+    if(lsame_(uplo, "U", 1, 1))
     {
         /* Set the strictly upper triangular or trapezoidal part of the */
         /* array to ALPHA. */
         i__1 = *n;
-        for (j = 2;
-                j <= i__1;
-                ++j)
+        for(j = 2; j <= i__1; ++j)
         {
             /* Computing MIN */
             i__3 = j - 1;
-            i__2 = fla_min(i__3,*m);
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            i__2 = fla_min(i__3, *m);
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 a[i__ + j * a_dim1] = *alpha;
                 /* L10: */
@@ -154,19 +159,15 @@ void slaset_(char *uplo, integer *m, integer *n, real *alpha, real *beta, real *
             /* L20: */
         }
     }
-    else if (lsame_(uplo, "L", 1, 1))
+    else if(lsame_(uplo, "L", 1, 1))
     {
         /* Set the strictly lower triangular or trapezoidal part of the */
         /* array to ALPHA. */
-        i__1 = fla_min(*m,*n);
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        i__1 = fla_min(*m, *n);
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = j + 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = j + 1; i__ <= i__2; ++i__)
             {
                 a[i__ + j * a_dim1] = *alpha;
                 /* L30: */
@@ -178,14 +179,10 @@ void slaset_(char *uplo, integer *m, integer *n, real *alpha, real *beta, real *
     {
         /* Set the leading m-by-n submatrix to ALPHA. */
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 a[i__ + j * a_dim1] = *alpha;
                 /* L50: */
@@ -194,10 +191,8 @@ void slaset_(char *uplo, integer *m, integer *n, real *alpha, real *beta, real *
         }
     }
     /* Set the first fla_min(M,N) diagonal elements to BETA. */
-    i__1 = fla_min(*m,*n);
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    i__1 = fla_min(*m, *n);
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         a[i__ + i__ * a_dim1] = *beta;
         /* L70: */

@@ -1,5 +1,8 @@
-/* ../netlib/dtrsyl.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dtrsyl.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static logical c_false = FALSE_;
@@ -13,11 +16,17 @@ static logical c_true = TRUE_;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DTRSYL + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtrsyl. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtrsyl.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtrsyl. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtrsyl.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrsyl. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrsyl.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -51,7 +60,7 @@ and scale is an output scale factor, set */
 /* > */
 /* > A and B must be in Schur canonical form (as returned by DHSEQR), that */
 /* > is, block upper triangular with 1-by-1 and 2-by-2 diagonal blocks;
-*/
+ */
 /* > each 2-by-2 diagonal block has its diagonal elements equal and its */
 /* > off-diagonal elements of opposite sign. */
 /* > \endverbatim */
@@ -160,34 +169,49 @@ perturbed */
 /* > \ingroup doubleSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dtrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, doublereal *a, integer *lda, doublereal *b, integer * ldb, doublereal *c__, integer *ldc, doublereal *scale, integer *info)
+void dtrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, doublereal *a,
+             integer *lda, doublereal *b, integer *ldb, doublereal *c__, integer *ldc,
+             doublereal *scale, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dtrsyl inputs: trana %c, tranb %c, isgn %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS "",*trana, *tranb, *isgn, *m, *n, *lda, *ldb, *ldc);
+    AOCL_DTL_SNPRINTF("dtrsyl inputs: trana %c, tranb %c, isgn %" FLA_IS ", m %" FLA_IS
+                      ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS "",
+                      *trana, *tranb, *isgn, *m, *n, *lda, *ldb, *ldc);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2;
     /* Local variables */
     integer j, k, l;
     doublereal x[4] /* was [2][2] */
-    ;
+        ;
     integer k1, k2, l1, l2;
     doublereal a11, db, da11, vec[4] /* was [2][2] */
-    , dum[1], eps, sgn;
+        ,
+        dum[1], eps, sgn;
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer ierr;
     doublereal smin, suml, sumr;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     integer knext, lnext;
     doublereal xnorm;
     extern /* Subroutine */
-    void dlaln2_(logical *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlasy2_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlabad_(doublereal *, doublereal *);
-    extern doublereal dlamch_(char *), dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
+        void
+        dlaln2_(logical *, integer *, integer *, doublereal *, doublereal *, doublereal *,
+                integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *,
+                doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *),
+        dlasy2_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                integer *, doublereal *, integer *),
+        dlabad_(doublereal *, doublereal *);
+    extern doublereal dlamch_(char *),
+        dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     doublereal scaloc;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical notrna, notrnb;
     doublereal smlnum;
@@ -228,39 +252,39 @@ void dtrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
     notrna = lsame_(trana, "N", 1, 1);
     notrnb = lsame_(tranb, "N", 1, 1);
     *info = 0;
-    if (! notrna && ! lsame_(trana, "T", 1, 1) && ! lsame_(trana, "C", 1, 1))
+    if(!notrna && !lsame_(trana, "T", 1, 1) && !lsame_(trana, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (! notrnb && ! lsame_(tranb, "T", 1, 1) && ! lsame_(tranb, "C", 1, 1))
+    else if(!notrnb && !lsame_(tranb, "T", 1, 1) && !lsame_(tranb, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (*isgn != 1 && *isgn != -1)
+    else if(*isgn != 1 && *isgn != -1)
     {
         *info = -3;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -4;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -11;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DTRSYL", &i__1, (ftnlen)6);
@@ -269,7 +293,7 @@ void dtrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
     }
     /* Quick return if possible */
     *scale = 1.;
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -279,15 +303,15 @@ void dtrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
     smlnum = dlamch_("S");
     bignum = 1. / smlnum;
     dlabad_(&smlnum, &bignum);
-    smlnum = smlnum * (doublereal) (*m * *n) / eps;
+    smlnum = smlnum * (doublereal)(*m * *n) / eps;
     bignum = 1. / smlnum;
     /* Computing MAX */
     d__1 = smlnum, d__2 = eps * dlange_("M", m, m, &a[a_offset], lda, dum);
-    d__1 = fla_max(d__1,d__2);
+    d__1 = fla_max(d__1, d__2);
     d__2 = eps * dlange_("M", n, n, &b[b_offset], ldb, dum); // ; expr subst
-    smin = fla_max(d__1,d__2);
-    sgn = (doublereal) (*isgn);
-    if (notrna && notrnb)
+    smin = fla_max(d__1, d__2);
+    sgn = (doublereal)(*isgn);
+    if(notrna && notrnb)
     {
         /* Solve A*X + ISGN*X*B = scale*C. */
         /* The (K,L)th block of X is determined starting from */
@@ -301,22 +325,20 @@ void dtrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
         /* L1 (L2) : column index of the first (first) row of X(K,L). */
         lnext = 1;
         i__1 = *n;
-        for (l = 1;
-                l <= i__1;
-                ++l)
+        for(l = 1; l <= i__1; ++l)
         {
-            if (l < lnext)
+            if(l < lnext)
             {
                 goto L60;
             }
-            if (l == *n)
+            if(l == *n)
             {
                 l1 = l;
                 l2 = l;
             }
             else
             {
-                if (b[l + 1 + l * b_dim1] != 0.)
+                if(b[l + 1 + l * b_dim1] != 0.)
                 {
                     l1 = l;
                     l2 = l + 1;
@@ -332,22 +354,20 @@ void dtrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
             /* Start row loop (index = K) */
             /* K1 (K2): row index of the first (last) row of X(K,L). */
             knext = *m;
-            for (k = *m;
-                    k >= 1;
-                    --k)
+            for(k = *m; k >= 1; --k)
             {
-                if (k > knext)
+                if(k > knext)
                 {
                     goto L50;
                 }
-                if (k == 1)
+                if(k == 1)
                 {
                     k1 = k;
                     k2 = k;
                 }
                 else
                 {
-                    if (a[k + (k - 1) * a_dim1] != 0.)
+                    if(a[k + (k - 1) * a_dim1] != 0.)
                     {
                         k1 = k - 1;
                         k2 = k;
@@ -360,41 +380,40 @@ void dtrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                         knext = k - 1;
                     }
                 }
-                if (l1 == l2 && k1 == k2)
+                if(l1 == l2 && k1 == k2)
                 {
                     i__2 = *m - k1;
                     /* Computing MIN */
                     i__3 = k1 + 1;
                     /* Computing MIN */
                     i__4 = k1 + 1;
-                    suml = ddot_(&i__2, &a[k1 + fla_min(i__3,*m) * a_dim1], lda, & c__[fla_min(i__4,*m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__2, &a[k1 + fla_min(i__3, *m) * a_dim1], lda,
+                                 &c__[fla_min(i__4, *m) + l1 * c_dim1], &c__1);
                     i__2 = l1 - 1;
                     sumr = ddot_(&i__2, &c__[k1 + c_dim1], ldc, &b[l1 * b_dim1 + 1], &c__1);
                     vec[0] = c__[k1 + l1 * c_dim1] - (suml + sgn * sumr);
                     scaloc = 1.;
                     a11 = a[k1 + k1 * a_dim1] + sgn * b[l1 + l1 * b_dim1];
                     da11 = f2c_dabs(a11);
-                    if (da11 <= smin)
+                    if(da11 <= smin)
                     {
                         a11 = smin;
                         da11 = smin;
                         *info = 1;
                     }
                     db = f2c_dabs(vec[0]);
-                    if (da11 < 1. && db > 1.)
+                    if(da11 < 1. && db > 1.)
                     {
-                        if (db > bignum * da11)
+                        if(db > bignum * da11)
                         {
                             scaloc = 1. / db;
                         }
                     }
                     x[0] = vec[0] * scaloc / a11;
-                    if (scaloc != 1.)
+                    if(scaloc != 1.)
                     {
                         i__2 = *n;
-                        for (j = 1;
-                                j <= i__2;
-                                ++j)
+                        for(j = 1; j <= i__2; ++j)
                         {
                             dscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
                             /* L10: */
@@ -403,14 +422,15 @@ void dtrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                     }
                     c__[k1 + l1 * c_dim1] = x[0];
                 }
-                else if (l1 == l2 && k1 != k2)
+                else if(l1 == l2 && k1 != k2)
                 {
                     i__2 = *m - k2;
                     /* Computing MIN */
                     i__3 = k2 + 1;
                     /* Computing MIN */
                     i__4 = k2 + 1;
-                    suml = ddot_(&i__2, &a[k1 + fla_min(i__3,*m) * a_dim1], lda, & c__[fla_min(i__4,*m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__2, &a[k1 + fla_min(i__3, *m) * a_dim1], lda,
+                                 &c__[fla_min(i__4, *m) + l1 * c_dim1], &c__1);
                     i__2 = l1 - 1;
                     sumr = ddot_(&i__2, &c__[k1 + c_dim1], ldc, &b[l1 * b_dim1 + 1], &c__1);
                     vec[0] = c__[k1 + l1 * c_dim1] - (suml + sgn * sumr);
@@ -419,22 +439,23 @@ void dtrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                     i__3 = k2 + 1;
                     /* Computing MIN */
                     i__4 = k2 + 1;
-                    suml = ddot_(&i__2, &a[k2 + fla_min(i__3,*m) * a_dim1], lda, & c__[fla_min(i__4,*m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__2, &a[k2 + fla_min(i__3, *m) * a_dim1], lda,
+                                 &c__[fla_min(i__4, *m) + l1 * c_dim1], &c__1);
                     i__2 = l1 - 1;
                     sumr = ddot_(&i__2, &c__[k2 + c_dim1], ldc, &b[l1 * b_dim1 + 1], &c__1);
                     vec[1] = c__[k2 + l1 * c_dim1] - (suml + sgn * sumr);
                     d__1 = -sgn * b[l1 + l1 * b_dim1];
-                    dlaln2_(&c_false, &c__2, &c__1, &smin, &c_b26, &a[k1 + k1 * a_dim1], lda, &c_b26, &c_b26, vec, &c__2, &d__1, &c_b30, x, &c__2, &scaloc, &xnorm, &ierr);
-                    if (ierr != 0)
+                    dlaln2_(&c_false, &c__2, &c__1, &smin, &c_b26, &a[k1 + k1 * a_dim1], lda,
+                            &c_b26, &c_b26, vec, &c__2, &d__1, &c_b30, x, &c__2, &scaloc, &xnorm,
+                            &ierr);
+                    if(ierr != 0)
                     {
                         *info = 1;
                     }
-                    if (scaloc != 1.)
+                    if(scaloc != 1.)
                     {
                         i__2 = *n;
-                        for (j = 1;
-                                j <= i__2;
-                                ++j)
+                        for(j = 1; j <= i__2; ++j)
                         {
                             dscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
                             /* L20: */
@@ -444,14 +465,15 @@ void dtrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                     c__[k1 + l1 * c_dim1] = x[0];
                     c__[k2 + l1 * c_dim1] = x[1];
                 }
-                else if (l1 != l2 && k1 == k2)
+                else if(l1 != l2 && k1 == k2)
                 {
                     i__2 = *m - k1;
                     /* Computing MIN */
                     i__3 = k1 + 1;
                     /* Computing MIN */
                     i__4 = k1 + 1;
-                    suml = ddot_(&i__2, &a[k1 + fla_min(i__3,*m) * a_dim1], lda, & c__[fla_min(i__4,*m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__2, &a[k1 + fla_min(i__3, *m) * a_dim1], lda,
+                                 &c__[fla_min(i__4, *m) + l1 * c_dim1], &c__1);
                     i__2 = l1 - 1;
                     sumr = ddot_(&i__2, &c__[k1 + c_dim1], ldc, &b[l1 * b_dim1 + 1], &c__1);
                     vec[0] = sgn * (c__[k1 + l1 * c_dim1] - (suml + sgn * sumr));
@@ -460,22 +482,22 @@ void dtrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                     i__3 = k1 + 1;
                     /* Computing MIN */
                     i__4 = k1 + 1;
-                    suml = ddot_(&i__2, &a[k1 + fla_min(i__3,*m) * a_dim1], lda, & c__[fla_min(i__4,*m) + l2 * c_dim1], &c__1);
+                    suml = ddot_(&i__2, &a[k1 + fla_min(i__3, *m) * a_dim1], lda,
+                                 &c__[fla_min(i__4, *m) + l2 * c_dim1], &c__1);
                     i__2 = l1 - 1;
                     sumr = ddot_(&i__2, &c__[k1 + c_dim1], ldc, &b[l2 * b_dim1 + 1], &c__1);
                     vec[1] = sgn * (c__[k1 + l2 * c_dim1] - (suml + sgn * sumr));
                     d__1 = -sgn * a[k1 + k1 * a_dim1];
-                    dlaln2_(&c_true, &c__2, &c__1, &smin, &c_b26, &b[l1 + l1 * b_dim1], ldb, &c_b26, &c_b26, vec, &c__2, &d__1, &c_b30, x, &c__2, &scaloc, &xnorm, &ierr);
-                    if (ierr != 0)
+                    dlaln2_(&c_true, &c__2, &c__1, &smin, &c_b26, &b[l1 + l1 * b_dim1], ldb, &c_b26,
+                            &c_b26, vec, &c__2, &d__1, &c_b30, x, &c__2, &scaloc, &xnorm, &ierr);
+                    if(ierr != 0)
                     {
                         *info = 1;
                     }
-                    if (scaloc != 1.)
+                    if(scaloc != 1.)
                     {
                         i__2 = *n;
-                        for (j = 1;
-                                j <= i__2;
-                                ++j)
+                        for(j = 1; j <= i__2; ++j)
                         {
                             dscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
                             /* L30: */
@@ -485,14 +507,15 @@ void dtrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                     c__[k1 + l1 * c_dim1] = x[0];
                     c__[k1 + l2 * c_dim1] = x[1];
                 }
-                else if (l1 != l2 && k1 != k2)
+                else if(l1 != l2 && k1 != k2)
                 {
                     i__2 = *m - k2;
                     /* Computing MIN */
                     i__3 = k2 + 1;
                     /* Computing MIN */
                     i__4 = k2 + 1;
-                    suml = ddot_(&i__2, &a[k1 + fla_min(i__3,*m) * a_dim1], lda, & c__[fla_min(i__4,*m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__2, &a[k1 + fla_min(i__3, *m) * a_dim1], lda,
+                                 &c__[fla_min(i__4, *m) + l1 * c_dim1], &c__1);
                     i__2 = l1 - 1;
                     sumr = ddot_(&i__2, &c__[k1 + c_dim1], ldc, &b[l1 * b_dim1 + 1], &c__1);
                     vec[0] = c__[k1 + l1 * c_dim1] - (suml + sgn * sumr);
@@ -501,7 +524,8 @@ void dtrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                     i__3 = k2 + 1;
                     /* Computing MIN */
                     i__4 = k2 + 1;
-                    suml = ddot_(&i__2, &a[k1 + fla_min(i__3,*m) * a_dim1], lda, & c__[fla_min(i__4,*m) + l2 * c_dim1], &c__1);
+                    suml = ddot_(&i__2, &a[k1 + fla_min(i__3, *m) * a_dim1], lda,
+                                 &c__[fla_min(i__4, *m) + l2 * c_dim1], &c__1);
                     i__2 = l1 - 1;
                     sumr = ddot_(&i__2, &c__[k1 + c_dim1], ldc, &b[l2 * b_dim1 + 1], &c__1);
                     vec[2] = c__[k1 + l2 * c_dim1] - (suml + sgn * sumr);
@@ -510,7 +534,8 @@ void dtrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                     i__3 = k2 + 1;
                     /* Computing MIN */
                     i__4 = k2 + 1;
-                    suml = ddot_(&i__2, &a[k2 + fla_min(i__3,*m) * a_dim1], lda, & c__[fla_min(i__4,*m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__2, &a[k2 + fla_min(i__3, *m) * a_dim1], lda,
+                                 &c__[fla_min(i__4, *m) + l1 * c_dim1], &c__1);
                     i__2 = l1 - 1;
                     sumr = ddot_(&i__2, &c__[k2 + c_dim1], ldc, &b[l1 * b_dim1 + 1], &c__1);
                     vec[1] = c__[k2 + l1 * c_dim1] - (suml + sgn * sumr);
@@ -519,21 +544,22 @@ void dtrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                     i__3 = k2 + 1;
                     /* Computing MIN */
                     i__4 = k2 + 1;
-                    suml = ddot_(&i__2, &a[k2 + fla_min(i__3,*m) * a_dim1], lda, & c__[fla_min(i__4,*m) + l2 * c_dim1], &c__1);
+                    suml = ddot_(&i__2, &a[k2 + fla_min(i__3, *m) * a_dim1], lda,
+                                 &c__[fla_min(i__4, *m) + l2 * c_dim1], &c__1);
                     i__2 = l1 - 1;
                     sumr = ddot_(&i__2, &c__[k2 + c_dim1], ldc, &b[l2 * b_dim1 + 1], &c__1);
                     vec[3] = c__[k2 + l2 * c_dim1] - (suml + sgn * sumr);
-                    dlasy2_(&c_false, &c_false, isgn, &c__2, &c__2, &a[k1 + k1 * a_dim1], lda, &b[l1 + l1 * b_dim1], ldb, vec, &c__2, &scaloc, x, &c__2, &xnorm, &ierr);
-                    if (ierr != 0)
+                    dlasy2_(&c_false, &c_false, isgn, &c__2, &c__2, &a[k1 + k1 * a_dim1], lda,
+                            &b[l1 + l1 * b_dim1], ldb, vec, &c__2, &scaloc, x, &c__2, &xnorm,
+                            &ierr);
+                    if(ierr != 0)
                     {
                         *info = 1;
                     }
-                    if (scaloc != 1.)
+                    if(scaloc != 1.)
                     {
                         i__2 = *n;
-                        for (j = 1;
-                                j <= i__2;
-                                ++j)
+                        for(j = 1; j <= i__2; ++j)
                         {
                             dscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
                             /* L40: */
@@ -545,14 +571,12 @@ void dtrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                     c__[k2 + l1 * c_dim1] = x[1];
                     c__[k2 + l2 * c_dim1] = x[3];
                 }
-L50:
-                ;
+            L50:;
             }
-L60:
-            ;
+        L60:;
         }
     }
-    else if (! notrna && notrnb)
+    else if(!notrna && notrnb)
     {
         /* Solve A**T *X + ISGN*X*B = scale*C. */
         /* The (K,L)th block of X is determined starting from */
@@ -566,22 +590,20 @@ L60:
         /* L1 (L2): column index of the first (last) row of X(K,L) */
         lnext = 1;
         i__1 = *n;
-        for (l = 1;
-                l <= i__1;
-                ++l)
+        for(l = 1; l <= i__1; ++l)
         {
-            if (l < lnext)
+            if(l < lnext)
             {
                 goto L120;
             }
-            if (l == *n)
+            if(l == *n)
             {
                 l1 = l;
                 l2 = l;
             }
             else
             {
-                if (b[l + 1 + l * b_dim1] != 0.)
+                if(b[l + 1 + l * b_dim1] != 0.)
                 {
                     l1 = l;
                     l2 = l + 1;
@@ -598,22 +620,20 @@ L60:
             /* K1 (K2): row index of the first (last) row of X(K,L) */
             knext = 1;
             i__2 = *m;
-            for (k = 1;
-                    k <= i__2;
-                    ++k)
+            for(k = 1; k <= i__2; ++k)
             {
-                if (k < knext)
+                if(k < knext)
                 {
                     goto L110;
                 }
-                if (k == *m)
+                if(k == *m)
                 {
                     k1 = k;
                     k2 = k;
                 }
                 else
                 {
-                    if (a[k + 1 + k * a_dim1] != 0.)
+                    if(a[k + 1 + k * a_dim1] != 0.)
                     {
                         k1 = k;
                         k2 = k + 1;
@@ -626,7 +646,7 @@ L60:
                         knext = k + 1;
                     }
                 }
-                if (l1 == l2 && k1 == k2)
+                if(l1 == l2 && k1 == k2)
                 {
                     i__3 = k1 - 1;
                     suml = ddot_(&i__3, &a[k1 * a_dim1 + 1], &c__1, &c__[l1 * c_dim1 + 1], &c__1);
@@ -636,27 +656,25 @@ L60:
                     scaloc = 1.;
                     a11 = a[k1 + k1 * a_dim1] + sgn * b[l1 + l1 * b_dim1];
                     da11 = f2c_dabs(a11);
-                    if (da11 <= smin)
+                    if(da11 <= smin)
                     {
                         a11 = smin;
                         da11 = smin;
                         *info = 1;
                     }
                     db = f2c_dabs(vec[0]);
-                    if (da11 < 1. && db > 1.)
+                    if(da11 < 1. && db > 1.)
                     {
-                        if (db > bignum * da11)
+                        if(db > bignum * da11)
                         {
                             scaloc = 1. / db;
                         }
                     }
                     x[0] = vec[0] * scaloc / a11;
-                    if (scaloc != 1.)
+                    if(scaloc != 1.)
                     {
                         i__3 = *n;
-                        for (j = 1;
-                                j <= i__3;
-                                ++j)
+                        for(j = 1; j <= i__3; ++j)
                         {
                             dscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
                             /* L70: */
@@ -665,7 +683,7 @@ L60:
                     }
                     c__[k1 + l1 * c_dim1] = x[0];
                 }
-                else if (l1 == l2 && k1 != k2)
+                else if(l1 == l2 && k1 != k2)
                 {
                     i__3 = k1 - 1;
                     suml = ddot_(&i__3, &a[k1 * a_dim1 + 1], &c__1, &c__[l1 * c_dim1 + 1], &c__1);
@@ -678,17 +696,16 @@ L60:
                     sumr = ddot_(&i__3, &c__[k2 + c_dim1], ldc, &b[l1 * b_dim1 + 1], &c__1);
                     vec[1] = c__[k2 + l1 * c_dim1] - (suml + sgn * sumr);
                     d__1 = -sgn * b[l1 + l1 * b_dim1];
-                    dlaln2_(&c_true, &c__2, &c__1, &smin, &c_b26, &a[k1 + k1 * a_dim1], lda, &c_b26, &c_b26, vec, &c__2, &d__1, &c_b30, x, &c__2, &scaloc, &xnorm, &ierr);
-                    if (ierr != 0)
+                    dlaln2_(&c_true, &c__2, &c__1, &smin, &c_b26, &a[k1 + k1 * a_dim1], lda, &c_b26,
+                            &c_b26, vec, &c__2, &d__1, &c_b30, x, &c__2, &scaloc, &xnorm, &ierr);
+                    if(ierr != 0)
                     {
                         *info = 1;
                     }
-                    if (scaloc != 1.)
+                    if(scaloc != 1.)
                     {
                         i__3 = *n;
-                        for (j = 1;
-                                j <= i__3;
-                                ++j)
+                        for(j = 1; j <= i__3; ++j)
                         {
                             dscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
                             /* L80: */
@@ -698,7 +715,7 @@ L60:
                     c__[k1 + l1 * c_dim1] = x[0];
                     c__[k2 + l1 * c_dim1] = x[1];
                 }
-                else if (l1 != l2 && k1 == k2)
+                else if(l1 != l2 && k1 == k2)
                 {
                     i__3 = k1 - 1;
                     suml = ddot_(&i__3, &a[k1 * a_dim1 + 1], &c__1, &c__[l1 * c_dim1 + 1], &c__1);
@@ -711,17 +728,16 @@ L60:
                     sumr = ddot_(&i__3, &c__[k1 + c_dim1], ldc, &b[l2 * b_dim1 + 1], &c__1);
                     vec[1] = sgn * (c__[k1 + l2 * c_dim1] - (suml + sgn * sumr));
                     d__1 = -sgn * a[k1 + k1 * a_dim1];
-                    dlaln2_(&c_true, &c__2, &c__1, &smin, &c_b26, &b[l1 + l1 * b_dim1], ldb, &c_b26, &c_b26, vec, &c__2, &d__1, &c_b30, x, &c__2, &scaloc, &xnorm, &ierr);
-                    if (ierr != 0)
+                    dlaln2_(&c_true, &c__2, &c__1, &smin, &c_b26, &b[l1 + l1 * b_dim1], ldb, &c_b26,
+                            &c_b26, vec, &c__2, &d__1, &c_b30, x, &c__2, &scaloc, &xnorm, &ierr);
+                    if(ierr != 0)
                     {
                         *info = 1;
                     }
-                    if (scaloc != 1.)
+                    if(scaloc != 1.)
                     {
                         i__3 = *n;
-                        for (j = 1;
-                                j <= i__3;
-                                ++j)
+                        for(j = 1; j <= i__3; ++j)
                         {
                             dscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
                             /* L90: */
@@ -731,7 +747,7 @@ L60:
                     c__[k1 + l1 * c_dim1] = x[0];
                     c__[k1 + l2 * c_dim1] = x[1];
                 }
-                else if (l1 != l2 && k1 != k2)
+                else if(l1 != l2 && k1 != k2)
                 {
                     i__3 = k1 - 1;
                     suml = ddot_(&i__3, &a[k1 * a_dim1 + 1], &c__1, &c__[l1 * c_dim1 + 1], &c__1);
@@ -753,17 +769,17 @@ L60:
                     i__3 = l1 - 1;
                     sumr = ddot_(&i__3, &c__[k2 + c_dim1], ldc, &b[l2 * b_dim1 + 1], &c__1);
                     vec[3] = c__[k2 + l2 * c_dim1] - (suml + sgn * sumr);
-                    dlasy2_(&c_true, &c_false, isgn, &c__2, &c__2, &a[k1 + k1 * a_dim1], lda, &b[l1 + l1 * b_dim1], ldb, vec, & c__2, &scaloc, x, &c__2, &xnorm, &ierr);
-                    if (ierr != 0)
+                    dlasy2_(&c_true, &c_false, isgn, &c__2, &c__2, &a[k1 + k1 * a_dim1], lda,
+                            &b[l1 + l1 * b_dim1], ldb, vec, &c__2, &scaloc, x, &c__2, &xnorm,
+                            &ierr);
+                    if(ierr != 0)
                     {
                         *info = 1;
                     }
-                    if (scaloc != 1.)
+                    if(scaloc != 1.)
                     {
                         i__3 = *n;
-                        for (j = 1;
-                                j <= i__3;
-                                ++j)
+                        for(j = 1; j <= i__3; ++j)
                         {
                             dscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
                             /* L100: */
@@ -775,14 +791,12 @@ L60:
                     c__[k2 + l1 * c_dim1] = x[1];
                     c__[k2 + l2 * c_dim1] = x[3];
                 }
-L110:
-                ;
+            L110:;
             }
-L120:
-            ;
+        L120:;
         }
     }
-    else if (! notrna && ! notrnb)
+    else if(!notrna && !notrnb)
     {
         /* Solve A**T*X + ISGN*X*B**T = scale*C. */
         /* The (K,L)th block of X is determined starting from */
@@ -795,22 +809,20 @@ L120:
         /* Start column loop (index = L) */
         /* L1 (L2): column index of the first (last) row of X(K,L) */
         lnext = *n;
-        for (l = *n;
-                l >= 1;
-                --l)
+        for(l = *n; l >= 1; --l)
         {
-            if (l > lnext)
+            if(l > lnext)
             {
                 goto L180;
             }
-            if (l == 1)
+            if(l == 1)
             {
                 l1 = l;
                 l2 = l;
             }
             else
             {
-                if (b[l + (l - 1) * b_dim1] != 0.)
+                if(b[l + (l - 1) * b_dim1] != 0.)
                 {
                     l1 = l - 1;
                     l2 = l;
@@ -827,22 +839,20 @@ L120:
             /* K1 (K2): row index of the first (last) row of X(K,L) */
             knext = 1;
             i__1 = *m;
-            for (k = 1;
-                    k <= i__1;
-                    ++k)
+            for(k = 1; k <= i__1; ++k)
             {
-                if (k < knext)
+                if(k < knext)
                 {
                     goto L170;
                 }
-                if (k == *m)
+                if(k == *m)
                 {
                     k1 = k;
                     k2 = k;
                 }
                 else
                 {
-                    if (a[k + 1 + k * a_dim1] != 0.)
+                    if(a[k + 1 + k * a_dim1] != 0.)
                     {
                         k1 = k;
                         k2 = k + 1;
@@ -855,7 +865,7 @@ L120:
                         knext = k + 1;
                     }
                 }
-                if (l1 == l2 && k1 == k2)
+                if(l1 == l2 && k1 == k2)
                 {
                     i__2 = k1 - 1;
                     suml = ddot_(&i__2, &a[k1 * a_dim1 + 1], &c__1, &c__[l1 * c_dim1 + 1], &c__1);
@@ -864,32 +874,31 @@ L120:
                     i__3 = l1 + 1;
                     /* Computing MIN */
                     i__4 = l1 + 1;
-                    sumr = ddot_(&i__2, &c__[k1 + fla_min(i__3,*n) * c_dim1], ldc, &b[l1 + fla_min(i__4,*n) * b_dim1], ldb);
+                    sumr = ddot_(&i__2, &c__[k1 + fla_min(i__3, *n) * c_dim1], ldc,
+                                 &b[l1 + fla_min(i__4, *n) * b_dim1], ldb);
                     vec[0] = c__[k1 + l1 * c_dim1] - (suml + sgn * sumr);
                     scaloc = 1.;
                     a11 = a[k1 + k1 * a_dim1] + sgn * b[l1 + l1 * b_dim1];
                     da11 = f2c_dabs(a11);
-                    if (da11 <= smin)
+                    if(da11 <= smin)
                     {
                         a11 = smin;
                         da11 = smin;
                         *info = 1;
                     }
                     db = f2c_dabs(vec[0]);
-                    if (da11 < 1. && db > 1.)
+                    if(da11 < 1. && db > 1.)
                     {
-                        if (db > bignum * da11)
+                        if(db > bignum * da11)
                         {
                             scaloc = 1. / db;
                         }
                     }
                     x[0] = vec[0] * scaloc / a11;
-                    if (scaloc != 1.)
+                    if(scaloc != 1.)
                     {
                         i__2 = *n;
-                        for (j = 1;
-                                j <= i__2;
-                                ++j)
+                        for(j = 1; j <= i__2; ++j)
                         {
                             dscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
                             /* L130: */
@@ -898,7 +907,7 @@ L120:
                     }
                     c__[k1 + l1 * c_dim1] = x[0];
                 }
-                else if (l1 == l2 && k1 != k2)
+                else if(l1 == l2 && k1 != k2)
                 {
                     i__2 = k1 - 1;
                     suml = ddot_(&i__2, &a[k1 * a_dim1 + 1], &c__1, &c__[l1 * c_dim1 + 1], &c__1);
@@ -907,7 +916,8 @@ L120:
                     i__3 = l2 + 1;
                     /* Computing MIN */
                     i__4 = l2 + 1;
-                    sumr = ddot_(&i__2, &c__[k1 + fla_min(i__3,*n) * c_dim1], ldc, &b[l1 + fla_min(i__4,*n) * b_dim1], ldb);
+                    sumr = ddot_(&i__2, &c__[k1 + fla_min(i__3, *n) * c_dim1], ldc,
+                                 &b[l1 + fla_min(i__4, *n) * b_dim1], ldb);
                     vec[0] = c__[k1 + l1 * c_dim1] - (suml + sgn * sumr);
                     i__2 = k1 - 1;
                     suml = ddot_(&i__2, &a[k2 * a_dim1 + 1], &c__1, &c__[l1 * c_dim1 + 1], &c__1);
@@ -916,20 +926,20 @@ L120:
                     i__3 = l2 + 1;
                     /* Computing MIN */
                     i__4 = l2 + 1;
-                    sumr = ddot_(&i__2, &c__[k2 + fla_min(i__3,*n) * c_dim1], ldc, &b[l1 + fla_min(i__4,*n) * b_dim1], ldb);
+                    sumr = ddot_(&i__2, &c__[k2 + fla_min(i__3, *n) * c_dim1], ldc,
+                                 &b[l1 + fla_min(i__4, *n) * b_dim1], ldb);
                     vec[1] = c__[k2 + l1 * c_dim1] - (suml + sgn * sumr);
                     d__1 = -sgn * b[l1 + l1 * b_dim1];
-                    dlaln2_(&c_true, &c__2, &c__1, &smin, &c_b26, &a[k1 + k1 * a_dim1], lda, &c_b26, &c_b26, vec, &c__2, &d__1, &c_b30, x, &c__2, &scaloc, &xnorm, &ierr);
-                    if (ierr != 0)
+                    dlaln2_(&c_true, &c__2, &c__1, &smin, &c_b26, &a[k1 + k1 * a_dim1], lda, &c_b26,
+                            &c_b26, vec, &c__2, &d__1, &c_b30, x, &c__2, &scaloc, &xnorm, &ierr);
+                    if(ierr != 0)
                     {
                         *info = 1;
                     }
-                    if (scaloc != 1.)
+                    if(scaloc != 1.)
                     {
                         i__2 = *n;
-                        for (j = 1;
-                                j <= i__2;
-                                ++j)
+                        for(j = 1; j <= i__2; ++j)
                         {
                             dscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
                             /* L140: */
@@ -939,7 +949,7 @@ L120:
                     c__[k1 + l1 * c_dim1] = x[0];
                     c__[k2 + l1 * c_dim1] = x[1];
                 }
-                else if (l1 != l2 && k1 == k2)
+                else if(l1 != l2 && k1 == k2)
                 {
                     i__2 = k1 - 1;
                     suml = ddot_(&i__2, &a[k1 * a_dim1 + 1], &c__1, &c__[l1 * c_dim1 + 1], &c__1);
@@ -948,7 +958,8 @@ L120:
                     i__3 = l2 + 1;
                     /* Computing MIN */
                     i__4 = l2 + 1;
-                    sumr = ddot_(&i__2, &c__[k1 + fla_min(i__3,*n) * c_dim1], ldc, &b[l1 + fla_min(i__4,*n) * b_dim1], ldb);
+                    sumr = ddot_(&i__2, &c__[k1 + fla_min(i__3, *n) * c_dim1], ldc,
+                                 &b[l1 + fla_min(i__4, *n) * b_dim1], ldb);
                     vec[0] = sgn * (c__[k1 + l1 * c_dim1] - (suml + sgn * sumr));
                     i__2 = k1 - 1;
                     suml = ddot_(&i__2, &a[k1 * a_dim1 + 1], &c__1, &c__[l2 * c_dim1 + 1], &c__1);
@@ -957,20 +968,21 @@ L120:
                     i__3 = l2 + 1;
                     /* Computing MIN */
                     i__4 = l2 + 1;
-                    sumr = ddot_(&i__2, &c__[k1 + fla_min(i__3,*n) * c_dim1], ldc, &b[l2 + fla_min(i__4,*n) * b_dim1], ldb);
+                    sumr = ddot_(&i__2, &c__[k1 + fla_min(i__3, *n) * c_dim1], ldc,
+                                 &b[l2 + fla_min(i__4, *n) * b_dim1], ldb);
                     vec[1] = sgn * (c__[k1 + l2 * c_dim1] - (suml + sgn * sumr));
                     d__1 = -sgn * a[k1 + k1 * a_dim1];
-                    dlaln2_(&c_false, &c__2, &c__1, &smin, &c_b26, &b[l1 + l1 * b_dim1], ldb, &c_b26, &c_b26, vec, &c__2, &d__1, &c_b30, x, &c__2, &scaloc, &xnorm, &ierr);
-                    if (ierr != 0)
+                    dlaln2_(&c_false, &c__2, &c__1, &smin, &c_b26, &b[l1 + l1 * b_dim1], ldb,
+                            &c_b26, &c_b26, vec, &c__2, &d__1, &c_b30, x, &c__2, &scaloc, &xnorm,
+                            &ierr);
+                    if(ierr != 0)
                     {
                         *info = 1;
                     }
-                    if (scaloc != 1.)
+                    if(scaloc != 1.)
                     {
                         i__2 = *n;
-                        for (j = 1;
-                                j <= i__2;
-                                ++j)
+                        for(j = 1; j <= i__2; ++j)
                         {
                             dscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
                             /* L150: */
@@ -980,7 +992,7 @@ L120:
                     c__[k1 + l1 * c_dim1] = x[0];
                     c__[k1 + l2 * c_dim1] = x[1];
                 }
-                else if (l1 != l2 && k1 != k2)
+                else if(l1 != l2 && k1 != k2)
                 {
                     i__2 = k1 - 1;
                     suml = ddot_(&i__2, &a[k1 * a_dim1 + 1], &c__1, &c__[l1 * c_dim1 + 1], &c__1);
@@ -989,7 +1001,8 @@ L120:
                     i__3 = l2 + 1;
                     /* Computing MIN */
                     i__4 = l2 + 1;
-                    sumr = ddot_(&i__2, &c__[k1 + fla_min(i__3,*n) * c_dim1], ldc, &b[l1 + fla_min(i__4,*n) * b_dim1], ldb);
+                    sumr = ddot_(&i__2, &c__[k1 + fla_min(i__3, *n) * c_dim1], ldc,
+                                 &b[l1 + fla_min(i__4, *n) * b_dim1], ldb);
                     vec[0] = c__[k1 + l1 * c_dim1] - (suml + sgn * sumr);
                     i__2 = k1 - 1;
                     suml = ddot_(&i__2, &a[k1 * a_dim1 + 1], &c__1, &c__[l2 * c_dim1 + 1], &c__1);
@@ -998,7 +1011,8 @@ L120:
                     i__3 = l2 + 1;
                     /* Computing MIN */
                     i__4 = l2 + 1;
-                    sumr = ddot_(&i__2, &c__[k1 + fla_min(i__3,*n) * c_dim1], ldc, &b[l2 + fla_min(i__4,*n) * b_dim1], ldb);
+                    sumr = ddot_(&i__2, &c__[k1 + fla_min(i__3, *n) * c_dim1], ldc,
+                                 &b[l2 + fla_min(i__4, *n) * b_dim1], ldb);
                     vec[2] = c__[k1 + l2 * c_dim1] - (suml + sgn * sumr);
                     i__2 = k1 - 1;
                     suml = ddot_(&i__2, &a[k2 * a_dim1 + 1], &c__1, &c__[l1 * c_dim1 + 1], &c__1);
@@ -1007,7 +1021,8 @@ L120:
                     i__3 = l2 + 1;
                     /* Computing MIN */
                     i__4 = l2 + 1;
-                    sumr = ddot_(&i__2, &c__[k2 + fla_min(i__3,*n) * c_dim1], ldc, &b[l1 + fla_min(i__4,*n) * b_dim1], ldb);
+                    sumr = ddot_(&i__2, &c__[k2 + fla_min(i__3, *n) * c_dim1], ldc,
+                                 &b[l1 + fla_min(i__4, *n) * b_dim1], ldb);
                     vec[1] = c__[k2 + l1 * c_dim1] - (suml + sgn * sumr);
                     i__2 = k1 - 1;
                     suml = ddot_(&i__2, &a[k2 * a_dim1 + 1], &c__1, &c__[l2 * c_dim1 + 1], &c__1);
@@ -1016,19 +1031,20 @@ L120:
                     i__3 = l2 + 1;
                     /* Computing MIN */
                     i__4 = l2 + 1;
-                    sumr = ddot_(&i__2, &c__[k2 + fla_min(i__3,*n) * c_dim1], ldc, &b[l2 + fla_min(i__4,*n) * b_dim1], ldb);
+                    sumr = ddot_(&i__2, &c__[k2 + fla_min(i__3, *n) * c_dim1], ldc,
+                                 &b[l2 + fla_min(i__4, *n) * b_dim1], ldb);
                     vec[3] = c__[k2 + l2 * c_dim1] - (suml + sgn * sumr);
-                    dlasy2_(&c_true, &c_true, isgn, &c__2, &c__2, &a[k1 + k1 * a_dim1], lda, &b[l1 + l1 * b_dim1], ldb, vec, & c__2, &scaloc, x, &c__2, &xnorm, &ierr);
-                    if (ierr != 0)
+                    dlasy2_(&c_true, &c_true, isgn, &c__2, &c__2, &a[k1 + k1 * a_dim1], lda,
+                            &b[l1 + l1 * b_dim1], ldb, vec, &c__2, &scaloc, x, &c__2, &xnorm,
+                            &ierr);
+                    if(ierr != 0)
                     {
                         *info = 1;
                     }
-                    if (scaloc != 1.)
+                    if(scaloc != 1.)
                     {
                         i__2 = *n;
-                        for (j = 1;
-                                j <= i__2;
-                                ++j)
+                        for(j = 1; j <= i__2; ++j)
                         {
                             dscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
                             /* L160: */
@@ -1040,14 +1056,12 @@ L120:
                     c__[k2 + l1 * c_dim1] = x[1];
                     c__[k2 + l2 * c_dim1] = x[3];
                 }
-L170:
-                ;
+            L170:;
             }
-L180:
-            ;
+        L180:;
         }
     }
-    else if (notrna && ! notrnb)
+    else if(notrna && !notrnb)
     {
         /* Solve A*X + ISGN*X*B**T = scale*C. */
         /* The (K,L)th block of X is determined starting from */
@@ -1060,22 +1074,20 @@ L180:
         /* Start column loop (index = L) */
         /* L1 (L2): column index of the first (last) row of X(K,L) */
         lnext = *n;
-        for (l = *n;
-                l >= 1;
-                --l)
+        for(l = *n; l >= 1; --l)
         {
-            if (l > lnext)
+            if(l > lnext)
             {
                 goto L240;
             }
-            if (l == 1)
+            if(l == 1)
             {
                 l1 = l;
                 l2 = l;
             }
             else
             {
-                if (b[l + (l - 1) * b_dim1] != 0.)
+                if(b[l + (l - 1) * b_dim1] != 0.)
                 {
                     l1 = l - 1;
                     l2 = l;
@@ -1091,22 +1103,20 @@ L180:
             /* Start row loop (index = K) */
             /* K1 (K2): row index of the first (last) row of X(K,L) */
             knext = *m;
-            for (k = *m;
-                    k >= 1;
-                    --k)
+            for(k = *m; k >= 1; --k)
             {
-                if (k > knext)
+                if(k > knext)
                 {
                     goto L230;
                 }
-                if (k == 1)
+                if(k == 1)
                 {
                     k1 = k;
                     k2 = k;
                 }
                 else
                 {
-                    if (a[k + (k - 1) * a_dim1] != 0.)
+                    if(a[k + (k - 1) * a_dim1] != 0.)
                     {
                         k1 = k - 1;
                         k2 = k;
@@ -1119,45 +1129,45 @@ L180:
                         knext = k - 1;
                     }
                 }
-                if (l1 == l2 && k1 == k2)
+                if(l1 == l2 && k1 == k2)
                 {
                     i__1 = *m - k1;
                     /* Computing MIN */
                     i__2 = k1 + 1;
                     /* Computing MIN */
                     i__3 = k1 + 1;
-                    suml = ddot_(&i__1, &a[k1 + fla_min(i__2,*m) * a_dim1], lda, & c__[fla_min(i__3,*m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__1, &a[k1 + fla_min(i__2, *m) * a_dim1], lda,
+                                 &c__[fla_min(i__3, *m) + l1 * c_dim1], &c__1);
                     i__1 = *n - l1;
                     /* Computing MIN */
                     i__2 = l1 + 1;
                     /* Computing MIN */
                     i__3 = l1 + 1;
-                    sumr = ddot_(&i__1, &c__[k1 + fla_min(i__2,*n) * c_dim1], ldc, &b[l1 + fla_min(i__3,*n) * b_dim1], ldb);
+                    sumr = ddot_(&i__1, &c__[k1 + fla_min(i__2, *n) * c_dim1], ldc,
+                                 &b[l1 + fla_min(i__3, *n) * b_dim1], ldb);
                     vec[0] = c__[k1 + l1 * c_dim1] - (suml + sgn * sumr);
                     scaloc = 1.;
                     a11 = a[k1 + k1 * a_dim1] + sgn * b[l1 + l1 * b_dim1];
                     da11 = f2c_dabs(a11);
-                    if (da11 <= smin)
+                    if(da11 <= smin)
                     {
                         a11 = smin;
                         da11 = smin;
                         *info = 1;
                     }
                     db = f2c_dabs(vec[0]);
-                    if (da11 < 1. && db > 1.)
+                    if(da11 < 1. && db > 1.)
                     {
-                        if (db > bignum * da11)
+                        if(db > bignum * da11)
                         {
                             scaloc = 1. / db;
                         }
                     }
                     x[0] = vec[0] * scaloc / a11;
-                    if (scaloc != 1.)
+                    if(scaloc != 1.)
                     {
                         i__1 = *n;
-                        for (j = 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = 1; j <= i__1; ++j)
                         {
                             dscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
                             /* L190: */
@@ -1166,46 +1176,50 @@ L180:
                     }
                     c__[k1 + l1 * c_dim1] = x[0];
                 }
-                else if (l1 == l2 && k1 != k2)
+                else if(l1 == l2 && k1 != k2)
                 {
                     i__1 = *m - k2;
                     /* Computing MIN */
                     i__2 = k2 + 1;
                     /* Computing MIN */
                     i__3 = k2 + 1;
-                    suml = ddot_(&i__1, &a[k1 + fla_min(i__2,*m) * a_dim1], lda, & c__[fla_min(i__3,*m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__1, &a[k1 + fla_min(i__2, *m) * a_dim1], lda,
+                                 &c__[fla_min(i__3, *m) + l1 * c_dim1], &c__1);
                     i__1 = *n - l2;
                     /* Computing MIN */
                     i__2 = l2 + 1;
                     /* Computing MIN */
                     i__3 = l2 + 1;
-                    sumr = ddot_(&i__1, &c__[k1 + fla_min(i__2,*n) * c_dim1], ldc, &b[l1 + fla_min(i__3,*n) * b_dim1], ldb);
+                    sumr = ddot_(&i__1, &c__[k1 + fla_min(i__2, *n) * c_dim1], ldc,
+                                 &b[l1 + fla_min(i__3, *n) * b_dim1], ldb);
                     vec[0] = c__[k1 + l1 * c_dim1] - (suml + sgn * sumr);
                     i__1 = *m - k2;
                     /* Computing MIN */
                     i__2 = k2 + 1;
                     /* Computing MIN */
                     i__3 = k2 + 1;
-                    suml = ddot_(&i__1, &a[k2 + fla_min(i__2,*m) * a_dim1], lda, & c__[fla_min(i__3,*m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__1, &a[k2 + fla_min(i__2, *m) * a_dim1], lda,
+                                 &c__[fla_min(i__3, *m) + l1 * c_dim1], &c__1);
                     i__1 = *n - l2;
                     /* Computing MIN */
                     i__2 = l2 + 1;
                     /* Computing MIN */
                     i__3 = l2 + 1;
-                    sumr = ddot_(&i__1, &c__[k2 + fla_min(i__2,*n) * c_dim1], ldc, &b[l1 + fla_min(i__3,*n) * b_dim1], ldb);
+                    sumr = ddot_(&i__1, &c__[k2 + fla_min(i__2, *n) * c_dim1], ldc,
+                                 &b[l1 + fla_min(i__3, *n) * b_dim1], ldb);
                     vec[1] = c__[k2 + l1 * c_dim1] - (suml + sgn * sumr);
                     d__1 = -sgn * b[l1 + l1 * b_dim1];
-                    dlaln2_(&c_false, &c__2, &c__1, &smin, &c_b26, &a[k1 + k1 * a_dim1], lda, &c_b26, &c_b26, vec, &c__2, &d__1, &c_b30, x, &c__2, &scaloc, &xnorm, &ierr);
-                    if (ierr != 0)
+                    dlaln2_(&c_false, &c__2, &c__1, &smin, &c_b26, &a[k1 + k1 * a_dim1], lda,
+                            &c_b26, &c_b26, vec, &c__2, &d__1, &c_b30, x, &c__2, &scaloc, &xnorm,
+                            &ierr);
+                    if(ierr != 0)
                     {
                         *info = 1;
                     }
-                    if (scaloc != 1.)
+                    if(scaloc != 1.)
                     {
                         i__1 = *n;
-                        for (j = 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = 1; j <= i__1; ++j)
                         {
                             dscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
                             /* L200: */
@@ -1215,46 +1229,50 @@ L180:
                     c__[k1 + l1 * c_dim1] = x[0];
                     c__[k2 + l1 * c_dim1] = x[1];
                 }
-                else if (l1 != l2 && k1 == k2)
+                else if(l1 != l2 && k1 == k2)
                 {
                     i__1 = *m - k1;
                     /* Computing MIN */
                     i__2 = k1 + 1;
                     /* Computing MIN */
                     i__3 = k1 + 1;
-                    suml = ddot_(&i__1, &a[k1 + fla_min(i__2,*m) * a_dim1], lda, & c__[fla_min(i__3,*m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__1, &a[k1 + fla_min(i__2, *m) * a_dim1], lda,
+                                 &c__[fla_min(i__3, *m) + l1 * c_dim1], &c__1);
                     i__1 = *n - l2;
                     /* Computing MIN */
                     i__2 = l2 + 1;
                     /* Computing MIN */
                     i__3 = l2 + 1;
-                    sumr = ddot_(&i__1, &c__[k1 + fla_min(i__2,*n) * c_dim1], ldc, &b[l1 + fla_min(i__3,*n) * b_dim1], ldb);
+                    sumr = ddot_(&i__1, &c__[k1 + fla_min(i__2, *n) * c_dim1], ldc,
+                                 &b[l1 + fla_min(i__3, *n) * b_dim1], ldb);
                     vec[0] = sgn * (c__[k1 + l1 * c_dim1] - (suml + sgn * sumr));
                     i__1 = *m - k1;
                     /* Computing MIN */
                     i__2 = k1 + 1;
                     /* Computing MIN */
                     i__3 = k1 + 1;
-                    suml = ddot_(&i__1, &a[k1 + fla_min(i__2,*m) * a_dim1], lda, & c__[fla_min(i__3,*m) + l2 * c_dim1], &c__1);
+                    suml = ddot_(&i__1, &a[k1 + fla_min(i__2, *m) * a_dim1], lda,
+                                 &c__[fla_min(i__3, *m) + l2 * c_dim1], &c__1);
                     i__1 = *n - l2;
                     /* Computing MIN */
                     i__2 = l2 + 1;
                     /* Computing MIN */
                     i__3 = l2 + 1;
-                    sumr = ddot_(&i__1, &c__[k1 + fla_min(i__2,*n) * c_dim1], ldc, &b[l2 + fla_min(i__3,*n) * b_dim1], ldb);
+                    sumr = ddot_(&i__1, &c__[k1 + fla_min(i__2, *n) * c_dim1], ldc,
+                                 &b[l2 + fla_min(i__3, *n) * b_dim1], ldb);
                     vec[1] = sgn * (c__[k1 + l2 * c_dim1] - (suml + sgn * sumr));
                     d__1 = -sgn * a[k1 + k1 * a_dim1];
-                    dlaln2_(&c_false, &c__2, &c__1, &smin, &c_b26, &b[l1 + l1 * b_dim1], ldb, &c_b26, &c_b26, vec, &c__2, &d__1, &c_b30, x, &c__2, &scaloc, &xnorm, &ierr);
-                    if (ierr != 0)
+                    dlaln2_(&c_false, &c__2, &c__1, &smin, &c_b26, &b[l1 + l1 * b_dim1], ldb,
+                            &c_b26, &c_b26, vec, &c__2, &d__1, &c_b30, x, &c__2, &scaloc, &xnorm,
+                            &ierr);
+                    if(ierr != 0)
                     {
                         *info = 1;
                     }
-                    if (scaloc != 1.)
+                    if(scaloc != 1.)
                     {
                         i__1 = *n;
-                        for (j = 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = 1; j <= i__1; ++j)
                         {
                             dscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
                             /* L210: */
@@ -1264,71 +1282,79 @@ L180:
                     c__[k1 + l1 * c_dim1] = x[0];
                     c__[k1 + l2 * c_dim1] = x[1];
                 }
-                else if (l1 != l2 && k1 != k2)
+                else if(l1 != l2 && k1 != k2)
                 {
                     i__1 = *m - k2;
                     /* Computing MIN */
                     i__2 = k2 + 1;
                     /* Computing MIN */
                     i__3 = k2 + 1;
-                    suml = ddot_(&i__1, &a[k1 + fla_min(i__2,*m) * a_dim1], lda, & c__[fla_min(i__3,*m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__1, &a[k1 + fla_min(i__2, *m) * a_dim1], lda,
+                                 &c__[fla_min(i__3, *m) + l1 * c_dim1], &c__1);
                     i__1 = *n - l2;
                     /* Computing MIN */
                     i__2 = l2 + 1;
                     /* Computing MIN */
                     i__3 = l2 + 1;
-                    sumr = ddot_(&i__1, &c__[k1 + fla_min(i__2,*n) * c_dim1], ldc, &b[l1 + fla_min(i__3,*n) * b_dim1], ldb);
+                    sumr = ddot_(&i__1, &c__[k1 + fla_min(i__2, *n) * c_dim1], ldc,
+                                 &b[l1 + fla_min(i__3, *n) * b_dim1], ldb);
                     vec[0] = c__[k1 + l1 * c_dim1] - (suml + sgn * sumr);
                     i__1 = *m - k2;
                     /* Computing MIN */
                     i__2 = k2 + 1;
                     /* Computing MIN */
                     i__3 = k2 + 1;
-                    suml = ddot_(&i__1, &a[k1 + fla_min(i__2,*m) * a_dim1], lda, & c__[fla_min(i__3,*m) + l2 * c_dim1], &c__1);
+                    suml = ddot_(&i__1, &a[k1 + fla_min(i__2, *m) * a_dim1], lda,
+                                 &c__[fla_min(i__3, *m) + l2 * c_dim1], &c__1);
                     i__1 = *n - l2;
                     /* Computing MIN */
                     i__2 = l2 + 1;
                     /* Computing MIN */
                     i__3 = l2 + 1;
-                    sumr = ddot_(&i__1, &c__[k1 + fla_min(i__2,*n) * c_dim1], ldc, &b[l2 + fla_min(i__3,*n) * b_dim1], ldb);
+                    sumr = ddot_(&i__1, &c__[k1 + fla_min(i__2, *n) * c_dim1], ldc,
+                                 &b[l2 + fla_min(i__3, *n) * b_dim1], ldb);
                     vec[2] = c__[k1 + l2 * c_dim1] - (suml + sgn * sumr);
                     i__1 = *m - k2;
                     /* Computing MIN */
                     i__2 = k2 + 1;
                     /* Computing MIN */
                     i__3 = k2 + 1;
-                    suml = ddot_(&i__1, &a[k2 + fla_min(i__2,*m) * a_dim1], lda, & c__[fla_min(i__3,*m) + l1 * c_dim1], &c__1);
+                    suml = ddot_(&i__1, &a[k2 + fla_min(i__2, *m) * a_dim1], lda,
+                                 &c__[fla_min(i__3, *m) + l1 * c_dim1], &c__1);
                     i__1 = *n - l2;
                     /* Computing MIN */
                     i__2 = l2 + 1;
                     /* Computing MIN */
                     i__3 = l2 + 1;
-                    sumr = ddot_(&i__1, &c__[k2 + fla_min(i__2,*n) * c_dim1], ldc, &b[l1 + fla_min(i__3,*n) * b_dim1], ldb);
+                    sumr = ddot_(&i__1, &c__[k2 + fla_min(i__2, *n) * c_dim1], ldc,
+                                 &b[l1 + fla_min(i__3, *n) * b_dim1], ldb);
                     vec[1] = c__[k2 + l1 * c_dim1] - (suml + sgn * sumr);
                     i__1 = *m - k2;
                     /* Computing MIN */
                     i__2 = k2 + 1;
                     /* Computing MIN */
                     i__3 = k2 + 1;
-                    suml = ddot_(&i__1, &a[k2 + fla_min(i__2,*m) * a_dim1], lda, & c__[fla_min(i__3,*m) + l2 * c_dim1], &c__1);
+                    suml = ddot_(&i__1, &a[k2 + fla_min(i__2, *m) * a_dim1], lda,
+                                 &c__[fla_min(i__3, *m) + l2 * c_dim1], &c__1);
                     i__1 = *n - l2;
                     /* Computing MIN */
                     i__2 = l2 + 1;
                     /* Computing MIN */
                     i__3 = l2 + 1;
-                    sumr = ddot_(&i__1, &c__[k2 + fla_min(i__2,*n) * c_dim1], ldc, &b[l2 + fla_min(i__3,*n) * b_dim1], ldb);
+                    sumr = ddot_(&i__1, &c__[k2 + fla_min(i__2, *n) * c_dim1], ldc,
+                                 &b[l2 + fla_min(i__3, *n) * b_dim1], ldb);
                     vec[3] = c__[k2 + l2 * c_dim1] - (suml + sgn * sumr);
-                    dlasy2_(&c_false, &c_true, isgn, &c__2, &c__2, &a[k1 + k1 * a_dim1], lda, &b[l1 + l1 * b_dim1], ldb, vec, & c__2, &scaloc, x, &c__2, &xnorm, &ierr);
-                    if (ierr != 0)
+                    dlasy2_(&c_false, &c_true, isgn, &c__2, &c__2, &a[k1 + k1 * a_dim1], lda,
+                            &b[l1 + l1 * b_dim1], ldb, vec, &c__2, &scaloc, x, &c__2, &xnorm,
+                            &ierr);
+                    if(ierr != 0)
                     {
                         *info = 1;
                     }
-                    if (scaloc != 1.)
+                    if(scaloc != 1.)
                     {
                         i__1 = *n;
-                        for (j = 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = 1; j <= i__1; ++j)
                         {
                             dscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
                             /* L220: */
@@ -1340,11 +1366,9 @@ L180:
                     c__[k2 + l1 * c_dim1] = x[1];
                     c__[k2 + l2 * c_dim1] = x[3];
                 }
-L230:
-                ;
+            L230:;
             }
-L240:
-            ;
+        L240:;
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

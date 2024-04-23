@@ -1,18 +1,28 @@
-/* ../netlib/zlangt.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlangt.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b ZLANGT returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest absolute value of any element of a general tridiagonal matrix. */
+/* > \brief \b ZLANGT returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest
+ * absolute value of any element of a general tridiagonal matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLANGT + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlangt. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlangt.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlangt. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlangt.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlangt. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlangt.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -93,10 +103,10 @@ static integer c__1 = 1;
 /* > \date December 2016 */
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
-doublereal zlangt_(char *norm, integer *n, doublecomplex *dl, doublecomplex * d__, doublecomplex *du)
+doublereal zlangt_(char *norm, integer *n, doublecomplex *dl, doublecomplex *d__, doublecomplex *du)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlangt inputs: norm %c, n %" FLA_IS "",*norm, *n);
+    AOCL_DTL_SNPRINTF("zlangt inputs: norm %c, n %" FLA_IS "", *norm, *n);
 
     /* System generated locals */
     integer i__1;
@@ -110,7 +120,8 @@ doublereal zlangt_(char *norm, integer *n, doublecomplex *dl, doublecomplex * d_
     doublereal anorm;
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
-    void zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
+        void
+        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -137,41 +148,39 @@ doublereal zlangt_(char *norm, integer *n, doublecomplex *dl, doublecomplex * d_
     --dl;
     /* Function Body */
     anorm = 0.;
-    if (*n <= 0)
+    if(*n <= 0)
     {
         anorm = 0.;
     }
-    else if (lsame_(norm, "M", 1, 1))
+    else if(lsame_(norm, "M", 1, 1))
     {
         /* Find fla_max(f2c_abs(A(i,j))). */
         anorm = z_abs(&d__[*n]);
         i__1 = *n - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             d__1 = z_abs(&dl[i__]);
-            if (anorm < z_abs(&dl[i__]) || disnan_(&d__1))
+            if(anorm < z_abs(&dl[i__]) || disnan_(&d__1))
             {
                 anorm = z_abs(&dl[i__]);
             }
             d__1 = z_abs(&d__[i__]);
-            if (anorm < z_abs(&d__[i__]) || disnan_(&d__1))
+            if(anorm < z_abs(&d__[i__]) || disnan_(&d__1))
             {
                 anorm = z_abs(&d__[i__]);
             }
             d__1 = z_abs(&du[i__]);
-            if (anorm < z_abs(&du[i__]) || disnan_(&d__1))
+            if(anorm < z_abs(&du[i__]) || disnan_(&d__1))
             {
                 anorm = z_abs(&du[i__]);
             }
             /* L10: */
         }
     }
-    else if (lsame_(norm, "O", 1, 1) || *(unsigned char *) norm == '1')
+    else if(lsame_(norm, "O", 1, 1) || *(unsigned char *)norm == '1')
     {
         /* Find norm1(A). */
-        if (*n == 1)
+        if(*n == 1)
         {
             anorm = z_abs(&d__[1]);
         }
@@ -179,17 +188,15 @@ doublereal zlangt_(char *norm, integer *n, doublecomplex *dl, doublecomplex * d_
         {
             anorm = z_abs(&d__[1]) + z_abs(&dl[1]);
             temp = z_abs(&d__[*n]) + z_abs(&du[*n - 1]);
-            if (anorm < temp || disnan_(&temp))
+            if(anorm < temp || disnan_(&temp))
             {
                 anorm = temp;
             }
             i__1 = *n - 1;
-            for (i__ = 2;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 2; i__ <= i__1; ++i__)
             {
-                temp = z_abs(&d__[i__]) + z_abs(&dl[i__]) + z_abs(&du[i__ - 1] );
-                if (anorm < temp || disnan_(&temp))
+                temp = z_abs(&d__[i__]) + z_abs(&dl[i__]) + z_abs(&du[i__ - 1]);
+                if(anorm < temp || disnan_(&temp))
                 {
                     anorm = temp;
                 }
@@ -197,10 +204,10 @@ doublereal zlangt_(char *norm, integer *n, doublecomplex *dl, doublecomplex * d_
             }
         }
     }
-    else if (lsame_(norm, "I", 1, 1))
+    else if(lsame_(norm, "I", 1, 1))
     {
         /* Find normI(A). */
-        if (*n == 1)
+        if(*n == 1)
         {
             anorm = z_abs(&d__[1]);
         }
@@ -208,17 +215,15 @@ doublereal zlangt_(char *norm, integer *n, doublecomplex *dl, doublecomplex * d_
         {
             anorm = z_abs(&d__[1]) + z_abs(&du[1]);
             temp = z_abs(&d__[*n]) + z_abs(&dl[*n - 1]);
-            if (anorm < temp || disnan_(&temp))
+            if(anorm < temp || disnan_(&temp))
             {
                 anorm = temp;
             }
             i__1 = *n - 1;
-            for (i__ = 2;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 2; i__ <= i__1; ++i__)
             {
-                temp = z_abs(&d__[i__]) + z_abs(&du[i__]) + z_abs(&dl[i__ - 1] );
-                if (anorm < temp || disnan_(&temp))
+                temp = z_abs(&d__[i__]) + z_abs(&du[i__]) + z_abs(&dl[i__ - 1]);
+                if(anorm < temp || disnan_(&temp))
                 {
                     anorm = temp;
                 }
@@ -226,13 +231,13 @@ doublereal zlangt_(char *norm, integer *n, doublecomplex *dl, doublecomplex * d_
             }
         }
     }
-    else if (lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
+    else if(lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
     {
         /* Find normF(A). */
         scale = 0.;
         sum = 1.;
         zlassq_(n, &d__[1], &c__1, &scale, &sum);
-        if (*n > 1)
+        if(*n > 1)
         {
             i__1 = *n - 1;
             zlassq_(&i__1, &dl[1], &c__1, &scale, &sum);
@@ -247,4 +252,3 @@ doublereal zlangt_(char *norm, integer *n, doublecomplex *dl, doublecomplex * d_
     /* End of ZLANGT */
 }
 /* zlangt_ */
-

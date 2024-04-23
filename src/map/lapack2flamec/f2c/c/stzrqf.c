@@ -1,5 +1,8 @@
-/* ../netlib/stzrqf.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/stzrqf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b8 = 1.f;
@@ -9,11 +12,17 @@ static real c_b8 = 1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download STZRQF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stzrqf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stzrqf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stzrqf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stzrqf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stzrqf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stzrqf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -135,7 +144,15 @@ void stzrqf_(integer *m, integer *n, real *a, integer *lda, real *tau, integer *
     /* Local variables */
     integer i__, k, m1;
     extern /* Subroutine */
-    void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
+        void
+        sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+              integer *),
+        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+               real *, integer *),
+        scopy_(integer *, real *, integer *, real *, integer *),
+        saxpy_(integer *, real *, real *, integer *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -162,35 +179,33 @@ void stzrqf_(integer *m, integer *n, real *a, integer *lda, real *tau, integer *
     --tau;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < *m)
+    else if(*n < *m)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("STZRQF", &i__1, (ftnlen)6);
         return;
     }
     /* Perform the factorization. */
-    if (*m == 0)
+    if(*m == 0)
     {
         return;
     }
-    if (*m == *n)
+    if(*m == *n)
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             tau[i__] = 0.f;
             /* L10: */
@@ -200,16 +215,14 @@ void stzrqf_(integer *m, integer *n, real *a, integer *lda, real *tau, integer *
     {
         /* Computing MIN */
         i__1 = *m + 1;
-        m1 = fla_min(i__1,*n);
-        for (k = *m;
-                k >= 1;
-                --k)
+        m1 = fla_min(i__1, *n);
+        for(k = *m; k >= 1; --k)
         {
             /* Use a Householder reflection to zero the kth row of A. */
             /* First set up the reflection. */
             i__1 = *n - *m + 1;
-            slarfg_(&i__1, &a[k + k * a_dim1], &a[k + m1 * a_dim1], lda, &tau[ k]);
-            if (tau[k] != 0.f && k > 1)
+            slarfg_(&i__1, &a[k + k * a_dim1], &a[k + m1 * a_dim1], lda, &tau[k]);
+            if(tau[k] != 0.f && k > 1)
             {
                 /* We now perform the operation A := A*P( k ). */
                 /* Use the first ( k - 1 ) elements of TAU to store a( k ), */
@@ -221,16 +234,18 @@ void stzrqf_(integer *m, integer *n, real *a, integer *lda, real *tau, integer *
                 /* Form w = a( k ) + B*z( k ) in TAU. */
                 i__1 = k - 1;
                 i__2 = *n - *m;
-                sgemv_("No transpose", &i__1, &i__2, &c_b8, &a[m1 * a_dim1 + 1], lda, &a[k + m1 * a_dim1], lda, &c_b8, &tau[1], & c__1);
+                sgemv_("No transpose", &i__1, &i__2, &c_b8, &a[m1 * a_dim1 + 1], lda,
+                       &a[k + m1 * a_dim1], lda, &c_b8, &tau[1], &c__1);
                 /* Now form a( k ) := a( k ) - tau*w */
                 /* and B := B - tau*w*z( k )**T. */
                 i__1 = k - 1;
                 r__1 = -tau[k];
-                saxpy_(&i__1, &r__1, &tau[1], &c__1, &a[k * a_dim1 + 1], & c__1);
+                saxpy_(&i__1, &r__1, &tau[1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 i__1 = k - 1;
                 i__2 = *n - *m;
                 r__1 = -tau[k];
-                sger_(&i__1, &i__2, &r__1, &tau[1], &c__1, &a[k + m1 * a_dim1], lda, &a[m1 * a_dim1 + 1], lda);
+                sger_(&i__1, &i__2, &r__1, &tau[1], &c__1, &a[k + m1 * a_dim1], lda,
+                      &a[m1 * a_dim1 + 1], lda);
             }
             /* L20: */
         }

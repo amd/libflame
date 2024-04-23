@@ -1,9 +1,10 @@
-#include "FLA_lapack2flame_return_defs.h"
 #include "FLA_f2c.h"
+#include "FLA_lapack2flame_return_defs.h"
 static integer c__1 = 1;
 static integer c_n1 = -1;
 
-int dorgtr_check(char *uplo, integer *n, double *a, integer * lda, double *tau, double *work, integer *lwork, integer *info)
+int dorgtr_check(char *uplo, integer *n, double *a, integer *lda, double *tau, double *work,
+                 integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -23,15 +24,15 @@ int dorgtr_check(char *uplo, integer *n, double *a, integer * lda, double *tau, 
     *info = 0;
     lquery = *lwork == -1;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -40,14 +41,14 @@ int dorgtr_check(char *uplo, integer *n, double *a, integer * lda, double *tau, 
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
-        if (*lwork < fla_max(i__1,i__2) && ! lquery)
+        if(*lwork < fla_max(i__1, i__2) && !lquery)
         {
             *info = -7;
         }
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (upper)
+        if(upper)
         {
             i__1 = *n - 1;
             i__2 = *n - 1;
@@ -64,21 +65,21 @@ int dorgtr_check(char *uplo, integer *n, double *a, integer * lda, double *tau, 
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
-        lwkopt = fla_max(i__1,i__2) * nb;
-        work[1] = (double) lwkopt;
+        lwkopt = fla_max(i__1, i__2) * nb;
+        work[1] = (double)lwkopt;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DORGTR", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
-    else if (lquery)
+    else if(lquery)
     {
         return LAPACK_QUERY_RETURN;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         work[1] = 1.;
         return LAPACK_QUICK_RETURN;

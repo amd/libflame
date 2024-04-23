@@ -1,30 +1,33 @@
 #ifdef FLA_ENABLE_XBLAS
-/* ../netlib/zla_gbrfsx_extended.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zla_gbrfsx_extended.f -- translated by f2c (version 20100827). You must link the
+ resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
+ Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
+ with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-static doublecomplex c_b6 =
-{
-    -1.,0.
-    }
-;
-static doublecomplex c_b8 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b6 = {-1., 0.};
+static doublecomplex c_b8 = {1., 0.};
 static doublereal c_b31 = 1.;
-/* > \brief \b ZLA_GBRFSX_EXTENDED improves the computed solution to a system of linear equations for general banded matrices by performing extra-precise iterative refinement and provides error bounds and backwar d error estimates for the solution. */
+/* > \brief \b ZLA_GBRFSX_EXTENDED improves the computed solution to a system of linear equations
+ * for general banded matrices by performing extra-precise iterative refinement and provides error
+ * bounds and backwar d error estimates for the solution. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLA_GBRFSX_EXTENDED + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zla_gbr fsx_extended.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zla_gbr
+ * fsx_extended.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zla_gbr fsx_extended.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zla_gbr
+ * fsx_extended.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zla_gbr fsx_extended.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zla_gbr
+ * fsx_extended.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -413,12 +416,29 @@ i+1}
 /* > \ingroup complex16GBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer *n, integer *kl, integer *ku, integer *nrhs, doublecomplex *ab, integer *ldab, doublecomplex *afb, integer *ldafb, integer *ipiv, logical *colequ, doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *y, integer *ldy, doublereal *berr_out__, integer *n_norms__, doublereal *err_bnds_norm__, doublereal * err_bnds_comp__, doublecomplex *res, doublereal *ayb, doublecomplex * dy, doublecomplex *y_tail__, doublereal *rcond, integer *ithresh, doublereal *rthresh, doublereal *dz_ub__, logical *ignore_cwise__, integer *info)
+void zla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *n, integer *kl,
+                          integer *ku, integer *nrhs, doublecomplex *ab, integer *ldab,
+                          doublecomplex *afb, integer *ldafb, integer *ipiv, logical *colequ,
+                          doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *y,
+                          integer *ldy, doublereal *berr_out__, integer *n_norms__,
+                          doublereal *err_bnds_norm__, doublereal *err_bnds_comp__,
+                          doublecomplex *res, doublereal *ayb, doublecomplex *dy,
+                          doublecomplex *y_tail__, doublereal *rcond, integer *ithresh,
+                          doublereal *rthresh, doublereal *dz_ub__, logical *ignore_cwise__,
+                          integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zla_gbrfsx_extended inputs: prec_type__ %" FLA_IS ", trans_type__ %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ",ldb %" FLA_IS ", ldy %" FLA_IS ", n_norms__ %" FLA_IS ", rcond %lf, ithresh %" FLA_IS ", rthresh %lf, dz_ub__ %lf, ignore_cwise__ %" FLA_IS "", *prec_type__, *trans_type__, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldy, *n_norms__, *rcond, *ithresh, *rthresh, *dz_ub__, *ignore_cwise__);
+    AOCL_DTL_SNPRINTF("zla_gbrfsx_extended inputs: prec_type__ %" FLA_IS ", trans_type__ %" FLA_IS
+                      ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS
+                      ", ldab %" FLA_IS ", ldafb %" FLA_IS ",ldb %" FLA_IS ", ldy %" FLA_IS
+                      ", n_norms__ %" FLA_IS ", rcond %lf, ithresh %" FLA_IS
+                      ", rthresh %lf, dz_ub__ %lf, ignore_cwise__ %" FLA_IS "",
+                      *prec_type__, *trans_type__, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldy,
+                      *n_norms__, *rcond, *ithresh, *rthresh, *dz_ub__, *ignore_cwise__);
     /* System generated locals */
-    integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, y_dim1, y_offset, err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1, i__2, i__3, i__4;
+    integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, y_dim1, y_offset,
+        err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1,
+        i__2, i__3, i__4;
     doublereal d__1, d__2;
     char ch__1[1];
     /* Builtin functions */
@@ -427,32 +447,50 @@ void zla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer 
     doublereal dxratmax, dzratmax;
     integer i__, j, m;
     extern /* Subroutine */
-    void zla_gbamv_(integer *, integer *, integer *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *) ;
+        void
+        zla_gbamv_(integer *, integer *, integer *, integer *, integer *, doublereal *,
+                   doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
+                   doublereal *, integer *);
     logical incr_prec__;
     doublereal prev_dz_z__, yk, final_dx_x__, final_dz_z__;
     extern /* Subroutine */
-    void zla_wwaddw_(integer *, doublecomplex *, doublecomplex *, doublecomplex *);
+        void
+        zla_wwaddw_(integer *, doublecomplex *, doublecomplex *, doublecomplex *);
     doublereal prevnormdx;
     integer cnt;
     doublereal dyk, eps, incr_thresh__, dx_x__, dz_z__, ymin;
     extern /* Subroutine */
-    void zla_lin_berr_(integer *, integer *, integer *, doublecomplex *, doublereal *, doublereal *), blas_zgbmv_x_( integer *, integer *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *) ;
+        void
+        zla_lin_berr_(integer *, integer *, integer *, doublecomplex *, doublereal *, doublereal *),
+        blas_zgbmv_x_(integer *, integer *, integer *, integer *, integer *, doublecomplex *,
+                      doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                      doublecomplex *, integer *, integer *);
     integer y_prec_state__;
     extern /* Subroutine */
-    int blas_zgbmv2_x_(integer *, integer *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
+        int
+        blas_zgbmv2_x_(integer *, integer *, integer *, integer *, integer *, doublecomplex *,
+                       doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *,
+                       doublecomplex *, doublecomplex *, integer *, integer *);
     doublereal dxrat, dzrat;
     extern /* Subroutine */
-    void zgbmv_(char *, integer *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zgbmv_(char *, integer *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
+               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     char trans[1];
     doublereal normx, normy;
     extern /* Subroutine */
-    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     doublereal normdx;
     extern /* Subroutine */
-    void zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *,
+                integer *, doublecomplex *, integer *, integer *);
     extern /* Character */
-    VOID chla_transtype_(char *, integer *);
+        VOID
+        chla_transtype_(char *, integer *);
     doublereal hugeval;
     integer x_state__, z_state__;
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -504,7 +542,7 @@ void zla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer 
     --dy;
     --y_tail__;
     /* Function Body */
-    if (*info != 0)
+    if(*info != 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -516,20 +554,16 @@ void zla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer 
     /* Force HUGEVAL to Inf */
     hugeval *= hugeval;
     /* Using HUGEVAL may lead to spurious underflows. */
-    incr_thresh__ = (doublereal) (*n) * eps;
+    incr_thresh__ = (doublereal)(*n) * eps;
     m = *kl + *ku + 1;
     i__1 = *nrhs;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         y_prec_state__ = 1;
-        if (y_prec_state__ == 2)
+        if(y_prec_state__ == 2)
         {
             i__2 = *n;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__;
                 y_tail__[i__3].r = 0.;
@@ -550,24 +584,26 @@ void zla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer 
         z_state__ = 0;
         incr_prec__ = FALSE_;
         i__2 = *ithresh;
-        for (cnt = 1;
-                cnt <= i__2;
-                ++cnt)
+        for(cnt = 1; cnt <= i__2; ++cnt)
         {
             /* Compute residual RES = B_s - op(A_s) * Y, */
             /* op(A) = A, A**T, or A**H depending on TRANS (and type). */
             zcopy_(n, &b[j * b_dim1 + 1], &c__1, &res[1], &c__1);
-            if (y_prec_state__ == 0)
+            if(y_prec_state__ == 0)
             {
-                zgbmv_(trans, &m, n, kl, ku, &c_b6, &ab[ab_offset], ldab, &y[ j * y_dim1 + 1], &c__1, &c_b8, &res[1], &c__1);
+                zgbmv_(trans, &m, n, kl, ku, &c_b6, &ab[ab_offset], ldab, &y[j * y_dim1 + 1], &c__1,
+                       &c_b8, &res[1], &c__1);
             }
-            else if (y_prec_state__ == 1)
+            else if(y_prec_state__ == 1)
             {
-                blas_zgbmv_x_(trans_type__, n, n, kl, ku, &c_b6, &ab[ ab_offset], ldab, &y[j * y_dim1 + 1], &c__1, &c_b8, & res[1], &c__1, prec_type__);
+                blas_zgbmv_x_(trans_type__, n, n, kl, ku, &c_b6, &ab[ab_offset], ldab,
+                              &y[j * y_dim1 + 1], &c__1, &c_b8, &res[1], &c__1, prec_type__);
             }
             else
             {
-                blas_zgbmv2_x_(trans_type__, n, n, kl, ku, &c_b6, &ab[ ab_offset], ldab, &y[j * y_dim1 + 1], &y_tail__[1], & c__1, &c_b8, &res[1], &c__1, prec_type__);
+                blas_zgbmv2_x_(trans_type__, n, n, kl, ku, &c_b6, &ab[ab_offset], ldab,
+                               &y[j * y_dim1 + 1], &y_tail__[1], &c__1, &c_b8, &res[1], &c__1,
+                               prec_type__);
             }
             /* XXX: RES is no longer needed. */
             zcopy_(n, &res[1], &c__1, &dy[1], &c__1);
@@ -579,49 +615,49 @@ void zla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer 
             dz_z__ = 0.;
             ymin = hugeval;
             i__3 = *n;
-            for (i__ = 1;
-                    i__ <= i__3;
-                    ++i__)
+            for(i__ = 1; i__ <= i__3; ++i__)
             {
                 i__4 = i__ + j * y_dim1;
-                yk = (d__1 = y[i__4].r, f2c_dabs(d__1)) + (d__2 = d_imag(&y[i__ + j * y_dim1]), f2c_dabs(d__2));
+                yk = (d__1 = y[i__4].r, f2c_dabs(d__1))
+                     + (d__2 = d_imag(&y[i__ + j * y_dim1]), f2c_dabs(d__2));
                 i__4 = i__;
-                dyk = (d__1 = dy[i__4].r, f2c_dabs(d__1)) + (d__2 = d_imag(&dy[i__] ), f2c_dabs(d__2));
-                if (yk != 0.)
+                dyk = (d__1 = dy[i__4].r, f2c_dabs(d__1))
+                      + (d__2 = d_imag(&dy[i__]), f2c_dabs(d__2));
+                if(yk != 0.)
                 {
                     /* Computing MAX */
                     d__1 = dz_z__;
                     d__2 = dyk / yk; // , expr subst
-                    dz_z__ = fla_max(d__1,d__2);
+                    dz_z__ = fla_max(d__1, d__2);
                 }
-                else if (dyk != 0.)
+                else if(dyk != 0.)
                 {
                     dz_z__ = hugeval;
                 }
-                ymin = fla_min(ymin,yk);
-                normy = fla_max(normy,yk);
-                if (*colequ)
+                ymin = fla_min(ymin, yk);
+                normy = fla_max(normy, yk);
+                if(*colequ)
                 {
                     /* Computing MAX */
                     d__1 = normx;
                     d__2 = yk * c__[i__]; // , expr subst
-                    normx = fla_max(d__1,d__2);
+                    normx = fla_max(d__1, d__2);
                     /* Computing MAX */
                     d__1 = normdx;
                     d__2 = dyk * c__[i__]; // , expr subst
-                    normdx = fla_max(d__1,d__2);
+                    normdx = fla_max(d__1, d__2);
                 }
                 else
                 {
                     normx = normy;
-                    normdx = fla_max(normdx,dyk);
+                    normdx = fla_max(normdx, dyk);
                 }
             }
-            if (normx != 0.)
+            if(normx != 0.)
             {
                 dx_x__ = normdx / normx;
             }
-            else if (normdx == 0.)
+            else if(normdx == 0.)
             {
                 dx_x__ = 0.;
             }
@@ -632,23 +668,23 @@ void zla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer 
             dxrat = normdx / prevnormdx;
             dzrat = dz_z__ / prev_dz_z__;
             /* Check termination criteria. */
-            if (! (*ignore_cwise__) && ymin * *rcond < incr_thresh__ * normy && y_prec_state__ < 2)
+            if(!(*ignore_cwise__) && ymin * *rcond < incr_thresh__ * normy && y_prec_state__ < 2)
             {
                 incr_prec__ = TRUE_;
             }
-            if (x_state__ == 3 && dxrat <= *rthresh)
+            if(x_state__ == 3 && dxrat <= *rthresh)
             {
                 x_state__ = 1;
             }
-            if (x_state__ == 1)
+            if(x_state__ == 1)
             {
-                if (dx_x__ <= eps)
+                if(dx_x__ <= eps)
                 {
                     x_state__ = 2;
                 }
-                else if (dxrat > *rthresh)
+                else if(dxrat > *rthresh)
                 {
-                    if (y_prec_state__ != 2)
+                    if(y_prec_state__ != 2)
                     {
                         incr_prec__ = TRUE_;
                     }
@@ -659,39 +695,39 @@ void zla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer 
                 }
                 else
                 {
-                    if (dxrat > dxratmax)
+                    if(dxrat > dxratmax)
                     {
                         dxratmax = dxrat;
                     }
                 }
-                if (x_state__ > 1)
+                if(x_state__ > 1)
                 {
                     final_dx_x__ = dx_x__;
                 }
             }
-            if (z_state__ == 0 && dz_z__ <= *dz_ub__)
+            if(z_state__ == 0 && dz_z__ <= *dz_ub__)
             {
                 z_state__ = 1;
             }
-            if (z_state__ == 3 && dzrat <= *rthresh)
+            if(z_state__ == 3 && dzrat <= *rthresh)
             {
                 z_state__ = 1;
             }
-            if (z_state__ == 1)
+            if(z_state__ == 1)
             {
-                if (dz_z__ <= eps)
+                if(dz_z__ <= eps)
                 {
                     z_state__ = 2;
                 }
-                else if (dz_z__ > *dz_ub__)
+                else if(dz_z__ > *dz_ub__)
                 {
                     z_state__ = 0;
                     dzratmax = 0.;
                     final_dz_z__ = hugeval;
                 }
-                else if (dzrat > *rthresh)
+                else if(dzrat > *rthresh)
                 {
-                    if (y_prec_state__ != 2)
+                    if(y_prec_state__ != 2)
                     {
                         incr_prec__ = TRUE_;
                     }
@@ -702,12 +738,12 @@ void zla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer 
                 }
                 else
                 {
-                    if (dzrat > dzratmax)
+                    if(dzrat > dzratmax)
                     {
                         dzratmax = dzrat;
                     }
                 }
-                if (z_state__ > 1)
+                if(z_state__ > 1)
                 {
                     final_dz_z__ = dz_z__;
                 }
@@ -715,29 +751,27 @@ void zla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer 
             /* Exit if both normwise and componentwise stopped working, */
             /* but if componentwise is unstable, let it go at least two */
             /* iterations. */
-            if (x_state__ != 1)
+            if(x_state__ != 1)
             {
-                if (*ignore_cwise__)
+                if(*ignore_cwise__)
                 {
                     goto L666;
                 }
-                if (z_state__ == 3 || z_state__ == 2)
+                if(z_state__ == 3 || z_state__ == 2)
                 {
                     goto L666;
                 }
-                if (z_state__ == 0 && cnt > 1)
+                if(z_state__ == 0 && cnt > 1)
                 {
                     goto L666;
                 }
             }
-            if (incr_prec__)
+            if(incr_prec__)
             {
                 incr_prec__ = FALSE_;
                 ++y_prec_state__;
                 i__3 = *n;
-                for (i__ = 1;
-                        i__ <= i__3;
-                        ++i__)
+                for(i__ = 1; i__ <= i__3; ++i__)
                 {
                     i__4 = i__;
                     y_tail__[i__4].r = 0.;
@@ -747,7 +781,7 @@ void zla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer 
             prevnormdx = normdx;
             prev_dz_z__ = dz_z__;
             /* Update soluton. */
-            if (y_prec_state__ < 2)
+            if(y_prec_state__ < 2)
             {
                 zaxpy_(n, &c_b8, &dy[1], &c__1, &y[j * y_dim1 + 1], &c__1);
             }
@@ -757,23 +791,23 @@ void zla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer 
             }
         }
         /* Target of "IF (Z_STOP .AND. X_STOP)". Sun's f77 won't CALL F90_EXIT. */
-L666: /* Set final_* when cnt hits ithresh. */
-        if (x_state__ == 1)
+    L666: /* Set final_* when cnt hits ithresh. */
+        if(x_state__ == 1)
         {
             final_dx_x__ = dx_x__;
         }
-        if (z_state__ == 1)
+        if(z_state__ == 1)
         {
             final_dz_z__ = dz_z__;
         }
         /* Compute error bounds. */
-        if (*n_norms__ >= 1)
+        if(*n_norms__ >= 1)
         {
-            err_bnds_norm__[j + (err_bnds_norm_dim1 << 1)] = final_dx_x__ / ( 1 - dxratmax);
+            err_bnds_norm__[j + (err_bnds_norm_dim1 << 1)] = final_dx_x__ / (1 - dxratmax);
         }
-        if (*n_norms__ >= 2)
+        if(*n_norms__ >= 2)
         {
-            err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] = final_dz_z__ / ( 1 - dzratmax);
+            err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] = final_dz_z__ / (1 - dzratmax);
         }
         /* Compute componentwise relative backward error from formula */
         /* fla_max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(op(A_s))*f2c_dabs(Y) + f2c_dabs(B_s) )(i) ) */
@@ -782,17 +816,18 @@ L666: /* Set final_* when cnt hits ithresh. */
         /* Compute residual RES = B_s - op(A_s) * Y, */
         /* op(A) = A, A**T, or A**H depending on TRANS (and type). */
         zcopy_(n, &b[j * b_dim1 + 1], &c__1, &res[1], &c__1);
-        zgbmv_(trans, n, n, kl, ku, &c_b6, &ab[ab_offset], ldab, &y[j * y_dim1 + 1], &c__1, &c_b8, &res[1], &c__1);
+        zgbmv_(trans, n, n, kl, ku, &c_b6, &ab[ab_offset], ldab, &y[j * y_dim1 + 1], &c__1, &c_b8,
+               &res[1], &c__1);
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            ayb[i__] = (d__1 = b[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&b[i__ + j * b_dim1]), f2c_dabs(d__2));
+            ayb[i__] = (d__1 = b[i__3].r, f2c_dabs(d__1))
+                       + (d__2 = d_imag(&b[i__ + j * b_dim1]), f2c_dabs(d__2));
         }
         /* Compute f2c_dabs(op(A_s))*f2c_dabs(Y) + f2c_dabs(B_s). */
-        zla_gbamv_(trans_type__, n, n, kl, ku, &c_b31, &ab[ab_offset], ldab, &y[j * y_dim1 + 1], &c__1, &c_b31, &ayb[1], &c__1);
+        zla_gbamv_(trans_type__, n, n, kl, ku, &c_b31, &ab[ab_offset], ldab, &y[j * y_dim1 + 1],
+                   &c__1, &c_b31, &ayb[1], &c__1);
         zla_lin_berr_(n, n, &c__1, &res[1], &ayb[1], &berr_out__[j]);
         /* End of loop for each RHS. */
     }

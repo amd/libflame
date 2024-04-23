@@ -1,16 +1,25 @@
-/* ../netlib/dlarra.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlarra.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLARRA computes the splitting points with the specified threshold. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLARRA + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarra. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarra.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarra. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarra.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarra. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarra.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -63,7 +72,7 @@ E(N) need not be set. */
 /* > E2 is DOUBLE PRECISION array, dimension (N) */
 /* > On entry, the first (N-1) entries contain the SQUARES of the */
 /* > subdiagonal elements of the tridiagonal matrix T;
-*/
+ */
 /* > E2(N) need not be set. */
 /* > On exit, the entries E2( ISPLIT( I ) ), */
 /* > 1 <= I <= NSPLIT, have been set to zero */
@@ -122,10 +131,11 @@ E(N) need not be set. */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void dlarra_(integer *n, doublereal *d__, doublereal *e, doublereal *e2, doublereal *spltol, doublereal *tnrm, integer *nsplit, integer *isplit, integer *info)
+void dlarra_(integer *n, doublereal *d__, doublereal *e, doublereal *e2, doublereal *spltol,
+             doublereal *tnrm, integer *nsplit, integer *isplit, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlarra inputs: n %" FLA_IS "",*n);
+    AOCL_DTL_SNPRINTF("dlarra inputs: n %" FLA_IS "", *n);
     /* System generated locals */
     integer i__1;
     doublereal d__1, d__2;
@@ -158,24 +168,22 @@ void dlarra_(integer *n, doublereal *d__, doublereal *e, doublereal *e2, doubler
     /* Function Body */
     *info = 0;
     /* Quick return if possible */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute splitting points */
     *nsplit = 1;
-    if (*spltol < 0.)
+    if(*spltol < 0.)
     {
         /* Criterion based on absolute off-diagonal value */
         tmp1 = f2c_abs(*spltol) * *tnrm;
         i__1 = *n - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             eabs = (d__1 = e[i__], f2c_abs(d__1));
-            if (eabs <= tmp1)
+            if(eabs <= tmp1)
             {
                 e[i__] = 0.;
                 e2[i__] = 0.;
@@ -189,12 +197,11 @@ void dlarra_(integer *n, doublereal *d__, doublereal *e, doublereal *e2, doubler
     {
         /* Criterion that guarantees relative accuracy */
         i__1 = *n - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             eabs = (d__1 = e[i__], f2c_abs(d__1));
-            if (eabs <= *spltol * sqrt((d__1 = d__[i__], f2c_abs(d__1))) * sqrt(( d__2 = d__[i__ + 1], f2c_abs(d__2))))
+            if(eabs <= *spltol * sqrt((d__1 = d__[i__], f2c_abs(d__1)))
+                           * sqrt((d__2 = d__[i__ + 1], f2c_abs(d__2))))
             {
                 e[i__] = 0.;
                 e2[i__] = 0.;

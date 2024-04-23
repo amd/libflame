@@ -1,19 +1,29 @@
-/* ../netlib/sgesc2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sgesc2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
-/* > \brief \b SGESC2 solves a system of linear equations using the LU factorization with complete pivoting co mputed by sgetc2. */
+/* > \brief \b SGESC2 solves a system of linear equations using the LU factorization with complete
+ * pivoting co mputed by sgetc2. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SGESC2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgesc2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgesc2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgesc2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgesc2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgesc2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgesc2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -104,7 +114,8 @@ for 1 <= j <= N, column j of the */
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-void sgesc2_(integer *n, real *a, integer *lda, real *rhs, integer *ipiv, integer *jpiv, real *scale)
+void sgesc2_(integer *n, real *a, integer *lda, real *rhs, integer *ipiv, integer *jpiv,
+             real *scale)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -113,12 +124,15 @@ void sgesc2_(integer *n, real *a, integer *lda, real *rhs, integer *ipiv, intege
     integer i__, j;
     real eps, temp;
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *), slabad_(real *, real *);
+        void
+        sscal_(integer *, real *, real *, integer *),
+        slabad_(real *, real *);
     extern real slamch_(char *);
     real bignum;
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    void slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
+        void
+        slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
     real smlnum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -158,14 +172,10 @@ void sgesc2_(integer *n, real *a, integer *lda, real *rhs, integer *ipiv, intege
     slaswp_(&c__1, &rhs[1], lda, &c__1, &i__1, &ipiv[1], &c__1);
     /* Solve for L part */
     i__1 = *n - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = *n;
-        for (j = i__ + 1;
-                j <= i__2;
-                ++j)
+        for(j = i__ + 1; j <= i__2; ++j)
         {
             rhs[j] -= a[j + i__ * a_dim1] * rhs[i__];
             /* L10: */
@@ -176,22 +186,19 @@ void sgesc2_(integer *n, real *a, integer *lda, real *rhs, integer *ipiv, intege
     *scale = 1.f;
     /* Check for scaling */
     i__ = isamax_(n, &rhs[1], &c__1);
-    if (smlnum * 2.f * (r__1 = rhs[i__], f2c_abs(r__1)) > (r__2 = a[*n + *n * a_dim1], f2c_abs(r__2)))
+    if(smlnum * 2.f * (r__1 = rhs[i__], f2c_abs(r__1))
+       > (r__2 = a[*n + *n * a_dim1], f2c_abs(r__2)))
     {
         temp = .5f / (r__1 = rhs[i__], f2c_abs(r__1));
         sscal_(n, &temp, &rhs[1], &c__1);
         *scale *= temp;
     }
-    for (i__ = *n;
-            i__ >= 1;
-            --i__)
+    for(i__ = *n; i__ >= 1; --i__)
     {
         temp = 1.f / a[i__ + i__ * a_dim1];
         rhs[i__] *= temp;
         i__1 = *n;
-        for (j = i__ + 1;
-                j <= i__1;
-                ++j)
+        for(j = i__ + 1; j <= i__1; ++j)
         {
             rhs[i__] -= rhs[j] * (a[i__ + j * a_dim1] * temp);
             /* L30: */

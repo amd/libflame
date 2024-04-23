@@ -1,19 +1,19 @@
-#include "FLA_lapack2flame_return_defs.h"
 #include "FLA_f2c.h" /* Table of constant values */
+#include "FLA_lapack2flame_return_defs.h"
 static integer c_n1 = -1;
 
-int dorgbr_check(char *vect, integer *m, integer *n, integer *k, double *a, integer *lda, double *tau, double *work, integer *lwork, integer *info)
+int dorgbr_check(char *vect, integer *m, integer *n, integer *k, double *a, integer *lda,
+                 double *tau, double *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
     integer iinfo;
     logical wantq;
-    extern int
-      dorglq_check( integer *, integer *, integer *, double *, integer *,
-               double *, double *, integer *, integer *),
-      dorgqr_check( integer *, integer *, integer *, double *, integer *,
-               double *, double *, integer *, integer *);
+    extern int dorglq_check(integer *, integer *, integer *, double *, integer *, double *,
+                            double *, integer *, integer *),
+        dorgqr_check(integer *, integer *, integer *, double *, integer *, double *, double *,
+                     integer *, integer *);
     integer mn, lwkopt;
     logical lquery;
 
@@ -26,85 +26,88 @@ int dorgbr_check(char *vect, integer *m, integer *n, integer *k, double *a, inte
     /* Function Body */
     *info = 0;
     wantq = lsame_(vect, "Q", 1, 1);
-    mn = fla_min(*m,*n);
+    mn = fla_min(*m, *n);
     lquery = *lwork == -1;
-    if (! wantq && ! lsame_(vect, "P", 1, 1))
+    if(!wantq && !lsame_(vect, "P", 1, 1))
     {
         *info = -1;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -2;
     }
-    else if (*n < 0 || wantq && (*n > *m || *n < fla_min(*m,*k)) || ! wantq && ( *m > *n || *m < fla_min(*n,*k)))
+    else if(*n < 0 || wantq && (*n > *m || *n < fla_min(*m, *k))
+            || !wantq && (*m > *n || *m < fla_min(*n, *k)))
     {
         *info = -3;
     }
-    else if (*k < 0)
+    else if(*k < 0)
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -6;
     }
-    else if (*lwork < fla_max(1,mn) && ! lquery)
+    else if(*lwork < fla_max(1, mn) && !lquery)
     {
         *info = -9;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
         work[1] = 1.;
-        if (wantq)
+        if(wantq)
         {
-            if (*m >= *k)
+            if(*m >= *k)
             {
                 dorgqr_check(m, n, k, &a[a_offset], lda, &tau[1], &work[1], &c_n1, &iinfo);
             }
             else
             {
-                if (*m > 1)
+                if(*m > 1)
                 {
                     i__1 = *m - 1;
                     i__2 = *m - 1;
                     i__3 = *m - 1;
-                    dorgqr_check(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, & tau[1], &work[1], &c_n1, &iinfo);
+                    dorgqr_check(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1],
+                                 &c_n1, &iinfo);
                 }
             }
         }
         else
         {
-            if (*k < *n)
+            if(*k < *n)
             {
                 dorglq_check(m, n, k, &a[a_offset], lda, &tau[1], &work[1], &c_n1, &iinfo);
             }
             else
             {
-                if (*n > 1)
+                if(*n > 1)
                 {
                     i__1 = *n - 1;
                     i__2 = *n - 1;
                     i__3 = *n - 1;
-                    dorglq_check(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, & tau[1], &work[1], &c_n1, &iinfo);
+                    dorglq_check(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1],
+                                 &c_n1, &iinfo);
                 }
             }
         }
-        lwkopt = (integer) work[1];
-        lwkopt = fla_max(lwkopt,mn);
+        lwkopt = (integer)work[1];
+        lwkopt = fla_max(lwkopt, mn);
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DORGBR", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
-    else if (lquery)
+    else if(lquery)
     {
-        work[1] = (double) lwkopt;
+        work[1] = (double)lwkopt;
         return LAPACK_QUERY_RETURN;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         work[1] = 1.;
         return LAPACK_QUICK_RETURN;

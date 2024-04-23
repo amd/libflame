@@ -1,19 +1,29 @@
-/* ../netlib/spbtf2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/spbtf2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b8 = -1.f;
 static integer c__1 = 1;
-/* > \brief \b SPBTF2 computes the Cholesky factorization of a symmetric/Hermitian positive definite band matr ix (unblocked algorithm). */
+/* > \brief \b SPBTF2 computes the Cholesky factorization of a symmetric/Hermitian positive definite
+ * band matr ix (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SPBTF2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spbtf2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spbtf2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spbtf2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spbtf2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spbtf2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spbtf2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -74,7 +84,7 @@ static integer c__1 = 1;
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > */
 /* > On exit, if INFO = 0, the triangular factor U or L from the */
@@ -137,7 +147,7 @@ void spbtf2_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"spbtf2 inputs: uplo %c, n %d, kd %d, ldab %d",*uplo, *n, *kd, *ldab);
+    snprintf(buffer, 256, "spbtf2 inputs: uplo %c, n %d, kd %d, ldab %d", *uplo, *n, *kd, *ldab);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -150,13 +160,16 @@ void spbtf2_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
     real ajj;
     integer kld;
     extern /* Subroutine */
-    void ssyr_(char *, integer *, real *, real *, integer *, real *, integer *);
+        void
+        ssyr_(char *, integer *, real *, real *, integer *, real *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -185,23 +198,23 @@ void spbtf2_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*kd < 0)
+    else if(*kd < 0)
     {
         *info = -3;
     }
-    else if (*ldab < *kd + 1)
+    else if(*ldab < *kd + 1)
     {
         *info = -5;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SPBTF2", &i__1, (ftnlen)6);
@@ -209,7 +222,7 @@ void spbtf2_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -217,18 +230,16 @@ void spbtf2_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
     /* Computing MAX */
     i__1 = 1;
     i__2 = *ldab - 1; // , expr subst
-    kld = fla_max(i__1,i__2);
-    if (upper)
+    kld = fla_max(i__1, i__2);
+    if(upper)
     {
         /* Compute the Cholesky factorization A = U**T*U. */
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Compute U(J,J) and test for non-positive-definiteness. */
             ajj = ab[*kd + 1 + j * ab_dim1];
-            if (ajj <= 0.f)
+            if(ajj <= 0.f)
             {
                 goto L30;
             }
@@ -239,12 +250,13 @@ void spbtf2_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
             /* Computing MIN */
             i__2 = *kd;
             i__3 = *n - j; // , expr subst
-            kn = fla_min(i__2,i__3);
-            if (kn > 0)
+            kn = fla_min(i__2, i__3);
+            if(kn > 0)
             {
                 r__1 = 1.f / ajj;
                 sscal_(&kn, &r__1, &ab[*kd + (j + 1) * ab_dim1], &kld);
-                ssyr_("Upper", &kn, &c_b8, &ab[*kd + (j + 1) * ab_dim1], &kld, &ab[*kd + 1 + (j + 1) * ab_dim1], &kld);
+                ssyr_("Upper", &kn, &c_b8, &ab[*kd + (j + 1) * ab_dim1], &kld,
+                      &ab[*kd + 1 + (j + 1) * ab_dim1], &kld);
             }
             /* L10: */
         }
@@ -253,13 +265,11 @@ void spbtf2_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
     {
         /* Compute the Cholesky factorization A = L*L**T. */
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Compute L(J,J) and test for non-positive-definiteness. */
             ajj = ab[j * ab_dim1 + 1];
-            if (ajj <= 0.f)
+            if(ajj <= 0.f)
             {
                 goto L30;
             }
@@ -270,12 +280,13 @@ void spbtf2_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
             /* Computing MIN */
             i__2 = *kd;
             i__3 = *n - j; // , expr subst
-            kn = fla_min(i__2,i__3);
-            if (kn > 0)
+            kn = fla_min(i__2, i__3);
+            if(kn > 0)
             {
                 r__1 = 1.f / ajj;
                 sscal_(&kn, &r__1, &ab[j * ab_dim1 + 2], &c__1);
-                ssyr_("Lower", &kn, &c_b8, &ab[j * ab_dim1 + 2], &c__1, &ab[( j + 1) * ab_dim1 + 1], &kld);
+                ssyr_("Lower", &kn, &c_b8, &ab[j * ab_dim1 + 2], &c__1, &ab[(j + 1) * ab_dim1 + 1],
+                      &kld);
             }
             /* L20: */
         }

@@ -1,21 +1,31 @@
-/* ../netlib/claed0.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/claed0.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__9 = 9;
 static integer c__0 = 0;
 static integer c__2 = 2;
 static integer c__1 = 1;
-/* > \brief \b CLAED0 used by sstedc. Computes all eigenvalues and corresponding eigenvectors of an unreduced symmetric tridiagonal matrix using the divide and conquer method. */
+/* > \brief \b CLAED0 used by sstedc. Computes all eigenvalues and corresponding eigenvectors of an
+ * unreduced symmetric tridiagonal matrix using the divide and conquer method. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLAED0 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claed0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claed0.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claed0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claed0.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claed0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claed0.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -135,15 +145,17 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void claed0_(integer *qsiz, integer *n, real *d__, real *e, complex *q, integer *ldq, complex *qstore, integer *ldqs, real *rwork, integer *iwork, integer *info)
+void claed0_(integer *qsiz, integer *n, real *d__, real *e, complex *q, integer *ldq,
+             complex *qstore, integer *ldqs, real *rwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"claed0 inputs: qsiz %lld, n %lld, ldq %lld, ldqs %lld",*qsiz, *n, *ldq, *ldqs);
+    snprintf(buffer, 256, "claed0 inputs: qsiz %lld, n %lld, ldq %lld, ldqs %lld", *qsiz, *n, *ldq,
+             *ldqs);
 #else
-    snprintf(buffer, 256,"claed0 inputs: qsiz %d, n %d, ldq %d, ldqs %d",*qsiz, *n, *ldq, *ldqs);
+    snprintf(buffer, 256, "claed0 inputs: qsiz %d, n %d, ldq %d, ldqs %d", *qsiz, *n, *ldq, *ldqs);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -158,23 +170,32 @@ void claed0_(integer *qsiz, integer *n, real *d__, real *e, complex *q, integer 
     real temp;
     integer curr, iperm;
     extern /* Subroutine */
-    void ccopy_(integer *, complex *, integer *, complex *, integer *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *);
     integer indxq, iwrem;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     integer iqptr;
     extern /* Subroutine */
-    void claed7_(integer *, integer *, integer *, integer *, integer *, integer *, real *, complex *, integer *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, real *, complex *, real *, integer *, integer *);
+        void
+        claed7_(integer *, integer *, integer *, integer *, integer *, integer *, real *, complex *,
+                integer *, real *, integer *, real *, integer *, integer *, integer *, integer *,
+                integer *, real *, complex *, real *, integer *, integer *);
     integer tlvls;
     extern /* Subroutine */
-    void clacrm_(integer *, integer *, complex *, integer *, real *, integer *, complex *, integer *, real *);
+        void
+        clacrm_(integer *, integer *, complex *, integer *, real *, integer *, complex *, integer *,
+                real *);
     integer igivcl;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer igivnm, submat, curprb, subpbs, igivpt, curlvl, matsiz, iprmpt, smlsiz;
     extern /* Subroutine */
-    void ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
+        void
+        ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -214,23 +235,23 @@ void claed0_(integer *qsiz, integer *n, real *d__, real *e, complex *q, integer 
     /* INFO = -1 */
     /* ELSE IF( ( ICOMPQ .EQ. 1 ) .AND. ( QSIZ .LT. MAX( 0, N ) ) ) */
     /* $ THEN */
-    if (*qsiz < fla_max(0,*n))
+    if(*qsiz < fla_max(0, *n))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*ldq < fla_max(1,*n))
+    else if(*ldq < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldqs < fla_max(1,*n))
+    else if(*ldqs < fla_max(1, *n))
     {
         *info = -8;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CLAED0", &i__1, (ftnlen)6);
@@ -238,7 +259,7 @@ void claed0_(integer *qsiz, integer *n, real *d__, real *e, complex *q, integer 
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -250,11 +271,9 @@ void claed0_(integer *qsiz, integer *n, real *d__, real *e, complex *q, integer 
     subpbs = 1;
     tlvls = 0;
 L10:
-    if (iwork[subpbs] > smlsiz)
+    if(iwork[subpbs] > smlsiz)
     {
-        for (j = subpbs;
-                j >= 1;
-                --j)
+        for(j = subpbs; j >= 1; --j)
         {
             iwork[j * 2] = (iwork[j] + 1) / 2;
             iwork[(j << 1) - 1] = iwork[j] / 2;
@@ -265,9 +284,7 @@ L10:
         goto L10;
     }
     i__1 = subpbs;
-    for (j = 2;
-            j <= i__1;
-            ++j)
+    for(j = 2; j <= i__1; ++j)
     {
         iwork[j] += iwork[j - 1];
         /* L30: */
@@ -276,9 +293,7 @@ L10:
     /* using rank-1 modifications (cuts). */
     spm1 = subpbs - 1;
     i__1 = spm1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         submat = iwork[i__] + 1;
         smm1 = submat - 1;
@@ -289,13 +304,13 @@ L10:
     indxq = (*n << 2) + 3;
     /* Set up workspaces for eigenvalues only/accumulate new vectors */
     /* routine */
-    temp = log((real) (*n)) / log(2.f);
-    lgn = (integer) temp;
-    if (pow_ii(&c__2, &lgn) < *n)
+    temp = log((real)(*n)) / log(2.f);
+    lgn = (integer)temp;
+    if(pow_ii(&c__2, &lgn) < *n)
     {
         ++lgn;
     }
-    if (pow_ii(&c__2, &lgn) < *n)
+    if(pow_ii(&c__2, &lgn) < *n)
     {
         ++lgn;
     }
@@ -311,9 +326,7 @@ L10:
     iwrem = iq + i__1 * i__1 + 1;
     /* Initialize pointers */
     i__1 = subpbs;
-    for (i__ = 0;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 0; i__ <= i__1; ++i__)
     {
         iwork[iprmpt + i__] = 1;
         iwork[igivpt + i__] = 1;
@@ -324,11 +337,9 @@ L10:
     /* conquer tree. */
     curr = 0;
     i__1 = spm1;
-    for (i__ = 0;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 0; i__ <= i__1; ++i__)
     {
-        if (i__ == 0)
+        if(i__ == 0)
         {
             submat = 1;
             matsiz = iwork[1];
@@ -339,13 +350,14 @@ L10:
             matsiz = iwork[i__ + 1] - iwork[i__];
         }
         ll = iq - 1 + iwork[iqptr + curr];
-        ssteqr_("I", &matsiz, &d__[submat], &e[submat], &rwork[ll], &matsiz, & rwork[1], info);
-        clacrm_(qsiz, &matsiz, &q[submat * q_dim1 + 1], ldq, &rwork[ll], & matsiz, &qstore[submat * qstore_dim1 + 1], ldqs, &rwork[iwrem] );
+        ssteqr_("I", &matsiz, &d__[submat], &e[submat], &rwork[ll], &matsiz, &rwork[1], info);
+        clacrm_(qsiz, &matsiz, &q[submat * q_dim1 + 1], ldq, &rwork[ll], &matsiz,
+                &qstore[submat * qstore_dim1 + 1], ldqs, &rwork[iwrem]);
         /* Computing 2nd power */
         i__2 = matsiz;
         iwork[iqptr + curr + 1] = iwork[iqptr + curr] + i__2 * i__2;
         ++curr;
-        if (*info > 0)
+        if(*info > 0)
         {
             *info = submat * (*n + 1) + submat + matsiz - 1;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -353,9 +365,7 @@ L10:
         }
         k = 1;
         i__2 = iwork[i__ + 1];
-        for (j = submat;
-                j <= i__2;
-                ++j)
+        for(j = submat; j <= i__2; ++j)
         {
             iwork[indxq + j] = k;
             ++k;
@@ -368,15 +378,13 @@ L10:
     /* while ( SUBPBS > 1 ) */
     curlvl = 1;
 L80:
-    if (subpbs > 1)
+    if(subpbs > 1)
     {
         spm2 = subpbs - 2;
         i__1 = spm2;
-        for (i__ = 0;
-                i__ <= i__1;
-                i__ += 2)
+        for(i__ = 0; i__ <= i__1; i__ += 2)
         {
-            if (i__ == 0)
+            if(i__ == 0)
             {
                 submat = 1;
                 matsiz = iwork[2];
@@ -395,8 +403,12 @@ L80:
             /* when the eigenvectors of a full or band Hermitian matrix (which */
             /* was reduced to tridiagonal form) are desired. */
             /* I am free to use Q as a valuable working space until Loop 150. */
-            claed7_(&matsiz, &msd2, qsiz, &tlvls, &curlvl, &curprb, &d__[ submat], &qstore[submat * qstore_dim1 + 1], ldqs, &e[ submat + msd2 - 1], &iwork[indxq + submat], &rwork[iq], & iwork[iqptr], &iwork[iprmpt], &iwork[iperm], &iwork[ igivpt], &iwork[igivcl], &rwork[igivnm], &q[submat * q_dim1 + 1], &rwork[iwrem], &iwork[subpbs + 1], info);
-            if (*info > 0)
+            claed7_(&matsiz, &msd2, qsiz, &tlvls, &curlvl, &curprb, &d__[submat],
+                    &qstore[submat * qstore_dim1 + 1], ldqs, &e[submat + msd2 - 1],
+                    &iwork[indxq + submat], &rwork[iq], &iwork[iqptr], &iwork[iprmpt],
+                    &iwork[iperm], &iwork[igivpt], &iwork[igivcl], &rwork[igivnm],
+                    &q[submat * q_dim1 + 1], &rwork[iwrem], &iwork[subpbs + 1], info);
+            if(*info > 0)
             {
                 *info = submat * (*n + 1) + submat + matsiz - 1;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -413,9 +425,7 @@ L80:
     /* Re-merge the eigenvalues/vectors which were deflated at the final */
     /* merge step. */
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         j = iwork[indxq + i__];
         rwork[i__] = d__[j];

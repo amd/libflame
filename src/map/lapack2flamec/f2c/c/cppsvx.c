@@ -1,18 +1,28 @@
-/* ../netlib/cppsvx.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cppsvx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief <b> CPPSVX computes the solution to system of linear equations A * X = B for OTHER matrices</b> */
+/* > \brief <b> CPPSVX computes the solution to system of linear equations A * X = B for OTHER
+ * matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CPPSVX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cppsvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cppsvx.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cppsvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cppsvx.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cppsvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cppsvx.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -104,7 +114,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -131,7 +141,7 @@ static integer c__1 = 1;
 /* > diag(S)*A*diag(S). The j-th column of A is stored in the */
 /* > array AP as follows: */
 /* > if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n. */
 /* > See below for further details. A is not modified if */
 /* > FACT = 'F' or 'N', or if FACT = 'E' and EQUED = 'N' on exit. */
@@ -303,15 +313,21 @@ if EQUED = 'Y', */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, complex *afp, char *equed, real *s, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, real *rwork, integer *info)
+void cppsvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *ap, complex *afp,
+             char *equed, real *s, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond,
+             real *ferr, real *berr, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cppsvx inputs: fact %c, uplo %c, n %lld, nrhs %lld, equed %c, ldb %lld, ldx %lld",*fact, *uplo, *n, *nrhs, *equed, *ldb, *ldx);
+    snprintf(buffer, 256,
+             "cppsvx inputs: fact %c, uplo %c, n %lld, nrhs %lld, equed %c, ldb %lld, ldx %lld",
+             *fact, *uplo, *n, *nrhs, *equed, *ldb, *ldx);
 #else
-    snprintf(buffer, 256,"cppsvx inputs: fact %c, uplo %c, n %d, nrhs %d, equed %c, ldb %d, ldx %d",*fact, *uplo, *n, *nrhs, *equed, *ldb, *ldx);
+    snprintf(buffer, 256,
+             "cppsvx inputs: fact %c, uplo %c, n %d, nrhs %d, equed %c, ldb %d, ldx %d", *fact,
+             *uplo, *n, *nrhs, *equed, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -325,23 +341,33 @@ void cppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, co
     extern logical lsame_(char *, char *, integer, integer);
     real scond, anorm;
     extern /* Subroutine */
-    void ccopy_(integer *, complex *, integer *, complex *, integer *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *);
     logical equil, rcequ;
     extern real clanhp_(char *, char *, integer *, complex *, real *), slamch_(char *);
     extern /* Subroutine */
-    void claqhp_(char *, integer *, complex *, real *, real *, real *, char *);
+        void
+        claqhp_(char *, integer *, complex *, real *, real *, real *, char *);
     logical nofact;
     extern /* Subroutine */
-    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern /* Subroutine */
-    void cppcon_(char *, integer *, complex *, real *, real *, complex *, real *, integer *);
+        void
+        cppcon_(char *, integer *, complex *, real *, real *, complex *, real *, integer *);
     integer infequ;
     extern /* Subroutine */
-    void cppequ_(char *, integer *, complex *, real *, real *, real *, integer *), cpprfs_(char *, integer *, integer *, complex *, complex *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), cpptrf_(char *, integer *, complex *, integer *);
+        void
+        cppequ_(char *, integer *, complex *, real *, real *, real *, integer *),
+        cpprfs_(char *, integer *, integer *, complex *, complex *, complex *, integer *, complex *,
+                integer *, real *, real *, complex *, real *, integer *),
+        cpptrf_(char *, integer *, complex *, integer *);
     real smlnum;
     extern /* Subroutine */
-    void cpptrs_(char *, integer *, integer *, complex *, complex *, integer *, integer *);
+        void
+        cpptrs_(char *, integer *, integer *, complex *, complex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -382,7 +408,7 @@ void cppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, co
     equil = lsame_(fact, "E", 1, 1);
     smlnum = 0.f;
     bignum = 0.f;
-    if (nofact || equil)
+    if(nofact || equil)
     {
         *(unsigned char *)equed = 'N';
         rcequ = FALSE_;
@@ -394,84 +420,82 @@ void cppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, co
         bignum = 1.f / smlnum;
     }
     /* Test the input parameters. */
-    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    else if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -4;
     }
-    else if (lsame_(fact, "F", 1, 1) && ! (rcequ || lsame_(equed, "N", 1, 1)))
+    else if(lsame_(fact, "F", 1, 1) && !(rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -7;
     }
     else
     {
-        if (rcequ)
+        if(rcequ)
         {
             smin = bignum;
             smax = 0.f;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Computing MIN */
                 r__1 = smin;
                 r__2 = s[j]; // , expr subst
-                smin = fla_min(r__1,r__2);
+                smin = fla_min(r__1, r__2);
                 /* Computing MAX */
                 r__1 = smax;
                 r__2 = s[j]; // , expr subst
-                smax = fla_max(r__1,r__2);
+                smax = fla_max(r__1, r__2);
                 /* L10: */
             }
-            if (smin <= 0.f)
+            if(smin <= 0.f)
             {
                 *info = -8;
             }
-            else if (*n > 0)
+            else if(*n > 0)
             {
-                scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
+                scond = fla_max(smin, smlnum) / fla_min(smax, bignum);
             }
             else
             {
                 scond = 1.f;
             }
         }
-        if (*info == 0)
+        if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -10;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -12;
             }
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CPPSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (equil)
+    if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
         cppequ_(uplo, n, &ap[1], &s[1], &scond, &amax, &infequ);
-        if (infequ == 0)
+        if(infequ == 0)
         {
             /* Equilibrate the matrix. */
             claqhp_(uplo, n, &ap[1], &s[1], &scond, &amax, equed);
@@ -479,17 +503,13 @@ void cppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, co
         }
     }
     /* Scale the right-hand side. */
-    if (rcequ)
+    if(rcequ)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *n;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__;
@@ -503,14 +523,14 @@ void cppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, co
             /* L30: */
         }
     }
-    if (nofact || equil)
+    if(nofact || equil)
     {
         /* Compute the Cholesky factorization A = U**H * U or A = L * L**H. */
         i__1 = *n * (*n + 1) / 2;
         ccopy_(&i__1, &ap[1], &c__1, &afp[1], &c__1);
         cpptrf_(uplo, n, &afp[1], info);
         /* Return if INFO is non-zero. */
-        if (*info > 0)
+        if(*info > 0)
         {
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -526,20 +546,17 @@ void cppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, co
     cpptrs_(uplo, n, nrhs, &afp[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    cpprfs_(uplo, n, nrhs, &ap[1], &afp[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
+    cpprfs_(uplo, n, nrhs, &ap[1], &afp[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1],
+            &berr[1], &work[1], &rwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
-    if (rcequ)
+    if(rcequ)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *n;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * x_dim1;
                 i__4 = i__;
@@ -553,16 +570,14 @@ void cppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *ap, co
             /* L50: */
         }
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             ferr[j] /= scond;
             /* L60: */
         }
     }
     /* Set INFO = N+1 if the matrix is singular to working precision. */
-    if (*rcond < slamch_("Epsilon"))
+    if(*rcond < slamch_("Epsilon"))
     {
         *info = *n + 1;
     }

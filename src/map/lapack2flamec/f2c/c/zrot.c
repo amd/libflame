@@ -1,5 +1,8 @@
-/* ../netlib/zrot.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zrot.f -- translated by f2c (version 20100827). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 
 /*
     Copyright (c) 2022 Advanced Micro Devices, Inc.  All rights reserved.
@@ -15,11 +18,17 @@
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZROT + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zrot.f" > */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zrot.f"
+ * > */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zrot.f" > */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zrot.f"
+ * > */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zrot.f" > */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zrot.f"
+ * > */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -98,35 +107,40 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zrot_(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy, doublereal *c__, doublecomplex *s)
+void zrot_(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy,
+           doublereal *c__, doublecomplex *s)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zrot inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*n, *incx, *incy);
+    AOCL_DTL_SNPRINTF("zrot inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "", *n, *incx,
+                      *incy);
     extern fla_context fla_global_context;
-    extern void fla_zrot(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy, doublereal *c__, doublecomplex *s);
-    extern void fla_zrot_native(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy, doublereal *c__, doublecomplex *s);
+    extern void fla_zrot(integer * n, doublecomplex * cx, integer * incx, doublecomplex * cy,
+                         integer * incy, doublereal * c__, doublecomplex * s);
+    extern void fla_zrot_native(integer * n, doublecomplex * cx, integer * incx, doublecomplex * cy,
+                                integer * incy, doublereal * c__, doublecomplex * s);
 
     /* Initialize global context data */
     aocl_fla_init();
 
 #ifdef FLA_ENABLE_AMD_OPT
-    if (FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
-      fla_zrot(n, cx, incx, cy, incy, c__, s);
+        fla_zrot(n, cx, incx, cy, incy, c__, s);
     }
     else
     {
-      fla_zrot_native(n, cx, incx, cy, incy, c__, s);
+        fla_zrot_native(n, cx, incx, cy, incy, c__, s);
     }
 #else
-      fla_zrot_native(n, cx, incx, cy, incy, c__, s);
+    fla_zrot_native(n, cx, incx, cy, incy, c__, s);
 #endif
 
     AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 
-void fla_zrot_native(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy, doublereal *c__, doublecomplex *s)
+void fla_zrot_native(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy,
+                     doublereal *c__, doublecomplex *s)
 {
     /* System generated locals */
     integer i__1;
@@ -153,34 +167,34 @@ void fla_zrot_native(integer *n, doublecomplex *cx, integer *incx, doublecomplex
     --cx;
     /* Function Body */
 
-    if (*n <= 0)
+    if(*n <= 0)
     {
         return;
     }
-    lc  = *c__;
+    lc = *c__;
     sr = s->r;
     si = s->i;
 
-    if (*incx == 1 && *incy == 1)
+    if(*incx == 1 && *incy == 1)
     {
         goto L20;
     }
     /* Code for unequal increments or equal increments not equal to 1 */
     ix = 1;
     iy = 1;
-    if (*incx < 0)
+    if(*incx < 0)
     {
         ix = (-(*n) + 1) * *incx + 1;
     }
-    if (*incy < 0)
+    if(*incy < 0)
     {
         iy = (-(*n) + 1) * *incy + 1;
     }
 
     i__1 = *n;
-    if (*incx != *incy)
+    if(*incx != *incy)
     {
-        for (i__ = 1; i__ <= i__1; ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             z__2.r = lc * cx[ix].r;
             z__2.i = lc * cx[ix].i; // , expr subst
@@ -204,7 +218,7 @@ void fla_zrot_native(integer *n, doublecomplex *cx, integer *incx, doublecomplex
     }
     else
     {
-        for ( i__ = 1; i__ <= i__1; ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             z__2.r = lc * cx[ix].r;
             z__2.i = lc * cx[ix].i; // , expr subst
@@ -229,7 +243,7 @@ void fla_zrot_native(integer *n, doublecomplex *cx, integer *incx, doublecomplex
     /* Code for both increments equal to 1 */
 L20:
     i__1 = *n;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         z__2.r = lc * cx[i__].r;
         z__2.i = lc * cx[i__].i; // , expr subst

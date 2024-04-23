@@ -1,16 +1,25 @@
-/* ../netlib/zlagtm.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlagtm.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZLAGTM performs a matrix-matrix product of the form C = αAB+βC, where A is a tridiagonal matr ix, B and C are rectangular matrices, and α and β are scalars, which may be 0, 1, or -1. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLAGTM + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlagtm. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlagtm.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlagtm. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlagtm.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlagtm. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlagtm.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -132,12 +141,17 @@ otherwise, */
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doublecomplex *dl, doublecomplex *d__, doublecomplex *du, doublecomplex *x, integer *ldx, doublereal *beta, doublecomplex *b, integer *ldb)
+void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doublecomplex *dl,
+             doublecomplex *d__, doublecomplex *du, doublecomplex *x, integer *ldx,
+             doublereal *beta, doublecomplex *b, integer *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlagtm inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldx %" FLA_IS ", ldb %" FLA_IS "",*trans, *n, *nrhs, *ldx, *ldb);
+    AOCL_DTL_SNPRINTF("zlagtm inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldx %" FLA_IS
+                      ", ldb %" FLA_IS "",
+                      *trans, *n, *nrhs, *ldx, *ldb);
     /* System generated locals */
-    integer b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9, i__10;
+    integer b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8,
+        i__9, i__10;
     doublecomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7, z__8, z__9;
     /* Builtin functions */
     void d_cnjg(doublecomplex *, doublecomplex *);
@@ -173,23 +187,19 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
     b_offset = 1 + b_dim1;
     b -= b_offset;
     /* Function Body */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Multiply B by BETA if BETA.NE.1. */
-    if (*beta == 0.)
+    if(*beta == 0.)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *n;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * b_dim1;
                 b[i__3].r = 0.;
@@ -199,17 +209,13 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
             /* L20: */
         }
     }
-    else if (*beta == -1.)
+    else if(*beta == -1.)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *n;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * b_dim1;
@@ -222,23 +228,21 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
             /* L40: */
         }
     }
-    if (*alpha == 1.)
+    if(*alpha == 1.)
     {
-        if (lsame_(trans, "N", 1, 1))
+        if(lsame_(trans, "N", 1, 1))
         {
             /* Compute B := B + A*X */
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
-                if (*n == 1)
+                if(*n == 1)
                 {
                     i__2 = j * b_dim1 + 1;
                     i__3 = j * b_dim1 + 1;
                     i__4 = j * x_dim1 + 1;
                     z__2.r = d__[1].r * x[i__4].r - d__[1].i * x[i__4].i;
-                    z__2.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4] .r; // , expr subst
+                    z__2.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4].r; // , expr subst
                     z__1.r = b[i__3].r + z__2.r;
                     z__1.i = b[i__3].i + z__2.i; // , expr subst
                     b[i__2].r = z__1.r;
@@ -250,12 +254,12 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
                     i__3 = j * b_dim1 + 1;
                     i__4 = j * x_dim1 + 1;
                     z__3.r = d__[1].r * x[i__4].r - d__[1].i * x[i__4].i;
-                    z__3.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4] .r; // , expr subst
+                    z__3.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4].r; // , expr subst
                     z__2.r = b[i__3].r + z__3.r;
                     z__2.i = b[i__3].i + z__3.i; // , expr subst
                     i__5 = j * x_dim1 + 2;
                     z__4.r = du[1].r * x[i__5].r - du[1].i * x[i__5].i;
-                    z__4.i = du[1].r * x[i__5].i + du[1].i * x[i__5] .r; // , expr subst
+                    z__4.i = du[1].r * x[i__5].i + du[1].i * x[i__5].r; // , expr subst
                     z__1.r = z__2.r + z__4.r;
                     z__1.i = z__2.i + z__4.i; // , expr subst
                     b[i__2].r = z__1.r;
@@ -265,39 +269,37 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
                     i__4 = *n - 1;
                     i__5 = *n - 1 + j * x_dim1;
                     z__3.r = dl[i__4].r * x[i__5].r - dl[i__4].i * x[i__5].i;
-                    z__3.i = dl[i__4].r * x[i__5].i + dl[i__4].i * x[ i__5].r; // , expr subst
+                    z__3.i = dl[i__4].r * x[i__5].i + dl[i__4].i * x[i__5].r; // , expr subst
                     z__2.r = b[i__3].r + z__3.r;
                     z__2.i = b[i__3].i + z__3.i; // , expr subst
                     i__6 = *n;
                     i__7 = *n + j * x_dim1;
-                    z__4.r = d__[i__6].r * x[i__7].r - d__[i__6].i * x[i__7] .i;
-                    z__4.i = d__[i__6].r * x[i__7].i + d__[i__6] .i * x[i__7].r; // , expr subst
+                    z__4.r = d__[i__6].r * x[i__7].r - d__[i__6].i * x[i__7].i;
+                    z__4.i = d__[i__6].r * x[i__7].i + d__[i__6].i * x[i__7].r; // , expr subst
                     z__1.r = z__2.r + z__4.r;
                     z__1.i = z__2.i + z__4.i; // , expr subst
                     b[i__2].r = z__1.r;
                     b[i__2].i = z__1.i; // , expr subst
                     i__2 = *n - 1;
-                    for (i__ = 2;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 2; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + j * b_dim1;
                         i__4 = i__ + j * b_dim1;
                         i__5 = i__ - 1;
                         i__6 = i__ - 1 + j * x_dim1;
-                        z__4.r = dl[i__5].r * x[i__6].r - dl[i__5].i * x[i__6] .i;
-                        z__4.i = dl[i__5].r * x[i__6].i + dl[i__5] .i * x[i__6].r; // , expr subst
+                        z__4.r = dl[i__5].r * x[i__6].r - dl[i__5].i * x[i__6].i;
+                        z__4.i = dl[i__5].r * x[i__6].i + dl[i__5].i * x[i__6].r; // , expr subst
                         z__3.r = b[i__4].r + z__4.r;
                         z__3.i = b[i__4].i + z__4.i; // , expr subst
                         i__7 = i__;
                         i__8 = i__ + j * x_dim1;
-                        z__5.r = d__[i__7].r * x[i__8].r - d__[i__7].i * x[ i__8].i;
+                        z__5.r = d__[i__7].r * x[i__8].r - d__[i__7].i * x[i__8].i;
                         z__5.i = d__[i__7].r * x[i__8].i + d__[i__7].i * x[i__8].r; // , expr subst
                         z__2.r = z__3.r + z__5.r;
                         z__2.i = z__3.i + z__5.i; // , expr subst
                         i__9 = i__;
                         i__10 = i__ + 1 + j * x_dim1;
-                        z__6.r = du[i__9].r * x[i__10].r - du[i__9].i * x[ i__10].i;
+                        z__6.r = du[i__9].r * x[i__10].r - du[i__9].i * x[i__10].i;
                         z__6.i = du[i__9].r * x[i__10].i + du[i__9].i * x[i__10].r; // , expr subst
                         z__1.r = z__2.r + z__6.r;
                         z__1.i = z__2.i + z__6.i; // , expr subst
@@ -309,21 +311,19 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
                 /* L60: */
             }
         }
-        else if (lsame_(trans, "T", 1, 1))
+        else if(lsame_(trans, "T", 1, 1))
         {
             /* Compute B := B + A**T * X */
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
-                if (*n == 1)
+                if(*n == 1)
                 {
                     i__2 = j * b_dim1 + 1;
                     i__3 = j * b_dim1 + 1;
                     i__4 = j * x_dim1 + 1;
                     z__2.r = d__[1].r * x[i__4].r - d__[1].i * x[i__4].i;
-                    z__2.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4] .r; // , expr subst
+                    z__2.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4].r; // , expr subst
                     z__1.r = b[i__3].r + z__2.r;
                     z__1.i = b[i__3].i + z__2.i; // , expr subst
                     b[i__2].r = z__1.r;
@@ -335,12 +335,12 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
                     i__3 = j * b_dim1 + 1;
                     i__4 = j * x_dim1 + 1;
                     z__3.r = d__[1].r * x[i__4].r - d__[1].i * x[i__4].i;
-                    z__3.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4] .r; // , expr subst
+                    z__3.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4].r; // , expr subst
                     z__2.r = b[i__3].r + z__3.r;
                     z__2.i = b[i__3].i + z__3.i; // , expr subst
                     i__5 = j * x_dim1 + 2;
                     z__4.r = dl[1].r * x[i__5].r - dl[1].i * x[i__5].i;
-                    z__4.i = dl[1].r * x[i__5].i + dl[1].i * x[i__5] .r; // , expr subst
+                    z__4.i = dl[1].r * x[i__5].i + dl[1].i * x[i__5].r; // , expr subst
                     z__1.r = z__2.r + z__4.r;
                     z__1.i = z__2.i + z__4.i; // , expr subst
                     b[i__2].r = z__1.r;
@@ -350,39 +350,37 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
                     i__4 = *n - 1;
                     i__5 = *n - 1 + j * x_dim1;
                     z__3.r = du[i__4].r * x[i__5].r - du[i__4].i * x[i__5].i;
-                    z__3.i = du[i__4].r * x[i__5].i + du[i__4].i * x[ i__5].r; // , expr subst
+                    z__3.i = du[i__4].r * x[i__5].i + du[i__4].i * x[i__5].r; // , expr subst
                     z__2.r = b[i__3].r + z__3.r;
                     z__2.i = b[i__3].i + z__3.i; // , expr subst
                     i__6 = *n;
                     i__7 = *n + j * x_dim1;
-                    z__4.r = d__[i__6].r * x[i__7].r - d__[i__6].i * x[i__7] .i;
-                    z__4.i = d__[i__6].r * x[i__7].i + d__[i__6] .i * x[i__7].r; // , expr subst
+                    z__4.r = d__[i__6].r * x[i__7].r - d__[i__6].i * x[i__7].i;
+                    z__4.i = d__[i__6].r * x[i__7].i + d__[i__6].i * x[i__7].r; // , expr subst
                     z__1.r = z__2.r + z__4.r;
                     z__1.i = z__2.i + z__4.i; // , expr subst
                     b[i__2].r = z__1.r;
                     b[i__2].i = z__1.i; // , expr subst
                     i__2 = *n - 1;
-                    for (i__ = 2;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 2; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + j * b_dim1;
                         i__4 = i__ + j * b_dim1;
                         i__5 = i__ - 1;
                         i__6 = i__ - 1 + j * x_dim1;
-                        z__4.r = du[i__5].r * x[i__6].r - du[i__5].i * x[i__6] .i;
-                        z__4.i = du[i__5].r * x[i__6].i + du[i__5] .i * x[i__6].r; // , expr subst
+                        z__4.r = du[i__5].r * x[i__6].r - du[i__5].i * x[i__6].i;
+                        z__4.i = du[i__5].r * x[i__6].i + du[i__5].i * x[i__6].r; // , expr subst
                         z__3.r = b[i__4].r + z__4.r;
                         z__3.i = b[i__4].i + z__4.i; // , expr subst
                         i__7 = i__;
                         i__8 = i__ + j * x_dim1;
-                        z__5.r = d__[i__7].r * x[i__8].r - d__[i__7].i * x[ i__8].i;
+                        z__5.r = d__[i__7].r * x[i__8].r - d__[i__7].i * x[i__8].i;
                         z__5.i = d__[i__7].r * x[i__8].i + d__[i__7].i * x[i__8].r; // , expr subst
                         z__2.r = z__3.r + z__5.r;
                         z__2.i = z__3.i + z__5.i; // , expr subst
                         i__9 = i__;
                         i__10 = i__ + 1 + j * x_dim1;
-                        z__6.r = dl[i__9].r * x[i__10].r - dl[i__9].i * x[ i__10].i;
+                        z__6.r = dl[i__9].r * x[i__10].r - dl[i__9].i * x[i__10].i;
                         z__6.i = dl[i__9].r * x[i__10].i + dl[i__9].i * x[i__10].r; // , expr subst
                         z__1.r = z__2.r + z__6.r;
                         z__1.i = z__2.i + z__6.i; // , expr subst
@@ -394,15 +392,13 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
                 /* L80: */
             }
         }
-        else if (lsame_(trans, "C", 1, 1))
+        else if(lsame_(trans, "C", 1, 1))
         {
             /* Compute B := B + A**H * X */
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
-                if (*n == 1)
+                if(*n == 1)
                 {
                     i__2 = j * b_dim1 + 1;
                     i__3 = j * b_dim1 + 1;
@@ -450,28 +446,26 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
                     b[i__2].r = z__1.r;
                     b[i__2].i = z__1.i; // , expr subst
                     i__2 = *n - 1;
-                    for (i__ = 2;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 2; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + j * b_dim1;
                         i__4 = i__ + j * b_dim1;
                         d_cnjg(&z__5, &du[i__ - 1]);
                         i__5 = i__ - 1 + j * x_dim1;
                         z__4.r = z__5.r * x[i__5].r - z__5.i * x[i__5].i;
-                        z__4.i = z__5.r * x[i__5].i + z__5.i * x[i__5] .r; // , expr subst
+                        z__4.i = z__5.r * x[i__5].i + z__5.i * x[i__5].r; // , expr subst
                         z__3.r = b[i__4].r + z__4.r;
                         z__3.i = b[i__4].i + z__4.i; // , expr subst
                         d_cnjg(&z__7, &d__[i__]);
                         i__6 = i__ + j * x_dim1;
                         z__6.r = z__7.r * x[i__6].r - z__7.i * x[i__6].i;
-                        z__6.i = z__7.r * x[i__6].i + z__7.i * x[i__6] .r; // , expr subst
+                        z__6.i = z__7.r * x[i__6].i + z__7.i * x[i__6].r; // , expr subst
                         z__2.r = z__3.r + z__6.r;
                         z__2.i = z__3.i + z__6.i; // , expr subst
                         d_cnjg(&z__9, &dl[i__]);
                         i__7 = i__ + 1 + j * x_dim1;
                         z__8.r = z__9.r * x[i__7].r - z__9.i * x[i__7].i;
-                        z__8.i = z__9.r * x[i__7].i + z__9.i * x[i__7] .r; // , expr subst
+                        z__8.i = z__9.r * x[i__7].i + z__9.i * x[i__7].r; // , expr subst
                         z__1.r = z__2.r + z__8.r;
                         z__1.i = z__2.i + z__8.i; // , expr subst
                         b[i__3].r = z__1.r;
@@ -483,23 +477,21 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
             }
         }
     }
-    else if (*alpha == -1.)
+    else if(*alpha == -1.)
     {
-        if (lsame_(trans, "N", 1, 1))
+        if(lsame_(trans, "N", 1, 1))
         {
             /* Compute B := B - A*X */
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
-                if (*n == 1)
+                if(*n == 1)
                 {
                     i__2 = j * b_dim1 + 1;
                     i__3 = j * b_dim1 + 1;
                     i__4 = j * x_dim1 + 1;
                     z__2.r = d__[1].r * x[i__4].r - d__[1].i * x[i__4].i;
-                    z__2.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4] .r; // , expr subst
+                    z__2.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4].r; // , expr subst
                     z__1.r = b[i__3].r - z__2.r;
                     z__1.i = b[i__3].i - z__2.i; // , expr subst
                     b[i__2].r = z__1.r;
@@ -511,12 +503,12 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
                     i__3 = j * b_dim1 + 1;
                     i__4 = j * x_dim1 + 1;
                     z__3.r = d__[1].r * x[i__4].r - d__[1].i * x[i__4].i;
-                    z__3.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4] .r; // , expr subst
+                    z__3.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4].r; // , expr subst
                     z__2.r = b[i__3].r - z__3.r;
                     z__2.i = b[i__3].i - z__3.i; // , expr subst
                     i__5 = j * x_dim1 + 2;
                     z__4.r = du[1].r * x[i__5].r - du[1].i * x[i__5].i;
-                    z__4.i = du[1].r * x[i__5].i + du[1].i * x[i__5] .r; // , expr subst
+                    z__4.i = du[1].r * x[i__5].i + du[1].i * x[i__5].r; // , expr subst
                     z__1.r = z__2.r - z__4.r;
                     z__1.i = z__2.i - z__4.i; // , expr subst
                     b[i__2].r = z__1.r;
@@ -526,39 +518,37 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
                     i__4 = *n - 1;
                     i__5 = *n - 1 + j * x_dim1;
                     z__3.r = dl[i__4].r * x[i__5].r - dl[i__4].i * x[i__5].i;
-                    z__3.i = dl[i__4].r * x[i__5].i + dl[i__4].i * x[ i__5].r; // , expr subst
+                    z__3.i = dl[i__4].r * x[i__5].i + dl[i__4].i * x[i__5].r; // , expr subst
                     z__2.r = b[i__3].r - z__3.r;
                     z__2.i = b[i__3].i - z__3.i; // , expr subst
                     i__6 = *n;
                     i__7 = *n + j * x_dim1;
-                    z__4.r = d__[i__6].r * x[i__7].r - d__[i__6].i * x[i__7] .i;
-                    z__4.i = d__[i__6].r * x[i__7].i + d__[i__6] .i * x[i__7].r; // , expr subst
+                    z__4.r = d__[i__6].r * x[i__7].r - d__[i__6].i * x[i__7].i;
+                    z__4.i = d__[i__6].r * x[i__7].i + d__[i__6].i * x[i__7].r; // , expr subst
                     z__1.r = z__2.r - z__4.r;
                     z__1.i = z__2.i - z__4.i; // , expr subst
                     b[i__2].r = z__1.r;
                     b[i__2].i = z__1.i; // , expr subst
                     i__2 = *n - 1;
-                    for (i__ = 2;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 2; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + j * b_dim1;
                         i__4 = i__ + j * b_dim1;
                         i__5 = i__ - 1;
                         i__6 = i__ - 1 + j * x_dim1;
-                        z__4.r = dl[i__5].r * x[i__6].r - dl[i__5].i * x[i__6] .i;
-                        z__4.i = dl[i__5].r * x[i__6].i + dl[i__5] .i * x[i__6].r; // , expr subst
+                        z__4.r = dl[i__5].r * x[i__6].r - dl[i__5].i * x[i__6].i;
+                        z__4.i = dl[i__5].r * x[i__6].i + dl[i__5].i * x[i__6].r; // , expr subst
                         z__3.r = b[i__4].r - z__4.r;
                         z__3.i = b[i__4].i - z__4.i; // , expr subst
                         i__7 = i__;
                         i__8 = i__ + j * x_dim1;
-                        z__5.r = d__[i__7].r * x[i__8].r - d__[i__7].i * x[ i__8].i;
+                        z__5.r = d__[i__7].r * x[i__8].r - d__[i__7].i * x[i__8].i;
                         z__5.i = d__[i__7].r * x[i__8].i + d__[i__7].i * x[i__8].r; // , expr subst
                         z__2.r = z__3.r - z__5.r;
                         z__2.i = z__3.i - z__5.i; // , expr subst
                         i__9 = i__;
                         i__10 = i__ + 1 + j * x_dim1;
-                        z__6.r = du[i__9].r * x[i__10].r - du[i__9].i * x[ i__10].i;
+                        z__6.r = du[i__9].r * x[i__10].r - du[i__9].i * x[i__10].i;
                         z__6.i = du[i__9].r * x[i__10].i + du[i__9].i * x[i__10].r; // , expr subst
                         z__1.r = z__2.r - z__6.r;
                         z__1.i = z__2.i - z__6.i; // , expr subst
@@ -570,21 +560,19 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
                 /* L120: */
             }
         }
-        else if (lsame_(trans, "T", 1, 1))
+        else if(lsame_(trans, "T", 1, 1))
         {
             /* Compute B := B - A**T *X */
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
-                if (*n == 1)
+                if(*n == 1)
                 {
                     i__2 = j * b_dim1 + 1;
                     i__3 = j * b_dim1 + 1;
                     i__4 = j * x_dim1 + 1;
                     z__2.r = d__[1].r * x[i__4].r - d__[1].i * x[i__4].i;
-                    z__2.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4] .r; // , expr subst
+                    z__2.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4].r; // , expr subst
                     z__1.r = b[i__3].r - z__2.r;
                     z__1.i = b[i__3].i - z__2.i; // , expr subst
                     b[i__2].r = z__1.r;
@@ -596,12 +584,12 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
                     i__3 = j * b_dim1 + 1;
                     i__4 = j * x_dim1 + 1;
                     z__3.r = d__[1].r * x[i__4].r - d__[1].i * x[i__4].i;
-                    z__3.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4] .r; // , expr subst
+                    z__3.i = d__[1].r * x[i__4].i + d__[1].i * x[i__4].r; // , expr subst
                     z__2.r = b[i__3].r - z__3.r;
                     z__2.i = b[i__3].i - z__3.i; // , expr subst
                     i__5 = j * x_dim1 + 2;
                     z__4.r = dl[1].r * x[i__5].r - dl[1].i * x[i__5].i;
-                    z__4.i = dl[1].r * x[i__5].i + dl[1].i * x[i__5] .r; // , expr subst
+                    z__4.i = dl[1].r * x[i__5].i + dl[1].i * x[i__5].r; // , expr subst
                     z__1.r = z__2.r - z__4.r;
                     z__1.i = z__2.i - z__4.i; // , expr subst
                     b[i__2].r = z__1.r;
@@ -611,39 +599,37 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
                     i__4 = *n - 1;
                     i__5 = *n - 1 + j * x_dim1;
                     z__3.r = du[i__4].r * x[i__5].r - du[i__4].i * x[i__5].i;
-                    z__3.i = du[i__4].r * x[i__5].i + du[i__4].i * x[ i__5].r; // , expr subst
+                    z__3.i = du[i__4].r * x[i__5].i + du[i__4].i * x[i__5].r; // , expr subst
                     z__2.r = b[i__3].r - z__3.r;
                     z__2.i = b[i__3].i - z__3.i; // , expr subst
                     i__6 = *n;
                     i__7 = *n + j * x_dim1;
-                    z__4.r = d__[i__6].r * x[i__7].r - d__[i__6].i * x[i__7] .i;
-                    z__4.i = d__[i__6].r * x[i__7].i + d__[i__6] .i * x[i__7].r; // , expr subst
+                    z__4.r = d__[i__6].r * x[i__7].r - d__[i__6].i * x[i__7].i;
+                    z__4.i = d__[i__6].r * x[i__7].i + d__[i__6].i * x[i__7].r; // , expr subst
                     z__1.r = z__2.r - z__4.r;
                     z__1.i = z__2.i - z__4.i; // , expr subst
                     b[i__2].r = z__1.r;
                     b[i__2].i = z__1.i; // , expr subst
                     i__2 = *n - 1;
-                    for (i__ = 2;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 2; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + j * b_dim1;
                         i__4 = i__ + j * b_dim1;
                         i__5 = i__ - 1;
                         i__6 = i__ - 1 + j * x_dim1;
-                        z__4.r = du[i__5].r * x[i__6].r - du[i__5].i * x[i__6] .i;
-                        z__4.i = du[i__5].r * x[i__6].i + du[i__5] .i * x[i__6].r; // , expr subst
+                        z__4.r = du[i__5].r * x[i__6].r - du[i__5].i * x[i__6].i;
+                        z__4.i = du[i__5].r * x[i__6].i + du[i__5].i * x[i__6].r; // , expr subst
                         z__3.r = b[i__4].r - z__4.r;
                         z__3.i = b[i__4].i - z__4.i; // , expr subst
                         i__7 = i__;
                         i__8 = i__ + j * x_dim1;
-                        z__5.r = d__[i__7].r * x[i__8].r - d__[i__7].i * x[ i__8].i;
+                        z__5.r = d__[i__7].r * x[i__8].r - d__[i__7].i * x[i__8].i;
                         z__5.i = d__[i__7].r * x[i__8].i + d__[i__7].i * x[i__8].r; // , expr subst
                         z__2.r = z__3.r - z__5.r;
                         z__2.i = z__3.i - z__5.i; // , expr subst
                         i__9 = i__;
                         i__10 = i__ + 1 + j * x_dim1;
-                        z__6.r = dl[i__9].r * x[i__10].r - dl[i__9].i * x[ i__10].i;
+                        z__6.r = dl[i__9].r * x[i__10].r - dl[i__9].i * x[i__10].i;
                         z__6.i = dl[i__9].r * x[i__10].i + dl[i__9].i * x[i__10].r; // , expr subst
                         z__1.r = z__2.r - z__6.r;
                         z__1.i = z__2.i - z__6.i; // , expr subst
@@ -655,15 +641,13 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
                 /* L140: */
             }
         }
-        else if (lsame_(trans, "C", 1, 1))
+        else if(lsame_(trans, "C", 1, 1))
         {
             /* Compute B := B - A**H *X */
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
-                if (*n == 1)
+                if(*n == 1)
                 {
                     i__2 = j * b_dim1 + 1;
                     i__3 = j * b_dim1 + 1;
@@ -711,28 +695,26 @@ void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doubleco
                     b[i__2].r = z__1.r;
                     b[i__2].i = z__1.i; // , expr subst
                     i__2 = *n - 1;
-                    for (i__ = 2;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 2; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + j * b_dim1;
                         i__4 = i__ + j * b_dim1;
                         d_cnjg(&z__5, &du[i__ - 1]);
                         i__5 = i__ - 1 + j * x_dim1;
                         z__4.r = z__5.r * x[i__5].r - z__5.i * x[i__5].i;
-                        z__4.i = z__5.r * x[i__5].i + z__5.i * x[i__5] .r; // , expr subst
+                        z__4.i = z__5.r * x[i__5].i + z__5.i * x[i__5].r; // , expr subst
                         z__3.r = b[i__4].r - z__4.r;
                         z__3.i = b[i__4].i - z__4.i; // , expr subst
                         d_cnjg(&z__7, &d__[i__]);
                         i__6 = i__ + j * x_dim1;
                         z__6.r = z__7.r * x[i__6].r - z__7.i * x[i__6].i;
-                        z__6.i = z__7.r * x[i__6].i + z__7.i * x[i__6] .r; // , expr subst
+                        z__6.i = z__7.r * x[i__6].i + z__7.i * x[i__6].r; // , expr subst
                         z__2.r = z__3.r - z__6.r;
                         z__2.i = z__3.i - z__6.i; // , expr subst
                         d_cnjg(&z__9, &dl[i__]);
                         i__7 = i__ + 1 + j * x_dim1;
                         z__8.r = z__9.r * x[i__7].r - z__9.i * x[i__7].i;
-                        z__8.i = z__9.r * x[i__7].i + z__9.i * x[i__7] .r; // , expr subst
+                        z__8.i = z__9.r * x[i__7].i + z__9.i * x[i__7].r; // , expr subst
                         z__1.r = z__2.r - z__8.r;
                         z__1.i = z__2.i - z__8.i; // , expr subst
                         b[i__3].r = z__1.r;

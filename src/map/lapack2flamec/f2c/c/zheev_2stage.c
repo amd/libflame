@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/zheev_2stage.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/zheev_2stage.f -- translated by f2c (version 20160102). You must link the
+ resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
+ Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
+ with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -8,18 +11,25 @@ static integer c__3 = 3;
 static integer c__4 = 4;
 static integer c__0 = 0;
 static doublereal c_b28 = 1.;
-/* > \brief <b> ZHEEV_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for HE matrices</b> */
+/* > \brief <b> ZHEEV_2STAGE computes the eigenvalues and, optionally, the left and/or right
+ * eigenvectors for HE matrices</b> */
 /* @precisions fortran z -> s d c */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZHEEV_2STAGE + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zheev_2 stage.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zheev_2
+ * stage.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zheev_2 stage.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zheev_2
+ * stage.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zheev_2 stage.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zheev_2
+ * stage.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -50,7 +60,7 @@ static doublereal c_b28 = 1.;
 /* > \verbatim */
 /* > JOBZ is CHARACTER*1 */
 /* > = 'N': Compute eigenvalues only;
-*/
+ */
 /* > = 'V': Compute eigenvalues and eigenvectors. */
 /* > Not available in this release. */
 /* > \endverbatim */
@@ -59,7 +69,7 @@ static doublereal c_b28 = 1.;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -106,7 +116,7 @@ static doublereal c_b28 = 1.;
 /* > \verbatim */
 /* > LWORK is INTEGER */
 /* > The length of the array WORK. LWORK >= 1, when N <= 1;
-*/
+ */
 /* > otherwise */
 /* > If JOBZ = 'N' and N > 1, LWORK must be queried. */
 /* > LWORK = MAX(1, dimension) where */
@@ -184,10 +194,14 @@ i */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void zheev_2stage_(char *jobz, char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *w, doublecomplex *work, integer *lwork, doublereal *rwork, integer *info)
+void zheev_2stage_(char *jobz, char *uplo, integer *n, doublecomplex *a, integer *lda,
+                   doublereal *w, doublecomplex *work, integer *lwork, doublereal *rwork,
+                   integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zheev_2stage inputs: jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "", *jobz, *uplo, *n, *lda, *lwork);
+    AOCL_DTL_SNPRINTF("zheev_2stage inputs: jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS
+                      ", lwork %" FLA_IS "",
+                      *jobz, *uplo, *n, *lda, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
     doublereal d__1;
@@ -197,16 +211,21 @@ void zheev_2stage_(char *jobz, char *uplo, integer *n, doublecomplex *a, integer
     integer ib, kd;
     doublereal eps;
     integer inde;
-    extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *,
+                                 integer *);
     doublereal anrm;
     integer imax;
     doublereal rmin, rmax;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void zhetrd_2stage_(char *, char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zhetrd_2stage_(char *, char *, integer *, doublecomplex *, integer *, doublereal *,
+                       doublereal *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+                       integer *, integer *);
     integer iinfo, lhtrd, lwmin;
     logical lower;
     integer lwtrd;
@@ -215,17 +234,25 @@ void zheev_2stage_(char *jobz, char *uplo, integer *n, doublecomplex *a, integer
     integer iscale;
     doublereal safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern doublereal zlanhe_(char *, char *, integer *, doublecomplex *, integer *, doublereal *);
     integer indtau;
     extern /* Subroutine */
-    void dsterf_(integer *, doublereal *, doublereal *, integer *), zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, integer *);
+        void
+        dsterf_(integer *, doublereal *, doublereal *, integer *),
+        zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublecomplex *, integer *, integer *);
     integer indwrk, llwork;
     doublereal smlnum;
     logical lquery;
     extern /* Subroutine */
-    void zsteqr_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublereal *, integer *), zungtr_(char *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
+        void
+        zsteqr_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *,
+                doublereal *, integer *),
+        zungtr_(char *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
+                integer *, integer *);
     integer indhous;
     /* -- LAPACK driver routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -260,61 +287,61 @@ void zheev_2stage_(char *jobz, char *uplo, integer *n, doublecomplex *a, integer
     lower = lsame_(uplo, "L", 1, 1);
     lquery = *lwork == -1;
     *info = 0;
-    if (! lsame_(jobz, "N", 1, 1))
+    if(!lsame_(jobz, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (! (lower || lsame_(uplo, "U", 1, 1)))
+    else if(!(lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        kd = ilaenv2stage_(&c__1, "ZHETRD_2STAGE", jobz, n, &c_n1, &c_n1, & c_n1);
+        kd = ilaenv2stage_(&c__1, "ZHETRD_2STAGE", jobz, n, &c_n1, &c_n1, &c_n1);
         ib = ilaenv2stage_(&c__2, "ZHETRD_2STAGE", jobz, n, &kd, &c_n1, &c_n1);
-        lhtrd = ilaenv2stage_(&c__3, "ZHETRD_2STAGE", jobz, n, &kd, &ib, & c_n1);
-        lwtrd = ilaenv2stage_(&c__4, "ZHETRD_2STAGE", jobz, n, &kd, &ib, & c_n1);
+        lhtrd = ilaenv2stage_(&c__3, "ZHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
+        lwtrd = ilaenv2stage_(&c__4, "ZHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
         lwmin = *n + lhtrd + lwtrd;
-        work[1].r = (doublereal) lwmin;
+        work[1].r = (doublereal)lwmin;
         work[1].i = 0.; // , expr subst
-        if (*lwork < lwmin && ! lquery)
+        if(*lwork < lwmin && !lquery)
         {
             *info = -8;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZHEEV_2STAGE ", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
         i__1 = a_dim1 + 1;
         w[1] = a[i__1].r;
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
-        if (wantz)
+        if(wantz)
         {
             i__1 = a_dim1 + 1;
             a[i__1].r = 1.;
@@ -333,17 +360,17 @@ void zheev_2stage_(char *jobz, char *uplo, integer *n, doublecomplex *a, integer
     /* Scale matrix to allowable range, if necessary. */
     anrm = zlanhe_("M", uplo, n, &a[a_offset], lda, &rwork[1]);
     iscale = 0;
-    if (anrm > 0. && anrm < rmin)
+    if(anrm > 0. && anrm < rmin)
     {
         iscale = 1;
         sigma = rmin / anrm;
     }
-    else if (anrm > rmax)
+    else if(anrm > rmax)
     {
         iscale = 1;
         sigma = rmax / anrm;
     }
-    if (iscale == 1)
+    if(iscale == 1)
     {
         zlascl_(uplo, &c__0, &c__0, &c_b28, &sigma, n, n, &a[a_offset], lda, info);
     }
@@ -353,23 +380,24 @@ void zheev_2stage_(char *jobz, char *uplo, integer *n, doublecomplex *a, integer
     indhous = indtau + *n;
     indwrk = indhous + lhtrd;
     llwork = *lwork - indwrk + 1;
-    zhetrd_2stage_(jobz, uplo, n, &a[a_offset], lda, &w[1], &rwork[inde], & work[indtau], &work[indhous], &lhtrd, &work[indwrk], &llwork, & iinfo);
+    zhetrd_2stage_(jobz, uplo, n, &a[a_offset], lda, &w[1], &rwork[inde], &work[indtau],
+                   &work[indhous], &lhtrd, &work[indwrk], &llwork, &iinfo);
     /* For eigenvalues only, call DSTERF. For eigenvectors, first call */
     /* ZUNGTR to generate the unitary matrix, then call ZSTEQR. */
-    if (! wantz)
+    if(!wantz)
     {
         dsterf_(n, &w[1], &rwork[inde], info);
     }
     else
     {
-        zungtr_(uplo, n, &a[a_offset], lda, &work[indtau], &work[indwrk], & llwork, &iinfo);
+        zungtr_(uplo, n, &a[a_offset], lda, &work[indtau], &work[indwrk], &llwork, &iinfo);
         indwrk = inde + *n;
-        zsteqr_(jobz, n, &w[1], &rwork[inde], &a[a_offset], lda, &rwork[ indwrk], info);
+        zsteqr_(jobz, n, &w[1], &rwork[inde], &a[a_offset], lda, &rwork[indwrk], info);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
-    if (iscale == 1)
+    if(iscale == 1)
     {
-        if (*info == 0)
+        if(*info == 0)
         {
             imax = *n;
         }
@@ -381,7 +409,7 @@ void zheev_2stage_(char *jobz, char *uplo, integer *n, doublecomplex *a, integer
         dscal_(&imax, &d__1, &w[1], &c__1);
     }
     /* Set WORK(1) to optimal complex workspace size. */
-    work[1].r = (doublereal) lwmin;
+    work[1].r = (doublereal)lwmin;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

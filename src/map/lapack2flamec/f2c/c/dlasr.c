@@ -1,16 +1,25 @@
-/* ../netlib/dlasr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlasr.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLASR applies a sequence of plane rotations to a general rectangular matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLASR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasr.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasr.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasr.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasr.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasr.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasr.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -185,10 +194,13 @@
 /* > \ingroup auxOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doublereal *c__, doublereal *s, doublereal *a, integer * lda)
+void dlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doublereal *c__,
+            doublereal *s, doublereal *a, integer *lda)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlasr inputs: side %c, pivot %c, direct %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*side, *pivot, *direct, *m, *n, *lda);
+    AOCL_DTL_SNPRINTF("dlasr inputs: side %c, pivot %c, direct %c, m %" FLA_IS ", n %" FLA_IS
+                      ", lda %" FLA_IS "",
+                      *side, *pivot, *direct, *m, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -197,7 +209,8 @@ void dlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
     extern logical lsame_(char *, char *, integer, integer);
     doublereal ctemp, stemp;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -227,48 +240,48 @@ void dlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
     a -= a_offset;
     /* Function Body */
     info = 0;
-    if (! (lsame_(side, "L", 1, 1) || lsame_(side, "R", 1, 1)))
+    if(!(lsame_(side, "L", 1, 1) || lsame_(side, "R", 1, 1)))
     {
         info = 1;
     }
-    else if (! (lsame_(pivot, "V", 1, 1) || lsame_(pivot, "T", 1, 1) || lsame_(pivot, "B", 1, 1)))
+    else if(!(lsame_(pivot, "V", 1, 1) || lsame_(pivot, "T", 1, 1) || lsame_(pivot, "B", 1, 1)))
     {
         info = 2;
     }
-    else if (! (lsame_(direct, "F", 1, 1) || lsame_(direct, "B", 1, 1)))
+    else if(!(lsame_(direct, "F", 1, 1) || lsame_(direct, "B", 1, 1)))
     {
         info = 3;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         info = 4;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         info = 5;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         info = 9;
     }
-    if (info != 0)
+    if(info != 0)
     {
         xerbla_("DLASR ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (lsame_(side, "L", 1, 1))
+    if(lsame_(side, "L", 1, 1))
     {
         /* Form P * A */
-        if (lsame_(pivot, "V", 1, 1))
+        if(lsame_(pivot, "V", 1, 1))
         {
-            if (lsame_(direct, "F", 1, 1))
+            if(lsame_(direct, "F", 1, 1))
             {
                 double ct0, ct1;
                 double st0, st1;
@@ -277,14 +290,14 @@ void dlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
 
                 i__1 = *m - 1;
                 /* Apply two rotations in an iteration */
-                for (j = 1; j < i__1; j += 2)
+                for(j = 1; j < i__1; j += 2)
                 {
                     ct0 = c__[j];
                     st0 = s[j];
                     ct1 = c__[j + 1];
                     st1 = s[j + 1];
                     i__2 = *n;
-                    for (i__ = 1; i__ <= i__2; ++i__)
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         tmp0 = a[j + 0 + i__ * a_dim1];
                         tmp1 = a[j + 1 + i__ * a_dim1];
@@ -302,17 +315,15 @@ void dlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                     }
                 }
                 /* Apply the remaining rotation */
-                if (i__1 & 1)
+                if(i__1 & 1)
                 {
                     ct0 = c__[i__1];
                     st0 = s[i__1];
-                    if (ct0 != 1. || st0 != 0.)
+                    if(ct0 != 1. || st0 != 0.)
                     {
                         i__2 = *n;
                         j = i__1;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             tmp0 = a[j + 1 + i__ * a_dim1];
                             a[j + 1 + i__ * a_dim1] = ct0 * tmp0 - st0 * a[j + i__ * a_dim1];
@@ -322,20 +333,16 @@ void dlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                     }
                 }
             }
-            else if (lsame_(direct, "B", 1, 1))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *m - 1;
-                        j >= 1;
-                        --j)
+                for(j = *m - 1; j >= 1; --j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1. || stemp != 0.)
+                    if(ctemp != 1. || stemp != 0.)
                     {
                         i__1 = *n;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             temp = a[j + 1 + i__ * a_dim1];
                             a[j + 1 + i__ * a_dim1] = ctemp * temp - stemp * a[j + i__ * a_dim1];
@@ -347,51 +354,43 @@ void dlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                 }
             }
         }
-        else if (lsame_(pivot, "T", 1, 1))
+        else if(lsame_(pivot, "T", 1, 1))
         {
-            if (lsame_(direct, "F", 1, 1))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *m;
-                for (j = 2;
-                        j <= i__1;
-                        ++j)
+                for(j = 2; j <= i__1; ++j)
                 {
                     ctemp = c__[j - 1];
                     stemp = s[j - 1];
-                    if (ctemp != 1. || stemp != 0.)
+                    if(ctemp != 1. || stemp != 0.)
                     {
                         i__2 = *n;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             temp = a[j + i__ * a_dim1];
-                            a[j + i__ * a_dim1] = ctemp * temp - stemp * a[ i__ * a_dim1 + 1];
-                            a[i__ * a_dim1 + 1] = stemp * temp + ctemp * a[ i__ * a_dim1 + 1];
+                            a[j + i__ * a_dim1] = ctemp * temp - stemp * a[i__ * a_dim1 + 1];
+                            a[i__ * a_dim1 + 1] = stemp * temp + ctemp * a[i__ * a_dim1 + 1];
                             /* L50: */
                         }
                     }
                     /* L60: */
                 }
             }
-            else if (lsame_(direct, "B", 1, 1))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *m;
-                        j >= 2;
-                        --j)
+                for(j = *m; j >= 2; --j)
                 {
                     ctemp = c__[j - 1];
                     stemp = s[j - 1];
-                    if (ctemp != 1. || stemp != 0.)
+                    if(ctemp != 1. || stemp != 0.)
                     {
                         i__1 = *n;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             temp = a[j + i__ * a_dim1];
-                            a[j + i__ * a_dim1] = ctemp * temp - stemp * a[ i__ * a_dim1 + 1];
-                            a[i__ * a_dim1 + 1] = stemp * temp + ctemp * a[ i__ * a_dim1 + 1];
+                            a[j + i__ * a_dim1] = ctemp * temp - stemp * a[i__ * a_dim1 + 1];
+                            a[i__ * a_dim1 + 1] = stemp * temp + ctemp * a[i__ * a_dim1 + 1];
                             /* L70: */
                         }
                     }
@@ -399,23 +398,19 @@ void dlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                 }
             }
         }
-        else if (lsame_(pivot, "B", 1, 1))
+        else if(lsame_(pivot, "B", 1, 1))
         {
-            if (lsame_(direct, "F", 1, 1))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *m - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1. || stemp != 0.)
+                    if(ctemp != 1. || stemp != 0.)
                     {
                         i__2 = *n;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             temp = a[j + i__ * a_dim1];
                             a[j + i__ * a_dim1] = stemp * a[*m + i__ * a_dim1] + ctemp * temp;
@@ -426,20 +421,16 @@ void dlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                     /* L100: */
                 }
             }
-            else if (lsame_(direct, "B", 1, 1))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *m - 1;
-                        j >= 1;
-                        --j)
+                for(j = *m - 1; j >= 1; --j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1. || stemp != 0.)
+                    if(ctemp != 1. || stemp != 0.)
                     {
                         i__1 = *n;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             temp = a[j + i__ * a_dim1];
                             a[j + i__ * a_dim1] = stemp * a[*m + i__ * a_dim1] + ctemp * temp;
@@ -452,37 +443,33 @@ void dlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
             }
         }
     }
-    else if (lsame_(side, "R", 1, 1))
+    else if(lsame_(side, "R", 1, 1))
     {
         /* Form A * P**T */
-        if (lsame_(pivot, "V", 1, 1))
+        if(lsame_(pivot, "V", 1, 1))
         {
-            if (lsame_(direct, "F", 1, 1))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *n - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1. || stemp != 0.)
+                    if(ctemp != 1. || stemp != 0.)
                     {
                         i__2 = *m;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             temp = a[i__ + (j + 1) * a_dim1];
                             a[i__ + (j + 1) * a_dim1] = ctemp * temp - stemp * a[i__ + j * a_dim1];
-                            a[i__ + j * a_dim1] = stemp * temp + ctemp * a[ i__ + j * a_dim1];
+                            a[i__ + j * a_dim1] = stemp * temp + ctemp * a[i__ + j * a_dim1];
                             /* L130: */
                         }
                     }
                     /* L140: */
                 }
             }
-            else if (lsame_(direct, "B", 1, 1))
+            else if(lsame_(direct, "B", 1, 1))
             {
                 double ct0, ct1;
                 double st0, st1;
@@ -490,14 +477,14 @@ void dlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                 double res0, res1, res2;
 
                 /* Apply two rotations in an iteration */
-                for (j = *n - 1; j > 1; j -= 2)
+                for(j = *n - 1; j > 1; j -= 2)
                 {
                     ct0 = c__[j - 0];
                     st0 = s[j - 0];
                     ct1 = c__[j - 1];
                     st1 = s[j - 1];
                     i__1 = *m;
-                    for (i__ = 1; i__ <= i__1; ++i__)
+                    for(i__ = 1; i__ <= i__1; ++i__)
                     {
                         tmp0 = a[i__ + (j + 1) * a_dim1];
                         tmp1 = a[i__ + (j + 0) * a_dim1];
@@ -515,14 +502,14 @@ void dlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                     }
                 }
                 /* Apply the remaining rotation */
-                if (!(*n & 1))
+                if(!(*n & 1))
                 {
                     ct0 = c__[1];
                     st0 = s[1];
-                    if (ct0 != 1. || st0 != 0.)
+                    if(ct0 != 1. || st0 != 0.)
                     {
                         i__1 = *m;
-                        for (i__ = 1; i__ <= i__1; ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             tmp0 = a[i__ + 2 * a_dim1];
                             a[i__ + 2 * a_dim1] = ct0 * tmp0 - st0 * a[i__ + 1 * a_dim1];
@@ -532,26 +519,22 @@ void dlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                 }
             }
         }
-        else if (lsame_(pivot, "T", 1, 1))
+        else if(lsame_(pivot, "T", 1, 1))
         {
-            if (lsame_(direct, "F", 1, 1))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *n;
-                for (j = 2;
-                        j <= i__1;
-                        ++j)
+                for(j = 2; j <= i__1; ++j)
                 {
                     ctemp = c__[j - 1];
                     stemp = s[j - 1];
-                    if (ctemp != 1. || stemp != 0.)
+                    if(ctemp != 1. || stemp != 0.)
                     {
                         i__2 = *m;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             temp = a[i__ + j * a_dim1];
-                            a[i__ + j * a_dim1] = ctemp * temp - stemp * a[ i__ + a_dim1];
+                            a[i__ + j * a_dim1] = ctemp * temp - stemp * a[i__ + a_dim1];
                             a[i__ + a_dim1] = stemp * temp + ctemp * a[i__ + a_dim1];
                             /* L170: */
                         }
@@ -559,23 +542,19 @@ void dlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                     /* L180: */
                 }
             }
-            else if (lsame_(direct, "B", 1, 1))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *n;
-                        j >= 2;
-                        --j)
+                for(j = *n; j >= 2; --j)
                 {
                     ctemp = c__[j - 1];
                     stemp = s[j - 1];
-                    if (ctemp != 1. || stemp != 0.)
+                    if(ctemp != 1. || stemp != 0.)
                     {
                         i__1 = *m;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             temp = a[i__ + j * a_dim1];
-                            a[i__ + j * a_dim1] = ctemp * temp - stemp * a[ i__ + a_dim1];
+                            a[i__ + j * a_dim1] = ctemp * temp - stemp * a[i__ + a_dim1];
                             a[i__ + a_dim1] = stemp * temp + ctemp * a[i__ + a_dim1];
                             /* L190: */
                         }
@@ -584,23 +563,19 @@ void dlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                 }
             }
         }
-        else if (lsame_(pivot, "B", 1, 1))
+        else if(lsame_(pivot, "B", 1, 1))
         {
-            if (lsame_(direct, "F", 1, 1))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *n - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1. || stemp != 0.)
+                    if(ctemp != 1. || stemp != 0.)
                     {
                         i__2 = *m;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             temp = a[i__ + j * a_dim1];
                             a[i__ + j * a_dim1] = stemp * a[i__ + *n * a_dim1] + ctemp * temp;
@@ -611,20 +586,16 @@ void dlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
                     /* L220: */
                 }
             }
-            else if (lsame_(direct, "B", 1, 1))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *n - 1;
-                        j >= 1;
-                        --j)
+                for(j = *n - 1; j >= 1; --j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1. || stemp != 0.)
+                    if(ctemp != 1. || stemp != 0.)
                     {
                         i__1 = *m;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             temp = a[i__ + j * a_dim1];
                             a[i__ + j * a_dim1] = stemp * a[i__ + *n * a_dim1] + ctemp * temp;

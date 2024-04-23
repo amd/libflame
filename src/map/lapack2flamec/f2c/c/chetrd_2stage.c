@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/chetrd_2stage.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/chetrd_2stage.f -- translated by f2c (version 20160102). You must link the
+ resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
+ Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
+ with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -13,11 +16,17 @@ static integer c__4 = 4;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CHETRD_2STAGE + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrd_ 2stage.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrd_
+ * 2stage.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetrd_ 2stage.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetrd_
+ * 2stage.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrd_ 2stage.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrd_
+ * 2stage.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -51,7 +60,7 @@ static integer c__4 = 4;
 /* > = 'N': No need for the Housholder representation, */
 /* > in particular for the second stage (Band to */
 /* > tridiagonal) and thus LHOUS2 is of size fla_max(1, 4*N);
-*/
+ */
 /* > = 'V': the Householder representation is needed to */
 /* > either generate Q1 Q2 or to apply Q1 Q2, */
 /* > then LHOUS2 is to be queried and computed. */
@@ -62,7 +71,7 @@ static integer c__4 = 4;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -138,7 +147,7 @@ the routine */
 /* > this value as the first entry of the HOUS2 array, and no error */
 /* > message related to LHOUS2 is issued by XERBLA. */
 /* > If VECT='N', LHOUS2 = fla_max(1, 4*n);
-*/
+ */
 /* > if VECT='V', option not yet available. */
 /* > \endverbatim */
 /* > */
@@ -219,15 +228,21 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void chetrd_2stage_(char *vect, char *uplo, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tau, complex * hous2, integer *lhous2, complex *work, integer *lwork, integer *info)
+void chetrd_2stage_(char *vect, char *uplo, integer *n, complex *a, integer *lda, real *d__,
+                    real *e, complex *tau, complex *hous2, integer *lhous2, complex *work,
+                    integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chetrd_2stage inputs: vect %c, uplo %c, n %lld, lda %lld, lhous2 %lld, lwork %lld",*vect, *uplo, *n, *lda, *lhous2, *lwork);
+    snprintf(buffer, 256,
+             "chetrd_2stage inputs: vect %c, uplo %c, n %lld, lda %lld, lhous2 %lld, lwork %lld",
+             *vect, *uplo, *n, *lda, *lhous2, *lwork);
 #else
-    snprintf(buffer, 256,"chetrd_2stage inputs: vect %c, uplo %c, n %d, lda %d, lhous2 %d, lwork %d",*vect, *uplo, *n, *lda, *lhous2, *lwork);
+    snprintf(buffer, 256,
+             "chetrd_2stage inputs: vect %c, uplo %c, n %d, lda %d, lhous2 %d, lwork %d", *vect,
+             *uplo, *n, *lda, *lhous2, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -236,17 +251,23 @@ void chetrd_2stage_(char *vect, char *uplo, integer *n, complex *a, integer *lda
     /* Local variables */
     integer ib, kd;
     extern /* Subroutine */
-    void chetrd_he2hb_(char *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+        void
+        chetrd_he2hb_(char *, integer *, integer *, complex *, integer *, complex *, integer *,
+                      complex *, complex *, integer *, integer *);
     integer ldab;
     extern /* Subroutine */
-    void chetrd_hb2st_(char *, char *, char *, integer *, integer *, complex *, integer *, real *, real *, complex *, integer *, complex *, integer *, integer *);
-    extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+        void
+        chetrd_hb2st_(char *, char *, char *, integer *, integer *, complex *, integer *, real *,
+                      real *, complex *, integer *, complex *, integer *, integer *);
+    extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *,
+                                 integer *);
     integer lwrk, wpos;
     extern logical lsame_(char *, char *, integer, integer);
     integer abpos, lhmin, lwmin;
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -286,51 +307,51 @@ void chetrd_2stage_(char *vect, char *uplo, integer *n, complex *a, integer *lda
     lwmin = ilaenv2stage_(&c__4, "CHETRD_2STAGE", vect, n, &kd, &ib, &c_n1);
     /* WRITE(*,*),'CHETRD_2STAGE N KD UPLO LHMIN LWMIN ',N, KD, UPLO, */
     /* $ LHMIN, LWMIN */
-    if (! lsame_(vect, "N", 1, 1))
+    if(!lsame_(vect, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*lhous2 < lhmin && ! lquery)
+    else if(*lhous2 < lhmin && !lquery)
     {
         *info = -10;
     }
-    else if (*lwork < lwmin && ! lquery)
+    else if(*lwork < lwmin && !lquery)
     {
         *info = -12;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        hous2[1].r = (real) lhmin;
+        hous2[1].r = (real)lhmin;
         hous2[1].i = 0.f; // , expr subst
-        work[1].r = (real) lwmin;
+        work[1].r = (real)lwmin;
         work[1].i = 0.f; // , expr subst
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CHETRD_2STAGE", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
@@ -342,25 +363,27 @@ void chetrd_2stage_(char *vect, char *uplo, integer *n, complex *a, integer *lda
     lwrk = *lwork - ldab * *n;
     abpos = 1;
     wpos = abpos + ldab * *n;
-    chetrd_he2hb_(uplo, n, &kd, &a[a_offset], lda, &work[abpos], &ldab, &tau[ 1], &work[wpos], &lwrk, info);
-    if (*info != 0)
+    chetrd_he2hb_(uplo, n, &kd, &a[a_offset], lda, &work[abpos], &ldab, &tau[1], &work[wpos], &lwrk,
+                  info);
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CHETRD_HE2HB", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    chetrd_hb2st_("Y", vect, uplo, n, &kd, &work[abpos], &ldab, &d__[1], &e[ 1], &hous2[1], lhous2, &work[wpos], &lwrk, info);
-    if (*info != 0)
+    chetrd_hb2st_("Y", vect, uplo, n, &kd, &work[abpos], &ldab, &d__[1], &e[1], &hous2[1], lhous2,
+                  &work[wpos], &lwrk, info);
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CHETRD_HB2ST", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    hous2[1].r = (real) lhmin;
+    hous2[1].r = (real)lhmin;
     hous2[1].i = 0.f; // , expr subst
-    work[1].r = (real) lwmin;
+    work[1].r = (real)lwmin;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

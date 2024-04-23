@@ -1,16 +1,25 @@
-/* ../netlib/slaqsy.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slaqsy.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLAQSY scales a symmetric/Hermitian matrix, using scaling factors computed by spoequ. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAQSY + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaqsy. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaqsy.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaqsy. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaqsy.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaqsy. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaqsy.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -118,12 +127,13 @@
 /* > \ingroup realSYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slaqsy_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scond, real *amax, char *equed)
+void slaqsy_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scond, real *amax,
+             char *equed)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slaqsy inputs: uplo %c, n %d, lda %d",*uplo, *n, *lda);
+    snprintf(buffer, 256, "slaqsy inputs: uplo %c, n %d, lda %d", *uplo, *n, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -157,7 +167,7 @@ void slaqsy_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scond
     a -= a_offset;
     --s;
     /* Function Body */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         *(unsigned char *)equed = 'N';
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -166,7 +176,7 @@ void slaqsy_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scond
     /* Initialize LARGE and SMALL. */
     small_val = slamch_("Safe minimum") / slamch_("Precision");
     large = 1.f / small_val;
-    if (*scond >= .1f && *amax >= small_val && *amax <= large)
+    if(*scond >= .1f && *amax >= small_val && *amax <= large)
     {
         /* No equilibration */
         *(unsigned char *)equed = 'N';
@@ -174,19 +184,15 @@ void slaqsy_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scond
     else
     {
         /* Replace A by diag(S) * A * diag(S). */
-        if (lsame_(uplo, "U", 1, 1))
+        if(lsame_(uplo, "U", 1, 1))
         {
             /* Upper triangle of A is stored. */
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 cj = s[j];
                 i__2 = j;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     a[i__ + j * a_dim1] = cj * s[i__] * a[i__ + j * a_dim1];
                     /* L10: */
@@ -198,15 +204,11 @@ void slaqsy_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scond
         {
             /* Lower triangle of A is stored. */
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 cj = s[j];
                 i__2 = *n;
-                for (i__ = j;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = j; i__ <= i__2; ++i__)
                 {
                     a[i__ + j * a_dim1] = cj * s[i__] * a[i__ + j * a_dim1];
                     /* L30: */

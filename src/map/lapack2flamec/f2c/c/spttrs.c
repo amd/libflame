@@ -1,5 +1,8 @@
-/* ../netlib/spttrs.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/spttrs.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -9,11 +12,17 @@ static integer c_n1 = -1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SPTTRS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spttrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spttrs.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spttrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spttrs.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spttrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spttrs.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -103,7 +112,8 @@ void spttrs_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ld
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"spttrs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *ldb);
+    snprintf(buffer, 256, "spttrs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n,
+             *nrhs, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -111,7 +121,9 @@ void spttrs_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ld
     /* Local variables */
     integer j, jb, nb;
     extern /* Subroutine */
-    void sptts2_(integer *, integer *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sptts2_(integer *, integer *, real *, real *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -140,19 +152,19 @@ void spttrs_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ld
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -2;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SPTTRS", &i__1, (ftnlen)6);
@@ -160,13 +172,13 @@ void spttrs_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ld
         return;
     }
     /* Quick return if possible */
-    if (*n == 0 || *nrhs == 0)
+    if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Determine the number of right-hand sides to solve at a time. */
-    if (*nrhs == 1)
+    if(*nrhs == 1)
     {
         nb = 1;
     }
@@ -175,9 +187,9 @@ void spttrs_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ld
         /* Computing MAX */
         i__1 = 1;
         i__2 = ilaenv_(&c__1, "SPTTRS", " ", n, nrhs, &c_n1, &c_n1); // , expr subst
-        nb = fla_max(i__1,i__2);
+        nb = fla_max(i__1, i__2);
     }
-    if (nb >= *nrhs)
+    if(nb >= *nrhs)
     {
         sptts2_(n, nrhs, &d__[1], &e[1], &b[b_offset], ldb);
     }
@@ -185,13 +197,11 @@ void spttrs_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ld
     {
         i__1 = *nrhs;
         i__2 = nb;
-        for (j = 1;
-                i__2 < 0 ? j >= i__1 : j <= i__1;
-                j += i__2)
+        for(j = 1; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2)
         {
             /* Computing MIN */
             i__3 = *nrhs - j + 1;
-            jb = fla_min(i__3,nb);
+            jb = fla_min(i__3, nb);
             sptts2_(n, &jb, &d__[1], &e[1], &b[j * b_dim1 + 1], ldb);
             /* L10: */
         }

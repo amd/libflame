@@ -1,16 +1,25 @@
-/* ../netlib/slaev2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slaev2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLAEV2 computes the eigenvalues and eigenvectors of a 2-by-2 symmetric/Hermitian matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAEV2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaev2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaev2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaev2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaev2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaev2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaev2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -107,7 +116,7 @@ higher precision or correctly rounded or */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slaev2_(real *a, real *b, real *c__, real *rt1, real * rt2, real *cs1, real *sn1)
+void slaev2_(real *a, real *b, real *c__, real *rt1, real *rt2, real *cs1, real *sn1)
 {
     /* System generated locals */
     real r__1;
@@ -137,7 +146,7 @@ void slaev2_(real *a, real *b, real *c__, real *rt1, real * rt2, real *cs1, real
     adf = f2c_abs(df);
     tb = *b + *b;
     ab = f2c_abs(tb);
-    if (f2c_abs(*a) > f2c_abs(*c__))
+    if(f2c_abs(*a) > f2c_abs(*c__))
     {
         acmx = *a;
         acmn = *c__;
@@ -147,13 +156,13 @@ void slaev2_(real *a, real *b, real *c__, real *rt1, real * rt2, real *cs1, real
         acmx = *c__;
         acmn = *a;
     }
-    if (adf > ab)
+    if(adf > ab)
     {
         /* Computing 2nd power */
         r__1 = ab / adf;
         rt = adf * sqrt(r__1 * r__1 + 1.f);
     }
-    else if (adf < ab)
+    else if(adf < ab)
     {
         /* Computing 2nd power */
         r__1 = adf / ab;
@@ -164,7 +173,7 @@ void slaev2_(real *a, real *b, real *c__, real *rt1, real * rt2, real *cs1, real
         /* Includes case AB=ADF=0 */
         rt = ab * sqrt(2.f);
     }
-    if (sm < 0.f)
+    if(sm < 0.f)
     {
         *rt1 = (sm - rt) * .5f;
         sgn1 = -1;
@@ -173,7 +182,7 @@ void slaev2_(real *a, real *b, real *c__, real *rt1, real * rt2, real *cs1, real
         /* next line needs to be executed in higher precision. */
         *rt2 = acmx / *rt1 * acmn - *b / *rt1 * *b;
     }
-    else if (sm > 0.f)
+    else if(sm > 0.f)
     {
         *rt1 = (sm + rt) * .5f;
         sgn1 = 1;
@@ -190,7 +199,7 @@ void slaev2_(real *a, real *b, real *c__, real *rt1, real * rt2, real *cs1, real
         sgn1 = 1;
     }
     /* Compute the eigenvector */
-    if (df >= 0.f)
+    if(df >= 0.f)
     {
         cs = df + rt;
         sgn2 = 1;
@@ -201,7 +210,7 @@ void slaev2_(real *a, real *b, real *c__, real *rt1, real * rt2, real *cs1, real
         sgn2 = -1;
     }
     acs = f2c_abs(cs);
-    if (acs > ab)
+    if(acs > ab)
     {
         ct = -tb / cs;
         *sn1 = 1.f / sqrt(ct * ct + 1.f);
@@ -209,7 +218,7 @@ void slaev2_(real *a, real *b, real *c__, real *rt1, real * rt2, real *cs1, real
     }
     else
     {
-        if (ab == 0.f)
+        if(ab == 0.f)
         {
             *cs1 = 1.f;
             *sn1 = 0.f;
@@ -221,7 +230,7 @@ void slaev2_(real *a, real *b, real *c__, real *rt1, real * rt2, real *cs1, real
             *sn1 = tn * *cs1;
         }
     }
-    if (sgn1 == sgn2)
+    if(sgn1 == sgn2)
     {
         tn = *cs1;
         *cs1 = -(*sn1);

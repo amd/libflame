@@ -1,16 +1,25 @@
-/* ../netlib/dlaed6.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlaed6.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLAED6 used by sstedc. Computes one Newton step in solution of the secular equation. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLAED6 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaed6. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaed6.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaed6. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaed6.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaed6. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaed6.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -38,7 +47,7 @@
 /* > It is assumed that */
 /* > */
 /* > if ORGATI = .true. the root is between d(2) and d(3);
-*/
+ */
 /* > otherwise it is between d(1) and d(2) */
 /* > */
 /* > This routine will be called by DLAED4 when necessary. In most cases, */
@@ -127,10 +136,12 @@ otherwise it is between d(1) and d(2). See */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlaed6_(integer *kniter, logical *orgati, doublereal * rho, doublereal *d__, doublereal *z__, doublereal *finit, doublereal * tau, integer *info)
+void dlaed6_(integer *kniter, logical *orgati, doublereal *rho, doublereal *d__, doublereal *z__,
+             doublereal *finit, doublereal *tau, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaed6 inputs: kniter %" FLA_IS ", orgati %" FLA_IS ", rho %lf", *kniter, *orgati, *rho);
+    AOCL_DTL_SNPRINTF("dlaed6 inputs: kniter %" FLA_IS ", orgati %" FLA_IS ", rho %lf", *kniter,
+                      *orgati, *rho);
     /* System generated locals */
     integer i__1;
     doublereal d__1, d__2, d__3, d__4;
@@ -173,7 +184,7 @@ void dlaed6_(integer *kniter, logical *orgati, doublereal * rho, doublereal *d__
     /* Function Body */
     *info = 0;
     sclinv = 0.;
-    if (*orgati)
+    if(*orgati)
     {
         lbd = d__[2];
         ubd = d__[3];
@@ -183,7 +194,7 @@ void dlaed6_(integer *kniter, logical *orgati, doublereal * rho, doublereal *d__
         lbd = d__[1];
         ubd = d__[2];
     }
-    if (*finit < 0.)
+    if(*finit < 0.)
     {
         lbd = 0.;
     }
@@ -193,9 +204,9 @@ void dlaed6_(integer *kniter, logical *orgati, doublereal * rho, doublereal *d__
     }
     niter = 1;
     *tau = 0.;
-    if (*kniter == 2)
+    if(*kniter == 2)
     {
-        if (*orgati)
+        if(*orgati)
         {
             temp = (d__[3] - d__[2]) / 2.;
             c__ = *rho + z__[1] / (d__[1] - d__[2] - temp);
@@ -211,36 +222,38 @@ void dlaed6_(integer *kniter, logical *orgati, doublereal * rho, doublereal *d__
         }
         /* Computing MAX */
         d__1 = f2c_abs(a), d__2 = f2c_abs(b);
-        d__1 = fla_max(d__1,d__2);
+        d__1 = fla_max(d__1, d__2);
         d__2 = f2c_abs(c__); // ; expr subst
-        temp = fla_max(d__1,d__2);
+        temp = fla_max(d__1, d__2);
         a /= temp;
         b /= temp;
         c__ /= temp;
-        if (c__ == 0.)
+        if(c__ == 0.)
         {
             *tau = b / a;
         }
-        else if (a <= 0.)
+        else if(a <= 0.)
         {
-            *tau = (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_abs(d__1)))) / ( c__ * 2.);
+            *tau = (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_abs(d__1)))) / (c__ * 2.);
         }
         else
         {
-            *tau = b * 2. / (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_abs(d__1)) ));
+            *tau = b * 2. / (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_abs(d__1))));
         }
-        if (*tau < lbd || *tau > ubd)
+        if(*tau < lbd || *tau > ubd)
         {
             *tau = (lbd + ubd) / 2.;
         }
-        if (d__[1] == *tau || d__[2] == *tau || d__[3] == *tau)
+        if(d__[1] == *tau || d__[2] == *tau || d__[3] == *tau)
         {
             *tau = 0.;
         }
         else
         {
-            temp = *finit + *tau * z__[1] / (d__[1] * (d__[1] - *tau)) + *tau * z__[2] / (d__[2] * (d__[2] - *tau)) + *tau * z__[3] / ( d__[3] * (d__[3] - *tau));
-            if (temp <= 0.)
+            temp = *finit + *tau * z__[1] / (d__[1] * (d__[1] - *tau))
+                   + *tau * z__[2] / (d__[2] * (d__[2] - *tau))
+                   + *tau * z__[3] / (d__[3] * (d__[3] - *tau));
+            if(temp <= 0.)
             {
                 lbd = *tau;
             }
@@ -248,7 +261,7 @@ void dlaed6_(integer *kniter, logical *orgati, doublereal * rho, doublereal *d__
             {
                 ubd = *tau;
             }
-            if (f2c_abs(*finit) <= f2c_abs(temp))
+            if(f2c_abs(*finit) <= f2c_abs(temp))
             {
                 *tau = 0.;
             }
@@ -260,32 +273,32 @@ void dlaed6_(integer *kniter, logical *orgati, doublereal * rho, doublereal *d__
     /* others but recomputed at each call */
     eps = dlamch_("Epsilon");
     base = dlamch_("Base");
-    i__1 = (integer) (log(dlamch_("SafMin")) / log(base) / 3.);
+    i__1 = (integer)(log(dlamch_("SafMin")) / log(base) / 3.);
     small1 = pow_di(&base, &i__1);
     sminv1 = 1. / small1;
     small2 = small1 * small1;
     sminv2 = sminv1 * sminv1;
     /* Determine if scaling of inputs necessary to avoid overflow */
     /* when computing 1/TEMP**3 */
-    if (*orgati)
+    if(*orgati)
     {
         /* Computing MIN */
         d__3 = (d__1 = d__[2] - *tau, f2c_abs(d__1));
-        d__4 = (d__2 = d__[3] - * tau, f2c_abs(d__2)); // , expr subst
-        temp = fla_min(d__3,d__4);
+        d__4 = (d__2 = d__[3] - *tau, f2c_abs(d__2)); // , expr subst
+        temp = fla_min(d__3, d__4);
     }
     else
     {
         /* Computing MIN */
         d__3 = (d__1 = d__[1] - *tau, f2c_abs(d__1));
-        d__4 = (d__2 = d__[2] - * tau, f2c_abs(d__2)); // , expr subst
-        temp = fla_min(d__3,d__4);
+        d__4 = (d__2 = d__[2] - *tau, f2c_abs(d__2)); // , expr subst
+        temp = fla_min(d__3, d__4);
     }
     scale = FALSE_;
-    if (temp <= small1)
+    if(temp <= small1)
     {
         scale = TRUE_;
-        if (temp <= small2)
+        if(temp <= small2)
         {
             /* Scale up by power of radix nearest 1/SAFMIN**(2/3) */
             sclfac = sminv2;
@@ -298,9 +311,7 @@ void dlaed6_(integer *kniter, logical *orgati, doublereal * rho, doublereal *d__
             sclinv = small1;
         }
         /* Scaling up safe because D, Z, TAU scaled elsewhere to be O(1) */
-        for (i__ = 1;
-                i__ <= 3;
-                ++i__)
+        for(i__ = 1; i__ <= 3; ++i__)
         {
             dscale[i__ - 1] = d__[i__] * sclfac;
             zscale[i__ - 1] = z__[i__] * sclfac;
@@ -313,9 +324,7 @@ void dlaed6_(integer *kniter, logical *orgati, doublereal * rho, doublereal *d__
     else
     {
         /* Copy D and Z to DSCALE and ZSCALE */
-        for (i__ = 1;
-                i__ <= 3;
-                ++i__)
+        for(i__ = 1; i__ <= 3; ++i__)
         {
             dscale[i__ - 1] = d__[i__];
             zscale[i__ - 1] = z__[i__];
@@ -325,9 +334,7 @@ void dlaed6_(integer *kniter, logical *orgati, doublereal * rho, doublereal *d__
     fc = 0.;
     df = 0.;
     ddf = 0.;
-    for (i__ = 1;
-            i__ <= 3;
-            ++i__)
+    for(i__ = 1; i__ <= 3; ++i__)
     {
         temp = 1. / (dscale[i__ - 1] - *tau);
         temp1 = zscale[i__ - 1] * temp;
@@ -339,11 +346,11 @@ void dlaed6_(integer *kniter, logical *orgati, doublereal * rho, doublereal *d__
         /* L30: */
     }
     f = *finit + *tau * fc;
-    if (f2c_abs(f) <= 0.)
+    if(f2c_abs(f) <= 0.)
     {
         goto L60;
     }
-    if (f <= 0.)
+    if(f <= 0.)
     {
         lbd = *tau;
     }
@@ -356,15 +363,13 @@ void dlaed6_(integer *kniter, logical *orgati, doublereal * rho, doublereal *d__
     /* It is not hard to see that */
     /* 1) Iterations will go up monotonically */
     /* if FINIT < 0;
-    */
+     */
     /* 2) Iterations will go down monotonically */
     /* if FINIT > 0. */
     iter = niter + 1;
-    for (niter = iter;
-            niter <= 40;
-            ++niter)
+    for(niter = iter; niter <= 40; ++niter)
     {
-        if (*orgati)
+        if(*orgati)
         {
             temp1 = dscale[1] - *tau;
             temp2 = dscale[2] - *tau;
@@ -379,30 +384,30 @@ void dlaed6_(integer *kniter, logical *orgati, doublereal * rho, doublereal *d__
         c__ = f - (temp1 + temp2) * df + temp1 * temp2 * ddf;
         /* Computing MAX */
         d__1 = f2c_abs(a), d__2 = f2c_abs(b);
-        d__1 = fla_max(d__1,d__2);
+        d__1 = fla_max(d__1, d__2);
         d__2 = f2c_abs(c__); // ; expr subst
-        temp = fla_max(d__1,d__2);
+        temp = fla_max(d__1, d__2);
         a /= temp;
         b /= temp;
         c__ /= temp;
-        if (c__ == 0.)
+        if(c__ == 0.)
         {
             eta = b / a;
         }
-        else if (a <= 0.)
+        else if(a <= 0.)
         {
             eta = (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_abs(d__1)))) / (c__ * 2.);
         }
         else
         {
-            eta = b * 2. / (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_abs(d__1))) );
+            eta = b * 2. / (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_abs(d__1))));
         }
-        if (f * eta >= 0.)
+        if(f * eta >= 0.)
         {
             eta = -f / df;
         }
         *tau += eta;
-        if (*tau < lbd || *tau > ubd)
+        if(*tau < lbd || *tau > ubd)
         {
             *tau = (lbd + ubd) / 2.;
         }
@@ -410,11 +415,9 @@ void dlaed6_(integer *kniter, logical *orgati, doublereal * rho, doublereal *d__
         erretm = 0.;
         df = 0.;
         ddf = 0.;
-        for (i__ = 1;
-                i__ <= 3;
-                ++i__)
+        for(i__ = 1; i__ <= 3; ++i__)
         {
-            if (dscale[i__ - 1] - *tau != 0.)
+            if(dscale[i__ - 1] - *tau != 0.)
             {
                 temp = 1. / (dscale[i__ - 1] - *tau);
                 temp1 = zscale[i__ - 1] * temp;
@@ -434,11 +437,11 @@ void dlaed6_(integer *kniter, logical *orgati, doublereal * rho, doublereal *d__
         }
         f = *finit + *tau * fc;
         erretm = (f2c_abs(*finit) + f2c_abs(*tau) * erretm) * 8. + f2c_abs(*tau) * df;
-        if (f2c_abs(f) <= eps * 4. * erretm || ubd - lbd <= eps * 4. * f2c_abs(*tau))
+        if(f2c_abs(f) <= eps * 4. * erretm || ubd - lbd <= eps * 4. * f2c_abs(*tau))
         {
             goto L60;
         }
-        if (f <= 0.)
+        if(f <= 0.)
         {
             lbd = *tau;
         }
@@ -450,7 +453,7 @@ void dlaed6_(integer *kniter, logical *orgati, doublereal * rho, doublereal *d__
     }
     *info = 1;
 L60: /* Undo scaling */
-    if (scale)
+    if(scale)
     {
         *tau *= sclinv;
     }

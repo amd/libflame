@@ -1,5 +1,5 @@
-#include "FLA_lapack2flame_return_defs.h"
 #include "FLA_f2c.h" /* Table of constant values */
+#include "FLA_lapack2flame_return_defs.h"
 
 int zlauum_check(char *uplo, integer *n, dcomplex *a, integer *lda, integer *info)
 {
@@ -16,26 +16,26 @@ int zlauum_check(char *uplo, integer *n, dcomplex *a, integer *lda, integer *inf
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZLAUUM", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         return LAPACK_QUICK_RETURN;
     }

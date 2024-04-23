@@ -1,17 +1,16 @@
 /* dsecndtst.f -- translated by f2c (version 20061008).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+    on Microsoft Windows system, link with libf2c.lib;
+    on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+    or, if you install libf2c.a in a standard place, with -lf2c -lm
+    -- in that order, at the end of the command line, as in
+        cc *.o -lf2c -lm
+    Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+        http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "FLA_f2c.h"
-
 
 /* Table of constant values */
 
@@ -49,14 +48,12 @@ int MAIN__(void)
     doublereal tnosec;
 
     /* Fortran I/O blocks */
-    static cilist io___8 = { 0, 6, 0, fmt_9999, 0 };
-    static cilist io___9 = { 0, 6, 0, fmt_9998, 0 };
-    static cilist io___10 = { 0, 6, 0, fmt_9994, 0 };
-    static cilist io___12 = { 0, 6, 0, fmt_9997, 0 };
-    static cilist io___14 = { 0, 6, 0, fmt_9996, 0 };
-    static cilist io___15 = { 0, 6, 0, fmt_9995, 0 };
-
-
+    static cilist io___8 = {0, 6, 0, fmt_9999, 0};
+    static cilist io___9 = {0, 6, 0, fmt_9998, 0};
+    static cilist io___10 = {0, 6, 0, fmt_9994, 0};
+    static cilist io___12 = {0, 6, 0, fmt_9997, 0};
+    static cilist io___14 = {0, 6, 0, fmt_9996, 0};
+    static cilist io___15 = {0, 6, 0, fmt_9995, 0};
 
     /*  -- LAPACK test routine (version 3.2) -- */
     /*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
@@ -74,13 +71,12 @@ int MAIN__(void)
     /*     .. */
     /*     .. Executable Statements .. */
 
-
     /*     Initialize X and Y */
 
-    for (i__ = 1; i__ <= 100; ++i__)
+    for(i__ = 1; i__ <= 100; ++i__)
     {
-        x[i__ - 1] = 1. / (doublereal) i__;
-        y[i__ - 1] = (doublereal) (100 - i__) / 100.;
+        x[i__ - 1] = 1. / (doublereal)i__;
+        y[i__ - 1] = (doublereal)(100 - i__) / 100.;
         /* L10: */
     }
     alpha = .315;
@@ -88,9 +84,9 @@ int MAIN__(void)
     /*     Time 1,000,000 DAXPY operations */
 
     t1 = dsecnd_();
-    for (j = 1; j <= 5000; ++j)
+    for(j = 1; j <= 5000; ++j)
     {
-        for (i__ = 1; i__ <= 100; ++i__)
+        for(i__ = 1; i__ <= 100; ++i__)
         {
             y[i__ - 1] += alpha * x[i__ - 1];
             /* L20: */
@@ -103,7 +99,7 @@ int MAIN__(void)
     d__1 = t2 - t1;
     do_fio(&c__1, (char *)&d__1, (ftnlen)sizeof(doublereal));
     e_wsfe();
-    if (t2 - t1 > 0.)
+    if(t2 - t1 > 0.)
     {
         s_wsfe(&io___9);
         d__1 = 1. / (t2 - t1);
@@ -120,9 +116,9 @@ int MAIN__(void)
     /*     Time 1,000,000 DAXPY operations with DSECND in the outer loop */
 
     t1 = dsecnd_();
-    for (j = 1; j <= 5000; ++j)
+    for(j = 1; j <= 5000; ++j)
     {
-        for (i__ = 1; i__ <= 100; ++i__)
+        for(i__ = 1; i__ <= 100; ++i__)
         {
             y[i__ - 1] += alpha * x[i__ - 1];
             /* L40: */
@@ -147,7 +143,7 @@ int MAIN__(void)
     /*     Compute the equivalent number of floating point operations used */
     /*     by an average call to DSECND. */
 
-    if (tnosec > 0.)
+    if(tnosec > 0.)
     {
         s_wsfe(&io___15);
         d__1 = avg * 1e3 / tnosec;
@@ -169,8 +165,8 @@ int MAIN__(void)
     return 0;
 } /* mysub_ */
 
-/* Main program alias */ int test5_ ()
+/* Main program alias */ int test5_()
 {
-    MAIN__ ();
+    MAIN__();
     return 0;
 }

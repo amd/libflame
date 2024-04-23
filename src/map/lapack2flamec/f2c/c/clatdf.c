@@ -1,25 +1,31 @@
-/* ../netlib/clatdf.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/clatdf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {1.f, 0.f};
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static real c_b24 = 1.f;
-/* > \brief \b CLATDF uses the LU factorization of the n-by-n matrix computed by sgetc2 and computes a contrib ution to the reciprocal Dif-estimate. */
+/* > \brief \b CLATDF uses the LU factorization of the n-by-n matrix computed by sgetc2 and computes
+ * a contrib ution to the reciprocal Dif-estimate. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLATDF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clatdf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clatdf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clatdf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clatdf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clatdf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clatdf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -162,15 +168,16 @@ for 1 <= j <= N, column j of the */
 /* > 1995. */
 /* ===================================================================== */
 /* Subroutine */
-void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs, real *rdsum, real *rdscal, integer *ipiv, integer *jpiv)
+void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs, real *rdsum,
+             real *rdscal, integer *ipiv, integer *jpiv)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clatdf inputs: ijob %lld, n %lld, ldz %lld",*ijob, *n, *ldz);
+    snprintf(buffer, 256, "clatdf inputs: ijob %lld, n %lld, ldz %lld", *ijob, *n, *ldz);
 #else
-    snprintf(buffer, 256,"clatdf inputs: ijob %d, n %d, ldz %d",*ijob, *n, *ldz);
+    snprintf(buffer, 256, "clatdf inputs: ijob %d, n %d, ldz %d", *ijob, *n, *ldz);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -187,18 +194,27 @@ void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs
     integer info;
     complex temp, work[8];
     extern /* Subroutine */
-    void cscal_(integer *, complex *, complex *, integer *);
+        void
+        cscal_(integer *, complex *, complex *, integer *);
     real scale;
     extern /* Complex */
-    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+        VOID
+        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern /* Subroutine */
-    void ccopy_(integer *, complex *, integer *, complex *, integer *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *);
     complex pmone;
     extern /* Subroutine */
-    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+        void
+        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     real rtemp, sminu, rwork[2], splus;
     extern /* Subroutine */
-    void cgesc2_(integer *, complex *, integer *, complex *, integer *, integer *, real *), cgecon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), classq_(integer *, complex *, integer *, real *, real *), claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
+        void
+        cgesc2_(integer *, complex *, integer *, complex *, integer *, integer *, real *),
+        cgecon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *,
+                integer *),
+        classq_(integer *, complex *, integer *, real *, real *),
+        claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
     extern real scasum_(integer *, complex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -230,7 +246,7 @@ void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs
     --ipiv;
     --jpiv;
     /* Function Body */
-    if (*ijob != 2)
+    if(*ijob != 2)
     {
         /* Apply permutations IPIV to RHS */
         i__1 = *n - 1;
@@ -241,9 +257,7 @@ void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs
         pmone.r = q__1.r;
         pmone.i = q__1.i; // , expr subst
         i__1 = *n - 1;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j;
             q__1.r = rhs[i__2].r + 1.f;
@@ -259,20 +273,21 @@ void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs
             /* Lockahead for L- part RHS(1:N-1) = +-1 */
             /* SPLUS and SMIN computed more efficiently than in BSOLVE[1]. */
             i__2 = *n - j;
-            cdotc_f2c_(&q__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &z__[j + 1 + j * z_dim1], &c__1);
+            cdotc_f2c_(&q__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &z__[j + 1 + j * z_dim1],
+                       &c__1);
             splus += q__1.r;
             i__2 = *n - j;
             cdotc_f2c_(&q__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1], &c__1);
             sminu = q__1.r;
             i__2 = j;
             splus *= rhs[i__2].r;
-            if (splus > sminu)
+            if(splus > sminu)
             {
                 i__2 = j;
                 rhs[i__2].r = bp.r;
                 rhs[i__2].i = bp.i; // , expr subst
             }
-            else if (sminu > splus)
+            else if(sminu > splus)
             {
                 i__2 = j;
                 rhs[i__2].r = bm.r;
@@ -324,9 +339,7 @@ void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs
         rhs[i__1].i = q__1.i; // , expr subst
         splus = 0.f;
         sminu = 0.f;
-        for (i__ = *n;
-                i__ >= 1;
-                --i__)
+        for(i__ = *n; i__ >= 1; --i__)
         {
             c_div(&q__1, &c_b1, &z__[i__ + i__ * z_dim1]);
             temp.r = q__1.r;
@@ -344,9 +357,7 @@ void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs
             rhs[i__1].r = q__1.r;
             rhs[i__1].i = q__1.i; // , expr subst
             i__1 = *n;
-            for (k = i__ + 1;
-                    k <= i__1;
-                    ++k)
+            for(k = i__ + 1; k <= i__1; ++k)
             {
                 i__2 = i__ - 1;
                 i__3 = i__ - 1;
@@ -378,7 +389,7 @@ void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs
             sminu += c_abs(&rhs[i__]);
             /* L30: */
         }
-        if (splus > sminu)
+        if(splus > sminu)
         {
             ccopy_(n, work, &c__1, &rhs[1], &c__1);
         }
@@ -410,7 +421,7 @@ void clatdf_(integer *ijob, integer *n, complex *z__, integer *ldz, complex *rhs
     caxpy_(n, &q__1, xm, &c__1, &rhs[1], &c__1);
     cgesc2_(n, &z__[z_offset], ldz, &rhs[1], &ipiv[1], &jpiv[1], &scale);
     cgesc2_(n, &z__[z_offset], ldz, xp, &ipiv[1], &jpiv[1], &scale);
-    if (scasum_(n, xp, &c__1) > scasum_(n, &rhs[1], &c__1))
+    if(scasum_(n, xp, &c__1) > scasum_(n, &rhs[1], &c__1))
     {
         ccopy_(n, xp, &c__1, &rhs[1], &c__1);
     }

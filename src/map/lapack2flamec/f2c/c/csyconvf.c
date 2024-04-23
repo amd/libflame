@@ -1,16 +1,25 @@
-/* ../netlib/v3.9.0/csyconvf.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/csyconvf.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CSYCONVF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CSYCONVF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csyconv f.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csyconv
+ * f.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csyconv f.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csyconv
+ * f.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csyconv f.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csyconv
+ * f.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -92,7 +101,7 @@
 /* > CSYTRF_RK or CSYTRF_BK: */
 /* > a) ONLY diagonal elements of the symmetric block diagonal */
 /* > matrix D on the diagonal of A, i.e. D(k,k) = A(k,k);
-*/
+ */
 /* > (superdiagonal (or subdiagonal) elements of D */
 /* > are stored on exit in array E), and */
 /* > b) If UPLO = 'U': factor U in the superdiagonal part of A. */
@@ -104,7 +113,7 @@
 /* > CSYTRF_RK or CSYTRF_BK: */
 /* > a) ONLY diagonal elements of the symmetric block diagonal */
 /* > matrix D on the diagonal of A, i.e. D(k,k) = A(k,k);
-*/
+ */
 /* > (superdiagonal (or subdiagonal) elements of D */
 /* > are stored on exit in array E), and */
 /* > b) If UPLO = 'U': factor U in the superdiagonal part of A. */
@@ -139,7 +148,7 @@
 /* > elements of the symmetric block diagonal matrix D */
 /* > with 1-by-1 or 2-by-2 diagonal blocks, where */
 /* > If UPLO = 'U': E(i) = D(i-1,i), i=2:N, E(1) is set to 0;
-*/
+ */
 /* > If UPLO = 'L': E(i) = D(i+1,i), i=1:N-1, E(N) is set to 0. */
 /* > */
 /* > 2) If WAY = 'R': */
@@ -148,7 +157,7 @@
 /* > elements of the symmetric block diagonal matrix D */
 /* > with 1-by-1 or 2-by-2 diagonal blocks, where */
 /* > If UPLO = 'U': E(i) = D(i-1,i),i=2:N, E(1) not referenced;
-*/
+ */
 /* > If UPLO = 'L': E(i) = D(i+1,i),i=1:N-1, E(N) not referenced. */
 /* > */
 /* > On exit, is not changed */
@@ -199,15 +208,17 @@
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void csyconvf_(char *uplo, char *way, integer *n, complex *a, integer *lda, complex *e, integer *ipiv, integer *info)
+void csyconvf_(char *uplo, char *way, integer *n, complex *a, integer *lda, complex *e,
+               integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"csyconvf inputs: uplo %c, way %c, n %lld, lda %lld",*uplo, *way, *n, *lda);
+    snprintf(buffer, 256, "csyconvf inputs: uplo %c, way %c, n %lld, lda %lld", *uplo, *way, *n,
+             *lda);
 #else
-    snprintf(buffer, 256,"csyconvf inputs: uplo %c, way %c, n %d, lda %d",*uplo, *way, *n, *lda);
+    snprintf(buffer, 256, "csyconvf inputs: uplo %c, way %c, n %d, lda %d", *uplo, *way, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -217,10 +228,12 @@ void csyconvf_(char *uplo, char *way, integer *n, complex *a, integer *lda, comp
     integer i__, ip;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void cswap_(integer *, complex *, integer *, complex *, integer *);
+        void
+        cswap_(integer *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical convert;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -248,23 +261,23 @@ void csyconvf_(char *uplo, char *way, integer *n, complex *a, integer *lda, comp
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     convert = lsame_(way, "C", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! convert && ! lsame_(way, "R", 1, 1))
+    else if(!convert && !lsame_(way, "R", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CSYCONVF", &i__1, (ftnlen)8);
@@ -272,15 +285,15 @@ void csyconvf_(char *uplo, char *way, integer *n, complex *a, integer *lda, comp
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (upper)
+    if(upper)
     {
         /* Begin A is UPPER */
-        if (convert)
+        if(convert)
         {
             /* Convert A (A is upper) */
             /* Convert VALUE */
@@ -291,7 +304,7 @@ void csyconvf_(char *uplo, char *way, integer *n, complex *a, integer *lda, comp
             e[1].i = 0.f; // , expr subst
             while(i__ > 1)
             {
-                if (ipiv[i__] < 0)
+                if(ipiv[i__] < 0)
                 {
                     i__1 = i__;
                     i__2 = i__ - 1 + i__ * a_dim1;
@@ -319,17 +332,18 @@ void csyconvf_(char *uplo, char *way, integer *n, complex *a, integer *lda, comp
             i__ = *n;
             while(i__ >= 1)
             {
-                if (ipiv[i__] > 0)
+                if(ipiv[i__] > 0)
                 {
                     /* 1-by-1 pivot interchange */
                     /* Swap rows i and IPIV(i) in A(1:i,N-i:N) */
                     ip = ipiv[i__];
-                    if (i__ < *n)
+                    if(i__ < *n)
                     {
-                        if (ip != i__)
+                        if(ip != i__)
                         {
                             i__1 = *n - i__;
-                            cswap_(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda, & a[ip + (i__ + 1) * a_dim1], lda);
+                            cswap_(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda,
+                                   &a[ip + (i__ + 1) * a_dim1], lda);
                         }
                     }
                 }
@@ -338,12 +352,13 @@ void csyconvf_(char *uplo, char *way, integer *n, complex *a, integer *lda, comp
                     /* 2-by-2 pivot interchange */
                     /* Swap rows i-1 and IPIV(i) in A(1:i,N-i:N) */
                     ip = -ipiv[i__];
-                    if (i__ < *n)
+                    if(i__ < *n)
                     {
-                        if (ip != i__ - 1)
+                        if(ip != i__ - 1)
                         {
                             i__1 = *n - i__;
-                            cswap_(&i__1, &a[i__ - 1 + (i__ + 1) * a_dim1], lda, &a[ip + (i__ + 1) * a_dim1], lda);
+                            cswap_(&i__1, &a[i__ - 1 + (i__ + 1) * a_dim1], lda,
+                                   &a[ip + (i__ + 1) * a_dim1], lda);
                         }
                     }
                     /* Convert IPIV */
@@ -365,17 +380,18 @@ void csyconvf_(char *uplo, char *way, integer *n, complex *a, integer *lda, comp
             i__ = 1;
             while(i__ <= *n)
             {
-                if (ipiv[i__] > 0)
+                if(ipiv[i__] > 0)
                 {
                     /* 1-by-1 pivot interchange */
                     /* Swap rows i and IPIV(i) in A(1:i,N-i:N) */
                     ip = ipiv[i__];
-                    if (i__ < *n)
+                    if(i__ < *n)
                     {
-                        if (ip != i__)
+                        if(ip != i__)
                         {
                             i__1 = *n - i__;
-                            cswap_(&i__1, &a[ip + (i__ + 1) * a_dim1], lda, & a[i__ + (i__ + 1) * a_dim1], lda);
+                            cswap_(&i__1, &a[ip + (i__ + 1) * a_dim1], lda,
+                                   &a[i__ + (i__ + 1) * a_dim1], lda);
                         }
                     }
                 }
@@ -385,12 +401,13 @@ void csyconvf_(char *uplo, char *way, integer *n, complex *a, integer *lda, comp
                     /* Swap rows i-1 and IPIV(i) in A(1:i,N-i:N) */
                     ++i__;
                     ip = -ipiv[i__];
-                    if (i__ < *n)
+                    if(i__ < *n)
                     {
-                        if (ip != i__ - 1)
+                        if(ip != i__ - 1)
                         {
                             i__1 = *n - i__;
-                            cswap_(&i__1, &a[ip + (i__ + 1) * a_dim1], lda, & a[i__ - 1 + (i__ + 1) * a_dim1], lda);
+                            cswap_(&i__1, &a[ip + (i__ + 1) * a_dim1], lda,
+                                   &a[i__ - 1 + (i__ + 1) * a_dim1], lda);
                         }
                     }
                     /* Convert IPIV */
@@ -407,7 +424,7 @@ void csyconvf_(char *uplo, char *way, integer *n, complex *a, integer *lda, comp
             i__ = *n;
             while(i__ > 1)
             {
-                if (ipiv[i__] < 0)
+                if(ipiv[i__] < 0)
                 {
                     i__1 = i__ - 1 + i__ * a_dim1;
                     i__2 = i__;
@@ -423,7 +440,7 @@ void csyconvf_(char *uplo, char *way, integer *n, complex *a, integer *lda, comp
     else
     {
         /* Begin A is LOWER */
-        if (convert)
+        if(convert)
         {
             /* Convert A (A is lower) */
             /* Convert VALUE */
@@ -435,7 +452,7 @@ void csyconvf_(char *uplo, char *way, integer *n, complex *a, integer *lda, comp
             e[i__1].i = 0.f; // , expr subst
             while(i__ <= *n)
             {
-                if (i__ < *n && ipiv[i__] < 0)
+                if(i__ < *n && ipiv[i__] < 0)
                 {
                     i__1 = i__;
                     i__2 = i__ + 1 + i__ * a_dim1;
@@ -463,14 +480,14 @@ void csyconvf_(char *uplo, char *way, integer *n, complex *a, integer *lda, comp
             i__ = 1;
             while(i__ <= *n)
             {
-                if (ipiv[i__] > 0)
+                if(ipiv[i__] > 0)
                 {
                     /* 1-by-1 pivot interchange */
                     /* Swap rows i and IPIV(i) in A(i:N,1:i-1) */
                     ip = ipiv[i__];
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
-                        if (ip != i__)
+                        if(ip != i__)
                         {
                             i__1 = i__ - 1;
                             cswap_(&i__1, &a[i__ + a_dim1], lda, &a[ip + a_dim1], lda);
@@ -482,9 +499,9 @@ void csyconvf_(char *uplo, char *way, integer *n, complex *a, integer *lda, comp
                     /* 2-by-2 pivot interchange */
                     /* Swap rows i+1 and IPIV(i) in A(i:N,1:i-1) */
                     ip = -ipiv[i__];
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
-                        if (ip != i__ + 1)
+                        if(ip != i__ + 1)
                         {
                             i__1 = i__ - 1;
                             cswap_(&i__1, &a[i__ + 1 + a_dim1], lda, &a[ip + a_dim1], lda);
@@ -509,14 +526,14 @@ void csyconvf_(char *uplo, char *way, integer *n, complex *a, integer *lda, comp
             i__ = *n;
             while(i__ >= 1)
             {
-                if (ipiv[i__] > 0)
+                if(ipiv[i__] > 0)
                 {
                     /* 1-by-1 pivot interchange */
                     /* Swap rows i and IPIV(i) in A(i:N,1:i-1) */
                     ip = ipiv[i__];
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
-                        if (ip != i__)
+                        if(ip != i__)
                         {
                             i__1 = i__ - 1;
                             cswap_(&i__1, &a[ip + a_dim1], lda, &a[i__ + a_dim1], lda);
@@ -529,9 +546,9 @@ void csyconvf_(char *uplo, char *way, integer *n, complex *a, integer *lda, comp
                     /* Swap rows i+1 and IPIV(i) in A(i:N,1:i-1) */
                     --i__;
                     ip = -ipiv[i__];
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
-                        if (ip != i__ + 1)
+                        if(ip != i__ + 1)
                         {
                             i__1 = i__ - 1;
                             cswap_(&i__1, &a[ip + a_dim1], lda, &a[i__ + 1 + a_dim1], lda);
@@ -551,7 +568,7 @@ void csyconvf_(char *uplo, char *way, integer *n, complex *a, integer *lda, comp
             i__ = 1;
             while(i__ <= *n - 1)
             {
-                if (ipiv[i__] < 0)
+                if(ipiv[i__] < 0)
                 {
                     i__1 = i__ + 1 + i__ * a_dim1;
                     i__2 = i__;

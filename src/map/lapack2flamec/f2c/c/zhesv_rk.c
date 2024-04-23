@@ -1,18 +1,28 @@
-/* ../netlib/v3.9.0/zhesv_rk.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/zhesv_rk.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c_n1 = -1;
-/* > \brief <b> ZHESV_RK computes the solution to system of linear equations A * X = B for SY matrices</b> */
+/* > \brief <b> ZHESV_RK computes the solution to system of linear equations A * X = B for SY
+ * matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZHESV_RK + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhesv_r k.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhesv_r
+ * k.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhesv_r k.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhesv_r
+ * k.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhesv_r k.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhesv_r
+ * k.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -56,7 +66,7 @@ static integer c_n1 = -1;
 /* > Specifies whether the upper or lower triangular part of the */
 /* > Hermitian matrix A is stored: */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -92,7 +102,7 @@ static integer c_n1 = -1;
 /* > matrix D and factors U or L as computed by ZHETRF_RK: */
 /* > a) ONLY diagonal elements of the Hermitian block diagonal */
 /* > matrix D on the diagonal of A, i.e. D(k,k) = A(k,k);
-*/
+ */
 /* > (superdiagonal (or subdiagonal) elements of D */
 /* > are stored on exit in array E), and */
 /* > b) If UPLO = 'U': factor U in the superdiagonal part of A. */
@@ -115,7 +125,7 @@ static integer c_n1 = -1;
 /* > elements of the Hermitian block diagonal matrix D */
 /* > with 1-by-1 or 2-by-2 diagonal blocks, where */
 /* > If UPLO = 'U': E(i) = D(i-1,i), i=2:N, E(1) is set to 0;
-*/
+ */
 /* > If UPLO = 'L': E(i) = D(i+1,i), i=1:N-1, E(N) is set to 0. */
 /* > */
 /* > NOTE: For 1-by-1 diagonal block D(k), where */
@@ -162,7 +172,7 @@ static integer c_n1 = -1;
 /* > the optimal blocksize for ZHETRF_RK. */
 /* > */
 /* > If LWORK = -1, then a workspace query is assumed;
-*/
+ */
 /* > the routine only calculates the optimal size of the WORK */
 /* > array for factorization stage, returns this value as */
 /* > the first entry of the WORK array, and no error message */
@@ -218,18 +228,27 @@ static integer c_n1 = -1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void zhesv_rk_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda, doublecomplex *e, integer *ipiv, doublecomplex *b, integer *ldb, doublecomplex *work, integer *lwork, integer *info)
+void zhesv_rk_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda,
+               doublecomplex *e, integer *ipiv, doublecomplex *b, integer *ldb, doublecomplex *work,
+               integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhesv_rk inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb, *lwork);
+    AOCL_DTL_SNPRINTF("zhesv_rk inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS ", lwork %" FLA_IS "",
+                      *uplo, *n, *nrhs, *lda, *ldb, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    void zhetrs_3_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zhetrf_rk_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zhetrs_3_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                  integer *, doublecomplex *, integer *, integer *),
+        zhetrf_rk_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
+                   doublecomplex *, integer *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK driver routine (version 3.7.0) -- */
@@ -264,52 +283,52 @@ void zhesv_rk_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer 
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*lwork < 1 && ! lquery)
+    else if(*lwork < 1 && !lquery)
     {
         *info = -11;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (*n == 0)
+        if(*n == 0)
         {
             lwkopt = 1;
         }
         else
         {
             zhetrf_rk_(uplo, n, &a[a_offset], lda, &e[1], &ipiv[1], &work[1], &c_n1, info);
-            lwkopt = (integer) work[1].r;
+            lwkopt = (integer)work[1].r;
         }
-        work[1].r = (doublereal) lwkopt;
+        work[1].r = (doublereal)lwkopt;
         work[1].i = 0.; // , expr subst
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZHESV_RK ", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -317,16 +336,15 @@ void zhesv_rk_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer 
     /* Compute the factorization A = P*U*D*(U**H)*(P**T) or */
     /* A = P*U*D*(U**H)*(P**T). */
     zhetrf_rk_(uplo, n, &a[a_offset], lda, &e[1], &ipiv[1], &work[1], lwork, info);
-    if (*info == 0)
+    if(*info == 0)
     {
         /* Solve the system A*X = B with BLAS3 solver, overwriting B with X. */
-        zhetrs_3_(uplo, n, nrhs, &a[a_offset], lda, &e[1], &ipiv[1], &b[ b_offset], ldb, info);
+        zhetrs_3_(uplo, n, nrhs, &a[a_offset], lda, &e[1], &ipiv[1], &b[b_offset], ldb, info);
     }
-    work[1].r = (doublereal) lwkopt;
+    work[1].r = (doublereal)lwkopt;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZHESV_RK */
 }
 /* zhesv_rk__ */
-

@@ -1,16 +1,25 @@
-/* ../netlib/dlasd5.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlasd5.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLASD5 computes the square root of the i-th eigenvalue of a positive symmetric rank-one modific ation of a 2-by-2 diagonal matrix. Used by sbdsdc. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLASD5 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasd5. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasd5.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasd5. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasd5.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasd5. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasd5.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -102,10 +111,11 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlasd5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho, doublereal *dsigma, doublereal * work)
+void dlasd5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho,
+             doublereal *dsigma, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlasd5 inputs: i__ %" FLA_IS "",*i__);
+    AOCL_DTL_SNPRINTF("dlasd5 inputs: i__ %" FLA_IS "", *i__);
     /* System generated locals */
     doublereal d__1;
     /* Builtin functions */
@@ -136,10 +146,14 @@ void dlasd5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, 
     /* Function Body */
     del = d__[2] - d__[1];
     delsq = del * (d__[2] + d__[1]);
-    if (*i__ == 1)
+    if(*i__ == 1)
     {
-        w = *rho * 4. * (z__[2] * z__[2] / (d__[1] + d__[2] * 3.) - z__[1] * z__[1] / (d__[1] * 3. + d__[2])) / del + 1.;
-        if (w > 0.)
+        w = *rho * 4.
+                * (z__[2] * z__[2] / (d__[1] + d__[2] * 3.)
+                   - z__[1] * z__[1] / (d__[1] * 3. + d__[2]))
+                / del
+            + 1.;
+        if(w > 0.)
         {
             b = delsq + *rho * (z__[1] * z__[1] + z__[2] * z__[2]);
             c__ = *rho * z__[1] * z__[1] * delsq;
@@ -161,7 +175,7 @@ void dlasd5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, 
             b = -delsq + *rho * (z__[1] * z__[1] + z__[2] * z__[2]);
             c__ = *rho * z__[2] * z__[2] * delsq;
             /* The following TAU is DSIGMA * DSIGMA - D( 2 ) * D( 2 ) */
-            if (b > 0.)
+            if(b > 0.)
             {
                 tau = c__ * -2. / (b + sqrt(b * b + c__ * 4.));
             }
@@ -189,7 +203,7 @@ void dlasd5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, 
         b = -delsq + *rho * (z__[1] * z__[1] + z__[2] * z__[2]);
         c__ = *rho * z__[2] * z__[2] * delsq;
         /* The following TAU is DSIGMA * DSIGMA - D( 2 ) * D( 2 ) */
-        if (b > 0.)
+        if(b > 0.)
         {
             tau = (b + sqrt(b * b + c__ * 4.)) / 2.;
         }

@@ -1,16 +1,11 @@
-/* ../netlib/csteqr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/csteqr.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    0.f,0.f
-}
-;
-static complex c_b2 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {0.f, 0.f};
+static complex c_b2 = {1.f, 0.f};
 static integer c__0 = 0;
 static integer c__1 = 1;
 static integer c__2 = 2;
@@ -21,11 +16,17 @@ static real c_b41 = 1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CSTEQR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csteqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csteqr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csteqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csteqr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csteqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csteqr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -135,15 +136,16 @@ on exit, D */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void csteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer *ldz, real *work, integer *info)
+void csteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer *ldz, real *work,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"csteqr inputs: compz %c, n %lld, ldz %lld",*compz, *n, *ldz);
+    snprintf(buffer, 256, "csteqr inputs: compz %c, n %lld, ldz %lld", *compz, *n, *ldz);
 #else
-    snprintf(buffer, 256,"csteqr inputs: compz %c, n %d, ldz %d",*compz, *n, *ldz);
+    snprintf(buffer, 256, "csteqr inputs: compz %c, n %d, ldz %d", *compz, *n, *ldz);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -162,36 +164,46 @@ void csteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     real tst, eps2;
     integer lend, jtot;
     extern /* Subroutine */
-    void slae2_(real *, real *, real *, real *, real *) ;
+        void
+        slae2_(real *, real *, real *, real *, real *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void clasr_(char *, char *, char *, integer *, integer *, real *, real *, complex *, integer *);
+        void
+        clasr_(char *, char *, char *, integer *, integer *, real *, real *, complex *, integer *);
     real anorm;
     extern /* Subroutine */
-    void cswap_(integer *, complex *, integer *, complex *, integer *);
+        void
+        cswap_(integer *, complex *, integer *, complex *, integer *);
     integer lendm1, lendp1;
     extern /* Subroutine */
-    void slaev2_(real *, real *, real *, real *, real *, real *, real *);
+        void
+        slaev2_(real *, real *, real *, real *, real *, real *, real *);
     extern real slapy2_(real *, real *);
     integer iscale;
     extern real slamch_(char *);
     extern /* Subroutine */
-    void claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
+        void
+        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real safmax;
     extern /* Subroutine */
-    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
+                integer *, integer *);
     integer lendsv;
     extern /* Subroutine */
-    void slartg_(real *, real *, real *, real *, real * );
+        void
+        slartg_(real *, real *, real *, real *, real *);
     real ssfmin;
     integer nmaxit, icompz;
     real ssfmax;
     extern real slanst_(char *, integer *, real *, real *);
     extern /* Subroutine */
-    void slasrt_(char *, integer *, real *, integer *);
+        void
+        slasrt_(char *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -222,15 +234,15 @@ void csteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     --work;
     /* Function Body */
     *info = 0;
-    if (lsame_(compz, "N", 1, 1))
+    if(lsame_(compz, "N", 1, 1))
     {
         icompz = 0;
     }
-    else if (lsame_(compz, "V", 1, 1))
+    else if(lsame_(compz, "V", 1, 1))
     {
         icompz = 1;
     }
-    else if (lsame_(compz, "I", 1, 1))
+    else if(lsame_(compz, "I", 1, 1))
     {
         icompz = 2;
     }
@@ -238,19 +250,19 @@ void csteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     {
         icompz = -1;
     }
-    if (icompz < 0)
+    if(icompz < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*ldz < 1 || icompz > 0 && *ldz < fla_max(1,*n))
+    else if(*ldz < 1 || icompz > 0 && *ldz < fla_max(1, *n))
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CSTEQR", &i__1, (ftnlen)6);
@@ -258,14 +270,14 @@ void csteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (icompz == 2)
+        if(icompz == 2)
         {
             i__1 = z_dim1 + 1;
             z__[i__1].r = 1.f;
@@ -285,7 +297,7 @@ void csteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     ssfmin = sqrt(safmin) / eps2;
     /* Compute the eigenvalues and eigenvectors of the tridiagonal */
     /* matrix. */
-    if (icompz == 2)
+    if(icompz == 2)
     {
         claset_("Full", n, n, &c_b1, &c_b2, &z__[z_offset], ldz);
     }
@@ -297,27 +309,26 @@ void csteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     l1 = 1;
     nm1 = *n - 1;
 L10:
-    if (l1 > *n)
+    if(l1 > *n)
     {
         goto L160;
     }
-    if (l1 > 1)
+    if(l1 > 1)
     {
         e[l1 - 1] = 0.f;
     }
-    if (l1 <= nm1)
+    if(l1 <= nm1)
     {
         i__1 = nm1;
-        for (m = l1;
-                m <= i__1;
-                ++m)
+        for(m = l1; m <= i__1; ++m)
         {
             tst = (r__1 = e[m], f2c_abs(r__1));
-            if (tst == 0.f)
+            if(tst == 0.f)
             {
                 goto L30;
             }
-            if (tst <= sqrt((r__1 = d__[m], f2c_abs(r__1))) * sqrt((r__2 = d__[m + 1], f2c_abs(r__2))) * eps)
+            if(tst <= sqrt((r__1 = d__[m], f2c_abs(r__1)))
+                          * sqrt((r__2 = d__[m + 1], f2c_abs(r__2))) * eps)
             {
                 e[m] = 0.f;
                 goto L30;
@@ -332,7 +343,7 @@ L30:
     lend = m;
     lendsv = lend;
     l1 = m + 1;
-    if (lend == l)
+    if(lend == l)
     {
         goto L10;
     }
@@ -340,11 +351,11 @@ L30:
     i__1 = lend - l + 1;
     anorm = slanst_("I", &i__1, &d__[l], &e[l]);
     iscale = 0;
-    if (anorm == 0.f)
+    if(anorm == 0.f)
     {
         goto L10;
     }
-    if (anorm > ssfmax)
+    if(anorm > ssfmax)
     {
         iscale = 1;
         i__1 = lend - l + 1;
@@ -352,7 +363,7 @@ L30:
         i__1 = lend - l;
         slascl_("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &e[l], n, info);
     }
-    else if (anorm < ssfmin)
+    else if(anorm < ssfmin)
     {
         iscale = 2;
         i__1 = lend - l + 1;
@@ -361,28 +372,27 @@ L30:
         slascl_("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &e[l], n, info);
     }
     /* Choose between QL and QR iteration */
-    if ((r__1 = d__[lend], f2c_abs(r__1)) < (r__2 = d__[l], f2c_abs(r__2)))
+    if((r__1 = d__[lend], f2c_abs(r__1)) < (r__2 = d__[l], f2c_abs(r__2)))
     {
         lend = lsv;
         l = lendsv;
     }
-    if (lend > l)
+    if(lend > l)
     {
         /* QL Iteration */
         /* Look for small subdiagonal element. */
-L40:
-        if (l != lend)
+    L40:
+        if(l != lend)
         {
             lendm1 = lend - 1;
             i__1 = lendm1;
-            for (m = l;
-                    m <= i__1;
-                    ++m)
+            for(m = l; m <= i__1; ++m)
             {
                 /* Computing 2nd power */
                 r__2 = (r__1 = e[m], f2c_abs(r__1));
                 tst = r__2 * r__2;
-                if (tst <= eps2 * (r__1 = d__[m], f2c_abs(r__1)) * (r__2 = d__[m + 1], f2c_abs(r__2)) + safmin)
+                if(tst <= eps2 * (r__1 = d__[m], f2c_abs(r__1)) * (r__2 = d__[m + 1], f2c_abs(r__2))
+                              + safmin)
                 {
                     goto L60;
                 }
@@ -390,26 +400,27 @@ L40:
             }
         }
         m = lend;
-L60:
-        if (m < lend)
+    L60:
+        if(m < lend)
         {
             e[m] = 0.f;
         }
         p = d__[l];
-        if (m == l)
+        if(m == l)
         {
             goto L80;
         }
         /* If remaining matrix is 2-by-2, use SLAE2 or SLAEV2 */
         /* to compute its eigensystem. */
-        if (m == l + 1)
+        if(m == l + 1)
         {
-            if (icompz > 0)
+            if(icompz > 0)
             {
                 slaev2_(&d__[l], &e[l], &d__[l + 1], &rt1, &rt2, &c__, &s);
                 work[l] = c__;
                 work[*n - 1 + l] = s;
-                clasr_("R", "V", "B", n, &c__2, &work[l], &work[*n - 1 + l], & z__[l * z_dim1 + 1], ldz);
+                clasr_("R", "V", "B", n, &c__2, &work[l], &work[*n - 1 + l], &z__[l * z_dim1 + 1],
+                       ldz);
             }
             else
             {
@@ -419,13 +430,13 @@ L60:
             d__[l + 1] = rt2;
             e[l] = 0.f;
             l += 2;
-            if (l <= lend)
+            if(l <= lend)
             {
                 goto L40;
             }
             goto L140;
         }
-        if (jtot == nmaxit)
+        if(jtot == nmaxit)
         {
             goto L140;
         }
@@ -440,14 +451,12 @@ L60:
         /* Inner loop */
         mm1 = m - 1;
         i__1 = l;
-        for (i__ = mm1;
-                i__ >= i__1;
-                --i__)
+        for(i__ = mm1; i__ >= i__1; --i__)
         {
             f = s * e[i__];
             b = c__ * e[i__];
             slartg_(&g, &f, &c__, &s, &r__);
-            if (i__ != m - 1)
+            if(i__ != m - 1)
             {
                 e[i__ + 1] = r__;
             }
@@ -457,7 +466,7 @@ L60:
             d__[i__ + 1] = g + p;
             g = c__ * r__ - b;
             /* If eigenvectors are desired, then save rotations. */
-            if (icompz > 0)
+            if(icompz > 0)
             {
                 work[i__] = c__;
                 work[*n - 1 + i__] = -s;
@@ -465,7 +474,7 @@ L60:
             /* L70: */
         }
         /* If eigenvectors are desired, then apply saved rotations. */
-        if (icompz > 0)
+        if(icompz > 0)
         {
             mm = m - l + 1;
             clasr_("R", "V", "B", n, &mm, &work[l], &work[*n - 1 + l], &z__[l * z_dim1 + 1], ldz);
@@ -474,10 +483,10 @@ L60:
         e[l] = g;
         goto L40;
         /* Eigenvalue found. */
-L80:
+    L80:
         d__[l] = p;
         ++l;
-        if (l <= lend)
+        if(l <= lend)
         {
             goto L40;
         }
@@ -487,19 +496,18 @@ L80:
     {
         /* QR Iteration */
         /* Look for small superdiagonal element. */
-L90:
-        if (l != lend)
+    L90:
+        if(l != lend)
         {
             lendp1 = lend + 1;
             i__1 = lendp1;
-            for (m = l;
-                    m >= i__1;
-                    --m)
+            for(m = l; m >= i__1; --m)
             {
                 /* Computing 2nd power */
                 r__2 = (r__1 = e[m - 1], f2c_abs(r__1));
                 tst = r__2 * r__2;
-                if (tst <= eps2 * (r__1 = d__[m], f2c_abs(r__1)) * (r__2 = d__[m - 1], f2c_abs(r__2)) + safmin)
+                if(tst <= eps2 * (r__1 = d__[m], f2c_abs(r__1)) * (r__2 = d__[m - 1], f2c_abs(r__2))
+                              + safmin)
                 {
                     goto L110;
                 }
@@ -507,26 +515,27 @@ L90:
             }
         }
         m = lend;
-L110:
-        if (m > lend)
+    L110:
+        if(m > lend)
         {
             e[m - 1] = 0.f;
         }
         p = d__[l];
-        if (m == l)
+        if(m == l)
         {
             goto L130;
         }
         /* If remaining matrix is 2-by-2, use SLAE2 or SLAEV2 */
         /* to compute its eigensystem. */
-        if (m == l - 1)
+        if(m == l - 1)
         {
-            if (icompz > 0)
+            if(icompz > 0)
             {
-                slaev2_(&d__[l - 1], &e[l - 1], &d__[l], &rt1, &rt2, &c__, &s) ;
+                slaev2_(&d__[l - 1], &e[l - 1], &d__[l], &rt1, &rt2, &c__, &s);
                 work[m] = c__;
                 work[*n - 1 + m] = s;
-                clasr_("R", "V", "F", n, &c__2, &work[m], &work[*n - 1 + m], & z__[(l - 1) * z_dim1 + 1], ldz);
+                clasr_("R", "V", "F", n, &c__2, &work[m], &work[*n - 1 + m],
+                       &z__[(l - 1) * z_dim1 + 1], ldz);
             }
             else
             {
@@ -536,13 +545,13 @@ L110:
             d__[l] = rt2;
             e[l - 1] = 0.f;
             l += -2;
-            if (l >= lend)
+            if(l >= lend)
             {
                 goto L90;
             }
             goto L140;
         }
-        if (jtot == nmaxit)
+        if(jtot == nmaxit)
         {
             goto L140;
         }
@@ -557,14 +566,12 @@ L110:
         /* Inner loop */
         lm1 = l - 1;
         i__1 = lm1;
-        for (i__ = m;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = m; i__ <= i__1; ++i__)
         {
             f = s * e[i__];
             b = c__ * e[i__];
             slartg_(&g, &f, &c__, &s, &r__);
-            if (i__ != m)
+            if(i__ != m)
             {
                 e[i__ - 1] = r__;
             }
@@ -574,7 +581,7 @@ L110:
             d__[i__] = g + p;
             g = c__ * r__ - b;
             /* If eigenvectors are desired, then save rotations. */
-            if (icompz > 0)
+            if(icompz > 0)
             {
                 work[i__] = c__;
                 work[*n - 1 + i__] = s;
@@ -582,7 +589,7 @@ L110:
             /* L120: */
         }
         /* If eigenvectors are desired, then apply saved rotations. */
-        if (icompz > 0)
+        if(icompz > 0)
         {
             mm = l - m + 1;
             clasr_("R", "V", "F", n, &mm, &work[m], &work[*n - 1 + m], &z__[m * z_dim1 + 1], ldz);
@@ -591,10 +598,10 @@ L110:
         e[lm1] = g;
         goto L90;
         /* Eigenvalue found. */
-L130:
+    L130:
         d__[l] = p;
         --l;
-        if (l >= lend)
+        if(l >= lend)
         {
             goto L90;
         }
@@ -602,14 +609,14 @@ L130:
     }
     /* Undo scaling if necessary */
 L140:
-    if (iscale == 1)
+    if(iscale == 1)
     {
         i__1 = lendsv - lsv + 1;
         slascl_("G", &c__0, &c__0, &ssfmax, &anorm, &i__1, &c__1, &d__[lsv], n, info);
         i__1 = lendsv - lsv;
         slascl_("G", &c__0, &c__0, &ssfmax, &anorm, &i__1, &c__1, &e[lsv], n, info);
     }
-    else if (iscale == 2)
+    else if(iscale == 2)
     {
         i__1 = lendsv - lsv + 1;
         slascl_("G", &c__0, &c__0, &ssfmin, &anorm, &i__1, &c__1, &d__[lsv], n, info);
@@ -618,14 +625,12 @@ L140:
     }
     /* Check for no convergence to an eigenvalue after a total */
     /* of N*MAXIT iterations. */
-    if (jtot == nmaxit)
+    if(jtot == nmaxit)
     {
         i__1 = *n - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if (e[i__] != 0.f)
+            if(e[i__] != 0.f)
             {
                 ++(*info);
             }
@@ -637,7 +642,7 @@ L140:
     goto L10;
     /* Order eigenvalues and eigenvectors. */
 L160:
-    if (icompz == 0)
+    if(icompz == 0)
     {
         /* Use Quick Sort */
         slasrt_("I", n, &d__[1], info);
@@ -646,26 +651,22 @@ L160:
     {
         /* Use Selection Sort to minimize swaps of eigenvectors */
         i__1 = *n;
-        for (ii = 2;
-                ii <= i__1;
-                ++ii)
+        for(ii = 2; ii <= i__1; ++ii)
         {
             i__ = ii - 1;
             k = i__;
             p = d__[i__];
             i__2 = *n;
-            for (j = ii;
-                    j <= i__2;
-                    ++j)
+            for(j = ii; j <= i__2; ++j)
             {
-                if (d__[j] < p)
+                if(d__[j] < p)
                 {
                     k = j;
                     p = d__[j];
                 }
                 /* L170: */
             }
-            if (k != i__)
+            if(k != i__)
             {
                 d__[k] = d__[i__];
                 d__[i__] = p;

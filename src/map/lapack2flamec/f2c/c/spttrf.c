@@ -1,16 +1,25 @@
-/* ../netlib/spttrf.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/spttrf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SPTTRF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SPTTRF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spttrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spttrf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spttrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spttrf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spttrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spttrf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -83,7 +92,7 @@ void spttrf_(integer *n, real *d__, real *e, integer *info)
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"spttrf inputs: n %" FLA_IS "",*n);
+    snprintf(buffer, 256, "spttrf inputs: n %" FLA_IS "", *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -92,7 +101,8 @@ void spttrf_(integer *n, real *d__, real *e, integer *info)
     integer i__, i4;
     real ei;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -117,7 +127,7 @@ void spttrf_(integer *n, real *d__, real *e, integer *info)
     --d__;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
         i__1 = -(*info);
@@ -126,7 +136,7 @@ void spttrf_(integer *n, real *d__, real *e, integer *info)
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -134,11 +144,9 @@ void spttrf_(integer *n, real *d__, real *e, integer *info)
     /* Compute the L*D*L**T (or U**T*D*U) factorization of A. */
     i4 = (*n - 1) % 4;
     i__1 = i4;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (d__[i__] <= 0.f)
+        if(d__[i__] <= 0.f)
         {
             *info = i__;
             goto L30;
@@ -149,13 +157,11 @@ void spttrf_(integer *n, real *d__, real *e, integer *info)
         /* L10: */
     }
     i__1 = *n - 4;
-    for (i__ = i4 + 1;
-            i__ <= i__1;
-            i__ += 4)
+    for(i__ = i4 + 1; i__ <= i__1; i__ += 4)
     {
         /* Drop out of the loop if d(i) <= 0: the matrix is not positive */
         /* definite. */
-        if (d__[i__] <= 0.f)
+        if(d__[i__] <= 0.f)
         {
             *info = i__;
             goto L30;
@@ -164,7 +170,7 @@ void spttrf_(integer *n, real *d__, real *e, integer *info)
         ei = e[i__];
         e[i__] = ei / d__[i__];
         d__[i__ + 1] -= e[i__] * ei;
-        if (d__[i__ + 1] <= 0.f)
+        if(d__[i__ + 1] <= 0.f)
         {
             *info = i__ + 1;
             goto L30;
@@ -173,7 +179,7 @@ void spttrf_(integer *n, real *d__, real *e, integer *info)
         ei = e[i__ + 1];
         e[i__ + 1] = ei / d__[i__ + 1];
         d__[i__ + 2] -= e[i__ + 1] * ei;
-        if (d__[i__ + 2] <= 0.f)
+        if(d__[i__ + 2] <= 0.f)
         {
             *info = i__ + 2;
             goto L30;
@@ -182,7 +188,7 @@ void spttrf_(integer *n, real *d__, real *e, integer *info)
         ei = e[i__ + 2];
         e[i__ + 2] = ei / d__[i__ + 2];
         d__[i__ + 3] -= e[i__ + 2] * ei;
-        if (d__[i__ + 3] <= 0.f)
+        if(d__[i__ + 3] <= 0.f)
         {
             *info = i__ + 3;
             goto L30;
@@ -194,7 +200,7 @@ void spttrf_(integer *n, real *d__, real *e, integer *info)
         /* L20: */
     }
     /* Check d(n) for positive definiteness. */
-    if (d__[*n] <= 0.f)
+    if(d__[*n] <= 0.f)
     {
         *info = *n;
     }

@@ -1,5 +1,8 @@
-/* ../netlib/dggsvd.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dggsvd.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief <b> DGGSVD computes the singular value decomposition (SVD) for OTHER matrices</b> */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DGGSVD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dggsvd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dggsvd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dggsvd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dggsvd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dggsvd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dggsvd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -120,7 +129,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > JOBU is CHARACTER*1 */
 /* > = 'U': Orthogonal matrix U is computed;
-*/
+ */
 /* > = 'N': U is not computed. */
 /* > \endverbatim */
 /* > */
@@ -128,7 +137,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > JOBV is CHARACTER*1 */
 /* > = 'V': Orthogonal matrix V is computed;
-*/
+ */
 /* > = 'N': V is not computed. */
 /* > \endverbatim */
 /* > */
@@ -136,7 +145,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > JOBQ is CHARACTER*1 */
 /* > = 'Q': Orthogonal matrix Q is computed;
-*/
+ */
 /* > = 'N': Q is not computed. */
 /* > \endverbatim */
 /* > */
@@ -211,7 +220,7 @@ static integer c__1 = 1;
 /* > */
 /* > On exit, ALPHA and BETA contain the generalized singular */
 /* > value pairs of A and B;
-*/
+ */
 /* > ALPHA(1:K) = 1, */
 /* > BETA(1:K) = 0, */
 /* > and if M-K-L >= 0, */
@@ -324,12 +333,20 @@ LDQ >= 1 otherwise. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer *p, integer *k, integer *l, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *alpha, doublereal *beta, doublereal *u, integer *ldu, doublereal *v, integer *ldv, doublereal *q, integer *ldq, doublereal *work, integer *iwork, integer *info)
+void dggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer *p, integer *k,
+             integer *l, doublereal *a, integer *lda, doublereal *b, integer *ldb,
+             doublereal *alpha, doublereal *beta, doublereal *u, integer *ldu, doublereal *v,
+             integer *ldv, doublereal *q, integer *ldq, doublereal *work, integer *iwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dggsvd inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", n %" FLA_IS ", p %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS ", ldq %" FLA_IS "",*jobu, *jobv, *jobq, *m, *n, *p, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq);
+    AOCL_DTL_SNPRINTF("dggsvd inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", n %" FLA_IS
+                      ", p %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS
+                      ", ldu %" FLA_IS ", ldv %" FLA_IS ", ldq %" FLA_IS "",
+                      *jobu, *jobv, *jobq, *m, *n, *p, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2;
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
+        v_offset, i__1, i__2;
     /* Local variables */
     integer i__, j;
     doublereal ulp;
@@ -340,14 +357,25 @@ void dggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer
     extern logical lsame_(char *, char *, integer, integer);
     doublereal anorm, bnorm;
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical wantq, wantu, wantv;
-    extern doublereal dlamch_(char *), dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
+    extern doublereal dlamch_(char *),
+        dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
-    void dtgsja_(char *, char *, char *, integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dtgsja_(char *, char *, char *, integer *, integer *, integer *, integer *, integer *,
+                doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+                doublereal *, integer *, doublereal *, integer *, integer *);
     integer ncycle;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dggsvp_( char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        dggsvp_(char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
+                integer *, doublereal *, doublereal *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -392,51 +420,51 @@ void dggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer
     wantv = lsame_(jobv, "V", 1, 1);
     wantq = lsame_(jobq, "Q", 1, 1);
     *info = 0;
-    if (! (wantu || lsame_(jobu, "N", 1, 1)))
+    if(!(wantu || lsame_(jobu, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (wantv || lsame_(jobv, "N", 1, 1)))
+    else if(!(wantv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (wantq || lsame_(jobq, "N", 1, 1)))
+    else if(!(wantq || lsame_(jobq, "N", 1, 1)))
     {
         *info = -3;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -4;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -5;
     }
-    else if (*p < 0)
+    else if(*p < 0)
     {
         *info = -6;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -10;
     }
-    else if (*ldb < fla_max(1,*p))
+    else if(*ldb < fla_max(1, *p))
     {
         *info = -12;
     }
-    else if (*ldu < 1 || wantu && *ldu < *m)
+    else if(*ldu < 1 || wantu && *ldu < *m)
     {
         *info = -16;
     }
-    else if (*ldv < 1 || wantv && *ldv < *p)
+    else if(*ldv < 1 || wantv && *ldv < *p)
     {
         *info = -18;
     }
-    else if (*ldq < 1 || wantq && *ldq < *n)
+    else if(*ldq < 1 || wantq && *ldq < *n)
     {
         *info = -20;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DGGSVD", &i__1, (ftnlen)6);
@@ -450,41 +478,41 @@ void dggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer
     /* the effective numerical rank of the matrices A and B. */
     ulp = dlamch_("Precision");
     unfl = dlamch_("Safe Minimum");
-    tola = fla_max(*m,*n) * fla_max(anorm,unfl) * ulp;
-    tolb = fla_max(*p,*n) * fla_max(bnorm,unfl) * ulp;
+    tola = fla_max(*m, *n) * fla_max(anorm, unfl) * ulp;
+    tolb = fla_max(*p, *n) * fla_max(bnorm, unfl) * ulp;
     /* Preprocessing */
-    dggsvp_(jobu, jobv, jobq, m, p, n, &a[a_offset], lda, &b[b_offset], ldb, & tola, &tolb, k, l, &u[u_offset], ldu, &v[v_offset], ldv, &q[ q_offset], ldq, &iwork[1], &work[1], &work[*n + 1], info);
+    dggsvp_(jobu, jobv, jobq, m, p, n, &a[a_offset], lda, &b[b_offset], ldb, &tola, &tolb, k, l,
+            &u[u_offset], ldu, &v[v_offset], ldv, &q[q_offset], ldq, &iwork[1], &work[1],
+            &work[*n + 1], info);
     /* Compute the GSVD of two upper "triangular" matrices */
-    dtgsja_(jobu, jobv, jobq, m, p, n, k, l, &a[a_offset], lda, &b[b_offset], ldb, &tola, &tolb, &alpha[1], &beta[1], &u[u_offset], ldu, &v[ v_offset], ldv, &q[q_offset], ldq, &work[1], &ncycle, info);
+    dtgsja_(jobu, jobv, jobq, m, p, n, k, l, &a[a_offset], lda, &b[b_offset], ldb, &tola, &tolb,
+            &alpha[1], &beta[1], &u[u_offset], ldu, &v[v_offset], ldv, &q[q_offset], ldq, &work[1],
+            &ncycle, info);
     /* Sort the singular values and store the pivot indices in IWORK */
     /* Copy ALPHA to WORK, then sort ALPHA in WORK */
     dcopy_(n, &alpha[1], &c__1, &work[1], &c__1);
     /* Computing MIN */
     i__1 = *l;
     i__2 = *m - *k; // , expr subst
-    ibnd = fla_min(i__1,i__2);
+    ibnd = fla_min(i__1, i__2);
     i__1 = ibnd;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Scan for largest ALPHA(K+I) */
         isub = i__;
         smax = work[*k + i__];
         i__2 = ibnd;
-        for (j = i__ + 1;
-                j <= i__2;
-                ++j)
+        for(j = i__ + 1; j <= i__2; ++j)
         {
             temp = work[*k + j];
-            if (temp > smax)
+            if(temp > smax)
             {
                 isub = j;
                 smax = temp;
             }
             /* L10: */
         }
-        if (isub != i__)
+        if(isub != i__)
         {
             work[*k + isub] = work[*k + i__];
             work[*k + i__] = smax;

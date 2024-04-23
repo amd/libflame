@@ -1,16 +1,25 @@
-/* ../netlib/claqr1.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/claqr1.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CLAQR1 sets a scalar multiple of the first column of the product of 2-by-2 or 3-by-3 matrix H a nd specified shifts. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLAQR1 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claqr1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claqr1.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claqr1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claqr1.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claqr1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claqr1.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -93,15 +102,15 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void claqr1_(integer *n, complex *h__, integer *ldh, complex * s1, complex *s2, complex *v)
+void claqr1_(integer *n, complex *h__, integer *ldh, complex *s1, complex *s2, complex *v)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"claqr1 inputs: n %lld, ldh %lld",*n, *ldh);
+    snprintf(buffer, 256, "claqr1 inputs: n %lld, ldh %lld", *n, *ldh);
 #else
-    snprintf(buffer, 256,"claqr1 inputs: n %d, ldh %d",*n, *ldh);
+    snprintf(buffer, 256, "claqr1 inputs: n %d, ldh %d", *n, *ldh);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -139,12 +148,12 @@ void claqr1_(integer *n, complex *h__, integer *ldh, complex * s1, complex *s2, 
     h__ -= h_offset;
     --v;
     /* Function Body */
-    if (*n != 2 && *n != 3)
+    if(*n != 2 && *n != 3)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (*n == 2)
+    if(*n == 2)
     {
         i__1 = h_dim1 + 1;
         q__2.r = h__[i__1].r - s2->r;
@@ -152,8 +161,9 @@ void claqr1_(integer *n, complex *h__, integer *ldh, complex * s1, complex *s2, 
         q__1.r = q__2.r;
         q__1.i = q__2.i; // , expr subst
         i__2 = h_dim1 + 2;
-        s = (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = q__1.i, f2c_abs(r__2)) + ( (r__3 = h__[i__2].r, f2c_abs(r__3)) + (r__4 = h__[i__2].i, f2c_abs(r__4)));
-        if (s == 0.f)
+        s = (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = q__1.i, f2c_abs(r__2))
+            + ((r__3 = h__[i__2].r, f2c_abs(r__3)) + (r__4 = h__[i__2].i, f2c_abs(r__4)));
+        if(s == 0.f)
         {
             v[1].r = 0.f;
             v[1].i = 0.f; // , expr subst
@@ -183,7 +193,7 @@ void claqr1_(integer *n, complex *h__, integer *ldh, complex * s1, complex *s2, 
             v[1].i = q__1.i; // , expr subst
             i__2 = (h_dim1 << 1) + 2;
             q__4.r = h__[i__1].r + h__[i__2].r;
-            q__4.i = h__[i__1].i + h__[ i__2].i; // , expr subst
+            q__4.i = h__[i__1].i + h__[i__2].i; // , expr subst
             q__3.r = q__4.r - s1->r;
             q__3.i = q__4.i - s1->i; // , expr subst
             q__2.r = q__3.r - s2->r;
@@ -203,8 +213,10 @@ void claqr1_(integer *n, complex *h__, integer *ldh, complex * s1, complex *s2, 
         q__1.i = q__2.i; // , expr subst
         i__2 = h_dim1 + 2;
         i__3 = h_dim1 + 3;
-        s = (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = q__1.i, f2c_abs(r__2)) + ( (r__3 = h__[i__2].r, f2c_abs(r__3)) + (r__4 = h__[i__2].i, f2c_abs(r__4))) + ((r__5 = h__[i__3].r, f2c_abs(r__5)) + (r__6 = h__[i__3].i, f2c_abs(r__6)));
-        if (s == 0.f)
+        s = (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = q__1.i, f2c_abs(r__2))
+            + ((r__3 = h__[i__2].r, f2c_abs(r__3)) + (r__4 = h__[i__2].i, f2c_abs(r__4)))
+            + ((r__5 = h__[i__3].r, f2c_abs(r__5)) + (r__6 = h__[i__3].i, f2c_abs(r__6)));
+        if(s == 0.f)
         {
             v[1].r = 0.f;
             v[1].i = 0.f; // , expr subst
@@ -245,7 +257,7 @@ void claqr1_(integer *n, complex *h__, integer *ldh, complex * s1, complex *s2, 
             v[1].i = q__1.i; // , expr subst
             i__2 = (h_dim1 << 1) + 2;
             q__5.r = h__[i__1].r + h__[i__2].r;
-            q__5.i = h__[i__1].i + h__[ i__2].i; // , expr subst
+            q__5.i = h__[i__1].i + h__[i__2].i; // , expr subst
             q__4.r = q__5.r - s1->r;
             q__4.i = q__5.i - s1->i; // , expr subst
             q__3.r = q__4.r - s2->r;
@@ -262,7 +274,7 @@ void claqr1_(integer *n, complex *h__, integer *ldh, complex * s1, complex *s2, 
             i__1 = h_dim1 + 1;
             i__2 = h_dim1 * 3 + 3;
             q__5.r = h__[i__1].r + h__[i__2].r;
-            q__5.i = h__[i__1].i + h__[ i__2].i; // , expr subst
+            q__5.i = h__[i__1].i + h__[i__2].i; // , expr subst
             q__4.r = q__5.r - s1->r;
             q__4.i = q__5.i - s1->i; // , expr subst
             q__3.r = q__4.r - s2->r;

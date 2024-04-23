@@ -1,16 +1,11 @@
-/* zhseqr.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* zhseqr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    0.,0.
-}
-;
-static doublecomplex c_b2 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b1 = {0., 0.};
+static doublecomplex c_b2 = {1., 0.};
 static integer c__1 = 1;
 static integer c__12 = 12;
 static integer c__49 = 49;
@@ -20,11 +15,17 @@ static integer c__49 = 49;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZHSEQR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhseqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhseqr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhseqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhseqr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhseqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhseqr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -59,7 +60,7 @@ static integer c__49 = 49;
 /* > \verbatim */
 /* > JOB is CHARACTER*1 */
 /* > = 'E': compute eigenvalues only;
-*/
+ */
 /* > = 'S': compute eigenvalues and the Schur form T. */
 /* > \endverbatim */
 /* > */
@@ -67,10 +68,10 @@ static integer c__49 = 49;
 /* > \verbatim */
 /* > COMPZ is CHARACTER*1 */
 /* > = 'N': no Schur vectors are computed;
-*/
+ */
 /* > = 'I': Z is initialized to the unit matrix and the matrix Z */
 /* > of Schur vectors of H is returned;
-*/
+ */
 /* > = 'V': Z must contain an unitary matrix Q on entry, and */
 /* > the product Q*Z is returned. */
 /* > \endverbatim */
@@ -297,10 +298,14 @@ static integer c__49 = 49;
 /* > of Matrix Analysis, volume 23, pages 948--973, 2002. */
 /* ===================================================================== */
 /* Subroutine */
-void zhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, doublecomplex *h__, integer *ldh, doublecomplex *w, doublecomplex *z__, integer *ldz, doublecomplex *work, integer *lwork, integer *info)
+void zhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, doublecomplex *h__,
+             integer *ldh, doublecomplex *w, doublecomplex *z__, integer *ldz, doublecomplex *work,
+             integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhseqr inputs: job %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS "",*job, *compz, *n, *ilo, *ihi, *ldh, *ldz, *lwork);
+    AOCL_DTL_SNPRINTF("zhseqr inputs: job %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS
+                      ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS "",
+                      *job, *compz, *n, *ilo, *ihi, *ldh, *ldz, *lwork);
     /* System generated locals */
     integer h_dim1, h_offset, z_dim1, z_offset, i__1, i__2;
     doublereal d__1, d__2, d__3;
@@ -311,17 +316,28 @@ void zhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, dou
 
     /* Local variables */
     doublecomplex hl[2401] /* was [49][49] */
-    ;
+        ;
     integer kbot, nmin;
     extern logical lsame_(char *, char *, integer, integer);
     logical initz;
     doublecomplex workl[49];
     logical wantt, wantz;
     extern /* Subroutine */
-    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaqr0_(logical *, logical *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zlaqr0_(logical *, logical *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void zlahqr_(logical *, logical *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zlahqr_(logical *, logical *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *),
+        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *),
+        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
+                integer *);
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -367,130 +383,134 @@ void zhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, dou
     wantt = lsame_(job, "S", 1, 1);
     initz = lsame_(compz, "I", 1, 1);
     wantz = initz || lsame_(compz, "V", 1, 1);
-    d__1 = (doublereal) fla_max(1,*n);
+    d__1 = (doublereal)fla_max(1, *n);
     z__1.r = d__1;
     z__1.i = 0.; // , expr subst
     work[1].r = z__1.r;
     work[1].i = z__1.i; // , expr subst
     lquery = *lwork == -1;
     *info = 0;
-    if (! lsame_(job, "E", 1, 1) && ! wantt)
+    if(!lsame_(job, "E", 1, 1) && !wantt)
     {
         *info = -1;
     }
-    else if (! lsame_(compz, "N", 1, 1) && ! wantz)
+    else if(!lsame_(compz, "N", 1, 1) && !wantz)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*ilo < 1 || *ilo > fla_max(1,*n))
+    else if(*ilo < 1 || *ilo > fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*ihi < fla_min(*ilo,*n) || *ihi > *n)
+    else if(*ihi < fla_min(*ilo, *n) || *ihi > *n)
     {
         *info = -5;
     }
-    else if (*ldh < fla_max(1,*n))
+    else if(*ldh < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldz < 1 || wantz && *ldz < fla_max(1,*n))
+    else if(*ldz < 1 || wantz && *ldz < fla_max(1, *n))
     {
         *info = -10;
     }
-    else if (*lwork < fla_max(1,*n) && ! lquery)
+    else if(*lwork < fla_max(1, *n) && !lquery)
     {
         *info = -12;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         /* ==== Quick return in case of invalid argument. ==== */
         i__1 = -(*info);
         xerbla_("ZHSEQR", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (*n == 0)
+    else if(*n == 0)
     {
         /* ==== Quick return in case N = 0;
         nothing to do. ==== */
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         /* ==== Quick return in case of a workspace query ==== */
-        zlaqr0_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &w[1], ilo, ihi, &z__[z_offset], ldz, &work[1], lwork, info);
+        zlaqr0_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &w[1], ilo, ihi, &z__[z_offset],
+                ldz, &work[1], lwork, info);
         /* ==== Ensure reported workspace size is backward-compatible with */
         /* . previous LAPACK versions. ==== */
         /* Computing MAX */
         d__2 = work[1].r;
-        d__3 = (doublereal) fla_max(1,*n); // , expr subst
-        d__1 = fla_max(d__2,d__3);
+        d__3 = (doublereal)fla_max(1, *n); // , expr subst
+        d__1 = fla_max(d__2, d__3);
         z__1.r = d__1;
         z__1.i = 0.; // , expr subst
         work[1].r = z__1.r;
         work[1].i = z__1.i; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else
     {
         /* ==== copy eigenvalues isolated by ZGEBAL ==== */
-        if (*ilo > 1)
+        if(*ilo > 1)
         {
             i__1 = *ilo - 1;
             i__2 = *ldh + 1;
             zcopy_(&i__1, &h__[h_offset], &i__2, &w[1], &c__1);
         }
-        if (*ihi < *n)
+        if(*ihi < *n)
         {
             i__1 = *n - *ihi;
             i__2 = *ldh + 1;
-            zcopy_(&i__1, &h__[*ihi + 1 + (*ihi + 1) * h_dim1], &i__2, &w[* ihi + 1], &c__1);
+            zcopy_(&i__1, &h__[*ihi + 1 + (*ihi + 1) * h_dim1], &i__2, &w[*ihi + 1], &c__1);
         }
         /* ==== Initialize Z, if requested ==== */
-        if (initz)
+        if(initz)
         {
             zlaset_("A", n, n, &c_b1, &c_b2, &z__[z_offset], ldz);
         }
         /* ==== Quick return if possible ==== */
-        if (*ilo == *ihi)
+        if(*ilo == *ihi)
         {
             i__1 = *ilo;
             i__2 = *ilo + *ilo * h_dim1;
             w[i__1].r = h__[i__2].r;
             w[i__1].i = h__[i__2].i; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         /* ==== ZLAHQR/ZLAQR0 crossover point ==== */
         nmin = ilaenv_(&c__12, "ZHSEQR", ch__1, n, ilo, ihi, lwork);
-        nmin = fla_max(15,nmin);
+        nmin = fla_max(15, nmin);
         /* ==== ZLAQR0 for big matrices;
         ZLAHQR for small ones ==== */
-        if (*n > nmin)
+        if(*n > nmin)
         {
-            zlaqr0_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &w[1], ilo, ihi, &z__[z_offset], ldz, &work[1], lwork, info);
+            zlaqr0_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &w[1], ilo, ihi,
+                    &z__[z_offset], ldz, &work[1], lwork, info);
         }
         else
         {
             /* ==== Small matrix ==== */
-            zlahqr_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &w[1], ilo, ihi, &z__[z_offset], ldz, info);
-            if (*info > 0)
+            zlahqr_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &w[1], ilo, ihi,
+                    &z__[z_offset], ldz, info);
+            if(*info > 0)
             {
                 /* ==== A rare ZLAHQR failure! ZLAQR0 sometimes succeeds */
                 /* . when ZLAHQR fails. ==== */
                 kbot = *info;
-                if (*n >= 49)
+                if(*n >= 49)
                 {
                     /* ==== Larger matrices have enough subdiagonal scratch */
                     /* . space to call ZLAQR0 directly. ==== */
-                    zlaqr0_(&wantt, &wantz, n, ilo, &kbot, &h__[h_offset], ldh, &w[1], ilo, ihi, &z__[z_offset], ldz, &work[ 1], lwork, info);
+                    zlaqr0_(&wantt, &wantz, n, ilo, &kbot, &h__[h_offset], ldh, &w[1], ilo, ihi,
+                            &z__[z_offset], ldz, &work[1], lwork, info);
                 }
                 else
                 {
@@ -504,8 +524,9 @@ void zhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, dou
                     hl[i__1].i = 0.; // , expr subst
                     i__1 = 49 - *n;
                     zlaset_("A", &c__49, &i__1, &c_b1, &c_b1, &hl[(*n + 1) * 49 - 49], &c__49);
-                    zlaqr0_(&wantt, &wantz, &c__49, ilo, &kbot, hl, &c__49, & w[1], ilo, ihi, &z__[z_offset], ldz, workl, & c__49, info);
-                    if (wantt || *info != 0)
+                    zlaqr0_(&wantt, &wantz, &c__49, ilo, &kbot, hl, &c__49, &w[1], ilo, ihi,
+                            &z__[z_offset], ldz, workl, &c__49, info);
+                    if(wantt || *info != 0)
                     {
                         zlacpy_("A", n, n, hl, &c__49, &h__[h_offset], ldh);
                     }
@@ -513,7 +534,7 @@ void zhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, dou
             }
         }
         /* ==== Clear out the trash, if necessary. ==== */
-        if ((wantt || *info != 0) && *n > 2)
+        if((wantt || *info != 0) && *n > 2)
         {
             i__1 = *n - 2;
             i__2 = *n - 2;
@@ -522,9 +543,9 @@ void zhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, dou
         /* ==== Ensure reported workspace size is backward-compatible with */
         /* . previous LAPACK versions. ==== */
         /* Computing MAX */
-        d__2 = (doublereal) fla_max(1,*n);
+        d__2 = (doublereal)fla_max(1, *n);
         d__3 = work[1].r; // , expr subst
-        d__1 = fla_max(d__2,d__3);
+        d__1 = fla_max(d__2, d__3);
         z__1.r = d__1;
         z__1.i = 0.; // , expr subst
         work[1].r = z__1.r;

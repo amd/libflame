@@ -1,22 +1,32 @@
-/* ../netlib/dlaed7.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlaed7.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__2 = 2;
 static integer c__1 = 1;
 static doublereal c_b10 = 1.;
 static doublereal c_b11 = 0.;
 static integer c_n1 = -1;
-/* > \brief \b DLAED7 used by sstedc. Computes the updated eigensystem of a diagonal matrix after modification by a rank-one symmetric matrix. Used when the original matrix is dense. */
+/* > \brief \b DLAED7 used by sstedc. Computes the updated eigensystem of a diagonal matrix after
+ * modification by a rank-one symmetric matrix. Used when the original matrix is dense. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLAED7 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaed7. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaed7.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaed7. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaed7.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaed7. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaed7.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -248,10 +258,19 @@ static integer c_n1 = -1;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void dlaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer *curlvl, integer *curpbm, doublereal *d__, doublereal *q, integer *ldq, integer *indxq, doublereal *rho, integer *cutpnt, doublereal *qstore, integer *qptr, integer *prmptr, integer * perm, integer *givptr, integer *givcol, doublereal *givnum, doublereal *work, integer *iwork, integer *info)
+void dlaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer *curlvl,
+             integer *curpbm, doublereal *d__, doublereal *q, integer *ldq, integer *indxq,
+             doublereal *rho, integer *cutpnt, doublereal *qstore, integer *qptr, integer *prmptr,
+             integer *perm, integer *givptr, integer *givcol, doublereal *givnum, doublereal *work,
+             integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaed7 inputs: icompq %" FLA_IS ", n %" FLA_IS ", qsiz %" FLA_IS ", tlvls %" FLA_IS ", curlvl %" FLA_IS ", curpbm %" FLA_IS ", ldq %" FLA_IS ", cutpnt %" FLA_IS ", qptr %" FLA_IS ", prmptr %" FLA_IS ", perm %" FLA_IS ", givptr %" FLA_IS ", givcol %" FLA_IS "",*icompq, *n, *qsiz, *tlvls, *curlvl, *curpbm, *ldq, *cutpnt, *qptr, *prmptr, *perm, *givptr, *givcol);
+    AOCL_DTL_SNPRINTF("dlaed7 inputs: icompq %" FLA_IS ", n %" FLA_IS ", qsiz %" FLA_IS
+                      ", tlvls %" FLA_IS ", curlvl %" FLA_IS ", curpbm %" FLA_IS ", ldq %" FLA_IS
+                      ", cutpnt %" FLA_IS ", qptr %" FLA_IS ", prmptr %" FLA_IS ", perm %" FLA_IS
+                      ", givptr %" FLA_IS ", givcol %" FLA_IS "",
+                      *icompq, *n, *qsiz, *tlvls, *curlvl, *curpbm, *ldq, *cutpnt, *qptr, *prmptr,
+                      *perm, *givptr, *givcol);
     /* System generated locals */
     integer q_dim1, q_offset, i__1, i__2;
     /* Builtin functions */
@@ -259,13 +278,26 @@ void dlaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer
     /* Local variables */
     integer i__, k, n1, n2, is, iw, iz, iq2, ptr, ldq2, indx, curr;
     extern /* Subroutine */
-    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer indxc, indxp;
     extern /* Subroutine */
-    void dlaed8_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *, integer *, integer *), dlaed9_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dlaeda_(integer *, integer *, integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *) ;
+        void
+        dlaed8_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *,
+                integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *,
+                integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *,
+                integer *, integer *),
+        dlaed9_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *,
+                doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *),
+        dlaeda_(integer *, integer *, integer *, integer *, integer *, integer *, integer *,
+                integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *,
+                integer *);
     integer idlmda;
     extern /* Subroutine */
-    void dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer coltyp;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -303,27 +335,27 @@ void dlaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer
     --iwork;
     /* Function Body */
     *info = 0;
-    if (*icompq < 0 || *icompq > 1)
+    if(*icompq < 0 || *icompq > 1)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*icompq == 1 && *qsiz < *n)
+    else if(*icompq == 1 && *qsiz < *n)
     {
         *info = -3;
     }
-    else if (*ldq < fla_max(1,*n))
+    else if(*ldq < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (fla_min(1,*n) > *cutpnt || *n < *cutpnt)
+    else if(fla_min(1, *n) > *cutpnt || *n < *cutpnt)
     {
         *info = -12;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DLAED7", &i__1, (ftnlen)6);
@@ -331,7 +363,7 @@ void dlaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -339,7 +371,7 @@ void dlaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer
     /* The following values are for bookkeeping purposes only. They are */
     /* integer pointers which indicate the portion of the workspace */
     /* used by a particular array in DLAED8 and DLAED9. */
-    if (*icompq == 1)
+    if(*icompq == 1)
     {
         ldq2 = *qsiz;
     }
@@ -360,40 +392,44 @@ void dlaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer
     /* first row of Q_2. */
     ptr = pow_ii(&c__2, tlvls) + 1;
     i__1 = *curlvl - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = *tlvls - i__;
         ptr += pow_ii(&c__2, &i__2);
         /* L10: */
     }
     curr = ptr + *curpbm;
-    dlaeda_(n, tlvls, curlvl, curpbm, &prmptr[1], &perm[1], &givptr[1], & givcol[3], &givnum[3], &qstore[1], &qptr[1], &work[iz], &work[iz + *n], info);
+    dlaeda_(n, tlvls, curlvl, curpbm, &prmptr[1], &perm[1], &givptr[1], &givcol[3], &givnum[3],
+            &qstore[1], &qptr[1], &work[iz], &work[iz + *n], info);
     /* When solving the final problem, we no longer need the stored data, */
     /* so we will overwrite the data from this level onto the previously */
     /* used storage space. */
-    if (*curlvl == *tlvls)
+    if(*curlvl == *tlvls)
     {
         qptr[curr] = 1;
         prmptr[curr] = 1;
         givptr[curr] = 1;
     }
     /* Sort and Deflate eigenvalues. */
-    dlaed8_(icompq, &k, n, qsiz, &d__[1], &q[q_offset], ldq, &indxq[1], rho, cutpnt, &work[iz], &work[idlmda], &work[iq2], &ldq2, &work[iw], & perm[prmptr[curr]], &givptr[curr + 1], &givcol[(givptr[curr] << 1) + 1], &givnum[(givptr[curr] << 1) + 1], &iwork[indxp], &iwork[ indx], info);
+    dlaed8_(icompq, &k, n, qsiz, &d__[1], &q[q_offset], ldq, &indxq[1], rho, cutpnt, &work[iz],
+            &work[idlmda], &work[iq2], &ldq2, &work[iw], &perm[prmptr[curr]], &givptr[curr + 1],
+            &givcol[(givptr[curr] << 1) + 1], &givnum[(givptr[curr] << 1) + 1], &iwork[indxp],
+            &iwork[indx], info);
     prmptr[curr + 1] = prmptr[curr] + *n;
     givptr[curr + 1] += givptr[curr];
     /* Solve Secular Equation. */
-    if (k != 0)
+    if(k != 0)
     {
-        dlaed9_(&k, &c__1, &k, n, &d__[1], &work[is], &k, rho, &work[idlmda], &work[iw], &qstore[qptr[curr]], &k, info);
-        if (*info != 0)
+        dlaed9_(&k, &c__1, &k, n, &d__[1], &work[is], &k, rho, &work[idlmda], &work[iw],
+                &qstore[qptr[curr]], &k, info);
+        if(*info != 0)
         {
             goto L30;
         }
-        if (*icompq == 1)
+        if(*icompq == 1)
         {
-            dgemm_("N", "N", qsiz, &k, &k, &c_b10, &work[iq2], &ldq2, &qstore[ qptr[curr]], &k, &c_b11, &q[q_offset], ldq);
+            dgemm_("N", "N", qsiz, &k, &k, &c_b10, &work[iq2], &ldq2, &qstore[qptr[curr]], &k,
+                   &c_b11, &q[q_offset], ldq);
         }
         /* Computing 2nd power */
         i__1 = k;
@@ -407,9 +443,7 @@ void dlaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer
     {
         qptr[curr + 1] = qptr[curr];
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             indxq[i__] = i__;
             /* L20: */

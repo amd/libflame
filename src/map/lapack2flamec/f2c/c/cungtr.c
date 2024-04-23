@@ -1,5 +1,8 @@
-/* ../netlib/cungtr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cungtr.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -9,11 +12,17 @@ static integer c_n1 = -1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CUNGTR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cungtr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cungtr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cungtr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cungtr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cungtr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cungtr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -46,7 +55,7 @@ static integer c_n1 = -1;
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A contains elementary reflectors */
 /* > from CHETRD;
-*/
+ */
 /* > = 'L': Lower triangle of A contains elementary reflectors */
 /* > from CHETRD. */
 /* > \endverbatim */
@@ -114,12 +123,15 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, complex *work, integer *lwork, integer *info)
+void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, complex *work,
+             integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"cungtr inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *lda, *lwork);
+    snprintf(buffer, 256,
+             "cungtr inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "", *uplo, *n,
+             *lda, *lwork);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -130,10 +142,15 @@ void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, com
     integer iinfo;
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void cungql_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), cungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+        void
+        cungql_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *, integer *),
+        cungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -167,15 +184,15 @@ void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, com
     *info = 0;
     lquery = *lwork == -1;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -184,14 +201,14 @@ void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, com
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
-        if (*lwork < fla_max(i__1,i__2) && ! lquery)
+        if(*lwork < fla_max(i__1, i__2) && !lquery)
         {
             *info = -7;
         }
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (upper)
+        if(upper)
         {
             i__1 = *n - 1;
             i__2 = *n - 1;
@@ -208,45 +225,41 @@ void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, com
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
-        lwkopt = fla_max(i__1,i__2) * nb;
-        work[1].r = (real) lwkopt;
+        lwkopt = fla_max(i__1, i__2) * nb;
+        work[1].r = (real)lwkopt;
         work[1].i = 0.f; // , expr subst
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CUNGTR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (upper)
+    if(upper)
     {
         /* Q was determined by a call to CHETRD with UPLO = 'U' */
         /* Shift the vectors which define the elementary reflectors one */
         /* column to the left, and set the last row and column of Q to */
         /* those of the unit matrix */
         i__1 = *n - 1;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j - 1;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + (j + 1) * a_dim1;
@@ -260,9 +273,7 @@ void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, com
             /* L20: */
         }
         i__1 = *n - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + *n * a_dim1;
             a[i__2].r = 0.f;
@@ -284,17 +295,13 @@ void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, com
         /* Shift the vectors which define the elementary reflectors one */
         /* column to the right, and set the first row and column of Q to */
         /* those of the unit matrix */
-        for (j = *n;
-                j >= 2;
-                --j)
+        for(j = *n; j >= 2; --j)
         {
             i__1 = j * a_dim1 + 1;
             a[i__1].r = 0.f;
             a[i__1].i = 0.f; // , expr subst
             i__1 = *n;
-            for (i__ = j + 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = j + 1; i__ <= i__1; ++i__)
             {
                 i__2 = i__ + j * a_dim1;
                 i__3 = i__ + (j - 1) * a_dim1;
@@ -308,25 +315,24 @@ void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, com
         a[i__1].r = 1.f;
         a[i__1].i = 0.f; // , expr subst
         i__1 = *n;
-        for (i__ = 2;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 2; i__ <= i__1; ++i__)
         {
             i__2 = i__ + a_dim1;
             a[i__2].r = 0.f;
             a[i__2].i = 0.f; // , expr subst
             /* L60: */
         }
-        if (*n > 1)
+        if(*n > 1)
         {
             /* Generate Q(2:n,2:n) */
             i__1 = *n - 1;
             i__2 = *n - 1;
             i__3 = *n - 1;
-            cungqr_(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1], lwork, &iinfo);
+            cungqr_(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1], lwork,
+                    &iinfo);
         }
     }
-    work[1].r = (real) lwkopt;
+    work[1].r = (real)lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

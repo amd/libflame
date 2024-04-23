@@ -3,15 +3,16 @@
 extern "C" {
 #endif
 
- longint
+longint
 #ifdef KR_headers
-qbit_shift(a, b) longint a; integer b;
+    qbit_shift(a, b) longint a;
+integer b;
 #else
-qbit_shift(longint a, integer b)
+    qbit_shift(longint a, integer b)
 #endif
 {
-	return b >= 0 ? a << b : (longint)((ulongint)a >> -b);
-	}
+    return b >= 0 ? a << b : (longint)((ulongint)a >> -b);
+}
 #ifdef __cplusplus
 }
 #endif

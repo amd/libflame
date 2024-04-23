@@ -1,5 +1,8 @@
-/* ../netlib/strrfs.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/strrfs.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b19 = -1.f;
@@ -9,11 +12,17 @@ static real c_b19 = -1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download STRRFS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/strrfs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/strrfs.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/strrfs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/strrfs.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/strrfs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/strrfs.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -48,7 +57,7 @@ static real c_b19 = -1.f;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': A is upper triangular;
-*/
+ */
 /* > = 'L': A is lower triangular. */
 /* > \endverbatim */
 /* > */
@@ -65,7 +74,7 @@ static real c_b19 = -1.f;
 /* > \verbatim */
 /* > DIAG is CHARACTER*1 */
 /* > = 'N': A is non-unit triangular;
-*/
+ */
 /* > = 'U': A is unit triangular. */
 /* > \endverbatim */
 /* > */
@@ -172,12 +181,17 @@ static real c_b19 = -1.f;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb, real *x, integer *ldx, real *ferr, real *berr, real *work, integer *iwork, integer *info)
+void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, real *a, integer *lda,
+             real *b, integer *ldb, real *x, integer *ldx, real *ferr, real *berr, real *work,
+             integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"strrfs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*uplo, *trans, *diag, *n, *nrhs, *lda, *ldb, *ldx);
+    snprintf(buffer, 256,
+             "strrfs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", nrhs %" FLA_IS
+             ", lda %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",
+             *uplo, *trans, *diag, *n, *nrhs, *lda, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -194,11 +208,17 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *), strsv_( char *, char *, char *, integer *, real *, integer *, real *, integer *), slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *),
+        saxpy_(integer *, real *, real *, integer *, real *, integer *),
+        strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *),
+        strsv_(char *, char *, char *, integer *, real *, integer *, real *, integer *),
+        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     char transt[1];
     logical nounit;
@@ -245,39 +265,39 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
     upper = lsame_(uplo, "U", 1, 1);
     notran = lsame_(trans, "N", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -11;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("STRRFS", &i__1, (ftnlen)6);
@@ -285,12 +305,10 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
         return;
     }
     /* Quick return if possible */
-    if (*n == 0 || *nrhs == 0)
+    if(*n == 0 || *nrhs == 0)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             ferr[j] = 0.f;
             berr[j] = 0.f;
@@ -299,7 +317,7 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (notran)
+    if(notran)
     {
         *(unsigned char *)transt = 'T';
     }
@@ -315,9 +333,7 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
     safe2 = safe1 / eps;
     /* Do for each right hand side */
     i__1 = *nrhs;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         /* Compute residual R = B - op(A) * X, */
         /* where op(A) = A or A**T, depending on TRANS. */
@@ -331,32 +347,26 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
         /* than SAFE2, then SAFE1 is added to the i-th components of the */
         /* numerator and denominator before dividing. */
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             work[i__] = (r__1 = b[i__ + j * b_dim1], f2c_abs(r__1));
             /* L20: */
         }
-        if (notran)
+        if(notran)
         {
             /* Compute f2c_abs(A)*f2c_abs(X) + f2c_abs(B). */
-            if (upper)
+            if(upper)
             {
-                if (nounit)
+                if(nounit)
                 {
                     i__2 = *n;
-                    for (k = 1;
-                            k <= i__2;
-                            ++k)
+                    for(k = 1; k <= i__2; ++k)
                     {
                         xk = (r__1 = x[k + j * x_dim1], f2c_abs(r__1));
                         i__3 = k;
-                        for (i__ = 1;
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__3; ++i__)
                         {
-                            work[i__] += (r__1 = a[i__ + k * a_dim1], f2c_abs( r__1)) * xk;
+                            work[i__] += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1)) * xk;
                             /* L30: */
                         }
                         /* L40: */
@@ -365,17 +375,13 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
                 else
                 {
                     i__2 = *n;
-                    for (k = 1;
-                            k <= i__2;
-                            ++k)
+                    for(k = 1; k <= i__2; ++k)
                     {
                         xk = (r__1 = x[k + j * x_dim1], f2c_abs(r__1));
                         i__3 = k - 1;
-                        for (i__ = 1;
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__3; ++i__)
                         {
-                            work[i__] += (r__1 = a[i__ + k * a_dim1], f2c_abs( r__1)) * xk;
+                            work[i__] += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1)) * xk;
                             /* L50: */
                         }
                         work[k] += xk;
@@ -385,20 +391,16 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
             }
             else
             {
-                if (nounit)
+                if(nounit)
                 {
                     i__2 = *n;
-                    for (k = 1;
-                            k <= i__2;
-                            ++k)
+                    for(k = 1; k <= i__2; ++k)
                     {
                         xk = (r__1 = x[k + j * x_dim1], f2c_abs(r__1));
                         i__3 = *n;
-                        for (i__ = k;
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = k; i__ <= i__3; ++i__)
                         {
-                            work[i__] += (r__1 = a[i__ + k * a_dim1], f2c_abs( r__1)) * xk;
+                            work[i__] += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1)) * xk;
                             /* L70: */
                         }
                         /* L80: */
@@ -407,17 +409,13 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
                 else
                 {
                     i__2 = *n;
-                    for (k = 1;
-                            k <= i__2;
-                            ++k)
+                    for(k = 1; k <= i__2; ++k)
                     {
                         xk = (r__1 = x[k + j * x_dim1], f2c_abs(r__1));
                         i__3 = *n;
-                        for (i__ = k + 1;
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = k + 1; i__ <= i__3; ++i__)
                         {
-                            work[i__] += (r__1 = a[i__ + k * a_dim1], f2c_abs( r__1)) * xk;
+                            work[i__] += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1)) * xk;
                             /* L90: */
                         }
                         work[k] += xk;
@@ -429,22 +427,19 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
         else
         {
             /* Compute f2c_abs(A**T)*f2c_abs(X) + f2c_abs(B). */
-            if (upper)
+            if(upper)
             {
-                if (nounit)
+                if(nounit)
                 {
                     i__2 = *n;
-                    for (k = 1;
-                            k <= i__2;
-                            ++k)
+                    for(k = 1; k <= i__2; ++k)
                     {
                         s = 0.f;
                         i__3 = k;
-                        for (i__ = 1;
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__3; ++i__)
                         {
-                            s += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1)) * ( r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
+                            s += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1))
+                                 * (r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
                             /* L110: */
                         }
                         work[k] += s;
@@ -454,17 +449,14 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
                 else
                 {
                     i__2 = *n;
-                    for (k = 1;
-                            k <= i__2;
-                            ++k)
+                    for(k = 1; k <= i__2; ++k)
                     {
                         s = (r__1 = x[k + j * x_dim1], f2c_abs(r__1));
                         i__3 = k - 1;
-                        for (i__ = 1;
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__3; ++i__)
                         {
-                            s += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1)) * ( r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
+                            s += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1))
+                                 * (r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
                             /* L130: */
                         }
                         work[k] += s;
@@ -474,20 +466,17 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
             }
             else
             {
-                if (nounit)
+                if(nounit)
                 {
                     i__2 = *n;
-                    for (k = 1;
-                            k <= i__2;
-                            ++k)
+                    for(k = 1; k <= i__2; ++k)
                     {
                         s = 0.f;
                         i__3 = *n;
-                        for (i__ = k;
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = k; i__ <= i__3; ++i__)
                         {
-                            s += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1)) * ( r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
+                            s += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1))
+                                 * (r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
                             /* L150: */
                         }
                         work[k] += s;
@@ -497,17 +486,14 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
                 else
                 {
                     i__2 = *n;
-                    for (k = 1;
-                            k <= i__2;
-                            ++k)
+                    for(k = 1; k <= i__2; ++k)
                     {
                         s = (r__1 = x[k + j * x_dim1], f2c_abs(r__1));
                         i__3 = *n;
-                        for (i__ = k + 1;
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = k + 1; i__ <= i__3; ++i__)
                         {
-                            s += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1)) * ( r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
+                            s += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1))
+                                 * (r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
                             /* L170: */
                         }
                         work[k] += s;
@@ -518,23 +504,22 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
         }
         s = 0.f;
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
-            if (work[i__] > safe2)
+            if(work[i__] > safe2)
             {
                 /* Computing MAX */
                 r__2 = s;
-                r__3 = (r__1 = work[*n + i__], f2c_abs(r__1)) / work[ i__]; // , expr subst
-                s = fla_max(r__2,r__3);
+                r__3 = (r__1 = work[*n + i__], f2c_abs(r__1)) / work[i__]; // , expr subst
+                s = fla_max(r__2, r__3);
             }
             else
             {
                 /* Computing MAX */
                 r__2 = s;
-                r__3 = ((r__1 = work[*n + i__], f2c_abs(r__1)) + safe1) / (work[i__] + safe1); // , expr subst
-                s = fla_max(r__2,r__3);
+                r__3 = ((r__1 = work[*n + i__], f2c_abs(r__1)) + safe1)
+                       / (work[i__] + safe1); // , expr subst
+                s = fla_max(r__2, r__3);
             }
             /* L190: */
         }
@@ -557,11 +542,9 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
         /* inv(op(A)) * diag(W), */
         /* where W = f2c_abs(R) + NZ*EPS*( f2c_abs(op(A))*f2c_abs(X)+f2c_abs(B) ))) */
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
-            if (work[i__] > safe2)
+            if(work[i__] > safe2)
             {
                 work[i__] = (r__1 = work[*n + i__], f2c_abs(r__1)) + nz * eps * work[i__];
             }
@@ -572,18 +555,16 @@ void strrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
             /* L200: */
         }
         kase = 0;
-L210:
-        slacn2_(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], & kase, isave);
-        if (kase != 0)
+    L210:
+        slacn2_(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase, isave);
+        if(kase != 0)
         {
-            if (kase == 1)
+            if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(op(A)**T). */
                 strsv_(uplo, transt, diag, n, &a[a_offset], lda, &work[*n + 1], &c__1);
                 i__2 = *n;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     work[*n + i__] = work[i__] * work[*n + i__];
                     /* L220: */
@@ -593,9 +574,7 @@ L210:
             {
                 /* Multiply by inv(op(A))*diag(W). */
                 i__2 = *n;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     work[*n + i__] = work[i__] * work[*n + i__];
                     /* L230: */
@@ -607,17 +586,15 @@ L210:
         /* Normalize error. */
         lstres = 0.f;
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             r__2 = lstres;
             r__3 = (r__1 = x[i__ + j * x_dim1], f2c_abs(r__1)); // , expr subst
-            lstres = fla_max(r__2,r__3);
+            lstres = fla_max(r__2, r__3);
             /* L240: */
         }
-        if (lstres != 0.f)
+        if(lstres != 0.f)
         {
             ferr[j] /= lstres;
         }

@@ -25,41 +25,56 @@
 #define LAPACK_QUICK_RETURN 212
 #define LAPACK_QUERY_RETURN 112
 
-#define LAPACK_RETURN_CHECK( r_check )                                \
-{                                                                     \
-int r_val = r_check;                                                  \
-switch ( r_val )                                                      \
-  {                                                                   \
-  case LAPACK_FAILURE:      return FLA_FAILURE;                       \
-  case LAPACK_QUERY_RETURN: ;                                         \
-  case LAPACK_QUICK_RETURN: return 0;                                 \
-  case LAPACK_SUCCESS: ;                                              \
-  default: ;                                                          \
-    if ( r_val > 0 ) { ; }                                            \
-    else             { FLA_Check_error_code( FLA_LAPAC2FLAME_INVALID_RETURN ); } \
-  }                                                                   \
-}
+#define LAPACK_RETURN_CHECK(r_check)                                      \
+    {                                                                     \
+        int r_val = r_check;                                              \
+        switch(r_val)                                                     \
+        {                                                                 \
+            case LAPACK_FAILURE:                                          \
+                return FLA_FAILURE;                                       \
+            case LAPACK_QUERY_RETURN:;                                    \
+            case LAPACK_QUICK_RETURN:                                     \
+                return 0;                                                 \
+            case LAPACK_SUCCESS:;                                         \
+            default:;                                                     \
+                if(r_val > 0)                                             \
+                {                                                         \
+                    ;                                                     \
+                }                                                         \
+                else                                                      \
+                {                                                         \
+                    FLA_Check_error_code(FLA_LAPAC2FLAME_INVALID_RETURN); \
+                }                                                         \
+        }                                                                 \
+    }
 
-#define LAPACK_RETURN_CHECK_VAR1( r_check , fla_error)                  \
-  {                                                                     \
-  int r_val = r_check;                                                  \
-  switch ( r_val )                                                      \
-    {                                                                   \
-    case LAPACK_FAILURE:      fla_error = FLA_FAILURE; break;           \
-    case LAPACK_QUERY_RETURN: ;                                         \
-    case LAPACK_QUICK_RETURN: fla_error = 0;   break;                   \
-    case LAPACK_SUCCESS: ;                                              \
-    default: ;                                                          \
-      if ( r_val > 0 ) { ; }                                            \
-      else     fla_error = FLA_FAILURE;                                 \
-    }                                                                   \
-  }
+#define LAPACK_RETURN_CHECK_VAR1(r_check, fla_error) \
+    {                                                \
+        int r_val = r_check;                         \
+        switch(r_val)                                \
+        {                                            \
+            case LAPACK_FAILURE:                     \
+                fla_error = FLA_FAILURE;             \
+                break;                               \
+            case LAPACK_QUERY_RETURN:;               \
+            case LAPACK_QUICK_RETURN:                \
+                fla_error = 0;                       \
+                break;                               \
+            case LAPACK_SUCCESS:;                    \
+            default:;                                \
+                if(r_val > 0)                        \
+                {                                    \
+                    ;                                \
+                }                                    \
+                else                                 \
+                    fla_error = FLA_FAILURE;         \
+        }                                            \
+    }
 
 #ifndef FLA_ENABLE_AOCL_BLAS
 extern int lsame_(char *, char *, integer a, integer b);
 extern int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
 #endif
 extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-
 
 #endif

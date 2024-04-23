@@ -1,16 +1,25 @@
-/* ../netlib/sla_geamv.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sla_geamv.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLA_GEAMV computes a matrix-vector product using a general matrix to calculate error bounds. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLA_GEAMV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_gea mv.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_gea
+ * mv.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sla_gea mv.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sla_gea
+ * mv.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_gea mv.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_gea
+ * mv.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -159,7 +168,8 @@
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, integer *lda, real *x, integer *incx, real *beta, real *y, integer *incy)
+void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, integer *lda, real *x,
+                integer *incx, real *beta, real *y, integer *incy)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -176,7 +186,8 @@ void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, in
     real safe1;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -206,43 +217,43 @@ void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, in
     --y;
     /* Function Body */
     info = 0;
-    if (! (*trans == ilatrans_("N") || *trans == ilatrans_("T") || *trans == ilatrans_("C")))
+    if(!(*trans == ilatrans_("N") || *trans == ilatrans_("T") || *trans == ilatrans_("C")))
     {
         info = 1;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         info = 2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         info = 3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         info = 6;
     }
-    else if (*incx == 0)
+    else if(*incx == 0)
     {
         info = 8;
     }
-    else if (*incy == 0)
+    else if(*incy == 0)
     {
         info = 11;
     }
-    if (info != 0)
+    if(info != 0)
     {
         xerbla_("SLA_GEAMV ", &info, (ftnlen)10);
         return;
     }
     /* Quick return if possible. */
-    if (*m == 0 || *n == 0 || *alpha == 0.f && *beta == 1.f)
+    if(*m == 0 || *n == 0 || *alpha == 0.f && *beta == 1.f)
     {
         return;
     }
     /* Set LENX and LENY, the lengths of the vectors x and y, and set */
     /* up the start points in X and Y. */
-    if (*trans == ilatrans_("N"))
+    if(*trans == ilatrans_("N"))
     {
         lenx = *n;
         leny = *m;
@@ -252,7 +263,7 @@ void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, in
         lenx = *m;
         leny = *n;
     }
-    if (*incx > 0)
+    if(*incx > 0)
     {
         kx = 1;
     }
@@ -260,7 +271,7 @@ void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, in
     {
         kx = 1 - (lenx - 1) * *incx;
     }
-    if (*incy > 0)
+    if(*incy > 0)
     {
         ky = 1;
     }
@@ -277,21 +288,19 @@ void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, in
     /* the inexact flag. Still doesn't help change the iteration order */
     /* to per-column. */
     iy = ky;
-    if (*incx == 1)
+    if(*incx == 1)
     {
-        if (*trans == ilatrans_("N"))
+        if(*trans == ilatrans_("N"))
         {
             i__1 = leny;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
-                if (*beta == 0.f)
+                if(*beta == 0.f)
                 {
                     symb_zero__ = TRUE_;
                     y[iy] = 0.f;
                 }
-                else if (y[iy] == 0.f)
+                else if(y[iy] == 0.f)
                 {
                     symb_zero__ = TRUE_;
                 }
@@ -300,19 +309,17 @@ void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, in
                     symb_zero__ = FALSE_;
                     y[iy] = *beta * (r__1 = y[iy], f2c_abs(r__1));
                 }
-                if (*alpha != 0.f)
+                if(*alpha != 0.f)
                 {
                     i__2 = lenx;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         temp = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
                         symb_zero__ = symb_zero__ && (x[j] == 0.f || temp == 0.f);
                         y[iy] += *alpha * (r__1 = x[j], f2c_abs(r__1)) * temp;
                     }
                 }
-                if (! symb_zero__)
+                if(!symb_zero__)
                 {
                     y[iy] += r_sign(&safe1, &y[iy]);
                 }
@@ -322,16 +329,14 @@ void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, in
         else
         {
             i__1 = leny;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
-                if (*beta == 0.f)
+                if(*beta == 0.f)
                 {
                     symb_zero__ = TRUE_;
                     y[iy] = 0.f;
                 }
-                else if (y[iy] == 0.f)
+                else if(y[iy] == 0.f)
                 {
                     symb_zero__ = TRUE_;
                 }
@@ -340,19 +345,17 @@ void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, in
                     symb_zero__ = FALSE_;
                     y[iy] = *beta * (r__1 = y[iy], f2c_abs(r__1));
                 }
-                if (*alpha != 0.f)
+                if(*alpha != 0.f)
                 {
                     i__2 = lenx;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         temp = (r__1 = a[j + i__ * a_dim1], f2c_abs(r__1));
                         symb_zero__ = symb_zero__ && (x[j] == 0.f || temp == 0.f);
                         y[iy] += *alpha * (r__1 = x[j], f2c_abs(r__1)) * temp;
                     }
                 }
-                if (! symb_zero__)
+                if(!symb_zero__)
                 {
                     y[iy] += r_sign(&safe1, &y[iy]);
                 }
@@ -362,19 +365,17 @@ void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, in
     }
     else
     {
-        if (*trans == ilatrans_("N"))
+        if(*trans == ilatrans_("N"))
         {
             i__1 = leny;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
-                if (*beta == 0.f)
+                if(*beta == 0.f)
                 {
                     symb_zero__ = TRUE_;
                     y[iy] = 0.f;
                 }
-                else if (y[iy] == 0.f)
+                else if(y[iy] == 0.f)
                 {
                     symb_zero__ = TRUE_;
                 }
@@ -383,13 +384,11 @@ void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, in
                     symb_zero__ = FALSE_;
                     y[iy] = *beta * (r__1 = y[iy], f2c_abs(r__1));
                 }
-                if (*alpha != 0.f)
+                if(*alpha != 0.f)
                 {
                     jx = kx;
                     i__2 = lenx;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         temp = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
                         symb_zero__ = symb_zero__ && (x[jx] == 0.f || temp == 0.f);
@@ -397,7 +396,7 @@ void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, in
                         jx += *incx;
                     }
                 }
-                if (! symb_zero__)
+                if(!symb_zero__)
                 {
                     y[iy] += r_sign(&safe1, &y[iy]);
                 }
@@ -407,16 +406,14 @@ void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, in
         else
         {
             i__1 = leny;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
-                if (*beta == 0.f)
+                if(*beta == 0.f)
                 {
                     symb_zero__ = TRUE_;
                     y[iy] = 0.f;
                 }
-                else if (y[iy] == 0.f)
+                else if(y[iy] == 0.f)
                 {
                     symb_zero__ = TRUE_;
                 }
@@ -425,13 +422,11 @@ void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, in
                     symb_zero__ = FALSE_;
                     y[iy] = *beta * (r__1 = y[iy], f2c_abs(r__1));
                 }
-                if (*alpha != 0.f)
+                if(*alpha != 0.f)
                 {
                     jx = kx;
                     i__2 = lenx;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         temp = (r__1 = a[j + i__ * a_dim1], f2c_abs(r__1));
                         symb_zero__ = symb_zero__ && (x[jx] == 0.f || temp == 0.f);
@@ -439,7 +434,7 @@ void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, in
                         jx += *incx;
                     }
                 }
-                if (! symb_zero__)
+                if(!symb_zero__)
                 {
                     y[iy] += r_sign(&safe1, &y[iy]);
                 }

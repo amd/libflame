@@ -1,5 +1,8 @@
-/* ../netlib/cpptrf.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cpptrf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b16 = -1.f;
@@ -9,11 +12,17 @@ static real c_b16 = -1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CPPTRF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpptrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpptrf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpptrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpptrf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpptrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpptrf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -45,7 +54,7 @@ static real c_b16 = -1.f;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -62,7 +71,7 @@ static real c_b16 = -1.f;
 /* > A, packed columnwise in a linear array. The j-th column of A */
 /* > is stored in the array AP as follows: */
 /* > if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n. */
 /* > See below for further details. */
 /* > */
@@ -110,15 +119,15 @@ static real c_b16 = -1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cpptrf_(char *uplo, integer *n, complex *ap, integer * info)
+void cpptrf_(char *uplo, integer *n, complex *ap, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cpptrf inputs: uplo %c, n %lld",*uplo, *n);
+    snprintf(buffer, 256, "cpptrf inputs: uplo %c, n %lld", *uplo, *n);
 #else
-    snprintf(buffer, 256,"cpptrf inputs: uplo %c, n %d",*uplo, *n);
+    snprintf(buffer, 256, "cpptrf inputs: uplo %c, n %d", *uplo, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -132,13 +141,18 @@ void cpptrf_(char *uplo, integer *n, complex *ap, integer * info)
     integer j, jc, jj;
     real ajj;
     extern /* Subroutine */
-    void chpr_(char *, integer *, real *, complex *, integer *, complex *);
+        void
+        chpr_(char *, integer *, real *, complex *, integer *, complex *);
     extern /* Complex */
-    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+        VOID
+        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    void ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *), csscal_( integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *),
+        csscal_(integer *, real *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -165,15 +179,15 @@ void cpptrf_(char *uplo, integer *n, complex *ap, integer * info)
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CPPTRF", &i__1, (ftnlen)6);
@@ -181,27 +195,25 @@ void cpptrf_(char *uplo, integer *n, complex *ap, integer * info)
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (upper)
+    if(upper)
     {
         /* Compute the Cholesky factorization A = U**H * U. */
         jj = 0;
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             jc = jj + 1;
             jj += j;
             /* Compute elements 1:J-1 of column J. */
-            if (j > 1)
+            if(j > 1)
             {
                 i__2 = j - 1;
-                ctpsv_("Upper", "Conjugate transpose", "Non-unit", &i__2, &ap[ 1], &ap[jc], &c__1);
+                ctpsv_("Upper", "Conjugate transpose", "Non-unit", &i__2, &ap[1], &ap[jc], &c__1);
             }
             /* Compute U(J,J) and test for non-positive-definiteness. */
             i__2 = jj;
@@ -211,7 +223,7 @@ void cpptrf_(char *uplo, integer *n, complex *ap, integer * info)
             q__1.r = r__1 - q__2.r;
             q__1.i = -q__2.i; // , expr subst
             ajj = q__1.r;
-            if (ajj <= 0.f)
+            if(ajj <= 0.f)
             {
                 i__2 = jj;
                 ap[i__2].r = ajj;
@@ -230,14 +242,12 @@ void cpptrf_(char *uplo, integer *n, complex *ap, integer * info)
         /* Compute the Cholesky factorization A = L * L**H. */
         jj = 1;
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Compute L(J,J) and test for non-positive-definiteness. */
             i__2 = jj;
             ajj = ap[i__2].r;
-            if (ajj <= 0.f)
+            if(ajj <= 0.f)
             {
                 i__2 = jj;
                 ap[i__2].r = ajj;
@@ -250,7 +260,7 @@ void cpptrf_(char *uplo, integer *n, complex *ap, integer * info)
             ap[i__2].i = 0.f; // , expr subst
             /* Compute elements J+1:N of column J and update the trailing */
             /* submatrix. */
-            if (j < *n)
+            if(j < *n)
             {
                 i__2 = *n - j;
                 r__1 = 1.f / ajj;

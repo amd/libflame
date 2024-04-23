@@ -1,16 +1,25 @@
-/* ../netlib/zlaqgb.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlaqgb.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZLAQGB scales a general band matrix, using row and column scaling factors computed by sgbequ. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLAQGB + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaqgb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaqgb.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaqgb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaqgb.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaqgb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaqgb.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -144,10 +153,14 @@
 /* > \ingroup complex16GBauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlaqgb_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab, integer *ldab, doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax, char *equed)
+void zlaqgb_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab, integer *ldab,
+             doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd,
+             doublereal *amax, char *equed)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaqgb inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS "",*m, *n, *kl, *ku, *ldab);
+    AOCL_DTL_SNPRINTF("zlaqgb inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
+                      ", ldab %" FLA_IS "",
+                      *m, *n, *kl, *ku, *ldab);
     /* System generated locals */
     integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     doublereal d__1;
@@ -182,19 +195,19 @@ void zlaqgb_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
     --r__;
     --c__;
     /* Function Body */
-    if (*m <= 0 || *n <= 0)
+    if(*m <= 0 || *n <= 0)
     {
         *(unsigned char *)equed = 'N';
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize LARGE and SMALL. */
     small_val = dlamch_("Safe minimum") / dlamch_("Precision");
     large = 1. / small_val;
-    if (*rowcnd >= .1 && *amax >= small_val && *amax <= large)
+    if(*rowcnd >= .1 && *amax >= small_val && *amax <= large)
     {
         /* No row scaling */
-        if (*colcnd >= .1)
+        if(*colcnd >= .1)
         {
             /* No column scaling */
             *(unsigned char *)equed = 'N';
@@ -203,9 +216,7 @@ void zlaqgb_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
         {
             /* Column scaling */
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 cj = c__[j];
                 /* Computing MAX */
@@ -214,10 +225,8 @@ void zlaqgb_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
                 /* Computing MIN */
                 i__5 = *m;
                 i__6 = j + *kl; // , expr subst
-                i__4 = fla_min(i__5,i__6);
-                for (i__ = fla_max(i__2,i__3);
-                        i__ <= i__4;
-                        ++i__)
+                i__4 = fla_min(i__5, i__6);
+                for(i__ = fla_max(i__2, i__3); i__ <= i__4; ++i__)
                 {
                     i__2 = *ku + 1 + i__ - j + j * ab_dim1;
                     i__3 = *ku + 1 + i__ - j + j * ab_dim1;
@@ -232,13 +241,11 @@ void zlaqgb_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
             *(unsigned char *)equed = 'C';
         }
     }
-    else if (*colcnd >= .1)
+    else if(*colcnd >= .1)
     {
         /* Row scaling, no column scaling */
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Computing MAX */
             i__4 = 1;
@@ -246,16 +253,14 @@ void zlaqgb_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
             /* Computing MIN */
             i__5 = *m;
             i__6 = j + *kl; // , expr subst
-            i__3 = fla_min(i__5,i__6);
-            for (i__ = fla_max(i__4,i__2);
-                    i__ <= i__3;
-                    ++i__)
+            i__3 = fla_min(i__5, i__6);
+            for(i__ = fla_max(i__4, i__2); i__ <= i__3; ++i__)
             {
                 i__4 = *ku + 1 + i__ - j + j * ab_dim1;
                 i__2 = i__;
                 i__5 = *ku + 1 + i__ - j + j * ab_dim1;
                 z__1.r = r__[i__2] * ab[i__5].r;
-                z__1.i = r__[i__2] * ab[i__5] .i; // , expr subst
+                z__1.i = r__[i__2] * ab[i__5].i; // , expr subst
                 ab[i__4].r = z__1.r;
                 ab[i__4].i = z__1.i; // , expr subst
                 /* L30: */
@@ -268,9 +273,7 @@ void zlaqgb_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
     {
         /* Row and column scaling */
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             cj = c__[j];
             /* Computing MAX */
@@ -279,10 +282,8 @@ void zlaqgb_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
             /* Computing MIN */
             i__5 = *m;
             i__6 = j + *kl; // , expr subst
-            i__2 = fla_min(i__5,i__6);
-            for (i__ = fla_max(i__3,i__4);
-                    i__ <= i__2;
-                    ++i__)
+            i__2 = fla_min(i__5, i__6);
+            for(i__ = fla_max(i__3, i__4); i__ <= i__2; ++i__)
             {
                 i__3 = *ku + 1 + i__ - j + j * ab_dim1;
                 d__1 = cj * r__[i__];

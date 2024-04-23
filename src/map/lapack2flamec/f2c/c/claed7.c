@@ -1,20 +1,30 @@
-/* ../netlib/claed7.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/claed7.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__2 = 2;
 static integer c__1 = 1;
 static integer c_n1 = -1;
-/* > \brief \b CLAED7 used by sstedc. Computes the updated eigensystem of a diagonal matrix after modification by a rank-one symmetric matrix. Used when the original matrix is dense. */
+/* > \brief \b CLAED7 used by sstedc. Computes the updated eigensystem of a diagonal matrix after
+ * modification by a rank-one symmetric matrix. Used when the original matrix is dense. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLAED7 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claed7. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claed7.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claed7. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claed7.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claed7. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claed7.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -236,15 +246,25 @@ static integer c_n1 = -1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void claed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer *curlvl, integer *curpbm, real *d__, complex * q, integer *ldq, real *rho, integer *indxq, real *qstore, integer * qptr, integer *prmptr, integer *perm, integer *givptr, integer * givcol, real *givnum, complex *work, real *rwork, integer *iwork, integer *info)
+void claed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer *curlvl,
+             integer *curpbm, real *d__, complex *q, integer *ldq, real *rho, integer *indxq,
+             real *qstore, integer *qptr, integer *prmptr, integer *perm, integer *givptr,
+             integer *givcol, real *givnum, complex *work, real *rwork, integer *iwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"claed7 inputs: n %lld, cutpnt %lld, qsiz %lld, tlvls %lld, curlvl %lld, curpbm %lld, ldq %lld, indxq %lld, qptr %lld, prmptr %lld",*n, *cutpnt, *qsiz, *tlvls, *curlvl, *curpbm, *ldq, *indxq, *qptr, *prmptr);
+    snprintf(buffer, 256,
+             "claed7 inputs: n %lld, cutpnt %lld, qsiz %lld, tlvls %lld, curlvl %lld, curpbm %lld, "
+             "ldq %lld, indxq %lld, qptr %lld, prmptr %lld",
+             *n, *cutpnt, *qsiz, *tlvls, *curlvl, *curpbm, *ldq, *indxq, *qptr, *prmptr);
 #else
-    snprintf(buffer, 256,"claed7 inputs: n %d, cutpnt %d, qsiz %d, tlvls %d, curlvl %d, curpbm %d, ldq %d, indxq %d, qptr %d, prmptr %d",*n, *cutpnt, *qsiz, *tlvls, *curlvl, *curpbm, *ldq, *indxq, *qptr, *prmptr);
+    snprintf(buffer, 256,
+             "claed7 inputs: n %d, cutpnt %d, qsiz %d, tlvls %d, curlvl %d, curpbm %d, ldq %d, "
+             "indxq %d, qptr %d, prmptr %d",
+             *n, *cutpnt, *qsiz, *tlvls, *curlvl, *curpbm, *ldq, *indxq, *qptr, *prmptr);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -255,10 +275,21 @@ void claed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer
     /* Local variables */
     integer i__, k, n1, n2, iq, iw, iz, ptr, indx, curr, indxc, indxp;
     extern /* Subroutine */
-    void claed8_(integer *, integer *, integer *, complex *, integer *, real *, real *, integer *, real *, real *, complex *, integer *, real *, integer *, integer *, integer *, integer *, integer *, integer *, real *, integer *), slaed9_( integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, real *, real *, integer *, integer *), slaeda_(integer *, integer *, integer *, integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, integer *);
+        void
+        claed8_(integer *, integer *, integer *, complex *, integer *, real *, real *, integer *,
+                real *, real *, complex *, integer *, real *, integer *, integer *, integer *,
+                integer *, integer *, integer *, real *, integer *),
+        slaed9_(integer *, integer *, integer *, integer *, real *, real *, integer *, real *,
+                real *, real *, real *, integer *, integer *),
+        slaeda_(integer *, integer *, integer *, integer *, integer *, integer *, integer *,
+                integer *, real *, real *, integer *, real *, real *, integer *);
     integer idlmda;
     extern /* Subroutine */
-    void clacrm_(integer *, integer *, complex *, integer *, real *, integer *, complex *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
+        void
+        clacrm_(integer *, integer *, complex *, integer *, real *, integer *, complex *, integer *,
+                real *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
     integer coltyp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -298,23 +329,23 @@ void claed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer
     /* IF( ICOMPQ.LT.0 .OR. ICOMPQ.GT.1 ) THEN */
     /* INFO = -1 */
     /* ELSE IF( N.LT.0 ) THEN */
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    else if (fla_min(1,*n) > *cutpnt || *n < *cutpnt)
+    else if(fla_min(1, *n) > *cutpnt || *n < *cutpnt)
     {
         *info = -2;
     }
-    else if (*qsiz < *n)
+    else if(*qsiz < *n)
     {
         *info = -3;
     }
-    else if (*ldq < fla_max(1,*n))
+    else if(*ldq < fla_max(1, *n))
     {
         *info = -9;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CLAED7", &i__1, (ftnlen)6);
@@ -322,7 +353,7 @@ void claed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -342,38 +373,41 @@ void claed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer
     /* first row of Q_2. */
     ptr = pow_ii(&c__2, tlvls) + 1;
     i__1 = *curlvl - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = *tlvls - i__;
         ptr += pow_ii(&c__2, &i__2);
         /* L10: */
     }
     curr = ptr + *curpbm;
-    slaeda_(n, tlvls, curlvl, curpbm, &prmptr[1], &perm[1], &givptr[1], & givcol[3], &givnum[3], &qstore[1], &qptr[1], &rwork[iz], &rwork[ iz + *n], info);
+    slaeda_(n, tlvls, curlvl, curpbm, &prmptr[1], &perm[1], &givptr[1], &givcol[3], &givnum[3],
+            &qstore[1], &qptr[1], &rwork[iz], &rwork[iz + *n], info);
     /* When solving the final problem, we no longer need the stored data, */
     /* so we will overwrite the data from this level onto the previously */
     /* used storage space. */
-    if (*curlvl == *tlvls)
+    if(*curlvl == *tlvls)
     {
         qptr[curr] = 1;
         prmptr[curr] = 1;
         givptr[curr] = 1;
     }
     /* Sort and Deflate eigenvalues. */
-    claed8_(&k, n, qsiz, &q[q_offset], ldq, &d__[1], rho, cutpnt, &rwork[iz], &rwork[idlmda], &work[1], qsiz, &rwork[iw], &iwork[indxp], &iwork[ indx], &indxq[1], &perm[prmptr[curr]], &givptr[curr + 1], &givcol[ (givptr[curr] << 1) + 1], &givnum[(givptr[curr] << 1) + 1], info);
+    claed8_(&k, n, qsiz, &q[q_offset], ldq, &d__[1], rho, cutpnt, &rwork[iz], &rwork[idlmda],
+            &work[1], qsiz, &rwork[iw], &iwork[indxp], &iwork[indx], &indxq[1], &perm[prmptr[curr]],
+            &givptr[curr + 1], &givcol[(givptr[curr] << 1) + 1], &givnum[(givptr[curr] << 1) + 1],
+            info);
     prmptr[curr + 1] = prmptr[curr] + *n;
     givptr[curr + 1] += givptr[curr];
     /* Solve Secular Equation. */
-    if (k != 0)
+    if(k != 0)
     {
-        slaed9_(&k, &c__1, &k, n, &d__[1], &rwork[iq], &k, rho, &rwork[idlmda], &rwork[iw], &qstore[qptr[curr]], &k, info);
-        clacrm_(qsiz, &k, &work[1], qsiz, &qstore[qptr[curr]], &k, &q[ q_offset], ldq, &rwork[iq]);
+        slaed9_(&k, &c__1, &k, n, &d__[1], &rwork[iq], &k, rho, &rwork[idlmda], &rwork[iw],
+                &qstore[qptr[curr]], &k, info);
+        clacrm_(qsiz, &k, &work[1], qsiz, &qstore[qptr[curr]], &k, &q[q_offset], ldq, &rwork[iq]);
         /* Computing 2nd power */
         i__1 = k;
         qptr[curr + 1] = qptr[curr] + i__1 * i__1;
-        if (*info != 0)
+        if(*info != 0)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;
@@ -387,9 +421,7 @@ void claed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer
     {
         qptr[curr + 1] = qptr[curr];
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             indxq[i__] = i__;
             /* L20: */

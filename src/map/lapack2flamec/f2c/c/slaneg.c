@@ -1,16 +1,25 @@
-/* ../netlib/slaneg.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slaneg.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLANEG computes the Sturm count. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLANEG + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaneg. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaneg.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaneg. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaneg.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaneg. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaneg.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -150,22 +159,18 @@ integer slaneg_(integer *n, real *d__, real *lld, real *sigma, real *pivmin, int
     /* I) upper part: L D L^T - SIGMA I = L+ D+ L+^T */
     t = -(*sigma);
     i__1 = *r__ - 1;
-    for (bj = 1;
-            bj <= i__1;
-            bj += 128)
+    for(bj = 1; bj <= i__1; bj += 128)
     {
         neg1 = 0;
         bsav = t;
         /* Computing MIN */
         i__3 = bj + 127;
         i__4 = *r__ - 1; // , expr subst
-        i__2 = fla_min(i__3,i__4);
-        for (j = bj;
-                j <= i__2;
-                ++j)
+        i__2 = fla_min(i__3, i__4);
+        for(j = bj; j <= i__2; ++j)
         {
             dplus = d__[j] + t;
-            if (dplus < 0.f)
+            if(dplus < 0.f)
             {
                 ++neg1;
             }
@@ -178,25 +183,23 @@ integer slaneg_(integer *n, real *d__, real *lld, real *sigma, real *pivmin, int
         /* A NaN should occur only with a zero pivot after an infinite */
         /* pivot. In that case, substituting 1 for T/DPLUS is the */
         /* correct limit. */
-        if (sawnan)
+        if(sawnan)
         {
             neg1 = 0;
             t = bsav;
             /* Computing MIN */
             i__3 = bj + 127;
             i__4 = *r__ - 1; // , expr subst
-            i__2 = fla_min(i__3,i__4);
-            for (j = bj;
-                    j <= i__2;
-                    ++j)
+            i__2 = fla_min(i__3, i__4);
+            for(j = bj; j <= i__2; ++j)
             {
                 dplus = d__[j] + t;
-                if (dplus < 0.f)
+                if(dplus < 0.f)
                 {
                     ++neg1;
                 }
                 tmp = t / dplus;
-                if (sisnan_(&tmp))
+                if(sisnan_(&tmp))
                 {
                     tmp = 1.f;
                 }
@@ -210,21 +213,17 @@ integer slaneg_(integer *n, real *d__, real *lld, real *sigma, real *pivmin, int
     /* II) lower part: L D L^T - SIGMA I = U- D- U-^T */
     p = d__[*n] - *sigma;
     i__1 = *r__;
-    for (bj = *n - 1;
-            bj >= i__1;
-            bj += -128)
+    for(bj = *n - 1; bj >= i__1; bj += -128)
     {
         neg2 = 0;
         bsav = p;
         /* Computing MAX */
         i__3 = bj - 127;
-        i__2 = fla_max(i__3,*r__);
-        for (j = bj;
-                j >= i__2;
-                --j)
+        i__2 = fla_max(i__3, *r__);
+        for(j = bj; j >= i__2; --j)
         {
             dminus = lld[j] + p;
-            if (dminus < 0.f)
+            if(dminus < 0.f)
             {
                 ++neg2;
             }
@@ -234,24 +233,22 @@ integer slaneg_(integer *n, real *d__, real *lld, real *sigma, real *pivmin, int
         }
         sawnan = sisnan_(&p);
         /* As above, run a slower version that substitutes 1 for Inf/Inf. */
-        if (sawnan)
+        if(sawnan)
         {
             neg2 = 0;
             p = bsav;
             /* Computing MAX */
             i__3 = bj - 127;
-            i__2 = fla_max(i__3,*r__);
-            for (j = bj;
-                    j >= i__2;
-                    --j)
+            i__2 = fla_max(i__3, *r__);
+            for(j = bj; j >= i__2; --j)
             {
                 dminus = lld[j] + p;
-                if (dminus < 0.f)
+                if(dminus < 0.f)
                 {
                     ++neg2;
                 }
                 tmp = p / dminus;
-                if (sisnan_(&tmp))
+                if(sisnan_(&tmp))
                 {
                     tmp = 1.f;
                 }
@@ -265,7 +262,7 @@ integer slaneg_(integer *n, real *d__, real *lld, real *sigma, real *pivmin, int
     /* III) Twist index */
     /* T was shifted by SIGMA initially. */
     gamma = t + *sigma + p;
-    if (gamma < 0.f)
+    if(gamma < 0.f)
     {
         ++negcnt;
     }

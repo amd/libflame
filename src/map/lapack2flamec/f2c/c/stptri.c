@@ -1,5 +1,8 @@
-/* ../netlib/stptri.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/stptri.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b STPTRI */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download STPTRI + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stptri. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stptri.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stptri. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stptri.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stptri. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stptri.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -39,7 +48,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': A is upper triangular;
-*/
+ */
 /* > = 'L': A is lower triangular. */
 /* > \endverbatim */
 /* > */
@@ -47,7 +56,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > DIAG is CHARACTER*1 */
 /* > = 'N': A is non-unit triangular;
-*/
+ */
 /* > = 'U': A is unit triangular. */
 /* > \endverbatim */
 /* > */
@@ -64,7 +73,7 @@ static integer c__1 = 1;
 /* > columnwise in a linear array. The j-th column of A is stored */
 /* > in the array AP as follows: */
 /* > if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AP(i + (j-1)*((2*n-j)/2) = A(i,j) for j<=i<=n. */
 /* > See below for further details. */
 /* > On exit, the (triangular) inverse of the original matrix, in */
@@ -113,7 +122,7 @@ void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"stptri inputs: uplo %c, diag %c, n %d",*uplo, *diag, *n);
+    snprintf(buffer, 256, "stptri inputs: uplo %c, diag %c, n %d", *uplo, *diag, *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -123,10 +132,13 @@ void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
     real ajj;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     logical upper;
     extern /* Subroutine */
-    void stpmv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        stpmv_(char *, char *, char *, integer *, real *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer jclast;
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -155,19 +167,19 @@ void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
     upper = lsame_(uplo, "U", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
     jclast = 0;
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("STPTRI", &i__1, (ftnlen)6);
@@ -175,18 +187,16 @@ void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
         return;
     }
     /* Check for singularity if non-unit. */
-    if (nounit)
+    if(nounit)
     {
-        if (upper)
+        if(upper)
         {
             jj = 0;
             i__1 = *n;
-            for (*info = 1;
-                    *info <= i__1;
-                    ++(*info))
+            for(*info = 1; *info <= i__1; ++(*info))
             {
                 jj += *info;
-                if (ap[jj] == 0.f)
+                if(ap[jj] == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
@@ -198,11 +208,9 @@ void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
         {
             jj = 1;
             i__1 = *n;
-            for (*info = 1;
-                    *info <= i__1;
-                    ++(*info))
+            for(*info = 1; *info <= i__1; ++(*info))
             {
-                if (ap[jj] == 0.f)
+                if(ap[jj] == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
@@ -213,16 +221,14 @@ void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
         }
         *info = 0;
     }
-    if (upper)
+    if(upper)
     {
         /* Compute inverse of upper triangular matrix. */
         jc = 1;
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
-            if (nounit)
+            if(nounit)
             {
                 ap[jc + j - 1] = 1.f / ap[jc + j - 1];
                 ajj = -ap[jc + j - 1];
@@ -233,7 +239,7 @@ void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
             }
             /* Compute elements 1:j-1 of j-th column. */
             i__2 = j - 1;
-            stpmv_("Upper", "No transpose", diag, &i__2, &ap[1], &ap[jc], & c__1);
+            stpmv_("Upper", "No transpose", diag, &i__2, &ap[1], &ap[jc], &c__1);
             i__2 = j - 1;
             sscal_(&i__2, &ajj, &ap[jc], &c__1);
             jc += j;
@@ -244,11 +250,9 @@ void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
     {
         /* Compute inverse of lower triangular matrix. */
         jc = *n * (*n + 1) / 2;
-        for (j = *n;
-                j >= 1;
-                --j)
+        for(j = *n; j >= 1; --j)
         {
-            if (nounit)
+            if(nounit)
             {
                 ap[jc] = 1.f / ap[jc];
                 ajj = -ap[jc];
@@ -257,11 +261,11 @@ void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
             {
                 ajj = -1.f;
             }
-            if (j < *n)
+            if(j < *n)
             {
                 /* Compute elements j+1:n of j-th column. */
                 i__1 = *n - j;
-                stpmv_("Lower", "No transpose", diag, &i__1, &ap[jclast], &ap[ jc + 1], &c__1);
+                stpmv_("Lower", "No transpose", diag, &i__1, &ap[jclast], &ap[jc + 1], &c__1);
                 i__1 = *n - j;
                 sscal_(&i__1, &ajj, &ap[jc + 1], &c__1);
             }

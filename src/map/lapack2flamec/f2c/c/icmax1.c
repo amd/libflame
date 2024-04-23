@@ -1,16 +1,25 @@
-/* ../netlib/icmax1.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/icmax1.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ICMAX1 finds the index of the first vector element of maximum absolute value. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ICMAX1 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/icmax1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/icmax1.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/icmax1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/icmax1.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/icmax1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/icmax1.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -99,27 +108,25 @@ integer icmax1_(integer *n, complex *cx, integer *incx)
     --cx;
     /* Function Body */
     ret_val = 0;
-    if (*n < 1 || *incx <= 0)
+    if(*n < 1 || *incx <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return ret_val;
     }
     ret_val = 1;
-    if (*n == 1)
+    if(*n == 1)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return ret_val;
     }
-    if (*incx == 1)
+    if(*incx == 1)
     {
         /* code for increment equal to 1 */
         smax = c_abs(&cx[1]);
         i__1 = *n;
-        for (i__ = 2;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 2; i__ <= i__1; ++i__)
         {
-            if (c_abs(&cx[i__]) > smax)
+            if(c_abs(&cx[i__]) > smax)
             {
                 ret_val = i__;
                 smax = c_abs(&cx[i__]);
@@ -133,11 +140,9 @@ integer icmax1_(integer *n, complex *cx, integer *incx)
         smax = c_abs(&cx[1]);
         ix += *incx;
         i__1 = *n;
-        for (i__ = 2;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 2; i__ <= i__1; ++i__)
         {
-            if (c_abs(&cx[ix]) > smax)
+            if(c_abs(&cx[ix]) > smax)
             {
                 ret_val = i__;
                 smax = c_abs(&cx[ix]);
@@ -150,4 +155,3 @@ integer icmax1_(integer *n, complex *cx, integer *incx)
     /* End of ICMAX1 */
 }
 /* icmax1_ */
-

@@ -1,11 +1,10 @@
-/* ../netlib/zhptri.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zhptri.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b2 =
-{
-    0.,0.
-}
-;
+static doublecomplex c_b2 = {0., 0.};
 static integer c__1 = 1;
 /* > \brief \b ZHPTRI */
 /* =========== DOCUMENTATION =========== */
@@ -13,11 +12,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZHPTRI + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhptri. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhptri.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhptri. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhptri.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhptri. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhptri.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -48,7 +53,7 @@ static integer c__1 = 1;
 /* > Specifies whether the details of the factorization are stored */
 /* > as an upper or lower triangular matrix. */
 /* > = 'U': Upper triangular, form is A = U*D*U**H;
-*/
+ */
 /* > = 'L': Lower triangular, form is A = L*D*L**H. */
 /* > \endverbatim */
 /* > */
@@ -69,7 +74,7 @@ static integer c__1 = 1;
 /* > matrix, stored as a packed triangular matrix. The j-th column */
 /* > of inv(A) is stored in the array AP as follows: */
 /* > if UPLO = 'U', AP(i + (j-1)*j/2) = inv(A)(i,j) for 1<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', */
 /* > AP(i + (j-1)*(2n-j)/2) = inv(A)(i,j) for j<=i<=n. */
 /* > \endverbatim */
@@ -105,11 +110,12 @@ the matrix is singular and its */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zhptri_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublecomplex *work, integer *info)
+void zhptri_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublecomplex *work,
+             integer *info)
 {
 
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhptri inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
+    AOCL_DTL_SNPRINTF("zhptri inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
     integer i__1, i__2, i__3;
     doublereal d__1;
@@ -126,11 +132,18 @@ void zhptri_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublecom
     doublecomplex temp, akkp1;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Double Complex */
-    VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        VOID
+        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                   integer *);
     integer kstep;
     logical upper;
     extern /* Subroutine */
-    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zhpmv_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zswap_( integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zhpmv_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *,
+               doublecomplex *, doublecomplex *, integer *),
+        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer kcnext;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -160,15 +173,15 @@ void zhptri_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublecom
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZHPTRI", &i__1, (ftnlen)6);
@@ -176,22 +189,20 @@ void zhptri_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublecom
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
-    if (upper)
+    if(upper)
     {
         /* Upper triangular storage: examine D from bottom to top */
         kp = *n * (*n + 1) / 2;
-        for (*info = *n;
-                *info >= 1;
-                --(*info))
+        for(*info = *n; *info >= 1; --(*info))
         {
             i__1 = kp;
-            if (ipiv[*info] > 0 && (ap[i__1].r == 0. && ap[i__1].i == 0.))
+            if(ipiv[*info] > 0 && (ap[i__1].r == 0. && ap[i__1].i == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
@@ -205,12 +216,10 @@ void zhptri_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublecom
         /* Lower triangular storage: examine D from top to bottom. */
         kp = 1;
         i__1 = *n;
-        for (*info = 1;
-                *info <= i__1;
-                ++(*info))
+        for(*info = 1; *info <= i__1; ++(*info))
         {
             i__2 = kp;
-            if (ipiv[*info] > 0 && (ap[i__2].r == 0. && ap[i__2].i == 0.))
+            if(ipiv[*info] > 0 && (ap[i__2].r == 0. && ap[i__2].i == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
@@ -220,20 +229,20 @@ void zhptri_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublecom
         }
     }
     *info = 0;
-    if (upper)
+    if(upper)
     {
         /* Compute inv(A) from the factorization A = U*D*U**H. */
         /* K is the main loop index, increasing from 1 to N in steps of */
         /* 1 or 2, depending on the size of the diagonal blocks. */
         k = 1;
         kc = 1;
-L30: /* If K > N, exit from loop. */
-        if (k > *n)
+    L30: /* If K > N, exit from loop. */
+        if(k > *n)
         {
             goto L50;
         }
         kcnext = kc + k;
-        if (ipiv[k] > 0)
+        if(ipiv[k] > 0)
         {
             /* 1 x 1 diagonal block */
             /* Invert the diagonal block. */
@@ -243,14 +252,14 @@ L30: /* If K > N, exit from loop. */
             ap[i__1].r = d__1;
             ap[i__1].i = 0.; // , expr subst
             /* Compute column K of the inverse. */
-            if (k > 1)
+            if(k > 1)
             {
                 i__1 = k - 1;
                 zcopy_(&i__1, &ap[kc], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zhpmv_(uplo, &i__1, &z__1, &ap[1], &work[1], &c__1, &c_b2, & ap[kc], &c__1);
+                zhpmv_(uplo, &i__1, &z__1, &ap[1], &work[1], &c__1, &c_b2, &ap[kc], &c__1);
                 i__1 = kc + k - 1;
                 i__2 = kc + k - 1;
                 i__3 = k - 1;
@@ -294,14 +303,14 @@ L30: /* If K > N, exit from loop. */
             ap[i__1].r = z__1.r;
             ap[i__1].i = z__1.i; // , expr subst
             /* Compute columns K and K+1 of the inverse. */
-            if (k > 1)
+            if(k > 1)
             {
                 i__1 = k - 1;
                 zcopy_(&i__1, &ap[kc], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zhpmv_(uplo, &i__1, &z__1, &ap[1], &work[1], &c__1, &c_b2, & ap[kc], &c__1);
+                zhpmv_(uplo, &i__1, &z__1, &ap[1], &work[1], &c__1, &c_b2, &ap[kc], &c__1);
                 i__1 = kc + k - 1;
                 i__2 = kc + k - 1;
                 i__3 = k - 1;
@@ -324,7 +333,7 @@ L30: /* If K > N, exit from loop. */
                 i__1 = k - 1;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zhpmv_(uplo, &i__1, &z__1, &ap[1], &work[1], &c__1, &c_b2, & ap[kcnext], &c__1);
+                zhpmv_(uplo, &i__1, &z__1, &ap[1], &work[1], &c__1, &c_b2, &ap[kcnext], &c__1);
                 i__1 = kcnext + k;
                 i__2 = kcnext + k;
                 i__3 = k - 1;
@@ -339,7 +348,7 @@ L30: /* If K > N, exit from loop. */
             kcnext = kcnext + k + 1;
         }
         kp = (i__1 = ipiv[k], f2c_dabs(i__1));
-        if (kp != k)
+        if(kp != k)
         {
             /* Interchange rows and columns K and KP in the leading */
             /* submatrix A(1:k+1,1:k+1) */
@@ -348,9 +357,7 @@ L30: /* If K > N, exit from loop. */
             zswap_(&i__1, &ap[kc], &c__1, &ap[kpc], &c__1);
             kx = kpc + kp - 1;
             i__1 = k - 1;
-            for (j = kp + 1;
-                    j <= i__1;
-                    ++j)
+            for(j = kp + 1; j <= i__1; ++j)
             {
                 kx = kx + j - 1;
                 d_cnjg(&z__1, &ap[kc + j - 1]);
@@ -379,7 +386,7 @@ L30: /* If K > N, exit from loop. */
             i__1 = kpc + kp - 1;
             ap[i__1].r = temp.r;
             ap[i__1].i = temp.i; // , expr subst
-            if (kstep == 2)
+            if(kstep == 2)
             {
                 i__1 = kc + k + k - 1;
                 temp.r = ap[i__1].r;
@@ -396,8 +403,7 @@ L30: /* If K > N, exit from loop. */
         k += kstep;
         kc = kcnext;
         goto L30;
-L50:
-        ;
+    L50:;
     }
     else
     {
@@ -407,13 +413,13 @@ L50:
         npp = *n * (*n + 1) / 2;
         k = *n;
         kc = npp;
-L60: /* If K < 1, exit from loop. */
-        if (k < 1)
+    L60: /* If K < 1, exit from loop. */
+        if(k < 1)
         {
             goto L80;
         }
         kcnext = kc - (*n - k + 2);
-        if (ipiv[k] > 0)
+        if(ipiv[k] > 0)
         {
             /* 1 x 1 diagonal block */
             /* Invert the diagonal block. */
@@ -423,14 +429,15 @@ L60: /* If K < 1, exit from loop. */
             ap[i__1].r = d__1;
             ap[i__1].i = 0.; // , expr subst
             /* Compute column K of the inverse. */
-            if (k < *n)
+            if(k < *n)
             {
                 i__1 = *n - k;
                 zcopy_(&i__1, &ap[kc + 1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zhpmv_(uplo, &i__1, &z__1, &ap[kc + *n - k + 1], &work[1], & c__1, &c_b2, &ap[kc + 1], &c__1);
+                zhpmv_(uplo, &i__1, &z__1, &ap[kc + *n - k + 1], &work[1], &c__1, &c_b2,
+                       &ap[kc + 1], &c__1);
                 i__1 = kc;
                 i__2 = kc;
                 i__3 = *n - k;
@@ -474,14 +481,15 @@ L60: /* If K < 1, exit from loop. */
             ap[i__1].r = z__1.r;
             ap[i__1].i = z__1.i; // , expr subst
             /* Compute columns K-1 and K of the inverse. */
-            if (k < *n)
+            if(k < *n)
             {
                 i__1 = *n - k;
                 zcopy_(&i__1, &ap[kc + 1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zhpmv_(uplo, &i__1, &z__1, &ap[kc + (*n - k + 1)], &work[1], & c__1, &c_b2, &ap[kc + 1], &c__1);
+                zhpmv_(uplo, &i__1, &z__1, &ap[kc + (*n - k + 1)], &work[1], &c__1, &c_b2,
+                       &ap[kc + 1], &c__1);
                 i__1 = kc;
                 i__2 = kc;
                 i__3 = *n - k;
@@ -494,7 +502,7 @@ L60: /* If K < 1, exit from loop. */
                 i__1 = kcnext + 1;
                 i__2 = kcnext + 1;
                 i__3 = *n - k;
-                zdotc_f2c_(&z__2, &i__3, &ap[kc + 1], &c__1, &ap[kcnext + 2], & c__1);
+                zdotc_f2c_(&z__2, &i__3, &ap[kc + 1], &c__1, &ap[kcnext + 2], &c__1);
                 z__1.r = ap[i__2].r - z__2.r;
                 z__1.i = ap[i__2].i - z__2.i; // , expr subst
                 ap[i__1].r = z__1.r;
@@ -504,7 +512,8 @@ L60: /* If K < 1, exit from loop. */
                 i__1 = *n - k;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zhpmv_(uplo, &i__1, &z__1, &ap[kc + (*n - k + 1)], &work[1], & c__1, &c_b2, &ap[kcnext + 2], &c__1);
+                zhpmv_(uplo, &i__1, &z__1, &ap[kc + (*n - k + 1)], &work[1], &c__1, &c_b2,
+                       &ap[kcnext + 2], &c__1);
                 i__1 = kcnext;
                 i__2 = kcnext;
                 i__3 = *n - k;
@@ -519,21 +528,19 @@ L60: /* If K < 1, exit from loop. */
             kcnext -= *n - k + 3;
         }
         kp = (i__1 = ipiv[k], f2c_dabs(i__1));
-        if (kp != k)
+        if(kp != k)
         {
             /* Interchange rows and columns K and KP in the trailing */
             /* submatrix A(k-1:n,k-1:n) */
             kpc = npp - (*n - kp + 1) * (*n - kp + 2) / 2 + 1;
-            if (kp < *n)
+            if(kp < *n)
             {
                 i__1 = *n - kp;
-                zswap_(&i__1, &ap[kc + kp - k + 1], &c__1, &ap[kpc + 1], & c__1);
+                zswap_(&i__1, &ap[kc + kp - k + 1], &c__1, &ap[kpc + 1], &c__1);
             }
             kx = kc + kp - k;
             i__1 = kp - 1;
-            for (j = k + 1;
-                    j <= i__1;
-                    ++j)
+            for(j = k + 1; j <= i__1; ++j)
             {
                 kx = kx + *n - j + 1;
                 d_cnjg(&z__1, &ap[kc + j - k]);
@@ -562,7 +569,7 @@ L60: /* If K < 1, exit from loop. */
             i__1 = kpc;
             ap[i__1].r = temp.r;
             ap[i__1].i = temp.i; // , expr subst
-            if (kstep == 2)
+            if(kstep == 2)
             {
                 i__1 = kc - *n + k - 1;
                 temp.r = ap[i__1].r;
@@ -579,8 +586,7 @@ L60: /* If K < 1, exit from loop. */
         k -= kstep;
         kc = kcnext;
         goto L60;
-L80:
-        ;
+    L80:;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

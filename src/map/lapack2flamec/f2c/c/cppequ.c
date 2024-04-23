@@ -1,16 +1,25 @@
-/* ../netlib/cppequ.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cppequ.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CPPEQU */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CPPEQU + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cppequ. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cppequ.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cppequ. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cppequ.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cppequ. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cppequ.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -45,7 +54,7 @@
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -62,7 +71,7 @@
 /* > columnwise in a linear array. The j-th column of A is stored */
 /* > in the array AP as follows: */
 /* > if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n. */
 /* > \endverbatim */
 /* > */
@@ -111,9 +120,9 @@ void cppequ_(char *uplo, integer *n, complex *ap, real *s, real *scond, real *am
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cppequ inputs: uplo %c, n %lld",*uplo, *n);
+    snprintf(buffer, 256, "cppequ inputs: uplo %c, n %lld", *uplo, *n);
 #else
-    snprintf(buffer, 256,"cppequ inputs: uplo %c, n %d",*uplo, *n);
+    snprintf(buffer, 256, "cppequ inputs: uplo %c, n %d", *uplo, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -128,7 +137,8 @@ void cppequ_(char *uplo, integer *n, complex *ap, real *s, real *scond, real *am
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -156,15 +166,15 @@ void cppequ_(char *uplo, integer *n, complex *ap, real *s, real *scond, real *am
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CPPEQU", &i__1, (ftnlen)6);
@@ -172,7 +182,7 @@ void cppequ_(char *uplo, integer *n, complex *ap, real *s, real *scond, real *am
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         *scond = 1.f;
         *amax = 0.f;
@@ -183,15 +193,13 @@ void cppequ_(char *uplo, integer *n, complex *ap, real *s, real *scond, real *am
     s[1] = ap[1].r;
     smin = s[1];
     *amax = s[1];
-    if (upper)
+    if(upper)
     {
         /* UPLO = 'U': Upper triangle of A is stored. */
         /* Find the minimum and maximum diagonal elements. */
         jj = 1;
         i__1 = *n;
-        for (i__ = 2;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 2; i__ <= i__1; ++i__)
         {
             jj += i__;
             i__2 = jj;
@@ -199,11 +207,11 @@ void cppequ_(char *uplo, integer *n, complex *ap, real *s, real *scond, real *am
             /* Computing MIN */
             r__1 = smin;
             r__2 = s[i__]; // , expr subst
-            smin = fla_min(r__1,r__2);
+            smin = fla_min(r__1, r__2);
             /* Computing MAX */
             r__1 = *amax;
             r__2 = s[i__]; // , expr subst
-            *amax = fla_max(r__1,r__2);
+            *amax = fla_max(r__1, r__2);
             /* L10: */
         }
     }
@@ -213,9 +221,7 @@ void cppequ_(char *uplo, integer *n, complex *ap, real *s, real *scond, real *am
         /* Find the minimum and maximum diagonal elements. */
         jj = 1;
         i__1 = *n;
-        for (i__ = 2;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 2; i__ <= i__1; ++i__)
         {
             jj = jj + *n - i__ + 2;
             i__2 = jj;
@@ -223,23 +229,21 @@ void cppequ_(char *uplo, integer *n, complex *ap, real *s, real *scond, real *am
             /* Computing MIN */
             r__1 = smin;
             r__2 = s[i__]; // , expr subst
-            smin = fla_min(r__1,r__2);
+            smin = fla_min(r__1, r__2);
             /* Computing MAX */
             r__1 = *amax;
             r__2 = s[i__]; // , expr subst
-            *amax = fla_max(r__1,r__2);
+            *amax = fla_max(r__1, r__2);
             /* L20: */
         }
     }
-    if (smin <= 0.f)
+    if(smin <= 0.f)
     {
         /* Find the first non-positive diagonal element and return. */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if (s[i__] <= 0.f)
+            if(s[i__] <= 0.f)
             {
                 *info = i__;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -253,9 +257,7 @@ void cppequ_(char *uplo, integer *n, complex *ap, real *s, real *scond, real *am
         /* Set the scale factors to the reciprocals */
         /* of the diagonal elements. */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             s[i__] = 1.f / sqrt(s[i__]);
             /* L40: */

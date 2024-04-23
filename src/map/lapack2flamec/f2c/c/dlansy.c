@@ -1,18 +1,28 @@
-/* dlansy.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dlansy.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b DLANSY returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the ele ment of largest absolute value of a real symmetric matrix. */
+/* > \brief \b DLANSY returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
+ * or the ele ment of largest absolute value of a real symmetric matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLANSY + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlansy. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlansy.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlansy. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlansy.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlansy. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlansy.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -109,10 +119,12 @@ otherwise, */
 /* > \author NAG Ltd. */
 /* > \ingroup doubleSYauxiliary */
 /* ===================================================================== */
-doublereal dlansy_(char *norm, char *uplo, integer *n, doublereal *a, integer *lda, doublereal *work)
+doublereal dlansy_(char *norm, char *uplo, integer *n, doublereal *a, integer *lda,
+                   doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlansy inputs: norm %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*norm, *uplo, *n, *lda);
+    AOCL_DTL_SNPRINTF("dlansy inputs: norm %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *norm,
+                      *uplo, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     doublereal ret_val, d__1;
@@ -124,7 +136,8 @@ doublereal dlansy_(char *norm, char *uplo, integer *n, doublereal *a, integer *l
     extern logical lsame_(char *, char *, integer, integer);
     doublereal value;
     extern /* Subroutine */
-    void dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
+        void
+        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -151,28 +164,24 @@ doublereal dlansy_(char *norm, char *uplo, integer *n, doublereal *a, integer *l
     --work;
     /* Function Body */
     value = 0.;
-    if (*n == 0)
+    if(*n == 0)
     {
         value = 0.;
     }
-    else if (lsame_(norm, "M", 1, 1))
+    else if(lsame_(norm, "M", 1, 1))
     {
         /* Find fla_max(abs(A(i,j))). */
         value = 0.;
-        if (lsame_(uplo, "U", 1, 1))
+        if(lsame_(uplo, "U", 1, 1))
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     sum = (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1));
-                    if (value < sum || sum != sum)
+                    if(value < sum || sum != sum)
                     {
                         value = sum;
                     }
@@ -184,17 +193,13 @@ doublereal dlansy_(char *norm, char *uplo, integer *n, doublereal *a, integer *l
         else
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = *n;
-                for (i__ = j;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = j; i__ <= i__2; ++i__)
                 {
                     sum = (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1));
-                    if (value < sum || sum != sum)
+                    if(value < sum || sum != sum)
                     {
                         value = sum;
                     }
@@ -204,22 +209,18 @@ doublereal dlansy_(char *norm, char *uplo, integer *n, doublereal *a, integer *l
             }
         }
     }
-    else if (lsame_(norm, "I", 1, 1) || lsame_(norm, "O", 1, 1) || *(unsigned char *)norm == '1')
+    else if(lsame_(norm, "I", 1, 1) || lsame_(norm, "O", 1, 1) || *(unsigned char *)norm == '1')
     {
         /* Find normI(A) ( = norm1(A), since A is symmetric). */
         value = 0.;
-        if (lsame_(uplo, "U", 1, 1))
+        if(lsame_(uplo, "U", 1, 1))
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 sum = 0.;
                 i__2 = j - 1;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     absa = (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1));
                     sum += absa;
@@ -230,12 +231,10 @@ doublereal dlansy_(char *norm, char *uplo, integer *n, doublereal *a, integer *l
                 /* L60: */
             }
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 sum = work[i__];
-                if (value < sum || sum != sum)
+                if(value < sum || sum != sum)
                 {
                     value = sum;
                 }
@@ -245,30 +244,24 @@ doublereal dlansy_(char *norm, char *uplo, integer *n, doublereal *a, integer *l
         else
         {
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 work[i__] = 0.;
                 /* L80: */
             }
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 sum = work[j] + (d__1 = a[j + j * a_dim1], f2c_abs(d__1));
                 i__2 = *n;
-                for (i__ = j + 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
                     absa = (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1));
                     sum += absa;
                     work[i__] += absa;
                     /* L90: */
                 }
-                if (value < sum || sum != sum)
+                if(value < sum || sum != sum)
                 {
                     value = sum;
                 }
@@ -276,17 +269,15 @@ doublereal dlansy_(char *norm, char *uplo, integer *n, doublereal *a, integer *l
             }
         }
     }
-    else if (lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
+    else if(lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
     {
         /* Find normF(A). */
         scale = 0.;
         sum = 1.;
-        if (lsame_(uplo, "U", 1, 1))
+        if(lsame_(uplo, "U", 1, 1))
         {
             i__1 = *n;
-            for (j = 2;
-                    j <= i__1;
-                    ++j)
+            for(j = 2; j <= i__1; ++j)
             {
                 i__2 = j - 1;
                 dlassq_(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
@@ -296,9 +287,7 @@ doublereal dlansy_(char *norm, char *uplo, integer *n, doublereal *a, integer *l
         else
         {
             i__1 = *n - 1;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = *n - j;
                 dlassq_(&i__2, &a[j + 1 + j * a_dim1], &c__1, &scale, &sum);

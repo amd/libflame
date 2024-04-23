@@ -1,11 +1,10 @@
-/* ../netlib/chpgst.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/chpgst.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {1.f, 0.f};
 static integer c__1 = 1;
 /* > \brief \b CHPGST */
 /* =========== DOCUMENTATION =========== */
@@ -13,11 +12,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CHPGST + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chpgst. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chpgst.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chpgst. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chpgst.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpgst. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpgst.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -52,7 +57,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > ITYPE is INTEGER */
 /* > = 1: compute inv(U**H)*A*inv(U) or inv(L)*A*inv(L**H);
-*/
+ */
 /* > = 2 or 3: compute U*A*U**H or L**H*A*L. */
 /* > \endverbatim */
 /* > */
@@ -61,7 +66,7 @@ static integer c__1 = 1;
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored and B is factored as */
 /* > U**H*U;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored and B is factored as */
 /* > L*L**H. */
 /* > \endverbatim */
@@ -79,7 +84,7 @@ static integer c__1 = 1;
 /* > A, packed columnwise in a linear array. The j-th column of A */
 /* > is stored in the array AP as follows: */
 /* > if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n. */
 /* > */
 /* > On exit, if INFO = 0, the transformed matrix, stored in the */
@@ -109,15 +114,15 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, integer *info)
+void chpgst_(integer *itype, char *uplo, integer *n, complex *ap, complex *bp, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chpgst inputs: itype %lld, uplo %c, n %lld",*itype, *uplo, *n);
+    snprintf(buffer, 256, "chpgst inputs: itype %lld, uplo %c, n %lld", *itype, *uplo, *n);
 #else
-    snprintf(buffer, 256,"chpgst inputs: itype %d, uplo %c, n %d",*itype, *uplo, *n);
+    snprintf(buffer, 256, "chpgst inputs: itype %d, uplo %c, n %d", *itype, *uplo, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -134,15 +139,24 @@ void chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, 
     integer k1k1;
     real bjj, bkk;
     extern /* Subroutine */
-    void chpr2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *);
+        void
+        chpr2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *);
     extern /* Complex */
-    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+        VOID
+        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void chpmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *), ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
+        void
+        chpmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *,
+               integer *),
+        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *),
+        ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    void ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *), csscal_( integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *),
+        csscal_(integer *, real *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -170,36 +184,34 @@ void chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, 
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (*itype < 1 || *itype > 3)
+    if(*itype < 1 || *itype > 3)
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CHPGST", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (*itype == 1)
+    if(*itype == 1)
     {
-        if (upper)
+        if(upper)
         {
             /* Compute inv(U**H)*A*inv(U) */
             /* J1 and JJ are the indices of A(1,j) and A(j,j) */
             jj = 0;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 j1 = jj + 1;
                 jj += j;
@@ -211,11 +223,11 @@ void chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, 
                 ap[i__2].i = 0.f; // , expr subst
                 i__2 = jj;
                 bjj = bp[i__2].r;
-                ctpsv_(uplo, "Conjugate transpose", "Non-unit", &j, &bp[1], & ap[j1], &c__1);
+                ctpsv_(uplo, "Conjugate transpose", "Non-unit", &j, &bp[1], &ap[j1], &c__1);
                 i__2 = j - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                chpmv_(uplo, &i__2, &q__1, &ap[1], &bp[j1], &c__1, &c_b1, &ap[ j1], &c__1);
+                chpmv_(uplo, &i__2, &q__1, &ap[1], &bp[j1], &c__1, &c_b1, &ap[j1], &c__1);
                 i__2 = j - 1;
                 r__1 = 1.f / bjj;
                 csscal_(&i__2, &r__1, &ap[j1], &c__1);
@@ -238,9 +250,7 @@ void chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, 
             /* KK and K1K1 are the indices of A(k,k) and A(k+1,k+1) */
             kk = 1;
             i__1 = *n;
-            for (k = 1;
-                    k <= i__1;
-                    ++k)
+            for(k = 1; k <= i__1; ++k)
             {
                 k1k1 = kk + *n - k + 1;
                 /* Update the lower triangle of A(k:n,k:n) */
@@ -254,7 +264,7 @@ void chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, 
                 i__2 = kk;
                 ap[i__2].r = akk;
                 ap[i__2].i = 0.f; // , expr subst
-                if (k < *n)
+                if(k < *n)
                 {
                     i__2 = *n - k;
                     r__1 = 1.f / bkk;
@@ -263,13 +273,13 @@ void chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, 
                     ct.r = r__1;
                     ct.i = 0.f; // , expr subst
                     i__2 = *n - k;
-                    caxpy_(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1) ;
+                    caxpy_(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
                     i__2 = *n - k;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
                     chpr2_(uplo, &i__2, &q__1, &ap[kk + 1], &c__1, &bp[kk + 1], &c__1, &ap[k1k1]);
                     i__2 = *n - k;
-                    caxpy_(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1) ;
+                    caxpy_(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
                     i__2 = *n - k;
                     ctpsv_(uplo, "No transpose", "Non-unit", &i__2, &bp[k1k1], &ap[kk + 1], &c__1);
                 }
@@ -280,15 +290,13 @@ void chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, 
     }
     else
     {
-        if (upper)
+        if(upper)
         {
             /* Compute U*A*U**H */
             /* K1 and KK are the indices of A(1,k) and A(k,k) */
             kk = 0;
             i__1 = *n;
-            for (k = 1;
-                    k <= i__1;
-                    ++k)
+            for(k = 1; k <= i__1; ++k)
             {
                 k1 = kk + 1;
                 kk += k;
@@ -298,14 +306,14 @@ void chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, 
                 i__2 = kk;
                 bkk = bp[i__2].r;
                 i__2 = k - 1;
-                ctpmv_(uplo, "No transpose", "Non-unit", &i__2, &bp[1], &ap[ k1], &c__1);
+                ctpmv_(uplo, "No transpose", "Non-unit", &i__2, &bp[1], &ap[k1], &c__1);
                 r__1 = akk * .5f;
                 ct.r = r__1;
                 ct.i = 0.f; // , expr subst
                 i__2 = k - 1;
                 caxpy_(&i__2, &ct, &bp[k1], &c__1, &ap[k1], &c__1);
                 i__2 = k - 1;
-                chpr2_(uplo, &i__2, &c_b1, &ap[k1], &c__1, &bp[k1], &c__1, & ap[1]);
+                chpr2_(uplo, &i__2, &c_b1, &ap[k1], &c__1, &bp[k1], &c__1, &ap[1]);
                 i__2 = k - 1;
                 caxpy_(&i__2, &ct, &bp[k1], &c__1, &ap[k1], &c__1);
                 i__2 = k - 1;
@@ -325,9 +333,7 @@ void chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, 
             /* JJ and J1J1 are the indices of A(j,j) and A(j+1,j+1) */
             jj = 1;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 j1j1 = jj + *n - j + 1;
                 /* Compute the j-th column of the lower triangle of A */
@@ -346,7 +352,8 @@ void chpgst_(integer *itype, char *uplo, integer *n, complex * ap, complex *bp, 
                 i__2 = *n - j;
                 csscal_(&i__2, &bjj, &ap[jj + 1], &c__1);
                 i__2 = *n - j;
-                chpmv_(uplo, &i__2, &c_b1, &ap[j1j1], &bp[jj + 1], &c__1, & c_b1, &ap[jj + 1], &c__1);
+                chpmv_(uplo, &i__2, &c_b1, &ap[j1j1], &bp[jj + 1], &c__1, &c_b1, &ap[jj + 1],
+                       &c__1);
                 i__2 = *n - j + 1;
                 ctpmv_(uplo, "Conjugate transpose", "Non-unit", &i__2, &bp[jj], &ap[jj], &c__1);
                 jj = j1j1;

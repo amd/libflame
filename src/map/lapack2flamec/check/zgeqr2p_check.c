@@ -1,7 +1,8 @@
-#include "FLA_lapack2flame_return_defs.h"
 #include "FLA_f2c.h" /* Table of constant values */
+#include "FLA_lapack2flame_return_defs.h"
 
-int zgeqr2p_check(integer *m, integer *n, dcomplex *a, integer *lda, dcomplex *tau, dcomplex *work, integer *info)
+int zgeqr2p_check(integer *m, integer *n, dcomplex *a, integer *lda, dcomplex *tau, dcomplex *work,
+                  integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
@@ -14,19 +15,19 @@ int zgeqr2p_check(integer *m, integer *n, dcomplex *a, integer *lda, dcomplex *t
     --work;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZGEQR2P", &i__1, (ftnlen)7);

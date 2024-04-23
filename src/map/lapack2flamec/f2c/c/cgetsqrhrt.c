@@ -1,5 +1,8 @@
-/* cgetsqrhrt.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* cgetsqrhrt.f -- translated by f2c (version 20160102). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b CGETSQRHRT */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CGETSQRHRT + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgetsqr hrt.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgetsqr
+ * hrt.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgetsqr hrt.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgetsqr
+ * hrt.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgetsqr hrt.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgetsqr
+ * hrt.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -93,7 +102,7 @@ static integer c__1 = 1;
 /* > a) the elements on and above the diagonal */
 /* > of the array contain the N-by-N upper-triangular */
 /* > matrix R corresponding to the Householder QR;
-*/
+ */
 /* > b) the elements below the diagonal represent Q by */
 /* > the columns of blocked V (compact WY-representation). */
 /* > \endverbatim */
@@ -166,7 +175,9 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2, complex *a, integer *lda, complex *t, integer *ldt, complex *work, integer *lwork, integer *info)
+void cgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2, complex *a,
+                 integer *lda, complex *t, integer *ldt, complex *work, integer *lwork,
+                 integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
@@ -175,16 +186,24 @@ void cgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb
     /* Local variables */
     integer lworkopt, i__, j;
     extern /* Subroutine */
-    void cunhr_col_(integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *);
+        void
+        cunhr_col_(integer *, integer *, integer *, complex *, integer *, complex *, integer *,
+                   complex *, integer *);
     integer lw1, lw2, num_all_row_blocks__, lwt, ldwt;
     extern /* Subroutine */
-    void cungtsqr_row_(integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
+        void
+        cungtsqr_row_(integer *, integer *, integer *, integer *, complex *, integer *, complex *,
+                      integer *, complex *, integer *, integer *);
     integer iinfo;
     extern /* Subroutine */
-    void ccopy_(integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     extern /* Subroutine */
-    void clatsqr_(integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
+        void
+        clatsqr_(integer *, integer *, integer *, integer *, complex *, integer *, complex *,
+                 integer *, complex *, integer *, integer *);
     integer nb1local, nb2local;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -215,27 +234,27 @@ void cgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0 || *m < *n)
+    else if(*n < 0 || *m < *n)
     {
         *info = -2;
     }
-    else if (*mb1 <= *n)
+    else if(*mb1 <= *n)
     {
         *info = -3;
     }
-    else if (*nb1 < 1)
+    else if(*nb1 < 1)
     {
         *info = -4;
     }
-    else if (*nb2 < 1)
+    else if(*nb2 < 1)
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -7;
     }
@@ -243,8 +262,8 @@ void cgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb
     {
         /* Computing MAX */
         i__1 = 1;
-        i__2 = fla_min(*nb2,*n); // , expr subst
-        if (*ldt < fla_max(i__1,i__2))
+        i__2 = fla_min(*nb2, *n); // , expr subst
+        if(*ldt < fla_max(i__1, i__2))
         {
             *info = -9;
         }
@@ -253,24 +272,24 @@ void cgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb
             /* Test the input LWORK for the dimension of the array WORK. */
             /* This workspace is used to store array: */
             /* a) Matrix T and WORK for CLATSQR;
-            */
+             */
             /* b) N-by-N upper-triangular factor R_tsqr;
-            */
+             */
             /* c) Matrix T and array WORK for CUNGTSQR_ROW;
-            */
+             */
             /* d) Diagonal D for CUNHR_COL. */
-            if (*lwork < *n * *n + 1 && ! lquery)
+            if(*lwork < *n * *n + 1 && !lquery)
             {
                 *info = -11;
             }
             else
             {
                 /* Set block size for column blocks */
-                nb1local = fla_min(*nb1,*n);
+                nb1local = fla_min(*nb1, *n);
                 /* Computing MAX */
                 r__1 = 1.f;
-                r__2 = ceiling_f90_((real) (*m - *n) / (real) (*mb1 - *n)); // , expr subst
-                num_all_row_blocks__ = fla_max(r__1,r__2);
+                r__2 = ceiling_f90_((real)(*m - *n) / (real)(*mb1 - *n)); // , expr subst
+                num_all_row_blocks__ = fla_max(r__1, r__2);
                 /* Length and leading dimension of WORK array to place */
                 /* T array in TSQR. */
                 lwt = num_all_row_blocks__ * *n * nb1local;
@@ -281,15 +300,15 @@ void cgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb
                 /* Computing MAX */
                 i__1 = nb1local;
                 i__2 = *n - nb1local; // , expr subst
-                lw2 = nb1local * fla_max(i__1,i__2);
+                lw2 = nb1local * fla_max(i__1, i__2);
                 /* Computing MAX */
                 /* Computing MAX */
                 i__3 = lwt + *n * *n + lw2;
                 i__4 = lwt + *n * *n + *n; // , expr subst
                 i__1 = lwt + lw1;
-                i__2 = fla_max(i__3,i__4); // , expr subst
-                lworkopt = fla_max(i__1,i__2);
-                if (*lwork < fla_max(1,lworkopt) && ! lquery)
+                i__2 = fla_max(i__3, i__4); // , expr subst
+                lworkopt = fla_max(i__1, i__2);
+                if(*lwork < fla_max(1, lworkopt) && !lquery)
                 {
                     *info = -11;
                 }
@@ -297,48 +316,49 @@ void cgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb
         }
     }
     /* Handle error in the input parameters and return workspace query. */
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CGETSQRHRT", &i__1, (ftnlen)10);
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-        q__1.r = (real) lworkopt;
+        q__1.r = (real)lworkopt;
         q__1.i = 0.f; // , expr subst
         work[1].r = q__1.r;
         work[1].i = q__1.i; // , expr subst
         return;
     }
     /* Quick return if possible */
-    if (fla_min(*m,*n) == 0)
+    if(fla_min(*m, *n) == 0)
     {
-        q__1.r = (real) lworkopt;
+        q__1.r = (real)lworkopt;
         q__1.i = 0.f; // , expr subst
         work[1].r = q__1.r;
         work[1].i = q__1.i; // , expr subst
         return;
     }
-    nb2local = fla_min(*nb2,*n);
+    nb2local = fla_min(*nb2, *n);
     /* (1) Perform TSQR-factorization of the M-by-N matrix A. */
-    clatsqr_(m, n, mb1, &nb1local, &a[a_offset], lda, &work[1], &ldwt, &work[ lwt + 1], &lw1, &iinfo);
+    clatsqr_(m, n, mb1, &nb1local, &a[a_offset], lda, &work[1], &ldwt, &work[lwt + 1], &lw1,
+             &iinfo);
     /* (2) Copy the factor R_tsqr stored in the upper-triangular part */
     /* of A into the square matrix in the work array */
     /* WORK(LWT+1:LWT+N*N) column-by-column. */
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
-        ccopy_(&j, &a[j * a_dim1 + 1], &c__1, &work[lwt + *n * (j - 1) + 1], & c__1);
+        ccopy_(&j, &a[j * a_dim1 + 1], &c__1, &work[lwt + *n * (j - 1) + 1], &c__1);
     }
     /* (3) Generate a M-by-N matrix Q with orthonormal columns from */
     /* the result stored below the diagonal in the array A in place. */
-    cungtsqr_row_(m, n, mb1, &nb1local, &a[a_offset], lda, &work[1], &ldwt, & work[lwt + *n * *n + 1], &lw2, &iinfo);
+    cungtsqr_row_(m, n, mb1, &nb1local, &a[a_offset], lda, &work[1], &ldwt,
+                  &work[lwt + *n * *n + 1], &lw2, &iinfo);
     /* (4) Perform the reconstruction of Householder vectors from */
     /* the matrix Q (stored in A) in place. */
-    cunhr_col_(m, n, &nb2local, &a[a_offset], lda, &t[t_offset], ldt, &work[ lwt + *n * *n + 1], &iinfo);
+    cunhr_col_(m, n, &nb2local, &a[a_offset], lda, &t[t_offset], ldt, &work[lwt + *n * *n + 1],
+               &iinfo);
     /* (5) Copy the factor R_tsqr stored in the square matrix in the */
     /* work array WORK(LWT+1:LWT+N*N) into the upper-triangular */
     /* part of A. */
@@ -351,26 +371,22 @@ void cgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb
     /* (5) and (6) can be combined in a single loop, so the rows in A */
     /* are accessed only once. */
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = lwt + *n * *n + i__;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        if (work[i__2].r == q__1.r && work[i__2].i == q__1.i)
+        if(work[i__2].r == q__1.r && work[i__2].i == q__1.i)
         {
             i__2 = *n;
-            for (j = i__;
-                    j <= i__2;
-                    ++j)
+            for(j = i__; j <= i__2; ++j)
             {
                 i__3 = i__ + j * a_dim1;
                 q__2.r = -1.f;
                 q__2.i = -0.f; // , expr subst
                 i__4 = lwt + *n * (j - 1) + i__;
                 q__1.r = q__2.r * work[i__4].r - q__2.i * work[i__4].i;
-                q__1.i = q__2.r * work[i__4].i + q__2.i * work[i__4] .r; // , expr subst
+                q__1.i = q__2.r * work[i__4].i + q__2.i * work[i__4].r; // , expr subst
                 a[i__3].r = q__1.r;
                 a[i__3].i = q__1.i; // , expr subst
             }
@@ -381,7 +397,7 @@ void cgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb
             ccopy_(&i__2, &work[lwt + *n * (i__ - 1) + i__], n, &a[i__ + i__ * a_dim1], lda);
         }
     }
-    q__1.r = (real) lworkopt;
+    q__1.r = (real)lworkopt;
     q__1.i = 0.f; // , expr subst
     work[1].r = q__1.r;
     work[1].i = q__1.i; // , expr subst
@@ -389,4 +405,3 @@ void cgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb
     /* End of CGETSQRHRT */
 }
 /* cgetsqrhrt_ */
-

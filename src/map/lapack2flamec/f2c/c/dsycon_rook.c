@@ -1,5 +1,8 @@
-/* ../netlib/dsycon_rook.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dsycon_rook.f -- translated by f2c (version 20100827). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b DSYCON_ROOK */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DSYCON_ROOK + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsycon_ rook.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsycon_
+ * rook.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsycon_ rook.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsycon_
+ * rook.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsycon_ rook.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsycon_
+ * rook.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -48,7 +57,7 @@ static integer c__1 = 1;
 /* > Specifies whether the details of the factorization are stored */
 /* > as an upper or lower triangular matrix. */
 /* > = 'U': Upper triangular, form is A = U*D*U**T;
-*/
+ */
 /* > = 'L': Lower triangular, form is A = L*D*L**T. */
 /* > \endverbatim */
 /* > */
@@ -131,22 +140,30 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void dsycon_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *anorm, doublereal *rcond, doublereal *work, integer *iwork, integer *info)
+void dsycon_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv,
+                  doublereal *anorm, doublereal *rcond, doublereal *work, integer *iwork,
+                  integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsycon_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
+    AOCL_DTL_SNPRINTF("dsycon_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
+                      *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
     /* Local variables */
     integer i__;
     extern /* Subroutine */
-    void dsytrs_rook_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dsytrs_rook_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *,
+                     integer *, integer *);
     integer kase;
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     /* -- LAPACK computational routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -181,23 +198,23 @@ void dsycon_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*anorm < 0.)
+    else if(*anorm < 0.)
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DSYCON_ROOK", &i__1, (ftnlen)11);
@@ -206,26 +223,24 @@ void dsycon_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
     }
     /* Quick return if possible */
     *rcond = 0.;
-    if (*n == 0)
+    if(*n == 0)
     {
         *rcond = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (*anorm <= 0.)
+    else if(*anorm <= 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
-    if (upper)
+    if(upper)
     {
         /* Upper triangular storage: examine D from bottom to top */
-        for (i__ = *n;
-                i__ >= 1;
-                --i__)
+        for(i__ = *n; i__ >= 1; --i__)
         {
-            if (ipiv[i__] > 0 && a[i__ + i__ * a_dim1] == 0.)
+            if(ipiv[i__] > 0 && a[i__ + i__ * a_dim1] == 0.)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
@@ -237,11 +252,9 @@ void dsycon_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
     {
         /* Lower triangular storage: examine D from top to bottom. */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if (ipiv[i__] > 0 && a[i__ + i__ * a_dim1] == 0.)
+            if(ipiv[i__] > 0 && a[i__ + i__ * a_dim1] == 0.)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
@@ -253,14 +266,14 @@ void dsycon_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
     kase = 0;
 L30:
     dlacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
-    if (kase != 0)
+    if(kase != 0)
     {
         /* Multiply by inv(L*D*L**T) or inv(U*D*U**T). */
         dsytrs_rook_(uplo, n, &c__1, &a[a_offset], lda, &ipiv[1], &work[1], n, info);
         goto L30;
     }
     /* Compute the estimate of the reciprocal condition number. */
-    if (ainvnm != 0.)
+    if(ainvnm != 0.)
     {
         *rcond = 1. / ainvnm / *anorm;
     }

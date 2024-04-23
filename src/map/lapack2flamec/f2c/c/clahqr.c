@@ -1,19 +1,29 @@
-/* clahqr.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* clahqr.f -- translated by f2c (version 20160102). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__2 = 2;
-/* > \brief \b CLAHQR computes the eigenvalues and Schur factorization of an upper Hessenberg matrix, using th e double-shift/single-shift QR algorithm. */
+/* > \brief \b CLAHQR computes the eigenvalues and Schur factorization of an upper Hessenberg
+ * matrix, using th e double-shift/single-shift QR algorithm. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLAHQR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clahqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clahqr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clahqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clahqr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clahqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clahqr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -43,7 +53,7 @@ static integer c__2 = 2;
 /* > \verbatim */
 /* > WANTT is LOGICAL */
 /* > = .TRUE. : the full Schur form T is required;
-*/
+ */
 /* > = .FALSE.: only eigenvalues are required. */
 /* > \endverbatim */
 /* > */
@@ -51,7 +61,7 @@ static integer c__2 = 2;
 /* > \verbatim */
 /* > WANTZ is LOGICAL */
 /* > = .TRUE. : the matrix of Schur vectors Z is required;
-*/
+ */
 /* > = .FALSE.: Schur vectors are not required. */
 /* > \endverbatim */
 /* > */
@@ -188,15 +198,20 @@ elements i+1:ihi of W contain */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, complex *h__, integer *ldh, complex *w, integer *iloz, integer *ihiz, complex *z__, integer *ldz, integer * info)
+void clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, complex *h__,
+             integer *ldh, complex *w, integer *iloz, integer *ihiz, complex *z__, integer *ldz,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clahqr inputs: n %lld, ilo %lld, ihi %lld, ldh %lld, iloz %lld, ihiz %lld, ldz %lld",*n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz);
+    snprintf(buffer, 256,
+             "clahqr inputs: n %lld, ilo %lld, ihi %lld, ldh %lld, iloz %lld, ihiz %lld, ldz %lld",
+             *n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz);
 #else
-    snprintf(buffer, 256,"clahqr inputs: n %d, ilo %d, ihi %d, ldh %d, iloz %d, ihiz %d, ldz %d",*n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz);
+    snprintf(buffer, 256, "clahqr inputs: n %d, ilo %d, ihi %d, ldh %d, iloz %d, ihiz %d, ldz %d",
+             *n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -206,7 +221,7 @@ void clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     complex q__1, q__2, q__3, q__4, q__5, q__6, q__7;
     /* Builtin functions */
     double c_abs(complex *);
-    void c_sqrt(complex *, complex *), pow_ci(complex *, complex *, integer *) ;
+    void c_sqrt(complex *, complex *), pow_ci(complex *, complex *, integer *);
     void r_cnjg(complex *, complex *);
     /* Local variables */
     integer i__, j, k, l, m;
@@ -231,13 +246,18 @@ void clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     complex temp;
     integer kdefl;
     extern /* Subroutine */
-    void cscal_(integer *, complex *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *);
+        void
+        cscal_(integer *, complex *, complex *, integer *),
+        ccopy_(integer *, complex *, integer *, complex *, integer *);
     integer itmax;
     real rtemp;
     extern /* Subroutine */
-    void slabad_(real *, real *), clarfg_(integer *, complex *, complex *, integer *, complex *);
+        void
+        slabad_(real *, real *),
+        clarfg_(integer *, complex *, complex *, integer *, complex *);
     extern /* Complex */
-    VOID cladiv_f2c_(complex *, complex *, complex *);
+        VOID
+        cladiv_f2c_(complex *, complex *, complex *);
     extern real slamch_(char *);
     real safmin, safmax, smlnum;
     /* -- LAPACK auxiliary routine -- */
@@ -277,12 +297,12 @@ void clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     *info = 0;
     i2 = 0;
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (*ilo == *ihi)
+    if(*ilo == *ihi)
     {
         i__1 = *ilo;
         i__2 = *ilo + *ilo * h_dim1;
@@ -293,9 +313,7 @@ void clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     }
     /* ==== clear out the trash ==== */
     i__1 = *ihi - 3;
-    for (j = *ilo;
-            j <= i__1;
-            ++j)
+    for(j = *ilo; j <= i__1; ++j)
     {
         i__2 = j + 2 + j * h_dim1;
         h__[i__2].r = 0.f;
@@ -305,14 +323,14 @@ void clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
         h__[i__2].i = 0.f; // , expr subst
         /* L10: */
     }
-    if (*ilo <= *ihi - 2)
+    if(*ilo <= *ihi - 2)
     {
         i__1 = *ihi + (*ihi - 2) * h_dim1;
         h__[i__1].r = 0.f;
         h__[i__1].i = 0.f; // , expr subst
     }
     /* ==== ensure that subdiagonal entries are real ==== */
-    if (*wantt)
+    if(*wantt)
     {
         jlo = 1;
         jhi = *n;
@@ -323,16 +341,14 @@ void clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
         jhi = *ihi;
     }
     i__1 = *ihi;
-    for (i__ = *ilo + 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = *ilo + 1; i__ <= i__1; ++i__)
     {
         i__2 = i__ + (i__ - 1) * h_dim1;
-        if (h__[i__2].i != 0.f)
+        if(h__[i__2].i != 0.f)
         {
             /* ==== The following redundant normalization */
             /* . avoids problems with both gradual and */
-            /* . sudden underflow in ABS(H(I,I-1)) ==== */       
+            /* . sudden underflow in ABS(H(I,I-1)) ==== */
             r__3 = (r__1 = h__[i__2].r, f2c_abs(r__1)) + (r__2 = h__[i__2].i, f2c_abs(r__2));
             q__1.r = h__[i__2].r / r__3;
             q__1.i = h__[i__2].i / r__3; // , expr subst
@@ -353,11 +369,11 @@ void clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
             /* Computing MIN */
             i__3 = jhi;
             i__4 = i__ + 1; // , expr subst
-            i__2 = fla_min(i__3,i__4) - jlo + 1;
+            i__2 = fla_min(i__3, i__4) - jlo + 1;
             q__1.r = sc.r;
             q__1.i = -sc.i;
             cscal_(&i__2, &q__1, &h__[jlo + i__ * h_dim1], &c__1);
-            if (*wantz)
+            if(*wantz)
             {
                 i__2 = *ihiz - *iloz + 1;
                 cscal_(&i__2, &q__1, &z__[*iloz + i__ * z_dim1], &c__1);
@@ -372,17 +388,17 @@ void clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     safmax = 1.f / safmin;
     slabad_(&safmin, &safmax);
     ulp = slamch_("PRECISION");
-    smlnum = safmin * ((real) nh / ulp);
+    smlnum = safmin * ((real)nh / ulp);
     /* I1 and I2 are the indices of the first row and last column of H */
     /* to which transformations must be applied. If eigenvalues only are */
     /* being computed, I1 and I2 are set inside the main loop. */
-    if (*wantt)
+    if(*wantt)
     {
         i1 = 1;
         i2 = *n;
     }
     /* ITMAX is the total number of QR iterations allowed. */
-    itmax = fla_max(10,nh) * 30;
+    itmax = fla_max(10, nh) * 30;
     /* KDEFL counts the number of iterations since a deflation */
     kdefl = 0;
     /* The main loop begins here. I is the loop index and decreases from */
@@ -392,7 +408,7 @@ void clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     /* H(L,L-1) is negligible so that the matrix splits. */
     i__ = *ihi;
 L30:
-    if (i__ < *ilo)
+    if(i__ < *ilo)
     {
         goto L150;
     }
@@ -401,32 +417,29 @@ L30:
     /* subdiagonal element has become negligible. */
     l = *ilo;
     i__1 = itmax;
-    for (its = 0;
-            its <= i__1;
-            ++its)
+    for(its = 0; its <= i__1; ++its)
     {
         /* Look for a single small subdiagonal element. */
         i__2 = l + 1;
-        for (k = i__;
-                k >= i__2;
-                --k)
+        for(k = i__; k >= i__2; --k)
         {
             i__3 = k + (k - 1) * h_dim1;
-            if ((r__1 = h__[i__3].r, f2c_abs(r__1)) + (r__2 = h__[i__3].i, f2c_abs(r__2)) <= smlnum)
+            if((r__1 = h__[i__3].r, f2c_abs(r__1)) + (r__2 = h__[i__3].i, f2c_abs(r__2)) <= smlnum)
             {
                 goto L50;
             }
             i__3 = k - 1 + (k - 1) * h_dim1;
             i__4 = k + k * h_dim1;
-            tst = (r__1 = h__[i__3].r, f2c_abs(r__1)) + (r__2 = h__[i__3].i, f2c_abs(r__2)) + ((r__3 = h__[i__4].r, f2c_abs(r__3)) + (r__4 = h__[i__4].i, f2c_abs( r__4)));
-            if (tst == 0.f)
+            tst = (r__1 = h__[i__3].r, f2c_abs(r__1)) + (r__2 = h__[i__3].i, f2c_abs(r__2))
+                  + ((r__3 = h__[i__4].r, f2c_abs(r__3)) + (r__4 = h__[i__4].i, f2c_abs(r__4)));
+            if(tst == 0.f)
             {
-                if (k - 2 >= *ilo)
+                if(k - 2 >= *ilo)
                 {
                     i__3 = k - 1 + (k - 2) * h_dim1;
                     tst += (r__1 = h__[i__3].r, f2c_abs(r__1));
                 }
-                if (k + 1 <= *ihi)
+                if(k + 1 <= *ihi)
                 {
                     i__3 = k + 1 + k * h_dim1;
                     tst += (r__1 = h__[i__3].r, f2c_abs(r__1));
@@ -437,17 +450,19 @@ L30:
             /* . 1997). It has better mathematical foundation and */
             /* . improves accuracy in some examples. ==== */
             i__3 = k + (k - 1) * h_dim1;
-            if ((r__1 = h__[i__3].r, f2c_abs(r__1)) <= ulp * tst)
+            if((r__1 = h__[i__3].r, f2c_abs(r__1)) <= ulp * tst)
             {
                 /* Computing MAX */
                 i__4 = k - 1 + k * h_dim1;
                 r__5 = (r__1 = h__[i__3].r, f2c_abs(r__1)) + (r__2 = h__[i__3].i, f2c_abs(r__2));
-                r__6 = (r__3 = h__[i__4].r, f2c_abs(r__3)) + (r__4 = h__[i__4].i, f2c_abs(r__4)); // , expr subst
-                ab = fla_max(r__5,r__6);
+                r__6 = (r__3 = h__[i__4].r, f2c_abs(r__3))
+                       + (r__4 = h__[i__4].i, f2c_abs(r__4)); // , expr subst
+                ab = fla_max(r__5, r__6);
                 /* Computing MIN */
                 r__5 = (r__1 = h__[i__3].r, f2c_abs(r__1)) + (r__2 = h__[i__3].i, f2c_abs(r__2));
-                r__6 = (r__3 = h__[i__4].r, f2c_abs(r__3)) + (r__4 = h__[i__4].i, f2c_abs(r__4)); // , expr subst
-                ba = fla_min(r__5,r__6);
+                r__6 = (r__3 = h__[i__4].r, f2c_abs(r__3))
+                       + (r__4 = h__[i__4].i, f2c_abs(r__4)); // , expr subst
+                ba = fla_min(r__5, r__6);
                 i__3 = k - 1 + (k - 1) * h_dim1;
                 i__4 = k + k * h_dim1;
                 q__2.r = h__[i__3].r - h__[i__4].r;
@@ -456,30 +471,32 @@ L30:
                 q__1.i = q__2.i; // , expr subst
                 /* Computing MAX */
                 r__5 = (r__1 = h__[i__4].r, f2c_abs(r__1)) + (r__2 = h__[i__4].i, f2c_abs(r__2));
-                r__6 = (r__3 = q__1.r, f2c_abs(r__3)) + (r__4 = q__1.i, f2c_abs(r__4)); // , expr subst
-                aa = fla_max(r__5,r__6);
+                r__6 = (r__3 = q__1.r, f2c_abs(r__3))
+                       + (r__4 = q__1.i, f2c_abs(r__4)); // , expr subst
+                aa = fla_max(r__5, r__6);
                 q__2.r = h__[i__3].r - h__[i__4].r;
                 q__2.i = h__[i__3].i - h__[i__4].i; // , expr subst
                 q__1.r = q__2.r;
                 q__1.i = q__2.i; // , expr subst
                 /* Computing MIN */
                 r__5 = (r__1 = h__[i__4].r, f2c_abs(r__1)) + (r__2 = h__[i__4].i, f2c_abs(r__2));
-                r__6 = (r__3 = q__1.r, f2c_abs(r__3)) + (r__4 = q__1.i, f2c_abs(r__4)); // , expr subst
-                bb = fla_min(r__5,r__6);
+                r__6 = (r__3 = q__1.r, f2c_abs(r__3))
+                       + (r__4 = q__1.i, f2c_abs(r__4)); // , expr subst
+                bb = fla_min(r__5, r__6);
                 s = aa + ab;
                 /* Computing MAX */
                 r__1 = smlnum;
                 r__2 = ulp * (bb * (aa / s)); // , expr subst
-                if (ba * (ab / s) <= fla_max(r__1,r__2))
+                if(ba * (ab / s) <= fla_max(r__1, r__2))
                 {
                     goto L50;
                 }
             }
             /* L40: */
         }
-L50:
+    L50:
         l = k;
-        if (l > *ilo)
+        if(l > *ilo)
         {
             /* H(L,L-1) is negligible */
             i__2 = l + (l - 1) * h_dim1;
@@ -487,7 +504,7 @@ L50:
             h__[i__2].i = 0.f; // , expr subst
         }
         /* Exit from loop if a submatrix of order 1 has split off. */
-        if (l >= i__)
+        if(l >= i__)
         {
             goto L140;
         }
@@ -495,12 +512,12 @@ L50:
         /* Now the active submatrix is in rows and columns L to I. If */
         /* eigenvalues only are being computed, only the active submatrix */
         /* need be transformed. */
-        if (! (*wantt))
+        if(!(*wantt))
         {
             i1 = l;
             i2 = i__;
         }
-        if (kdefl % 20 == 0)
+        if(kdefl % 20 == 0)
         {
             /* Exceptional shift. */
             i__2 = i__ + (i__ - 1) * h_dim1;
@@ -511,7 +528,7 @@ L50:
             t.r = q__1.r;
             t.i = q__1.i; // , expr subst
         }
-        else if (kdefl % 10 == 0)
+        else if(kdefl % 10 == 0)
         {
             /* Exceptional shift. */
             i__2 = l + 1 + l * h_dim1;
@@ -535,7 +552,7 @@ L50:
             u.r = q__1.r;
             u.i = q__1.i; // , expr subst
             s = (r__1 = u.r, f2c_abs(r__1)) + (r__2 = u.i, f2c_abs(r__2));
-            if (s != 0.f)
+            if(s != 0.f)
             {
                 i__2 = i__ - 1 + (i__ - 1) * h_dim1;
                 q__2.r = h__[i__2].r - t.r;
@@ -548,7 +565,7 @@ L50:
                 /* Computing MAX */
                 r__3 = s;
                 r__4 = (r__1 = x.r, f2c_abs(r__1)) + (r__2 = x.i, f2c_abs(r__2)); // , expr subst
-                s = fla_max(r__3,r__4);
+                s = fla_max(r__3, r__4);
                 q__5.r = x.r / s;
                 q__5.i = x.i / s; // , expr subst
                 pow_ci(&q__4, &q__5, &c__2);
@@ -562,13 +579,13 @@ L50:
                 q__1.i = s * q__2.i; // , expr subst
                 y.r = q__1.r;
                 y.i = q__1.i; // , expr subst
-                if (sx > 0.f)
+                if(sx > 0.f)
                 {
                     q__1.r = x.r / sx;
                     q__1.i = x.i / sx; // , expr subst
                     q__2.r = x.r / sx;
                     q__2.i = x.i / sx; // , expr subst
-                    if (q__1.r * y.r + q__2.i * y.i < 0.f)
+                    if(q__1.r * y.r + q__2.i * y.i < 0.f)
                     {
                         q__3.r = -y.r;
                         q__3.i = -y.i; // , expr subst
@@ -589,9 +606,7 @@ L50:
         }
         /* Look for two consecutive small subdiagonal elements. */
         i__2 = l + 1;
-        for (m = i__ - 1;
-                m >= i__2;
-                --m)
+        for(m = i__ - 1; m >= i__2; --m)
         {
             /* Determine the effect of starting the single-shift QR */
             /* iteration at row M, and see if this would make H(M,M-1) */
@@ -620,7 +635,11 @@ L50:
             v[1].i = 0.f; // , expr subst
             i__3 = m + (m - 1) * h_dim1;
             h10 = h__[i__3].r;
-            if (f2c_abs(h10) * f2c_abs(h21) <= ulp * (((r__1 = h11s.r, f2c_abs(r__1)) + ( r__2 = h11s.i, f2c_abs(r__2))) * ((r__3 = h11.r, f2c_abs( r__3)) + (r__4 = h11.i, f2c_abs(r__4)) + ((r__5 = h22.r, f2c_abs(r__5)) + (r__6 = h22.i, f2c_abs(r__6))))))
+            if(f2c_abs(h10) * f2c_abs(h21)
+               <= ulp
+                      * (((r__1 = h11s.r, f2c_abs(r__1)) + (r__2 = h11s.i, f2c_abs(r__2)))
+                         * ((r__3 = h11.r, f2c_abs(r__3)) + (r__4 = h11.i, f2c_abs(r__4))
+                            + ((r__5 = h22.r, f2c_abs(r__5)) + (r__6 = h22.i, f2c_abs(r__6))))))
             {
                 goto L70;
             }
@@ -648,11 +667,9 @@ L50:
         v[0].i = h11s.i; // , expr subst
         v[1].r = h21;
         v[1].i = 0.f; // , expr subst
-L70: /* Single-shift QR step */
+    L70: /* Single-shift QR step */
         i__2 = i__ - 1;
-        for (k = m;
-                k <= i__2;
-                ++k)
+        for(k = m; k <= i__2; ++k)
         {
             /* The first iteration of this loop determines a reflection G */
             /* from the vector V and applies it from left and right to H, */
@@ -663,13 +680,13 @@ L70: /* Single-shift QR step */
             /* submatrix. */
             /* V(2) is always real before the call to CLARFG, and hence */
             /* after the call T2 ( = T1*V(2) ) is also real. */
-            i__3 = k + (k - 1) * h_dim1;         
-            if (k > m)
+            i__3 = k + (k - 1) * h_dim1;
+            if(k > m)
             {
                 ccopy_(&c__2, &h__[i__3], &c__1, v, &c__1);
             }
             clarfg_(&c__2, v, &v[1], &c__1, &t1);
-            if (k > m)
+            if(k > m)
             {
                 h__[i__3].r = v[0].r;
                 h__[i__3].i = v[0].i; // , expr subst
@@ -689,9 +706,7 @@ L70: /* Single-shift QR step */
             real t1i = t1.i;
             real v2i = v2.i;
             real v2r = v2.r;
-            for (j = k;
-                    j <= i__3;
-                    ++j)
+            for(j = k; j <= i__3; ++j)
             {
                 r_cnjg(&q__3, &t1);
                 i__4 = k + j * h_dim1;
@@ -721,10 +736,8 @@ L70: /* Single-shift QR step */
             /* matrix in rows I1 to fla_min(K+2,I). */
             /* Computing MIN */
             i__4 = k + 2;
-            i__3 = fla_min(i__4,i__);
-            for (j = i1;
-                    j <= i__3;
-                    ++j)
+            i__3 = fla_min(i__4, i__);
+            for(j = i1; j <= i__3; ++j)
             {
                 i__4 = j + k * h_dim1;
                 q__2.r = t1r * h__[i__4].r - t1i * h__[i__4].i;
@@ -749,13 +762,11 @@ L70: /* Single-shift QR step */
                 h__[i__5].i = q__1.i; // , expr subst
                 /* L90: */
             }
-            if (*wantz)
+            if(*wantz)
             {
                 /* Accumulate transformations in the matrix Z */
                 i__3 = *ihiz;
-                for (j = *iloz;
-                        j <= i__3;
-                        ++j)
+                for(j = *iloz; j <= i__3; ++j)
                 {
                     i__4 = j + k * z_dim1;
                     q__2.r = t1r * z__[i__4].r - t1i * z__[i__4].i;
@@ -774,7 +785,7 @@ L70: /* Single-shift QR step */
                     i__4 = j + (k + 1) * z_dim1;
                     i__5 = j + (k + 1) * z_dim1;
                     q__2.r = sum.r * v2r + sum.i * v2i;
-                    q__2.i = - sum.r * v2i + sum.i * v2r; // , expr subst
+                    q__2.i = -sum.r * v2i + sum.i * v2r; // , expr subst
                     q__1.r = z__[i__5].r - q__2.r;
                     q__1.i = z__[i__5].i - q__2.i; // , expr subst
                     z__[i__5].r = q__1.r;
@@ -782,7 +793,7 @@ L70: /* Single-shift QR step */
                     /* L100: */
                 }
             }
-            if (k == m && m > l)
+            if(k == m && m > l)
             {
                 /* If the QR step was started at row M > L because two */
                 /* consecutive small subdiagonals were found, then extra */
@@ -803,7 +814,7 @@ L70: /* Single-shift QR step */
                 q__1.i = h__[i__4].r * q__2.i + h__[i__4].i * q__2.r; // , expr subst
                 h__[i__3].r = q__1.r;
                 h__[i__3].i = q__1.i; // , expr subst
-                if (m + 2 <= i__)
+                if(m + 2 <= i__)
                 {
                     i__3 = m + 2 + (m + 1) * h_dim1;
                     q__1.r = h__[i__3].r * temp.r - h__[i__3].i * temp.i;
@@ -812,13 +823,11 @@ L70: /* Single-shift QR step */
                     h__[i__3].i = q__1.i; // , expr subst
                 }
                 i__3 = i__;
-                for (j = m;
-                        j <= i__3;
-                        ++j)
+                for(j = m; j <= i__3; ++j)
                 {
-                    if (j != m + 1)
+                    if(j != m + 1)
                     {
-                        if (i2 > j)
+                        if(i2 > j)
                         {
                             i__4 = i2 - j;
                             cscal_(&i__4, &temp, &h__[j + (j + 1) * h_dim1], ldh);
@@ -827,11 +836,11 @@ L70: /* Single-shift QR step */
                         q__1.r = temp.r;
                         q__1.i = -temp.i;
                         cscal_(&i__4, &q__1, &h__[i1 + j * h_dim1], &c__1);
-                        if (*wantz)
+                        if(*wantz)
                         {
                             q__1.r = temp.r;
                             q__1.i = -temp.i;
-                            cscal_(&nz, &q__1, &z__[*iloz + j * z_dim1], & c__1);
+                            cscal_(&nz, &q__1, &z__[*iloz + j * z_dim1], &c__1);
                         }
                     }
                     /* L110: */
@@ -843,7 +852,7 @@ L70: /* Single-shift QR step */
         i__2 = i__ + (i__ - 1) * h_dim1;
         temp.r = h__[i__2].r;
         temp.i = h__[i__2].i; // , expr subst
-        if (temp.i != 0.f)
+        if(temp.i != 0.f)
         {
             rtemp = c_abs(&temp);
             i__2 = i__ + (i__ - 1) * h_dim1;
@@ -853,7 +862,7 @@ L70: /* Single-shift QR step */
             q__1.i = temp.i / rtemp; // , expr subst
             temp.r = q__1.r;
             temp.i = q__1.i; // , expr subst
-            if (i2 > i__)
+            if(i2 > i__)
             {
                 i__2 = i2 - i__;
                 q__1.r = temp.r;
@@ -862,7 +871,7 @@ L70: /* Single-shift QR step */
             }
             i__2 = i__ - i1;
             cscal_(&i__2, &temp, &h__[i1 + i__ * h_dim1], &c__1);
-            if (*wantz)
+            if(*wantz)
             {
                 cscal_(&nz, &temp, &z__[*iloz + i__ * z_dim1], &c__1);
             }

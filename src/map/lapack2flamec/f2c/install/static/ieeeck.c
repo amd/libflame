@@ -1,13 +1,13 @@
 /* netlib/ieeeck.f -- translated by f2c (version 20100827).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+    on Microsoft Windows system, link with libf2c.lib;
+    on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+    or, if you install libf2c.a in a standard place, with -lf2c -lm
+    -- in that order, at the end of the command line, as in
+        cc *.o -lf2c -lm
+    Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+        http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "FLA_f2c.h"
@@ -21,13 +21,16 @@
 
 /* > \htmlonly */
 /* > Download IEEECK + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ieeeck.
+/* > <a
+href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ieeeck.
 f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ieeeck.
+/* > <a
+href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ieeeck.
 f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ieeeck.
+/* > <a
+href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ieeeck.
 f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
@@ -41,7 +44,6 @@ f"> */
 /*       INTEGER            ISPEC */
 /*       REAL               ONE, ZERO */
 /*       .. */
-
 
 /* > \par Purpose: */
 /*  ============= */
@@ -105,7 +107,6 @@ integer ieeeck_(integer *ispec, real *zero, real *one)
     /* Local variables */
     real nan1, nan2, nan3, nan4, nan5, nan6, neginf, posinf, negzro, newzro;
 
-
     /*  -- LAPACK auxiliary routine (version 3.4.0) -- */
     /*  -- LAPACK is a software package provided by Univ. of Tennessee,    -- */
     /*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -122,67 +123,64 @@ integer ieeeck_(integer *ispec, real *zero, real *one)
     ret_val = 1;
 
     posinf = *one / *zero;
-    if (posinf <= *one)
+    if(posinf <= *one)
     {
         ret_val = 0;
         return ret_val;
     }
 
     neginf = -(*one) / *zero;
-    if (neginf >= *zero)
+    if(neginf >= *zero)
     {
         ret_val = 0;
         return ret_val;
     }
 
     negzro = *one / (neginf + *one);
-    if (negzro != *zero)
+    if(negzro != *zero)
     {
         ret_val = 0;
         return ret_val;
     }
 
     neginf = *one / negzro;
-    if (neginf >= *zero)
+    if(neginf >= *zero)
     {
         ret_val = 0;
         return ret_val;
     }
 
     newzro = negzro + *zero;
-    if (newzro != *zero)
+    if(newzro != *zero)
     {
         ret_val = 0;
         return ret_val;
     }
 
     posinf = *one / newzro;
-    if (posinf <= *one)
+    if(posinf <= *one)
     {
         ret_val = 0;
         return ret_val;
     }
 
     neginf *= posinf;
-    if (neginf >= *zero)
+    if(neginf >= *zero)
     {
         ret_val = 0;
         return ret_val;
     }
 
     posinf *= posinf;
-    if (posinf <= *one)
+    if(posinf <= *one)
     {
         ret_val = 0;
         return ret_val;
     }
 
-
-
-
     /*     Return if we were only asked to check infinity arithmetic */
 
-    if (*ispec == 0)
+    if(*ispec == 0)
     {
         return ret_val;
     }
@@ -199,37 +197,37 @@ integer ieeeck_(integer *ispec, real *zero, real *one)
 
     nan6 = nan5 * *zero;
 
-    if (nan1 == nan1)
+    if(nan1 == nan1)
     {
         ret_val = 0;
         return ret_val;
     }
 
-    if (nan2 == nan2)
+    if(nan2 == nan2)
     {
         ret_val = 0;
         return ret_val;
     }
 
-    if (nan3 == nan3)
+    if(nan3 == nan3)
     {
         ret_val = 0;
         return ret_val;
     }
 
-    if (nan4 == nan4)
+    if(nan4 == nan4)
     {
         ret_val = 0;
         return ret_val;
     }
 
-    if (nan5 == nan5)
+    if(nan5 == nan5)
     {
         ret_val = 0;
         return ret_val;
     }
 
-    if (nan6 == nan6)
+    if(nan6 == nan6)
     {
         ret_val = 0;
         return ret_val;
@@ -237,4 +235,3 @@ integer ieeeck_(integer *ispec, real *zero, real *one)
 
     return ret_val;
 } /* ieeeck_ */
-

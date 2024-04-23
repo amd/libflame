@@ -1,22 +1,27 @@
-/* ../netlib/cpotrs.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cpotrs.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {1.f, 0.f};
 /* > \brief \b CPOTRS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CPOTRS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpotrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpotrs.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpotrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpotrs.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpotrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpotrs.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -44,7 +49,7 @@ static complex c_b1 =
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -103,15 +108,18 @@ static complex c_b1 =
 /* > \ingroup complexPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cpotrs_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, complex *b, integer *ldb, integer *info)
+void cpotrs_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, complex *b,
+             integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cpotrs inputs: uplo %c, n %lld, nrhs %lld, lda %lld, ldb %lld",*uplo, *n, *nrhs, *lda, *ldb);
+    snprintf(buffer, 256, "cpotrs inputs: uplo %c, n %lld, nrhs %lld, lda %lld, ldb %lld", *uplo,
+             *n, *nrhs, *lda, *ldb);
 #else
-    snprintf(buffer, 256,"cpotrs inputs: uplo %c, n %d, nrhs %d, lda %d, ldb %d",*uplo, *n, *nrhs, *lda, *ldb);
+    snprintf(buffer, 256, "cpotrs inputs: uplo %c, n %d, nrhs %d, lda %d, ldb %d", *uplo, *n, *nrhs,
+             *lda, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -120,10 +128,13 @@ void cpotrs_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, c
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+        void
+        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
+               integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -155,27 +166,27 @@ void cpotrs_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, c
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CPOTRS", &i__1, (ftnlen)6);
@@ -183,26 +194,30 @@ void cpotrs_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, c
         return;
     }
     /* Quick return if possible */
-    if (*n == 0 || *nrhs == 0)
+    if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (upper)
+    if(upper)
     {
         /* Solve A*X = B where A = U**H *U. */
         /* Solve U**H *X = B, overwriting B with X. */
-        ctrsm_("Left", "Upper", "Conjugate transpose", "Non-unit", n, nrhs, & c_b1, &a[a_offset], lda, &b[b_offset], ldb);
+        ctrsm_("Left", "Upper", "Conjugate transpose", "Non-unit", n, nrhs, &c_b1, &a[a_offset],
+               lda, &b[b_offset], ldb);
         /* Solve U*X = B, overwriting B with X. */
-        ctrsm_("Left", "Upper", "No transpose", "Non-unit", n, nrhs, &c_b1, & a[a_offset], lda, &b[b_offset], ldb);
+        ctrsm_("Left", "Upper", "No transpose", "Non-unit", n, nrhs, &c_b1, &a[a_offset], lda,
+               &b[b_offset], ldb);
     }
     else
     {
         /* Solve A*X = B where A = L*L**H. */
         /* Solve L*X = B, overwriting B with X. */
-        ctrsm_("Left", "Lower", "No transpose", "Non-unit", n, nrhs, &c_b1, & a[a_offset], lda, &b[b_offset], ldb);
+        ctrsm_("Left", "Lower", "No transpose", "Non-unit", n, nrhs, &c_b1, &a[a_offset], lda,
+               &b[b_offset], ldb);
         /* Solve L**H *X = B, overwriting B with X. */
-        ctrsm_("Left", "Lower", "Conjugate transpose", "Non-unit", n, nrhs, & c_b1, &a[a_offset], lda, &b[b_offset], ldb);
+        ctrsm_("Left", "Lower", "Conjugate transpose", "Non-unit", n, nrhs, &c_b1, &a[a_offset],
+               lda, &b[b_offset], ldb);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

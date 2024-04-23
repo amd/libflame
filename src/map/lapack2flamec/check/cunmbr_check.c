@@ -1,9 +1,11 @@
-#include "FLA_lapack2flame_return_defs.h"
 #include "FLA_f2c.h"
+#include "FLA_lapack2flame_return_defs.h"
 static integer c__1 = 1;
 static integer c_n1 = -1;
 
-int cunmbr_check(char *vect, char *side, char *trans, integer *m, integer *n, integer *k, scomplex *a, integer *lda, scomplex *tau, scomplex *c__, integer *ldc, scomplex *work, integer *lwork, integer * info)
+int cunmbr_check(char *vect, char *side, char *trans, integer *m, integer *n, integer *k,
+                 scomplex *a, integer *lda, scomplex *tau, scomplex *c__, integer *ldc,
+                 scomplex *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
@@ -33,7 +35,7 @@ int cunmbr_check(char *vect, char *side, char *trans, integer *m, integer *n, in
     notran = lsame_(trans, "N", 1, 1);
     lquery = *lwork == -1;
     /* NQ is the order of Q or P and NW is the minimum dimension of WORK */
-    if (left)
+    if(left)
     {
         nq = *m;
         nw = *n;
@@ -43,31 +45,31 @@ int cunmbr_check(char *vect, char *side, char *trans, integer *m, integer *n, in
         nq = *n;
         nw = *m;
     }
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         nw = 0;
     }
-    if (! applyq && ! lsame_(vect, "P", 1, 1))
+    if(!applyq && !lsame_(vect, "P", 1, 1))
     {
         *info = -1;
     }
-    else if (! left && ! lsame_(side, "R", 1, 1))
+    else if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -2;
     }
-    else if (! notran && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "C", 1, 1))
     {
         *info = -3;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -4;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -5;
     }
-    else if (*k < 0)
+    else if(*k < 0)
     {
         *info = -6;
     }
@@ -75,78 +77,78 @@ int cunmbr_check(char *vect, char *side, char *trans, integer *m, integer *n, in
     {
         /* Computing MAX */
         i__1 = 1;
-        i__2 = fla_min(nq,*k); // , expr subst
-        if (applyq && *lda < fla_max(1,nq) || ! applyq && *lda < fla_max(i__1,i__2))
+        i__2 = fla_min(nq, *k); // , expr subst
+        if(applyq && *lda < fla_max(1, nq) || !applyq && *lda < fla_max(i__1, i__2))
         {
             *info = -8;
         }
-        else if (*ldc < fla_max(1,*m))
+        else if(*ldc < fla_max(1, *m))
         {
             *info = -11;
         }
-        else if (*lwork < fla_max(1,nw) && ! lquery)
+        else if(*lwork < fla_max(1, nw) && !lquery)
         {
             *info = -13;
         }
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (nw > 0)
+        if(nw > 0)
         {
-            if (applyq)
+            if(applyq)
             {
-                if (left)
+                if(left)
                 {
                     i__1 = *m - 1;
                     i__2 = *m - 1;
-                    nb = ilaenv_(&c__1, "CUNMQR", ch__1, &i__1, n, &i__2, & c_n1);
+                    nb = ilaenv_(&c__1, "CUNMQR", ch__1, &i__1, n, &i__2, &c_n1);
                 }
                 else
                 {
                     i__1 = *n - 1;
                     i__2 = *n - 1;
-                    nb = ilaenv_(&c__1, "CUNMQR", ch__1, m, &i__1, &i__2, & c_n1);
+                    nb = ilaenv_(&c__1, "CUNMQR", ch__1, m, &i__1, &i__2, &c_n1);
                 }
             }
             else
             {
-                if (left)
+                if(left)
                 {
                     i__1 = *m - 1;
                     i__2 = *m - 1;
-                    nb = ilaenv_(&c__1, "CUNMLQ", ch__1, &i__1, n, &i__2, & c_n1);
+                    nb = ilaenv_(&c__1, "CUNMLQ", ch__1, &i__1, n, &i__2, &c_n1);
                 }
                 else
                 {
                     i__1 = *n - 1;
                     i__2 = *n - 1;
-                    nb = ilaenv_(&c__1, "CUNMLQ", ch__1, m, &i__1, &i__2, & c_n1);
+                    nb = ilaenv_(&c__1, "CUNMLQ", ch__1, m, &i__1, &i__2, &c_n1);
                 }
             }
             /* Computing MAX */
             i__1 = 1;
             i__2 = nw * nb; // , expr subst
-            lwkopt = fla_max(i__1,i__2);
+            lwkopt = fla_max(i__1, i__2);
         }
         else
         {
             lwkopt = 1;
         }
-        work[1].real = (real) lwkopt;
+        work[1].real = (real)lwkopt;
         work[1].imag = 0.f; // , expr subst
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CUNMBR", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
-    else if (lquery)
+    else if(lquery)
     {
-      return LAPACK_QUERY_RETURN;
+        return LAPACK_QUERY_RETURN;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         return LAPACK_QUICK_RETURN;
     }

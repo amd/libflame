@@ -4,10 +4,10 @@
 extern "C" {
 #endif
 
-    double d_prod(real *x, real *y)
-    {
-        return( (*x) * (*y) );
-    }
+double d_prod(real *x, real *y)
+{
+    return ((*x) * (*y));
+}
 
 #ifdef __cplusplus
 }

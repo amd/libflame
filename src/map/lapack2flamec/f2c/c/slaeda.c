@@ -1,21 +1,31 @@
-/* ../netlib/slaeda.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slaeda.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__2 = 2;
 static integer c__1 = 1;
 static real c_b24 = 1.f;
 static real c_b26 = 0.f;
-/* > \brief \b SLAEDA used by sstedc. Computes the Z vector determining the rank-one modification of the diago nal matrix. Used when the original matrix is dense. */
+/* > \brief \b SLAEDA used by sstedc. Computes the Z vector determining the rank-one modification of
+ * the diago nal matrix. Used when the original matrix is dense. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAEDA + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaeda. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaeda.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaeda. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaeda.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaeda. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaeda.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -155,7 +165,9 @@ static real c_b26 = 0.f;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integer *prmptr, integer *perm, integer *givptr, integer *givcol, real *givnum, real *q, integer *qptr, real *z__, real *ztemp, integer *info)
+void slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integer *prmptr,
+             integer *perm, integer *givptr, integer *givcol, real *givnum, real *q, integer *qptr,
+             real *z__, real *ztemp, integer *info)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -165,10 +177,15 @@ void slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integ
     /* Local variables */
     integer i__, k, mid, ptr, curr;
     extern /* Subroutine */
-    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+        void
+        srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     integer bsiz1, bsiz2, psiz1, psiz2, zptr1;
     extern /* Subroutine */
-    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+               real *, integer *),
+        scopy_(integer *, real *, integer *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -200,18 +217,18 @@ void slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integ
     --prmptr;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SLAEDA", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         return;
     }
@@ -226,22 +243,18 @@ void slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integ
     /* Determine size of these matrices. We add HALF to the value of */
     /* the SQRT in case the machine underestimates one of these square */
     /* roots. */
-    bsiz1 = (integer) (sqrt((real) (qptr[curr + 1] - qptr[curr])) + .5f);
-    bsiz2 = (integer) (sqrt((real) (qptr[curr + 2] - qptr[curr + 1])) + .5f);
+    bsiz1 = (integer)(sqrt((real)(qptr[curr + 1] - qptr[curr])) + .5f);
+    bsiz2 = (integer)(sqrt((real)(qptr[curr + 2] - qptr[curr + 1])) + .5f);
     i__1 = mid - bsiz1 - 1;
-    for (k = 1;
-            k <= i__1;
-            ++k)
+    for(k = 1; k <= i__1; ++k)
     {
         z__[k] = 0.f;
         /* L10: */
     }
-    scopy_(&bsiz1, &q[qptr[curr] + bsiz1 - 1], &bsiz1, &z__[mid - bsiz1], & c__1);
+    scopy_(&bsiz1, &q[qptr[curr] + bsiz1 - 1], &bsiz1, &z__[mid - bsiz1], &c__1);
     scopy_(&bsiz2, &q[qptr[curr + 1]], &bsiz2, &z__[mid], &c__1);
     i__1 = *n;
-    for (k = mid + bsiz2;
-            k <= i__1;
-            ++k)
+    for(k = mid + bsiz2; k <= i__1; ++k)
     {
         z__[k] = 0.f;
         /* L20: */
@@ -251,9 +264,7 @@ void slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integ
     /* against the current Z. */
     ptr = pow_ii(&c__2, tlvls) + 1;
     i__1 = *curlvl - 1;
-    for (k = 1;
-            k <= i__1;
-            ++k)
+    for(k = 1; k <= i__1; ++k)
     {
         i__2 = *curlvl - k;
         i__3 = *curlvl - k - 1;
@@ -263,35 +274,31 @@ void slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integ
         zptr1 = mid - psiz1;
         /* Apply Givens at CURR and CURR+1 */
         i__2 = givptr[curr + 1] - 1;
-        for (i__ = givptr[curr];
-                i__ <= i__2;
-                ++i__)
+        for(i__ = givptr[curr]; i__ <= i__2; ++i__)
         {
-            srot_(&c__1, &z__[zptr1 + givcol[(i__ << 1) + 1] - 1], &c__1, & z__[zptr1 + givcol[(i__ << 1) + 2] - 1], &c__1, &givnum[( i__ << 1) + 1], &givnum[(i__ << 1) + 2]);
+            srot_(&c__1, &z__[zptr1 + givcol[(i__ << 1) + 1] - 1], &c__1,
+                  &z__[zptr1 + givcol[(i__ << 1) + 2] - 1], &c__1, &givnum[(i__ << 1) + 1],
+                  &givnum[(i__ << 1) + 2]);
             /* L30: */
         }
         i__2 = givptr[curr + 2] - 1;
-        for (i__ = givptr[curr + 1];
-                i__ <= i__2;
-                ++i__)
+        for(i__ = givptr[curr + 1]; i__ <= i__2; ++i__)
         {
-            srot_(&c__1, &z__[mid - 1 + givcol[(i__ << 1) + 1]], &c__1, &z__[ mid - 1 + givcol[(i__ << 1) + 2]], &c__1, &givnum[(i__ << 1) + 1], &givnum[(i__ << 1) + 2]);
+            srot_(&c__1, &z__[mid - 1 + givcol[(i__ << 1) + 1]], &c__1,
+                  &z__[mid - 1 + givcol[(i__ << 1) + 2]], &c__1, &givnum[(i__ << 1) + 1],
+                  &givnum[(i__ << 1) + 2]);
             /* L40: */
         }
         psiz1 = prmptr[curr + 1] - prmptr[curr];
         psiz2 = prmptr[curr + 2] - prmptr[curr + 1];
         i__2 = psiz1 - 1;
-        for (i__ = 0;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 0; i__ <= i__2; ++i__)
         {
             ztemp[i__ + 1] = z__[zptr1 + perm[prmptr[curr] + i__] - 1];
             /* L50: */
         }
         i__2 = psiz2 - 1;
-        for (i__ = 0;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 0; i__ <= i__2; ++i__)
         {
             ztemp[psiz1 + i__ + 1] = z__[mid + perm[prmptr[curr + 1] + i__] - 1];
             /* L60: */
@@ -300,20 +307,22 @@ void slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integ
         /* Determine size of these matrices. We add HALF to the value of */
         /* the SQRT in case the machine underestimates one of these */
         /* square roots. */
-        bsiz1 = (integer) (sqrt((real) (qptr[curr + 1] - qptr[curr])) + .5f);
-        bsiz2 = (integer) (sqrt((real) (qptr[curr + 2] - qptr[curr + 1])) + .5f);
-        if (bsiz1 > 0)
+        bsiz1 = (integer)(sqrt((real)(qptr[curr + 1] - qptr[curr])) + .5f);
+        bsiz2 = (integer)(sqrt((real)(qptr[curr + 2] - qptr[curr + 1])) + .5f);
+        if(bsiz1 > 0)
         {
-            sgemv_("T", &bsiz1, &bsiz1, &c_b24, &q[qptr[curr]], &bsiz1, & ztemp[1], &c__1, &c_b26, &z__[zptr1], &c__1);
+            sgemv_("T", &bsiz1, &bsiz1, &c_b24, &q[qptr[curr]], &bsiz1, &ztemp[1], &c__1, &c_b26,
+                   &z__[zptr1], &c__1);
         }
         i__2 = psiz1 - bsiz1;
         scopy_(&i__2, &ztemp[bsiz1 + 1], &c__1, &z__[zptr1 + bsiz1], &c__1);
-        if (bsiz2 > 0)
+        if(bsiz2 > 0)
         {
-            sgemv_("T", &bsiz2, &bsiz2, &c_b24, &q[qptr[curr + 1]], &bsiz2, & ztemp[psiz1 + 1], &c__1, &c_b26, &z__[mid], &c__1);
+            sgemv_("T", &bsiz2, &bsiz2, &c_b24, &q[qptr[curr + 1]], &bsiz2, &ztemp[psiz1 + 1],
+                   &c__1, &c_b26, &z__[mid], &c__1);
         }
         i__2 = psiz2 - bsiz2;
-        scopy_(&i__2, &ztemp[psiz1 + bsiz2 + 1], &c__1, &z__[mid + bsiz2], & c__1);
+        scopy_(&i__2, &ztemp[psiz1 + bsiz2 + 1], &c__1, &z__[mid + bsiz2], &c__1);
         i__2 = *tlvls - k;
         ptr += pow_ii(&c__2, &i__2);
         /* L70: */

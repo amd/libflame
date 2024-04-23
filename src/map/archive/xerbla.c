@@ -1,6 +1,6 @@
 /* xerbla.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
+    -lf2c -lm   (in that order)
 */
 
 #include "FLA_f2c.h"
@@ -38,12 +38,10 @@
     /*          The position of the invalid parameter in the parameter list */
     /*          of the calling routine. */
 
-    printf("lapack2flame: On entry to %6s, parameter number %2i had an illegal value\n",
-           srname, (int)*info);
+    printf("lapack2flame: On entry to %6s, parameter number %2i had an illegal value\n", srname,
+           (int)*info);
 
     /*     End of XERBLA */
 
     return 0;
 } /* xerbla_ */
-
-

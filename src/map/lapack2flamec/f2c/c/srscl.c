@@ -1,16 +1,25 @@
-/* ../netlib/srscl.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/srscl.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SRSCL multiplies a vector by the reciprocal of a real scalar. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SRSCL + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/srscl.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/srscl.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/srscl.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/srscl.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/srscl.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/srscl.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -76,7 +85,9 @@ void srscl_(integer *n, real *sa, real *sx, integer *incx)
     logical done;
     real cnum, cden1, cnum1;
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *), slabad_(real *, real *);
+        void
+        sscal_(integer *, real *, real *, integer *),
+        slabad_(real *, real *);
     extern real slamch_(char *);
     real bignum, smlnum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -110,7 +121,7 @@ void srscl_(integer *n, real *sa, real *sx, integer *incx)
     /* Parameter adjustments */
     --sx;
     /* Function Body */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -125,14 +136,14 @@ void srscl_(integer *n, real *sa, real *sx, integer *incx)
 L10:
     cden1 = cden * smlnum;
     cnum1 = cnum / bignum;
-    if (f2c_abs(cden1) > f2c_abs(cnum) && cnum != 0.f)
+    if(f2c_abs(cden1) > f2c_abs(cnum) && cnum != 0.f)
     {
         /* Pre-multiply X by SMLNUM if CDEN is large compared to CNUM. */
         mul = smlnum;
         done = FALSE_;
         cden = cden1;
     }
-    else if (f2c_abs(cnum1) > f2c_abs(cden))
+    else if(f2c_abs(cnum1) > f2c_abs(cden))
     {
         /* Pre-multiply X by BIGNUM if CDEN is small compared to CNUM. */
         mul = bignum;
@@ -147,7 +158,7 @@ L10:
     }
     /* Scale the vector X by MUL */
     sscal_(n, &mul, &sx[1], incx);
-    if (! done)
+    if(!done)
     {
         goto L10;
     }

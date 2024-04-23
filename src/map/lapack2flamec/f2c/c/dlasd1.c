@@ -1,21 +1,31 @@
-/* ../netlib/dlasd1.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlasd1.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__0 = 0;
 static doublereal c_b7 = 1.;
 static integer c__1 = 1;
 static integer c_n1 = -1;
-/* > \brief \b DLASD1 computes the SVD of an upper bidiagonal matrix B of the specified size. Used by sbdsdc. */
+/* > \brief \b DLASD1 computes the SVD of an upper bidiagonal matrix B of the specified size. Used
+ * by sbdsdc. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLASD1 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasd1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasd1.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasd1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasd1.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasd1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasd1.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -198,20 +208,35 @@ VT(NL+2:M, NL+2:M)**T contains */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlasd1_(integer *nl, integer *nr, integer *sqre, doublereal *d__, doublereal *alpha, doublereal *beta, doublereal *u, integer *ldu, doublereal *vt, integer *ldvt, integer *idxq, integer * iwork, doublereal *work, integer *info)
+void dlasd1_(integer *nl, integer *nr, integer *sqre, doublereal *d__, doublereal *alpha,
+             doublereal *beta, doublereal *u, integer *ldu, doublereal *vt, integer *ldvt,
+             integer *idxq, integer *iwork, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlasd1 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS ", ldu %" FLA_IS ", ldvt %" FLA_IS "",*nl, *nr, *sqre, *ldu, *ldvt);
+    AOCL_DTL_SNPRINTF("dlasd1 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS
+                      ", ldu %" FLA_IS ", ldvt %" FLA_IS "",
+                      *nl, *nr, *sqre, *ldu, *ldvt);
     /* System generated locals */
     integer u_dim1, u_offset, vt_dim1, vt_offset, i__1;
     doublereal d__1, d__2;
     /* Local variables */
     integer i__, k, m, n, n1, n2, iq, iz, iu2, ldq, idx, ldu2, ivt2, idxc, idxp, ldvt2;
     extern /* Subroutine */
-    void dlasd2_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *, integer *, integer *, integer *), dlasd3_( integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *);
+        void
+        dlasd2_(integer *, integer *, integer *, integer *, doublereal *, doublereal *,
+                doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+                doublereal *, doublereal *, integer *, doublereal *, integer *, integer *,
+                integer *, integer *, integer *, integer *, integer *),
+        dlasd3_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *,
+                doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+                integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *),
+        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *),
+        dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *);
     integer isigma;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal orgnrm;
     integer coltyp;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -246,19 +271,19 @@ void dlasd1_(integer *nl, integer *nr, integer *sqre, doublereal *d__, doublerea
     --work;
     /* Function Body */
     *info = 0;
-    if (*nl < 1)
+    if(*nl < 1)
     {
         *info = -1;
     }
-    else if (*nr < 1)
+    else if(*nr < 1)
     {
         *info = -2;
     }
-    else if (*sqre < 0 || *sqre > 1)
+    else if(*sqre < 0 || *sqre > 1)
     {
         *info = -3;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DLASD1", &i__1, (ftnlen)6);
@@ -285,14 +310,12 @@ void dlasd1_(integer *nl, integer *nr, integer *sqre, doublereal *d__, doublerea
     /* Computing MAX */
     d__1 = f2c_dabs(*alpha);
     d__2 = f2c_dabs(*beta); // , expr subst
-    orgnrm = fla_max(d__1,d__2);
+    orgnrm = fla_max(d__1, d__2);
     d__[*nl + 1] = 0.;
     i__1 = n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((d__1 = d__[i__], f2c_dabs(d__1)) > orgnrm)
+        if((d__1 = d__[i__], f2c_dabs(d__1)) > orgnrm)
         {
             orgnrm = (d__1 = d__[i__], f2c_dabs(d__1));
         }
@@ -302,11 +325,15 @@ void dlasd1_(integer *nl, integer *nr, integer *sqre, doublereal *d__, doublerea
     *alpha /= orgnrm;
     *beta /= orgnrm;
     /* Deflate singular values. */
-    dlasd2_(nl, nr, sqre, &k, &d__[1], &work[iz], alpha, beta, &u[u_offset], ldu, &vt[vt_offset], ldvt, &work[isigma], &work[iu2], &ldu2, & work[ivt2], &ldvt2, &iwork[idxp], &iwork[idx], &iwork[idxc], & idxq[1], &iwork[coltyp], info);
+    dlasd2_(nl, nr, sqre, &k, &d__[1], &work[iz], alpha, beta, &u[u_offset], ldu, &vt[vt_offset],
+            ldvt, &work[isigma], &work[iu2], &ldu2, &work[ivt2], &ldvt2, &iwork[idxp], &iwork[idx],
+            &iwork[idxc], &idxq[1], &iwork[coltyp], info);
     /* Solve Secular Equation and update singular vectors. */
     ldq = k;
-    dlasd3_(nl, nr, sqre, &k, &d__[1], &work[iq], &ldq, &work[isigma], &u[ u_offset], ldu, &work[iu2], &ldu2, &vt[vt_offset], ldvt, &work[ ivt2], &ldvt2, &iwork[idxc], &iwork[coltyp], &work[iz], info);
-    if (*info != 0)
+    dlasd3_(nl, nr, sqre, &k, &d__[1], &work[iq], &ldq, &work[isigma], &u[u_offset], ldu,
+            &work[iu2], &ldu2, &vt[vt_offset], ldvt, &work[ivt2], &ldvt2, &iwork[idxc],
+            &iwork[coltyp], &work[iz], info);
+    if(*info != 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;

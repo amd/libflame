@@ -1,5 +1,8 @@
-/* ../netlib/cptcon.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cptcon.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b CPTCON */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CPTCON + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cptcon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cptcon.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cptcon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cptcon.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cptcon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cptcon.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -107,15 +116,16 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cptcon_(integer *n, real *d__, complex *e, real *anorm, real *rcond, real *rwork, integer *info)
+void cptcon_(integer *n, real *d__, complex *e, real *anorm, real *rcond, real *rwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cptcon inputs: n %lld",*n);
+    snprintf(buffer, 256, "cptcon inputs: n %lld", *n);
 #else
-    snprintf(buffer, 256,"cptcon inputs: n %d",*n);
+    snprintf(buffer, 256, "cptcon inputs: n %d", *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -127,7 +137,8 @@ void cptcon_(integer *n, real *d__, complex *e, real *anorm, real *rcond, real *
     /* Local variables */
     integer i__, ix;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real ainvnm;
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -157,15 +168,15 @@ void cptcon_(integer *n, real *d__, complex *e, real *anorm, real *rcond, real *
     --d__;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    else if (*anorm < 0.f)
+    else if(*anorm < 0.f)
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CPTCON", &i__1, (ftnlen)6);
@@ -174,24 +185,22 @@ void cptcon_(integer *n, real *d__, complex *e, real *anorm, real *rcond, real *
     }
     /* Quick return if possible */
     *rcond = 0.f;
-    if (*n == 0)
+    if(*n == 0)
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    else if (*anorm == 0.f)
+    else if(*anorm == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Check that D(1:N) is positive. */
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (d__[i__] <= 0.f)
+        if(d__[i__] <= 0.f)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;
@@ -205,18 +214,14 @@ void cptcon_(integer *n, real *d__, complex *e, real *anorm, real *rcond, real *
     /* Solve M(L) * x = e. */
     rwork[1] = 1.f;
     i__1 = *n;
-    for (i__ = 2;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 2; i__ <= i__1; ++i__)
     {
         rwork[i__] = rwork[i__ - 1] * c_abs(&e[i__ - 1]) + 1.f;
         /* L20: */
     }
     /* Solve D * M(L)**H * x = b. */
     rwork[*n] /= d__[*n];
-    for (i__ = *n - 1;
-            i__ >= 1;
-            --i__)
+    for(i__ = *n - 1; i__ >= 1; --i__)
     {
         rwork[i__] = rwork[i__] / d__[i__] + rwork[i__ + 1] * c_abs(&e[i__]);
         /* L30: */
@@ -225,7 +230,7 @@ void cptcon_(integer *n, real *d__, complex *e, real *anorm, real *rcond, real *
     ix = isamax_(n, &rwork[1], &c__1);
     ainvnm = (r__1 = rwork[ix], f2c_abs(r__1));
     /* Compute the reciprocal condition number. */
-    if (ainvnm != 0.f)
+    if(ainvnm != 0.f)
     {
         *rcond = 1.f / ainvnm / *anorm;
     }

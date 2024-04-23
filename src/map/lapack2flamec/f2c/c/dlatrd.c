@@ -1,21 +1,31 @@
-/* ../netlib/dlatrd.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlatrd.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b5 = -1.;
 static doublereal c_b6 = 1.;
 static integer c__1 = 1;
 static doublereal c_b16 = 0.;
-/* > \brief \b DLATRD reduces the first nb rows and columns of a symmetric/Hermitian matrix A to real tridiago nal form by an orthogonal similarity transformation. */
+/* > \brief \b DLATRD reduces the first nb rows and columns of a symmetric/Hermitian matrix A to
+ * real tridiago nal form by an orthogonal similarity transformation. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLATRD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlatrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlatrd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlatrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlatrd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlatrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlatrd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -40,7 +50,7 @@ static doublereal c_b16 = 0.;
 /* > */
 /* > If UPLO = 'U', DLATRD reduces the last NB rows and columns of a */
 /* > matrix, of which the upper triangle is supplied;
-*/
+ */
 /* > if UPLO = 'L', DLATRD reduces the first NB rows and columns of a */
 /* > matrix, of which the lower triangle is supplied. */
 /* > */
@@ -86,7 +96,7 @@ static doublereal c_b16 = 0.;
 the elements above the diagonal */
 /* > with the array TAU, represent the orthogonal matrix Q as a */
 /* > product of elementary reflectors;
-*/
+ */
 /* > if UPLO = 'L', the first NB columns have been reduced to */
 /* > tridiagonal form, with the diagonal elements overwriting */
 /* > the diagonal elements of A;
@@ -107,7 +117,7 @@ the elements below the diagonal */
 /* > E is DOUBLE PRECISION array, dimension (N-1) */
 /* > If UPLO = 'U', E(n-nb:n-1) contains the superdiagonal */
 /* > elements of the last NB columns of the reduced matrix;
-*/
+ */
 /* > if UPLO = 'L', E(1:nb) contains the subdiagonal elements of */
 /* > the first NB columns of the reduced matrix. */
 /* > \endverbatim */
@@ -196,10 +206,13 @@ v(i+1:n) is stored on exit in A(i+1:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlatrd_(char *uplo, integer *n, integer *nb, doublereal * a, integer *lda, doublereal *e, doublereal *tau, doublereal *w, integer *ldw)
+void dlatrd_(char *uplo, integer *n, integer *nb, doublereal *a, integer *lda, doublereal *e,
+             doublereal *tau, doublereal *w, integer *ldw)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlatrd inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldw %" FLA_IS "",*uplo, *n, *nb, *lda, *ldw);
+    AOCL_DTL_SNPRINTF("dlatrd inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS
+                      ", ldw %" FLA_IS "",
+                      *uplo, *n, *nb, *lda, *ldw);
     /* System generated locals */
     integer a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3;
     /* Local variables */
@@ -207,10 +220,17 @@ void dlatrd_(char *uplo, integer *n, integer *nb, doublereal * a, integer *lda, 
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal alpha;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsymv_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+        void
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *),
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *),
+        dsymv_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+               doublereal *, doublereal *, integer *),
+        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -242,58 +262,65 @@ void dlatrd_(char *uplo, integer *n, integer *nb, doublereal * a, integer *lda, 
     w_offset = 1 + w_dim1;
     w -= w_offset;
     /* Function Body */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (lsame_(uplo, "U", 1, 1))
+    if(lsame_(uplo, "U", 1, 1))
     {
         /* Reduce last NB columns of upper triangle */
         i__1 = *n - *nb + 1;
-        for (i__ = *n;
-                i__ >= i__1;
-                --i__)
+        for(i__ = *n; i__ >= i__1; --i__)
         {
             iw = i__ - *n + *nb;
-            if (i__ < *n)
+            if(i__ < *n)
             {
                 /* Update A(1:i,i) */
                 i__2 = *n - i__;
-                dgemv_("No transpose", &i__, &i__2, &c_b5, &a[(i__ + 1) * a_dim1 + 1], lda, &w[i__ + (iw + 1) * w_dim1], ldw, & c_b6, &a[i__ * a_dim1 + 1], &c__1);
+                dgemv_("No transpose", &i__, &i__2, &c_b5, &a[(i__ + 1) * a_dim1 + 1], lda,
+                       &w[i__ + (iw + 1) * w_dim1], ldw, &c_b6, &a[i__ * a_dim1 + 1], &c__1);
                 i__2 = *n - i__;
-                dgemv_("No transpose", &i__, &i__2, &c_b5, &w[(iw + 1) * w_dim1 + 1], ldw, &a[i__ + (i__ + 1) * a_dim1], lda, & c_b6, &a[i__ * a_dim1 + 1], &c__1);
+                dgemv_("No transpose", &i__, &i__2, &c_b5, &w[(iw + 1) * w_dim1 + 1], ldw,
+                       &a[i__ + (i__ + 1) * a_dim1], lda, &c_b6, &a[i__ * a_dim1 + 1], &c__1);
             }
-            if (i__ > 1)
+            if(i__ > 1)
             {
                 /* Generate elementary reflector H(i) to annihilate */
                 /* A(1:i-2,i) */
                 i__2 = i__ - 1;
-                dlarfg_(&i__2, &a[i__ - 1 + i__ * a_dim1], &a[i__ * a_dim1 + 1], &c__1, &tau[i__ - 1]);
+                dlarfg_(&i__2, &a[i__ - 1 + i__ * a_dim1], &a[i__ * a_dim1 + 1], &c__1,
+                        &tau[i__ - 1]);
                 e[i__ - 1] = a[i__ - 1 + i__ * a_dim1];
                 a[i__ - 1 + i__ * a_dim1] = 1.;
                 /* Compute W(1:i-1,i) */
                 i__2 = i__ - 1;
-                dsymv_("Upper", &i__2, &c_b6, &a[a_offset], lda, &a[i__ * a_dim1 + 1], &c__1, &c_b16, &w[iw * w_dim1 + 1], & c__1);
-                if (i__ < *n)
+                dsymv_("Upper", &i__2, &c_b6, &a[a_offset], lda, &a[i__ * a_dim1 + 1], &c__1,
+                       &c_b16, &w[iw * w_dim1 + 1], &c__1);
+                if(i__ < *n)
                 {
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
-                    dgemv_("Transpose", &i__2, &i__3, &c_b6, &w[(iw + 1) * w_dim1 + 1], ldw, &a[i__ * a_dim1 + 1], &c__1, & c_b16, &w[i__ + 1 + iw * w_dim1], &c__1);
+                    dgemv_("Transpose", &i__2, &i__3, &c_b6, &w[(iw + 1) * w_dim1 + 1], ldw,
+                           &a[i__ * a_dim1 + 1], &c__1, &c_b16, &w[i__ + 1 + iw * w_dim1], &c__1);
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
-                    dgemv_("No transpose", &i__2, &i__3, &c_b5, &a[(i__ + 1) * a_dim1 + 1], lda, &w[i__ + 1 + iw * w_dim1], & c__1, &c_b6, &w[iw * w_dim1 + 1], &c__1);
+                    dgemv_("No transpose", &i__2, &i__3, &c_b5, &a[(i__ + 1) * a_dim1 + 1], lda,
+                           &w[i__ + 1 + iw * w_dim1], &c__1, &c_b6, &w[iw * w_dim1 + 1], &c__1);
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
-                    dgemv_("Transpose", &i__2, &i__3, &c_b6, &a[(i__ + 1) * a_dim1 + 1], lda, &a[i__ * a_dim1 + 1], &c__1, & c_b16, &w[i__ + 1 + iw * w_dim1], &c__1);
+                    dgemv_("Transpose", &i__2, &i__3, &c_b6, &a[(i__ + 1) * a_dim1 + 1], lda,
+                           &a[i__ * a_dim1 + 1], &c__1, &c_b16, &w[i__ + 1 + iw * w_dim1], &c__1);
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
-                    dgemv_("No transpose", &i__2, &i__3, &c_b5, &w[(iw + 1) * w_dim1 + 1], ldw, &w[i__ + 1 + iw * w_dim1], & c__1, &c_b6, &w[iw * w_dim1 + 1], &c__1);
+                    dgemv_("No transpose", &i__2, &i__3, &c_b5, &w[(iw + 1) * w_dim1 + 1], ldw,
+                           &w[i__ + 1 + iw * w_dim1], &c__1, &c_b6, &w[iw * w_dim1 + 1], &c__1);
                 }
                 i__2 = i__ - 1;
                 dscal_(&i__2, &tau[i__ - 1], &w[iw * w_dim1 + 1], &c__1);
                 i__2 = i__ - 1;
-                alpha = tau[i__ - 1] * -.5 * ddot_(&i__2, &w[iw * w_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
+                alpha = tau[i__ - 1] * -.5
+                        * ddot_(&i__2, &w[iw * w_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
                 i__2 = i__ - 1;
                 daxpy_(&i__2, &alpha, &a[i__ * a_dim1 + 1], &c__1, &w[iw * w_dim1 + 1], &c__1);
             }
@@ -304,48 +331,58 @@ void dlatrd_(char *uplo, integer *n, integer *nb, doublereal * a, integer *lda, 
     {
         /* Reduce first NB columns of lower triangle */
         i__1 = *nb;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* Update A(i:n,i) */
             i__2 = *n - i__ + 1;
             i__3 = i__ - 1;
-            dgemv_("No transpose", &i__2, &i__3, &c_b5, &a[i__ + a_dim1], lda, &w[i__ + w_dim1], ldw, &c_b6, &a[i__ + i__ * a_dim1], & c__1);
+            dgemv_("No transpose", &i__2, &i__3, &c_b5, &a[i__ + a_dim1], lda, &w[i__ + w_dim1],
+                   ldw, &c_b6, &a[i__ + i__ * a_dim1], &c__1);
             i__2 = *n - i__ + 1;
             i__3 = i__ - 1;
-            dgemv_("No transpose", &i__2, &i__3, &c_b5, &w[i__ + w_dim1], ldw, &a[i__ + a_dim1], lda, &c_b6, &a[i__ + i__ * a_dim1], & c__1);
-            if (i__ < *n)
+            dgemv_("No transpose", &i__2, &i__3, &c_b5, &w[i__ + w_dim1], ldw, &a[i__ + a_dim1],
+                   lda, &c_b6, &a[i__ + i__ * a_dim1], &c__1);
+            if(i__ < *n)
             {
                 /* Generate elementary reflector H(i) to annihilate */
                 /* A(i+2:n,i) */
                 i__2 = *n - i__;
                 /* Computing MIN */
                 i__3 = i__ + 2;
-                dlarfg_(&i__2, &a[i__ + 1 + i__ * a_dim1], &a[fla_min(i__3,*n) + i__ * a_dim1], &c__1, &tau[i__]);
+                dlarfg_(&i__2, &a[i__ + 1 + i__ * a_dim1], &a[fla_min(i__3, *n) + i__ * a_dim1],
+                        &c__1, &tau[i__]);
                 e[i__] = a[i__ + 1 + i__ * a_dim1];
                 a[i__ + 1 + i__ * a_dim1] = 1.;
                 /* Compute W(i+1:n,i) */
                 i__2 = *n - i__;
-                dsymv_("Lower", &i__2, &c_b6, &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &w[ i__ + 1 + i__ * w_dim1], &c__1);
+                dsymv_("Lower", &i__2, &c_b6, &a[i__ + 1 + (i__ + 1) * a_dim1], lda,
+                       &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &w[i__ + 1 + i__ * w_dim1],
+                       &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
-                dgemv_("Transpose", &i__2, &i__3, &c_b6, &w[i__ + 1 + w_dim1], ldw, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &w[ i__ * w_dim1 + 1], &c__1);
+                dgemv_("Transpose", &i__2, &i__3, &c_b6, &w[i__ + 1 + w_dim1], ldw,
+                       &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &w[i__ * w_dim1 + 1], &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
-                dgemv_("No transpose", &i__2, &i__3, &c_b5, &a[i__ + 1 + a_dim1], lda, &w[i__ * w_dim1 + 1], &c__1, &c_b6, &w[ i__ + 1 + i__ * w_dim1], &c__1);
+                dgemv_("No transpose", &i__2, &i__3, &c_b5, &a[i__ + 1 + a_dim1], lda,
+                       &w[i__ * w_dim1 + 1], &c__1, &c_b6, &w[i__ + 1 + i__ * w_dim1], &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
-                dgemv_("Transpose", &i__2, &i__3, &c_b6, &a[i__ + 1 + a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &w[ i__ * w_dim1 + 1], &c__1);
+                dgemv_("Transpose", &i__2, &i__3, &c_b6, &a[i__ + 1 + a_dim1], lda,
+                       &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &w[i__ * w_dim1 + 1], &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
-                dgemv_("No transpose", &i__2, &i__3, &c_b5, &w[i__ + 1 + w_dim1], ldw, &w[i__ * w_dim1 + 1], &c__1, &c_b6, &w[ i__ + 1 + i__ * w_dim1], &c__1);
+                dgemv_("No transpose", &i__2, &i__3, &c_b5, &w[i__ + 1 + w_dim1], ldw,
+                       &w[i__ * w_dim1 + 1], &c__1, &c_b6, &w[i__ + 1 + i__ * w_dim1], &c__1);
                 i__2 = *n - i__;
                 dscal_(&i__2, &tau[i__], &w[i__ + 1 + i__ * w_dim1], &c__1);
                 i__2 = *n - i__;
-                alpha = tau[i__] * -.5 * ddot_(&i__2, &w[i__ + 1 + i__ * w_dim1], &c__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
+                alpha = tau[i__] * -.5
+                        * ddot_(&i__2, &w[i__ + 1 + i__ * w_dim1], &c__1,
+                                &a[i__ + 1 + i__ * a_dim1], &c__1);
                 i__2 = *n - i__;
-                daxpy_(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1, &w[ i__ + 1 + i__ * w_dim1], &c__1);
+                daxpy_(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1, &w[i__ + 1 + i__ * w_dim1],
+                       &c__1);
             }
             /* L20: */
         }

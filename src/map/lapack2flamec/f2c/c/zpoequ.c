@@ -1,16 +1,25 @@
-/* ../netlib/zpoequ.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zpoequ.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZPOEQU */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZPOEQU + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpoequ. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpoequ.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zpoequ. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zpoequ.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpoequ. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpoequ.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -99,10 +108,11 @@
 /* > \ingroup complex16POcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zpoequ_(integer *n, doublecomplex *a, integer *lda, doublereal *s, doublereal *scond, doublereal *amax, integer *info)
+void zpoequ_(integer *n, doublecomplex *a, integer *lda, doublereal *s, doublereal *scond,
+             doublereal *amax, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zpoequ inputs: n %" FLA_IS ", lda %" FLA_IS "",*n, *lda);
+    AOCL_DTL_SNPRINTF("zpoequ inputs: n %" FLA_IS ", lda %" FLA_IS "", *n, *lda);
 
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -113,7 +123,8 @@ void zpoequ_(integer *n, doublecomplex *a, integer *lda, doublereal *s, doublere
     integer i__;
     doublereal smin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -140,15 +151,15 @@ void zpoequ_(integer *n, doublecomplex *a, integer *lda, doublereal *s, doublere
     --s;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -3;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZPOEQU", &i__1, (ftnlen)6);
@@ -156,7 +167,7 @@ void zpoequ_(integer *n, doublecomplex *a, integer *lda, doublereal *s, doublere
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         *scond = 1.;
         *amax = 0.;
@@ -169,31 +180,27 @@ void zpoequ_(integer *n, doublecomplex *a, integer *lda, doublereal *s, doublere
     smin = s[1];
     *amax = s[1];
     i__1 = *n;
-    for (i__ = 2;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 2; i__ <= i__1; ++i__)
     {
         i__2 = i__ + i__ * a_dim1;
         s[i__] = a[i__2].r;
         /* Computing MIN */
         d__1 = smin;
         d__2 = s[i__]; // , expr subst
-        smin = fla_min(d__1,d__2);
+        smin = fla_min(d__1, d__2);
         /* Computing MAX */
         d__1 = *amax;
         d__2 = s[i__]; // , expr subst
-        *amax = fla_max(d__1,d__2);
+        *amax = fla_max(d__1, d__2);
         /* L10: */
     }
-    if (smin <= 0.)
+    if(smin <= 0.)
     {
         /* Find the first non-positive diagonal element and return. */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if (s[i__] <= 0.)
+            if(s[i__] <= 0.)
             {
                 *info = i__;
                 AOCL_DTL_TRACE_LOG_EXIT
@@ -207,9 +214,7 @@ void zpoequ_(integer *n, doublecomplex *a, integer *lda, doublereal *s, doublere
         /* Set the scale factors to the reciprocals */
         /* of the diagonal elements. */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             s[i__] = 1. / sqrt(s[i__]);
             /* L30: */

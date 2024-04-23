@@ -1,18 +1,28 @@
-/* ../netlib/sspsvx.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sspsvx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief <b> SSPSVX computes the solution to system of linear equations A * X = B for OTHER matrices</b> */
+/* > \brief <b> SSPSVX computes the solution to system of linear equations A * X = B for OTHER
+ * matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SSPSVX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sspsvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sspsvx.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sspsvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sspsvx.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sspsvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sspsvx.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -86,7 +96,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -111,7 +121,7 @@ static integer c__1 = 1;
 /* > columnwise in a linear array. The j-th column of A is stored */
 /* > in the array AP as follows: */
 /* > if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AP(i + (j-1)*(2*n-j)/2) = A(i,j) for j<=i<=n. */
 /* > See below for further details. */
 /* > \endverbatim */
@@ -265,12 +275,17 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real *afp, integer *ipiv, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork, integer *info)
+void sspsvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *ap, real *afp, integer *ipiv,
+             real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *ferr, real *berr,
+             real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sspsvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *uplo, *n, *nrhs, *ldb, *ldx);
+    snprintf(buffer, 256,
+             "sspsvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS
+             ", ldx %" FLA_IS "",
+             *fact, *uplo, *n, *nrhs, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -279,14 +294,22 @@ void sspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real 
     extern logical lsame_(char *, char *, integer, integer);
     real anorm;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slacpy_( char *, integer *, integer *, real *, integer *, real *, integer * );
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     extern real slansp_(char *, char *, integer *, real *, real *);
     extern /* Subroutine */
-    void sspcon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), ssprfs_( char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), ssptrf_(char *, integer *, real *, integer *, integer *), ssptrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
+        void
+        sspcon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *),
+        ssprfs_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+                integer *, real *, real *, real *, integer *, integer *),
+        ssptrf_(char *, integer *, real *, integer *, integer *),
+        ssptrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -325,45 +348,45 @@ void sspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real 
     /* Function Body */
     *info = 0;
     nofact = lsame_(fact, "N", 1, 1);
-    if (! nofact && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    else if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -4;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -11;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SSPSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (nofact)
+    if(nofact)
     {
         /* Compute the factorization A = U*D*U**T or A = L*D*L**T. */
         i__1 = *n * (*n + 1) / 2;
         scopy_(&i__1, &ap[1], &c__1, &afp[1], &c__1);
         ssptrf_(uplo, n, &afp[1], &ipiv[1], info);
         /* Return if INFO is non-zero. */
-        if (*info > 0)
+        if(*info > 0)
         {
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -379,9 +402,10 @@ void sspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real 
     ssptrs_(uplo, n, nrhs, &afp[1], &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solutions and */
     /* compute error bounds and backward error estimates for them. */
-    ssprfs_(uplo, n, nrhs, &ap[1], &afp[1], &ipiv[1], &b[b_offset], ldb, &x[ x_offset], ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
+    ssprfs_(uplo, n, nrhs, &ap[1], &afp[1], &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx,
+            &ferr[1], &berr[1], &work[1], &iwork[1], info);
     /* Set INFO = N+1 if the matrix is singular to working precision. */
-    if (*rcond < slamch_("Epsilon"))
+    if(*rcond < slamch_("Epsilon"))
     {
         *info = *n + 1;
     }

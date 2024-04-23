@@ -8,8 +8,6 @@
 
 */
 
-
-
 #ifndef FLA_LAPACK2FLAME_UTIL_DEFS_H
 #define FLA_LAPACK2FLAME_UTIL_DEFS_H
 
@@ -29,25 +27,25 @@ typedef real          lapack_creal;
 typedef doublereal    lapack_zreal;
 */
 
-typedef float    lapack_stype;
-typedef double   lapack_dtype;
+typedef float lapack_stype;
+typedef double lapack_dtype;
 typedef scomplex lapack_ctype;
 typedef dcomplex lapack_ztype;
 
-typedef float    lapack_sreal;
-typedef double   lapack_dreal;
-typedef float    lapack_creal;
-typedef double   lapack_zreal;
+typedef float lapack_sreal;
+typedef double lapack_dreal;
+typedef float lapack_creal;
+typedef double lapack_zreal;
 
 #define LAPACK_strans "T"
 #define LAPACK_dtrans "T"
 #define LAPACK_ctrans "C"
 #define LAPACK_ztrans "C"
 
-#define PREFIX2LAPACK_TRANS(prefix) LAPACK_ ## prefix ## trans
+#define PREFIX2LAPACK_TRANS(prefix) LAPACK_##prefix##trans
 
-#define PREFIX2LAPACK_TYPEDEF(prefix) lapack_ ## prefix ## type
-#define PREFIX2LAPACK_REALDEF(prefix) lapack_ ## prefix ## real
+#define PREFIX2LAPACK_TYPEDEF(prefix) lapack_##prefix##type
+#define PREFIX2LAPACK_REALDEF(prefix) lapack_##prefix##real
 
 #define FLAME_stype FLA_FLOAT
 #define FLAME_dtype FLA_DOUBLE
@@ -59,31 +57,30 @@ typedef double   lapack_zreal;
 #define FLAME_crealtype FLA_FLOAT
 #define FLAME_zrealtype FLA_DOUBLE
 
-#define PREFIX2FLAME_DATATYPE(prefix) FLAME_ ## prefix ## type
-#define PREFIX2FLAME_REALTYPE(prefix) FLAME_ ## prefix ## realtype
+#define PREFIX2FLAME_DATATYPE(prefix) FLAME_##prefix##type
+#define PREFIX2FLAME_REALTYPE(prefix) FLAME_##prefix##realtype
 
 #define s_IS_COMPLEX 0
 #define d_IS_COMPLEX 0
 #define c_IS_COMPLEX 1
 #define z_IS_COMPLEX 1
 
-#define IS_COMPLEX_PREFIX(prefix)  prefix ## _IS_COMPLEX
+#define IS_COMPLEX_PREFIX(prefix) prefix##_IS_COMPLEX
 
-#define FLAME_is_szero( val ) (*val == 0.f)
-#define FLAME_is_dzero( val ) (*val == 0.0)
-#define FLAME_is_czero( val ) (val->real == 0.f && val->imag == 0.f)
-#define FLAME_is_zzero( val ) (val->real == 0.0 && val->imag == 0.0)
+#define FLAME_is_szero(val) (*val == 0.f)
+#define FLAME_is_dzero(val) (*val == 0.0)
+#define FLAME_is_czero(val) (val->real == 0.f && val->imag == 0.f)
+#define FLAME_is_zzero(val) (val->real == 0.0 && val->imag == 0.0)
 
-#define PREFIX2FLAME_IS_ZERO(prefix, val) FLAME_is_ ## prefix ## zero(val)
+#define PREFIX2FLAME_IS_ZERO(prefix, val) FLAME_is_##prefix##zero(val)
 
-extern int FLAME_invert_stau( FLA_Obj t );
-extern int FLAME_invert_dtau( FLA_Obj t );
-extern int FLAME_invert_ctau( FLA_Obj t );
-extern int FLAME_invert_ztau( FLA_Obj t );
+extern int FLAME_invert_stau(FLA_Obj t);
+extern int FLAME_invert_dtau(FLA_Obj t);
+extern int FLAME_invert_ctau(FLA_Obj t);
+extern int FLAME_invert_ztau(FLA_Obj t);
 
-#define PREFIX2FLAME_INVERT_TAU(prefix, val) FLAME_invert_ ## prefix ## tau(val)
+#define PREFIX2FLAME_INVERT_TAU(prefix, val) FLAME_invert_##prefix##tau(val)
 
-extern int FLAME_QR_piv_preorder( FLA_Obj A, integer *jpiv_lapack, integer *jpiv_fla );
-
+extern int FLAME_QR_piv_preorder(FLA_Obj A, integer *jpiv_lapack, integer *jpiv_fla);
 
 #endif

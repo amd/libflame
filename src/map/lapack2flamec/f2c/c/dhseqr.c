@@ -1,5 +1,8 @@
-/* dhseqr.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dhseqr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b11 = 0.;
 static doublereal c_b12 = 1.;
@@ -11,11 +14,17 @@ static integer c__49 = 49;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DHSEQR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dhseqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dhseqr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dhseqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dhseqr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dhseqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dhseqr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -51,7 +60,7 @@ static integer c__49 = 49;
 /* > \verbatim */
 /* > JOB is CHARACTER*1 */
 /* > = 'E': compute eigenvalues only;
-*/
+ */
 /* > = 'S': compute eigenvalues and the Schur form T. */
 /* > \endverbatim */
 /* > */
@@ -59,10 +68,10 @@ static integer c__49 = 49;
 /* > \verbatim */
 /* > COMPZ is CHARACTER*1 */
 /* > = 'N': no Schur vectors are computed;
-*/
+ */
 /* > = 'I': Z is initialized to the unit matrix and the matrix Z */
 /* > of Schur vectors of H is returned;
-*/
+ */
 /* > = 'V': Z must contain an orthogonal matrix Q on entry, and */
 /* > the product Q*Z is returned. */
 /* > \endverbatim */
@@ -306,10 +315,14 @@ static integer c__49 = 49;
 /* > of Matrix Analysis, volume 23, pages 948--973, 2002. */
 /* ===================================================================== */
 /* Subroutine */
-void dhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *h__, integer *ldh, doublereal *wr, doublereal *wi, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info)
+void dhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *h__,
+             integer *ldh, doublereal *wr, doublereal *wi, doublereal *z__, integer *ldz,
+             doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dhseqr inputs: job %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS "",*job, *compz, *n, *ilo, *ihi, *ldh, *ldz, *lwork);
+    AOCL_DTL_SNPRINTF("dhseqr inputs: job %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS
+                      ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS "",
+                      *job, *compz, *n, *ilo, *ihi, *ldh, *ldz, *lwork);
     /* System generated locals */
     integer h_dim1, h_offset, z_dim1, z_offset, i__1, i__3;
     doublereal d__1;
@@ -320,17 +333,26 @@ void dhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, dou
     /* Local variables */
     integer i__;
     doublereal hl[2401] /* was [49][49] */
-    ;
+        ;
     integer kbot, nmin;
     extern logical lsame_(char *, char *, integer, integer);
     logical initz;
     doublereal workl[49];
     logical wantt, wantz;
     extern /* Subroutine */
-    void dlaqr0_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dlahqr_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+        void
+        dlaqr0_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, doublereal *, integer *, integer *, doublereal *, integer *,
+                doublereal *, integer *, integer *),
+        dlahqr_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, doublereal *, integer *, integer *, doublereal *, integer *,
+                integer *),
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -377,42 +399,42 @@ void dhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, dou
     wantt = lsame_(job, "S", 1, 1);
     initz = lsame_(compz, "I", 1, 1);
     wantz = initz || lsame_(compz, "V", 1, 1);
-    work[1] = (doublereal) fla_max(1,*n);
+    work[1] = (doublereal)fla_max(1, *n);
     lquery = *lwork == -1;
     *info = 0;
-    if (! lsame_(job, "E", 1, 1) && ! wantt)
+    if(!lsame_(job, "E", 1, 1) && !wantt)
     {
         *info = -1;
     }
-    else if (! lsame_(compz, "N", 1, 1) && ! wantz)
+    else if(!lsame_(compz, "N", 1, 1) && !wantz)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*ilo < 1 || *ilo > fla_max(1,*n))
+    else if(*ilo < 1 || *ilo > fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*ihi < fla_min(*ilo,*n) || *ihi > *n)
+    else if(*ihi < fla_min(*ilo, *n) || *ihi > *n)
     {
         *info = -5;
     }
-    else if (*ldh < fla_max(1,*n))
+    else if(*ldh < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldz < 1 || wantz && *ldz < fla_max(1,*n))
+    else if(*ldz < 1 || wantz && *ldz < fla_max(1, *n))
     {
         *info = -11;
     }
-    else if (*lwork < fla_max(1,*n) && ! lquery)
+    else if(*lwork < fla_max(1, *n) && !lquery)
     {
         *info = -13;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         /* ==== Quick return in case of invalid argument. ==== */
         i__1 = -(*info);
@@ -420,22 +442,23 @@ void dhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, dou
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (*n == 0)
+    else if(*n == 0)
     {
         /* ==== Quick return in case N = 0;
         nothing to do. ==== */
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         /* ==== Quick return in case of a workspace query ==== */
-        dlaqr0_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[ 1], ilo, ihi, &z__[z_offset], ldz, &work[1], lwork, info);
+        dlaqr0_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[1], ilo, ihi,
+                &z__[z_offset], ldz, &work[1], lwork, info);
         /* ==== Ensure reported workspace size is backward-compatible with */
         /* . previous LAPACK versions. ==== */
         /* Computing MAX */
-        d__1 = (doublereal) fla_max(1,*n);
-        work[1] = fla_max(d__1,work[1]);
+        d__1 = (doublereal)fla_max(1, *n);
+        work[1] = fla_max(d__1, work[1]);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -443,30 +466,26 @@ void dhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, dou
     {
         /* ==== copy eigenvalues isolated by DGEBAL ==== */
         i__1 = *ilo - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             wr[i__] = h__[i__ + i__ * h_dim1];
             wi[i__] = 0.;
             /* L10: */
         }
         i__1 = *n;
-        for (i__ = *ihi + 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = *ihi + 1; i__ <= i__1; ++i__)
         {
             wr[i__] = h__[i__ + i__ * h_dim1];
             wi[i__] = 0.;
             /* L20: */
         }
         /* ==== Initialize Z, if requested ==== */
-        if (initz)
+        if(initz)
         {
-            dlaset_("A", n, n, &c_b11, &c_b12, &z__[z_offset], ldz) ;
+            dlaset_("A", n, n, &c_b11, &c_b12, &z__[z_offset], ldz);
         }
         /* ==== Quick return if possible ==== */
-        if (*ilo == *ihi)
+        if(*ilo == *ihi)
         {
             wr[*ilo] = h__[*ilo + *ilo * h_dim1];
             wi[*ilo] = 0.;
@@ -475,27 +494,30 @@ void dhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, dou
         }
         /* ==== DLAHQR/DLAQR0 crossover point ==== */
         nmin = ilaenv_(&c__12, "DHSEQR", ch__1, n, ilo, ihi, lwork);
-        nmin = fla_max(15,nmin);
+        nmin = fla_max(15, nmin);
         /* ==== DLAQR0 for big matrices;
         DLAHQR for small ones ==== */
-        if (*n > nmin)
+        if(*n > nmin)
         {
-            dlaqr0_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[1], ilo, ihi, &z__[z_offset], ldz, &work[1], lwork, info);
+            dlaqr0_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[1], ilo, ihi,
+                    &z__[z_offset], ldz, &work[1], lwork, info);
         }
         else
         {
             /* ==== Small matrix ==== */
-            dlahqr_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[1], ilo, ihi, &z__[z_offset], ldz, info);
-            if (*info > 0)
+            dlahqr_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[1], ilo, ihi,
+                    &z__[z_offset], ldz, info);
+            if(*info > 0)
             {
                 /* ==== A rare DLAHQR failure! DLAQR0 sometimes succeeds */
                 /* . when DLAHQR fails. ==== */
                 kbot = *info;
-                if (*n >= 49)
+                if(*n >= 49)
                 {
                     /* ==== Larger matrices have enough subdiagonal scratch */
                     /* . space to call DLAQR0 directly. ==== */
-                    dlaqr0_(&wantt, &wantz, n, ilo, &kbot, &h__[h_offset], ldh, &wr[1], &wi[1], ilo, ihi, &z__[z_offset], ldz, &work[1], lwork, info);
+                    dlaqr0_(&wantt, &wantz, n, ilo, &kbot, &h__[h_offset], ldh, &wr[1], &wi[1], ilo,
+                            ihi, &z__[z_offset], ldz, &work[1], lwork, info);
                 }
                 else
                 {
@@ -507,8 +529,9 @@ void dhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, dou
                     hl[*n + 1 + *n * 49 - 50] = 0.;
                     i__1 = 49 - *n;
                     dlaset_("A", &c__49, &i__1, &c_b11, &c_b11, &hl[(*n + 1) * 49 - 49], &c__49);
-                    dlaqr0_(&wantt, &wantz, &c__49, ilo, &kbot, hl, &c__49, & wr[1], &wi[1], ilo, ihi, &z__[z_offset], ldz, workl, &c__49, info);
-                    if (wantt || *info != 0)
+                    dlaqr0_(&wantt, &wantz, &c__49, ilo, &kbot, hl, &c__49, &wr[1], &wi[1], ilo,
+                            ihi, &z__[z_offset], ldz, workl, &c__49, info);
+                    if(wantt || *info != 0)
                     {
                         dlacpy_("A", n, n, hl, &c__49, &h__[h_offset], ldh);
                     }
@@ -516,7 +539,7 @@ void dhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, dou
             }
         }
         /* ==== Clear out the trash, if necessary. ==== */
-        if ((wantt || *info != 0) && *n > 2)
+        if((wantt || *info != 0) && *n > 2)
         {
             i__1 = *n - 2;
             i__3 = *n - 2;
@@ -525,8 +548,8 @@ void dhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, dou
         /* ==== Ensure reported workspace size is backward-compatible with */
         /* . previous LAPACK versions. ==== */
         /* Computing MAX */
-        d__1 = (doublereal) fla_max(1,*n);
-        work[1] = fla_max(d__1,work[1]);
+        d__1 = (doublereal)fla_max(1, *n);
+        work[1] = fla_max(d__1, work[1]);
     }
     /* ==== End of DHSEQR ==== */
     AOCL_DTL_TRACE_LOG_EXIT

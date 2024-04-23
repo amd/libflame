@@ -1,21 +1,31 @@
-/* ../netlib/dlatdf.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlatdf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static doublereal c_b23 = 1.;
 static doublereal c_b37 = -1.;
-/* > \brief \b DLATDF uses the LU factorization of the n-by-n matrix computed by sgetc2 and computes a contrib ution to the reciprocal Dif-estimate. */
+/* > \brief \b DLATDF uses the LU factorization of the n-by-n matrix computed by sgetc2 and computes
+ * a contrib ution to the reciprocal Dif-estimate. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLATDF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlatdf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlatdf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlatdf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlatdf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlatdf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlatdf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -161,10 +171,12 @@ for 1 <= j <= N, column j of the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlatdf_(integer *ijob, integer *n, doublereal *z__, integer *ldz, doublereal *rhs, doublereal *rdsum, doublereal *rdscal, integer *ipiv, integer *jpiv)
+void dlatdf_(integer *ijob, integer *n, doublereal *z__, integer *ldz, doublereal *rhs,
+             doublereal *rdsum, doublereal *rdscal, integer *ipiv, integer *jpiv)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlatdf inputs: ijob %" FLA_IS ", n %" FLA_IS ", ldz %" FLA_IS "",*ijob, *n, *ldz);
+    AOCL_DTL_SNPRINTF("dlatdf inputs: ijob %" FLA_IS ", n %" FLA_IS ", ldz %" FLA_IS "", *ijob, *n,
+                      *ldz);
     /* System generated locals */
     integer z_dim1, z_offset, i__1, i__2;
     doublereal d__1;
@@ -177,16 +189,25 @@ void dlatdf_(integer *ijob, integer *n, doublereal *z__, integer *ldz, doublerea
     integer info;
     doublereal temp, work[32];
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     extern doublereal dasum_(integer *, doublereal *, integer *);
     doublereal pmone;
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     doublereal sminu;
     integer iwork[8];
     doublereal splus;
     extern /* Subroutine */
-    void dgesc2_(integer *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *), dgecon_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *), dlaswp_( integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
+        void
+        dgesc2_(integer *, doublereal *, integer *, doublereal *, integer *, integer *,
+                doublereal *),
+        dgecon_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, integer *, integer *),
+        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *),
+        dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -217,7 +238,7 @@ void dlatdf_(integer *ijob, integer *n, doublereal *z__, integer *ldz, doublerea
     --ipiv;
     --jpiv;
     /* Function Body */
-    if (*ijob != 2)
+    if(*ijob != 2)
     {
         /* Apply permutations IPIV to RHS */
         i__1 = *n - 1;
@@ -225,9 +246,7 @@ void dlatdf_(integer *ijob, integer *n, doublereal *z__, integer *ldz, doublerea
         /* Solve for L-part choosing RHS either to +1 or -1. */
         pmone = -1.;
         i__1 = *n - 1;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             bp = rhs[j] + 1.;
             bm = rhs[j] - 1.;
@@ -239,11 +258,11 @@ void dlatdf_(integer *ijob, integer *n, doublereal *z__, integer *ldz, doublerea
             i__2 = *n - j;
             sminu = ddot_(&i__2, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1], &c__1);
             splus *= rhs[j];
-            if (splus > sminu)
+            if(splus > sminu)
             {
                 rhs[j] = bp;
             }
-            else if (sminu > splus)
+            else if(sminu > splus)
             {
                 rhs[j] = bm;
             }
@@ -273,17 +292,13 @@ void dlatdf_(integer *ijob, integer *n, doublereal *z__, integer *ldz, doublerea
         rhs[*n] += -1.;
         splus = 0.;
         sminu = 0.;
-        for (i__ = *n;
-                i__ >= 1;
-                --i__)
+        for(i__ = *n; i__ >= 1; --i__)
         {
             temp = 1. / z__[i__ + i__ * z_dim1];
             xp[i__ - 1] *= temp;
             rhs[i__] *= temp;
             i__1 = *n;
-            for (k = i__ + 1;
-                    k <= i__1;
-                    ++k)
+            for(k = i__ + 1; k <= i__1; ++k)
             {
                 xp[i__ - 1] -= xp[k - 1] * (z__[i__ + k * z_dim1] * temp);
                 rhs[i__] -= rhs[k] * (z__[i__ + k * z_dim1] * temp);
@@ -293,7 +308,7 @@ void dlatdf_(integer *ijob, integer *n, doublereal *z__, integer *ldz, doublerea
             sminu += (d__1 = rhs[i__], f2c_dabs(d__1));
             /* L30: */
         }
-        if (splus > sminu)
+        if(splus > sminu)
         {
             dcopy_(n, xp, &c__1, &rhs[1], &c__1);
         }
@@ -306,7 +321,7 @@ void dlatdf_(integer *ijob, integer *n, doublereal *z__, integer *ldz, doublerea
     else
     {
         /* IJOB = 2, Compute approximate nullvector XM of Z */
-        dgecon_("I", n, &z__[z_offset], ldz, &c_b23, &temp, work, iwork, & info);
+        dgecon_("I", n, &z__[z_offset], ldz, &c_b23, &temp, work, iwork, &info);
         dcopy_(n, &work[*n], &c__1, xm, &c__1);
         /* Compute RHS */
         i__1 = *n - 1;
@@ -318,7 +333,7 @@ void dlatdf_(integer *ijob, integer *n, doublereal *z__, integer *ldz, doublerea
         daxpy_(n, &c_b37, xm, &c__1, &rhs[1], &c__1);
         dgesc2_(n, &z__[z_offset], ldz, &rhs[1], &ipiv[1], &jpiv[1], &temp);
         dgesc2_(n, &z__[z_offset], ldz, xp, &ipiv[1], &jpiv[1], &temp);
-        if (dasum_(n, xp, &c__1) > dasum_(n, &rhs[1], &c__1))
+        if(dasum_(n, xp, &c__1) > dasum_(n, &rhs[1], &c__1))
         {
             dcopy_(n, xp, &c__1, &rhs[1], &c__1);
         }

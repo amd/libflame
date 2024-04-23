@@ -1,16 +1,25 @@
-/* ../netlib/cla_gerpvgrw.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cla_gerpvgrw.f -- translated by f2c (version 20100827). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CLA_GERPVGRW multiplies a square real matrix by a complex matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLA_GERPVGRW + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cla_ger pvgrw.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cla_ger
+ * pvgrw.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cla_ger pvgrw.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cla_ger
+ * pvgrw.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cla_ger pvgrw.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cla_ger
+ * pvgrw.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -89,9 +98,11 @@ real cla_gerpvgrw_(integer *n, integer *ncols, complex *a, integer *lda, complex
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cla_gerpvgrw inputs: n %lld, ncols %lld, lda %lld, ldaf %lld",*n, *ncols, *lda, *ldaf);
+    snprintf(buffer, 256, "cla_gerpvgrw inputs: n %lld, ncols %lld, lda %lld, ldaf %lld", *n,
+             *ncols, *lda, *ldaf);
 #else
-    snprintf(buffer, 256,"cla_gerpvgrw inputs: n %d, ncols %d, lda %d, ldaf %d",*n, *ncols, *lda, *ldaf);
+    snprintf(buffer, 256, "cla_gerpvgrw inputs: n %d, ncols %d, lda %d, ldaf %d", *n, *ncols, *lda,
+             *ldaf);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -131,37 +142,33 @@ real cla_gerpvgrw_(integer *n, integer *ncols, complex *a, integer *lda, complex
     /* Function Body */
     rpvgrw = 1.f;
     i__1 = *ncols;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         amax = 0.f;
         umax = 0.f;
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             i__3 = i__ + j * a_dim1;
-            r__3 = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
-            amax = fla_max(r__3,amax);
+            r__3 = (r__1 = a[i__3].r, f2c_abs(r__1))
+                   + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
+            amax = fla_max(r__3, amax);
         }
         i__2 = j;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             i__3 = i__ + j * af_dim1;
-            r__3 = (r__1 = af[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&af[i__ + j * af_dim1]), f2c_abs(r__2));
-            umax = fla_max(r__3,umax);
+            r__3 = (r__1 = af[i__3].r, f2c_abs(r__1))
+                   + (r__2 = r_imag(&af[i__ + j * af_dim1]), f2c_abs(r__2));
+            umax = fla_max(r__3, umax);
         }
-        if (umax != 0.f)
+        if(umax != 0.f)
         {
             /* Computing MIN */
             r__1 = amax / umax;
-            rpvgrw = fla_min(r__1,rpvgrw);
+            rpvgrw = fla_min(r__1, rpvgrw);
         }
     }
     ret_val = rpvgrw;

@@ -1,16 +1,25 @@
-/* ../netlib/slagts.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slagts.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLAGTS solves the system of equations (T-λI)x = y or (T-λI)Tx = y,where T is a general tridia gonal matrix and λ a scalar, using the LU factorization computed by slagtf. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAGTS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slagts. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slagts.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slagts. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slagts.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slagts. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slagts.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -147,7 +156,8 @@
 /* > \ingroup auxOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, integer *in, real *y, real *tol, integer *info)
+void slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, integer *in, real *y,
+             real *tol, integer *info)
 {
     /* System generated locals */
     integer i__1;
@@ -159,7 +169,8 @@ void slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, i
     real ak, eps, temp, pert, absak, sfmin;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -190,67 +201,64 @@ void slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, i
     --a;
     /* Function Body */
     *info = 0;
-    if (f2c_abs(*job) > 2 || *job == 0)
+    if(f2c_abs(*job) > 2 || *job == 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SLAGTS", &i__1, (ftnlen)6);
         return;
     }
-    if (*n == 0)
+    if(*n == 0)
     {
         return;
     }
     eps = slamch_("Epsilon");
     sfmin = slamch_("Safe minimum");
     bignum = 1.f / sfmin;
-    if (*job < 0)
+    if(*job < 0)
     {
-        if (*tol <= 0.f)
+        if(*tol <= 0.f)
         {
             *tol = f2c_abs(a[1]);
-            if (*n > 1)
+            if(*n > 1)
             {
                 /* Computing MAX */
                 r__1 = *tol, r__2 = f2c_abs(a[2]);
-                r__1 = fla_max(r__1,r__2);
+                r__1 = fla_max(r__1, r__2);
                 r__2 = f2c_abs(b[1]); // ; expr subst
-                *tol = fla_max(r__1,r__2);
+                *tol = fla_max(r__1, r__2);
             }
             i__1 = *n;
-            for (k = 3;
-                    k <= i__1;
-                    ++k)
+            for(k = 3; k <= i__1; ++k)
             {
                 /* Computing MAX */
-                r__4 = *tol, r__5 = (r__1 = a[k], f2c_abs(r__1)), r__4 = fla_max(r__4, r__5), r__5 = (r__2 = b[k - 1], f2c_abs(r__2));
-                r__4 = fla_max(r__4,r__5);
+                r__4 = *tol, r__5 = (r__1 = a[k], f2c_abs(r__1)), r__4 = fla_max(r__4, r__5),
+                r__5 = (r__2 = b[k - 1], f2c_abs(r__2));
+                r__4 = fla_max(r__4, r__5);
                 r__5 = (r__3 = d__[k - 2], f2c_abs(r__3)); // ; expr subst
-                *tol = fla_max(r__4,r__5);
+                *tol = fla_max(r__4, r__5);
                 /* L10: */
             }
             *tol *= eps;
-            if (*tol == 0.f)
+            if(*tol == 0.f)
             {
                 *tol = eps;
             }
         }
     }
-    if (f2c_abs(*job) == 1)
+    if(f2c_abs(*job) == 1)
     {
         i__1 = *n;
-        for (k = 2;
-                k <= i__1;
-                ++k)
+        for(k = 2; k <= i__1; ++k)
         {
-            if (in[k - 1] == 0)
+            if(in[k - 1] == 0)
             {
                 y[k] -= c__[k - 1] * y[k - 1];
             }
@@ -262,17 +270,15 @@ void slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, i
             }
             /* L20: */
         }
-        if (*job == 1)
+        if(*job == 1)
         {
-            for (k = *n;
-                    k >= 1;
-                    --k)
+            for(k = *n; k >= 1; --k)
             {
-                if (k <= *n - 2)
+                if(k <= *n - 2)
                 {
                     temp = y[k] - b[k] * y[k + 1] - d__[k] * y[k + 2];
                 }
-                else if (k == *n - 1)
+                else if(k == *n - 1)
                 {
                     temp = y[k] - b[k] * y[k + 1];
                 }
@@ -282,11 +288,11 @@ void slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, i
                 }
                 ak = a[k];
                 absak = f2c_abs(ak);
-                if (absak < 1.f)
+                if(absak < 1.f)
                 {
-                    if (absak < sfmin)
+                    if(absak < sfmin)
                     {
-                        if (absak == 0.f || f2c_abs(temp) * sfmin > absak)
+                        if(absak == 0.f || f2c_abs(temp) * sfmin > absak)
                         {
                             *info = k;
                             return;
@@ -297,7 +303,7 @@ void slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, i
                             ak *= bignum;
                         }
                     }
-                    else if (f2c_abs(temp) > absak * bignum)
+                    else if(f2c_abs(temp) > absak * bignum)
                     {
                         *info = k;
                         return;
@@ -309,15 +315,13 @@ void slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, i
         }
         else
         {
-            for (k = *n;
-                    k >= 1;
-                    --k)
+            for(k = *n; k >= 1; --k)
             {
-                if (k <= *n - 2)
+                if(k <= *n - 2)
                 {
                     temp = y[k] - b[k] * y[k + 1] - d__[k] * y[k + 2];
                 }
-                else if (k == *n - 1)
+                else if(k == *n - 1)
                 {
                     temp = y[k] - b[k] * y[k + 1];
                 }
@@ -327,13 +331,13 @@ void slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, i
                 }
                 ak = a[k];
                 pert = r_sign(tol, &ak);
-L40:
+            L40:
                 absak = f2c_abs(ak);
-                if (absak < 1.f)
+                if(absak < 1.f)
                 {
-                    if (absak < sfmin)
+                    if(absak < sfmin)
                     {
-                        if (absak == 0.f || f2c_abs(temp) * sfmin > absak)
+                        if(absak == 0.f || f2c_abs(temp) * sfmin > absak)
                         {
                             ak += pert;
                             pert *= 2;
@@ -345,7 +349,7 @@ L40:
                             ak *= bignum;
                         }
                     }
-                    else if (f2c_abs(temp) > absak * bignum)
+                    else if(f2c_abs(temp) > absak * bignum)
                     {
                         ak += pert;
                         pert *= 2;
@@ -360,18 +364,16 @@ L40:
     else
     {
         /* Come to here if JOB = 2 or -2 */
-        if (*job == 2)
+        if(*job == 2)
         {
             i__1 = *n;
-            for (k = 1;
-                    k <= i__1;
-                    ++k)
+            for(k = 1; k <= i__1; ++k)
             {
-                if (k >= 3)
+                if(k >= 3)
                 {
                     temp = y[k] - b[k - 1] * y[k - 1] - d__[k - 2] * y[k - 2];
                 }
-                else if (k == 2)
+                else if(k == 2)
                 {
                     temp = y[k] - b[k - 1] * y[k - 1];
                 }
@@ -381,11 +383,11 @@ L40:
                 }
                 ak = a[k];
                 absak = f2c_abs(ak);
-                if (absak < 1.f)
+                if(absak < 1.f)
                 {
-                    if (absak < sfmin)
+                    if(absak < sfmin)
                     {
-                        if (absak == 0.f || f2c_abs(temp) * sfmin > absak)
+                        if(absak == 0.f || f2c_abs(temp) * sfmin > absak)
                         {
                             *info = k;
                             return;
@@ -396,7 +398,7 @@ L40:
                             ak *= bignum;
                         }
                     }
-                    else if (f2c_abs(temp) > absak * bignum)
+                    else if(f2c_abs(temp) > absak * bignum)
                     {
                         *info = k;
                         return;
@@ -409,15 +411,13 @@ L40:
         else
         {
             i__1 = *n;
-            for (k = 1;
-                    k <= i__1;
-                    ++k)
+            for(k = 1; k <= i__1; ++k)
             {
-                if (k >= 3)
+                if(k >= 3)
                 {
                     temp = y[k] - b[k - 1] * y[k - 1] - d__[k - 2] * y[k - 2];
                 }
-                else if (k == 2)
+                else if(k == 2)
                 {
                     temp = y[k] - b[k - 1] * y[k - 1];
                 }
@@ -427,13 +427,13 @@ L40:
                 }
                 ak = a[k];
                 pert = r_sign(tol, &ak);
-L70:
+            L70:
                 absak = f2c_abs(ak);
-                if (absak < 1.f)
+                if(absak < 1.f)
                 {
-                    if (absak < sfmin)
+                    if(absak < sfmin)
                     {
-                        if (absak == 0.f || f2c_abs(temp) * sfmin > absak)
+                        if(absak == 0.f || f2c_abs(temp) * sfmin > absak)
                         {
                             ak += pert;
                             pert *= 2;
@@ -445,7 +445,7 @@ L70:
                             ak *= bignum;
                         }
                     }
-                    else if (f2c_abs(temp) > absak * bignum)
+                    else if(f2c_abs(temp) > absak * bignum)
                     {
                         ak += pert;
                         pert *= 2;
@@ -456,11 +456,9 @@ L70:
                 /* L80: */
             }
         }
-        for (k = *n;
-                k >= 2;
-                --k)
+        for(k = *n; k >= 2; --k)
         {
-            if (in[k - 1] == 0)
+            if(in[k - 1] == 0)
             {
                 y[k - 1] -= c__[k - 1] * y[k];
             }

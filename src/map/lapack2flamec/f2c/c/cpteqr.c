@@ -1,16 +1,11 @@
-/* ../netlib/cpteqr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cpteqr.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    0.f,0.f
-}
-;
-static complex c_b2 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {0.f, 0.f};
+static complex c_b2 = {1.f, 0.f};
 static integer c__0 = 0;
 static integer c__1 = 1;
 /* > \brief \b CPTEQR */
@@ -19,11 +14,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CPTEQR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpteqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpteqr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpteqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpteqr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpteqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpteqr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -102,7 +103,7 @@ static integer c__1 = 1;
 /* > reduction to tridiagonal form. */
 /* > On exit, if COMPZ = 'V', the orthonormal eigenvectors of the */
 /* > original Hermitian matrix;
-*/
+ */
 /* > if COMPZ = 'I', the orthonormal eigenvectors of the */
 /* > tridiagonal matrix. */
 /* > If INFO > 0 on exit, Z contains the eigenvectors associated */
@@ -132,7 +133,7 @@ static integer c__1 = 1;
 /* > not be performed because the i-th principal minor */
 /* > was not positive definite. */
 /* > > N the SVD algorithm failed to converge;
-*/
+ */
 /* > if INFO = N+i, i off-diagonal elements of the */
 /* > bidiagonal factor did not converge to zero. */
 /* > \endverbatim */
@@ -146,15 +147,16 @@ static integer c__1 = 1;
 /* > \ingroup complexPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer *ldz, real *work, integer *info)
+void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer *ldz, real *work,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cpteqr inputs: compz %c, n %lld, ldz %lld",*compz, *n, *ldz);
+    snprintf(buffer, 256, "cpteqr inputs: compz %c, n %lld, ldz %lld", *compz, *n, *ldz);
 #else
-    snprintf(buffer, 256,"cpteqr inputs: compz %c, n %d, ldz %d",*compz, *n, *ldz);
+    snprintf(buffer, 256, "cpteqr inputs: compz %c, n %d, ldz %d", *compz, *n, *ldz);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -164,17 +166,22 @@ void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     double sqrt(doublereal);
     /* Local variables */
     complex c__[1] /* was [1][1] */
-    ;
+        ;
     integer i__;
     complex vt[1] /* was [1][1] */
-    ;
+        ;
     integer nru;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, complex *, integer *, complex *, integer *, complex *, integer *, real *, integer *);
+        void
+        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        cbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, complex *,
+                integer *, complex *, integer *, complex *, integer *, real *, integer *);
     integer icompz;
     extern /* Subroutine */
-    void spttrf_(integer *, real *, real *, integer *);
+        void
+        spttrf_(integer *, real *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -207,15 +214,15 @@ void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     --work;
     /* Function Body */
     *info = 0;
-    if (lsame_(compz, "N", 1, 1))
+    if(lsame_(compz, "N", 1, 1))
     {
         icompz = 0;
     }
-    else if (lsame_(compz, "V", 1, 1))
+    else if(lsame_(compz, "V", 1, 1))
     {
         icompz = 1;
     }
-    else if (lsame_(compz, "I", 1, 1))
+    else if(lsame_(compz, "I", 1, 1))
     {
         icompz = 2;
     }
@@ -223,19 +230,19 @@ void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     {
         icompz = -1;
     }
-    if (icompz < 0)
+    if(icompz < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*ldz < 1 || icompz > 0 && *ldz < fla_max(1,*n))
+    else if(*ldz < 1 || icompz > 0 && *ldz < fla_max(1, *n))
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CPTEQR", &i__1, (ftnlen)6);
@@ -243,14 +250,14 @@ void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (icompz > 0)
+        if(icompz > 0)
         {
             i__1 = z_dim1 + 1;
             z__[i__1].r = 1.f;
@@ -259,36 +266,32 @@ void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (icompz == 2)
+    if(icompz == 2)
     {
         claset_("Full", n, n, &c_b1, &c_b2, &z__[z_offset], ldz);
     }
     /* Call SPTTRF to factor the matrix. */
     spttrf_(n, &d__[1], &e[1], info);
-    if (*info != 0)
+    if(*info != 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         d__[i__] = sqrt(d__[i__]);
         /* L10: */
     }
     i__1 = *n - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         e[i__] *= d__[i__];
         /* L20: */
     }
     /* Call CBDSQR to compute the singular values/vectors of the */
     /* bidiagonal factor. */
-    if (icompz > 0)
+    if(icompz > 0)
     {
         nru = *n;
     }
@@ -296,14 +299,13 @@ void cpteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
     {
         nru = 0;
     }
-    cbdsqr_("Lower", n, &c__0, &nru, &c__0, &d__[1], &e[1], vt, &c__1, &z__[ z_offset], ldz, c__, &c__1, &work[1], info);
+    cbdsqr_("Lower", n, &c__0, &nru, &c__0, &d__[1], &e[1], vt, &c__1, &z__[z_offset], ldz, c__,
+            &c__1, &work[1], info);
     /* Square the singular values. */
-    if (*info == 0)
+    if(*info == 0)
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             d__[i__] *= d__[i__];
             /* L30: */

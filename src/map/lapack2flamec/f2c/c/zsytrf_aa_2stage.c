@@ -1,16 +1,11 @@
-/* ../netlib/v3.9.0/zsytrf_aa_2stage.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/zsytrf_aa_2stage.f -- translated by f2c (version 20160102). You must link the
+ resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
+ Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
+ with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    0.,0.
-}
-;
-static doublecomplex c_b2 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b1 = {0., 0.};
+static doublecomplex c_b2 = {1., 0.};
 static integer c__1 = 1;
 static integer c_n1 = -1;
 /* > \brief \b ZSYTRF_AA_2STAGE */
@@ -19,11 +14,17 @@ static integer c_n1 = -1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZSYTRF_AA_2STAGE + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csytrf_ aa_2stage.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csytrf_
+ * aa_2stage.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csytrf_ aa_2stage.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csytrf_
+ * aa_2stage.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytrf_ aa_2stage.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytrf_
+ * aa_2stage.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -61,7 +62,7 @@ static integer c_n1 = -1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -162,10 +163,14 @@ the */
 /* > \ingroup complex16SYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *tb, integer *ltb, integer *ipiv, integer *ipiv2, doublecomplex *work, integer *lwork, integer *info)
+void zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *tb,
+                       integer *ltb, integer *ipiv, integer *ipiv2, doublecomplex *work,
+                       integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zsytrf_aa_2stage inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ltb %" FLA_IS ", lwork %" FLA_IS "", *uplo, *n, *lda, *ltb, *lwork);
+    AOCL_DTL_SNPRINTF("zsytrf_aa_2stage inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS
+                      ", ltb %" FLA_IS ", lwork %" FLA_IS "",
+                      *uplo, *n, *lda, *ltb, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     doublecomplex z__1;
@@ -176,13 +181,27 @@ void zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, d
     extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
-    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
+               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical upper;
     extern /* Subroutine */
-    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void zgbtrf_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, integer *), zgetrf_(integer *, integer *, doublecomplex *, integer *, integer *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zgbtrf_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *,
+                integer *),
+        zgetrf_(integer *, integer *, doublecomplex *, integer *, integer *, integer *),
+        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *),
+        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
+                integer *);
     logical tquery, wquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -217,110 +236,104 @@ void zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, d
     upper = lsame_(uplo, "U", 1, 1);
     wquery = *lwork == -1;
     tquery = *ltb == -1;
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*ltb < *n << 2 && ! tquery)
+    else if(*ltb < *n << 2 && !tquery)
     {
         *info = -6;
     }
-    else if (*lwork < *n && ! wquery)
+    else if(*lwork < *n && !wquery)
     {
         *info = -10;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZSYTRF_AA_2STAGE", &i__1, (ftnlen)16);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Answer the query */
     nb = ilaenv_(&c__1, "ZSYTRF_AA_2STAGE", uplo, n, &c_n1, &c_n1, &c_n1);
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (tquery)
+        if(tquery)
         {
             i__1 = (nb * 3 + 1) * *n;
-            tb[1].r = (doublereal) i__1;
+            tb[1].r = (doublereal)i__1;
             tb[1].i = 0.; // , expr subst
         }
-        if (wquery)
+        if(wquery)
         {
             i__1 = *n * nb;
-            work[1].r = (doublereal) i__1;
+            work[1].r = (doublereal)i__1;
             work[1].i = 0.; // , expr subst
         }
     }
-    if (tquery || wquery)
+    if(tquery || wquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return */
-    if (*n == 0)
+    if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine the number of the block size */
     ldtb = *ltb / *n;
-    if (ldtb < nb * 3 + 1)
+    if(ldtb < nb * 3 + 1)
     {
         nb = (ldtb - 1) / 3;
     }
-    if (*lwork < nb * *n)
+    if(*lwork < nb * *n)
     {
         nb = *lwork / *n;
     }
     /* Determine the number of the block columns */
     nt = (*n + nb - 1) / nb;
     td = nb << 1;
-    kb = fla_min(nb,*n);
+    kb = fla_min(nb, *n);
     /* Initialize vectors/matrices */
     i__1 = kb;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         ipiv[j] = j;
     }
     /* Save NB */
-    tb[1].r = (doublereal) nb;
+    tb[1].r = (doublereal)nb;
     tb[1].i = 0.; // , expr subst
-    if (upper)
+    if(upper)
     {
         /* ..................................................... */
         /* Factorize A as U**T*D*U using the upper triangle of A */
         /* ..................................................... */
         i__1 = nt - 1;
-        for (j = 0;
-                j <= i__1;
-                ++j)
+        for(j = 0; j <= i__1; ++j)
         {
             /* Generate Jth column of W and H */
             /* Computing MIN */
             i__2 = nb;
             i__3 = *n - j * nb; // , expr subst
-            kb = fla_min(i__2,i__3);
+            kb = fla_min(i__2, i__3);
             i__2 = j - 1;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
-                if (i__ == 1)
+                if(i__ == 1)
                 {
                     /* H(I,J) = T(I,I)*U(I,J) + T(I+1,I)*U(I+1,J) */
-                    if (i__ == j - 1)
+                    if(i__ == j - 1)
                     {
                         jb = nb + kb;
                     }
@@ -329,12 +342,15 @@ void zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, d
                         jb = nb << 1;
                     }
                     i__3 = ldtb - 1;
-                    zgemm_("NoTranspose", "NoTranspose", &nb, &kb, &jb, &c_b2, &tb[td + 1 + i__ * nb * ldtb], &i__3, &a[(i__ - 1) * nb + 1 + (j * nb + 1) * a_dim1], lda, &c_b1, &work[i__ * nb + 1], n);
+                    zgemm_("NoTranspose", "NoTranspose", &nb, &kb, &jb, &c_b2,
+                           &tb[td + 1 + i__ * nb * ldtb], &i__3,
+                           &a[(i__ - 1) * nb + 1 + (j * nb + 1) * a_dim1], lda, &c_b1,
+                           &work[i__ * nb + 1], n);
                 }
                 else
                 {
                     /* H(I,J) = T(I,I-1)*U(I-1,J) + T(I,I)*U(I,J) + T(I,I+1)*U(I+1,J) */
-                    if (i__ == j - 1)
+                    if(i__ == j - 1)
                     {
                         jb = (nb << 1) + kb;
                     }
@@ -343,38 +359,44 @@ void zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, d
                         jb = nb * 3;
                     }
                     i__3 = ldtb - 1;
-                    zgemm_("NoTranspose", "NoTranspose", &nb, &kb, &jb, &c_b2, &tb[td + nb + 1 + (i__ - 1) * nb * ldtb], &i__3, &a[(i__ - 2) * nb + 1 + (j * nb + 1) * a_dim1], lda, &c_b1, &work[i__ * nb + 1], n);
+                    zgemm_("NoTranspose", "NoTranspose", &nb, &kb, &jb, &c_b2,
+                           &tb[td + nb + 1 + (i__ - 1) * nb * ldtb], &i__3,
+                           &a[(i__ - 2) * nb + 1 + (j * nb + 1) * a_dim1], lda, &c_b1,
+                           &work[i__ * nb + 1], n);
                 }
             }
             /* Compute T(J,J) */
             i__2 = ldtb - 1;
-            zlacpy_("Upper", &kb, &kb, &a[j * nb + 1 + (j * nb + 1) * a_dim1], lda, &tb[td + 1 + j * nb * ldtb], &i__2);
-            if (j > 1)
+            zlacpy_("Upper", &kb, &kb, &a[j * nb + 1 + (j * nb + 1) * a_dim1], lda,
+                    &tb[td + 1 + j * nb * ldtb], &i__2);
+            if(j > 1)
             {
                 /* T(J,J) = U(1:J,J)'*H(1:J) */
                 i__2 = (j - 1) * nb;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
                 i__3 = ldtb - 1;
-                zgemm_("Transpose", "NoTranspose", &kb, &kb, &i__2, &z__1, &a[ (j * nb + 1) * a_dim1 + 1], lda, &work[nb + 1], n, & c_b2, &tb[td + 1 + j * nb * ldtb], &i__3);
+                zgemm_("Transpose", "NoTranspose", &kb, &kb, &i__2, &z__1,
+                       &a[(j * nb + 1) * a_dim1 + 1], lda, &work[nb + 1], n, &c_b2,
+                       &tb[td + 1 + j * nb * ldtb], &i__3);
                 /* T(J,J) += U(J,J)'*T(J,J-1)*U(J-1,J) */
                 i__2 = ldtb - 1;
-                zgemm_("Transpose", "NoTranspose", &kb, &nb, &kb, &c_b2, &a[( j - 1) * nb + 1 + (j * nb + 1) * a_dim1], lda, &tb[td + nb + 1 + (j - 1) * nb * ldtb], &i__2, &c_b1, &work[ 1], n);
+                zgemm_("Transpose", "NoTranspose", &kb, &nb, &kb, &c_b2,
+                       &a[(j - 1) * nb + 1 + (j * nb + 1) * a_dim1], lda,
+                       &tb[td + nb + 1 + (j - 1) * nb * ldtb], &i__2, &c_b1, &work[1], n);
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
                 i__2 = ldtb - 1;
-                zgemm_("NoTranspose", "NoTranspose", &kb, &kb, &nb, &z__1, & work[1], n, &a[(j - 2) * nb + 1 + (j * nb + 1) * a_dim1], lda, &c_b2, &tb[td + 1 + j * nb * ldtb], & i__2);
+                zgemm_("NoTranspose", "NoTranspose", &kb, &kb, &nb, &z__1, &work[1], n,
+                       &a[(j - 2) * nb + 1 + (j * nb + 1) * a_dim1], lda, &c_b2,
+                       &tb[td + 1 + j * nb * ldtb], &i__2);
             }
             /* Expand T(J,J) into full format */
             i__2 = kb;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = kb;
-                for (k = i__ + 1;
-                        k <= i__3;
-                        ++k)
+                for(k = i__ + 1; k <= i__3; ++k)
                 {
                     i__4 = td + (k - i__) + 1 + (j * nb + i__ - 1) * ldtb;
                     i__5 = td - (k - (i__ + 1)) + (j * nb + k - 1) * ldtb;
@@ -382,88 +404,96 @@ void zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, d
                     tb[i__4].i = tb[i__5].i; // , expr subst
                 }
             }
-            if (j > 0)
+            if(j > 0)
             {
                 /* CALL CHEGST( 1, 'Upper', KB, */
                 /* $ TB( TD+1 + (J*NB)*LDTB ), LDTB-1, */
                 /* $ A( (J-1)*NB+1, J*NB+1 ), LDA, IINFO ) */
                 i__2 = ldtb - 1;
-                ztrsm_("L", "U", "T", "N", &kb, &kb, &c_b2, &a[(j - 1) * nb + 1 + (j * nb + 1) * a_dim1], lda, &tb[td + 1 + j * nb * ldtb], &i__2);
+                ztrsm_("L", "U", "T", "N", &kb, &kb, &c_b2,
+                       &a[(j - 1) * nb + 1 + (j * nb + 1) * a_dim1], lda,
+                       &tb[td + 1 + j * nb * ldtb], &i__2);
                 i__2 = ldtb - 1;
-                ztrsm_("R", "U", "N", "N", &kb, &kb, &c_b2, &a[(j - 1) * nb + 1 + (j * nb + 1) * a_dim1], lda, &tb[td + 1 + j * nb * ldtb], &i__2);
+                ztrsm_("R", "U", "N", "N", &kb, &kb, &c_b2,
+                       &a[(j - 1) * nb + 1 + (j * nb + 1) * a_dim1], lda,
+                       &tb[td + 1 + j * nb * ldtb], &i__2);
             }
-            if (j < nt - 1)
+            if(j < nt - 1)
             {
-                if (j > 0)
+                if(j > 0)
                 {
                     /* Compute H(J,J) */
-                    if (j == 1)
+                    if(j == 1)
                     {
                         i__2 = ldtb - 1;
-                        zgemm_("NoTranspose", "NoTranspose", &kb, &kb, &kb, & c_b2, &tb[td + 1 + j * nb * ldtb], &i__2, &a[( j - 1) * nb + 1 + (j * nb + 1) * a_dim1], lda, &c_b1, &work[j * nb + 1], n);
+                        zgemm_("NoTranspose", "NoTranspose", &kb, &kb, &kb, &c_b2,
+                               &tb[td + 1 + j * nb * ldtb], &i__2,
+                               &a[(j - 1) * nb + 1 + (j * nb + 1) * a_dim1], lda, &c_b1,
+                               &work[j * nb + 1], n);
                     }
                     else
                     {
                         i__2 = nb + kb;
                         i__3 = ldtb - 1;
-                        zgemm_("NoTranspose", "NoTranspose", &kb, &kb, &i__2, &c_b2, &tb[td + nb + 1 + (j - 1) * nb * ldtb], &i__3, &a[(j - 2) * nb + 1 + (j * nb + 1) * a_dim1], lda, &c_b1, &work[j * nb + 1], n);
+                        zgemm_("NoTranspose", "NoTranspose", &kb, &kb, &i__2, &c_b2,
+                               &tb[td + nb + 1 + (j - 1) * nb * ldtb], &i__3,
+                               &a[(j - 2) * nb + 1 + (j * nb + 1) * a_dim1], lda, &c_b1,
+                               &work[j * nb + 1], n);
                     }
                     /* Update with the previous column */
                     i__2 = *n - (j + 1) * nb;
                     i__3 = j * nb;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zgemm_("Transpose", "NoTranspose", &nb, &i__2, &i__3, & z__1, &work[nb + 1], n, &a[((j + 1) * nb + 1) * a_dim1 + 1], lda, &c_b2, &a[j * nb + 1 + ((j + 1) * nb + 1) * a_dim1], lda);
+                    zgemm_("Transpose", "NoTranspose", &nb, &i__2, &i__3, &z__1, &work[nb + 1], n,
+                           &a[((j + 1) * nb + 1) * a_dim1 + 1], lda, &c_b2,
+                           &a[j * nb + 1 + ((j + 1) * nb + 1) * a_dim1], lda);
                 }
                 /* Copy panel to workspace to call ZGETRF */
                 i__2 = nb;
-                for (k = 1;
-                        k <= i__2;
-                        ++k)
+                for(k = 1; k <= i__2; ++k)
                 {
                     i__3 = *n - (j + 1) * nb;
-                    zcopy_(&i__3, &a[j * nb + k + ((j + 1) * nb + 1) * a_dim1], lda, &work[(k - 1) * *n + 1], &c__1);
+                    zcopy_(&i__3, &a[j * nb + k + ((j + 1) * nb + 1) * a_dim1], lda,
+                           &work[(k - 1) * *n + 1], &c__1);
                 }
                 /* Factorize panel */
                 i__2 = *n - (j + 1) * nb;
-                zgetrf_(&i__2, &nb, &work[1], n, &ipiv[(j + 1) * nb + 1], & iinfo);
+                zgetrf_(&i__2, &nb, &work[1], n, &ipiv[(j + 1) * nb + 1], &iinfo);
                 /* IF (IINFO.NE.0 .AND. INFO.EQ.0) THEN */
                 /* INFO = IINFO+(J+1)*NB */
                 /* END IF */
                 /* Copy panel back */
                 i__2 = nb;
-                for (k = 1;
-                        k <= i__2;
-                        ++k)
+                for(k = 1; k <= i__2; ++k)
                 {
                     i__3 = *n - (j + 1) * nb;
-                    zcopy_(&i__3, &work[(k - 1) * *n + 1], &c__1, &a[j * nb + k + ((j + 1) * nb + 1) * a_dim1], lda);
+                    zcopy_(&i__3, &work[(k - 1) * *n + 1], &c__1,
+                           &a[j * nb + k + ((j + 1) * nb + 1) * a_dim1], lda);
                 }
                 /* Compute T(J+1, J), zero out for GEMM update */
                 /* Computing MIN */
                 i__2 = nb;
                 i__3 = *n - (j + 1) * nb; // , expr subst
-                kb = fla_min(i__2,i__3);
+                kb = fla_min(i__2, i__3);
                 i__2 = ldtb - 1;
                 zlaset_("Full", &kb, &nb, &c_b1, &c_b1, &tb[td + nb + 1 + j * nb * ldtb], &i__2);
                 i__2 = ldtb - 1;
                 zlacpy_("Upper", &kb, &nb, &work[1], n, &tb[td + nb + 1 + j * nb * ldtb], &i__2);
-                if (j > 0)
+                if(j > 0)
                 {
                     i__2 = ldtb - 1;
-                    ztrsm_("R", "U", "N", "U", &kb, &nb, &c_b2, &a[(j - 1) * nb + 1 + (j * nb + 1) * a_dim1], lda, &tb[td + nb + 1 + j * nb * ldtb], &i__2);
+                    ztrsm_("R", "U", "N", "U", &kb, &nb, &c_b2,
+                           &a[(j - 1) * nb + 1 + (j * nb + 1) * a_dim1], lda,
+                           &tb[td + nb + 1 + j * nb * ldtb], &i__2);
                 }
                 /* Copy T(J,J+1) into T(J+1, J), both upper/lower for GEMM */
                 /* updates */
                 i__2 = nb;
-                for (k = 1;
-                        k <= i__2;
-                        ++k)
+                for(k = 1; k <= i__2; ++k)
                 {
                     i__3 = kb;
-                    for (i__ = 1;
-                            i__ <= i__3;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__3; ++i__)
                     {
                         i__4 = td - nb + k - i__ + 1 + (j * nb + nb + i__ - 1) * ldtb;
                         i__5 = td + nb + i__ - k + 1 + (j * nb + k - 1) * ldtb;
@@ -471,33 +501,35 @@ void zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, d
                         tb[i__4].i = tb[i__5].i; // , expr subst
                     }
                 }
-                zlaset_("Lower", &kb, &nb, &c_b1, &c_b2, &a[j * nb + 1 + ((j + 1) * nb + 1) * a_dim1], lda);
+                zlaset_("Lower", &kb, &nb, &c_b1, &c_b2,
+                        &a[j * nb + 1 + ((j + 1) * nb + 1) * a_dim1], lda);
                 /* Apply pivots to trailing submatrix of A */
                 i__2 = kb;
-                for (k = 1;
-                        k <= i__2;
-                        ++k)
+                for(k = 1; k <= i__2; ++k)
                 {
                     /* > Adjust ipiv */
                     ipiv[(j + 1) * nb + k] += (j + 1) * nb;
                     i1 = (j + 1) * nb + k;
                     i2 = ipiv[(j + 1) * nb + k];
-                    if (i1 != i2)
+                    if(i1 != i2)
                     {
                         /* > Apply pivots to previous columns of L */
                         i__3 = k - 1;
-                        zswap_(&i__3, &a[(j + 1) * nb + 1 + i1 * a_dim1], & c__1, &a[(j + 1) * nb + 1 + i2 * a_dim1], & c__1);
+                        zswap_(&i__3, &a[(j + 1) * nb + 1 + i1 * a_dim1], &c__1,
+                               &a[(j + 1) * nb + 1 + i2 * a_dim1], &c__1);
                         /* > Swap A(I1+1:M, I1) with A(I2, I1+1:M) */
-                        if (i2 > i1 + 1)
+                        if(i2 > i1 + 1)
                         {
                             i__3 = i2 - i1 - 1;
-                            zswap_(&i__3, &a[i1 + (i1 + 1) * a_dim1], lda, &a[ i1 + 1 + i2 * a_dim1], &c__1);
+                            zswap_(&i__3, &a[i1 + (i1 + 1) * a_dim1], lda, &a[i1 + 1 + i2 * a_dim1],
+                                   &c__1);
                         }
                         /* > Swap A(I2+1:M, I1) with A(I2+1:M, I2) */
-                        if (i2 < *n)
+                        if(i2 < *n)
                         {
                             i__3 = *n - i2;
-                            zswap_(&i__3, &a[i1 + (i2 + 1) * a_dim1], lda, &a[ i2 + (i2 + 1) * a_dim1], lda);
+                            zswap_(&i__3, &a[i1 + (i2 + 1) * a_dim1], lda,
+                                   &a[i2 + (i2 + 1) * a_dim1], lda);
                         }
                         /* > Swap A(I1, I1) with A(I2, I2) */
                         i__3 = i1 + i1 * a_dim1;
@@ -511,7 +543,7 @@ void zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, d
                         a[i__3].r = piv.r;
                         a[i__3].i = piv.i; // , expr subst
                         /* > Apply pivots to previous columns of L */
-                        if (j > 0)
+                        if(j > 0)
                         {
                             i__3 = j * nb;
                             zswap_(&i__3, &a[i1 * a_dim1 + 1], &c__1, &a[i2 * a_dim1 + 1], &c__1);
@@ -527,24 +559,20 @@ void zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, d
         /* Factorize A as L*D*L**T using the lower triangle of A */
         /* ..................................................... */
         i__1 = nt - 1;
-        for (j = 0;
-                j <= i__1;
-                ++j)
+        for(j = 0; j <= i__1; ++j)
         {
             /* Generate Jth column of W and H */
             /* Computing MIN */
             i__2 = nb;
             i__3 = *n - j * nb; // , expr subst
-            kb = fla_min(i__2,i__3);
+            kb = fla_min(i__2, i__3);
             i__2 = j - 1;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
-                if (i__ == 1)
+                if(i__ == 1)
                 {
                     /* H(I,J) = T(I,I)*L(J,I)' + T(I+1,I)'*L(J,I+1)' */
-                    if (i__ == j - 1)
+                    if(i__ == j - 1)
                     {
                         jb = nb + kb;
                     }
@@ -553,12 +581,15 @@ void zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, d
                         jb = nb << 1;
                     }
                     i__3 = ldtb - 1;
-                    zgemm_("NoTranspose", "Transpose", &nb, &kb, &jb, &c_b2, & tb[td + 1 + i__ * nb * ldtb], &i__3, &a[j * nb + 1 + ((i__ - 1) * nb + 1) * a_dim1], lda, &c_b1, & work[i__ * nb + 1], n);
+                    zgemm_("NoTranspose", "Transpose", &nb, &kb, &jb, &c_b2,
+                           &tb[td + 1 + i__ * nb * ldtb], &i__3,
+                           &a[j * nb + 1 + ((i__ - 1) * nb + 1) * a_dim1], lda, &c_b1,
+                           &work[i__ * nb + 1], n);
                 }
                 else
                 {
                     /* H(I,J) = T(I,I-1)*L(J,I-1)' + T(I,I)*L(J,I)' + T(I,I+1)*L(J,I+1)' */
-                    if (i__ == j - 1)
+                    if(i__ == j - 1)
                     {
                         jb = (nb << 1) + kb;
                     }
@@ -567,38 +598,44 @@ void zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, d
                         jb = nb * 3;
                     }
                     i__3 = ldtb - 1;
-                    zgemm_("NoTranspose", "Transpose", &nb, &kb, &jb, &c_b2, & tb[td + nb + 1 + (i__ - 1) * nb * ldtb], &i__3, & a[j * nb + 1 + ((i__ - 2) * nb + 1) * a_dim1], lda, &c_b1, &work[i__ * nb + 1], n);
+                    zgemm_("NoTranspose", "Transpose", &nb, &kb, &jb, &c_b2,
+                           &tb[td + nb + 1 + (i__ - 1) * nb * ldtb], &i__3,
+                           &a[j * nb + 1 + ((i__ - 2) * nb + 1) * a_dim1], lda, &c_b1,
+                           &work[i__ * nb + 1], n);
                 }
             }
             /* Compute T(J,J) */
             i__2 = ldtb - 1;
-            zlacpy_("Lower", &kb, &kb, &a[j * nb + 1 + (j * nb + 1) * a_dim1], lda, &tb[td + 1 + j * nb * ldtb], &i__2);
-            if (j > 1)
+            zlacpy_("Lower", &kb, &kb, &a[j * nb + 1 + (j * nb + 1) * a_dim1], lda,
+                    &tb[td + 1 + j * nb * ldtb], &i__2);
+            if(j > 1)
             {
                 /* T(J,J) = L(J,1:J)*H(1:J) */
                 i__2 = (j - 1) * nb;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
                 i__3 = ldtb - 1;
-                zgemm_("NoTranspose", "NoTranspose", &kb, &kb, &i__2, &z__1, & a[j * nb + 1 + a_dim1], lda, &work[nb + 1], n, &c_b2, &tb[td + 1 + j * nb * ldtb], &i__3);
+                zgemm_("NoTranspose", "NoTranspose", &kb, &kb, &i__2, &z__1,
+                       &a[j * nb + 1 + a_dim1], lda, &work[nb + 1], n, &c_b2,
+                       &tb[td + 1 + j * nb * ldtb], &i__3);
                 /* T(J,J) += L(J,J)*T(J,J-1)*L(J,J-1)' */
                 i__2 = ldtb - 1;
-                zgemm_("NoTranspose", "NoTranspose", &kb, &nb, &kb, &c_b2, &a[ j * nb + 1 + ((j - 1) * nb + 1) * a_dim1], lda, &tb[ td + nb + 1 + (j - 1) * nb * ldtb], &i__2, &c_b1, & work[1], n);
+                zgemm_("NoTranspose", "NoTranspose", &kb, &nb, &kb, &c_b2,
+                       &a[j * nb + 1 + ((j - 1) * nb + 1) * a_dim1], lda,
+                       &tb[td + nb + 1 + (j - 1) * nb * ldtb], &i__2, &c_b1, &work[1], n);
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
                 i__2 = ldtb - 1;
-                zgemm_("NoTranspose", "Transpose", &kb, &kb, &nb, &z__1, & work[1], n, &a[j * nb + 1 + ((j - 2) * nb + 1) * a_dim1], lda, &c_b2, &tb[td + 1 + j * nb * ldtb], & i__2);
+                zgemm_("NoTranspose", "Transpose", &kb, &kb, &nb, &z__1, &work[1], n,
+                       &a[j * nb + 1 + ((j - 2) * nb + 1) * a_dim1], lda, &c_b2,
+                       &tb[td + 1 + j * nb * ldtb], &i__2);
             }
             /* Expand T(J,J) into full format */
             i__2 = kb;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = kb;
-                for (k = i__ + 1;
-                        k <= i__3;
-                        ++k)
+                for(k = i__ + 1; k <= i__3; ++k)
                 {
                     i__4 = td - (k - (i__ + 1)) + (j * nb + k - 1) * ldtb;
                     i__5 = td + (k - i__) + 1 + (j * nb + i__ - 1) * ldtb;
@@ -606,26 +643,26 @@ void zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, d
                     tb[i__4].i = tb[i__5].i; // , expr subst
                 }
             }
-            if (j > 0)
+            if(j > 0)
             {
                 /* CALL CHEGST( 1, 'Lower', KB, */
                 /* $ TB( TD+1 + (J*NB)*LDTB ), LDTB-1, */
                 /* $ A( J*NB+1, (J-1)*NB+1 ), LDA, IINFO ) */
                 i__2 = ldtb - 1;
-                ztrsm_("L", "L", "N", "N", &kb, &kb, &c_b2, &a[j * nb + 1 + (( j - 1) * nb + 1) * a_dim1], lda, &tb[td + 1 + j * nb * ldtb], &i__2);
+                ztrsm_("L", "L", "N", "N", &kb, &kb, &c_b2,
+                       &a[j * nb + 1 + ((j - 1) * nb + 1) * a_dim1], lda,
+                       &tb[td + 1 + j * nb * ldtb], &i__2);
                 i__2 = ldtb - 1;
-                ztrsm_("R", "L", "T", "N", &kb, &kb, &c_b2, &a[j * nb + 1 + (( j - 1) * nb + 1) * a_dim1], lda, &tb[td + 1 + j * nb * ldtb], &i__2);
+                ztrsm_("R", "L", "T", "N", &kb, &kb, &c_b2,
+                       &a[j * nb + 1 + ((j - 1) * nb + 1) * a_dim1], lda,
+                       &tb[td + 1 + j * nb * ldtb], &i__2);
             }
             /* Symmetrize T(J,J) */
             i__2 = kb;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = kb;
-                for (k = i__ + 1;
-                        k <= i__3;
-                        ++k)
+                for(k = i__ + 1; k <= i__3; ++k)
                 {
                     i__4 = td - (k - (i__ + 1)) + (j * nb + k - 1) * ldtb;
                     i__5 = td + (k - i__) + 1 + (j * nb + i__ - 1) * ldtb;
@@ -633,32 +670,41 @@ void zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, d
                     tb[i__4].i = tb[i__5].i; // , expr subst
                 }
             }
-            if (j < nt - 1)
+            if(j < nt - 1)
             {
-                if (j > 0)
+                if(j > 0)
                 {
                     /* Compute H(J,J) */
-                    if (j == 1)
+                    if(j == 1)
                     {
                         i__2 = ldtb - 1;
-                        zgemm_("NoTranspose", "Transpose", &kb, &kb, &kb, & c_b2, &tb[td + 1 + j * nb * ldtb], &i__2, &a[ j * nb + 1 + ((j - 1) * nb + 1) * a_dim1], lda, &c_b1, &work[j * nb + 1], n);
+                        zgemm_("NoTranspose", "Transpose", &kb, &kb, &kb, &c_b2,
+                               &tb[td + 1 + j * nb * ldtb], &i__2,
+                               &a[j * nb + 1 + ((j - 1) * nb + 1) * a_dim1], lda, &c_b1,
+                               &work[j * nb + 1], n);
                     }
                     else
                     {
                         i__2 = nb + kb;
                         i__3 = ldtb - 1;
-                        zgemm_("NoTranspose", "Transpose", &kb, &kb, &i__2, & c_b2, &tb[td + nb + 1 + (j - 1) * nb * ldtb], &i__3, &a[j * nb + 1 + ((j - 2) * nb + 1) * a_dim1], lda, &c_b1, &work[j * nb + 1], n);
+                        zgemm_("NoTranspose", "Transpose", &kb, &kb, &i__2, &c_b2,
+                               &tb[td + nb + 1 + (j - 1) * nb * ldtb], &i__3,
+                               &a[j * nb + 1 + ((j - 2) * nb + 1) * a_dim1], lda, &c_b1,
+                               &work[j * nb + 1], n);
                     }
                     /* Update with the previous column */
                     i__2 = *n - (j + 1) * nb;
                     i__3 = j * nb;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zgemm_("NoTranspose", "NoTranspose", &i__2, &nb, &i__3, & z__1, &a[(j + 1) * nb + 1 + a_dim1], lda, &work[ nb + 1], n, &c_b2, &a[(j + 1) * nb + 1 + (j * nb + 1) * a_dim1], lda);
+                    zgemm_("NoTranspose", "NoTranspose", &i__2, &nb, &i__3, &z__1,
+                           &a[(j + 1) * nb + 1 + a_dim1], lda, &work[nb + 1], n, &c_b2,
+                           &a[(j + 1) * nb + 1 + (j * nb + 1) * a_dim1], lda);
                 }
                 /* Factorize panel */
                 i__2 = *n - (j + 1) * nb;
-                zgetrf_(&i__2, &nb, &a[(j + 1) * nb + 1 + (j * nb + 1) * a_dim1], lda, &ipiv[(j + 1) * nb + 1], &iinfo);
+                zgetrf_(&i__2, &nb, &a[(j + 1) * nb + 1 + (j * nb + 1) * a_dim1], lda,
+                        &ipiv[(j + 1) * nb + 1], &iinfo);
                 /* IF (IINFO.NE.0 .AND. INFO.EQ.0) THEN */
                 /* INFO = IINFO+(J+1)*NB */
                 /* END IF */
@@ -666,27 +712,26 @@ void zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, d
                 /* Computing MIN */
                 i__2 = nb;
                 i__3 = *n - (j + 1) * nb; // , expr subst
-                kb = fla_min(i__2,i__3);
+                kb = fla_min(i__2, i__3);
                 i__2 = ldtb - 1;
                 zlaset_("Full", &kb, &nb, &c_b1, &c_b1, &tb[td + nb + 1 + j * nb * ldtb], &i__2);
                 i__2 = ldtb - 1;
-                zlacpy_("Upper", &kb, &nb, &a[(j + 1) * nb + 1 + (j * nb + 1) * a_dim1], lda, &tb[td + nb + 1 + j * nb * ldtb], & i__2);
-                if (j > 0)
+                zlacpy_("Upper", &kb, &nb, &a[(j + 1) * nb + 1 + (j * nb + 1) * a_dim1], lda,
+                        &tb[td + nb + 1 + j * nb * ldtb], &i__2);
+                if(j > 0)
                 {
                     i__2 = ldtb - 1;
-                    ztrsm_("R", "L", "T", "U", &kb, &nb, &c_b2, &a[j * nb + 1 + ((j - 1) * nb + 1) * a_dim1], lda, &tb[td + nb + 1 + j * nb * ldtb], &i__2);
+                    ztrsm_("R", "L", "T", "U", &kb, &nb, &c_b2,
+                           &a[j * nb + 1 + ((j - 1) * nb + 1) * a_dim1], lda,
+                           &tb[td + nb + 1 + j * nb * ldtb], &i__2);
                 }
                 /* Copy T(J+1,J) into T(J, J+1), both upper/lower for GEMM */
                 /* updates */
                 i__2 = nb;
-                for (k = 1;
-                        k <= i__2;
-                        ++k)
+                for(k = 1; k <= i__2; ++k)
                 {
                     i__3 = kb;
-                    for (i__ = 1;
-                            i__ <= i__3;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__3; ++i__)
                     {
                         i__4 = td - nb + k - i__ + 1 + (j * nb + nb + i__ - 1) * ldtb;
                         i__5 = td + nb + i__ - k + 1 + (j * nb + k - 1) * ldtb;
@@ -694,33 +739,35 @@ void zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, d
                         tb[i__4].i = tb[i__5].i; // , expr subst
                     }
                 }
-                zlaset_("Upper", &kb, &nb, &c_b1, &c_b2, &a[(j + 1) * nb + 1 + (j * nb + 1) * a_dim1], lda);
+                zlaset_("Upper", &kb, &nb, &c_b1, &c_b2,
+                        &a[(j + 1) * nb + 1 + (j * nb + 1) * a_dim1], lda);
                 /* Apply pivots to trailing submatrix of A */
                 i__2 = kb;
-                for (k = 1;
-                        k <= i__2;
-                        ++k)
+                for(k = 1; k <= i__2; ++k)
                 {
                     /* > Adjust ipiv */
                     ipiv[(j + 1) * nb + k] += (j + 1) * nb;
                     i1 = (j + 1) * nb + k;
                     i2 = ipiv[(j + 1) * nb + k];
-                    if (i1 != i2)
+                    if(i1 != i2)
                     {
                         /* > Apply pivots to previous columns of L */
                         i__3 = k - 1;
-                        zswap_(&i__3, &a[i1 + ((j + 1) * nb + 1) * a_dim1], lda, &a[i2 + ((j + 1) * nb + 1) * a_dim1], lda);
+                        zswap_(&i__3, &a[i1 + ((j + 1) * nb + 1) * a_dim1], lda,
+                               &a[i2 + ((j + 1) * nb + 1) * a_dim1], lda);
                         /* > Swap A(I1+1:M, I1) with A(I2, I1+1:M) */
-                        if (i2 > i1 + 1)
+                        if(i2 > i1 + 1)
                         {
                             i__3 = i2 - i1 - 1;
-                            zswap_(&i__3, &a[i1 + 1 + i1 * a_dim1], &c__1, &a[ i2 + (i1 + 1) * a_dim1], lda);
+                            zswap_(&i__3, &a[i1 + 1 + i1 * a_dim1], &c__1,
+                                   &a[i2 + (i1 + 1) * a_dim1], lda);
                         }
                         /* > Swap A(I2+1:M, I1) with A(I2+1:M, I2) */
-                        if (i2 < *n)
+                        if(i2 < *n)
                         {
                             i__3 = *n - i2;
-                            zswap_(&i__3, &a[i2 + 1 + i1 * a_dim1], &c__1, &a[ i2 + 1 + i2 * a_dim1], &c__1);
+                            zswap_(&i__3, &a[i2 + 1 + i1 * a_dim1], &c__1, &a[i2 + 1 + i2 * a_dim1],
+                                   &c__1);
                         }
                         /* > Swap A(I1, I1) with A(I2, I2) */
                         i__3 = i1 + i1 * a_dim1;
@@ -734,7 +781,7 @@ void zsytrf_aa_2stage_(char *uplo, integer *n, doublecomplex *a, integer *lda, d
                         a[i__3].r = piv.r;
                         a[i__3].i = piv.i; // , expr subst
                         /* > Apply pivots to previous columns of L */
-                        if (j > 0)
+                        if(j > 0)
                         {
                             i__3 = j * nb;
                             zswap_(&i__3, &a[i1 + a_dim1], lda, &a[i2 + a_dim1], lda);

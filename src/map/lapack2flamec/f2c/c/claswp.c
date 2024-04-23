@@ -1,16 +1,25 @@
-/* ../netlib/claswp.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/claswp.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CLASWP performs a series of row interchanges on a general rectangular matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLASWP + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claswp. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claswp.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claswp. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claswp.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claswp. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claswp.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -101,15 +110,18 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void claswp_(integer *n, complex *a, integer *lda, integer * k1, integer *k2, integer *ipiv, integer *incx)
+void claswp_(integer *n, complex *a, integer *lda, integer *k1, integer *k2, integer *ipiv,
+             integer *incx)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"claswp inputs: n %lld, lda %lld, k1 %lld, k2 %lld, incx %lld",*n, *lda, *k1, *k2, *incx);
+    snprintf(buffer, 256, "claswp inputs: n %lld, lda %lld, k1 %lld, k2 %lld, incx %lld", *n, *lda,
+             *k1, *k2, *incx);
 #else
-    snprintf(buffer, 256,"claswp inputs: n %d, lda %d, k1 %d, k2 %d, incx %d",*n, *lda, *k1, *k2, *incx);
+    snprintf(buffer, 256, "claswp inputs: n %d, lda %d, k1 %d, k2 %d, incx %d", *n, *lda, *k1, *k2,
+             *incx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -138,14 +150,14 @@ void claswp_(integer *n, complex *a, integer *lda, integer * k1, integer *k2, in
     a -= a_offset;
     --ipiv;
     /* Function Body */
-    if (*incx > 0)
+    if(*incx > 0)
     {
         ix0 = *k1;
         i1 = *k1;
         i2 = *k2;
         inc = 1;
     }
-    else if (*incx < 0)
+    else if(*incx < 0)
     {
         ix0 = *k1 + (*k1 - *k2) * *incx;
         i1 = *k2;
@@ -158,27 +170,21 @@ void claswp_(integer *n, complex *a, integer *lda, integer * k1, integer *k2, in
         return;
     }
     n32 = *n / 32 << 5;
-    if (n32 != 0)
+    if(n32 != 0)
     {
         i__1 = n32;
-        for (j = 1;
-                j <= i__1;
-                j += 32)
+        for(j = 1; j <= i__1; j += 32)
         {
             ix = ix0;
             i__2 = i2;
             i__3 = inc;
-            for (i__ = i1;
-                    i__3 < 0 ? i__ >= i__2 : i__ <= i__2;
-                    i__ += i__3)
+            for(i__ = i1; i__3 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__3)
             {
                 ip = ipiv[ix];
-                if (ip != i__)
+                if(ip != i__)
                 {
                     i__4 = j + 31;
-                    for (k = j;
-                            k <= i__4;
-                            ++k)
+                    for(k = j; k <= i__4; ++k)
                     {
                         i__5 = i__ + k * a_dim1;
                         temp.r = a[i__5].r;
@@ -199,23 +205,19 @@ void claswp_(integer *n, complex *a, integer *lda, integer * k1, integer *k2, in
             /* L30: */
         }
     }
-    if (n32 != *n)
+    if(n32 != *n)
     {
         ++n32;
         ix = ix0;
         i__1 = i2;
         i__3 = inc;
-        for (i__ = i1;
-                i__3 < 0 ? i__ >= i__1 : i__ <= i__1;
-                i__ += i__3)
+        for(i__ = i1; i__3 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__3)
         {
             ip = ipiv[ix];
-            if (ip != i__)
+            if(ip != i__)
             {
                 i__2 = *n;
-                for (k = n32;
-                        k <= i__2;
-                        ++k)
+                for(k = n32; k <= i__2; ++k)
                 {
                     i__4 = i__ + k * a_dim1;
                     temp.r = a[i__4].r;

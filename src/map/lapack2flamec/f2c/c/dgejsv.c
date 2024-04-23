@@ -1,5 +1,8 @@
-/* ../netlib/dgejsv.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dgejsv.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static doublereal c_b34 = 0.;
@@ -12,11 +15,17 @@ static integer c_n1 = -1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DGEJSV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgejsv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgejsv.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgejsv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgejsv.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgejsv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgejsv.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -255,7 +264,7 @@ Jacobi rotations */
 /* > V is DOUBLE PRECISION array, dimension ( LDV, N ) */
 /* > If JOBV = 'V', 'J' then V contains on exit the N-by-N matrix of */
 /* > the right singular vectors;
-*/
+ */
 /* > If JOBV = 'W', AND (JOBU = 'U' AND JOBT = 'T' AND M = N), */
 /* > then V is used as workspace if the pprocedure */
 /* > replaces A with A^t. In that case, [U] is computed */
@@ -383,7 +392,7 @@ Jacobi rotations */
 /* > INFO is INTEGER */
 /* > < 0: if INFO = -i, then the i-th argument had an illegal value. */
 /* > = 0: successful exit;
-*/
+ */
 /* > > 0: DGEJSV did not converge in the maximal allowed number */
 /* > of sweeps. The computed values may be inaccurate. */
 /* > \endverbatim */
@@ -470,12 +479,19 @@ Jacobi rotations */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jobp, integer *m, integer *n, doublereal *a, integer *lda, doublereal *sva, doublereal *u, integer *ldu, doublereal *v, integer *ldv, doublereal *work, integer *lwork, integer *iwork, integer *info)
+void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *jobp, integer *m,
+             integer *n, doublereal *a, integer *lda, doublereal *sva, doublereal *u, integer *ldu,
+             doublereal *v, integer *ldv, doublereal *work, integer *lwork, integer *iwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgejsv inputs: joba %c, jobu %c, jobv %c, jobr %c, jobt %c, jobp %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS ", lwork %" FLA_IS "",*joba, *jobu, *jobv, *jobr, *jobt, *jobp, *m, *n, *lda, *ldu, *ldv, *lwork);
+    AOCL_DTL_SNPRINTF(
+        "dgejsv inputs: joba %c, jobu %c, jobv %c, jobr %c, jobt %c, jobp %c, m %" FLA_IS
+        ", n %" FLA_IS ", lda %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS ", lwork %" FLA_IS "",
+        *joba, *jobu, *jobv, *jobr, *jobt, *jobp, *m, *n, *lda, *ldu, *ldv, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9, i__10, i__11, i__12;
+    integer a_dim1, a_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4, i__5,
+        i__6, i__7, i__8, i__9, i__10, i__11, i__12;
     doublereal d__1, d__2, d__3, d__4;
     /* Builtin functions */
     double sqrt(doublereal), log(doublereal), d_sign(doublereal *, doublereal *);
@@ -491,47 +507,75 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     doublereal temp1;
     logical jracc;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     doublereal small_val, entra, sfmin;
     logical lsvec;
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal epsln;
     logical rsvec;
     extern /* Subroutine */
-    void dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *);
     logical l2aber;
     extern /* Subroutine */
-    void dgeqp3_(integer *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *, integer *);
+        void
+        dgeqp3_(integer *, integer *, doublereal *, integer *, integer *, doublereal *,
+                doublereal *, integer *, integer *);
     doublereal condr1, condr2, uscal1, uscal2;
     logical l2kill, l2rank, l2tran, l2pert;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    void dgelqf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
+        void
+        dgelqf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                integer *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     doublereal scalem;
     extern /* Subroutine */
-    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *);
     doublereal sconda;
     logical goscal;
     doublereal aatmin;
     extern /* Subroutine */
-    void dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
+        void
+        dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                integer *, integer *);
     doublereal aatmax;
     extern /* Subroutine */
-    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical noscal;
     extern /* Subroutine */
-    void dpocon_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dgesvj_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *), dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
+        void
+        dpocon_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, integer *, integer *),
+        dgesvj_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
+                integer *, doublereal *, integer *, doublereal *, integer *, integer *),
+        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *),
+        dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
     doublereal entrat;
     logical almort;
     extern /* Subroutine */
-    void dorgqr_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dormlq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dorgqr_(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, integer *, integer *),
+        dormlq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     doublereal maxprj;
     logical errest;
     extern /* Subroutine */
-    void dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     logical transp, rowpiv;
     doublereal cond_ok__;
     integer warning, numrank;
@@ -580,47 +624,47 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     l2kill = lsame_(jobr, "R", 1, 1);
     defr = lsame_(jobr, "N", 1, 1);
     l2pert = lsame_(jobp, "P", 1, 1);
-    if (! (rowpiv || l2rank || l2aber || errest || lsame_(joba, "C", 1, 1)))
+    if(!(rowpiv || l2rank || l2aber || errest || lsame_(joba, "C", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (lsvec || lsame_(jobu, "N", 1, 1) || lsame_(jobu, "W", 1, 1)))
+    else if(!(lsvec || lsame_(jobu, "N", 1, 1) || lsame_(jobu, "W", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (rsvec || lsame_(jobv, "N", 1, 1) || lsame_(jobv, "W", 1, 1)) || jracc && ! lsvec)
+    else if(!(rsvec || lsame_(jobv, "N", 1, 1) || lsame_(jobv, "W", 1, 1)) || jracc && !lsvec)
     {
         *info = -3;
     }
-    else if (! (l2kill || defr))
+    else if(!(l2kill || defr))
     {
         *info = -4;
     }
-    else if (! (l2tran || lsame_(jobt, "N", 1, 1)))
+    else if(!(l2tran || lsame_(jobt, "N", 1, 1)))
     {
         *info = -5;
     }
-    else if (! (l2pert || lsame_(jobp, "N", 1, 1)))
+    else if(!(l2pert || lsame_(jobp, "N", 1, 1)))
     {
         *info = -6;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -7;
     }
-    else if (*n < 0 || *n > *m)
+    else if(*n < 0 || *n > *m)
     {
         *info = -8;
     }
-    else if (*lda < *m)
+    else if(*lda < *m)
     {
         *info = -10;
     }
-    else if (lsvec && *ldu < *m)
+    else if(lsvec && *ldu < *m)
     {
         *info = -13;
     }
-    else if (rsvec && *ldv < *n)
+    else if(rsvec && *ldv < *n)
     {
         *info = -15;
     }
@@ -628,28 +672,33 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     {
         /* Computing MAX */
         i__1 = 7, i__2 = (*n << 2) + 1;
-        i__1 = fla_max(i__1,i__2);
+        i__1 = fla_max(i__1, i__2);
         i__2 = (*m << 1) + *n; // ; expr subst
         /* Computing MAX */
         i__3 = 7, i__4 = (*n << 2) + *n * *n;
-        i__3 = fla_max(i__3,i__4);
-        i__4 = (* m << 1) + *n; // ; expr subst
+        i__3 = fla_max(i__3, i__4);
+        i__4 = (*m << 1) + *n; // ; expr subst
         /* Computing MAX */
         i__5 = 7, i__6 = (*m << 1) + *n;
-        i__5 = fla_max(i__5,i__6);
+        i__5 = fla_max(i__5, i__6);
         i__6 = (*n << 2) + 1; // ; expr subst
         /* Computing MAX */
         i__7 = 7, i__8 = (*m << 1) + *n;
-        i__7 = fla_max(i__7,i__8);
+        i__7 = fla_max(i__7, i__8);
         i__8 = (*n << 2) + 1; // ; expr subst
         /* Computing MAX */
         i__9 = (*m << 1) + *n;
         i__10 = *n * 6 + (*n << 1) * *n; // , expr subst
         /* Computing MAX */
         i__11 = (*m << 1) + *n, i__12 = (*n << 2) + *n * *n;
-        i__11 = fla_max( i__11,i__12);
+        i__11 = fla_max(i__11, i__12);
         i__12 = (*n << 1) + *n * *n + 6; // ; expr subst
-        if (! (lsvec || rsvec || errest) && *lwork < fla_max(i__1,i__2) || ! ( lsvec || rsvec) && errest && *lwork < fla_max(i__3,i__4) || lsvec && ! rsvec && *lwork < fla_max(i__5,i__6) || rsvec && ! lsvec && * lwork < fla_max(i__7,i__8) || lsvec && rsvec && ! jracc && *lwork < fla_max(i__9,i__10) || lsvec && rsvec && jracc && *lwork < fla_max( i__11,i__12))
+        if(!(lsvec || rsvec || errest) && *lwork < fla_max(i__1, i__2)
+           || !(lsvec || rsvec) && errest && *lwork < fla_max(i__3, i__4)
+           || lsvec && !rsvec && *lwork < fla_max(i__5, i__6)
+           || rsvec && !lsvec && *lwork < fla_max(i__7, i__8)
+           || lsvec && rsvec && !jracc && *lwork < fla_max(i__9, i__10)
+           || lsvec && rsvec && jracc && *lwork < fla_max(i__11, i__12))
         {
             *info = -17;
         }
@@ -659,7 +708,7 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             *info = 0;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         /* #:( */
         i__1 = -(*info);
@@ -669,19 +718,15 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     }
     /* Quick return for void matrix (Y3K safe) */
     /* #:) */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         /* IWORK(1:3) = 0 */
-        for (j1 = 1;
-                j1 <= 3;
-                ++j1)
+        for(j1 = 1; j1 <= 3; ++j1)
         {
             iwork[j1] = 0;
         }
         /* WORK(1:7) = 0 */
-        for (j1 = 1;
-                j1 <= 7;
-                ++j1)
+        for(j1 = 1; j1 <= 7; ++j1)
         {
             work[j1] = 0.;
         }
@@ -689,10 +734,10 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         return;
     }
     /* Determine whether the matrix U should be M x N or M x M */
-    if (lsvec)
+    if(lsvec)
     {
         n1 = *n;
-        if (lsame_(jobu, "F", 1, 1))
+        if(lsame_(jobu, "F", 1, 1))
         {
             n1 = *m;
         }
@@ -708,18 +753,16 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     /* (!) If necessary, scale SVA() to protect the largest norm from */
     /* overflow. It is possible that this scaling pushes the smallest */
     /* column norm left from the underflow threshold (extreme case). */
-    scalem = 1. / sqrt((doublereal) (*m) * (doublereal) (*n));
+    scalem = 1. / sqrt((doublereal)(*m) * (doublereal)(*n));
     noscal = TRUE_;
     goscal = TRUE_;
     i__1 = *n;
-    for (p = 1;
-            p <= i__1;
-            ++p)
+    for(p = 1; p <= i__1; ++p)
     {
         aapp = 0.;
         aaqq = 1.;
         dlassq_(m, &a[p * a_dim1 + 1], &c__1, &aapp, &aaqq);
-        if (aapp > big)
+        if(aapp > big)
         {
             *info = -9;
             i__2 = -(*info);
@@ -728,7 +771,7 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             return;
         }
         aaqq = sqrt(aaqq);
-        if (aapp < big / aaqq && noscal)
+        if(aapp < big / aaqq && noscal)
         {
             sva[p] = aapp * aaqq;
         }
@@ -736,7 +779,7 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         {
             noscal = FALSE_;
             sva[p] = aapp * (aaqq * scalem);
-            if (goscal)
+            if(goscal)
             {
                 goscal = FALSE_;
                 i__2 = p - 1;
@@ -745,54 +788,52 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         }
         /* L1874: */
     }
-    if (noscal)
+    if(noscal)
     {
         scalem = 1.;
     }
     aapp = 0.;
     aaqq = big;
     i__1 = *n;
-    for (p = 1;
-            p <= i__1;
-            ++p)
+    for(p = 1; p <= i__1; ++p)
     {
         /* Computing MAX */
         d__1 = aapp;
         d__2 = sva[p]; // , expr subst
-        aapp = fla_max(d__1,d__2);
-        if (sva[p] != 0.)
+        aapp = fla_max(d__1, d__2);
+        if(sva[p] != 0.)
         {
             /* Computing MIN */
             d__1 = aaqq;
             d__2 = sva[p]; // , expr subst
-            aaqq = fla_min(d__1,d__2);
+            aaqq = fla_min(d__1, d__2);
         }
         /* L4781: */
     }
     /* Quick return for zero M x N matrix */
     /* #:) */
-    if (aapp == 0.)
+    if(aapp == 0.)
     {
-        if (lsvec)
+        if(lsvec)
         {
-            dlaset_("G", m, &n1, &c_b34, &c_b35, &u[u_offset], ldu) ;
+            dlaset_("G", m, &n1, &c_b34, &c_b35, &u[u_offset], ldu);
         }
-        if (rsvec)
+        if(rsvec)
         {
             dlaset_("G", n, n, &c_b34, &c_b35, &v[v_offset], ldv);
         }
         work[1] = 1.;
         work[2] = 1.;
-        if (errest)
+        if(errest)
         {
             work[3] = 1.;
         }
-        if (lsvec && rsvec)
+        if(lsvec && rsvec)
         {
             work[4] = 1.;
             work[5] = 1.;
         }
-        if (l2tran)
+        if(l2tran)
         {
             work[6] = 0.;
             work[7] = 0.;
@@ -808,7 +849,7 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     /* (set them to zero) whose norm is less than sigma_max / BIG (roughly). */
     /* #:( */
     warning = 0;
-    if (aaqq <= sfmin)
+    if(aaqq <= sfmin)
     {
         l2rank = TRUE_;
         l2kill = TRUE_;
@@ -816,37 +857,37 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     }
     /* Quick return for one-column matrix */
     /* #:) */
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (lsvec)
+        if(lsvec)
         {
             dlascl_("G", &c__0, &c__0, &sva[1], &scalem, m, &c__1, &a[a_dim1 + 1], lda, &ierr);
             dlacpy_("A", m, &c__1, &a[a_offset], lda, &u[u_offset], ldu);
             /* computing all M left singular vectors of the M x 1 matrix */
-            if (n1 != *n)
+            if(n1 != *n)
             {
                 i__1 = *lwork - *n;
-                dgeqrf_(m, n, &u[u_offset], ldu, &work[1], &work[*n + 1], & i__1, &ierr);
+                dgeqrf_(m, n, &u[u_offset], ldu, &work[1], &work[*n + 1], &i__1, &ierr);
                 i__1 = *lwork - *n;
                 dorgqr_(m, &n1, &c__1, &u[u_offset], ldu, &work[1], &work[*n + 1], &i__1, &ierr);
                 dcopy_(m, &a[a_dim1 + 1], &c__1, &u[u_dim1 + 1], &c__1);
             }
         }
-        if (rsvec)
+        if(rsvec)
         {
             v[v_dim1 + 1] = 1.;
         }
-        if (sva[1] < big * scalem)
+        if(sva[1] < big * scalem)
         {
             sva[1] /= scalem;
             scalem = 1.;
         }
         work[1] = 1. / scalem;
         work[2] = 1.;
-        if (sva[1] != 0.)
+        if(sva[1] != 0.)
         {
             iwork[1] = 1;
-            if (sva[1] / scalem >= sfmin)
+            if(sva[1] / scalem >= sfmin)
             {
                 iwork[2] = 1;
             }
@@ -861,16 +902,16 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             iwork[2] = 0;
         }
         iwork[3] = 0;
-        if (errest)
+        if(errest)
         {
             work[3] = 1.;
         }
-        if (lsvec && rsvec)
+        if(lsvec && rsvec)
         {
             work[4] = 1.;
             work[5] = 1.;
         }
-        if (l2tran)
+        if(l2tran)
         {
             work[6] = 0.;
             work[7] = 0.;
@@ -882,18 +923,16 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     l2tran = l2tran && *m == *n;
     aatmax = -1.;
     aatmin = big;
-    if (rowpiv || l2tran)
+    if(rowpiv || l2tran)
     {
         /* Compute the row norms, needed to determine row pivoting sequence */
         /* (in the case of heavily row weighted A, row pivoting is strongly */
         /* advised) and to collect information needed to compare the */
         /* structures of A * A^t and A^t * A (in the case L2TRAN.EQ..TRUE.). */
-        if (l2tran)
+        if(l2tran)
         {
             i__1 = *m;
-            for (p = 1;
-                    p <= i__1;
-                    ++p)
+            for(p = 1; p <= i__1; ++p)
             {
                 xsc = 0.;
                 temp1 = 1.;
@@ -905,13 +944,13 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 /* Computing MAX */
                 d__1 = aatmax;
                 d__2 = work[*n + p]; // , expr subst
-                aatmax = fla_max(d__1,d__2);
-                if (work[*n + p] != 0.)
+                aatmax = fla_max(d__1, d__2);
+                if(work[*n + p] != 0.)
                 {
                     /* Computing MIN */
                     d__1 = aatmin;
                     d__2 = work[*n + p]; // , expr subst
-                    aatmin = fla_min(d__1,d__2);
+                    aatmin = fla_min(d__1, d__2);
                 }
                 /* L1950: */
             }
@@ -919,19 +958,19 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         else
         {
             i__1 = *m;
-            for (p = 1;
-                    p <= i__1;
-                    ++p)
+            for(p = 1; p <= i__1; ++p)
             {
-                work[*m + *n + p] = scalem * (d__1 = a[p + idamax_(n, &a[p + a_dim1], lda) * a_dim1], f2c_abs(d__1));
+                work[*m + *n + p]
+                    = scalem
+                      * (d__1 = a[p + idamax_(n, &a[p + a_dim1], lda) * a_dim1], f2c_abs(d__1));
                 /* Computing MAX */
                 d__1 = aatmax;
                 d__2 = work[*m + *n + p]; // , expr subst
-                aatmax = fla_max(d__1,d__2);
+                aatmax = fla_max(d__1, d__2);
                 /* Computing MIN */
                 d__1 = aatmin;
                 d__2 = work[*m + *n + p]; // , expr subst
-                aatmin = fla_min(d__1,d__2);
+                aatmin = fla_min(d__1, d__2);
                 /* L1904: */
             }
         }
@@ -944,7 +983,7 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     /* It may fail and pick the slower converging side. */
     entra = 0.;
     entrat = 0.;
-    if (l2tran)
+    if(l2tran)
     {
         xsc = 0.;
         temp1 = 1.;
@@ -952,20 +991,18 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         temp1 = 1. / temp1;
         entra = 0.;
         i__1 = *n;
-        for (p = 1;
-                p <= i__1;
-                ++p)
+        for(p = 1; p <= i__1; ++p)
         {
             /* Computing 2nd power */
             d__1 = sva[p] / xsc;
             big1 = d__1 * d__1 * temp1;
-            if (big1 != 0.)
+            if(big1 != 0.)
             {
                 entra += big1 * log(big1);
             }
             /* L1113: */
         }
-        entra = -entra / log((doublereal) (*n));
+        entra = -entra / log((doublereal)(*n));
         /* Now, SVA().^2/Trace(A^t * A) is a point in the probability simplex. */
         /* It is derived from the diagonal of A^t * A. Do the same with the */
         /* diagonal of A * A^t, compute the entropy of the corresponding */
@@ -973,37 +1010,31 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         /* same trace. */
         entrat = 0.;
         i__1 = *n + *m;
-        for (p = *n + 1;
-                p <= i__1;
-                ++p)
+        for(p = *n + 1; p <= i__1; ++p)
         {
             /* Computing 2nd power */
             d__1 = work[p] / xsc;
             big1 = d__1 * d__1 * temp1;
-            if (big1 != 0.)
+            if(big1 != 0.)
             {
                 entrat += big1 * log(big1);
             }
             /* L1114: */
         }
-        entrat = -entrat / log((doublereal) (*m));
+        entrat = -entrat / log((doublereal)(*m));
         /* Analyze the entropies and decide A or A^t. Smaller entropy */
         /* usually means better input for the algorithm. */
         transp = entrat < entra;
         /* If A^t is better than A, transpose A. */
-        if (transp)
+        if(transp)
         {
             /* In an optimal implementation, this trivial transpose */
             /* should be replaced with faster transpose. */
             i__1 = *n - 1;
-            for (p = 1;
-                    p <= i__1;
-                    ++p)
+            for(p = 1; p <= i__1; ++p)
             {
                 i__2 = *n;
-                for (q = p + 1;
-                        q <= i__2;
-                        ++q)
+                for(q = p + 1; q <= i__2; ++q)
                 {
                     temp1 = a[q + p * a_dim1];
                     a[q + p * a_dim1] = a[p + q * a_dim1];
@@ -1013,9 +1044,7 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
                 /* L1115: */
             }
             i__1 = *n;
-            for (p = 1;
-                    p <= i__1;
-                    ++p)
+            for(p = 1; p <= i__1; ++p)
             {
                 work[*m + *n + p] = sva[p];
                 sva[p] = work[*n + p];
@@ -1030,7 +1059,7 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             kill = lsvec;
             lsvec = rsvec;
             rsvec = kill;
-            if (lsvec)
+            if(lsvec)
             {
                 n1 = *n;
             }
@@ -1048,9 +1077,9 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     /* from SFMIN to BIG, then DGESVJ will compute them. So, in that case, */
     /* one should use DGESVJ instead of DGEJSV. */
     big1 = sqrt(big);
-    temp1 = sqrt(big / (doublereal) (*n));
+    temp1 = sqrt(big / (doublereal)(*n));
     dlascl_("G", &c__0, &c__0, &aapp, &temp1, n, &c__1, &sva[1], n, &ierr);
-    if (aaqq > aapp * sfmin)
+    if(aaqq > aapp * sfmin)
     {
         aaqq = aaqq / aapp * temp1;
     }
@@ -1064,7 +1093,7 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     /* computed singular values with USCAL2 / USCAL1. */
     uscal1 = temp1;
     uscal2 = aapp;
-    if (l2kill)
+    if(l2kill)
     {
         /* L2KILL enforces computation of nonzero singular values in */
         /* the restricted range of condition number of the initial A, */
@@ -1082,19 +1111,17 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         /* time. Depending on the concrete implementation of BLAS and LAPACK */
         /* (i.e. how they behave in presence of extreme ill-conditioning) the */
         /* implementor may decide to remove this switch. */
-        if (aaqq < sqrt(sfmin) && lsvec && rsvec)
+        if(aaqq < sqrt(sfmin) && lsvec && rsvec)
         {
             jracc = TRUE_;
         }
     }
-    if (aaqq < xsc)
+    if(aaqq < xsc)
     {
         i__1 = *n;
-        for (p = 1;
-                p <= i__1;
-                ++p)
+        for(p = 1; p <= i__1; ++p)
         {
-            if (sva[p] < xsc)
+            if(sva[p] < xsc)
             {
                 dlaset_("A", m, &c__1, &c_b34, &c_b34, &a[p * a_dim1 + 1], lda);
                 sva[p] = 0.;
@@ -1103,7 +1130,7 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         }
     }
     /* Preconditioning using QR factorization with pivoting */
-    if (rowpiv)
+    if(rowpiv)
     {
         /* Optional row permutation (Bjoerck row pivoting): */
         /* A result by Cox and Higham shows that the Bjoerck's */
@@ -1111,14 +1138,12 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         /* has similar effect as Powell-Reid complete pivoting. */
         /* The ell-infinity norms of A are made nonincreasing. */
         i__1 = *m - 1;
-        for (p = 1;
-                p <= i__1;
-                ++p)
+        for(p = 1; p <= i__1; ++p)
         {
             i__2 = *m - p + 1;
             q = idamax_(&i__2, &work[*m + *n + p], &c__1) + p - 1;
             iwork[(*n << 1) + p] = q;
-            if (p != q)
+            if(p != q)
             {
                 temp1 = work[*m + *n + p];
                 work[*m + *n + p] = work[*m + *n + q];
@@ -1127,7 +1152,7 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             /* L1952: */
         }
         i__1 = *m - 1;
-        dlaswp_(n, &a[a_offset], lda, &c__1, &i__1, &iwork[(*n << 1) + 1], & c__1);
+        dlaswp_(n, &a[a_offset], lda, &c__1, &i__1, &iwork[(*n << 1) + 1], &c__1);
     }
     /* End of the preparation phase (scaling, optional sorting and */
     /* transposing, optional flushing of small columns). */
@@ -1142,16 +1167,14 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     /* Any improvement of DGEQP3 improves overal performance of DGEJSV. */
     /* A * P1 = Q1 * [ R1^t 0]^t: */
     i__1 = *n;
-    for (p = 1;
-            p <= i__1;
-            ++p)
+    for(p = 1; p <= i__1; ++p)
     {
         /* .. all columns are free columns */
         iwork[p] = 0;
         /* L1963: */
     }
     i__1 = *lwork - *n;
-    dgeqp3_(m, n, &a[a_offset], lda, &iwork[1], &work[1], &work[*n + 1], & i__1, &ierr);
+    dgeqp3_(m, n, &a[a_offset], lda, &iwork[1], &work[1], &work[*n + 1], &i__1, &ierr);
     /* The upper triangular matrix R1 from the first QRF is inspected for */
     /* rank deficiency and possibilities for deflation, or possible */
     /* ill-conditioning. Depending on the user specified flag L2RANK, */
@@ -1160,19 +1183,18 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     /* L2RANK or L2ABER are up, then DGEJSV will compute the SVD of */
     /* A + dA, where ||dA|| <= f(M,N)*EPSLN. */
     nr = 1;
-    if (l2aber)
+    if(l2aber)
     {
         /* Standard absolute error bound suffices. All sigma_i with */
         /* sigma_i < N*EPSLN*||A|| are flushed to zero. This is an */
         /* aggressive enforcement of lower numerical rank by introducing a */
         /* backward error of the order of N*EPSLN*||A||. */
-        temp1 = sqrt((doublereal) (*n)) * epsln;
+        temp1 = sqrt((doublereal)(*n)) * epsln;
         i__1 = *n;
-        for (p = 2;
-                p <= i__1;
-                ++p)
+        for(p = 2; p <= i__1; ++p)
         {
-            if ((d__2 = a[p + p * a_dim1], f2c_abs(d__2)) >= temp1 * (d__1 = a[ a_dim1 + 1], f2c_abs(d__1)))
+            if((d__2 = a[p + p * a_dim1], f2c_abs(d__2))
+               >= temp1 * (d__1 = a[a_dim1 + 1], f2c_abs(d__1)))
             {
                 ++nr;
             }
@@ -1182,29 +1204,28 @@ void dgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             }
             /* L3001: */
         }
-L3002:
-        ;
+    L3002:;
     }
-    else if (l2rank)
+    else if(l2rank)
     {
         /* .. similarly as above, only slightly more gentle (less aggressive). */
         /* Sudden drop on the diagonal of R1 is used as the criterion for */
         /* close-to-rank-deficient. */
         temp1 = sqrt(sfmin);
         i__1 = *n;
-        for (p = 2;
-                p <= i__1;
-                ++p)
+        for(p = 2; p <= i__1; ++p)
         {
-            if ((d__2 = a[p + p * a_dim1], f2c_abs(d__2)) < epsln * (d__1 = a[p - 1 + (p - 1) * a_dim1], f2c_abs(d__1)) || (d__3 = a[p + p * a_dim1], f2c_abs(d__3)) < small_val || l2kill && (d__4 = a[p + p * a_dim1], f2c_abs(d__4)) < temp1)
+            if((d__2 = a[p + p * a_dim1], f2c_abs(d__2))
+                   < epsln * (d__1 = a[p - 1 + (p - 1) * a_dim1], f2c_abs(d__1))
+               || (d__3 = a[p + p * a_dim1], f2c_abs(d__3)) < small_val
+               || l2kill && (d__4 = a[p + p * a_dim1], f2c_abs(d__4)) < temp1)
             {
                 goto L3402;
             }
             ++nr;
             /* L3401: */
         }
-L3402:
-        ;
+    L3402:;
     }
     else
     {
@@ -1217,36 +1238,32 @@ L3402:
         /* working hard to get the accuracy not warranted by the data. */
         temp1 = sqrt(sfmin);
         i__1 = *n;
-        for (p = 2;
-                p <= i__1;
-                ++p)
+        for(p = 2; p <= i__1; ++p)
         {
-            if ((d__1 = a[p + p * a_dim1], f2c_abs(d__1)) < small_val || l2kill && ( d__2 = a[p + p * a_dim1], f2c_abs(d__2)) < temp1)
+            if((d__1 = a[p + p * a_dim1], f2c_abs(d__1)) < small_val
+               || l2kill && (d__2 = a[p + p * a_dim1], f2c_abs(d__2)) < temp1)
             {
                 goto L3302;
             }
             ++nr;
             /* L3301: */
         }
-L3302:
-        ;
+    L3302:;
     }
     almort = FALSE_;
-    if (nr == *n)
+    if(nr == *n)
     {
         maxprj = 1.;
         i__1 = *n;
-        for (p = 2;
-                p <= i__1;
-                ++p)
+        for(p = 2; p <= i__1; ++p)
         {
             temp1 = (d__1 = a[p + p * a_dim1], f2c_abs(d__1)) / sva[iwork[p]];
-            maxprj = fla_min(maxprj,temp1);
+            maxprj = fla_min(maxprj, temp1);
             /* L3051: */
         }
         /* Computing 2nd power */
         d__1 = maxprj;
-        if (d__1 * d__1 >= 1. - (doublereal) (*n) * epsln)
+        if(d__1 * d__1 >= 1. - (doublereal)(*n) * epsln)
         {
             almort = TRUE_;
         }
@@ -1254,49 +1271,45 @@ L3302:
     sconda = -1.;
     condr1 = -1.;
     condr2 = -1.;
-    if (errest)
+    if(errest)
     {
-        if (*n == nr)
+        if(*n == nr)
         {
-            if (rsvec)
+            if(rsvec)
             {
                 /* .. V is available as workspace */
                 dlacpy_("U", n, n, &a[a_offset], lda, &v[v_offset], ldv);
                 i__1 = *n;
-                for (p = 1;
-                        p <= i__1;
-                        ++p)
+                for(p = 1; p <= i__1; ++p)
                 {
                     temp1 = sva[iwork[p]];
                     d__1 = 1. / temp1;
                     dscal_(&p, &d__1, &v[p * v_dim1 + 1], &c__1);
                     /* L3053: */
                 }
-                dpocon_("U", n, &v[v_offset], ldv, &c_b35, &temp1, &work[*n + 1], &iwork[(*n << 1) + *m + 1], &ierr);
+                dpocon_("U", n, &v[v_offset], ldv, &c_b35, &temp1, &work[*n + 1],
+                        &iwork[(*n << 1) + *m + 1], &ierr);
             }
-            else if (lsvec)
+            else if(lsvec)
             {
                 /* .. U is available as workspace */
                 dlacpy_("U", n, n, &a[a_offset], lda, &u[u_offset], ldu);
                 i__1 = *n;
-                for (p = 1;
-                        p <= i__1;
-                        ++p)
+                for(p = 1; p <= i__1; ++p)
                 {
                     temp1 = sva[iwork[p]];
                     d__1 = 1. / temp1;
                     dscal_(&p, &d__1, &u[p * u_dim1 + 1], &c__1);
                     /* L3054: */
                 }
-                dpocon_("U", n, &u[u_offset], ldu, &c_b35, &temp1, &work[*n + 1], &iwork[(*n << 1) + *m + 1], &ierr);
+                dpocon_("U", n, &u[u_offset], ldu, &c_b35, &temp1, &work[*n + 1],
+                        &iwork[(*n << 1) + *m + 1], &ierr);
             }
             else
             {
                 dlacpy_("U", n, n, &a[a_offset], lda, &work[*n + 1], n);
                 i__1 = *n;
-                for (p = 1;
-                        p <= i__1;
-                        ++p)
+                for(p = 1; p <= i__1; ++p)
                 {
                     temp1 = sva[iwork[p]];
                     d__1 = 1. / temp1;
@@ -1304,7 +1317,8 @@ L3302:
                     /* L3052: */
                 }
                 /* .. the columns of R are scaled to have unit Euclidean lengths. */
-                dpocon_("U", n, &work[*n + 1], n, &c_b35, &temp1, &work[*n + * n * *n + 1], &iwork[(*n << 1) + *m + 1], &ierr);
+                dpocon_("U", n, &work[*n + 1], n, &c_b35, &temp1, &work[*n + *n * *n + 1],
+                        &iwork[(*n << 1) + *m + 1], &ierr);
             }
             sconda = 1. / sqrt(temp1);
             /* SCONDA is an estimate of DSQRT(||(R^t * R)^(-1)||_1). */
@@ -1318,16 +1332,14 @@ L3302:
     l2pert = l2pert && (d__1 = a[a_dim1 + 1] / a[nr + nr * a_dim1], f2c_abs(d__1)) > sqrt(big1);
     /* If there is no violent scaling, artificial perturbation is not needed. */
     /* Phase 3: */
-    if (! (rsvec || lsvec))
+    if(!(rsvec || lsvec))
     {
         /* Singular Values only */
         /* .. transpose A(1:NR,1:N) */
         /* Computing MIN */
         i__2 = *n - 1;
-        i__1 = fla_min(i__2,nr);
-        for (p = 1;
-                p <= i__1;
-                ++p)
+        i__1 = fla_min(i__2, nr);
+        for(p = 1; p <= i__1; ++p)
         {
             i__2 = *n - p;
             dcopy_(&i__2, &a[p + (p + 1) * a_dim1], lda, &a[p + 1 + p * a_dim1], &c__1);
@@ -1344,24 +1356,20 @@ L3302:
         /* the job done by the preconditioner. */
         /* The licence for this perturbation is in the variable L2PERT, which */
         /* should be .FALSE. if FLUSH TO ZERO underflow is active. */
-        if (! almort)
+        if(!almort)
         {
-            if (l2pert)
+            if(l2pert)
             {
                 /* XSC = DSQRT(SMALL) */
-                xsc = epsln / (doublereal) (*n);
+                xsc = epsln / (doublereal)(*n);
                 i__1 = nr;
-                for (q = 1;
-                        q <= i__1;
-                        ++q)
+                for(q = 1; q <= i__1; ++q)
                 {
                     temp1 = xsc * (d__1 = a[q + q * a_dim1], f2c_abs(d__1));
                     i__2 = *n;
-                    for (p = 1;
-                            p <= i__2;
-                            ++p)
+                    for(p = 1; p <= i__2; ++p)
                     {
-                        if (p > q && (d__1 = a[p + q * a_dim1], f2c_abs(d__1)) <= temp1 || p < q)
+                        if(p > q && (d__1 = a[p + q * a_dim1], f2c_abs(d__1)) <= temp1 || p < q)
                         {
                             a[p + q * a_dim1] = d_sign(&temp1, &a[p + q * a_dim1]);
                         }
@@ -1381,9 +1389,7 @@ L3302:
             dgeqrf_(n, &nr, &a[a_offset], lda, &work[1], &work[*n + 1], &i__1, &ierr);
             /* .. and transpose upper to lower triangular */
             i__1 = nr - 1;
-            for (p = 1;
-                    p <= i__1;
-                    ++p)
+            for(p = 1; p <= i__1; ++p)
             {
                 i__2 = nr - p;
                 dcopy_(&i__2, &a[p + (p + 1) * a_dim1], lda, &a[p + 1 + p * a_dim1], &c__1);
@@ -1393,24 +1399,20 @@ L3302:
         /* Row-cyclic Jacobi SVD algorithm with column pivoting */
         /* .. again some perturbation (a "background noise") is added */
         /* to drown denormals */
-        if (l2pert)
+        if(l2pert)
         {
             /* XSC = DSQRT(SMALL) */
-            xsc = epsln / (doublereal) (*n);
+            xsc = epsln / (doublereal)(*n);
             i__1 = nr;
-            for (q = 1;
-                    q <= i__1;
-                    ++q)
+            for(q = 1; q <= i__1; ++q)
             {
                 temp1 = xsc * (d__1 = a[q + q * a_dim1], f2c_abs(d__1));
                 i__2 = nr;
-                for (p = 1;
-                        p <= i__2;
-                        ++p)
+                for(p = 1; p <= i__2; ++p)
                 {
-                    if (p > q && (d__1 = a[p + q * a_dim1], f2c_abs(d__1)) <= temp1 || p < q)
+                    if(p > q && (d__1 = a[p + q * a_dim1], f2c_abs(d__1)) <= temp1 || p < q)
                     {
-                        a[p + q * a_dim1] = d_sign(&temp1, &a[p + q * a_dim1]) ;
+                        a[p + q * a_dim1] = d_sign(&temp1, &a[p + q * a_dim1]);
                     }
                     /* L1949: */
                 }
@@ -1426,29 +1428,29 @@ L3302:
         /* .. and one-sided Jacobi rotations are started on a lower */
         /* triangular matrix (plus perturbation which is ignored in */
         /* the part which destroys triangular form (confusing?!)) */
-        dgesvj_("L", "NoU", "NoV", &nr, &nr, &a[a_offset], lda, &sva[1], n, & v[v_offset], ldv, &work[1], lwork, info);
+        dgesvj_("L", "NoU", "NoV", &nr, &nr, &a[a_offset], lda, &sva[1], n, &v[v_offset], ldv,
+                &work[1], lwork, info);
         scalem = work[1];
         numrank = i_dnnt(&work[2]);
     }
-    else if (rsvec && ! lsvec)
+    else if(rsvec && !lsvec)
     {
         /* -> Singular Values and Right Singular Vectors <- */
-        if (almort)
+        if(almort)
         {
             /* .. in this case NR equals N */
             i__1 = nr;
-            for (p = 1;
-                    p <= i__1;
-                    ++p)
+            for(p = 1; p <= i__1; ++p)
             {
                 i__2 = *n - p + 1;
-                dcopy_(&i__2, &a[p + p * a_dim1], lda, &v[p + p * v_dim1], & c__1);
+                dcopy_(&i__2, &a[p + p * a_dim1], lda, &v[p + p * v_dim1], &c__1);
                 /* L1998: */
             }
             i__1 = nr - 1;
             i__2 = nr - 1;
             dlaset_("Upper", &i__1, &i__2, &c_b34, &c_b34, &v[(v_dim1 << 1) + 1], ldv);
-            dgesvj_("L", "U", "N", n, &nr, &v[v_offset], ldv, &sva[1], &nr, & a[a_offset], lda, &work[1], lwork, info);
+            dgesvj_("L", "U", "N", n, &nr, &v[v_offset], ldv, &sva[1], &nr, &a[a_offset], lda,
+                    &work[1], lwork, info);
             scalem = work[1];
             numrank = i_dnnt(&work[2]);
         }
@@ -1468,21 +1470,20 @@ L3302:
             i__1 = *lwork - (*n << 1);
             dgeqrf_(&nr, &nr, &v[v_offset], ldv, &work[*n + 1], &work[(*n << 1) + 1], &i__1, &ierr);
             i__1 = nr;
-            for (p = 1;
-                    p <= i__1;
-                    ++p)
+            for(p = 1; p <= i__1; ++p)
             {
                 i__2 = nr - p + 1;
-                dcopy_(&i__2, &v[p + p * v_dim1], ldv, &v[p + p * v_dim1], & c__1);
+                dcopy_(&i__2, &v[p + p * v_dim1], ldv, &v[p + p * v_dim1], &c__1);
                 /* L8998: */
             }
             i__1 = nr - 1;
             i__2 = nr - 1;
             dlaset_("Upper", &i__1, &i__2, &c_b34, &c_b34, &v[(v_dim1 << 1) + 1], ldv);
-            dgesvj_("Lower", "U", "N", &nr, &nr, &v[v_offset], ldv, &sva[1], & nr, &u[u_offset], ldu, &work[*n + 1], lwork, info);
+            dgesvj_("Lower", "U", "N", &nr, &nr, &v[v_offset], ldv, &sva[1], &nr, &u[u_offset], ldu,
+                    &work[*n + 1], lwork, info);
             scalem = work[*n + 1];
             numrank = i_dnnt(&work[*n + 2]);
-            if (nr < *n)
+            if(nr < *n)
             {
                 i__1 = *n - nr;
                 dlaset_("A", &i__1, &nr, &c_b34, &c_b34, &v[nr + 1 + v_dim1], ldv);
@@ -1493,31 +1494,28 @@ L3302:
                 dlaset_("A", &i__1, &i__2, &c_b34, &c_b35, &v[nr + 1 + (nr + 1) * v_dim1], ldv);
             }
             i__1 = *lwork - *n;
-            dormlq_("Left", "Transpose", n, n, &nr, &a[a_offset], lda, &work[ 1], &v[v_offset], ldv, &work[*n + 1], &i__1, &ierr);
+            dormlq_("Left", "Transpose", n, n, &nr, &a[a_offset], lda, &work[1], &v[v_offset], ldv,
+                    &work[*n + 1], &i__1, &ierr);
         }
         i__1 = *n;
-        for (p = 1;
-                p <= i__1;
-                ++p)
+        for(p = 1; p <= i__1; ++p)
         {
             dcopy_(n, &v[p + v_dim1], ldv, &a[iwork[p] + a_dim1], lda);
             /* L8991: */
         }
         dlacpy_("All", n, n, &a[a_offset], lda, &v[v_offset], ldv);
-        if (transp)
+        if(transp)
         {
             dlacpy_("All", n, n, &v[v_offset], ldv, &u[u_offset], ldu);
         }
     }
-    else if (lsvec && ! rsvec)
+    else if(lsvec && !rsvec)
     {
         /* .. Singular Values and Left Singular Vectors .. */
         /* .. second preconditioning step to avoid need to accumulate */
         /* Jacobi rotations in the Jacobi iterations. */
         i__1 = nr;
-        for (p = 1;
-                p <= i__1;
-                ++p)
+        for(p = 1; p <= i__1; ++p)
         {
             i__2 = *n - p + 1;
             dcopy_(&i__2, &a[p + p * a_dim1], lda, &u[p + p * u_dim1], &c__1);
@@ -1529,9 +1527,7 @@ L3302:
         i__1 = *lwork - (*n << 1);
         dgeqrf_(n, &nr, &u[u_offset], ldu, &work[*n + 1], &work[(*n << 1) + 1], &i__1, &ierr);
         i__1 = nr - 1;
-        for (p = 1;
-                p <= i__1;
-                ++p)
+        for(p = 1; p <= i__1; ++p)
         {
             i__2 = nr - p;
             dcopy_(&i__2, &u[p + (p + 1) * u_dim1], ldu, &u[p + 1 + p * u_dim1], &c__1);
@@ -1541,14 +1537,15 @@ L3302:
         i__2 = nr - 1;
         dlaset_("Upper", &i__1, &i__2, &c_b34, &c_b34, &u[(u_dim1 << 1) + 1], ldu);
         i__1 = *lwork - *n;
-        dgesvj_("Lower", "U", "N", &nr, &nr, &u[u_offset], ldu, &sva[1], &nr, &a[a_offset], lda, &work[*n + 1], &i__1, info);
+        dgesvj_("Lower", "U", "N", &nr, &nr, &u[u_offset], ldu, &sva[1], &nr, &a[a_offset], lda,
+                &work[*n + 1], &i__1, info);
         scalem = work[*n + 1];
         numrank = i_dnnt(&work[*n + 2]);
-        if (nr < *m)
+        if(nr < *m)
         {
             i__1 = *m - nr;
             dlaset_("A", &i__1, &nr, &c_b34, &c_b34, &u[nr + 1 + u_dim1], ldu);
-            if (nr < n1)
+            if(nr < n1)
             {
                 i__1 = n1 - nr;
                 dlaset_("A", &nr, &i__1, &c_b34, &c_b34, &u[(nr + 1) * u_dim1 + 1], ldu);
@@ -1558,22 +1555,21 @@ L3302:
             }
         }
         i__1 = *lwork - *n;
-        dormqr_("Left", "No Tr", m, &n1, n, &a[a_offset], lda, &work[1], &u[ u_offset], ldu, &work[*n + 1], &i__1, &ierr);
-        if (rowpiv)
+        dormqr_("Left", "No Tr", m, &n1, n, &a[a_offset], lda, &work[1], &u[u_offset], ldu,
+                &work[*n + 1], &i__1, &ierr);
+        if(rowpiv)
         {
             i__1 = *m - 1;
             dlaswp_(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[(*n << 1) + 1], &c_n1);
         }
         i__1 = n1;
-        for (p = 1;
-                p <= i__1;
-                ++p)
+        for(p = 1; p <= i__1; ++p)
         {
             xsc = 1. / dnrm2_(m, &u[p * u_dim1 + 1], &c__1);
             dscal_(m, &xsc, &u[p * u_dim1 + 1], &c__1);
             /* L1974: */
         }
-        if (transp)
+        if(transp)
         {
             dlacpy_("All", n, n, &u[u_offset], ldu, &v[v_offset], ldv);
         }
@@ -1581,9 +1577,9 @@ L3302:
     else
     {
         /* .. Full SVD .. */
-        if (! jracc)
+        if(!jracc)
         {
-            if (! almort)
+            if(!almort)
             {
                 /* Second Preconditioning Step (QRF [with pivoting]) */
                 /* Note that the composition of TRANSPOSE, QRF and TRANSPOSE is */
@@ -1592,9 +1588,7 @@ L3302:
                 /* transpose and use the QRF. This is subject to changes in an */
                 /* optimized implementation of DGEJSV. */
                 i__1 = nr;
-                for (p = 1;
-                        p <= i__1;
-                        ++p)
+                for(p = 1; p <= i__1; ++p)
                 {
                     i__2 = *n - p + 1;
                     dcopy_(&i__2, &a[p + p * a_dim1], lda, &v[p + p * v_dim1], &c__1);
@@ -1611,25 +1605,21 @@ L3302:
                 /* code, remove the action under L2PERT=.TRUE., leave the ELSE part. */
                 /* The following two loops should be blocked and fused with the */
                 /* transposed copy above. */
-                if (l2pert)
+                if(l2pert)
                 {
                     xsc = sqrt(small_val);
                     i__1 = nr;
-                    for (q = 1;
-                            q <= i__1;
-                            ++q)
+                    for(q = 1; q <= i__1; ++q)
                     {
                         temp1 = xsc * (d__1 = v[q + q * v_dim1], f2c_abs(d__1));
                         i__2 = *n;
-                        for (p = 1;
-                                p <= i__2;
-                                ++p)
+                        for(p = 1; p <= i__2; ++p)
                         {
-                            if (p > q && (d__1 = v[p + q * v_dim1], f2c_abs(d__1)) <= temp1 || p < q)
+                            if(p > q && (d__1 = v[p + q * v_dim1], f2c_abs(d__1)) <= temp1 || p < q)
                             {
                                 v[p + q * v_dim1] = d_sign(&temp1, &v[p + q * v_dim1]);
                             }
-                            if (p < q)
+                            if(p < q)
                             {
                                 v[p + q * v_dim1] = -v[p + q * v_dim1];
                             }
@@ -1649,9 +1639,7 @@ L3302:
                 /* of the leading NR x NR submatrix is estimated.) */
                 dlacpy_("L", &nr, &nr, &v[v_offset], ldv, &work[(*n << 1) + 1], &nr);
                 i__1 = nr;
-                for (p = 1;
-                        p <= i__1;
-                        ++p)
+                for(p = 1; p <= i__1; ++p)
                 {
                     i__2 = nr - p + 1;
                     temp1 = dnrm2_(&i__2, &work[(*n << 1) + (p - 1) * nr + p], &c__1);
@@ -1660,40 +1648,38 @@ L3302:
                     dscal_(&i__2, &d__1, &work[(*n << 1) + (p - 1) * nr + p], &c__1);
                     /* L3950: */
                 }
-                dpocon_("Lower", &nr, &work[(*n << 1) + 1], &nr, &c_b35, & temp1, &work[(*n << 1) + nr * nr + 1], &iwork[*m + (* n << 1) + 1], &ierr);
+                dpocon_("Lower", &nr, &work[(*n << 1) + 1], &nr, &c_b35, &temp1,
+                        &work[(*n << 1) + nr * nr + 1], &iwork[*m + (*n << 1) + 1], &ierr);
                 condr1 = 1. / sqrt(temp1);
                 /* .. here need a second opinion on the condition number */
                 /* .. then assume worst case scenario */
                 /* R1 is OK for inverse <=> CONDR1 .LT. DBLE(N) */
                 /* more conservative <=> CONDR1 .LT. DSQRT(DBLE(N)) */
-                cond_ok__ = sqrt((doublereal) nr);
+                cond_ok__ = sqrt((doublereal)nr);
                 /* [TP] COND_OK is a tuning parameter. */
-                if (condr1 < cond_ok__)
+                if(condr1 < cond_ok__)
                 {
                     /* .. the second QRF without pivoting. Note: in an optimized */
                     /* implementation, this QRF should be implemented as the QRF */
                     /* of a lower triangular matrix. */
                     /* R1^t = Q2 * R2 */
                     i__1 = *lwork - (*n << 1);
-                    dgeqrf_(n, &nr, &v[v_offset], ldv, &work[*n + 1], &work[(* n << 1) + 1], &i__1, &ierr);
-                    if (l2pert)
+                    dgeqrf_(n, &nr, &v[v_offset], ldv, &work[*n + 1], &work[(*n << 1) + 1], &i__1,
+                            &ierr);
+                    if(l2pert)
                     {
                         xsc = sqrt(small_val) / epsln;
                         i__1 = nr;
-                        for (p = 2;
-                                p <= i__1;
-                                ++p)
+                        for(p = 2; p <= i__1; ++p)
                         {
                             i__2 = p - 1;
-                            for (q = 1;
-                                    q <= i__2;
-                                    ++q)
+                            for(q = 1; q <= i__2; ++q)
                             {
                                 /* Computing MIN */
                                 d__3 = (d__1 = v[p + p * v_dim1], f2c_abs(d__1));
-                                d__4 = (d__2 = v[q + q * v_dim1], f2c_abs( d__2)); // , expr subst
-                                temp1 = xsc * fla_min(d__3,d__4);
-                                if ((d__1 = v[q + p * v_dim1], f2c_abs(d__1)) <= temp1)
+                                d__4 = (d__2 = v[q + q * v_dim1], f2c_abs(d__2)); // , expr subst
+                                temp1 = xsc * fla_min(d__3, d__4);
+                                if((d__1 = v[q + p * v_dim1], f2c_abs(d__1)) <= temp1)
                                 {
                                     v[q + p * v_dim1] = d_sign(&temp1, &v[q + p * v_dim1]);
                                 }
@@ -1702,16 +1688,14 @@ L3302:
                             /* L3959: */
                         }
                     }
-                    if (nr != *n)
+                    if(nr != *n)
                     {
                         dlacpy_("A", n, &nr, &v[v_offset], ldv, &work[(*n << 1) + 1], n);
                     }
                     /* .. save ... */
                     /* .. this transposed copy should be better than naive */
                     i__1 = nr - 1;
-                    for (p = 1;
-                            p <= i__1;
-                            ++p)
+                    for(p = 1; p <= i__1; ++p)
                     {
                         i__2 = nr - p;
                         dcopy_(&i__2, &v[p + (p + 1) * v_dim1], ldv, &v[p + 1 + p * v_dim1], &c__1);
@@ -1729,35 +1713,30 @@ L3302:
                     /* with properly (carefully) chosen parameters. */
                     /* R1^t * P2 = Q2 * R2 */
                     i__1 = nr;
-                    for (p = 1;
-                            p <= i__1;
-                            ++p)
+                    for(p = 1; p <= i__1; ++p)
                     {
                         iwork[*n + p] = 0;
                         /* L3003: */
                     }
                     i__1 = *lwork - (*n << 1);
-                    dgeqp3_(n, &nr, &v[v_offset], ldv, &iwork[*n + 1], &work[* n + 1], &work[(*n << 1) + 1], &i__1, &ierr);
+                    dgeqp3_(n, &nr, &v[v_offset], ldv, &iwork[*n + 1], &work[*n + 1],
+                            &work[(*n << 1) + 1], &i__1, &ierr);
                     /* * CALL DGEQRF( N, NR, V, LDV, WORK(N+1), WORK(2*N+1), */
                     /* * $ LWORK-2*N, IERR ) */
-                    if (l2pert)
+                    if(l2pert)
                     {
                         xsc = sqrt(small_val);
                         i__1 = nr;
-                        for (p = 2;
-                                p <= i__1;
-                                ++p)
+                        for(p = 2; p <= i__1; ++p)
                         {
                             i__2 = p - 1;
-                            for (q = 1;
-                                    q <= i__2;
-                                    ++q)
+                            for(q = 1; q <= i__2; ++q)
                             {
                                 /* Computing MIN */
                                 d__3 = (d__1 = v[p + p * v_dim1], f2c_abs(d__1));
-                                d__4 = (d__2 = v[q + q * v_dim1], f2c_abs( d__2)); // , expr subst
-                                temp1 = xsc * fla_min(d__3,d__4);
-                                if ((d__1 = v[q + p * v_dim1], f2c_abs(d__1)) <= temp1)
+                                d__4 = (d__2 = v[q + q * v_dim1], f2c_abs(d__2)); // , expr subst
+                                temp1 = xsc * fla_min(d__3, d__4);
+                                if((d__1 = v[q + p * v_dim1], f2c_abs(d__1)) <= temp1)
                                 {
                                     v[q + p * v_dim1] = d_sign(&temp1, &v[q + p * v_dim1]);
                                 }
@@ -1767,23 +1746,19 @@ L3302:
                         }
                     }
                     dlacpy_("A", n, &nr, &v[v_offset], ldv, &work[(*n << 1) + 1], n);
-                    if (l2pert)
+                    if(l2pert)
                     {
                         xsc = sqrt(small_val);
                         i__1 = nr;
-                        for (p = 2;
-                                p <= i__1;
-                                ++p)
+                        for(p = 2; p <= i__1; ++p)
                         {
                             i__2 = p - 1;
-                            for (q = 1;
-                                    q <= i__2;
-                                    ++q)
+                            for(q = 1; q <= i__2; ++q)
                             {
                                 /* Computing MIN */
                                 d__3 = (d__1 = v[p + p * v_dim1], f2c_abs(d__1));
-                                d__4 = (d__2 = v[q + q * v_dim1], f2c_abs( d__2)); // , expr subst
-                                temp1 = xsc * fla_min(d__3,d__4);
+                                d__4 = (d__2 = v[q + q * v_dim1], f2c_abs(d__2)); // , expr subst
+                                temp1 = xsc * fla_min(d__3, d__4);
                                 v[p + q * v_dim1] = -d_sign(&temp1, &v[q + p * v_dim1]);
                                 /* L8971: */
                             }
@@ -1798,22 +1773,24 @@ L3302:
                     }
                     /* Now, compute R2 = L3 * Q3, the LQ factorization. */
                     i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                    dgelqf_(&nr, &nr, &v[v_offset], ldv, &work[(*n << 1) + *n * nr + 1], &work[(*n << 1) + *n * nr + nr + 1], & i__1, &ierr);
+                    dgelqf_(&nr, &nr, &v[v_offset], ldv, &work[(*n << 1) + *n * nr + 1],
+                            &work[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
                     /* .. and estimate the condition number */
-                    dlacpy_("L", &nr, &nr, &v[v_offset], ldv, &work[(*n << 1) + *n * nr + nr + 1], &nr);
+                    dlacpy_("L", &nr, &nr, &v[v_offset], ldv, &work[(*n << 1) + *n * nr + nr + 1],
+                            &nr);
                     i__1 = nr;
-                    for (p = 1;
-                            p <= i__1;
-                            ++p)
+                    for(p = 1; p <= i__1; ++p)
                     {
                         temp1 = dnrm2_(&p, &work[(*n << 1) + *n * nr + nr + p], &nr);
                         d__1 = 1. / temp1;
                         dscal_(&p, &d__1, &work[(*n << 1) + *n * nr + nr + p], &nr);
                         /* L4950: */
                     }
-                    dpocon_("L", &nr, &work[(*n << 1) + *n * nr + nr + 1], & nr, &c_b35, &temp1, &work[(*n << 1) + *n * nr + nr + nr * nr + 1], &iwork[*m + (*n << 1) + 1], & ierr);
+                    dpocon_("L", &nr, &work[(*n << 1) + *n * nr + nr + 1], &nr, &c_b35, &temp1,
+                            &work[(*n << 1) + *n * nr + nr + nr * nr + 1],
+                            &iwork[*m + (*n << 1) + 1], &ierr);
                     condr2 = 1. / sqrt(temp1);
-                    if (condr2 >= cond_ok__)
+                    if(condr2 >= cond_ok__)
                     {
                         /* .. save the Householder vectors used for Q3 */
                         /* (this overwrites the copy of R2, as it will not be */
@@ -1824,19 +1801,15 @@ L3302:
                         /* WORK(2*N+N*NR+1:2*N+N*NR+N) */
                     }
                 }
-                if (l2pert)
+                if(l2pert)
                 {
                     xsc = sqrt(small_val);
                     i__1 = nr;
-                    for (q = 2;
-                            q <= i__1;
-                            ++q)
+                    for(q = 2; q <= i__1; ++q)
                     {
                         temp1 = xsc * v[q + q * v_dim1];
                         i__2 = q - 1;
-                        for (p = 1;
-                                p <= i__2;
-                                ++p)
+                        for(p = 1; p <= i__2; ++p)
                         {
                             /* V(p,q) = - DSIGN( TEMP1, V(q,p) ) */
                             v[p + q * v_dim1] = -d_sign(&temp1, &v[p + q * v_dim1]);
@@ -1856,29 +1829,29 @@ L3302:
                 /* The input matrix is lower trinagular. */
                 /* Recover the right singular vectors as solution of a well */
                 /* conditioned triangular matrix equation. */
-                if (condr1 < cond_ok__)
+                if(condr1 < cond_ok__)
                 {
                     i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                    dgesvj_("L", "U", "N", &nr, &nr, &v[v_offset], ldv, &sva[ 1], &nr, &u[u_offset], ldu, &work[(*n << 1) + *n * nr + nr + 1], &i__1, info);
+                    dgesvj_("L", "U", "N", &nr, &nr, &v[v_offset], ldv, &sva[1], &nr, &u[u_offset],
+                            ldu, &work[(*n << 1) + *n * nr + nr + 1], &i__1, info);
                     scalem = work[(*n << 1) + *n * nr + nr + 1];
                     numrank = i_dnnt(&work[(*n << 1) + *n * nr + nr + 2]);
                     i__1 = nr;
-                    for (p = 1;
-                            p <= i__1;
-                            ++p)
+                    for(p = 1; p <= i__1; ++p)
                     {
                         dcopy_(&nr, &v[p * v_dim1 + 1], &c__1, &u[p * u_dim1 + 1], &c__1);
                         dscal_(&nr, &sva[p], &v[p * v_dim1 + 1], &c__1);
                         /* L3970: */
                     }
                     /* .. pick the right matrix equation and solve it */
-                    if (nr == *n)
+                    if(nr == *n)
                     {
                         /* :)) .. best case, R1 is inverted. The solution of this matrix */
                         /* equation is Q2*V2 = the product of the Jacobi rotations */
                         /* used in DGESVJ, premultiplied with the orthogonal matrix */
                         /* from the second QR factorization. */
-                        dtrsm_("L", "U", "N", "N", &nr, &nr, &c_b35, &a[ a_offset], lda, &v[v_offset], ldv);
+                        dtrsm_("L", "U", "N", "N", &nr, &nr, &c_b35, &a[a_offset], lda,
+                               &v[v_offset], ldv);
                     }
                     else
                     {
@@ -1886,22 +1859,27 @@ L3302:
                         /* is inverted to get the product of the Jacobi rotations */
                         /* used in DGESVJ. The Q-factor from the second QR */
                         /* factorization is then built in explicitly. */
-                        dtrsm_("L", "U", "T", "N", &nr, &nr, &c_b35, &work[(* n << 1) + 1], n, &v[v_offset], ldv);
-                        if (nr < *n)
+                        dtrsm_("L", "U", "T", "N", &nr, &nr, &c_b35, &work[(*n << 1) + 1], n,
+                               &v[v_offset], ldv);
+                        if(nr < *n)
                         {
                             i__1 = *n - nr;
                             dlaset_("A", &i__1, &nr, &c_b34, &c_b34, &v[nr + 1 + v_dim1], ldv);
                             i__1 = *n - nr;
-                            dlaset_("A", &nr, &i__1, &c_b34, &c_b34, &v[(nr + 1) * v_dim1 + 1], ldv);
+                            dlaset_("A", &nr, &i__1, &c_b34, &c_b34, &v[(nr + 1) * v_dim1 + 1],
+                                    ldv);
                             i__1 = *n - nr;
                             i__2 = *n - nr;
-                            dlaset_("A", &i__1, &i__2, &c_b34, &c_b35, &v[nr + 1 + (nr + 1) * v_dim1], ldv);
+                            dlaset_("A", &i__1, &i__2, &c_b34, &c_b35,
+                                    &v[nr + 1 + (nr + 1) * v_dim1], ldv);
                         }
                         i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                        dormqr_("L", "N", n, n, &nr, &work[(*n << 1) + 1], n, &work[*n + 1], &v[v_offset], ldv, &work[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
+                        dormqr_("L", "N", n, n, &nr, &work[(*n << 1) + 1], n, &work[*n + 1],
+                                &v[v_offset], ldv, &work[(*n << 1) + *n * nr + nr + 1], &i__1,
+                                &ierr);
                     }
                 }
-                else if (condr2 < cond_ok__)
+                else if(condr2 < cond_ok__)
                 {
                     /* :) .. the input matrix A is very likely a relative of */
                     /* the Kahan matrix :) */
@@ -1910,44 +1888,38 @@ L3302:
                     /* the lower triangular L3 from the LQ factorization of */
                     /* R2=L3*Q3), pre-multiplied with the transposed Q3. */
                     i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                    dgesvj_("L", "U", "N", &nr, &nr, &v[v_offset], ldv, &sva[ 1], &nr, &u[u_offset], ldu, &work[(*n << 1) + *n * nr + nr + 1], &i__1, info);
+                    dgesvj_("L", "U", "N", &nr, &nr, &v[v_offset], ldv, &sva[1], &nr, &u[u_offset],
+                            ldu, &work[(*n << 1) + *n * nr + nr + 1], &i__1, info);
                     scalem = work[(*n << 1) + *n * nr + nr + 1];
                     numrank = i_dnnt(&work[(*n << 1) + *n * nr + nr + 2]);
                     i__1 = nr;
-                    for (p = 1;
-                            p <= i__1;
-                            ++p)
+                    for(p = 1; p <= i__1; ++p)
                     {
                         dcopy_(&nr, &v[p * v_dim1 + 1], &c__1, &u[p * u_dim1 + 1], &c__1);
                         dscal_(&nr, &sva[p], &u[p * u_dim1 + 1], &c__1);
                         /* L3870: */
                     }
-                    dtrsm_("L", "U", "N", "N", &nr, &nr, &c_b35, &work[(*n << 1) + 1], n, &u[u_offset], ldu);
+                    dtrsm_("L", "U", "N", "N", &nr, &nr, &c_b35, &work[(*n << 1) + 1], n,
+                           &u[u_offset], ldu);
                     /* .. apply the permutation from the second QR factorization */
                     i__1 = nr;
-                    for (q = 1;
-                            q <= i__1;
-                            ++q)
+                    for(q = 1; q <= i__1; ++q)
                     {
                         i__2 = nr;
-                        for (p = 1;
-                                p <= i__2;
-                                ++p)
+                        for(p = 1; p <= i__2; ++p)
                         {
                             work[(*n << 1) + *n * nr + nr + iwork[*n + p]] = u[p + q * u_dim1];
                             /* L872: */
                         }
                         i__2 = nr;
-                        for (p = 1;
-                                p <= i__2;
-                                ++p)
+                        for(p = 1; p <= i__2; ++p)
                         {
                             u[p + q * u_dim1] = work[(*n << 1) + *n * nr + nr + p];
                             /* L874: */
                         }
                         /* L873: */
                     }
-                    if (nr < *n)
+                    if(nr < *n)
                     {
                         i__1 = *n - nr;
                         dlaset_("A", &i__1, &nr, &c_b34, &c_b34, &v[nr + 1 + v_dim1], ldv);
@@ -1955,10 +1927,12 @@ L3302:
                         dlaset_("A", &nr, &i__1, &c_b34, &c_b34, &v[(nr + 1) * v_dim1 + 1], ldv);
                         i__1 = *n - nr;
                         i__2 = *n - nr;
-                        dlaset_("A", &i__1, &i__2, &c_b34, &c_b35, &v[nr + 1 + (nr + 1) * v_dim1], ldv);
+                        dlaset_("A", &i__1, &i__2, &c_b34, &c_b35, &v[nr + 1 + (nr + 1) * v_dim1],
+                                ldv);
                     }
                     i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                    dormqr_("L", "N", n, n, &nr, &work[(*n << 1) + 1], n, & work[*n + 1], &v[v_offset], ldv, &work[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
+                    dormqr_("L", "N", n, n, &nr, &work[(*n << 1) + 1], n, &work[*n + 1],
+                            &v[v_offset], ldv, &work[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
                 }
                 else
                 {
@@ -1974,10 +1948,11 @@ L3302:
                     /* Compute the full SVD of L3 using DGESVJ with explicit */
                     /* accumulation of Jacobi rotations. */
                     i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                    dgesvj_("L", "U", "V", &nr, &nr, &v[v_offset], ldv, &sva[ 1], &nr, &u[u_offset], ldu, &work[(*n << 1) + *n * nr + nr + 1], &i__1, info);
+                    dgesvj_("L", "U", "V", &nr, &nr, &v[v_offset], ldv, &sva[1], &nr, &u[u_offset],
+                            ldu, &work[(*n << 1) + *n * nr + nr + 1], &i__1, info);
                     scalem = work[(*n << 1) + *n * nr + nr + 1];
                     numrank = i_dnnt(&work[(*n << 1) + *n * nr + nr + 2]);
-                    if (nr < *n)
+                    if(nr < *n)
                     {
                         i__1 = *n - nr;
                         dlaset_("A", &i__1, &nr, &c_b34, &c_b34, &v[nr + 1 + v_dim1], ldv);
@@ -1985,29 +1960,27 @@ L3302:
                         dlaset_("A", &nr, &i__1, &c_b34, &c_b34, &v[(nr + 1) * v_dim1 + 1], ldv);
                         i__1 = *n - nr;
                         i__2 = *n - nr;
-                        dlaset_("A", &i__1, &i__2, &c_b34, &c_b35, &v[nr + 1 + (nr + 1) * v_dim1], ldv);
+                        dlaset_("A", &i__1, &i__2, &c_b34, &c_b35, &v[nr + 1 + (nr + 1) * v_dim1],
+                                ldv);
                     }
                     i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                    dormqr_("L", "N", n, n, &nr, &work[(*n << 1) + 1], n, & work[*n + 1], &v[v_offset], ldv, &work[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
+                    dormqr_("L", "N", n, n, &nr, &work[(*n << 1) + 1], n, &work[*n + 1],
+                            &v[v_offset], ldv, &work[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
                     i__1 = *lwork - (*n << 1) - *n * nr - nr;
-                    dormlq_("L", "T", &nr, &nr, &nr, &work[(*n << 1) + 1], n, &work[(*n << 1) + *n * nr + 1], &u[u_offset], ldu, &work[(*n << 1) + *n * nr + nr + 1], &i__1, & ierr);
+                    dormlq_("L", "T", &nr, &nr, &nr, &work[(*n << 1) + 1], n,
+                            &work[(*n << 1) + *n * nr + 1], &u[u_offset], ldu,
+                            &work[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
                     i__1 = nr;
-                    for (q = 1;
-                            q <= i__1;
-                            ++q)
+                    for(q = 1; q <= i__1; ++q)
                     {
                         i__2 = nr;
-                        for (p = 1;
-                                p <= i__2;
-                                ++p)
+                        for(p = 1; p <= i__2; ++p)
                         {
                             work[(*n << 1) + *n * nr + nr + iwork[*n + p]] = u[p + q * u_dim1];
                             /* L772: */
                         }
                         i__2 = nr;
-                        for (p = 1;
-                                p <= i__2;
-                                ++p)
+                        for(p = 1; p <= i__2; ++p)
                         {
                             u[p + q * u_dim1] = work[(*n << 1) + *n * nr + nr + p];
                             /* L774: */
@@ -2018,30 +1991,24 @@ L3302:
                 /* Permute the rows of V using the (column) permutation from the */
                 /* first QRF. Also, scale the columns to make them unit in */
                 /* Euclidean norm. This applies to all cases. */
-                temp1 = sqrt((doublereal) (*n)) * epsln;
+                temp1 = sqrt((doublereal)(*n)) * epsln;
                 i__1 = *n;
-                for (q = 1;
-                        q <= i__1;
-                        ++q)
+                for(q = 1; q <= i__1; ++q)
                 {
                     i__2 = *n;
-                    for (p = 1;
-                            p <= i__2;
-                            ++p)
+                    for(p = 1; p <= i__2; ++p)
                     {
                         work[(*n << 1) + *n * nr + nr + iwork[p]] = v[p + q * v_dim1];
                         /* L972: */
                     }
                     i__2 = *n;
-                    for (p = 1;
-                            p <= i__2;
-                            ++p)
+                    for(p = 1; p <= i__2; ++p)
                     {
-                        v[p + q * v_dim1] = work[(*n << 1) + *n * nr + nr + p] ;
+                        v[p + q * v_dim1] = work[(*n << 1) + *n * nr + nr + p];
                         /* L973: */
                     }
                     xsc = 1. / dnrm2_(n, &v[q * v_dim1 + 1], &c__1);
-                    if (xsc < 1. - temp1 || xsc > temp1 + 1.)
+                    if(xsc < 1. - temp1 || xsc > temp1 + 1.)
                     {
                         dscal_(n, &xsc, &v[q * v_dim1 + 1], &c__1);
                     }
@@ -2049,32 +2016,32 @@ L3302:
                 }
                 /* At this moment, V contains the right singular vectors of A. */
                 /* Next, assemble the left singular vector matrix U (M x N). */
-                if (nr < *m)
+                if(nr < *m)
                 {
                     i__1 = *m - nr;
                     dlaset_("A", &i__1, &nr, &c_b34, &c_b34, &u[nr + 1 + u_dim1], ldu);
-                    if (nr < n1)
+                    if(nr < n1)
                     {
                         i__1 = n1 - nr;
                         dlaset_("A", &nr, &i__1, &c_b34, &c_b34, &u[(nr + 1) * u_dim1 + 1], ldu);
                         i__1 = *m - nr;
                         i__2 = n1 - nr;
-                        dlaset_("A", &i__1, &i__2, &c_b34, &c_b35, &u[nr + 1 + (nr + 1) * u_dim1], ldu);
+                        dlaset_("A", &i__1, &i__2, &c_b34, &c_b35, &u[nr + 1 + (nr + 1) * u_dim1],
+                                ldu);
                     }
                 }
                 /* The Q matrix from the first QRF is built into the left singular */
                 /* matrix U. This applies to all cases. */
                 i__1 = *lwork - *n;
-                dormqr_("Left", "No_Tr", m, &n1, n, &a[a_offset], lda, &work[ 1], &u[u_offset], ldu, &work[*n + 1], &i__1, &ierr);
+                dormqr_("Left", "No_Tr", m, &n1, n, &a[a_offset], lda, &work[1], &u[u_offset], ldu,
+                        &work[*n + 1], &i__1, &ierr);
                 /* The columns of U are normalized. The cost is O(M*N) flops. */
-                temp1 = sqrt((doublereal) (*m)) * epsln;
+                temp1 = sqrt((doublereal)(*m)) * epsln;
                 i__1 = nr;
-                for (p = 1;
-                        p <= i__1;
-                        ++p)
+                for(p = 1; p <= i__1; ++p)
                 {
                     xsc = 1. / dnrm2_(m, &u[p * u_dim1 + 1], &c__1);
-                    if (xsc < 1. - temp1 || xsc > temp1 + 1.)
+                    if(xsc < 1. - temp1 || xsc > temp1 + 1.)
                     {
                         dscal_(m, &xsc, &u[p * u_dim1 + 1], &c__1);
                     }
@@ -2082,7 +2049,7 @@ L3302:
                 }
                 /* If the initial QRF is computed with row pivoting, the left */
                 /* singular vectors must be adjusted. */
-                if (rowpiv)
+                if(rowpiv)
                 {
                     i__1 = *m - 1;
                     dlaswp_(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[(*n << 1) + 1], &c_n1);
@@ -2093,21 +2060,18 @@ L3302:
                 /* .. the initial matrix A has almost orthogonal columns and */
                 /* the second QRF is not needed */
                 dlacpy_("Upper", n, n, &a[a_offset], lda, &work[*n + 1], n);
-                if (l2pert)
+                if(l2pert)
                 {
                     xsc = sqrt(small_val);
                     i__1 = *n;
-                    for (p = 2;
-                            p <= i__1;
-                            ++p)
+                    for(p = 2; p <= i__1; ++p)
                     {
                         temp1 = xsc * work[*n + (p - 1) * *n + p];
                         i__2 = p - 1;
-                        for (q = 1;
-                                q <= i__2;
-                                ++q)
+                        for(q = 1; q <= i__2; ++q)
                         {
-                            work[*n + (q - 1) * *n + p] = -d_sign(&temp1, & work[*n + (p - 1) * *n + q]);
+                            work[*n + (q - 1) * *n + p]
+                                = -d_sign(&temp1, &work[*n + (p - 1) * *n + q]);
                             /* L5971: */
                         }
                         /* L5970: */
@@ -2120,70 +2084,66 @@ L3302:
                     dlaset_("Lower", &i__1, &i__2, &c_b34, &c_b34, &work[*n + 2], n);
                 }
                 i__1 = *lwork - *n - *n * *n;
-                dgesvj_("Upper", "U", "N", n, n, &work[*n + 1], n, &sva[1], n, &u[u_offset], ldu, &work[*n + *n * *n + 1], &i__1, info);
+                dgesvj_("Upper", "U", "N", n, n, &work[*n + 1], n, &sva[1], n, &u[u_offset], ldu,
+                        &work[*n + *n * *n + 1], &i__1, info);
                 scalem = work[*n + *n * *n + 1];
                 numrank = i_dnnt(&work[*n + *n * *n + 2]);
                 i__1 = *n;
-                for (p = 1;
-                        p <= i__1;
-                        ++p)
+                for(p = 1; p <= i__1; ++p)
                 {
                     dcopy_(n, &work[*n + (p - 1) * *n + 1], &c__1, &u[p * u_dim1 + 1], &c__1);
                     dscal_(n, &sva[p], &work[*n + (p - 1) * *n + 1], &c__1);
                     /* L6970: */
                 }
-                dtrsm_("Left", "Upper", "NoTrans", "No UD", n, n, &c_b35, &a[ a_offset], lda, &work[*n + 1], n);
+                dtrsm_("Left", "Upper", "NoTrans", "No UD", n, n, &c_b35, &a[a_offset], lda,
+                       &work[*n + 1], n);
                 i__1 = *n;
-                for (p = 1;
-                        p <= i__1;
-                        ++p)
+                for(p = 1; p <= i__1; ++p)
                 {
                     dcopy_(n, &work[*n + p], n, &v[iwork[p] + v_dim1], ldv);
                     /* L6972: */
                 }
-                temp1 = sqrt((doublereal) (*n)) * epsln;
+                temp1 = sqrt((doublereal)(*n)) * epsln;
                 i__1 = *n;
-                for (p = 1;
-                        p <= i__1;
-                        ++p)
+                for(p = 1; p <= i__1; ++p)
                 {
                     xsc = 1. / dnrm2_(n, &v[p * v_dim1 + 1], &c__1);
-                    if (xsc < 1. - temp1 || xsc > temp1 + 1.)
+                    if(xsc < 1. - temp1 || xsc > temp1 + 1.)
                     {
                         dscal_(n, &xsc, &v[p * v_dim1 + 1], &c__1);
                     }
                     /* L6971: */
                 }
                 /* Assemble the left singular vector matrix U (M x N). */
-                if (*n < *m)
+                if(*n < *m)
                 {
                     i__1 = *m - *n;
                     dlaset_("A", &i__1, n, &c_b34, &c_b34, &u[*n + 1 + u_dim1], ldu);
-                    if (*n < n1)
+                    if(*n < n1)
                     {
                         i__1 = n1 - *n;
                         dlaset_("A", n, &i__1, &c_b34, &c_b34, &u[(*n + 1) * u_dim1 + 1], ldu);
                         i__1 = *m - *n;
                         i__2 = n1 - *n;
-                        dlaset_("A", &i__1, &i__2, &c_b34, &c_b35, &u[*n + 1 + (*n + 1) * u_dim1], ldu);
+                        dlaset_("A", &i__1, &i__2, &c_b34, &c_b35, &u[*n + 1 + (*n + 1) * u_dim1],
+                                ldu);
                     }
                 }
                 i__1 = *lwork - *n;
-                dormqr_("Left", "No Tr", m, &n1, n, &a[a_offset], lda, &work[ 1], &u[u_offset], ldu, &work[*n + 1], &i__1, &ierr);
-                temp1 = sqrt((doublereal) (*m)) * epsln;
+                dormqr_("Left", "No Tr", m, &n1, n, &a[a_offset], lda, &work[1], &u[u_offset], ldu,
+                        &work[*n + 1], &i__1, &ierr);
+                temp1 = sqrt((doublereal)(*m)) * epsln;
                 i__1 = n1;
-                for (p = 1;
-                        p <= i__1;
-                        ++p)
+                for(p = 1; p <= i__1; ++p)
                 {
                     xsc = 1. / dnrm2_(m, &u[p * u_dim1 + 1], &c__1);
-                    if (xsc < 1. - temp1 || xsc > temp1 + 1.)
+                    if(xsc < 1. - temp1 || xsc > temp1 + 1.)
                     {
                         dscal_(m, &xsc, &u[p * u_dim1 + 1], &c__1);
                     }
                     /* L6973: */
                 }
-                if (rowpiv)
+                if(rowpiv)
                 {
                     i__1 = *m - 1;
                     dlaswp_(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[(*n << 1) + 1], &c_n1);
@@ -2203,33 +2163,27 @@ L3302:
             /* implementation of BLAS and some LAPACK procedures, capable of working */
             /* in presence of extreme values. Since that is not always the case, ... */
             i__1 = nr;
-            for (p = 1;
-                    p <= i__1;
-                    ++p)
+            for(p = 1; p <= i__1; ++p)
             {
                 i__2 = *n - p + 1;
-                dcopy_(&i__2, &a[p + p * a_dim1], lda, &v[p + p * v_dim1], & c__1);
+                dcopy_(&i__2, &a[p + p * a_dim1], lda, &v[p + p * v_dim1], &c__1);
                 /* L7968: */
             }
-            if (l2pert)
+            if(l2pert)
             {
                 xsc = sqrt(small_val / epsln);
                 i__1 = nr;
-                for (q = 1;
-                        q <= i__1;
-                        ++q)
+                for(q = 1; q <= i__1; ++q)
                 {
                     temp1 = xsc * (d__1 = v[q + q * v_dim1], f2c_abs(d__1));
                     i__2 = *n;
-                    for (p = 1;
-                            p <= i__2;
-                            ++p)
+                    for(p = 1; p <= i__2; ++p)
                     {
-                        if (p > q && (d__1 = v[p + q * v_dim1], f2c_abs(d__1)) <= temp1 || p < q)
+                        if(p > q && (d__1 = v[p + q * v_dim1], f2c_abs(d__1)) <= temp1 || p < q)
                         {
                             v[p + q * v_dim1] = d_sign(&temp1, &v[p + q * v_dim1]);
                         }
-                        if (p < q)
+                        if(p < q)
                         {
                             v[p + q * v_dim1] = -v[p + q * v_dim1];
                         }
@@ -2248,32 +2202,26 @@ L3302:
             dgeqrf_(n, &nr, &v[v_offset], ldv, &work[*n + 1], &work[(*n << 1) + 1], &i__1, &ierr);
             dlacpy_("L", n, &nr, &v[v_offset], ldv, &work[(*n << 1) + 1], n);
             i__1 = nr;
-            for (p = 1;
-                    p <= i__1;
-                    ++p)
+            for(p = 1; p <= i__1; ++p)
             {
                 i__2 = nr - p + 1;
-                dcopy_(&i__2, &v[p + p * v_dim1], ldv, &u[p + p * u_dim1], & c__1);
+                dcopy_(&i__2, &v[p + p * v_dim1], ldv, &u[p + p * u_dim1], &c__1);
                 /* L7969: */
             }
-            if (l2pert)
+            if(l2pert)
             {
                 xsc = sqrt(small_val / epsln);
                 i__1 = nr;
-                for (q = 2;
-                        q <= i__1;
-                        ++q)
+                for(q = 2; q <= i__1; ++q)
                 {
                     i__2 = q - 1;
-                    for (p = 1;
-                            p <= i__2;
-                            ++p)
+                    for(p = 1; p <= i__2; ++p)
                     {
                         /* Computing MIN */
                         d__3 = (d__1 = u[p + p * u_dim1], f2c_abs(d__1));
-                        d__4 = ( d__2 = u[q + q * u_dim1], f2c_abs(d__2)); // , expr subst
-                        temp1 = xsc * fla_min(d__3,d__4);
-                        u[p + q * u_dim1] = -d_sign(&temp1, &u[q + p * u_dim1] );
+                        d__4 = (d__2 = u[q + q * u_dim1], f2c_abs(d__2)); // , expr subst
+                        temp1 = xsc * fla_min(d__3, d__4);
+                        u[p + q * u_dim1] = -d_sign(&temp1, &u[q + p * u_dim1]);
                         /* L9971: */
                     }
                     /* L9970: */
@@ -2286,10 +2234,11 @@ L3302:
                 dlaset_("U", &i__1, &i__2, &c_b34, &c_b34, &u[(u_dim1 << 1) + 1], ldu);
             }
             i__1 = *lwork - (*n << 1) - *n * nr;
-            dgesvj_("G", "U", "V", &nr, &nr, &u[u_offset], ldu, &sva[1], n, & v[v_offset], ldv, &work[(*n << 1) + *n * nr + 1], &i__1, info);
+            dgesvj_("G", "U", "V", &nr, &nr, &u[u_offset], ldu, &sva[1], n, &v[v_offset], ldv,
+                    &work[(*n << 1) + *n * nr + 1], &i__1, info);
             scalem = work[(*n << 1) + *n * nr + 1];
             numrank = i_dnnt(&work[(*n << 1) + *n * nr + 2]);
-            if (nr < *n)
+            if(nr < *n)
             {
                 i__1 = *n - nr;
                 dlaset_("A", &i__1, &nr, &c_b34, &c_b34, &v[nr + 1 + v_dim1], ldv);
@@ -2300,34 +2249,29 @@ L3302:
                 dlaset_("A", &i__1, &i__2, &c_b34, &c_b35, &v[nr + 1 + (nr + 1) * v_dim1], ldv);
             }
             i__1 = *lwork - (*n << 1) - *n * nr - nr;
-            dormqr_("L", "N", n, n, &nr, &work[(*n << 1) + 1], n, &work[*n + 1], &v[v_offset], ldv, &work[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
+            dormqr_("L", "N", n, n, &nr, &work[(*n << 1) + 1], n, &work[*n + 1], &v[v_offset], ldv,
+                    &work[(*n << 1) + *n * nr + nr + 1], &i__1, &ierr);
             /* Permute the rows of V using the (column) permutation from the */
             /* first QRF. Also, scale the columns to make them unit in */
             /* Euclidean norm. This applies to all cases. */
-            temp1 = sqrt((doublereal) (*n)) * epsln;
+            temp1 = sqrt((doublereal)(*n)) * epsln;
             i__1 = *n;
-            for (q = 1;
-                    q <= i__1;
-                    ++q)
+            for(q = 1; q <= i__1; ++q)
             {
                 i__2 = *n;
-                for (p = 1;
-                        p <= i__2;
-                        ++p)
+                for(p = 1; p <= i__2; ++p)
                 {
                     work[(*n << 1) + *n * nr + nr + iwork[p]] = v[p + q * v_dim1];
                     /* L8972: */
                 }
                 i__2 = *n;
-                for (p = 1;
-                        p <= i__2;
-                        ++p)
+                for(p = 1; p <= i__2; ++p)
                 {
                     v[p + q * v_dim1] = work[(*n << 1) + *n * nr + nr + p];
                     /* L8973: */
                 }
                 xsc = 1. / dnrm2_(n, &v[q * v_dim1 + 1], &c__1);
-                if (xsc < 1. - temp1 || xsc > temp1 + 1.)
+                if(xsc < 1. - temp1 || xsc > temp1 + 1.)
                 {
                     dscal_(n, &xsc, &v[q * v_dim1 + 1], &c__1);
                 }
@@ -2335,54 +2279,51 @@ L3302:
             }
             /* At this moment, V contains the right singular vectors of A. */
             /* Next, assemble the left singular vector matrix U (M x N). */
-            if (nr < *m)
+            if(nr < *m)
             {
                 i__1 = *m - nr;
                 dlaset_("A", &i__1, &nr, &c_b34, &c_b34, &u[nr + 1 + u_dim1], ldu);
-                if (nr < n1)
+                if(nr < n1)
                 {
                     i__1 = n1 - nr;
                     dlaset_("A", &nr, &i__1, &c_b34, &c_b34, &u[(nr + 1) * u_dim1 + 1], ldu);
                     i__1 = *m - nr;
                     i__2 = n1 - nr;
-                    dlaset_("A", &i__1, &i__2, &c_b34, &c_b35, &u[nr + 1 + ( nr + 1) * u_dim1], ldu);
+                    dlaset_("A", &i__1, &i__2, &c_b34, &c_b35, &u[nr + 1 + (nr + 1) * u_dim1], ldu);
                 }
             }
             i__1 = *lwork - *n;
-            dormqr_("Left", "No Tr", m, &n1, n, &a[a_offset], lda, &work[1], & u[u_offset], ldu, &work[*n + 1], &i__1, &ierr);
-            if (rowpiv)
+            dormqr_("Left", "No Tr", m, &n1, n, &a[a_offset], lda, &work[1], &u[u_offset], ldu,
+                    &work[*n + 1], &i__1, &ierr);
+            if(rowpiv)
             {
                 i__1 = *m - 1;
                 dlaswp_(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[(*n << 1) + 1], &c_n1);
             }
         }
-        if (transp)
+        if(transp)
         {
             /* .. swap U and V because the procedure worked on A^t */
             i__1 = *n;
-            for (p = 1;
-                    p <= i__1;
-                    ++p)
+            for(p = 1; p <= i__1; ++p)
             {
-                dswap_(n, &u[p * u_dim1 + 1], &c__1, &v[p * v_dim1 + 1], & c__1);
+                dswap_(n, &u[p * u_dim1 + 1], &c__1, &v[p * v_dim1 + 1], &c__1);
                 /* L6974: */
             }
         }
     }
     /* end of the full SVD */
     /* Undo scaling, if necessary (and possible) */
-    if (uscal2 <= big / sva[1] * uscal1)
+    if(uscal2 <= big / sva[1] * uscal1)
     {
-        dlascl_("G", &c__0, &c__0, &uscal1, &uscal2, &nr, &c__1, &sva[1], n, & ierr);
+        dlascl_("G", &c__0, &c__0, &uscal1, &uscal2, &nr, &c__1, &sva[1], n, &ierr);
         uscal1 = 1.;
         uscal2 = 1.;
     }
-    if (nr < *n)
+    if(nr < *n)
     {
         i__1 = *n;
-        for (p = nr + 1;
-                p <= i__1;
-                ++p)
+        for(p = nr + 1; p <= i__1; ++p)
         {
             sva[p] = 0.;
             /* L3004: */
@@ -2390,16 +2331,16 @@ L3302:
     }
     work[1] = uscal2 * scalem;
     work[2] = uscal1;
-    if (errest)
+    if(errest)
     {
         work[3] = sconda;
     }
-    if (lsvec && rsvec)
+    if(lsvec && rsvec)
     {
         work[4] = condr1;
         work[5] = condr2;
     }
-    if (l2tran)
+    if(l2tran)
     {
         work[6] = entra;
         work[7] = entrat;

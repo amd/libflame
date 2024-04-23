@@ -1,5 +1,8 @@
-/* ../netlib/sgghrd.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sgghrd.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b10 = 0.f;
 static real c_b11 = 1.f;
@@ -10,11 +13,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SGGHRD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgghrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgghrd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgghrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgghrd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgghrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgghrd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -69,10 +78,10 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > COMPQ is CHARACTER*1 */
 /* > = 'N': do not compute Q;
-*/
+ */
 /* > = 'I': Q is initialized to the unit matrix, and the */
 /* > orthogonal matrix Q is returned;
-*/
+ */
 /* > = 'V': Q must contain an orthogonal matrix Q1 on entry, */
 /* > and the product Q1*Q is returned. */
 /* > \endverbatim */
@@ -81,10 +90,10 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > COMPZ is CHARACTER*1 */
 /* > = 'N': do not compute Z;
-*/
+ */
 /* > = 'I': Z is initialized to the unit matrix, and the */
 /* > orthogonal matrix Z is returned;
-*/
+ */
 /* > = 'V': Z must contain an orthogonal matrix Z1 on entry, */
 /* > and the product Z1*Z is returned. */
 /* > \endverbatim */
@@ -204,10 +213,13 @@ LDZ >= 1 otherwise. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, real *a, integer *lda, real *b, integer *ldb, real *q, integer *ldq, real *z__, integer *ldz, integer *info)
+void sgghrd_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, real *a,
+             integer *lda, real *b, integer *ldb, real *q, integer *ldq, real *z__, integer *ldz,
+             integer *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
+        i__3;
     /* Local variables */
     real c__, s;
     logical ilq, ilz;
@@ -215,13 +227,17 @@ void sgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
     real temp;
     integer jrow;
     extern /* Subroutine */
-    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+        void
+        srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer icompq;
     extern /* Subroutine */
-    void slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real *);
+        void
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *),
+        slartg_(real *, real *, real *, real *, real *);
     integer icompz;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -258,17 +274,17 @@ void sgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
     z_offset = 1 + z_dim1;
     z__ -= z_offset;
     /* Function Body */
-    if (lsame_(compq, "N", 1, 1))
+    if(lsame_(compq, "N", 1, 1))
     {
         ilq = FALSE_;
         icompq = 1;
     }
-    else if (lsame_(compq, "V", 1, 1))
+    else if(lsame_(compq, "V", 1, 1))
     {
         ilq = TRUE_;
         icompq = 2;
     }
-    else if (lsame_(compq, "I", 1, 1))
+    else if(lsame_(compq, "I", 1, 1))
     {
         ilq = TRUE_;
         icompq = 3;
@@ -278,17 +294,17 @@ void sgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
         icompq = 0;
     }
     /* Decode COMPZ */
-    if (lsame_(compz, "N", 1, 1))
+    if(lsame_(compz, "N", 1, 1))
     {
         ilz = FALSE_;
         icompz = 1;
     }
-    else if (lsame_(compz, "V", 1, 1))
+    else if(lsame_(compz, "V", 1, 1))
     {
         ilz = TRUE_;
         icompz = 2;
     }
-    else if (lsame_(compz, "I", 1, 1))
+    else if(lsame_(compz, "I", 1, 1))
     {
         ilz = TRUE_;
         icompz = 3;
@@ -299,72 +315,68 @@ void sgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
     }
     /* Test the input parameters. */
     *info = 0;
-    if (icompq <= 0)
+    if(icompq <= 0)
     {
         *info = -1;
     }
-    else if (icompz <= 0)
+    else if(icompz <= 0)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*ilo < 1)
+    else if(*ilo < 1)
     {
         *info = -4;
     }
-    else if (*ihi > *n || *ihi < *ilo - 1)
+    else if(*ihi > *n || *ihi < *ilo - 1)
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (ilq && *ldq < *n || *ldq < 1)
+    else if(ilq && *ldq < *n || *ldq < 1)
     {
         *info = -11;
     }
-    else if (ilz && *ldz < *n || *ldz < 1)
+    else if(ilz && *ldz < *n || *ldz < 1)
     {
         *info = -13;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SGGHRD", &i__1, (ftnlen)6);
         return;
     }
     /* Initialize Q and Z if desired. */
-    if (icompq == 3)
+    if(icompq == 3)
     {
         slaset_("Full", n, n, &c_b10, &c_b11, &q[q_offset], ldq);
     }
-    if (icompz == 3)
+    if(icompz == 3)
     {
         slaset_("Full", n, n, &c_b10, &c_b11, &z__[z_offset], ldz);
     }
     /* Quick return if possible */
-    if (*n <= 1)
+    if(*n <= 1)
     {
         return;
     }
     /* Zero out lower triangle of B */
     i__1 = *n - 1;
-    for (jcol = 1;
-            jcol <= i__1;
-            ++jcol)
+    for(jcol = 1; jcol <= i__1; ++jcol)
     {
         i__2 = *n;
-        for (jrow = jcol + 1;
-                jrow <= i__2;
-                ++jrow)
+        for(jrow = jcol + 1; jrow <= i__2; ++jrow)
         {
             b[jrow + jcol * b_dim1] = 0.f;
             /* L10: */
@@ -373,26 +385,25 @@ void sgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
     }
     /* Reduce A and B */
     i__1 = *ihi - 2;
-    for (jcol = *ilo;
-            jcol <= i__1;
-            ++jcol)
+    for(jcol = *ilo; jcol <= i__1; ++jcol)
     {
         i__2 = jcol + 2;
-        for (jrow = *ihi;
-                jrow >= i__2;
-                --jrow)
+        for(jrow = *ihi; jrow >= i__2; --jrow)
         {
             /* Step 1: rotate rows JROW-1, JROW to kill A(JROW,JCOL) */
             temp = a[jrow - 1 + jcol * a_dim1];
             slartg_(&temp, &a[jrow + jcol * a_dim1], &c__, &s, &a[jrow - 1 + jcol * a_dim1]);
             a[jrow + jcol * a_dim1] = 0.f;
             i__3 = *n - jcol;
-            srot_(&i__3, &a[jrow - 1 + (jcol + 1) * a_dim1], lda, &a[jrow + ( jcol + 1) * a_dim1], lda, &c__, &s);
+            srot_(&i__3, &a[jrow - 1 + (jcol + 1) * a_dim1], lda, &a[jrow + (jcol + 1) * a_dim1],
+                  lda, &c__, &s);
             i__3 = *n + 2 - jrow;
-            srot_(&i__3, &b[jrow - 1 + (jrow - 1) * b_dim1], ldb, &b[jrow + ( jrow - 1) * b_dim1], ldb, &c__, &s);
-            if (ilq)
+            srot_(&i__3, &b[jrow - 1 + (jrow - 1) * b_dim1], ldb, &b[jrow + (jrow - 1) * b_dim1],
+                  ldb, &c__, &s);
+            if(ilq)
             {
-                srot_(n, &q[(jrow - 1) * q_dim1 + 1], &c__1, &q[jrow * q_dim1 + 1], &c__1, &c__, &s);
+                srot_(n, &q[(jrow - 1) * q_dim1 + 1], &c__1, &q[jrow * q_dim1 + 1], &c__1, &c__,
+                      &s);
             }
             /* Step 2: rotate columns JROW, JROW-1 to kill B(JROW,JROW-1) */
             temp = b[jrow + jrow * b_dim1];
@@ -400,10 +411,12 @@ void sgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
             b[jrow + (jrow - 1) * b_dim1] = 0.f;
             srot_(ihi, &a[jrow * a_dim1 + 1], &c__1, &a[(jrow - 1) * a_dim1 + 1], &c__1, &c__, &s);
             i__3 = jrow - 1;
-            srot_(&i__3, &b[jrow * b_dim1 + 1], &c__1, &b[(jrow - 1) * b_dim1 + 1], &c__1, &c__, &s);
-            if (ilz)
+            srot_(&i__3, &b[jrow * b_dim1 + 1], &c__1, &b[(jrow - 1) * b_dim1 + 1], &c__1, &c__,
+                  &s);
+            if(ilz)
             {
-                srot_(n, &z__[jrow * z_dim1 + 1], &c__1, &z__[(jrow - 1) * z_dim1 + 1], &c__1, &c__, &s);
+                srot_(n, &z__[jrow * z_dim1 + 1], &c__1, &z__[(jrow - 1) * z_dim1 + 1], &c__1, &c__,
+                      &s);
             }
             /* L30: */
         }

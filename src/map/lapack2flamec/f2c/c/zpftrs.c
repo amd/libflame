@@ -1,22 +1,27 @@
-/* ../netlib/zpftrs.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zpftrs.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b1 = {1., 0.};
 /* > \brief \b ZPFTRS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZPFTRS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpftrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpftrs.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zpftrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zpftrs.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpftrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpftrs.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -44,7 +49,7 @@ static doublecomplex c_b1 =
 /* > \verbatim */
 /* > TRANSR is CHARACTER*1 */
 /* > = 'N': The Normal TRANSR of RFP A is stored;
-*/
+ */
 /* > = 'C': The Conjugate-transpose TRANSR of RFP A is stored. */
 /* > \endverbatim */
 /* > */
@@ -52,7 +57,7 @@ static doublecomplex c_b1 =
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of RFP A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of RFP A is stored. */
 /* > \endverbatim */
 /* > */
@@ -72,7 +77,7 @@ static doublecomplex c_b1 =
 /* > \param[in] A */
 /* > \verbatim */
 /* > A is COMPLEX*16 array, dimension ( N*(N+1)/2 );
-*/
+ */
 /* > The triangular factor U or L from the Cholesky factorization */
 /* > of RFP A = U**H*U or RFP A = L*L**H, as computed by ZPFTRF. */
 /* > See note below for more details about RFP A. */
@@ -215,10 +220,13 @@ static doublecomplex c_b1 =
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, doublecomplex *a, doublecomplex *b, integer *ldb, integer *info)
+void zpftrs_(char *transr, char *uplo, integer *n, integer *nrhs, doublecomplex *a,
+             doublecomplex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zpftrs inputs: transr %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*transr, *uplo, *n, *nrhs, *ldb);
+    AOCL_DTL_SNPRINTF("zpftrs inputs: transr %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS
+                      ", ldb %" FLA_IS "",
+                      *transr, *uplo, *n, *nrhs, *ldb);
 
     /* System generated locals */
     integer b_dim1, b_offset, i__1;
@@ -227,7 +235,10 @@ void zpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, doublecomplex
     extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
-    void ztfsm_(char *, char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ztfsm_(char *, char *, char *, char *, char *, integer *, integer *, doublecomplex *,
+               doublecomplex *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -257,27 +268,27 @@ void zpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, doublecomplex
     *info = 0;
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
-    if (! normaltransr && ! lsame_(transr, "C", 1, 1))
+    if(!normaltransr && !lsame_(transr, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U", 1, 1))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -4;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZPFTRS", &i__1, (ftnlen)6);
@@ -285,13 +296,13 @@ void zpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, doublecomplex
         return;
     }
     /* Quick return if possible */
-    if (*n == 0 || *nrhs == 0)
+    if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* start execution: there are two triangular solves */
-    if (lower)
+    if(lower)
     {
         ztfsm_(transr, "L", uplo, "N", "N", n, nrhs, &c_b1, a, &b[b_offset], ldb);
         ztfsm_(transr, "L", uplo, "C", "N", n, nrhs, &c_b1, a, &b[b_offset], ldb);

@@ -1,5 +1,8 @@
-/* ../netlib/zunmql.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zunmql.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -11,11 +14,17 @@ static integer c__65 = 65;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZUNMQL + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zunmql. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zunmql.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zunmql. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zunmql.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunmql. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunmql.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -54,7 +63,7 @@ static integer c__65 = 65;
 /* > \verbatim */
 /* > SIDE is CHARACTER*1 */
 /* > = 'L': apply Q or Q**H from the Left;
-*/
+ */
 /* > = 'R': apply Q or Q**H from the Right. */
 /* > \endverbatim */
 /* > */
@@ -62,7 +71,7 @@ static integer c__65 = 65;
 /* > \verbatim */
 /* > TRANS is CHARACTER*1 */
 /* > = 'N': No transpose, apply Q;
-*/
+ */
 /* > = 'C': Transpose, apply Q**H. */
 /* > \endverbatim */
 /* > */
@@ -84,7 +93,7 @@ static integer c__65 = 65;
 /* > The number of elementary reflectors whose product defines */
 /* > the matrix Q. */
 /* > If SIDE = 'L', M >= K >= 0;
-*/
+ */
 /* > if SIDE = 'R', N >= K >= 0. */
 /* > \endverbatim */
 /* > */
@@ -101,7 +110,7 @@ static integer c__65 = 65;
 /* > LDA is INTEGER */
 /* > The leading dimension of the array A. */
 /* > If SIDE = 'L', LDA >= fla_max(1,M);
-*/
+ */
 /* > if SIDE = 'R', LDA >= fla_max(1,N). */
 /* > \endverbatim */
 /* > */
@@ -136,7 +145,7 @@ static integer c__65 = 65;
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If SIDE = 'L', LWORK >= fla_max(1,N);
-*/
+ */
 /* > if SIDE = 'R', LWORK >= fla_max(1,M). */
 /* > For good performance, LWORK should genreally be larger. */
 /* > */
@@ -163,10 +172,14 @@ the routine */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zunmql_(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *lwork, integer *info)
+void zunmql_(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a,
+             integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc,
+             doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zunmql inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS ", lwork %" FLA_IS "", *side, *trans, *m, *n, *k, *lda, *ldc, *lwork);
+    AOCL_DTL_SNPRINTF("zunmql inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
+                      ", lda %" FLA_IS ", ldc %" FLA_IS ", lwork %" FLA_IS "",
+                      *side, *trans, *m, *n, *k, *lda, *ldc, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__4, i__5;
     char ch__1[2];
@@ -179,14 +192,22 @@ void zunmql_(char *side, char *trans, integer *m, integer *n, integer *k, double
     extern logical lsame_(char *, char *, integer, integer);
     integer nbmin, iinfo;
     extern /* Subroutine */
-    void zunm2l_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zunm2l_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void zlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublecomplex *,
+                integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *);
     logical notran;
     integer ldwork;
     extern /* Subroutine */
-    void zlarft_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zlarft_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                doublecomplex *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.7.0) -- */
@@ -226,52 +247,52 @@ void zunmql_(char *side, char *trans, integer *m, integer *n, integer *k, double
     lquery = *lwork == -1;
     nb = 0;
     /* NQ is the order of Q and NW is the minimum dimension of WORK */
-    if (left)
+    if(left)
     {
         nq = *m;
-        nw = fla_max(1,*n);
+        nw = fla_max(1, *n);
     }
     else
     {
         nq = *n;
-        nw = fla_max(1,*m);
+        nw = fla_max(1, *m);
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*k < 0 || *k > nq)
+    else if(*k < 0 || *k > nq)
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,nq))
+    else if(*lda < fla_max(1, nq))
     {
         *info = -7;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -10;
     }
-    else if (*lwork < nw && ! lquery)
+    else if(*lwork < nw && !lquery)
     {
         *info = -12;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
         /* Compute the workspace requirements */
-        if (*m == 0 || *n == 0)
+        if(*m == 0 || *n == 0)
         {
             lwkopt = 1;
         }
@@ -280,53 +301,54 @@ void zunmql_(char *side, char *trans, integer *m, integer *n, integer *k, double
             /* Computing MIN */
             i__1 = 64;
             i__2 = ilaenv_(&c__1, "ZUNMQL", ch__1, m, n, k, &c_n1); // , expr subst
-            nb = fla_min(i__1,i__2);
+            nb = fla_min(i__1, i__2);
             lwkopt = nw * nb + 4160;
         }
-        work[1].r = (doublereal) lwkopt;
+        work[1].r = (doublereal)lwkopt;
         work[1].i = 0.; // , expr subst
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZUNMQL", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     nbmin = 2;
     ldwork = nw;
-    if (nb > 1 && nb < *k)
+    if(nb > 1 && nb < *k)
     {
-        if (*lwork < nw * nb + 4160)
+        if(*lwork < nw * nb + 4160)
         {
             nb = (*lwork - 4160) / ldwork;
             /* Computing MAX */
             i__1 = 2;
             i__2 = ilaenv_(&c__2, "ZUNMQL", ch__1, m, n, k, &c_n1); // , expr subst
-            nbmin = fla_max(i__1,i__2);
+            nbmin = fla_max(i__1, i__2);
         }
     }
-    if (nb < nbmin || nb >= *k)
+    if(nb < nbmin || nb >= *k)
     {
         /* Use unblocked code */
-        zunm2l_(side, trans, m, n, k, &a[a_offset], lda, &tau[1], &c__[ c_offset], ldc, &work[1], &iinfo);
+        zunm2l_(side, trans, m, n, k, &a[a_offset], lda, &tau[1], &c__[c_offset], ldc, &work[1],
+                &iinfo);
     }
     else
     {
         /* Use blocked code */
         iwt = nw * nb + 1;
-        if (left && notran || ! left && ! notran)
+        if(left && notran || !left && !notran)
         {
             i1 = 1;
             i2 = *k;
@@ -338,7 +360,7 @@ void zunmql_(char *side, char *trans, integer *m, integer *n, integer *k, double
             i2 = 1;
             i3 = -nb;
         }
-        if (left)
+        if(left)
         {
             ni = *n;
         }
@@ -348,19 +370,18 @@ void zunmql_(char *side, char *trans, integer *m, integer *n, integer *k, double
         }
         i__1 = i2;
         i__2 = i3;
-        for (i__ = i1;
-                i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-                i__ += i__2)
+        for(i__ = i1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
         {
             /* Computing MIN */
             i__4 = nb;
             i__5 = *k - i__ + 1; // , expr subst
-            ib = fla_min(i__4,i__5);
+            ib = fla_min(i__4, i__5);
             /* Form the triangular factor of the block reflector */
             /* H = H(i+ib-1) . . . H(i+1) H(i) */
             i__4 = nq - *k + i__ + ib - 1;
-            zlarft_("Backward", "Columnwise", &i__4, &ib, &a[i__ * a_dim1 + 1], lda, &tau[i__], &work[iwt], &c__65);
-            if (left)
+            zlarft_("Backward", "Columnwise", &i__4, &ib, &a[i__ * a_dim1 + 1], lda, &tau[i__],
+                    &work[iwt], &c__65);
+            if(left)
             {
                 /* H or H**H is applied to C(1:m-k+i+ib-1,1:n) */
                 mi = *m - *k + i__ + ib - 1;
@@ -371,11 +392,12 @@ void zunmql_(char *side, char *trans, integer *m, integer *n, integer *k, double
                 ni = *n - *k + i__ + ib - 1;
             }
             /* Apply H or H**H */
-            zlarfb_(side, trans, "Backward", "Columnwise", &mi, &ni, &ib, &a[ i__ * a_dim1 + 1], lda, &work[iwt], &c__65, &c__[c_offset], ldc, &work[1], &ldwork);
+            zlarfb_(side, trans, "Backward", "Columnwise", &mi, &ni, &ib, &a[i__ * a_dim1 + 1], lda,
+                    &work[iwt], &c__65, &c__[c_offset], ldc, &work[1], &ldwork);
             /* L10: */
         }
     }
-    work[1].r = (doublereal) lwkopt;
+    work[1].r = (doublereal)lwkopt;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

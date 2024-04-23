@@ -1,16 +1,25 @@
-/* ../netlib/slas2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slas2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLAS2 computes singular values of a 2-by-2 triangular matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAS2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slas2.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slas2.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slas2.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slas2.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slas2.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slas2.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -93,7 +102,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slas2_(real *f, real *g, real *h__, real *ssmin, real * ssmax)
+void slas2_(real *f, real *g, real *h__, real *ssmin, real *ssmax)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
@@ -119,25 +128,25 @@ void slas2_(real *f, real *g, real *h__, real *ssmin, real * ssmax)
     fa = f2c_abs(*f);
     ga = f2c_abs(*g);
     ha = f2c_abs(*h__);
-    fhmn = fla_min(fa,ha);
-    fhmx = fla_max(fa,ha);
-    if (fhmn == 0.f)
+    fhmn = fla_min(fa, ha);
+    fhmx = fla_max(fa, ha);
+    if(fhmn == 0.f)
     {
         *ssmin = 0.f;
-        if (fhmx == 0.f)
+        if(fhmx == 0.f)
         {
             *ssmax = ga;
         }
         else
         {
             /* Computing 2nd power */
-            r__1 = fla_min(fhmx,ga) / fla_max(fhmx,ga);
-            *ssmax = fla_max(fhmx,ga) * sqrt(r__1 * r__1 + 1.f);
+            r__1 = fla_min(fhmx, ga) / fla_max(fhmx, ga);
+            *ssmax = fla_max(fhmx, ga) * sqrt(r__1 * r__1 + 1.f);
         }
     }
     else
     {
-        if (ga < fhmx)
+        if(ga < fhmx)
         {
             as = fhmn / fhmx + 1.f;
             at = (fhmx - fhmn) / fhmx;
@@ -151,7 +160,7 @@ void slas2_(real *f, real *g, real *h__, real *ssmin, real * ssmax)
         else
         {
             au = fhmx / ga;
-            if (au == 0.f)
+            if(au == 0.f)
             {
                 /* Avoid possible harmful underflow if exponent range */
                 /* asymmetric (true SSMIN may not underflow even if */
@@ -167,7 +176,7 @@ void slas2_(real *f, real *g, real *h__, real *ssmin, real * ssmax)
                 r__1 = as * au;
                 /* Computing 2nd power */
                 r__2 = at * au;
-                c__ = 1.f / (sqrt(r__1 * r__1 + 1.f) + sqrt(r__2 * r__2 + 1.f) );
+                c__ = 1.f / (sqrt(r__1 * r__1 + 1.f) + sqrt(r__2 * r__2 + 1.f));
                 *ssmin = fhmn * c__ * au;
                 *ssmin += *ssmin;
                 *ssmax = ga / (c__ + c__);

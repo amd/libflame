@@ -1,5 +1,8 @@
-/* ../netlib/slarf.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slarf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b4 = 1.f;
 static real c_b5 = 0.f;
@@ -10,11 +13,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLARF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarf.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarf.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarf.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarf.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarf.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarf.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -114,12 +123,14 @@ static integer c__1 = 1;
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *tau, real *c__, integer *ldc, real *work)
+void slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *tau, real *c__,
+            integer *ldc, real *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slarf inputs: side %c, m %d, n %d, incv %d, ldc %d",*side, *m, *n, *incv, *ldc);
+    snprintf(buffer, 256, "slarf inputs: side %c, m %d, n %d, incv %d, ldc %d", *side, *m, *n,
+             *incv, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -129,13 +140,18 @@ void slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *ta
     integer i__;
     logical applyleft;
     extern /* Subroutine */
-    void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
+        void
+        sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+              integer *);
     extern logical lsame_(char *, char *, integer, integer);
     integer lastc;
     extern /* Subroutine */
-    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+               real *, integer *);
     integer lastv;
-    extern integer ilaslc_(integer *, integer *, real *, integer *), ilaslr_( integer *, integer *, real *, integer *);
+    extern integer ilaslc_(integer *, integer *, real *, integer *),
+        ilaslr_(integer *, integer *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -164,11 +180,11 @@ void slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *ta
     applyleft = lsame_(side, "L", 1, 1);
     lastv = 0;
     lastc = 0;
-    if (*tau != 0.f)
+    if(*tau != 0.f)
     {
         /* Set up variables for scanning V. LASTV begins pointing to the end */
         /* of V. */
-        if (applyleft)
+        if(applyleft)
         {
             lastv = *m;
         }
@@ -176,7 +192,7 @@ void slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *ta
         {
             lastv = *n;
         }
-        if (*incv > 0)
+        if(*incv > 0)
         {
             i__ = (lastv - 1) * *incv + 1;
         }
@@ -190,7 +206,7 @@ void slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *ta
             --lastv;
             i__ -= *incv;
         }
-        if (applyleft)
+        if(applyleft)
         {
             /* Scan for the last non-zero column in C(1:lastv,:). */
             lastc = ilaslc_(&lastv, n, &c__[c_offset], ldc);
@@ -204,28 +220,30 @@ void slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *ta
     /* Note that lastc.eq.0 renders the BLAS operations null;
     no special */
     /* case is needed at this level. */
-    if (applyleft)
+    if(applyleft)
     {
         /* Form H * C */
-        if (lastv > 0)
+        if(lastv > 0)
         {
             /* w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1) */
-            sgemv_("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, & v[1], incv, &c_b5, &work[1], &c__1);
+            sgemv_("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1], incv, &c_b5,
+                   &work[1], &c__1);
             /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T */
             r__1 = -(*tau);
-            sger_(&lastv, &lastc, &r__1, &v[1], incv, &work[1], &c__1, &c__[ c_offset], ldc);
+            sger_(&lastv, &lastc, &r__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
         }
     }
     else
     {
         /* Form C * H */
-        if (lastv > 0)
+        if(lastv > 0)
         {
             /* w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1) */
-            sgemv_("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[1], incv, &c_b5, &work[1], &c__1);
+            sgemv_("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[1], incv, &c_b5,
+                   &work[1], &c__1);
             /* C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**T */
             r__1 = -(*tau);
-            sger_(&lastc, &lastv, &r__1, &work[1], &c__1, &v[1], incv, &c__[ c_offset], ldc);
+            sger_(&lastc, &lastv, &r__1, &work[1], &c__1, &v[1], incv, &c__[c_offset], ldc);
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

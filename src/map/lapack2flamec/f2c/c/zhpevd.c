@@ -1,18 +1,28 @@
-/* ../netlib/zhpevd.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zhpevd.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief <b> ZHPEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b> */
+/* > \brief <b> ZHPEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors
+ * for OTHER matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZHPEVD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhpevd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhpevd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhpevd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhpevd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhpevd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhpevd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -50,7 +60,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > JOBZ is CHARACTER*1 */
 /* > = 'N': Compute eigenvalues only;
-*/
+ */
 /* > = 'V': Compute eigenvalues and eigenvectors. */
 /* > \endverbatim */
 /* > */
@@ -58,7 +68,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -75,7 +85,7 @@ static integer c__1 = 1;
 /* > A, packed columnwise in a linear array. The j-th column of A */
 /* > is stored in the array AP as follows: */
 /* > if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AP(i + (j-1)*(2*n-j)/2) = A(i,j) for j<=i<=n. */
 /* > */
 /* > On exit, AP is overwritten by values generated during the */
@@ -195,10 +205,13 @@ i */
 /* > \ingroup complex16OTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void zhpevd_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *w, doublecomplex *z__, integer *ldz, doublecomplex *work, integer *lwork, doublereal *rwork, integer * lrwork, integer *iwork, integer *liwork, integer *info)
+void zhpevd_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *w,
+             doublecomplex *z__, integer *ldz, doublecomplex *work, integer *lwork,
+             doublereal *rwork, integer *lrwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhpevd inputs: jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "",*jobz, *uplo, *n, *ldz);
+    AOCL_DTL_SNPRINTF("zhpevd inputs: jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "", *jobz,
+                      *uplo, *n, *ldz);
     /* System generated locals */
     integer z_dim1, z_offset, i__1;
     doublereal d__1;
@@ -211,7 +224,8 @@ void zhpevd_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *
     integer imax;
     doublereal rmin, rmax;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
     extern logical lsame_(char *, char *, integer, integer);
     integer iinfo, lwmin, llrwk, llwrk;
@@ -220,21 +234,31 @@ void zhpevd_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *
     integer iscale;
     doublereal safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_( integer *, doublereal *, doublecomplex *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal bignum;
     integer indtau;
     extern /* Subroutine */
-    void dsterf_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dsterf_(integer *, doublereal *, doublereal *, integer *);
     extern doublereal zlanhp_(char *, char *, integer *, doublecomplex *, doublereal *);
     extern /* Subroutine */
-    void zstedc_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *, integer *, integer *, integer *);
+        void
+        zstedc_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *,
+                doublecomplex *, integer *, doublereal *, integer *, integer *, integer *,
+                integer *);
     integer indrwk, indwrk, liwmin, lrwmin;
     doublereal smlnum;
     extern /* Subroutine */
-    void zhptrd_(char *, integer *, doublecomplex *, doublereal *, doublereal *, doublecomplex *, integer *);
+        void
+        zhptrd_(char *, integer *, doublecomplex *, doublereal *, doublereal *, doublecomplex *,
+                integer *);
     logical lquery;
     extern /* Subroutine */
-    void zupmtr_(char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zupmtr_(char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *,
+                doublecomplex *, integer *, doublecomplex *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -269,25 +293,25 @@ void zhpevd_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *
     wantz = lsame_(jobz, "V", 1, 1);
     lquery = *lwork == -1 || *lrwork == -1 || *liwork == -1;
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (lsame_(uplo, "L", 1, 1) || lsame_(uplo, "U", 1, 1)))
+    else if(!(lsame_(uplo, "L", 1, 1) || lsame_(uplo, "U", 1, 1)))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*ldz < 1 || wantz && *ldz < *n)
+    else if(*ldz < 1 || wantz && *ldz < *n)
     {
         *info = -7;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (*n <= 1)
+        if(*n <= 1)
         {
             lwmin = 1;
             liwmin = 1;
@@ -295,7 +319,7 @@ void zhpevd_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *
         }
         else
         {
-            if (wantz)
+            if(wantz)
             {
                 lwmin = *n << 1;
                 /* Computing 2nd power */
@@ -310,51 +334,51 @@ void zhpevd_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *
                 liwmin = 1;
             }
         }
-        work[1].r = (doublereal) lwmin;
+        work[1].r = (doublereal)lwmin;
         work[1].i = 0.; // , expr subst
-        rwork[1] = (doublereal) lrwmin;
+        rwork[1] = (doublereal)lrwmin;
         iwork[1] = liwmin;
-        if (*lwork < lwmin && ! lquery)
+        if(*lwork < lwmin && !lquery)
         {
             *info = -9;
         }
-        else if (*lrwork < lrwmin && ! lquery)
+        else if(*lrwork < lrwmin && !lquery)
         {
             *info = -11;
         }
-        else if (*liwork < liwmin && ! lquery)
+        else if(*liwork < liwmin && !lquery)
         {
             *info = -13;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZHPEVD", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
         w[1] = ap[1].r;
-        if (wantz)
+        if(wantz)
         {
             i__1 = z_dim1 + 1;
             z__[i__1].r = 1.;
             z__[i__1].i = 0.; // , expr subst
         }
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants. */
@@ -367,17 +391,17 @@ void zhpevd_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *
     /* Scale matrix to allowable range, if necessary. */
     anrm = zlanhp_("M", uplo, n, &ap[1], &rwork[1]);
     iscale = 0;
-    if (anrm > 0. && anrm < rmin)
+    if(anrm > 0. && anrm < rmin)
     {
         iscale = 1;
         sigma = rmin / anrm;
     }
-    else if (anrm > rmax)
+    else if(anrm > rmax)
     {
         iscale = 1;
         sigma = rmax / anrm;
     }
-    if (iscale == 1)
+    if(iscale == 1)
     {
         i__1 = *n * (*n + 1) / 2;
         zdscal_(&i__1, &sigma, &ap[1], &c__1);
@@ -392,19 +416,21 @@ void zhpevd_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *
     zhptrd_(uplo, n, &ap[1], &w[1], &rwork[inde], &work[indtau], &iinfo);
     /* For eigenvalues only, call DSTERF. For eigenvectors, first call */
     /* ZUPGTR to generate the orthogonal matrix, then call ZSTEDC. */
-    if (! wantz)
+    if(!wantz)
     {
         dsterf_(n, &w[1], &rwork[inde], info);
     }
     else
     {
-        zstedc_("I", n, &w[1], &rwork[inde], &z__[z_offset], ldz, &work[ indwrk], &llwrk, &rwork[indrwk], &llrwk, &iwork[1], liwork, info);
-        zupmtr_("L", uplo, "N", n, n, &ap[1], &work[indtau], &z__[z_offset], ldz, &work[indwrk], &iinfo);
+        zstedc_("I", n, &w[1], &rwork[inde], &z__[z_offset], ldz, &work[indwrk], &llwrk,
+                &rwork[indrwk], &llrwk, &iwork[1], liwork, info);
+        zupmtr_("L", uplo, "N", n, n, &ap[1], &work[indtau], &z__[z_offset], ldz, &work[indwrk],
+                &iinfo);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
-    if (iscale == 1)
+    if(iscale == 1)
     {
-        if (*info == 0)
+        if(*info == 0)
         {
             imax = *n;
         }
@@ -415,9 +441,9 @@ void zhpevd_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *
         d__1 = 1. / sigma;
         dscal_(&imax, &d__1, &w[1], &c__1);
     }
-    work[1].r = (doublereal) lwmin;
+    work[1].r = (doublereal)lwmin;
     work[1].i = 0.; // , expr subst
-    rwork[1] = (doublereal) lrwmin;
+    rwork[1] = (doublereal)lrwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
     return;

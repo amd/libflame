@@ -1,22 +1,27 @@
-/* ../netlib/ctrtrs.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ctrtrs.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b2 =
-{
-    1.f,0.f
-}
-;
+static complex c_b2 = {1.f, 0.f};
 /* > \brief \b CTRTRS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CTRTRS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctrtrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctrtrs.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctrtrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctrtrs.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrtrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrtrs.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -48,7 +53,7 @@ static complex c_b2 =
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': A is upper triangular;
-*/
+ */
 /* > = 'L': A is lower triangular. */
 /* > \endverbatim */
 /* > */
@@ -65,7 +70,7 @@ static complex c_b2 =
 /* > \verbatim */
 /* > DIAG is CHARACTER*1 */
 /* > = 'N': A is non-unit triangular;
-*/
+ */
 /* > = 'U': A is unit triangular. */
 /* > \endverbatim */
 /* > */
@@ -133,15 +138,20 @@ static complex c_b2 =
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ctrtrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, complex *a, integer *lda, complex *b, integer *ldb, integer *info)
+void ctrtrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, complex *a,
+             integer *lda, complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctrtrs inputs: uplo %c, trans %c, diag %c, n %lld, nrhs %lld, lda %lld, ldb %lld",*uplo, *trans, *diag, *n, *nrhs, *lda, *ldb);
+    snprintf(buffer, 256,
+             "ctrtrs inputs: uplo %c, trans %c, diag %c, n %lld, nrhs %lld, lda %lld, ldb %lld",
+             *uplo, *trans, *diag, *n, *nrhs, *lda, *ldb);
 #else
-    snprintf(buffer, 256,"ctrtrs inputs: uplo %c, trans %c, diag %c, n %d, nrhs %d, lda %d, ldb %d",*uplo, *trans, *diag, *n, *nrhs, *lda, *ldb);
+    snprintf(buffer, 256,
+             "ctrtrs inputs: uplo %c, trans %c, diag %c, n %d, nrhs %d, lda %d, ldb %d", *uplo,
+             *trans, *diag, *n, *nrhs, *lda, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -150,7 +160,10 @@ void ctrtrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
+               integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -183,35 +196,35 @@ void ctrtrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
     /* Function Body */
     *info = 0;
     nounit = lsame_(diag, "N", 1, 1);
-    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!lsame_(trans, "N", 1, 1) && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CTRTRS", &i__1, (ftnlen)6);
@@ -219,21 +232,19 @@ void ctrtrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Check for singularity. */
-    if (nounit)
+    if(nounit)
     {
         i__1 = *n;
-        for (*info = 1;
-                *info <= i__1;
-                ++(*info))
+        for(*info = 1; *info <= i__1; ++(*info))
         {
             i__2 = *info + *info * a_dim1;
-            if (a[i__2].r == 0.f && a[i__2].i == 0.f)
+            if(a[i__2].r == 0.f && a[i__2].i == 0.f)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                 return;
@@ -243,7 +254,7 @@ void ctrtrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
     }
     *info = 0;
     /* Solve A * x = b, A**T * x = b, or A**H * x = b. */
-    ctrsm_("Left", uplo, trans, diag, n, nrhs, &c_b2, &a[a_offset], lda, &b[ b_offset], ldb);
+    ctrsm_("Left", uplo, trans, diag, n, nrhs, &c_b2, &a[a_offset], lda, &b[b_offset], ldb);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CTRTRS */

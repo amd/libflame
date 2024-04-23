@@ -1,5 +1,8 @@
-/* ../netlib/dptrfs.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dptrfs.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static doublereal c_b11 = 1.;
@@ -9,11 +12,17 @@ static doublereal c_b11 = 1.;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DPTRFS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dptrfs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dptrfs.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dptrfs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dptrfs.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dptrfs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dptrfs.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -150,10 +159,14 @@ static doublereal c_b11 = 1.;
 /* > \ingroup doublePTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dptrfs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublereal *df, doublereal *ef, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal *ferr, doublereal *berr, doublereal *work, integer *info)
+void dptrfs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublereal *df,
+             doublereal *ef, doublereal *b, integer *ldb, doublereal *x, integer *ldx,
+             doublereal *ferr, doublereal *berr, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dptrfs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*n, *nrhs, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("dptrfs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS
+                      ", ldx %" FLA_IS "",
+                      *n, *nrhs, *ldb, *ldx);
     /* System generated locals */
     integer b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
     doublereal d__1, d__2, d__3;
@@ -163,16 +176,20 @@ void dptrfs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublere
     integer ix, nz;
     doublereal eps, safe1, safe2;
     extern /* Subroutine */
-    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     integer count;
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal lstres;
     extern /* Subroutine */
-    void dpttrs_(integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+        void
+        dpttrs_(integer *, integer *, doublereal *, doublereal *, doublereal *, integer *,
+                integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -210,23 +227,23 @@ void dptrfs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublere
     --work;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -2;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -10;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DPTRFS", &i__1, (ftnlen)6);
@@ -234,12 +251,10 @@ void dptrfs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublere
         return;
     }
     /* Quick return if possible */
-    if (*n == 0 || *nrhs == 0)
+    if(*n == 0 || *nrhs == 0)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             ferr[j] = 0.;
             berr[j] = 0.;
@@ -256,16 +271,14 @@ void dptrfs_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublere
     safe2 = safe1 / eps;
     /* Do for each right hand side */
     i__1 = *nrhs;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         count = 1;
         lstres = 3.;
-L20: /* Loop until stopping criterion is satisfied. */
+    L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - A * X. Also compute */
         /* f2c_dabs(A)*f2c_dabs(x) + f2c_dabs(b) for use in the backward error bound. */
-        if (*n == 1)
+        if(*n == 1)
         {
             bi = b[j * b_dim1 + 1];
             dx = d__[1] * x[j * x_dim1 + 1];
@@ -280,9 +293,7 @@ L20: /* Loop until stopping criterion is satisfied. */
             work[*n + 1] = bi - dx - ex;
             work[1] = f2c_dabs(bi) + f2c_dabs(dx) + f2c_dabs(ex);
             i__2 = *n - 1;
-            for (i__ = 2;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 2; i__ <= i__2; ++i__)
             {
                 bi = b[i__ + j * b_dim1];
                 cx = e[i__ - 1] * x[i__ - 1 + j * x_dim1];
@@ -306,23 +317,22 @@ L20: /* Loop until stopping criterion is satisfied. */
         /* numerator and denominator before dividing. */
         s = 0.;
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
-            if (work[i__] > safe2)
+            if(work[i__] > safe2)
             {
                 /* Computing MAX */
                 d__2 = s;
-                d__3 = (d__1 = work[*n + i__], f2c_dabs(d__1)) / work[ i__]; // , expr subst
-                s = fla_max(d__2,d__3);
+                d__3 = (d__1 = work[*n + i__], f2c_dabs(d__1)) / work[i__]; // , expr subst
+                s = fla_max(d__2, d__3);
             }
             else
             {
                 /* Computing MAX */
                 d__2 = s;
-                d__3 = ((d__1 = work[*n + i__], f2c_dabs(d__1)) + safe1) / (work[i__] + safe1); // , expr subst
-                s = fla_max(d__2,d__3);
+                d__3 = ((d__1 = work[*n + i__], f2c_dabs(d__1)) + safe1)
+                       / (work[i__] + safe1); // , expr subst
+                s = fla_max(d__2, d__3);
             }
             /* L40: */
         }
@@ -332,11 +342,11 @@ L20: /* Loop until stopping criterion is satisfied. */
         /* 2) BERR(J) decreased by at least a factor of 2 during the */
         /* last iteration, and */
         /* 3) At most ITMAX iterations tried. */
-        if (berr[j] > eps && berr[j] * 2. <= lstres && count <= 5)
+        if(berr[j] > eps && berr[j] * 2. <= lstres && count <= 5)
         {
             /* Update solution and try again. */
             dpttrs_(n, &c__1, &df[1], &ef[1], &work[*n + 1], n, info);
-            daxpy_(n, &c_b11, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1) ;
+            daxpy_(n, &c_b11, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;
@@ -356,11 +366,9 @@ L20: /* Loop until stopping criterion is satisfied. */
         /* is incremented by SAFE1 if the i-th component of */
         /* f2c_dabs(A)*f2c_dabs(X) + f2c_dabs(B) is less than SAFE2. */
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
-            if (work[i__] > safe2)
+            if(work[i__] > safe2)
             {
                 work[i__] = (d__1 = work[*n + i__], f2c_dabs(d__1)) + nz * eps * work[i__];
             }
@@ -380,18 +388,14 @@ L20: /* Loop until stopping criterion is satisfied. */
         /* Solve M(L) * x = e. */
         work[1] = 1.;
         i__2 = *n;
-        for (i__ = 2;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 2; i__ <= i__2; ++i__)
         {
             work[i__] = work[i__ - 1] * (d__1 = ef[i__ - 1], f2c_dabs(d__1)) + 1.;
             /* L60: */
         }
         /* Solve D * M(L)**T * x = b. */
         work[*n] /= df[*n];
-        for (i__ = *n - 1;
-                i__ >= 1;
-                --i__)
+        for(i__ = *n - 1; i__ >= 1; --i__)
         {
             work[i__] = work[i__] / df[i__] + work[i__ + 1] * (d__1 = ef[i__], f2c_dabs(d__1));
             /* L70: */
@@ -402,17 +406,15 @@ L20: /* Loop until stopping criterion is satisfied. */
         /* Normalize error. */
         lstres = 0.;
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             d__2 = lstres;
             d__3 = (d__1 = x[i__ + j * x_dim1], f2c_dabs(d__1)); // , expr subst
-            lstres = fla_max(d__2,d__3);
+            lstres = fla_max(d__2, d__3);
             /* L80: */
         }
-        if (lstres != 0.)
+        if(lstres != 0.)
         {
             ferr[j] /= lstres;
         }

@@ -1,16 +1,25 @@
-/* ../netlib/dgemqrt.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dgemqrt.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DGEMQRT */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DGEMQRT + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgemqrt .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgemqrt
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgemqrt .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgemqrt
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgemqrt .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgemqrt
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -50,7 +59,7 @@
 /* > \verbatim */
 /* > SIDE is CHARACTER*1 */
 /* > = 'L': apply Q or Q**T from the Left;
-*/
+ */
 /* > = 'R': apply Q or Q**T from the Right. */
 /* > \endverbatim */
 /* > */
@@ -58,7 +67,7 @@
 /* > \verbatim */
 /* > TRANS is CHARACTER*1 */
 /* > = 'N': No transpose, apply Q;
-*/
+ */
 /* > = 'C': Transpose, apply Q**T. */
 /* > \endverbatim */
 /* > */
@@ -80,7 +89,7 @@
 /* > The number of elementary reflectors whose product defines */
 /* > the matrix Q. */
 /* > If SIDE = 'L', M >= K >= 0;
-*/
+ */
 /* > if SIDE = 'R', N >= K >= 0. */
 /* > \endverbatim */
 /* > */
@@ -105,7 +114,7 @@
 /* > LDV is INTEGER */
 /* > The leading dimension of the array V. */
 /* > If SIDE = 'L', LDA >= fla_max(1,M);
-*/
+ */
 /* > if SIDE = 'R', LDA >= fla_max(1,N). */
 /* > \endverbatim */
 /* > */
@@ -157,10 +166,14 @@
 /* > \ingroup doubleGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integer *nb, doublereal *v, integer *ldv, doublereal *t, integer *ldt, doublereal *c__, integer *ldc, doublereal *work, integer *info)
+void dgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integer *nb,
+              doublereal *v, integer *ldv, doublereal *t, integer *ldt, doublereal *c__,
+              integer *ldc, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgemqrt inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", nb %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS ", ldc %" FLA_IS "",*side, *trans, *m, *n, *k, *nb, *ldv, *ldt, *ldc);
+    AOCL_DTL_SNPRINTF("dgemqrt inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
+                      ", nb %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS ", ldc %" FLA_IS "",
+                      *side, *trans, *m, *n, *k, *nb, *ldv, *ldt, *ldc);
     /* System generated locals */
     integer v_dim1, v_offset, c_dim1, c_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
@@ -169,7 +182,11 @@ void dgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
     extern logical lsame_(char *, char *, integer, integer);
     logical right;
     extern /* Subroutine */
-    void dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *,
+                integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     integer ldwork;
     /* -- LAPACK computational routine (version 3.7.0) -- */
@@ -209,53 +226,53 @@ void dgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
     right = lsame_(side, "R", 1, 1);
     tran = lsame_(trans, "T", 1, 1);
     notran = lsame_(trans, "N", 1, 1);
-    if (left)
+    if(left)
     {
-        ldwork = fla_max(1,*n);
+        ldwork = fla_max(1, *n);
         q = *m;
     }
-    else if (right)
+    else if(right)
     {
-        ldwork = fla_max(1,*m);
+        ldwork = fla_max(1, *m);
         q = *n;
     }
-    if (! left && ! right)
+    if(!left && !right)
     {
         *info = -1;
     }
-    else if (! tran && ! notran)
+    else if(!tran && !notran)
     {
         *info = -2;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*k < 0 || *k > q)
+    else if(*k < 0 || *k > q)
     {
         *info = -5;
     }
-    else if (*nb < 1 || *nb > *k && *k > 0)
+    else if(*nb < 1 || *nb > *k && *k > 0)
     {
         *info = -6;
     }
-    else if (*ldv < fla_max(1,q))
+    else if(*ldv < fla_max(1, q))
     {
         *info = -8;
     }
-    else if (*ldt < *nb)
+    else if(*ldt < *nb)
     {
         *info = -10;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -12;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DGEMQRT", &i__1, (ftnlen)7);
@@ -263,73 +280,69 @@ void dgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
         return;
     }
     /* .. Quick return if possible .. */
-    if (*m == 0 || *n == 0 || *k == 0)
+    if(*m == 0 || *n == 0 || *k == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (left && tran)
+    if(left && tran)
     {
         i__1 = *k;
         i__2 = *nb;
-        for (i__ = 1;
-                i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-                i__ += i__2)
+        for(i__ = 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
         {
             /* Computing MIN */
             i__3 = *nb;
             i__4 = *k - i__ + 1; // , expr subst
-            ib = fla_min(i__3,i__4);
+            ib = fla_min(i__3, i__4);
             i__3 = *m - i__ + 1;
-            dlarfb_("L", "T", "F", "C", &i__3, n, &ib, &v[i__ + i__ * v_dim1], ldv, &t[i__ * t_dim1 + 1], ldt, &c__[i__ + c_dim1], ldc, &work[1], &ldwork);
+            dlarfb_("L", "T", "F", "C", &i__3, n, &ib, &v[i__ + i__ * v_dim1], ldv,
+                    &t[i__ * t_dim1 + 1], ldt, &c__[i__ + c_dim1], ldc, &work[1], &ldwork);
         }
     }
-    else if (right && notran)
+    else if(right && notran)
     {
         i__2 = *k;
         i__1 = *nb;
-        for (i__ = 1;
-                i__1 < 0 ? i__ >= i__2 : i__ <= i__2;
-                i__ += i__1)
+        for(i__ = 1; i__1 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__1)
         {
             /* Computing MIN */
             i__3 = *nb;
             i__4 = *k - i__ + 1; // , expr subst
-            ib = fla_min(i__3,i__4);
+            ib = fla_min(i__3, i__4);
             i__3 = *n - i__ + 1;
-            dlarfb_("R", "N", "F", "C", m, &i__3, &ib, &v[i__ + i__ * v_dim1], ldv, &t[i__ * t_dim1 + 1], ldt, &c__[i__ * c_dim1 + 1], ldc, &work[1], &ldwork);
+            dlarfb_("R", "N", "F", "C", m, &i__3, &ib, &v[i__ + i__ * v_dim1], ldv,
+                    &t[i__ * t_dim1 + 1], ldt, &c__[i__ * c_dim1 + 1], ldc, &work[1], &ldwork);
         }
     }
-    else if (left && notran)
+    else if(left && notran)
     {
         kf = (*k - 1) / *nb * *nb + 1;
         i__1 = -(*nb);
-        for (i__ = kf;
-                i__1 < 0 ? i__ >= 1 : i__ <= 1;
-                i__ += i__1)
+        for(i__ = kf; i__1 < 0 ? i__ >= 1 : i__ <= 1; i__ += i__1)
         {
             /* Computing MIN */
             i__2 = *nb;
             i__3 = *k - i__ + 1; // , expr subst
-            ib = fla_min(i__2,i__3);
+            ib = fla_min(i__2, i__3);
             i__2 = *m - i__ + 1;
-            dlarfb_("L", "N", "F", "C", &i__2, n, &ib, &v[i__ + i__ * v_dim1], ldv, &t[i__ * t_dim1 + 1], ldt, &c__[i__ + c_dim1], ldc, &work[1], &ldwork);
+            dlarfb_("L", "N", "F", "C", &i__2, n, &ib, &v[i__ + i__ * v_dim1], ldv,
+                    &t[i__ * t_dim1 + 1], ldt, &c__[i__ + c_dim1], ldc, &work[1], &ldwork);
         }
     }
-    else if (right && tran)
+    else if(right && tran)
     {
         kf = (*k - 1) / *nb * *nb + 1;
         i__1 = -(*nb);
-        for (i__ = kf;
-                i__1 < 0 ? i__ >= 1 : i__ <= 1;
-                i__ += i__1)
+        for(i__ = kf; i__1 < 0 ? i__ >= 1 : i__ <= 1; i__ += i__1)
         {
             /* Computing MIN */
             i__2 = *nb;
             i__3 = *k - i__ + 1; // , expr subst
-            ib = fla_min(i__2,i__3);
+            ib = fla_min(i__2, i__3);
             i__2 = *n - i__ + 1;
-            dlarfb_("R", "T", "F", "C", m, &i__2, &ib, &v[i__ + i__ * v_dim1], ldv, &t[i__ * t_dim1 + 1], ldt, &c__[i__ * c_dim1 + 1], ldc, &work[1], &ldwork);
+            dlarfb_("R", "T", "F", "C", m, &i__2, &ib, &v[i__ + i__ * v_dim1], ldv,
+                    &t[i__ * t_dim1 + 1], ldt, &c__[i__ * c_dim1 + 1], ldc, &work[1], &ldwork);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

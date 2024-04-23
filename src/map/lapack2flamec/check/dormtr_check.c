@@ -1,9 +1,11 @@
-#include "FLA_lapack2flame_return_defs.h"
 #include "FLA_f2c.h"
+#include "FLA_lapack2flame_return_defs.h"
 static integer c__1 = 1;
 static integer c_n1 = -1;
 
-int dormtr_check(char *side, char *uplo, char *trans, integer *m, integer *n, double *a, integer *lda, double *tau, double * c__, integer *ldc, double *work, integer *lwork, integer *info)
+int dormtr_check(char *side, char *uplo, char *trans, integer *m, integer *n, double *a,
+                 integer *lda, double *tau, double *c__, integer *ldc, double *work, integer *lwork,
+                 integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
@@ -33,7 +35,7 @@ int dormtr_check(char *side, char *uplo, char *trans, integer *m, integer *n, do
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
     /* NQ is the order of Q and NW is the minimum dimension of WORK */
-    if (left)
+    if(left)
     {
         nq = *m;
         nw = *n;
@@ -43,43 +45,43 @@ int dormtr_check(char *side, char *uplo, char *trans, integer *m, integer *n, do
         nq = *n;
         nw = *m;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "T", 1, 1))
+    else if(!lsame_(trans, "N", 1, 1) && !lsame_(trans, "T", 1, 1))
     {
         *info = -3;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -4;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,nq))
+    else if(*lda < fla_max(1, nq))
     {
         *info = -7;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -10;
     }
-    else if (*lwork < fla_max(1,nw) && ! lquery)
+    else if(*lwork < fla_max(1, nw) && !lquery)
     {
         *info = -12;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (upper)
+        if(upper)
         {
-            if (left)
+            if(left)
             {
                 i__2 = *m - 1;
                 i__3 = *m - 1;
@@ -94,7 +96,7 @@ int dormtr_check(char *side, char *uplo, char *trans, integer *m, integer *n, do
         }
         else
         {
-            if (left)
+            if(left)
             {
                 i__2 = *m - 1;
                 i__3 = *m - 1;
@@ -107,21 +109,21 @@ int dormtr_check(char *side, char *uplo, char *trans, integer *m, integer *n, do
                 nb = ilaenv_(&c__1, "DORMQR", ch__1, m, &i__2, &i__3, &c_n1);
             }
         }
-        lwkopt = fla_max(1,nw) * nb;
-        work[1] = (double) lwkopt;
+        lwkopt = fla_max(1, nw) * nb;
+        work[1] = (double)lwkopt;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__2 = -(*info);
         xerbla_("DORMTR", &i__2, (ftnlen)6);
         return LAPACK_FAILURE;
     }
-    else if (lquery)
+    else if(lquery)
     {
         return LAPACK_QUERY_RETURN;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0 || nq == 1)
+    if(*m == 0 || *n == 0 || nq == 1)
     {
         work[1] = 1.;
         return LAPACK_QUICK_RETURN;

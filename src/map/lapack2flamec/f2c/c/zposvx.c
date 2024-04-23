@@ -1,16 +1,25 @@
-/* ../netlib/zposvx.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zposvx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief <b> ZPOSVX computes the solution to system of linear equations A * X = B for PO matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZPOSVX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zposvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zposvx.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zposvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zposvx.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zposvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zposvx.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -103,7 +112,7 @@
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -294,13 +303,19 @@ if EQUED = 'Y', */
 /* > \ingroup complex16POsolve */
 /* ===================================================================== */
 /* Subroutine */
-void zposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *a, integer *lda, doublecomplex *af, integer * ldaf, char *equed, doublereal *s, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr, doublecomplex *work, doublereal *rwork, integer * info)
+void zposvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda,
+             doublecomplex *af, integer *ldaf, char *equed, doublereal *s, doublecomplex *b,
+             integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *ferr,
+             doublereal *berr, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zposvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("zposvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS
+                      ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",
+                      *fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
 
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5;
+    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2,
+        i__3, i__4, i__5;
     doublereal d__1, d__2;
     doublecomplex z__1;
     /* Local variables */
@@ -312,17 +327,32 @@ void zposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern doublereal zlanhe_(char *, char *, integer *, doublecomplex *, integer *, doublereal *);
     extern /* Subroutine */
-    void zlaqhe_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, char *);
+        void
+        zlaqhe_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
+                doublereal *, char *);
     integer infequ;
     extern /* Subroutine */
-    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zpocon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *) ;
+        void
+        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *),
+        zpocon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
+                doublecomplex *, doublereal *, integer *);
     doublereal smlnum;
     extern /* Subroutine */
-    void zpoequ_(integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, integer *), zporfs_( char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zpotrf_(char *, integer *, doublecomplex *, integer *, integer *), zpotrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zpoequ_(integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *,
+                integer *),
+        zporfs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
+                doublereal *, doublecomplex *, doublereal *, integer *),
+        zpotrf_(char *, integer *, doublecomplex *, integer *, integer *),
+        zpotrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -367,7 +397,7 @@ void zposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *
     equil = lsame_(fact, "E", 1, 1);
     smlnum = 0.;
     bignum = 0.;
-    if (nofact || equil)
+    if(nofact || equil)
     {
         *(unsigned char *)equed = 'N';
         rcequ = FALSE_;
@@ -379,92 +409,90 @@ void zposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *
         bignum = 1. / smlnum;
     }
     /* Test the input parameters. */
-    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    else if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (lsame_(fact, "F", 1, 1) && ! (rcequ || lsame_(equed, "N", 1, 1)))
+    else if(lsame_(fact, "F", 1, 1) && !(rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -9;
     }
     else
     {
-        if (rcequ)
+        if(rcequ)
         {
             smin = bignum;
             smax = 0.;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Computing MIN */
                 d__1 = smin;
                 d__2 = s[j]; // , expr subst
-                smin = fla_min(d__1,d__2);
+                smin = fla_min(d__1, d__2);
                 /* Computing MAX */
                 d__1 = smax;
                 d__2 = s[j]; // , expr subst
-                smax = fla_max(d__1,d__2);
+                smax = fla_max(d__1, d__2);
                 /* L10: */
             }
-            if (smin <= 0.)
+            if(smin <= 0.)
             {
                 *info = -10;
             }
-            else if (*n > 0)
+            else if(*n > 0)
             {
-                scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
+                scond = fla_max(smin, smlnum) / fla_min(smax, bignum);
             }
             else
             {
                 scond = 1.;
             }
         }
-        if (*info == 0)
+        if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -12;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -14;
             }
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZPOSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (equil)
+    if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
         zpoequ_(n, &a[a_offset], lda, &s[1], &scond, &amax, &infequ);
-        if (infequ == 0)
+        if(infequ == 0)
         {
             /* Equilibrate the matrix. */
             zlaqhe_(uplo, n, &a[a_offset], lda, &s[1], &scond, &amax, equed);
@@ -472,17 +500,13 @@ void zposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *
         }
     }
     /* Scale the right hand side. */
-    if (rcequ)
+    if(rcequ)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *n;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__;
@@ -496,13 +520,13 @@ void zposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *
             /* L30: */
         }
     }
-    if (nofact || equil)
+    if(nofact || equil)
     {
         /* Compute the Cholesky factorization A = U**H *U or A = L*L**H. */
         zlacpy_(uplo, n, n, &a[a_offset], lda, &af[af_offset], ldaf);
         zpotrf_(uplo, n, &af[af_offset], ldaf, info);
         /* Return if INFO is non-zero. */
-        if (*info > 0)
+        if(*info > 0)
         {
             *rcond = 0.;
             AOCL_DTL_TRACE_LOG_EXIT
@@ -518,20 +542,17 @@ void zposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *
     zpotrs_(uplo, n, nrhs, &af[af_offset], ldaf, &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    zporfs_(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &b[ b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], & rwork[1], info);
+    zporfs_(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &b[b_offset], ldb, &x[x_offset],
+            ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
-    if (rcequ)
+    if(rcequ)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *n;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * x_dim1;
                 i__4 = i__;
@@ -545,16 +566,14 @@ void zposvx_(char *fact, char *uplo, integer *n, integer * nrhs, doublecomplex *
             /* L50: */
         }
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             ferr[j] /= scond;
             /* L60: */
         }
     }
     /* Set INFO = N+1 if the matrix is singular to working precision. */
-    if (*rcond < dlamch_("Epsilon"))
+    if(*rcond < dlamch_("Epsilon"))
     {
         *info = *n + 1;
     }

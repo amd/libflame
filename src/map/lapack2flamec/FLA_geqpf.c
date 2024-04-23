@@ -1,5 +1,5 @@
 /******************************************************************************
-* Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+* Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
 *******************************************************************************/
 /*
 
@@ -109,10 +109,10 @@ extern void dgeqpf_fla(integer *m, integer *n, doublereal *a, integer * lda, int
 
 LAPACK_geqpf(s)
 {
-    int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgeqpf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);
 #if !FLA_ENABLE_AMD_OPT
+    int fla_error = LAPACK_SUCCESS;
     {
         for ( int i=0; i<*n; ++i) buff_p[i] = (i+1);
     }
@@ -139,7 +139,6 @@ LAPACK_geqpf(s)
             buff_t,
             buff_w,
             info );
-        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;
@@ -148,10 +147,10 @@ LAPACK_geqpf(s)
 
 LAPACK_geqpf(d)
 {
-    int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgeqpf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *ldim_A);    
 #if !FLA_ENABLE_AMD_OPT
+    int fla_error = LAPACK_SUCCESS;
     {
         for ( int i=0; i<*n; ++i) buff_p[i] = (i+1);
     }
@@ -178,7 +177,6 @@ LAPACK_geqpf(d)
             buff_t,
             buff_w,
             info );
-        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

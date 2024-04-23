@@ -1,16 +1,25 @@
-/* ../netlib/dlagts.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlagts.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLAGTS solves the system of equations (T-λI)x = y or (T-λI)Tx = y,where T is a general tridia gonal matrix and λ a scalar, using the LU factorization computed by slagtf. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLAGTS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlagts. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlagts.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlagts. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlagts.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlagts. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlagts.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -147,10 +156,12 @@
 /* > \ingroup auxOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, integer *in, doublereal *y, doublereal *tol, integer *info)
+void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal *c__,
+             doublereal *d__, integer *in, doublereal *y, doublereal *tol, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlagts inputs: job %" FLA_IS ", n %" FLA_IS ", in %" FLA_IS "",*job, *n, *in);
+    AOCL_DTL_SNPRINTF("dlagts inputs: job %" FLA_IS ", n %" FLA_IS ", in %" FLA_IS "", *job, *n,
+                      *in);
     /* System generated locals */
     integer i__1;
     doublereal d__1, d__2, d__3, d__4, d__5;
@@ -161,7 +172,8 @@ void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal 
     doublereal ak, eps, temp, pert, absak, sfmin;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -192,22 +204,22 @@ void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal 
     --a;
     /* Function Body */
     *info = 0;
-    if (f2c_dabs(*job) > 2 || *job == 0)
+    if(f2c_dabs(*job) > 2 || *job == 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DLAGTS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -215,46 +227,43 @@ void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal 
     eps = dlamch_("Epsilon");
     sfmin = dlamch_("Safe minimum");
     bignum = 1. / sfmin;
-    if (*job < 0)
+    if(*job < 0)
     {
-        if (*tol <= 0.)
+        if(*tol <= 0.)
         {
             *tol = f2c_dabs(a[1]);
-            if (*n > 1)
+            if(*n > 1)
             {
                 /* Computing MAX */
                 d__1 = *tol, d__2 = f2c_dabs(a[2]);
-                d__1 = fla_max(d__1,d__2);
+                d__1 = fla_max(d__1, d__2);
                 d__2 = f2c_dabs(b[1]); // ; expr subst
-                *tol = fla_max(d__1,d__2);
+                *tol = fla_max(d__1, d__2);
             }
             i__1 = *n;
-            for (k = 3;
-                    k <= i__1;
-                    ++k)
+            for(k = 3; k <= i__1; ++k)
             {
                 /* Computing MAX */
-                d__4 = *tol, d__5 = (d__1 = a[k], f2c_dabs(d__1)), d__4 = fla_max(d__4, d__5), d__5 = (d__2 = b[k - 1], f2c_dabs(d__2));
-                d__4 = fla_max(d__4,d__5);
+                d__4 = *tol, d__5 = (d__1 = a[k], f2c_dabs(d__1)), d__4 = fla_max(d__4, d__5),
+                d__5 = (d__2 = b[k - 1], f2c_dabs(d__2));
+                d__4 = fla_max(d__4, d__5);
                 d__5 = (d__3 = d__[k - 2], f2c_dabs(d__3)); // ; expr subst
-                *tol = fla_max(d__4,d__5);
+                *tol = fla_max(d__4, d__5);
                 /* L10: */
             }
             *tol *= eps;
-            if (*tol == 0.)
+            if(*tol == 0.)
             {
                 *tol = eps;
             }
         }
     }
-    if (f2c_dabs(*job) == 1)
+    if(f2c_dabs(*job) == 1)
     {
         i__1 = *n;
-        for (k = 2;
-                k <= i__1;
-                ++k)
+        for(k = 2; k <= i__1; ++k)
         {
-            if (in[k - 1] == 0)
+            if(in[k - 1] == 0)
             {
                 y[k] -= c__[k - 1] * y[k - 1];
             }
@@ -266,17 +275,15 @@ void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal 
             }
             /* L20: */
         }
-        if (*job == 1)
+        if(*job == 1)
         {
-            for (k = *n;
-                    k >= 1;
-                    --k)
+            for(k = *n; k >= 1; --k)
             {
-                if (k <= *n - 2)
+                if(k <= *n - 2)
                 {
                     temp = y[k] - b[k] * y[k + 1] - d__[k] * y[k + 2];
                 }
-                else if (k == *n - 1)
+                else if(k == *n - 1)
                 {
                     temp = y[k] - b[k] * y[k + 1];
                 }
@@ -286,11 +293,11 @@ void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal 
                 }
                 ak = a[k];
                 absak = f2c_dabs(ak);
-                if (absak < 1.)
+                if(absak < 1.)
                 {
-                    if (absak < sfmin)
+                    if(absak < sfmin)
                     {
-                        if (absak == 0. || f2c_dabs(temp) * sfmin > absak)
+                        if(absak == 0. || f2c_dabs(temp) * sfmin > absak)
                         {
                             *info = k;
                             AOCL_DTL_TRACE_LOG_EXIT
@@ -302,7 +309,7 @@ void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal 
                             ak *= bignum;
                         }
                     }
-                    else if (f2c_dabs(temp) > absak * bignum)
+                    else if(f2c_dabs(temp) > absak * bignum)
                     {
                         *info = k;
                         AOCL_DTL_TRACE_LOG_EXIT
@@ -315,15 +322,13 @@ void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal 
         }
         else
         {
-            for (k = *n;
-                    k >= 1;
-                    --k)
+            for(k = *n; k >= 1; --k)
             {
-                if (k <= *n - 2)
+                if(k <= *n - 2)
                 {
                     temp = y[k] - b[k] * y[k + 1] - d__[k] * y[k + 2];
                 }
-                else if (k == *n - 1)
+                else if(k == *n - 1)
                 {
                     temp = y[k] - b[k] * y[k + 1];
                 }
@@ -333,13 +338,13 @@ void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal 
                 }
                 ak = a[k];
                 pert = d_sign(tol, &ak);
-L40:
+            L40:
                 absak = f2c_dabs(ak);
-                if (absak < 1.)
+                if(absak < 1.)
                 {
-                    if (absak < sfmin)
+                    if(absak < sfmin)
                     {
-                        if (absak == 0. || f2c_dabs(temp) * sfmin > absak)
+                        if(absak == 0. || f2c_dabs(temp) * sfmin > absak)
                         {
                             ak += pert;
                             pert *= 2;
@@ -351,7 +356,7 @@ L40:
                             ak *= bignum;
                         }
                     }
-                    else if (f2c_dabs(temp) > absak * bignum)
+                    else if(f2c_dabs(temp) > absak * bignum)
                     {
                         ak += pert;
                         pert *= 2;
@@ -366,18 +371,16 @@ L40:
     else
     {
         /* Come to here if JOB = 2 or -2 */
-        if (*job == 2)
+        if(*job == 2)
         {
             i__1 = *n;
-            for (k = 1;
-                    k <= i__1;
-                    ++k)
+            for(k = 1; k <= i__1; ++k)
             {
-                if (k >= 3)
+                if(k >= 3)
                 {
                     temp = y[k] - b[k - 1] * y[k - 1] - d__[k - 2] * y[k - 2];
                 }
-                else if (k == 2)
+                else if(k == 2)
                 {
                     temp = y[k] - b[k - 1] * y[k - 1];
                 }
@@ -387,11 +390,11 @@ L40:
                 }
                 ak = a[k];
                 absak = f2c_dabs(ak);
-                if (absak < 1.)
+                if(absak < 1.)
                 {
-                    if (absak < sfmin)
+                    if(absak < sfmin)
                     {
-                        if (absak == 0. || f2c_dabs(temp) * sfmin > absak)
+                        if(absak == 0. || f2c_dabs(temp) * sfmin > absak)
                         {
                             *info = k;
                             AOCL_DTL_TRACE_LOG_EXIT
@@ -403,7 +406,7 @@ L40:
                             ak *= bignum;
                         }
                     }
-                    else if (f2c_dabs(temp) > absak * bignum)
+                    else if(f2c_dabs(temp) > absak * bignum)
                     {
                         *info = k;
                         AOCL_DTL_TRACE_LOG_EXIT
@@ -417,15 +420,13 @@ L40:
         else
         {
             i__1 = *n;
-            for (k = 1;
-                    k <= i__1;
-                    ++k)
+            for(k = 1; k <= i__1; ++k)
             {
-                if (k >= 3)
+                if(k >= 3)
                 {
                     temp = y[k] - b[k - 1] * y[k - 1] - d__[k - 2] * y[k - 2];
                 }
-                else if (k == 2)
+                else if(k == 2)
                 {
                     temp = y[k] - b[k - 1] * y[k - 1];
                 }
@@ -435,13 +436,13 @@ L40:
                 }
                 ak = a[k];
                 pert = d_sign(tol, &ak);
-L70:
+            L70:
                 absak = f2c_dabs(ak);
-                if (absak < 1.)
+                if(absak < 1.)
                 {
-                    if (absak < sfmin)
+                    if(absak < sfmin)
                     {
-                        if (absak == 0. || f2c_dabs(temp) * sfmin > absak)
+                        if(absak == 0. || f2c_dabs(temp) * sfmin > absak)
                         {
                             ak += pert;
                             pert *= 2;
@@ -453,7 +454,7 @@ L70:
                             ak *= bignum;
                         }
                     }
-                    else if (f2c_dabs(temp) > absak * bignum)
+                    else if(f2c_dabs(temp) > absak * bignum)
                     {
                         ak += pert;
                         pert *= 2;
@@ -464,11 +465,9 @@ L70:
                 /* L80: */
             }
         }
-        for (k = *n;
-                k >= 2;
-                --k)
+        for(k = *n; k >= 2; --k)
         {
-            if (in[k - 1] == 0)
+            if(in[k - 1] == 0)
             {
                 y[k - 1] -= c__[k - 1] * y[k];
             }

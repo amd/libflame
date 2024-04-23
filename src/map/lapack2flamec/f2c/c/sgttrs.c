@@ -1,5 +1,8 @@
-/* ../netlib/sgttrs.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sgttrs.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -9,11 +12,17 @@ static integer c_n1 = -1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SGTTRS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgttrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgttrs.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgttrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgttrs.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgttrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgttrs.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -128,12 +137,14 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup realGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sgttrs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *du, real *du2, integer *ipiv, real *b, integer *ldb, integer *info)
+void sgttrs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *du, real *du2,
+             integer *ipiv, real *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sgttrs inputs: trans %c, n %d, nrhs %d, ldb %d",*trans, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "sgttrs inputs: trans %c, n %d, nrhs %d, ldb %d", *trans, *n, *nrhs,
+             *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -141,7 +152,10 @@ void sgttrs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *
     /* Local variables */
     integer j, jb, nb;
     extern /* Subroutine */
-    void sgtts2_(integer *, integer *, integer *, real *, real *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sgtts2_(integer *, integer *, integer *, real *, real *, real *, real *, integer *, real *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer itrans;
     logical notran;
@@ -175,23 +189,24 @@ void sgttrs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *
     /* Function Body */
     *info = 0;
     notran = *(unsigned char *)trans == 'N' || *(unsigned char *)trans == 'n';
-    if (! notran && ! (*(unsigned char *)trans == 'T' || *(unsigned char *) trans == 't') && ! (*(unsigned char *)trans == 'C' || *(unsigned char *)trans == 'c'))
+    if(!notran && !(*(unsigned char *)trans == 'T' || *(unsigned char *)trans == 't')
+       && !(*(unsigned char *)trans == 'C' || *(unsigned char *)trans == 'c'))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -3;
     }
-    else if (*ldb < fla_max(*n,1))
+    else if(*ldb < fla_max(*n, 1))
     {
         *info = -10;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SGTTRS", &i__1, (ftnlen)6);
@@ -199,13 +214,13 @@ void sgttrs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *
         return;
     }
     /* Quick return if possible */
-    if (*n == 0 || *nrhs == 0)
+    if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Decode TRANS */
-    if (notran)
+    if(notran)
     {
         itrans = 0;
     }
@@ -214,7 +229,7 @@ void sgttrs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *
         itrans = 1;
     }
     /* Determine the number of right-hand sides to solve at a time. */
-    if (*nrhs == 1)
+    if(*nrhs == 1)
     {
         nb = 1;
     }
@@ -222,10 +237,10 @@ void sgttrs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *
     {
         /* Computing MAX */
         i__1 = 1;
-        i__2 = ilaenv_(&c__1, "SGTTRS", trans, n, nrhs, &c_n1, & c_n1); // , expr subst
-        nb = fla_max(i__1,i__2);
+        i__2 = ilaenv_(&c__1, "SGTTRS", trans, n, nrhs, &c_n1, &c_n1); // , expr subst
+        nb = fla_max(i__1, i__2);
     }
-    if (nb >= *nrhs)
+    if(nb >= *nrhs)
     {
         sgtts2_(&itrans, n, nrhs, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &b[b_offset], ldb);
     }
@@ -233,14 +248,13 @@ void sgttrs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *
     {
         i__1 = *nrhs;
         i__2 = nb;
-        for (j = 1;
-                i__2 < 0 ? j >= i__1 : j <= i__1;
-                j += i__2)
+        for(j = 1; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2)
         {
             /* Computing MIN */
             i__3 = *nrhs - j + 1;
-            jb = fla_min(i__3,nb);
-            sgtts2_(&itrans, n, &jb, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[ 1], &b[j * b_dim1 + 1], ldb);
+            jb = fla_min(i__3, nb);
+            sgtts2_(&itrans, n, &jb, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &b[j * b_dim1 + 1],
+                    ldb);
             /* L10: */
         }
     }

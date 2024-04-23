@@ -1,22 +1,32 @@
-/* ../netlib/dlarrd.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlarrd.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static integer c__3 = 3;
 static integer c__2 = 2;
 static integer c__0 = 0;
-/* > \brief \b DLARRD computes the eigenvalues of a symmetric tridiagonal matrix to suitable accuracy. */
+/* > \brief \b DLARRD computes the eigenvalues of a symmetric tridiagonal matrix to suitable
+ * accuracy. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLARRD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarrd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarrd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarrd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -49,7 +59,8 @@ static integer c__0 = 0;
 /* > eigenvalues. */
 /* > */
 /* > To avoid overflow, the matrix must be scaled so that its */
-/* > largest element is no greater than overflow**(1/2) * underflow**(1/4) in absolute value, and for greatest */
+/* > largest element is no greater than overflow**(1/2) * underflow**(1/4) in absolute value, and
+ * for greatest */
 /* > accuracy, it should not be much smaller than that. */
 /* > */
 /* > See W. Kahan "Accurate Eigenvalues of a Symmetric Tridiagonal */
@@ -242,7 +253,7 @@ IL = 1 and IU = 0 if N = 0. */
 /* > \verbatim */
 /* > INDEXW is INTEGER array, dimension (N) */
 /* > The indices of the eigenvalues within each block (submatrix);
-*/
+ */
 /* > for example, INDEXW(i)= j and IBLOCK(i)=k imply that the */
 /* > i-th eigenvalue W(i) is the j-th eigenvalue in block k. */
 /* > \endverbatim */
@@ -321,10 +332,16 @@ these eigenvalues are flagged by a */
 /* > \ingroup OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *gers, doublereal *reltol, doublereal *d__, doublereal *e, doublereal *e2, doublereal *pivmin, integer *nsplit, integer *isplit, integer *m, doublereal *w, doublereal *werr, doublereal *wl, doublereal *wu, integer *iblock, integer *indexw, doublereal *work, integer *iwork, integer *info)
+void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu, integer *il,
+             integer *iu, doublereal *gers, doublereal *reltol, doublereal *d__, doublereal *e,
+             doublereal *e2, doublereal *pivmin, integer *nsplit, integer *isplit, integer *m,
+             doublereal *w, doublereal *werr, doublereal *wl, doublereal *wu, integer *iblock,
+             integer *indexw, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlarrd inputs: range %c, order %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", nsplit %" FLA_IS ", isplit %" FLA_IS "",*range, *order, *n, *il, *iu, *nsplit, *isplit);
+    AOCL_DTL_SNPRINTF("dlarrd inputs: range %c, order %c, n %" FLA_IS ", il %" FLA_IS
+                      ", iu %" FLA_IS ", nsplit %" FLA_IS ", isplit %" FLA_IS "",
+                      *range, *order, *n, *il, *iu, *nsplit, *isplit);
     /* System generated locals */
     integer i__1, i__2, i__3;
     doublereal d__1, d__2;
@@ -350,7 +367,11 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
     extern doublereal dlamch_(char *);
     integer ibegin;
     extern /* Subroutine */
-    void dlaebz_(integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dlaebz_(integer *, integer *, integer *, integer *, integer *, integer *, doublereal *,
+                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *,
+                doublereal *, doublereal *, integer *, integer *, doublereal *, integer *,
+                integer *);
     integer irange, idiscl, idumma[1] = {0};
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer idiscu;
@@ -394,21 +415,21 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
     wul = 0.;
     wlu = 0.;
     /* Quick return if possible */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Decode RANGE */
-    if (lsame_(range, "A", 1, 1))
+    if(lsame_(range, "A", 1, 1))
     {
         irange = 1;
     }
-    else if (lsame_(range, "V", 1, 1))
+    else if(lsame_(range, "V", 1, 1))
     {
         irange = 2;
     }
-    else if (lsame_(range, "I", 1, 1))
+    else if(lsame_(range, "I", 1, 1))
     {
         irange = 3;
     }
@@ -417,34 +438,34 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
         irange = 0;
     }
     /* Check for Errors */
-    if (irange <= 0)
+    if(irange <= 0)
     {
         *info = -1;
     }
-    else if (! (lsame_(order, "B", 1, 1) || lsame_(order, "E", 1, 1)))
+    else if(!(lsame_(order, "B", 1, 1) || lsame_(order, "E", 1, 1)))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (irange == 2)
+    else if(irange == 2)
     {
-        if (*vl >= *vu)
+        if(*vl >= *vu)
         {
             *info = -5;
         }
     }
-    else if (irange == 3 && (*il < 1 || *il > fla_max(1,*n)))
+    else if(irange == 3 && (*il < 1 || *il > fla_max(1, *n)))
     {
         *info = -6;
     }
-    else if (irange == 3 && (*iu < fla_min(*n,*il) || *iu > *n))
+    else if(irange == 3 && (*iu < fla_min(*n, *il) || *iu > *n))
     {
         *info = -7;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -455,13 +476,13 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
     toofew = FALSE_;
     /* Quick return if possible */
     *m = 0;
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Simplification: */
-    if (irange == 3 && *il == 1 && *iu == *n)
+    if(irange == 3 && *il == 1 && *iu == *n)
     {
         irange = 1;
     }
@@ -470,9 +491,10 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
     uflow = dlamch_("U");
     /* Special Case when N=1 */
     /* Treat case of 1x1 matrix for quick return */
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (irange == 1 || irange == 2 && d__[1] > *vl && d__[1] <= *vu || irange == 3 && *il == 1 && *iu == 1)
+        if(irange == 1 || irange == 2 && d__[1] > *vl && d__[1] <= *vu
+           || irange == 3 && *il == 1 && *iu == 1)
         {
             *m = 1;
             w[1] = d__[1];
@@ -487,7 +509,7 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
     /* NB is the minimum vector length for vector bisection, or 0 */
     /* if only scalar is to be done. */
     nb = ilaenv_(&c__1, "DSTEBZ", " ", n, &c_n1, &c_n1, &c_n1);
-    if (nb <= 1)
+    if(nb <= 1)
     {
         nb = 0;
     }
@@ -495,25 +517,23 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
     gl = d__[1];
     gu = d__[1];
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Computing MIN */
         d__1 = gl;
         d__2 = gers[(i__ << 1) - 1]; // , expr subst
-        gl = fla_min(d__1,d__2);
+        gl = fla_min(d__1, d__2);
         /* Computing MAX */
         d__1 = gu;
         d__2 = gers[i__ * 2]; // , expr subst
-        gu = fla_max(d__1,d__2);
+        gu = fla_max(d__1, d__2);
         /* L5: */
     }
     /* Compute global Gerschgorin bounds and spectral diameter */
     /* Computing MAX */
     d__1 = f2c_abs(gl);
     d__2 = f2c_abs(gu); // , expr subst
-    tnorm = fla_max(d__1,d__2);
+    tnorm = fla_max(d__1, d__2);
     gl = gl - tnorm * 2. * eps * *n - *pivmin * 4.;
     gu = gu + tnorm * 2. * eps * *n + *pivmin * 4.;
     /* [JAN/28/2009] remove the line below since SPDIAM variable not use */
@@ -529,12 +549,12 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
     /* strongly graded matrices, the code can get relatively accurate */
     /* eigenvalues. */
     atoli = uflow * 4. + *pivmin * 4.;
-    if (irange == 3)
+    if(irange == 3)
     {
         /* RANGE='I': Compute an interval containing eigenvalues */
         /* IL through IU. The initial interval [GL,GU] from the global */
         /* Gerschgorin bounds GL and GU is refined by DLAEBZ. */
-        itmax = (integer) ((log(tnorm + *pivmin) - log(*pivmin)) / log(2.)) + 2;
+        itmax = (integer)((log(tnorm + *pivmin) - log(*pivmin)) / log(2.)) + 2;
         work[*n + 1] = gl;
         work[*n + 2] = gl;
         work[*n + 3] = gu;
@@ -547,15 +567,17 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
         iwork[4] = *n + 1;
         iwork[5] = *il - 1;
         iwork[6] = *iu;
-        dlaebz_(&c__3, &itmax, n, &c__2, &c__2, &nb, &atoli, &rtoli, pivmin, & d__[1], &e[1], &e2[1], &iwork[5], &work[*n + 1], &work[*n + 5], &iout, &iwork[1], &w[1], &iblock[1], &iinfo);
-        if (iinfo != 0)
+        dlaebz_(&c__3, &itmax, n, &c__2, &c__2, &nb, &atoli, &rtoli, pivmin, &d__[1], &e[1], &e2[1],
+                &iwork[5], &work[*n + 1], &work[*n + 5], &iout, &iwork[1], &w[1], &iblock[1],
+                &iinfo);
+        if(iinfo != 0)
         {
             *info = iinfo;
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         /* On exit, output intervals may not be ordered by ascending negcount */
-        if (iwork[6] == *iu)
+        if(iwork[6] == *iu)
         {
             *wl = work[*n + 1];
             wlu = work[*n + 3];
@@ -575,19 +597,19 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
         }
         /* On exit, the interval [WL, WLU] contains a value with negcount NWL, */
         /* and [WUL, WU] contains a value with negcount NWU. */
-        if (nwl < 0 || nwl >= *n || nwu < 1 || nwu > *n)
+        if(nwl < 0 || nwl >= *n || nwu < 1 || nwu > *n)
         {
             *info = 4;
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
-    else if (irange == 2)
+    else if(irange == 2)
     {
         *wl = *vl;
         *wu = *vu;
     }
-    else if (irange == 1)
+    else if(irange == 1)
     {
         *wl = gl;
         *wu = gu;
@@ -601,26 +623,24 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
     nwl = 0;
     nwu = 0;
     i__1 = *nsplit;
-    for (jblk = 1;
-            jblk <= i__1;
-            ++jblk)
+    for(jblk = 1; jblk <= i__1; ++jblk)
     {
         ioff = iend;
         ibegin = ioff + 1;
         iend = isplit[jblk];
         in = iend - ioff;
-        if (in == 1)
+        if(in == 1)
         {
             /* 1x1 block */
-            if (*wl >= d__[ibegin] - *pivmin)
+            if(*wl >= d__[ibegin] - *pivmin)
             {
                 ++nwl;
             }
-            if (*wu >= d__[ibegin] - *pivmin)
+            if(*wu >= d__[ibegin] - *pivmin)
             {
                 ++nwu;
             }
-            if (irange == 1 || *wl < d__[ibegin] - *pivmin && *wu >= d__[ ibegin] - *pivmin)
+            if(irange == 1 || *wl < d__[ibegin] - *pivmin && *wu >= d__[ibegin] - *pivmin)
             {
                 ++(*m);
                 w[*m] = d__[ibegin];
@@ -638,13 +658,13 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
             /* -0.128208148052635E-15 */
             /* 0.128257718286320E-15 */
             /* ];
-            */
+             */
             /* e = [ */
             /* -0.357171383266986E+00 */
             /* -0.180411241501588E-15 */
             /* -0.175152352710251E-15 */
             /* ];
-            */
+             */
             /* ELSE IF( IN.EQ.2 ) THEN */
             /* * 2x2 block */
             /* DISC = SQRT( (HALF*(D(IBEGIN)-D(IEND)))**2 + E(IBEGIN)**2 ) */
@@ -687,18 +707,16 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
             gl = d__[ibegin];
             tmp1 = 0.;
             i__2 = iend;
-            for (j = ibegin;
-                    j <= i__2;
-                    ++j)
+            for(j = ibegin; j <= i__2; ++j)
             {
                 /* Computing MIN */
                 d__1 = gl;
                 d__2 = gers[(j << 1) - 1]; // , expr subst
-                gl = fla_min(d__1,d__2);
+                gl = fla_min(d__1, d__2);
                 /* Computing MAX */
                 d__1 = gu;
                 d__2 = gers[j * 2]; // , expr subst
-                gu = fla_max(d__1,d__2);
+                gu = fla_max(d__1, d__2);
                 /* L40: */
             }
             /* [JAN/28/2009] */
@@ -709,9 +727,9 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
             /* GU = GU + FUDGE*SPDIAM*EPS*IN + FUDGE*PIVMIN */
             gl = gl - tnorm * 2. * eps * in - *pivmin * 2.;
             gu = gu + tnorm * 2. * eps * in + *pivmin * 2.;
-            if (irange > 1)
+            if(irange > 1)
             {
-                if (gu < *wl)
+                if(gu < *wl)
                 {
                     /* the local block contains none of the wanted eigenvalues */
                     nwl += in;
@@ -719,9 +737,9 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
                     goto L70;
                 }
                 /* refine search interval if possible, only range (WL,WU] matters */
-                gl = fla_max(gl,*wl);
-                gu = fla_min(gu,*wu);
-                if (gl >= gu)
+                gl = fla_max(gl, *wl);
+                gu = fla_min(gu, *wu);
+                if(gl >= gu)
                 {
                     goto L70;
                 }
@@ -729,8 +747,10 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
             /* Find negcount of initial interval boundaries GL and GU */
             work[*n + 1] = gl;
             work[*n + in + 1] = gu;
-            dlaebz_(&c__1, &c__0, &in, &in, &c__1, &nb, &atoli, &rtoli, pivmin, &d__[ibegin], &e[ibegin], &e2[ibegin], idumma, & work[*n + 1], &work[*n + (in << 1) + 1], &im, &iwork[1], & w[*m + 1], &iblock[*m + 1], &iinfo);
-            if (iinfo != 0)
+            dlaebz_(&c__1, &c__0, &in, &in, &c__1, &nb, &atoli, &rtoli, pivmin, &d__[ibegin],
+                    &e[ibegin], &e2[ibegin], idumma, &work[*n + 1], &work[*n + (in << 1) + 1], &im,
+                    &iwork[1], &w[*m + 1], &iblock[*m + 1], &iinfo);
+            if(iinfo != 0)
             {
                 *info = iinfo;
                 AOCL_DTL_TRACE_LOG_EXIT
@@ -740,9 +760,11 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
             nwu += iwork[in + 1];
             iwoff = *m - iwork[1];
             /* Compute Eigenvalues */
-            itmax = (integer) ((log(gu - gl + *pivmin) - log(*pivmin)) / log( 2.)) + 2;
-            dlaebz_(&c__2, &itmax, &in, &in, &c__1, &nb, &atoli, &rtoli, pivmin, &d__[ibegin], &e[ibegin], &e2[ibegin], idumma, & work[*n + 1], &work[*n + (in << 1) + 1], &iout, &iwork[1], &w[*m + 1], &iblock[*m + 1], &iinfo);
-            if (iinfo != 0)
+            itmax = (integer)((log(gu - gl + *pivmin) - log(*pivmin)) / log(2.)) + 2;
+            dlaebz_(&c__2, &itmax, &in, &in, &c__1, &nb, &atoli, &rtoli, pivmin, &d__[ibegin],
+                    &e[ibegin], &e2[ibegin], idumma, &work[*n + 1], &work[*n + (in << 1) + 1],
+                    &iout, &iwork[1], &w[*m + 1], &iblock[*m + 1], &iinfo);
+            if(iinfo != 0)
             {
                 *info = iinfo;
                 AOCL_DTL_TRACE_LOG_EXIT
@@ -752,15 +774,13 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
             /* Use -JBLK for block number for unconverged eigenvalues. */
             /* Loop over the number of output intervals from DLAEBZ */
             i__2 = iout;
-            for (j = 1;
-                    j <= i__2;
-                    ++j)
+            for(j = 1; j <= i__2; ++j)
             {
                 /* eigenvalue approximation is middle point of interval */
                 tmp1 = (work[j + *n] + work[j + in + *n]) * .5;
                 /* semi length of error interval */
                 tmp2 = (d__1 = work[j + *n] - work[j + in + *n], f2c_abs(d__1)) * .5;
-                if (j > iout - iinfo)
+                if(j > iout - iinfo)
                 {
                     /* Flag non-convergence. */
                     ncnvrg = TRUE_;
@@ -771,9 +791,7 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
                     ib = jblk;
                 }
                 i__3 = iwork[j + in] + iwoff;
-                for (je = iwork[j] + 1 + iwoff;
-                        je <= i__3;
-                        ++je)
+                for(je = iwork[j] + 1 + iwoff; je <= i__3; ++je)
                 {
                     w[je] = tmp1;
                     werr[je] = tmp2;
@@ -785,26 +803,23 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
             }
             *m += im;
         }
-L70:
-        ;
+    L70:;
     }
     /* If RANGE='I', then (WL,WU) contains eigenvalues NWL+1,...,NWU */
     /* If NWL+1 < IL or NWU > IU, discard extra eigenvalues. */
-    if (irange == 3)
+    if(irange == 3)
     {
         idiscl = *il - 1 - nwl;
         idiscu = nwu - *iu;
-        if (idiscl > 0)
+        if(idiscl > 0)
         {
             im = 0;
             i__1 = *m;
-            for (je = 1;
-                    je <= i__1;
-                    ++je)
+            for(je = 1; je <= i__1; ++je)
             {
                 /* Remove some of the smallest eigenvalues from the left so that */
                 /* at the end IDISCL =0. Move all eigenvalues up to the left. */
-                if (w[je] <= wlu && idiscl > 0)
+                if(w[je] <= wlu && idiscl > 0)
                 {
                     --idiscl;
                 }
@@ -820,16 +835,14 @@ L70:
             }
             *m = im;
         }
-        if (idiscu > 0)
+        if(idiscu > 0)
         {
             /* Remove some of the largest eigenvalues from the right so that */
             /* at the end IDISCU =0. Move all eigenvalues up to the left. */
             im = *m + 1;
-            for (je = *m;
-                    je >= 1;
-                    --je)
+            for(je = *m; je >= 1; --je)
             {
-                if (w[je] >= wul && idiscu > 0)
+                if(w[je] >= wul && idiscu > 0)
                 {
                     --idiscu;
                 }
@@ -845,9 +858,7 @@ L70:
             }
             jee = 0;
             i__1 = *m;
-            for (je = im;
-                    je <= i__1;
-                    ++je)
+            for(je = im; je <= i__1; ++je)
             {
                 ++jee;
                 w[jee] = w[je];
@@ -858,7 +869,7 @@ L70:
             }
             *m = *m - im + 1;
         }
-        if (idiscl > 0 || idiscu > 0)
+        if(idiscl > 0 || idiscu > 0)
         {
             /* Code to deal with effects of bad arithmetic. (If N(w) is */
             /* monotone non-decreasing, this should never happen.) */
@@ -866,21 +877,17 @@ L70:
             /* or high eigenvalues to be discarded are not in (WUL,WU] */
             /* so just kill off the smallest IDISCL/largest IDISCU */
             /* eigenvalues, by marking the corresponding IBLOCK = 0 */
-            if (idiscl > 0)
+            if(idiscl > 0)
             {
                 wkill = *wu;
                 i__1 = idiscl;
-                for (jdisc = 1;
-                        jdisc <= i__1;
-                        ++jdisc)
+                for(jdisc = 1; jdisc <= i__1; ++jdisc)
                 {
                     iw = 0;
                     i__2 = *m;
-                    for (je = 1;
-                            je <= i__2;
-                            ++je)
+                    for(je = 1; je <= i__2; ++je)
                     {
-                        if (iblock[je] != 0 && (w[je] < wkill || iw == 0))
+                        if(iblock[je] != 0 && (w[je] < wkill || iw == 0))
                         {
                             iw = je;
                             wkill = w[je];
@@ -891,21 +898,17 @@ L70:
                     /* L100: */
                 }
             }
-            if (idiscu > 0)
+            if(idiscu > 0)
             {
                 wkill = *wl;
                 i__1 = idiscu;
-                for (jdisc = 1;
-                        jdisc <= i__1;
-                        ++jdisc)
+                for(jdisc = 1; jdisc <= i__1; ++jdisc)
                 {
                     iw = 0;
                     i__2 = *m;
-                    for (je = 1;
-                            je <= i__2;
-                            ++je)
+                    for(je = 1; je <= i__2; ++je)
                     {
-                        if (iblock[je] != 0 && (w[je] >= wkill || iw == 0))
+                        if(iblock[je] != 0 && (w[je] >= wkill || iw == 0))
                         {
                             iw = je;
                             wkill = w[je];
@@ -919,11 +922,9 @@ L70:
             /* Now erase all eigenvalues with IBLOCK set to zero */
             im = 0;
             i__1 = *m;
-            for (je = 1;
-                    je <= i__1;
-                    ++je)
+            for(je = 1; je <= i__1; ++je)
             {
-                if (iblock[je] != 0)
+                if(iblock[je] != 0)
                 {
                     ++im;
                     w[im] = w[je];
@@ -935,40 +936,36 @@ L70:
             }
             *m = im;
         }
-        if (idiscl < 0 || idiscu < 0)
+        if(idiscl < 0 || idiscu < 0)
         {
             toofew = TRUE_;
         }
     }
-    if (irange == 1 && *m != *n || irange == 3 && *m != *iu - *il + 1)
+    if(irange == 1 && *m != *n || irange == 3 && *m != *iu - *il + 1)
     {
         toofew = TRUE_;
     }
     /* If ORDER='B', do nothing the eigenvalues are already sorted by */
     /* block. */
     /* If ORDER='E', sort the eigenvalues from smallest to largest */
-    if (lsame_(order, "E", 1, 1) && *nsplit > 1)
+    if(lsame_(order, "E", 1, 1) && *nsplit > 1)
     {
         i__1 = *m - 1;
-        for (je = 1;
-                je <= i__1;
-                ++je)
+        for(je = 1; je <= i__1; ++je)
         {
             ie = 0;
             tmp1 = w[je];
             i__2 = *m;
-            for (j = je + 1;
-                    j <= i__2;
-                    ++j)
+            for(j = je + 1; j <= i__2; ++j)
             {
-                if (w[j] < tmp1)
+                if(w[j] < tmp1)
                 {
                     ie = j;
                     tmp1 = w[j];
                 }
                 /* L140: */
             }
-            if (ie != 0)
+            if(ie != 0)
             {
                 tmp2 = werr[ie];
                 itmp1 = iblock[ie];
@@ -986,11 +983,11 @@ L70:
         }
     }
     *info = 0;
-    if (ncnvrg)
+    if(ncnvrg)
     {
         ++(*info);
     }
-    if (toofew)
+    if(toofew)
     {
         *info += 2;
     }

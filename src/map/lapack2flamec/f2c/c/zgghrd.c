@@ -1,16 +1,11 @@
-/* ../netlib/zgghrd.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zgghrd.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    1.,0.
-}
-;
-static doublecomplex c_b2 =
-{
-    0.,0.
-}
-;
+static doublecomplex c_b1 = {1., 0.};
+static doublecomplex c_b2 = {0., 0.};
 static integer c__1 = 1;
 /* > \brief \b ZGGHRD */
 /* =========== DOCUMENTATION =========== */
@@ -18,11 +13,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZGGHRD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgghrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgghrd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgghrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgghrd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgghrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgghrd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -74,10 +75,10 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > COMPQ is CHARACTER*1 */
 /* > = 'N': do not compute Q;
-*/
+ */
 /* > = 'I': Q is initialized to the unit matrix, and the */
 /* > unitary matrix Q is returned;
-*/
+ */
 /* > = 'V': Q must contain a unitary matrix Q1 on entry, */
 /* > and the product Q1*Q is returned. */
 /* > \endverbatim */
@@ -86,10 +87,10 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > COMPZ is CHARACTER*1 */
 /* > = 'N': do not compute Q;
-*/
+ */
 /* > = 'I': Q is initialized to the unit matrix, and the */
 /* > unitary matrix Q is returned;
-*/
+ */
 /* > = 'V': Q must contain a unitary matrix Q1 on entry, */
 /* > and the product Q1*Q is returned. */
 /* > \endverbatim */
@@ -209,12 +210,18 @@ LDZ >= 1 otherwise. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *q, integer *ldq, doublecomplex *z__, integer *ldz, integer *info)
+void zgghrd_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublecomplex *a,
+             integer *lda, doublecomplex *b, integer *ldb, doublecomplex *q, integer *ldq,
+             doublecomplex *z__, integer *ldz, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgghrd inputs: compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS "",*compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz);
+    AOCL_DTL_SNPRINTF("zgghrd inputs: compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS
+                      ", ihi %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS
+                      ", ldz %" FLA_IS "",
+                      *compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
+        i__3;
     doublecomplex z__1;
     /* Builtin functions */
     void d_cnjg(doublecomplex *, doublecomplex *);
@@ -224,14 +231,20 @@ void zgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
     logical ilq, ilz;
     integer jcol, jrow;
     extern /* Subroutine */
-    void zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
+        void
+        zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
+              doublecomplex *);
     extern logical lsame_(char *, char *, integer, integer);
     doublecomplex ctemp;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer icompq, icompz;
     extern /* Subroutine */
-    void zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
+        void
+        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
+                integer *),
+        zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -267,17 +280,17 @@ void zgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
     z_offset = 1 + z_dim1;
     z__ -= z_offset;
     /* Function Body */
-    if (lsame_(compq, "N", 1, 1))
+    if(lsame_(compq, "N", 1, 1))
     {
         ilq = FALSE_;
         icompq = 1;
     }
-    else if (lsame_(compq, "V", 1, 1))
+    else if(lsame_(compq, "V", 1, 1))
     {
         ilq = TRUE_;
         icompq = 2;
     }
-    else if (lsame_(compq, "I", 1, 1))
+    else if(lsame_(compq, "I", 1, 1))
     {
         ilq = TRUE_;
         icompq = 3;
@@ -287,17 +300,17 @@ void zgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
         icompq = 0;
     }
     /* Decode COMPZ */
-    if (lsame_(compz, "N", 1, 1))
+    if(lsame_(compz, "N", 1, 1))
     {
         ilz = FALSE_;
         icompz = 1;
     }
-    else if (lsame_(compz, "V", 1, 1))
+    else if(lsame_(compz, "V", 1, 1))
     {
         ilz = TRUE_;
         icompz = 2;
     }
-    else if (lsame_(compz, "I", 1, 1))
+    else if(lsame_(compz, "I", 1, 1))
     {
         ilz = TRUE_;
         icompz = 3;
@@ -308,74 +321,70 @@ void zgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
     }
     /* Test the input parameters. */
     *info = 0;
-    if (icompq <= 0)
+    if(icompq <= 0)
     {
         *info = -1;
     }
-    else if (icompz <= 0)
+    else if(icompz <= 0)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*ilo < 1)
+    else if(*ilo < 1)
     {
         *info = -4;
     }
-    else if (*ihi > *n || *ihi < *ilo - 1)
+    else if(*ihi > *n || *ihi < *ilo - 1)
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (ilq && *ldq < *n || *ldq < 1)
+    else if(ilq && *ldq < *n || *ldq < 1)
     {
         *info = -11;
     }
-    else if (ilz && *ldz < *n || *ldz < 1)
+    else if(ilz && *ldz < *n || *ldz < 1)
     {
         *info = -13;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZGGHRD", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize Q and Z if desired. */
-    if (icompq == 3)
+    if(icompq == 3)
     {
         zlaset_("Full", n, n, &c_b2, &c_b1, &q[q_offset], ldq);
     }
-    if (icompz == 3)
+    if(icompz == 3)
     {
         zlaset_("Full", n, n, &c_b2, &c_b1, &z__[z_offset], ldz);
     }
     /* Quick return if possible */
-    if (*n <= 1)
+    if(*n <= 1)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Zero out lower triangle of B */
     i__1 = *n - 1;
-    for (jcol = 1;
-            jcol <= i__1;
-            ++jcol)
+    for(jcol = 1; jcol <= i__1; ++jcol)
     {
         i__2 = *n;
-        for (jrow = jcol + 1;
-                jrow <= i__2;
-                ++jrow)
+        for(jrow = jcol + 1; jrow <= i__2; ++jrow)
         {
             i__3 = jrow + jcol * b_dim1;
             b[i__3].r = 0.;
@@ -386,14 +395,10 @@ void zgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
     }
     /* Reduce A and B */
     i__1 = *ihi - 2;
-    for (jcol = *ilo;
-            jcol <= i__1;
-            ++jcol)
+    for(jcol = *ilo; jcol <= i__1; ++jcol)
     {
         i__2 = jcol + 2;
-        for (jrow = *ihi;
-                jrow >= i__2;
-                --jrow)
+        for(jrow = *ihi; jrow >= i__2; --jrow)
         {
             /* Step 1: rotate rows JROW-1, JROW to kill A(JROW,JCOL) */
             i__3 = jrow - 1 + jcol * a_dim1;
@@ -404,13 +409,16 @@ void zgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
             a[i__3].r = 0.;
             a[i__3].i = 0.; // , expr subst
             i__3 = *n - jcol;
-            zrot_(&i__3, &a[jrow - 1 + (jcol + 1) * a_dim1], lda, &a[jrow + ( jcol + 1) * a_dim1], lda, &c__, &s);
+            zrot_(&i__3, &a[jrow - 1 + (jcol + 1) * a_dim1], lda, &a[jrow + (jcol + 1) * a_dim1],
+                  lda, &c__, &s);
             i__3 = *n + 2 - jrow;
-            zrot_(&i__3, &b[jrow - 1 + (jrow - 1) * b_dim1], ldb, &b[jrow + ( jrow - 1) * b_dim1], ldb, &c__, &s);
-            if (ilq)
+            zrot_(&i__3, &b[jrow - 1 + (jrow - 1) * b_dim1], ldb, &b[jrow + (jrow - 1) * b_dim1],
+                  ldb, &c__, &s);
+            if(ilq)
             {
                 d_cnjg(&z__1, &s);
-                zrot_(n, &q[(jrow - 1) * q_dim1 + 1], &c__1, &q[jrow * q_dim1 + 1], &c__1, &c__, &z__1);
+                zrot_(n, &q[(jrow - 1) * q_dim1 + 1], &c__1, &q[jrow * q_dim1 + 1], &c__1, &c__,
+                      &z__1);
             }
             /* Step 2: rotate columns JROW, JROW-1 to kill B(JROW,JROW-1) */
             i__3 = jrow + jrow * b_dim1;
@@ -422,10 +430,12 @@ void zgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
             b[i__3].i = 0.; // , expr subst
             zrot_(ihi, &a[jrow * a_dim1 + 1], &c__1, &a[(jrow - 1) * a_dim1 + 1], &c__1, &c__, &s);
             i__3 = jrow - 1;
-            zrot_(&i__3, &b[jrow * b_dim1 + 1], &c__1, &b[(jrow - 1) * b_dim1 + 1], &c__1, &c__, &s);
-            if (ilz)
+            zrot_(&i__3, &b[jrow * b_dim1 + 1], &c__1, &b[(jrow - 1) * b_dim1 + 1], &c__1, &c__,
+                  &s);
+            if(ilz)
             {
-                zrot_(n, &z__[jrow * z_dim1 + 1], &c__1, &z__[(jrow - 1) * z_dim1 + 1], &c__1, &c__, &s);
+                zrot_(n, &z__[jrow * z_dim1 + 1], &c__1, &z__[(jrow - 1) * z_dim1 + 1], &c__1, &c__,
+                      &s);
             }
             /* L30: */
         }

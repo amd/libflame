@@ -1,5 +1,8 @@
-/* ../netlib/dhsein.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dhsein.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static logical c_false = FALSE_;
 static logical c_true = TRUE_;
@@ -9,11 +12,17 @@ static logical c_true = TRUE_;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DHSEIN + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dhsein. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dhsein.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dhsein. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dhsein.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dhsein. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dhsein.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -52,9 +61,9 @@ static logical c_true = TRUE_;
 /* > \verbatim */
 /* > SIDE is CHARACTER*1 */
 /* > = 'R': compute right eigenvectors only;
-*/
+ */
 /* > = 'L': compute left eigenvectors only;
-*/
+ */
 /* > = 'B': compute both right and left eigenvectors. */
 /* > \endverbatim */
 /* > */
@@ -79,7 +88,7 @@ thus, if */
 /* > \verbatim */
 /* > INITV is CHARACTER*1 */
 /* > = 'N': no initial vectors are supplied;
-*/
+ */
 /* > = 'U': user-supplied initial vectors are stored in the arrays */
 /* > VL and/or VR. */
 /* > \endverbatim */
@@ -265,10 +274,15 @@ here the magnitude of a complex number */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n, doublereal *h__, integer *ldh, doublereal *wr, doublereal *wi, doublereal *vl, integer *ldvl, doublereal *vr, integer *ldvr, integer *mm, integer *m, doublereal *work, integer * ifaill, integer *ifailr, integer *info)
+void dhsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n, doublereal *h__,
+             integer *ldh, doublereal *wr, doublereal *wi, doublereal *vl, integer *ldvl,
+             doublereal *vr, integer *ldvr, integer *mm, integer *m, doublereal *work,
+             integer *ifaill, integer *ifailr, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dhsein inputs: side %c, eigsrc %c, initv %c, n %" FLA_IS ", ldh %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",*side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm);
+    AOCL_DTL_SNPRINTF("dhsein inputs: side %c, eigsrc %c, initv %c, n %" FLA_IS ", ldh %" FLA_IS
+                      ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",
+                      *side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm);
     /* System generated locals */
     integer h_dim1, h_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -285,11 +299,15 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
     doublereal hnorm;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    void dlaein_(logical *, logical *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
+        void
+        dlaein_(logical *, logical *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *,
+                doublereal *, doublereal *, doublereal *, integer *);
     extern doublereal dlanhs_(char *, integer *, doublereal *, integer *, doublereal *);
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical noinit;
     integer ldwork;
@@ -344,20 +362,18 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
     *m = 0;
     pair = FALSE_;
     i__1 = *n;
-    for (k = 1;
-            k <= i__1;
-            ++k)
+    for(k = 1; k <= i__1; ++k)
     {
-        if (pair)
+        if(pair)
         {
             pair = FALSE_;
             select[k] = FALSE_;
         }
         else
         {
-            if (wi[k] == 0.)
+            if(wi[k] == 0.)
             {
-                if (select[k])
+                if(select[k])
                 {
                     ++(*m);
                 }
@@ -365,7 +381,7 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
             else
             {
                 pair = TRUE_;
-                if (select[k] || select[k + 1])
+                if(select[k] || select[k + 1])
                 {
                     select[k] = TRUE_;
                     *m += 2;
@@ -375,39 +391,39 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
         /* L10: */
     }
     *info = 0;
-    if (! rightv && ! leftv)
+    if(!rightv && !leftv)
     {
         *info = -1;
     }
-    else if (! fromqr && ! lsame_(eigsrc, "N", 1, 1))
+    else if(!fromqr && !lsame_(eigsrc, "N", 1, 1))
     {
         *info = -2;
     }
-    else if (! noinit && ! lsame_(initv, "U", 1, 1))
+    else if(!noinit && !lsame_(initv, "U", 1, 1))
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -5;
     }
-    else if (*ldh < fla_max(1,*n))
+    else if(*ldh < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldvl < 1 || leftv && *ldvl < *n)
+    else if(*ldvl < 1 || leftv && *ldvl < *n)
     {
         *info = -11;
     }
-    else if (*ldvr < 1 || rightv && *ldvr < *n)
+    else if(*ldvr < 1 || rightv && *ldvr < *n)
     {
         *info = -13;
     }
-    else if (*mm < *m)
+    else if(*mm < *m)
     {
         *info = -14;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DHSEIN", &i__1, (ftnlen)6);
@@ -415,7 +431,7 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
         return;
     }
     /* Quick return if possible. */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -429,7 +445,7 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
     ldwork = *n + 1;
     kl = 1;
     kln = 0;
-    if (fromqr)
+    if(fromqr)
     {
         kr = 0;
     }
@@ -439,14 +455,12 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
     }
     ksr = 1;
     i__1 = *n;
-    for (k = 1;
-            k <= i__1;
-            ++k)
+    for(k = 1; k <= i__1; ++k)
     {
-        if (select[k])
+        if(select[k])
         {
             /* Compute eigenvector(s) corresponding to W(K). */
-            if (fromqr)
+            if(fromqr)
             {
                 /* If affiliation of eigenvalues is known, check whether */
                 /* the matrix splits. */
@@ -457,49 +471,45 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
                 /* submatrix H(KL:N,KL:N) for a left eigenvector, and with */
                 /* the submatrix H(1:KR,1:KR) for a right eigenvector. */
                 i__2 = kl + 1;
-                for (i__ = k;
-                        i__ >= i__2;
-                        --i__)
+                for(i__ = k; i__ >= i__2; --i__)
                 {
-                    if (h__[i__ + (i__ - 1) * h_dim1] == 0.)
+                    if(h__[i__ + (i__ - 1) * h_dim1] == 0.)
                     {
                         goto L30;
                     }
                     /* L20: */
                 }
-L30:
+            L30:
                 kl = i__;
-                if (k > kr)
+                if(k > kr)
                 {
                     i__2 = *n - 1;
-                    for (i__ = k;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = k; i__ <= i__2; ++i__)
                     {
-                        if (h__[i__ + 1 + i__ * h_dim1] == 0.)
+                        if(h__[i__ + 1 + i__ * h_dim1] == 0.)
                         {
                             goto L50;
                         }
                         /* L40: */
                     }
-L50:
+                L50:
                     kr = i__;
                 }
             }
-            if (kl != kln)
+            if(kl != kln)
             {
                 kln = kl;
                 /* Compute infinity-norm of submatrix H(KL:KR,KL:KR) if it */
                 /* has not ben computed before. */
                 i__2 = kr - kl + 1;
-                hnorm = dlanhs_("I", &i__2, &h__[kl + kl * h_dim1], ldh, & work[1]);
-                if (disnan_(&hnorm))
+                hnorm = dlanhs_("I", &i__2, &h__[kl + kl * h_dim1], ldh, &work[1]);
+                if(disnan_(&hnorm))
                 {
                     *info = -6;
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
-                else if (hnorm > 0.)
+                else if(hnorm > 0.)
                 {
                     eps3 = hnorm * ulp;
                 }
@@ -513,13 +523,14 @@ L50:
             /* H(KL:KR,KL:KR). Close roots are modified by EPS3. */
             wkr = wr[k];
             wki = wi[k];
-L60:
+        L60:
             i__2 = kl;
-            for (i__ = k - 1;
-                    i__ >= i__2;
-                    --i__)
+            for(i__ = k - 1; i__ >= i__2; --i__)
             {
-                if (select[i__] && (d__1 = wr[i__] - wkr, f2c_dabs(d__1)) + (d__2 = wi[i__] - wki, f2c_dabs(d__2)) < eps3)
+                if(select[i__]
+                   && (d__1 = wr[i__] - wkr, f2c_dabs(d__1))
+                              + (d__2 = wi[i__] - wki, f2c_dabs(d__2))
+                          < eps3)
                 {
                     wkr += eps3;
                     goto L60;
@@ -528,7 +539,7 @@ L60:
             }
             wr[k] = wkr;
             pair = wki != 0.;
-            if (pair)
+            if(pair)
             {
                 ksi = ksr + 1;
             }
@@ -536,14 +547,16 @@ L60:
             {
                 ksi = ksr;
             }
-            if (leftv)
+            if(leftv)
             {
                 /* Compute left eigenvector. */
                 i__2 = *n - kl + 1;
-                dlaein_(&c_false, &noinit, &i__2, &h__[kl + kl * h_dim1], ldh, &wkr, &wki, &vl[kl + ksr * vl_dim1], &vl[kl + ksi * vl_dim1], &work[1], &ldwork, &work[*n * *n + *n + 1], &eps3, &smlnum, &bignum, &iinfo);
-                if (iinfo > 0)
+                dlaein_(&c_false, &noinit, &i__2, &h__[kl + kl * h_dim1], ldh, &wkr, &wki,
+                        &vl[kl + ksr * vl_dim1], &vl[kl + ksi * vl_dim1], &work[1], &ldwork,
+                        &work[*n * *n + *n + 1], &eps3, &smlnum, &bignum, &iinfo);
+                if(iinfo > 0)
                 {
-                    if (pair)
+                    if(pair)
                     {
                         *info += 2;
                     }
@@ -560,32 +573,30 @@ L60:
                     ifaill[ksi] = 0;
                 }
                 i__2 = kl - 1;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     vl[i__ + ksr * vl_dim1] = 0.;
                     /* L80: */
                 }
-                if (pair)
+                if(pair)
                 {
                     i__2 = kl - 1;
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         vl[i__ + ksi * vl_dim1] = 0.;
                         /* L90: */
                     }
                 }
             }
-            if (rightv)
+            if(rightv)
             {
                 /* Compute right eigenvector. */
-                dlaein_(&c_true, &noinit, &kr, &h__[h_offset], ldh, &wkr, & wki, &vr[ksr * vr_dim1 + 1], &vr[ksi * vr_dim1 + 1], & work[1], &ldwork, &work[*n * *n + *n + 1], &eps3, & smlnum, &bignum, &iinfo);
-                if (iinfo > 0)
+                dlaein_(&c_true, &noinit, &kr, &h__[h_offset], ldh, &wkr, &wki,
+                        &vr[ksr * vr_dim1 + 1], &vr[ksi * vr_dim1 + 1], &work[1], &ldwork,
+                        &work[*n * *n + *n + 1], &eps3, &smlnum, &bignum, &iinfo);
+                if(iinfo > 0)
                 {
-                    if (pair)
+                    if(pair)
                     {
                         *info += 2;
                     }
@@ -602,26 +613,22 @@ L60:
                     ifailr[ksi] = 0;
                 }
                 i__2 = *n;
-                for (i__ = kr + 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = kr + 1; i__ <= i__2; ++i__)
                 {
                     vr[i__ + ksr * vr_dim1] = 0.;
                     /* L100: */
                 }
-                if (pair)
+                if(pair)
                 {
                     i__2 = *n;
-                    for (i__ = kr + 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = kr + 1; i__ <= i__2; ++i__)
                     {
                         vr[i__ + ksi * vr_dim1] = 0.;
                         /* L110: */
                     }
                 }
             }
-            if (pair)
+            if(pair)
             {
                 ksr += 2;
             }

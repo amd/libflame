@@ -1,16 +1,25 @@
-/* ../netlib/sladiv.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sladiv.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLADIV performs complex division in real arithmetic, avoiding unnecessary overflow. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLADIV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sladiv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sladiv.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sladiv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sladiv.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sladiv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sladiv.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -85,7 +94,8 @@ void sladiv_(real *a, real *b, real *c__, real *d__, real *p, real *q)
     real s, aa, ab, bb, cc, cd, dd, be, un, ov, eps;
     extern real slamch_(char *);
     extern /* Subroutine */
-    void sladiv1_(real *, real *, real *, real *, real *, real *);
+        void
+        sladiv1_(real *, real *, real *, real *, real *, real *);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -110,41 +120,41 @@ void sladiv_(real *a, real *b, real *c__, real *d__, real *p, real *q)
     /* Computing MAX */
     r__1 = f2c_abs(*a);
     r__2 = f2c_abs(*b); // , expr subst
-    ab = fla_max(r__1,r__2);
+    ab = fla_max(r__1, r__2);
     /* Computing MAX */
     r__1 = f2c_abs(*c__);
     r__2 = f2c_abs(*d__); // , expr subst
-    cd = fla_max(r__1,r__2);
+    cd = fla_max(r__1, r__2);
     s = 1.f;
     ov = slamch_("Overflow threshold");
     un = slamch_("Safe minimum");
     eps = slamch_("Epsilon");
     be = 2.f / (eps * eps);
-    if (ab >= ov * .5f)
+    if(ab >= ov * .5f)
     {
         aa *= .5f;
         bb *= .5f;
         s *= 2.f;
     }
-    if (cd >= ov * .5f)
+    if(cd >= ov * .5f)
     {
         cc *= .5f;
         dd *= .5f;
         s *= .5f;
     }
-    if (ab <= un * 2.f / eps)
+    if(ab <= un * 2.f / eps)
     {
         aa *= be;
         bb *= be;
         s /= be;
     }
-    if (cd <= un * 2.f / eps)
+    if(cd <= un * 2.f / eps)
     {
         cc *= be;
         dd *= be;
         s *= be;
     }
-    if (f2c_abs(*d__) <= f2c_abs(*c__))
+    if(f2c_abs(*d__) <= f2c_abs(*c__))
     {
         sladiv1_(&aa, &bb, &cc, &dd, p, q);
     }
@@ -205,10 +215,10 @@ real sladiv2_(real *a, real *b, real *c__, real *d__, real *r__, real *t)
     /* .. Local Scalars .. */
     /* .. */
     /* .. Executable Statements .. */
-    if (*r__ != 0.f)
+    if(*r__ != 0.f)
     {
         br = *b * *r__;
-        if (br != 0.f)
+        if(br != 0.f)
         {
             ret_val = (*a + br) * *t;
         }

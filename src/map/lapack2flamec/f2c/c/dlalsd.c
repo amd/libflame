@@ -1,21 +1,31 @@
-/* ../netlib/dlalsd.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlalsd.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static doublereal c_b6 = 0.;
 static integer c__0 = 0;
 static doublereal c_b11 = 1.;
-/* > \brief \b DLALSD uses the singular value decomposition of A to solve the least squares problem. */
+/* > \brief \b DLALSD uses the singular value decomposition of A to solve the least squares problem.
+ */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLALSD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlalsd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlalsd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlalsd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlalsd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlalsd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlalsd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -169,10 +179,14 @@ in this case a minimum norm solution is returned. */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublereal *b, integer *ldb, doublereal *rcond, integer *rank, doublereal *work, integer *iwork, integer *info)
+void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal *d__, doublereal *e,
+             doublereal *b, integer *ldb, doublereal *rcond, integer *rank, doublereal *work,
+             integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlalsd inputs: uplo %c, smlsiz %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", rank %" FLA_IS "",*uplo, *smlsiz, *n, *nrhs, *ldb, *rank);
+    AOCL_DTL_SNPRINTF("dlalsd inputs: uplo %c, smlsiz %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS
+                      ", ldb %" FLA_IS ", rank %" FLA_IS "",
+                      *uplo, *smlsiz, *n, *nrhs, *ldb, *rank);
     /* System generated locals */
     integer b_dim1, b_offset, i__1, i__2;
     doublereal d__1;
@@ -193,21 +207,45 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
     doublereal rcnd;
     integer perm, nsub;
     extern /* Subroutine */
-    void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+        void
+        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+              doublereal *);
     integer nlvl, sqre, bxst;
     extern /* Subroutine */
-    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *),
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer poles, sizei, nsize, nwork, icmpq1, icmpq2;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    void dlasda_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dlalsa_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dlasda_(integer *, integer *, integer *, integer *, doublereal *, doublereal *,
+                doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, doublereal *, integer *, integer *, integer *, integer *,
+                doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *),
+        dlalsa_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, doublereal *, doublereal *, integer *, integer *, integer *,
+                integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *,
+                integer *),
+        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    void dlasdq_(char *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlasdq_(char *, integer *, integer *, integer *, integer *, integer *, doublereal *,
+                doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+                integer *, doublereal *, integer *),
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
+        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer givcol;
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
     extern /* Subroutine */
-    void dlasrt_(char *, integer *, doublereal *, integer *);
+        void
+        dlasrt_(char *, integer *, doublereal *, integer *);
     doublereal orgnrm;
     integer givnum, givptr, smlszp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -241,19 +279,19 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
     --iwork;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -3;
     }
-    else if (*nrhs < 1)
+    else if(*nrhs < 1)
     {
         *info = -4;
     }
-    else if (*ldb < 1 || *ldb < *n)
+    else if(*ldb < 1 || *ldb < *n)
     {
         *info = -8;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DLALSD", &i__1, (ftnlen)6);
@@ -262,7 +300,7 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
     }
     eps = dlamch_("Epsilon");
     /* Set up the tolerance. */
-    if (*rcond <= 0. || *rcond >= 1.)
+    if(*rcond <= 0. || *rcond >= 1.)
     {
         rcnd = eps;
     }
@@ -272,41 +310,39 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
     }
     *rank = 0;
     /* Quick return if possible. */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (*n == 1)
+    else if(*n == 1)
     {
-        if (d__[1] == 0.)
+        if(d__[1] == 0.)
         {
             dlaset_("A", &c__1, nrhs, &c_b6, &c_b6, &b[b_offset], ldb);
         }
         else
         {
             *rank = 1;
-            dlascl_("G", &c__0, &c__0, &d__[1], &c_b11, &c__1, nrhs, &b[ b_offset], ldb, info);
+            dlascl_("G", &c__0, &c__0, &d__[1], &c_b11, &c__1, nrhs, &b[b_offset], ldb, info);
             d__[1] = f2c_dabs(d__[1]);
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Rotate the matrix if it is lower bidiagonal. */
-    if (*(unsigned char *)uplo == 'L')
+    if(*(unsigned char *)uplo == 'L')
     {
         i__1 = *n - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             dlartg_(&d__[i__], &e[i__], &cs, &sn, &r__);
             d__[i__] = r__;
             e[i__] = sn * d__[i__ + 1];
             d__[i__ + 1] = cs * d__[i__ + 1];
-            if (*nrhs == 1)
+            if(*nrhs == 1)
             {
-                drot_(&c__1, &b[i__ + b_dim1], &c__1, &b[i__ + 1 + b_dim1], & c__1, &cs, &sn);
+                drot_(&c__1, &b[i__ + b_dim1], &c__1, &b[i__ + 1 + b_dim1], &c__1, &cs, &sn);
             }
             else
             {
@@ -315,21 +351,18 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
             }
             /* L10: */
         }
-        if (*nrhs > 1)
+        if(*nrhs > 1)
         {
             i__1 = *nrhs;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = *n - 1;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     cs = work[(j << 1) - 1];
                     sn = work[j * 2];
-                    drot_(&c__1, &b[j + i__ * b_dim1], &c__1, &b[j + 1 + i__ * b_dim1], &c__1, &cs, &sn);
+                    drot_(&c__1, &b[j + i__ * b_dim1], &c__1, &b[j + 1 + i__ * b_dim1], &c__1, &cs,
+                          &sn);
                     /* L20: */
                 }
                 /* L30: */
@@ -339,7 +372,7 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
     /* Scale. */
     nm1 = *n - 1;
     orgnrm = dlanst_("M", n, &d__[1], &e[1]);
-    if (orgnrm == 0.)
+    if(orgnrm == 0.)
     {
         dlaset_("A", n, nrhs, &c_b6, &c_b6, &b[b_offset], ldb);
         AOCL_DTL_TRACE_LOG_EXIT
@@ -349,34 +382,35 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
     dlascl_("G", &c__0, &c__0, &orgnrm, &c_b11, &nm1, &c__1, &e[1], &nm1, info);
     /* If N is smaller than the minimum divide size SMLSIZ, then solve */
     /* the problem with another solver. */
-    if (*n <= *smlsiz)
+    if(*n <= *smlsiz)
     {
         nwork = *n * *n + 1;
         dlaset_("A", n, n, &c_b6, &c_b11, &work[1], n);
-        dlasdq_("U", &c__0, n, n, &c__0, nrhs, &d__[1], &e[1], &work[1], n, & work[1], n, &b[b_offset], ldb, &work[nwork], info);
-        if (*info != 0)
+        dlasdq_("U", &c__0, n, n, &c__0, nrhs, &d__[1], &e[1], &work[1], n, &work[1], n,
+                &b[b_offset], ldb, &work[nwork], info);
+        if(*info != 0)
         {
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         tol = rcnd * (d__1 = d__[idamax_(n, &d__[1], &c__1)], f2c_dabs(d__1));
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if (d__[i__] <= tol)
+            if(d__[i__] <= tol)
             {
                 dlaset_("A", &c__1, nrhs, &c_b6, &c_b6, &b[i__ + b_dim1], ldb);
             }
             else
             {
-                dlascl_("G", &c__0, &c__0, &d__[i__], &c_b11, &c__1, nrhs, &b[ i__ + b_dim1], ldb, info);
+                dlascl_("G", &c__0, &c__0, &d__[i__], &c_b11, &c__1, nrhs, &b[i__ + b_dim1], ldb,
+                        info);
                 ++(*rank);
             }
             /* L40: */
         }
-        dgemm_("T", "N", n, nrhs, n, &c_b11, &work[1], n, &b[b_offset], ldb, & c_b6, &work[nwork], n);
+        dgemm_("T", "N", n, nrhs, n, &c_b11, &work[1], n, &b[b_offset], ldb, &c_b6, &work[nwork],
+               n);
         dlacpy_("A", n, nrhs, &work[nwork], n, &b[b_offset], ldb);
         /* Unscale. */
         dlascl_("G", &c__0, &c__0, &c_b11, &orgnrm, n, &c__1, &d__[1], n, info);
@@ -386,7 +420,7 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
         return;
     }
     /* Book-keeping and setting up some constants. */
-    nlvl = (integer) (log((doublereal) (*n) / (doublereal) (*smlsiz + 1)) / log(2.)) + 1;
+    nlvl = (integer)(log((doublereal)(*n) / (doublereal)(*smlsiz + 1)) / log(2.)) + 1;
     smlszp = *smlsiz + 1;
     u = 1;
     vt = *smlsiz * *n + 1;
@@ -411,34 +445,30 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
     icmpq2 = 0;
     nsub = 0;
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((d__1 = d__[i__], f2c_dabs(d__1)) < eps)
+        if((d__1 = d__[i__], f2c_dabs(d__1)) < eps)
         {
             d__[i__] = d_sign(&eps, &d__[i__]);
         }
         /* L50: */
     }
     i__1 = nm1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((d__1 = e[i__], f2c_dabs(d__1)) < eps || i__ == nm1)
+        if((d__1 = e[i__], f2c_dabs(d__1)) < eps || i__ == nm1)
         {
             ++nsub;
             iwork[nsub] = st;
             /* Subproblem found. First determine its size and then */
             /* apply divide and conquer on it. */
-            if (i__ < nm1)
+            if(i__ < nm1)
             {
                 /* A subproblem with E(I) small for I < NM1. */
                 nsize = i__ - st + 1;
                 iwork[sizei + nsub - 1] = nsize;
             }
-            else if ((d__1 = e[i__], f2c_dabs(d__1)) >= eps)
+            else if((d__1 = e[i__], f2c_dabs(d__1)) >= eps)
             {
                 /* A subproblem with E(NM1) not too small but I = NM1. */
                 nsize = *n - st + 1;
@@ -457,18 +487,19 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
                 dcopy_(nrhs, &b[*n + b_dim1], ldb, &work[bx + nm1], n);
             }
             st1 = st - 1;
-            if (nsize == 1)
+            if(nsize == 1)
             {
                 /* This is a 1-by-1 subproblem and is not solved */
                 /* explicitly. */
                 dcopy_(nrhs, &b[st + b_dim1], ldb, &work[bx + st1], n);
             }
-            else if (nsize <= *smlsiz)
+            else if(nsize <= *smlsiz)
             {
                 /* This is a small subproblem and is solved by DLASDQ. */
                 dlaset_("A", &nsize, &nsize, &c_b6, &c_b11, &work[vt + st1], n);
-                dlasdq_("U", &c__0, &nsize, &nsize, &c__0, nrhs, &d__[st], &e[ st], &work[vt + st1], n, &work[nwork], n, &b[st + b_dim1], ldb, &work[nwork], info);
-                if (*info != 0)
+                dlasdq_("U", &c__0, &nsize, &nsize, &c__0, nrhs, &d__[st], &e[st], &work[vt + st1],
+                        n, &work[nwork], n, &b[st + b_dim1], ldb, &work[nwork], info);
+                if(*info != 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
@@ -478,15 +509,24 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
             else
             {
                 /* A large problem. Solve it using divide and conquer. */
-                dlasda_(&icmpq1, smlsiz, &nsize, &sqre, &d__[st], &e[st], & work[u + st1], n, &work[vt + st1], &iwork[k + st1], & work[difl + st1], &work[difr + st1], &work[z__ + st1], &work[poles + st1], &iwork[givptr + st1], &iwork[ givcol + st1], n, &iwork[perm + st1], &work[givnum + st1], &work[c__ + st1], &work[s + st1], &work[nwork], &iwork[iwk], info);
-                if (*info != 0)
+                dlasda_(&icmpq1, smlsiz, &nsize, &sqre, &d__[st], &e[st], &work[u + st1], n,
+                        &work[vt + st1], &iwork[k + st1], &work[difl + st1], &work[difr + st1],
+                        &work[z__ + st1], &work[poles + st1], &iwork[givptr + st1],
+                        &iwork[givcol + st1], n, &iwork[perm + st1], &work[givnum + st1],
+                        &work[c__ + st1], &work[s + st1], &work[nwork], &iwork[iwk], info);
+                if(*info != 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 bxst = bx + st1;
-                dlalsa_(&icmpq2, smlsiz, &nsize, nrhs, &b[st + b_dim1], ldb, & work[bxst], n, &work[u + st1], n, &work[vt + st1], & iwork[k + st1], &work[difl + st1], &work[difr + st1], &work[z__ + st1], &work[poles + st1], &iwork[givptr + st1], &iwork[givcol + st1], n, &iwork[perm + st1], & work[givnum + st1], &work[c__ + st1], &work[s + st1], &work[nwork], &iwork[iwk], info);
-                if (*info != 0)
+                dlalsa_(&icmpq2, smlsiz, &nsize, nrhs, &b[st + b_dim1], ldb, &work[bxst], n,
+                        &work[u + st1], n, &work[vt + st1], &iwork[k + st1], &work[difl + st1],
+                        &work[difr + st1], &work[z__ + st1], &work[poles + st1],
+                        &iwork[givptr + st1], &iwork[givcol + st1], n, &iwork[perm + st1],
+                        &work[givnum + st1], &work[c__ + st1], &work[s + st1], &work[nwork],
+                        &iwork[iwk], info);
+                if(*info != 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
@@ -499,20 +539,19 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
     /* Apply the singular values and treat the tiny ones as zero. */
     tol = rcnd * (d__1 = d__[idamax_(n, &d__[1], &c__1)], f2c_dabs(d__1));
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Some of the elements in D can be negative because 1-by-1 */
         /* subproblems were not solved explicitly. */
-        if ((d__1 = d__[i__], f2c_dabs(d__1)) <= tol)
+        if((d__1 = d__[i__], f2c_dabs(d__1)) <= tol)
         {
             dlaset_("A", &c__1, nrhs, &c_b6, &c_b6, &work[bx + i__ - 1], n);
         }
         else
         {
             ++(*rank);
-            dlascl_("G", &c__0, &c__0, &d__[i__], &c_b11, &c__1, nrhs, &work[ bx + i__ - 1], n, info);
+            dlascl_("G", &c__0, &c__0, &d__[i__], &c_b11, &c__1, nrhs, &work[bx + i__ - 1], n,
+                    info);
         }
         d__[i__] = (d__1 = d__[i__], f2c_dabs(d__1));
         /* L70: */
@@ -520,26 +559,29 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
     /* Now apply back the right singular vectors. */
     icmpq2 = 1;
     i__1 = nsub;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         st = iwork[i__];
         st1 = st - 1;
         nsize = iwork[sizei + i__ - 1];
         bxst = bx + st1;
-        if (nsize == 1)
+        if(nsize == 1)
         {
             dcopy_(nrhs, &work[bxst], n, &b[st + b_dim1], ldb);
         }
-        else if (nsize <= *smlsiz)
+        else if(nsize <= *smlsiz)
         {
-            dgemm_("T", "N", &nsize, nrhs, &nsize, &c_b11, &work[vt + st1], n, &work[bxst], n, &c_b6, &b[st + b_dim1], ldb);
+            dgemm_("T", "N", &nsize, nrhs, &nsize, &c_b11, &work[vt + st1], n, &work[bxst], n,
+                   &c_b6, &b[st + b_dim1], ldb);
         }
         else
         {
-            dlalsa_(&icmpq2, smlsiz, &nsize, nrhs, &work[bxst], n, &b[st + b_dim1], ldb, &work[u + st1], n, &work[vt + st1], &iwork[ k + st1], &work[difl + st1], &work[difr + st1], &work[z__ + st1], &work[poles + st1], &iwork[givptr + st1], &iwork[ givcol + st1], n, &iwork[perm + st1], &work[givnum + st1], &work[c__ + st1], &work[s + st1], &work[nwork], &iwork[ iwk], info);
-            if (*info != 0)
+            dlalsa_(&icmpq2, smlsiz, &nsize, nrhs, &work[bxst], n, &b[st + b_dim1], ldb,
+                    &work[u + st1], n, &work[vt + st1], &iwork[k + st1], &work[difl + st1],
+                    &work[difr + st1], &work[z__ + st1], &work[poles + st1], &iwork[givptr + st1],
+                    &iwork[givcol + st1], n, &iwork[perm + st1], &work[givnum + st1],
+                    &work[c__ + st1], &work[s + st1], &work[nwork], &iwork[iwk], info);
+            if(*info != 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;

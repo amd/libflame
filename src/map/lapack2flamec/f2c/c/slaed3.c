@@ -1,20 +1,30 @@
-/* ../netlib/slaed3.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slaed3.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b22 = 1.f;
 static real c_b23 = 0.f;
-/* > \brief \b SLAED3 used by sstedc. Finds the roots of the secular equation and updates the eigenvectors. Us ed when the original matrix is tridiagonal. */
+/* > \brief \b SLAED3 used by sstedc. Finds the roots of the secular equation and updates the
+ * eigenvectors. Us ed when the original matrix is tridiagonal. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAED3 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed3. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed3.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaed3. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaed3.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed3. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed3.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -174,7 +184,8 @@ static real c_b23 = 0.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slaed3_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *ldq, real *rho, real *dlamda, real *q2, integer * indx, integer *ctot, real *w, real *s, integer *info)
+void slaed3_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *ldq, real *rho,
+             real *dlamda, real *q2, integer *indx, integer *ctot, real *w, real *s, integer *info)
 {
     /* System generated locals */
     integer q_dim1, q_offset, i__1, i__2;
@@ -186,10 +197,17 @@ void slaed3_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
     real temp;
     extern real snrm2_(integer *, real *, integer *);
     extern /* Subroutine */
-    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), slaed4_(integer *, integer *, real *, real *, real *, real *, real *, integer *);
+        void
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *),
+        scopy_(integer *, real *, integer *, real *, integer *),
+        slaed4_(integer *, integer *, real *, real *, real *, real *, real *, integer *);
     extern real slamc3_(real *, real *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slacpy_( char *, integer *, integer *, real *, integer *, real *, integer * ), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -224,26 +242,26 @@ void slaed3_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
     --s;
     /* Function Body */
     *info = 0;
-    if (*k < 0)
+    if(*k < 0)
     {
         *info = -1;
     }
-    else if (*n < *k)
+    else if(*n < *k)
     {
         *info = -2;
     }
-    else if (*ldq < fla_max(1,*n))
+    else if(*ldq < fla_max(1, *n))
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SLAED3", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
-    if (*k == 0)
+    if(*k == 0)
     {
         return;
     }
@@ -265,36 +283,30 @@ void slaed3_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
     /* 2*DLAMBDA(I) to prevent optimizing compilers from eliminating */
     /* this code. */
     i__1 = *k;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         dlamda[i__] = slamc3_(&dlamda[i__], &dlamda[i__]) - dlamda[i__];
         /* L10: */
     }
     i__1 = *k;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         slaed4_(k, &j, &dlamda[1], &w[1], &q[j * q_dim1 + 1], rho, &d__[j], info);
         /* If the zero finder fails, the computation is terminated. */
-        if (*info != 0)
+        if(*info != 0)
         {
             goto L120;
         }
         /* L20: */
     }
-    if (*k == 1)
+    if(*k == 1)
     {
         goto L110;
     }
-    if (*k == 2)
+    if(*k == 2)
     {
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             w[1] = q[j * q_dim1 + 1];
             w[2] = q[j * q_dim1 + 2];
@@ -312,22 +324,16 @@ void slaed3_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
     i__1 = *ldq + 1;
     scopy_(k, &q[q_offset], &i__1, &w[1], &c__1);
     i__1 = *k;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         i__2 = j - 1;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             w[i__] *= q[i__ + j * q_dim1] / (dlamda[i__] - dlamda[j]);
             /* L40: */
         }
         i__2 = *k;
-        for (i__ = j + 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = j + 1; i__ <= i__2; ++i__)
         {
             w[i__] *= q[i__ + j * q_dim1] / (dlamda[i__] - dlamda[j]);
             /* L50: */
@@ -335,9 +341,7 @@ void slaed3_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
         /* L60: */
     }
     i__1 = *k;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         r__1 = sqrt(-w[i__]);
         w[i__] = r_sign(&r__1, &s[i__]);
@@ -345,23 +349,17 @@ void slaed3_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
     }
     /* Compute eigenvectors of the modified rank-1 modification. */
     i__1 = *k;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         i__2 = *k;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             s[i__] = w[i__] / q[i__ + j * q_dim1];
             /* L80: */
         }
         temp = snrm2_(k, &s[1], &c__1);
         i__2 = *k;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             ii = indx[i__];
             q[i__ + j * q_dim1] = s[ii] / temp;
@@ -376,16 +374,17 @@ L110:
     n23 = ctot[2] + ctot[3];
     slacpy_("A", &n23, k, &q[ctot[1] + 1 + q_dim1], ldq, &s[1], &n23);
     iq2 = *n1 * n12 + 1;
-    if (n23 != 0)
+    if(n23 != 0)
     {
-        sgemm_("N", "N", &n2, k, &n23, &c_b22, &q2[iq2], &n2, &s[1], &n23, & c_b23, &q[*n1 + 1 + q_dim1], ldq);
+        sgemm_("N", "N", &n2, k, &n23, &c_b22, &q2[iq2], &n2, &s[1], &n23, &c_b23,
+               &q[*n1 + 1 + q_dim1], ldq);
     }
     else
     {
         slaset_("A", &n2, k, &c_b23, &c_b23, &q[*n1 + 1 + q_dim1], ldq);
     }
     slacpy_("A", &n12, k, &q[q_offset], ldq, &s[1], &n12);
-    if (n12 != 0)
+    if(n12 != 0)
     {
         sgemm_("N", "N", n1, k, &n12, &c_b22, &q2[1], n1, &s[1], &n12, &c_b23, &q[q_offset], ldq);
     }

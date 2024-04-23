@@ -6,7 +6,7 @@ extern "C" {
 
 integer i_len(char *s, ftnlen n)
 {
-return(n);
+    return (n);
 }
 
 #ifdef __cplusplus

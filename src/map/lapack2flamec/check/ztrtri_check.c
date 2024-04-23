@@ -1,5 +1,5 @@
-#include "FLA_lapack2flame_return_defs.h"
 #include "FLA_f2c.h"
+#include "FLA_lapack2flame_return_defs.h"
 
 int ztrtri_check(char *uplo, char *diag, integer *n, dcomplex *a, integer *lda, integer *info)
 {
@@ -18,43 +18,41 @@ int ztrtri_check(char *uplo, char *diag, integer *n, dcomplex *a, integer *lda, 
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZTRTRI", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         return LAPACK_QUICK_RETURN;
     }
     /* Check for singularity if non-unit. */
-    if (nounit)
+    if(nounit)
     {
         i__1 = *n;
-        for (*info = 1;
-                *info <= i__1;
-                ++(*info))
+        for(*info = 1; *info <= i__1; ++(*info))
         {
             i__2 = *info + *info * a_dim1;
-            if (a[i__2].real == 0. && a[i__2].imag == 0.)
+            if(a[i__2].real == 0. && a[i__2].imag == 0.)
             {
                 return LAPACK_FAILURE;
             }

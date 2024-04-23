@@ -1,5 +1,8 @@
-/* dlartgp.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dlartgp.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b6 = 1.;
 /* > \brief \b DLARTGP generates a plane rotation so that the diagonal is nonnegative. */
@@ -8,11 +11,17 @@ static doublereal c_b6 = 1.;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLARTGP + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlartgp .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlartgp
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlartgp .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlartgp
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlartgp .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlartgp
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -90,7 +99,8 @@ void dlartgp_(doublereal *f, doublereal *g, doublereal *cs, doublereal *sn, doub
     integer i__1;
     doublereal d__1, d__2;
     /* Builtin functions */
-    double log(doublereal), pow_di(doublereal *, integer *), d_sign( doublereal *, doublereal *), sqrt(doublereal);
+    double log(doublereal), pow_di(doublereal *, integer *), d_sign(doublereal *, doublereal *),
+        sqrt(doublereal);
     /* Local variables */
     integer i__;
     doublereal f1, g1, eps, scale;
@@ -124,18 +134,18 @@ void dlartgp_(doublereal *f, doublereal *g, doublereal *cs, doublereal *sn, doub
     safmin = dlamch_("S");
     eps = dlamch_("E");
     d__1 = dlamch_("B");
-    i__1 = (integer) (log(safmin / eps) / log(dlamch_("B")) / 2.);
+    i__1 = (integer)(log(safmin / eps) / log(dlamch_("B")) / 2.);
     safmn2 = pow_di(&d__1, &i__1);
     safmx2 = 1. / safmn2;
     /* FIRST = .FALSE. */
     /* END IF */
-    if (*g == 0.)
+    if(*g == 0.)
     {
         *cs = d_sign(&c_b6, f);
         *sn = 0.;
         *r__ = f2c_dabs(*f);
     }
-    else if (*f == 0.)
+    else if(*f == 0.)
     {
         *cs = 0.;
         *sn = d_sign(&c_b6, g);
@@ -148,19 +158,19 @@ void dlartgp_(doublereal *f, doublereal *g, doublereal *cs, doublereal *sn, doub
         /* Computing MAX */
         d__1 = f2c_dabs(f1);
         d__2 = f2c_dabs(g1); // , expr subst
-        scale = fla_max(d__1,d__2);
-        if (scale >= safmx2)
+        scale = fla_max(d__1, d__2);
+        if(scale >= safmx2)
         {
             count = 0;
-L10:
+        L10:
             ++count;
             f1 *= safmn2;
             g1 *= safmn2;
             /* Computing MAX */
             d__1 = f2c_dabs(f1);
             d__2 = f2c_dabs(g1); // , expr subst
-            scale = fla_max(d__1,d__2);
-            if (scale >= safmx2 && count < 20)
+            scale = fla_max(d__1, d__2);
+            if(scale >= safmx2 && count < 20)
             {
                 goto L10;
             }
@@ -172,26 +182,24 @@ L10:
             *cs = f1 / *r__;
             *sn = g1 / *r__;
             i__1 = count;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 *r__ *= safmx2;
                 /* L20: */
             }
         }
-        else if (scale <= safmn2)
+        else if(scale <= safmn2)
         {
             count = 0;
-L30:
+        L30:
             ++count;
             f1 *= safmx2;
             g1 *= safmx2;
             /* Computing MAX */
             d__1 = f2c_dabs(f1);
             d__2 = f2c_dabs(g1); // , expr subst
-            scale = fla_max(d__1,d__2);
-            if (scale <= safmn2)
+            scale = fla_max(d__1, d__2);
+            if(scale <= safmn2)
             {
                 goto L30;
             }
@@ -203,9 +211,7 @@ L30:
             *cs = f1 / *r__;
             *sn = g1 / *r__;
             i__1 = count;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 *r__ *= safmn2;
                 /* L40: */
@@ -221,7 +227,7 @@ L30:
             *cs = f1 / *r__;
             *sn = g1 / *r__;
         }
-        if (*r__ < 0.)
+        if(*r__ < 0.)
         {
             *cs = -(*cs);
             *sn = -(*sn);

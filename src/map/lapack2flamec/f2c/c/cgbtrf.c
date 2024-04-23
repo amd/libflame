@@ -1,11 +1,10 @@
-/* ../netlib/cgbtrf.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cgbtrf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {1.f, 0.f};
 static integer c__1 = 1;
 static integer c__65 = 65;
 /* > \brief \b CGBTRF */
@@ -14,11 +13,17 @@ static integer c__65 = 65;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CGBTRF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgbtrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgbtrf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgbtrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgbtrf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgbtrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgbtrf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -141,15 +146,18 @@ elements marked */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgbtrf_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integer *ldab, integer *ipiv, integer *info)
+void cgbtrf_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integer *ldab,
+             integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgbtrf inputs: m %lld, n %lld, kl %lld, ku %lld, ldab %lld",*m, *n, *kl, *ku, *ldab);
+    snprintf(buffer, 256, "cgbtrf inputs: m %lld, n %lld, kl %lld, ku %lld, ldab %lld", *m, *n, *kl,
+             *ku, *ldab);
 #else
-    snprintf(buffer, 256,"cgbtrf inputs: m %d, n %d, kl %d, ku %d, ldab %d",*m, *n, *kl, *ku, *ldab);
+    snprintf(buffer, 256, "cgbtrf inputs: m %d, n %d, kl %d, ku %d, ldab %d", *m, *n, *kl, *ku,
+             *ldab);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -162,18 +170,32 @@ void cgbtrf_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
     integer i__, j, i2, i3, j2, j3, k2, jb, nb, ii, jj, jm, ip, jp, km, ju, kv, nw;
     complex temp;
     extern /* Subroutine */
-    void cscal_(integer *, complex *, complex *, integer *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
+        void
+        cscal_(integer *, complex *, complex *, integer *),
+        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
+               complex *, integer *, complex *, complex *, integer *),
+        cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *,
+               complex *, integer *),
+        ccopy_(integer *, complex *, integer *, complex *, integer *),
+        cswap_(integer *, complex *, integer *, complex *, integer *);
     complex work13[4160] /* was [65][64] */
-    , work31[4160] /* was [65][64] */
-    ;
+        ,
+        work31[4160] /* was [65][64] */
+        ;
     extern /* Subroutine */
-    void ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), cgbtf2_(integer *, integer *, integer *, integer *, complex *, integer *, integer *, integer *);
+        void
+        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
+               integer *, complex *, integer *),
+        cgbtf2_(integer *, integer *, integer *, integer *, complex *, integer *, integer *,
+                integer *);
     extern integer icamax_(integer *, complex *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
+        void
+        claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -202,36 +224,36 @@ void cgbtrf_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
     ab_dim1 = *ldab;
     ab_offset = 1 + ab_dim1;
     ab -= ab_offset;
-    #if AOCL_FLA_PROGRESS_H
-        AOCL_FLA_PROGRESS_VAR;
-    #endif
+#if AOCL_FLA_PROGRESS_H
+    AOCL_FLA_PROGRESS_VAR;
+#endif
 
     --ipiv;
     /* Function Body */
     kv = *ku + *kl;
     /* Test the input parameters. */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*kl < 0)
+    else if(*kl < 0)
     {
         *info = -3;
     }
-    else if (*ku < 0)
+    else if(*ku < 0)
     {
         *info = -4;
     }
-    else if (*ldab < *kl + kv + 1)
+    else if(*ldab < *kl + kv + 1)
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CGBTRF", &i__1, (ftnlen)6);
@@ -239,25 +261,25 @@ void cgbtrf_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
         return;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    #if AOCL_FLA_PROGRESS_H
-        progress_step_count =0;
-      #ifndef FLA_ENABLE_WINDOWS_BUILD
-        if(!aocl_fla_progress_ptr)
-              aocl_fla_progress_ptr=aocl_fla_progress;
-      #endif
-    #endif
+#if AOCL_FLA_PROGRESS_H
+    progress_step_count = 0;
+#ifndef FLA_ENABLE_WINDOWS_BUILD
+    if(!aocl_fla_progress_ptr)
+        aocl_fla_progress_ptr = aocl_fla_progress;
+#endif
+#endif
 
     /* Determine the block size for this environment */
     nb = ilaenv_(&c__1, "CGBTRF", " ", m, n, kl, ku);
     /* The block size must not exceed the limit set by the size of the */
     /* local arrays WORK13 and WORK31. */
-    nb = fla_min(nb,64);
-    if (nb <= 1 || nb > *kl)
+    nb = fla_min(nb, 64);
+    if(nb <= 1 || nb > *kl)
     {
         /* Use unblocked code */
         cgbtf2_(m, n, kl, ku, &ab[ab_offset], ldab, &ipiv[1], info);
@@ -267,14 +289,10 @@ void cgbtrf_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
         /* Use blocked code */
         /* Zero the superdiagonal elements of the work array WORK13 */
         i__1 = nb;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j - 1;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * 65 - 66;
                 work13[i__3].r = 0.f;
@@ -285,14 +303,10 @@ void cgbtrf_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
         }
         /* Zero the subdiagonal elements of the work array WORK31 */
         i__1 = nb;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = nb;
-            for (i__ = j + 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = j + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * 65 - 66;
                 work31[i__3].r = 0.f;
@@ -303,15 +317,11 @@ void cgbtrf_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
         }
         /* Gaussian elimination with partial pivoting */
         /* Set fill-in elements in columns KU+2 to KV to zero */
-        i__1 = fla_min(kv,*n);
-        for (j = *ku + 2;
-                j <= i__1;
-                ++j)
+        i__1 = fla_min(kv, *n);
+        for(j = *ku + 2; j <= i__1; ++j)
         {
             i__2 = *kl;
-            for (i__ = kv - j + 2;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = kv - j + 2; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * ab_dim1;
                 ab[i__3].r = 0.f;
@@ -323,23 +333,23 @@ void cgbtrf_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
         /* JU is the index of the last column affected by the current */
         /* stage of the factorization */
         ju = 1;
-        i__1 = fla_min(*m,*n);
+        i__1 = fla_min(*m, *n);
         i__2 = nb;
-        for (j = 1;
-                i__2 < 0 ? j >= i__1 : j <= i__1;
-                j += i__2)
+        for(j = 1; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2)
         {
             /* Computing MIN */
             i__3 = nb;
-            i__4 = fla_min(*m,*n) - j + 1; // , expr subst
-            jb = fla_min(i__3,i__4);
-	    #if AOCL_FLA_PROGRESS_H
-                if(aocl_fla_progress_ptr){
-                        progress_step_count+=jb;
-                        AOCL_FLA_PROGRESS_FUNC_PTR("CGBTRF",6,&progress_step_count,&progress_thread_id,&progress_total_threads);
-                }
+            i__4 = fla_min(*m, *n) - j + 1; // , expr subst
+            jb = fla_min(i__3, i__4);
+#if AOCL_FLA_PROGRESS_H
+            if(aocl_fla_progress_ptr)
+            {
+                progress_step_count += jb;
+                AOCL_FLA_PROGRESS_FUNC_PTR("CGBTRF", 6, &progress_step_count, &progress_thread_id,
+                                           &progress_total_threads);
+            }
 
-        #endif
+#endif
 
             /* The active part of the matrix is partitioned */
             /* A11 A12 A13 */
@@ -353,25 +363,21 @@ void cgbtrf_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
             /* Computing MIN */
             i__3 = *kl - jb;
             i__4 = *m - j - jb + 1; // , expr subst
-            i2 = fla_min(i__3,i__4);
+            i2 = fla_min(i__3, i__4);
             /* Computing MIN */
             i__3 = jb;
             i__4 = *m - j - *kl + 1; // , expr subst
-            i3 = fla_min(i__3,i__4);
+            i3 = fla_min(i__3, i__4);
             /* J2 and J3 are computed after JU has been updated. */
             /* Factorize the current block of JB columns */
             i__3 = j + jb - 1;
-            for (jj = j;
-                    jj <= i__3;
-                    ++jj)
+            for(jj = j; jj <= i__3; ++jj)
             {
                 /* Set fill-in elements in column JJ+KV to zero */
-                if (jj + kv <= *n)
+                if(jj + kv <= *n)
                 {
                     i__4 = *kl;
-                    for (i__ = 1;
-                            i__ <= i__4;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__4; ++i__)
                     {
                         i__5 = i__ + (jj + kv) * ab_dim1;
                         ab[i__5].r = 0.f;
@@ -384,27 +390,28 @@ void cgbtrf_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
                 /* Computing MIN */
                 i__4 = *kl;
                 i__5 = *m - jj; // , expr subst
-                km = fla_min(i__4,i__5);
+                km = fla_min(i__4, i__5);
                 i__4 = km + 1;
                 jp = icamax_(&i__4, &ab[kv + 1 + jj * ab_dim1], &c__1);
                 ipiv[jj] = jp + jj - j;
                 i__4 = kv + jp + jj * ab_dim1;
-                if (ab[i__4].r != 0.f || ab[i__4].i != 0.f)
+                if(ab[i__4].r != 0.f || ab[i__4].i != 0.f)
                 {
                     /* Computing MAX */
                     /* Computing MIN */
                     i__6 = jj + *ku + jp - 1;
                     i__4 = ju;
-                    i__5 = fla_min(i__6,*n); // , expr subst
-                    ju = fla_max(i__4,i__5);
-                    if (jp != 1)
+                    i__5 = fla_min(i__6, *n); // , expr subst
+                    ju = fla_max(i__4, i__5);
+                    if(jp != 1)
                     {
                         /* Apply interchange to columns J to J+JB-1 */
-                        if (jp + jj - 1 < j + *kl)
+                        if(jp + jj - 1 < j + *kl)
                         {
                             i__4 = *ldab - 1;
                             i__5 = *ldab - 1;
-                            cswap_(&jb, &ab[kv + 1 + jj - j + j * ab_dim1], & i__4, &ab[kv + jp + jj - j + j * ab_dim1], &i__5);
+                            cswap_(&jb, &ab[kv + 1 + jj - j + j * ab_dim1], &i__4,
+                                   &ab[kv + jp + jj - j + j * ab_dim1], &i__5);
                         }
                         else
                         {
@@ -412,11 +419,13 @@ void cgbtrf_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
                             /* which are stored in the work array WORK31 */
                             i__4 = jj - j;
                             i__5 = *ldab - 1;
-                            cswap_(&i__4, &ab[kv + 1 + jj - j + j * ab_dim1], &i__5, &work31[jp + jj - j - *kl - 1], & c__65);
+                            cswap_(&i__4, &ab[kv + 1 + jj - j + j * ab_dim1], &i__5,
+                                   &work31[jp + jj - j - *kl - 1], &c__65);
                             i__4 = j + jb - jj;
                             i__5 = *ldab - 1;
                             i__6 = *ldab - 1;
-                            cswap_(&i__4, &ab[kv + 1 + jj * ab_dim1], &i__5, & ab[kv + jp + jj * ab_dim1], &i__6);
+                            cswap_(&i__4, &ab[kv + 1 + jj * ab_dim1], &i__5,
+                                   &ab[kv + jp + jj * ab_dim1], &i__6);
                         }
                     }
                     /* Compute multipliers */
@@ -428,22 +437,24 @@ void cgbtrf_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
                     /* Computing MIN */
                     i__4 = ju;
                     i__5 = j + jb - 1; // , expr subst
-                    jm = fla_min(i__4,i__5);
-                    if (jm > jj)
+                    jm = fla_min(i__4, i__5);
+                    if(jm > jj)
                     {
                         i__4 = jm - jj;
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
                         i__5 = *ldab - 1;
                         i__6 = *ldab - 1;
-                        cgeru_(&km, &i__4, &q__1, &ab[kv + 2 + jj * ab_dim1], &c__1, &ab[kv + (jj + 1) * ab_dim1], &i__5, & ab[kv + 1 + (jj + 1) * ab_dim1], &i__6);
+                        cgeru_(&km, &i__4, &q__1, &ab[kv + 2 + jj * ab_dim1], &c__1,
+                               &ab[kv + (jj + 1) * ab_dim1], &i__5,
+                               &ab[kv + 1 + (jj + 1) * ab_dim1], &i__6);
                     }
                 }
                 else
                 {
                     /* If pivot is zero, set INFO to the index of the pivot */
                     /* unless a zero pivot has already been found. */
-                    if (*info == 0)
+                    if(*info == 0)
                     {
                         *info = jj;
                     }
@@ -451,32 +462,32 @@ void cgbtrf_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
                 /* Copy current column of A31 into the work array WORK31 */
                 /* Computing MIN */
                 i__4 = jj - j + 1;
-                nw = fla_min(i__4,i3);
-                if (nw > 0)
+                nw = fla_min(i__4, i3);
+                if(nw > 0)
                 {
-                    ccopy_(&nw, &ab[kv + *kl + 1 - jj + j + jj * ab_dim1], & c__1, &work31[(jj - j + 1) * 65 - 65], &c__1);
+                    ccopy_(&nw, &ab[kv + *kl + 1 - jj + j + jj * ab_dim1], &c__1,
+                           &work31[(jj - j + 1) * 65 - 65], &c__1);
                 }
                 /* L80: */
             }
-            if (j + jb <= *n)
+            if(j + jb <= *n)
             {
                 /* Apply the row interchanges to the other blocks. */
                 /* Computing MIN */
                 i__3 = ju - j + 1;
-                j2 = fla_min(i__3,kv) - jb;
+                j2 = fla_min(i__3, kv) - jb;
                 /* Computing MAX */
                 i__3 = 0;
                 i__4 = ju - j - kv + 1; // , expr subst
-                j3 = fla_max(i__3,i__4);
+                j3 = fla_max(i__3, i__4);
                 /* Use CLASWP to apply the row interchanges to A12, A22, and */
                 /* A32. */
                 i__3 = *ldab - 1;
-                claswp_(&j2, &ab[kv + 1 - jb + (j + jb) * ab_dim1], &i__3, & c__1, &jb, &ipiv[j], &c__1);
+                claswp_(&j2, &ab[kv + 1 - jb + (j + jb) * ab_dim1], &i__3, &c__1, &jb, &ipiv[j],
+                        &c__1);
                 /* Adjust the pivot indices. */
                 i__3 = j + jb - 1;
-                for (i__ = j;
-                        i__ <= i__3;
-                        ++i__)
+                for(i__ = j; i__ <= i__3; ++i__)
                 {
                     ipiv[i__] = ipiv[i__] + j - 1;
                     /* L90: */
@@ -485,18 +496,14 @@ void cgbtrf_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
                 /* columnwise. */
                 k2 = j - 1 + jb + j2;
                 i__3 = j3;
-                for (i__ = 1;
-                        i__ <= i__3;
-                        ++i__)
+                for(i__ = 1; i__ <= i__3; ++i__)
                 {
                     jj = k2 + i__;
                     i__4 = j + jb - 1;
-                    for (ii = j + i__ - 1;
-                            ii <= i__4;
-                            ++ii)
+                    for(ii = j + i__ - 1; ii <= i__4; ++ii)
                     {
                         ip = ipiv[ii];
-                        if (ip != ii)
+                        if(ip != ii)
                         {
                             i__5 = kv + 1 + ii - jj + jj * ab_dim1;
                             temp.r = ab[i__5].r;
@@ -514,13 +521,15 @@ void cgbtrf_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
                     /* L110: */
                 }
                 /* Update the relevant part of the trailing submatrix */
-                if (j2 > 0)
+                if(j2 > 0)
                 {
                     /* Update A12 */
                     i__3 = *ldab - 1;
                     i__4 = *ldab - 1;
-                    ctrsm_("Left", "Lower", "No transpose", "Unit", &jb, &j2, &c_b1, &ab[kv + 1 + j * ab_dim1], &i__3, &ab[kv + 1 - jb + (j + jb) * ab_dim1], &i__4);
-                    if (i2 > 0)
+                    ctrsm_("Left", "Lower", "No transpose", "Unit", &jb, &j2, &c_b1,
+                           &ab[kv + 1 + j * ab_dim1], &i__3, &ab[kv + 1 - jb + (j + jb) * ab_dim1],
+                           &i__4);
+                    if(i2 > 0)
                     {
                         /* Update A22 */
                         q__1.r = -1.f;
@@ -528,75 +537,76 @@ void cgbtrf_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
                         i__3 = *ldab - 1;
                         i__4 = *ldab - 1;
                         i__5 = *ldab - 1;
-                        cgemm_("No transpose", "No transpose", &i2, &j2, &jb, &q__1, &ab[kv + 1 + jb + j * ab_dim1], &i__3, &ab[kv + 1 - jb + (j + jb) * ab_dim1], &i__4, &c_b1, &ab[kv + 1 + (j + jb) * ab_dim1], & i__5);
+                        cgemm_("No transpose", "No transpose", &i2, &j2, &jb, &q__1,
+                               &ab[kv + 1 + jb + j * ab_dim1], &i__3,
+                               &ab[kv + 1 - jb + (j + jb) * ab_dim1], &i__4, &c_b1,
+                               &ab[kv + 1 + (j + jb) * ab_dim1], &i__5);
                     }
-                    if (i3 > 0)
+                    if(i3 > 0)
                     {
                         /* Update A32 */
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
                         i__3 = *ldab - 1;
                         i__4 = *ldab - 1;
-                        cgemm_("No transpose", "No transpose", &i3, &j2, &jb, &q__1, work31, &c__65, &ab[kv + 1 - jb + (j + jb) * ab_dim1], &i__3, &c_b1, &ab[kv + *kl + 1 - jb + (j + jb) * ab_dim1], &i__4);
+                        cgemm_("No transpose", "No transpose", &i3, &j2, &jb, &q__1, work31, &c__65,
+                               &ab[kv + 1 - jb + (j + jb) * ab_dim1], &i__3, &c_b1,
+                               &ab[kv + *kl + 1 - jb + (j + jb) * ab_dim1], &i__4);
                     }
                 }
-                if (j3 > 0)
+                if(j3 > 0)
                 {
                     /* Copy the lower triangle of A13 into the work array */
                     /* WORK13 */
                     i__3 = j3;
-                    for (jj = 1;
-                            jj <= i__3;
-                            ++jj)
+                    for(jj = 1; jj <= i__3; ++jj)
                     {
                         i__4 = jb;
-                        for (ii = jj;
-                                ii <= i__4;
-                                ++ii)
+                        for(ii = jj; ii <= i__4; ++ii)
                         {
                             i__5 = ii + jj * 65 - 66;
                             i__6 = ii - jj + 1 + (jj + j + kv - 1) * ab_dim1;
                             work13[i__5].r = ab[i__6].r;
-                            work13[i__5].i = ab[ i__6].i; // , expr subst
+                            work13[i__5].i = ab[i__6].i; // , expr subst
                             /* L120: */
                         }
                         /* L130: */
                     }
                     /* Update A13 in the work array */
                     i__3 = *ldab - 1;
-                    ctrsm_("Left", "Lower", "No transpose", "Unit", &jb, &j3, &c_b1, &ab[kv + 1 + j * ab_dim1], &i__3, work13, & c__65);
-                    if (i2 > 0)
+                    ctrsm_("Left", "Lower", "No transpose", "Unit", &jb, &j3, &c_b1,
+                           &ab[kv + 1 + j * ab_dim1], &i__3, work13, &c__65);
+                    if(i2 > 0)
                     {
                         /* Update A23 */
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
                         i__3 = *ldab - 1;
                         i__4 = *ldab - 1;
-                        cgemm_("No transpose", "No transpose", &i2, &j3, &jb, &q__1, &ab[kv + 1 + jb + j * ab_dim1], &i__3, work13, &c__65, &c_b1, &ab[jb + 1 + (j + kv) * ab_dim1], &i__4);
+                        cgemm_("No transpose", "No transpose", &i2, &j3, &jb, &q__1,
+                               &ab[kv + 1 + jb + j * ab_dim1], &i__3, work13, &c__65, &c_b1,
+                               &ab[jb + 1 + (j + kv) * ab_dim1], &i__4);
                     }
-                    if (i3 > 0)
+                    if(i3 > 0)
                     {
                         /* Update A33 */
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
                         i__3 = *ldab - 1;
-                        cgemm_("No transpose", "No transpose", &i3, &j3, &jb, &q__1, work31, &c__65, work13, &c__65, &c_b1, &ab[*kl + 1 + (j + kv) * ab_dim1], &i__3);
+                        cgemm_("No transpose", "No transpose", &i3, &j3, &jb, &q__1, work31, &c__65,
+                               work13, &c__65, &c_b1, &ab[*kl + 1 + (j + kv) * ab_dim1], &i__3);
                     }
                     /* Copy the lower triangle of A13 back into place */
                     i__3 = j3;
-                    for (jj = 1;
-                            jj <= i__3;
-                            ++jj)
+                    for(jj = 1; jj <= i__3; ++jj)
                     {
                         i__4 = jb;
-                        for (ii = jj;
-                                ii <= i__4;
-                                ++ii)
+                        for(ii = jj; ii <= i__4; ++ii)
                         {
                             i__5 = ii - jj + 1 + (jj + j + kv - 1) * ab_dim1;
                             i__6 = ii + jj * 65 - 66;
                             ab[i__5].r = work13[i__6].r;
-                            ab[i__5].i = work13[ i__6].i; // , expr subst
+                            ab[i__5].i = work13[i__6].i; // , expr subst
                             /* L140: */
                         }
                         /* L150: */
@@ -607,9 +617,7 @@ void cgbtrf_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
             {
                 /* Adjust the pivot indices. */
                 i__3 = j + jb - 1;
-                for (i__ = j;
-                        i__ <= i__3;
-                        ++i__)
+                for(i__ = j; i__ <= i__3; ++i__)
                 {
                     ipiv[i__] = ipiv[i__] + j - 1;
                     /* L160: */
@@ -619,38 +627,39 @@ void cgbtrf_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
             /* restore the upper triangular form of A31 and copy the upper */
             /* triangle of A31 back into place */
             i__3 = j;
-            for (jj = j + jb - 1;
-                    jj >= i__3;
-                    --jj)
+            for(jj = j + jb - 1; jj >= i__3; --jj)
             {
                 jp = ipiv[jj] - jj + 1;
-                if (jp != 1)
+                if(jp != 1)
                 {
                     /* Apply interchange to columns J to JJ-1 */
-                    if (jp + jj - 1 < j + *kl)
+                    if(jp + jj - 1 < j + *kl)
                     {
                         /* The interchange does not affect A31 */
                         i__4 = jj - j;
                         i__5 = *ldab - 1;
                         i__6 = *ldab - 1;
-                        cswap_(&i__4, &ab[kv + 1 + jj - j + j * ab_dim1], & i__5, &ab[kv + jp + jj - j + j * ab_dim1], & i__6);
+                        cswap_(&i__4, &ab[kv + 1 + jj - j + j * ab_dim1], &i__5,
+                               &ab[kv + jp + jj - j + j * ab_dim1], &i__6);
                     }
                     else
                     {
                         /* The interchange does affect A31 */
                         i__4 = jj - j;
                         i__5 = *ldab - 1;
-                        cswap_(&i__4, &ab[kv + 1 + jj - j + j * ab_dim1], & i__5, &work31[jp + jj - j - *kl - 1], &c__65);
+                        cswap_(&i__4, &ab[kv + 1 + jj - j + j * ab_dim1], &i__5,
+                               &work31[jp + jj - j - *kl - 1], &c__65);
                     }
                 }
                 /* Copy the current column of A31 back into place */
                 /* Computing MIN */
                 i__4 = i3;
                 i__5 = jj - j + 1; // , expr subst
-                nw = fla_min(i__4,i__5);
-                if (nw > 0)
+                nw = fla_min(i__4, i__5);
+                if(nw > 0)
                 {
-                    ccopy_(&nw, &work31[(jj - j + 1) * 65 - 65], &c__1, &ab[ kv + *kl + 1 - jj + j + jj * ab_dim1], &c__1);
+                    ccopy_(&nw, &work31[(jj - j + 1) * 65 - 65], &c__1,
+                           &ab[kv + *kl + 1 - jj + j + jj * ab_dim1], &c__1);
                 }
                 /* L170: */
             }

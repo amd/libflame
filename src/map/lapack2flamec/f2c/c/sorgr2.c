@@ -1,16 +1,25 @@
-/* ../netlib/sorgr2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sorgr2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SORGR2 generates all or part of the orthogonal matrix Q from an RQ factorization determined by sgerqf (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SORGR2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorgr2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorgr2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorgr2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorgr2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorgr2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorgr2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -100,12 +109,13 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sorgr2_(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work, integer *info)
+void sorgr2_(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sorgr2 inputs: m %d, n %d, k %d, lda %d",*m, *n, *k, *lda);
+    snprintf(buffer, 256, "sorgr2 inputs: m %d, n %d, k %d, lda %d", *m, *n, *k, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -114,7 +124,10 @@ void sorgr2_(integer *m, integer *n, integer *k, real *a, integer *lda, real *ta
     /* Local variables */
     integer i__, j, l, ii;
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *), slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sscal_(integer *, real *, real *, integer *),
+        slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -142,23 +155,23 @@ void sorgr2_(integer *m, integer *n, integer *k, real *a, integer *lda, real *ta
     --work;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < *m)
+    else if(*n < *m)
     {
         *info = -2;
     }
-    else if (*k < 0 || *k > *m)
+    else if(*k < 0 || *k > *m)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SORGR2", &i__1, (ftnlen)6);
@@ -166,28 +179,24 @@ void sorgr2_(integer *m, integer *n, integer *k, real *a, integer *lda, real *ta
         return;
     }
     /* Quick return if possible */
-    if (*m <= 0)
+    if(*m <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (*k < *m)
+    if(*k < *m)
     {
         /* Initialise rows 1:m-k to rows of the unit matrix */
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m - *k;
-            for (l = 1;
-                    l <= i__2;
-                    ++l)
+            for(l = 1; l <= i__2; ++l)
             {
                 a[l + j * a_dim1] = 0.f;
                 /* L10: */
             }
-            if (j > *n - *m && j <= *n - *k)
+            if(j > *n - *m && j <= *n - *k)
             {
                 a[*m - *n + j + j * a_dim1] = 1.f;
             }
@@ -195,25 +204,21 @@ void sorgr2_(integer *m, integer *n, integer *k, real *a, integer *lda, real *ta
         }
     }
     i__1 = *k;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         ii = *m - *k + i__;
         /* Apply H(i) to A(1:m-k+i,1:n-k+i) from the right */
         a[ii + (*n - *m + ii) * a_dim1] = 1.f;
         i__2 = ii - 1;
         i__3 = *n - *m + ii;
-        slarf_("Right", &i__2, &i__3, &a[ii + a_dim1], lda, &tau[i__], &a[ a_offset], lda, &work[1]);
+        slarf_("Right", &i__2, &i__3, &a[ii + a_dim1], lda, &tau[i__], &a[a_offset], lda, &work[1]);
         i__2 = *n - *m + ii - 1;
         r__1 = -tau[i__];
         sscal_(&i__2, &r__1, &a[ii + a_dim1], lda);
         a[ii + (*n - *m + ii) * a_dim1] = 1.f - tau[i__];
         /* Set A(m-k+i,n-k+i+1:n) to zero */
         i__2 = *n;
-        for (l = *n - *m + ii + 1;
-                l <= i__2;
-                ++l)
+        for(l = *n - *m + ii + 1; l <= i__2; ++l)
         {
             a[ii + l * a_dim1] = 0.f;
             /* L30: */

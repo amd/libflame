@@ -1,16 +1,25 @@
-/* slaqz1.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* slaqz1.f -- translated by f2c (version 20160102). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLAQZ1 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAQZ1 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaqz1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaqz1.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaqz1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaqz1.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaqz1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaqz1.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -109,10 +118,11 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slaqz1_(real *a, integer *lda, real *b, integer *ldb, real *sr1, real *sr2, real *si, real *beta1, real *beta2, real *v)
+void slaqz1_(real *a, integer *lda, real *b, integer *ldb, real *sr1, real *sr2, real *si,
+             real *beta1, real *beta2, real *v)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slaqz1 inputs: lda %" FLA_IS ", ldb %" FLA_IS "",*lda, *ldb);
+    AOCL_DTL_SNPRINTF("slaqz1 inputs: lda %" FLA_IS ", ldb %" FLA_IS "", *lda, *ldb);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset;
     /* Builtin functions */
@@ -141,7 +151,7 @@ void slaqz1_(real *a, integer *lda, real *b, integer *ldb, real *sr1, real *sr2,
     w[0] = *beta1 * a[a_dim1 + 1] - *sr1 * b[b_dim1 + 1];
     w[1] = *beta1 * a[a_dim1 + 2] - *sr1 * b[b_dim1 + 2];
     scale1 = sqrt((f2c_abs(w[0]))) * sqrt((f2c_abs(w[1])));
-    if (scale1 >= safmin && scale1 <= safmax)
+    if(scale1 >= safmin && scale1 <= safmax)
     {
         w[0] /= scale1;
         w[1] /= scale1;
@@ -150,19 +160,23 @@ void slaqz1_(real *a, integer *lda, real *b, integer *ldb, real *sr1, real *sr2,
     w[1] /= b[(b_dim1 << 1) + 2];
     w[0] = (w[0] - b[(b_dim1 << 1) + 1] * w[1]) / b[b_dim1 + 1];
     scale2 = sqrt((f2c_abs(w[0]))) * sqrt((f2c_abs(w[1])));
-    if (scale2 >= safmin && scale2 <= safmax)
+    if(scale2 >= safmin && scale2 <= safmax)
     {
         w[0] /= scale2;
         w[1] /= scale2;
     }
     /* Apply second shift */
-    v[1] = *beta2 * (a[a_dim1 + 1] * w[0] + a[(a_dim1 << 1) + 1] * w[1]) - * sr2 * (b[b_dim1 + 1] * w[0] + b[(b_dim1 << 1) + 1] * w[1]);
-    v[2] = *beta2 * (a[a_dim1 + 2] * w[0] + a[(a_dim1 << 1) + 2] * w[1]) - * sr2 * (b[b_dim1 + 2] * w[0] + b[(b_dim1 << 1) + 2] * w[1]);
-    v[3] = *beta2 * (a[a_dim1 + 3] * w[0] + a[(a_dim1 << 1) + 3] * w[1]) - * sr2 * (b[b_dim1 + 3] * w[0] + b[(b_dim1 << 1) + 3] * w[1]);
+    v[1] = *beta2 * (a[a_dim1 + 1] * w[0] + a[(a_dim1 << 1) + 1] * w[1])
+           - *sr2 * (b[b_dim1 + 1] * w[0] + b[(b_dim1 << 1) + 1] * w[1]);
+    v[2] = *beta2 * (a[a_dim1 + 2] * w[0] + a[(a_dim1 << 1) + 2] * w[1])
+           - *sr2 * (b[b_dim1 + 2] * w[0] + b[(b_dim1 << 1) + 2] * w[1]);
+    v[3] = *beta2 * (a[a_dim1 + 3] * w[0] + a[(a_dim1 << 1) + 3] * w[1])
+           - *sr2 * (b[b_dim1 + 3] * w[0] + b[(b_dim1 << 1) + 3] * w[1]);
     /* Account for imaginary part */
     v[1] += *si * *si * b[b_dim1 + 1] / scale1 / scale2;
     /* Check for overflow */
-    if (f2c_abs(v[1]) > safmax || f2c_abs(v[2]) > safmax || f2c_abs(v[3]) > safmax || sisnan_(&v[1]) || sisnan_(&v[2]) || sisnan_(&v[3]))
+    if(f2c_abs(v[1]) > safmax || f2c_abs(v[2]) > safmax || f2c_abs(v[3]) > safmax || sisnan_(&v[1])
+       || sisnan_(&v[2]) || sisnan_(&v[3]))
     {
         v[1] = 0.f;
         v[2] = 0.f;

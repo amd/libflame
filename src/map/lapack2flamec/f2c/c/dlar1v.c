@@ -1,16 +1,25 @@
-/* ../netlib/dlar1v.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlar1v.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLAR1V computes the (scaled) r-th column of the inverse of the submatrix in rows b1 through bn of the tridiagonal matrix LDLT - λI. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLAR1V + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlar1v. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlar1v.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlar1v. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlar1v.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlar1v. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlar1v.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -215,10 +224,16 @@ is largest */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void dlar1v_(integer *n, integer *b1, integer *bn, doublereal *lambda, doublereal *d__, doublereal *l, doublereal *ld, doublereal * lld, doublereal *pivmin, doublereal *gaptol, doublereal *z__, logical *wantnc, integer *negcnt, doublereal *ztz, doublereal *mingma, integer *r__, integer *isuppz, doublereal *nrminv, doublereal *resid, doublereal *rqcorr, doublereal *work)
+void dlar1v_(integer *n, integer *b1, integer *bn, doublereal *lambda, doublereal *d__,
+             doublereal *l, doublereal *ld, doublereal *lld, doublereal *pivmin, doublereal *gaptol,
+             doublereal *z__, logical *wantnc, integer *negcnt, doublereal *ztz, doublereal *mingma,
+             integer *r__, integer *isuppz, doublereal *nrminv, doublereal *resid,
+             doublereal *rqcorr, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlar1v inputs: n %" FLA_IS ", b1 %" FLA_IS ", bn %" FLA_IS ", r__ %" FLA_IS "",*n, *b1, *bn, *r__);
+    AOCL_DTL_SNPRINTF("dlar1v inputs: n %" FLA_IS ", b1 %" FLA_IS ", bn %" FLA_IS ", r__ %" FLA_IS
+                      "",
+                      *n, *b1, *bn, *r__);
     /* System generated locals */
     integer i__1;
     doublereal d__1, d__2, d__3;
@@ -264,7 +279,7 @@ void dlar1v_(integer *n, integer *b1, integer *bn, doublereal *lambda, doublerea
     --d__;
     /* Function Body */
     eps = dlamch_("Precision");
-    if (*r__ == 0)
+    if(*r__ == 0)
     {
         r1 = *b1;
         r2 = *bn;
@@ -280,7 +295,7 @@ void dlar1v_(integer *n, integer *b1, integer *bn, doublereal *lambda, doublerea
     indumn = *n;
     inds = (*n << 1) + 1;
     indp = *n * 3 + 1;
-    if (*b1 == 1)
+    if(*b1 == 1)
     {
         work[inds] = 0.;
     }
@@ -294,13 +309,11 @@ void dlar1v_(integer *n, integer *b1, integer *bn, doublereal *lambda, doublerea
     neg1 = 0;
     s = work[inds + *b1 - 1] - *lambda;
     i__1 = r1 - 1;
-    for (i__ = *b1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = *b1; i__ <= i__1; ++i__)
     {
         dplus = d__[i__] + s;
         work[indlpl + i__] = ld[i__] / dplus;
-        if (dplus < 0.)
+        if(dplus < 0.)
         {
             ++neg1;
         }
@@ -309,14 +322,12 @@ void dlar1v_(integer *n, integer *b1, integer *bn, doublereal *lambda, doublerea
         /* L50: */
     }
     sawnan1 = disnan_(&s);
-    if (sawnan1)
+    if(sawnan1)
     {
         goto L60;
     }
     i__1 = r2 - 1;
-    for (i__ = r1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = r1; i__ <= i__1; ++i__)
     {
         dplus = d__[i__] + s;
         work[indlpl + i__] = ld[i__] / dplus;
@@ -326,28 +337,26 @@ void dlar1v_(integer *n, integer *b1, integer *bn, doublereal *lambda, doublerea
     }
     sawnan1 = disnan_(&s);
 L60:
-    if (sawnan1)
+    if(sawnan1)
     {
         /* Runs a slower version of the above loop if a NaN is detected */
         neg1 = 0;
         s = work[inds + *b1 - 1] - *lambda;
         i__1 = r1 - 1;
-        for (i__ = *b1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = *b1; i__ <= i__1; ++i__)
         {
             dplus = d__[i__] + s;
-            if (f2c_dabs(dplus) < *pivmin)
+            if(f2c_dabs(dplus) < *pivmin)
             {
                 dplus = -(*pivmin);
             }
             work[indlpl + i__] = ld[i__] / dplus;
-            if (dplus < 0.)
+            if(dplus < 0.)
             {
                 ++neg1;
             }
             work[inds + i__] = s * work[indlpl + i__] * l[i__];
-            if (work[indlpl + i__] == 0.)
+            if(work[indlpl + i__] == 0.)
             {
                 work[inds + i__] = lld[i__];
             }
@@ -355,18 +364,16 @@ L60:
             /* L70: */
         }
         i__1 = r2 - 1;
-        for (i__ = r1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = r1; i__ <= i__1; ++i__)
         {
             dplus = d__[i__] + s;
-            if (f2c_dabs(dplus) < *pivmin)
+            if(f2c_dabs(dplus) < *pivmin)
             {
                 dplus = -(*pivmin);
             }
             work[indlpl + i__] = ld[i__] / dplus;
             work[inds + i__] = s * work[indlpl + i__] * l[i__];
-            if (work[indlpl + i__] == 0.)
+            if(work[indlpl + i__] == 0.)
             {
                 work[inds + i__] = lld[i__];
             }
@@ -380,13 +387,11 @@ L60:
     neg2 = 0;
     work[indp + *bn - 1] = d__[*bn] - *lambda;
     i__1 = r1;
-    for (i__ = *bn - 1;
-            i__ >= i__1;
-            --i__)
+    for(i__ = *bn - 1; i__ >= i__1; --i__)
     {
         dminus = lld[i__] + work[indp + i__];
         tmp = d__[i__] / dminus;
-        if (dminus < 0.)
+        if(dminus < 0.)
         {
             ++neg2;
         }
@@ -396,28 +401,26 @@ L60:
     }
     tmp = work[indp + r1 - 1];
     sawnan2 = disnan_(&tmp);
-    if (sawnan2)
+    if(sawnan2)
     {
         /* Runs a slower version of the above loop if a NaN is detected */
         neg2 = 0;
         i__1 = r1;
-        for (i__ = *bn - 1;
-                i__ >= i__1;
-                --i__)
+        for(i__ = *bn - 1; i__ >= i__1; --i__)
         {
             dminus = lld[i__] + work[indp + i__];
-            if (f2c_dabs(dminus) < *pivmin)
+            if(f2c_dabs(dminus) < *pivmin)
             {
                 dminus = -(*pivmin);
             }
             tmp = d__[i__] / dminus;
-            if (dminus < 0.)
+            if(dminus < 0.)
             {
                 ++neg2;
             }
             work[indumn + i__] = l[i__] * tmp;
             work[indp + i__ - 1] = work[indp + i__] * tmp - *lambda;
-            if (tmp == 0.)
+            if(tmp == 0.)
             {
                 work[indp + i__ - 1] = d__[i__] - *lambda;
             }
@@ -427,11 +430,11 @@ L60:
     /* Find the index (from R1 to R2) of the largest (in magnitude) */
     /* diagonal element of the inverse */
     *mingma = work[inds + r1 - 1] + work[indp + r1 - 1];
-    if (*mingma < 0.)
+    if(*mingma < 0.)
     {
         ++neg1;
     }
-    if (*wantnc)
+    if(*wantnc)
     {
         *negcnt = neg1 + neg2;
     }
@@ -439,22 +442,20 @@ L60:
     {
         *negcnt = -1;
     }
-    if (f2c_dabs(*mingma) == 0.)
+    if(f2c_dabs(*mingma) == 0.)
     {
         *mingma = eps * work[inds + r1 - 1];
     }
     *r__ = r1;
     i__1 = r2 - 1;
-    for (i__ = r1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = r1; i__ <= i__1; ++i__)
     {
         tmp = work[inds + i__] + work[indp + i__];
-        if (tmp == 0.)
+        if(tmp == 0.)
         {
             tmp = eps * work[inds + i__];
         }
-        if (f2c_dabs(tmp) <= f2c_dabs(*mingma))
+        if(f2c_dabs(tmp) <= f2c_dabs(*mingma))
         {
             *mingma = tmp;
             *r__ = i__ + 1;
@@ -467,15 +468,15 @@ L60:
     z__[*r__] = 1.;
     *ztz = 1.;
     /* Compute the FP vector upwards from R */
-    if (! sawnan1 && ! sawnan2)
+    if(!sawnan1 && !sawnan2)
     {
         i__1 = *b1;
-        for (i__ = *r__ - 1;
-                i__ >= i__1;
-                --i__)
+        for(i__ = *r__ - 1; i__ >= i__1; --i__)
         {
             z__[i__] = -(work[indlpl + i__] * z__[i__ + 1]);
-            if (((d__1 = z__[i__], f2c_dabs(d__1)) + (d__2 = z__[i__ + 1], f2c_dabs( d__2))) * (d__3 = ld[i__], f2c_dabs(d__3)) < *gaptol)
+            if(((d__1 = z__[i__], f2c_dabs(d__1)) + (d__2 = z__[i__ + 1], f2c_dabs(d__2)))
+                   * (d__3 = ld[i__], f2c_dabs(d__3))
+               < *gaptol)
             {
                 z__[i__] = 0.;
                 isuppz[1] = i__ + 1;
@@ -484,18 +485,15 @@ L60:
             *ztz += z__[i__] * z__[i__];
             /* L210: */
         }
-L220:
-        ;
+    L220:;
     }
     else
     {
         /* Run slower loop if NaN occurred. */
         i__1 = *b1;
-        for (i__ = *r__ - 1;
-                i__ >= i__1;
-                --i__)
+        for(i__ = *r__ - 1; i__ >= i__1; --i__)
         {
-            if (z__[i__ + 1] == 0.)
+            if(z__[i__ + 1] == 0.)
             {
                 z__[i__] = -(ld[i__ + 1] / ld[i__]) * z__[i__ + 2];
             }
@@ -503,7 +501,9 @@ L220:
             {
                 z__[i__] = -(work[indlpl + i__] * z__[i__ + 1]);
             }
-            if (((d__1 = z__[i__], f2c_dabs(d__1)) + (d__2 = z__[i__ + 1], f2c_dabs( d__2))) * (d__3 = ld[i__], f2c_dabs(d__3)) < *gaptol)
+            if(((d__1 = z__[i__], f2c_dabs(d__1)) + (d__2 = z__[i__ + 1], f2c_dabs(d__2)))
+                   * (d__3 = ld[i__], f2c_dabs(d__3))
+               < *gaptol)
             {
                 z__[i__] = 0.;
                 isuppz[1] = i__ + 1;
@@ -512,19 +512,18 @@ L220:
             *ztz += z__[i__] * z__[i__];
             /* L230: */
         }
-L240:
-        ;
+    L240:;
     }
     /* Compute the FP vector downwards from R in blocks of size BLKSIZ */
-    if (! sawnan1 && ! sawnan2)
+    if(!sawnan1 && !sawnan2)
     {
         i__1 = *bn - 1;
-        for (i__ = *r__;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = *r__; i__ <= i__1; ++i__)
         {
             z__[i__ + 1] = -(work[indumn + i__] * z__[i__]);
-            if (((d__1 = z__[i__], f2c_dabs(d__1)) + (d__2 = z__[i__ + 1], f2c_dabs( d__2))) * (d__3 = ld[i__], f2c_dabs(d__3)) < *gaptol)
+            if(((d__1 = z__[i__], f2c_dabs(d__1)) + (d__2 = z__[i__ + 1], f2c_dabs(d__2)))
+                   * (d__3 = ld[i__], f2c_dabs(d__3))
+               < *gaptol)
             {
                 z__[i__ + 1] = 0.;
                 isuppz[2] = i__;
@@ -533,18 +532,15 @@ L240:
             *ztz += z__[i__ + 1] * z__[i__ + 1];
             /* L250: */
         }
-L260:
-        ;
+    L260:;
     }
     else
     {
         /* Run slower loop if NaN occurred. */
         i__1 = *bn - 1;
-        for (i__ = *r__;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = *r__; i__ <= i__1; ++i__)
         {
-            if (z__[i__] == 0.)
+            if(z__[i__] == 0.)
             {
                 z__[i__ + 1] = -(ld[i__ - 1] / ld[i__]) * z__[i__ - 1];
             }
@@ -552,7 +548,9 @@ L260:
             {
                 z__[i__ + 1] = -(work[indumn + i__] * z__[i__]);
             }
-            if (((d__1 = z__[i__], f2c_dabs(d__1)) + (d__2 = z__[i__ + 1], f2c_dabs( d__2))) * (d__3 = ld[i__], f2c_dabs(d__3)) < *gaptol)
+            if(((d__1 = z__[i__], f2c_dabs(d__1)) + (d__2 = z__[i__ + 1], f2c_dabs(d__2)))
+                   * (d__3 = ld[i__], f2c_dabs(d__3))
+               < *gaptol)
             {
                 z__[i__ + 1] = 0.;
                 isuppz[2] = i__;
@@ -561,8 +559,7 @@ L260:
             *ztz += z__[i__ + 1] * z__[i__ + 1];
             /* L270: */
         }
-L280:
-        ;
+    L280:;
     }
     /* Compute quantities for convergence test */
     tmp = 1. / *ztz;

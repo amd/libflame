@@ -1,5 +1,8 @@
-/* slaqr5.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* slaqr5.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b7 = 0.f;
 static real c_b8 = 1.f;
@@ -12,11 +15,17 @@ static integer c__3 = 3;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAQR5 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaqr5. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaqr5.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaqr5. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaqr5.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaqr5. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaqr5.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -253,16 +262,27 @@ static integer c__3 = 3;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, integer *ktop, integer *kbot, integer *nshfts, real *sr, real *si, real *h__, integer *ldh, integer *iloz, integer *ihiz, real *z__, integer *ldz, real *v, integer *ldv, real *u, integer *ldu, integer *nv, real *wv, integer *ldwv, integer *nh, real *wh, integer * ldwh)
+void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, integer *ktop,
+             integer *kbot, integer *nshfts, real *sr, real *si, real *h__, integer *ldh,
+             integer *iloz, integer *ihiz, real *z__, integer *ldz, real *v, integer *ldv, real *u,
+             integer *ldu, integer *nv, real *wv, integer *ldwv, integer *nh, real *wh,
+             integer *ldwh)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slaqr5 inputs: kacc22 %" FLA_IS ", n %" FLA_IS ", ktop %" FLA_IS ", kbot %" FLA_IS ", nshfts %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS ", ldv %" FLA_IS ", ldu %" FLA_IS ", nv %" FLA_IS ", ldwv %" FLA_IS ", nh %" FLA_IS ", ldwh %" FLA_IS "",*kacc22, *n, *ktop, *kbot, *nshfts, *ldh, *iloz, *ihiz, *ldz, *ldv, *ldu, *nv, *ldwv, *nh, *ldwh);
+    AOCL_DTL_SNPRINTF("slaqr5 inputs: kacc22 %" FLA_IS ", n %" FLA_IS ", ktop %" FLA_IS
+                      ", kbot %" FLA_IS ", nshfts %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS
+                      ", ihiz %" FLA_IS ", ldz %" FLA_IS ", ldv %" FLA_IS ", ldu %" FLA_IS
+                      ", nv %" FLA_IS ", ldwv %" FLA_IS ", nh %" FLA_IS ", ldwh %" FLA_IS "",
+                      *kacc22, *n, *ktop, *kbot, *nshfts, *ldh, *iloz, *ihiz, *ldz, *ldv, *ldu, *nv,
+                      *ldwv, *nh, *ldwh);
     /* System generated locals */
-    integer h_dim1, h_offset, u_dim1, u_offset, v_dim1, v_offset, wh_dim1, wh_offset, wv_dim1, wv_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7;
+    integer h_dim1, h_offset, u_dim1, u_offset, v_dim1, v_offset, wh_dim1, wh_offset, wv_dim1,
+        wv_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7;
     real r__1, r__2, r__3, r__4, r__5;
     /* Local variables */
     extern /* Subroutine */
-    int f90_cycle_(void);
+        int
+        f90_cycle_(void);
     integer i__, j, k, m, i2, k1, i4;
     real t1, t2, t3, h11, h12, h21, h22;
     integer m22, ns, nu;
@@ -277,17 +297,24 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
     logical accum;
     integer ndcol, incol;
     extern /* Subroutine */
-    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *);
     integer krcol, nbmps;
     extern /* Subroutine */
-    void slaqr1_(integer *, real *, integer *, real *, real *, real *, real *, real *), slabad_(real *, real *);
+        void
+        slaqr1_(integer *, real *, integer *, real *, real *, real *, real *, real *),
+        slabad_(real *, real *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    void slarfg_(integer *, real *, real *, integer *, real *);
+        void
+        slarfg_(integer *, real *, real *, integer *, real *);
     real safmax;
     extern /* Subroutine */
-    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+        void
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     real refsum, smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -333,16 +360,16 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
     wh_offset = 1 + wh_dim1;
     wh -= wh_offset;
     /* Function Body */
-    if (*nshfts < 2)
+    if(*nshfts < 2)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* ==== If the active block is empty or 1-by-1, then there */
     /* . is nothing to do. ==== */
-    if (*ktop >= *kbot)
+    if(*ktop >= *kbot)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* ==== Shuffle shifts into pairs of real shifts and pairs */
@@ -350,11 +377,9 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
     /* . conjugate shifts are already adjacent to one */
     /* . another. ==== */
     i__1 = *nshfts - 2;
-    for (i__ = 1;
-            i__ <= i__1;
-            i__ += 2)
+    for(i__ = 1; i__ <= i__1; i__ += 2)
     {
-        if (si[i__] != -si[i__ + 1])
+        if(si[i__] != -si[i__ + 1])
         {
             swap = sr[i__];
             sr[i__] = sr[i__ + 1];
@@ -377,12 +402,12 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
     safmax = 1.f / safmin;
     slabad_(&safmin, &safmax);
     ulp = slamch_("PRECISION");
-    smlnum = safmin * ((real) (*n) / ulp);
+    smlnum = safmin * ((real)(*n) / ulp);
     /* ==== Use accumulated reflections to update far-from-diagonal */
     /* . entries ? ==== */
     accum = *kacc22 == 1 || *kacc22 == 2;
     /* ==== clear trash ==== */
-    if (*ktop + 2 <= *kbot)
+    if(*ktop + 2 <= *kbot)
     {
         h__[*ktop + 2 + *ktop * h_dim1] = 0.f;
     }
@@ -393,16 +418,14 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
     /* ==== Create and chase chains of NBMPS bulges ==== */
     i__1 = *kbot - 2;
     i__2 = nbmps << 1;
-    for (incol = *ktop - (nbmps << 1) + 1;
-            i__2 < 0 ? incol >= i__1 : incol <= i__1;
-            incol += i__2)
+    for(incol = *ktop - (nbmps << 1) + 1; i__2 < 0 ? incol >= i__1 : incol <= i__1; incol += i__2)
     {
         /* JTOP = Index from which updates from the right start. */
-        if (accum)
+        if(accum)
         {
-            jtop = fla_max(*ktop,incol);
+            jtop = fla_max(*ktop, incol);
         }
-        else if (*wantt)
+        else if(*wantt)
         {
             jtop = 1;
         }
@@ -411,7 +434,7 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
             jtop = *ktop;
         }
         ndcol = incol + kdu;
-        if (accum)
+        if(accum)
         {
             slaset_("ALL", &kdu, &kdu, &c_b7, &c_b8, &u[u_offset], ldu);
         }
@@ -429,10 +452,8 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
         /* Computing MIN */
         i__4 = incol + (nbmps << 1) - 1;
         i__5 = *kbot - 2; // , expr subst
-        i__3 = fla_min(i__4,i__5);
-        for (krcol = incol;
-                krcol <= i__3;
-                ++krcol)
+        i__3 = fla_min(i__4, i__5);
+        for(krcol = incol; krcol <= i__3; ++krcol)
         {
             /* ==== Bulges number MTOP to MBOT are active double implicit */
             /* . shift bulges. There may or may not also be small */
@@ -443,23 +464,24 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
             /* Computing fla_max */
             i__4 = 1;
             i__5 = (*ktop - krcol) / 2 + 1; // , expr subst
-            mtop = fla_max(i__4,i__5);
+            mtop = fla_max(i__4, i__5);
             /* Computing MIN */
             i__4 = nbmps;
             i__5 = (*kbot - krcol - 1) / 2; // , expr subst
-            mbot = fla_min(i__4,i__5);
+            mbot = fla_min(i__4, i__5);
             m22 = mbot + 1;
             bmp22 = mbot < nbmps && krcol + (m22 - 1 << 1) == *kbot - 2;
             /* ==== Generate reflections to chase the chain right */
             /* . one column. (The minimum value of K is KTOP-1.) ==== */
-            if (bmp22)
+            if(bmp22)
             {
                 /* ==== Special case: 2-by-2 reflection at bottom treated */
                 /* . separately ==== */
                 k = krcol + (m22 - 1 << 1);
-                if (k == *ktop - 1)
+                if(k == *ktop - 1)
                 {
-                    slaqr1_(&c__2, &h__[k + 1 + (k + 1) * h_dim1], ldh, &sr[( m22 << 1) - 1], &si[(m22 << 1) - 1], &sr[m22 * 2], &si[m22 * 2], &v[m22 * v_dim1 + 1]);
+                    slaqr1_(&c__2, &h__[k + 1 + (k + 1) * h_dim1], ldh, &sr[(m22 << 1) - 1],
+                            &si[(m22 << 1) - 1], &sr[m22 * 2], &si[m22 * 2], &v[m22 * v_dim1 + 1]);
                     beta = v[m22 * v_dim1 + 1];
                     slarfg_(&c__2, &beta, &v[m22 * v_dim1 + 2], &c__1, &v[m22 * v_dim1 + 1]);
                 }
@@ -478,23 +500,22 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                 /* Computing MIN */
                 i__5 = *kbot;
                 i__6 = k + 3; // , expr subst
-                i__4 = fla_min(i__5,i__6);
-                for (j = jtop;
-                        j <= i__4;
-                        ++j)
+                i__4 = fla_min(i__5, i__6);
+                for(j = jtop; j <= i__4; ++j)
                 {
-                    refsum = h__[j + (k + 1) * h_dim1] + v[m22 * v_dim1 + 2] * h__[j + (k + 2) * h_dim1];
+                    refsum = h__[j + (k + 1) * h_dim1]
+                             + v[m22 * v_dim1 + 2] * h__[j + (k + 2) * h_dim1];
                     h__[j + (k + 1) * h_dim1] -= refsum * t1;
                     h__[j + (k + 2) * h_dim1] -= refsum * t2;
                     /* L30: */
                 }
                 /* ==== Perform update from left within */
                 /* . computational window. ==== */
-                if (accum)
+                if(accum)
                 {
-                    jbot = fla_min(ndcol,*kbot);
+                    jbot = fla_min(ndcol, *kbot);
                 }
-                else if (*wantt)
+                else if(*wantt)
                 {
                     jbot = *n;
                 }
@@ -505,11 +526,10 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                 t1 = v[m22 * v_dim1 + 1];
                 t2 = t1 * v[m22 * v_dim1 + 2];
                 i__4 = jbot;
-                for (j = k + 1;
-                        j <= i__4;
-                        ++j)
+                for(j = k + 1; j <= i__4; ++j)
                 {
-                    refsum = h__[k + 1 + j * h_dim1] + v[m22 * v_dim1 + 2] * h__[k + 2 + j * h_dim1];
+                    refsum
+                        = h__[k + 1 + j * h_dim1] + v[m22 * v_dim1 + 2] * h__[k + 2 + j * h_dim1];
                     h__[k + 1 + j * h_dim1] -= refsum * t1;
                     h__[k + 2 + j * h_dim1] -= refsum * t2;
                     /* L40: */
@@ -522,34 +542,35 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                 /* . alternate convergence criterion when TST1 or TST2 */
                 /* . is zero (as done here) is traditional but probably */
                 /* . unnecessary. ==== */
-                if (k >= *ktop)
+                if(k >= *ktop)
                 {
-                    if (h__[k + 1 + k * h_dim1] != 0.f)
+                    if(h__[k + 1 + k * h_dim1] != 0.f)
                     {
-                        tst1 = (r__1 = h__[k + k * h_dim1], f2c_abs(r__1)) + ( r__2 = h__[k + 1 + (k + 1) * h_dim1], f2c_abs( r__2));
-                        if (tst1 == 0.f)
+                        tst1 = (r__1 = h__[k + k * h_dim1], f2c_abs(r__1))
+                               + (r__2 = h__[k + 1 + (k + 1) * h_dim1], f2c_abs(r__2));
+                        if(tst1 == 0.f)
                         {
-                            if (k >= *ktop + 1)
+                            if(k >= *ktop + 1)
                             {
                                 tst1 += (r__1 = h__[k + (k - 1) * h_dim1], f2c_abs(r__1));
                             }
-                            if (k >= *ktop + 2)
+                            if(k >= *ktop + 2)
                             {
                                 tst1 += (r__1 = h__[k + (k - 2) * h_dim1], f2c_abs(r__1));
                             }
-                            if (k >= *ktop + 3)
+                            if(k >= *ktop + 3)
                             {
                                 tst1 += (r__1 = h__[k + (k - 3) * h_dim1], f2c_abs(r__1));
                             }
-                            if (k <= *kbot - 2)
+                            if(k <= *kbot - 2)
                             {
                                 tst1 += (r__1 = h__[k + 2 + (k + 1) * h_dim1], f2c_abs(r__1));
                             }
-                            if (k <= *kbot - 3)
+                            if(k <= *kbot - 3)
                             {
                                 tst1 += (r__1 = h__[k + 3 + (k + 1) * h_dim1], f2c_abs(r__1));
                             }
-                            if (k <= *kbot - 4)
+                            if(k <= *kbot - 4)
                             {
                                 tst1 += (r__1 = h__[k + 4 + (k + 1) * h_dim1], f2c_abs(r__1));
                             }
@@ -557,30 +578,34 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                         /* Computing fla_max */
                         r__2 = smlnum;
                         r__3 = ulp * tst1; // , expr subst
-                        if ((r__1 = h__[k + 1 + k * h_dim1], f2c_abs(r__1)) <= fla_max(r__2,r__3))
+                        if((r__1 = h__[k + 1 + k * h_dim1], f2c_abs(r__1)) <= fla_max(r__2, r__3))
                         {
                             /* Computing fla_max */
-                            r__3 = (r__1 = h__[k + 1 + k * h_dim1], f2c_abs(r__1)) ;
-                            r__4 = (r__2 = h__[k + (k + 1) * h_dim1], f2c_abs(r__2));  // , expr subst
-                            h12 = fla_max(r__3,r__4);
+                            r__3 = (r__1 = h__[k + 1 + k * h_dim1], f2c_abs(r__1));
+                            r__4
+                                = (r__2 = h__[k + (k + 1) * h_dim1], f2c_abs(r__2)); // , expr subst
+                            h12 = fla_max(r__3, r__4);
                             /* Computing MIN */
-                            r__3 = (r__1 = h__[k + 1 + k * h_dim1], f2c_abs(r__1)) ;
-                            r__4 = (r__2 = h__[k + (k + 1) * h_dim1], f2c_abs(r__2));  // , expr subst
-                            h21 = fla_min(r__3,r__4);
+                            r__3 = (r__1 = h__[k + 1 + k * h_dim1], f2c_abs(r__1));
+                            r__4
+                                = (r__2 = h__[k + (k + 1) * h_dim1], f2c_abs(r__2)); // , expr subst
+                            h21 = fla_min(r__3, r__4);
                             /* Computing fla_max */
-                            r__3 = (r__1 = h__[k + 1 + (k + 1) * h_dim1], f2c_abs( r__1));
-                            r__4 = (r__2 = h__[k + k * h_dim1] - h__[k + 1 + (k + 1) * h_dim1], f2c_abs( r__2)); // , expr subst
-                            h11 = fla_max(r__3,r__4);
+                            r__3 = (r__1 = h__[k + 1 + (k + 1) * h_dim1], f2c_abs(r__1));
+                            r__4 = (r__2 = h__[k + k * h_dim1] - h__[k + 1 + (k + 1) * h_dim1],
+                                    f2c_abs(r__2)); // , expr subst
+                            h11 = fla_max(r__3, r__4);
                             /* Computing MIN */
-                            r__3 = (r__1 = h__[k + 1 + (k + 1) * h_dim1], f2c_abs( r__1));
-                            r__4 = (r__2 = h__[k + k * h_dim1] - h__[k + 1 + (k + 1) * h_dim1], f2c_abs( r__2)); // , expr subst
-                            h22 = fla_min(r__3,r__4);
+                            r__3 = (r__1 = h__[k + 1 + (k + 1) * h_dim1], f2c_abs(r__1));
+                            r__4 = (r__2 = h__[k + k * h_dim1] - h__[k + 1 + (k + 1) * h_dim1],
+                                    f2c_abs(r__2)); // , expr subst
+                            h22 = fla_min(r__3, r__4);
                             scl = h11 + h12;
                             tst2 = h22 * (h11 / scl);
                             /* Computing fla_max */
                             r__1 = smlnum;
                             r__2 = ulp * tst2; // , expr subst
-                            if (tst2 == 0.f || h21 * (h12 / scl) <= fla_max(r__1, r__2))
+                            if(tst2 == 0.f || h21 * (h12 / scl) <= fla_max(r__1, r__2))
                             {
                                 h__[k + 1 + k * h_dim1] = 0.f;
                             }
@@ -588,7 +613,7 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                     }
                 }
                 /* ==== Accumulate orthogonal transformations. ==== */
-                if (accum)
+                if(accum)
                 {
                     kms = k - incol;
                     t1 = v[m22 * v_dim1 + 1];
@@ -597,26 +622,24 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                     i__4 = 1;
                     i__5 = *ktop - incol; // , expr subst
                     i__6 = kdu;
-                    for (j = fla_max(i__4,i__5);
-                            j <= i__6;
-                            ++j)
+                    for(j = fla_max(i__4, i__5); j <= i__6; ++j)
                     {
-                        refsum = u[j + (kms + 1) * u_dim1] + v[m22 * v_dim1 + 2] * u[j + (kms + 2) * u_dim1];
+                        refsum = u[j + (kms + 1) * u_dim1]
+                                 + v[m22 * v_dim1 + 2] * u[j + (kms + 2) * u_dim1];
                         u[j + (kms + 1) * u_dim1] -= refsum * t1;
                         u[j + (kms + 2) * u_dim1] -= refsum * t2;
                         /* L50: */
                     }
                 }
-                else if (*wantz)
+                else if(*wantz)
                 {
                     t1 = v[m22 * v_dim1 + 1];
                     t2 = t1 * v[m22 * v_dim1 + 2];
                     i__6 = *ihiz;
-                    for (j = *iloz;
-                            j <= i__6;
-                            ++j)
+                    for(j = *iloz; j <= i__6; ++j)
                     {
-                        refsum = z__[j + (k + 1) * z_dim1] + v[m22 * v_dim1 + 2] * z__[j + (k + 2) * z_dim1];
+                        refsum = z__[j + (k + 1) * z_dim1]
+                                 + v[m22 * v_dim1 + 2] * z__[j + (k + 2) * z_dim1];
                         z__[j + (k + 1) * z_dim1] -= refsum * t1;
                         z__[j + (k + 2) * z_dim1] -= refsum * t2;
                         /* L60: */
@@ -625,14 +648,13 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
             }
             /* ==== Normal case: Chain of 3-by-3 reflections ==== */
             i__6 = mtop;
-            for (m = mbot;
-                    m >= i__6;
-                    --m)
+            for(m = mbot; m >= i__6; --m)
             {
                 k = krcol + (m - 1 << 1);
-                if (k == *ktop - 1)
+                if(k == *ktop - 1)
                 {
-                    slaqr1_(&c__3, &h__[*ktop + *ktop * h_dim1], ldh, &sr[(m << 1) - 1], &si[(m << 1) - 1], &sr[m * 2], &si[m * 2], &v[m * v_dim1 + 1]);
+                    slaqr1_(&c__3, &h__[*ktop + *ktop * h_dim1], ldh, &sr[(m << 1) - 1],
+                            &si[(m << 1) - 1], &sr[m * 2], &si[m * 2], &v[m * v_dim1 + 1]);
                     alpha = v[m * v_dim1 + 1];
                     slarfg_(&c__3, &alpha, &v[m * v_dim1 + 2], &c__1, &v[m * v_dim1 + 1]);
                 }
@@ -655,7 +677,8 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                     /* . deflation or destructive underflow. In the */
                     /* . underflow case, try the two-small-subdiagonals */
                     /* . trick to try to reinflate the bulge. ==== */
-                    if (h__[k + 3 + k * h_dim1] != 0.f || h__[k + 3 + (k + 1) * h_dim1] != 0.f || h__[k + 3 + (k + 2) * h_dim1] == 0.f)
+                    if(h__[k + 3 + k * h_dim1] != 0.f || h__[k + 3 + (k + 1) * h_dim1] != 0.f
+                       || h__[k + 3 + (k + 2) * h_dim1] == 0.f)
                     {
                         /* ==== Typical case: not collapsed (yet). ==== */
                         h__[k + 1 + k * h_dim1] = beta;
@@ -669,11 +692,18 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                         /* . If the fill resulting from the new */
                         /* . reflector is too large, then abandon it. */
                         /* . Otherwise, use the new one. ==== */
-                        slaqr1_(&c__3, &h__[k + 1 + (k + 1) * h_dim1], ldh, & sr[(m << 1) - 1], &si[(m << 1) - 1], &sr[m * 2], &si[m * 2], vt);
+                        slaqr1_(&c__3, &h__[k + 1 + (k + 1) * h_dim1], ldh, &sr[(m << 1) - 1],
+                                &si[(m << 1) - 1], &sr[m * 2], &si[m * 2], vt);
                         alpha = vt[0];
                         slarfg_(&c__3, &alpha, &vt[1], &c__1, vt);
-                        refsum = vt[0] * (h__[k + 1 + k * h_dim1] + vt[1] * h__[k + 2 + k * h_dim1]);
-                        if ((r__1 = h__[k + 2 + k * h_dim1] - refsum * vt[1], f2c_abs(r__1)) + (r__2 = refsum * vt[2], f2c_abs(r__2) ) > ulp * ((r__3 = h__[k + k * h_dim1], f2c_abs( r__3)) + (r__4 = h__[k + 1 + (k + 1) * h_dim1], f2c_abs(r__4)) + (r__5 = h__[k + 2 + (k + 2) * h_dim1], f2c_abs(r__5))))
+                        refsum
+                            = vt[0] * (h__[k + 1 + k * h_dim1] + vt[1] * h__[k + 2 + k * h_dim1]);
+                        if((r__1 = h__[k + 2 + k * h_dim1] - refsum * vt[1], f2c_abs(r__1))
+                               + (r__2 = refsum * vt[2], f2c_abs(r__2))
+                           > ulp
+                                 * ((r__3 = h__[k + k * h_dim1], f2c_abs(r__3))
+                                    + (r__4 = h__[k + 1 + (k + 1) * h_dim1], f2c_abs(r__4))
+                                    + (r__5 = h__[k + 2 + (k + 2) * h_dim1], f2c_abs(r__5))))
                         {
                             /* ==== Starting a new bulge here would */
                             /* . create non-negligible fill. Use */
@@ -708,12 +738,12 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                 /* Computing MIN */
                 i__5 = *kbot;
                 i__7 = k + 3; // , expr subst
-                i__4 = fla_min(i__5,i__7);
-                for (j = jtop;
-                        j <= i__4;
-                        ++j)
+                i__4 = fla_min(i__5, i__7);
+                for(j = jtop; j <= i__4; ++j)
                 {
-                    refsum = h__[j + (k + 1) * h_dim1] + v[m * v_dim1 + 2] * h__[j + (k + 2) * h_dim1] + v[m * v_dim1 + 3] * h__[j + (k + 3) * h_dim1];
+                    refsum = h__[j + (k + 1) * h_dim1]
+                             + v[m * v_dim1 + 2] * h__[j + (k + 2) * h_dim1]
+                             + v[m * v_dim1 + 3] * h__[j + (k + 3) * h_dim1];
                     h__[j + (k + 1) * h_dim1] -= refsum * t1;
                     h__[j + (k + 2) * h_dim1] -= refsum * t2;
                     h__[j + (k + 3) * h_dim1] -= refsum * t3;
@@ -721,7 +751,9 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                 }
                 /* ==== Perform update from left for subsequent */
                 /* . column. ==== */
-                refsum = h__[k + 1 + (k + 1) * h_dim1] + v[m * v_dim1 + 2] * h__[k + 2 + (k + 1) * h_dim1] + v[m * v_dim1 + 3] * h__[k + 3 + (k + 1) * h_dim1];
+                refsum = h__[k + 1 + (k + 1) * h_dim1]
+                         + v[m * v_dim1 + 2] * h__[k + 2 + (k + 1) * h_dim1]
+                         + v[m * v_dim1 + 3] * h__[k + 3 + (k + 1) * h_dim1];
                 h__[k + 1 + (k + 1) * h_dim1] -= refsum * t1;
                 h__[k + 2 + (k + 1) * h_dim1] -= refsum * t2;
                 h__[k + 3 + (k + 1) * h_dim1] -= refsum * t3;
@@ -733,36 +765,37 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                 /* . alternate convergence criterion when TST1 or TST2 */
                 /* . is zero (as done here) is traditional but probably */
                 /* . unnecessary. ==== */
-                if (k < *ktop)
+                if(k < *ktop)
                 {
                     continue;
                 }
-                if (h__[k + 1 + k * h_dim1] != 0.f)
+                if(h__[k + 1 + k * h_dim1] != 0.f)
                 {
-                    tst1 = (r__1 = h__[k + k * h_dim1], f2c_abs(r__1)) + (r__2 = h__[k + 1 + (k + 1) * h_dim1], f2c_abs(r__2));
-                    if (tst1 == 0.f)
+                    tst1 = (r__1 = h__[k + k * h_dim1], f2c_abs(r__1))
+                           + (r__2 = h__[k + 1 + (k + 1) * h_dim1], f2c_abs(r__2));
+                    if(tst1 == 0.f)
                     {
-                        if (k >= *ktop + 1)
+                        if(k >= *ktop + 1)
                         {
-                            tst1 += (r__1 = h__[k + (k - 1) * h_dim1], f2c_abs( r__1));
+                            tst1 += (r__1 = h__[k + (k - 1) * h_dim1], f2c_abs(r__1));
                         }
-                        if (k >= *ktop + 2)
+                        if(k >= *ktop + 2)
                         {
-                            tst1 += (r__1 = h__[k + (k - 2) * h_dim1], f2c_abs( r__1));
+                            tst1 += (r__1 = h__[k + (k - 2) * h_dim1], f2c_abs(r__1));
                         }
-                        if (k >= *ktop + 3)
+                        if(k >= *ktop + 3)
                         {
-                            tst1 += (r__1 = h__[k + (k - 3) * h_dim1], f2c_abs( r__1));
+                            tst1 += (r__1 = h__[k + (k - 3) * h_dim1], f2c_abs(r__1));
                         }
-                        if (k <= *kbot - 2)
+                        if(k <= *kbot - 2)
                         {
                             tst1 += (r__1 = h__[k + 2 + (k + 1) * h_dim1], f2c_abs(r__1));
                         }
-                        if (k <= *kbot - 3)
+                        if(k <= *kbot - 3)
                         {
                             tst1 += (r__1 = h__[k + 3 + (k + 1) * h_dim1], f2c_abs(r__1));
                         }
-                        if (k <= *kbot - 4)
+                        if(k <= *kbot - 4)
                         {
                             tst1 += (r__1 = h__[k + 4 + (k + 1) * h_dim1], f2c_abs(r__1));
                         }
@@ -770,30 +803,32 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                     /* Computing fla_max */
                     r__2 = smlnum;
                     r__3 = ulp * tst1; // , expr subst
-                    if ((r__1 = h__[k + 1 + k * h_dim1], f2c_abs(r__1)) <= fla_max( r__2,r__3))
+                    if((r__1 = h__[k + 1 + k * h_dim1], f2c_abs(r__1)) <= fla_max(r__2, r__3))
                     {
                         /* Computing fla_max */
                         r__3 = (r__1 = h__[k + 1 + k * h_dim1], f2c_abs(r__1));
-                        r__4 = (r__2 = h__[k + (k + 1) * h_dim1], f2c_abs( r__2)); // , expr subst
-                        h12 = fla_max(r__3,r__4);
+                        r__4 = (r__2 = h__[k + (k + 1) * h_dim1], f2c_abs(r__2)); // , expr subst
+                        h12 = fla_max(r__3, r__4);
                         /* Computing MIN */
                         r__3 = (r__1 = h__[k + 1 + k * h_dim1], f2c_abs(r__1));
-                        r__4 = (r__2 = h__[k + (k + 1) * h_dim1], f2c_abs( r__2)); // , expr subst
-                        h21 = fla_min(r__3,r__4);
+                        r__4 = (r__2 = h__[k + (k + 1) * h_dim1], f2c_abs(r__2)); // , expr subst
+                        h21 = fla_min(r__3, r__4);
                         /* Computing fla_max */
-                        r__3 = (r__1 = h__[k + 1 + (k + 1) * h_dim1], f2c_abs( r__1));
-                        r__4 = (r__2 = h__[k + k * h_dim1] - h__[k + 1 + (k + 1) * h_dim1], f2c_abs(r__2)); // , expr subst
-                        h11 = fla_max(r__3,r__4);
+                        r__3 = (r__1 = h__[k + 1 + (k + 1) * h_dim1], f2c_abs(r__1));
+                        r__4 = (r__2 = h__[k + k * h_dim1] - h__[k + 1 + (k + 1) * h_dim1],
+                                f2c_abs(r__2)); // , expr subst
+                        h11 = fla_max(r__3, r__4);
                         /* Computing MIN */
-                        r__3 = (r__1 = h__[k + 1 + (k + 1) * h_dim1], f2c_abs( r__1));
-                        r__4 = (r__2 = h__[k + k * h_dim1] - h__[k + 1 + (k + 1) * h_dim1], f2c_abs(r__2)); // , expr subst
-                        h22 = fla_min(r__3,r__4);
+                        r__3 = (r__1 = h__[k + 1 + (k + 1) * h_dim1], f2c_abs(r__1));
+                        r__4 = (r__2 = h__[k + k * h_dim1] - h__[k + 1 + (k + 1) * h_dim1],
+                                f2c_abs(r__2)); // , expr subst
+                        h22 = fla_min(r__3, r__4);
                         scl = h11 + h12;
                         tst2 = h22 * (h11 / scl);
                         /* Computing fla_max */
                         r__1 = smlnum;
                         r__2 = ulp * tst2; // , expr subst
-                        if (tst2 == 0.f || h21 * (h12 / scl) <= fla_max(r__1,r__2) )
+                        if(tst2 == 0.f || h21 * (h12 / scl) <= fla_max(r__1, r__2))
                         {
                             h__[k + 1 + k * h_dim1] = 0.f;
                         }
@@ -802,11 +837,11 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                 /* L80: */
             }
             /* ==== Multiply H by reflections from the left ==== */
-            if (accum)
+            if(accum)
             {
-                jbot = fla_min(ndcol,*kbot);
+                jbot = fla_min(ndcol, *kbot);
             }
-            else if (*wantt)
+            else if(*wantt)
             {
                 jbot = *n;
             }
@@ -815,9 +850,7 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                 jbot = *kbot;
             }
             i__6 = mtop;
-            for (m = mbot;
-                    m >= i__6;
-                    --m)
+            for(m = mbot; m >= i__6; --m)
             {
                 k = krcol + (m - 1 << 1);
                 t1 = v[m * v_dim1 + 1];
@@ -827,11 +860,10 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                 i__4 = *ktop;
                 i__5 = krcol + (m << 1); // , expr subst
                 i__7 = jbot;
-                for (j = fla_max(i__4,i__5);
-                        j <= i__7;
-                        ++j)
+                for(j = fla_max(i__4, i__5); j <= i__7; ++j)
                 {
-                    refsum = h__[k + 1 + j * h_dim1] + v[m * v_dim1 + 2] * h__[k + 2 + j * h_dim1] + v[m * v_dim1 + 3] * h__[ k + 3 + j * h_dim1];
+                    refsum = h__[k + 1 + j * h_dim1] + v[m * v_dim1 + 2] * h__[k + 2 + j * h_dim1]
+                             + v[m * v_dim1 + 3] * h__[k + 3 + j * h_dim1];
                     h__[k + 1 + j * h_dim1] -= refsum * t1;
                     h__[k + 2 + j * h_dim1] -= refsum * t2;
                     h__[k + 3 + j * h_dim1] -= refsum * t3;
@@ -840,39 +872,37 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                 /* L100: */
             }
             /* ==== Accumulate orthogonal transformations. ==== */
-            if (accum)
+            if(accum)
             {
                 /* ==== Accumulate U. (If needed, update Z later */
                 /* . with an efficient matrix-matrix */
                 /* . multiply.) ==== */
                 i__6 = mtop;
-                for (m = mbot;
-                        m >= i__6;
-                        --m)
+                for(m = mbot; m >= i__6; --m)
                 {
                     k = krcol + (m - 1 << 1);
                     kms = k - incol;
                     /* Computing fla_max */
                     i__7 = 1;
                     i__4 = *ktop - incol; // , expr subst
-                    i2 = fla_max(i__7,i__4);
+                    i2 = fla_max(i__7, i__4);
                     /* Computing fla_max */
                     i__7 = i2;
                     i__4 = kms - (krcol - incol) + 1; // , expr subst
-                    i2 = fla_max(i__7,i__4);
+                    i2 = fla_max(i__7, i__4);
                     /* Computing MIN */
                     i__7 = kdu;
                     i__4 = krcol + (mbot - 1 << 1) - incol + 5; // , expr subst
-                    i4 = fla_min(i__7,i__4);
+                    i4 = fla_min(i__7, i__4);
                     t1 = v[m * v_dim1 + 1];
                     t2 = t1 * v[m * v_dim1 + 2];
                     t3 = t1 * v[m * v_dim1 + 3];
                     i__7 = i4;
-                    for (j = i2;
-                            j <= i__7;
-                            ++j)
+                    for(j = i2; j <= i__7; ++j)
                     {
-                        refsum = u[j + (kms + 1) * u_dim1] + v[m * v_dim1 + 2] * u[j + (kms + 2) * u_dim1] + v[m * v_dim1 + 3] * u[j + (kms + 3) * u_dim1];
+                        refsum = u[j + (kms + 1) * u_dim1]
+                                 + v[m * v_dim1 + 2] * u[j + (kms + 2) * u_dim1]
+                                 + v[m * v_dim1 + 3] * u[j + (kms + 3) * u_dim1];
                         u[j + (kms + 1) * u_dim1] -= refsum * t1;
                         u[j + (kms + 2) * u_dim1] -= refsum * t2;
                         u[j + (kms + 3) * u_dim1] -= refsum * t3;
@@ -881,26 +911,24 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                     /* L120: */
                 }
             }
-            else if (*wantz)
+            else if(*wantz)
             {
                 /* ==== U is not accumulated, so update Z */
                 /* . now by multiplying by reflections */
                 /* . from the right. ==== */
                 i__6 = mtop;
-                for (m = mbot;
-                        m >= i__6;
-                        --m)
+                for(m = mbot; m >= i__6; --m)
                 {
                     k = krcol + (m - 1 << 1);
                     t1 = v[m * v_dim1 + 1];
                     t2 = t1 * v[m * v_dim1 + 2];
                     t3 = t1 * v[m * v_dim1 + 3];
                     i__7 = *ihiz;
-                    for (j = *iloz;
-                            j <= i__7;
-                            ++j)
+                    for(j = *iloz; j <= i__7; ++j)
                     {
-                        refsum = z__[j + (k + 1) * z_dim1] + v[m * v_dim1 + 2] * z__[j + (k + 2) * z_dim1] + v[m * v_dim1 + 3] * z__[j + (k + 3) * z_dim1];
+                        refsum = z__[j + (k + 1) * z_dim1]
+                                 + v[m * v_dim1 + 2] * z__[j + (k + 2) * z_dim1]
+                                 + v[m * v_dim1 + 3] * z__[j + (k + 3) * z_dim1];
                         z__[j + (k + 1) * z_dim1] -= refsum * t1;
                         z__[j + (k + 2) * z_dim1] -= refsum * t2;
                         z__[j + (k + 3) * z_dim1] -= refsum * t3;
@@ -915,9 +943,9 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
         /* ==== Use U (if accumulated) to update far-from-diagonal */
         /* . entries in H. If required, use U to update Z as */
         /* . well. ==== */
-        if (accum)
+        if(accum)
         {
-            if (*wantt)
+            if(*wantt)
             {
                 jtop = 1;
                 jbot = *n;
@@ -930,56 +958,57 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
             /* Computing fla_max */
             i__3 = 1;
             i__6 = *ktop - incol; // , expr subst
-            k1 = fla_max(i__3,i__6);
+            k1 = fla_max(i__3, i__6);
             /* Computing fla_max */
             i__3 = 0;
             i__6 = ndcol - *kbot; // , expr subst
-            nu = kdu - fla_max(i__3,i__6) - k1 + 1;
+            nu = kdu - fla_max(i__3, i__6) - k1 + 1;
             /* ==== Horizontal Multiply ==== */
             i__3 = jbot;
             i__6 = *nh;
-            for (jcol = fla_min(ndcol,*kbot) + 1;
-                    i__6 < 0 ? jcol >= i__3 : jcol <= i__3;
-                    jcol += i__6)
+            for(jcol = fla_min(ndcol, *kbot) + 1; i__6 < 0 ? jcol >= i__3 : jcol <= i__3;
+                jcol += i__6)
             {
                 /* Computing MIN */
                 i__7 = *nh;
                 i__4 = jbot - jcol + 1; // , expr subst
-                jlen = fla_min(i__7,i__4);
-                sgemm_("C", "N", &nu, &jlen, &nu, &c_b8, &u[k1 + k1 * u_dim1], ldu, &h__[incol + k1 + jcol * h_dim1], ldh, &c_b7, & wh[wh_offset], ldwh);
-                slacpy_("ALL", &nu, &jlen, &wh[wh_offset], ldwh, &h__[incol + k1 + jcol * h_dim1], ldh);
+                jlen = fla_min(i__7, i__4);
+                sgemm_("C", "N", &nu, &jlen, &nu, &c_b8, &u[k1 + k1 * u_dim1], ldu,
+                       &h__[incol + k1 + jcol * h_dim1], ldh, &c_b7, &wh[wh_offset], ldwh);
+                slacpy_("ALL", &nu, &jlen, &wh[wh_offset], ldwh, &h__[incol + k1 + jcol * h_dim1],
+                        ldh);
                 /* L150: */
             }
             /* ==== Vertical multiply ==== */
-            i__6 = fla_max(*ktop,incol) - 1;
+            i__6 = fla_max(*ktop, incol) - 1;
             i__3 = *nv;
-            for (jrow = jtop;
-                    i__3 < 0 ? jrow >= i__6 : jrow <= i__6;
-                    jrow += i__3)
+            for(jrow = jtop; i__3 < 0 ? jrow >= i__6 : jrow <= i__6; jrow += i__3)
             {
                 /* Computing MIN */
                 i__7 = *nv;
-                i__4 = fla_max(*ktop,incol) - jrow; // , expr subst
-                jlen = fla_min(i__7,i__4);
-                sgemm_("N", "N", &jlen, &nu, &nu, &c_b8, &h__[jrow + (incol + k1) * h_dim1], ldh, &u[k1 + k1 * u_dim1], ldu, &c_b7, &wv[wv_offset], ldwv);
-                slacpy_("ALL", &jlen, &nu, &wv[wv_offset], ldwv, &h__[jrow + ( incol + k1) * h_dim1], ldh);
+                i__4 = fla_max(*ktop, incol) - jrow; // , expr subst
+                jlen = fla_min(i__7, i__4);
+                sgemm_("N", "N", &jlen, &nu, &nu, &c_b8, &h__[jrow + (incol + k1) * h_dim1], ldh,
+                       &u[k1 + k1 * u_dim1], ldu, &c_b7, &wv[wv_offset], ldwv);
+                slacpy_("ALL", &jlen, &nu, &wv[wv_offset], ldwv, &h__[jrow + (incol + k1) * h_dim1],
+                        ldh);
                 /* L160: */
             }
             /* ==== Z multiply (also vertical) ==== */
-            if (*wantz)
+            if(*wantz)
             {
                 i__3 = *ihiz;
                 i__6 = *nv;
-                for (jrow = *iloz;
-                        i__6 < 0 ? jrow >= i__3 : jrow <= i__3;
-                        jrow += i__6)
+                for(jrow = *iloz; i__6 < 0 ? jrow >= i__3 : jrow <= i__3; jrow += i__6)
                 {
                     /* Computing MIN */
                     i__7 = *nv;
                     i__4 = *ihiz - jrow + 1; // , expr subst
-                    jlen = fla_min(i__7,i__4);
-                    sgemm_("N", "N", &jlen, &nu, &nu, &c_b8, &z__[jrow + ( incol + k1) * z_dim1], ldz, &u[k1 + k1 * u_dim1], ldu, &c_b7, &wv[wv_offset], ldwv);
-                    slacpy_("ALL", &jlen, &nu, &wv[wv_offset], ldwv, &z__[ jrow + (incol + k1) * z_dim1], ldz);
+                    jlen = fla_min(i__7, i__4);
+                    sgemm_("N", "N", &jlen, &nu, &nu, &c_b8, &z__[jrow + (incol + k1) * z_dim1],
+                           ldz, &u[k1 + k1 * u_dim1], ldu, &c_b7, &wv[wv_offset], ldwv);
+                    slacpy_("ALL", &jlen, &nu, &wv[wv_offset], ldwv,
+                            &z__[jrow + (incol + k1) * z_dim1], ldz);
                     /* L170: */
                 }
             }

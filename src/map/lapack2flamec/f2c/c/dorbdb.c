@@ -1,5 +1,8 @@
-/* ../netlib/dorbdb.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dorbdb.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b DORBDB */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DORBDB + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorbdb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorbdb.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorbdb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorbdb.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorbdb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorbdb.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -64,7 +73,7 @@ static integer c__1 = 1;
 /* > TRANS is CHARACTER */
 /* > = 'T': X, U1, U2, V1T, and V2T are stored in row-major */
 /* > order;
-*/
+ */
 /* > otherwise: X, U1, U2, V1T, and V2T are stored in column- */
 /* > major order. */
 /* > \endverbatim */
@@ -74,7 +83,7 @@ static integer c__1 = 1;
 /* > SIGNS is CHARACTER */
 /* > = 'O': The lower-left block is made nonpositive (the */
 /* > "other" convention);
-*/
+ */
 /* > otherwise: The upper-right block is made nonpositive (the */
 /* > "default" convention). */
 /* > \endverbatim */
@@ -106,7 +115,7 @@ static integer c__1 = 1;
 /* > If TRANS = 'N', then */
 /* > the columns of tril(X11) specify reflectors for P1, */
 /* > the rows of triu(X11,1) specify reflectors for Q1;
-*/
+ */
 /* > else TRANS = 'T', and */
 /* > the rows of triu(X11) specify reflectors for P1, */
 /* > the columns of tril(X11,-1) specify reflectors for Q1. */
@@ -128,7 +137,7 @@ else LDX11 >= Q. */
 /* > If TRANS = 'N', then */
 /* > the rows of triu(X12) specify the first P reflectors for */
 /* > Q2;
-*/
+ */
 /* > else TRANS = 'T', and */
 /* > the columns of tril(X12) specify the first P reflectors */
 /* > for Q2. */
@@ -149,7 +158,7 @@ else LDX11 >= M-Q. */
 /* > be reduced. On exit, the form depends on TRANS: */
 /* > If TRANS = 'N', then */
 /* > the columns of tril(X21) specify reflectors for P2;
-*/
+ */
 /* > else TRANS = 'T', and */
 /* > the rows of triu(X21) specify reflectors for P2. */
 /* > \endverbatim */
@@ -282,12 +291,20 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, doublereal *x11, integer *ldx11, doublereal *x12, integer *ldx12, doublereal *x21, integer *ldx21, doublereal *x22, integer *ldx22, doublereal *theta, doublereal *phi, doublereal *taup1, doublereal *taup2, doublereal *tauq1, doublereal *tauq2, doublereal * work, integer *lwork, integer *info)
+void dorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, doublereal *x11,
+             integer *ldx11, doublereal *x12, integer *ldx12, doublereal *x21, integer *ldx21,
+             doublereal *x22, integer *ldx22, doublereal *theta, doublereal *phi, doublereal *taup1,
+             doublereal *taup2, doublereal *tauq1, doublereal *tauq2, doublereal *work,
+             integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dorbdb inputs: trans %c, signs %c, m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS ", ldx11 %" FLA_IS ", ldx12 %" FLA_IS ", ldx21 %" FLA_IS ", ldx22 %" FLA_IS ", lwork %" FLA_IS "",*trans, *signs, *m, *p, *q, *ldx11, *ldx12, *ldx21, *ldx22, *lwork);
+    AOCL_DTL_SNPRINTF("dorbdb inputs: trans %c, signs %c, m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS
+                      ", ldx11 %" FLA_IS ", ldx12 %" FLA_IS ", ldx21 %" FLA_IS ", ldx22 %" FLA_IS
+                      ", lwork %" FLA_IS "",
+                      *trans, *signs, *m, *p, *q, *ldx11, *ldx12, *ldx21, *ldx22, *lwork);
     /* System generated locals */
-    integer x11_dim1, x11_offset, x12_dim1, x12_offset, x21_dim1, x21_offset, x22_dim1, x22_offset, i__1, i__2, i__3;
+    integer x11_dim1, x11_offset, x12_dim1, x12_offset, x21_dim1, x21_offset, x22_dim1, x22_offset,
+        i__1, i__2, i__3;
     doublereal d__1;
     /* Builtin functions */
     double cos(doublereal), sin(doublereal), atan2(doublereal, doublereal);
@@ -297,13 +314,19 @@ void dorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, doubl
     doublereal z1, z2, z3, z4;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *), dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *),
+        dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     extern /* Subroutine */
-    void dlarfgp_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+        void
+        dlarfgp_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -347,8 +370,8 @@ void dorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, doubl
     --work;
     /* Function Body */
     *info = 0;
-    colmajor = ! lsame_(trans, "T", 1, 1);
-    if (! lsame_(signs, "O", 1, 1))
+    colmajor = !lsame_(trans, "T", 1, 1);
+    if(!lsame_(signs, "O", 1, 1))
     {
         z1 = 1.;
         z2 = 1.;
@@ -363,27 +386,27 @@ void dorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, doubl
         z4 = -1.;
     }
     lquery = *lwork == -1;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -3;
     }
-    else if (*p < 0 || *p > *m)
+    else if(*p < 0 || *p > *m)
     {
         *info = -4;
     }
-    else if (*q < 0 || *q > *p || *q > *m - *p || *q > *m - *q)
+    else if(*q < 0 || *q > *p || *q > *m - *p || *q > *m - *q)
     {
         *info = -5;
     }
-    else if (colmajor && *ldx11 < fla_max(1,*p))
+    else if(colmajor && *ldx11 < fla_max(1, *p))
     {
         *info = -7;
     }
-    else if (! colmajor && *ldx11 < fla_max(1,*q))
+    else if(!colmajor && *ldx11 < fla_max(1, *q))
     {
         *info = -7;
     }
-    else if (colmajor && *ldx12 < fla_max(1,*p))
+    else if(colmajor && *ldx12 < fla_max(1, *p))
     {
         *info = -9;
     }
@@ -392,7 +415,7 @@ void dorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, doubl
         /* Computing MAX */
         i__1 = 1;
         i__2 = *m - *q; // , expr subst
-        if (! colmajor && *ldx12 < fla_max(i__1,i__2))
+        if(!colmajor && *ldx12 < fla_max(i__1, i__2))
         {
             *info = -9;
         }
@@ -401,11 +424,11 @@ void dorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, doubl
             /* Computing MAX */
             i__1 = 1;
             i__2 = *m - *p; // , expr subst
-            if (colmajor && *ldx21 < fla_max(i__1,i__2))
+            if(colmajor && *ldx21 < fla_max(i__1, i__2))
             {
                 *info = -11;
             }
-            else if (! colmajor && *ldx21 < fla_max(1,*q))
+            else if(!colmajor && *ldx21 < fla_max(1, *q))
             {
                 *info = -11;
             }
@@ -414,7 +437,7 @@ void dorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, doubl
                 /* Computing MAX */
                 i__1 = 1;
                 i__2 = *m - *p; // , expr subst
-                if (colmajor && *ldx22 < fla_max(i__1,i__2))
+                if(colmajor && *ldx22 < fla_max(i__1, i__2))
                 {
                     *info = -13;
                 }
@@ -423,7 +446,7 @@ void dorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, doubl
                     /* Computing MAX */
                     i__1 = 1;
                     i__2 = *m - *q; // , expr subst
-                    if (! colmajor && *ldx22 < fla_max(i__1,i__2))
+                    if(!colmajor && *ldx22 < fla_max(i__1, i__2))
                     {
                         *info = -13;
                     }
@@ -432,38 +455,36 @@ void dorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, doubl
         }
     }
     /* Compute workspace */
-    if (*info == 0)
+    if(*info == 0)
     {
         lworkopt = *m - *q;
         lworkmin = *m - *q;
-        work[1] = (doublereal) lworkopt;
-        if (*lwork < lworkmin && ! lquery)
+        work[1] = (doublereal)lworkopt;
+        if(*lwork < lworkmin && !lquery)
         {
             *info = -21;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("xORBDB", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Handle column-major and row-major separately */
-    if (colmajor)
+    if(colmajor)
     {
         /* Reduce columns 1, ..., Q of X11, X12, X21, and X22 */
         i__1 = *q;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if (i__ == 1)
+            if(i__ == 1)
             {
                 i__2 = *p - i__ + 1;
                 dscal_(&i__2, &z1, &x11[i__ + i__ * x11_dim1], &c__1);
@@ -475,9 +496,10 @@ void dorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, doubl
                 dscal_(&i__2, &d__1, &x11[i__ + i__ * x11_dim1], &c__1);
                 i__2 = *p - i__ + 1;
                 d__1 = -z1 * z3 * z4 * sin(phi[i__ - 1]);
-                daxpy_(&i__2, &d__1, &x12[i__ + (i__ - 1) * x12_dim1], &c__1, &x11[i__ + i__ * x11_dim1], &c__1);
+                daxpy_(&i__2, &d__1, &x12[i__ + (i__ - 1) * x12_dim1], &c__1,
+                       &x11[i__ + i__ * x11_dim1], &c__1);
             }
-            if (i__ == 1)
+            if(i__ == 1)
             {
                 i__2 = *m - *p - i__ + 1;
                 dscal_(&i__2, &z2, &x21[i__ + i__ * x21_dim1], &c__1);
@@ -489,186 +511,211 @@ void dorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, doubl
                 dscal_(&i__2, &d__1, &x21[i__ + i__ * x21_dim1], &c__1);
                 i__2 = *m - *p - i__ + 1;
                 d__1 = -z2 * z3 * z4 * sin(phi[i__ - 1]);
-                daxpy_(&i__2, &d__1, &x22[i__ + (i__ - 1) * x22_dim1], &c__1, &x21[i__ + i__ * x21_dim1], &c__1);
+                daxpy_(&i__2, &d__1, &x22[i__ + (i__ - 1) * x22_dim1], &c__1,
+                       &x21[i__ + i__ * x21_dim1], &c__1);
             }
             i__2 = *m - *p - i__ + 1;
             i__3 = *p - i__ + 1;
-            theta[i__] = atan2(dnrm2_(&i__2, &x21[i__ + i__ * x21_dim1], & c__1), dnrm2_(&i__3, &x11[i__ + i__ * x11_dim1], &c__1));
-            if (*p > i__)
+            theta[i__] = atan2(dnrm2_(&i__2, &x21[i__ + i__ * x21_dim1], &c__1),
+                               dnrm2_(&i__3, &x11[i__ + i__ * x11_dim1], &c__1));
+            if(*p > i__)
             {
                 i__2 = *p - i__ + 1;
-                dlarfgp_(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + 1 + i__ * x11_dim1], &c__1, &taup1[i__]);
+                dlarfgp_(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + 1 + i__ * x11_dim1], &c__1,
+                         &taup1[i__]);
             }
-            else if (*p == i__)
+            else if(*p == i__)
             {
                 i__2 = *p - i__ + 1;
-                dlarfgp_(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + i__ * x11_dim1], &c__1, &taup1[i__]);
+                dlarfgp_(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + i__ * x11_dim1], &c__1,
+                         &taup1[i__]);
             }
             x11[i__ + i__ * x11_dim1] = 1.;
-            if (*m - *p > i__)
+            if(*m - *p > i__)
             {
                 i__2 = *m - *p - i__ + 1;
-                dlarfgp_(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + 1 + i__ * x21_dim1], &c__1, &taup2[i__]);
+                dlarfgp_(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + 1 + i__ * x21_dim1], &c__1,
+                         &taup2[i__]);
             }
-            else if (*m - *p == i__)
+            else if(*m - *p == i__)
             {
                 i__2 = *m - *p - i__ + 1;
-                dlarfgp_(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + i__ * x21_dim1], &c__1, &taup2[i__]);
+                dlarfgp_(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + i__ * x21_dim1], &c__1,
+                         &taup2[i__]);
             }
             x21[i__ + i__ * x21_dim1] = 1.;
-            if (*q > i__)
+            if(*q > i__)
             {
                 i__2 = *p - i__ + 1;
                 i__3 = *q - i__;
-                dlarf_("L", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], &c__1, & taup1[i__], &x11[i__ + (i__ + 1) * x11_dim1], ldx11, & work[1]);
+                dlarf_("L", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], &c__1, &taup1[i__],
+                       &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &work[1]);
             }
-            if (*m - *q + 1 > i__)
+            if(*m - *q + 1 > i__)
             {
                 i__2 = *p - i__ + 1;
                 i__3 = *m - *q - i__ + 1;
-                dlarf_("L", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], &c__1, & taup1[i__], &x12[i__ + i__ * x12_dim1], ldx12, &work[ 1]);
+                dlarf_("L", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], &c__1, &taup1[i__],
+                       &x12[i__ + i__ * x12_dim1], ldx12, &work[1]);
             }
-            if (*q > i__)
+            if(*q > i__)
             {
                 i__2 = *m - *p - i__ + 1;
                 i__3 = *q - i__;
-                dlarf_("L", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], &c__1, & taup2[i__], &x21[i__ + (i__ + 1) * x21_dim1], ldx21, & work[1]);
+                dlarf_("L", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], &c__1, &taup2[i__],
+                       &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &work[1]);
             }
-            if (*m - *q + 1 > i__)
+            if(*m - *q + 1 > i__)
             {
                 i__2 = *m - *p - i__ + 1;
                 i__3 = *m - *q - i__ + 1;
-                dlarf_("L", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], &c__1, & taup2[i__], &x22[i__ + i__ * x22_dim1], ldx22, &work[ 1]);
+                dlarf_("L", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], &c__1, &taup2[i__],
+                       &x22[i__ + i__ * x22_dim1], ldx22, &work[1]);
             }
-            if (i__ < *q)
+            if(i__ < *q)
             {
                 i__2 = *q - i__;
                 d__1 = -z1 * z3 * sin(theta[i__]);
                 dscal_(&i__2, &d__1, &x11[i__ + (i__ + 1) * x11_dim1], ldx11);
                 i__2 = *q - i__;
                 d__1 = z2 * z3 * cos(theta[i__]);
-                daxpy_(&i__2, &d__1, &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &x11[i__ + (i__ + 1) * x11_dim1], ldx11);
+                daxpy_(&i__2, &d__1, &x21[i__ + (i__ + 1) * x21_dim1], ldx21,
+                       &x11[i__ + (i__ + 1) * x11_dim1], ldx11);
             }
             i__2 = *m - *q - i__ + 1;
             d__1 = -z1 * z4 * sin(theta[i__]);
             dscal_(&i__2, &d__1, &x12[i__ + i__ * x12_dim1], ldx12);
             i__2 = *m - *q - i__ + 1;
             d__1 = z2 * z4 * cos(theta[i__]);
-            daxpy_(&i__2, &d__1, &x22[i__ + i__ * x22_dim1], ldx22, &x12[i__ + i__ * x12_dim1], ldx12);
-            if (i__ < *q)
+            daxpy_(&i__2, &d__1, &x22[i__ + i__ * x22_dim1], ldx22, &x12[i__ + i__ * x12_dim1],
+                   ldx12);
+            if(i__ < *q)
             {
                 i__2 = *q - i__;
                 i__3 = *m - *q - i__ + 1;
-                phi[i__] = atan2(dnrm2_(&i__2, &x11[i__ + (i__ + 1) * x11_dim1], ldx11), dnrm2_(&i__3, &x12[i__ + i__ * x12_dim1], ldx12));
+                phi[i__] = atan2(dnrm2_(&i__2, &x11[i__ + (i__ + 1) * x11_dim1], ldx11),
+                                 dnrm2_(&i__3, &x12[i__ + i__ * x12_dim1], ldx12));
             }
-            if (i__ < *q)
+            if(i__ < *q)
             {
-                if (*q - i__ == 1)
+                if(*q - i__ == 1)
                 {
                     i__2 = *q - i__;
-                    dlarfgp_(&i__2, &x11[i__ + (i__ + 1) * x11_dim1], &x11[ i__ + (i__ + 1) * x11_dim1], ldx11, &tauq1[i__]);
+                    dlarfgp_(&i__2, &x11[i__ + (i__ + 1) * x11_dim1],
+                             &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &tauq1[i__]);
                 }
                 else
                 {
                     i__2 = *q - i__;
-                    dlarfgp_(&i__2, &x11[i__ + (i__ + 1) * x11_dim1], &x11[ i__ + (i__ + 2) * x11_dim1], ldx11, &tauq1[i__]);
+                    dlarfgp_(&i__2, &x11[i__ + (i__ + 1) * x11_dim1],
+                             &x11[i__ + (i__ + 2) * x11_dim1], ldx11, &tauq1[i__]);
                 }
                 x11[i__ + (i__ + 1) * x11_dim1] = 1.;
             }
-            if (*q + i__ - 1 < *m)
+            if(*q + i__ - 1 < *m)
             {
-                if (*m - *q == i__)
+                if(*m - *q == i__)
                 {
                     i__2 = *m - *q - i__ + 1;
-                    dlarfgp_(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__]);
+                    dlarfgp_(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + i__ * x12_dim1], ldx12,
+                             &tauq2[i__]);
                 }
                 else
                 {
                     i__2 = *m - *q - i__ + 1;
-                    dlarfgp_(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + ( i__ + 1) * x12_dim1], ldx12, &tauq2[i__]);
+                    dlarfgp_(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + (i__ + 1) * x12_dim1],
+                             ldx12, &tauq2[i__]);
                 }
             }
             x12[i__ + i__ * x12_dim1] = 1.;
-            if (i__ < *q)
+            if(i__ < *q)
             {
                 i__2 = *p - i__;
                 i__3 = *q - i__;
-                dlarf_("R", &i__2, &i__3, &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &tauq1[i__], &x11[i__ + 1 + (i__ + 1) * x11_dim1], ldx11, &work[1]);
+                dlarf_("R", &i__2, &i__3, &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &tauq1[i__],
+                       &x11[i__ + 1 + (i__ + 1) * x11_dim1], ldx11, &work[1]);
                 i__2 = *m - *p - i__;
                 i__3 = *q - i__;
-                dlarf_("R", &i__2, &i__3, &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &tauq1[i__], &x21[i__ + 1 + (i__ + 1) * x21_dim1], ldx21, &work[1]);
+                dlarf_("R", &i__2, &i__3, &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &tauq1[i__],
+                       &x21[i__ + 1 + (i__ + 1) * x21_dim1], ldx21, &work[1]);
             }
-            if (*p > i__)
+            if(*p > i__)
             {
                 i__2 = *p - i__;
                 i__3 = *m - *q - i__ + 1;
-                dlarf_("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, & tauq2[i__], &x12[i__ + 1 + i__ * x12_dim1], ldx12, & work[1]);
+                dlarf_("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__],
+                       &x12[i__ + 1 + i__ * x12_dim1], ldx12, &work[1]);
             }
-            if (*m - *p > i__)
+            if(*m - *p > i__)
             {
                 i__2 = *m - *p - i__;
                 i__3 = *m - *q - i__ + 1;
-                dlarf_("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, & tauq2[i__], &x22[i__ + 1 + i__ * x22_dim1], ldx22, & work[1]);
+                dlarf_("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__],
+                       &x22[i__ + 1 + i__ * x22_dim1], ldx22, &work[1]);
             }
         }
         /* Reduce columns Q + 1, ..., P of X12, X22 */
         i__1 = *p;
-        for (i__ = *q + 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = *q + 1; i__ <= i__1; ++i__)
         {
             i__2 = *m - *q - i__ + 1;
             d__1 = -z1 * z4;
             dscal_(&i__2, &d__1, &x12[i__ + i__ * x12_dim1], ldx12);
-            if (i__ >= *m - *q)
+            if(i__ >= *m - *q)
             {
                 i__2 = *m - *q - i__ + 1;
-                dlarfgp_(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__]);
+                dlarfgp_(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + i__ * x12_dim1], ldx12,
+                         &tauq2[i__]);
             }
             else
             {
                 i__2 = *m - *q - i__ + 1;
-                dlarfgp_(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + (i__ + 1) * x12_dim1], ldx12, &tauq2[i__]);
+                dlarfgp_(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + (i__ + 1) * x12_dim1], ldx12,
+                         &tauq2[i__]);
             }
             x12[i__ + i__ * x12_dim1] = 1.;
-            if (*p > i__)
+            if(*p > i__)
             {
                 i__2 = *p - i__;
                 i__3 = *m - *q - i__ + 1;
-                dlarf_("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, & tauq2[i__], &x12[i__ + 1 + i__ * x12_dim1], ldx12, & work[1]);
+                dlarf_("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__],
+                       &x12[i__ + 1 + i__ * x12_dim1], ldx12, &work[1]);
             }
-            if (*m - *p - *q >= 1)
+            if(*m - *p - *q >= 1)
             {
                 i__2 = *m - *p - *q;
                 i__3 = *m - *q - i__ + 1;
-                dlarf_("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, & tauq2[i__], &x22[*q + 1 + i__ * x22_dim1], ldx22, & work[1]);
+                dlarf_("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__],
+                       &x22[*q + 1 + i__ * x22_dim1], ldx22, &work[1]);
             }
         }
         /* Reduce columns P + 1, ..., M - Q of X12, X22 */
         i__1 = *m - *p - *q;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = *m - *p - *q - i__ + 1;
             d__1 = z2 * z4;
             dscal_(&i__2, &d__1, &x22[*q + i__ + (*p + i__) * x22_dim1], ldx22);
-            if (i__ == *m - *p - *q)
+            if(i__ == *m - *p - *q)
             {
                 i__2 = *m - *p - *q - i__ + 1;
-                dlarfgp_(&i__2, &x22[*q + i__ + (*p + i__) * x22_dim1], &x22[* q + i__ + (*p + i__) * x22_dim1], ldx22, &tauq2[*p + i__]);
+                dlarfgp_(&i__2, &x22[*q + i__ + (*p + i__) * x22_dim1],
+                         &x22[*q + i__ + (*p + i__) * x22_dim1], ldx22, &tauq2[*p + i__]);
             }
             else
             {
                 i__2 = *m - *p - *q - i__ + 1;
-                dlarfgp_(&i__2, &x22[*q + i__ + (*p + i__) * x22_dim1], &x22[* q + i__ + (*p + i__ + 1) * x22_dim1], ldx22, &tauq2[* p + i__]);
+                dlarfgp_(&i__2, &x22[*q + i__ + (*p + i__) * x22_dim1],
+                         &x22[*q + i__ + (*p + i__ + 1) * x22_dim1], ldx22, &tauq2[*p + i__]);
             }
             x22[*q + i__ + (*p + i__) * x22_dim1] = 1.;
-            if (i__ < *m - *p - *q)
+            if(i__ < *m - *p - *q)
             {
                 i__2 = *m - *p - *q - i__;
                 i__3 = *m - *p - *q - i__ + 1;
-                dlarf_("R", &i__2, &i__3, &x22[*q + i__ + (*p + i__) * x22_dim1], ldx22, &tauq2[*p + i__], &x22[*q + i__ + 1 + (*p + i__) * x22_dim1], ldx22, &work[1]);
+                dlarf_("R", &i__2, &i__3, &x22[*q + i__ + (*p + i__) * x22_dim1], ldx22,
+                       &tauq2[*p + i__], &x22[*q + i__ + 1 + (*p + i__) * x22_dim1], ldx22,
+                       &work[1]);
             }
         }
     }
@@ -676,11 +723,9 @@ void dorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, doubl
     {
         /* Reduce columns 1, ..., Q of X11, X12, X21, X22 */
         i__1 = *q;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if (i__ == 1)
+            if(i__ == 1)
             {
                 i__2 = *p - i__ + 1;
                 dscal_(&i__2, &z1, &x11[i__ + i__ * x11_dim1], ldx11);
@@ -692,9 +737,10 @@ void dorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, doubl
                 dscal_(&i__2, &d__1, &x11[i__ + i__ * x11_dim1], ldx11);
                 i__2 = *p - i__ + 1;
                 d__1 = -z1 * z3 * z4 * sin(phi[i__ - 1]);
-                daxpy_(&i__2, &d__1, &x12[i__ - 1 + i__ * x12_dim1], ldx12, & x11[i__ + i__ * x11_dim1], ldx11);
+                daxpy_(&i__2, &d__1, &x12[i__ - 1 + i__ * x12_dim1], ldx12,
+                       &x11[i__ + i__ * x11_dim1], ldx11);
             }
-            if (i__ == 1)
+            if(i__ == 1)
             {
                 i__2 = *m - *p - i__ + 1;
                 dscal_(&i__2, &z2, &x21[i__ + i__ * x21_dim1], ldx21);
@@ -706,160 +752,183 @@ void dorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, doubl
                 dscal_(&i__2, &d__1, &x21[i__ + i__ * x21_dim1], ldx21);
                 i__2 = *m - *p - i__ + 1;
                 d__1 = -z2 * z3 * z4 * sin(phi[i__ - 1]);
-                daxpy_(&i__2, &d__1, &x22[i__ - 1 + i__ * x22_dim1], ldx22, & x21[i__ + i__ * x21_dim1], ldx21);
+                daxpy_(&i__2, &d__1, &x22[i__ - 1 + i__ * x22_dim1], ldx22,
+                       &x21[i__ + i__ * x21_dim1], ldx21);
             }
             i__2 = *m - *p - i__ + 1;
             i__3 = *p - i__ + 1;
-            theta[i__] = atan2(dnrm2_(&i__2, &x21[i__ + i__ * x21_dim1], ldx21), dnrm2_(&i__3, &x11[i__ + i__ * x11_dim1], ldx11));
+            theta[i__] = atan2(dnrm2_(&i__2, &x21[i__ + i__ * x21_dim1], ldx21),
+                               dnrm2_(&i__3, &x11[i__ + i__ * x11_dim1], ldx11));
             i__2 = *p - i__ + 1;
-            dlarfgp_(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &taup1[i__]);
+            dlarfgp_(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + (i__ + 1) * x11_dim1], ldx11,
+                     &taup1[i__]);
             x11[i__ + i__ * x11_dim1] = 1.;
-            if (i__ == *m - *p)
+            if(i__ == *m - *p)
             {
                 i__2 = *m - *p - i__ + 1;
-                dlarfgp_(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + i__ * x21_dim1], ldx21, &taup2[i__]);
+                dlarfgp_(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + i__ * x21_dim1], ldx21,
+                         &taup2[i__]);
             }
             else
             {
                 i__2 = *m - *p - i__ + 1;
-                dlarfgp_(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &taup2[i__]);
+                dlarfgp_(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + (i__ + 1) * x21_dim1], ldx21,
+                         &taup2[i__]);
             }
             x21[i__ + i__ * x21_dim1] = 1.;
-            if (*q > i__)
+            if(*q > i__)
             {
                 i__2 = *q - i__;
                 i__3 = *p - i__ + 1;
-                dlarf_("R", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], ldx11, & taup1[i__], &x11[i__ + 1 + i__ * x11_dim1], ldx11, & work[1]);
+                dlarf_("R", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], ldx11, &taup1[i__],
+                       &x11[i__ + 1 + i__ * x11_dim1], ldx11, &work[1]);
             }
-            if (*m - *q + 1 > i__)
+            if(*m - *q + 1 > i__)
             {
                 i__2 = *m - *q - i__ + 1;
                 i__3 = *p - i__ + 1;
-                dlarf_("R", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], ldx11, & taup1[i__], &x12[i__ + i__ * x12_dim1], ldx12, &work[ 1]);
+                dlarf_("R", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], ldx11, &taup1[i__],
+                       &x12[i__ + i__ * x12_dim1], ldx12, &work[1]);
             }
-            if (*q > i__)
+            if(*q > i__)
             {
                 i__2 = *q - i__;
                 i__3 = *m - *p - i__ + 1;
-                dlarf_("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, & taup2[i__], &x21[i__ + 1 + i__ * x21_dim1], ldx21, & work[1]);
+                dlarf_("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &taup2[i__],
+                       &x21[i__ + 1 + i__ * x21_dim1], ldx21, &work[1]);
             }
-            if (*m - *q + 1 > i__)
+            if(*m - *q + 1 > i__)
             {
                 i__2 = *m - *q - i__ + 1;
                 i__3 = *m - *p - i__ + 1;
-                dlarf_("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, & taup2[i__], &x22[i__ + i__ * x22_dim1], ldx22, &work[ 1]);
+                dlarf_("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &taup2[i__],
+                       &x22[i__ + i__ * x22_dim1], ldx22, &work[1]);
             }
-            if (i__ < *q)
+            if(i__ < *q)
             {
                 i__2 = *q - i__;
                 d__1 = -z1 * z3 * sin(theta[i__]);
                 dscal_(&i__2, &d__1, &x11[i__ + 1 + i__ * x11_dim1], &c__1);
                 i__2 = *q - i__;
                 d__1 = z2 * z3 * cos(theta[i__]);
-                daxpy_(&i__2, &d__1, &x21[i__ + 1 + i__ * x21_dim1], &c__1, & x11[i__ + 1 + i__ * x11_dim1], &c__1);
+                daxpy_(&i__2, &d__1, &x21[i__ + 1 + i__ * x21_dim1], &c__1,
+                       &x11[i__ + 1 + i__ * x11_dim1], &c__1);
             }
             i__2 = *m - *q - i__ + 1;
             d__1 = -z1 * z4 * sin(theta[i__]);
             dscal_(&i__2, &d__1, &x12[i__ + i__ * x12_dim1], &c__1);
             i__2 = *m - *q - i__ + 1;
             d__1 = z2 * z4 * cos(theta[i__]);
-            daxpy_(&i__2, &d__1, &x22[i__ + i__ * x22_dim1], &c__1, &x12[i__ + i__ * x12_dim1], &c__1);
-            if (i__ < *q)
+            daxpy_(&i__2, &d__1, &x22[i__ + i__ * x22_dim1], &c__1, &x12[i__ + i__ * x12_dim1],
+                   &c__1);
+            if(i__ < *q)
             {
                 i__2 = *q - i__;
                 i__3 = *m - *q - i__ + 1;
-                phi[i__] = atan2(dnrm2_(&i__2, &x11[i__ + 1 + i__ * x11_dim1], &c__1), dnrm2_(&i__3, &x12[i__ + i__ * x12_dim1], & c__1));
+                phi[i__] = atan2(dnrm2_(&i__2, &x11[i__ + 1 + i__ * x11_dim1], &c__1),
+                                 dnrm2_(&i__3, &x12[i__ + i__ * x12_dim1], &c__1));
             }
-            if (i__ < *q)
+            if(i__ < *q)
             {
-                if (*q - i__ == 1)
+                if(*q - i__ == 1)
                 {
                     i__2 = *q - i__;
-                    dlarfgp_(&i__2, &x11[i__ + 1 + i__ * x11_dim1], &x11[i__ + 1 + i__ * x11_dim1], &c__1, &tauq1[i__]);
+                    dlarfgp_(&i__2, &x11[i__ + 1 + i__ * x11_dim1], &x11[i__ + 1 + i__ * x11_dim1],
+                             &c__1, &tauq1[i__]);
                 }
                 else
                 {
                     i__2 = *q - i__;
-                    dlarfgp_(&i__2, &x11[i__ + 1 + i__ * x11_dim1], &x11[i__ + 2 + i__ * x11_dim1], &c__1, &tauq1[i__]);
+                    dlarfgp_(&i__2, &x11[i__ + 1 + i__ * x11_dim1], &x11[i__ + 2 + i__ * x11_dim1],
+                             &c__1, &tauq1[i__]);
                 }
                 x11[i__ + 1 + i__ * x11_dim1] = 1.;
             }
-            if (*m - *q > i__)
+            if(*m - *q > i__)
             {
                 i__2 = *m - *q - i__ + 1;
-                dlarfgp_(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + 1 + i__ * x12_dim1], &c__1, &tauq2[i__]);
+                dlarfgp_(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + 1 + i__ * x12_dim1], &c__1,
+                         &tauq2[i__]);
             }
             else
             {
                 i__2 = *m - *q - i__ + 1;
-                dlarfgp_(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + i__ * x12_dim1], &c__1, &tauq2[i__]);
+                dlarfgp_(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + i__ * x12_dim1], &c__1,
+                         &tauq2[i__]);
             }
             x12[i__ + i__ * x12_dim1] = 1.;
-            if (i__ < *q)
+            if(i__ < *q)
             {
                 i__2 = *q - i__;
                 i__3 = *p - i__;
-                dlarf_("L", &i__2, &i__3, &x11[i__ + 1 + i__ * x11_dim1], & c__1, &tauq1[i__], &x11[i__ + 1 + (i__ + 1) * x11_dim1], ldx11, &work[1]);
+                dlarf_("L", &i__2, &i__3, &x11[i__ + 1 + i__ * x11_dim1], &c__1, &tauq1[i__],
+                       &x11[i__ + 1 + (i__ + 1) * x11_dim1], ldx11, &work[1]);
                 i__2 = *q - i__;
                 i__3 = *m - *p - i__;
-                dlarf_("L", &i__2, &i__3, &x11[i__ + 1 + i__ * x11_dim1], & c__1, &tauq1[i__], &x21[i__ + 1 + (i__ + 1) * x21_dim1], ldx21, &work[1]);
+                dlarf_("L", &i__2, &i__3, &x11[i__ + 1 + i__ * x11_dim1], &c__1, &tauq1[i__],
+                       &x21[i__ + 1 + (i__ + 1) * x21_dim1], ldx21, &work[1]);
             }
             i__2 = *m - *q - i__ + 1;
             i__3 = *p - i__;
-            dlarf_("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, & tauq2[i__], &x12[i__ + (i__ + 1) * x12_dim1], ldx12, & work[1]);
-            if (*m - *p - i__ > 0)
+            dlarf_("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, &tauq2[i__],
+                   &x12[i__ + (i__ + 1) * x12_dim1], ldx12, &work[1]);
+            if(*m - *p - i__ > 0)
             {
                 i__2 = *m - *q - i__ + 1;
                 i__3 = *m - *p - i__;
-                dlarf_("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, & tauq2[i__], &x22[i__ + (i__ + 1) * x22_dim1], ldx22, & work[1]);
+                dlarf_("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, &tauq2[i__],
+                       &x22[i__ + (i__ + 1) * x22_dim1], ldx22, &work[1]);
             }
         }
         /* Reduce columns Q + 1, ..., P of X12, X22 */
         i__1 = *p;
-        for (i__ = *q + 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = *q + 1; i__ <= i__1; ++i__)
         {
             i__2 = *m - *q - i__ + 1;
             d__1 = -z1 * z4;
             dscal_(&i__2, &d__1, &x12[i__ + i__ * x12_dim1], &c__1);
             i__2 = *m - *q - i__ + 1;
-            dlarfgp_(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + 1 + i__ * x12_dim1], &c__1, &tauq2[i__]);
+            dlarfgp_(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + 1 + i__ * x12_dim1], &c__1,
+                     &tauq2[i__]);
             x12[i__ + i__ * x12_dim1] = 1.;
-            if (*p > i__)
+            if(*p > i__)
             {
                 i__2 = *m - *q - i__ + 1;
                 i__3 = *p - i__;
-                dlarf_("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, & tauq2[i__], &x12[i__ + (i__ + 1) * x12_dim1], ldx12, & work[1]);
+                dlarf_("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, &tauq2[i__],
+                       &x12[i__ + (i__ + 1) * x12_dim1], ldx12, &work[1]);
             }
-            if (*m - *p - *q >= 1)
+            if(*m - *p - *q >= 1)
             {
                 i__2 = *m - *q - i__ + 1;
                 i__3 = *m - *p - *q;
-                dlarf_("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, & tauq2[i__], &x22[i__ + (*q + 1) * x22_dim1], ldx22, & work[1]);
+                dlarf_("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, &tauq2[i__],
+                       &x22[i__ + (*q + 1) * x22_dim1], ldx22, &work[1]);
             }
         }
         /* Reduce columns P + 1, ..., M - Q of X12, X22 */
         i__1 = *m - *p - *q;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = *m - *p - *q - i__ + 1;
             d__1 = z2 * z4;
-            dscal_(&i__2, &d__1, &x22[*p + i__ + (*q + i__) * x22_dim1], & c__1);
-            if (*m - *p - *q == i__)
+            dscal_(&i__2, &d__1, &x22[*p + i__ + (*q + i__) * x22_dim1], &c__1);
+            if(*m - *p - *q == i__)
             {
                 i__2 = *m - *p - *q - i__ + 1;
-                dlarfgp_(&i__2, &x22[*p + i__ + (*q + i__) * x22_dim1], &x22[* p + i__ + (*q + i__) * x22_dim1], &c__1, &tauq2[*p + i__]);
+                dlarfgp_(&i__2, &x22[*p + i__ + (*q + i__) * x22_dim1],
+                         &x22[*p + i__ + (*q + i__) * x22_dim1], &c__1, &tauq2[*p + i__]);
             }
             else
             {
                 i__2 = *m - *p - *q - i__ + 1;
-                dlarfgp_(&i__2, &x22[*p + i__ + (*q + i__) * x22_dim1], &x22[* p + i__ + 1 + (*q + i__) * x22_dim1], &c__1, &tauq2[* p + i__]);
+                dlarfgp_(&i__2, &x22[*p + i__ + (*q + i__) * x22_dim1],
+                         &x22[*p + i__ + 1 + (*q + i__) * x22_dim1], &c__1, &tauq2[*p + i__]);
                 i__2 = *m - *p - *q - i__ + 1;
                 i__3 = *m - *p - *q - i__;
-                dlarf_("L", &i__2, &i__3, &x22[*p + i__ + (*q + i__) * x22_dim1], &c__1, &tauq2[*p + i__], &x22[*p + i__ + (* q + i__ + 1) * x22_dim1], ldx22, &work[1]);
+                dlarf_("L", &i__2, &i__3, &x22[*p + i__ + (*q + i__) * x22_dim1], &c__1,
+                       &tauq2[*p + i__], &x22[*p + i__ + (*q + i__ + 1) * x22_dim1], ldx22,
+                       &work[1]);
             }
             x22[*p + i__ + (*q + i__) * x22_dim1] = 1.;
         }

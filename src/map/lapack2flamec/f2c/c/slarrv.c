@@ -1,20 +1,30 @@
-/* ../netlib/slarrv.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slarrv.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b5 = 0.f;
 static integer c__1 = 1;
 static integer c__2 = 2;
-/* > \brief \b SLARRV computes the eigenvectors of the tridiagonal matrix T = L D LT given L, D and the eigenv alues of L D LT. */
+/* > \brief \b SLARRV computes the eigenvectors of the tridiagonal matrix T = L D LT given L, D and
+ * the eigenv alues of L D LT. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLARRV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarrv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarrv.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarrv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarrv.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarrv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarrv.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -188,7 +198,7 @@ IBLOCK(i)=1 if eigenvalue */
 /* > \verbatim */
 /* > INDEXW is INTEGER array, dimension (N) */
 /* > The indices of the eigenvalues within each block (submatrix);
-*/
+ */
 /* > for example, INDEXW(i)= 10 and IBLOCK(i)=2 imply that the */
 /* > i-th eigenvalue W(i) is the 10-th eigenvalue in the second block. */
 /* > \endverbatim */
@@ -280,10 +290,16 @@ IBLOCK(i)=1 if eigenvalue */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void slarrv_(integer *n, real *vl, real *vu, real *d__, real * l, real *pivmin, integer *isplit, integer *m, integer *dol, integer * dou, real *minrgp, real *rtol1, real *rtol2, real *w, real *werr, real *wgap, integer *iblock, integer *indexw, real *gers, real *z__, integer *ldz, integer *isuppz, real *work, integer *iwork, integer * info)
+void slarrv_(integer *n, real *vl, real *vu, real *d__, real *l, real *pivmin, integer *isplit,
+             integer *m, integer *dol, integer *dou, real *minrgp, real *rtol1, real *rtol2,
+             real *w, real *werr, real *wgap, integer *iblock, integer *indexw, real *gers,
+             real *z__, integer *ldz, integer *isuppz, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slarrv inputs: n %" FLA_IS ", isplit %" FLA_IS ", m %" FLA_IS ", dol %" FLA_IS ", dou %" FLA_IS ", iblock %" FLA_IS ", indexw %" FLA_IS ", ldz %" FLA_IS "",*n, *isplit, *m, *dol, *dou, *iblock, *indexw, *ldz);
+    AOCL_DTL_SNPRINTF("slarrv inputs: n %" FLA_IS ", isplit %" FLA_IS ", m %" FLA_IS
+                      ", dol %" FLA_IS ", dou %" FLA_IS ", iblock %" FLA_IS ", indexw %" FLA_IS
+                      ", ldz %" FLA_IS "",
+                      *n, *isplit, *m, *dol, *dou, *iblock, *indexw, *ldz);
     /* System generated locals */
     integer z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
     real r__1, r__2;
@@ -309,16 +325,21 @@ void slarrv_(integer *n, real *vl, real *vu, real *d__, real * l, real *pivmin, 
     integer iinfo, iindr;
     real resid;
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     logical eskip;
     real right;
     integer nclus, zfrom;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     real rqtol;
     integer iindc1, iindc2;
     extern /* Subroutine */
-    void slar1v_(integer *, integer *, integer *, real *, real *, real *, real *, real *, real *, real *, real *, logical *, integer *, real *, real *, integer *, integer *, real *, real *, real *, real *);
+        void
+        slar1v_(integer *, integer *, integer *, real *, real *, real *, real *, real *, real *,
+                real *, real *, logical *, integer *, real *, real *, integer *, integer *, real *,
+                real *, real *, real *);
     logical stp2ii;
     real lambda;
     integer ibegin, indeig;
@@ -336,7 +357,11 @@ void slarrv_(integer *n, real *vl, real *vu, real *d__, real * l, real *pivmin, 
     integer iindwk, offset;
     real gaptol;
     extern /* Subroutine */
-    void slarrb_(integer *, real *, real *, integer *, integer *, real *, real *, integer *, real *, real *, real *, real *, integer *, real *, real *, integer *, integer *), slarrf_( integer *, real *, real *, real *, integer *, integer *, real *, real *, real *, real *, real *, real *, real *, real *, real *, real *, real *, integer *);
+        void
+        slarrb_(integer *, real *, real *, integer *, integer *, real *, real *, integer *, real *,
+                real *, real *, real *, integer *, real *, real *, integer *, integer *),
+        slarrf_(integer *, real *, real *, real *, integer *, integer *, real *, real *, real *,
+                real *, real *, real *, real *, real *, real *, real *, real *, integer *);
     integer newcls, oldfst, indwrk, windex, oldlst;
     logical usedrq;
     integer newfst, newftt, parity, windmn, isupmn, newlst, windpl, zusedl, newsiz, zusedu, zusedw;
@@ -345,7 +370,8 @@ void slarrv_(integer *n, real *vl, real *vu, real *d__, real * l, real *pivmin, 
     integer isupmx;
     real rqcorr;
     extern /* Subroutine */
-    void slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+        void
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -386,12 +412,12 @@ void slarrv_(integer *n, real *vl, real *vu, real *d__, real * l, real *pivmin, 
     /* Function Body */
     *info = 0;
     /* Quick return if possible */
-    if ((*n <= 0) || (*m <= 0) || (*m > *n))
+    if((*n <= 0) || (*m <= 0) || (*m > *n))
     {
-       if (*m > *n)
-           *info = -4;
-       AOCL_DTL_TRACE_LOG_EXIT
-       return;
+        if(*m > *n)
+            *info = -4;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* The first N entries of WORK are reserved for the eigenvalues */
     indld = *n + 1;
@@ -399,9 +425,7 @@ void slarrv_(integer *n, real *vl, real *vu, real *d__, real * l, real *pivmin, 
     indwrk = *n * 3 + 1;
     minwsize = *n * 12;
     i__1 = minwsize;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         work[i__] = 0.f;
         /* L5: */
@@ -416,21 +440,19 @@ void slarrv_(integer *n, real *vl, real *vu, real *d__, real * l, real *pivmin, 
     iindwk = *n * 3 + 1;
     miniwsize = *n * 7;
     i__1 = miniwsize;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         iwork[i__] = 0;
         /* L10: */
     }
     zusedl = 1;
-    if (*dol > 1)
+    if(*dol > 1)
     {
         /* Set lower bound for use of Z */
         zusedl = *dol - 1;
     }
     zusedu = *m;
-    if (*dou < *m)
+    if(*dou < *m)
     {
         /* Set lower bound for use of Z */
         zusedu = *dou + 1;
@@ -442,7 +464,7 @@ void slarrv_(integer *n, real *vl, real *vu, real *d__, real * l, real *pivmin, 
     rqtol = eps * 2.f;
     /* Set expert flags for standard code. */
     tryrqc = TRUE_;
-    if (*dol == 1 && *dou == *m)
+    if(*dol == 1 && *dou == *m)
     {
     }
     else
@@ -461,30 +483,28 @@ void slarrv_(integer *n, real *vl, real *vu, real *d__, real * l, real *pivmin, 
     ibegin = 1;
     wbegin = 1;
     i__1 = iblock[*m];
-    for (jblk = 1;
-            jblk <= i__1;
-            ++jblk)
+    for(jblk = 1; jblk <= i__1; ++jblk)
     {
         iend = isplit[jblk];
         sigma = l[iend];
         /* Find the eigenvectors of the submatrix indexed IBEGIN */
         /* through IEND. */
         wend = wbegin - 1;
-L15:
-        if (wend < *m)
+    L15:
+        if(wend < *m)
         {
-            if (iblock[wend + 1] == jblk)
+            if(iblock[wend + 1] == jblk)
             {
                 ++wend;
                 goto L15;
             }
         }
-        if (wend < wbegin)
+        if(wend < wbegin)
         {
             ibegin = iend + 1;
             goto L170;
         }
-        else if (wend < *dol || wbegin > *dou)
+        else if(wend < *dol || wbegin > *dou)
         {
             ibegin = iend + 1;
             wbegin = wend + 1;
@@ -494,16 +514,14 @@ L15:
         gl = gers[(ibegin << 1) - 1];
         gu = gers[ibegin * 2];
         i__2 = iend;
-        for (i__ = ibegin + 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = ibegin + 1; i__ <= i__2; ++i__)
         {
             /* Computing MIN */
             r__1 = gers[(i__ << 1) - 1];
-            gl = fla_min(r__1,gl);
+            gl = fla_min(r__1, gl);
             /* Computing MAX */
             r__1 = gers[i__ * 2];
-            gu = fla_max(r__1,gu);
+            gu = fla_max(r__1, gu);
             /* L20: */
         }
         spdiam = gu - gl;
@@ -514,7 +532,7 @@ L15:
         /* The number of eigenvalues in the current block */
         im = wend - wbegin + 1;
         /* This is for a 1x1 block */
-        if (ibegin == iend)
+        if(ibegin == iend)
         {
             z__[ibegin + wbegin * z_dim1] = 1.f;
             isuppz[(wbegin << 1) - 1] = ibegin;
@@ -535,9 +553,7 @@ L15:
         /* We store in W the eigenvalue approximations w.r.t. the original */
         /* matrix T. */
         i__2 = im;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             w[wbegin + i__ - 1] += sigma;
             /* L30: */
@@ -557,11 +573,11 @@ L15:
         /* loop while( IDONE.LT.IM ) */
         /* generate the representation tree for the current block and */
         /* compute the eigenvectors */
-L40:
-        if (idone < im)
+    L40:
+        if(idone < im)
         {
             /* This is a crude protection against infinitely deep trees */
-            if (ndepth > *m)
+            if(ndepth > *m)
             {
                 *info = -2;
                 AOCL_DTL_TRACE_LOG_EXIT
@@ -573,7 +589,7 @@ L40:
             /* reset NCLUS to count the number of child clusters */
             nclus = 0;
             parity = 1 - parity;
-            if (parity == 0)
+            if(parity == 0)
             {
                 oldcls = iindc1;
                 newcls = iindc2;
@@ -585,9 +601,7 @@ L40:
             }
             /* Process the clusters on the current level */
             i__2 = oldncl;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 j = oldcls + (i__ << 1);
                 /* OLDFST, OLDLST = first, last index of current cluster. */
@@ -595,13 +609,13 @@ L40:
                 /* to WBEGIN when accessing W, WGAP, WERR, Z */
                 oldfst = iwork[j - 1];
                 oldlst = iwork[j];
-                if (ndepth > 0)
+                if(ndepth > 0)
                 {
                     /* Retrieve relatively robust representation (RRR) of cluster */
                     /* that has been computed at the previous level */
                     /* The RRR is stored in Z and overwritten once the eigenvectors */
                     /* have been computed or when the cluster is refined */
-                    if (*dol == 1 && *dou == *m)
+                    if(*dol == 1 && *dou == *m)
                     {
                         /* Get representation from location of the leftmost evalue */
                         /* of the cluster */
@@ -609,12 +623,12 @@ L40:
                     }
                     else
                     {
-                        if (wbegin + oldfst - 1 < *dol)
+                        if(wbegin + oldfst - 1 < *dol)
                         {
                             /* Get representation from the left end of Z array */
                             j = *dol - 1;
                         }
-                        else if (wbegin + oldfst - 1 > *dou)
+                        else if(wbegin + oldfst - 1 > *dou)
                         {
                             /* Get representation from the right end of Z array */
                             j = *dou;
@@ -626,23 +640,21 @@ L40:
                     }
                     scopy_(&in, &z__[ibegin + j * z_dim1], &c__1, &d__[ibegin], &c__1);
                     i__3 = in - 1;
-                    scopy_(&i__3, &z__[ibegin + (j + 1) * z_dim1], &c__1, &l[ ibegin], &c__1);
+                    scopy_(&i__3, &z__[ibegin + (j + 1) * z_dim1], &c__1, &l[ibegin], &c__1);
                     sigma = z__[iend + (j + 1) * z_dim1];
                     /* Set the corresponding entries in Z to zero */
                     slaset_("Full", &in, &c__2, &c_b5, &c_b5, &z__[ibegin + j * z_dim1], ldz);
                 }
                 /* Compute DL and DLL of current RRR */
                 i__3 = iend - 1;
-                for (j = ibegin;
-                        j <= i__3;
-                        ++j)
+                for(j = ibegin; j <= i__3; ++j)
                 {
                     tmp = d__[j] * l[j];
                     work[indld - 1 + j] = tmp;
                     work[indlld - 1 + j] = tmp * l[j];
                     /* L50: */
                 }
-                if (ndepth > 0)
+                if(ndepth > 0)
                 {
                     /* P and Q are index of the first and last eigenvalue to compute */
                     /* within the current block */
@@ -654,8 +666,10 @@ L40:
                     offset = indexw[wbegin] - 1;
                     /* perform limited bisection (if necessary) to get approximate */
                     /* eigenvalues to the precision needed. */
-                    slarrb_(&in, &d__[ibegin], &work[indlld + ibegin - 1], &p, &q, rtol1, rtol2, &offset, &work[wbegin], &wgap[ wbegin], &werr[wbegin], &work[indwrk], &iwork[ iindwk], pivmin, &spdiam, &in, &iinfo);
-                    if (iinfo != 0)
+                    slarrb_(&in, &d__[ibegin], &work[indlld + ibegin - 1], &p, &q, rtol1, rtol2,
+                            &offset, &work[wbegin], &wgap[wbegin], &werr[wbegin], &work[indwrk],
+                            &iwork[iindwk], pivmin, &spdiam, &in, &iinfo);
+                    if(iinfo != 0)
                     {
                         *info = -1;
                         AOCL_DTL_TRACE_LOG_EXIT
@@ -668,26 +682,26 @@ L40:
                     /* WBEGIN-1+OLDLST are correctly computed in SLARRB. */
                     /* However, we only allow the gaps to become greater since */
                     /* this is what should happen when we decrease WERR */
-                    if (oldfst > 1)
+                    if(oldfst > 1)
                     {
                         /* Computing MAX */
                         r__1 = wgap[wbegin + oldfst - 2];
-                        r__2 = w[wbegin + oldfst - 1] - werr[wbegin + oldfst - 1] - w[ wbegin + oldfst - 2] - werr[wbegin + oldfst - 2]; // , expr subst
-                        wgap[wbegin + oldfst - 2] = fla_max(r__1,r__2);
+                        r__2 = w[wbegin + oldfst - 1] - werr[wbegin + oldfst - 1]
+                               - w[wbegin + oldfst - 2] - werr[wbegin + oldfst - 2]; // , expr subst
+                        wgap[wbegin + oldfst - 2] = fla_max(r__1, r__2);
                     }
-                    if (wbegin + oldlst - 1 < wend)
+                    if(wbegin + oldlst - 1 < wend)
                     {
                         /* Computing MAX */
                         r__1 = wgap[wbegin + oldlst - 1];
-                        r__2 = w[wbegin + oldlst] - werr[wbegin + oldlst] - w[wbegin + oldlst - 1] - werr[wbegin + oldlst - 1]; // , expr subst
-                        wgap[wbegin + oldlst - 1] = fla_max(r__1,r__2);
+                        r__2 = w[wbegin + oldlst] - werr[wbegin + oldlst] - w[wbegin + oldlst - 1]
+                               - werr[wbegin + oldlst - 1]; // , expr subst
+                        wgap[wbegin + oldlst - 1] = fla_max(r__1, r__2);
                     }
                     /* Each time the eigenvalues in WORK get refined, we store */
                     /* the newly found approximation with all shifts applied in W */
                     i__3 = oldlst;
-                    for (j = oldfst;
-                            j <= i__3;
-                            ++j)
+                    for(j = oldfst; j <= i__3; ++j)
                     {
                         w[wbegin + j - 1] = work[wbegin + j - 1] + sigma;
                         /* L53: */
@@ -696,17 +710,16 @@ L40:
                 /* Process the current node. */
                 newfst = oldfst;
                 i__3 = oldlst;
-                for (j = oldfst;
-                        j <= i__3;
-                        ++j)
+                for(j = oldfst; j <= i__3; ++j)
                 {
-                    if (j == oldlst)
+                    if(j == oldlst)
                     {
                         /* we are at the right end of the cluster, this is also the */
                         /* boundary of the child cluster */
                         newlst = j;
                     }
-                    else if (wgap[wbegin + j - 1] >= *minrgp * (r__1 = work[ wbegin + j - 1], f2c_abs(r__1)))
+                    else if(wgap[wbegin + j - 1]
+                            >= *minrgp * (r__1 = work[wbegin + j - 1], f2c_abs(r__1)))
                     {
                         /* the right relative gap is big enough, the child cluster */
                         /* (NEWFST,..,NEWLST) is well separated from the following */
@@ -722,7 +735,7 @@ L40:
                     newsiz = newlst - newfst + 1;
                     /* NEWFTT is the place in Z where the new RRR or the computed */
                     /* eigenvector is to be stored */
-                    if (*dol == 1 && *dou == *m)
+                    if(*dol == 1 && *dou == *m)
                     {
                         /* Store representation at location of the leftmost evalue */
                         /* of the cluster */
@@ -730,12 +743,12 @@ L40:
                     }
                     else
                     {
-                        if (wbegin + newfst - 1 < *dol)
+                        if(wbegin + newfst - 1 < *dol)
                         {
                             /* Store representation at the left end of Z array */
                             newftt = *dol - 1;
                         }
-                        else if (wbegin + newfst - 1 > *dou)
+                        else if(wbegin + newfst - 1 > *dou)
                         {
                             /* Store representation at the right end of Z array */
                             newftt = *dou;
@@ -745,7 +758,7 @@ L40:
                             newftt = wbegin + newfst - 1;
                         }
                     }
-                    if (newsiz > 1)
+                    if(newsiz > 1)
                     {
                         /* Current child is not a singleton but a cluster. */
                         /* Compute and store new representation of child. */
@@ -757,12 +770,12 @@ L40:
                         /* have to be computed from WORK since the entries */
                         /* in W might be of the same order so that gaps are not */
                         /* exhibited correctly for very close eigenvalues. */
-                        if (newfst == 1)
+                        if(newfst == 1)
                         {
                             /* Computing MAX */
                             r__1 = 0.f;
                             r__2 = w[wbegin] - werr[wbegin] - *vl; // , expr subst
-                            lgap = fla_max(r__1,r__2);
+                            lgap = fla_max(r__1, r__2);
                         }
                         else
                         {
@@ -773,11 +786,9 @@ L40:
                         /* to high precision in order to shift as close */
                         /* as possible and obtain as large relative gaps */
                         /* as possible */
-                        for (k = 1;
-                                k <= 2;
-                                ++k)
+                        for(k = 1; k <= 2; ++k)
                         {
-                            if (k == 1)
+                            if(k == 1)
                             {
                                 p = indexw[wbegin - 1 + newfst];
                             }
@@ -786,10 +797,12 @@ L40:
                                 p = indexw[wbegin - 1 + newlst];
                             }
                             offset = indexw[wbegin] - 1;
-                            slarrb_(&in, &d__[ibegin], &work[indlld + ibegin - 1], &p, &p, &rqtol, &rqtol, &offset, & work[wbegin], &wgap[wbegin], &werr[wbegin], &work[indwrk], &iwork[iindwk], pivmin, & spdiam, &in, &iinfo);
+                            slarrb_(&in, &d__[ibegin], &work[indlld + ibegin - 1], &p, &p, &rqtol,
+                                    &rqtol, &offset, &work[wbegin], &wgap[wbegin], &werr[wbegin],
+                                    &work[indwrk], &iwork[iindwk], pivmin, &spdiam, &in, &iinfo);
                             /* L55: */
                         }
-                        if (wbegin + newlst - 1 < *dol || wbegin + newfst - 1 > *dou)
+                        if(wbegin + newlst - 1 < *dol || wbegin + newfst - 1 > *dou)
                         {
                             /* if the cluster contains no desired eigenvalues */
                             /* skip the computation of that branch of the rep. tree */
@@ -803,8 +816,11 @@ L40:
                         /* Compute RRR of child cluster. */
                         /* Note that the new RRR is stored in Z */
                         /* SLARRF needs LWORK = 2*N */
-                        slarrf_(&in, &d__[ibegin], &l[ibegin], &work[indld + ibegin - 1], &newfst, &newlst, &work[wbegin], &wgap[wbegin], &werr[wbegin], &spdiam, &lgap, &rgap, pivmin, &tau, &z__[ibegin + newftt * z_dim1], &z__[ibegin + (newftt + 1) * z_dim1], &work[indwrk], &iinfo);
-                        if (iinfo == 0)
+                        slarrf_(&in, &d__[ibegin], &l[ibegin], &work[indld + ibegin - 1], &newfst,
+                                &newlst, &work[wbegin], &wgap[wbegin], &werr[wbegin], &spdiam,
+                                &lgap, &rgap, pivmin, &tau, &z__[ibegin + newftt * z_dim1],
+                                &z__[ibegin + (newftt + 1) * z_dim1], &work[indwrk], &iinfo);
+                        if(iinfo == 0)
                         {
                             /* a new RRR for the cluster was found by SLARRF */
                             /* update shift and store it */
@@ -813,9 +829,7 @@ L40:
                             /* WORK() are the midpoints and WERR() the semi-width */
                             /* Note that the entries in W are unchanged. */
                             i__4 = newlst;
-                            for (k = newfst;
-                                    k <= i__4;
-                                    ++k)
+                            for(k = newfst; k <= i__4; ++k)
                             {
                                 fudge = eps * 3.f * (r__1 = work[wbegin + k - 1], f2c_abs(r__1));
                                 work[wbegin + k - 1] -= tau;
@@ -847,18 +861,18 @@ L40:
                     {
                         /* Compute eigenvector of singleton */
                         iter = 0;
-                        tol = log((real) in) * 4.f * eps;
+                        tol = log((real)in) * 4.f * eps;
                         k = newfst;
                         windex = wbegin + k - 1;
                         /* Computing MAX */
                         i__4 = windex - 1;
-                        windmn = fla_max(i__4,1);
+                        windmn = fla_max(i__4, 1);
                         /* Computing MIN */
                         i__4 = windex + 1;
-                        windpl = fla_min(i__4,*m);
+                        windpl = fla_min(i__4, *m);
                         lambda = work[windex];
                         /* Check if eigenvector computation is to be skipped */
-                        if (windex < *dol || windex > *dou)
+                        if(windex < *dol || windex > *dou)
                         {
                             eskip = TRUE_;
                             goto L125;
@@ -876,7 +890,7 @@ L40:
                         /* computing the gaps since they exhibit even very small */
                         /* differences in the eigenvalues, as opposed to the */
                         /* entries in W which might "look" the same. */
-                        if (k == 1)
+                        if(k == 1)
                         {
                             /* In the case RANGE='I' and with not much initial */
                             /* accuracy in LAMBDA and VL, the formula */
@@ -887,13 +901,13 @@ L40:
                             /* Computing MAX */
                             r__1 = f2c_abs(left);
                             r__2 = f2c_abs(right); // , expr subst
-                            lgap = eps * fla_max(r__1,r__2);
+                            lgap = eps * fla_max(r__1, r__2);
                         }
                         else
                         {
                             lgap = wgap[windmn];
                         }
-                        if (k == im)
+                        if(k == im)
                         {
                             /* In the case RANGE='I' and with not much initial */
                             /* accuracy in LAMBDA and VU, the formula */
@@ -903,14 +917,14 @@ L40:
                             /* Computing MAX */
                             r__1 = f2c_abs(left);
                             r__2 = f2c_abs(right); // , expr subst
-                            rgap = eps * fla_max(r__1,r__2);
+                            rgap = eps * fla_max(r__1, r__2);
                         }
                         else
                         {
                             rgap = wgap[windex];
                         }
-                        gap = fla_min(lgap,rgap);
-                        if (k == 1 || k == im)
+                        gap = fla_min(lgap, rgap);
+                        if(k == 1 || k == im)
                         {
                             /* The eigenvector support can become wrong */
                             /* because significant entries could be cut off due to a */
@@ -939,17 +953,20 @@ L40:
                         usedbs = FALSE_;
                         usedrq = FALSE_;
                         /* Bisection is initially turned off unless it is forced */
-                        needbs = ! tryrqc;
-L120: /* Check if bisection should be used to refine eigenvalue */
-                        if (needbs)
+                        needbs = !tryrqc;
+                    L120: /* Check if bisection should be used to refine eigenvalue */
+                        if(needbs)
                         {
                             /* Take the bisection as new iterate */
                             usedbs = TRUE_;
                             itmp1 = iwork[iindr + windex];
                             offset = indexw[wbegin] - 1;
                             r__1 = eps * 2.f;
-                            slarrb_(&in, &d__[ibegin], &work[indlld + ibegin - 1], &indeig, &indeig, &c_b5, &r__1, & offset, &work[wbegin], &wgap[wbegin], & werr[wbegin], &work[indwrk], &iwork[ iindwk], pivmin, &spdiam, &itmp1, &iinfo);
-                            if (iinfo != 0)
+                            slarrb_(&in, &d__[ibegin], &work[indlld + ibegin - 1], &indeig, &indeig,
+                                    &c_b5, &r__1, &offset, &work[wbegin], &wgap[wbegin],
+                                    &werr[wbegin], &work[indwrk], &iwork[iindwk], pivmin, &spdiam,
+                                    &itmp1, &iinfo);
+                            if(iinfo != 0)
                             {
                                 *info = -3;
                                 AOCL_DTL_TRACE_LOG_EXIT
@@ -961,14 +978,18 @@ L120: /* Check if bisection should be used to refine eigenvalue */
                             iwork[iindr + windex] = 0;
                         }
                         /* Given LAMBDA, compute the eigenvector. */
-                        L__1 = ! usedbs;
-                        slar1v_(&in, &c__1, &in, &lambda, &d__[ibegin], &l[ ibegin], &work[indld + ibegin - 1], &work[ indlld + ibegin - 1], pivmin, &gaptol, &z__[ ibegin + windex * z_dim1], &L__1, &negcnt, & ztz, &mingma, &iwork[iindr + windex], &isuppz[ (windex << 1) - 1], &nrminv, &resid, &rqcorr, &work[indwrk]);
-                        if (iter == 0)
+                        L__1 = !usedbs;
+                        slar1v_(&in, &c__1, &in, &lambda, &d__[ibegin], &l[ibegin],
+                                &work[indld + ibegin - 1], &work[indlld + ibegin - 1], pivmin,
+                                &gaptol, &z__[ibegin + windex * z_dim1], &L__1, &negcnt, &ztz,
+                                &mingma, &iwork[iindr + windex], &isuppz[(windex << 1) - 1],
+                                &nrminv, &resid, &rqcorr, &work[indwrk]);
+                        if(iter == 0)
                         {
                             bstres = resid;
                             bstw = lambda;
                         }
-                        else if (resid < bstres)
+                        else if(resid < bstres)
                         {
                             bstres = resid;
                             bstw = lambda;
@@ -976,11 +997,11 @@ L120: /* Check if bisection should be used to refine eigenvalue */
                         /* Computing MIN */
                         i__4 = isupmn;
                         i__5 = isuppz[(windex << 1) - 1]; // , expr subst
-                        isupmn = fla_min(i__4,i__5);
+                        isupmn = fla_min(i__4, i__5);
                         /* Computing MAX */
                         i__4 = isupmx;
                         i__5 = isuppz[windex * 2]; // , expr subst
-                        isupmx = fla_max(i__4,i__5);
+                        isupmx = fla_max(i__4, i__5);
                         ++iter;
                         /* sin alpha <= |resid|/gap */
                         /* Note that both the residual and the gap are */
@@ -988,12 +1009,13 @@ L120: /* Check if bisection should be used to refine eigenvalue */
                         /* a role in the quotient */
                         /* Convergence test for Rayleigh-Quotient iteration */
                         /* (omitted when Bisection has been used) */
-                        if (resid > tol * gap && f2c_abs(rqcorr) > rqtol * f2c_abs( lambda) && ! usedbs)
+                        if(resid > tol * gap && f2c_abs(rqcorr) > rqtol * f2c_abs(lambda)
+                           && !usedbs)
                         {
                             /* We need to check that the RQCORR update doesn't */
                             /* move the eigenvalue away from the desired one and */
                             /* towards a neighbor. -> protection with bisection */
-                            if (indeig <= negcnt)
+                            if(indeig <= negcnt)
                             {
                                 /* The wanted eigenvalue lies to the left */
                                 sgndef = -1.f;
@@ -1005,11 +1027,12 @@ L120: /* Check if bisection should be used to refine eigenvalue */
                             }
                             /* We only use the RQCORR if it improves the */
                             /* the iterate reasonably. */
-                            if (rqcorr * sgndef >= 0.f && lambda + rqcorr <= right && lambda + rqcorr >= left)
+                            if(rqcorr * sgndef >= 0.f && lambda + rqcorr <= right
+                               && lambda + rqcorr >= left)
                             {
                                 usedrq = TRUE_;
                                 /* Store new midpoint of bisection interval in WORK */
-                                if (sgndef == 1.f)
+                                if(sgndef == 1.f)
                                 {
                                     /* The current LAMBDA is on the left of the true */
                                     /* eigenvalue */
@@ -1041,18 +1064,18 @@ L120: /* Check if bisection should be used to refine eigenvalue */
                             {
                                 needbs = TRUE_;
                             }
-                            if (right - left < rqtol * f2c_abs(lambda))
+                            if(right - left < rqtol * f2c_abs(lambda))
                             {
                                 /* The eigenvalue is computed to bisection accuracy */
                                 /* compute eigenvector and stop */
                                 usedbs = TRUE_;
                                 goto L120;
                             }
-                            else if (iter < 10)
+                            else if(iter < 10)
                             {
                                 goto L120;
                             }
-                            else if (iter == 10)
+                            else if(iter == 10)
                             {
                                 needbs = TRUE_;
                                 goto L120;
@@ -1067,16 +1090,21 @@ L120: /* Check if bisection should be used to refine eigenvalue */
                         else
                         {
                             stp2ii = FALSE_;
-                            if (usedrq && usedbs && bstres <= resid)
+                            if(usedrq && usedbs && bstres <= resid)
                             {
                                 lambda = bstw;
                                 stp2ii = TRUE_;
                             }
-                            if (stp2ii)
+                            if(stp2ii)
                             {
                                 /* improve error angle by second step */
-                                L__1 = ! usedbs;
-                                slar1v_(&in, &c__1, &in, &lambda, &d__[ibegin], &l[ibegin], &work[indld + ibegin - 1], &work[indlld + ibegin - 1], pivmin, &gaptol, &z__[ibegin + windex * z_dim1], &L__1, &negcnt, &ztz, & mingma, &iwork[iindr + windex], & isuppz[(windex << 1) - 1], &nrminv, & resid, &rqcorr, &work[indwrk]);
+                                L__1 = !usedbs;
+                                slar1v_(&in, &c__1, &in, &lambda, &d__[ibegin], &l[ibegin],
+                                        &work[indld + ibegin - 1], &work[indlld + ibegin - 1],
+                                        pivmin, &gaptol, &z__[ibegin + windex * z_dim1], &L__1,
+                                        &negcnt, &ztz, &mingma, &iwork[iindr + windex],
+                                        &isuppz[(windex << 1) - 1], &nrminv, &resid, &rqcorr,
+                                        &work[indwrk]);
                             }
                             work[windex] = lambda;
                         }
@@ -1088,23 +1116,19 @@ L120: /* Check if bisection should be used to refine eigenvalue */
                         isupmn += oldien;
                         isupmx += oldien;
                         /* Ensure vector is ok if support in the RQI has changed */
-                        if (isupmn < zfrom)
+                        if(isupmn < zfrom)
                         {
                             i__4 = zfrom - 1;
-                            for (ii = isupmn;
-                                    ii <= i__4;
-                                    ++ii)
+                            for(ii = isupmn; ii <= i__4; ++ii)
                             {
                                 z__[ii + windex * z_dim1] = 0.f;
                                 /* L122: */
                             }
                         }
-                        if (isupmx > zto)
+                        if(isupmx > zto)
                         {
                             i__4 = isupmx;
-                            for (ii = zto + 1;
-                                    ii <= i__4;
-                                    ++ii)
+                            for(ii = zto + 1; ii <= i__4; ++ii)
                             {
                                 z__[ii + windex * z_dim1] = 0.f;
                                 /* L123: */
@@ -1112,7 +1136,7 @@ L120: /* Check if bisection should be used to refine eigenvalue */
                         }
                         i__4 = zto - zfrom + 1;
                         sscal_(&i__4, &nrminv, &z__[zfrom + windex * z_dim1], &c__1);
-L125: /* Update W */
+                    L125: /* Update W */
                         w[windex] = lambda + sigma;
                         /* Recompute the gaps on the left and right */
                         /* But only allow them to become larger and not */
@@ -1120,30 +1144,31 @@ L125: /* Update W */
                         /* cancellation and doesn't reflect the theory */
                         /* where the initial gaps are underestimated due */
                         /* to WERR being too crude.) */
-                        if (! eskip)
+                        if(!eskip)
                         {
-                            if (k > 1)
+                            if(k > 1)
                             {
                                 /* Computing MAX */
                                 r__1 = wgap[windmn];
-                                r__2 = w[windex] - werr[ windex] - w[windmn] - werr[windmn]; // , expr subst
-                                wgap[windmn] = fla_max(r__1,r__2);
+                                r__2 = w[windex] - werr[windex] - w[windmn]
+                                       - werr[windmn]; // , expr subst
+                                wgap[windmn] = fla_max(r__1, r__2);
                             }
-                            if (windex < wend)
+                            if(windex < wend)
                             {
                                 /* Computing MAX */
                                 r__1 = savgap;
-                                r__2 = w[windpl] - werr[windpl] - w[windex] - werr[windex]; // , expr subst
-                                wgap[windex] = fla_max(r__1,r__2);
+                                r__2 = w[windpl] - werr[windpl] - w[windex]
+                                       - werr[windex]; // , expr subst
+                                wgap[windex] = fla_max(r__1, r__2);
                             }
                         }
                         ++idone;
                     }
                     /* here ends the code for the current child */
-L139: /* Proceed to any remaining child nodes */
+                L139: /* Proceed to any remaining child nodes */
                     newfst = j + 1;
-L140:
-                    ;
+                L140:;
                 }
                 /* L150: */
             }
@@ -1152,8 +1177,7 @@ L140:
         }
         ibegin = iend + 1;
         wbegin = wend + 1;
-L170:
-        ;
+    L170:;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

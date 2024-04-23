@@ -1,6 +1,9 @@
 #ifdef FLA_ENABLE_XBLAS
-/* ../netlib/sgerfsx.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sgerfsx.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c_n1 = -1;
 static integer c__0 = 0;
@@ -11,11 +14,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SGERFSX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgerfsx .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgerfsx
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgerfsx .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgerfsx
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgerfsx .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgerfsx
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -410,10 +419,15 @@ defaults */
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, real *a, integer *lda, real *af, integer *ldaf, integer *ipiv, real *r__, real *c__, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *berr, integer *n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer *nparams, real *params, real *work, integer *iwork, integer *info)
+void sgerfsx_(char *trans, char *equed, integer *n, integer *nrhs, real *a, integer *lda, real *af,
+              integer *ldaf, integer *ipiv, real *r__, real *c__, real *b, integer *ldb, real *x,
+              integer *ldx, real *rcond, real *berr, integer *n_err_bnds__, real *err_bnds_norm__,
+              real *err_bnds_comp__, integer *nparams, real *params, real *work, integer *iwork,
+              integer *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1;
+    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset,
+        err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1;
     real r__1, r__2;
     /* Builtin functions */
     double sqrt(doublereal);
@@ -424,17 +438,24 @@ void sgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, real *a, int
     integer j;
     real rcond_tmp__;
     integer prec_type__, trans_type__;
-    extern real sla_gercond_(char *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, real *, integer *);
+    extern real sla_gercond_(char *, integer *, real *, integer *, real *, integer *, integer *,
+                             integer *, real *, integer *, real *, integer *);
     real cwise_wrong__;
     extern /* Subroutine */
-    void sla_gerfsx_extended_(integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *, logical *, real *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *, real *, integer *, real *, real *, logical *, integer *);
+        void
+        sla_gerfsx_extended_(integer *, integer *, integer *, integer *, real *, integer *, real *,
+                             integer *, integer *, logical *, real *, real *, integer *, real *,
+                             integer *, real *, integer *, real *, real *, real *, real *, real *,
+                             real *, real *, integer *, real *, real *, logical *, integer *);
     char norm[1];
     logical ignore_cwise__;
     extern logical lsame_(char *, char *, integer, integer);
     real anorm;
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgecon_( char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        sgecon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
     logical colequ, notran, rowequ;
     extern integer ilaprec_(char *);
     integer ithresh, n_norms__;
@@ -490,9 +511,9 @@ void sgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, real *a, int
     *info = 0;
     trans_type__ = ilatrans_(trans);
     ref_type__ = 1;
-    if (*nparams >= 1)
+    if(*nparams >= 1)
     {
-        if (params[1] < 0.f)
+        if(params[1] < 0.f)
         {
             params[1] = 1.f;
         }
@@ -502,27 +523,27 @@ void sgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, real *a, int
         }
     }
     /* Set default parameters. */
-    illrcond_thresh__ = (real) (*n) * slamch_("Epsilon");
+    illrcond_thresh__ = (real)(*n) * slamch_("Epsilon");
     ithresh = 10;
     rthresh = .5f;
     unstable_thresh__ = .25f;
     ignore_cwise__ = FALSE_;
-    if (*nparams >= 2)
+    if(*nparams >= 2)
     {
-        if (params[2] < 0.f)
+        if(params[2] < 0.f)
         {
-            params[2] = (real) ithresh;
+            params[2] = (real)ithresh;
         }
         else
         {
-            ithresh = (integer) params[2];
+            ithresh = (integer)params[2];
         }
     }
-    if (*nparams >= 3)
+    if(*nparams >= 3)
     {
-        if (params[3] < 0.f)
+        if(params[3] < 0.f)
         {
-            if (ignore_cwise__)
+            if(ignore_cwise__)
             {
                 params[3] = 0.f;
             }
@@ -536,11 +557,11 @@ void sgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, real *a, int
             ignore_cwise__ = params[3] == 0.f;
         }
     }
-    if (ref_type__ == 0 || *n_err_bnds__ == 0)
+    if(ref_type__ == 0 || *n_err_bnds__ == 0)
     {
         n_norms__ = 0;
     }
-    else if (ignore_cwise__)
+    else if(ignore_cwise__)
     {
         n_norms__ = 1;
     }
@@ -552,65 +573,63 @@ void sgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, real *a, int
     rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
     colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
     /* Test input parameters. */
-    if (trans_type__ == -1)
+    if(trans_type__ == -1)
     {
         *info = -1;
     }
-    else if (! rowequ && ! colequ && ! lsame_(equed, "N", 1, 1))
+    else if(!rowequ && !colequ && !lsame_(equed, "N", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -13;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -15;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SGERFSX", &i__1, (ftnlen)7);
         return;
     }
     /* Quick return if possible. */
-    if (*n == 0 || *nrhs == 0)
+    if(*n == 0 || *nrhs == 0)
     {
         *rcond = 1.f;
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             berr[j] = 0.f;
-            if (*n_err_bnds__ >= 1)
+            if(*n_err_bnds__ >= 1)
             {
                 err_bnds_norm__[j + err_bnds_norm_dim1] = 1.f;
                 err_bnds_comp__[j + err_bnds_comp_dim1] = 1.f;
             }
-            if (*n_err_bnds__ >= 2)
+            if(*n_err_bnds__ >= 2)
             {
                 err_bnds_norm__[j + (err_bnds_norm_dim1 << 1)] = 0.f;
                 err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] = 0.f;
             }
-            if (*n_err_bnds__ >= 3)
+            if(*n_err_bnds__ >= 3)
             {
                 err_bnds_norm__[j + err_bnds_norm_dim1 * 3] = 1.f;
                 err_bnds_comp__[j + err_bnds_comp_dim1 * 3] = 1.f;
@@ -621,22 +640,20 @@ void sgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, real *a, int
     /* Default to failure. */
     *rcond = 0.f;
     i__1 = *nrhs;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         berr[j] = 1.f;
-        if (*n_err_bnds__ >= 1)
+        if(*n_err_bnds__ >= 1)
         {
             err_bnds_norm__[j + err_bnds_norm_dim1] = 1.f;
             err_bnds_comp__[j + err_bnds_comp_dim1] = 1.f;
         }
-        if (*n_err_bnds__ >= 2)
+        if(*n_err_bnds__ >= 2)
         {
             err_bnds_norm__[j + (err_bnds_norm_dim1 << 1)] = 1.f;
             err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] = 1.f;
         }
-        if (*n_err_bnds__ >= 3)
+        if(*n_err_bnds__ >= 3)
         {
             err_bnds_norm__[j + err_bnds_norm_dim1 * 3] = 0.f;
             err_bnds_comp__[j + err_bnds_comp_dim1 * 3] = 0.f;
@@ -644,7 +661,7 @@ void sgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, real *a, int
     }
     /* Compute the norm of A and the reciprocal of the condition */
     /* number of A. */
-    if (notran)
+    if(notran)
     {
         *(unsigned char *)norm = 'I';
     }
@@ -655,70 +672,83 @@ void sgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, real *a, int
     anorm = slange_(norm, n, n, &a[a_offset], lda, &work[1]);
     sgecon_(norm, n, &af[af_offset], ldaf, &anorm, rcond, &work[1], &iwork[1], info);
     /* Perform refinement on each right-hand side */
-    if (ref_type__ != 0)
+    if(ref_type__ != 0)
     {
         prec_type__ = ilaprec_("D");
-        if (notran)
+        if(notran)
         {
-            sla_gerfsx_extended_(&prec_type__, &trans_type__, n, nrhs, &a[ a_offset], lda, &af[af_offset], ldaf, &ipiv[1], &colequ, & c__[1], &b[b_offset], ldb, &x[x_offset], ldx, &berr[1], & n_norms__, &err_bnds_norm__[err_bnds_norm_offset], & err_bnds_comp__[err_bnds_comp_offset], &work[*n + 1], & work[1], &work[(*n << 1) + 1], &work[1], rcond, &ithresh, &rthresh, &unstable_thresh__, &ignore_cwise__, info);
+            sla_gerfsx_extended_(&prec_type__, &trans_type__, n, nrhs, &a[a_offset], lda,
+                                 &af[af_offset], ldaf, &ipiv[1], &colequ, &c__[1], &b[b_offset],
+                                 ldb, &x[x_offset], ldx, &berr[1], &n_norms__,
+                                 &err_bnds_norm__[err_bnds_norm_offset],
+                                 &err_bnds_comp__[err_bnds_comp_offset], &work[*n + 1], &work[1],
+                                 &work[(*n << 1) + 1], &work[1], rcond, &ithresh, &rthresh,
+                                 &unstable_thresh__, &ignore_cwise__, info);
         }
         else
         {
-            sla_gerfsx_extended_(&prec_type__, &trans_type__, n, nrhs, &a[ a_offset], lda, &af[af_offset], ldaf, &ipiv[1], &rowequ, & r__[1], &b[b_offset], ldb, &x[x_offset], ldx, &berr[1], & n_norms__, &err_bnds_norm__[err_bnds_norm_offset], & err_bnds_comp__[err_bnds_comp_offset], &work[*n + 1], & work[1], &work[(*n << 1) + 1], &work[1], rcond, &ithresh, &rthresh, &unstable_thresh__, &ignore_cwise__, info);
+            sla_gerfsx_extended_(&prec_type__, &trans_type__, n, nrhs, &a[a_offset], lda,
+                                 &af[af_offset], ldaf, &ipiv[1], &rowequ, &r__[1], &b[b_offset],
+                                 ldb, &x[x_offset], ldx, &berr[1], &n_norms__,
+                                 &err_bnds_norm__[err_bnds_norm_offset],
+                                 &err_bnds_comp__[err_bnds_comp_offset], &work[*n + 1], &work[1],
+                                 &work[(*n << 1) + 1], &work[1], rcond, &ithresh, &rthresh,
+                                 &unstable_thresh__, &ignore_cwise__, info);
         }
     }
     /* Computing MAX */
     r__1 = 10.f;
-    r__2 = sqrt((real) (*n)); // , expr subst
-    err_lbnd__ = fla_max(r__1,r__2) * slamch_("Epsilon");
-    if (*n_err_bnds__ >= 1 && n_norms__ >= 1)
+    r__2 = sqrt((real)(*n)); // , expr subst
+    err_lbnd__ = fla_max(r__1, r__2) * slamch_("Epsilon");
+    if(*n_err_bnds__ >= 1 && n_norms__ >= 1)
     {
         /* Compute scaled normwise condition number cond(A*C). */
-        if (colequ && notran)
+        if(colequ && notran)
         {
-            rcond_tmp__ = sla_gercond_(trans, n, &a[a_offset], lda, &af[ af_offset], ldaf, &ipiv[1], &c_n1, &c__[1], info, &work[1], &iwork[1]);
+            rcond_tmp__ = sla_gercond_(trans, n, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1],
+                                       &c_n1, &c__[1], info, &work[1], &iwork[1]);
         }
-        else if (rowequ && ! notran)
+        else if(rowequ && !notran)
         {
-            rcond_tmp__ = sla_gercond_(trans, n, &a[a_offset], lda, &af[ af_offset], ldaf, &ipiv[1], &c_n1, &r__[1], info, &work[1], &iwork[1]);
+            rcond_tmp__ = sla_gercond_(trans, n, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1],
+                                       &c_n1, &r__[1], info, &work[1], &iwork[1]);
         }
         else
         {
-            rcond_tmp__ = sla_gercond_(trans, n, &a[a_offset], lda, &af[ af_offset], ldaf, &ipiv[1], &c__0, &r__[1], info, &work[1], &iwork[1]);
+            rcond_tmp__ = sla_gercond_(trans, n, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1],
+                                       &c__0, &r__[1], info, &work[1], &iwork[1]);
         }
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Cap the error at 1.0. */
-            if (*n_err_bnds__ >= 2 && err_bnds_norm__[j + (err_bnds_norm_dim1 << 1)] > 1.f)
+            if(*n_err_bnds__ >= 2 && err_bnds_norm__[j + (err_bnds_norm_dim1 << 1)] > 1.f)
             {
                 err_bnds_norm__[j + (err_bnds_norm_dim1 << 1)] = 1.f;
             }
             /* Threshold the error (see LAWN). */
-            if (rcond_tmp__ < illrcond_thresh__)
+            if(rcond_tmp__ < illrcond_thresh__)
             {
                 err_bnds_norm__[j + (err_bnds_norm_dim1 << 1)] = 1.f;
                 err_bnds_norm__[j + err_bnds_norm_dim1] = 0.f;
-                if (*info <= *n)
+                if(*info <= *n)
                 {
                     *info = *n + j;
                 }
             }
-            else if (err_bnds_norm__[j + (err_bnds_norm_dim1 << 1)] < err_lbnd__)
+            else if(err_bnds_norm__[j + (err_bnds_norm_dim1 << 1)] < err_lbnd__)
             {
                 err_bnds_norm__[j + (err_bnds_norm_dim1 << 1)] = err_lbnd__;
                 err_bnds_norm__[j + err_bnds_norm_dim1] = 1.f;
             }
             /* Save the condition number. */
-            if (*n_err_bnds__ >= 3)
+            if(*n_err_bnds__ >= 3)
             {
                 err_bnds_norm__[j + err_bnds_norm_dim1 * 3] = rcond_tmp__;
             }
         }
     }
-    if (*n_err_bnds__ >= 1 && n_norms__ >= 2)
+    if(*n_err_bnds__ >= 1 && n_norms__ >= 2)
     {
         /* Compute componentwise condition number cond(A*diag(Y(:,J))) for */
         /* each right-hand side using the current solution as an estimate of */
@@ -729,40 +759,40 @@ void sgerfsx_(char *trans, char *equed, integer *n, integer * nrhs, real *a, int
         /* cwise error is at least CWISE_WRONG. */
         cwise_wrong__ = sqrt(slamch_("Epsilon"));
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
-            if (err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] < cwise_wrong__)
+            if(err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] < cwise_wrong__)
             {
-                rcond_tmp__ = sla_gercond_(trans, n, &a[a_offset], lda, &af[ af_offset], ldaf, &ipiv[1], &c__1, &x[j * x_dim1 + 1], info, &work[1], &iwork[1]);
+                rcond_tmp__
+                    = sla_gercond_(trans, n, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1],
+                                   &c__1, &x[j * x_dim1 + 1], info, &work[1], &iwork[1]);
             }
             else
             {
                 rcond_tmp__ = 0.f;
             }
             /* Cap the error at 1.0. */
-            if (*n_err_bnds__ >= 2 && err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] > 1.f)
+            if(*n_err_bnds__ >= 2 && err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] > 1.f)
             {
                 err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] = 1.f;
             }
             /* Threshold the error (see LAWN). */
-            if (rcond_tmp__ < illrcond_thresh__)
+            if(rcond_tmp__ < illrcond_thresh__)
             {
                 err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] = 1.f;
                 err_bnds_comp__[j + err_bnds_comp_dim1] = 0.f;
-                if (params[3] == 1.f && *info < *n + j)
+                if(params[3] == 1.f && *info < *n + j)
                 {
                     *info = *n + j;
                 }
             }
-            else if (err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] < err_lbnd__)
+            else if(err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] < err_lbnd__)
             {
                 err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] = err_lbnd__;
                 err_bnds_comp__[j + err_bnds_comp_dim1] = 1.f;
             }
             /* Save the condition number. */
-            if (*n_err_bnds__ >= 3)
+            if(*n_err_bnds__ >= 3)
             {
                 err_bnds_comp__[j + err_bnds_comp_dim1 * 3] = rcond_tmp__;
             }

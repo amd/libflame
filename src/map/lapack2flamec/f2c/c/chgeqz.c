@@ -1,16 +1,11 @@
-/* chgeqz.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* chgeqz.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    0.f,0.f
-}
-;
-static complex c_b2 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {0.f, 0.f};
+static complex c_b2 = {1.f, 0.f};
 static integer c__1 = 1;
 static integer c__2 = 2;
 /* > \brief \b CHGEQZ */
@@ -19,11 +14,17 @@ static integer c__2 = 2;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CHGEQZ + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chgeqz. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chgeqz.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chgeqz. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chgeqz.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chgeqz. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chgeqz.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -95,7 +96,7 @@ static integer c__2 = 2;
 /* > \verbatim */
 /* > JOB is CHARACTER*1 */
 /* > = 'E': Compute eigenvalues only;
-*/
+ */
 /* > = 'S': Computer eigenvalues and the Schur form. */
 /* > \endverbatim */
 /* > */
@@ -103,10 +104,10 @@ static integer c__2 = 2;
 /* > \verbatim */
 /* > COMPQ is CHARACTER*1 */
 /* > = 'N': Left Schur vectors (Q) are not computed;
-*/
+ */
 /* > = 'I': Q is initialized to the unit matrix and the matrix Q */
 /* > of left Schur vectors of (H,T) is returned;
-*/
+ */
 /* > = 'V': Q must contain a unitary matrix Q1 on entry and */
 /* > the product Q1*Q is returned. */
 /* > \endverbatim */
@@ -115,10 +116,10 @@ static integer c__2 = 2;
 /* > \verbatim */
 /* > COMPZ is CHARACTER*1 */
 /* > = 'N': Right Schur vectors (Z) are not computed;
-*/
+ */
 /* > = 'I': Q is initialized to the unit matrix and the matrix Z */
 /* > of right Schur vectors of (H,T) is returned;
-*/
+ */
 /* > = 'V': Z must contain a unitary matrix Z1 on entry and */
 /* > the product Z1*Z is returned. */
 /* > \endverbatim */
@@ -287,19 +288,27 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, complex *h__, integer *ldh, complex *t, integer *ldt, complex *alpha, complex *beta, complex *q, integer *ldq, complex *z__, integer *ldz, complex *work, integer *lwork, real * rwork, integer *info)
+void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi,
+             complex *h__, integer *ldh, complex *t, integer *ldt, complex *alpha, complex *beta,
+             complex *q, integer *ldq, complex *z__, integer *ldz, complex *work, integer *lwork,
+             real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("chgeqz inputs: job %c, compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS "",*job, *compq, *compz, *n, *ilo, *ihi, *ldh, *ldt, *ldq, *ldz, *lwork);
+    AOCL_DTL_SNPRINTF("chgeqz inputs: job %c, compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS
+                      ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS
+                      ", ldz %" FLA_IS ", lwork %" FLA_IS "",
+                      *job, *compq, *compz, *n, *ilo, *ihi, *ldh, *ldt, *ldq, *ldz, *lwork);
     /* System generated locals */
-    integer h_dim1, h_offset, q_dim1, q_offset, t_dim1, t_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    integer h_dim1, h_offset, q_dim1, q_offset, t_dim1, t_offset, z_dim1, z_offset, i__1, i__2,
+        i__3, i__4, i__5, i__6;
     real r__1, r__2, r__3, r__4, r__5, r__6, r__7, r__8;
     complex q__1, q__2, q__3, q__4, q__5, q__6, q__7;
     /* Builtin functions */
     double c_abs(complex *);
     void r_cnjg(complex *, complex *);
     double r_imag(complex *);
-    void c_div(complex *, complex *, complex *), c_sqrt(complex *, complex *), pow_ci(complex *, complex *, integer *);
+    void c_div(complex *, complex *, complex *), c_sqrt(complex *, complex *),
+        pow_ci(complex *, complex *, integer *);
     /* Local variables */
     real c__;
     integer j;
@@ -314,10 +323,12 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
     complex abi12, abi22;
     real absb, atol, btol, temp;
     extern /* Subroutine */
-    void crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
+        void
+        crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
     real temp2;
     extern /* Subroutine */
-    void cscal_(integer *, complex *, complex *, integer *);
+        void
+        cscal_(integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     complex ctemp;
     integer iiter, ilast, jiter;
@@ -329,14 +340,18 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
     logical ilazr2;
     real ascale, bscale;
     extern /* Complex */
-    VOID cladiv_f2c_(complex *, complex *, complex *);
+        VOID
+        cladiv_f2c_(complex *, complex *, complex *);
     complex signbc;
     extern real slamch_(char *), clanhs_(char *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    void claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), clartg_(complex *, complex *, real *, complex *, complex *);
+        void
+        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
+        clartg_(complex *, complex *, real *, complex *, complex *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     complex eshift;
     logical ilschr;
     integer icompq, ilastm, ischur;
@@ -385,12 +400,12 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
     --work;
     --rwork;
     /* Function Body */
-    if (lsame_(job, "E", 1, 1))
+    if(lsame_(job, "E", 1, 1))
     {
         ilschr = FALSE_;
         ischur = 1;
     }
-    else if (lsame_(job, "S", 1, 1))
+    else if(lsame_(job, "S", 1, 1))
     {
         ilschr = TRUE_;
         ischur = 2;
@@ -400,17 +415,17 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
         ilschr = TRUE_;
         ischur = 0;
     }
-    if (lsame_(compq, "N", 1, 1))
+    if(lsame_(compq, "N", 1, 1))
     {
         ilq = FALSE_;
         icompq = 1;
     }
-    else if (lsame_(compq, "V", 1, 1))
+    else if(lsame_(compq, "V", 1, 1))
     {
         ilq = TRUE_;
         icompq = 2;
     }
-    else if (lsame_(compq, "I", 1, 1))
+    else if(lsame_(compq, "I", 1, 1))
     {
         ilq = TRUE_;
         icompq = 3;
@@ -420,17 +435,17 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
         ilq = TRUE_;
         icompq = 0;
     }
-    if (lsame_(compz, "N", 1, 1))
+    if(lsame_(compz, "N", 1, 1))
     {
         ilz = FALSE_;
         icompz = 1;
     }
-    else if (lsame_(compz, "V", 1, 1))
+    else if(lsame_(compz, "V", 1, 1))
     {
         ilz = TRUE_;
         icompz = 2;
     }
-    else if (lsame_(compz, "I", 1, 1))
+    else if(lsame_(compz, "I", 1, 1))
     {
         ilz = TRUE_;
         icompz = 3;
@@ -442,69 +457,69 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
     }
     /* Check Argument Values */
     *info = 0;
-    i__1 = fla_max(1,*n);
-    work[1].r = (real) i__1;
+    i__1 = fla_max(1, *n);
+    work[1].r = (real)i__1;
     work[1].i = 0.f; // , expr subst
     lquery = *lwork == -1;
-    if (ischur == 0)
+    if(ischur == 0)
     {
         *info = -1;
     }
-    else if (icompq == 0)
+    else if(icompq == 0)
     {
         *info = -2;
     }
-    else if (icompz == 0)
+    else if(icompz == 0)
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*ilo < 1)
+    else if(*ilo < 1)
     {
         *info = -5;
     }
-    else if (*ihi > *n || *ihi < *ilo - 1)
+    else if(*ihi > *n || *ihi < *ilo - 1)
     {
         *info = -6;
     }
-    else if (*ldh < *n)
+    else if(*ldh < *n)
     {
         *info = -8;
     }
-    else if (*ldt < *n)
+    else if(*ldt < *n)
     {
         *info = -10;
     }
-    else if (*ldq < 1 || ilq && *ldq < *n)
+    else if(*ldq < 1 || ilq && *ldq < *n)
     {
         *info = -14;
     }
-    else if (*ldz < 1 || ilz && *ldz < *n)
+    else if(*ldz < 1 || ilz && *ldz < *n)
     {
         *info = -16;
     }
-    else if (*lwork < fla_max(1,*n) && ! lquery)
+    else if(*lwork < fla_max(1, *n) && !lquery)
     {
         *info = -18;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         AOCL_DTL_TRACE_LOG_EXIT
         xerbla_("CHGEQZ", &i__1, (ftnlen)6);
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     /* WORK( 1 ) = CMPLX( 1 ) */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
@@ -512,11 +527,11 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
         return;
     }
     /* Initialize Q and Z */
-    if (icompq == 3)
+    if(icompq == 3)
     {
         claset_("Full", n, n, &c_b1, &c_b2, &q[q_offset], ldq);
     }
-    if (icompz == 3)
+    if(icompz == 3)
     {
         claset_("Full", n, n, &c_b1, &c_b2, &z__[z_offset], ldz);
     }
@@ -529,21 +544,19 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
     /* Computing MAX */
     r__1 = safmin;
     r__2 = ulp * anorm; // , expr subst
-    atol = fla_max(r__1,r__2);
+    atol = fla_max(r__1, r__2);
     /* Computing MAX */
     r__1 = safmin;
     r__2 = ulp * bnorm; // , expr subst
-    btol = fla_max(r__1,r__2);
-    ascale = 1.f / fla_max(safmin,anorm);
-    bscale = 1.f / fla_max(safmin,bnorm);
+    btol = fla_max(r__1, r__2);
+    ascale = 1.f / fla_max(safmin, anorm);
+    bscale = 1.f / fla_max(safmin, bnorm);
     /* Set Eigenvalues IHI+1:N */
     i__1 = *n;
-    for (j = *ihi + 1;
-            j <= i__1;
-            ++j)
+    for(j = *ihi + 1; j <= i__1; ++j)
     {
         absb = c_abs(&t[j + j * t_dim1]);
-        if (absb > safmin)
+        if(absb > safmin)
         {
             i__2 = j + j * t_dim1;
             q__2.r = t[i__2].r / absb;
@@ -554,7 +567,7 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
             i__2 = j + j * t_dim1;
             t[i__2].r = absb;
             t[i__2].i = 0.f; // , expr subst
-            if (ilschr)
+            if(ilschr)
             {
                 i__2 = j - 1;
                 cscal_(&i__2, &signbc, &t[j * t_dim1 + 1], &c__1);
@@ -564,7 +577,7 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
             {
                 cscal_(&c__1, &signbc, &h__[j + j * h_dim1], &c__1);
             }
-            if (ilz)
+            if(ilz)
             {
                 cscal_(n, &signbc, &z__[j * z_dim1 + 1], &c__1);
             }
@@ -586,7 +599,7 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
         /* L10: */
     }
     /* If IHI < ILO, skip QZ steps */
-    if (*ihi < *ilo)
+    if(*ihi < *ilo)
     {
         goto L190;
     }
@@ -597,13 +610,13 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
     /* Row operations modify columns whatever:ILASTM */
     /* If only eigenvalues are being computed, then */
     /* IFRSTM is the row of the last splitting row above row ILAST;
-    */
+     */
     /* this is always at least ILO. */
     /* IITER counts iterations since the last eigenvalue was found, */
     /* to tell when to use an extraordinary shift. */
     /* MAXIT is the maximum number of QZ sweeps allowed. */
     ilast = *ihi;
-    if (ilschr)
+    if(ilschr)
     {
         ifrstm = 1;
         ilastm = *n;
@@ -618,12 +631,10 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
     eshift.i = 0.f; // , expr subst
     maxit = (*ihi - *ilo + 1) * 30;
     i__1 = maxit;
-    for (jiter = 1;
-            jiter <= i__1;
-            ++jiter)
+    for(jiter = 1; jiter <= i__1; ++jiter)
     {
         /* Check for too many iterations. */
-        if (jiter > maxit)
+        if(jiter > maxit)
         {
             goto L180;
         }
@@ -632,7 +643,7 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
         /* 1: H(j,j-1)=0 or j=ILO */
         /* 2: T(j,j)=0 */
         /* Special case: j=ILAST */
-        if (ilast == *ilo)
+        if(ilast == *ilo)
         {
             goto L60;
         }
@@ -643,8 +654,15 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
             i__3 = ilast + ilast * h_dim1;
             i__4 = ilast - 1 + (ilast - 1) * h_dim1;
             r__7 = safmin;
-            r__8 = ulp * ((r__1 = h__[i__3].r, f2c_abs(r__1)) + ( r__2 = r_imag(&h__[ilast + ilast * h_dim1]), f2c_abs(r__2)) + ((r__3 = h__[i__4].r, f2c_abs(r__3)) + (r__4 = r_imag(&h__[ ilast - 1 + (ilast - 1) * h_dim1]), f2c_abs(r__4)))); // , expr subst
-            if ((r__5 = h__[i__2].r, f2c_abs(r__5)) + (r__6 = r_imag(&h__[ilast + (ilast - 1) * h_dim1]), f2c_abs(r__6)) <= fla_max(r__7,r__8))
+            r__8 = ulp
+                   * ((r__1 = h__[i__3].r, f2c_abs(r__1))
+                      + (r__2 = r_imag(&h__[ilast + ilast * h_dim1]), f2c_abs(r__2))
+                      + ((r__3 = h__[i__4].r, f2c_abs(r__3))
+                         + (r__4 = r_imag(&h__[ilast - 1 + (ilast - 1) * h_dim1]),
+                            f2c_abs(r__4)))); // , expr subst
+            if((r__5 = h__[i__2].r, f2c_abs(r__5))
+                   + (r__6 = r_imag(&h__[ilast + (ilast - 1) * h_dim1]), f2c_abs(r__6))
+               <= fla_max(r__7, r__8))
             {
                 i__2 = ilast + (ilast - 1) * h_dim1;
                 h__[i__2].r = 0.f;
@@ -652,7 +670,7 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
                 goto L60;
             }
         }
-        if (c_abs(&t[ilast + ilast * t_dim1]) <= btol)
+        if(c_abs(&t[ilast + ilast * t_dim1]) <= btol)
         {
             i__2 = ilast + ilast * t_dim1;
             t[i__2].r = 0.f;
@@ -661,12 +679,10 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
         }
         /* General case: j<ILAST */
         i__2 = *ilo;
-        for (j = ilast - 1;
-                j >= i__2;
-                --j)
+        for(j = ilast - 1; j >= i__2; --j)
         {
             /* Test 1: for H(j,j-1)=0 or j=ILO */
-            if (j == *ilo)
+            if(j == *ilo)
             {
                 ilazro = TRUE_;
             }
@@ -677,8 +693,15 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
                 i__4 = j + j * h_dim1;
                 i__5 = j - 1 + (j - 1) * h_dim1;
                 r__7 = safmin;
-                r__8 = ulp * ((r__1 = h__[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[j + j * h_dim1]), f2c_abs(r__2)) + ( (r__3 = h__[i__5].r, f2c_abs(r__3)) + (r__4 = r_imag(&h__[ j - 1 + (j - 1) * h_dim1]), f2c_abs(r__4)))); // , expr subst
-                if ((r__5 = h__[i__3].r, f2c_abs(r__5)) + (r__6 = r_imag(&h__[j + (j - 1) * h_dim1]), f2c_abs(r__6)) <= fla_max(r__7,r__8))
+                r__8 = ulp
+                       * ((r__1 = h__[i__4].r, f2c_abs(r__1))
+                          + (r__2 = r_imag(&h__[j + j * h_dim1]), f2c_abs(r__2))
+                          + ((r__3 = h__[i__5].r, f2c_abs(r__3))
+                             + (r__4 = r_imag(&h__[j - 1 + (j - 1) * h_dim1]),
+                                f2c_abs(r__4)))); // , expr subst
+                if((r__5 = h__[i__3].r, f2c_abs(r__5))
+                       + (r__6 = r_imag(&h__[j + (j - 1) * h_dim1]), f2c_abs(r__6))
+                   <= fla_max(r__7, r__8))
                 {
                     i__3 = j + (j - 1) * h_dim1;
                     h__[i__3].r = 0.f;
@@ -691,19 +714,26 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
                 }
             }
             /* Test 2: for T(j,j)=0 */
-            if (c_abs(&t[j + j * t_dim1]) < btol)
+            if(c_abs(&t[j + j * t_dim1]) < btol)
             {
                 i__3 = j + j * t_dim1;
                 t[i__3].r = 0.f;
                 t[i__3].i = 0.f; // , expr subst
                 /* Test 1a: Check for 2 consecutive small subdiagonals in A */
                 ilazr2 = FALSE_;
-                if (! ilazro)
+                if(!ilazro)
                 {
                     i__3 = j + (j - 1) * h_dim1;
                     i__4 = j + 1 + j * h_dim1;
                     i__5 = j + j * h_dim1;
-                    if (((r__1 = h__[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(& h__[j + (j - 1) * h_dim1]), f2c_abs(r__2))) * (ascale * ((r__3 = h__[i__4].r, f2c_abs(r__3)) + (r__4 = r_imag(&h__[j + 1 + j * h_dim1]), f2c_abs(r__4)))) <= ((r__5 = h__[i__5].r, f2c_abs(r__5)) + (r__6 = r_imag( &h__[j + j * h_dim1]), f2c_abs(r__6))) * (ascale * atol))
+                    if(((r__1 = h__[i__3].r, f2c_abs(r__1))
+                        + (r__2 = r_imag(&h__[j + (j - 1) * h_dim1]), f2c_abs(r__2)))
+                           * (ascale
+                              * ((r__3 = h__[i__4].r, f2c_abs(r__3))
+                                 + (r__4 = r_imag(&h__[j + 1 + j * h_dim1]), f2c_abs(r__4))))
+                       <= ((r__5 = h__[i__5].r, f2c_abs(r__5))
+                           + (r__6 = r_imag(&h__[j + j * h_dim1]), f2c_abs(r__6)))
+                              * (ascale * atol))
                     {
                         ilazr2 = TRUE_;
                     }
@@ -713,43 +743,47 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
                 /* at the top. (I.e., at the J-th row/column) The leading */
                 /* diagonal element of the remainder can also be zero, so */
                 /* this may have to be done repeatedly. */
-                if (ilazro || ilazr2)
+                if(ilazro || ilazr2)
                 {
                     i__3 = ilast - 1;
-                    for (jch = j;
-                            jch <= i__3;
-                            ++jch)
+                    for(jch = j; jch <= i__3; ++jch)
                     {
                         i__4 = jch + jch * h_dim1;
                         ctemp.r = h__[i__4].r;
                         ctemp.i = h__[i__4].i; // , expr subst
-                        clartg_(&ctemp, &h__[jch + 1 + jch * h_dim1], &c__, & s, &h__[jch + jch * h_dim1]);
+                        clartg_(&ctemp, &h__[jch + 1 + jch * h_dim1], &c__, &s,
+                                &h__[jch + jch * h_dim1]);
                         i__4 = jch + 1 + jch * h_dim1;
                         h__[i__4].r = 0.f;
                         h__[i__4].i = 0.f; // , expr subst
                         i__4 = ilastm - jch;
-                        crot_(&i__4, &h__[jch + (jch + 1) * h_dim1], ldh, & h__[jch + 1 + (jch + 1) * h_dim1], ldh, &c__, &s);
+                        crot_(&i__4, &h__[jch + (jch + 1) * h_dim1], ldh,
+                              &h__[jch + 1 + (jch + 1) * h_dim1], ldh, &c__, &s);
                         i__4 = ilastm - jch;
-                        crot_(&i__4, &t[jch + (jch + 1) * t_dim1], ldt, &t[ jch + 1 + (jch + 1) * t_dim1], ldt, &c__, &s);
-                        if (ilq)
+                        crot_(&i__4, &t[jch + (jch + 1) * t_dim1], ldt,
+                              &t[jch + 1 + (jch + 1) * t_dim1], ldt, &c__, &s);
+                        if(ilq)
                         {
                             r_cnjg(&q__1, &s);
-                            crot_(n, &q[jch * q_dim1 + 1], &c__1, &q[(jch + 1) * q_dim1 + 1], &c__1, &c__, &q__1);
+                            crot_(n, &q[jch * q_dim1 + 1], &c__1, &q[(jch + 1) * q_dim1 + 1], &c__1,
+                                  &c__, &q__1);
                         }
-                        if (ilazr2)
+                        if(ilazr2)
                         {
                             i__4 = jch + (jch - 1) * h_dim1;
                             i__5 = jch + (jch - 1) * h_dim1;
                             q__1.r = c__ * h__[i__5].r;
-                            q__1.i = c__ * h__[ i__5].i; // , expr subst
+                            q__1.i = c__ * h__[i__5].i; // , expr subst
                             h__[i__4].r = q__1.r;
                             h__[i__4].i = q__1.i; // , expr subst
                         }
                         ilazr2 = FALSE_;
                         i__4 = jch + 1 + (jch + 1) * t_dim1;
-                        if ((r__1 = t[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&t[ jch + 1 + (jch + 1) * t_dim1]), f2c_abs(r__2)) >= btol)
+                        if((r__1 = t[i__4].r, f2c_abs(r__1))
+                               + (r__2 = r_imag(&t[jch + 1 + (jch + 1) * t_dim1]), f2c_abs(r__2))
+                           >= btol)
                         {
-                            if (jch + 1 >= ilast)
+                            if(jch + 1 >= ilast)
                             {
                                 goto L60;
                             }
@@ -771,50 +805,56 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
                     /* Only test 2 passed -- chase the zero to T(ILAST,ILAST) */
                     /* Then process as in the case T(ILAST,ILAST)=0 */
                     i__3 = ilast - 1;
-                    for (jch = j;
-                            jch <= i__3;
-                            ++jch)
+                    for(jch = j; jch <= i__3; ++jch)
                     {
                         i__4 = jch + (jch + 1) * t_dim1;
                         ctemp.r = t[i__4].r;
                         ctemp.i = t[i__4].i; // , expr subst
-                        clartg_(&ctemp, &t[jch + 1 + (jch + 1) * t_dim1], & c__, &s, &t[jch + (jch + 1) * t_dim1]);
+                        clartg_(&ctemp, &t[jch + 1 + (jch + 1) * t_dim1], &c__, &s,
+                                &t[jch + (jch + 1) * t_dim1]);
                         i__4 = jch + 1 + (jch + 1) * t_dim1;
                         t[i__4].r = 0.f;
                         t[i__4].i = 0.f; // , expr subst
-                        if (jch < ilastm - 1)
+                        if(jch < ilastm - 1)
                         {
                             i__4 = ilastm - jch - 1;
-                            crot_(&i__4, &t[jch + (jch + 2) * t_dim1], ldt, & t[jch + 1 + (jch + 2) * t_dim1], ldt, & c__, &s);
+                            crot_(&i__4, &t[jch + (jch + 2) * t_dim1], ldt,
+                                  &t[jch + 1 + (jch + 2) * t_dim1], ldt, &c__, &s);
                         }
                         i__4 = ilastm - jch + 2;
-                        crot_(&i__4, &h__[jch + (jch - 1) * h_dim1], ldh, & h__[jch + 1 + (jch - 1) * h_dim1], ldh, &c__, &s);
-                        if (ilq)
+                        crot_(&i__4, &h__[jch + (jch - 1) * h_dim1], ldh,
+                              &h__[jch + 1 + (jch - 1) * h_dim1], ldh, &c__, &s);
+                        if(ilq)
                         {
                             r_cnjg(&q__1, &s);
-                            crot_(n, &q[jch * q_dim1 + 1], &c__1, &q[(jch + 1) * q_dim1 + 1], &c__1, &c__, &q__1);
+                            crot_(n, &q[jch * q_dim1 + 1], &c__1, &q[(jch + 1) * q_dim1 + 1], &c__1,
+                                  &c__, &q__1);
                         }
                         i__4 = jch + 1 + jch * h_dim1;
                         ctemp.r = h__[i__4].r;
                         ctemp.i = h__[i__4].i; // , expr subst
-                        clartg_(&ctemp, &h__[jch + 1 + (jch - 1) * h_dim1], & c__, &s, &h__[jch + 1 + jch * h_dim1]);
+                        clartg_(&ctemp, &h__[jch + 1 + (jch - 1) * h_dim1], &c__, &s,
+                                &h__[jch + 1 + jch * h_dim1]);
                         i__4 = jch + 1 + (jch - 1) * h_dim1;
                         h__[i__4].r = 0.f;
                         h__[i__4].i = 0.f; // , expr subst
                         i__4 = jch + 1 - ifrstm;
-                        crot_(&i__4, &h__[ifrstm + jch * h_dim1], &c__1, &h__[ ifrstm + (jch - 1) * h_dim1], &c__1, &c__, &s) ;
+                        crot_(&i__4, &h__[ifrstm + jch * h_dim1], &c__1,
+                              &h__[ifrstm + (jch - 1) * h_dim1], &c__1, &c__, &s);
                         i__4 = jch - ifrstm;
-                        crot_(&i__4, &t[ifrstm + jch * t_dim1], &c__1, &t[ ifrstm + (jch - 1) * t_dim1], &c__1, &c__, &s) ;
-                        if (ilz)
+                        crot_(&i__4, &t[ifrstm + jch * t_dim1], &c__1,
+                              &t[ifrstm + (jch - 1) * t_dim1], &c__1, &c__, &s);
+                        if(ilz)
                         {
-                            crot_(n, &z__[jch * z_dim1 + 1], &c__1, &z__[(jch - 1) * z_dim1 + 1], &c__1, &c__, &s);
+                            crot_(n, &z__[jch * z_dim1 + 1], &c__1, &z__[(jch - 1) * z_dim1 + 1],
+                                  &c__1, &c__, &s);
                         }
                         /* L30: */
                     }
                     goto L50;
                 }
             }
-            else if (ilazro)
+            else if(ilazro)
             {
                 /* Only test 1 passed -- work on J:ILAST */
                 ifirst = j;
@@ -828,26 +868,29 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
         goto L210;
         /* T(ILAST,ILAST)=0 -- clear H(ILAST,ILAST-1) to split off a */
         /* 1x1 block. */
-L50:
+    L50:
         i__2 = ilast + ilast * h_dim1;
         ctemp.r = h__[i__2].r;
         ctemp.i = h__[i__2].i; // , expr subst
-        clartg_(&ctemp, &h__[ilast + (ilast - 1) * h_dim1], &c__, &s, &h__[ ilast + ilast * h_dim1]);
+        clartg_(&ctemp, &h__[ilast + (ilast - 1) * h_dim1], &c__, &s, &h__[ilast + ilast * h_dim1]);
         i__2 = ilast + (ilast - 1) * h_dim1;
         h__[i__2].r = 0.f;
         h__[i__2].i = 0.f; // , expr subst
         i__2 = ilast - ifrstm;
-        crot_(&i__2, &h__[ifrstm + ilast * h_dim1], &c__1, &h__[ifrstm + ( ilast - 1) * h_dim1], &c__1, &c__, &s);
+        crot_(&i__2, &h__[ifrstm + ilast * h_dim1], &c__1, &h__[ifrstm + (ilast - 1) * h_dim1],
+              &c__1, &c__, &s);
         i__2 = ilast - ifrstm;
-        crot_(&i__2, &t[ifrstm + ilast * t_dim1], &c__1, &t[ifrstm + (ilast - 1) * t_dim1], &c__1, &c__, &s);
-        if (ilz)
+        crot_(&i__2, &t[ifrstm + ilast * t_dim1], &c__1, &t[ifrstm + (ilast - 1) * t_dim1], &c__1,
+              &c__, &s);
+        if(ilz)
         {
-            crot_(n, &z__[ilast * z_dim1 + 1], &c__1, &z__[(ilast - 1) * z_dim1 + 1], &c__1, &c__, &s);
+            crot_(n, &z__[ilast * z_dim1 + 1], &c__1, &z__[(ilast - 1) * z_dim1 + 1], &c__1, &c__,
+                  &s);
         }
         /* H(ILAST,ILAST-1)=0 -- Standardize B, set ALPHA and BETA */
-L60:
+    L60:
         absb = c_abs(&t[ilast + ilast * t_dim1]);
-        if (absb > safmin)
+        if(absb > safmin)
         {
             i__2 = ilast + ilast * t_dim1;
             q__2.r = t[i__2].r / absb;
@@ -858,7 +901,7 @@ L60:
             i__2 = ilast + ilast * t_dim1;
             t[i__2].r = absb;
             t[i__2].i = 0.f; // , expr subst
-            if (ilschr)
+            if(ilschr)
             {
                 i__2 = ilast - ifrstm;
                 cscal_(&i__2, &signbc, &t[ifrstm + ilast * t_dim1], &c__1);
@@ -869,7 +912,7 @@ L60:
             {
                 cscal_(&c__1, &signbc, &h__[ilast + ilast * h_dim1], &c__1);
             }
-            if (ilz)
+            if(ilz)
             {
                 cscal_(n, &signbc, &z__[ilast * z_dim1 + 1], &c__1);
             }
@@ -890,7 +933,7 @@ L60:
         beta[i__2].i = t[i__3].i; // , expr subst
         /* Go to next block -- exit if finished. */
         --ilast;
-        if (ilast < *ilo)
+        if(ilast < *ilo)
         {
             goto L190;
         }
@@ -898,10 +941,10 @@ L60:
         iiter = 0;
         eshift.r = 0.f;
         eshift.i = 0.f; // , expr subst
-        if (! ilschr)
+        if(!ilschr)
         {
             ilastm = ilast;
-            if (ifrstm > ilast)
+            if(ifrstm > ilast)
             {
                 ifrstm = *ilo;
             }
@@ -910,9 +953,9 @@ L60:
         /* QZ step */
         /* This iteration only involves rows/columns IFIRST:ILAST. We */
         /* assume IFIRST < ILAST, and that the diagonal of B is non-zero. */
-L70:
+    L70:
         ++iiter;
-        if (! ilschr)
+        if(!ilschr)
         {
             ifrstm = ifirst;
         }
@@ -920,7 +963,7 @@ L70:
         /* At this point, IFIRST < ILAST, and the diagonal elements of */
         /* T(IFIRST:ILAST,IFIRST,ILAST) are larger than BTOL (in */
         /* magnitude) */
-        if (iiter / 10 * 10 != iiter)
+        if(iiter / 10 * 10 != iiter)
         {
             /* The Wilkinson shift (AEP p.512), i.e., the eigenvalue of */
             /* the bottom-right 2x2 block of A inv(B) which is nearest to */
@@ -992,8 +1035,8 @@ L70:
             q__1.i = q__2.r * q__3.i + q__2.i * q__3.r; // , expr subst
             ctemp.r = q__1.r;
             ctemp.i = q__1.i; // , expr subst
-            temp = (r__1 = ctemp.r, f2c_abs(r__1)) + (r__2 = r_imag(&ctemp), f2c_abs( r__2));
-            if (ctemp.r != 0.f || ctemp.i != 0.f)
+            temp = (r__1 = ctemp.r, f2c_abs(r__1)) + (r__2 = r_imag(&ctemp), f2c_abs(r__2));
+            if(ctemp.r != 0.f || ctemp.i != 0.f)
             {
                 q__2.r = ad11.r - shift.r;
                 q__2.i = ad11.i - shift.i; // , expr subst
@@ -1001,11 +1044,12 @@ L70:
                 q__1.i = q__2.i * .5f; // , expr subst
                 x.r = q__1.r;
                 x.i = q__1.i; // , expr subst
-                temp2 = (r__1 = x.r, f2c_abs(r__1)) + (r__2 = r_imag(&x), f2c_abs( r__2));
+                temp2 = (r__1 = x.r, f2c_abs(r__1)) + (r__2 = r_imag(&x), f2c_abs(r__2));
                 /* Computing MAX */
                 r__3 = temp;
-                r__4 = (r__1 = x.r, f2c_abs(r__1)) + (r__2 = r_imag(& x), f2c_abs(r__2)); // , expr subst
-                temp = fla_max(r__3,r__4);
+                r__4 = (r__1 = x.r, f2c_abs(r__1))
+                       + (r__2 = r_imag(&x), f2c_abs(r__2)); // , expr subst
+                temp = fla_max(r__3, r__4);
                 q__5.r = x.r / temp;
                 q__5.i = x.i / temp; // , expr subst
                 pow_ci(&q__4, &q__5, &c__2);
@@ -1019,13 +1063,13 @@ L70:
                 q__1.i = temp * q__2.i; // , expr subst
                 y.r = q__1.r;
                 y.i = q__1.i; // , expr subst
-                if (temp2 > 0.f)
+                if(temp2 > 0.f)
                 {
                     q__1.r = x.r / temp2;
                     q__1.i = x.i / temp2; // , expr subst
                     q__2.r = x.r / temp2;
                     q__2.i = x.i / temp2; // , expr subst
-                    if (q__1.r * y.r + r_imag(&q__2) * r_imag(&y) < 0.f)
+                    if(q__1.r * y.r + r_imag(&q__2) * r_imag(&y) < 0.f)
                     {
                         q__3.r = -y.r;
                         q__3.i = -y.i; // , expr subst
@@ -1048,7 +1092,11 @@ L70:
         {
             /* Exceptional shift. Chosen for no particularly good reason. */
             i__2 = ilast + ilast * t_dim1;
-            if (iiter / 20 * 20 == iiter && bscale * ((r__1 = t[i__2].r, f2c_abs( r__1)) + (r__2 = r_imag(&t[ilast + ilast * t_dim1]), f2c_abs( r__2))) > safmin)
+            if(iiter / 20 * 20 == iiter
+               && bscale
+                          * ((r__1 = t[i__2].r, f2c_abs(r__1))
+                             + (r__2 = r_imag(&t[ilast + ilast * t_dim1]), f2c_abs(r__2)))
+                      > safmin)
             {
                 i__2 = ilast + ilast * h_dim1;
                 q__3.r = ascale * h__[i__2].r;
@@ -1081,9 +1129,7 @@ L70:
         }
         /* Now check for two consecutive small subdiagonals. */
         i__2 = ifirst + 1;
-        for (j = ilast - 1;
-                j >= i__2;
-                --j)
+        for(j = ilast - 1; j >= i__2; --j)
         {
             istart = j;
             i__3 = j + j * h_dim1;
@@ -1098,17 +1144,22 @@ L70:
             q__1.i = q__2.i - q__3.i; // , expr subst
             ctemp.r = q__1.r;
             ctemp.i = q__1.i; // , expr subst
-            temp = (r__1 = ctemp.r, f2c_abs(r__1)) + (r__2 = r_imag(&ctemp), f2c_abs( r__2));
+            temp = (r__1 = ctemp.r, f2c_abs(r__1)) + (r__2 = r_imag(&ctemp), f2c_abs(r__2));
             i__3 = j + 1 + j * h_dim1;
-            temp2 = ascale * ((r__1 = h__[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[j + 1 + j * h_dim1]), f2c_abs(r__2)));
-            tempr = fla_max(temp,temp2);
-            if (tempr < 1.f && tempr != 0.f)
+            temp2 = ascale
+                    * ((r__1 = h__[i__3].r, f2c_abs(r__1))
+                       + (r__2 = r_imag(&h__[j + 1 + j * h_dim1]), f2c_abs(r__2)));
+            tempr = fla_max(temp, temp2);
+            if(tempr < 1.f && tempr != 0.f)
             {
                 temp /= tempr;
                 temp2 /= tempr;
             }
             i__3 = j + (j - 1) * h_dim1;
-            if (((r__1 = h__[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&h__[j + (j - 1) * h_dim1]), f2c_abs(r__2))) * temp2 <= temp * atol)
+            if(((r__1 = h__[i__3].r, f2c_abs(r__1))
+                + (r__2 = r_imag(&h__[j + (j - 1) * h_dim1]), f2c_abs(r__2)))
+                   * temp2
+               <= temp * atol)
             {
                 goto L90;
             }
@@ -1127,7 +1178,7 @@ L70:
         q__1.i = q__2.i - q__3.i; // , expr subst
         ctemp.r = q__1.r;
         ctemp.i = q__1.i; // , expr subst
-L90: /* Do an implicit-shift QZ sweep. */
+    L90: /* Do an implicit-shift QZ sweep. */
         /* Initial Q */
         i__2 = istart + 1 + istart * h_dim1;
         q__1.r = ascale * h__[i__2].r;
@@ -1137,24 +1188,21 @@ L90: /* Do an implicit-shift QZ sweep. */
         clartg_(&ctemp, &ctemp2, &c__, &s, &ctemp3);
         /* Sweep */
         i__2 = ilast - 1;
-        for (j = istart;
-                j <= i__2;
-                ++j)
+        for(j = istart; j <= i__2; ++j)
         {
-            if (j > istart)
+            if(j > istart)
             {
                 i__3 = j + (j - 1) * h_dim1;
                 ctemp.r = h__[i__3].r;
                 ctemp.i = h__[i__3].i; // , expr subst
-                clartg_(&ctemp, &h__[j + 1 + (j - 1) * h_dim1], &c__, &s, & h__[j + (j - 1) * h_dim1]);
+                clartg_(&ctemp, &h__[j + 1 + (j - 1) * h_dim1], &c__, &s,
+                        &h__[j + (j - 1) * h_dim1]);
                 i__3 = j + 1 + (j - 1) * h_dim1;
                 h__[i__3].r = 0.f;
                 h__[i__3].i = 0.f; // , expr subst
             }
             i__3 = ilastm;
-            for (jc = j;
-                    jc <= i__3;
-                    ++jc)
+            for(jc = j; jc <= i__3; ++jc)
             {
                 i__4 = j + jc * h_dim1;
                 q__2.r = c__ * h__[i__4].r;
@@ -1188,7 +1236,7 @@ L90: /* Do an implicit-shift QZ sweep. */
                 q__2.i = c__ * t[i__4].i; // , expr subst
                 i__5 = j + 1 + jc * t_dim1;
                 q__3.r = s.r * t[i__5].r - s.i * t[i__5].i;
-                q__3.i = s.r * t[ i__5].i + s.i * t[i__5].r; // , expr subst
+                q__3.i = s.r * t[i__5].i + s.i * t[i__5].r; // , expr subst
                 q__1.r = q__2.r + q__3.r;
                 q__1.i = q__2.i + q__3.i; // , expr subst
                 ctemp2.r = q__1.r;
@@ -1212,12 +1260,10 @@ L90: /* Do an implicit-shift QZ sweep. */
                 t[i__4].i = ctemp2.i; // , expr subst
                 /* L100: */
             }
-            if (ilq)
+            if(ilq)
             {
                 i__3 = *n;
-                for (jr = 1;
-                        jr <= i__3;
-                        ++jr)
+                for(jr = 1; jr <= i__3; ++jr)
                 {
                     i__4 = jr + j * q_dim1;
                     q__2.r = c__ * q[i__4].r;
@@ -1258,10 +1304,8 @@ L90: /* Do an implicit-shift QZ sweep. */
             t[i__3].i = 0.f; // , expr subst
             /* Computing MIN */
             i__4 = j + 2;
-            i__3 = fla_min(i__4,ilast);
-            for (jr = ifrstm;
-                    jr <= i__3;
-                    ++jr)
+            i__3 = fla_min(i__4, ilast);
+            for(jr = ifrstm; jr <= i__3; ++jr)
             {
                 i__4 = jr + (j + 1) * h_dim1;
                 q__2.r = c__ * h__[i__4].r;
@@ -1293,16 +1337,14 @@ L90: /* Do an implicit-shift QZ sweep. */
                 /* L120: */
             }
             i__3 = j;
-            for (jr = ifrstm;
-                    jr <= i__3;
-                    ++jr)
+            for(jr = ifrstm; jr <= i__3; ++jr)
             {
                 i__4 = jr + (j + 1) * t_dim1;
                 q__2.r = c__ * t[i__4].r;
                 q__2.i = c__ * t[i__4].i; // , expr subst
                 i__5 = jr + j * t_dim1;
                 q__3.r = s.r * t[i__5].r - s.i * t[i__5].i;
-                q__3.i = s.r * t[ i__5].i + s.i * t[i__5].r; // , expr subst
+                q__3.i = s.r * t[i__5].i + s.i * t[i__5].r; // , expr subst
                 q__1.r = q__2.r + q__3.r;
                 q__1.i = q__2.i + q__3.i; // , expr subst
                 ctemp.r = q__1.r;
@@ -1326,12 +1368,10 @@ L90: /* Do an implicit-shift QZ sweep. */
                 t[i__4].i = ctemp.i; // , expr subst
                 /* L130: */
             }
-            if (ilz)
+            if(ilz)
             {
                 i__3 = *n;
-                for (jr = 1;
-                        jr <= i__3;
-                        ++jr)
+                for(jr = 1; jr <= i__3; ++jr)
                 {
                     i__4 = jr + (j + 1) * z_dim1;
                     q__2.r = c__ * z__[i__4].r;
@@ -1349,7 +1389,7 @@ L90: /* Do an implicit-shift QZ sweep. */
                     q__3.i = -q__4.i; // , expr subst
                     i__5 = jr + (j + 1) * z_dim1;
                     q__2.r = q__3.r * z__[i__5].r - q__3.i * z__[i__5].i;
-                    q__2.i = q__3.r * z__[i__5].i + q__3.i * z__[i__5] .r; // , expr subst
+                    q__2.i = q__3.r * z__[i__5].i + q__3.i * z__[i__5].r; // , expr subst
                     i__6 = jr + j * z_dim1;
                     q__5.r = c__ * z__[i__6].r;
                     q__5.i = c__ * z__[i__6].i; // , expr subst
@@ -1365,8 +1405,8 @@ L90: /* Do an implicit-shift QZ sweep. */
             }
             /* L150: */
         }
-L160: /* L170: */
-        ;
+    L160: /* L170: */
+          ;
     }
     /* Drop-through = non-convergence */
 L180:
@@ -1375,12 +1415,10 @@ L180:
     /* Successful completion of all QZ steps */
 L190: /* Set Eigenvalues 1:ILO-1 */
     i__1 = *ilo - 1;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         absb = c_abs(&t[j + j * t_dim1]);
-        if (absb > safmin)
+        if(absb > safmin)
         {
             i__2 = j + j * t_dim1;
             q__2.r = t[i__2].r / absb;
@@ -1391,7 +1429,7 @@ L190: /* Set Eigenvalues 1:ILO-1 */
             i__2 = j + j * t_dim1;
             t[i__2].r = absb;
             t[i__2].i = 0.f; // , expr subst
-            if (ilschr)
+            if(ilschr)
             {
                 i__2 = j - 1;
                 cscal_(&i__2, &signbc, &t[j * t_dim1 + 1], &c__1);
@@ -1401,7 +1439,7 @@ L190: /* Set Eigenvalues 1:ILO-1 */
             {
                 cscal_(&c__1, &signbc, &h__[j + j * h_dim1], &c__1);
             }
-            if (ilz)
+            if(ilz)
             {
                 cscal_(n, &signbc, &z__[j * z_dim1 + 1], &c__1);
             }
@@ -1426,7 +1464,7 @@ L190: /* Set Eigenvalues 1:ILO-1 */
     *info = 0;
     /* Exit (other than argument error) -- return optimal workspace size */
 L210:
-    q__1.r = (real) (*n);
+    q__1.r = (real)(*n);
     q__1.i = 0.f; // , expr subst
     work[1].r = q__1.r;
     work[1].i = q__1.i; // , expr subst

@@ -1,22 +1,27 @@
-/* ../netlib/v3.9.0/zunm22.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/zunm22.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b1 = {1., 0.};
 /* > \brief \b ZUNM22 multiplies a general matrix by a banded unitary matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZUNM22 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zunm22. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zunm22.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zunm22. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zunm22.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunm22. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunm22.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -58,7 +63,7 @@ static doublecomplex c_b1 =
 /* > \verbatim */
 /* > SIDE is CHARACTER*1 */
 /* > = 'L': apply Q or Q**H from the Left;
-*/
+ */
 /* > = 'R': apply Q or Q**H from the Right. */
 /* > \endverbatim */
 /* > */
@@ -66,7 +71,7 @@ static doublecomplex c_b1 =
 /* > \verbatim */
 /* > TRANS is CHARACTER*1 */
 /* > = 'N': apply Q (No transpose);
-*/
+ */
 /* > = 'C': apply Q**H (Conjugate transpose). */
 /* > \endverbatim */
 /* > */
@@ -131,7 +136,7 @@ LDQ >= fla_max(1,N) if SIDE = 'R'. */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If SIDE = 'L', LWORK >= fla_max(1,N);
-*/
+ */
 /* > if SIDE = 'R', LWORK >= fla_max(1,M). */
 /* > For optimum performance LWORK >= M*N. */
 /* > */
@@ -158,10 +163,14 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integer *n2, doublecomplex *q, integer *ldq, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *lwork, integer *info)
+void zunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integer *n2,
+             doublecomplex *q, integer *ldq, doublecomplex *c__, integer *ldc, doublecomplex *work,
+             integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zunm22 inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", n1 %" FLA_IS ", n2 %" FLA_IS ", ldq %" FLA_IS ", ldc %" FLA_IS ", lwork %" FLA_IS "",*side, *trans, *m, *n, *n1, *n2, *ldq, *ldc, *lwork);
+    AOCL_DTL_SNPRINTF("zunm22 inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", n1 %" FLA_IS
+                      ", n2 %" FLA_IS ", ldq %" FLA_IS ", ldc %" FLA_IS ", lwork %" FLA_IS "",
+                      *side, *trans, *m, *n, *n1, *n2, *ldq, *ldc, *lwork);
     /* System generated locals */
     integer q_dim1, q_offset, c_dim1, c_offset, i__1, i__2, i__3, i__4;
     doublecomplex z__1;
@@ -170,11 +179,18 @@ void zunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
     logical left;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
+               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
+        ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     integer ldwork;
     extern /* Subroutine */
-    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.7.1) -- */
@@ -211,9 +227,9 @@ void zunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
     notran = lsame_(trans, "N", 1, 1);
     lquery = *lwork == -1;
     /* NQ is the order of Q;
-    */
+     */
     /* NW is the minimum dimension of WORK. */
-    if (left)
+    if(left)
     {
         nq = *m;
     }
@@ -222,121 +238,126 @@ void zunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
         nq = *n;
     }
     nw = nq;
-    if (*n1 == 0 || *n2 == 0)
+    if(*n1 == 0 || *n2 == 0)
     {
         nw = 1;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!lsame_(trans, "N", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*n1 < 0 || *n1 + *n2 != nq)
+    else if(*n1 < 0 || *n1 + *n2 != nq)
     {
         *info = -5;
     }
-    else if (*n2 < 0)
+    else if(*n2 < 0)
     {
         *info = -6;
     }
-    else if (*ldq < fla_max(1,nq))
+    else if(*ldq < fla_max(1, nq))
     {
         *info = -8;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -10;
     }
-    else if (*lwork < nw && ! lquery)
+    else if(*lwork < nw && !lquery)
     {
         *info = -12;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
         lwkopt = *m * *n;
-        z__1.r = (doublereal) lwkopt;
+        z__1.r = (doublereal)lwkopt;
         z__1.i = 0.; // , expr subst
         work[1].r = z__1.r;
         work[1].i = z__1.i; // , expr subst
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZUNM22", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Degenerate cases (N1 = 0 or N2 = 0) are handled using ZTRMM. */
-    if (*n1 == 0)
+    if(*n1 == 0)
     {
-        ztrmm_(side, "Upper", trans, "Non-Unit", m, n, &c_b1, &q[q_offset], ldq, &c__[c_offset], ldc);
+        ztrmm_(side, "Upper", trans, "Non-Unit", m, n, &c_b1, &q[q_offset], ldq, &c__[c_offset],
+               ldc);
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (*n2 == 0)
+    else if(*n2 == 0)
     {
-        ztrmm_(side, "Lower", trans, "Non-Unit", m, n, &c_b1, &q[q_offset], ldq, &c__[c_offset], ldc);
+        ztrmm_(side, "Lower", trans, "Non-Unit", m, n, &c_b1, &q[q_offset], ldq, &c__[c_offset],
+               ldc);
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute the largest chunk size available from the workspace. */
     /* Computing MAX */
     i__1 = 1;
-    i__2 = fla_min(*lwork,lwkopt) / nq; // , expr subst
-    nb = fla_max(i__1,i__2);
-    if (left)
+    i__2 = fla_min(*lwork, lwkopt) / nq; // , expr subst
+    nb = fla_max(i__1, i__2);
+    if(left)
     {
-        if (notran)
+        if(notran)
         {
             i__1 = *n;
             i__2 = nb;
-            for (i__ = 1;
-                    i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-                    i__ += i__2)
+            for(i__ = 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
             {
                 /* Computing MIN */
                 i__3 = nb;
                 i__4 = *n - i__ + 1; // , expr subst
-                len = fla_min(i__3,i__4);
+                len = fla_min(i__3, i__4);
                 ldwork = *m;
                 /* Multiply bottom part of C by Q12. */
-                zlacpy_("All", n1, &len, &c__[*n2 + 1 + i__ * c_dim1], ldc, & work[1], &ldwork);
-                ztrmm_("Left", "Lower", "No Transpose", "Non-Unit", n1, &len, &c_b1, &q[(*n2 + 1) * q_dim1 + 1], ldq, &work[1], & ldwork);
+                zlacpy_("All", n1, &len, &c__[*n2 + 1 + i__ * c_dim1], ldc, &work[1], &ldwork);
+                ztrmm_("Left", "Lower", "No Transpose", "Non-Unit", n1, &len, &c_b1,
+                       &q[(*n2 + 1) * q_dim1 + 1], ldq, &work[1], &ldwork);
                 /* Multiply top part of C by Q11. */
-                zgemm_("No Transpose", "No Transpose", n1, &len, n2, &c_b1, & q[q_offset], ldq, &c__[i__ * c_dim1 + 1], ldc, &c_b1, &work[1], &ldwork);
+                zgemm_("No Transpose", "No Transpose", n1, &len, n2, &c_b1, &q[q_offset], ldq,
+                       &c__[i__ * c_dim1 + 1], ldc, &c_b1, &work[1], &ldwork);
                 /* Multiply top part of C by Q21. */
-                zlacpy_("All", n2, &len, &c__[i__ * c_dim1 + 1], ldc, &work[* n1 + 1], &ldwork);
-                ztrmm_("Left", "Upper", "No Transpose", "Non-Unit", n2, &len, &c_b1, &q[*n1 + 1 + q_dim1], ldq, &work[*n1 + 1], & ldwork);
+                zlacpy_("All", n2, &len, &c__[i__ * c_dim1 + 1], ldc, &work[*n1 + 1], &ldwork);
+                ztrmm_("Left", "Upper", "No Transpose", "Non-Unit", n2, &len, &c_b1,
+                       &q[*n1 + 1 + q_dim1], ldq, &work[*n1 + 1], &ldwork);
                 /* Multiply bottom part of C by Q22. */
-                zgemm_("No Transpose", "No Transpose", n2, &len, n1, &c_b1, & q[*n1 + 1 + (*n2 + 1) * q_dim1], ldq, &c__[*n2 + 1 + i__ * c_dim1], ldc, &c_b1, &work[*n1 + 1], &ldwork);
+                zgemm_("No Transpose", "No Transpose", n2, &len, n1, &c_b1,
+                       &q[*n1 + 1 + (*n2 + 1) * q_dim1], ldq, &c__[*n2 + 1 + i__ * c_dim1], ldc,
+                       &c_b1, &work[*n1 + 1], &ldwork);
                 /* Copy everything back. */
                 zlacpy_("All", m, &len, &work[1], &ldwork, &c__[i__ * c_dim1 + 1], ldc);
             }
@@ -345,25 +366,28 @@ void zunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
         {
             i__2 = *n;
             i__1 = nb;
-            for (i__ = 1;
-                    i__1 < 0 ? i__ >= i__2 : i__ <= i__2;
-                    i__ += i__1)
+            for(i__ = 1; i__1 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__1)
             {
                 /* Computing MIN */
                 i__3 = nb;
                 i__4 = *n - i__ + 1; // , expr subst
-                len = fla_min(i__3,i__4);
+                len = fla_min(i__3, i__4);
                 ldwork = *m;
                 /* Multiply bottom part of C by Q21**H. */
-                zlacpy_("All", n2, &len, &c__[*n1 + 1 + i__ * c_dim1], ldc, & work[1], &ldwork);
-                ztrmm_("Left", "Upper", "Conjugate", "Non-Unit", n2, &len, & c_b1, &q[*n1 + 1 + q_dim1], ldq, &work[1], &ldwork);
+                zlacpy_("All", n2, &len, &c__[*n1 + 1 + i__ * c_dim1], ldc, &work[1], &ldwork);
+                ztrmm_("Left", "Upper", "Conjugate", "Non-Unit", n2, &len, &c_b1,
+                       &q[*n1 + 1 + q_dim1], ldq, &work[1], &ldwork);
                 /* Multiply top part of C by Q11**H. */
-                zgemm_("Conjugate", "No Transpose", n2, &len, n1, &c_b1, &q[ q_offset], ldq, &c__[i__ * c_dim1 + 1], ldc, &c_b1, & work[1], &ldwork);
+                zgemm_("Conjugate", "No Transpose", n2, &len, n1, &c_b1, &q[q_offset], ldq,
+                       &c__[i__ * c_dim1 + 1], ldc, &c_b1, &work[1], &ldwork);
                 /* Multiply top part of C by Q12**H. */
-                zlacpy_("All", n1, &len, &c__[i__ * c_dim1 + 1], ldc, &work[* n2 + 1], &ldwork);
-                ztrmm_("Left", "Lower", "Conjugate", "Non-Unit", n1, &len, & c_b1, &q[(*n2 + 1) * q_dim1 + 1], ldq, &work[*n2 + 1], &ldwork);
+                zlacpy_("All", n1, &len, &c__[i__ * c_dim1 + 1], ldc, &work[*n2 + 1], &ldwork);
+                ztrmm_("Left", "Lower", "Conjugate", "Non-Unit", n1, &len, &c_b1,
+                       &q[(*n2 + 1) * q_dim1 + 1], ldq, &work[*n2 + 1], &ldwork);
                 /* Multiply bottom part of C by Q22**H. */
-                zgemm_("Conjugate", "No Transpose", n1, &len, n2, &c_b1, &q[* n1 + 1 + (*n2 + 1) * q_dim1], ldq, &c__[*n1 + 1 + i__ * c_dim1], ldc, &c_b1, &work[*n2 + 1], &ldwork);
+                zgemm_("Conjugate", "No Transpose", n1, &len, n2, &c_b1,
+                       &q[*n1 + 1 + (*n2 + 1) * q_dim1], ldq, &c__[*n1 + 1 + i__ * c_dim1], ldc,
+                       &c_b1, &work[*n2 + 1], &ldwork);
                 /* Copy everything back. */
                 zlacpy_("All", m, &len, &work[1], &ldwork, &c__[i__ * c_dim1 + 1], ldc);
             }
@@ -371,29 +395,32 @@ void zunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
     }
     else
     {
-        if (notran)
+        if(notran)
         {
             i__1 = *m;
             i__2 = nb;
-            for (i__ = 1;
-                    i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-                    i__ += i__2)
+            for(i__ = 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
             {
                 /* Computing MIN */
                 i__3 = nb;
                 i__4 = *m - i__ + 1; // , expr subst
-                len = fla_min(i__3,i__4);
+                len = fla_min(i__3, i__4);
                 ldwork = len;
                 /* Multiply right part of C by Q21. */
                 zlacpy_("All", &len, n2, &c__[i__ + (*n1 + 1) * c_dim1], ldc, &work[1], &ldwork);
-                ztrmm_("Right", "Upper", "No Transpose", "Non-Unit", &len, n2, &c_b1, &q[*n1 + 1 + q_dim1], ldq, &work[1], &ldwork);
+                ztrmm_("Right", "Upper", "No Transpose", "Non-Unit", &len, n2, &c_b1,
+                       &q[*n1 + 1 + q_dim1], ldq, &work[1], &ldwork);
                 /* Multiply left part of C by Q11. */
-                zgemm_("No Transpose", "No Transpose", &len, n2, n1, &c_b1, & c__[i__ + c_dim1], ldc, &q[q_offset], ldq, &c_b1, & work[1], &ldwork);
+                zgemm_("No Transpose", "No Transpose", &len, n2, n1, &c_b1, &c__[i__ + c_dim1], ldc,
+                       &q[q_offset], ldq, &c_b1, &work[1], &ldwork);
                 /* Multiply left part of C by Q12. */
                 zlacpy_("All", &len, n1, &c__[i__ + c_dim1], ldc, &work[*n2 * ldwork + 1], &ldwork);
-                ztrmm_("Right", "Lower", "No Transpose", "Non-Unit", &len, n1, &c_b1, &q[(*n2 + 1) * q_dim1 + 1], ldq, &work[*n2 * ldwork + 1], &ldwork);
+                ztrmm_("Right", "Lower", "No Transpose", "Non-Unit", &len, n1, &c_b1,
+                       &q[(*n2 + 1) * q_dim1 + 1], ldq, &work[*n2 * ldwork + 1], &ldwork);
                 /* Multiply right part of C by Q22. */
-                zgemm_("No Transpose", "No Transpose", &len, n1, n2, &c_b1, & c__[i__ + (*n1 + 1) * c_dim1], ldc, &q[*n1 + 1 + (*n2 + 1) * q_dim1], ldq, &c_b1, &work[*n2 * ldwork + 1], & ldwork);
+                zgemm_("No Transpose", "No Transpose", &len, n1, n2, &c_b1,
+                       &c__[i__ + (*n1 + 1) * c_dim1], ldc, &q[*n1 + 1 + (*n2 + 1) * q_dim1], ldq,
+                       &c_b1, &work[*n2 * ldwork + 1], &ldwork);
                 /* Copy everything back. */
                 zlacpy_("All", &len, n, &work[1], &ldwork, &c__[i__ + c_dim1], ldc);
             }
@@ -402,31 +429,34 @@ void zunm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
         {
             i__2 = *m;
             i__1 = nb;
-            for (i__ = 1;
-                    i__1 < 0 ? i__ >= i__2 : i__ <= i__2;
-                    i__ += i__1)
+            for(i__ = 1; i__1 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__1)
             {
                 /* Computing MIN */
                 i__3 = nb;
                 i__4 = *m - i__ + 1; // , expr subst
-                len = fla_min(i__3,i__4);
+                len = fla_min(i__3, i__4);
                 ldwork = len;
                 /* Multiply right part of C by Q12**H. */
                 zlacpy_("All", &len, n1, &c__[i__ + (*n2 + 1) * c_dim1], ldc, &work[1], &ldwork);
-                ztrmm_("Right", "Lower", "Conjugate", "Non-Unit", &len, n1, & c_b1, &q[(*n2 + 1) * q_dim1 + 1], ldq, &work[1], & ldwork);
+                ztrmm_("Right", "Lower", "Conjugate", "Non-Unit", &len, n1, &c_b1,
+                       &q[(*n2 + 1) * q_dim1 + 1], ldq, &work[1], &ldwork);
                 /* Multiply left part of C by Q11**H. */
-                zgemm_("No Transpose", "Conjugate", &len, n1, n2, &c_b1, &c__[ i__ + c_dim1], ldc, &q[q_offset], ldq, &c_b1, &work[1], &ldwork);
+                zgemm_("No Transpose", "Conjugate", &len, n1, n2, &c_b1, &c__[i__ + c_dim1], ldc,
+                       &q[q_offset], ldq, &c_b1, &work[1], &ldwork);
                 /* Multiply left part of C by Q21**H. */
                 zlacpy_("All", &len, n2, &c__[i__ + c_dim1], ldc, &work[*n1 * ldwork + 1], &ldwork);
-                ztrmm_("Right", "Upper", "Conjugate", "Non-Unit", &len, n2, & c_b1, &q[*n1 + 1 + q_dim1], ldq, &work[*n1 * ldwork + 1], &ldwork);
+                ztrmm_("Right", "Upper", "Conjugate", "Non-Unit", &len, n2, &c_b1,
+                       &q[*n1 + 1 + q_dim1], ldq, &work[*n1 * ldwork + 1], &ldwork);
                 /* Multiply right part of C by Q22**H. */
-                zgemm_("No Transpose", "Conjugate", &len, n2, n1, &c_b1, &c__[ i__ + (*n2 + 1) * c_dim1], ldc, &q[*n1 + 1 + (*n2 + 1) * q_dim1], ldq, &c_b1, &work[*n1 * ldwork + 1], & ldwork);
+                zgemm_("No Transpose", "Conjugate", &len, n2, n1, &c_b1,
+                       &c__[i__ + (*n2 + 1) * c_dim1], ldc, &q[*n1 + 1 + (*n2 + 1) * q_dim1], ldq,
+                       &c_b1, &work[*n1 * ldwork + 1], &ldwork);
                 /* Copy everything back. */
                 zlacpy_("All", &len, n, &work[1], &ldwork, &c__[i__ + c_dim1], ldc);
             }
         }
     }
-    z__1.r = (doublereal) lwkopt;
+    z__1.r = (doublereal)lwkopt;
     z__1.i = 0.; // , expr subst
     work[1].r = z__1.r;
     work[1].i = z__1.i; // , expr subst

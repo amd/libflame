@@ -1,5 +1,8 @@
-/* ../netlib/dsytri2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dsytri2.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -9,11 +12,17 @@ static integer c_n1 = -1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DSYTRI2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytri2 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytri2
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsytri2 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsytri2
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytri2 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytri2
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -45,7 +54,7 @@ static integer c_n1 = -1;
 /* > Specifies whether the details of the factorization are stored */
 /* > as an upper or lower triangular matrix. */
 /* > = 'U': Upper triangular, form is A = U*D*U**T;
-*/
+ */
 /* > = 'L': Lower triangular, form is A = L*D*L**T. */
 /* > \endverbatim */
 /* > */
@@ -120,23 +129,29 @@ the matrix is singular and its */
 /* > \ingroup doubleSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dsytri2_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipiv, doublereal *work, integer *lwork, integer *info)
+void dsytri2_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work,
+              integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsytri2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *lda, *lwork);
+    AOCL_DTL_SNPRINTF("dsytri2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",
+                      *uplo, *n, *lda, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    void dsytri2x_(char *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dsytri2x_(char *, integer *, doublereal *, integer *, integer *, doublereal *, integer *,
+                  integer *);
     extern logical lsame_(char *, char *, integer, integer);
     integer nbmax;
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void dsytri_(char *, integer *, doublereal *, integer *, integer *, doublereal *, integer *);
+        void
+        dsytri_(char *, integer *, doublereal *, integer *, integer *, doublereal *, integer *);
     logical lquery;
     integer minsize;
     /* -- LAPACK computational routine (version 3.8.0) -- */
@@ -168,7 +183,7 @@ void dsytri2_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipi
     lquery = *lwork == -1;
     /* Get blocksize */
     nbmax = ilaenv_(&c__1, "DSYTRI2", uplo, n, &c_n1, &c_n1, &c_n1);
-    if (nbmax >= *n)
+    if(nbmax >= *n)
     {
         minsize = *n;
     }
@@ -176,42 +191,42 @@ void dsytri2_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipi
     {
         minsize = (*n + nbmax + 1) * (nbmax + 3);
     }
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*lwork < minsize && ! lquery)
+    else if(*lwork < minsize && !lquery)
     {
         *info = -7;
     }
     /* Quick return if possible */
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DSYTRI2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-        work[1] = (doublereal) minsize;
+        work[1] = (doublereal)minsize;
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (nbmax >= *n)
+    if(nbmax >= *n)
     {
         dsytri_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], info);
     }
@@ -224,4 +239,3 @@ void dsytri2_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipi
     /* End of DSYTRI2 */
 }
 /* dsytri2_ */
-

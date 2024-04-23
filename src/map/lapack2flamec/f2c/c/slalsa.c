@@ -1,5 +1,8 @@
-/* ../netlib/slalsa.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slalsa.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b7 = 1.f;
 static real c_b8 = 0.f;
@@ -10,11 +13,17 @@ static integer c__2 = 2;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLALSA + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slalsa. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slalsa.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slalsa. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slalsa.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slalsa. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slalsa.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -256,19 +265,35 @@ and if */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-void slalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, real *b, integer *ldb, real *bx, integer *ldbx, real * u, integer *ldu, real *vt, integer *k, real *difl, real *difr, real * z__, real *poles, integer *givptr, integer *givcol, integer *ldgcol, integer *perm, real *givnum, real *c__, real *s, real *work, integer * iwork, integer *info)
+void slalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, real *b, integer *ldb,
+             real *bx, integer *ldbx, real *u, integer *ldu, real *vt, integer *k, real *difl,
+             real *difr, real *z__, real *poles, integer *givptr, integer *givcol, integer *ldgcol,
+             integer *perm, real *givnum, real *c__, real *s, real *work, integer *iwork,
+             integer *info)
 {
     /* System generated locals */
-    integer givcol_dim1, givcol_offset, perm_dim1, perm_offset, b_dim1, b_offset, bx_dim1, bx_offset, difl_dim1, difl_offset, difr_dim1, difr_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, u_dim1, u_offset, vt_dim1, vt_offset, z_dim1, z_offset, i__1, i__2;
+    integer givcol_dim1, givcol_offset, perm_dim1, perm_offset, b_dim1, b_offset, bx_dim1,
+        bx_offset, difl_dim1, difl_offset, difr_dim1, difr_offset, givnum_dim1, givnum_offset,
+        poles_dim1, poles_offset, u_dim1, u_offset, vt_dim1, vt_offset, z_dim1, z_offset, i__1,
+        i__2;
     /* Builtin functions */
     integer pow_ii(integer *, integer *);
     /* Local variables */
-    integer i__, j, i1, ic, lf, nd, ll, nl, nr, im1, nlf, nrf, lvl, ndb1, nlp1, lvl2, nrp1, nlvl, sqre, inode, ndiml;
+    integer i__, j, i1, ic, lf, nd, ll, nl, nr, im1, nlf, nrf, lvl, ndb1, nlp1, lvl2, nrp1, nlvl,
+        sqre, inode, ndiml;
     extern /* Subroutine */
-    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *);
     integer ndimr;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *), slals0_(integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *),
+        slals0_(integer *, integer *, integer *, integer *, integer *, real *, integer *, real *,
+                integer *, integer *, integer *, integer *, integer *, real *, integer *, real *,
+                real *, real *, real *, integer *, real *, real *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -328,39 +353,39 @@ void slalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, real *
     --iwork;
     /* Function Body */
     *info = 0;
-    if (*icompq < 0 || *icompq > 1)
+    if(*icompq < 0 || *icompq > 1)
     {
         *info = -1;
     }
-    else if (*smlsiz < 3)
+    else if(*smlsiz < 3)
     {
         *info = -2;
     }
-    else if (*n < *smlsiz)
+    else if(*n < *smlsiz)
     {
         *info = -3;
     }
-    else if (*nrhs < 1)
+    else if(*nrhs < 1)
     {
         *info = -4;
     }
-    else if (*ldb < *n)
+    else if(*ldb < *n)
     {
         *info = -6;
     }
-    else if (*ldbx < *n)
+    else if(*ldbx < *n)
     {
         *info = -8;
     }
-    else if (*ldu < *n)
+    else if(*ldu < *n)
     {
         *info = -10;
     }
-    else if (*ldgcol < *n)
+    else if(*ldgcol < *n)
     {
         *info = -19;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SLALSA", &i__1, (ftnlen)6);
@@ -373,7 +398,7 @@ void slalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, real *
     slasdt_(n, &nlvl, &nd, &iwork[inode], &iwork[ndiml], &iwork[ndimr], smlsiz);
     /* The following code applies back the left singular vector factors. */
     /* For applying back the right singular vector factors, go to 50. */
-    if (*icompq == 1)
+    if(*icompq == 1)
     {
         goto L50;
     }
@@ -383,9 +408,7 @@ void slalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, real *
     /* singular vector matrices. */
     ndb1 = (nd + 1) / 2;
     i__1 = nd;
-    for (i__ = ndb1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = ndb1; i__ <= i__1; ++i__)
     {
         /* IC : center row of each node */
         /* NL : number of rows of left subproblem */
@@ -398,16 +421,16 @@ void slalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, real *
         nr = iwork[ndimr + i1];
         nlf = ic - nl;
         nrf = ic + 1;
-        sgemm_("T", "N", &nl, nrhs, &nl, &c_b7, &u[nlf + u_dim1], ldu, &b[nlf + b_dim1], ldb, &c_b8, &bx[nlf + bx_dim1], ldbx);
-        sgemm_("T", "N", &nr, nrhs, &nr, &c_b7, &u[nrf + u_dim1], ldu, &b[nrf + b_dim1], ldb, &c_b8, &bx[nrf + bx_dim1], ldbx);
+        sgemm_("T", "N", &nl, nrhs, &nl, &c_b7, &u[nlf + u_dim1], ldu, &b[nlf + b_dim1], ldb, &c_b8,
+               &bx[nlf + bx_dim1], ldbx);
+        sgemm_("T", "N", &nr, nrhs, &nr, &c_b7, &u[nrf + u_dim1], ldu, &b[nrf + b_dim1], ldb, &c_b8,
+               &bx[nrf + bx_dim1], ldbx);
         /* L10: */
     }
     /* Next copy the rows of B that correspond to unchanged rows */
     /* in the bidiagonal matrix to BX. */
     i__1 = nd;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         ic = iwork[inode + i__ - 1];
         scopy_(nrhs, &b[ic + b_dim1], ldb, &bx[ic + bx_dim1], ldbx);
@@ -417,14 +440,12 @@ void slalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, real *
     /* the other subproblems bottom-up on the tree. */
     j = pow_ii(&c__2, &nlvl);
     sqre = 0;
-    for (lvl = nlvl;
-            lvl >= 1;
-            --lvl)
+    for(lvl = nlvl; lvl >= 1; --lvl)
     {
         lvl2 = (lvl << 1) - 1;
         /* find the first node LF and last node LL on */
         /* the current level LVL */
-        if (lvl == 1)
+        if(lvl == 1)
         {
             lf = 1;
             ll = 1;
@@ -436,9 +457,7 @@ void slalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, real *
             ll = (lf << 1) - 1;
         }
         i__1 = ll;
-        for (i__ = lf;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = lf; i__ <= i__1; ++i__)
         {
             im1 = i__ - 1;
             ic = iwork[inode + im1];
@@ -447,7 +466,11 @@ void slalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, real *
             nlf = ic - nl;
             nrf = ic + 1;
             --j;
-            slals0_(icompq, &nl, &nr, &sqre, nrhs, &bx[nlf + bx_dim1], ldbx, & b[nlf + b_dim1], ldb, &perm[nlf + lvl * perm_dim1], & givptr[j], &givcol[nlf + lvl2 * givcol_dim1], ldgcol, & givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1], &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1], &z__[nlf + lvl * z_dim1], &k[j], &c__[ j], &s[j], &work[1], info);
+            slals0_(icompq, &nl, &nr, &sqre, nrhs, &bx[nlf + bx_dim1], ldbx, &b[nlf + b_dim1], ldb,
+                    &perm[nlf + lvl * perm_dim1], &givptr[j], &givcol[nlf + lvl2 * givcol_dim1],
+                    ldgcol, &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1],
+                    &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1],
+                    &z__[nlf + lvl * z_dim1], &k[j], &c__[j], &s[j], &work[1], info);
             /* L30: */
         }
         /* L40: */
@@ -458,14 +481,12 @@ L50: /* First now go through the right singular vector matrices of all */
     /* the tree nodes top-down. */
     j = 0;
     i__1 = nlvl;
-    for (lvl = 1;
-            lvl <= i__1;
-            ++lvl)
+    for(lvl = 1; lvl <= i__1; ++lvl)
     {
         lvl2 = (lvl << 1) - 1;
         /* Find the first node LF and last node LL on */
         /* the current level LVL. */
-        if (lvl == 1)
+        if(lvl == 1)
         {
             lf = 1;
             ll = 1;
@@ -477,9 +498,7 @@ L50: /* First now go through the right singular vector matrices of all */
             ll = (lf << 1) - 1;
         }
         i__2 = lf;
-        for (i__ = ll;
-                i__ >= i__2;
-                --i__)
+        for(i__ = ll; i__ >= i__2; --i__)
         {
             im1 = i__ - 1;
             ic = iwork[inode + im1];
@@ -487,7 +506,7 @@ L50: /* First now go through the right singular vector matrices of all */
             nr = iwork[ndimr + im1];
             nlf = ic - nl;
             nrf = ic + 1;
-            if (i__ == ll)
+            if(i__ == ll)
             {
                 sqre = 0;
             }
@@ -496,7 +515,11 @@ L50: /* First now go through the right singular vector matrices of all */
                 sqre = 1;
             }
             ++j;
-            slals0_(icompq, &nl, &nr, &sqre, nrhs, &b[nlf + b_dim1], ldb, &bx[ nlf + bx_dim1], ldbx, &perm[nlf + lvl * perm_dim1], & givptr[j], &givcol[nlf + lvl2 * givcol_dim1], ldgcol, & givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1], &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1], &z__[nlf + lvl * z_dim1], &k[j], &c__[ j], &s[j], &work[1], info);
+            slals0_(icompq, &nl, &nr, &sqre, nrhs, &b[nlf + b_dim1], ldb, &bx[nlf + bx_dim1], ldbx,
+                    &perm[nlf + lvl * perm_dim1], &givptr[j], &givcol[nlf + lvl2 * givcol_dim1],
+                    ldgcol, &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1],
+                    &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1],
+                    &z__[nlf + lvl * z_dim1], &k[j], &c__[j], &s[j], &work[1], info);
             /* L60: */
         }
         /* L70: */
@@ -506,16 +529,14 @@ L50: /* First now go through the right singular vector matrices of all */
     /* matrices are in explicit form. Apply them back. */
     ndb1 = (nd + 1) / 2;
     i__1 = nd;
-    for (i__ = ndb1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = ndb1; i__ <= i__1; ++i__)
     {
         i1 = i__ - 1;
         ic = iwork[inode + i1];
         nl = iwork[ndiml + i1];
         nr = iwork[ndimr + i1];
         nlp1 = nl + 1;
-        if (i__ == nd)
+        if(i__ == nd)
         {
             nrp1 = nr;
         }
@@ -525,8 +546,10 @@ L50: /* First now go through the right singular vector matrices of all */
         }
         nlf = ic - nl;
         nrf = ic + 1;
-        sgemm_("T", "N", &nlp1, nrhs, &nlp1, &c_b7, &vt[nlf + vt_dim1], ldu, & b[nlf + b_dim1], ldb, &c_b8, &bx[nlf + bx_dim1], ldbx);
-        sgemm_("T", "N", &nrp1, nrhs, &nrp1, &c_b7, &vt[nrf + vt_dim1], ldu, & b[nrf + b_dim1], ldb, &c_b8, &bx[nrf + bx_dim1], ldbx);
+        sgemm_("T", "N", &nlp1, nrhs, &nlp1, &c_b7, &vt[nlf + vt_dim1], ldu, &b[nlf + b_dim1], ldb,
+               &c_b8, &bx[nlf + bx_dim1], ldbx);
+        sgemm_("T", "N", &nrp1, nrhs, &nrp1, &c_b7, &vt[nrf + vt_dim1], ldu, &b[nrf + b_dim1], ldb,
+               &c_b8, &bx[nrf + bx_dim1], ldbx);
         /* L80: */
     }
 L90:

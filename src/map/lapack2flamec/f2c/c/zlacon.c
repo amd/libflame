@@ -1,18 +1,28 @@
-/* ../netlib/zlacon.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlacon.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b ZLACON estimates the 1-norm of a square matrix, using reverse communication for evaluating matr ix-vector products. */
+/* > \brief \b ZLACON estimates the 1-norm of a square matrix, using reverse communication for
+ * evaluating matr ix-vector products. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLACON + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlacon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlacon.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlacon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlacon.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlacon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlacon.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -103,7 +113,7 @@ static integer c__1 = 1;
 void zlacon_(integer *n, doublecomplex *v, doublecomplex *x, doublereal *est, integer *kase)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlacon inputs: n %" FLA_IS ", est %lf, kase %" FLA_IS "",*n, *est, *kase);
+    AOCL_DTL_SNPRINTF("zlacon inputs: n %" FLA_IS ", est %lf, kase %" FLA_IS "", *n, *est, *kase);
     /* System generated locals */
     integer i__1, i__2, i__3;
     doublereal d__1, d__2;
@@ -119,9 +129,10 @@ void zlacon_(integer *n, doublecomplex *v, doublecomplex *x, doublereal *est, in
     doublereal absxi;
     integer jlast;
     extern /* Subroutine */
-    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern integer izmax1_(integer *, doublecomplex *, integer *);
-    extern doublereal dzsum1_(integer *, doublecomplex *, integer *), dlamch_( char *);
+    extern doublereal dzsum1_(integer *, doublecomplex *, integer *), dlamch_(char *);
     doublereal safmin, altsgn, estold;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -150,15 +161,13 @@ void zlacon_(integer *n, doublecomplex *v, doublecomplex *x, doublereal *est, in
     --v;
     /* Function Body */
     safmin = dlamch_("Safe minimum");
-    if (*kase == 0)
+    if(*kase == 0)
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
-            d__1 = 1. / (doublereal) (*n);
+            d__1 = 1. / (doublereal)(*n);
             z__1.r = d__1;
             z__1.i = 0.; // , expr subst
             x[i__2].r = z__1.r;
@@ -170,25 +179,25 @@ void zlacon_(integer *n, doublecomplex *v, doublecomplex *x, doublereal *est, in
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    switch (jump)
+    switch(jump)
     {
-    case 1:
-        goto L20;
-    case 2:
-        goto L40;
-    case 3:
-        goto L70;
-    case 4:
-        goto L90;
-    case 5:
-        goto L120;
-    default:
-        goto L130;
+        case 1:
+            goto L20;
+        case 2:
+            goto L40;
+        case 3:
+            goto L70;
+        case 4:
+            goto L90;
+        case 5:
+            goto L120;
+        default:
+            goto L130;
     }
     /* ................ ENTRY (JUMP = 1) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY A*X. */
 L20:
-    if (*n == 1)
+    if(*n == 1)
     {
         v[1].r = x[1].r;
         v[1].i = x[1].i; // , expr subst
@@ -198,12 +207,10 @@ L20:
     }
     *est = dzsum1_(n, &x[1], &c__1);
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         absxi = z_abs(&x[i__]);
-        if (absxi > safmin)
+        if(absxi > safmin)
         {
             i__2 = i__;
             i__3 = i__;
@@ -234,9 +241,7 @@ L40:
     /* MAIN LOOP - ITERATIONS 2,3,...,ITMAX. */
 L50:
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
         x[i__2].r = 0.;
@@ -257,17 +262,15 @@ L70:
     estold = *est;
     *est = dzsum1_(n, &v[1], &c__1);
     /* TEST FOR CYCLING. */
-    if (*est <= estold)
+    if(*est <= estold)
     {
         goto L100;
     }
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         absxi = z_abs(&x[i__]);
-        if (absxi > safmin)
+        if(absxi > safmin)
         {
             i__2 = i__;
             i__3 = i__;
@@ -295,7 +298,7 @@ L70:
 L90:
     jlast = j;
     j = izmax1_(n, &x[1], &c__1);
-    if (z_abs(&x[jlast]) != z_abs(&x[j]) && iter < 5)
+    if(z_abs(&x[jlast]) != z_abs(&x[j]) && iter < 5)
     {
         ++iter;
         goto L50;
@@ -304,12 +307,10 @@ L90:
 L100:
     altsgn = 1.;
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        d__1 = altsgn * ((doublereal) (i__ - 1) / (doublereal) (*n - 1) + 1.);
+        d__1 = altsgn * ((doublereal)(i__ - 1) / (doublereal)(*n - 1) + 1.);
         z__1.r = d__1;
         z__1.i = 0.; // , expr subst
         x[i__2].r = z__1.r;
@@ -324,8 +325,8 @@ L100:
     /* ................ ENTRY (JUMP = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L120:
-    temp = dzsum1_(n, &x[1], &c__1) / (doublereal) (*n * 3) * 2.;
-    if (temp > *est)
+    temp = dzsum1_(n, &x[1], &c__1) / (doublereal)(*n * 3) * 2.;
+    if(temp > *est)
     {
         zcopy_(n, &x[1], &c__1, &v[1], &c__1);
         *est = temp;

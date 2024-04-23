@@ -1,16 +1,25 @@
-/* ../netlib/slarrb.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slarrb.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLARRB provides limited bisection to locate eigenvalues for more accuracy. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLARRB + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarrb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarrb.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarrb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarrb.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarrb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarrb.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -179,7 +188,9 @@
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void slarrb_(integer *n, real *d__, real *lld, integer * ifirst, integer *ilast, real *rtol1, real *rtol2, integer *offset, real *w, real *wgap, real *werr, real *work, integer *iwork, real * pivmin, real *spdiam, integer *twist, integer *info)
+void slarrb_(integer *n, real *d__, real *lld, integer *ifirst, integer *ilast, real *rtol1,
+             real *rtol2, integer *offset, real *w, real *wgap, real *werr, real *work,
+             integer *iwork, real *pivmin, real *spdiam, integer *twist, integer *info)
 {
     /* System generated locals */
     integer i__1;
@@ -224,14 +235,14 @@ void slarrb_(integer *n, real *d__, real *lld, integer * ifirst, integer *ilast,
     /* Function Body */
     *info = 0;
     /* Quick return if possible */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         return;
     }
-    maxitr = (integer) ((log(*spdiam + *pivmin) - log(*pivmin)) / log(2.f)) + 2;
+    maxitr = (integer)((log(*spdiam + *pivmin) - log(*pivmin)) / log(2.f)) + 2;
     mnwdth = *pivmin * 2.f;
     r__ = *twist;
-    if (r__ < 1 || r__ > *n)
+    if(r__ < 1 || r__ > *n)
     {
         r__ = *n;
     }
@@ -248,9 +259,7 @@ void slarrb_(integer *n, real *d__, real *lld, integer * ifirst, integer *ilast,
     prev = 0;
     rgap = wgap[i1 - *offset];
     i__1 = *ilast;
-    for (i__ = i1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = i1; i__ <= i__1; ++i__)
     {
         k = i__ << 1;
         ii = i__ - *offset;
@@ -258,14 +267,14 @@ void slarrb_(integer *n, real *d__, real *lld, integer * ifirst, integer *ilast,
         right = w[ii] + werr[ii];
         lgap = rgap;
         rgap = wgap[ii];
-        gap = fla_min(lgap,rgap);
+        gap = fla_min(lgap, rgap);
         /* Make sure that [LEFT,RIGHT] contains the desired eigenvalue */
         /* Compute negcount from dstqds facto L+D+L+^T = L D L^T - LEFT */
         /* Do while( NEGCNT(LEFT).GT.I-1 ) */
         back = werr[ii];
-L20:
+    L20:
         negcnt = slaneg_(n, &d__[1], &lld[1], &left, pivmin, &r__);
-        if (negcnt > i__ - 1)
+        if(negcnt > i__ - 1)
         {
             left -= back;
             back *= 2.f;
@@ -274,9 +283,9 @@ L20:
         /* Do while( NEGCNT(RIGHT).LT.I ) */
         /* Compute negcount from dstqds facto L+D+L+^T = L D L^T - RIGHT */
         back = werr[ii];
-L50:
+    L50:
         negcnt = slaneg_(n, &d__[1], &lld[1], &right, pivmin, &r__);
-        if (negcnt < i__)
+        if(negcnt < i__)
         {
             right += back;
             back *= 2.f;
@@ -286,12 +295,12 @@ L50:
         /* Computing MAX */
         r__1 = f2c_abs(left);
         r__2 = f2c_abs(right); // , expr subst
-        tmp = fla_max(r__1,r__2);
+        tmp = fla_max(r__1, r__2);
         /* Computing MAX */
         r__1 = *rtol1 * gap;
         r__2 = *rtol2 * tmp; // , expr subst
-        cvrgd = fla_max(r__1,r__2);
-        if (width <= cvrgd || width <= mnwdth)
+        cvrgd = fla_max(r__1, r__2);
+        if(width <= cvrgd || width <= mnwdth)
         {
             /* This interval has already converged and does not need refinement. */
             /* (Note that the gaps might change through refining the */
@@ -299,11 +308,11 @@ L50:
             /* Remove it from the list. */
             iwork[k - 1] = -1;
             /* Make sure that I1 always points to the first unconverged interval */
-            if (i__ == i1 && i__ < *ilast)
+            if(i__ == i1 && i__ < *ilast)
             {
                 i1 = i__ + 1;
             }
-            if (prev >= i1 && i__ <= *ilast)
+            if(prev >= i1 && i__ <= *ilast)
             {
                 iwork[(prev << 1) - 1] = i__ + 1;
             }
@@ -328,19 +337,17 @@ L80:
     i__ = i1;
     olnint = nint;
     i__1 = olnint;
-    for (ip = 1;
-            ip <= i__1;
-            ++ip)
+    for(ip = 1; ip <= i__1; ++ip)
     {
         k = i__ << 1;
         ii = i__ - *offset;
         rgap = wgap[ii];
         lgap = rgap;
-        if (ii > 1)
+        if(ii > 1)
         {
             lgap = wgap[ii - 1];
         }
-        gap = fla_min(lgap,rgap);
+        gap = fla_min(lgap, rgap);
         next = iwork[k - 1];
         left = work[k - 1];
         right = work[k];
@@ -350,25 +357,25 @@ L80:
         /* Computing MAX */
         r__1 = f2c_abs(left);
         r__2 = f2c_abs(right); // , expr subst
-        tmp = fla_max(r__1,r__2);
+        tmp = fla_max(r__1, r__2);
         /* Computing MAX */
         r__1 = *rtol1 * gap;
         r__2 = *rtol2 * tmp; // , expr subst
-        cvrgd = fla_max(r__1,r__2);
-        if (width <= cvrgd || width <= mnwdth || iter == maxitr)
+        cvrgd = fla_max(r__1, r__2);
+        if(width <= cvrgd || width <= mnwdth || iter == maxitr)
         {
             /* reduce number of unconverged intervals */
             --nint;
             /* Mark interval as converged. */
             iwork[k - 1] = 0;
-            if (i1 == i__)
+            if(i1 == i__)
             {
                 i1 = next;
             }
             else
             {
                 /* Prev holds the last unconverged interval previously examined */
-                if (prev >= i1)
+                if(prev >= i1)
                 {
                     iwork[(prev << 1) - 1] = next;
                 }
@@ -379,7 +386,7 @@ L80:
         prev = i__;
         /* Perform one bisection step */
         negcnt = slaneg_(n, &d__[1], &lld[1], &mid, pivmin, &r__);
-        if (negcnt <= i__ - 1)
+        if(negcnt <= i__ - 1)
         {
             work[k - 1] = mid;
         }
@@ -388,27 +395,24 @@ L80:
             work[k] = mid;
         }
         i__ = next;
-L100:
-        ;
+    L100:;
     }
     ++iter;
     /* do another loop if there are still unconverged intervals */
     /* However, in the last iteration, all intervals are accepted */
     /* since this is the best we can do. */
-    if (nint > 0 && iter <= maxitr)
+    if(nint > 0 && iter <= maxitr)
     {
         goto L80;
     }
     /* At this point, all the intervals have converged */
     i__1 = *ilast;
-    for (i__ = *ifirst;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = *ifirst; i__ <= i__1; ++i__)
     {
         k = i__ << 1;
         ii = i__ - *offset;
         /* All intervals marked by '0' have been refined. */
-        if (iwork[k - 1] == 0)
+        if(iwork[k - 1] == 0)
         {
             w[ii] = (work[k - 1] + work[k]) * .5f;
             werr[ii] = work[k] - w[ii];
@@ -416,16 +420,14 @@ L100:
         /* L110: */
     }
     i__1 = *ilast;
-    for (i__ = *ifirst + 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = *ifirst + 1; i__ <= i__1; ++i__)
     {
         k = i__ << 1;
         ii = i__ - *offset;
         /* Computing MAX */
         r__1 = 0.f;
         r__2 = w[ii] - werr[ii] - w[ii - 1] - werr[ii - 1]; // , expr subst
-        wgap[ii - 1] = fla_max(r__1,r__2);
+        wgap[ii - 1] = fla_max(r__1, r__2);
         /* L111: */
     }
     return;

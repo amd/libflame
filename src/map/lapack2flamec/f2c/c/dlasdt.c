@@ -1,16 +1,25 @@
-/* ../netlib/dlasdt.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlasdt.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLASDT creates a tree of subproblems for bidiagonal divide and conquer. Used by sbdsdc. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLASDT + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasdt. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasdt.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasdt. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasdt.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasdt. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasdt.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -91,10 +100,11 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlasdt_(integer *n, integer *lvl, integer *nd, integer * inode, integer *ndiml, integer *ndimr, integer *msub)
+void dlasdt_(integer *n, integer *lvl, integer *nd, integer *inode, integer *ndiml, integer *ndimr,
+             integer *msub)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlasdt inputs: n %" FLA_IS ", msub %" FLA_IS "",*n, *msub);
+    AOCL_DTL_SNPRINTF("dlasdt inputs: n %" FLA_IS ", msub %" FLA_IS "", *n, *msub);
     /* System generated locals */
     integer i__1, i__2;
     /* Builtin functions */
@@ -125,9 +135,9 @@ void dlasdt_(integer *n, integer *lvl, integer *nd, integer * inode, integer *nd
     --ndiml;
     --inode;
     /* Function Body */
-    maxn = fla_max(1,*n);
-    temp = log((doublereal) maxn / (doublereal) (*msub + 1)) / log(2.);
-    *lvl = (integer) temp + 1;
+    maxn = fla_max(1, *n);
+    temp = log((doublereal)maxn / (doublereal)(*msub + 1)) / log(2.);
+    *lvl = (integer)temp + 1;
     i__ = *n / 2;
     inode[1] = i__ + 1;
     ndiml[1] = i__;
@@ -136,16 +146,12 @@ void dlasdt_(integer *n, integer *lvl, integer *nd, integer * inode, integer *nd
     ir = 1;
     llst = 1;
     i__1 = *lvl - 1;
-    for (nlvl = 1;
-            nlvl <= i__1;
-            ++nlvl)
+    for(nlvl = 1; nlvl <= i__1; ++nlvl)
     {
         /* Constructing the tree at (NLVL+1)-st level. The number of */
         /* nodes created on this level is LLST * 2. */
         i__2 = llst - 1;
-        for (i__ = 0;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 0; i__ <= i__2; ++i__)
         {
             il += 2;
             ir += 2;

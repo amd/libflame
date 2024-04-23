@@ -12,9 +12,9 @@
 
 #ifdef FLA_ENABLE_YET_LAPACK2FLAME
 
-#include "FLA_lapack2flame_util_defs.h"
-#include "FLA_lapack2flame_return_defs.h"
 #include "FLA_lapack2flame_prototypes.h"
+#include "FLA_lapack2flame_return_defs.h"
+#include "FLA_lapack2flame_util_defs.h"
 
 /*
   BDSQR computes the singular values and, optionally, the right and/or
@@ -44,123 +44,109 @@
   GREGORIO QUINTANA-ORT´ı, Universitat Jaume I
 */
 
-#define LAPACK_bdsqr(prefix)                                            \
-  void F77_ ## prefix ## bdsqr( char* uplo,                              \
-                               integer*  m_d,                               \
-                               integer*  n_Vt,                              \
-                               integer*  m_U,                               \
-                               integer*  n_C,                               \
-                               PREFIX2LAPACK_REALDEF(prefix)* buff_d,   \
-                               PREFIX2LAPACK_REALDEF(prefix)* buff_e,   \
-                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_Vt, integer* ldim_Vt, \
-                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_U,  integer* ldim_U, \
-                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_C,  integer* ldim_C, \
-                               PREFIX2LAPACK_REALDEF(prefix)* rwork,    \
-                               int*  info )
+#define LAPACK_bdsqr(prefix)                                                                      \
+    void F77_##prefix##bdsqr(char *uplo, integer *m_d, integer *n_Vt, integer *m_U, integer *n_C, \
+                             PREFIX2LAPACK_REALDEF(prefix) * buff_d,                              \
+                             PREFIX2LAPACK_REALDEF(prefix) * buff_e,                              \
+                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_Vt, integer * ldim_Vt,          \
+                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_U, integer * ldim_U,            \
+                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_C, integer * ldim_C,            \
+                             PREFIX2LAPACK_REALDEF(prefix) * rwork, int *info)
 
-#define LAPACK_bdsqr_body(prefix)                                       \
-  AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                         \
-  FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                \
-  FLA_Datatype dtype_re = PREFIX2FLAME_REALTYPE(prefix);                \
-  FLA_Obj      d, e, U, Vt, G, H, C;                                    \
-  FLA_Svd_type jobu, jobv;                                              \
-  FLA_Uplo     uplo_fla;                                                \
-  FLA_Error    init_result;                                             \
-                                                                        \
-  FLA_Init_safe( &init_result );                                        \
-                                                                        \
-  /* Param mapping */                                                   \
-  FLA_Param_map_netlib_to_flame_uplo( uplo, &uplo_fla );                \
-                                                                        \
-  /* Create diagonals */                                                \
-  FLA_Obj_create_without_buffer( dtype_re, *m_d, 1, &d );               \
-  FLA_Obj_attach_buffer( buff_d, 1, *m_d, &d );                         \
-  if ( *m_d > 1 ) {                                                     \
-    FLA_Obj_create_without_buffer( dtype_re, *m_d - 1, 1, &e );         \
-    FLA_Obj_attach_buffer( buff_d, 1, *m_d - 1, &e );                   \
-  }                                                                     \
-  /* Create U and Vt */                                                 \
-  if ( *m_U > 0 ) {                                                     \
-    FLA_Obj_create_without_buffer( datatype, *m_U, *m_d, &U  );         \
-    FLA_Obj_attach_buffer( buff_U, 1, *ldim_U, &U );                    \
-    jobu = FLA_SVD_VECTORS_ALL;                                         \
-  } else {                                                              \
-    jobu = FLA_SVD_VECTORS_NONE;                                        \
-  }                                                                     \
-  if ( *n_Vt > 0 ) {                                                    \
-    FLA_Obj_create_without_buffer( datatype, *m_d, *n_Vt, &Vt );        \
-    FLA_Obj_attach_buffer( buff_Vt, 1, *ldim_Vt, &Vt );                 \
-    jobv = FLA_SVD_VECTORS_ALL;                                         \
-    /* V should be flipped */                                           \
-    FLA_Obj_flip_base( &Vt );                                           \
-    FLA_Obj_flip_view( &Vt );                                           \
-  } else {                                                              \
-    jobv = FLA_SVD_VECTORS_NONE;                                        \
-  }                                                                     \
-  if ( *n_C > 0 ) {                                                     \
-    FLA_Obj_create_without_buffer( datatype, *m_d, *n_C, &C );          \
-    FLA_Obj_attach_buffer( buff_C, 1, *ldim_C, &C );                    \
-  }                                                                     \
-                                                                        \
-  /* Create workspace */                                                \
-  FLA_Bsvd_create_workspace( d, &G, &H );                               \
-                                                                        \
-  /* Perform Bidiagonal SVD */                                          \
-  FLA_Bsvd_ext( uplo_fla, d, e, G, H,                                   \
-                jobu, U,                                                \
-                jobv, Vt,                                               \
-                *n_C, C );                                              \
-                                                                        \
-  /* Free matrices */                                                   \
-  if ( jobv != FLA_SVD_VECTORS_NONE ) {                                 \
-    /* if V is flipped abd complex, then apply conjugate */             \
-    if ( FLA_Obj_is_complex( Vt ) == TRUE )                             \
-      FLA_Conjugate( Vt );                                              \
-    FLA_Obj_free_without_buffer( &Vt );                                 \
-  }                                                                     \
-  if ( jobu != FLA_SVD_VECTORS_NONE ) FLA_Obj_free_without_buffer( &U ); \
-  if ( *n_C > 0 )                     FLA_Obj_free_without_buffer( &C ); \
-  FLA_Obj_free( &H );                                                   \
-  FLA_Obj_free( &G );                                                   \
-  FLA_Obj_free_without_buffer( &d );                                    \
-  if ( *m_d > 1 )                                                       \
-    FLA_Obj_free_without_buffer( &e );                                  \
-                                                                        \
-  FLA_Finalize_safe( init_result );                                     \
-                                                                        \
-  *info = 0;                                                            \
-                                                                        \
-  AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                          \
-  return;
-
+#define LAPACK_bdsqr_body(prefix)                                   \
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                   \
+    FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);          \
+    FLA_Datatype dtype_re = PREFIX2FLAME_REALTYPE(prefix);          \
+    FLA_Obj d, e, U, Vt, G, H, C;                                   \
+    FLA_Svd_type jobu, jobv;                                        \
+    FLA_Uplo uplo_fla;                                              \
+    FLA_Error init_result;                                          \
+                                                                    \
+    FLA_Init_safe(&init_result);                                    \
+                                                                    \
+    /* Param mapping */                                             \
+    FLA_Param_map_netlib_to_flame_uplo(uplo, &uplo_fla);            \
+                                                                    \
+    /* Create diagonals */                                          \
+    FLA_Obj_create_without_buffer(dtype_re, *m_d, 1, &d);           \
+    FLA_Obj_attach_buffer(buff_d, 1, *m_d, &d);                     \
+    if(*m_d > 1)                                                    \
+    {                                                               \
+        FLA_Obj_create_without_buffer(dtype_re, *m_d - 1, 1, &e);   \
+        FLA_Obj_attach_buffer(buff_d, 1, *m_d - 1, &e);             \
+    }                                                               \
+    /* Create U and Vt */                                           \
+    if(*m_U > 0)                                                    \
+    {                                                               \
+        FLA_Obj_create_without_buffer(datatype, *m_U, *m_d, &U);    \
+        FLA_Obj_attach_buffer(buff_U, 1, *ldim_U, &U);              \
+        jobu = FLA_SVD_VECTORS_ALL;                                 \
+    }                                                               \
+    else                                                            \
+    {                                                               \
+        jobu = FLA_SVD_VECTORS_NONE;                                \
+    }                                                               \
+    if(*n_Vt > 0)                                                   \
+    {                                                               \
+        FLA_Obj_create_without_buffer(datatype, *m_d, *n_Vt, &Vt);  \
+        FLA_Obj_attach_buffer(buff_Vt, 1, *ldim_Vt, &Vt);           \
+        jobv = FLA_SVD_VECTORS_ALL;                                 \
+        /* V should be flipped */                                   \
+        FLA_Obj_flip_base(&Vt);                                     \
+        FLA_Obj_flip_view(&Vt);                                     \
+    }                                                               \
+    else                                                            \
+    {                                                               \
+        jobv = FLA_SVD_VECTORS_NONE;                                \
+    }                                                               \
+    if(*n_C > 0)                                                    \
+    {                                                               \
+        FLA_Obj_create_without_buffer(datatype, *m_d, *n_C, &C);    \
+        FLA_Obj_attach_buffer(buff_C, 1, *ldim_C, &C);              \
+    }                                                               \
+                                                                    \
+    /* Create workspace */                                          \
+    FLA_Bsvd_create_workspace(d, &G, &H);                           \
+                                                                    \
+    /* Perform Bidiagonal SVD */                                    \
+    FLA_Bsvd_ext(uplo_fla, d, e, G, H, jobu, U, jobv, Vt, *n_C, C); \
+                                                                    \
+    /* Free matrices */                                             \
+    if(jobv != FLA_SVD_VECTORS_NONE)                                \
+    {                                                               \
+        /* if V is flipped abd complex, then apply conjugate */     \
+        if(FLA_Obj_is_complex(Vt) == TRUE)                          \
+            FLA_Conjugate(Vt);                                      \
+        FLA_Obj_free_without_buffer(&Vt);                           \
+    }                                                               \
+    if(jobu != FLA_SVD_VECTORS_NONE)                                \
+        FLA_Obj_free_without_buffer(&U);                            \
+    if(*n_C > 0)                                                    \
+        FLA_Obj_free_without_buffer(&C);                            \
+    FLA_Obj_free(&H);                                               \
+    FLA_Obj_free(&G);                                               \
+    FLA_Obj_free_without_buffer(&d);                                \
+    if(*m_d > 1)                                                    \
+        FLA_Obj_free_without_buffer(&e);                            \
+                                                                    \
+    FLA_Finalize_safe(init_result);                                 \
+                                                                    \
+    *info = 0;                                                      \
+                                                                    \
+    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                    \
+    return;
 
 LAPACK_bdsqr(s)
 {
-    {
-        LAPACK_RETURN_CHECK( sbdsqr_check( uplo, m_d, n_Vt, m_U, n_C,
-                                           buff_d, buff_e,
-                                           buff_Vt, ldim_Vt,
-                                           buff_U,  ldim_U,
-                                           buff_C,  ldim_C,
-                                           rwork,
-                                           info ) )
-    }
-    {
+    {LAPACK_RETURN_CHECK(sbdsqr_check(uplo, m_d, n_Vt, m_U, n_C, buff_d, buff_e, buff_Vt, ldim_Vt,
+                                      buff_U, ldim_U, buff_C, ldim_C, rwork, info))} {
         LAPACK_bdsqr_body(s)
     }
 }
 LAPACK_bdsqr(d)
 {
-    {
-        LAPACK_RETURN_CHECK( dbdsqr_check( uplo, m_d, n_Vt, m_U, n_C,
-                                           buff_d, buff_e,
-                                           buff_Vt, ldim_Vt,
-                                           buff_U,  ldim_U,
-                                           buff_C,  ldim_C,
-                                           rwork,
-                                           info ) )
-    }
-    {
+    {LAPACK_RETURN_CHECK(dbdsqr_check(uplo, m_d, n_Vt, m_U, n_C, buff_d, buff_e, buff_Vt, ldim_Vt,
+                                      buff_U, ldim_U, buff_C, ldim_C, rwork, info))} {
         LAPACK_bdsqr_body(d)
     }
 }
@@ -168,31 +154,15 @@ LAPACK_bdsqr(d)
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
 LAPACK_bdsqr(c)
 {
-    {
-        LAPACK_RETURN_CHECK( cbdsqr_check( uplo, m_d, n_Vt, m_U, n_C,
-                                           buff_d, buff_e,
-                                           buff_Vt, ldim_Vt,
-                                           buff_U,  ldim_U,
-                                           buff_C,  ldim_C,
-                                           rwork,
-                                           info ) )
-    }
-    {
+    {LAPACK_RETURN_CHECK(cbdsqr_check(uplo, m_d, n_Vt, m_U, n_C, buff_d, buff_e, buff_Vt, ldim_Vt,
+                                      buff_U, ldim_U, buff_C, ldim_C, rwork, info))} {
         LAPACK_bdsqr_body(c)
     }
 }
 LAPACK_bdsqr(z)
 {
-    {
-        LAPACK_RETURN_CHECK( zbdsqr_check( uplo, m_d, n_Vt, m_U, n_C,
-                                           buff_d, buff_e,
-                                           buff_Vt, ldim_Vt,
-                                           buff_U,  ldim_U,
-                                           buff_C,  ldim_C,
-                                           rwork,
-                                           info ) )
-    }
-    {
+    {LAPACK_RETURN_CHECK(zbdsqr_check(uplo, m_d, n_Vt, m_U, n_C, buff_d, buff_e, buff_Vt, ldim_Vt,
+                                      buff_U, ldim_U, buff_C, ldim_C, rwork, info))} {
         LAPACK_bdsqr_body(z)
     }
 }

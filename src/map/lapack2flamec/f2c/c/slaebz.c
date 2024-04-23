@@ -1,16 +1,25 @@
-/* ../netlib/slaebz.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slaebz.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLAEBZ computes the number of eigenvalues of a real symmetric tridiagonal matrix which are less than or equal to a given value, and performs other tasks required by the routine sstebz. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAEBZ + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaebz. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaebz.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaebz. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaebz.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaebz. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaebz.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -303,7 +312,10 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer *minp, integer *nbmin, real *abstol, real * reltol, real *pivmin, real *d__, real *e, real *e2, integer *nval, real *ab, real *c__, integer *mout, integer *nab, real *work, integer *iwork, integer *info)
+void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer *minp,
+             integer *nbmin, real *abstol, real *reltol, real *pivmin, real *d__, real *e, real *e2,
+             integer *nval, real *ab, real *c__, integer *mout, integer *nab, real *work,
+             integer *iwork, integer *info)
 {
     /* System generated locals */
     integer nab_dim1, nab_offset, ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
@@ -345,46 +357,40 @@ void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
     --iwork;
     /* Function Body */
     *info = 0;
-    if (*ijob < 1 || *ijob > 3)
+    if(*ijob < 1 || *ijob > 3)
     {
         *info = -1;
         return;
     }
     /* Initialize NAB */
-    if (*ijob == 1)
+    if(*ijob == 1)
     {
         /* Compute the number of eigenvalues in the initial intervals. */
         *mout = 0;
         i__1 = *minp;
-        for (ji = 1;
-                ji <= i__1;
-                ++ji)
+        for(ji = 1; ji <= i__1; ++ji)
         {
-            for (jp = 1;
-                    jp <= 2;
-                    ++jp)
+            for(jp = 1; jp <= 2; ++jp)
             {
                 tmp1 = d__[1] - ab[ji + jp * ab_dim1];
-                if (f2c_abs(tmp1) < *pivmin)
+                if(f2c_abs(tmp1) < *pivmin)
                 {
                     tmp1 = -(*pivmin);
                 }
                 nab[ji + jp * nab_dim1] = 0;
-                if (tmp1 <= 0.f)
+                if(tmp1 <= 0.f)
                 {
                     nab[ji + jp * nab_dim1] = 1;
                 }
                 i__2 = *n;
-                for (j = 2;
-                        j <= i__2;
-                        ++j)
+                for(j = 2; j <= i__2; ++j)
                 {
                     tmp1 = d__[j] - e2[j - 1] / tmp1 - ab[ji + jp * ab_dim1];
-                    if (f2c_abs(tmp1) < *pivmin)
+                    if(f2c_abs(tmp1) < *pivmin)
                     {
                         tmp1 = -(*pivmin);
                     }
-                    if (tmp1 <= 0.f)
+                    if(tmp1 <= 0.f)
                     {
                         ++nab[ji + jp * nab_dim1];
                     }
@@ -405,12 +411,10 @@ void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
     kl = *minp;
     /* If IJOB=2, initialize C. */
     /* If IJOB=3, use the user-supplied starting point. */
-    if (*ijob == 2)
+    if(*ijob == 2)
     {
         i__1 = *minp;
-        for (ji = 1;
-                ji <= i__1;
-                ++ji)
+        for(ji = 1; ji <= i__1; ++ji)
         {
             c__[ji] = (ab[ji + ab_dim1] + ab[ji + (ab_dim1 << 1)]) * .5f;
             /* L40: */
@@ -418,56 +422,48 @@ void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
     }
     /* Iteration loop */
     i__1 = *nitmax;
-    for (jit = 1;
-            jit <= i__1;
-            ++jit)
+    for(jit = 1; jit <= i__1; ++jit)
     {
         /* Loop over intervals */
-        if (kl - kf + 1 >= *nbmin && *nbmin > 0)
+        if(kl - kf + 1 >= *nbmin && *nbmin > 0)
         {
             /* Begin of Parallel Version of the loop */
             i__2 = kl;
-            for (ji = kf;
-                    ji <= i__2;
-                    ++ji)
+            for(ji = kf; ji <= i__2; ++ji)
             {
                 /* Compute N(c), the number of eigenvalues less than c */
                 work[ji] = d__[1] - c__[ji];
                 iwork[ji] = 0;
-                if (work[ji] <= *pivmin)
+                if(work[ji] <= *pivmin)
                 {
                     iwork[ji] = 1;
                     /* Computing MIN */
                     r__1 = work[ji];
                     r__2 = -(*pivmin); // , expr subst
-                    work[ji] = fla_min(r__1,r__2);
+                    work[ji] = fla_min(r__1, r__2);
                 }
                 i__3 = *n;
-                for (j = 2;
-                        j <= i__3;
-                        ++j)
+                for(j = 2; j <= i__3; ++j)
                 {
                     work[ji] = d__[j] - e2[j - 1] / work[ji] - c__[ji];
-                    if (work[ji] <= *pivmin)
+                    if(work[ji] <= *pivmin)
                     {
                         ++iwork[ji];
                         /* Computing MIN */
                         r__1 = work[ji];
                         r__2 = -(*pivmin); // , expr subst
-                        work[ji] = fla_min(r__1,r__2);
+                        work[ji] = fla_min(r__1, r__2);
                     }
                     /* L50: */
                 }
                 /* L60: */
             }
-            if (*ijob <= 2)
+            if(*ijob <= 2)
             {
                 /* IJOB=2: Choose all intervals containing eigenvalues. */
                 klnew = kl;
                 i__2 = kl;
-                for (ji = kf;
-                        ji <= i__2;
-                        ++ji)
+                for(ji = kf; ji <= i__2; ++ji)
                 {
                     /* Insure that N(w) is monotone */
                     /* Computing MIN */
@@ -475,17 +471,17 @@ void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
                     i__5 = nab[ji + nab_dim1];
                     i__6 = iwork[ji]; // , expr subst
                     i__3 = nab[ji + (nab_dim1 << 1)];
-                    i__4 = fla_max(i__5,i__6); // , expr subst
-                    iwork[ji] = fla_min(i__3,i__4);
+                    i__4 = fla_max(i__5, i__6); // , expr subst
+                    iwork[ji] = fla_min(i__3, i__4);
                     /* Update the Queue -- add intervals if both halves */
                     /* contain eigenvalues. */
-                    if (iwork[ji] == nab[ji + (nab_dim1 << 1)])
+                    if(iwork[ji] == nab[ji + (nab_dim1 << 1)])
                     {
                         /* No eigenvalue in the upper interval: */
                         /* just use the lower interval. */
                         ab[ji + (ab_dim1 << 1)] = c__[ji];
                     }
-                    else if (iwork[ji] == nab[ji + nab_dim1])
+                    else if(iwork[ji] == nab[ji + nab_dim1])
                     {
                         /* No eigenvalue in the lower interval: */
                         /* just use the upper interval. */
@@ -494,7 +490,7 @@ void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
                     else
                     {
                         ++klnew;
-                        if (klnew <= *mmax)
+                        if(klnew <= *mmax)
                         {
                             /* Eigenvalue in both intervals -- add upper to */
                             /* queue. */
@@ -512,7 +508,7 @@ void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
                     }
                     /* L70: */
                 }
-                if (*info != 0)
+                if(*info != 0)
                 {
                     return;
                 }
@@ -523,16 +519,14 @@ void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
                 /* IJOB=3: Binary search. Keep only the interval containing */
                 /* w s.t. N(w) = NVAL */
                 i__2 = kl;
-                for (ji = kf;
-                        ji <= i__2;
-                        ++ji)
+                for(ji = kf; ji <= i__2; ++ji)
                 {
-                    if (iwork[ji] <= nval[ji])
+                    if(iwork[ji] <= nval[ji])
                     {
                         ab[ji + ab_dim1] = c__[ji];
                         nab[ji + nab_dim1] = iwork[ji];
                     }
-                    if (iwork[ji] >= nval[ji])
+                    if(iwork[ji] >= nval[ji])
                     {
                         ab[ji + (ab_dim1 << 1)] = c__[ji];
                         nab[ji + (nab_dim1 << 1)] = iwork[ji];
@@ -547,39 +541,35 @@ void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
             /* Begin of Serial Version of the loop */
             klnew = kl;
             i__2 = kl;
-            for (ji = kf;
-                    ji <= i__2;
-                    ++ji)
+            for(ji = kf; ji <= i__2; ++ji)
             {
                 /* Compute N(w), the number of eigenvalues less than w */
                 tmp1 = c__[ji];
                 tmp2 = d__[1] - tmp1;
                 itmp1 = 0;
-                if (tmp2 <= *pivmin)
+                if(tmp2 <= *pivmin)
                 {
                     itmp1 = 1;
                     /* Computing MIN */
                     r__1 = tmp2;
                     r__2 = -(*pivmin); // , expr subst
-                    tmp2 = fla_min(r__1,r__2);
+                    tmp2 = fla_min(r__1, r__2);
                 }
                 i__3 = *n;
-                for (j = 2;
-                        j <= i__3;
-                        ++j)
+                for(j = 2; j <= i__3; ++j)
                 {
                     tmp2 = d__[j] - e2[j - 1] / tmp2 - tmp1;
-                    if (tmp2 <= *pivmin)
+                    if(tmp2 <= *pivmin)
                     {
                         ++itmp1;
                         /* Computing MIN */
                         r__1 = tmp2;
                         r__2 = -(*pivmin); // , expr subst
-                        tmp2 = fla_min(r__1,r__2);
+                        tmp2 = fla_min(r__1, r__2);
                     }
                     /* L90: */
                 }
-                if (*ijob <= 2)
+                if(*ijob <= 2)
                 {
                     /* IJOB=2: Choose all intervals containing eigenvalues. */
                     /* Insure that N(w) is monotone */
@@ -587,23 +577,23 @@ void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
                     /* Computing MAX */
                     i__5 = nab[ji + nab_dim1];
                     i__3 = nab[ji + (nab_dim1 << 1)];
-                    i__4 = fla_max(i__5,itmp1); // , expr subst
-                    itmp1 = fla_min(i__3,i__4);
+                    i__4 = fla_max(i__5, itmp1); // , expr subst
+                    itmp1 = fla_min(i__3, i__4);
                     /* Update the Queue -- add intervals if both halves */
                     /* contain eigenvalues. */
-                    if (itmp1 == nab[ji + (nab_dim1 << 1)])
+                    if(itmp1 == nab[ji + (nab_dim1 << 1)])
                     {
                         /* No eigenvalue in the upper interval: */
                         /* just use the lower interval. */
                         ab[ji + (ab_dim1 << 1)] = tmp1;
                     }
-                    else if (itmp1 == nab[ji + nab_dim1])
+                    else if(itmp1 == nab[ji + nab_dim1])
                     {
                         /* No eigenvalue in the lower interval: */
                         /* just use the upper interval. */
                         ab[ji + ab_dim1] = tmp1;
                     }
-                    else if (klnew < *mmax)
+                    else if(klnew < *mmax)
                     {
                         /* Eigenvalue in both intervals -- add upper to queue. */
                         ++klnew;
@@ -624,12 +614,12 @@ void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
                 {
                     /* IJOB=3: Binary search. Keep only the interval */
                     /* containing w s.t. N(w) = NVAL */
-                    if (itmp1 <= nval[ji])
+                    if(itmp1 <= nval[ji])
                     {
                         ab[ji + ab_dim1] = tmp1;
                         nab[ji + nab_dim1] = itmp1;
                     }
-                    if (itmp1 >= nval[ji])
+                    if(itmp1 >= nval[ji])
                     {
                         ab[ji + (ab_dim1 << 1)] = tmp1;
                         nab[ji + (nab_dim1 << 1)] = itmp1;
@@ -642,23 +632,21 @@ void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
         /* Check for convergence */
         kfnew = kf;
         i__2 = kl;
-        for (ji = kf;
-                ji <= i__2;
-                ++ji)
+        for(ji = kf; ji <= i__2; ++ji)
         {
-            tmp1 = (r__1 = ab[ji + (ab_dim1 << 1)] - ab[ji + ab_dim1], f2c_abs( r__1));
+            tmp1 = (r__1 = ab[ji + (ab_dim1 << 1)] - ab[ji + ab_dim1], f2c_abs(r__1));
             /* Computing MAX */
             r__3 = (r__1 = ab[ji + (ab_dim1 << 1)], f2c_abs(r__1));
             r__4 = (r__2 = ab[ji + ab_dim1], f2c_abs(r__2)); // , expr subst
-            tmp2 = fla_max(r__3,r__4);
+            tmp2 = fla_max(r__3, r__4);
             /* Computing MAX */
-            r__1 = fla_max(*abstol,*pivmin);
+            r__1 = fla_max(*abstol, *pivmin);
             r__2 = *reltol * tmp2; // , expr subst
-            if (tmp1 < fla_max(r__1,r__2) || nab[ji + nab_dim1] >= nab[ji + ( nab_dim1 << 1)])
+            if(tmp1 < fla_max(r__1, r__2) || nab[ji + nab_dim1] >= nab[ji + (nab_dim1 << 1)])
             {
                 /* Converged -- Swap with position KFNEW, */
                 /* then increment KFNEW */
-                if (ji > kfnew)
+                if(ji > kfnew)
                 {
                     tmp1 = ab[ji + ab_dim1];
                     tmp2 = ab[ji + (ab_dim1 << 1)];
@@ -672,7 +660,7 @@ void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
                     ab[kfnew + (ab_dim1 << 1)] = tmp2;
                     nab[kfnew + nab_dim1] = itmp1;
                     nab[kfnew + (nab_dim1 << 1)] = itmp2;
-                    if (*ijob == 3)
+                    if(*ijob == 3)
                     {
                         itmp1 = nval[ji];
                         nval[ji] = nval[kfnew];
@@ -686,15 +674,13 @@ void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
         kf = kfnew;
         /* Choose Midpoints */
         i__2 = kl;
-        for (ji = kf;
-                ji <= i__2;
-                ++ji)
+        for(ji = kf; ji <= i__2; ++ji)
         {
             c__[ji] = (ab[ji + ab_dim1] + ab[ji + (ab_dim1 << 1)]) * .5f;
             /* L120: */
         }
         /* If no more intervals to refine, quit. */
-        if (kf > kl)
+        if(kf > kl)
         {
             goto L140;
         }
@@ -703,7 +689,7 @@ void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
     /* Converged */
 L140: /* Computing MAX */
     i__1 = kl + 1 - kf;
-    *info = fla_max(i__1,0);
+    *info = fla_max(i__1, 0);
     *mout = kl;
     return;
     /* End of SLAEBZ */

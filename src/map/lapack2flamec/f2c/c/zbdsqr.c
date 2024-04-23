@@ -1,5 +1,8 @@
-/* ../netlib/zbdsqr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zbdsqr.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b15 = -.125;
 static integer c__1 = 1;
@@ -11,11 +14,17 @@ static doublereal c_b72 = -1.;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZBDSQR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zbdsqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zbdsqr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zbdsqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zbdsqr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zbdsqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zbdsqr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -71,7 +80,7 @@ static doublereal c_b72 = -1.;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': B is upper bidiagonal;
-*/
+ */
 /* > = 'L': B is lower bidiagonal. */
 /* > \endverbatim */
 /* > */
@@ -218,16 +227,20 @@ if INFO = i, i */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc, doublereal *d__, doublereal *e, doublecomplex *vt, integer *ldvt, doublecomplex *u, integer *ldu, doublecomplex *c__, integer *ldc, doublereal *rwork, integer *info)
+void zbdsqr_(char *uplo, integer *n, integer *ncvt, integer *nru, integer *ncc, doublereal *d__,
+             doublereal *e, doublecomplex *vt, integer *ldvt, doublecomplex *u, integer *ldu,
+             doublecomplex *c__, integer *ldc, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zbdsqr inputs: uplo %c, n %" FLA_IS ", ncvt %" FLA_IS ", nru %" FLA_IS ", ncc %" FLA_IS ", ldvt %" FLA_IS ", ldu %" FLA_IS ", ldc %" FLA_IS "",*uplo, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
+    AOCL_DTL_SNPRINTF("zbdsqr inputs: uplo %c, n %" FLA_IS ", ncvt %" FLA_IS ", nru %" FLA_IS
+                      ", ncc %" FLA_IS ", ldvt %" FLA_IS ", ldu %" FLA_IS ", ldc %" FLA_IS "",
+                      *uplo, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
 
     /* System generated locals */
     integer c_dim1, c_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
     doublereal d__1, d__2, d__3, d__4;
     /* Builtin functions */
-    double pow_dd(doublereal *, doublereal *), sqrt(doublereal), d_sign( doublereal *, doublereal *);
+    double pow_dd(doublereal *, doublereal *), sqrt(doublereal), d_sign(doublereal *, doublereal *);
     /* Local variables */
     doublereal f, g, h__;
     integer i__, j, m;
@@ -243,7 +256,8 @@ void zbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc,
     integer isub, iter;
     doublereal unfl, sinl, cosr, smin, smax, sinr;
     extern /* Subroutine */
-    void dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     extern logical lsame_(char *, char *, integer, integer);
     doublereal oldcs;
     integer oldll;
@@ -252,10 +266,21 @@ void zbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc,
     doublereal sminl, sigmx;
     logical lower;
     extern /* Subroutine */
-    void zlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zdrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), dlasq1_(integer *, doublereal *, doublereal *, doublereal *, integer *), dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        zlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
+               doublecomplex *, integer *),
+        zdrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
+               doublereal *),
+        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        dlasq1_(integer *, doublereal *, doublereal *, doublereal *, integer *),
+        dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *, doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    void dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+        void
+        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal sminoa, thresh;
     logical rotate;
     doublereal tolmul;
@@ -296,62 +321,62 @@ void zbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc,
     /* Function Body */
     *info = 0;
     lower = lsame_(uplo, "L", 1, 1);
-    if (! lsame_(uplo, "U", 1, 1) && ! lower)
+    if(!lsame_(uplo, "U", 1, 1) && !lower)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*ncvt < 0)
+    else if(*ncvt < 0)
     {
         *info = -3;
     }
-    else if (*nru < 0)
+    else if(*nru < 0)
     {
         *info = -4;
     }
-    else if (*ncc < 0)
+    else if(*ncc < 0)
     {
         *info = -5;
     }
-    else if (*ncvt == 0 && *ldvt < 1 || *ncvt > 0 && *ldvt < fla_max(1,*n))
+    else if(*ncvt == 0 && *ldvt < 1 || *ncvt > 0 && *ldvt < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldu < fla_max(1,*nru))
+    else if(*ldu < fla_max(1, *nru))
     {
         *info = -11;
     }
-    else if (*ncc == 0 && *ldc < 1 || *ncc > 0 && *ldc < fla_max(1,*n))
+    else if(*ncc == 0 && *ldc < 1 || *ncc > 0 && *ldc < fla_max(1, *n))
     {
         *info = -13;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZBDSQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
         goto L160;
     }
     /* ROTATE is true if any singular vectors desired, false otherwise */
     rotate = *ncvt > 0 || *nru > 0 || *ncc > 0;
     /* If no singular vectors desired, use qd algorithm */
-    if (! rotate)
+    if(!rotate)
     {
         dlasq1_(n, &d__[1], &e[1], &rwork[1], info);
         /* If INFO equals 2, dqds didn't finish, try to finish */
-        if (*info != 2)
+        if(*info != 2)
         {
             AOCL_DTL_TRACE_LOG_EXIT
             return;
@@ -367,12 +392,10 @@ void zbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc,
     unfl = dlamch_("Safe minimum");
     /* If matrix lower bidiagonal, rotate to be upper bidiagonal */
     /* by applying Givens rotations on the left */
-    if (lower)
+    if(lower)
     {
         i__1 = *n - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             dlartg_(&d__[i__], &e[i__], &cs, &sn, &r__);
             d__[i__] = r__;
@@ -383,13 +406,13 @@ void zbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc,
             /* L10: */
         }
         /* Update singular vectors if desired */
-        if (*nru > 0)
+        if(*nru > 0)
         {
             zlasr_("R", "V", "F", nru, n, &rwork[1], &rwork[*n], &u[u_offset], ldu);
         }
-        if (*ncc > 0)
+        if(*ncc > 0)
         {
-            zlasr_("L", "V", "F", n, ncc, &rwork[1], &rwork[*n], &c__[ c_offset], ldc);
+            zlasr_("L", "V", "F", n, ncc, &rwork[1], &rwork[*n], &c__[c_offset], ldc);
         }
     }
     /* Compute singular values to relative accuracy TOL */
@@ -400,62 +423,57 @@ void zbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc,
     d__3 = 100.;
     d__4 = pow_dd(&eps, &c_b15); // , expr subst
     d__1 = 10.;
-    d__2 = fla_min(d__3,d__4); // , expr subst
-    tolmul = fla_max(d__1,d__2);
+    d__2 = fla_min(d__3, d__4); // , expr subst
+    tolmul = fla_max(d__1, d__2);
     tol = tolmul * eps;
     /* Compute approximate maximum, minimum singular values */
     smax = 0.;
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Computing MAX */
         d__2 = smax;
         d__3 = (d__1 = d__[i__], f2c_dabs(d__1)); // , expr subst
-        smax = fla_max(d__2,d__3);
+        smax = fla_max(d__2, d__3);
         /* L20: */
     }
     i__1 = *n - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Computing MAX */
         d__2 = smax;
         d__3 = (d__1 = e[i__], f2c_dabs(d__1)); // , expr subst
-        smax = fla_max(d__2,d__3);
+        smax = fla_max(d__2, d__3);
         /* L30: */
     }
     sminl = 0.;
-    if (tol >= 0.)
+    if(tol >= 0.)
     {
         /* Relative accuracy desired */
         sminoa = f2c_dabs(d__[1]);
-        if (sminoa == 0.)
+        if(sminoa == 0.)
         {
             goto L50;
         }
         mu = sminoa;
         i__1 = *n;
-        for (i__ = 2;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 2; i__ <= i__1; ++i__)
         {
-            mu = (d__2 = d__[i__], f2c_dabs(d__2)) * (mu / (mu + (d__1 = e[i__ - 1], f2c_dabs(d__1))));
-            sminoa = fla_min(sminoa,mu);
-            if (sminoa == 0.)
+            mu = (d__2 = d__[i__], f2c_dabs(d__2))
+                 * (mu / (mu + (d__1 = e[i__ - 1], f2c_dabs(d__1))));
+            sminoa = fla_min(sminoa, mu);
+            if(sminoa == 0.)
             {
                 goto L50;
             }
             /* L40: */
         }
-L50:
-        sminoa /= sqrt((doublereal) (*n));
+    L50:
+        sminoa /= sqrt((doublereal)(*n));
         /* Computing MAX */
         d__1 = tol * sminoa;
         d__2 = *n * 6 * *n * unfl; // , expr subst
-        thresh = fla_max(d__1,d__2);
+        thresh = fla_max(d__1, d__2);
     }
     else
     {
@@ -463,7 +481,7 @@ L50:
         /* Computing MAX */
         d__1 = f2c_dabs(tol) * smax;
         d__2 = *n * 6 * *n * unfl; // , expr subst
-        thresh = fla_max(d__1,d__2);
+        thresh = fla_max(d__1, d__2);
     }
     /* Prepare for main iteration loop for the singular values */
     /* (MAXIT is the maximum number of passes through the inner */
@@ -476,41 +494,39 @@ L50:
     m = *n;
     /* Begin main iteration loop */
 L60: /* Check for convergence or exceeding iteration count */
-    if (m <= 1)
+    if(m <= 1)
     {
         goto L160;
     }
-    if (iter > maxit)
+    if(iter > maxit)
     {
         goto L200;
     }
     /* Find diagonal block of matrix to work on */
-    if (tol < 0. && (d__1 = d__[m], f2c_dabs(d__1)) <= thresh)
+    if(tol < 0. && (d__1 = d__[m], f2c_dabs(d__1)) <= thresh)
     {
         d__[m] = 0.;
     }
     smax = (d__1 = d__[m], f2c_dabs(d__1));
     smin = smax;
     i__1 = m - 1;
-    for (lll = 1;
-            lll <= i__1;
-            ++lll)
+    for(lll = 1; lll <= i__1; ++lll)
     {
         ll = m - lll;
         abss = (d__1 = d__[ll], f2c_dabs(d__1));
         abse = (d__1 = e[ll], f2c_dabs(d__1));
-        if (tol < 0. && abss <= thresh)
+        if(tol < 0. && abss <= thresh)
         {
             d__[ll] = 0.;
         }
-        if (abse <= thresh)
+        if(abse <= thresh)
         {
             goto L80;
         }
-        smin = fla_min(smin,abss);
+        smin = fla_min(smin, abss);
         /* Computing MAX */
-        d__1 = fla_max(smax,abss);
-        smax = fla_max(d__1,abse);
+        d__1 = fla_max(smax, abss);
+        smax = fla_max(d__1, abse);
         /* L70: */
     }
     ll = 0;
@@ -518,7 +534,7 @@ L60: /* Check for convergence or exceeding iteration count */
 L80:
     e[ll] = 0.;
     /* Matrix splits since E(LL) = 0 */
-    if (ll == m - 1)
+    if(ll == m - 1)
     {
         /* Convergence of bottom singular value, return to top of loop */
         --m;
@@ -527,7 +543,7 @@ L80:
 L90:
     ++ll;
     /* E(LL) through E(M-1) are nonzero, E(LL-1) is zero */
-    if (ll == m - 1)
+    if(ll == m - 1)
     {
         /* 2 by 2 block, handle separately */
         dlasv2_(&d__[m - 1], &e[m - 1], &d__[m], &sigmn, &sigmx, &sinr, &cosr, &sinl, &cosl);
@@ -535,26 +551,26 @@ L90:
         e[m - 1] = 0.;
         d__[m] = sigmn;
         /* Compute singular vectors, if desired */
-        if (*ncvt > 0)
+        if(*ncvt > 0)
         {
-            zdrot_(ncvt, &vt[m - 1 + vt_dim1], ldvt, &vt[m + vt_dim1], ldvt, & cosr, &sinr);
+            zdrot_(ncvt, &vt[m - 1 + vt_dim1], ldvt, &vt[m + vt_dim1], ldvt, &cosr, &sinr);
         }
-        if (*nru > 0)
+        if(*nru > 0)
         {
-            zdrot_(nru, &u[(m - 1) * u_dim1 + 1], &c__1, &u[m * u_dim1 + 1], & c__1, &cosl, &sinl);
+            zdrot_(nru, &u[(m - 1) * u_dim1 + 1], &c__1, &u[m * u_dim1 + 1], &c__1, &cosl, &sinl);
         }
-        if (*ncc > 0)
+        if(*ncc > 0)
         {
-            zdrot_(ncc, &c__[m - 1 + c_dim1], ldc, &c__[m + c_dim1], ldc, & cosl, &sinl);
+            zdrot_(ncc, &c__[m - 1 + c_dim1], ldc, &c__[m + c_dim1], ldc, &cosl, &sinl);
         }
         m += -2;
         goto L60;
     }
     /* If working on new submatrix, choose shift direction */
     /* (from larger end diagonal element towards smaller) */
-    if (ll > oldm || m < oldll)
+    if(ll > oldm || m < oldll)
     {
-        if ((d__1 = d__[ll], f2c_dabs(d__1)) >= (d__2 = d__[m], f2c_dabs(d__2)))
+        if((d__1 = d__[ll], f2c_dabs(d__1)) >= (d__2 = d__[m], f2c_dabs(d__2)))
         {
             /* Chase bulge from top (big end) to bottom (small end) */
             idir = 1;
@@ -566,33 +582,33 @@ L90:
         }
     }
     /* Apply convergence tests */
-    if (idir == 1)
+    if(idir == 1)
     {
         /* Run convergence test in forward direction */
         /* First apply standard test to bottom of matrix */
-        if ((d__2 = e[m - 1], f2c_dabs(d__2)) <= f2c_dabs(tol) * (d__1 = d__[m], f2c_dabs( d__1)) || tol < 0. && (d__3 = e[m - 1], f2c_dabs(d__3)) <= thresh)
+        if((d__2 = e[m - 1], f2c_dabs(d__2)) <= f2c_dabs(tol) * (d__1 = d__[m], f2c_dabs(d__1))
+           || tol < 0. && (d__3 = e[m - 1], f2c_dabs(d__3)) <= thresh)
         {
             e[m - 1] = 0.;
             goto L60;
         }
-        if (tol >= 0.)
+        if(tol >= 0.)
         {
             /* If relative accuracy desired, */
             /* apply convergence criterion forward */
             mu = (d__1 = d__[ll], f2c_dabs(d__1));
             sminl = mu;
             i__1 = m - 1;
-            for (lll = ll;
-                    lll <= i__1;
-                    ++lll)
+            for(lll = ll; lll <= i__1; ++lll)
             {
-                if ((d__1 = e[lll], f2c_dabs(d__1)) <= tol * mu)
+                if((d__1 = e[lll], f2c_dabs(d__1)) <= tol * mu)
                 {
                     e[lll] = 0.;
                     goto L60;
                 }
-                mu = (d__2 = d__[lll + 1], f2c_dabs(d__2)) * (mu / (mu + (d__1 = e[ lll], f2c_dabs(d__1))));
-                sminl = fla_min(sminl,mu);
+                mu = (d__2 = d__[lll + 1], f2c_dabs(d__2))
+                     * (mu / (mu + (d__1 = e[lll], f2c_dabs(d__1))));
+                sminl = fla_min(sminl, mu);
                 /* L100: */
             }
         }
@@ -601,29 +617,29 @@ L90:
     {
         /* Run convergence test in backward direction */
         /* First apply standard test to top of matrix */
-        if ((d__2 = e[ll], f2c_dabs(d__2)) <= f2c_dabs(tol) * (d__1 = d__[ll], f2c_dabs(d__1) ) || tol < 0. && (d__3 = e[ll], f2c_dabs(d__3)) <= thresh)
+        if((d__2 = e[ll], f2c_dabs(d__2)) <= f2c_dabs(tol) * (d__1 = d__[ll], f2c_dabs(d__1))
+           || tol < 0. && (d__3 = e[ll], f2c_dabs(d__3)) <= thresh)
         {
             e[ll] = 0.;
             goto L60;
         }
-        if (tol >= 0.)
+        if(tol >= 0.)
         {
             /* If relative accuracy desired, */
             /* apply convergence criterion backward */
             mu = (d__1 = d__[m], f2c_dabs(d__1));
             sminl = mu;
             i__1 = ll;
-            for (lll = m - 1;
-                    lll >= i__1;
-                    --lll)
+            for(lll = m - 1; lll >= i__1; --lll)
             {
-                if ((d__1 = e[lll], f2c_dabs(d__1)) <= tol * mu)
+                if((d__1 = e[lll], f2c_dabs(d__1)) <= tol * mu)
                 {
                     e[lll] = 0.;
                     goto L60;
                 }
-                mu = (d__2 = d__[lll], f2c_dabs(d__2)) * (mu / (mu + (d__1 = e[lll], f2c_dabs(d__1))));
-                sminl = fla_min(sminl,mu);
+                mu = (d__2 = d__[lll], f2c_dabs(d__2))
+                     * (mu / (mu + (d__1 = e[lll], f2c_dabs(d__1))));
+                sminl = fla_min(sminl, mu);
                 /* L110: */
             }
         }
@@ -635,7 +651,7 @@ L90:
     /* Computing MAX */
     d__1 = eps;
     d__2 = tol * .01; // , expr subst
-    if (tol >= 0. && *n * tol * (sminl / smax) <= fla_max(d__1,d__2))
+    if(tol >= 0. && *n * tol * (sminl / smax) <= fla_max(d__1, d__2))
     {
         /* Use a zero shift to avoid loss of relative accuracy */
         shift = 0.;
@@ -643,7 +659,7 @@ L90:
     else
     {
         /* Compute the shift from 2-by-2 block at end of matrix */
-        if (idir == 1)
+        if(idir == 1)
         {
             sll = (d__1 = d__[ll], f2c_dabs(d__1));
             dlas2_(&d__[m - 1], &e[m - 1], &d__[m], &shift, &r__);
@@ -654,11 +670,11 @@ L90:
             dlas2_(&d__[ll], &e[ll], &d__[ll + 1], &shift, &r__);
         }
         /* Test if shift negligible, and if so set to zero */
-        if (sll > 0.)
+        if(sll > 0.)
         {
             /* Computing 2nd power */
             d__1 = shift / sll;
-            if (d__1 * d__1 < eps)
+            if(d__1 * d__1 < eps)
             {
                 shift = 0.;
             }
@@ -667,22 +683,20 @@ L90:
     /* Increment iteration count */
     iter = iter + m - ll;
     /* If SHIFT = 0, do simplified QR iteration */
-    if (shift == 0.)
+    if(shift == 0.)
     {
-        if (idir == 1)
+        if(idir == 1)
         {
             /* Chase bulge from top to bottom */
             /* Save cosines and sines for later singular vector updates */
             cs = 1.;
             oldcs = 1.;
             i__1 = m - 1;
-            for (i__ = ll;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = ll; i__ <= i__1; ++i__)
             {
                 d__1 = d__[i__] * cs;
                 dlartg_(&d__1, &e[i__], &cs, &sn, &r__);
-                if (i__ > ll)
+                if(i__ > ll)
                 {
                     e[i__ - 1] = oldsn * r__;
                 }
@@ -699,23 +713,25 @@ L90:
             d__[m] = h__ * oldcs;
             e[m - 1] = h__ * oldsn;
             /* Update singular vectors */
-            if (*ncvt > 0)
+            if(*ncvt > 0)
             {
                 i__1 = m - ll + 1;
-                zlasr_("L", "V", "F", &i__1, ncvt, &rwork[1], &rwork[*n], &vt[ ll + vt_dim1], ldvt);
+                zlasr_("L", "V", "F", &i__1, ncvt, &rwork[1], &rwork[*n], &vt[ll + vt_dim1], ldvt);
             }
-            if (*nru > 0)
+            if(*nru > 0)
             {
                 i__1 = m - ll + 1;
-                zlasr_("R", "V", "F", nru, &i__1, &rwork[nm12 + 1], &rwork[ nm13 + 1], &u[ll * u_dim1 + 1], ldu);
+                zlasr_("R", "V", "F", nru, &i__1, &rwork[nm12 + 1], &rwork[nm13 + 1],
+                       &u[ll * u_dim1 + 1], ldu);
             }
-            if (*ncc > 0)
+            if(*ncc > 0)
             {
                 i__1 = m - ll + 1;
-                zlasr_("L", "V", "F", &i__1, ncc, &rwork[nm12 + 1], &rwork[ nm13 + 1], &c__[ll + c_dim1], ldc);
+                zlasr_("L", "V", "F", &i__1, ncc, &rwork[nm12 + 1], &rwork[nm13 + 1],
+                       &c__[ll + c_dim1], ldc);
             }
             /* Test convergence */
-            if ((d__1 = e[m - 1], f2c_dabs(d__1)) <= thresh)
+            if((d__1 = e[m - 1], f2c_dabs(d__1)) <= thresh)
             {
                 e[m - 1] = 0.;
             }
@@ -727,13 +743,11 @@ L90:
             cs = 1.;
             oldcs = 1.;
             i__1 = ll + 1;
-            for (i__ = m;
-                    i__ >= i__1;
-                    --i__)
+            for(i__ = m; i__ >= i__1; --i__)
             {
                 d__1 = d__[i__] * cs;
                 dlartg_(&d__1, &e[i__ - 1], &cs, &sn, &r__);
-                if (i__ < m)
+                if(i__ < m)
                 {
                     e[i__] = oldsn * r__;
                 }
@@ -750,23 +764,24 @@ L90:
             d__[ll] = h__ * oldcs;
             e[ll] = h__ * oldsn;
             /* Update singular vectors */
-            if (*ncvt > 0)
+            if(*ncvt > 0)
             {
                 i__1 = m - ll + 1;
-                zlasr_("L", "V", "B", &i__1, ncvt, &rwork[nm12 + 1], &rwork[ nm13 + 1], &vt[ll + vt_dim1], ldvt);
+                zlasr_("L", "V", "B", &i__1, ncvt, &rwork[nm12 + 1], &rwork[nm13 + 1],
+                       &vt[ll + vt_dim1], ldvt);
             }
-            if (*nru > 0)
+            if(*nru > 0)
             {
                 i__1 = m - ll + 1;
-                zlasr_("R", "V", "B", nru, &i__1, &rwork[1], &rwork[*n], &u[ ll * u_dim1 + 1], ldu);
+                zlasr_("R", "V", "B", nru, &i__1, &rwork[1], &rwork[*n], &u[ll * u_dim1 + 1], ldu);
             }
-            if (*ncc > 0)
+            if(*ncc > 0)
             {
                 i__1 = m - ll + 1;
-                zlasr_("L", "V", "B", &i__1, ncc, &rwork[1], &rwork[*n], &c__[ ll + c_dim1], ldc);
+                zlasr_("L", "V", "B", &i__1, ncc, &rwork[1], &rwork[*n], &c__[ll + c_dim1], ldc);
             }
             /* Test convergence */
-            if ((d__1 = e[ll], f2c_dabs(d__1)) <= thresh)
+            if((d__1 = e[ll], f2c_dabs(d__1)) <= thresh)
             {
                 e[ll] = 0.;
             }
@@ -775,19 +790,18 @@ L90:
     else
     {
         /* Use nonzero shift */
-        if (idir == 1)
+        if(idir == 1)
         {
             /* Chase bulge from top to bottom */
             /* Save cosines and sines for later singular vector updates */
-            f = ((d__1 = d__[ll], f2c_dabs(d__1)) - shift) * (d_sign(&c_b49, &d__[ ll]) + shift / d__[ll]);
+            f = ((d__1 = d__[ll], f2c_dabs(d__1)) - shift)
+                * (d_sign(&c_b49, &d__[ll]) + shift / d__[ll]);
             g = e[ll];
             i__1 = m - 1;
-            for (i__ = ll;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = ll; i__ <= i__1; ++i__)
             {
                 dlartg_(&f, &g, &cosr, &sinr, &r__);
-                if (i__ > ll)
+                if(i__ > ll)
                 {
                     e[i__ - 1] = r__;
                 }
@@ -799,7 +813,7 @@ L90:
                 d__[i__] = r__;
                 f = cosl * e[i__] + sinl * d__[i__ + 1];
                 d__[i__ + 1] = cosl * d__[i__ + 1] - sinl * e[i__];
-                if (i__ < m - 1)
+                if(i__ < m - 1)
                 {
                     g = sinl * e[i__ + 1];
                     e[i__ + 1] = cosl * e[i__ + 1];
@@ -812,23 +826,25 @@ L90:
             }
             e[m - 1] = f;
             /* Update singular vectors */
-            if (*ncvt > 0)
+            if(*ncvt > 0)
             {
                 i__1 = m - ll + 1;
-                zlasr_("L", "V", "F", &i__1, ncvt, &rwork[1], &rwork[*n], &vt[ ll + vt_dim1], ldvt);
+                zlasr_("L", "V", "F", &i__1, ncvt, &rwork[1], &rwork[*n], &vt[ll + vt_dim1], ldvt);
             }
-            if (*nru > 0)
+            if(*nru > 0)
             {
                 i__1 = m - ll + 1;
-                zlasr_("R", "V", "F", nru, &i__1, &rwork[nm12 + 1], &rwork[ nm13 + 1], &u[ll * u_dim1 + 1], ldu);
+                zlasr_("R", "V", "F", nru, &i__1, &rwork[nm12 + 1], &rwork[nm13 + 1],
+                       &u[ll * u_dim1 + 1], ldu);
             }
-            if (*ncc > 0)
+            if(*ncc > 0)
             {
                 i__1 = m - ll + 1;
-                zlasr_("L", "V", "F", &i__1, ncc, &rwork[nm12 + 1], &rwork[ nm13 + 1], &c__[ll + c_dim1], ldc);
+                zlasr_("L", "V", "F", &i__1, ncc, &rwork[nm12 + 1], &rwork[nm13 + 1],
+                       &c__[ll + c_dim1], ldc);
             }
             /* Test convergence */
-            if ((d__1 = e[m - 1], f2c_dabs(d__1)) <= thresh)
+            if((d__1 = e[m - 1], f2c_dabs(d__1)) <= thresh)
             {
                 e[m - 1] = 0.;
             }
@@ -837,15 +853,14 @@ L90:
         {
             /* Chase bulge from bottom to top */
             /* Save cosines and sines for later singular vector updates */
-            f = ((d__1 = d__[m], f2c_dabs(d__1)) - shift) * (d_sign(&c_b49, &d__[m] ) + shift / d__[m]);
+            f = ((d__1 = d__[m], f2c_dabs(d__1)) - shift)
+                * (d_sign(&c_b49, &d__[m]) + shift / d__[m]);
             g = e[m - 1];
             i__1 = ll + 1;
-            for (i__ = m;
-                    i__ >= i__1;
-                    --i__)
+            for(i__ = m; i__ >= i__1; --i__)
             {
                 dlartg_(&f, &g, &cosr, &sinr, &r__);
-                if (i__ < m)
+                if(i__ < m)
                 {
                     e[i__] = r__;
                 }
@@ -857,7 +872,7 @@ L90:
                 d__[i__] = r__;
                 f = cosl * e[i__ - 1] + sinl * d__[i__ - 1];
                 d__[i__ - 1] = cosl * d__[i__ - 1] - sinl * e[i__ - 1];
-                if (i__ > ll + 1)
+                if(i__ > ll + 1)
                 {
                     g = sinl * e[i__ - 2];
                     e[i__ - 2] = cosl * e[i__ - 2];
@@ -870,25 +885,26 @@ L90:
             }
             e[ll] = f;
             /* Test convergence */
-            if ((d__1 = e[ll], f2c_dabs(d__1)) <= thresh)
+            if((d__1 = e[ll], f2c_dabs(d__1)) <= thresh)
             {
                 e[ll] = 0.;
             }
             /* Update singular vectors if desired */
-            if (*ncvt > 0)
+            if(*ncvt > 0)
             {
                 i__1 = m - ll + 1;
-                zlasr_("L", "V", "B", &i__1, ncvt, &rwork[nm12 + 1], &rwork[ nm13 + 1], &vt[ll + vt_dim1], ldvt);
+                zlasr_("L", "V", "B", &i__1, ncvt, &rwork[nm12 + 1], &rwork[nm13 + 1],
+                       &vt[ll + vt_dim1], ldvt);
             }
-            if (*nru > 0)
+            if(*nru > 0)
             {
                 i__1 = m - ll + 1;
-                zlasr_("R", "V", "B", nru, &i__1, &rwork[1], &rwork[*n], &u[ ll * u_dim1 + 1], ldu);
+                zlasr_("R", "V", "B", nru, &i__1, &rwork[1], &rwork[*n], &u[ll * u_dim1 + 1], ldu);
             }
-            if (*ncc > 0)
+            if(*ncc > 0)
             {
                 i__1 = m - ll + 1;
-                zlasr_("L", "V", "B", &i__1, ncc, &rwork[1], &rwork[*n], &c__[ ll + c_dim1], ldc);
+                zlasr_("L", "V", "B", &i__1, ncc, &rwork[1], &rwork[*n], &c__[ll + c_dim1], ldc);
             }
         }
     }
@@ -897,15 +913,13 @@ L90:
     /* All singular values converged, so make them positive */
 L160:
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (d__[i__] < 0.)
+        if(d__[i__] < 0.)
         {
             d__[i__] = -d__[i__];
             /* Change sign of singular vectors, if desired */
-            if (*ncvt > 0)
+            if(*ncvt > 0)
             {
                 zdscal_(ncvt, &c_b72, &vt[i__ + vt_dim1], ldvt);
             }
@@ -915,39 +929,35 @@ L160:
     /* Sort the singular values into decreasing order (insertion sort on */
     /* singular values, but only one transposition per singular vector) */
     i__1 = *n - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Scan for smallest D(I) */
         isub = 1;
         smin = d__[1];
         i__2 = *n + 1 - i__;
-        for (j = 2;
-                j <= i__2;
-                ++j)
+        for(j = 2; j <= i__2; ++j)
         {
-            if (d__[j] <= smin)
+            if(d__[j] <= smin)
             {
                 isub = j;
                 smin = d__[j];
             }
             /* L180: */
         }
-        if (isub != *n + 1 - i__)
+        if(isub != *n + 1 - i__)
         {
             /* Swap singular values and vectors */
             d__[isub] = d__[*n + 1 - i__];
             d__[*n + 1 - i__] = smin;
-            if (*ncvt > 0)
+            if(*ncvt > 0)
             {
                 zswap_(ncvt, &vt[isub + vt_dim1], ldvt, &vt[*n + 1 - i__ + vt_dim1], ldvt);
             }
-            if (*nru > 0)
+            if(*nru > 0)
             {
                 zswap_(nru, &u[isub * u_dim1 + 1], &c__1, &u[(*n + 1 - i__) * u_dim1 + 1], &c__1);
             }
-            if (*ncc > 0)
+            if(*ncc > 0)
             {
                 zswap_(ncc, &c__[isub + c_dim1], ldc, &c__[*n + 1 - i__ + c_dim1], ldc);
             }
@@ -959,11 +969,9 @@ L160:
 L200:
     *info = 0;
     i__1 = *n - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (e[i__] != 0.)
+        if(e[i__] != 0.)
         {
             ++(*info);
         }

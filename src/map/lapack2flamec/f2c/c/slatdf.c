@@ -1,21 +1,31 @@
-/* ../netlib/slatdf.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slatdf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static real c_b23 = 1.f;
 static real c_b37 = -1.f;
-/* > \brief \b SLATDF uses the LU factorization of the n-by-n matrix computed by sgetc2 and computes a contrib ution to the reciprocal Dif-estimate. */
+/* > \brief \b SLATDF uses the LU factorization of the n-by-n matrix computed by sgetc2 and computes
+ * a contrib ution to the reciprocal Dif-estimate. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLATDF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slatdf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slatdf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slatdf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slatdf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slatdf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slatdf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -161,7 +171,8 @@ for 1 <= j <= N, column j of the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slatdf_(integer *ijob, integer *n, real *z__, integer * ldz, real *rhs, real *rdsum, real *rdscal, integer *ipiv, integer * jpiv)
+void slatdf_(integer *ijob, integer *n, real *z__, integer *ldz, real *rhs, real *rdsum,
+             real *rdscal, integer *ipiv, integer *jpiv)
 {
     /* System generated locals */
     integer z_dim1, z_offset, i__1, i__2;
@@ -176,16 +187,23 @@ void slatdf_(integer *ijob, integer *n, real *z__, integer * ldz, real *rhs, rea
     extern real sdot_(integer *, real *, integer *, real *, integer *);
     real work[32];
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     real pmone;
     extern real sasum_(integer *, real *, integer *);
     real sminu;
     integer iwork[8];
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *),
+        saxpy_(integer *, real *, real *, integer *, real *, integer *);
     real splus;
     extern /* Subroutine */
-    void sgesc2_(integer *, real *, integer *, real *, integer *, integer *, real *), sgecon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), slassq_(integer *, real *, integer *, real *, real *), slaswp_( integer *, real *, integer *, integer *, integer *, integer *, integer *);
+        void
+        sgesc2_(integer *, real *, integer *, real *, integer *, integer *, real *),
+        sgecon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *),
+        slassq_(integer *, real *, integer *, real *, real *),
+        slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -216,7 +234,7 @@ void slatdf_(integer *ijob, integer *n, real *z__, integer * ldz, real *rhs, rea
     --ipiv;
     --jpiv;
     /* Function Body */
-    if (*ijob != 2)
+    if(*ijob != 2)
     {
         /* Apply permutations IPIV to RHS */
         i__1 = *n - 1;
@@ -224,9 +242,7 @@ void slatdf_(integer *ijob, integer *n, real *z__, integer * ldz, real *rhs, rea
         /* Solve for L-part choosing RHS either to +1 or -1. */
         pmone = -1.f;
         i__1 = *n - 1;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             bp = rhs[j] + 1.f;
             bm = rhs[j] - 1.f;
@@ -238,11 +254,11 @@ void slatdf_(integer *ijob, integer *n, real *z__, integer * ldz, real *rhs, rea
             i__2 = *n - j;
             sminu = sdot_(&i__2, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1], &c__1);
             splus *= rhs[j];
-            if (splus > sminu)
+            if(splus > sminu)
             {
                 rhs[j] = bp;
             }
-            else if (sminu > splus)
+            else if(sminu > splus)
             {
                 rhs[j] = bm;
             }
@@ -272,17 +288,13 @@ void slatdf_(integer *ijob, integer *n, real *z__, integer * ldz, real *rhs, rea
         rhs[*n] += -1.f;
         splus = 0.f;
         sminu = 0.f;
-        for (i__ = *n;
-                i__ >= 1;
-                --i__)
+        for(i__ = *n; i__ >= 1; --i__)
         {
             temp = 1.f / z__[i__ + i__ * z_dim1];
             xp[i__ - 1] *= temp;
             rhs[i__] *= temp;
             i__1 = *n;
-            for (k = i__ + 1;
-                    k <= i__1;
-                    ++k)
+            for(k = i__ + 1; k <= i__1; ++k)
             {
                 xp[i__ - 1] -= xp[k - 1] * (z__[i__ + k * z_dim1] * temp);
                 rhs[i__] -= rhs[k] * (z__[i__ + k * z_dim1] * temp);
@@ -292,7 +304,7 @@ void slatdf_(integer *ijob, integer *n, real *z__, integer * ldz, real *rhs, rea
             sminu += (r__1 = rhs[i__], f2c_abs(r__1));
             /* L30: */
         }
-        if (splus > sminu)
+        if(splus > sminu)
         {
             scopy_(n, xp, &c__1, &rhs[1], &c__1);
         }
@@ -305,7 +317,7 @@ void slatdf_(integer *ijob, integer *n, real *z__, integer * ldz, real *rhs, rea
     else
     {
         /* IJOB = 2, Compute approximate nullvector XM of Z */
-        sgecon_("I", n, &z__[z_offset], ldz, &c_b23, &temp, work, iwork, & info);
+        sgecon_("I", n, &z__[z_offset], ldz, &c_b23, &temp, work, iwork, &info);
         scopy_(n, &work[*n], &c__1, xm, &c__1);
         /* Compute RHS */
         i__1 = *n - 1;
@@ -317,7 +329,7 @@ void slatdf_(integer *ijob, integer *n, real *z__, integer * ldz, real *rhs, rea
         saxpy_(n, &c_b37, xm, &c__1, &rhs[1], &c__1);
         sgesc2_(n, &z__[z_offset], ldz, &rhs[1], &ipiv[1], &jpiv[1], &temp);
         sgesc2_(n, &z__[z_offset], ldz, xp, &ipiv[1], &jpiv[1], &temp);
-        if (sasum_(n, xp, &c__1) > sasum_(n, &rhs[1], &c__1))
+        if(sasum_(n, xp, &c__1) > sasum_(n, &rhs[1], &c__1))
         {
             scopy_(n, xp, &c__1, &rhs[1], &c__1);
         }

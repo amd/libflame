@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/dsytrd_sb2st.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/dsytrd_sb2st.f -- translated by f2c (version 20160102). You must link the
+ resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
+ Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
+ with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 #ifdef FLA_OPENMP_MULTITHREADING
 #include <omp.h>
@@ -9,17 +12,24 @@ static integer c_n1 = -1;
 static integer c__3 = 3;
 static integer c__4 = 4;
 static doublereal c_b26 = 0.;
-/* > \brief \b DSYTRD_SB2ST reduces a real symmetric band matrix A to real symmetric tridiagonal form T */
+/* > \brief \b DSYTRD_SB2ST reduces a real symmetric band matrix A to real symmetric tridiagonal
+ * form T */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DSYTRD_SB2ST + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytrd_ sb2st.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytrd_
+ * sb2st.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsytrd_ sb2st.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsytrd_
+ * sb2st.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytrd_ sb2st.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytrd_
+ * sb2st.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -230,15 +240,20 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab, doublereal *d__, doublereal *e, doublereal *hous, integer *lhous, doublereal *work, integer *lwork, integer *info)
+void dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd, doublereal *ab,
+                   integer *ldab, doublereal *d__, doublereal *e, doublereal *hous, integer *lhous,
+                   doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsytrd_sb2st inputs: stage1 %c, vect %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS ", lhous %" FLA_IS ", lwork %" FLA_IS "", *stage1, *vect, *uplo, *n, *kd, *ldab, *lhous, *lwork);
+    AOCL_DTL_SNPRINTF("dsytrd_sb2st inputs: stage1 %c, vect %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS
+                      ", ldab %" FLA_IS ", lhous %" FLA_IS ", lwork %" FLA_IS "",
+                      *stage1, *vect, *uplo, *n, *kd, *ldab, *lhous, *lwork);
     /* System generated locals */
     integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
     integer abofdpos, i__, k, m, stepercol, ed, ib, st, blklastind, lda, tid, ldv, stt, inda;
-    extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *,
+                                 integer *);
     integer thed, indv, myid, indw, apos, dpos, edind;
     extern logical lsame_(char *, char *, integer, integer);
     integer lhmin, sizea, shift, stind, colpt, lwmin, awpos;
@@ -253,10 +268,13 @@ void dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     integer thgrid;
     extern /* Subroutine */
         int
-        dsb2st_kernels_(char *, logical *, integer *, integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+        dsb2st_kernels_(char *, logical *, integer *, integer *, integer *, integer *, integer *,
+                        integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                        integer *, doublereal *);
 #ifdef FLA_OPENMP_MULTITHREADING
     extern /* Function */
-        int fla_thread_get_num_threads();
+        int
+        fla_thread_get_num_threads();
 #endif
     integer thgrnb, indtau, ofdpos;
     logical lquery, afters1;
@@ -301,57 +319,57 @@ void dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     ib = ilaenv2stage_(&c__2, "DSYTRD_SB2ST", vect, n, kd, &c_n1, &c_n1);
     lhmin = ilaenv2stage_(&c__3, "DSYTRD_SB2ST", vect, n, kd, &ib, &c_n1);
     lwmin = ilaenv2stage_(&c__4, "DSYTRD_SB2ST", vect, n, kd, &ib, &c_n1);
-    if (!afters1 && !lsame_(stage1, "N", 1, 1))
+    if(!afters1 && !lsame_(stage1, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (!lsame_(vect, "N", 1, 1))
+    else if(!lsame_(vect, "N", 1, 1))
     {
         *info = -2;
     }
-    else if (!upper && !lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*kd < 0)
+    else if(*kd < 0)
     {
         *info = -5;
     }
-    else if (*ldab < *kd + 1)
+    else if(*ldab < *kd + 1)
     {
         *info = -7;
     }
-    else if (*lhous < lhmin && !lquery)
+    else if(*lhous < lhmin && !lquery)
     {
         *info = -11;
     }
-    else if (*lwork < lwmin && !lquery)
+    else if(*lwork < lwmin && !lquery)
     {
         *info = -13;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
         hous[1] = (doublereal)lhmin;
         work[1] = (doublereal)lwmin;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DSYTRD_SB2ST", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         hous[1] = 1.;
         work[1] = 1.;
@@ -368,7 +386,7 @@ void dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     inda = 1;
     indw = inda + sizea;
     tid = 0;
-    if (upper)
+    if(upper)
     {
         apos = inda + *kd;
         awpos = inda;
@@ -391,20 +409,16 @@ void dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     /* real because D is double and the imaginary part should be 0) */
     /* and store it in D. A sequential code here is better or */
     /* in a parallel environment it might need two cores for D and E */
-    if (*kd == 0)
+    if(*kd == 0)
     {
         i__1 = *n;
-        for (i__ = 1;
-             i__ <= i__1;
-             ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             d__[i__] = ab[abdpos + i__ * ab_dim1];
             /* L30: */
         }
         i__1 = *n - 1;
-        for (i__ = 1;
-             i__ <= i__1;
-             ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             e[i__] = 0.;
             /* L40: */
@@ -423,22 +437,18 @@ void dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     /* tridiagonal. A simpler coversion formula might be used, but then */
     /* updating the Q matrix will be required and based if Q is generated */
     /* or not this might complicate the story. */
-    if (*kd == 1)
+    if(*kd == 1)
     {
         i__1 = *n;
-        for (i__ = 1;
-             i__ <= i__1;
-             ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             d__[i__] = ab[abdpos + i__ * ab_dim1];
             /* L50: */
         }
-        if (upper)
+        if(upper)
         {
             i__1 = *n - 1;
-            for (i__ = 1;
-                 i__ <= i__1;
-                 ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 e[i__] = ab[abofdpos + (i__ + 1) * ab_dim1];
                 /* L60: */
@@ -447,9 +457,7 @@ void dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
         else
         {
             i__1 = *n - 1;
-            for (i__ = 1;
-                 i__ <= i__1;
-                 ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 e[i__] = ab[abofdpos + i__ * ab_dim1];
                 /* L70: */
@@ -468,21 +476,21 @@ void dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     /* NBTILES = CEILING( REAL(N)/REAL(KD) ) */
     nbtiles = *n / *kd;
     ceiltmp = *n - nbtiles * *kd;
-    if (ceiltmp != 0)
+    if(ceiltmp != 0)
     {
         ++nbtiles;
     }
     /* STEPERCOL = CEILING( REAL(SHIFT)/REAL(GRSIZ) ) */
     stepercol = shift / grsiz;
     ceiltmp = shift - stepercol * grsiz;
-    if (ceiltmp != 0)
+    if(ceiltmp != 0)
     {
         ++stepercol;
     }
     /* THGRNB = CEILING( REAL(N-1)/REAL(THGRSIZ) ) */
     thgrnb = (*n - 1) / thgrsiz;
     ceiltmp = *n - 1 - thgrnb * thgrsiz;
-    if (ceiltmp != 0)
+    if(ceiltmp != 0)
     {
         ++thgrnb;
     }
@@ -493,20 +501,18 @@ void dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     /* openMP parallelisation start here */
     nthreads = 1;
 #ifdef FLA_OPENMP_MULTITHREADING
-     nthreads = fla_thread_get_num_threads();
-#pragma omp parallel num_threads(nthreads) private(tid, thgrid, blklastind) \
-    private(thed, i__, m, k, st, ed, stt, sweepid, myid, ttype, colpt, stind, edind) \
-    shared(uplo, wantq, indv, indtau, hous, work, \
-               n, kd, ib, nbtiles, lda, ldv, inda, stepercol, thgrnb, thgrsiz, grsiz, shift)
+    nthreads = fla_thread_get_num_threads();
+#pragma omp parallel num_threads(nthreads) private(tid, thgrid, blklastind) private(             \
+    thed, i__, m, k, st, ed, stt, sweepid, myid, ttype, colpt, stind, edind)                     \
+    shared(uplo, wantq, indv, indtau, hous, work, n, kd, ib, nbtiles, lda, ldv, inda, stepercol, \
+           thgrnb, thgrsiz, grsiz, shift)
     {
 #pragma omp master
         {
 #endif
             /* main bulge chasing loop */
             i__1 = thgrnb;
-            for (thgrid = 1;
-                 thgrid <= i__1;
-                 ++thgrid)
+            for(thgrid = 1; thgrid <= i__1; ++thgrid)
             {
                 stt = (thgrid - 1) * thgrsiz + 1;
                 /* Computing MIN */
@@ -514,33 +520,25 @@ void dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
                 i__3 = *n - 1; // , expr subst
                 thed = fla_min(i__2, i__3);
                 i__2 = *n - 1;
-                for (i__ = stt;
-                     i__ <= i__2;
-                     ++i__)
+                for(i__ = stt; i__ <= i__2; ++i__)
                 {
                     ed = fla_min(i__, thed);
-                    if (stt > ed)
+                    if(stt > ed)
                     {
                         break;
                     }
                     i__3 = stepercol;
-                    for (m = 1;
-                         m <= i__3;
-                         ++m)
+                    for(m = 1; m <= i__3; ++m)
                     {
                         st = stt;
                         i__4 = ed;
-                        for (sweepid = st;
-                             sweepid <= i__4;
-                             ++sweepid)
+                        for(sweepid = st; sweepid <= i__4; ++sweepid)
                         {
                             i__5 = grsiz;
-                            for (k = 1;
-                                 k <= i__5;
-                                 ++k)
+                            for(k = 1; k <= i__5; ++k)
                             {
                                 myid = (i__ - sweepid) * (stepercol * grsiz) + (m - 1) * grsiz + k;
-                                if (myid == 1)
+                                if(myid == 1)
                                 {
                                     ttype = 1;
                                 }
@@ -548,7 +546,7 @@ void dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
                                 {
                                     ttype = myid % 2 + 2;
                                 }
-                                if (ttype == 2)
+                                if(ttype == 2)
                                 {
                                     colpt = myid / 2 * *kd + sweepid;
                                     stind = colpt - *kd + 1;
@@ -560,7 +558,7 @@ void dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
                                     colpt = (myid + 1) / 2 * *kd + sweepid;
                                     stind = colpt - *kd + 1;
                                     edind = fla_min(colpt, *n);
-                                    if (stind >= edind - 1 && edind == *n)
+                                    if(stind >= edind - 1 && edind == *n)
                                     {
                                         blklastind = *n;
                                     }
@@ -571,29 +569,37 @@ void dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
                                 }
                                 /* Call the kernel */
 #ifdef FLA_OPENMP_MULTITHREADING
-                                if (ttype != 1)
+                                if(ttype != 1)
                                 {
-#pragma omp task depend(in : work[myid + shift - 1]) \
-    depend(in : work[myid - 1])                      \
-    depend(out : work[myid])
+#pragma omp task depend(in                                                            \
+                        : work[myid + shift - 1]) depend(in                           \
+                                                         : work[myid - 1]) depend(out \
+                                                                                  : work[myid])
                                     {
                                         tid = omp_get_thread_num();
-                                        dsb2st_kernels_(uplo, &wantq, &ttype, &stind, &edind, &sweepid, n, kd, &ib, &work[inda], &lda, &hous[indv], &hous[indtau], &ldv, &work[indw + tid * *kd]);
+                                        dsb2st_kernels_(uplo, &wantq, &ttype, &stind, &edind,
+                                                        &sweepid, n, kd, &ib, &work[inda], &lda,
+                                                        &hous[indv], &hous[indtau], &ldv,
+                                                        &work[indw + tid * *kd]);
                                     }
                                 }
                                 else
                                 {
-#pragma omp task depend(in : work[myid + shift - 1]) \
-    depend(out : work[myid])
+#pragma omp task depend(in : work[myid + shift - 1]) depend(out : work[myid])
                                     {
                                         tid = omp_get_thread_num();
-                                        dsb2st_kernels_(uplo, &wantq, &ttype, &stind, &edind, &sweepid, n, kd, &ib, &work[inda], &lda, &hous[indv], &hous[indtau], &ldv, &work[indw + tid * *kd]);
+                                        dsb2st_kernels_(uplo, &wantq, &ttype, &stind, &edind,
+                                                        &sweepid, n, kd, &ib, &work[inda], &lda,
+                                                        &hous[indv], &hous[indtau], &ldv,
+                                                        &work[indw + tid * *kd]);
                                     }
                                 }
 #else
-                        dsb2st_kernels_(uplo, &wantq, &ttype, &stind, &edind, &sweepid, n, kd, &ib, &work[inda], &lda, &hous[indv], &hous[indtau], &ldv, &work[indw + tid * *kd]);
+                        dsb2st_kernels_(uplo, &wantq, &ttype, &stind, &edind, &sweepid, n, kd, &ib,
+                                        &work[inda], &lda, &hous[indv], &hous[indtau], &ldv,
+                                        &work[indw + tid * *kd]);
 #endif
-                                if (blklastind >= *n - 1)
+                                if(blklastind >= *n - 1)
                                 {
                                     ++stt;
                                     break;
@@ -615,21 +621,17 @@ void dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     /* Copy the diagonal from A to D. Note that D is REAL thus only */
     /* the Real part is needed, the imaginary part should be zero. */
     i__1 = *n;
-    for (i__ = 1;
-         i__ <= i__1;
-         ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         d__[i__] = work[dpos + (i__ - 1) * lda];
         /* L150: */
     }
     /* Copy the off diagonal from A to E. Note that E is REAL thus only */
     /* the Real part is needed, the imaginary part should be zero. */
-    if (upper)
+    if(upper)
     {
         i__1 = *n - 1;
-        for (i__ = 1;
-             i__ <= i__1;
-             ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             e[i__] = work[ofdpos + i__ * lda];
             /* L160: */
@@ -638,9 +640,7 @@ void dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     else
     {
         i__1 = *n - 1;
-        for (i__ = 1;
-             i__ <= i__1;
-             ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             e[i__] = work[ofdpos + (i__ - 1) * lda];
             /* L170: */

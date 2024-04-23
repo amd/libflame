@@ -1,11 +1,10 @@
-/* ../netlib/ctzrqf.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ctzrqf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {1.f, 0.f};
 static integer c__1 = 1;
 /* > \brief \b CTZRQF */
 /* =========== DOCUMENTATION =========== */
@@ -13,11 +12,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CTZRQF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctzrqf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctzrqf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctzrqf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctzrqf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctzrqf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctzrqf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -137,9 +142,9 @@ void ctzrqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, int
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctzrqf inputs: m %lld, n %lld, lda %lld",*m, *n, *lda);
+    snprintf(buffer, 256, "ctzrqf inputs: m %lld, n %lld, lda %lld", *m, *n, *lda);
 #else
-    snprintf(buffer, 256,"ctzrqf inputs: m %d, n %d, lda %d",*m, *n, *lda);
+    snprintf(buffer, 256, "ctzrqf inputs: m %d, n %d, lda %d", *m, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -151,10 +156,19 @@ void ctzrqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, int
     /* Local variables */
     integer i__, k, m1;
     extern /* Subroutine */
-    void cgerc_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *);
+        void
+        cgerc_(integer *, integer *, complex *, complex *, integer *, complex *, integer *,
+               complex *, integer *);
     complex alpha;
     extern /* Subroutine */
-    void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *), clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
+               complex *, complex *, integer *),
+        ccopy_(integer *, complex *, integer *, complex *, integer *),
+        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *),
+        clarfg_(integer *, complex *, complex *, integer *, complex *),
+        clacgv_(integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -181,19 +195,19 @@ void ctzrqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, int
     --tau;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < *m)
+    else if(*n < *m)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CTZRQF", &i__1, (ftnlen)6);
@@ -201,17 +215,15 @@ void ctzrqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, int
         return;
     }
     /* Perform the factorization. */
-    if (*m == 0)
+    if(*m == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (*m == *n)
+    if(*m == *n)
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
             tau[i__2].r = 0.f;
@@ -223,10 +235,8 @@ void ctzrqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, int
     {
         /* Computing MIN */
         i__1 = *m + 1;
-        m1 = fla_min(i__1,*n);
-        for (k = *m;
-                k >= 1;
-                --k)
+        m1 = fla_min(i__1, *n);
+        for(k = *m; k >= 1; --k)
         {
             /* Use a Householder reflection to zero the kth row of A. */
             /* First set up the reflection. */
@@ -249,7 +259,7 @@ void ctzrqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, int
             tau[i__1].r = q__1.r;
             tau[i__1].i = q__1.i; // , expr subst
             i__1 = k;
-            if ((tau[i__1].r != 0.f || tau[i__1].i != 0.f) && k > 1)
+            if((tau[i__1].r != 0.f || tau[i__1].i != 0.f) && k > 1)
             {
                 /* We now perform the operation A := A*P( k )**H. */
                 /* Use the first ( k - 1 ) elements of TAU to store a( k ), */
@@ -261,20 +271,22 @@ void ctzrqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, int
                 /* Form w = a( k ) + B*z( k ) in TAU. */
                 i__1 = k - 1;
                 i__2 = *n - *m;
-                cgemv_("No transpose", &i__1, &i__2, &c_b1, &a[m1 * a_dim1 + 1], lda, &a[k + m1 * a_dim1], lda, &c_b1, &tau[1], & c__1);
+                cgemv_("No transpose", &i__1, &i__2, &c_b1, &a[m1 * a_dim1 + 1], lda,
+                       &a[k + m1 * a_dim1], lda, &c_b1, &tau[1], &c__1);
                 /* Now form a( k ) := a( k ) - conjg(tau)*w */
                 /* and B := B - conjg(tau)*w*z( k )**H. */
                 i__1 = k - 1;
                 r_cnjg(&q__2, &tau[k]);
                 q__1.r = -q__2.r;
                 q__1.i = -q__2.i; // , expr subst
-                caxpy_(&i__1, &q__1, &tau[1], &c__1, &a[k * a_dim1 + 1], & c__1);
+                caxpy_(&i__1, &q__1, &tau[1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 i__1 = k - 1;
                 i__2 = *n - *m;
                 r_cnjg(&q__2, &tau[k]);
                 q__1.r = -q__2.r;
                 q__1.i = -q__2.i; // , expr subst
-                cgerc_(&i__1, &i__2, &q__1, &tau[1], &c__1, &a[k + m1 * a_dim1], lda, &a[m1 * a_dim1 + 1], lda);
+                cgerc_(&i__1, &i__2, &q__1, &tau[1], &c__1, &a[k + m1 * a_dim1], lda,
+                       &a[m1 * a_dim1 + 1], lda);
             }
             /* L20: */
         }

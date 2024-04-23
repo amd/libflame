@@ -1,5 +1,8 @@
-/* ../netlib/sorgqr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sorgqr.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -11,11 +14,17 @@ static integer c__2 = 2;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SORGQR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorgqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorgqr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorgqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorgqr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorgqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorgqr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -120,17 +129,23 @@ the routine */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sorgqr_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info)
+void sorgqr_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work,
+                integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
     integer i__, j, l, ib, nb, ki, kk, nx, iws, nbmin, iinfo;
     extern /* Subroutine */
-    void sorg2r_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer *), slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer * , real *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sorg2r_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer *),
+        slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *,
+                real *, integer *, real *, integer *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -163,41 +178,41 @@ void sorgqr_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real 
     /* Function Body */
     *info = 0;
     nb = ilaenv_(&c__1, "SORGQR", " ", m, n, k, &c_n1);
-    lwkopt = fla_max(1,*n) * nb;
-    work[1] = (real) lwkopt;
+    lwkopt = fla_max(1, *n) * nb;
+    work[1] = (real)lwkopt;
     lquery = *lwork == -1;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0 || *n > *m)
+    else if(*n < 0 || *n > *m)
     {
         *info = -2;
     }
-    else if (*k < 0 || *k > *n)
+    else if(*k < 0 || *k > *n)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
-    else if (*lwork < fla_max(1,*n) && ! lquery)
+    else if(*lwork < fla_max(1, *n) && !lquery)
     {
         *info = -8;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SORGQR", &i__1, (ftnlen)6);
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         return;
     }
     /* Quick return if possible */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         work[1] = 1.f;
         return;
@@ -205,19 +220,19 @@ void sorgqr_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real 
     nbmin = 2;
     nx = 0;
     iws = *n;
-    if (nb > 1 && nb < *k)
+    if(nb > 1 && nb < *k)
     {
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
         i__2 = ilaenv_(&c__3, "SORGQR", " ", m, n, k, &c_n1); // , expr subst
-        nx = fla_max(i__1,i__2);
-        if (nx < *k)
+        nx = fla_max(i__1, i__2);
+        if(nx < *k)
         {
             /* Determine if workspace is large enough for blocked code. */
             ldwork = *n;
             iws = ldwork * nb;
-            if (*lwork < iws)
+            if(*lwork < iws)
             {
                 /* Not enough workspace to use optimal NB: reduce NB and */
                 /* determine the minimum value of NB. */
@@ -225,11 +240,11 @@ void sorgqr_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real 
                 /* Computing MAX */
                 i__1 = 2;
                 i__2 = ilaenv_(&c__2, "SORGQR", " ", m, n, k, &c_n1); // , expr subst
-                nbmin = fla_max(i__1,i__2);
+                nbmin = fla_max(i__1, i__2);
             }
         }
     }
-    if (nb >= nbmin && nb < *k && nx < *k)
+    if(nb >= nbmin && nb < *k && nx < *k)
     {
         /* Use blocked code after the last block. */
         /* The first kk columns are handled by the block method. */
@@ -237,17 +252,13 @@ void sorgqr_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real 
         /* Computing MIN */
         i__1 = *k;
         i__2 = ki + nb; // , expr subst
-        kk = fla_min(i__1,i__2);
+        kk = fla_min(i__1, i__2);
         /* Set A(1:kk,kk+1:n) to zero. */
         i__1 = *n;
-        for (j = kk + 1;
-                j <= i__1;
-                ++j)
+        for(j = kk + 1; j <= i__1; ++j)
         {
             i__2 = kk;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 a[i__ + j * a_dim1] = 0.f;
                 /* L10: */
@@ -260,49 +271,47 @@ void sorgqr_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real 
         kk = 0;
     }
     /* Use unblocked code for the last or only block. */
-    if (kk < *n)
+    if(kk < *n)
     {
         i__1 = *m - kk;
         i__2 = *n - kk;
         i__3 = *k - kk;
-        sorg2r_fla(&i__1, &i__2, &i__3, &a[kk + 1 + (kk + 1) * a_dim1], lda, & tau[kk + 1], &work[1], &iinfo);
+        sorg2r_fla(&i__1, &i__2, &i__3, &a[kk + 1 + (kk + 1) * a_dim1], lda, &tau[kk + 1], &work[1],
+                   &iinfo);
     }
-    if (kk > 0)
+    if(kk > 0)
     {
         /* Use blocked code */
         i__1 = -nb;
-        for (i__ = ki + 1;
-                i__1 < 0 ? i__ >= 1 : i__ <= 1;
-                i__ += i__1)
+        for(i__ = ki + 1; i__1 < 0 ? i__ >= 1 : i__ <= 1; i__ += i__1)
         {
             /* Computing MIN */
             i__2 = nb;
             i__3 = *k - i__ + 1; // , expr subst
-            ib = fla_min(i__2,i__3);
-            if (i__ + ib <= *n)
+            ib = fla_min(i__2, i__3);
+            if(i__ + ib <= *n)
             {
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i) H(i+1) . . . H(i+ib-1) */
                 i__2 = *m - i__ + 1;
-                slarft_("Forward", "Columnwise", &i__2, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &ldwork);
+                slarft_("Forward", "Columnwise", &i__2, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__],
+                        &work[1], &ldwork);
                 /* Apply H to A(i:m,i+ib:n) from the left */
                 i__2 = *m - i__ + 1;
                 i__3 = *n - i__ - ib + 1;
-                slarfb_("Left", "No transpose", "Forward", "Columnwise", & i__2, &i__3, &ib, &a[i__ + i__ * a_dim1], lda, &work[ 1], &ldwork, &a[i__ + (i__ + ib) * a_dim1], lda, & work[ib + 1], &ldwork);
+                slarfb_("Left", "No transpose", "Forward", "Columnwise", &i__2, &i__3, &ib,
+                        &a[i__ + i__ * a_dim1], lda, &work[1], &ldwork,
+                        &a[i__ + (i__ + ib) * a_dim1], lda, &work[ib + 1], &ldwork);
             }
             /* Apply H to rows i:m of current block */
             i__2 = *m - i__ + 1;
-            sorg2r_fla(&i__2, &ib, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__], & work[1], &iinfo);
+            sorg2r_fla(&i__2, &ib, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &iinfo);
             /* Set rows 1:i-1 of current block to zero */
             i__2 = i__ + ib - 1;
-            for (j = i__;
-                    j <= i__2;
-                    ++j)
+            for(j = i__; j <= i__2; ++j)
             {
                 i__3 = i__ - 1;
-                for (l = 1;
-                        l <= i__3;
-                        ++l)
+                for(l = 1; l <= i__3; ++l)
                 {
                     a[l + j * a_dim1] = 0.f;
                     /* L30: */
@@ -312,7 +321,7 @@ void sorgqr_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real 
             /* L50: */
         }
     }
-    work[1] = (real) iws;
+    work[1] = (real)iws;
     return;
     /* End of SORGQR */
 }

@@ -1,5 +1,8 @@
-/* claqr0.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* claqr0.f -- translated by f2c (version 20160102). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__13 = 13;
 static integer c__15 = 15;
@@ -10,17 +13,24 @@ static integer c__16 = 16;
 static logical c_false = FALSE_;
 static integer c__1 = 1;
 static integer c__3 = 3;
-/* > \brief \b CLAQR0 computes the eigenvalues of a Hessenberg matrix, and optionally the matrices from the Sc hur decomposition. */
+/* > \brief \b CLAQR0 computes the eigenvalues of a Hessenberg matrix, and optionally the matrices
+ * from the Sc hur decomposition. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLAQR0 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claqr0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claqr0.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claqr0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claqr0.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claqr0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claqr0.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -55,7 +65,7 @@ static integer c__3 = 3;
 /* > \verbatim */
 /* > WANTT is LOGICAL */
 /* > = .TRUE. : the full Schur form T is required;
-*/
+ */
 /* > = .FALSE.: only eigenvalues are required. */
 /* > \endverbatim */
 /* > */
@@ -63,7 +73,7 @@ static integer c__3 = 3;
 /* > \verbatim */
 /* > WANTZ is LOGICAL */
 /* > = .TRUE. : the matrix of Schur vectors Z is required;
-*/
+ */
 /* > = .FALSE.: Schur vectors are not required. */
 /* > \endverbatim */
 /* > */
@@ -236,15 +246,22 @@ IHI <= IHIZ <= N. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void claqr0_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, complex *h__, integer *ldh, complex *w, integer *iloz, integer *ihiz, complex *z__, integer *ldz, complex * work, integer *lwork, integer *info)
+void claqr0_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, complex *h__,
+             integer *ldh, complex *w, integer *iloz, integer *ihiz, complex *z__, integer *ldz,
+             complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"claqr0 inputs: n %lld, ilo %lld, ihi %lld, ldh %lld, iloz %lld, ihiz %lld, ldz %lld, lwork %lld",*n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz, *lwork);
+    snprintf(buffer, 256,
+             "claqr0 inputs: n %lld, ilo %lld, ihi %lld, ldh %lld, iloz %lld, ihiz %lld, ldz %lld, "
+             "lwork %lld",
+             *n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz, *lwork);
 #else
-    snprintf(buffer, 256,"claqr0 inputs: n %d, ilo %d, ihi %d, ldh %d, iloz %d, ihiz %d, ldz %d, lwork %d",*n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz, *lwork);
+    snprintf(buffer, 256,
+             "claqr0 inputs: n %d, ilo %d, ihi %d, ldh %d, iloz %d, ihiz %d, ldz %d, lwork %d", *n,
+             *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -264,13 +281,27 @@ void claqr0_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     complex swap;
     integer ktop;
     complex zdum[1] /* was [1][1] */
-    ;
+        ;
     integer kacc22, itmax, nsmax, nwmax, kwtop;
     extern /* Subroutine */
-    void claqr3_(logical *, logical *, integer *, integer *, integer *, integer *, complex *, integer *, integer *, integer *, complex *, integer *, integer *, integer *, complex *, complex *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *), claqr4_(logical *, logical *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *, integer *), claqr5_(logical *, logical *, integer *, integer *, integer *, integer *, integer *, complex *, complex *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, integer *, complex *, integer *);
+        void
+        claqr3_(logical *, logical *, integer *, integer *, integer *, integer *, complex *,
+                integer *, integer *, integer *, complex *, integer *, integer *, integer *,
+                complex *, complex *, integer *, integer *, complex *, integer *, integer *,
+                complex *, integer *, complex *, integer *),
+        claqr4_(logical *, logical *, integer *, integer *, integer *, complex *, integer *,
+                complex *, integer *, integer *, complex *, integer *, complex *, integer *,
+                integer *),
+        claqr5_(logical *, logical *, integer *, integer *, integer *, integer *, integer *,
+                complex *, complex *, integer *, integer *, integer *, complex *, integer *,
+                complex *, integer *, complex *, integer *, integer *, complex *, integer *,
+                integer *, complex *, integer *);
     integer nibble;
     extern /* Subroutine */
-    void clahqr_(logical *, logical *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
+        void
+        clahqr_(logical *, logical *, integer *, integer *, integer *, complex *, integer *,
+                complex *, integer *, integer *, complex *, integer *, integer *),
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     char jbcmpz[2];
     complex rtdisc;
@@ -326,20 +357,21 @@ void claqr0_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     *info = 0;
     ndec = 0;
     /* ==== Quick return for N = 0: nothing to do. ==== */
-    if (*n == 0)
+    if(*n == 0)
     {
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (*n <= 15)
+    if(*n <= 15)
     {
         /* ==== Tiny matrices must use CLAHQR. ==== */
         lwkopt = 1;
-        if (*lwork != -1)
+        if(*lwork != -1)
         {
-            clahqr_(wantt, wantz, n, ilo, ihi, &h__[h_offset], ldh, &w[1], iloz, ihiz, &z__[z_offset], ldz, info);
+            clahqr_(wantt, wantz, n, ilo, ihi, &h__[h_offset], ldh, &w[1], iloz, ihiz,
+                    &z__[z_offset], ldz, info);
         }
     }
     else
@@ -349,7 +381,7 @@ void claqr0_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
         /* ==== Hope for the best. ==== */
         *info = 0;
         /* ==== Set up job flags for ILAENV. ==== */
-        if (*wantt)
+        if(*wantt)
         {
             *(unsigned char *)jbcmpz = 'S';
         }
@@ -357,7 +389,7 @@ void claqr0_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
         {
             *(unsigned char *)jbcmpz = 'E';
         }
-        if (*wantz)
+        if(*wantz)
         {
             *(unsigned char *)&jbcmpz[1] = 'V';
         }
@@ -371,12 +403,12 @@ void claqr0_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
         /* . (In fact, there is enough subdiagonal space for */
         /* . NWR.GE.4.) ==== */
         nwr = ilaenv_(&c__13, "CLAQR0", jbcmpz, n, ilo, ihi, lwork);
-        nwr = fla_max(2,nwr);
+        nwr = fla_max(2, nwr);
         /* Computing MIN */
         i__1 = *ihi - *ilo + 1;
         i__2 = (*n - 1) / 3;
-        i__1 = fla_min(i__1,i__2); // ; expr subst
-        nwr = fla_min(i__1,nwr);
+        i__1 = fla_min(i__1, i__2); // ; expr subst
+        nwr = fla_min(i__1, nwr);
         /* ==== NSR = recommended number of simultaneous shifts. */
         /* . At this point N .GT. NTINY = 15, so there is at */
         /* . enough subdiagonal workspace for NSR to be even */
@@ -384,26 +416,28 @@ void claqr0_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
         nsr = ilaenv_(&c__15, "CLAQR0", jbcmpz, n, ilo, ihi, lwork);
         /* Computing MIN */
         i__1 = nsr, i__2 = (*n - 3) / 6;
-        i__1 = fla_min(i__1,i__2);
+        i__1 = fla_min(i__1, i__2);
         i__2 = *ihi - *ilo; // ; expr subst
-        nsr = fla_min(i__1,i__2);
+        nsr = fla_min(i__1, i__2);
         /* Computing MAX */
         i__1 = 2;
         i__2 = nsr - nsr % 2; // , expr subst
-        nsr = fla_max(i__1,i__2);
+        nsr = fla_max(i__1, i__2);
         /* ==== Estimate optimal workspace ==== */
         /* ==== Workspace query call to CLAQR3 ==== */
         i__1 = nwr + 1;
-        claqr3_(wantt, wantz, n, ilo, ihi, &i__1, &h__[h_offset], ldh, iloz, ihiz, &z__[z_offset], ldz, &ls, &ld, &w[1], &h__[h_offset], ldh, n, &h__[h_offset], ldh, n, &h__[h_offset], ldh, &work[1], &c_n1);
+        claqr3_(wantt, wantz, n, ilo, ihi, &i__1, &h__[h_offset], ldh, iloz, ihiz, &z__[z_offset],
+                ldz, &ls, &ld, &w[1], &h__[h_offset], ldh, n, &h__[h_offset], ldh, n,
+                &h__[h_offset], ldh, &work[1], &c_n1);
         /* ==== Optimal workspace = MAX(CLAQR5, CLAQR3) ==== */
         /* Computing MAX */
         i__1 = nsr * 3 / 2;
-        i__2 = (integer) work[1].r; // , expr subst
-        lwkopt = fla_max(i__1,i__2);
+        i__2 = (integer)work[1].r; // , expr subst
+        lwkopt = fla_max(i__1, i__2);
         /* ==== Quick return in case of workspace query. ==== */
-        if (*lwork == -1)
+        if(*lwork == -1)
         {
-            r__1 = (real) lwkopt;
+            r__1 = (real)lwkopt;
             q__1.r = r__1;
             q__1.i = 0.f; // , expr subst
             work[1].r = q__1.r;
@@ -413,28 +447,28 @@ void claqr0_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
         }
         /* ==== CLAHQR/CLAQR0 crossover point ==== */
         nmin = ilaenv_(&c__12, "CLAQR0", jbcmpz, n, ilo, ihi, lwork);
-        nmin = fla_max(15,nmin);
+        nmin = fla_max(15, nmin);
         /* ==== Nibble crossover point ==== */
         nibble = ilaenv_(&c__14, "CLAQR0", jbcmpz, n, ilo, ihi, lwork);
-        nibble = fla_max(0,nibble);
+        nibble = fla_max(0, nibble);
         /* ==== Accumulate reflections during ttswp? Use block */
         /* . 2-by-2 structure during matrix-matrix multiply? ==== */
         kacc22 = ilaenv_(&c__16, "CLAQR0", jbcmpz, n, ilo, ihi, lwork);
-        kacc22 = fla_max(0,kacc22);
-        kacc22 = fla_min(2,kacc22);
+        kacc22 = fla_max(0, kacc22);
+        kacc22 = fla_min(2, kacc22);
         /* ==== NWMAX = the largest possible deflation window for */
         /* . which there is sufficient workspace. ==== */
         /* Computing MIN */
         i__1 = (*n - 1) / 3;
         i__2 = *lwork / 2; // , expr subst
-        nwmax = fla_min(i__1,i__2);
+        nwmax = fla_min(i__1, i__2);
         nw = nwmax;
         /* ==== NSMAX = the Largest number of simultaneous shifts */
         /* . for which there is sufficient workspace. ==== */
         /* Computing MIN */
         i__1 = (*n - 3) / 6;
         i__2 = (*lwork << 1) / 3; // , expr subst
-        nsmax = fla_min(i__1,i__2);
+        nsmax = fla_min(i__1, i__2);
         nsmax -= nsmax % 2;
         /* ==== NDFL: an iteration count restarted at deflation. ==== */
         ndfl = 1;
@@ -442,35 +476,31 @@ void claqr0_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
         /* Computing MAX */
         i__1 = 10;
         i__2 = *ihi - *ilo + 1; // , expr subst
-        itmax = fla_max(i__1,i__2) * 30;
+        itmax = fla_max(i__1, i__2) * 30;
         /* ==== Last row and column in the active block ==== */
         kbot = *ihi;
         /* ==== Main Loop ==== */
         i__1 = itmax;
-        for (it = 1;
-                it <= i__1;
-                ++it)
+        for(it = 1; it <= i__1; ++it)
         {
             /* ==== Done when KBOT falls below ILO ==== */
-            if (kbot < *ilo)
+            if(kbot < *ilo)
             {
                 goto L80;
             }
             /* ==== Locate active block ==== */
             i__2 = *ilo + 1;
-            for (k = kbot;
-                    k >= i__2;
-                    --k)
+            for(k = kbot; k >= i__2; --k)
             {
                 i__3 = k + (k - 1) * h_dim1;
-                if (h__[i__3].r == 0.f && h__[i__3].i == 0.f)
+                if(h__[i__3].r == 0.f && h__[i__3].i == 0.f)
                 {
                     goto L20;
                 }
                 /* L10: */
             }
             k = *ilo;
-L20:
+        L20:
             ktop = k;
             /* ==== Select deflation window size: */
             /* . Typical Case: */
@@ -488,21 +518,21 @@ L20:
             /* . rapidly increase the window to the maximum possible. */
             /* . Then, gradually reduce the window size. ==== */
             nh = kbot - ktop + 1;
-            nwupbd = fla_min(nh,nwmax);
-            if (ndfl < 5)
+            nwupbd = fla_min(nh, nwmax);
+            if(ndfl < 5)
             {
-                nw = fla_min(nwupbd,nwr);
+                nw = fla_min(nwupbd, nwr);
             }
             else
             {
                 /* Computing MIN */
                 i__2 = nwupbd;
                 i__3 = nw << 1; // , expr subst
-                nw = fla_min(i__2,i__3);
+                nw = fla_min(i__2, i__3);
             }
-            if (nw < nwmax)
+            if(nw < nwmax)
             {
-                if (nw >= nh - 1)
+                if(nw >= nh - 1)
                 {
                     nw = nh;
                 }
@@ -511,20 +541,21 @@ L20:
                     kwtop = kbot - nw + 1;
                     i__2 = kwtop + (kwtop - 1) * h_dim1;
                     i__3 = kwtop - 1 + (kwtop - 2) * h_dim1;
-                    if ((r__1 = h__[i__2].r, f2c_abs(r__1)) + (r__2 = h__[i__2].i, f2c_abs(r__2)) > ( r__3 = h__[i__3].r, f2c_abs(r__3)) + (r__4 = h__[i__3].i, f2c_abs(r__4)) )
+                    if((r__1 = h__[i__2].r, f2c_abs(r__1)) + (r__2 = h__[i__2].i, f2c_abs(r__2))
+                       > (r__3 = h__[i__3].r, f2c_abs(r__3)) + (r__4 = h__[i__3].i, f2c_abs(r__4)))
                     {
                         ++nw;
                     }
                 }
             }
-            if (ndfl < 5)
+            if(ndfl < 5)
             {
                 ndec = -1;
             }
-            else if (ndec >= 0 || nw >= nwupbd)
+            else if(ndec >= 0 || nw >= nwupbd)
             {
                 ++ndec;
-                if (nw - ndec < 2)
+                if(nw - ndec < 2)
                 {
                     ndec = 0;
                 }
@@ -546,7 +577,9 @@ L20:
             kwv = nw + 2;
             nve = *n - nw - kwv + 1;
             /* ==== Aggressive early deflation ==== */
-            claqr3_(wantt, wantz, n, &ktop, &kbot, &nw, &h__[h_offset], ldh, iloz, ihiz, &z__[z_offset], ldz, &ls, &ld, &w[1], &h__[kv + h_dim1], ldh, &nho, &h__[kv + kt * h_dim1], ldh, &nve, & h__[kwv + h_dim1], ldh, &work[1], lwork);
+            claqr3_(wantt, wantz, n, &ktop, &kbot, &nw, &h__[h_offset], ldh, iloz, ihiz,
+                    &z__[z_offset], ldz, &ls, &ld, &w[1], &h__[kv + h_dim1], ldh, &nho,
+                    &h__[kv + kt * h_dim1], ldh, &nve, &h__[kwv + h_dim1], ldh, &work[1], lwork);
             /* ==== Adjust KBOT accounting for new deflations. ==== */
             kbot -= ld;
             /* ==== KS points to the shifts. ==== */
@@ -556,7 +589,7 @@ L20:
             /* . will deflate without it. Here, the QR sweep is */
             /* . skipped if many eigenvalues have just been deflated */
             /* . or if the remaining active block is small. */
-            if (ld == 0 || ld * 100 <= nw * nibble && kbot - ktop + 1 > fla_min( nmin,nwmax))
+            if(ld == 0 || ld * 100 <= nw * nibble && kbot - ktop + 1 > fla_min(nmin, nwmax))
             {
                 /* ==== NS = nominal number of simultaneous shifts. */
                 /* . This may be lowered (slightly) if CLAQR3 */
@@ -565,9 +598,9 @@ L20:
                 /* Computing MAX */
                 i__4 = 2;
                 i__5 = kbot - ktop; // , expr subst
-                i__2 = fla_min(nsmax,nsr);
-                i__3 = fla_max(i__4,i__5); // , expr subst
-                ns = fla_min(i__2,i__3);
+                i__2 = fla_min(nsmax, nsr);
+                i__3 = fla_max(i__4, i__5); // , expr subst
+                ns = fla_min(i__2, i__3);
                 ns -= ns % 2;
                 /* ==== If there have been no deflations */
                 /* . in a multiple of KEXSH iterations, */
@@ -575,18 +608,18 @@ L20:
                 /* . Otherwise use shifts provided by */
                 /* . CLAQR3 above or from the eigenvalues */
                 /* . of a trailing principal submatrix. ==== */
-                if (ndfl % 6 == 0)
+                if(ndfl % 6 == 0)
                 {
                     ks = kbot - ns + 1;
                     i__2 = ks + 1;
-                    for (i__ = kbot;
-                            i__ >= i__2;
-                            i__ += -2)
+                    for(i__ = kbot; i__ >= i__2; i__ += -2)
                     {
                         i__3 = i__;
                         i__4 = i__ + i__ * h_dim1;
                         i__5 = i__ + (i__ - 1) * h_dim1;
-                        r__3 = ((r__1 = h__[i__5].r, f2c_abs(r__1)) + (r__2 = h__[i__5].i, f2c_abs( r__2))) * .75f;
+                        r__3 = ((r__1 = h__[i__5].r, f2c_abs(r__1))
+                                + (r__2 = h__[i__5].i, f2c_abs(r__2)))
+                               * .75f;
                         q__1.r = h__[i__4].r + r__3;
                         q__1.i = h__[i__4].i; // , expr subst
                         w[i__3].r = q__1.r;
@@ -605,18 +638,20 @@ L20:
                     /* . get more. (Since NS.LE.NSMAX.LE.(N-3)/6, */
                     /* . there is enough space below the subdiagonal */
                     /* . to fit an NS-by-NS scratch array.) ==== */
-                    if (kbot - ks + 1 <= ns / 2)
+                    if(kbot - ks + 1 <= ns / 2)
                     {
                         ks = kbot - ns + 1;
                         kt = *n - ns + 1;
-                        clacpy_("A", &ns, &ns, &h__[ks + ks * h_dim1], ldh, & h__[kt + h_dim1], ldh);
-                        if (ns > nmin)
+                        clacpy_("A", &ns, &ns, &h__[ks + ks * h_dim1], ldh, &h__[kt + h_dim1], ldh);
+                        if(ns > nmin)
                         {
-                            claqr4_(&c_false, &c_false, &ns, &c__1, &ns, &h__[ kt + h_dim1], ldh, &w[ks], &c__1, &c__1, zdum, &c__1, &work[1], lwork, &inf);
+                            claqr4_(&c_false, &c_false, &ns, &c__1, &ns, &h__[kt + h_dim1], ldh,
+                                    &w[ks], &c__1, &c__1, zdum, &c__1, &work[1], lwork, &inf);
                         }
                         else
                         {
-                            clahqr_(&c_false, &c_false, &ns, &c__1, &ns, &h__[ kt + h_dim1], ldh, &w[ks], &c__1, &c__1, zdum, &c__1, &inf);
+                            clahqr_(&c_false, &c_false, &ns, &c__1, &ns, &h__[kt + h_dim1], ldh,
+                                    &w[ks], &c__1, &c__1, zdum, &c__1, &inf);
                         }
                         ks += inf;
                         /* ==== In case of a rare QR failure use */
@@ -625,13 +660,20 @@ L20:
                         /* . overflows, underflows and subnormals. */
                         /* . (The scale factor S can not be zero, */
                         /* . because H(KBOT,KBOT-1) is nonzero.) ==== */
-                        if (ks >= kbot)
+                        if(ks >= kbot)
                         {
                             i__2 = kbot - 1 + (kbot - 1) * h_dim1;
                             i__3 = kbot + (kbot - 1) * h_dim1;
                             i__4 = kbot - 1 + kbot * h_dim1;
                             i__5 = kbot + kbot * h_dim1;
-                            s = (r__1 = h__[i__2].r, f2c_abs(r__1)) + (r__2 = h__[i__2].i, f2c_abs(r__2)) + ((r__3 = h__[i__3] .r, f2c_abs(r__3)) + (r__4 = h__[i__3].i, f2c_abs(r__4))) + (( r__5 = h__[i__4].r, f2c_abs(r__5)) + (r__6 = h__[i__4].i, f2c_abs(r__6))) + ((r__7 = h__[i__5].r, f2c_abs( r__7)) + (r__8 = h__[i__5].i, f2c_abs(r__8)));
+                            s = (r__1 = h__[i__2].r, f2c_abs(r__1))
+                                + (r__2 = h__[i__2].i, f2c_abs(r__2))
+                                + ((r__3 = h__[i__3].r, f2c_abs(r__3))
+                                   + (r__4 = h__[i__3].i, f2c_abs(r__4)))
+                                + ((r__5 = h__[i__4].r, f2c_abs(r__5))
+                                   + (r__6 = h__[i__4].i, f2c_abs(r__6)))
+                                + ((r__7 = h__[i__5].r, f2c_abs(r__7))
+                                   + (r__8 = h__[i__5].i, f2c_abs(r__8)));
                             i__2 = kbot - 1 + (kbot - 1) * h_dim1;
                             q__1.r = h__[i__2].r / s;
                             q__1.i = h__[i__2].i / s; // , expr subst
@@ -689,33 +731,32 @@ L20:
                             ks = kbot - 1;
                         }
                     }
-                    if (kbot - ks + 1 > ns)
+                    if(kbot - ks + 1 > ns)
                     {
                         /* ==== Sort the shifts (Helps a little) ==== */
                         sorted = FALSE_;
                         i__2 = ks + 1;
-                        for (k = kbot;
-                                k >= i__2;
-                                --k)
+                        for(k = kbot; k >= i__2; --k)
                         {
-                            if (sorted)
+                            if(sorted)
                             {
                                 goto L60;
                             }
                             sorted = TRUE_;
                             i__3 = k - 1;
-                            for (i__ = ks;
-                                    i__ <= i__3;
-                                    ++i__)
+                            for(i__ = ks; i__ <= i__3; ++i__)
                             {
                                 i__5 = i__ + 1;
-                                if ((r__1 = w[i__].r, f2c_abs(r__1)) + (r__2 = w[i__].i, f2c_abs(r__2)) < (r__3 = w[i__5].r, f2c_abs(r__3)) + (r__4 = w[i__5].i, f2c_abs(r__4)))
+                                if((r__1 = w[i__].r, f2c_abs(r__1))
+                                       + (r__2 = w[i__].i, f2c_abs(r__2))
+                                   < (r__3 = w[i__5].r, f2c_abs(r__3))
+                                         + (r__4 = w[i__5].i, f2c_abs(r__4)))
                                 {
                                     sorted = FALSE_;
                                     swap.r = w[i__].r;
                                     swap.i = w[i__].i; // , expr subst
                                     w[i__].r = w[i__5].r;
-                                    w[i__].i = w[i__5] .i; // , expr subst
+                                    w[i__].i = w[i__5].i; // , expr subst
                                     w[i__5].r = swap.r;
                                     w[i__5].i = swap.i; // , expr subst
                                 }
@@ -723,13 +764,12 @@ L20:
                             }
                             /* L50: */
                         }
-L60:
-                        ;
+                    L60:;
                     }
                 }
                 /* ==== If there are only two shifts, then use */
                 /* . only one. ==== */
-                if (kbot - ks + 1 == 2)
+                if(kbot - ks + 1 == 2)
                 {
                     i__2 = kbot;
                     i__3 = kbot + kbot * h_dim1;
@@ -742,7 +782,8 @@ L60:
                     q__4.i = w[i__4].i - h__[i__3].i; // , expr subst
                     q__3.r = q__4.r;
                     q__3.i = q__4.i; // , expr subst
-                    if ((r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = q__1.i, f2c_abs(r__2)) < (r__3 = q__3.r, f2c_abs(r__3)) + (r__4 = q__3.i, f2c_abs(r__4)))
+                    if((r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = q__1.i, f2c_abs(r__2))
+                       < (r__3 = q__3.r, f2c_abs(r__3)) + (r__4 = q__3.i, f2c_abs(r__4)))
                     {
                         w[i__4].r = w[i__2].r;
                         w[i__4].i = w[i__2].i; // , expr subst
@@ -760,7 +801,7 @@ L60:
                 /* Computing MIN */
                 i__2 = ns;
                 i__3 = kbot - ks + 1; // , expr subst
-                ns = fla_min(i__2,i__3);
+                ns = fla_min(i__2, i__3);
                 ns -= ns % 2;
                 ks = kbot - ns + 1;
                 /* ==== Small-bulge multi-shift QR sweep: */
@@ -780,10 +821,12 @@ L60:
                 kwv = kdu + 4;
                 nve = *n - kdu - kwv + 1;
                 /* ==== Small-bulge multi-shift QR sweep ==== */
-                claqr5_(wantt, wantz, &kacc22, n, &ktop, &kbot, &ns, &w[ks], & h__[h_offset], ldh, iloz, ihiz, &z__[z_offset], ldz, & work[1], &c__3, &h__[ku + h_dim1], ldh, &nve, &h__[ kwv + h_dim1], ldh, &nho, &h__[ku + kwh * h_dim1], ldh);
+                claqr5_(wantt, wantz, &kacc22, n, &ktop, &kbot, &ns, &w[ks], &h__[h_offset], ldh,
+                        iloz, ihiz, &z__[z_offset], ldz, &work[1], &c__3, &h__[ku + h_dim1], ldh,
+                        &nve, &h__[kwv + h_dim1], ldh, &nho, &h__[ku + kwh * h_dim1], ldh);
             }
             /* ==== Note progress (or the lack of it). ==== */
-            if (ld > 0)
+            if(ld > 0)
             {
                 ndfl = 1;
             }
@@ -797,11 +840,10 @@ L60:
         /* ==== Iteration limit exceeded. Set INFO to show where */
         /* . the problem occurred and exit. ==== */
         *info = kbot;
-L80:
-        ;
+    L80:;
     }
     /* ==== Return the optimal value of LWORK. ==== */
-    r__1 = (real) lwkopt;
+    r__1 = (real)lwkopt;
     q__1.r = r__1;
     q__1.i = 0.f; // , expr subst
     work[1].r = q__1.r;

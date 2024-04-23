@@ -13,7 +13,7 @@ extern double erfc(double);
 double derfc_(doublereal *x)
 #endif
 {
-return( erfc(*x) );
+    return (erfc(*x));
 }
 #ifdef __cplusplus
 }

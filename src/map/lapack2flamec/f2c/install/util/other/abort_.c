@@ -1,5 +1,5 @@
-#include "stdio.h"
 #include "f2c.h"
+#include "stdio.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -9,13 +9,13 @@ extern VOID sig_die();
 
 int abort_()
 #else
-extern void sig_die(const char*,int);
+extern void sig_die(const char *, int);
 
 int abort_(void)
 #endif
 {
-sig_die("Fortran abort routine called", 1);
-return 0;	/* not reached */
+    sig_die("Fortran abort routine called", 1);
+    return 0; /* not reached */
 }
 #ifdef __cplusplus
 }

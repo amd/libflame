@@ -1,16 +1,25 @@
-/* ../netlib/dlarrc.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlarrc.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLARRC computes the number of eigenvalues of the symmetric tridiagonal matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLARRC + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarrc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarrc.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarrc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarrc.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarrc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarrc.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -121,10 +130,11 @@
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void dlarrc_(char *jobt, integer *n, doublereal *vl, doublereal *vu, doublereal *d__, doublereal *e, doublereal *pivmin, integer *eigcnt, integer *lcnt, integer *rcnt, integer *info)
+void dlarrc_(char *jobt, integer *n, doublereal *vl, doublereal *vu, doublereal *d__, doublereal *e,
+             doublereal *pivmin, integer *eigcnt, integer *lcnt, integer *rcnt, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlarrc inputs: jobt %c, n %" FLA_IS "",*jobt, *n);
+    AOCL_DTL_SNPRINTF("dlarrc inputs: jobt %c, n %" FLA_IS "", *jobt, *n);
     /* System generated locals */
     integer i__1;
     doublereal d__1;
@@ -156,7 +166,7 @@ void dlarrc_(char *jobt, integer *n, doublereal *vl, doublereal *vu, doublereal 
     /* Function Body */
     *info = 0;
     /* Quick return if possible */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -165,34 +175,32 @@ void dlarrc_(char *jobt, integer *n, doublereal *vl, doublereal *vu, doublereal 
     *rcnt = 0;
     *eigcnt = 0;
     matt = lsame_(jobt, "T", 1, 1);
-    if (matt)
+    if(matt)
     {
         /* Sturm sequence count on T */
         lpivot = d__[1] - *vl;
         rpivot = d__[1] - *vu;
-        if (lpivot <= 0.)
+        if(lpivot <= 0.)
         {
             ++(*lcnt);
         }
-        if (rpivot <= 0.)
+        if(rpivot <= 0.)
         {
             ++(*rcnt);
         }
         i__1 = *n - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* Computing 2nd power */
             d__1 = e[i__];
             tmp = d__1 * d__1;
             lpivot = d__[i__ + 1] - *vl - tmp / lpivot;
             rpivot = d__[i__ + 1] - *vu - tmp / rpivot;
-            if (lpivot <= 0.)
+            if(lpivot <= 0.)
             {
                 ++(*lcnt);
             }
-            if (rpivot <= 0.)
+            if(rpivot <= 0.)
             {
                 ++(*rcnt);
             }
@@ -205,23 +213,21 @@ void dlarrc_(char *jobt, integer *n, doublereal *vl, doublereal *vu, doublereal 
         sl = -(*vl);
         su = -(*vu);
         i__1 = *n - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             lpivot = d__[i__] + sl;
             rpivot = d__[i__] + su;
-            if (lpivot <= 0.)
+            if(lpivot <= 0.)
             {
                 ++(*lcnt);
             }
-            if (rpivot <= 0.)
+            if(rpivot <= 0.)
             {
                 ++(*rcnt);
             }
             tmp = e[i__] * d__[i__] * e[i__];
             tmp2 = tmp / lpivot;
-            if (tmp2 == 0.)
+            if(tmp2 == 0.)
             {
                 sl = tmp - *vl;
             }
@@ -230,7 +236,7 @@ void dlarrc_(char *jobt, integer *n, doublereal *vl, doublereal *vu, doublereal 
                 sl = sl * tmp2 - *vl;
             }
             tmp2 = tmp / rpivot;
-            if (tmp2 == 0.)
+            if(tmp2 == 0.)
             {
                 su = tmp - *vu;
             }
@@ -242,11 +248,11 @@ void dlarrc_(char *jobt, integer *n, doublereal *vl, doublereal *vu, doublereal 
         }
         lpivot = d__[*n] + sl;
         rpivot = d__[*n] + su;
-        if (lpivot <= 0.)
+        if(lpivot <= 0.)
         {
             ++(*lcnt);
         }
-        if (rpivot <= 0.)
+        if(rpivot <= 0.)
         {
             ++(*rcnt);
         }

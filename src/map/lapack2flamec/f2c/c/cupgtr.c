@@ -1,16 +1,25 @@
-/* ../netlib/cupgtr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cupgtr.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CUPGTR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CUPGTR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cupgtr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cupgtr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cupgtr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cupgtr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cupgtr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cupgtr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -43,7 +52,7 @@
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangular packed storage used in previous */
 /* > call to CHPTRD;
-*/
+ */
 /* > = 'L': Lower triangular packed storage used in previous */
 /* > call to CHPTRD. */
 /* > \endverbatim */
@@ -101,12 +110,14 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cupgtr_(char *uplo, integer *n, complex *ap, complex * tau, complex *q, integer *ldq, complex *work, integer *info)
+void cupgtr_(char *uplo, integer *n, complex *ap, complex *tau, complex *q, integer *ldq,
+             complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"cupgtr inputs: uplo %c, n %" FLA_IS ", ldq %" FLA_IS "",*uplo, *n, *ldq);
+    snprintf(buffer, 256, "cupgtr inputs: uplo %c, n %" FLA_IS ", ldq %" FLA_IS "", *uplo, *n,
+             *ldq);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -117,7 +128,12 @@ void cupgtr_(char *uplo, integer *n, complex *ap, complex * tau, complex *q, int
     integer iinfo;
     logical upper;
     extern /* Subroutine */
-    void cung2l_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), cung2r_( integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        cung2l_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *),
+        cung2r_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -149,19 +165,19 @@ void cupgtr_(char *uplo, integer *n, complex *ap, complex * tau, complex *q, int
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*ldq < fla_max(1,*n))
+    else if(*ldq < fla_max(1, *n))
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CUPGTR", &i__1, (ftnlen)6);
@@ -169,12 +185,12 @@ void cupgtr_(char *uplo, integer *n, complex *ap, complex * tau, complex *q, int
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (upper)
+    if(upper)
     {
         /* Q was determined by a call to CHPTRD with UPLO = 'U' */
         /* Unpack the vectors which define the elementary reflectors and */
@@ -182,14 +198,10 @@ void cupgtr_(char *uplo, integer *n, complex *ap, complex * tau, complex *q, int
         /* matrix */
         ij = 2;
         i__1 = *n - 1;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j - 1;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * q_dim1;
                 i__4 = ij;
@@ -205,9 +217,7 @@ void cupgtr_(char *uplo, integer *n, complex *ap, complex * tau, complex *q, int
             /* L20: */
         }
         i__1 = *n - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + *n * q_dim1;
             q[i__2].r = 0.f;
@@ -221,7 +231,7 @@ void cupgtr_(char *uplo, integer *n, complex *ap, complex * tau, complex *q, int
         i__1 = *n - 1;
         i__2 = *n - 1;
         i__3 = *n - 1;
-        cung2l_(&i__1, &i__2, &i__3, &q[q_offset], ldq, &tau[1], &work[1], & iinfo);
+        cung2l_(&i__1, &i__2, &i__3, &q[q_offset], ldq, &tau[1], &work[1], &iinfo);
     }
     else
     {
@@ -233,9 +243,7 @@ void cupgtr_(char *uplo, integer *n, complex *ap, complex * tau, complex *q, int
         q[i__1].r = 1.f;
         q[i__1].i = 0.f; // , expr subst
         i__1 = *n;
-        for (i__ = 2;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 2; i__ <= i__1; ++i__)
         {
             i__2 = i__ + q_dim1;
             q[i__2].r = 0.f;
@@ -244,17 +252,13 @@ void cupgtr_(char *uplo, integer *n, complex *ap, complex * tau, complex *q, int
         }
         ij = 3;
         i__1 = *n;
-        for (j = 2;
-                j <= i__1;
-                ++j)
+        for(j = 2; j <= i__1; ++j)
         {
             i__2 = j * q_dim1 + 1;
             q[i__2].r = 0.f;
             q[i__2].i = 0.f; // , expr subst
             i__2 = *n;
-            for (i__ = j + 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = j + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * q_dim1;
                 i__4 = ij;
@@ -266,7 +270,7 @@ void cupgtr_(char *uplo, integer *n, complex *ap, complex * tau, complex *q, int
             ij += 2;
             /* L60: */
         }
-        if (*n > 1)
+        if(*n > 1)
         {
             /* Generate Q(2:n,2:n) */
             i__1 = *n - 1;

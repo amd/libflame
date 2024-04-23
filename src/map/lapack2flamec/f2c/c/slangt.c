@@ -1,18 +1,28 @@
-/* ../netlib/slangt.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slangt.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b SLANGT returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest absolute value of any element of a general tridiagonal matrix. */
+/* > \brief \b SLANGT returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest
+ * absolute value of any element of a general tridiagonal matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLANGT + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slangt. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slangt.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slangt. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slangt.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slangt. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slangt.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -98,7 +108,7 @@ real slangt_(char *norm, integer *n, real *dl, real *d__, real *du)
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slangt inputs: norm %c, n %d",*norm, *n);
+    snprintf(buffer, 256, "slangt inputs: norm %c, n %d", *norm, *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -113,7 +123,8 @@ real slangt_(char *norm, integer *n, real *dl, real *d__, real *du)
     real anorm;
     extern logical sisnan_(real *);
     extern /* Subroutine */
-    void slassq_(integer *, real *, integer *, real *, real *);
+        void
+        slassq_(integer *, real *, integer *, real *, real *);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -140,59 +151,56 @@ real slangt_(char *norm, integer *n, real *dl, real *d__, real *du)
     --dl;
     /* Function Body */
     anorm = 0.f;
-    if (*n <= 0)
+    if(*n <= 0)
     {
         anorm = 0.f;
     }
-    else if (lsame_(norm, "M", 1, 1))
+    else if(lsame_(norm, "M", 1, 1))
     {
         /* Find fla_max(f2c_abs(A(i,j))). */
         anorm = (r__1 = d__[*n], f2c_abs(r__1));
         i__1 = *n - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             r__3 = (r__2 = dl[i__], f2c_abs(r__2));
-            if (anorm < (r__1 = dl[i__], f2c_abs(r__1)) || sisnan_(&r__3))
+            if(anorm < (r__1 = dl[i__], f2c_abs(r__1)) || sisnan_(&r__3))
             {
                 anorm = (r__4 = dl[i__], f2c_abs(r__4));
             }
             r__3 = (r__2 = d__[i__], f2c_abs(r__2));
-            if (anorm < (r__1 = d__[i__], f2c_abs(r__1)) || sisnan_(&r__3))
+            if(anorm < (r__1 = d__[i__], f2c_abs(r__1)) || sisnan_(&r__3))
             {
                 anorm = (r__4 = d__[i__], f2c_abs(r__4));
             }
             r__3 = (r__2 = du[i__], f2c_abs(r__2));
-            if (anorm < (r__1 = du[i__], f2c_abs(r__1)) || sisnan_(&r__3))
+            if(anorm < (r__1 = du[i__], f2c_abs(r__1)) || sisnan_(&r__3))
             {
                 anorm = (r__4 = du[i__], f2c_abs(r__4));
             }
             /* L10: */
         }
     }
-    else if (lsame_(norm, "O", 1, 1) || *(unsigned char *) norm == '1')
+    else if(lsame_(norm, "O", 1, 1) || *(unsigned char *)norm == '1')
     {
         /* Find norm1(A). */
-        if (*n == 1)
+        if(*n == 1)
         {
             anorm = f2c_abs(d__[1]);
         }
         else
         {
             anorm = f2c_abs(d__[1]) + f2c_abs(dl[1]);
-            temp = (r__1 = d__[*n], f2c_abs(r__1)) + (r__2 = du[*n - 1], f2c_abs(r__2) );
-            if (anorm < temp || sisnan_(&temp))
+            temp = (r__1 = d__[*n], f2c_abs(r__1)) + (r__2 = du[*n - 1], f2c_abs(r__2));
+            if(anorm < temp || sisnan_(&temp))
             {
                 anorm = temp;
             }
             i__1 = *n - 1;
-            for (i__ = 2;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 2; i__ <= i__1; ++i__)
             {
-                temp = (r__1 = d__[i__], f2c_abs(r__1)) + (r__2 = dl[i__], f2c_abs( r__2)) + (r__3 = du[i__ - 1], f2c_abs(r__3));
-                if (anorm < temp || sisnan_(&temp))
+                temp = (r__1 = d__[i__], f2c_abs(r__1)) + (r__2 = dl[i__], f2c_abs(r__2))
+                       + (r__3 = du[i__ - 1], f2c_abs(r__3));
+                if(anorm < temp || sisnan_(&temp))
                 {
                     anorm = temp;
                 }
@@ -200,28 +208,27 @@ real slangt_(char *norm, integer *n, real *dl, real *d__, real *du)
             }
         }
     }
-    else if (lsame_(norm, "I", 1, 1))
+    else if(lsame_(norm, "I", 1, 1))
     {
         /* Find normI(A). */
-        if (*n == 1)
+        if(*n == 1)
         {
             anorm = f2c_abs(d__[1]);
         }
         else
         {
             anorm = f2c_abs(d__[1]) + f2c_abs(du[1]);
-            temp = (r__1 = d__[*n], f2c_abs(r__1)) + (r__2 = dl[*n - 1], f2c_abs(r__2) );
-            if (anorm < temp || sisnan_(&temp))
+            temp = (r__1 = d__[*n], f2c_abs(r__1)) + (r__2 = dl[*n - 1], f2c_abs(r__2));
+            if(anorm < temp || sisnan_(&temp))
             {
                 anorm = temp;
             }
             i__1 = *n - 1;
-            for (i__ = 2;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 2; i__ <= i__1; ++i__)
             {
-                temp = (r__1 = d__[i__], f2c_abs(r__1)) + (r__2 = du[i__], f2c_abs( r__2)) + (r__3 = dl[i__ - 1], f2c_abs(r__3));
-                if (anorm < temp || sisnan_(&temp))
+                temp = (r__1 = d__[i__], f2c_abs(r__1)) + (r__2 = du[i__], f2c_abs(r__2))
+                       + (r__3 = dl[i__ - 1], f2c_abs(r__3));
+                if(anorm < temp || sisnan_(&temp))
                 {
                     anorm = temp;
                 }
@@ -229,13 +236,13 @@ real slangt_(char *norm, integer *n, real *dl, real *d__, real *du)
             }
         }
     }
-    else if (lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
+    else if(lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
     {
         /* Find normF(A). */
         scale = 0.f;
         sum = 1.f;
         slassq_(n, &d__[1], &c__1, &scale, &sum);
-        if (*n > 1)
+        if(*n > 1)
         {
             i__1 = *n - 1;
             slassq_(&i__1, &dl[1], &c__1, &scale, &sum);
@@ -250,4 +257,3 @@ real slangt_(char *norm, integer *n, real *dl, real *d__, real *du)
     /* End of SLANGT */
 }
 /* slangt_ */
-

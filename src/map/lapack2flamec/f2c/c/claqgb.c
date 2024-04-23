@@ -1,16 +1,25 @@
-/* ../netlib/claqgb.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/claqgb.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CLAQGB scales a general band matrix, using row and column scaling factors computed by sgbequ. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLAQGB + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claqgb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claqgb.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claqgb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claqgb.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claqgb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claqgb.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -144,15 +153,18 @@
 /* > \ingroup complexGBauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integer *ldab, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, char *equed)
+void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integer *ldab,
+             real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, char *equed)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"claqgb inputs: m %lld, n %lld, kl %lld, ku %lld, ldab %lld",*m, *n, *kl, *ku, *ldab);
+    snprintf(buffer, 256, "claqgb inputs: m %lld, n %lld, kl %lld, ku %lld, ldab %lld", *m, *n, *kl,
+             *ku, *ldab);
 #else
-    snprintf(buffer, 256,"claqgb inputs: m %d, n %d, kl %d, ku %d, ldab %d",*m, *n, *kl, *ku, *ldab);
+    snprintf(buffer, 256, "claqgb inputs: m %d, n %d, kl %d, ku %d, ldab %d", *m, *n, *kl, *ku,
+             *ldab);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -190,7 +202,7 @@ void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
     --r__;
     --c__;
     /* Function Body */
-    if (*m <= 0 || *n <= 0)
+    if(*m <= 0 || *n <= 0)
     {
         *(unsigned char *)equed = 'N';
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -199,10 +211,10 @@ void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
     /* Initialize LARGE and SMALL. */
     small_val = slamch_("Safe minimum") / slamch_("Precision");
     large = 1.f / small_val;
-    if (*rowcnd >= .1f && *amax >= small_val && *amax <= large)
+    if(*rowcnd >= .1f && *amax >= small_val && *amax <= large)
     {
         /* No row scaling */
-        if (*colcnd >= .1f)
+        if(*colcnd >= .1f)
         {
             /* No column scaling */
             *(unsigned char *)equed = 'N';
@@ -211,9 +223,7 @@ void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
         {
             /* Column scaling */
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 cj = c__[j];
                 /* Computing MAX */
@@ -222,10 +232,8 @@ void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
                 /* Computing MIN */
                 i__5 = *m;
                 i__6 = j + *kl; // , expr subst
-                i__4 = fla_min(i__5,i__6);
-                for (i__ = fla_max(i__2,i__3);
-                        i__ <= i__4;
-                        ++i__)
+                i__4 = fla_min(i__5, i__6);
+                for(i__ = fla_max(i__2, i__3); i__ <= i__4; ++i__)
                 {
                     i__2 = *ku + 1 + i__ - j + j * ab_dim1;
                     i__3 = *ku + 1 + i__ - j + j * ab_dim1;
@@ -240,13 +248,11 @@ void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
             *(unsigned char *)equed = 'C';
         }
     }
-    else if (*colcnd >= .1f)
+    else if(*colcnd >= .1f)
     {
         /* Row scaling, no column scaling */
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Computing MAX */
             i__4 = 1;
@@ -254,16 +260,14 @@ void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
             /* Computing MIN */
             i__5 = *m;
             i__6 = j + *kl; // , expr subst
-            i__3 = fla_min(i__5,i__6);
-            for (i__ = fla_max(i__4,i__2);
-                    i__ <= i__3;
-                    ++i__)
+            i__3 = fla_min(i__5, i__6);
+            for(i__ = fla_max(i__4, i__2); i__ <= i__3; ++i__)
             {
                 i__4 = *ku + 1 + i__ - j + j * ab_dim1;
                 i__2 = i__;
                 i__5 = *ku + 1 + i__ - j + j * ab_dim1;
                 q__1.r = r__[i__2] * ab[i__5].r;
-                q__1.i = r__[i__2] * ab[i__5] .i; // , expr subst
+                q__1.i = r__[i__2] * ab[i__5].i; // , expr subst
                 ab[i__4].r = q__1.r;
                 ab[i__4].i = q__1.i; // , expr subst
                 /* L30: */
@@ -276,9 +280,7 @@ void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
     {
         /* Row and column scaling */
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             cj = c__[j];
             /* Computing MAX */
@@ -287,10 +289,8 @@ void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
             /* Computing MIN */
             i__5 = *m;
             i__6 = j + *kl; // , expr subst
-            i__2 = fla_min(i__5,i__6);
-            for (i__ = fla_max(i__3,i__4);
-                    i__ <= i__2;
-                    ++i__)
+            i__2 = fla_min(i__5, i__6);
+            for(i__ = fla_max(i__3, i__4); i__ <= i__2; ++i__)
             {
                 i__3 = *ku + 1 + i__ - j + j * ab_dim1;
                 r__1 = cj * r__[i__];

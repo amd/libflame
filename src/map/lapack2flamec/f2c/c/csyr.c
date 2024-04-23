@@ -1,16 +1,25 @@
-/* ../netlib/csyr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/csyr.f -- translated by f2c (version 20100827). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CSYR performs the symmetric rank-1 update of a complex symmetric matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CSYR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csyr.f" > */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csyr.f"
+ * > */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csyr.f" > */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csyr.f"
+ * > */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csyr.f" > */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csyr.f"
+ * > */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -121,15 +130,17 @@
 /* > \ingroup complexSYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void csyr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, complex *a, integer *lda)
+void csyr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, complex *a,
+           integer *lda)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"csyr inputs: uplo %c, n %lld, incx %lld, lda %lld",*uplo, *n, *incx, *lda);
+    snprintf(buffer, 256, "csyr inputs: uplo %c, n %lld, incx %lld, lda %lld", *uplo, *n, *incx,
+             *lda);
 #else
-    snprintf(buffer, 256,"csyr inputs: uplo %c, n %d, incx %d, lda %d",*uplo, *n, *incx, *lda);
+    snprintf(buffer, 256, "csyr inputs: uplo %c, n %d, incx %d, lda %d", *uplo, *n, *incx, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -141,7 +152,8 @@ void csyr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, co
     complex temp;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -170,69 +182,65 @@ void csyr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, co
     a -= a_offset;
     /* Function Body */
     info = 0;
-    kx= 0;
-    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    kx = 0;
+    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         info = 1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         info = 2;
     }
-    else if (*incx == 0)
+    else if(*incx == 0)
     {
         info = 5;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         info = 7;
     }
-    if (info != 0)
+    if(info != 0)
     {
         xerbla_("CSYR ", &info, (ftnlen)5);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Quick return if possible. */
-    if (*n == 0 || alpha->r == 0.f && alpha->i == 0.f)
+    if(*n == 0 || alpha->r == 0.f && alpha->i == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Set the start point in X if the increment is not unity. */
-    if (*incx <= 0)
+    if(*incx <= 0)
     {
         kx = 1 - (*n - 1) * *incx;
     }
-    else if (*incx != 1)
+    else if(*incx != 1)
     {
         kx = 1;
     }
     /* Start the operations. In this version the elements of A are */
     /* accessed sequentially with one pass through the triangular part */
     /* of A. */
-    if (lsame_(uplo, "U", 1, 1))
+    if(lsame_(uplo, "U", 1, 1))
     {
         /* Form A when A is stored in upper triangle. */
-        if (*incx == 1)
+        if(*incx == 1)
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
-                if (x[i__2].r != 0.f || x[i__2].i != 0.f)
+                if(x[i__2].r != 0.f || x[i__2].i != 0.f)
                 {
                     i__2 = j;
                     q__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                    q__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2] .r; // , expr subst
+                    q__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
                     temp.r = q__1.r;
                     temp.i = q__1.i; // , expr subst
                     i__2 = j;
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + j * a_dim1;
                         i__4 = i__ + j * a_dim1;
@@ -253,23 +261,19 @@ void csyr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, co
         {
             jx = kx;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = jx;
-                if (x[i__2].r != 0.f || x[i__2].i != 0.f)
+                if(x[i__2].r != 0.f || x[i__2].i != 0.f)
                 {
                     i__2 = jx;
                     q__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                    q__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2] .r; // , expr subst
+                    q__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
                     temp.r = q__1.r;
                     temp.i = q__1.i; // , expr subst
                     ix = kx;
                     i__2 = j;
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + j * a_dim1;
                         i__4 = i__ + j * a_dim1;
@@ -292,25 +296,21 @@ void csyr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, co
     else
     {
         /* Form A when A is stored in lower triangle. */
-        if (*incx == 1)
+        if(*incx == 1)
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
-                if (x[i__2].r != 0.f || x[i__2].i != 0.f)
+                if(x[i__2].r != 0.f || x[i__2].i != 0.f)
                 {
                     i__2 = j;
                     q__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                    q__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2] .r; // , expr subst
+                    q__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
                     temp.r = q__1.r;
                     temp.i = q__1.i; // , expr subst
                     i__2 = *n;
-                    for (i__ = j;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = j; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + j * a_dim1;
                         i__4 = i__ + j * a_dim1;
@@ -331,23 +331,19 @@ void csyr_(char *uplo, integer *n, complex *alpha, complex *x, integer *incx, co
         {
             jx = kx;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = jx;
-                if (x[i__2].r != 0.f || x[i__2].i != 0.f)
+                if(x[i__2].r != 0.f || x[i__2].i != 0.f)
                 {
                     i__2 = jx;
                     q__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                    q__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2] .r; // , expr subst
+                    q__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
                     temp.r = q__1.r;
                     temp.i = q__1.i; // , expr subst
                     ix = jx;
                     i__2 = *n;
-                    for (i__ = j;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = j; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + j * a_dim1;
                         i__4 = i__ + j * a_dim1;

@@ -1,16 +1,25 @@
-/* ../netlib/clasr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/clasr.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CLASR applies a sequence of plane rotations to a general rectangular matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLASR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clasr.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clasr.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clasr.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clasr.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clasr.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clasr.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -186,15 +195,18 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real *c__, real *s, complex *a, integer *lda)
+void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real *c__, real *s,
+            complex *a, integer *lda)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clasr inputs: side %c, pivot %c, direct %c, m %lld, n %lld, lda %lld",*side, *pivot, *direct, *m, *n, *lda);
+    snprintf(buffer, 256, "clasr inputs: side %c, pivot %c, direct %c, m %lld, n %lld, lda %lld",
+             *side, *pivot, *direct, *m, *n, *lda);
 #else
-    snprintf(buffer, 256,"clasr inputs: side %c, pivot %c, direct %c, m %d, n %d, lda %d",*side, *pivot, *direct, *m, *n, *lda);
+    snprintf(buffer, 256, "clasr inputs: side %c, pivot %c, direct %c, m %d, n %d, lda %d", *side,
+             *pivot, *direct, *m, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -207,7 +219,8 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
     extern logical lsame_(char *, char *, integer, integer);
     real ctemp, stemp;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -237,62 +250,58 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
     a -= a_offset;
     /* Function Body */
     info = 0;
-    if (! (lsame_(side, "L", 1, 1) || lsame_(side, "R", 1, 1)))
+    if(!(lsame_(side, "L", 1, 1) || lsame_(side, "R", 1, 1)))
     {
         info = 1;
     }
-    else if (! (lsame_(pivot, "V", 1, 1) || lsame_(pivot, "T", 1, 1) || lsame_(pivot, "B", 1, 1)))
+    else if(!(lsame_(pivot, "V", 1, 1) || lsame_(pivot, "T", 1, 1) || lsame_(pivot, "B", 1, 1)))
     {
         info = 2;
     }
-    else if (! (lsame_(direct, "F", 1, 1) || lsame_(direct, "B", 1, 1)))
+    else if(!(lsame_(direct, "F", 1, 1) || lsame_(direct, "B", 1, 1)))
     {
         info = 3;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         info = 4;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         info = 5;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         info = 9;
     }
-    if (info != 0)
+    if(info != 0)
     {
         xerbla_("CLASR ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (lsame_(side, "L", 1, 1))
+    if(lsame_(side, "L", 1, 1))
     {
         /* Form P * A */
-        if (lsame_(pivot, "V", 1, 1))
+        if(lsame_(pivot, "V", 1, 1))
         {
-            if (lsame_(direct, "F", 1, 1))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *m - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__2 = *n;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = j + 1 + i__ * a_dim1;
                             temp.r = a[i__3].r;
@@ -302,7 +311,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.i = ctemp * temp.i; // , expr subst
                             i__4 = j + i__ * a_dim1;
                             q__3.r = stemp * a[i__4].r;
-                            q__3.i = stemp * a[ i__4].i; // , expr subst
+                            q__3.i = stemp * a[i__4].i; // , expr subst
                             q__1.r = q__2.r - q__3.r;
                             q__1.i = q__2.i - q__3.i; // , expr subst
                             a[i__3].r = q__1.r;
@@ -312,7 +321,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.i = stemp * temp.i; // , expr subst
                             i__4 = j + i__ * a_dim1;
                             q__3.r = ctemp * a[i__4].r;
-                            q__3.i = ctemp * a[ i__4].i; // , expr subst
+                            q__3.i = ctemp * a[i__4].i; // , expr subst
                             q__1.r = q__2.r + q__3.r;
                             q__1.i = q__2.i + q__3.i; // , expr subst
                             a[i__3].r = q__1.r;
@@ -323,20 +332,16 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                     /* L20: */
                 }
             }
-            else if (lsame_(direct, "B", 1, 1))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *m - 1;
-                        j >= 1;
-                        --j)
+                for(j = *m - 1; j >= 1; --j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__1 = *n;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = j + 1 + i__ * a_dim1;
                             temp.r = a[i__2].r;
@@ -346,7 +351,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.i = ctemp * temp.i; // , expr subst
                             i__3 = j + i__ * a_dim1;
                             q__3.r = stemp * a[i__3].r;
-                            q__3.i = stemp * a[ i__3].i; // , expr subst
+                            q__3.i = stemp * a[i__3].i; // , expr subst
                             q__1.r = q__2.r - q__3.r;
                             q__1.i = q__2.i - q__3.i; // , expr subst
                             a[i__2].r = q__1.r;
@@ -356,7 +361,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.i = stemp * temp.i; // , expr subst
                             i__3 = j + i__ * a_dim1;
                             q__3.r = ctemp * a[i__3].r;
-                            q__3.i = ctemp * a[ i__3].i; // , expr subst
+                            q__3.i = ctemp * a[i__3].i; // , expr subst
                             q__1.r = q__2.r + q__3.r;
                             q__1.i = q__2.i + q__3.i; // , expr subst
                             a[i__2].r = q__1.r;
@@ -368,23 +373,19 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                 }
             }
         }
-        else if (lsame_(pivot, "T", 1, 1))
+        else if(lsame_(pivot, "T", 1, 1))
         {
-            if (lsame_(direct, "F", 1, 1))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *m;
-                for (j = 2;
-                        j <= i__1;
-                        ++j)
+                for(j = 2; j <= i__1; ++j)
                 {
                     ctemp = c__[j - 1];
                     stemp = s[j - 1];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__2 = *n;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = j + i__ * a_dim1;
                             temp.r = a[i__3].r;
@@ -394,7 +395,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.i = ctemp * temp.i; // , expr subst
                             i__4 = i__ * a_dim1 + 1;
                             q__3.r = stemp * a[i__4].r;
-                            q__3.i = stemp * a[ i__4].i; // , expr subst
+                            q__3.i = stemp * a[i__4].i; // , expr subst
                             q__1.r = q__2.r - q__3.r;
                             q__1.i = q__2.i - q__3.i; // , expr subst
                             a[i__3].r = q__1.r;
@@ -404,7 +405,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.i = stemp * temp.i; // , expr subst
                             i__4 = i__ * a_dim1 + 1;
                             q__3.r = ctemp * a[i__4].r;
-                            q__3.i = ctemp * a[ i__4].i; // , expr subst
+                            q__3.i = ctemp * a[i__4].i; // , expr subst
                             q__1.r = q__2.r + q__3.r;
                             q__1.i = q__2.i + q__3.i; // , expr subst
                             a[i__3].r = q__1.r;
@@ -415,20 +416,16 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                     /* L60: */
                 }
             }
-            else if (lsame_(direct, "B", 1, 1))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *m;
-                        j >= 2;
-                        --j)
+                for(j = *m; j >= 2; --j)
                 {
                     ctemp = c__[j - 1];
                     stemp = s[j - 1];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__1 = *n;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = j + i__ * a_dim1;
                             temp.r = a[i__2].r;
@@ -438,7 +435,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.i = ctemp * temp.i; // , expr subst
                             i__3 = i__ * a_dim1 + 1;
                             q__3.r = stemp * a[i__3].r;
-                            q__3.i = stemp * a[ i__3].i; // , expr subst
+                            q__3.i = stemp * a[i__3].i; // , expr subst
                             q__1.r = q__2.r - q__3.r;
                             q__1.i = q__2.i - q__3.i; // , expr subst
                             a[i__2].r = q__1.r;
@@ -448,7 +445,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.i = stemp * temp.i; // , expr subst
                             i__3 = i__ * a_dim1 + 1;
                             q__3.r = ctemp * a[i__3].r;
-                            q__3.i = ctemp * a[ i__3].i; // , expr subst
+                            q__3.i = ctemp * a[i__3].i; // , expr subst
                             q__1.r = q__2.r + q__3.r;
                             q__1.i = q__2.i + q__3.i; // , expr subst
                             a[i__2].r = q__1.r;
@@ -460,23 +457,19 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                 }
             }
         }
-        else if (lsame_(pivot, "B", 1, 1))
+        else if(lsame_(pivot, "B", 1, 1))
         {
-            if (lsame_(direct, "F", 1, 1))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *m - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__2 = *n;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = j + i__ * a_dim1;
                             temp.r = a[i__3].r;
@@ -484,7 +477,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             i__3 = j + i__ * a_dim1;
                             i__4 = *m + i__ * a_dim1;
                             q__2.r = stemp * a[i__4].r;
-                            q__2.i = stemp * a[ i__4].i; // , expr subst
+                            q__2.i = stemp * a[i__4].i; // , expr subst
                             q__3.r = ctemp * temp.r;
                             q__3.i = ctemp * temp.i; // , expr subst
                             q__1.r = q__2.r + q__3.r;
@@ -494,7 +487,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             i__3 = *m + i__ * a_dim1;
                             i__4 = *m + i__ * a_dim1;
                             q__2.r = ctemp * a[i__4].r;
-                            q__2.i = ctemp * a[ i__4].i; // , expr subst
+                            q__2.i = ctemp * a[i__4].i; // , expr subst
                             q__3.r = stemp * temp.r;
                             q__3.i = stemp * temp.i; // , expr subst
                             q__1.r = q__2.r - q__3.r;
@@ -507,20 +500,16 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                     /* L100: */
                 }
             }
-            else if (lsame_(direct, "B", 1, 1))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *m - 1;
-                        j >= 1;
-                        --j)
+                for(j = *m - 1; j >= 1; --j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__1 = *n;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = j + i__ * a_dim1;
                             temp.r = a[i__2].r;
@@ -528,7 +517,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             i__2 = j + i__ * a_dim1;
                             i__3 = *m + i__ * a_dim1;
                             q__2.r = stemp * a[i__3].r;
-                            q__2.i = stemp * a[ i__3].i; // , expr subst
+                            q__2.i = stemp * a[i__3].i; // , expr subst
                             q__3.r = ctemp * temp.r;
                             q__3.i = ctemp * temp.i; // , expr subst
                             q__1.r = q__2.r + q__3.r;
@@ -538,7 +527,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             i__2 = *m + i__ * a_dim1;
                             i__3 = *m + i__ * a_dim1;
                             q__2.r = ctemp * a[i__3].r;
-                            q__2.i = ctemp * a[ i__3].i; // , expr subst
+                            q__2.i = ctemp * a[i__3].i; // , expr subst
                             q__3.r = stemp * temp.r;
                             q__3.i = stemp * temp.i; // , expr subst
                             q__1.r = q__2.r - q__3.r;
@@ -553,26 +542,22 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
             }
         }
     }
-    else if (lsame_(side, "R", 1, 1))
+    else if(lsame_(side, "R", 1, 1))
     {
         /* Form A * P**T */
-        if (lsame_(pivot, "V", 1, 1))
+        if(lsame_(pivot, "V", 1, 1))
         {
-            if (lsame_(direct, "F", 1, 1))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *n - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__2 = *m;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = i__ + (j + 1) * a_dim1;
                             temp.r = a[i__3].r;
@@ -582,7 +567,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.i = ctemp * temp.i; // , expr subst
                             i__4 = i__ + j * a_dim1;
                             q__3.r = stemp * a[i__4].r;
-                            q__3.i = stemp * a[ i__4].i; // , expr subst
+                            q__3.i = stemp * a[i__4].i; // , expr subst
                             q__1.r = q__2.r - q__3.r;
                             q__1.i = q__2.i - q__3.i; // , expr subst
                             a[i__3].r = q__1.r;
@@ -592,7 +577,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.i = stemp * temp.i; // , expr subst
                             i__4 = i__ + j * a_dim1;
                             q__3.r = ctemp * a[i__4].r;
-                            q__3.i = ctemp * a[ i__4].i; // , expr subst
+                            q__3.i = ctemp * a[i__4].i; // , expr subst
                             q__1.r = q__2.r + q__3.r;
                             q__1.i = q__2.i + q__3.i; // , expr subst
                             a[i__3].r = q__1.r;
@@ -603,20 +588,16 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                     /* L140: */
                 }
             }
-            else if (lsame_(direct, "B", 1, 1))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *n - 1;
-                        j >= 1;
-                        --j)
+                for(j = *n - 1; j >= 1; --j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__1 = *m;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = i__ + (j + 1) * a_dim1;
                             temp.r = a[i__2].r;
@@ -626,7 +607,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.i = ctemp * temp.i; // , expr subst
                             i__3 = i__ + j * a_dim1;
                             q__3.r = stemp * a[i__3].r;
-                            q__3.i = stemp * a[ i__3].i; // , expr subst
+                            q__3.i = stemp * a[i__3].i; // , expr subst
                             q__1.r = q__2.r - q__3.r;
                             q__1.i = q__2.i - q__3.i; // , expr subst
                             a[i__2].r = q__1.r;
@@ -636,7 +617,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.i = stemp * temp.i; // , expr subst
                             i__3 = i__ + j * a_dim1;
                             q__3.r = ctemp * a[i__3].r;
-                            q__3.i = ctemp * a[ i__3].i; // , expr subst
+                            q__3.i = ctemp * a[i__3].i; // , expr subst
                             q__1.r = q__2.r + q__3.r;
                             q__1.i = q__2.i + q__3.i; // , expr subst
                             a[i__2].r = q__1.r;
@@ -648,23 +629,19 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                 }
             }
         }
-        else if (lsame_(pivot, "T", 1, 1))
+        else if(lsame_(pivot, "T", 1, 1))
         {
-            if (lsame_(direct, "F", 1, 1))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *n;
-                for (j = 2;
-                        j <= i__1;
-                        ++j)
+                for(j = 2; j <= i__1; ++j)
                 {
                     ctemp = c__[j - 1];
                     stemp = s[j - 1];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__2 = *m;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = i__ + j * a_dim1;
                             temp.r = a[i__3].r;
@@ -674,7 +651,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.i = ctemp * temp.i; // , expr subst
                             i__4 = i__ + a_dim1;
                             q__3.r = stemp * a[i__4].r;
-                            q__3.i = stemp * a[ i__4].i; // , expr subst
+                            q__3.i = stemp * a[i__4].i; // , expr subst
                             q__1.r = q__2.r - q__3.r;
                             q__1.i = q__2.i - q__3.i; // , expr subst
                             a[i__3].r = q__1.r;
@@ -684,7 +661,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.i = stemp * temp.i; // , expr subst
                             i__4 = i__ + a_dim1;
                             q__3.r = ctemp * a[i__4].r;
-                            q__3.i = ctemp * a[ i__4].i; // , expr subst
+                            q__3.i = ctemp * a[i__4].i; // , expr subst
                             q__1.r = q__2.r + q__3.r;
                             q__1.i = q__2.i + q__3.i; // , expr subst
                             a[i__3].r = q__1.r;
@@ -695,20 +672,16 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                     /* L180: */
                 }
             }
-            else if (lsame_(direct, "B", 1, 1))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *n;
-                        j >= 2;
-                        --j)
+                for(j = *n; j >= 2; --j)
                 {
                     ctemp = c__[j - 1];
                     stemp = s[j - 1];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__1 = *m;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = i__ + j * a_dim1;
                             temp.r = a[i__2].r;
@@ -718,7 +691,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.i = ctemp * temp.i; // , expr subst
                             i__3 = i__ + a_dim1;
                             q__3.r = stemp * a[i__3].r;
-                            q__3.i = stemp * a[ i__3].i; // , expr subst
+                            q__3.i = stemp * a[i__3].i; // , expr subst
                             q__1.r = q__2.r - q__3.r;
                             q__1.i = q__2.i - q__3.i; // , expr subst
                             a[i__2].r = q__1.r;
@@ -728,7 +701,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.i = stemp * temp.i; // , expr subst
                             i__3 = i__ + a_dim1;
                             q__3.r = ctemp * a[i__3].r;
-                            q__3.i = ctemp * a[ i__3].i; // , expr subst
+                            q__3.i = ctemp * a[i__3].i; // , expr subst
                             q__1.r = q__2.r + q__3.r;
                             q__1.i = q__2.i + q__3.i; // , expr subst
                             a[i__2].r = q__1.r;
@@ -740,23 +713,19 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                 }
             }
         }
-        else if (lsame_(pivot, "B", 1, 1))
+        else if(lsame_(pivot, "B", 1, 1))
         {
-            if (lsame_(direct, "F", 1, 1))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *n - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__2 = *m;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = i__ + j * a_dim1;
                             temp.r = a[i__3].r;
@@ -764,7 +733,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             i__3 = i__ + j * a_dim1;
                             i__4 = i__ + *n * a_dim1;
                             q__2.r = stemp * a[i__4].r;
-                            q__2.i = stemp * a[ i__4].i; // , expr subst
+                            q__2.i = stemp * a[i__4].i; // , expr subst
                             q__3.r = ctemp * temp.r;
                             q__3.i = ctemp * temp.i; // , expr subst
                             q__1.r = q__2.r + q__3.r;
@@ -774,7 +743,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             i__3 = i__ + *n * a_dim1;
                             i__4 = i__ + *n * a_dim1;
                             q__2.r = ctemp * a[i__4].r;
-                            q__2.i = ctemp * a[ i__4].i; // , expr subst
+                            q__2.i = ctemp * a[i__4].i; // , expr subst
                             q__3.r = stemp * temp.r;
                             q__3.i = stemp * temp.i; // , expr subst
                             q__1.r = q__2.r - q__3.r;
@@ -787,20 +756,16 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                     /* L220: */
                 }
             }
-            else if (lsame_(direct, "B", 1, 1))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *n - 1;
-                        j >= 1;
-                        --j)
+                for(j = *n - 1; j >= 1; --j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__1 = *m;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = i__ + j * a_dim1;
                             temp.r = a[i__2].r;
@@ -808,7 +773,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             i__2 = i__ + j * a_dim1;
                             i__3 = i__ + *n * a_dim1;
                             q__2.r = stemp * a[i__3].r;
-                            q__2.i = stemp * a[ i__3].i; // , expr subst
+                            q__2.i = stemp * a[i__3].i; // , expr subst
                             q__3.r = ctemp * temp.r;
                             q__3.i = ctemp * temp.i; // , expr subst
                             q__1.r = q__2.r + q__3.r;
@@ -818,7 +783,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             i__2 = i__ + *n * a_dim1;
                             i__3 = i__ + *n * a_dim1;
                             q__2.r = ctemp * a[i__3].r;
-                            q__2.i = ctemp * a[ i__3].i; // , expr subst
+                            q__2.i = ctemp * a[i__3].i; // , expr subst
                             q__3.r = stemp * temp.r;
                             q__3.i = stemp * temp.i; // , expr subst
                             q__1.r = q__2.r - q__3.r;

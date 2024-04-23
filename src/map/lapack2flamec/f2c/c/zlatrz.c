@@ -1,16 +1,25 @@
-/* ../netlib/zlatrz.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlatrz.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZLATRZ factors an upper trapezoidal matrix by means of unitary transformations. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLATRZ + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlatrz. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlatrz.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlatrz. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlatrz.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlatrz. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlatrz.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -125,10 +134,12 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlatrz_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex * work)
+void zlatrz_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda, doublecomplex *tau,
+             doublecomplex *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlatrz inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS "",*m, *n, *l, *lda);
+    AOCL_DTL_SNPRINTF("zlatrz inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS "",
+                      *m, *n, *l, *lda);
 
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -139,7 +150,11 @@ void zlatrz_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda,
     integer i__;
     doublecomplex alpha;
     extern /* Subroutine */
-    void zlarz_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zlacgv_(integer *, doublecomplex *, integer *);
+        void
+        zlarz_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *),
+        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *),
+        zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -166,17 +181,15 @@ void zlatrz_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda,
     --tau;
     --work;
     /* Function Body */
-    if (*m == 0)
+    if(*m == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (*m == *n)
+    else if(*m == *n)
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
             tau[i__2].r = 0.;
@@ -186,9 +199,7 @@ void zlatrz_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda,
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    for (i__ = *m;
-            i__ >= 1;
-            --i__)
+    for(i__ = *m; i__ >= 1; --i__)
     {
         /* Generate elementary reflector H(i) to annihilate */
         /* [ A(i,i) A(i,n-l+1:n) ] */
@@ -197,7 +208,7 @@ void zlatrz_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda,
         alpha.r = z__1.r;
         alpha.i = z__1.i; // , expr subst
         i__1 = *l + 1;
-        zlarfg_(&i__1, &alpha, &a[i__ + (*n - *l + 1) * a_dim1], lda, &tau[ i__]);
+        zlarfg_(&i__1, &alpha, &a[i__ + (*n - *l + 1) * a_dim1], lda, &tau[i__]);
         i__1 = i__;
         d_cnjg(&z__1, &tau[i__]);
         tau[i__1].r = z__1.r;
@@ -206,7 +217,8 @@ void zlatrz_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda,
         i__1 = i__ - 1;
         i__2 = *n - i__ + 1;
         d_cnjg(&z__1, &tau[i__]);
-        zlarz_("Right", &i__1, &i__2, l, &a[i__ + (*n - *l + 1) * a_dim1], lda, &z__1, &a[i__ * a_dim1 + 1], lda, &work[1]);
+        zlarz_("Right", &i__1, &i__2, l, &a[i__ + (*n - *l + 1) * a_dim1], lda, &z__1,
+               &a[i__ * a_dim1 + 1], lda, &work[1]);
         i__1 = i__ + i__ * a_dim1;
         d_cnjg(&z__1, &alpha);
         a[i__1].r = z__1.r;

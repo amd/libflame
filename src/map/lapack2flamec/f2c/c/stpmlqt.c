@@ -1,16 +1,25 @@
-/* ../netlib/v3.9.0/stpmlqt.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/stpmlqt.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DTPMLQT */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DTPMQRT + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stpmlqt .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stpmlqt
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stpmlqt .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stpmlqt
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stpmlqt .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stpmlqt
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -40,7 +49,7 @@
 /* > \verbatim */
 /* > SIDE is CHARACTER*1 */
 /* > = 'L': apply Q or Q**T from the Left;
-*/
+ */
 /* > = 'R': apply Q or Q**T from the Right. */
 /* > \endverbatim */
 /* > */
@@ -48,7 +57,7 @@
 /* > \verbatim */
 /* > TRANS is CHARACTER*1 */
 /* > = 'N': No transpose, apply Q;
-*/
+ */
 /* > = 'T': Transpose, apply Q**T. */
 /* > \endverbatim */
 /* > */
@@ -99,7 +108,7 @@
 /* > LDV is INTEGER */
 /* > The leading dimension of the array V. */
 /* > If SIDE = 'L', LDV >= fla_max(1,M);
-*/
+ */
 /* > if SIDE = 'R', LDV >= fla_max(1,N). */
 /* > \endverbatim */
 /* > */
@@ -131,7 +140,7 @@
 /* > LDA is INTEGER */
 /* > The leading dimension of the array A. */
 /* > If SIDE = 'L', LDC >= fla_max(1,K);
-*/
+ */
 /* > If SIDE = 'R', LDC >= fla_max(1,M). */
 /* > \endverbatim */
 /* > */
@@ -187,7 +196,7 @@ V is composed of a rectangular block V1 and a */
 /* > where 0 <= L <= K;
 V2 is lower trapezoidal, consisting of the first L */
 /* > rows of a K-by-K upper triangular matrix. If L=K, V2 is lower triangular;
-*/
+ */
 /* > if L=0, there is no trapezoidal block, hence V = V1 is rectangular. */
 /* > */
 /* > If SIDE = 'L': C = [A] where A is K-by-N, B is M-by-N and V is K-by-M. */
@@ -208,23 +217,34 @@ V2 is lower trapezoidal, consisting of the first L */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void stpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, integer *mb, real *v, integer *ldv, real *t, integer *ldt, real *a, integer *lda, real *b, integer *ldb, real * work, integer *info)
+void stpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, integer *mb,
+              real *v, integer *ldv, real *t, integer *ldt, real *a, integer *lda, real *b,
+              integer *ldb, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"stpmlqt inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", mb %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*side, *trans, *m, *n, *k, *l, *mb, *ldv, *ldt, *lda, *ldb);
+    snprintf(buffer, 256,
+             "stpmlqt inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
+             ", l %" FLA_IS ", mb %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS ", lda %" FLA_IS
+             ", ldb %" FLA_IS "",
+             *side, *trans, *m, *n, *k, *l, *mb, *ldv, *ldt, *lda, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer v_dim1, v_offset, a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
+    integer v_dim1, v_offset, a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, i__1, i__2,
+        i__3, i__4;
     /* Local variables */
     integer i__, ib, lb, nb, kf, ldaq;
     logical left, tran;
     extern logical lsame_(char *, char *, integer, integer);
     logical right;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), stprfb_( char *, char *, char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        stprfb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *, real *,
+                integer *, real *, integer *, real *, integer *, real *, integer *, real *,
+                integer *);
     logical notran;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -266,59 +286,59 @@ void stpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
     right = lsame_(side, "R", 1, 1);
     tran = lsame_(trans, "T", 1, 1);
     notran = lsame_(trans, "N", 1, 1);
-    if (left)
+    if(left)
     {
-        ldaq = fla_max(1,*k);
+        ldaq = fla_max(1, *k);
     }
-    else if (right)
+    else if(right)
     {
-        ldaq = fla_max(1,*m);
+        ldaq = fla_max(1, *m);
     }
-    if (! left && ! right)
+    if(!left && !right)
     {
         *info = -1;
     }
-    else if (! tran && ! notran)
+    else if(!tran && !notran)
     {
         *info = -2;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*k < 0)
+    else if(*k < 0)
     {
         *info = -5;
     }
-    else if (*l < 0 || *l > *k)
+    else if(*l < 0 || *l > *k)
     {
         *info = -6;
     }
-    else if (*mb < 1 || *mb > *k && *k > 0)
+    else if(*mb < 1 || *mb > *k && *k > 0)
     {
         *info = -7;
     }
-    else if (*ldv < *k)
+    else if(*ldv < *k)
     {
         *info = -9;
     }
-    else if (*ldt < *mb)
+    else if(*ldt < *mb)
     {
         *info = -11;
     }
-    else if (*lda < ldaq)
+    else if(*lda < ldaq)
     {
         *info = -13;
     }
-    else if (*ldb < fla_max(1,*m))
+    else if(*ldb < fla_max(1, *m))
     {
         *info = -15;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("STPMLQT", &i__1, (ftnlen)7);
@@ -326,27 +346,25 @@ void stpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
         return;
     }
     /* .. Quick return if possible .. */
-    if (*m == 0 || *n == 0 || *k == 0)
+    if(*m == 0 || *n == 0 || *k == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (left && notran)
+    if(left && notran)
     {
         i__1 = *k;
         i__2 = *mb;
-        for (i__ = 1;
-                i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-                i__ += i__2)
+        for(i__ = 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
         {
             /* Computing MIN */
             i__3 = *mb;
             i__4 = *k - i__ + 1; // , expr subst
-            ib = fla_min(i__3,i__4);
+            ib = fla_min(i__3, i__4);
             /* Computing MIN */
             i__3 = *m - *l + i__ + ib - 1;
-            nb = fla_min(i__3,*m);
-            if (i__ >= *l)
+            nb = fla_min(i__3, *m);
+            if(i__ >= *l)
             {
                 lb = 0;
             }
@@ -354,25 +372,25 @@ void stpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
             {
                 lb = 0;
             }
-            stprfb_("L", "T", "F", "R", &nb, n, &ib, &lb, &v[i__ + v_dim1], ldv, &t[i__ * t_dim1 + 1], ldt, &a[i__ + a_dim1], lda, &b[ b_offset], ldb, &work[1], &ib);
+            stprfb_("L", "T", "F", "R", &nb, n, &ib, &lb, &v[i__ + v_dim1], ldv,
+                    &t[i__ * t_dim1 + 1], ldt, &a[i__ + a_dim1], lda, &b[b_offset], ldb, &work[1],
+                    &ib);
         }
     }
-    else if (right && tran)
+    else if(right && tran)
     {
         i__2 = *k;
         i__1 = *mb;
-        for (i__ = 1;
-                i__1 < 0 ? i__ >= i__2 : i__ <= i__2;
-                i__ += i__1)
+        for(i__ = 1; i__1 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__1)
         {
             /* Computing MIN */
             i__3 = *mb;
             i__4 = *k - i__ + 1; // , expr subst
-            ib = fla_min(i__3,i__4);
+            ib = fla_min(i__3, i__4);
             /* Computing MIN */
             i__3 = *n - *l + i__ + ib - 1;
-            nb = fla_min(i__3,*n);
-            if (i__ >= *l)
+            nb = fla_min(i__3, *n);
+            if(i__ >= *l)
             {
                 lb = 0;
             }
@@ -380,25 +398,25 @@ void stpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
             {
                 lb = nb - *n + *l - i__ + 1;
             }
-            stprfb_("R", "N", "F", "R", m, &nb, &ib, &lb, &v[i__ + v_dim1], ldv, &t[i__ * t_dim1 + 1], ldt, &a[i__ * a_dim1 + 1], lda, &b[b_offset], ldb, &work[1], m);
+            stprfb_("R", "N", "F", "R", m, &nb, &ib, &lb, &v[i__ + v_dim1], ldv,
+                    &t[i__ * t_dim1 + 1], ldt, &a[i__ * a_dim1 + 1], lda, &b[b_offset], ldb,
+                    &work[1], m);
         }
     }
-    else if (left && tran)
+    else if(left && tran)
     {
         kf = (*k - 1) / *mb * *mb + 1;
         i__1 = -(*mb);
-        for (i__ = kf;
-                i__1 < 0 ? i__ >= 1 : i__ <= 1;
-                i__ += i__1)
+        for(i__ = kf; i__1 < 0 ? i__ >= 1 : i__ <= 1; i__ += i__1)
         {
             /* Computing MIN */
             i__2 = *mb;
             i__3 = *k - i__ + 1; // , expr subst
-            ib = fla_min(i__2,i__3);
+            ib = fla_min(i__2, i__3);
             /* Computing MIN */
             i__2 = *m - *l + i__ + ib - 1;
-            nb = fla_min(i__2,*m);
-            if (i__ >= *l)
+            nb = fla_min(i__2, *m);
+            if(i__ >= *l)
             {
                 lb = 0;
             }
@@ -406,25 +424,25 @@ void stpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
             {
                 lb = 0;
             }
-            stprfb_("L", "N", "F", "R", &nb, n, &ib, &lb, &v[i__ + v_dim1], ldv, &t[i__ * t_dim1 + 1], ldt, &a[i__ + a_dim1], lda, &b[ b_offset], ldb, &work[1], &ib);
+            stprfb_("L", "N", "F", "R", &nb, n, &ib, &lb, &v[i__ + v_dim1], ldv,
+                    &t[i__ * t_dim1 + 1], ldt, &a[i__ + a_dim1], lda, &b[b_offset], ldb, &work[1],
+                    &ib);
         }
     }
-    else if (right && notran)
+    else if(right && notran)
     {
         kf = (*k - 1) / *mb * *mb + 1;
         i__1 = -(*mb);
-        for (i__ = kf;
-                i__1 < 0 ? i__ >= 1 : i__ <= 1;
-                i__ += i__1)
+        for(i__ = kf; i__1 < 0 ? i__ >= 1 : i__ <= 1; i__ += i__1)
         {
             /* Computing MIN */
             i__2 = *mb;
             i__3 = *k - i__ + 1; // , expr subst
-            ib = fla_min(i__2,i__3);
+            ib = fla_min(i__2, i__3);
             /* Computing MIN */
             i__2 = *n - *l + i__ + ib - 1;
-            nb = fla_min(i__2,*n);
-            if (i__ >= *l)
+            nb = fla_min(i__2, *n);
+            if(i__ >= *l)
             {
                 lb = 0;
             }
@@ -432,7 +450,9 @@ void stpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
             {
                 lb = nb - *n + *l - i__ + 1;
             }
-            stprfb_("R", "T", "F", "R", m, &nb, &ib, &lb, &v[i__ + v_dim1], ldv, &t[i__ * t_dim1 + 1], ldt, &a[i__ * a_dim1 + 1], lda, &b[b_offset], ldb, &work[1], m);
+            stprfb_("R", "T", "F", "R", m, &nb, &ib, &lb, &v[i__ + v_dim1], ldv,
+                    &t[i__ * t_dim1 + 1], ldt, &a[i__ * a_dim1 + 1], lda, &b[b_offset], ldb,
+                    &work[1], m);
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -440,4 +460,3 @@ void stpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
     /* End of STPMLQT */
 }
 /* stpmlqt_ */
-

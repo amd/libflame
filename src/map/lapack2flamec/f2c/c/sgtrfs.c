@@ -1,5 +1,8 @@
-/* ../netlib/sgtrfs.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sgtrfs.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b18 = -1.f;
@@ -10,11 +13,17 @@ static real c_b19 = 1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SGTRFS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgtrfs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgtrfs.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgtrfs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgtrfs.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgtrfs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgtrfs.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -198,12 +207,15 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup realGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sgtrfs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *du, real *dlf, real *df, real *duf, real *du2, integer *ipiv, real *b, integer *ldb, real *x, integer *ldx, real * ferr, real *berr, real *work, integer *iwork, integer *info)
+void sgtrfs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *du, real *dlf,
+             real *df, real *duf, real *du2, integer *ipiv, real *b, integer *ldb, real *x,
+             integer *ldx, real *ferr, real *berr, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sgtrfs inputs: trans %c, n %d, nrhs %d, ldb %d, ldx %d",*trans, *n, *nrhs, *ldb, *ldx);
+    snprintf(buffer, 256, "sgtrfs inputs: trans %c, n %d, nrhs %d, ldb %d, ldx %d", *trans, *n,
+             *nrhs, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -219,16 +231,24 @@ void sgtrfs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3], count;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *),
+        saxpy_(integer *, real *, real *, integer *, real *, integer *),
+        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slagtm_( char *, integer *, integer *, real *, real *, real *, real *, real *, integer *, real *, real *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slagtm_(char *, integer *, integer *, real *, real *, real *, real *, real *, integer *,
+                real *, real *, integer *);
     logical notran;
     char transn[1], transt[1];
     real lstres;
     extern /* Subroutine */
-    void sgttrs_(char *, integer *, integer *, real *, real *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        sgttrs_(char *, integer *, integer *, real *, real *, real *, real *, integer *, real *,
+                integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -274,27 +294,27 @@ void sgtrfs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *
     /* Function Body */
     *info = 0;
     notran = lsame_(trans, "N", 1, 1);
-    if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -3;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -13;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -15;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SGTRFS", &i__1, (ftnlen)6);
@@ -302,12 +322,10 @@ void sgtrfs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *
         return;
     }
     /* Quick return if possible */
-    if (*n == 0 || *nrhs == 0)
+    if(*n == 0 || *nrhs == 0)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             ferr[j] = 0.f;
             berr[j] = 0.f;
@@ -316,7 +334,7 @@ void sgtrfs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (notran)
+    if(notran)
     {
         *(unsigned char *)transn = 'N';
         *(unsigned char *)transt = 'T';
@@ -334,57 +352,68 @@ void sgtrfs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *
     safe2 = safe1 / eps;
     /* Do for each right hand side */
     i__1 = *nrhs;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         count = 1;
         lstres = 3.f;
-L20: /* Loop until stopping criterion is satisfied. */
+    L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - op(A) * X, */
         /* where op(A) = A, A**T, or A**H, depending on TRANS. */
         scopy_(n, &b[j * b_dim1 + 1], &c__1, &work[*n + 1], &c__1);
-        slagtm_(trans, n, &c__1, &c_b18, &dl[1], &d__[1], &du[1], &x[j * x_dim1 + 1], ldx, &c_b19, &work[*n + 1], n);
+        slagtm_(trans, n, &c__1, &c_b18, &dl[1], &d__[1], &du[1], &x[j * x_dim1 + 1], ldx, &c_b19,
+                &work[*n + 1], n);
         /* Compute f2c_abs(op(A))*f2c_abs(x) + f2c_abs(b) for use in the backward */
         /* error bound. */
-        if (notran)
+        if(notran)
         {
-            if (*n == 1)
+            if(*n == 1)
             {
-                work[1] = (r__1 = b[j * b_dim1 + 1], f2c_abs(r__1)) + (r__2 = d__[ 1] * x[j * x_dim1 + 1], f2c_abs(r__2));
+                work[1] = (r__1 = b[j * b_dim1 + 1], f2c_abs(r__1))
+                          + (r__2 = d__[1] * x[j * x_dim1 + 1], f2c_abs(r__2));
             }
             else
             {
-                work[1] = (r__1 = b[j * b_dim1 + 1], f2c_abs(r__1)) + (r__2 = d__[ 1] * x[j * x_dim1 + 1], f2c_abs(r__2)) + (r__3 = du[1] * x[j * x_dim1 + 2], f2c_abs(r__3));
+                work[1] = (r__1 = b[j * b_dim1 + 1], f2c_abs(r__1))
+                          + (r__2 = d__[1] * x[j * x_dim1 + 1], f2c_abs(r__2))
+                          + (r__3 = du[1] * x[j * x_dim1 + 2], f2c_abs(r__3));
                 i__2 = *n - 1;
-                for (i__ = 2;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 2; i__ <= i__2; ++i__)
                 {
-                    work[i__] = (r__1 = b[i__ + j * b_dim1], f2c_abs(r__1)) + ( r__2 = dl[i__ - 1] * x[i__ - 1 + j * x_dim1], f2c_abs( r__2)) + (r__3 = d__[i__] * x[i__ + j * x_dim1], f2c_abs(r__3)) + (r__4 = du[i__] * x[i__ + 1 + j * x_dim1], f2c_abs(r__4));
+                    work[i__] = (r__1 = b[i__ + j * b_dim1], f2c_abs(r__1))
+                                + (r__2 = dl[i__ - 1] * x[i__ - 1 + j * x_dim1], f2c_abs(r__2))
+                                + (r__3 = d__[i__] * x[i__ + j * x_dim1], f2c_abs(r__3))
+                                + (r__4 = du[i__] * x[i__ + 1 + j * x_dim1], f2c_abs(r__4));
                     /* L30: */
                 }
-                work[*n] = (r__1 = b[*n + j * b_dim1], f2c_abs(r__1)) + (r__2 = dl[*n - 1] * x[*n - 1 + j * x_dim1], f2c_abs(r__2)) + ( r__3 = d__[*n] * x[*n + j * x_dim1], f2c_abs(r__3));
+                work[*n] = (r__1 = b[*n + j * b_dim1], f2c_abs(r__1))
+                           + (r__2 = dl[*n - 1] * x[*n - 1 + j * x_dim1], f2c_abs(r__2))
+                           + (r__3 = d__[*n] * x[*n + j * x_dim1], f2c_abs(r__3));
             }
         }
         else
         {
-            if (*n == 1)
+            if(*n == 1)
             {
-                work[1] = (r__1 = b[j * b_dim1 + 1], f2c_abs(r__1)) + (r__2 = d__[ 1] * x[j * x_dim1 + 1], f2c_abs(r__2));
+                work[1] = (r__1 = b[j * b_dim1 + 1], f2c_abs(r__1))
+                          + (r__2 = d__[1] * x[j * x_dim1 + 1], f2c_abs(r__2));
             }
             else
             {
-                work[1] = (r__1 = b[j * b_dim1 + 1], f2c_abs(r__1)) + (r__2 = d__[ 1] * x[j * x_dim1 + 1], f2c_abs(r__2)) + (r__3 = dl[1] * x[j * x_dim1 + 2], f2c_abs(r__3));
+                work[1] = (r__1 = b[j * b_dim1 + 1], f2c_abs(r__1))
+                          + (r__2 = d__[1] * x[j * x_dim1 + 1], f2c_abs(r__2))
+                          + (r__3 = dl[1] * x[j * x_dim1 + 2], f2c_abs(r__3));
                 i__2 = *n - 1;
-                for (i__ = 2;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 2; i__ <= i__2; ++i__)
                 {
-                    work[i__] = (r__1 = b[i__ + j * b_dim1], f2c_abs(r__1)) + ( r__2 = du[i__ - 1] * x[i__ - 1 + j * x_dim1], f2c_abs( r__2)) + (r__3 = d__[i__] * x[i__ + j * x_dim1], f2c_abs(r__3)) + (r__4 = dl[i__] * x[i__ + 1 + j * x_dim1], f2c_abs(r__4));
+                    work[i__] = (r__1 = b[i__ + j * b_dim1], f2c_abs(r__1))
+                                + (r__2 = du[i__ - 1] * x[i__ - 1 + j * x_dim1], f2c_abs(r__2))
+                                + (r__3 = d__[i__] * x[i__ + j * x_dim1], f2c_abs(r__3))
+                                + (r__4 = dl[i__] * x[i__ + 1 + j * x_dim1], f2c_abs(r__4));
                     /* L40: */
                 }
-                work[*n] = (r__1 = b[*n + j * b_dim1], f2c_abs(r__1)) + (r__2 = du[*n - 1] * x[*n - 1 + j * x_dim1], f2c_abs(r__2)) + ( r__3 = d__[*n] * x[*n + j * x_dim1], f2c_abs(r__3));
+                work[*n] = (r__1 = b[*n + j * b_dim1], f2c_abs(r__1))
+                           + (r__2 = du[*n - 1] * x[*n - 1 + j * x_dim1], f2c_abs(r__2))
+                           + (r__3 = d__[*n] * x[*n + j * x_dim1], f2c_abs(r__3));
             }
         }
         /* Compute componentwise relative backward error from formula */
@@ -395,23 +424,22 @@ L20: /* Loop until stopping criterion is satisfied. */
         /* numerator and denominator before dividing. */
         s = 0.f;
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
-            if (work[i__] > safe2)
+            if(work[i__] > safe2)
             {
                 /* Computing MAX */
                 r__2 = s;
-                r__3 = (r__1 = work[*n + i__], f2c_abs(r__1)) / work[ i__]; // , expr subst
-                s = fla_max(r__2,r__3);
+                r__3 = (r__1 = work[*n + i__], f2c_abs(r__1)) / work[i__]; // , expr subst
+                s = fla_max(r__2, r__3);
             }
             else
             {
                 /* Computing MAX */
                 r__2 = s;
-                r__3 = ((r__1 = work[*n + i__], f2c_abs(r__1)) + safe1) / (work[i__] + safe1); // , expr subst
-                s = fla_max(r__2,r__3);
+                r__3 = ((r__1 = work[*n + i__], f2c_abs(r__1)) + safe1)
+                       / (work[i__] + safe1); // , expr subst
+                s = fla_max(r__2, r__3);
             }
             /* L50: */
         }
@@ -421,11 +449,12 @@ L20: /* Loop until stopping criterion is satisfied. */
         /* 2) BERR(J) decreased by at least a factor of 2 during the */
         /* last iteration, and */
         /* 3) At most ITMAX iterations tried. */
-        if (berr[j] > eps && berr[j] * 2.f <= lstres && count <= 5)
+        if(berr[j] > eps && berr[j] * 2.f <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            sgttrs_(trans, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[ 1], &work[*n + 1], n, info);
-            saxpy_(n, &c_b19, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1) ;
+            sgttrs_(trans, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &work[*n + 1], n,
+                    info);
+            saxpy_(n, &c_b19, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;
@@ -448,11 +477,9 @@ L20: /* Loop until stopping criterion is satisfied. */
         /* inv(op(A)) * diag(W), */
         /* where W = f2c_abs(R) + NZ*EPS*( f2c_abs(op(A))*f2c_abs(X)+f2c_abs(B) ))) */
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
-            if (work[i__] > safe2)
+            if(work[i__] > safe2)
             {
                 work[i__] = (r__1 = work[*n + i__], f2c_abs(r__1)) + nz * eps * work[i__];
             }
@@ -463,18 +490,17 @@ L20: /* Loop until stopping criterion is satisfied. */
             /* L60: */
         }
         kase = 0;
-L70:
-        slacn2_(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], & kase, isave);
-        if (kase != 0)
+    L70:
+        slacn2_(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase, isave);
+        if(kase != 0)
         {
-            if (kase == 1)
+            if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(op(A)**T). */
-                sgttrs_(transt, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], & ipiv[1], &work[*n + 1], n, info);
+                sgttrs_(transt, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1],
+                        &work[*n + 1], n, info);
                 i__2 = *n;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     work[*n + i__] = work[i__] * work[*n + i__];
                     /* L80: */
@@ -484,31 +510,28 @@ L70:
             {
                 /* Multiply by inv(op(A))*diag(W). */
                 i__2 = *n;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     work[*n + i__] = work[i__] * work[*n + i__];
                     /* L90: */
                 }
-                sgttrs_(transn, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], & ipiv[1], &work[*n + 1], n, info);
+                sgttrs_(transn, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1],
+                        &work[*n + 1], n, info);
             }
             goto L70;
         }
         /* Normalize error. */
         lstres = 0.f;
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             r__2 = lstres;
             r__3 = (r__1 = x[i__ + j * x_dim1], f2c_abs(r__1)); // , expr subst
-            lstres = fla_max(r__2,r__3);
+            lstres = fla_max(r__2, r__3);
             /* L100: */
         }
-        if (lstres != 0.f)
+        if(lstres != 0.f)
         {
             ferr[j] /= lstres;
         }

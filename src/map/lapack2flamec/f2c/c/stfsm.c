@@ -1,5 +1,8 @@
-/* ../netlib/stfsm.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/stfsm.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b23 = -1.f;
 static real c_b27 = 1.f;
@@ -9,11 +12,17 @@ static real c_b27 = 1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download STFSM + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stfsm.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stfsm.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stfsm.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stfsm.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stfsm.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stfsm.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -54,7 +63,7 @@ static real c_b27 = 1.f;
 /* > \verbatim */
 /* > TRANSR is CHARACTER*1 */
 /* > = 'N': The Normal Form of RFP A is stored;
-*/
+ */
 /* > = 'T': The Transpose Form of RFP A is stored. */
 /* > \endverbatim */
 /* > */
@@ -140,7 +149,7 @@ static real c_b27 = 1.f;
 /* > NT = N*(N+1)/2. On entry, the matrix A in RFP Format. */
 /* > RFP Format is described by TRANSR, UPLO and N as follows: */
 /* > If TRANSR='N' then RFP A is (0:N,0:K-1) when N is even;
-*/
+ */
 /* > K=N/2. RFP A is (0:N-1,0:K) when N is odd;
 K=N/2. If */
 /* > TRANSR = 'T' then RFP is the transpose of RFP A as */
@@ -267,7 +276,8 @@ K=N/2. If */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integer *m, integer *n, real *alpha, real *a, real *b, integer *ldb)
+void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integer *m, integer *n,
+            real *alpha, real *a, real *b, integer *ldb)
 {
     /* System generated locals */
     integer b_dim1, b_offset, i__1, i__2;
@@ -276,10 +286,15 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
     logical normaltransr, lside;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *);
     logical lower;
     extern /* Subroutine */
-    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
+               real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical misodd, nisodd, notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -313,61 +328,57 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
     lside = lsame_(side, "L", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
     notrans = lsame_(trans, "N", 1, 1);
-    if (! normaltransr && ! lsame_(transr, "T", 1, 1))
+    if(!normaltransr && !lsame_(transr, "T", 1, 1))
     {
         info = -1;
     }
-    else if (! lside && ! lsame_(side, "R", 1, 1))
+    else if(!lside && !lsame_(side, "R", 1, 1))
     {
         info = -2;
     }
-    else if (! lower && ! lsame_(uplo, "U", 1, 1))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         info = -3;
     }
-    else if (! notrans && ! lsame_(trans, "T", 1, 1))
+    else if(!notrans && !lsame_(trans, "T", 1, 1))
     {
         info = -4;
     }
-    else if (! lsame_(diag, "N", 1, 1) && ! lsame_(diag, "U", 1, 1))
+    else if(!lsame_(diag, "N", 1, 1) && !lsame_(diag, "U", 1, 1))
     {
         info = -5;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         info = -6;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         info = -7;
     }
-    else if (*ldb < fla_max(1,*m))
+    else if(*ldb < fla_max(1, *m))
     {
         info = -11;
     }
-    if (info != 0)
+    if(info != 0)
     {
         i__1 = -info;
         xerbla_("STFSM ", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return when ( (N.EQ.0).OR.(M.EQ.0) ) */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         return;
     }
     /* Quick return when ALPHA.EQ.(0D+0) */
-    if (*alpha == 0.f)
+    if(*alpha == 0.f)
     {
         i__1 = *n - 1;
-        for (j = 0;
-                j <= i__1;
-                ++j)
+        for(j = 0; j <= i__1; ++j)
         {
             i__2 = *m - 1;
-            for (i__ = 0;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 0; i__ <= i__2; ++i__)
             {
                 b[i__ + j * b_dim1] = 0.f;
                 /* L10: */
@@ -376,13 +387,13 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
         }
         return;
     }
-    if (lside)
+    if(lside)
     {
         /* SIDE = 'L' */
         /* A is M-by-M. */
         /* If M is odd, set NISODD = .TRUE., and M1 and M2. */
         /* If M is even, NISODD = .FALSE., and M. */
-        if (*m % 2 == 0)
+        if(*m % 2 == 0)
         {
             misodd = FALSE_;
             k = *m / 2;
@@ -390,7 +401,7 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
         else
         {
             misodd = TRUE_;
-            if (lower)
+            if(lower)
             {
                 m2 = *m / 2;
                 m1 = *m - m2;
@@ -401,27 +412,28 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
                 m2 = *m - m1;
             }
         }
-        if (misodd)
+        if(misodd)
         {
             /* SIDE = 'L' and N is odd */
-            if (normaltransr)
+            if(normaltransr)
             {
                 /* SIDE = 'L', N is odd, and TRANSR = 'N' */
-                if (lower)
+                if(lower)
                 {
                     /* SIDE ='L', N is odd, TRANSR = 'N', and UPLO = 'L' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='L', N is odd, TRANSR = 'N', UPLO = 'L', and */
                         /* TRANS = 'N' */
-                        if (*m == 1)
+                        if(*m == 1)
                         {
-                            strsm_("L", "L", "N", diag, &m1, n, alpha, a, m, & b[b_offset], ldb);
+                            strsm_("L", "L", "N", diag, &m1, n, alpha, a, m, &b[b_offset], ldb);
                         }
                         else
                         {
-                            strsm_("L", "L", "N", diag, &m1, n, alpha, a, m, & b[b_offset], ldb);
-                            sgemm_("N", "N", &m2, n, &m1, &c_b23, &a[m1], m, & b[b_offset], ldb, alpha, &b[m1], ldb);
+                            strsm_("L", "L", "N", diag, &m1, n, alpha, a, m, &b[b_offset], ldb);
+                            sgemm_("N", "N", &m2, n, &m1, &c_b23, &a[m1], m, &b[b_offset], ldb,
+                                   alpha, &b[m1], ldb);
                             strsm_("L", "U", "T", diag, &m2, n, &c_b27, &a[*m], m, &b[m1], ldb);
                         }
                     }
@@ -429,14 +441,15 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
                     {
                         /* SIDE ='L', N is odd, TRANSR = 'N', UPLO = 'L', and */
                         /* TRANS = 'T' */
-                        if (*m == 1)
+                        if(*m == 1)
                         {
-                            strsm_("L", "L", "T", diag, &m1, n, alpha, a, m, & b[b_offset], ldb);
+                            strsm_("L", "L", "T", diag, &m1, n, alpha, a, m, &b[b_offset], ldb);
                         }
                         else
                         {
                             strsm_("L", "U", "N", diag, &m2, n, alpha, &a[*m], m, &b[m1], ldb);
-                            sgemm_("T", "N", &m1, n, &m2, &c_b23, &a[m1], m, & b[m1], ldb, alpha, &b[b_offset], ldb);
+                            sgemm_("T", "N", &m1, n, &m2, &c_b23, &a[m1], m, &b[m1], ldb, alpha,
+                                   &b[b_offset], ldb);
                             strsm_("L", "L", "T", diag, &m1, n, &c_b27, a, m, &b[b_offset], ldb);
                         }
                     }
@@ -444,12 +457,13 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
                 else
                 {
                     /* SIDE ='L', N is odd, TRANSR = 'N', and UPLO = 'U' */
-                    if (! notrans)
+                    if(!notrans)
                     {
                         /* SIDE ='L', N is odd, TRANSR = 'N', UPLO = 'U', and */
                         /* TRANS = 'N' */
                         strsm_("L", "L", "N", diag, &m1, n, alpha, &a[m2], m, &b[b_offset], ldb);
-                        sgemm_("T", "N", &m2, n, &m1, &c_b23, a, m, &b[ b_offset], ldb, alpha, &b[m1], ldb);
+                        sgemm_("T", "N", &m2, n, &m1, &c_b23, a, m, &b[b_offset], ldb, alpha,
+                               &b[m1], ldb);
                         strsm_("L", "U", "T", diag, &m2, n, &c_b27, &a[m1], m, &b[m1], ldb);
                     }
                     else
@@ -457,7 +471,8 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
                         /* SIDE ='L', N is odd, TRANSR = 'N', UPLO = 'U', and */
                         /* TRANS = 'T' */
                         strsm_("L", "U", "N", diag, &m2, n, alpha, &a[m1], m, &b[m1], ldb);
-                        sgemm_("N", "N", &m1, n, &m2, &c_b23, a, m, &b[m1], ldb, alpha, &b[b_offset], ldb);
+                        sgemm_("N", "N", &m1, n, &m2, &c_b23, a, m, &b[m1], ldb, alpha,
+                               &b[b_offset], ldb);
                         strsm_("L", "L", "T", diag, &m1, n, &c_b27, &a[m2], m, &b[b_offset], ldb);
                     }
                 }
@@ -465,21 +480,22 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
             else
             {
                 /* SIDE = 'L', N is odd, and TRANSR = 'T' */
-                if (lower)
+                if(lower)
                 {
                     /* SIDE ='L', N is odd, TRANSR = 'T', and UPLO = 'L' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='L', N is odd, TRANSR = 'T', UPLO = 'L', and */
                         /* TRANS = 'N' */
-                        if (*m == 1)
+                        if(*m == 1)
                         {
                             strsm_("L", "U", "T", diag, &m1, n, alpha, a, &m1, &b[b_offset], ldb);
                         }
                         else
                         {
                             strsm_("L", "U", "T", diag, &m1, n, alpha, a, &m1, &b[b_offset], ldb);
-                            sgemm_("T", "N", &m2, n, &m1, &c_b23, &a[m1 * m1], &m1, &b[b_offset], ldb, alpha, &b[m1], ldb);
+                            sgemm_("T", "N", &m2, n, &m1, &c_b23, &a[m1 * m1], &m1, &b[b_offset],
+                                   ldb, alpha, &b[m1], ldb);
                             strsm_("L", "L", "N", diag, &m2, n, &c_b27, &a[1], &m1, &b[m1], ldb);
                         }
                     }
@@ -487,27 +503,30 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
                     {
                         /* SIDE ='L', N is odd, TRANSR = 'T', UPLO = 'L', and */
                         /* TRANS = 'T' */
-                        if (*m == 1)
+                        if(*m == 1)
                         {
                             strsm_("L", "U", "N", diag, &m1, n, alpha, a, &m1, &b[b_offset], ldb);
                         }
                         else
                         {
                             strsm_("L", "L", "T", diag, &m2, n, alpha, &a[1], &m1, &b[m1], ldb);
-                            sgemm_("N", "N", &m1, n, &m2, &c_b23, &a[m1 * m1], &m1, &b[m1], ldb, alpha, &b[b_offset], ldb);
-                            strsm_("L", "U", "N", diag, &m1, n, &c_b27, a, & m1, &b[b_offset], ldb);
+                            sgemm_("N", "N", &m1, n, &m2, &c_b23, &a[m1 * m1], &m1, &b[m1], ldb,
+                                   alpha, &b[b_offset], ldb);
+                            strsm_("L", "U", "N", diag, &m1, n, &c_b27, a, &m1, &b[b_offset], ldb);
                         }
                     }
                 }
                 else
                 {
                     /* SIDE ='L', N is odd, TRANSR = 'T', and UPLO = 'U' */
-                    if (! notrans)
+                    if(!notrans)
                     {
                         /* SIDE ='L', N is odd, TRANSR = 'T', UPLO = 'U', and */
                         /* TRANS = 'N' */
-                        strsm_("L", "U", "T", diag, &m1, n, alpha, &a[m2 * m2], &m2, &b[b_offset], ldb);
-                        sgemm_("N", "N", &m2, n, &m1, &c_b23, a, &m2, &b[ b_offset], ldb, alpha, &b[m1], ldb);
+                        strsm_("L", "U", "T", diag, &m1, n, alpha, &a[m2 * m2], &m2, &b[b_offset],
+                               ldb);
+                        sgemm_("N", "N", &m2, n, &m1, &c_b23, a, &m2, &b[b_offset], ldb, alpha,
+                               &b[m1], ldb);
                         strsm_("L", "L", "N", diag, &m2, n, &c_b27, &a[m1 * m2], &m2, &b[m1], ldb);
                     }
                     else
@@ -515,8 +534,10 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
                         /* SIDE ='L', N is odd, TRANSR = 'T', UPLO = 'U', and */
                         /* TRANS = 'T' */
                         strsm_("L", "L", "T", diag, &m2, n, alpha, &a[m1 * m2], &m2, &b[m1], ldb);
-                        sgemm_("T", "N", &m1, n, &m2, &c_b23, a, &m2, &b[m1], ldb, alpha, &b[b_offset], ldb);
-                        strsm_("L", "U", "N", diag, &m1, n, &c_b27, &a[m2 * m2], &m2, &b[b_offset], ldb);
+                        sgemm_("T", "N", &m1, n, &m2, &c_b23, a, &m2, &b[m1], ldb, alpha,
+                               &b[b_offset], ldb);
+                        strsm_("L", "U", "N", diag, &m1, n, &c_b27, &a[m2 * m2], &m2, &b[b_offset],
+                               ldb);
                     }
                 }
             }
@@ -524,103 +545,115 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
         else
         {
             /* SIDE = 'L' and N is even */
-            if (normaltransr)
+            if(normaltransr)
             {
                 /* SIDE = 'L', N is even, and TRANSR = 'N' */
-                if (lower)
+                if(lower)
                 {
                     /* SIDE ='L', N is even, TRANSR = 'N', and UPLO = 'L' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='L', N is even, TRANSR = 'N', UPLO = 'L', */
                         /* and TRANS = 'N' */
                         i__1 = *m + 1;
-                        strsm_("L", "L", "N", diag, &k, n, alpha, &a[1], & i__1, &b[b_offset], ldb);
+                        strsm_("L", "L", "N", diag, &k, n, alpha, &a[1], &i__1, &b[b_offset], ldb);
                         i__1 = *m + 1;
-                        sgemm_("N", "N", &k, n, &k, &c_b23, &a[k + 1], &i__1, &b[b_offset], ldb, alpha, &b[k], ldb);
+                        sgemm_("N", "N", &k, n, &k, &c_b23, &a[k + 1], &i__1, &b[b_offset], ldb,
+                               alpha, &b[k], ldb);
                         i__1 = *m + 1;
-                        strsm_("L", "U", "T", diag, &k, n, &c_b27, a, &i__1, & b[k], ldb);
+                        strsm_("L", "U", "T", diag, &k, n, &c_b27, a, &i__1, &b[k], ldb);
                     }
                     else
                     {
                         /* SIDE ='L', N is even, TRANSR = 'N', UPLO = 'L', */
                         /* and TRANS = 'T' */
                         i__1 = *m + 1;
-                        strsm_("L", "U", "N", diag, &k, n, alpha, a, &i__1, & b[k], ldb);
+                        strsm_("L", "U", "N", diag, &k, n, alpha, a, &i__1, &b[k], ldb);
                         i__1 = *m + 1;
-                        sgemm_("T", "N", &k, n, &k, &c_b23, &a[k + 1], &i__1, &b[k], ldb, alpha, &b[b_offset], ldb);
+                        sgemm_("T", "N", &k, n, &k, &c_b23, &a[k + 1], &i__1, &b[k], ldb, alpha,
+                               &b[b_offset], ldb);
                         i__1 = *m + 1;
-                        strsm_("L", "L", "T", diag, &k, n, &c_b27, &a[1], & i__1, &b[b_offset], ldb);
+                        strsm_("L", "L", "T", diag, &k, n, &c_b27, &a[1], &i__1, &b[b_offset], ldb);
                     }
                 }
                 else
                 {
                     /* SIDE ='L', N is even, TRANSR = 'N', and UPLO = 'U' */
-                    if (! notrans)
+                    if(!notrans)
                     {
                         /* SIDE ='L', N is even, TRANSR = 'N', UPLO = 'U', */
                         /* and TRANS = 'N' */
                         i__1 = *m + 1;
-                        strsm_("L", "L", "N", diag, &k, n, alpha, &a[k + 1], & i__1, &b[b_offset], ldb);
+                        strsm_("L", "L", "N", diag, &k, n, alpha, &a[k + 1], &i__1, &b[b_offset],
+                               ldb);
                         i__1 = *m + 1;
-                        sgemm_("T", "N", &k, n, &k, &c_b23, a, &i__1, &b[ b_offset], ldb, alpha, &b[k], ldb);
+                        sgemm_("T", "N", &k, n, &k, &c_b23, a, &i__1, &b[b_offset], ldb, alpha,
+                               &b[k], ldb);
                         i__1 = *m + 1;
-                        strsm_("L", "U", "T", diag, &k, n, &c_b27, &a[k], & i__1, &b[k], ldb);
+                        strsm_("L", "U", "T", diag, &k, n, &c_b27, &a[k], &i__1, &b[k], ldb);
                     }
                     else
                     {
                         /* SIDE ='L', N is even, TRANSR = 'N', UPLO = 'U', */
                         /* and TRANS = 'T' */
                         i__1 = *m + 1;
-                        strsm_("L", "U", "N", diag, &k, n, alpha, &a[k], & i__1, &b[k], ldb);
+                        strsm_("L", "U", "N", diag, &k, n, alpha, &a[k], &i__1, &b[k], ldb);
                         i__1 = *m + 1;
-                        sgemm_("N", "N", &k, n, &k, &c_b23, a, &i__1, &b[k], ldb, alpha, &b[b_offset], ldb);
+                        sgemm_("N", "N", &k, n, &k, &c_b23, a, &i__1, &b[k], ldb, alpha,
+                               &b[b_offset], ldb);
                         i__1 = *m + 1;
-                        strsm_("L", "L", "T", diag, &k, n, &c_b27, &a[k + 1], &i__1, &b[b_offset], ldb);
+                        strsm_("L", "L", "T", diag, &k, n, &c_b27, &a[k + 1], &i__1, &b[b_offset],
+                               ldb);
                     }
                 }
             }
             else
             {
                 /* SIDE = 'L', N is even, and TRANSR = 'T' */
-                if (lower)
+                if(lower)
                 {
                     /* SIDE ='L', N is even, TRANSR = 'T', and UPLO = 'L' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='L', N is even, TRANSR = 'T', UPLO = 'L', */
                         /* and TRANS = 'N' */
-                        strsm_("L", "U", "T", diag, &k, n, alpha, &a[k], &k, & b[b_offset], ldb);
-                        sgemm_("T", "N", &k, n, &k, &c_b23, &a[k * (k + 1)], & k, &b[b_offset], ldb, alpha, &b[k], ldb);
-                        strsm_("L", "L", "N", diag, &k, n, &c_b27, a, &k, &b[ k], ldb);
+                        strsm_("L", "U", "T", diag, &k, n, alpha, &a[k], &k, &b[b_offset], ldb);
+                        sgemm_("T", "N", &k, n, &k, &c_b23, &a[k * (k + 1)], &k, &b[b_offset], ldb,
+                               alpha, &b[k], ldb);
+                        strsm_("L", "L", "N", diag, &k, n, &c_b27, a, &k, &b[k], ldb);
                     }
                     else
                     {
                         /* SIDE ='L', N is even, TRANSR = 'T', UPLO = 'L', */
                         /* and TRANS = 'T' */
                         strsm_("L", "L", "T", diag, &k, n, alpha, a, &k, &b[k], ldb);
-                        sgemm_("N", "N", &k, n, &k, &c_b23, &a[k * (k + 1)], & k, &b[k], ldb, alpha, &b[b_offset], ldb);
+                        sgemm_("N", "N", &k, n, &k, &c_b23, &a[k * (k + 1)], &k, &b[k], ldb, alpha,
+                               &b[b_offset], ldb);
                         strsm_("L", "U", "N", diag, &k, n, &c_b27, &a[k], &k, &b[b_offset], ldb);
                     }
                 }
                 else
                 {
                     /* SIDE ='L', N is even, TRANSR = 'T', and UPLO = 'U' */
-                    if (! notrans)
+                    if(!notrans)
                     {
                         /* SIDE ='L', N is even, TRANSR = 'T', UPLO = 'U', */
                         /* and TRANS = 'N' */
-                        strsm_("L", "U", "T", diag, &k, n, alpha, &a[k * (k + 1)], &k, &b[b_offset], ldb);
-                        sgemm_("N", "N", &k, n, &k, &c_b23, a, &k, &b[ b_offset], ldb, alpha, &b[k], ldb);
+                        strsm_("L", "U", "T", diag, &k, n, alpha, &a[k * (k + 1)], &k, &b[b_offset],
+                               ldb);
+                        sgemm_("N", "N", &k, n, &k, &c_b23, a, &k, &b[b_offset], ldb, alpha, &b[k],
+                               ldb);
                         strsm_("L", "L", "N", diag, &k, n, &c_b27, &a[k * k], &k, &b[k], ldb);
                     }
                     else
                     {
                         /* SIDE ='L', N is even, TRANSR = 'T', UPLO = 'U', */
                         /* and TRANS = 'T' */
-                        strsm_("L", "L", "T", diag, &k, n, alpha, &a[k * k], & k, &b[k], ldb);
-                        sgemm_("T", "N", &k, n, &k, &c_b23, a, &k, &b[k], ldb, alpha, &b[b_offset], ldb);
-                        strsm_("L", "U", "N", diag, &k, n, &c_b27, &a[k * (k + 1)], &k, &b[b_offset], ldb);
+                        strsm_("L", "L", "T", diag, &k, n, alpha, &a[k * k], &k, &b[k], ldb);
+                        sgemm_("T", "N", &k, n, &k, &c_b23, a, &k, &b[k], ldb, alpha, &b[b_offset],
+                               ldb);
+                        strsm_("L", "U", "N", diag, &k, n, &c_b27, &a[k * (k + 1)], &k,
+                               &b[b_offset], ldb);
                     }
                 }
             }
@@ -632,7 +665,7 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
         /* A is N-by-N. */
         /* If N is odd, set NISODD = .TRUE., and N1 and N2. */
         /* If N is even, NISODD = .FALSE., and K. */
-        if (*n % 2 == 0)
+        if(*n % 2 == 0)
         {
             nisodd = FALSE_;
             k = *n / 2;
@@ -640,7 +673,7 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
         else
         {
             nisodd = TRUE_;
-            if (lower)
+            if(lower)
             {
                 n2 = *n / 2;
                 n1 = *n - n2;
@@ -651,21 +684,22 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
                 n2 = *n - n1;
             }
         }
-        if (nisodd)
+        if(nisodd)
         {
             /* SIDE = 'R' and N is odd */
-            if (normaltransr)
+            if(normaltransr)
             {
                 /* SIDE = 'R', N is odd, and TRANSR = 'N' */
-                if (lower)
+                if(lower)
                 {
                     /* SIDE ='R', N is odd, TRANSR = 'N', and UPLO = 'L' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='R', N is odd, TRANSR = 'N', UPLO = 'L', and */
                         /* TRANS = 'N' */
                         strsm_("R", "U", "T", diag, m, &n2, alpha, &a[*n], n, &b[n1 * b_dim1], ldb);
-                        sgemm_("N", "N", m, &n1, &n2, &c_b23, &b[n1 * b_dim1], ldb, &a[n1], n, alpha, b, ldb);
+                        sgemm_("N", "N", m, &n1, &n2, &c_b23, &b[n1 * b_dim1], ldb, &a[n1], n,
+                               alpha, b, ldb);
                         strsm_("R", "L", "N", diag, m, &n1, &c_b27, a, n, b, ldb);
                     }
                     else
@@ -673,27 +707,32 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
                         /* SIDE ='R', N is odd, TRANSR = 'N', UPLO = 'L', and */
                         /* TRANS = 'T' */
                         strsm_("R", "L", "T", diag, m, &n1, alpha, a, n, b, ldb);
-                        sgemm_("N", "T", m, &n2, &n1, &c_b23, b, ldb, &a[n1], n, alpha, &b[n1 * b_dim1], ldb);
-                        strsm_("R", "U", "N", diag, m, &n2, &c_b27, &a[*n], n, &b[n1 * b_dim1], ldb);
+                        sgemm_("N", "T", m, &n2, &n1, &c_b23, b, ldb, &a[n1], n, alpha,
+                               &b[n1 * b_dim1], ldb);
+                        strsm_("R", "U", "N", diag, m, &n2, &c_b27, &a[*n], n, &b[n1 * b_dim1],
+                               ldb);
                     }
                 }
                 else
                 {
                     /* SIDE ='R', N is odd, TRANSR = 'N', and UPLO = 'U' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='R', N is odd, TRANSR = 'N', UPLO = 'U', and */
                         /* TRANS = 'N' */
                         strsm_("R", "L", "T", diag, m, &n1, alpha, &a[n2], n, b, ldb);
-                        sgemm_("N", "N", m, &n2, &n1, &c_b23, b, ldb, a, n, alpha, &b[n1 * b_dim1], ldb);
-                        strsm_("R", "U", "N", diag, m, &n2, &c_b27, &a[n1], n, &b[n1 * b_dim1], ldb);
+                        sgemm_("N", "N", m, &n2, &n1, &c_b23, b, ldb, a, n, alpha, &b[n1 * b_dim1],
+                               ldb);
+                        strsm_("R", "U", "N", diag, m, &n2, &c_b27, &a[n1], n, &b[n1 * b_dim1],
+                               ldb);
                     }
                     else
                     {
                         /* SIDE ='R', N is odd, TRANSR = 'N', UPLO = 'U', and */
                         /* TRANS = 'T' */
                         strsm_("R", "U", "T", diag, m, &n2, alpha, &a[n1], n, &b[n1 * b_dim1], ldb);
-                        sgemm_("N", "T", m, &n1, &n2, &c_b23, &b[n1 * b_dim1], ldb, a, n, alpha, b, ldb);
+                        sgemm_("N", "T", m, &n1, &n2, &c_b23, &b[n1 * b_dim1], ldb, a, n, alpha, b,
+                               ldb);
                         strsm_("R", "L", "N", diag, m, &n1, &c_b27, &a[n2], n, b, ldb);
                     }
                 }
@@ -701,15 +740,17 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
             else
             {
                 /* SIDE = 'R', N is odd, and TRANSR = 'T' */
-                if (lower)
+                if(lower)
                 {
                     /* SIDE ='R', N is odd, TRANSR = 'T', and UPLO = 'L' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='R', N is odd, TRANSR = 'T', UPLO = 'L', and */
                         /* TRANS = 'N' */
-                        strsm_("R", "L", "N", diag, m, &n2, alpha, &a[1], &n1, &b[n1 * b_dim1], ldb);
-                        sgemm_("N", "T", m, &n1, &n2, &c_b23, &b[n1 * b_dim1], ldb, &a[n1 * n1], &n1, alpha, b, ldb);
+                        strsm_("R", "L", "N", diag, m, &n2, alpha, &a[1], &n1, &b[n1 * b_dim1],
+                               ldb);
+                        sgemm_("N", "T", m, &n1, &n2, &c_b23, &b[n1 * b_dim1], ldb, &a[n1 * n1],
+                               &n1, alpha, b, ldb);
                         strsm_("R", "U", "T", diag, m, &n1, &c_b27, a, &n1, b, ldb);
                     }
                     else
@@ -717,27 +758,33 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
                         /* SIDE ='R', N is odd, TRANSR = 'T', UPLO = 'L', and */
                         /* TRANS = 'T' */
                         strsm_("R", "U", "N", diag, m, &n1, alpha, a, &n1, b, ldb);
-                        sgemm_("N", "N", m, &n2, &n1, &c_b23, b, ldb, &a[n1 * n1], &n1, alpha, &b[n1 * b_dim1], ldb);
-                        strsm_("R", "L", "T", diag, m, &n2, &c_b27, &a[1], & n1, &b[n1 * b_dim1], ldb);
+                        sgemm_("N", "N", m, &n2, &n1, &c_b23, b, ldb, &a[n1 * n1], &n1, alpha,
+                               &b[n1 * b_dim1], ldb);
+                        strsm_("R", "L", "T", diag, m, &n2, &c_b27, &a[1], &n1, &b[n1 * b_dim1],
+                               ldb);
                     }
                 }
                 else
                 {
                     /* SIDE ='R', N is odd, TRANSR = 'T', and UPLO = 'U' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='R', N is odd, TRANSR = 'T', UPLO = 'U', and */
                         /* TRANS = 'N' */
                         strsm_("R", "U", "N", diag, m, &n1, alpha, &a[n2 * n2], &n2, b, ldb);
-                        sgemm_("N", "T", m, &n2, &n1, &c_b23, b, ldb, a, &n2, alpha, &b[n1 * b_dim1], ldb);
-                        strsm_("R", "L", "T", diag, m, &n2, &c_b27, &a[n1 * n2], &n2, &b[n1 * b_dim1], ldb);
+                        sgemm_("N", "T", m, &n2, &n1, &c_b23, b, ldb, a, &n2, alpha,
+                               &b[n1 * b_dim1], ldb);
+                        strsm_("R", "L", "T", diag, m, &n2, &c_b27, &a[n1 * n2], &n2,
+                               &b[n1 * b_dim1], ldb);
                     }
                     else
                     {
                         /* SIDE ='R', N is odd, TRANSR = 'T', UPLO = 'U', and */
                         /* TRANS = 'T' */
-                        strsm_("R", "L", "N", diag, m, &n2, alpha, &a[n1 * n2], &n2, &b[n1 * b_dim1], ldb);
-                        sgemm_("N", "N", m, &n1, &n2, &c_b23, &b[n1 * b_dim1], ldb, a, &n2, alpha, b, ldb);
+                        strsm_("R", "L", "N", diag, m, &n2, alpha, &a[n1 * n2], &n2,
+                               &b[n1 * b_dim1], ldb);
+                        sgemm_("N", "N", m, &n1, &n2, &c_b23, &b[n1 * b_dim1], ldb, a, &n2, alpha,
+                               b, ldb);
                         strsm_("R", "U", "T", diag, m, &n1, &c_b27, &a[n2 * n2], &n2, b, ldb);
                     }
                 }
@@ -746,57 +793,63 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
         else
         {
             /* SIDE = 'R' and N is even */
-            if (normaltransr)
+            if(normaltransr)
             {
                 /* SIDE = 'R', N is even, and TRANSR = 'N' */
-                if (lower)
+                if(lower)
                 {
                     /* SIDE ='R', N is even, TRANSR = 'N', and UPLO = 'L' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='R', N is even, TRANSR = 'N', UPLO = 'L', */
                         /* and TRANS = 'N' */
                         i__1 = *n + 1;
-                        strsm_("R", "U", "T", diag, m, &k, alpha, a, &i__1, & b[k * b_dim1], ldb);
+                        strsm_("R", "U", "T", diag, m, &k, alpha, a, &i__1, &b[k * b_dim1], ldb);
                         i__1 = *n + 1;
-                        sgemm_("N", "N", m, &k, &k, &c_b23, &b[k * b_dim1], ldb, &a[k + 1], &i__1, alpha, b, ldb);
+                        sgemm_("N", "N", m, &k, &k, &c_b23, &b[k * b_dim1], ldb, &a[k + 1], &i__1,
+                               alpha, b, ldb);
                         i__1 = *n + 1;
-                        strsm_("R", "L", "N", diag, m, &k, &c_b27, &a[1], & i__1, b, ldb);
+                        strsm_("R", "L", "N", diag, m, &k, &c_b27, &a[1], &i__1, b, ldb);
                     }
                     else
                     {
                         /* SIDE ='R', N is even, TRANSR = 'N', UPLO = 'L', */
                         /* and TRANS = 'T' */
                         i__1 = *n + 1;
-                        strsm_("R", "L", "T", diag, m, &k, alpha, &a[1], & i__1, b, ldb);
+                        strsm_("R", "L", "T", diag, m, &k, alpha, &a[1], &i__1, b, ldb);
                         i__1 = *n + 1;
-                        sgemm_("N", "T", m, &k, &k, &c_b23, b, ldb, &a[k + 1], &i__1, alpha, &b[k * b_dim1], ldb);
+                        sgemm_("N", "T", m, &k, &k, &c_b23, b, ldb, &a[k + 1], &i__1, alpha,
+                               &b[k * b_dim1], ldb);
                         i__1 = *n + 1;
-                        strsm_("R", "U", "N", diag, m, &k, &c_b27, a, &i__1, & b[k * b_dim1], ldb);
+                        strsm_("R", "U", "N", diag, m, &k, &c_b27, a, &i__1, &b[k * b_dim1], ldb);
                     }
                 }
                 else
                 {
                     /* SIDE ='R', N is even, TRANSR = 'N', and UPLO = 'U' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='R', N is even, TRANSR = 'N', UPLO = 'U', */
                         /* and TRANS = 'N' */
                         i__1 = *n + 1;
-                        strsm_("R", "L", "T", diag, m, &k, alpha, &a[k + 1], & i__1, b, ldb);
+                        strsm_("R", "L", "T", diag, m, &k, alpha, &a[k + 1], &i__1, b, ldb);
                         i__1 = *n + 1;
-                        sgemm_("N", "N", m, &k, &k, &c_b23, b, ldb, a, &i__1, alpha, &b[k * b_dim1], ldb);
+                        sgemm_("N", "N", m, &k, &k, &c_b23, b, ldb, a, &i__1, alpha, &b[k * b_dim1],
+                               ldb);
                         i__1 = *n + 1;
-                        strsm_("R", "U", "N", diag, m, &k, &c_b27, &a[k], & i__1, &b[k * b_dim1], ldb);
+                        strsm_("R", "U", "N", diag, m, &k, &c_b27, &a[k], &i__1, &b[k * b_dim1],
+                               ldb);
                     }
                     else
                     {
                         /* SIDE ='R', N is even, TRANSR = 'N', UPLO = 'U', */
                         /* and TRANS = 'T' */
                         i__1 = *n + 1;
-                        strsm_("R", "U", "T", diag, m, &k, alpha, &a[k], & i__1, &b[k * b_dim1], ldb);
+                        strsm_("R", "U", "T", diag, m, &k, alpha, &a[k], &i__1, &b[k * b_dim1],
+                               ldb);
                         i__1 = *n + 1;
-                        sgemm_("N", "T", m, &k, &k, &c_b23, &b[k * b_dim1], ldb, a, &i__1, alpha, b, ldb);
+                        sgemm_("N", "T", m, &k, &k, &c_b23, &b[k * b_dim1], ldb, a, &i__1, alpha, b,
+                               ldb);
                         i__1 = *n + 1;
                         strsm_("R", "L", "N", diag, m, &k, &c_b27, &a[k + 1], &i__1, b, ldb);
                     }
@@ -805,15 +858,16 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
             else
             {
                 /* SIDE = 'R', N is even, and TRANSR = 'T' */
-                if (lower)
+                if(lower)
                 {
                     /* SIDE ='R', N is even, TRANSR = 'T', and UPLO = 'L' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='R', N is even, TRANSR = 'T', UPLO = 'L', */
                         /* and TRANS = 'N' */
                         strsm_("R", "L", "N", diag, m, &k, alpha, a, &k, &b[k * b_dim1], ldb);
-                        sgemm_("N", "T", m, &k, &k, &c_b23, &b[k * b_dim1], ldb, &a[(k + 1) * k], &k, alpha, b, ldb);
+                        sgemm_("N", "T", m, &k, &k, &c_b23, &b[k * b_dim1], ldb, &a[(k + 1) * k],
+                               &k, alpha, b, ldb);
                         strsm_("R", "U", "T", diag, m, &k, &c_b27, &a[k], &k, b, ldb);
                     }
                     else
@@ -821,27 +875,32 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
                         /* SIDE ='R', N is even, TRANSR = 'T', UPLO = 'L', */
                         /* and TRANS = 'T' */
                         strsm_("R", "U", "N", diag, m, &k, alpha, &a[k], &k, b, ldb);
-                        sgemm_("N", "N", m, &k, &k, &c_b23, b, ldb, &a[(k + 1) * k], &k, alpha, &b[k * b_dim1], ldb);
-                        strsm_("R", "L", "T", diag, m, &k, &c_b27, a, &k, &b[ k * b_dim1], ldb);
+                        sgemm_("N", "N", m, &k, &k, &c_b23, b, ldb, &a[(k + 1) * k], &k, alpha,
+                               &b[k * b_dim1], ldb);
+                        strsm_("R", "L", "T", diag, m, &k, &c_b27, a, &k, &b[k * b_dim1], ldb);
                     }
                 }
                 else
                 {
                     /* SIDE ='R', N is even, TRANSR = 'T', and UPLO = 'U' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='R', N is even, TRANSR = 'T', UPLO = 'U', */
                         /* and TRANS = 'N' */
                         strsm_("R", "U", "N", diag, m, &k, alpha, &a[(k + 1) * k], &k, b, ldb);
-                        sgemm_("N", "T", m, &k, &k, &c_b23, b, ldb, a, &k, alpha, &b[k * b_dim1], ldb);
-                        strsm_("R", "L", "T", diag, m, &k, &c_b27, &a[k * k], &k, &b[k * b_dim1], ldb);
+                        sgemm_("N", "T", m, &k, &k, &c_b23, b, ldb, a, &k, alpha, &b[k * b_dim1],
+                               ldb);
+                        strsm_("R", "L", "T", diag, m, &k, &c_b27, &a[k * k], &k, &b[k * b_dim1],
+                               ldb);
                     }
                     else
                     {
                         /* SIDE ='R', N is even, TRANSR = 'T', UPLO = 'U', */
                         /* and TRANS = 'T' */
-                        strsm_("R", "L", "N", diag, m, &k, alpha, &a[k * k], & k, &b[k * b_dim1], ldb);
-                        sgemm_("N", "N", m, &k, &k, &c_b23, &b[k * b_dim1], ldb, a, &k, alpha, b, ldb);
+                        strsm_("R", "L", "N", diag, m, &k, alpha, &a[k * k], &k, &b[k * b_dim1],
+                               ldb);
+                        sgemm_("N", "N", m, &k, &k, &c_b23, &b[k * b_dim1], ldb, a, &k, alpha, b,
+                               ldb);
                         strsm_("R", "U", "T", diag, m, &k, &c_b27, &a[(k + 1) * k], &k, b, ldb);
                     }
                 }

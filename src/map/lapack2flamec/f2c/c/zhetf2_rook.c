@@ -1,18 +1,28 @@
-/* ../netlib/zhetf2_rook.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zhetf2_rook.f -- translated by f2c (version 20100827). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b ZHETF2_ROOK computes the factorization of a complex Hermitian indefinite matrix using the bound ed Bunch-Kaufman ("rook") diagonal pivoting method (unblocked algorithm). */
+/* > \brief \b ZHETF2_ROOK computes the factorization of a complex Hermitian indefinite matrix using
+ * the bound ed Bunch-Kaufman ("rook") diagonal pivoting method (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZHETF2_ROOK + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhetf2_ rook.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhetf2_
+ * rook.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhetf2_ rook.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhetf2_
+ * rook.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetf2_ rook.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetf2_
+ * rook.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -180,10 +190,12 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void zhetf2_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv, integer *info)
+void zhetf2_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv,
+                  integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhetf2_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
+    AOCL_DTL_SNPRINTF("zhetf2_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
+                      *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     doublereal d__1, d__2;
@@ -206,18 +218,23 @@ void zhetf2_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, intege
     logical done;
     integer imax, jmax;
     extern /* Subroutine */
-    void zher_(char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zher_(char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *,
+              integer *);
     doublereal alpha;
     extern logical lsame_(char *, char *, integer, integer);
     doublereal dtemp, sfmin;
     integer itemp, kstep;
     logical upper;
     extern /* Subroutine */
-    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
     doublereal absakk;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_( integer *, doublereal *, doublecomplex *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal colmax;
     extern integer izamax_(integer *, doublecomplex *, integer *);
     doublereal rowmax;
@@ -256,19 +273,19 @@ void zhetf2_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, intege
     upper = lsame_(uplo, "U", 1, 1);
     imax = 0;
     jmax = 0;
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZHETF2_ROOK", &i__1, (ftnlen)11);
@@ -279,14 +296,14 @@ void zhetf2_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, intege
     alpha = (sqrt(17.) + 1.) / 8.;
     /* Compute machine safe minimum */
     sfmin = dlamch_("S");
-    if (upper)
+    if(upper)
     {
         /* Factorize A as U*D*U**H using the upper triangle of A */
         /* K is the main loop index, decreasing from N to 1 in steps of */
         /* 1 or 2 */
         k = *n;
-L10: /* If K < 1, exit from loop */
-        if (k < 1)
+    L10: /* If K < 1, exit from loop */
+        if(k < 1)
         {
             goto L70;
         }
@@ -299,21 +316,22 @@ L10: /* If K < 1, exit from loop */
         /* IMAX is the row-index of the largest off-diagonal element in */
         /* column K, and COLMAX is its absolute value. */
         /* Determine both COLMAX and IMAX. */
-        if (k > 1)
+        if(k > 1)
         {
             i__1 = k - 1;
             imax = izamax_(&i__1, &a[k * a_dim1 + 1], &c__1);
             i__1 = imax + k * a_dim1;
-            colmax = (d__1 = a[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[imax + k * a_dim1]), f2c_dabs(d__2));
+            colmax = (d__1 = a[i__1].r, f2c_dabs(d__1))
+                     + (d__2 = d_imag(&a[imax + k * a_dim1]), f2c_dabs(d__2));
         }
         else
         {
             colmax = 0.;
         }
-        if (fla_max(absakk,colmax) == 0.)
+        if(fla_max(absakk, colmax) == 0.)
         {
             /* Column K is zero or underflow: set INFO and continue */
-            if (*info == 0)
+            if(*info == 0)
             {
                 *info = k;
             }
@@ -331,7 +349,7 @@ L10: /* If K < 1, exit from loop */
             /* Case(1) */
             /* Equivalent to testing for ABSAKK.GE.ALPHA*COLMAX */
             /* (used to handle NaN and Inf) */
-            if (! (absakk < alpha * colmax))
+            if(!(absakk < alpha * colmax))
             {
                 /* no interchange, use 1-by-1 pivot block */
                 kp = k;
@@ -340,28 +358,30 @@ L10: /* If K < 1, exit from loop */
             {
                 done = FALSE_;
                 /* Loop until pivot found */
-L12: /* BEGIN pivot search loop body */
+            L12: /* BEGIN pivot search loop body */
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value. */
                 /* Determine both ROWMAX and JMAX. */
-                if (imax != k)
+                if(imax != k)
                 {
                     i__1 = k - imax;
                     jmax = imax + izamax_(&i__1, &a[imax + (imax + 1) * a_dim1], lda);
                     i__1 = imax + jmax * a_dim1;
-                    rowmax = (d__1 = a[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(& a[imax + jmax * a_dim1]), f2c_dabs(d__2));
+                    rowmax = (d__1 = a[i__1].r, f2c_dabs(d__1))
+                             + (d__2 = d_imag(&a[imax + jmax * a_dim1]), f2c_dabs(d__2));
                 }
                 else
                 {
                     rowmax = 0.;
                 }
-                if (imax > 1)
+                if(imax > 1)
                 {
                     i__1 = imax - 1;
                     itemp = izamax_(&i__1, &a[imax * a_dim1 + 1], &c__1);
                     i__1 = itemp + imax * a_dim1;
-                    dtemp = (d__1 = a[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[ itemp + imax * a_dim1]), f2c_dabs(d__2));
-                    if (dtemp > rowmax)
+                    dtemp = (d__1 = a[i__1].r, f2c_dabs(d__1))
+                            + (d__2 = d_imag(&a[itemp + imax * a_dim1]), f2c_dabs(d__2));
+                    if(dtemp > rowmax)
                     {
                         rowmax = dtemp;
                         jmax = itemp;
@@ -372,7 +392,7 @@ L12: /* BEGIN pivot search loop body */
                 /* ABS( REAL( W( IMAX,KW-1 ) ) ).GE.ALPHA*ROWMAX */
                 /* (used to handle NaN and Inf) */
                 i__1 = imax + imax * a_dim1;
-                if (! ((d__1 = a[i__1].r, f2c_dabs(d__1)) < alpha * rowmax))
+                if(!((d__1 = a[i__1].r, f2c_dabs(d__1)) < alpha * rowmax))
                 {
                     /* interchange rows and columns K and IMAX, */
                     /* use 1-by-1 pivot block */
@@ -382,7 +402,7 @@ L12: /* BEGIN pivot search loop body */
                     /* Equivalent to testing for ROWMAX.EQ.COLMAX, */
                     /* (used to handle NaN and Inf) */
                 }
-                else if (p == jmax || rowmax <= colmax)
+                else if(p == jmax || rowmax <= colmax)
                 {
                     /* interchange rows and columns K-1 and IMAX, */
                     /* use 2-by-2 pivot block */
@@ -399,7 +419,7 @@ L12: /* BEGIN pivot search loop body */
                     imax = jmax;
                 }
                 /* END pivot search loop body */
-                if (! done)
+                if(!done)
                 {
                     goto L12;
                 }
@@ -410,19 +430,17 @@ L12: /* BEGIN pivot search loop body */
             kk = k - kstep + 1;
             /* For only a 2x2 pivot, interchange rows and columns K and P */
             /* in the leading submatrix A(1:k,1:k) */
-            if (kstep == 2 && p != k)
+            if(kstep == 2 && p != k)
             {
                 /* (1) Swap columnar parts */
-                if (p > 1)
+                if(p > 1)
                 {
                     i__1 = p - 1;
                     zswap_(&i__1, &a[k * a_dim1 + 1], &c__1, &a[p * a_dim1 + 1], &c__1);
                 }
                 /* (2) Swap and conjugate middle parts */
                 i__1 = k - 1;
-                for (j = p + 1;
-                        j <= i__1;
-                        ++j)
+                for(j = p + 1; j <= i__1; ++j)
                 {
                     d_cnjg(&z__1, &a[j + k * a_dim1]);
                     t.r = z__1.r;
@@ -455,19 +473,17 @@ L12: /* BEGIN pivot search loop body */
             }
             /* For both 1x1 and 2x2 pivots, interchange rows and */
             /* columns KK and KP in the leading submatrix A(1:k,1:k) */
-            if (kp != kk)
+            if(kp != kk)
             {
                 /* (1) Swap columnar parts */
-                if (kp > 1)
+                if(kp > 1)
                 {
                     i__1 = kp - 1;
                     zswap_(&i__1, &a[kk * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
                 }
                 /* (2) Swap and conjugate middle parts */
                 i__1 = kk - 1;
-                for (j = kp + 1;
-                        j <= i__1;
-                        ++j)
+                for(j = kp + 1; j <= i__1; ++j)
                 {
                     d_cnjg(&z__1, &a[j + kk * a_dim1]);
                     t.r = z__1.r;
@@ -497,7 +513,7 @@ L12: /* BEGIN pivot search loop body */
                 i__1 = kp + kp * a_dim1;
                 a[i__1].r = r1;
                 a[i__1].i = 0.; // , expr subst
-                if (kstep == 2)
+                if(kstep == 2)
                 {
                     /* (*) Make sure that diagonal element of pivot is real */
                     i__1 = k + k * a_dim1;
@@ -526,7 +542,7 @@ L12: /* BEGIN pivot search loop body */
                 d__1 = a[i__2].r;
                 a[i__1].r = d__1;
                 a[i__1].i = 0.; // , expr subst
-                if (kstep == 2)
+                if(kstep == 2)
                 {
                     i__1 = k - 1 + (k - 1) * a_dim1;
                     i__2 = k - 1 + (k - 1) * a_dim1;
@@ -536,17 +552,17 @@ L12: /* BEGIN pivot search loop body */
                 }
             }
             /* Update the leading submatrix */
-            if (kstep == 1)
+            if(kstep == 1)
             {
                 /* 1-by-1 pivot block D(k): column k now holds */
                 /* W(k) = U(k)*D(k) */
                 /* where U(k) is the k-th column of U */
-                if (k > 1)
+                if(k > 1)
                 {
                     /* Perform a rank-1 update of A(1:k-1,1:k-1) and */
                     /* store U(k) in column k */
                     i__1 = k + k * a_dim1;
-                    if ((d__1 = a[i__1].r, f2c_dabs(d__1)) >= sfmin)
+                    if((d__1 = a[i__1].r, f2c_dabs(d__1)) >= sfmin)
                     {
                         /* Perform a rank-1 update of A(1:k-1,1:k-1) as */
                         /* A := A - U(k)*D(k)*U(k)**T */
@@ -555,7 +571,7 @@ L12: /* BEGIN pivot search loop body */
                         d11 = 1. / a[i__1].r;
                         i__1 = k - 1;
                         d__1 = -d11;
-                        zher_(uplo, &i__1, &d__1, &a[k * a_dim1 + 1], &c__1, & a[a_offset], lda);
+                        zher_(uplo, &i__1, &d__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
                         /* Store U(k) in column k */
                         i__1 = k - 1;
                         zdscal_(&i__1, &d11, &a[k * a_dim1 + 1], &c__1);
@@ -566,9 +582,7 @@ L12: /* BEGIN pivot search loop body */
                         i__1 = k + k * a_dim1;
                         d11 = a[i__1].r;
                         i__1 = k - 1;
-                        for (ii = 1;
-                                ii <= i__1;
-                                ++ii)
+                        for(ii = 1; ii <= i__1; ++ii)
                         {
                             i__2 = ii + k * a_dim1;
                             i__3 = ii + k * a_dim1;
@@ -584,7 +598,7 @@ L12: /* BEGIN pivot search loop body */
                         /* = A - (W(k)/D(k))*(D(k))*(W(k)/D(K))**T */
                         i__1 = k - 1;
                         d__1 = -d11;
-                        zher_(uplo, &i__1, &d__1, &a[k * a_dim1 + 1], &c__1, & a[a_offset], lda);
+                        zher_(uplo, &i__1, &d__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
                     }
                 }
             }
@@ -598,7 +612,7 @@ L12: /* BEGIN pivot search loop body */
                 /* A := A - ( U(k-1) U(k) )*D(k)*( U(k-1) U(k) )**T */
                 /* = A - ( ( A(k-1)A(k) )*inv(D(k)) ) * ( A(k-1)A(k) )**T */
                 /* and store L(k) and L(k+1) in columns k and k+1 */
-                if (k > 2)
+                if(k > 2)
                 {
                     /* D = |A12| */
                     i__1 = k - 1 + k * a_dim1;
@@ -619,9 +633,7 @@ L12: /* BEGIN pivot search loop body */
                     d12.r = z__1.r;
                     d12.i = z__1.i; // , expr subst
                     tt = 1. / (d11 * d22 - 1.);
-                    for (j = k - 2;
-                            j >= 1;
-                            --j)
+                    for(j = k - 2; j >= 1; --j)
                     {
                         /* Compute D21 * ( W(k)W(k+1) ) * inv(D(k)) for row J */
                         i__1 = j + (k - 1) * a_dim1;
@@ -630,7 +642,7 @@ L12: /* BEGIN pivot search loop body */
                         d_cnjg(&z__5, &d12);
                         i__2 = j + k * a_dim1;
                         z__4.r = z__5.r * a[i__2].r - z__5.i * a[i__2].i;
-                        z__4.i = z__5.r * a[i__2].i + z__5.i * a[i__2] .r; // , expr subst
+                        z__4.i = z__5.r * a[i__2].i + z__5.i * a[i__2].r; // , expr subst
                         z__2.r = z__3.r - z__4.r;
                         z__2.i = z__3.i - z__4.i; // , expr subst
                         z__1.r = tt * z__2.r;
@@ -642,7 +654,7 @@ L12: /* BEGIN pivot search loop body */
                         z__3.i = d22 * a[i__1].i; // , expr subst
                         i__2 = j + (k - 1) * a_dim1;
                         z__4.r = d12.r * a[i__2].r - d12.i * a[i__2].i;
-                        z__4.i = d12.r * a[i__2].i + d12.i * a[i__2] .r; // , expr subst
+                        z__4.i = d12.r * a[i__2].i + d12.i * a[i__2].r; // , expr subst
                         z__2.r = z__3.r - z__4.r;
                         z__2.i = z__3.i - z__4.i; // , expr subst
                         z__1.r = tt * z__2.r;
@@ -650,9 +662,7 @@ L12: /* BEGIN pivot search loop body */
                         wk.r = z__1.r;
                         wk.i = z__1.i; // , expr subst
                         /* Perform a rank-2 update of A(1:k-2,1:k-2) */
-                        for (i__ = j;
-                                i__ >= 1;
-                                --i__)
+                        for(i__ = j; i__ >= 1; --i__)
                         {
                             i__1 = i__ + j * a_dim1;
                             i__2 = i__ + j * a_dim1;
@@ -701,7 +711,7 @@ L12: /* BEGIN pivot search loop body */
             }
         }
         /* Store details of the interchanges in IPIV */
-        if (kstep == 1)
+        if(kstep == 1)
         {
             ipiv[k] = kp;
         }
@@ -720,8 +730,8 @@ L12: /* BEGIN pivot search loop body */
         /* K is the main loop index, increasing from 1 to N in steps of */
         /* 1 or 2 */
         k = 1;
-L40: /* If K > N, exit from loop */
-        if (k > *n)
+    L40: /* If K > N, exit from loop */
+        if(k > *n)
         {
             goto L70;
         }
@@ -734,21 +744,22 @@ L40: /* If K > N, exit from loop */
         /* IMAX is the row-index of the largest off-diagonal element in */
         /* column K, and COLMAX is its absolute value. */
         /* Determine both COLMAX and IMAX. */
-        if (k < *n)
+        if(k < *n)
         {
             i__1 = *n - k;
             imax = k + izamax_(&i__1, &a[k + 1 + k * a_dim1], &c__1);
             i__1 = imax + k * a_dim1;
-            colmax = (d__1 = a[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[imax + k * a_dim1]), f2c_dabs(d__2));
+            colmax = (d__1 = a[i__1].r, f2c_dabs(d__1))
+                     + (d__2 = d_imag(&a[imax + k * a_dim1]), f2c_dabs(d__2));
         }
         else
         {
             colmax = 0.;
         }
-        if (fla_max(absakk,colmax) == 0.)
+        if(fla_max(absakk, colmax) == 0.)
         {
             /* Column K is zero or underflow: set INFO and continue */
-            if (*info == 0)
+            if(*info == 0)
             {
                 *info = k;
             }
@@ -766,7 +777,7 @@ L40: /* If K > N, exit from loop */
             /* Case(1) */
             /* Equivalent to testing for ABSAKK.GE.ALPHA*COLMAX */
             /* (used to handle NaN and Inf) */
-            if (! (absakk < alpha * colmax))
+            if(!(absakk < alpha * colmax))
             {
                 /* no interchange, use 1-by-1 pivot block */
                 kp = k;
@@ -775,28 +786,30 @@ L40: /* If K > N, exit from loop */
             {
                 done = FALSE_;
                 /* Loop until pivot found */
-L42: /* BEGIN pivot search loop body */
+            L42: /* BEGIN pivot search loop body */
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value. */
                 /* Determine both ROWMAX and JMAX. */
-                if (imax != k)
+                if(imax != k)
                 {
                     i__1 = imax - k;
                     jmax = k - 1 + izamax_(&i__1, &a[imax + k * a_dim1], lda);
                     i__1 = imax + jmax * a_dim1;
-                    rowmax = (d__1 = a[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(& a[imax + jmax * a_dim1]), f2c_dabs(d__2));
+                    rowmax = (d__1 = a[i__1].r, f2c_dabs(d__1))
+                             + (d__2 = d_imag(&a[imax + jmax * a_dim1]), f2c_dabs(d__2));
                 }
                 else
                 {
                     rowmax = 0.;
                 }
-                if (imax < *n)
+                if(imax < *n)
                 {
                     i__1 = *n - imax;
                     itemp = imax + izamax_(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
                     i__1 = itemp + imax * a_dim1;
-                    dtemp = (d__1 = a[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[ itemp + imax * a_dim1]), f2c_dabs(d__2));
-                    if (dtemp > rowmax)
+                    dtemp = (d__1 = a[i__1].r, f2c_dabs(d__1))
+                            + (d__2 = d_imag(&a[itemp + imax * a_dim1]), f2c_dabs(d__2));
+                    if(dtemp > rowmax)
                     {
                         rowmax = dtemp;
                         jmax = itemp;
@@ -807,7 +820,7 @@ L42: /* BEGIN pivot search loop body */
                 /* ABS( REAL( W( IMAX,KW-1 ) ) ).GE.ALPHA*ROWMAX */
                 /* (used to handle NaN and Inf) */
                 i__1 = imax + imax * a_dim1;
-                if (! ((d__1 = a[i__1].r, f2c_dabs(d__1)) < alpha * rowmax))
+                if(!((d__1 = a[i__1].r, f2c_dabs(d__1)) < alpha * rowmax))
                 {
                     /* interchange rows and columns K and IMAX, */
                     /* use 1-by-1 pivot block */
@@ -817,7 +830,7 @@ L42: /* BEGIN pivot search loop body */
                     /* Equivalent to testing for ROWMAX.EQ.COLMAX, */
                     /* (used to handle NaN and Inf) */
                 }
-                else if (p == jmax || rowmax <= colmax)
+                else if(p == jmax || rowmax <= colmax)
                 {
                     /* interchange rows and columns K+1 and IMAX, */
                     /* use 2-by-2 pivot block */
@@ -834,7 +847,7 @@ L42: /* BEGIN pivot search loop body */
                     imax = jmax;
                 }
                 /* END pivot search loop body */
-                if (! done)
+                if(!done)
                 {
                     goto L42;
                 }
@@ -845,19 +858,17 @@ L42: /* BEGIN pivot search loop body */
             kk = k + kstep - 1;
             /* For only a 2x2 pivot, interchange rows and columns K and P */
             /* in the trailing submatrix A(k:n,k:n) */
-            if (kstep == 2 && p != k)
+            if(kstep == 2 && p != k)
             {
                 /* (1) Swap columnar parts */
-                if (p < *n)
+                if(p < *n)
                 {
                     i__1 = *n - p;
                     zswap_(&i__1, &a[p + 1 + k * a_dim1], &c__1, &a[p + 1 + p * a_dim1], &c__1);
                 }
                 /* (2) Swap and conjugate middle parts */
                 i__1 = p - 1;
-                for (j = k + 1;
-                        j <= i__1;
-                        ++j)
+                for(j = k + 1; j <= i__1; ++j)
                 {
                     d_cnjg(&z__1, &a[j + k * a_dim1]);
                     t.r = z__1.r;
@@ -890,19 +901,17 @@ L42: /* BEGIN pivot search loop body */
             }
             /* For both 1x1 and 2x2 pivots, interchange rows and */
             /* columns KK and KP in the trailing submatrix A(k:n,k:n) */
-            if (kp != kk)
+            if(kp != kk)
             {
                 /* (1) Swap columnar parts */
-                if (kp < *n)
+                if(kp < *n)
                 {
                     i__1 = *n - kp;
                     zswap_(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + 1 + kp * a_dim1], &c__1);
                 }
                 /* (2) Swap and conjugate middle parts */
                 i__1 = kp - 1;
-                for (j = kk + 1;
-                        j <= i__1;
-                        ++j)
+                for(j = kk + 1; j <= i__1; ++j)
                 {
                     d_cnjg(&z__1, &a[j + kk * a_dim1]);
                     t.r = z__1.r;
@@ -932,7 +941,7 @@ L42: /* BEGIN pivot search loop body */
                 i__1 = kp + kp * a_dim1;
                 a[i__1].r = r1;
                 a[i__1].i = 0.; // , expr subst
-                if (kstep == 2)
+                if(kstep == 2)
                 {
                     /* (*) Make sure that diagonal element of pivot is real */
                     i__1 = k + k * a_dim1;
@@ -961,7 +970,7 @@ L42: /* BEGIN pivot search loop body */
                 d__1 = a[i__2].r;
                 a[i__1].r = d__1;
                 a[i__1].i = 0.; // , expr subst
-                if (kstep == 2)
+                if(kstep == 2)
                 {
                     i__1 = k + 1 + (k + 1) * a_dim1;
                     i__2 = k + 1 + (k + 1) * a_dim1;
@@ -971,18 +980,18 @@ L42: /* BEGIN pivot search loop body */
                 }
             }
             /* Update the trailing submatrix */
-            if (kstep == 1)
+            if(kstep == 1)
             {
                 /* 1-by-1 pivot block D(k): column k of A now holds */
                 /* W(k) = L(k)*D(k), */
                 /* where L(k) is the k-th column of L */
-                if (k < *n)
+                if(k < *n)
                 {
                     /* Perform a rank-1 update of A(k+1:n,k+1:n) and */
                     /* store L(k) in column k */
                     /* Handle division by a small number */
                     i__1 = k + k * a_dim1;
-                    if ((d__1 = a[i__1].r, f2c_dabs(d__1)) >= sfmin)
+                    if((d__1 = a[i__1].r, f2c_dabs(d__1)) >= sfmin)
                     {
                         /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
                         /* A := A - L(k)*D(k)*L(k)**T */
@@ -991,7 +1000,8 @@ L42: /* BEGIN pivot search loop body */
                         d11 = 1. / a[i__1].r;
                         i__1 = *n - k;
                         d__1 = -d11;
-                        zher_(uplo, &i__1, &d__1, &a[k + 1 + k * a_dim1], & c__1, &a[k + 1 + (k + 1) * a_dim1], lda);
+                        zher_(uplo, &i__1, &d__1, &a[k + 1 + k * a_dim1], &c__1,
+                              &a[k + 1 + (k + 1) * a_dim1], lda);
                         /* Store L(k) in column k */
                         i__1 = *n - k;
                         zdscal_(&i__1, &d11, &a[k + 1 + k * a_dim1], &c__1);
@@ -1002,9 +1012,7 @@ L42: /* BEGIN pivot search loop body */
                         i__1 = k + k * a_dim1;
                         d11 = a[i__1].r;
                         i__1 = *n;
-                        for (ii = k + 1;
-                                ii <= i__1;
-                                ++ii)
+                        for(ii = k + 1; ii <= i__1; ++ii)
                         {
                             i__2 = ii + k * a_dim1;
                             i__3 = ii + k * a_dim1;
@@ -1020,7 +1028,8 @@ L42: /* BEGIN pivot search loop body */
                         /* = A - (W(k)/D(k))*(D(k))*(W(k)/D(K))**T */
                         i__1 = *n - k;
                         d__1 = -d11;
-                        zher_(uplo, &i__1, &d__1, &a[k + 1 + k * a_dim1], & c__1, &a[k + 1 + (k + 1) * a_dim1], lda);
+                        zher_(uplo, &i__1, &d__1, &a[k + 1 + k * a_dim1], &c__1,
+                              &a[k + 1 + (k + 1) * a_dim1], lda);
                     }
                 }
             }
@@ -1034,7 +1043,7 @@ L42: /* BEGIN pivot search loop body */
                 /* A := A - ( L(k) L(k+1) ) * D(k) * ( L(k) L(k+1) )**T */
                 /* = A - ( ( A(k)A(k+1) )*inv(D(k) ) * ( A(k)A(k+1) )**T */
                 /* and store L(k) and L(k+1) in columns k and k+1 */
-                if (k < *n - 1)
+                if(k < *n - 1)
                 {
                     /* D = |A21| */
                     i__1 = k + 1 + k * a_dim1;
@@ -1052,9 +1061,7 @@ L42: /* BEGIN pivot search loop body */
                     d21.i = z__1.i; // , expr subst
                     tt = 1. / (d11 * d22 - 1.);
                     i__1 = *n;
-                    for (j = k + 2;
-                            j <= i__1;
-                            ++j)
+                    for(j = k + 2; j <= i__1; ++j)
                     {
                         /* Compute D21 * ( W(k)W(k+1) ) * inv(D(k)) for row J */
                         i__2 = j + k * a_dim1;
@@ -1062,7 +1069,7 @@ L42: /* BEGIN pivot search loop body */
                         z__3.i = d11 * a[i__2].i; // , expr subst
                         i__3 = j + (k + 1) * a_dim1;
                         z__4.r = d21.r * a[i__3].r - d21.i * a[i__3].i;
-                        z__4.i = d21.r * a[i__3].i + d21.i * a[i__3] .r; // , expr subst
+                        z__4.i = d21.r * a[i__3].i + d21.i * a[i__3].r; // , expr subst
                         z__2.r = z__3.r - z__4.r;
                         z__2.i = z__3.i - z__4.i; // , expr subst
                         z__1.r = tt * z__2.r;
@@ -1075,7 +1082,7 @@ L42: /* BEGIN pivot search loop body */
                         d_cnjg(&z__5, &d21);
                         i__3 = j + k * a_dim1;
                         z__4.r = z__5.r * a[i__3].r - z__5.i * a[i__3].i;
-                        z__4.i = z__5.r * a[i__3].i + z__5.i * a[i__3] .r; // , expr subst
+                        z__4.i = z__5.r * a[i__3].i + z__5.i * a[i__3].r; // , expr subst
                         z__2.r = z__3.r - z__4.r;
                         z__2.i = z__3.i - z__4.i; // , expr subst
                         z__1.r = tt * z__2.r;
@@ -1084,9 +1091,7 @@ L42: /* BEGIN pivot search loop body */
                         wkp1.i = z__1.i; // , expr subst
                         /* Perform a rank-2 update of A(k+2:n,k+2:n) */
                         i__2 = *n;
-                        for (i__ = j;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = j; i__ <= i__2; ++i__)
                         {
                             i__3 = i__ + j * a_dim1;
                             i__4 = i__ + j * a_dim1;
@@ -1135,7 +1140,7 @@ L42: /* BEGIN pivot search loop body */
             }
         }
         /* Store details of the interchanges in IPIV */
-        if (kstep == 1)
+        if(kstep == 1)
         {
             ipiv[k] = kp;
         }

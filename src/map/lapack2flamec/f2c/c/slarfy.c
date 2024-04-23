@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/slarfy.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/slarfy.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b2 = 1.f;
 static real c_b3 = 0.f;
@@ -99,7 +102,8 @@ static integer c__1 = 1;
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slarfy_(char *uplo, integer *n, real *v, integer *incv, real *tau, real *c__, integer *ldc, real *work)
+void slarfy_(char *uplo, integer *n, real *v, integer *incv, real *tau, real *c__, integer *ldc,
+             real *work)
 {
     /* System generated locals */
     integer c_dim1, c_offset;
@@ -107,10 +111,14 @@ void slarfy_(char *uplo, integer *n, real *v, integer *incv, real *tau, real *c_
     /* Local variables */
     extern real sdot_(integer *, real *, integer *, real *, integer *);
     extern /* Subroutine */
-    void ssyr2_(char *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
+        void
+        ssyr2_(char *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
     real alpha;
     extern /* Subroutine */
-    void saxpy_(integer *, real *, real *, integer *, real *, integer *), ssymv_(char *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        saxpy_(integer *, real *, real *, integer *, real *, integer *),
+        ssymv_(char *, integer *, real *, real *, integer *, real *, integer *, real *, real *,
+               integer *);
     /* -- LAPACK test routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -136,7 +144,7 @@ void slarfy_(char *uplo, integer *n, real *v, integer *incv, real *tau, real *c_
     c__ -= c_offset;
     --work;
     /* Function Body */
-    if (*tau == 0.f)
+    if(*tau == 0.f)
     {
         return;
     }

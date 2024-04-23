@@ -1,20 +1,30 @@
-/* ../netlib/cgeev.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cgeev.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__0 = 0;
 static integer c_n1 = -1;
-/* > \brief <b> CGEEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matr ices</b> */
+/* > \brief <b> CGEEV computes the eigenvalues and, optionally, the left and/or right eigenvectors
+ * for GE matr ices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CGEEV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgeev.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgeev.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgeev.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgeev.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgeev.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgeev.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -54,7 +64,7 @@ static integer c_n1 = -1;
 /* > \verbatim */
 /* > JOBVL is CHARACTER*1 */
 /* > = 'N': left eigenvectors of A are not computed;
-*/
+ */
 /* > = 'V': left eigenvectors of are computed. */
 /* > \endverbatim */
 /* > */
@@ -62,7 +72,7 @@ static integer c_n1 = -1;
 /* > \verbatim */
 /* > JOBVR is CHARACTER*1 */
 /* > = 'N': right eigenvectors of A are not computed;
-*/
+ */
 /* > = 'V': right eigenvectors of A are computed. */
 /* > \endverbatim */
 /* > */
@@ -158,7 +168,7 @@ the routine */
 /* > < 0: if INFO = -i, the i-th argument had an illegal value. */
 /* > > 0: if INFO = i, the QR algorithm failed to compute all the */
 /* > eigenvalues, and no eigenvectors have been computed;
-*/
+ */
 /* > elements i+1:N of W contain eigenvalues which have */
 /* > converged. */
 /* > \endverbatim */
@@ -173,15 +183,21 @@ the routine */
 /* > \ingroup complexGEeigen */
 /* ===================================================================== */
 /* Subroutine */
-void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, complex *w, complex *vl, integer *ldvl, complex *vr, integer *ldvr, complex *work, integer *lwork, real *rwork, integer * info)
+void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, complex *w, complex *vl,
+            integer *ldvl, complex *vr, integer *ldvr, complex *work, integer *lwork, real *rwork,
+            integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgeev inputs: jobvl %c, jobvr %c, n %lld, lda %lld, ldvl %lld, ldvr %lld, lwork %lld",*jobvl, *jobvr, *n, *lda, *ldvl, *ldvr, *lwork);
+    snprintf(buffer, 256,
+             "cgeev inputs: jobvl %c, jobvr %c, n %lld, lda %lld, ldvl %lld, ldvr %lld, lwork %lld",
+             *jobvl, *jobvr, *n, *lda, *ldvl, *ldvr, *lwork);
 #else
-    snprintf(buffer, 256,"cgeev inputs: jobvl %c, jobvr %c, n %d, lda %d, ldvl %d, ldvr %d, lwork %d",*jobvl, *jobvr, *n, *lda, *ldvl, *ldvr, *lwork);
+    snprintf(buffer, 256,
+             "cgeev inputs: jobvl %c, jobvr %c, n %d, lda %d, ldvl %d, ldvr %d, lwork %d", *jobvl,
+             *jobvr, *n, *lda, *ldvl, *ldvr, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -203,32 +219,51 @@ void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, comp
     real anrm;
     integer ierr, itau, iwrk, nout;
     extern /* Subroutine */
-    void cscal_(integer *, complex *, complex *, integer *);
+        void
+        cscal_(integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern real scnrm2_(integer *, complex *, integer *);
     extern /* Subroutine */
-    void cgebak_(char *, char *, integer *, integer *, integer *, real *, integer *, complex *, integer *, integer *), cgebal_(char *, integer *, complex *, integer *, integer *, integer *, real *, integer *), slabad_(real *, real *);
+        void
+        cgebak_(char *, char *, integer *, integer *, integer *, real *, integer *, complex *,
+                integer *, integer *),
+        cgebal_(char *, integer *, complex *, integer *, integer *, integer *, real *, integer *),
+        slabad_(real *, real *);
     logical scalea;
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     real cscale;
     extern /* Subroutine */
-    void cgehrd_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
+        void
+        cgehrd_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *, integer *),
+        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
+                integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    void csscal_(integer *, real *, complex *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        csscal_(integer *, real *, complex *, integer *),
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     logical select[1] = {0};
     real bignum;
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    void chseqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *), cunghr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+        void
+        chseqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
+                complex *, integer *, complex *, integer *, integer *),
+        cunghr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *, integer *);
     integer minwrk, maxwrk;
     logical wantvl;
     real smlnum;
     integer hswork, irwork;
     logical lquery, wantvr;
     extern /* Subroutine */
-    void ctrevc3_(char *, char *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, complex *, integer *, real *, integer *, integer *);
+        void
+        ctrevc3_(char *, char *, logical *, integer *, complex *, integer *, complex *, integer *,
+                 complex *, integer *, integer *, integer *, complex *, integer *, real *,
+                 integer *, integer *);
     /* -- LAPACK driver routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -270,27 +305,27 @@ void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, comp
     lquery = *lwork == -1;
     wantvl = lsame_(jobvl, "V", 1, 1);
     wantvr = lsame_(jobvr, "V", 1, 1);
-    if (! wantvl && ! lsame_(jobvl, "N", 1, 1))
+    if(!wantvl && !lsame_(jobvl, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (! wantvr && ! lsame_(jobvr, "N", 1, 1))
+    else if(!wantvr && !lsame_(jobvr, "N", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldvl < 1 || wantvl && *ldvl < *n)
+    else if(*ldvl < 1 || wantvl && *ldvl < *n)
     {
         *info = -8;
     }
-    else if (*ldvr < 1 || wantvr && *ldvr < *n)
+    else if(*ldvr < 1 || wantvr && *ldvr < *n)
     {
         *info = -10;
     }
@@ -304,75 +339,84 @@ void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, comp
     /* HSWORK refers to the workspace preferred by CHSEQR, as */
     /* calculated below. HSWORK is computed assuming ILO=1 and IHI=N, */
     /* the worst case.) */
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (*n == 0)
+        if(*n == 0)
         {
             minwrk = 1;
             maxwrk = 1;
         }
         else
         {
-            maxwrk = *n + *n * ilaenv_(&c__1, "CGEHRD", " ", n, &c__1, n, & c__0);
+            maxwrk = *n + *n * ilaenv_(&c__1, "CGEHRD", " ", n, &c__1, n, &c__0);
             minwrk = *n << 1;
-            if (wantvl)
+            if(wantvl)
             {
                 /* Computing MAX */
                 i__1 = maxwrk;
-                i__2 = *n + (*n - 1) * ilaenv_(&c__1, "CUNGHR", " ", n, &c__1, n, &c_n1); // , expr subst
-                maxwrk = fla_max(i__1,i__2);
-                ctrevc3_("L", "B", select, n, &a[a_offset], lda, &vl[ vl_offset], ldvl, &vr[vr_offset], ldvr, n, &nout, & work[1], &c_n1, &rwork[1], &c_n1, &ierr);
-                lwork_trevc__ = (integer) work[1].r;
+                i__2 = *n
+                       + (*n - 1)
+                             * ilaenv_(&c__1, "CUNGHR", " ", n, &c__1, n, &c_n1); // , expr subst
+                maxwrk = fla_max(i__1, i__2);
+                ctrevc3_("L", "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl,
+                         &vr[vr_offset], ldvr, n, &nout, &work[1], &c_n1, &rwork[1], &c_n1, &ierr);
+                lwork_trevc__ = (integer)work[1].r;
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n + lwork_trevc__; // , expr subst
-                maxwrk = fla_max(i__1,i__2);
-                chseqr_("S", "V", n, &c__1, n, &a[a_offset], lda, &w[1], &vl[ vl_offset], ldvl, &work[1], &c_n1, info);
+                maxwrk = fla_max(i__1, i__2);
+                chseqr_("S", "V", n, &c__1, n, &a[a_offset], lda, &w[1], &vl[vl_offset], ldvl,
+                        &work[1], &c_n1, info);
             }
-            else if (wantvr)
+            else if(wantvr)
             {
                 /* Computing MAX */
                 i__1 = maxwrk;
-                i__2 = *n + (*n - 1) * ilaenv_(&c__1, "CUNGHR", " ", n, &c__1, n, &c_n1); // , expr subst
-                maxwrk = fla_max(i__1,i__2);
-                ctrevc3_("R", "B", select, n, &a[a_offset], lda, &vl[ vl_offset], ldvl, &vr[vr_offset], ldvr, n, &nout, & work[1], &c_n1, &rwork[1], &c_n1, &ierr);
-                lwork_trevc__ = (integer) work[1].r;
+                i__2 = *n
+                       + (*n - 1)
+                             * ilaenv_(&c__1, "CUNGHR", " ", n, &c__1, n, &c_n1); // , expr subst
+                maxwrk = fla_max(i__1, i__2);
+                ctrevc3_("R", "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl,
+                         &vr[vr_offset], ldvr, n, &nout, &work[1], &c_n1, &rwork[1], &c_n1, &ierr);
+                lwork_trevc__ = (integer)work[1].r;
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n + lwork_trevc__; // , expr subst
-                maxwrk = fla_max(i__1,i__2);
-                chseqr_("S", "V", n, &c__1, n, &a[a_offset], lda, &w[1], &vr[ vr_offset], ldvr, &work[1], &c_n1, info);
+                maxwrk = fla_max(i__1, i__2);
+                chseqr_("S", "V", n, &c__1, n, &a[a_offset], lda, &w[1], &vr[vr_offset], ldvr,
+                        &work[1], &c_n1, info);
             }
             else
             {
-                chseqr_("E", "N", n, &c__1, n, &a[a_offset], lda, &w[1], &vr[ vr_offset], ldvr, &work[1], &c_n1, info);
+                chseqr_("E", "N", n, &c__1, n, &a[a_offset], lda, &w[1], &vr[vr_offset], ldvr,
+                        &work[1], &c_n1, info);
             }
-            hswork = (integer) work[1].r;
+            hswork = (integer)work[1].r;
             /* Computing MAX */
-            i__1 = fla_max(maxwrk,hswork);
-            maxwrk = fla_max(i__1,minwrk);
+            i__1 = fla_max(maxwrk, hswork);
+            maxwrk = fla_max(i__1, minwrk);
         }
-        work[1].r = (real) maxwrk;
+        work[1].r = (real)maxwrk;
         work[1].i = 0.f; // , expr subst
-        if (*lwork < minwrk && ! lquery)
+        if(*lwork < minwrk && !lquery)
         {
             *info = -12;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CGEEV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -387,19 +431,19 @@ void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, comp
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
     anrm = clange_("M", n, n, &a[a_offset], lda, dum);
     scalea = FALSE_;
-    if (anrm > 0.f && anrm < smlnum)
+    if(anrm > 0.f && anrm < smlnum)
     {
         scalea = TRUE_;
         cscale = smlnum;
     }
-    else if (anrm > bignum)
+    else if(anrm > bignum)
     {
         scalea = TRUE_;
         cscale = bignum;
     }
-    if (scalea)
+    if(scalea)
     {
-        clascl_("G", &c__0, &c__0, &anrm, &cscale, n, n, &a[a_offset], lda, & ierr);
+        clascl_("G", &c__0, &c__0, &anrm, &cscale, n, n, &a[a_offset], lda, &ierr);
     }
     /* Balance the matrix */
     /* (CWorkspace: none) */
@@ -413,12 +457,12 @@ void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, comp
     iwrk = itau + *n;
     i__1 = *lwork - iwrk + 1;
     cgehrd_(n, &ilo, &ihi, &a[a_offset], lda, &work[itau], &work[iwrk], &i__1, &ierr);
-    if (wantvl)
+    if(wantvl)
     {
         /* Want left eigenvectors */
         /* Copy Householder vectors to VL */
         *(unsigned char *)side = 'L';
-        clacpy_("L", n, n, &a[a_offset], lda, &vl[vl_offset], ldvl) ;
+        clacpy_("L", n, n, &a[a_offset], lda, &vl[vl_offset], ldvl);
         /* Generate unitary matrix in VL */
         /* (CWorkspace: need 2*N-1, prefer N+(N-1)*NB) */
         /* (RWorkspace: none) */
@@ -429,8 +473,9 @@ void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, comp
         /* (RWorkspace: none) */
         iwrk = itau;
         i__1 = *lwork - iwrk + 1;
-        chseqr_("S", "V", n, &ilo, &ihi, &a[a_offset], lda, &w[1], &vl[ vl_offset], ldvl, &work[iwrk], &i__1, info);
-        if (wantvr)
+        chseqr_("S", "V", n, &ilo, &ihi, &a[a_offset], lda, &w[1], &vl[vl_offset], ldvl,
+                &work[iwrk], &i__1, info);
+        if(wantvr)
         {
             /* Want left and right eigenvectors */
             /* Copy Schur vectors to VR */
@@ -438,12 +483,12 @@ void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, comp
             clacpy_("F", n, n, &vl[vl_offset], ldvl, &vr[vr_offset], ldvr);
         }
     }
-    else if (wantvr)
+    else if(wantvr)
     {
         /* Want right eigenvectors */
         /* Copy Householder vectors to VR */
         *(unsigned char *)side = 'R';
-        clacpy_("L", n, n, &a[a_offset], lda, &vr[vr_offset], ldvr) ;
+        clacpy_("L", n, n, &a[a_offset], lda, &vr[vr_offset], ldvr);
         /* Generate unitary matrix in VR */
         /* (CWorkspace: need 2*N-1, prefer N+(N-1)*NB) */
         /* (RWorkspace: none) */
@@ -454,7 +499,8 @@ void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, comp
         /* (RWorkspace: none) */
         iwrk = itau;
         i__1 = *lwork - iwrk + 1;
-        chseqr_("S", "V", n, &ilo, &ihi, &a[a_offset], lda, &w[1], &vr[ vr_offset], ldvr, &work[iwrk], &i__1, info);
+        chseqr_("S", "V", n, &ilo, &ihi, &a[a_offset], lda, &w[1], &vr[vr_offset], ldvr,
+                &work[iwrk], &i__1, info);
     }
     else
     {
@@ -463,23 +509,25 @@ void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, comp
         /* (RWorkspace: none) */
         iwrk = itau;
         i__1 = *lwork - iwrk + 1;
-        chseqr_("E", "N", n, &ilo, &ihi, &a[a_offset], lda, &w[1], &vr[ vr_offset], ldvr, &work[iwrk], &i__1, info);
+        chseqr_("E", "N", n, &ilo, &ihi, &a[a_offset], lda, &w[1], &vr[vr_offset], ldvr,
+                &work[iwrk], &i__1, info);
     }
     /* If INFO .NE. 0 from CHSEQR, then quit */
-    if (*info != 0)
+    if(*info != 0)
     {
         goto L50;
     }
-    if (wantvl || wantvr)
+    if(wantvl || wantvr)
     {
         /* Compute left and/or right eigenvectors */
         /* (CWorkspace: need 2*N, prefer N + 2*N*NB) */
         /* (RWorkspace: need 2*N) */
         irwork = ibal + *n;
         i__1 = *lwork - iwrk + 1;
-        ctrevc3_(side, "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl, &vr[vr_offset], ldvr, n, &nout, &work[iwrk], &i__1, & rwork[irwork], n, &ierr);
+        ctrevc3_(side, "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl, &vr[vr_offset],
+                 ldvr, n, &nout, &work[iwrk], &i__1, &rwork[irwork], n, &ierr);
     }
-    if (wantvl)
+    if(wantvl)
     {
         /* Undo balancing of left eigenvectors */
         /* (CWorkspace: none) */
@@ -487,16 +535,12 @@ void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, comp
         cgebak_("B", "L", n, &ilo, &ihi, &rwork[ibal], n, &vl[vl_offset], ldvl, &ierr);
         /* Normalize left eigenvectors and make largest component real */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             scl = 1.f / scnrm2_(n, &vl[i__ * vl_dim1 + 1], &c__1);
             csscal_(n, &scl, &vl[i__ * vl_dim1 + 1], &c__1);
             i__2 = *n;
-            for (k = 1;
-                    k <= i__2;
-                    ++k)
+            for(k = 1; k <= i__2; ++k)
             {
                 i__3 = k + i__ * vl_dim1;
                 /* Computing 2nd power */
@@ -524,7 +568,7 @@ void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, comp
             /* L20: */
         }
     }
-    if (wantvr)
+    if(wantvr)
     {
         /* Undo balancing of right eigenvectors */
         /* (CWorkspace: none) */
@@ -532,16 +576,12 @@ void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, comp
         cgebak_("B", "R", n, &ilo, &ihi, &rwork[ibal], n, &vr[vr_offset], ldvr, &ierr);
         /* Normalize right eigenvectors and make largest component real */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             scl = 1.f / scnrm2_(n, &vr[i__ * vr_dim1 + 1], &c__1);
             csscal_(n, &scl, &vr[i__ * vr_dim1 + 1], &c__1);
             i__2 = *n;
-            for (k = 1;
-                    k <= i__2;
-                    ++k)
+            for(k = 1; k <= i__2; ++k)
             {
                 i__3 = k + i__ * vr_dim1;
                 /* Computing 2nd power */
@@ -571,24 +611,23 @@ void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, comp
     }
     /* Undo scaling if necessary */
 L50:
-    if (scalea)
+    if(scalea)
     {
         i__1 = *n - *info;
         /* Computing MAX */
         i__3 = *n - *info;
-        i__2 = fla_max(i__3,1);
+        i__2 = fla_max(i__3, 1);
         clascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &w[*info + 1], &i__2, &ierr);
-        if (*info > 0)
+        if(*info > 0)
         {
             i__1 = ilo - 1;
             clascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &w[1], n, &ierr);
         }
     }
-    work[1].r = (real) maxwrk;
+    work[1].r = (real)maxwrk;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGEEV */
 }
 /* cgeev_ */
-

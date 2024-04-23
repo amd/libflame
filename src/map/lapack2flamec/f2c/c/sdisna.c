@@ -1,16 +1,25 @@
-/* ../netlib/sdisna.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sdisna.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SDISNA */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SDISNA + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sdisna. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sdisna.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sdisna. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sdisna.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sdisna. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sdisna.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -54,9 +63,9 @@
 /* > Specifies for which problem the reciprocal condition numbers */
 /* > should be computed: */
 /* > = 'E': the eigenvectors of a symmetric/Hermitian matrix;
-*/
+ */
 /* > = 'L': the left singular vectors of a general matrix;
-*/
+ */
 /* > = 'R': the right singular vectors of a general matrix. */
 /* > \endverbatim */
 /* > */
@@ -121,7 +130,8 @@ void sdisna_(char *job, integer *m, integer *n, real *d__, real *sep, integer *i
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real newgap, thresh;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -153,23 +163,23 @@ void sdisna_(char *job, integer *m, integer *n, real *d__, real *sep, integer *i
     left = lsame_(job, "L", 1, 1);
     right = lsame_(job, "R", 1, 1);
     sing = left || right;
-    if (eigen)
+    if(eigen)
     {
         k = *m;
     }
-    else if (sing)
+    else if(sing)
     {
-        k = fla_min(*m,*n);
+        k = fla_min(*m, *n);
     }
-    if (! eigen && ! sing)
+    if(!eigen && !sing)
     {
         *info = -1;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -2;
     }
-    else if (k < 0)
+    else if(k < 0)
     {
         *info = -3;
     }
@@ -178,49 +188,47 @@ void sdisna_(char *job, integer *m, integer *n, real *d__, real *sep, integer *i
         incr = TRUE_;
         decr = TRUE_;
         i__1 = k - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if (incr)
+            if(incr)
             {
                 incr = incr && d__[i__] <= d__[i__ + 1];
             }
-            if (decr)
+            if(decr)
             {
                 decr = decr && d__[i__] >= d__[i__ + 1];
             }
             /* L10: */
         }
-        if (sing && k > 0)
+        if(sing && k > 0)
         {
-            if (incr)
+            if(incr)
             {
                 incr = incr && 0.f <= d__[1];
             }
-            if (decr)
+            if(decr)
             {
                 decr = decr && d__[k] >= 0.f;
             }
         }
-        if (! (incr || decr))
+        if(!(incr || decr))
         {
             *info = -4;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SDISNA", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
-    if (k == 0)
+    if(k == 0)
     {
         return;
     }
     /* Compute reciprocal condition numbers */
-    if (k == 1)
+    if(k == 1)
     {
         sep[1] = slamch_("O");
     }
@@ -229,31 +237,29 @@ void sdisna_(char *job, integer *m, integer *n, real *d__, real *sep, integer *i
         oldgap = (r__1 = d__[2] - d__[1], f2c_abs(r__1));
         sep[1] = oldgap;
         i__1 = k - 1;
-        for (i__ = 2;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 2; i__ <= i__1; ++i__)
         {
             newgap = (r__1 = d__[i__ + 1] - d__[i__], f2c_abs(r__1));
-            sep[i__] = fla_min(oldgap,newgap);
+            sep[i__] = fla_min(oldgap, newgap);
             oldgap = newgap;
             /* L20: */
         }
         sep[k] = oldgap;
     }
-    if (sing)
+    if(sing)
     {
-        if (left && *m > *n || right && *m < *n)
+        if(left && *m > *n || right && *m < *n)
         {
-            if (incr)
+            if(incr)
             {
-                sep[1] = fla_min(sep[1],d__[1]);
+                sep[1] = fla_min(sep[1], d__[1]);
             }
-            if (decr)
+            if(decr)
             {
                 /* Computing MIN */
                 r__1 = sep[k];
                 r__2 = d__[k]; // , expr subst
-                sep[k] = fla_min(r__1,r__2);
+                sep[k] = fla_min(r__1, r__2);
             }
         }
     }
@@ -264,8 +270,8 @@ void sdisna_(char *job, integer *m, integer *n, real *d__, real *sep, integer *i
     /* Computing MAX */
     r__2 = f2c_abs(d__[1]);
     r__3 = (r__1 = d__[k], f2c_abs(r__1)); // , expr subst
-    anorm = fla_max(r__2,r__3);
-    if (anorm == 0.f)
+    anorm = fla_max(r__2, r__3);
+    if(anorm == 0.f)
     {
         thresh = eps;
     }
@@ -273,16 +279,14 @@ void sdisna_(char *job, integer *m, integer *n, real *d__, real *sep, integer *i
     {
         /* Computing MAX */
         r__1 = eps * anorm;
-        thresh = fla_max(r__1,safmin);
+        thresh = fla_max(r__1, safmin);
     }
     i__1 = k;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Computing MAX */
         r__1 = sep[i__];
-        sep[i__] = fla_max(r__1,thresh);
+        sep[i__] = fla_max(r__1, thresh);
         /* L30: */
     }
     return;

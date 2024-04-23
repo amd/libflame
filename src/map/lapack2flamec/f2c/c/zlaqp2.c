@@ -1,5 +1,8 @@
-/* ../netlib/zlaqp2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlaqp2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b ZLAQP2 computes a QR factorization with column pivoting of the matrix block. */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLAQP2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaqp2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaqp2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaqp2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaqp2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaqp2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaqp2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -135,10 +144,13 @@ if JPVT(i) = 0, */
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-void zlaqp2_(integer *m, integer *n, integer *offset, doublecomplex *a, integer *lda, integer *jpvt, doublecomplex *tau, doublereal *vn1, doublereal *vn2, doublecomplex *work)
+void zlaqp2_(integer *m, integer *n, integer *offset, doublecomplex *a, integer *lda, integer *jpvt,
+             doublecomplex *tau, doublereal *vn1, doublereal *vn2, doublecomplex *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaqp2 inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS ", lda %" FLA_IS "",*m, *n, *offset, *lda);
+    AOCL_DTL_SNPRINTF("zlaqp2 inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS
+                      ", lda %" FLA_IS "",
+                      *m, *n, *offset, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1;
@@ -154,11 +166,15 @@ void zlaqp2_(integer *m, integer *n, integer *offset, doublecomplex *a, integer 
     doublereal temp, temp2, tol3z;
     integer offpi, itemp;
     extern /* Subroutine */
-    void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
-    extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_( char *);
+        void
+        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *),
+        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    void zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+        void
+        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -191,21 +207,19 @@ void zlaqp2_(integer *m, integer *n, integer *offset, doublecomplex *a, integer 
     /* Function Body */
     /* Computing MIN */
     i__1 = *m - *offset;
-    mn = fla_min(i__1,*n);
+    mn = fla_min(i__1, *n);
     tol3z = sqrt(dlamch_("Epsilon"));
     /* Compute factorization. */
     i__1 = mn;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         offpi = *offset + i__;
         /* Determine ith pivot column and swap if necessary. */
         i__2 = *n - i__ + 1;
         pvt = i__ - 1 + idamax_(&i__2, &vn1[i__], &c__1);
-        if (pvt != i__)
+        if(pvt != i__)
         {
-            zswap_(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], & c__1);
+            zswap_(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
             itemp = jpvt[pvt];
             jpvt[pvt] = jpvt[i__];
             jpvt[i__] = itemp;
@@ -213,16 +227,17 @@ void zlaqp2_(integer *m, integer *n, integer *offset, doublecomplex *a, integer 
             vn2[pvt] = vn2[i__];
         }
         /* Generate elementary reflector H(i). */
-        if (offpi < *m)
+        if(offpi < *m)
         {
             i__2 = *m - offpi + 1;
-            zlarfg_(&i__2, &a[offpi + i__ * a_dim1], &a[offpi + 1 + i__ * a_dim1], &c__1, &tau[i__]);
+            zlarfg_(&i__2, &a[offpi + i__ * a_dim1], &a[offpi + 1 + i__ * a_dim1], &c__1,
+                    &tau[i__]);
         }
         else
         {
-            zlarfg_(&c__1, &a[*m + i__ * a_dim1], &a[*m + i__ * a_dim1], & c__1, &tau[i__]);
+            zlarfg_(&c__1, &a[*m + i__ * a_dim1], &a[*m + i__ * a_dim1], &c__1, &tau[i__]);
         }
-        if (i__ < *n)
+        if(i__ < *n)
         {
             /* Apply H(i)**H to A(offset+i:m,i+1:n) from the left. */
             i__2 = offpi + i__ * a_dim1;
@@ -234,34 +249,33 @@ void zlaqp2_(integer *m, integer *n, integer *offset, doublecomplex *a, integer 
             i__2 = *m - offpi + 1;
             i__3 = *n - i__;
             d_cnjg(&z__1, &tau[i__]);
-            zlarf_("Left", &i__2, &i__3, &a[offpi + i__ * a_dim1], &c__1, & z__1, &a[offpi + (i__ + 1) * a_dim1], lda, &work[1]);
+            zlarf_("Left", &i__2, &i__3, &a[offpi + i__ * a_dim1], &c__1, &z__1,
+                   &a[offpi + (i__ + 1) * a_dim1], lda, &work[1]);
             i__2 = offpi + i__ * a_dim1;
             a[i__2].r = aii.r;
             a[i__2].i = aii.i; // , expr subst
         }
         /* Update partial column norms. */
         i__2 = *n;
-        for (j = i__ + 1;
-                j <= i__2;
-                ++j)
+        for(j = i__ + 1; j <= i__2; ++j)
         {
-            if (vn1[j] != 0.)
+            if(vn1[j] != 0.)
             {
                 /* NOTE: The following 4 lines follow from the analysis in */
                 /* Lapack Working Note 176. */
                 /* Computing 2nd power */
                 d__1 = z_abs(&a[offpi + j * a_dim1]) / vn1[j];
                 temp = 1. - d__1 * d__1;
-                temp = fla_max(temp,0.);
+                temp = fla_max(temp, 0.);
                 /* Computing 2nd power */
                 d__1 = vn1[j] / vn2[j];
                 temp2 = temp * (d__1 * d__1);
-                if (temp2 <= tol3z)
+                if(temp2 <= tol3z)
                 {
-                    if (offpi < *m)
+                    if(offpi < *m)
                     {
                         i__3 = *m - offpi;
-                        vn1[j] = dznrm2_(&i__3, &a[offpi + 1 + j * a_dim1], & c__1);
+                        vn1[j] = dznrm2_(&i__3, &a[offpi + 1 + j * a_dim1], &c__1);
                         vn2[j] = vn1[j];
                     }
                     else

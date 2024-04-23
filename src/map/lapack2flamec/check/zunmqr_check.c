@@ -1,9 +1,11 @@
-#include "FLA_lapack2flame_return_defs.h"
 #include "FLA_f2c.h" /* Table of constant values */
+#include "FLA_lapack2flame_return_defs.h"
 static integer c__1 = 1;
 static integer c_n1 = -1;
 
-int zunmqr_check(char *side, char *trans, integer *m, integer *n, integer *k, dcomplex *a, integer *lda, dcomplex *tau, dcomplex *c__, integer *ldc, dcomplex *work, integer *lwork, integer *info)
+int zunmqr_check(char *side, char *trans, integer *m, integer *n, integer *k, dcomplex *a,
+                 integer *lda, dcomplex *tau, dcomplex *c__, integer *ldc, dcomplex *work,
+                 integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
@@ -31,7 +33,7 @@ int zunmqr_check(char *side, char *trans, integer *m, integer *n, integer *k, dc
     notran = lsame_(trans, "N", 1, 1);
     lquery = *lwork == -1;
     /* NQ is the order of Q and NW is the minimum dimension of WORK */
-    if (left)
+    if(left)
     {
         nq = *m;
         nw = *n;
@@ -41,62 +43,62 @@ int zunmqr_check(char *side, char *trans, integer *m, integer *n, integer *k, dc
         nq = *n;
         nw = *m;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*k < 0 || *k > nq)
+    else if(*k < 0 || *k > nq)
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,nq))
+    else if(*lda < fla_max(1, nq))
     {
         *info = -7;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -10;
     }
-    else if (*lwork < fla_max(1,nw) && ! lquery)
+    else if(*lwork < fla_max(1, nw) && !lquery)
     {
         *info = -12;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
         /* Determine the block size. NB may be at most NBMAX, where NBMAX */
         /* is used to define the local array T. */
         /* Computing MIN */
         i__1 = 64;
         i__2 = ilaenv_(&c__1, "ZUNMQR", ch__1, m, n, k, &c_n1); // , expr subst
-        nb = fla_min(i__1,i__2);
-        lwkopt = fla_max(1,nw) * nb;
-        work[1].real = (double) lwkopt;
+        nb = fla_min(i__1, i__2);
+        lwkopt = fla_max(1, nw) * nb;
+        work[1].real = (double)lwkopt;
         work[1].imag = 0.; // , expr subst
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZUNMQR", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
-    else if (lquery)
+    else if(lquery)
     {
         return LAPACK_QUERY_RETURN;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0 || *k == 0)
+    if(*m == 0 || *n == 0 || *k == 0)
     {
         work[1].real = 1.;
         work[1].imag = 0.; // , expr subst

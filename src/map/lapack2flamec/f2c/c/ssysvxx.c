@@ -1,17 +1,26 @@
 #ifdef FLA_ENABLE_XBLAS
-/* ../netlib/ssysvxx.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ssysvxx.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SSYSVXX */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SSYSVXX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssysvxx .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssysvxx
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssysvxx .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssysvxx
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssysvxx .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssysvxx
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -133,7 +142,7 @@ see the definitions of the FACT and EQUED options. */
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -246,9 +255,9 @@ otherwise, S is an output argument. If FACT = 'F' and EQUED */
 /* > On entry, the N-by-NRHS right hand side matrix B. */
 /* > On exit, */
 /* > if EQUED = 'N', B is not modified;
-*/
+ */
 /* > if EQUED = 'Y', B is overwritten by diag(S)*B;
-*/
+ */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LDB */
@@ -502,31 +511,48 @@ defaults */
 /* > \ingroup realSYsolve */
 /* ===================================================================== */
 /* Subroutine */
-void ssysvxx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integer *lda, real *af, integer *ldaf, integer *ipiv, char *equed, real *s, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *rpvgrw, real *berr, integer *n_err_bnds__, real * err_bnds_norm__, real *err_bnds_comp__, integer *nparams, real * params, real *work, integer *iwork, integer *info)
+void ssysvxx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *af,
+              integer *ldaf, integer *ipiv, char *equed, real *s, real *b, integer *ldb, real *x,
+              integer *ldx, real *rcond, real *rpvgrw, real *berr, integer *n_err_bnds__,
+              real *err_bnds_norm__, real *err_bnds_comp__, integer *nparams, real *params,
+              real *work, integer *iwork, integer *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1;
+    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset,
+        err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1;
     real r__1, r__2;
     /* Local variables */
     extern /* Subroutine */
-    void ssyrfsx_(char *, char *, integer *, integer *, real *, integer *, real *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, real *, real *, integer *, real *, real *, integer *, integer *);
+        void
+        ssyrfsx_(char *, char *, integer *, integer *, real *, integer *, real *, integer *,
+                 integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *,
+                 real *, real *, integer *, real *, real *, integer *, integer *);
     integer j;
     real amax, smin, smax;
-    extern real sla_syrpvgrw_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *, real *);
+    extern real sla_syrpvgrw_(char *, integer *, integer *, real *, integer *, real *, integer *,
+                              integer *, real *);
     extern logical lsame_(char *, char *, integer, integer);
     real scond;
     logical equil, rcequ;
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer infequ;
     extern /* Subroutine */
-    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+        void
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     real smlnum;
     extern /* Subroutine */
-    void slaqsy_(char *, integer *, real *, integer *, real *, real *, real *, char *), ssytrf_(char *, integer *, real *, integer *, integer *, real *, integer *, integer *), slascl2_(integer *, integer *, real *, real *, integer *), ssytrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *), ssyequb_(char *, integer *, real *, integer *, real *, real *, real *, real *, integer *);
+        void
+        slaqsy_(char *, integer *, real *, integer *, real *, real *, real *, char *),
+        ssytrf_(char *, integer *, real *, integer *, integer *, real *, integer *, integer *),
+        slascl2_(integer *, integer *, real *, real *, integer *),
+        ssytrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *,
+                integer *),
+        ssyequb_(char *, integer *, real *, integer *, real *, real *, real *, real *, integer *);
     /* -- LAPACK driver routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -578,7 +604,7 @@ void ssysvxx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integ
     equil = lsame_(fact, "E", 1, 1);
     smlnum = slamch_("Safe minimum");
     bignum = 1.f / smlnum;
-    if (nofact || equil)
+    if(nofact || equil)
     {
         *(unsigned char *)equed = 'N';
         rcequ = FALSE_;
@@ -592,91 +618,89 @@ void ssysvxx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integ
     /* pivot growth is set here, the rest is initialized in SSYRFSX. */
     *rpvgrw = 0.f;
     /* Test the input parameters. PARAMS is not tested until SSYRFSX. */
-    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    else if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (lsame_(fact, "F", 1, 1) && ! (rcequ || lsame_(equed, "N", 1, 1)))
+    else if(lsame_(fact, "F", 1, 1) && !(rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -10;
     }
     else
     {
-        if (rcequ)
+        if(rcequ)
         {
             smin = bignum;
             smax = 0.f;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Computing MIN */
                 r__1 = smin;
                 r__2 = s[j]; // , expr subst
-                smin = fla_min(r__1,r__2);
+                smin = fla_min(r__1, r__2);
                 /* Computing MAX */
                 r__1 = smax;
                 r__2 = s[j]; // , expr subst
-                smax = fla_max(r__1,r__2);
+                smax = fla_max(r__1, r__2);
                 /* L10: */
             }
-            if (smin <= 0.f)
+            if(smin <= 0.f)
             {
                 *info = -11;
             }
-            else if (*n > 0)
+            else if(*n > 0)
             {
-                scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
+                scond = fla_max(smin, smlnum) / fla_min(smax, bignum);
             }
             else
             {
                 scond = 1.f;
             }
         }
-        if (*info == 0)
+        if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -13;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -15;
             }
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SSYSVXX", &i__1, (ftnlen)7);
         return;
     }
-    if (equil)
+    if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        ssyequb_(uplo, n, &a[a_offset], lda, &s[1], &scond, &amax, &work[1], & infequ);
-        if (infequ == 0)
+        ssyequb_(uplo, n, &a[a_offset], lda, &s[1], &scond, &amax, &work[1], &infequ);
+        if(infequ == 0)
         {
             /* Equilibrate the matrix. */
             slaqsy_(uplo, n, &a[a_offset], lda, &s[1], &scond, &amax, equed);
@@ -684,42 +708,47 @@ void ssysvxx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integ
         }
     }
     /* Scale the right-hand side. */
-    if (rcequ)
+    if(rcequ)
     {
         slascl2_(n, nrhs, &s[1], &b[b_offset], ldb);
     }
-    if (nofact || equil)
+    if(nofact || equil)
     {
         /* Compute the LDL^T or UDU^T factorization of A. */
         slacpy_(uplo, n, n, &a[a_offset], lda, &af[af_offset], ldaf);
-        i__1 = fla_max(1,*n) * 5;
+        i__1 = fla_max(1, *n) * 5;
         ssytrf_(uplo, n, &af[af_offset], ldaf, &ipiv[1], &work[1], &i__1, info);
         /* Return if INFO is non-zero. */
-        if (*info > 0)
+        if(*info > 0)
         {
             /* Pivot in column INFO is exactly 0 */
             /* Compute the reciprocal pivot growth factor of the */
             /* leading rank-deficient INFO columns of A. */
-            if (*n > 0)
+            if(*n > 0)
             {
-                *rpvgrw = sla_syrpvgrw_(uplo, n, info, &a[a_offset], lda, & af[af_offset], ldaf, &ipiv[1], &work[1]);
+                *rpvgrw = sla_syrpvgrw_(uplo, n, info, &a[a_offset], lda, &af[af_offset], ldaf,
+                                        &ipiv[1], &work[1]);
             }
             return;
         }
     }
     /* Compute the reciprocal pivot growth factor RPVGRW. */
-    if (*n > 0)
+    if(*n > 0)
     {
-        *rpvgrw = sla_syrpvgrw_(uplo, n, info, &a[a_offset], lda, &af[ af_offset], ldaf, &ipiv[1], &work[1]);
+        *rpvgrw = sla_syrpvgrw_(uplo, n, info, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1],
+                                &work[1]);
     }
     /* Compute the solution matrix X. */
     slacpy_("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
     ssytrs_(uplo, n, nrhs, &af[af_offset], ldaf, &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    ssyrfsx_(uplo, equed, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, & ipiv[1], &s[1], &b[b_offset], ldb, &x[x_offset], ldx, rcond, & berr[1], n_err_bnds__, &err_bnds_norm__[err_bnds_norm_offset], & err_bnds_comp__[err_bnds_comp_offset], nparams, &params[1], &work[ 1], &iwork[1], info);
+    ssyrfsx_(uplo, equed, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1], &s[1],
+             &b[b_offset], ldb, &x[x_offset], ldx, rcond, &berr[1], n_err_bnds__,
+             &err_bnds_norm__[err_bnds_norm_offset], &err_bnds_comp__[err_bnds_comp_offset],
+             nparams, &params[1], &work[1], &iwork[1], info);
     /* Scale solutions. */
-    if (rcequ)
+    if(rcequ)
     {
         slascl2_(n, nrhs, &s[1], &x[x_offset], ldx);
     }

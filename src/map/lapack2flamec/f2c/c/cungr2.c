@@ -1,16 +1,25 @@
-/* ../netlib/cungr2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cungr2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CUNGR2 generates all or part of the unitary matrix Q from an RQ factorization determined by cge rqf (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CUNGR2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cungr2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cungr2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cungr2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cungr2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cungr2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cungr2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -100,12 +109,15 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cungr2_(integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau, complex *work, integer *info)
+void cungr2_(integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau,
+             complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"cungr2 inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",*m, *n, *k, *lda);
+    snprintf(buffer, 256,
+             "cungr2 inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "", *m, *n,
+             *k, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -116,7 +128,12 @@ void cungr2_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
     /* Local variables */
     integer i__, j, l, ii;
     extern /* Subroutine */
-    void cscal_(integer *, complex *, complex *, integer *), clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        cscal_(integer *, complex *, complex *, integer *),
+        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+               complex *),
+        clacgv_(integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -144,23 +161,23 @@ void cungr2_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
     --work;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < *m)
+    else if(*n < *m)
     {
         *info = -2;
     }
-    else if (*k < 0 || *k > *m)
+    else if(*k < 0 || *k > *m)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CUNGR2", &i__1, (ftnlen)6);
@@ -168,30 +185,26 @@ void cungr2_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
         return;
     }
     /* Quick return if possible */
-    if (*m <= 0)
+    if(*m <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (*k < *m)
+    if(*k < *m)
     {
         /* Initialise rows 1:m-k to rows of the unit matrix */
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m - *k;
-            for (l = 1;
-                    l <= i__2;
-                    ++l)
+            for(l = 1; l <= i__2; ++l)
             {
                 i__3 = l + j * a_dim1;
                 a[i__3].r = 0.f;
                 a[i__3].i = 0.f; // , expr subst
                 /* L10: */
             }
-            if (j > *n - *m && j <= *n - *k)
+            if(j > *n - *m && j <= *n - *k)
             {
                 i__2 = *m - *n + j + j * a_dim1;
                 a[i__2].r = 1.f;
@@ -201,9 +214,7 @@ void cungr2_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
         }
     }
     i__1 = *k;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         ii = *m - *k + i__;
         /* Apply H(i)**H to A(1:m-k+i,1:n-k+i) from the right */
@@ -215,7 +226,7 @@ void cungr2_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
         i__2 = ii - 1;
         i__3 = *n - *m + ii;
         r_cnjg(&q__1, &tau[i__]);
-        clarf_("Right", &i__2, &i__3, &a[ii + a_dim1], lda, &q__1, &a[ a_offset], lda, &work[1]);
+        clarf_("Right", &i__2, &i__3, &a[ii + a_dim1], lda, &q__1, &a[a_offset], lda, &work[1]);
         i__2 = *n - *m + ii - 1;
         i__3 = i__;
         q__1.r = -tau[i__3].r;
@@ -231,9 +242,7 @@ void cungr2_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
         a[i__2].i = q__1.i; // , expr subst
         /* Set A(m-k+i,n-k+i+1:n) to zero */
         i__2 = *n;
-        for (l = *n - *m + ii + 1;
-                l <= i__2;
-                ++l)
+        for(l = *n - *m + ii + 1; l <= i__2; ++l)
         {
             i__3 = ii + l * a_dim1;
             a[i__3].r = 0.f;

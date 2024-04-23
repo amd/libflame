@@ -1,26 +1,32 @@
-/* ../netlib/zlalsd.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlalsd.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    0.,0.
-}
-;
+static doublecomplex c_b1 = {0., 0.};
 static integer c__1 = 1;
 static integer c__0 = 0;
 static doublereal c_b10 = 1.;
 static doublereal c_b35 = 0.;
-/* > \brief \b ZLALSD uses the singular value decomposition of A to solve the least squares problem. */
+/* > \brief \b ZLALSD uses the singular value decomposition of A to solve the least squares problem.
+ */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLALSD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlalsd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlalsd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlalsd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlalsd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlalsd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlalsd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -183,10 +189,14 @@ in this case a minimum norm solution is returned. */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublecomplex *b, integer *ldb, doublereal *rcond, integer *rank, doublecomplex *work, doublereal * rwork, integer *iwork, integer *info)
+void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal *d__, doublereal *e,
+             doublecomplex *b, integer *ldb, doublereal *rcond, integer *rank, doublecomplex *work,
+             doublereal *rwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlalsd inputs: uplo %c, smlsiz %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*uplo, *smlsiz, *n, *nrhs, *ldb);
+    AOCL_DTL_SNPRINTF("zlalsd inputs: uplo %c, smlsiz %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS
+                      ", ldb %" FLA_IS "",
+                      *uplo, *smlsiz, *n, *nrhs, *ldb);
     /* System generated locals */
     integer b_dim1, b_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     doublereal d__1;
@@ -208,21 +218,50 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
     doublereal rcnd;
     integer jcol, irwb, perm, nsub, nlvl, sqre, bxst, jrow, irwu, jimag;
     extern /* Subroutine */
-    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer jreal, irwib, poles, sizei, irwrb, nsize;
     extern /* Subroutine */
-    void zdrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *), zcopy_( integer *, doublecomplex *, integer *, doublecomplex *, integer *) ;
+        void
+        zdrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
+               doublereal *),
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     integer irwvt, icmpq1, icmpq2;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    void dlasda_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dlasda_(integer *, integer *, integer *, integer *, doublereal *, doublereal *,
+                doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, doublereal *, integer *, integer *, integer *, integer *,
+                doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *),
+        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    void dlasdq_(char *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlasdq_(char *, integer *, integer *, integer *, integer *, integer *, doublereal *,
+                doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+                integer *, doublereal *, integer *),
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
+        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer givcol;
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
     extern /* Subroutine */
-    void zlalsa_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, integer *), dlasrt_(char *, integer *, doublereal *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zlalsa_(integer *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *, doublereal *, integer *, doublereal *, integer *,
+                doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *,
+                integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
+                integer *, integer *),
+        zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublecomplex *, integer *, integer *),
+        dlasrt_(char *, integer *, doublereal *, integer *),
+        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *),
+        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
+                integer *);
     doublereal orgnrm;
     integer givnum, givptr, nrwork, irwwrk, smlszp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -257,19 +296,19 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
     --iwork;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -3;
     }
-    else if (*nrhs < 1)
+    else if(*nrhs < 1)
     {
         *info = -4;
     }
-    else if (*ldb < 1 || *ldb < *n)
+    else if(*ldb < 1 || *ldb < *n)
     {
         *info = -8;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZLALSD", &i__1, (ftnlen)6);
@@ -278,7 +317,7 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
     }
     eps = dlamch_("Epsilon");
     /* Set up the tolerance. */
-    if (*rcond <= 0. || *rcond >= 1.)
+    if(*rcond <= 0. || *rcond >= 1.)
     {
         rcnd = eps;
     }
@@ -288,41 +327,39 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
     }
     *rank = 0;
     /* Quick return if possible. */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (*n == 1)
+    else if(*n == 1)
     {
-        if (d__[1] == 0.)
+        if(d__[1] == 0.)
         {
             zlaset_("A", &c__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         }
         else
         {
             *rank = 1;
-            zlascl_("G", &c__0, &c__0, &d__[1], &c_b10, &c__1, nrhs, &b[ b_offset], ldb, info);
+            zlascl_("G", &c__0, &c__0, &d__[1], &c_b10, &c__1, nrhs, &b[b_offset], ldb, info);
             d__[1] = f2c_dabs(d__[1]);
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Rotate the matrix if it is lower bidiagonal. */
-    if (*(unsigned char *)uplo == 'L')
+    if(*(unsigned char *)uplo == 'L')
     {
         i__1 = *n - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             dlartg_(&d__[i__], &e[i__], &cs, &sn, &r__);
             d__[i__] = r__;
             e[i__] = sn * d__[i__ + 1];
             d__[i__ + 1] = cs * d__[i__ + 1];
-            if (*nrhs == 1)
+            if(*nrhs == 1)
             {
-                zdrot_(&c__1, &b[i__ + b_dim1], &c__1, &b[i__ + 1 + b_dim1], & c__1, &cs, &sn);
+                zdrot_(&c__1, &b[i__ + b_dim1], &c__1, &b[i__ + 1 + b_dim1], &c__1, &cs, &sn);
             }
             else
             {
@@ -331,21 +368,18 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
             }
             /* L10: */
         }
-        if (*nrhs > 1)
+        if(*nrhs > 1)
         {
             i__1 = *nrhs;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = *n - 1;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     cs = rwork[(j << 1) - 1];
                     sn = rwork[j * 2];
-                    zdrot_(&c__1, &b[j + i__ * b_dim1], &c__1, &b[j + 1 + i__ * b_dim1], &c__1, &cs, &sn);
+                    zdrot_(&c__1, &b[j + i__ * b_dim1], &c__1, &b[j + 1 + i__ * b_dim1], &c__1, &cs,
+                           &sn);
                     /* L20: */
                 }
                 /* L30: */
@@ -355,7 +389,7 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
     /* Scale. */
     nm1 = *n - 1;
     orgnrm = dlanst_("M", n, &d__[1], &e[1]);
-    if (orgnrm == 0.)
+    if(orgnrm == 0.)
     {
         zlaset_("A", n, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         AOCL_DTL_TRACE_LOG_EXIT
@@ -365,7 +399,7 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
     dlascl_("G", &c__0, &c__0, &orgnrm, &c_b10, &nm1, &c__1, &e[1], &nm1, info);
     /* If N is smaller than the minimum divide size SMLSIZ, then solve */
     /* the problem with another solver. */
-    if (*n <= *smlsiz)
+    if(*n <= *smlsiz)
     {
         irwu = 1;
         irwvt = irwu + *n * *n;
@@ -375,8 +409,9 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
         irwb = irwib + *n * *nrhs;
         dlaset_("A", n, n, &c_b35, &c_b10, &rwork[irwu], n);
         dlaset_("A", n, n, &c_b35, &c_b10, &rwork[irwvt], n);
-        dlasdq_("U", &c__0, n, n, n, &c__0, &d__[1], &e[1], &rwork[irwvt], n, &rwork[irwu], n, &rwork[irwwrk], &c__1, &rwork[irwwrk], info);
-        if (*info != 0)
+        dlasdq_("U", &c__0, n, n, n, &c__0, &d__[1], &e[1], &rwork[irwvt], n, &rwork[irwu], n,
+                &rwork[irwwrk], &c__1, &rwork[irwwrk], info);
+        if(*info != 0)
         {
             AOCL_DTL_TRACE_LOG_EXIT
             return;
@@ -386,14 +421,10 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
         /* computed below in two steps (real and imaginary parts). */
         j = irwb - 1;
         i__1 = *nrhs;
-        for (jcol = 1;
-                jcol <= i__1;
-                ++jcol)
+        for(jcol = 1; jcol <= i__1; ++jcol)
         {
             i__2 = *n;
-            for (jrow = 1;
-                    jrow <= i__2;
-                    ++jrow)
+            for(jrow = 1; jrow <= i__2; ++jrow)
             {
                 ++j;
                 i__3 = jrow + jcol * b_dim1;
@@ -402,17 +433,14 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
             }
             /* L50: */
         }
-        dgemm_("T", "N", n, nrhs, n, &c_b10, &rwork[irwu], n, &rwork[irwb], n, &c_b35, &rwork[irwrb], n);
+        dgemm_("T", "N", n, nrhs, n, &c_b10, &rwork[irwu], n, &rwork[irwb], n, &c_b35,
+               &rwork[irwrb], n);
         j = irwb - 1;
         i__1 = *nrhs;
-        for (jcol = 1;
-                jcol <= i__1;
-                ++jcol)
+        for(jcol = 1; jcol <= i__1; ++jcol)
         {
             i__2 = *n;
-            for (jrow = 1;
-                    jrow <= i__2;
-                    ++jrow)
+            for(jrow = 1; jrow <= i__2; ++jrow)
             {
                 ++j;
                 rwork[j] = d_imag(&b[jrow + jcol * b_dim1]);
@@ -420,18 +448,15 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
             }
             /* L70: */
         }
-        dgemm_("T", "N", n, nrhs, n, &c_b10, &rwork[irwu], n, &rwork[irwb], n, &c_b35, &rwork[irwib], n);
+        dgemm_("T", "N", n, nrhs, n, &c_b10, &rwork[irwu], n, &rwork[irwb], n, &c_b35,
+               &rwork[irwib], n);
         jreal = irwrb - 1;
         jimag = irwib - 1;
         i__1 = *nrhs;
-        for (jcol = 1;
-                jcol <= i__1;
-                ++jcol)
+        for(jcol = 1; jcol <= i__1; ++jcol)
         {
             i__2 = *n;
-            for (jrow = 1;
-                    jrow <= i__2;
-                    ++jrow)
+            for(jrow = 1; jrow <= i__2; ++jrow)
             {
                 ++jreal;
                 ++jimag;
@@ -448,17 +473,16 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
         }
         tol = rcnd * (d__1 = d__[idamax_(n, &d__[1], &c__1)], f2c_dabs(d__1));
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if (d__[i__] <= tol)
+            if(d__[i__] <= tol)
             {
                 zlaset_("A", &c__1, nrhs, &c_b1, &c_b1, &b[i__ + b_dim1], ldb);
             }
             else
             {
-                zlascl_("G", &c__0, &c__0, &d__[i__], &c_b10, &c__1, nrhs, &b[ i__ + b_dim1], ldb, info);
+                zlascl_("G", &c__0, &c__0, &d__[i__], &c_b10, &c__1, nrhs, &b[i__ + b_dim1], ldb,
+                        info);
                 ++(*rank);
             }
             /* L100: */
@@ -470,14 +494,10 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
         /* $ WORK( NWORK ), N ) */
         j = irwb - 1;
         i__1 = *nrhs;
-        for (jcol = 1;
-                jcol <= i__1;
-                ++jcol)
+        for(jcol = 1; jcol <= i__1; ++jcol)
         {
             i__2 = *n;
-            for (jrow = 1;
-                    jrow <= i__2;
-                    ++jrow)
+            for(jrow = 1; jrow <= i__2; ++jrow)
             {
                 ++j;
                 i__3 = jrow + jcol * b_dim1;
@@ -486,17 +506,14 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
             }
             /* L120: */
         }
-        dgemm_("T", "N", n, nrhs, n, &c_b10, &rwork[irwvt], n, &rwork[irwb], n, &c_b35, &rwork[irwrb], n);
+        dgemm_("T", "N", n, nrhs, n, &c_b10, &rwork[irwvt], n, &rwork[irwb], n, &c_b35,
+               &rwork[irwrb], n);
         j = irwb - 1;
         i__1 = *nrhs;
-        for (jcol = 1;
-                jcol <= i__1;
-                ++jcol)
+        for(jcol = 1; jcol <= i__1; ++jcol)
         {
             i__2 = *n;
-            for (jrow = 1;
-                    jrow <= i__2;
-                    ++jrow)
+            for(jrow = 1; jrow <= i__2; ++jrow)
             {
                 ++j;
                 rwork[j] = d_imag(&b[jrow + jcol * b_dim1]);
@@ -504,18 +521,15 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
             }
             /* L140: */
         }
-        dgemm_("T", "N", n, nrhs, n, &c_b10, &rwork[irwvt], n, &rwork[irwb], n, &c_b35, &rwork[irwib], n);
+        dgemm_("T", "N", n, nrhs, n, &c_b10, &rwork[irwvt], n, &rwork[irwb], n, &c_b35,
+               &rwork[irwib], n);
         jreal = irwrb - 1;
         jimag = irwib - 1;
         i__1 = *nrhs;
-        for (jcol = 1;
-                jcol <= i__1;
-                ++jcol)
+        for(jcol = 1; jcol <= i__1; ++jcol)
         {
             i__2 = *n;
-            for (jrow = 1;
-                    jrow <= i__2;
-                    ++jrow)
+            for(jrow = 1; jrow <= i__2; ++jrow)
             {
                 ++jreal;
                 ++jimag;
@@ -538,7 +552,7 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
         return;
     }
     /* Book-keeping and setting up some constants. */
-    nlvl = (integer) (log((doublereal) (*n) / (doublereal) (*smlsiz + 1)) / log(2.)) + 1;
+    nlvl = (integer)(log((doublereal)(*n) / (doublereal)(*smlsiz + 1)) / log(2.)) + 1;
     smlszp = *smlsiz + 1;
     u = 1;
     vt = *smlsiz * *n + 1;
@@ -566,34 +580,30 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
     icmpq2 = 0;
     nsub = 0;
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((d__1 = d__[i__], f2c_dabs(d__1)) < eps)
+        if((d__1 = d__[i__], f2c_dabs(d__1)) < eps)
         {
             d__[i__] = d_sign(&eps, &d__[i__]);
         }
         /* L170: */
     }
     i__1 = nm1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((d__1 = e[i__], f2c_dabs(d__1)) < eps || i__ == nm1)
+        if((d__1 = e[i__], f2c_dabs(d__1)) < eps || i__ == nm1)
         {
             ++nsub;
             iwork[nsub] = st;
             /* Subproblem found. First determine its size and then */
             /* apply divide and conquer on it. */
-            if (i__ < nm1)
+            if(i__ < nm1)
             {
                 /* A subproblem with E(I) small for I < NM1. */
                 nsize = i__ - st + 1;
                 iwork[sizei + nsub - 1] = nsize;
             }
-            else if ((d__1 = e[i__], f2c_dabs(d__1)) >= eps)
+            else if((d__1 = e[i__], f2c_dabs(d__1)) >= eps)
             {
                 /* A subproblem with E(NM1) not too small but I = NM1. */
                 nsize = *n - st + 1;
@@ -612,19 +622,21 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
                 zcopy_(nrhs, &b[*n + b_dim1], ldb, &work[bx + nm1], n);
             }
             st1 = st - 1;
-            if (nsize == 1)
+            if(nsize == 1)
             {
                 /* This is a 1-by-1 subproblem and is not solved */
                 /* explicitly. */
                 zcopy_(nrhs, &b[st + b_dim1], ldb, &work[bx + st1], n);
             }
-            else if (nsize <= *smlsiz)
+            else if(nsize <= *smlsiz)
             {
                 /* This is a small subproblem and is solved by DLASDQ. */
                 dlaset_("A", &nsize, &nsize, &c_b35, &c_b10, &rwork[vt + st1], n);
                 dlaset_("A", &nsize, &nsize, &c_b35, &c_b10, &rwork[u + st1], n);
-                dlasdq_("U", &c__0, &nsize, &nsize, &nsize, &c__0, &d__[st], & e[st], &rwork[vt + st1], n, &rwork[u + st1], n, & rwork[nrwork], &c__1, &rwork[nrwork], info) ;
-                if (*info != 0)
+                dlasdq_("U", &c__0, &nsize, &nsize, &nsize, &c__0, &d__[st], &e[st],
+                        &rwork[vt + st1], n, &rwork[u + st1], n, &rwork[nrwork], &c__1,
+                        &rwork[nrwork], info);
+                if(*info != 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
@@ -634,14 +646,10 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
                 /* computed below in two steps (real and imaginary parts). */
                 j = irwb - 1;
                 i__2 = *nrhs;
-                for (jcol = 1;
-                        jcol <= i__2;
-                        ++jcol)
+                for(jcol = 1; jcol <= i__2; ++jcol)
                 {
                     i__3 = st + nsize - 1;
-                    for (jrow = st;
-                            jrow <= i__3;
-                            ++jrow)
+                    for(jrow = st; jrow <= i__3; ++jrow)
                     {
                         ++j;
                         i__4 = jrow + jcol * b_dim1;
@@ -650,17 +658,14 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
                     }
                     /* L190: */
                 }
-                dgemm_("T", "N", &nsize, nrhs, &nsize, &c_b10, &rwork[u + st1], n, &rwork[irwb], &nsize, &c_b35, &rwork[irwrb], & nsize);
+                dgemm_("T", "N", &nsize, nrhs, &nsize, &c_b10, &rwork[u + st1], n, &rwork[irwb],
+                       &nsize, &c_b35, &rwork[irwrb], &nsize);
                 j = irwb - 1;
                 i__2 = *nrhs;
-                for (jcol = 1;
-                        jcol <= i__2;
-                        ++jcol)
+                for(jcol = 1; jcol <= i__2; ++jcol)
                 {
                     i__3 = st + nsize - 1;
-                    for (jrow = st;
-                            jrow <= i__3;
-                            ++jrow)
+                    for(jrow = st; jrow <= i__3; ++jrow)
                     {
                         ++j;
                         rwork[j] = d_imag(&b[jrow + jcol * b_dim1]);
@@ -668,18 +673,15 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
                     }
                     /* L210: */
                 }
-                dgemm_("T", "N", &nsize, nrhs, &nsize, &c_b10, &rwork[u + st1], n, &rwork[irwb], &nsize, &c_b35, &rwork[irwib], & nsize);
+                dgemm_("T", "N", &nsize, nrhs, &nsize, &c_b10, &rwork[u + st1], n, &rwork[irwb],
+                       &nsize, &c_b35, &rwork[irwib], &nsize);
                 jreal = irwrb - 1;
                 jimag = irwib - 1;
                 i__2 = *nrhs;
-                for (jcol = 1;
-                        jcol <= i__2;
-                        ++jcol)
+                for(jcol = 1; jcol <= i__2; ++jcol)
                 {
                     i__3 = st + nsize - 1;
-                    for (jrow = st;
-                            jrow <= i__3;
-                            ++jrow)
+                    for(jrow = st; jrow <= i__3; ++jrow)
                     {
                         ++jreal;
                         ++jimag;
@@ -699,15 +701,24 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
             else
             {
                 /* A large problem. Solve it using divide and conquer. */
-                dlasda_(&icmpq1, smlsiz, &nsize, &sqre, &d__[st], &e[st], & rwork[u + st1], n, &rwork[vt + st1], &iwork[k + st1], &rwork[difl + st1], &rwork[difr + st1], &rwork[z__ + st1], &rwork[poles + st1], &iwork[givptr + st1], & iwork[givcol + st1], n, &iwork[perm + st1], &rwork[ givnum + st1], &rwork[c__ + st1], &rwork[s + st1], & rwork[nrwork], &iwork[iwk], info);
-                if (*info != 0)
+                dlasda_(&icmpq1, smlsiz, &nsize, &sqre, &d__[st], &e[st], &rwork[u + st1], n,
+                        &rwork[vt + st1], &iwork[k + st1], &rwork[difl + st1], &rwork[difr + st1],
+                        &rwork[z__ + st1], &rwork[poles + st1], &iwork[givptr + st1],
+                        &iwork[givcol + st1], n, &iwork[perm + st1], &rwork[givnum + st1],
+                        &rwork[c__ + st1], &rwork[s + st1], &rwork[nrwork], &iwork[iwk], info);
+                if(*info != 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 bxst = bx + st1;
-                zlalsa_(&icmpq2, smlsiz, &nsize, nrhs, &b[st + b_dim1], ldb, & work[bxst], n, &rwork[u + st1], n, &rwork[vt + st1], & iwork[k + st1], &rwork[difl + st1], &rwork[difr + st1], &rwork[z__ + st1], &rwork[poles + st1], &iwork[ givptr + st1], &iwork[givcol + st1], n, &iwork[perm + st1], &rwork[givnum + st1], &rwork[c__ + st1], &rwork[ s + st1], &rwork[nrwork], &iwork[iwk], info);
-                if (*info != 0)
+                zlalsa_(&icmpq2, smlsiz, &nsize, nrhs, &b[st + b_dim1], ldb, &work[bxst], n,
+                        &rwork[u + st1], n, &rwork[vt + st1], &iwork[k + st1], &rwork[difl + st1],
+                        &rwork[difr + st1], &rwork[z__ + st1], &rwork[poles + st1],
+                        &iwork[givptr + st1], &iwork[givcol + st1], n, &iwork[perm + st1],
+                        &rwork[givnum + st1], &rwork[c__ + st1], &rwork[s + st1], &rwork[nrwork],
+                        &iwork[iwk], info);
+                if(*info != 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
@@ -720,20 +731,19 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
     /* Apply the singular values and treat the tiny ones as zero. */
     tol = rcnd * (d__1 = d__[idamax_(n, &d__[1], &c__1)], f2c_dabs(d__1));
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Some of the elements in D can be negative because 1-by-1 */
         /* subproblems were not solved explicitly. */
-        if ((d__1 = d__[i__], f2c_dabs(d__1)) <= tol)
+        if((d__1 = d__[i__], f2c_dabs(d__1)) <= tol)
         {
             zlaset_("A", &c__1, nrhs, &c_b1, &c_b1, &work[bx + i__ - 1], n);
         }
         else
         {
             ++(*rank);
-            zlascl_("G", &c__0, &c__0, &d__[i__], &c_b10, &c__1, nrhs, &work[ bx + i__ - 1], n, info);
+            zlascl_("G", &c__0, &c__0, &d__[i__], &c_b10, &c__1, nrhs, &work[bx + i__ - 1], n,
+                    info);
         }
         d__[i__] = (d__1 = d__[i__], f2c_dabs(d__1));
         /* L250: */
@@ -741,19 +751,17 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
     /* Now apply back the right singular vectors. */
     icmpq2 = 1;
     i__1 = nsub;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         st = iwork[i__];
         st1 = st - 1;
         nsize = iwork[sizei + i__ - 1];
         bxst = bx + st1;
-        if (nsize == 1)
+        if(nsize == 1)
         {
             zcopy_(nrhs, &work[bxst], n, &b[st + b_dim1], ldb);
         }
-        else if (nsize <= *smlsiz)
+        else if(nsize <= *smlsiz)
         {
             /* Since B and BX are complex, the following call to DGEMM */
             /* is performed in two steps (real and imaginary parts). */
@@ -763,15 +771,11 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
             j = bxst - *n - 1;
             jreal = irwb - 1;
             i__2 = *nrhs;
-            for (jcol = 1;
-                    jcol <= i__2;
-                    ++jcol)
+            for(jcol = 1; jcol <= i__2; ++jcol)
             {
                 j += *n;
                 i__3 = nsize;
-                for (jrow = 1;
-                        jrow <= i__3;
-                        ++jrow)
+                for(jrow = 1; jrow <= i__3; ++jrow)
                 {
                     ++jreal;
                     i__4 = j + jrow;
@@ -780,19 +784,16 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
                 }
                 /* L270: */
             }
-            dgemm_("T", "N", &nsize, nrhs, &nsize, &c_b10, &rwork[vt + st1], n, &rwork[irwb], &nsize, &c_b35, &rwork[irwrb], &nsize);
+            dgemm_("T", "N", &nsize, nrhs, &nsize, &c_b10, &rwork[vt + st1], n, &rwork[irwb],
+                   &nsize, &c_b35, &rwork[irwrb], &nsize);
             j = bxst - *n - 1;
             jimag = irwb - 1;
             i__2 = *nrhs;
-            for (jcol = 1;
-                    jcol <= i__2;
-                    ++jcol)
+            for(jcol = 1; jcol <= i__2; ++jcol)
             {
                 j += *n;
                 i__3 = nsize;
-                for (jrow = 1;
-                        jrow <= i__3;
-                        ++jrow)
+                for(jrow = 1; jrow <= i__3; ++jrow)
                 {
                     ++jimag;
                     rwork[jimag] = d_imag(&work[j + jrow]);
@@ -800,18 +801,15 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
                 }
                 /* L290: */
             }
-            dgemm_("T", "N", &nsize, nrhs, &nsize, &c_b10, &rwork[vt + st1], n, &rwork[irwb], &nsize, &c_b35, &rwork[irwib], &nsize);
+            dgemm_("T", "N", &nsize, nrhs, &nsize, &c_b10, &rwork[vt + st1], n, &rwork[irwb],
+                   &nsize, &c_b35, &rwork[irwib], &nsize);
             jreal = irwrb - 1;
             jimag = irwib - 1;
             i__2 = *nrhs;
-            for (jcol = 1;
-                    jcol <= i__2;
-                    ++jcol)
+            for(jcol = 1; jcol <= i__2; ++jcol)
             {
                 i__3 = st + nsize - 1;
-                for (jrow = st;
-                        jrow <= i__3;
-                        ++jrow)
+                for(jrow = st; jrow <= i__3; ++jrow)
                 {
                     ++jreal;
                     ++jimag;
@@ -829,8 +827,13 @@ void zlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
         }
         else
         {
-            zlalsa_(&icmpq2, smlsiz, &nsize, nrhs, &work[bxst], n, &b[st + b_dim1], ldb, &rwork[u + st1], n, &rwork[vt + st1], & iwork[k + st1], &rwork[difl + st1], &rwork[difr + st1], & rwork[z__ + st1], &rwork[poles + st1], &iwork[givptr + st1], &iwork[givcol + st1], n, &iwork[perm + st1], &rwork[ givnum + st1], &rwork[c__ + st1], &rwork[s + st1], &rwork[ nrwork], &iwork[iwk], info);
-            if (*info != 0)
+            zlalsa_(&icmpq2, smlsiz, &nsize, nrhs, &work[bxst], n, &b[st + b_dim1], ldb,
+                    &rwork[u + st1], n, &rwork[vt + st1], &iwork[k + st1], &rwork[difl + st1],
+                    &rwork[difr + st1], &rwork[z__ + st1], &rwork[poles + st1],
+                    &iwork[givptr + st1], &iwork[givcol + st1], n, &iwork[perm + st1],
+                    &rwork[givnum + st1], &rwork[c__ + st1], &rwork[s + st1], &rwork[nrwork],
+                    &iwork[iwk], info);
+            if(*info != 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;

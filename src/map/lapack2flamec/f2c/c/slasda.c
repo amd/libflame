@@ -1,22 +1,32 @@
-/* ../netlib/slasda.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slasda.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__0 = 0;
 static real c_b11 = 0.f;
 static real c_b12 = 1.f;
 static integer c__1 = 1;
 static integer c__2 = 2;
-/* > \brief \b SLASDA computes the singular value decomposition (SVD) of a real upper bidiagonal matrix with d iagonal d and off-diagonal e. Used by sbdsdc. */
+/* > \brief \b SLASDA computes the singular value decomposition (SVD) of a real upper bidiagonal
+ * matrix with d iagonal d and off-diagonal e. Used by sbdsdc. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLASDA + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasda. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasda.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasda. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasda.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasda. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasda.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -81,7 +91,7 @@ static integer c__2 = 2;
 /* > SQRE is INTEGER */
 /* > Specifies the column dimension of the bidiagonal matrix. */
 /* > = 0: The bidiagonal matrix has column dimension M = N;
-*/
+ */
 /* > = 1: The bidiagonal matrix has column dimension M = N + 1. */
 /* > \endverbatim */
 /* > */
@@ -264,29 +274,45 @@ static integer c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *d__, real *e, real *u, integer *ldu, real *vt, integer *k, real *difl, real *difr, real *z__, real *poles, integer * givptr, integer *givcol, integer *ldgcol, integer *perm, real *givnum, real *c__, real *s, real *work, integer *iwork, integer *info)
+void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *d__, real *e,
+             real *u, integer *ldu, real *vt, integer *k, real *difl, real *difr, real *z__,
+             real *poles, integer *givptr, integer *givcol, integer *ldgcol, integer *perm,
+             real *givnum, real *c__, real *s, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slasda inputs: icompq %d, smlsiz %d, n %d, sqre %d, ldu %d, ldgcol %d",*icompq, *smlsiz, *n, *sqre, *ldu, *ldgcol);
+    snprintf(buffer, 256, "slasda inputs: icompq %d, smlsiz %d, n %d, sqre %d, ldu %d, ldgcol %d",
+             *icompq, *smlsiz, *n, *sqre, *ldu, *ldgcol);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer givcol_dim1, givcol_offset, perm_dim1, perm_offset, difl_dim1, difl_offset, difr_dim1, difr_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, u_dim1, u_offset, vt_dim1, vt_offset, z_dim1, z_offset, i__1, i__2;
+    integer givcol_dim1, givcol_offset, perm_dim1, perm_offset, difl_dim1, difl_offset, difr_dim1,
+        difr_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, u_dim1, u_offset,
+        vt_dim1, vt_offset, z_dim1, z_offset, i__1, i__2;
     /* Builtin functions */
     integer pow_ii(integer *, integer *);
     /* Local variables */
-    integer i__, j, m, i1, ic, lf, nd, ll, nl, vf, nr, vl, im1, ncc, nlf, nrf, vfi, iwk, vli, lvl, nru, ndb1, nlp1, lvl2, nrp1;
+    integer i__, j, m, i1, ic, lf, nd, ll, nl, vf, nr, vl, im1, ncc, nlf, nrf, vfi, iwk, vli, lvl,
+        nru, ndb1, nlp1, lvl2, nrp1;
     real beta;
     integer idxq, nlvl;
     real alpha;
     integer inode, ndiml, ndimr, idxqi, itemp, sqrei;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *), slasd6_(integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, real *, real *, integer *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *),
+        slasd6_(integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *,
+                integer *, integer *, integer *, integer *, integer *, real *, integer *, real *,
+                real *, real *, real *, integer *, real *, real *, real *, integer *, integer *);
     integer nwork1, nwork2;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slasdq_( char *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slasdq_(char *, integer *, integer *, integer *, integer *, integer *, real *, real *,
+                real *, integer *, real *, integer *, real *, integer *, real *, integer *),
+        slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *),
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     integer smlszp;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -343,31 +369,31 @@ void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *
     --iwork;
     /* Function Body */
     *info = 0;
-    if (*icompq < 0 || *icompq > 1)
+    if(*icompq < 0 || *icompq > 1)
     {
         *info = -1;
     }
-    else if (*smlsiz < 3)
+    else if(*smlsiz < 3)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*sqre < 0 || *sqre > 1)
+    else if(*sqre < 0 || *sqre > 1)
     {
         *info = -4;
     }
-    else if (*ldu < *n + *sqre)
+    else if(*ldu < *n + *sqre)
     {
         *info = -8;
     }
-    else if (*ldgcol < *n)
+    else if(*ldgcol < *n)
     {
         *info = -17;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SLASDA", &i__1, (ftnlen)6);
@@ -376,15 +402,17 @@ void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *
     }
     m = *n + *sqre;
     /* If the input matrix is too small, call SLASDQ to find the SVD. */
-    if (*n <= *smlsiz)
+    if(*n <= *smlsiz)
     {
-        if (*icompq == 0)
+        if(*icompq == 0)
         {
-            slasdq_("U", sqre, n, &c__0, &c__0, &c__0, &d__[1], &e[1], &vt[ vt_offset], ldu, &u[u_offset], ldu, &u[u_offset], ldu, & work[1], info);
+            slasdq_("U", sqre, n, &c__0, &c__0, &c__0, &d__[1], &e[1], &vt[vt_offset], ldu,
+                    &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
         }
         else
         {
-            slasdq_("U", sqre, n, &m, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldu, &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
+            slasdq_("U", sqre, n, &m, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldu, &u[u_offset],
+                    ldu, &u[u_offset], ldu, &work[1], info);
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -407,9 +435,7 @@ void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *
     /* their subproblems by SLASDQ. */
     ndb1 = (nd + 1) / 2;
     i__1 = nd;
-    for (i__ = ndb1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = ndb1; i__ <= i__1; ++i__)
     {
         /* IC : center row of each node */
         /* NL : number of rows of left subproblem */
@@ -427,10 +453,11 @@ void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *
         vfi = vf + nlf - 1;
         vli = vl + nlf - 1;
         sqrei = 1;
-        if (*icompq == 0)
+        if(*icompq == 0)
         {
             slaset_("A", &nlp1, &nlp1, &c_b11, &c_b12, &work[nwork1], &smlszp);
-            slasdq_("U", &sqrei, &nl, &nlp1, &nru, &ncc, &d__[nlf], &e[nlf], & work[nwork1], &smlszp, &work[nwork2], &nl, &work[nwork2], &nl, &work[nwork2], info);
+            slasdq_("U", &sqrei, &nl, &nlp1, &nru, &ncc, &d__[nlf], &e[nlf], &work[nwork1], &smlszp,
+                    &work[nwork2], &nl, &work[nwork2], &nl, &work[nwork2], info);
             itemp = nwork1 + nl * smlszp;
             scopy_(&nlp1, &work[nwork1], &c__1, &work[vfi], &c__1);
             scopy_(&nlp1, &work[itemp], &c__1, &work[vli], &c__1);
@@ -439,24 +466,23 @@ void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *
         {
             slaset_("A", &nl, &nl, &c_b11, &c_b12, &u[nlf + u_dim1], ldu);
             slaset_("A", &nlp1, &nlp1, &c_b11, &c_b12, &vt[nlf + vt_dim1], ldu);
-            slasdq_("U", &sqrei, &nl, &nlp1, &nl, &ncc, &d__[nlf], &e[nlf], & vt[nlf + vt_dim1], ldu, &u[nlf + u_dim1], ldu, &u[nlf + u_dim1], ldu, &work[nwork1], info);
+            slasdq_("U", &sqrei, &nl, &nlp1, &nl, &ncc, &d__[nlf], &e[nlf], &vt[nlf + vt_dim1], ldu,
+                    &u[nlf + u_dim1], ldu, &u[nlf + u_dim1], ldu, &work[nwork1], info);
             scopy_(&nlp1, &vt[nlf + vt_dim1], &c__1, &work[vfi], &c__1);
-            scopy_(&nlp1, &vt[nlf + nlp1 * vt_dim1], &c__1, &work[vli], &c__1) ;
+            scopy_(&nlp1, &vt[nlf + nlp1 * vt_dim1], &c__1, &work[vli], &c__1);
         }
-        if (*info != 0)
+        if(*info != 0)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;
         }
         i__2 = nl;
-        for (j = 1;
-                j <= i__2;
-                ++j)
+        for(j = 1; j <= i__2; ++j)
         {
             iwork[idxqi + j] = j;
             /* L10: */
         }
-        if (i__ == nd && *sqre == 0)
+        if(i__ == nd && *sqre == 0)
         {
             sqrei = 0;
         }
@@ -468,10 +494,11 @@ void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *
         vfi += nlp1;
         vli += nlp1;
         nrp1 = nr + sqrei;
-        if (*icompq == 0)
+        if(*icompq == 0)
         {
             slaset_("A", &nrp1, &nrp1, &c_b11, &c_b12, &work[nwork1], &smlszp);
-            slasdq_("U", &sqrei, &nr, &nrp1, &nru, &ncc, &d__[nrf], &e[nrf], & work[nwork1], &smlszp, &work[nwork2], &nr, &work[nwork2], &nr, &work[nwork2], info);
+            slasdq_("U", &sqrei, &nr, &nrp1, &nru, &ncc, &d__[nrf], &e[nrf], &work[nwork1], &smlszp,
+                    &work[nwork2], &nr, &work[nwork2], &nr, &work[nwork2], info);
             itemp = nwork1 + (nrp1 - 1) * smlszp;
             scopy_(&nrp1, &work[nwork1], &c__1, &work[vfi], &c__1);
             scopy_(&nrp1, &work[itemp], &c__1, &work[vli], &c__1);
@@ -480,19 +507,18 @@ void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *
         {
             slaset_("A", &nr, &nr, &c_b11, &c_b12, &u[nrf + u_dim1], ldu);
             slaset_("A", &nrp1, &nrp1, &c_b11, &c_b12, &vt[nrf + vt_dim1], ldu);
-            slasdq_("U", &sqrei, &nr, &nrp1, &nr, &ncc, &d__[nrf], &e[nrf], & vt[nrf + vt_dim1], ldu, &u[nrf + u_dim1], ldu, &u[nrf + u_dim1], ldu, &work[nwork1], info);
+            slasdq_("U", &sqrei, &nr, &nrp1, &nr, &ncc, &d__[nrf], &e[nrf], &vt[nrf + vt_dim1], ldu,
+                    &u[nrf + u_dim1], ldu, &u[nrf + u_dim1], ldu, &work[nwork1], info);
             scopy_(&nrp1, &vt[nrf + vt_dim1], &c__1, &work[vfi], &c__1);
-            scopy_(&nrp1, &vt[nrf + nrp1 * vt_dim1], &c__1, &work[vli], &c__1) ;
+            scopy_(&nrp1, &vt[nrf + nrp1 * vt_dim1], &c__1, &work[vli], &c__1);
         }
-        if (*info != 0)
+        if(*info != 0)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;
         }
         i__2 = nr;
-        for (j = 1;
-                j <= i__2;
-                ++j)
+        for(j = 1; j <= i__2; ++j)
         {
             iwork[idxqi + j] = j;
             /* L20: */
@@ -501,14 +527,12 @@ void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *
     }
     /* Now conquer each subproblem bottom-up. */
     j = pow_ii(&c__2, &nlvl);
-    for (lvl = nlvl;
-            lvl >= 1;
-            --lvl)
+    for(lvl = nlvl; lvl >= 1; --lvl)
     {
         lvl2 = (lvl << 1) - 1;
         /* Find the first node LF and last node LL on */
         /* the current level LVL. */
-        if (lvl == 1)
+        if(lvl == 1)
         {
             lf = 1;
             ll = 1;
@@ -520,9 +544,7 @@ void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *
             ll = (lf << 1) - 1;
         }
         i__1 = ll;
-        for (i__ = lf;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = lf; i__ <= i__1; ++i__)
         {
             im1 = i__ - 1;
             ic = iwork[inode + im1];
@@ -530,7 +552,7 @@ void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *
             nr = iwork[ndimr + im1];
             nlf = ic - nl;
             nrf = ic + 1;
-            if (i__ == ll)
+            if(i__ == ll)
             {
                 sqrei = *sqre;
             }
@@ -543,16 +565,26 @@ void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *
             idxqi = idxq + nlf - 1;
             alpha = d__[ic];
             beta = e[ic];
-            if (*icompq == 0)
+            if(*icompq == 0)
             {
-                slasd6_(icompq, &nl, &nr, &sqrei, &d__[nlf], &work[vfi], & work[vli], &alpha, &beta, &iwork[idxqi], &perm[ perm_offset], &givptr[1], &givcol[givcol_offset], ldgcol, &givnum[givnum_offset], ldu, &poles[ poles_offset], &difl[difl_offset], &difr[difr_offset], &z__[z_offset], &k[1], &c__[1], &s[1], &work[nwork1], &iwork[iwk], info);
+                slasd6_(icompq, &nl, &nr, &sqrei, &d__[nlf], &work[vfi], &work[vli], &alpha, &beta,
+                        &iwork[idxqi], &perm[perm_offset], &givptr[1], &givcol[givcol_offset],
+                        ldgcol, &givnum[givnum_offset], ldu, &poles[poles_offset],
+                        &difl[difl_offset], &difr[difr_offset], &z__[z_offset], &k[1], &c__[1],
+                        &s[1], &work[nwork1], &iwork[iwk], info);
             }
             else
             {
                 --j;
-                slasd6_(icompq, &nl, &nr, &sqrei, &d__[nlf], &work[vfi], & work[vli], &alpha, &beta, &iwork[idxqi], &perm[nlf + lvl * perm_dim1], &givptr[j], &givcol[nlf + lvl2 * givcol_dim1], ldgcol, &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1], & difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1], &z__[nlf + lvl * z_dim1], &k[j], &c__[j], &s[j], &work[nwork1], &iwork[iwk], info);
+                slasd6_(icompq, &nl, &nr, &sqrei, &d__[nlf], &work[vfi], &work[vli], &alpha, &beta,
+                        &iwork[idxqi], &perm[nlf + lvl * perm_dim1], &givptr[j],
+                        &givcol[nlf + lvl2 * givcol_dim1], ldgcol,
+                        &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1],
+                        &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1],
+                        &z__[nlf + lvl * z_dim1], &k[j], &c__[j], &s[j], &work[nwork1], &iwork[iwk],
+                        info);
             }
-            if (*info != 0)
+            if(*info != 0)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                 return;

@@ -1,5 +1,8 @@
-/* ../netlib/dpbtrs.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dpbtrs.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b DPBTRS */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DPBTRS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpbtrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpbtrs.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dpbtrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dpbtrs.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpbtrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpbtrs.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -40,7 +49,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangular factor stored in AB;
-*/
+ */
 /* > = 'L': Lower triangular factor stored in AB. */
 /* > \endverbatim */
 /* > */
@@ -72,7 +81,7 @@ static integer c__1 = 1;
 /* > first KD+1 rows of the array. The j-th column of U or L is */
 /* > stored in the j-th column of the array AB as follows: */
 /* > if UPLO ='U', AB(kd+1+i-j,j) = U(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO ='L', AB(1+i-j,j) = L(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > \endverbatim */
 /* > */
@@ -111,20 +120,26 @@ static integer c__1 = 1;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, doublereal *ab, integer *ldab, doublereal *b, integer *ldb, integer *info)
+void dpbtrs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublereal *ab, integer *ldab,
+             doublereal *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dpbtrs inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *kd, *nrhs, *ldab, *ldb);
+    AOCL_DTL_SNPRINTF("dpbtrs inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS
+                      ", ldab %" FLA_IS ", ldb %" FLA_IS "",
+                      *uplo, *n, *kd, *nrhs, *ldab, *ldb);
     /* System generated locals */
     integer ab_dim1, ab_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     integer j;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dtbsv_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dtbsv_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
+               integer *);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -154,31 +169,31 @@ void dpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, doublereal *ab
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*kd < 0)
+    else if(*kd < 0)
     {
         *info = -3;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -4;
     }
-    else if (*ldab < *kd + 1)
+    else if(*ldab < *kd + 1)
     {
         *info = -6;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DPBTRS", &i__1, (ftnlen)6);
@@ -186,23 +201,23 @@ void dpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, doublereal *ab
         return;
     }
     /* Quick return if possible */
-    if (*n == 0 || *nrhs == 0)
+    if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (upper)
+    if(upper)
     {
         /* Solve A*X = B where A = U**T *U. */
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Solve U**T *X = B, overwriting B with X. */
-            dtbsv_("Upper", "Transpose", "Non-unit", n, kd, &ab[ab_offset], ldab, &b[j * b_dim1 + 1], &c__1);
+            dtbsv_("Upper", "Transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
+                   &b[j * b_dim1 + 1], &c__1);
             /* Solve U*X = B, overwriting B with X. */
-            dtbsv_("Upper", "No transpose", "Non-unit", n, kd, &ab[ab_offset], ldab, &b[j * b_dim1 + 1], &c__1);
+            dtbsv_("Upper", "No transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
+                   &b[j * b_dim1 + 1], &c__1);
             /* L10: */
         }
     }
@@ -210,14 +225,14 @@ void dpbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, doublereal *ab
     {
         /* Solve A*X = B where A = L*L**T. */
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Solve L*X = B, overwriting B with X. */
-            dtbsv_("Lower", "No transpose", "Non-unit", n, kd, &ab[ab_offset], ldab, &b[j * b_dim1 + 1], &c__1);
+            dtbsv_("Lower", "No transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
+                   &b[j * b_dim1 + 1], &c__1);
             /* Solve L**T *X = B, overwriting B with X. */
-            dtbsv_("Lower", "Transpose", "Non-unit", n, kd, &ab[ab_offset], ldab, &b[j * b_dim1 + 1], &c__1);
+            dtbsv_("Lower", "Transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
+                   &b[j * b_dim1 + 1], &c__1);
             /* L20: */
         }
     }

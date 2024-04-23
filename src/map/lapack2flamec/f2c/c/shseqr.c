@@ -1,5 +1,8 @@
-/* shseqr.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* shseqr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b11 = 0.f;
 static real c_b12 = 1.f;
@@ -11,11 +14,17 @@ static integer c__49 = 49;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SHSEQR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/shseqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/shseqr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/shseqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/shseqr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/shseqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/shseqr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -51,7 +60,7 @@ static integer c__49 = 49;
 /* > \verbatim */
 /* > JOB is CHARACTER*1 */
 /* > = 'E': compute eigenvalues only;
-*/
+ */
 /* > = 'S': compute eigenvalues and the Schur form T. */
 /* > \endverbatim */
 /* > */
@@ -59,10 +68,10 @@ static integer c__49 = 49;
 /* > \verbatim */
 /* > COMPZ is CHARACTER*1 */
 /* > = 'N': no Schur vectors are computed;
-*/
+ */
 /* > = 'I': Z is initialized to the unit matrix and the matrix Z */
 /* > of Schur vectors of H is returned;
-*/
+ */
 /* > = 'V': Z must contain an orthogonal matrix Q on entry, and */
 /* > the product Q*Z is returned. */
 /* > \endverbatim */
@@ -306,10 +315,14 @@ static integer c__49 = 49;
 /* > of Matrix Analysis, volume 23, pages 948--973, 2002. */
 /* ===================================================================== */
 /* Subroutine */
-void shseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, real *h__, integer *ldh, real *wr, real *wi, real *z__, integer *ldz, real *work, integer *lwork, integer *info)
+void shseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, real *h__,
+             integer *ldh, real *wr, real *wi, real *z__, integer *ldz, real *work, integer *lwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("shseqr inputs: job %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldz %" FLA_IS "",*job, *compz, *n, *ilo, *ihi, *ldh, *ldz);
+    AOCL_DTL_SNPRINTF("shseqr inputs: job %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS
+                      ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldz %" FLA_IS "",
+                      *job, *compz, *n, *ilo, *ihi, *ldh, *ldz);
     /* System generated locals */
     integer h_dim1, h_offset, z_dim1, z_offset, i__1, i__3;
     real r__1;
@@ -320,17 +333,24 @@ void shseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, rea
     /* Local variables */
     integer i__;
     real hl[2401] /* was [49][49] */
-    ;
+        ;
     integer kbot, nmin;
     extern logical lsame_(char *, char *, integer, integer);
     logical initz;
     real workl[49];
     logical wantt, wantz;
     extern /* Subroutine */
-    void slaqr0_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        slaqr0_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *,
+                real *, integer *, integer *, real *, integer *, real *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void slahqr_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+        void
+        slahqr_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *,
+                real *, integer *, integer *, real *, integer *, integer *),
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -377,125 +397,125 @@ void shseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, rea
     wantt = lsame_(job, "S", 1, 1);
     initz = lsame_(compz, "I", 1, 1);
     wantz = initz || lsame_(compz, "V", 1, 1);
-    work[1] = (real) fla_max(1,*n);
+    work[1] = (real)fla_max(1, *n);
     lquery = *lwork == -1;
     *info = 0;
-    if (! lsame_(job, "E", 1, 1) && ! wantt)
+    if(!lsame_(job, "E", 1, 1) && !wantt)
     {
         *info = -1;
     }
-    else if (! lsame_(compz, "N", 1, 1) && ! wantz)
+    else if(!lsame_(compz, "N", 1, 1) && !wantz)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*ilo < 1 || *ilo > fla_max(1,*n))
+    else if(*ilo < 1 || *ilo > fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*ihi < fla_min(*ilo,*n) || *ihi > *n)
+    else if(*ihi < fla_min(*ilo, *n) || *ihi > *n)
     {
         *info = -5;
     }
-    else if (*ldh < fla_max(1,*n))
+    else if(*ldh < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldz < 1 || wantz && *ldz < fla_max(1,*n))
+    else if(*ldz < 1 || wantz && *ldz < fla_max(1, *n))
     {
         *info = -11;
     }
-    else if (*lwork < fla_max(1,*n) && ! lquery)
+    else if(*lwork < fla_max(1, *n) && !lquery)
     {
         *info = -13;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         /* ==== Quick return in case of invalid argument. ==== */
         i__1 = -(*info);
         xerbla_("SHSEQR", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (*n == 0)
+    else if(*n == 0)
     {
         /* ==== Quick return in case N = 0;
         nothing to do. ==== */
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         /* ==== Quick return in case of a workspace query ==== */
-        slaqr0_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[ 1], ilo, ihi, &z__[z_offset], ldz, &work[1], lwork, info);
+        slaqr0_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[1], ilo, ihi,
+                &z__[z_offset], ldz, &work[1], lwork, info);
         /* ==== Ensure reported workspace size is backward-compatible with */
         /* . previous LAPACK versions. ==== */
         /* Computing MAX */
-        r__1 = (real) fla_max(1,*n);
-        work[1] = fla_max(r__1,work[1]);
-    AOCL_DTL_TRACE_LOG_EXIT
+        r__1 = (real)fla_max(1, *n);
+        work[1] = fla_max(r__1, work[1]);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else
     {
         /* ==== copy eigenvalues isolated by SGEBAL ==== */
         i__1 = *ilo - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             wr[i__] = h__[i__ + i__ * h_dim1];
             wi[i__] = 0.f;
             /* L10: */
         }
         i__1 = *n;
-        for (i__ = *ihi + 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = *ihi + 1; i__ <= i__1; ++i__)
         {
             wr[i__] = h__[i__ + i__ * h_dim1];
             wi[i__] = 0.f;
             /* L20: */
         }
         /* ==== Initialize Z, if requested ==== */
-        if (initz)
+        if(initz)
         {
-            slaset_("A", n, n, &c_b11, &c_b12, &z__[z_offset], ldz) ;
+            slaset_("A", n, n, &c_b11, &c_b12, &z__[z_offset], ldz);
         }
         /* ==== Quick return if possible ==== */
-        if (*ilo == *ihi)
+        if(*ilo == *ihi)
         {
             wr[*ilo] = h__[*ilo + *ilo * h_dim1];
             wi[*ilo] = 0.f;
-    AOCL_DTL_TRACE_LOG_EXIT
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         /* ==== SLAHQR/SLAQR0 crossover point ==== */
         nmin = ilaenv_(&c__12, "SHSEQR", ch__1, n, ilo, ihi, lwork);
-        nmin = fla_max(15,nmin);
+        nmin = fla_max(15, nmin);
         /* ==== SLAQR0 for big matrices;
         SLAHQR for small ones ==== */
-        if (*n > nmin)
+        if(*n > nmin)
         {
-            slaqr0_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[1], ilo, ihi, &z__[z_offset], ldz, &work[1], lwork, info);
+            slaqr0_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[1], ilo, ihi,
+                    &z__[z_offset], ldz, &work[1], lwork, info);
         }
         else
         {
             /* ==== Small matrix ==== */
-            slahqr_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[1], ilo, ihi, &z__[z_offset], ldz, info);
-            if (*info > 0)
+            slahqr_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[1], ilo, ihi,
+                    &z__[z_offset], ldz, info);
+            if(*info > 0)
             {
                 /* ==== A rare SLAHQR failure! SLAQR0 sometimes succeeds */
                 /* . when SLAHQR fails. ==== */
                 kbot = *info;
-                if (*n >= 49)
+                if(*n >= 49)
                 {
                     /* ==== Larger matrices have enough subdiagonal scratch */
                     /* . space to call SLAQR0 directly. ==== */
-                    slaqr0_(&wantt, &wantz, n, ilo, &kbot, &h__[h_offset], ldh, &wr[1], &wi[1], ilo, ihi, &z__[z_offset], ldz, &work[1], lwork, info);
+                    slaqr0_(&wantt, &wantz, n, ilo, &kbot, &h__[h_offset], ldh, &wr[1], &wi[1], ilo,
+                            ihi, &z__[z_offset], ldz, &work[1], lwork, info);
                 }
                 else
                 {
@@ -507,8 +527,9 @@ void shseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, rea
                     hl[*n + 1 + *n * 49 - 50] = 0.f;
                     i__1 = 49 - *n;
                     slaset_("A", &c__49, &i__1, &c_b11, &c_b11, &hl[(*n + 1) * 49 - 49], &c__49);
-                    slaqr0_(&wantt, &wantz, &c__49, ilo, &kbot, hl, &c__49, & wr[1], &wi[1], ilo, ihi, &z__[z_offset], ldz, workl, &c__49, info);
-                    if (wantt || *info != 0)
+                    slaqr0_(&wantt, &wantz, &c__49, ilo, &kbot, hl, &c__49, &wr[1], &wi[1], ilo,
+                            ihi, &z__[z_offset], ldz, workl, &c__49, info);
+                    if(wantt || *info != 0)
                     {
                         slacpy_("A", n, n, hl, &c__49, &h__[h_offset], ldh);
                     }
@@ -516,7 +537,7 @@ void shseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, rea
             }
         }
         /* ==== Clear out the trash, if necessary. ==== */
-        if ((wantt || *info != 0) && *n > 2)
+        if((wantt || *info != 0) && *n > 2)
         {
             i__1 = *n - 2;
             i__3 = *n - 2;
@@ -525,8 +546,8 @@ void shseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, rea
         /* ==== Ensure reported workspace size is backward-compatible with */
         /* . previous LAPACK versions. ==== */
         /* Computing MAX */
-        r__1 = (real) fla_max(1,*n);
-        work[1] = fla_max(r__1,work[1]);
+        r__1 = (real)fla_max(1, *n);
+        work[1] = fla_max(r__1, work[1]);
     }
     /* ==== End of SHSEQR ==== */
     AOCL_DTL_TRACE_LOG_EXIT

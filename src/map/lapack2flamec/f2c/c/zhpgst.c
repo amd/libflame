@@ -1,11 +1,10 @@
-/* ../netlib/zhpgst.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zhpgst.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b1 = {1., 0.};
 static integer c__1 = 1;
 /* > \brief \b ZHPGST */
 /* =========== DOCUMENTATION =========== */
@@ -13,11 +12,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZHPGST + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhpgst. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhpgst.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhpgst. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhpgst.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhpgst. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhpgst.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -52,7 +57,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > ITYPE is INTEGER */
 /* > = 1: compute inv(U**H)*A*inv(U) or inv(L)*A*inv(L**H);
-*/
+ */
 /* > = 2 or 3: compute U*A*U**H or L**H*A*L. */
 /* > \endverbatim */
 /* > */
@@ -61,7 +66,7 @@ static integer c__1 = 1;
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored and B is factored as */
 /* > U**H*U;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored and B is factored as */
 /* > L*L**H. */
 /* > \endverbatim */
@@ -79,7 +84,7 @@ static integer c__1 = 1;
 /* > A, packed columnwise in a linear array. The j-th column of A */
 /* > is stored in the array AP as follows: */
 /* > if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n. */
 /* > */
 /* > On exit, if INFO = 0, the transformed matrix, stored in the */
@@ -109,10 +114,12 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zhpgst_(integer *itype, char *uplo, integer *n, doublecomplex *ap, doublecomplex *bp, integer *info)
+void zhpgst_(integer *itype, char *uplo, integer *n, doublecomplex *ap, doublecomplex *bp,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhpgst inputs: itype %" FLA_IS ", uplo %c, n %" FLA_IS "",*itype, *uplo, *n);
+    AOCL_DTL_SNPRINTF("zhpgst inputs: itype %" FLA_IS ", uplo %c, n %" FLA_IS "", *itype, *uplo,
+                      *n);
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
     doublereal d__1, d__2;
@@ -126,13 +133,24 @@ void zhpgst_(integer *itype, char *uplo, integer *n, doublecomplex *ap, doubleco
     integer k1k1;
     doublereal bjj, bkk;
     extern /* Subroutine */
-    void zhpr2_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *);
+        void
+        zhpr2_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+               integer *, doublecomplex *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Double Complex */
-    VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        VOID
+        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                   integer *);
     logical upper;
     extern /* Subroutine */
-    void zhpmv_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+        void
+        zhpmv_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *,
+               doublecomplex *, doublecomplex *, integer *),
+        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
+        ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
+        ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -160,36 +178,34 @@ void zhpgst_(integer *itype, char *uplo, integer *n, doublecomplex *ap, doubleco
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (*itype < 1 || *itype > 3)
+    if(*itype < 1 || *itype > 3)
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZHPGST", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (*itype == 1)
+    if(*itype == 1)
     {
-        if (upper)
+        if(upper)
         {
             /* Compute inv(U**H)*A*inv(U) */
             /* J1 and JJ are the indices of A(1,j) and A(j,j) */
             jj = 0;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 j1 = jj + 1;
                 jj += j;
@@ -201,11 +217,11 @@ void zhpgst_(integer *itype, char *uplo, integer *n, doublecomplex *ap, doubleco
                 ap[i__2].i = 0.; // , expr subst
                 i__2 = jj;
                 bjj = bp[i__2].r;
-                ztpsv_(uplo, "Conjugate transpose", "Non-unit", &j, &bp[1], & ap[j1], &c__1);
+                ztpsv_(uplo, "Conjugate transpose", "Non-unit", &j, &bp[1], &ap[j1], &c__1);
                 i__2 = j - 1;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zhpmv_(uplo, &i__2, &z__1, &ap[1], &bp[j1], &c__1, &c_b1, &ap[ j1], &c__1);
+                zhpmv_(uplo, &i__2, &z__1, &ap[1], &bp[j1], &c__1, &c_b1, &ap[j1], &c__1);
                 i__2 = j - 1;
                 d__1 = 1. / bjj;
                 zdscal_(&i__2, &d__1, &ap[j1], &c__1);
@@ -228,9 +244,7 @@ void zhpgst_(integer *itype, char *uplo, integer *n, doublecomplex *ap, doubleco
             /* KK and K1K1 are the indices of A(k,k) and A(k+1,k+1) */
             kk = 1;
             i__1 = *n;
-            for (k = 1;
-                    k <= i__1;
-                    ++k)
+            for(k = 1; k <= i__1; ++k)
             {
                 k1k1 = kk + *n - k + 1;
                 /* Update the lower triangle of A(k:n,k:n) */
@@ -244,7 +258,7 @@ void zhpgst_(integer *itype, char *uplo, integer *n, doublecomplex *ap, doubleco
                 i__2 = kk;
                 ap[i__2].r = akk;
                 ap[i__2].i = 0.; // , expr subst
-                if (k < *n)
+                if(k < *n)
                 {
                     i__2 = *n - k;
                     d__1 = 1. / bkk;
@@ -253,13 +267,13 @@ void zhpgst_(integer *itype, char *uplo, integer *n, doublecomplex *ap, doubleco
                     ct.r = d__1;
                     ct.i = 0.; // , expr subst
                     i__2 = *n - k;
-                    zaxpy_(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1) ;
+                    zaxpy_(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
                     i__2 = *n - k;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
                     zhpr2_(uplo, &i__2, &z__1, &ap[kk + 1], &c__1, &bp[kk + 1], &c__1, &ap[k1k1]);
                     i__2 = *n - k;
-                    zaxpy_(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1) ;
+                    zaxpy_(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
                     i__2 = *n - k;
                     ztpsv_(uplo, "No transpose", "Non-unit", &i__2, &bp[k1k1], &ap[kk + 1], &c__1);
                 }
@@ -270,15 +284,13 @@ void zhpgst_(integer *itype, char *uplo, integer *n, doublecomplex *ap, doubleco
     }
     else
     {
-        if (upper)
+        if(upper)
         {
             /* Compute U*A*U**H */
             /* K1 and KK are the indices of A(1,k) and A(k,k) */
             kk = 0;
             i__1 = *n;
-            for (k = 1;
-                    k <= i__1;
-                    ++k)
+            for(k = 1; k <= i__1; ++k)
             {
                 k1 = kk + 1;
                 kk += k;
@@ -288,14 +300,14 @@ void zhpgst_(integer *itype, char *uplo, integer *n, doublecomplex *ap, doubleco
                 i__2 = kk;
                 bkk = bp[i__2].r;
                 i__2 = k - 1;
-                ztpmv_(uplo, "No transpose", "Non-unit", &i__2, &bp[1], &ap[ k1], &c__1);
+                ztpmv_(uplo, "No transpose", "Non-unit", &i__2, &bp[1], &ap[k1], &c__1);
                 d__1 = akk * .5;
                 ct.r = d__1;
                 ct.i = 0.; // , expr subst
                 i__2 = k - 1;
                 zaxpy_(&i__2, &ct, &bp[k1], &c__1, &ap[k1], &c__1);
                 i__2 = k - 1;
-                zhpr2_(uplo, &i__2, &c_b1, &ap[k1], &c__1, &bp[k1], &c__1, & ap[1]);
+                zhpr2_(uplo, &i__2, &c_b1, &ap[k1], &c__1, &bp[k1], &c__1, &ap[1]);
                 i__2 = k - 1;
                 zaxpy_(&i__2, &ct, &bp[k1], &c__1, &ap[k1], &c__1);
                 i__2 = k - 1;
@@ -315,9 +327,7 @@ void zhpgst_(integer *itype, char *uplo, integer *n, doublecomplex *ap, doubleco
             /* JJ and J1J1 are the indices of A(j,j) and A(j+1,j+1) */
             jj = 1;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 j1j1 = jj + *n - j + 1;
                 /* Compute the j-th column of the lower triangle of A */
@@ -336,7 +346,8 @@ void zhpgst_(integer *itype, char *uplo, integer *n, doublecomplex *ap, doubleco
                 i__2 = *n - j;
                 zdscal_(&i__2, &bjj, &ap[jj + 1], &c__1);
                 i__2 = *n - j;
-                zhpmv_(uplo, &i__2, &c_b1, &ap[j1j1], &bp[jj + 1], &c__1, & c_b1, &ap[jj + 1], &c__1);
+                zhpmv_(uplo, &i__2, &c_b1, &ap[j1j1], &bp[jj + 1], &c__1, &c_b1, &ap[jj + 1],
+                       &c__1);
                 i__2 = *n - j + 1;
                 ztpmv_(uplo, "Conjugate transpose", "Non-unit", &i__2, &bp[jj], &ap[jj], &c__1);
                 jj = j1j1;

@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/spotrf2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/spotrf2.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b9 = 1.f;
 static real c_b11 = -1.f;
@@ -47,7 +50,7 @@ static real c_b11 = -1.f;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -110,7 +113,12 @@ void spotrf2_(char *uplo, integer *n, real *a, integer *lda, integer *info)
     integer iinfo;
     logical upper;
     extern /* Subroutine */
-    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
+               real *, integer *),
+        ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *,
+               integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern logical sisnan_(real *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -140,34 +148,34 @@ void spotrf2_(char *uplo, integer *n, real *a, integer *lda, integer *info)
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SPOTRF2", &i__1, (ftnlen)7);
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         return;
     }
     /* N=1 case */
-    if (*n == 1)
+    if(*n == 1)
     {
         /* Test for non-positive-definiteness */
-        if (a[a_dim1 + 1] <= 0.f || sisnan_(&a[a_dim1 + 1]))
+        if(a[a_dim1 + 1] <= 0.f || sisnan_(&a[a_dim1 + 1]))
         {
             *info = 1;
             return;
@@ -182,20 +190,22 @@ void spotrf2_(char *uplo, integer *n, real *a, integer *lda, integer *info)
         n2 = *n - n1;
         /* Factor A11 */
         spotrf2_(uplo, &n1, &a[a_dim1 + 1], lda, &iinfo);
-        if (iinfo != 0)
+        if(iinfo != 0)
         {
             *info = iinfo;
             return;
         }
         /* Compute the Cholesky factorization A = U**T*U */
-        if (upper)
+        if(upper)
         {
             /* Update and scale A12 */
-            strsm_("L", "U", "T", "N", &n1, &n2, &c_b9, &a[a_dim1 + 1], lda, & a[(n1 + 1) * a_dim1 + 1], lda);
+            strsm_("L", "U", "T", "N", &n1, &n2, &c_b9, &a[a_dim1 + 1], lda,
+                   &a[(n1 + 1) * a_dim1 + 1], lda);
             /* Update and factor A22 */
-            ssyrk_(uplo, "T", &n2, &n1, &c_b11, &a[(n1 + 1) * a_dim1 + 1], lda, &c_b9, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+            ssyrk_(uplo, "T", &n2, &n1, &c_b11, &a[(n1 + 1) * a_dim1 + 1], lda, &c_b9,
+                   &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
             spotrf2_(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
-            if (iinfo != 0)
+            if(iinfo != 0)
             {
                 *info = iinfo + n1;
                 return;
@@ -205,11 +215,13 @@ void spotrf2_(char *uplo, integer *n, real *a, integer *lda, integer *info)
         else
         {
             /* Update and scale A21 */
-            strsm_("R", "L", "T", "N", &n2, &n1, &c_b9, &a[a_dim1 + 1], lda, & a[n1 + 1 + a_dim1], lda);
+            strsm_("R", "L", "T", "N", &n2, &n1, &c_b9, &a[a_dim1 + 1], lda, &a[n1 + 1 + a_dim1],
+                   lda);
             /* Update and factor A22 */
-            ssyrk_(uplo, "N", &n2, &n1, &c_b11, &a[n1 + 1 + a_dim1], lda, & c_b9, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+            ssyrk_(uplo, "N", &n2, &n1, &c_b11, &a[n1 + 1 + a_dim1], lda, &c_b9,
+                   &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
             spotrf2_(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
-            if (iinfo != 0)
+            if(iinfo != 0)
             {
                 *info = iinfo + n1;
                 return;
@@ -221,4 +233,3 @@ void spotrf2_(char *uplo, integer *n, real *a, integer *lda, integer *info)
     /* End of SPOTRF2 */
 }
 /* spotrf2_ */
-

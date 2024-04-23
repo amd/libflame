@@ -1,11 +1,10 @@
-/* ../netlib/clarzt.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/clarzt.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    0.f,0.f
-}
-;
+static complex c_b1 = {0.f, 0.f};
 static integer c__1 = 1;
 /* > \brief \b CLARZT forms the triangular factor T of a block reflector H = I - vtvH. */
 /* =========== DOCUMENTATION =========== */
@@ -13,11 +12,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLARZT + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarzt. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarzt.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarzt. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarzt.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarzt. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarzt.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -40,7 +45,7 @@ static integer c__1 = 1;
 /* > reflectors. */
 /* > */
 /* > If DIRECT = 'F', H = H(1) H(2) . . . H(k) and T is upper triangular;
-*/
+ */
 /* > */
 /* > If DIRECT = 'B', H = H(k) . . . H(2) H(1) and T is lower triangular. */
 /* > */
@@ -181,15 +186,18 @@ the corresponding */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void clarzt_(char *direct, char *storev, integer *n, integer * k, complex *v, integer *ldv, complex *tau, complex *t, integer *ldt)
+void clarzt_(char *direct, char *storev, integer *n, integer *k, complex *v, integer *ldv,
+             complex *tau, complex *t, integer *ldt)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clarzt inputs: direct %c, storev %c, n %lld, k %lld, ldv %lld, ldt %lld",*direct, *storev, *n, *k, *ldv, *ldt);
+    snprintf(buffer, 256, "clarzt inputs: direct %c, storev %c, n %lld, k %lld, ldv %lld, ldt %lld",
+             *direct, *storev, *n, *k, *ldv, *ldt);
 #else
-    snprintf(buffer, 256,"clarzt inputs: direct %c, storev %c, n %d, k %d, ldv %d, ldt %d",*direct, *storev, *n, *k, *ldv, *ldt);
+    snprintf(buffer, 256, "clarzt inputs: direct %c, storev %c, n %d, k %d, ldv %d, ldt %d",
+             *direct, *storev, *n, *k, *ldv, *ldt);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -199,10 +207,15 @@ void clarzt_(char *direct, char *storev, integer *n, integer * k, complex *v, in
     /* Local variables */
     integer i__, j, info;
     extern /* Subroutine */
-    void cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+        void
+        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
+               complex *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *),
+        clacgv_(integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -232,33 +245,29 @@ void clarzt_(char *direct, char *storev, integer *n, integer * k, complex *v, in
     t -= t_offset;
     /* Function Body */
     info = 0;
-    if (! lsame_(direct, "B", 1, 1))
+    if(!lsame_(direct, "B", 1, 1))
     {
         info = -1;
     }
-    else if (! lsame_(storev, "R", 1, 1))
+    else if(!lsame_(storev, "R", 1, 1))
     {
         info = -2;
     }
-    if (info != 0)
+    if(info != 0)
     {
         i__1 = -info;
         xerbla_("CLARZT", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    for (i__ = *k;
-            i__ >= 1;
-            --i__)
+    for(i__ = *k; i__ >= 1; --i__)
     {
         i__1 = i__;
-        if (tau[i__1].r == 0.f && tau[i__1].i == 0.f)
+        if(tau[i__1].r == 0.f && tau[i__1].i == 0.f)
         {
             /* H(i) = I */
             i__1 = *k;
-            for (j = i__;
-                    j <= i__1;
-                    ++j)
+            for(j = i__; j <= i__1; ++j)
             {
                 i__2 = j + i__ * t_dim1;
                 t[i__2].r = 0.f;
@@ -269,7 +278,7 @@ void clarzt_(char *direct, char *storev, integer *n, integer * k, complex *v, in
         else
         {
             /* general case */
-            if (i__ < *k)
+            if(i__ < *k)
             {
                 /* T(i+1:k,i) = - tau(i) * V(i+1:k,1:n) * V(i,1:n)**H */
                 clacgv_(n, &v[i__ + v_dim1], ldv);
@@ -277,11 +286,13 @@ void clarzt_(char *direct, char *storev, integer *n, integer * k, complex *v, in
                 i__2 = i__;
                 q__1.r = -tau[i__2].r;
                 q__1.i = -tau[i__2].i; // , expr subst
-                cgemv_("No transpose", &i__1, n, &q__1, &v[i__ + 1 + v_dim1], ldv, &v[i__ + v_dim1], ldv, &c_b1, &t[i__ + 1 + i__ * t_dim1], &c__1);
+                cgemv_("No transpose", &i__1, n, &q__1, &v[i__ + 1 + v_dim1], ldv, &v[i__ + v_dim1],
+                       ldv, &c_b1, &t[i__ + 1 + i__ * t_dim1], &c__1);
                 clacgv_(n, &v[i__ + v_dim1], ldv);
                 /* T(i+1:k,i) = T(i+1:k,i+1:k) * T(i+1:k,i) */
                 i__1 = *k - i__;
-                ctrmv_("Lower", "No transpose", "Non-unit", &i__1, &t[i__ + 1 + (i__ + 1) * t_dim1], ldt, &t[i__ + 1 + i__ * t_dim1], &c__1);
+                ctrmv_("Lower", "No transpose", "Non-unit", &i__1, &t[i__ + 1 + (i__ + 1) * t_dim1],
+                       ldt, &t[i__ + 1 + i__ * t_dim1], &c__1);
             }
             i__1 = i__ + i__ * t_dim1;
             i__2 = i__;

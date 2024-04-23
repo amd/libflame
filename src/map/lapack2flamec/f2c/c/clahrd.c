@@ -1,28 +1,31 @@
-/* ../netlib/clahrd.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/clahrd.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    0.f,0.f
-}
-;
-static complex c_b2 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {0.f, 0.f};
+static complex c_b2 = {1.f, 0.f};
 static integer c__1 = 1;
-/* > \brief \b CLAHRD reduces the first nb columns of a general rectangular matrix A so that elements below th e k-th subdiagonal are zero, and returns auxiliary matrices which are needed to apply the transformati on to the unreduced part of A. */
+/* > \brief \b CLAHRD reduces the first nb columns of a general rectangular matrix A so that
+ * elements below th e k-th subdiagonal are zero, and returns auxiliary matrices which are needed to
+ * apply the transformati on to the unreduced part of A. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLAHRD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clahrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clahrd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clahrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clahrd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clahrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clahrd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -169,15 +172,18 @@ v(i+k+1:n) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void clahrd_(integer *n, integer *k, integer *nb, complex *a, integer *lda, complex *tau, complex *t, integer *ldt, complex *y, integer *ldy)
+void clahrd_(integer *n, integer *k, integer *nb, complex *a, integer *lda, complex *tau,
+             complex *t, integer *ldt, complex *y, integer *ldy)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clahrd inputs: n %lld, k %lld, nb %lld, lda %lld, ldt %lld, ldy %lld",*n, *k, *nb, *lda, *ldt, *ldy);
+    snprintf(buffer, 256, "clahrd inputs: n %lld, k %lld, nb %lld, lda %lld, ldt %lld, ldy %lld",
+             *n, *k, *nb, *lda, *ldt, *ldy);
 #else
-    snprintf(buffer, 256,"clahrd inputs: n %d, k %d, nb %d, lda %d, ldt %d, ldy %d",*n, *k, *nb, *lda, *ldt, *ldy);
+    snprintf(buffer, 256, "clahrd inputs: n %d, k %d, nb %d, lda %d, ldt %d, ldy %d", *n, *k, *nb,
+             *lda, *ldt, *ldy);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -188,7 +194,15 @@ void clahrd_(integer *n, integer *k, integer *nb, complex *a, integer *lda, comp
     integer i__;
     complex ei;
     extern /* Subroutine */
-    void cscal_(integer *, complex *, complex *, integer *), cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *), ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *), clacgv_(integer *, complex *, integer *);
+        void
+        cscal_(integer *, complex *, complex *, integer *),
+        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
+               complex *, complex *, integer *),
+        ccopy_(integer *, complex *, integer *, complex *, integer *),
+        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *),
+        ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *),
+        clarfg_(integer *, complex *, complex *, integer *, complex *),
+        clacgv_(integer *, complex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -220,17 +234,15 @@ void clahrd_(integer *n, integer *k, integer *nb, complex *a, integer *lda, comp
     y_offset = 1 + y_dim1;
     y -= y_offset;
     /* Function Body */
-    if (*n <= 1)
+    if(*n <= 1)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     i__1 = *nb;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (i__ > 1)
+        if(i__ > 1)
         {
             /* Update A(1:n,i) */
             /* Compute i-th column of A - Y * V**H */
@@ -239,7 +251,8 @@ void clahrd_(integer *n, integer *k, integer *nb, complex *a, integer *lda, comp
             i__2 = i__ - 1;
             q__1.r = -1.f;
             q__1.i = -0.f; // , expr subst
-            cgemv_("No transpose", n, &i__2, &q__1, &y[y_offset], ldy, &a[*k + i__ - 1 + a_dim1], lda, &c_b2, &a[i__ * a_dim1 + 1], & c__1);
+            cgemv_("No transpose", n, &i__2, &q__1, &y[y_offset], ldy, &a[*k + i__ - 1 + a_dim1],
+                   lda, &c_b2, &a[i__ * a_dim1 + 1], &c__1);
             i__2 = i__ - 1;
             clacgv_(&i__2, &a[*k + i__ - 1 + a_dim1], lda);
             /* Apply I - V * T**H * V**H to this column (call it b) from the */
@@ -251,23 +264,28 @@ void clahrd_(integer *n, integer *k, integer *nb, complex *a, integer *lda, comp
             i__2 = i__ - 1;
             ccopy_(&i__2, &a[*k + 1 + i__ * a_dim1], &c__1, &t[*nb * t_dim1 + 1], &c__1);
             i__2 = i__ - 1;
-            ctrmv_("Lower", "Conjugate transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda, &t[*nb * t_dim1 + 1], &c__1);
+            ctrmv_("Lower", "Conjugate transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda,
+                   &t[*nb * t_dim1 + 1], &c__1);
             /* w := w + V2**H *b2 */
             i__2 = *n - *k - i__ + 1;
             i__3 = i__ - 1;
-            cgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[*k + i__ + a_dim1], lda, &a[*k + i__ + i__ * a_dim1], &c__1, &c_b2, & t[*nb * t_dim1 + 1], &c__1);
+            cgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[*k + i__ + a_dim1], lda,
+                   &a[*k + i__ + i__ * a_dim1], &c__1, &c_b2, &t[*nb * t_dim1 + 1], &c__1);
             /* w := T**H *w */
             i__2 = i__ - 1;
-            ctrmv_("Upper", "Conjugate transpose", "Non-unit", &i__2, &t[ t_offset], ldt, &t[*nb * t_dim1 + 1], &c__1);
+            ctrmv_("Upper", "Conjugate transpose", "Non-unit", &i__2, &t[t_offset], ldt,
+                   &t[*nb * t_dim1 + 1], &c__1);
             /* b2 := b2 - V2*w */
             i__2 = *n - *k - i__ + 1;
             i__3 = i__ - 1;
             q__1.r = -1.f;
             q__1.i = -0.f; // , expr subst
-            cgemv_("No transpose", &i__2, &i__3, &q__1, &a[*k + i__ + a_dim1], lda, &t[*nb * t_dim1 + 1], &c__1, &c_b2, &a[*k + i__ + i__ * a_dim1], &c__1);
+            cgemv_("No transpose", &i__2, &i__3, &q__1, &a[*k + i__ + a_dim1], lda,
+                   &t[*nb * t_dim1 + 1], &c__1, &c_b2, &a[*k + i__ + i__ * a_dim1], &c__1);
             /* b1 := b1 - V1*w */
             i__2 = i__ - 1;
-            ctrmv_("Lower", "No transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda, &t[*nb * t_dim1 + 1], &c__1);
+            ctrmv_("Lower", "No transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda,
+                   &t[*nb * t_dim1 + 1], &c__1);
             i__2 = i__ - 1;
             q__1.r = -1.f;
             q__1.i = -0.f; // , expr subst
@@ -284,20 +302,23 @@ void clahrd_(integer *n, integer *k, integer *nb, complex *a, integer *lda, comp
         i__2 = *n - *k - i__ + 1;
         /* Computing MIN */
         i__3 = *k + i__ + 1;
-        clarfg_(&i__2, &ei, &a[fla_min(i__3,*n) + i__ * a_dim1], &c__1, &tau[i__]) ;
+        clarfg_(&i__2, &ei, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &tau[i__]);
         i__2 = *k + i__ + i__ * a_dim1;
         a[i__2].r = 1.f;
         a[i__2].i = 0.f; // , expr subst
         /* Compute Y(1:n,i) */
         i__2 = *n - *k - i__ + 1;
-        cgemv_("No transpose", n, &i__2, &c_b2, &a[(i__ + 1) * a_dim1 + 1], lda, &a[*k + i__ + i__ * a_dim1], &c__1, &c_b1, &y[i__ * y_dim1 + 1], &c__1);
+        cgemv_("No transpose", n, &i__2, &c_b2, &a[(i__ + 1) * a_dim1 + 1], lda,
+               &a[*k + i__ + i__ * a_dim1], &c__1, &c_b1, &y[i__ * y_dim1 + 1], &c__1);
         i__2 = *n - *k - i__ + 1;
         i__3 = i__ - 1;
-        cgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[*k + i__ + a_dim1], lda, &a[*k + i__ + i__ * a_dim1], &c__1, &c_b1, &t[ i__ * t_dim1 + 1], &c__1);
+        cgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[*k + i__ + a_dim1], lda,
+               &a[*k + i__ + i__ * a_dim1], &c__1, &c_b1, &t[i__ * t_dim1 + 1], &c__1);
         i__2 = i__ - 1;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemv_("No transpose", n, &i__2, &q__1, &y[y_offset], ldy, &t[i__ * t_dim1 + 1], &c__1, &c_b2, &y[i__ * y_dim1 + 1], &c__1);
+        cgemv_("No transpose", n, &i__2, &q__1, &y[y_offset], ldy, &t[i__ * t_dim1 + 1], &c__1,
+               &c_b2, &y[i__ * y_dim1 + 1], &c__1);
         cscal_(n, &tau[i__], &y[i__ * y_dim1 + 1], &c__1);
         /* Compute T(1:i,i) */
         i__2 = i__ - 1;
@@ -306,7 +327,8 @@ void clahrd_(integer *n, integer *k, integer *nb, complex *a, integer *lda, comp
         q__1.i = -tau[i__3].i; // , expr subst
         cscal_(&i__2, &q__1, &t[i__ * t_dim1 + 1], &c__1);
         i__2 = i__ - 1;
-        ctrmv_("Upper", "No transpose", "Non-unit", &i__2, &t[t_offset], ldt, &t[i__ * t_dim1 + 1], &c__1) ;
+        ctrmv_("Upper", "No transpose", "Non-unit", &i__2, &t[t_offset], ldt, &t[i__ * t_dim1 + 1],
+               &c__1);
         i__2 = i__ + i__ * t_dim1;
         i__3 = i__;
         t[i__2].r = tau[i__3].r;

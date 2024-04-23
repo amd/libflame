@@ -1,5 +1,8 @@
-/* ../netlib/dla_gbrcond.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dla_gbrcond.f -- translated by f2c (version 20100827). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b DLA_GBRCOND estimates the Skeel condition number for a general banded matrix. */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLA_GBRCOND + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dla_gbr cond.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dla_gbr
+ * cond.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dla_gbr cond.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dla_gbr
+ * cond.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dla_gbr cond.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dla_gbr
+ * cond.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -156,10 +165,16 @@ row i of the matrix was interchanged */
 /* > \date September 2012 */
 /* > \ingroup doubleGBcomputational */
 /* ===================================================================== */
-doublereal dla_gbrcond_(char *trans, integer *n, integer *kl, integer *ku, doublereal *ab, integer *ldab, doublereal *afb, integer *ldafb, integer *ipiv, integer *cmode, doublereal *c__, integer *info, doublereal *work, integer *iwork)
+doublereal dla_gbrcond_(char *trans, integer *n, integer *kl, integer *ku, doublereal *ab,
+                        integer *ldab, doublereal *afb, integer *ldafb, integer *ipiv,
+                        integer *cmode, doublereal *c__, integer *info, doublereal *work,
+                        integer *iwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dla_gbrcond inputs: trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", cmode %" FLA_IS ", work %" FLA_IS ", iwork %" FLA_IS "",*trans, *n, *kl, *ku, *ldab, *ldafb, *cmode, *work, *iwork);
+    AOCL_DTL_SNPRINTF("dla_gbrcond inputs: trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
+                      ", ldab %" FLA_IS ", ldafb %" FLA_IS ", cmode %" FLA_IS ", work %" FLA_IS
+                      ", iwork %" FLA_IS "",
+                      *trans, *n, *kl, *ku, *ldab, *ldafb, *cmode, *work, *iwork);
     /* System generated locals */
     integer ab_dim1, ab_offset, afb_dim1, afb_offset, i__1, i__2, i__3, i__4;
     doublereal ret_val, d__1;
@@ -170,7 +185,12 @@ doublereal dla_gbrcond_(char *trans, integer *n, integer *kl, integer *ku, doubl
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dgbtrs_(char *, integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        dgbtrs_(char *, integer *, integer *, integer *, integer *, doublereal *, integer *,
+                integer *, doublereal *, integer *, integer *);
     doublereal ainvnm;
     logical notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -208,38 +228,38 @@ doublereal dla_gbrcond_(char *trans, integer *n, integer *kl, integer *ku, doubl
     ret_val = 0.;
     *info = 0;
     notrans = lsame_(trans, "N", 1, 1);
-    if (! notrans && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    if(!notrans && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*kl < 0 || *kl > *n - 1)
+    else if(*kl < 0 || *kl > *n - 1)
     {
         *info = -3;
     }
-    else if (*ku < 0 || *ku > *n - 1)
+    else if(*ku < 0 || *ku > *n - 1)
     {
         *info = -4;
     }
-    else if (*ldab < *kl + *ku + 1)
+    else if(*ldab < *kl + *ku + 1)
     {
         *info = -6;
     }
-    else if (*ldafb < (*kl << 1) + *ku + 1)
+    else if(*ldafb < (*kl << 1) + *ku + 1)
     {
         *info = -8;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DLA_GBRCOND", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_LOG_EXIT
         return ret_val;
     }
-    if (*n == 0)
+    if(*n == 0)
     {
         ret_val = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
@@ -249,38 +269,32 @@ doublereal dla_gbrcond_(char *trans, integer *n, integer *kl, integer *ku, doubl
     /* inv(R)*A*C has unit 1-norm. */
     kd = *ku + 1;
     ke = *kl + 1;
-    if (notrans)
+    if(notrans)
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             tmp = 0.;
-            if (*cmode == 1)
+            if(*cmode == 1)
             {
                 /* Computing MAX */
                 i__2 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__3 = fla_min(i__4,*n);
-                for (j = fla_max(i__2,1);
-                        j <= i__3;
-                        ++j)
+                i__3 = fla_min(i__4, *n);
+                for(j = fla_max(i__2, 1); j <= i__3; ++j)
                 {
                     tmp += (d__1 = ab[kd + i__ - j + j * ab_dim1] * c__[j], f2c_dabs(d__1));
                 }
             }
-            else if (*cmode == 0)
+            else if(*cmode == 0)
             {
                 /* Computing MAX */
                 i__3 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__2 = fla_min(i__4,*n);
-                for (j = fla_max(i__3,1);
-                        j <= i__2;
-                        ++j)
+                i__2 = fla_min(i__4, *n);
+                for(j = fla_max(i__3, 1); j <= i__2; ++j)
                 {
                     tmp += (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_dabs(d__1));
                 }
@@ -291,10 +305,8 @@ doublereal dla_gbrcond_(char *trans, integer *n, integer *kl, integer *ku, doubl
                 i__2 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__3 = fla_min(i__4,*n);
-                for (j = fla_max(i__2,1);
-                        j <= i__3;
-                        ++j)
+                i__3 = fla_min(i__4, *n);
+                for(j = fla_max(i__2, 1); j <= i__3; ++j)
                 {
                     tmp += (d__1 = ab[kd + i__ - j + j * ab_dim1] / c__[j], f2c_dabs(d__1));
                 }
@@ -305,37 +317,31 @@ doublereal dla_gbrcond_(char *trans, integer *n, integer *kl, integer *ku, doubl
     else
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             tmp = 0.;
-            if (*cmode == 1)
+            if(*cmode == 1)
             {
                 /* Computing MAX */
                 i__3 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__2 = fla_min(i__4,*n);
-                for (j = fla_max(i__3,1);
-                        j <= i__2;
-                        ++j)
+                i__2 = fla_min(i__4, *n);
+                for(j = fla_max(i__3, 1); j <= i__2; ++j)
                 {
                     tmp += (d__1 = ab[ke - i__ + j + i__ * ab_dim1] * c__[j], f2c_dabs(d__1));
                 }
             }
-            else if (*cmode == 0)
+            else if(*cmode == 0)
             {
                 /* Computing MAX */
                 i__2 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__3 = fla_min(i__4,*n);
-                for (j = fla_max(i__2,1);
-                        j <= i__3;
-                        ++j)
+                i__3 = fla_min(i__4, *n);
+                for(j = fla_max(i__2, 1); j <= i__3; ++j)
                 {
-                    tmp += (d__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_dabs(d__1) );
+                    tmp += (d__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_dabs(d__1));
                 }
             }
             else
@@ -344,10 +350,8 @@ doublereal dla_gbrcond_(char *trans, integer *n, integer *kl, integer *ku, doubl
                 i__3 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__2 = fla_min(i__4,*n);
-                for (j = fla_max(i__3,1);
-                        j <= i__2;
-                        ++j)
+                i__2 = fla_min(i__4, *n);
+                for(j = fla_max(i__3, 1); j <= i__2; ++j)
                 {
                     tmp += (d__1 = ab[ke - i__ + j + i__ * ab_dim1] / c__[j], f2c_dabs(d__1));
                 }
@@ -360,43 +364,39 @@ doublereal dla_gbrcond_(char *trans, integer *n, integer *kl, integer *ku, doubl
     kase = 0;
 L10:
     dlacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
-    if (kase != 0)
+    if(kase != 0)
     {
-        if (kase == 2)
+        if(kase == 2)
         {
             /* Multiply by R. */
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 work[i__] *= work[(*n << 1) + i__];
             }
-            if (notrans)
+            if(notrans)
             {
-                dgbtrs_("No transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1], &work[1], n, info);
+                dgbtrs_("No transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1],
+                        &work[1], n, info);
             }
             else
             {
-                dgbtrs_("Transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1], &work[1], n, info);
+                dgbtrs_("Transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1], &work[1],
+                        n, info);
             }
             /* Multiply by inv(C). */
-            if (*cmode == 1)
+            if(*cmode == 1)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     work[i__] /= c__[i__];
                 }
             }
-            else if (*cmode == -1)
+            else if(*cmode == -1)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     work[i__] *= c__[i__];
                 }
@@ -405,39 +405,35 @@ L10:
         else
         {
             /* Multiply by inv(C**T). */
-            if (*cmode == 1)
+            if(*cmode == 1)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     work[i__] /= c__[i__];
                 }
             }
-            else if (*cmode == -1)
+            else if(*cmode == -1)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     work[i__] *= c__[i__];
                 }
             }
-            if (notrans)
+            if(notrans)
             {
-                dgbtrs_("Transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1], &work[1], n, info);
+                dgbtrs_("Transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1], &work[1],
+                        n, info);
             }
             else
             {
-                dgbtrs_("No transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1], &work[1], n, info);
+                dgbtrs_("No transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1],
+                        &work[1], n, info);
             }
             /* Multiply by R. */
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 work[i__] *= work[(*n << 1) + i__];
             }
@@ -445,7 +441,7 @@ L10:
         goto L10;
     }
     /* Compute the estimate of the reciprocal condition number. */
-    if (ainvnm != 0.)
+    if(ainvnm != 0.)
     {
         ret_val = 1. / ainvnm;
     }

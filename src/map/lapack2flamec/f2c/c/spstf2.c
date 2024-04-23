@@ -1,20 +1,30 @@
-/* ../netlib/spstf2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/spstf2.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b16 = -1.f;
 static real c_b18 = 1.f;
-/* > \brief \b SPSTF2 computes the Cholesky factorization with complete pivoting of a real symmetric positive semidefinite matrix. */
+/* > \brief \b SPSTF2 computes the Cholesky factorization with complete pivoting of a real symmetric
+ * positive semidefinite matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SPSTF2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spstf2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spstf2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spstf2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spstf2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spstf2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spstf2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -131,12 +141,14 @@ static real c_b18 = 1.f;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, integer *rank, real *tol, real *work, integer *info)
+void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, integer *rank, real *tol,
+             real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"spstf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
+    snprintf(buffer, 256, "spstf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
+             *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -150,18 +162,23 @@ void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
     integer pvt;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     integer itemp;
     extern /* Subroutine */
-    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+               real *, integer *);
     real stemp;
     logical upper;
     extern /* Subroutine */
-    void sswap_(integer *, real *, integer *, real *, integer *);
+        void
+        sswap_(integer *, real *, integer *, real *, integer *);
     real sstop;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer smaxloc_(real *, integer *);
     extern logical sisnan_(real *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
@@ -194,19 +211,19 @@ void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SPSTF2", &i__1, (ftnlen)6);
@@ -214,16 +231,14 @@ void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Initialize PIV */
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         piv[i__] = i__;
         /* L100: */
@@ -232,24 +247,22 @@ void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
     pvt = 1;
     ajj = a[pvt + pvt * a_dim1];
     i__1 = *n;
-    for (i__ = 2;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 2; i__ <= i__1; ++i__)
     {
-        if (a[i__ + i__ * a_dim1] > ajj)
+        if(a[i__ + i__ * a_dim1] > ajj)
         {
             pvt = i__;
             ajj = a[pvt + pvt * a_dim1];
         }
     }
-    if (ajj <= 0.f || sisnan_(&ajj))
+    if(ajj <= 0.f || sisnan_(&ajj))
     {
         *rank = 0;
         *info = 1;
         goto L170;
     }
     /* Compute stopping value if not supplied */
-    if (*tol < 0.f)
+    if(*tol < 0.f)
     {
         sstop = *n * slamch_("Epsilon") * ajj;
     }
@@ -259,30 +272,24 @@ void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
     }
     /* Set first half of WORK to zero, holds dot products */
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         work[i__] = 0.f;
         /* L110: */
     }
-    if (upper)
+    if(upper)
     {
         /* Compute the Cholesky factorization P**T * A * P = U**T * U */
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Find pivot, test for exit, else swap rows and columns */
             /* Update dot products, compute possible pivots which are */
             /* stored in the second half of WORK */
             i__2 = *n;
-            for (i__ = j;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = j; i__ <= i__2; ++i__)
             {
-                if (j > 1)
+                if(j > 1)
                 {
                     /* Computing 2nd power */
                     r__1 = a[j - 1 + i__ * a_dim1];
@@ -291,28 +298,29 @@ void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
                 work[*n + i__] = a[i__ + i__ * a_dim1] - work[i__];
                 /* L120: */
             }
-            if (j > 1)
+            if(j > 1)
             {
                 i__2 = *n - j + 1;
                 itemp = smaxloc_(&work[*n + j], &i__2);
                 pvt = itemp + j - 1;
                 ajj = work[*n + pvt];
-                if (ajj <= sstop || sisnan_(&ajj))
+                if(ajj <= sstop || sisnan_(&ajj))
                 {
                     a[j + j * a_dim1] = ajj;
                     goto L160;
                 }
             }
-            if (j != pvt)
+            if(j != pvt)
             {
                 /* Pivot OK, so can now swap pivot rows and columns */
                 a[pvt + pvt * a_dim1] = a[j + j * a_dim1];
                 i__2 = j - 1;
                 sswap_(&i__2, &a[j * a_dim1 + 1], &c__1, &a[pvt * a_dim1 + 1], &c__1);
-                if (pvt < *n)
+                if(pvt < *n)
                 {
                     i__2 = *n - pvt;
-                    sswap_(&i__2, &a[j + (pvt + 1) * a_dim1], lda, &a[pvt + ( pvt + 1) * a_dim1], lda);
+                    sswap_(&i__2, &a[j + (pvt + 1) * a_dim1], lda, &a[pvt + (pvt + 1) * a_dim1],
+                           lda);
                 }
                 i__2 = pvt - j - 1;
                 sswap_(&i__2, &a[j + (j + 1) * a_dim1], lda, &a[j + 1 + pvt * a_dim1], &c__1);
@@ -327,11 +335,12 @@ void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
             ajj = sqrt(ajj);
             a[j + j * a_dim1] = ajj;
             /* Compute elements J+1:N of row J */
-            if (j < *n)
+            if(j < *n)
             {
                 i__2 = j - 1;
                 i__3 = *n - j;
-                sgemv_("Trans", &i__2, &i__3, &c_b16, &a[(j + 1) * a_dim1 + 1], lda, &a[j * a_dim1 + 1], &c__1, &c_b18, &a[j + (j + 1) * a_dim1], lda);
+                sgemv_("Trans", &i__2, &i__3, &c_b16, &a[(j + 1) * a_dim1 + 1], lda,
+                       &a[j * a_dim1 + 1], &c__1, &c_b18, &a[j + (j + 1) * a_dim1], lda);
                 i__2 = *n - j;
                 r__1 = 1.f / ajj;
                 sscal_(&i__2, &r__1, &a[j + (j + 1) * a_dim1], lda);
@@ -343,19 +352,15 @@ void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
     {
         /* Compute the Cholesky factorization P**T * A * P = L * L**T */
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Find pivot, test for exit, else swap rows and columns */
             /* Update dot products, compute possible pivots which are */
             /* stored in the second half of WORK */
             i__2 = *n;
-            for (i__ = j;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = j; i__ <= i__2; ++i__)
             {
-                if (j > 1)
+                if(j > 1)
                 {
                     /* Computing 2nd power */
                     r__1 = a[i__ + (j - 1) * a_dim1];
@@ -364,28 +369,29 @@ void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
                 work[*n + i__] = a[i__ + i__ * a_dim1] - work[i__];
                 /* L140: */
             }
-            if (j > 1)
+            if(j > 1)
             {
                 i__2 = *n - j + 1;
                 itemp = smaxloc_(&work[*n + j], &i__2);
                 pvt = itemp + j - 1;
                 ajj = work[*n + pvt];
-                if (ajj <= sstop || sisnan_(&ajj))
+                if(ajj <= sstop || sisnan_(&ajj))
                 {
                     a[j + j * a_dim1] = ajj;
                     goto L160;
                 }
             }
-            if (j != pvt)
+            if(j != pvt)
             {
                 /* Pivot OK, so can now swap pivot rows and columns */
                 a[pvt + pvt * a_dim1] = a[j + j * a_dim1];
                 i__2 = j - 1;
                 sswap_(&i__2, &a[j + a_dim1], lda, &a[pvt + a_dim1], lda);
-                if (pvt < *n)
+                if(pvt < *n)
                 {
                     i__2 = *n - pvt;
-                    sswap_(&i__2, &a[pvt + 1 + j * a_dim1], &c__1, &a[pvt + 1 + pvt * a_dim1], &c__1);
+                    sswap_(&i__2, &a[pvt + 1 + j * a_dim1], &c__1, &a[pvt + 1 + pvt * a_dim1],
+                           &c__1);
                 }
                 i__2 = pvt - j - 1;
                 sswap_(&i__2, &a[j + 1 + j * a_dim1], &c__1, &a[pvt + (j + 1) * a_dim1], lda);
@@ -400,11 +406,12 @@ void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
             ajj = sqrt(ajj);
             a[j + j * a_dim1] = ajj;
             /* Compute elements J+1:N of column J */
-            if (j < *n)
+            if(j < *n)
             {
                 i__2 = *n - j;
                 i__3 = j - 1;
-                sgemv_("No Trans", &i__2, &i__3, &c_b16, &a[j + 1 + a_dim1], lda, &a[j + a_dim1], lda, &c_b18, &a[j + 1 + j * a_dim1], &c__1);
+                sgemv_("No Trans", &i__2, &i__3, &c_b16, &a[j + 1 + a_dim1], lda, &a[j + a_dim1],
+                       lda, &c_b18, &a[j + 1 + j * a_dim1], &c__1);
                 i__2 = *n - j;
                 r__1 = 1.f / ajj;
                 sscal_(&i__2, &r__1, &a[j + 1 + j * a_dim1], &c__1);
@@ -425,4 +432,3 @@ L170:
     /* End of SPSTF2 */
 }
 /* spstf2_ */
-

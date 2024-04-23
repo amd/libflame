@@ -1,16 +1,25 @@
-/* ../netlib/zggbak.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zggbak.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZGGBAK */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZGGBAK + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zggbak. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zggbak.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zggbak. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zggbak.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zggbak. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zggbak.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -42,11 +51,11 @@
 /* > JOB is CHARACTER*1 */
 /* > Specifies the type of backward transformation required: */
 /* > = 'N': do nothing, return immediately;
-*/
+ */
 /* > = 'P': do backward transformation for permutation only;
-*/
+ */
 /* > = 'S': do backward transformation for scaling only;
-*/
+ */
 /* > = 'B': do backward transformations for both permutation and */
 /* > scaling. */
 /* > JOB must be the same as the argument JOB supplied to ZGGBAL. */
@@ -56,7 +65,7 @@
 /* > \verbatim */
 /* > SIDE is CHARACTER*1 */
 /* > = 'R': V contains right eigenvectors;
-*/
+ */
 /* > = 'L': V contains left eigenvectors. */
 /* > \endverbatim */
 /* > */
@@ -138,10 +147,13 @@ ILO=1 and IHI=0, if N=0. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zggbak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doublereal *lscale, doublereal *rscale, integer *m, doublecomplex *v, integer *ldv, integer *info)
+void zggbak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doublereal *lscale,
+             doublereal *rscale, integer *m, doublecomplex *v, integer *ldv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zggbak inputs: job %c, side %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", m %" FLA_IS ", ldv %" FLA_IS "",*job, *side, *n, *ilo, *ihi, *m, *ldv);
+    AOCL_DTL_SNPRINTF("zggbak inputs: job %c, side %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS
+                      ", m %" FLA_IS ", ldv %" FLA_IS "",
+                      *job, *side, *n, *ilo, *ihi, *m, *ldv);
     /* System generated locals */
     integer v_dim1, v_offset, i__1;
     /* Local variables */
@@ -149,7 +161,10 @@ void zggbak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doub
     extern logical lsame_(char *, char *, integer, integer);
     logical leftv;
     extern /* Subroutine */
-    void zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+        void
+        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     logical rightv;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -180,91 +195,88 @@ void zggbak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doub
     rightv = lsame_(side, "R", 1, 1);
     leftv = lsame_(side, "L", 1, 1);
     *info = 0;
-    if (! lsame_(job, "N", 1, 1) && ! lsame_(job, "P", 1, 1) && ! lsame_(job, "S", 1, 1) && ! lsame_(job, "B", 1, 1))
+    if(!lsame_(job, "N", 1, 1) && !lsame_(job, "P", 1, 1) && !lsame_(job, "S", 1, 1)
+       && !lsame_(job, "B", 1, 1))
     {
         *info = -1;
     }
-    else if (! rightv && ! leftv)
+    else if(!rightv && !leftv)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*ilo < 1)
+    else if(*ilo < 1)
     {
         *info = -4;
     }
-    else if (*n == 0 && *ihi == 0 && *ilo != 1)
+    else if(*n == 0 && *ihi == 0 && *ilo != 1)
     {
         *info = -4;
     }
-    else if (*n > 0 && (*ihi < *ilo || *ihi > fla_max(1,*n)))
+    else if(*n > 0 && (*ihi < *ilo || *ihi > fla_max(1, *n)))
     {
         *info = -5;
     }
-    else if (*n == 0 && *ilo == 1 && *ihi != 0)
+    else if(*n == 0 && *ilo == 1 && *ihi != 0)
     {
         *info = -5;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -8;
     }
-    else if (*ldv < fla_max(1,*n))
+    else if(*ldv < fla_max(1, *n))
     {
         *info = -10;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZGGBAK", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (*m == 0)
+    if(*m == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (lsame_(job, "N", 1, 1))
+    if(lsame_(job, "N", 1, 1))
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (*ilo == *ihi)
+    if(*ilo == *ihi)
     {
         goto L30;
     }
     /* Backward balance */
-    if (lsame_(job, "S", 1, 1) || lsame_(job, "B", 1, 1))
+    if(lsame_(job, "S", 1, 1) || lsame_(job, "B", 1, 1))
     {
         /* Backward transformation on right eigenvectors */
-        if (rightv)
+        if(rightv)
         {
             i__1 = *ihi;
-            for (i__ = *ilo;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = *ilo; i__ <= i__1; ++i__)
             {
                 zdscal_(m, &rscale[i__], &v[i__ + v_dim1], ldv);
                 /* L10: */
             }
         }
         /* Backward transformation on left eigenvectors */
-        if (leftv)
+        if(leftv)
         {
             i__1 = *ihi;
-            for (i__ = *ilo;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = *ilo; i__ <= i__1; ++i__)
             {
                 zdscal_(m, &lscale[i__], &v[i__ + v_dim1], ldv);
                 /* L20: */
@@ -273,87 +285,75 @@ void zggbak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doub
     }
     /* Backward permutation */
 L30:
-    if (lsame_(job, "P", 1, 1) || lsame_(job, "B", 1, 1))
+    if(lsame_(job, "P", 1, 1) || lsame_(job, "B", 1, 1))
     {
         /* Backward permutation on right eigenvectors */
-        if (rightv)
+        if(rightv)
         {
-            if (*ilo == 1)
+            if(*ilo == 1)
             {
                 goto L50;
             }
-            for (i__ = *ilo - 1;
-                    i__ >= 1;
-                    --i__)
+            for(i__ = *ilo - 1; i__ >= 1; --i__)
             {
-                k = (integer) rscale[i__];
-                if (k == i__)
+                k = (integer)rscale[i__];
+                if(k == i__)
                 {
                     goto L40;
                 }
                 zswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
-L40:
-                ;
+            L40:;
             }
-L50:
-            if (*ihi == *n)
+        L50:
+            if(*ihi == *n)
             {
                 goto L70;
             }
             i__1 = *n;
-            for (i__ = *ihi + 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = *ihi + 1; i__ <= i__1; ++i__)
             {
-                k = (integer) rscale[i__];
-                if (k == i__)
+                k = (integer)rscale[i__];
+                if(k == i__)
                 {
                     goto L60;
                 }
                 zswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
-L60:
-                ;
+            L60:;
             }
         }
         /* Backward permutation on left eigenvectors */
-L70:
-        if (leftv)
+    L70:
+        if(leftv)
         {
-            if (*ilo == 1)
+            if(*ilo == 1)
             {
                 goto L90;
             }
-            for (i__ = *ilo - 1;
-                    i__ >= 1;
-                    --i__)
+            for(i__ = *ilo - 1; i__ >= 1; --i__)
             {
-                k = (integer) lscale[i__];
-                if (k == i__)
+                k = (integer)lscale[i__];
+                if(k == i__)
                 {
                     goto L80;
                 }
                 zswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
-L80:
-                ;
+            L80:;
             }
-L90:
-            if (*ihi == *n)
+        L90:
+            if(*ihi == *n)
             {
                 goto L110;
             }
             i__1 = *n;
-            for (i__ = *ihi + 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = *ihi + 1; i__ <= i__1; ++i__)
             {
-                k = (integer) lscale[i__];
-                if (k == i__)
+                k = (integer)lscale[i__];
+                if(k == i__)
                 {
                     goto L100;
                 }
                 zswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
-L100:
-                ;
+            L100:;
             }
         }
     }

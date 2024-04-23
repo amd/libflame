@@ -15,7 +15,7 @@ extern double erf(double);
 REAL erf_(real *x)
 #endif
 {
-return( erf((double)*x) );
+    return (erf((double)*x));
 }
 #ifdef __cplusplus
 }

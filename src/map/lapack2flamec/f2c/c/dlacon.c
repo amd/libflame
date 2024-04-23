@@ -1,19 +1,29 @@
-/* ../netlib/dlacon.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlacon.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static doublereal c_b11 = 1.;
-/* > \brief \b DLACON estimates the 1-norm of a square matrix, using reverse communication for evaluating matr ix-vector products. */
+/* > \brief \b DLACON estimates the 1-norm of a square matrix, using reverse communication for
+ * evaluating matr ix-vector products. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLACON + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlacon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlacon.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlacon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlacon.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlacon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlacon.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -103,10 +113,11 @@ static doublereal c_b11 = 1.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlacon_(integer *n, doublereal *v, doublereal *x, integer *isgn, doublereal *est, integer *kase)
+void dlacon_(integer *n, doublereal *v, doublereal *x, integer *isgn, doublereal *est,
+             integer *kase)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlacon inputs: n %" FLA_IS ", kase %" FLA_IS "",*n, *kase);
+    AOCL_DTL_SNPRINTF("dlacon inputs: n %" FLA_IS ", kase %" FLA_IS "", *n, *kase);
     /* System generated locals */
     integer i__1;
     doublereal d__1;
@@ -122,7 +133,8 @@ void dlacon_(integer *n, doublereal *v, doublereal *x, integer *isgn, doublereal
     extern doublereal dasum_(integer *, doublereal *, integer *);
     integer jlast;
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     doublereal altsgn, estold;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -152,14 +164,12 @@ void dlacon_(integer *n, doublereal *v, doublereal *x, integer *isgn, doublereal
     --x;
     --v;
     /* Function Body */
-    if (*kase == 0)
+    if(*kase == 0)
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            x[i__] = 1. / (doublereal) (*n);
+            x[i__] = 1. / (doublereal)(*n);
             /* L10: */
         }
         *kase = 1;
@@ -167,25 +177,25 @@ void dlacon_(integer *n, doublereal *v, doublereal *x, integer *isgn, doublereal
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    switch (jump)
+    switch(jump)
     {
-    case 1:
-        goto L20;
-    case 2:
-        goto L40;
-    case 3:
-        goto L70;
-    case 4:
-        goto L110;
-    case 5:
-        goto L140;
-    default:
-        goto L150;
+        case 1:
+            goto L20;
+        case 2:
+            goto L40;
+        case 3:
+            goto L70;
+        case 4:
+            goto L110;
+        case 5:
+            goto L140;
+        default:
+            goto L150;
     }
     /* ................ ENTRY (JUMP = 1) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY A*X. */
 L20:
-    if (*n == 1)
+    if(*n == 1)
     {
         v[1] = x[1];
         *est = f2c_dabs(v[1]);
@@ -194,9 +204,7 @@ L20:
     }
     *est = dasum_(n, &x[1], &c__1);
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         x[i__] = d_sign(&c_b11, &x[i__]);
         isgn[i__] = i_dnnt(&x[i__]);
@@ -214,9 +222,7 @@ L40:
     /* MAIN LOOP - ITERATIONS 2,3,...,ITMAX. */
 L50:
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         x[i__] = 0.;
         /* L60: */
@@ -233,12 +239,10 @@ L70:
     estold = *est;
     *est = dasum_(n, &v[1], &c__1);
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         d__1 = d_sign(&c_b11, &x[i__]);
-        if (i_dnnt(&d__1) != isgn[i__])
+        if(i_dnnt(&d__1) != isgn[i__])
         {
             goto L90;
         }
@@ -247,14 +251,12 @@ L70:
     /* REPEATED SIGN VECTOR DETECTED, HENCE ALGORITHM HAS CONVERGED. */
     goto L120;
 L90: /* TEST FOR CYCLING. */
-    if (*est <= estold)
+    if(*est <= estold)
     {
         goto L120;
     }
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         x[i__] = d_sign(&c_b11, &x[i__]);
         isgn[i__] = i_dnnt(&x[i__]);
@@ -269,7 +271,7 @@ L90: /* TEST FOR CYCLING. */
 L110:
     jlast = j;
     j = idamax_(n, &x[1], &c__1);
-    if (x[jlast] != (d__1 = x[j], f2c_dabs(d__1)) && iter < 5)
+    if(x[jlast] != (d__1 = x[j], f2c_dabs(d__1)) && iter < 5)
     {
         ++iter;
         goto L50;
@@ -278,11 +280,9 @@ L110:
 L120:
     altsgn = 1.;
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        x[i__] = altsgn * ((doublereal) (i__ - 1) / (doublereal) (*n - 1) + 1.);
+        x[i__] = altsgn * ((doublereal)(i__ - 1) / (doublereal)(*n - 1) + 1.);
         altsgn = -altsgn;
         /* L130: */
     }
@@ -293,8 +293,8 @@ L120:
     /* ................ ENTRY (JUMP = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L140:
-    temp = dasum_(n, &x[1], &c__1) / (doublereal) (*n * 3) * 2.;
-    if (temp > *est)
+    temp = dasum_(n, &x[1], &c__1) / (doublereal)(*n * 3) * 2.;
+    if(temp > *est)
     {
         dcopy_(n, &x[1], &c__1, &v[1], &c__1);
         *est = temp;

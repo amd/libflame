@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/slaorhr_col_getrfnp2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/slaorhr_col_getrfnp2.f -- translated by f2c (version 20160102). You must link
+ the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b3 = 1.f;
 static integer c__1 = 1;
@@ -10,11 +13,17 @@ static real c_b19 = -1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLAORHR_GETRF2NP + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaorhr _col_getrfnp2.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaorhr
+ * _col_getrfnp2.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaorhr _col_getrfnp2.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaorhr
+ * _col_getrfnp2.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaorhr _col_getrfnp2.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaorhr
+ * _col_getrfnp2.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -45,11 +54,11 @@ static real c_b19 = -1.f;
 /* > element at each step of "modified" Gaussian elimination is at */
 /* > least one in absolute value (so that division-by-zero not */
 /* > possible during the division by the diagonal element);
-*/
+ */
 /* > */
 /* > L is a M-by-N lower triangular matrix with unit diagonal elements */
 /* > (lower trapezoidal if M > N);
-*/
+ */
 /* > */
 /* > and U is a M-by-N upper triangular matrix */
 /* > (upper trapezoidal if M < N). */
@@ -165,7 +174,7 @@ void slaorhr_col_getrfnp2_(integer *m, integer *n, real *a, integer *lda, real *
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slaorhr_col_getrfnp2 inputs: m %d, n %d, lda %d",*m, *n, *lda);
+    snprintf(buffer, 256, "slaorhr_col_getrfnp2 inputs: m %d, n %d, lda %d", *m, *n, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -176,13 +185,19 @@ void slaorhr_col_getrfnp2_(integer *m, integer *n, real *a, integer *lda, real *
     /* Local variables */
     integer i__, n1, n2, iinfo;
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *),
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *);
     real sfmin;
     extern /* Subroutine */
-    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * );
+        void
+        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
+               real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -211,19 +226,19 @@ void slaorhr_col_getrfnp2_(integer *m, integer *n, real *a, integer *lda, real *
     --d__;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SLAORHR_COL_GETRFNP2", &i__1, (ftnlen)20);
@@ -231,12 +246,12 @@ void slaorhr_col_getrfnp2_(integer *m, integer *n, real *a, integer *lda, real *
         return;
     }
     /* Quick return if possible */
-    if (fla_min(*m,*n) == 0)
+    if(fla_min(*m, *n) == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (*m == 1)
+    if(*m == 1)
     {
         /* One row case, (also recursion termination case), */
         /* use unblocked code */
@@ -245,7 +260,7 @@ void slaorhr_col_getrfnp2_(integer *m, integer *n, real *a, integer *lda, real *
         /* Construct the row of U */
         a[a_dim1 + 1] -= d__[1];
     }
-    else if (*n == 1)
+    else if(*n == 1)
     {
         /* One column case, (also recursion termination case), */
         /* use unblocked code */
@@ -257,7 +272,7 @@ void slaorhr_col_getrfnp2_(integer *m, integer *n, real *a, integer *lda, real *
         /* Determine machine safe minimum */
         sfmin = slamch_("S");
         /* Construct the subdiagonal elements of L */
-        if ((r__1 = a[a_dim1 + 1], f2c_abs(r__1)) >= sfmin)
+        if((r__1 = a[a_dim1 + 1], f2c_abs(r__1)) >= sfmin)
         {
             i__1 = *m - 1;
             r__1 = 1.f / a[a_dim1 + 1];
@@ -266,9 +281,7 @@ void slaorhr_col_getrfnp2_(integer *m, integer *n, real *a, integer *lda, real *
         else
         {
             i__1 = *m;
-            for (i__ = 2;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 2; i__ <= i__1; ++i__)
             {
                 a[i__ + a_dim1] /= a[a_dim1 + 1];
             }
@@ -277,26 +290,28 @@ void slaorhr_col_getrfnp2_(integer *m, integer *n, real *a, integer *lda, real *
     else
     {
         /* Divide the matrix B into four submatrices */
-        n1 = fla_min(*m,*n) / 2;
+        n1 = fla_min(*m, *n) / 2;
         n2 = *n - n1;
         /* Factor B11, recursive call */
         slaorhr_col_getrfnp2_(&n1, &n1, &a[a_offset], lda, &d__[1], &iinfo);
         /* Solve for B21 */
         i__1 = *m - n1;
-        strsm_("R", "U", "N", "N", &i__1, &n1, &c_b3, &a[a_offset], lda, &a[ n1 + 1 + a_dim1], lda);
+        strsm_("R", "U", "N", "N", &i__1, &n1, &c_b3, &a[a_offset], lda, &a[n1 + 1 + a_dim1], lda);
         /* Solve for B12 */
-        strsm_("L", "L", "N", "U", &n1, &n2, &c_b3, &a[a_offset], lda, &a[(n1 + 1) * a_dim1 + 1], lda);
+        strsm_("L", "L", "N", "U", &n1, &n2, &c_b3, &a[a_offset], lda, &a[(n1 + 1) * a_dim1 + 1],
+               lda);
         /* Update B22, i.e. compute the Schur complement */
         /* B22 := B22 - B21*B12 */
         i__1 = *m - n1;
-        sgemm_("N", "N", &i__1, &n2, &n1, &c_b19, &a[n1 + 1 + a_dim1], lda, & a[(n1 + 1) * a_dim1 + 1], lda, &c_b3, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+        sgemm_("N", "N", &i__1, &n2, &n1, &c_b19, &a[n1 + 1 + a_dim1], lda,
+               &a[(n1 + 1) * a_dim1 + 1], lda, &c_b3, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
         /* Factor B22, recursive call */
         i__1 = *m - n1;
-        slaorhr_col_getrfnp2_(&i__1, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &d__[n1 + 1], &iinfo);
+        slaorhr_col_getrfnp2_(&i__1, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &d__[n1 + 1],
+                              &iinfo);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of SLAORHR_COL_GETRFNP2 */
 }
 /* slaorhr_col_getrfnp2__ */
-

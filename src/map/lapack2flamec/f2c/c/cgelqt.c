@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/cgelqt.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/cgelqt.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CGELQT */
 /* Definition: */
 /* =========== */
@@ -114,15 +117,18 @@ the elements above the diagonal */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgelqt_(integer *m, integer *n, integer *mb, complex *a, integer *lda, complex *t, integer *ldt, complex *work, integer *info)
+void cgelqt_(integer *m, integer *n, integer *mb, complex *a, integer *lda, complex *t,
+             integer *ldt, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgelqt inputs: m %lld, n %lld, mb %lld, lda %lld, ldt %lld",*m, *n, *mb, *lda, *ldt);
+    snprintf(buffer, 256, "cgelqt inputs: m %lld, n %lld, mb %lld, lda %lld, ldt %lld", *m, *n, *mb,
+             *lda, *ldt);
 #else
-    snprintf(buffer, 256,"cgelqt inputs: m %d, n %d, mb %d, lda %d, ldt %d",*m, *n, *mb, *lda, *ldt);
+    snprintf(buffer, 256, "cgelqt inputs: m %d, n %d, mb %d, lda %d, ldt %d", *m, *n, *mb, *lda,
+             *ldt);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -131,7 +137,11 @@ void cgelqt_(integer *m, integer *n, integer *mb, complex *a, integer *lda, comp
     /* Local variables */
     integer i__, k, ib, iinfo;
     extern /* Subroutine */
-    void clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cgelqt3_(integer *, integer *, complex *, integer *, complex *, integer *, integer *);
+        void
+        clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *,
+                integer *, complex *, integer *, complex *, integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        cgelqt3_(integer *, integer *, complex *, integer *, complex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -158,27 +168,27 @@ void cgelqt_(integer *m, integer *n, integer *mb, complex *a, integer *lda, comp
     --work;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*mb < 1 || *mb > fla_min(*m,*n) && fla_min(*m,*n) > 0)
+    else if(*mb < 1 || *mb > fla_min(*m, *n) && fla_min(*m, *n) > 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
-    else if (*ldt < *mb)
+    else if(*ldt < *mb)
     {
         *info = -7;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CGELQT", &i__1, (ftnlen)6);
@@ -186,8 +196,8 @@ void cgelqt_(integer *m, integer *n, integer *mb, complex *a, integer *lda, comp
         return;
     }
     /* Quick return if possible */
-    k = fla_min(*m,*n);
-    if (k == 0)
+    k = fla_min(*m, *n);
+    if(k == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -195,23 +205,22 @@ void cgelqt_(integer *m, integer *n, integer *mb, complex *a, integer *lda, comp
     /* Blocked loop of length K */
     i__1 = k;
     i__2 = *mb;
-    for (i__ = 1;
-            i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-            i__ += i__2)
+    for(i__ = 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
     {
         /* Computing MIN */
         i__3 = k - i__ + 1;
-        ib = fla_min(i__3,*mb);
+        ib = fla_min(i__3, *mb);
         /* Compute the LQ factorization of the current block A(I:M,I:I+IB-1) */
         i__3 = *n - i__ + 1;
         cgelqt3_(&ib, &i__3, &a[i__ + i__ * a_dim1], lda, &t[i__ * t_dim1 + 1], ldt, &iinfo);
-        if (i__ + ib <= *m)
+        if(i__ + ib <= *m)
         {
             /* Update by applying H**T to A(I:M,I+IB:N) from the right */
             i__3 = *m - i__ - ib + 1;
             i__4 = *n - i__ + 1;
             i__5 = *m - i__ - ib + 1;
-            clarfb_("R", "N", "F", "R", &i__3, &i__4, &ib, &a[i__ + i__ * a_dim1], lda, &t[i__ * t_dim1 + 1], ldt, &a[i__ + ib + i__ * a_dim1], lda, &work[1], &i__5);
+            clarfb_("R", "N", "F", "R", &i__3, &i__4, &ib, &a[i__ + i__ * a_dim1], lda,
+                    &t[i__ * t_dim1 + 1], ldt, &a[i__ + ib + i__ * a_dim1], lda, &work[1], &i__5);
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

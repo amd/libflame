@@ -1,16 +1,25 @@
-/* ../netlib/ctfttp.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ctfttp.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CTFTTP copies a triangular matrix from the rectangular full packed format (TF) to the standard packed format (TP). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CTFTTP + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctfttp. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctfttp.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctfttp. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctfttp.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctfttp. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctfttp.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -37,16 +46,16 @@
 /* > \verbatim */
 /* > TRANSR is CHARACTER*1 */
 /* > = 'N': ARF is in Normal format;
-*/
+ */
 /* > = 'C': ARF is in Conjugate-transpose format;
-*/
+ */
 /* > \endverbatim */
 /* > */
 /* > \param[in] UPLO */
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': A is upper triangular;
-*/
+ */
 /* > = 'L': A is lower triangular. */
 /* > \endverbatim */
 /* > */
@@ -70,7 +79,7 @@
 /* > columnwise in a linear array. The j-th column of A is stored */
 /* > in the array AP as follows: */
 /* > if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n. */
 /* > \endverbatim */
 /* > */
@@ -198,15 +207,15 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, integer *info)
+void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctfttp inputs: transr %c, uplo %c, n %lld",*transr, *uplo, *n);
+    snprintf(buffer, 256, "ctfttp inputs: transr %c, uplo %c, n %lld", *transr, *uplo, *n);
 #else
-    snprintf(buffer, 256,"ctfttp inputs: transr %c, uplo %c, n %d",*transr, *uplo, *n);
+    snprintf(buffer, 256, "ctfttp inputs: transr %c, uplo %c, n %d", *transr, *uplo, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -221,7 +230,8 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
     extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -249,19 +259,19 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
     *info = 0;
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
-    if (! normaltransr && ! lsame_(transr, "C", 1, 1))
+    if(!normaltransr && !lsame_(transr, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U", 1, 1))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CTFTTP", &i__1, (ftnlen)6);
@@ -269,14 +279,14 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (normaltransr)
+        if(normaltransr)
         {
             ap[0].r = arf[0].r;
             ap[0].i = arf[0].i; // , expr subst
@@ -291,7 +301,7 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
         return;
     }
     /* Set N1 and N2 depending on LOWER */
-    if (lower)
+    if(lower)
     {
         n2 = *n / 2;
         n1 = *n - n2;
@@ -306,7 +316,7 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
     /* set lda of ARF^C;
     ARF^C is (0:(N+1)/2-1,0:N-noe) */
     /* where noe = 0 if n is even, noe = 1 if n is odd */
-    if (*n % 2 == 0)
+    if(*n % 2 == 0)
     {
         k = *n / 2;
         nisodd = FALSE_;
@@ -318,18 +328,18 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
         lda = *n;
     }
     /* ARF^C has lda rows and n+1-noe cols */
-    if (! normaltransr)
+    if(!normaltransr)
     {
         lda = (*n + 1) / 2;
     }
     /* start execution: there are eight cases */
-    if (nisodd)
+    if(nisodd)
     {
         /* N is odd */
-        if (normaltransr)
+        if(normaltransr)
         {
             /* N is odd and TRANSR = 'N' */
-            if (lower)
+            if(lower)
             {
                 /* SRPA for LOWER, NORMAL and N is odd ( a(0:n-1,0:n1-1) ) */
                 /* T1 -> a(0,0), T2 -> a(0,1), S -> a(n1,0) */
@@ -338,14 +348,10 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
                 ijp = 0;
                 jp = 0;
                 i__1 = n2;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = *n - 1;
-                    for (i__ = j;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = j; i__ <= i__2; ++i__)
                     {
                         ij = i__ + jp;
                         i__3 = ijp;
@@ -357,14 +363,10 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
                     jp += lda;
                 }
                 i__1 = n2 - 1;
-                for (i__ = 0;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 0; i__ <= i__1; ++i__)
                 {
                     i__2 = n2;
-                    for (j = i__ + 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = i__ + 1; j <= i__2; ++j)
                     {
                         ij = i__ + j * lda;
                         i__3 = ijp;
@@ -382,15 +384,11 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
                 /* T1 -> a(n2), T2 -> a(n1), S -> a(0) */
                 ijp = 0;
                 i__1 = n1 - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     ij = n2 + j;
                     i__2 = j;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         i__3 = ijp;
                         r_cnjg(&q__1, &arf[ij]);
@@ -402,15 +400,11 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
                 }
                 js = 0;
                 i__1 = *n - 1;
-                for (j = n1;
-                        j <= i__1;
-                        ++j)
+                for(j = n1; j <= i__1; ++j)
                 {
                     ij = js;
                     i__2 = js + j;
-                    for (ij = js;
-                            ij <= i__2;
-                            ++ij)
+                    for(ij = js; ij <= i__2; ++ij)
                     {
                         i__3 = ijp;
                         i__4 = ij;
@@ -425,7 +419,7 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
         else
         {
             /* N is odd and TRANSR = 'C' */
-            if (lower)
+            if(lower)
             {
                 /* SRPA for LOWER, TRANSPOSE and N is odd */
                 /* T1 -> A(0,0) , T2 -> A(1,0) , S -> A(0,n1) */
@@ -433,15 +427,11 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
                 lda=n1 */
                 ijp = 0;
                 i__1 = n2;
-                for (i__ = 0;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 0; i__ <= i__1; ++i__)
                 {
                     i__2 = *n * lda - 1;
                     i__3 = lda;
-                    for (ij = i__ * (lda + 1);
-                            i__3 < 0 ? ij >= i__2 : ij <= i__2;
-                            ij += i__3)
+                    for(ij = i__ * (lda + 1); i__3 < 0 ? ij >= i__2 : ij <= i__2; ij += i__3)
                     {
                         i__4 = ijp;
                         r_cnjg(&q__1, &arf[ij]);
@@ -452,14 +442,10 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
                 }
                 js = 1;
                 i__1 = n2 - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__3 = js + n2 - j - 1;
-                    for (ij = js;
-                            ij <= i__3;
-                            ++ij)
+                    for(ij = js; ij <= i__3; ++ij)
                     {
                         i__2 = ijp;
                         i__4 = ij;
@@ -479,14 +465,10 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
                 ijp = 0;
                 js = n2 * lda;
                 i__1 = n1 - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__3 = js + j;
-                    for (ij = js;
-                            ij <= i__3;
-                            ++ij)
+                    for(ij = js; ij <= i__3; ++ij)
                     {
                         i__2 = ijp;
                         i__4 = ij;
@@ -497,15 +479,11 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
                     js += lda;
                 }
                 i__1 = n1;
-                for (i__ = 0;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 0; i__ <= i__1; ++i__)
                 {
                     i__3 = i__ + (n1 + i__) * lda;
                     i__2 = lda;
-                    for (ij = i__;
-                            i__2 < 0 ? ij >= i__3 : ij <= i__3;
-                            ij += i__2)
+                    for(ij = i__; i__2 < 0 ? ij >= i__3 : ij <= i__3; ij += i__2)
                     {
                         i__4 = ijp;
                         r_cnjg(&q__1, &arf[ij]);
@@ -520,10 +498,10 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
     else
     {
         /* N is even */
-        if (normaltransr)
+        if(normaltransr)
         {
             /* N is even and TRANSR = 'N' */
-            if (lower)
+            if(lower)
             {
                 /* SRPA for LOWER, NORMAL, and N is even ( a(0:n,0:k-1) ) */
                 /* T1 -> a(1,0), T2 -> a(0,0), S -> a(k+1,0) */
@@ -531,14 +509,10 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
                 ijp = 0;
                 jp = 0;
                 i__1 = k - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = *n - 1;
-                    for (i__ = j;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = j; i__ <= i__2; ++i__)
                     {
                         ij = i__ + 1 + jp;
                         i__3 = ijp;
@@ -550,14 +524,10 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
                     jp += lda;
                 }
                 i__1 = k - 1;
-                for (i__ = 0;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 0; i__ <= i__1; ++i__)
                 {
                     i__2 = k - 1;
-                    for (j = i__;
-                            j <= i__2;
-                            ++j)
+                    for(j = i__; j <= i__2; ++j)
                     {
                         ij = i__ + j * lda;
                         i__3 = ijp;
@@ -575,15 +545,11 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
                 /* T1 -> a(k+1), T2 -> a(k), S -> a(0) */
                 ijp = 0;
                 i__1 = k - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     ij = k + 1 + j;
                     i__2 = j;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         i__3 = ijp;
                         r_cnjg(&q__1, &arf[ij]);
@@ -595,15 +561,11 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
                 }
                 js = 0;
                 i__1 = *n - 1;
-                for (j = k;
-                        j <= i__1;
-                        ++j)
+                for(j = k; j <= i__1; ++j)
                 {
                     ij = js;
                     i__2 = js + j;
-                    for (ij = js;
-                            ij <= i__2;
-                            ++ij)
+                    for(ij = js; ij <= i__2; ++ij)
                     {
                         i__3 = ijp;
                         i__4 = ij;
@@ -618,7 +580,7 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
         else
         {
             /* N is even and TRANSR = 'C' */
-            if (lower)
+            if(lower)
             {
                 /* SRPA for LOWER, TRANSPOSE and N is even (see paper) */
                 /* T1 -> B(0,1), T2 -> B(0,0), S -> B(0,k+1) */
@@ -626,15 +588,11 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
                 lda=k */
                 ijp = 0;
                 i__1 = k - 1;
-                for (i__ = 0;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 0; i__ <= i__1; ++i__)
                 {
                     i__2 = (*n + 1) * lda - 1;
                     i__3 = lda;
-                    for (ij = i__ + (i__ + 1) * lda;
-                            i__3 < 0 ? ij >= i__2 : ij <= i__2;
-                            ij += i__3)
+                    for(ij = i__ + (i__ + 1) * lda; i__3 < 0 ? ij >= i__2 : ij <= i__2; ij += i__3)
                     {
                         i__4 = ijp;
                         r_cnjg(&q__1, &arf[ij]);
@@ -645,14 +603,10 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
                 }
                 js = 0;
                 i__1 = k - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__3 = js + k - j - 1;
-                    for (ij = js;
-                            ij <= i__3;
-                            ++ij)
+                    for(ij = js; ij <= i__3; ++ij)
                     {
                         i__2 = ijp;
                         i__4 = ij;
@@ -672,14 +626,10 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
                 ijp = 0;
                 js = (k + 1) * lda;
                 i__1 = k - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__3 = js + j;
-                    for (ij = js;
-                            ij <= i__3;
-                            ++ij)
+                    for(ij = js; ij <= i__3; ++ij)
                     {
                         i__2 = ijp;
                         i__4 = ij;
@@ -690,15 +640,11 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex * arf, complex *ap, i
                     js += lda;
                 }
                 i__1 = k - 1;
-                for (i__ = 0;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 0; i__ <= i__1; ++i__)
                 {
                     i__3 = i__ + (k + i__) * lda;
                     i__2 = lda;
-                    for (ij = i__;
-                            i__2 < 0 ? ij >= i__3 : ij <= i__3;
-                            ij += i__2)
+                    for(ij = i__; i__2 < 0 ? ij >= i__3 : ij <= i__3; ij += i__2)
                     {
                         i__4 = ijp;
                         r_cnjg(&q__1, &arf[ij]);

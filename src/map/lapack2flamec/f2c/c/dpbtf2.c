@@ -1,19 +1,29 @@
-/* ../netlib/dpbtf2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dpbtf2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b8 = -1.;
 static integer c__1 = 1;
-/* > \brief \b DPBTF2 computes the Cholesky factorization of a symmetric/Hermitian positive definite band matr ix (unblocked algorithm). */
+/* > \brief \b DPBTF2 computes the Cholesky factorization of a symmetric/Hermitian positive definite
+ * band matr ix (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DPBTF2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpbtf2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpbtf2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dpbtf2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dpbtf2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpbtf2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpbtf2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -74,7 +84,7 @@ static integer c__1 = 1;
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > */
 /* > On exit, if INFO = 0, the triangular factor U or L from the */
@@ -132,10 +142,11 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dpbtf2_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab, integer *info)
+void dpbtf2_(char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dpbtf2 inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",*uplo, *n, *kd, *ldab);
+    AOCL_DTL_SNPRINTF("dpbtf2 inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",
+                      *uplo, *n, *kd, *ldab);
     /* System generated locals */
     integer ab_dim1, ab_offset, i__1, i__2, i__3;
     doublereal d__1;
@@ -146,11 +157,14 @@ void dpbtf2_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
     doublereal ajj;
     integer kld;
     extern /* Subroutine */
-    void dsyr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dscal_( integer *, doublereal *, doublereal *, integer *);
+        void
+        dsyr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *),
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -179,23 +193,23 @@ void dpbtf2_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*kd < 0)
+    else if(*kd < 0)
     {
         *info = -3;
     }
-    else if (*ldab < *kd + 1)
+    else if(*ldab < *kd + 1)
     {
         *info = -5;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DPBTF2", &i__1, (ftnlen)6);
@@ -203,7 +217,7 @@ void dpbtf2_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -211,18 +225,16 @@ void dpbtf2_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
     /* Computing MAX */
     i__1 = 1;
     i__2 = *ldab - 1; // , expr subst
-    kld = fla_max(i__1,i__2);
-    if (upper)
+    kld = fla_max(i__1, i__2);
+    if(upper)
     {
         /* Compute the Cholesky factorization A = U**T*U. */
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Compute U(J,J) and test for non-positive-definiteness. */
             ajj = ab[*kd + 1 + j * ab_dim1];
-            if (ajj <= 0.)
+            if(ajj <= 0.)
             {
                 goto L30;
             }
@@ -233,12 +245,13 @@ void dpbtf2_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
             /* Computing MIN */
             i__2 = *kd;
             i__3 = *n - j; // , expr subst
-            kn = fla_min(i__2,i__3);
-            if (kn > 0)
+            kn = fla_min(i__2, i__3);
+            if(kn > 0)
             {
                 d__1 = 1. / ajj;
                 dscal_(&kn, &d__1, &ab[*kd + (j + 1) * ab_dim1], &kld);
-                dsyr_("Upper", &kn, &c_b8, &ab[*kd + (j + 1) * ab_dim1], &kld, &ab[*kd + 1 + (j + 1) * ab_dim1], &kld);
+                dsyr_("Upper", &kn, &c_b8, &ab[*kd + (j + 1) * ab_dim1], &kld,
+                      &ab[*kd + 1 + (j + 1) * ab_dim1], &kld);
             }
             /* L10: */
         }
@@ -247,13 +260,11 @@ void dpbtf2_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
     {
         /* Compute the Cholesky factorization A = L*L**T. */
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Compute L(J,J) and test for non-positive-definiteness. */
             ajj = ab[j * ab_dim1 + 1];
-            if (ajj <= 0.)
+            if(ajj <= 0.)
             {
                 goto L30;
             }
@@ -264,12 +275,13 @@ void dpbtf2_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
             /* Computing MIN */
             i__2 = *kd;
             i__3 = *n - j; // , expr subst
-            kn = fla_min(i__2,i__3);
-            if (kn > 0)
+            kn = fla_min(i__2, i__3);
+            if(kn > 0)
             {
                 d__1 = 1. / ajj;
                 dscal_(&kn, &d__1, &ab[j * ab_dim1 + 2], &c__1);
-                dsyr_("Lower", &kn, &c_b8, &ab[j * ab_dim1 + 2], &c__1, &ab[( j + 1) * ab_dim1 + 1], &kld);
+                dsyr_("Lower", &kn, &c_b8, &ab[j * ab_dim1 + 2], &c__1, &ab[(j + 1) * ab_dim1 + 1],
+                      &kld);
             }
             /* L20: */
         }

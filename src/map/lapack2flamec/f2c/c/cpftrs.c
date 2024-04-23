@@ -1,22 +1,27 @@
-/* ../netlib/cpftrs.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cpftrs.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {1.f, 0.f};
 /* > \brief \b CPFTRS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CPFTRS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpftrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpftrs.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpftrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpftrs.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpftrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpftrs.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -44,7 +49,7 @@ static complex c_b1 =
 /* > \verbatim */
 /* > TRANSR is CHARACTER*1 */
 /* > = 'N': The Normal TRANSR of RFP A is stored;
-*/
+ */
 /* > = 'C': The Conjugate-transpose TRANSR of RFP A is stored. */
 /* > \endverbatim */
 /* > */
@@ -52,7 +57,7 @@ static complex c_b1 =
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of RFP A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of RFP A is stored. */
 /* > \endverbatim */
 /* > */
@@ -72,7 +77,7 @@ static complex c_b1 =
 /* > \param[in] A */
 /* > \verbatim */
 /* > A is COMPLEX array, dimension ( N*(N+1)/2 );
-*/
+ */
 /* > The triangular factor U or L from the Cholesky factorization */
 /* > of RFP A = U**H*U or RFP A = L*L**H, as computed by CPFTRF. */
 /* > See note below for more details about RFP A. */
@@ -215,15 +220,18 @@ static complex c_b1 =
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, complex *a, complex *b, integer *ldb, integer *info)
+void cpftrs_(char *transr, char *uplo, integer *n, integer *nrhs, complex *a, complex *b,
+             integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cpftrs inputs: transr %c, uplo %c, n %lld, nrhs %lld, ldb %lld",*transr, *uplo, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "cpftrs inputs: transr %c, uplo %c, n %lld, nrhs %lld, ldb %lld", *transr,
+             *uplo, *n, *nrhs, *ldb);
 #else
-    snprintf(buffer, 256,"cpftrs inputs: transr %c, uplo %c, n %d, nrhs %d, ldb %d",*transr, *uplo, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "cpftrs inputs: transr %c, uplo %c, n %d, nrhs %d, ldb %d", *transr,
+             *uplo, *n, *nrhs, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -233,10 +241,13 @@ void cpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, complex *a, c
     logical normaltransr;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void ctfsm_(char *, char *, char *, char *, char *, integer *, integer *, complex *, complex *, complex *, integer *);
+        void
+        ctfsm_(char *, char *, char *, char *, char *, integer *, integer *, complex *, complex *,
+               complex *, integer *);
     logical lower;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -266,27 +277,27 @@ void cpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, complex *a, c
     *info = 0;
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
-    if (! normaltransr && ! lsame_(transr, "C", 1, 1))
+    if(!normaltransr && !lsame_(transr, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U", 1, 1))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -4;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CPFTRS", &i__1, (ftnlen)6);
@@ -294,13 +305,13 @@ void cpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, complex *a, c
         return;
     }
     /* Quick return if possible */
-    if (*n == 0 || *nrhs == 0)
+    if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* start execution: there are two triangular solves */
-    if (lower)
+    if(lower)
     {
         ctfsm_(transr, "L", uplo, "N", "N", n, nrhs, &c_b1, a, &b[b_offset], ldb);
         ctfsm_(transr, "L", uplo, "C", "N", n, nrhs, &c_b1, a, &b[b_offset], ldb);

@@ -1,18 +1,28 @@
-/* ../netlib/sstev.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sstev.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief <b> SSTEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER m atrices</b> */
+/* > \brief <b> SSTEV computes the eigenvalues and, optionally, the left and/or right eigenvectors
+ * for OTHER m atrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SSTEV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sstev.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sstev.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sstev.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sstev.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sstev.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sstev.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -39,7 +49,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > JOBZ is CHARACTER*1 */
 /* > = 'N': Compute eigenvalues only;
-*/
+ */
 /* > = 'V': Compute eigenvalues and eigenvectors. */
 /* > \endverbatim */
 /* > */
@@ -106,12 +116,13 @@ i */
 /* > \ingroup realOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void sstev_(char *jobz, integer *n, real *d__, real *e, real * z__, integer *ldz, real *work, integer *info)
+void sstev_(char *jobz, integer *n, real *d__, real *e, real *z__, integer *ldz, real *work,
+            integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sstev inputs: jobz %c, n %" FLA_IS ", ldz %" FLA_IS "",*jobz, *n, *ldz);
+    snprintf(buffer, 256, "sstev inputs: jobz %c, n %" FLA_IS ", ldz %" FLA_IS "", *jobz, *n, *ldz);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -125,20 +136,24 @@ void sstev_(char *jobz, integer *n, real *d__, real *e, real * z__, integer *ldz
     real rmin, rmax, tnrm, sigma;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     logical wantz;
     integer iscale;
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern real slanst_(char *, integer *, real *, real *);
     extern /* Subroutine */
-    void ssterf_(integer *, real *, real *, integer *);
+        void
+        ssterf_(integer *, real *, real *, integer *);
     real smlnum;
     extern /* Subroutine */
-    void ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
+        void
+        ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -170,19 +185,19 @@ void sstev_(char *jobz, integer *n, real *d__, real *e, real * z__, integer *ldz
     /* Function Body */
     wantz = lsame_(jobz, "V", 1, 1);
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*ldz < 1 || wantz && *ldz < *n)
+    else if(*ldz < 1 || wantz && *ldz < *n)
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SSTEV ", &i__1, (ftnlen)6);
@@ -190,14 +205,14 @@ void sstev_(char *jobz, integer *n, real *d__, real *e, real * z__, integer *ldz
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (wantz)
+        if(wantz)
         {
             z__[z_dim1 + 1] = 1.f;
         }
@@ -214,17 +229,17 @@ void sstev_(char *jobz, integer *n, real *d__, real *e, real * z__, integer *ldz
     /* Scale matrix to allowable range, if necessary. */
     iscale = 0;
     tnrm = slanst_("M", n, &d__[1], &e[1]);
-    if (tnrm > 0.f && tnrm < rmin)
+    if(tnrm > 0.f && tnrm < rmin)
     {
         iscale = 1;
         sigma = rmin / tnrm;
     }
-    else if (tnrm > rmax)
+    else if(tnrm > rmax)
     {
         iscale = 1;
         sigma = rmax / tnrm;
     }
-    if (iscale == 1)
+    if(iscale == 1)
     {
         sscal_(n, &sigma, &d__[1], &c__1);
         i__1 = *n - 1;
@@ -232,7 +247,7 @@ void sstev_(char *jobz, integer *n, real *d__, real *e, real * z__, integer *ldz
     }
     /* For eigenvalues only, call SSTERF. For eigenvalues and */
     /* eigenvectors, call SSTEQR. */
-    if (! wantz)
+    if(!wantz)
     {
         ssterf_(n, &d__[1], &e[1], info);
     }
@@ -241,9 +256,9 @@ void sstev_(char *jobz, integer *n, real *d__, real *e, real * z__, integer *ldz
         ssteqr_("I", n, &d__[1], &e[1], &z__[z_offset], ldz, &work[1], info);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
-    if (iscale == 1)
+    if(iscale == 1)
     {
-        if (*info == 0)
+        if(*info == 0)
         {
             imax = *n;
         }

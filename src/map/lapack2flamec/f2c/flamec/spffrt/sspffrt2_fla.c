@@ -24,7 +24,7 @@ extern void sspr_(char *, integer *, real *, real *, integer *, real *);
 
     * @param[in,out] ap
     ap is real array, dimension (N*(N+1)/2)
-    On entry, the lower triangle of the symmetric matrix A, packed columnwise in a 
+    On entry, the lower triangle of the symmetric matrix A, packed columnwise in a
     linear array. The j-th column of A is stored in the array AP as follows:
             AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n.
     On exit, the block diagonal matrix D and the multipliers used
@@ -69,7 +69,7 @@ extern void sspr_(char *, integer *, real *, real *, integer *, real *);
     \endverbatim
     *  */
 
-void sspffrt2_fla(real *ap, integer *n, integer * ncolm, real *work, real *work2)
+void sspffrt2_fla(real *ap, integer *n, integer *ncolm, real *work, real *work2)
 {
     real d__1;
     integer i__1, k, kc;
@@ -80,24 +80,23 @@ void sspffrt2_fla(real *ap, integer *n, integer * ncolm, real *work, real *work2
     /* Factorize A as L*D*L**T using the lower triangle of A */
     /* K is the main loop index, increasing from 1 to ncolm in steps of 1 */
     kc = 1;
-    for( k = 1; k <= *ncolm; k++ )
+    for(k = 1; k <= *ncolm; k++)
     {
-       /* Update the trailing submatrix */
-       /* W(k) = L(k)*D(k) */
-       /* where L(k) is the k-th column of L */
+        /* Update the trailing submatrix */
+        /* W(k) = L(k)*D(k) */
+        /* where L(k) is the k-th column of L */
 
-       r1 = 1. / ap[kc];
-       d__1 = -r1;
+        r1 = 1. / ap[kc];
+        d__1 = -r1;
 
-       /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
-       /* A := A - L(k)*D(k)*L(k)**T = A - W(k)*(1/D(k))*W(k)**T */
-       i__1 = *n - k;
-       sspr_("Lower", &i__1, &d__1, &ap[kc + 1], &c__1, &ap[kc + *n - k + 1]);
+        /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
+        /* A := A - L(k)*D(k)*L(k)**T = A - W(k)*(1/D(k))*W(k)**T */
+        i__1 = *n - k;
+        sspr_("Lower", &i__1, &d__1, &ap[kc + 1], &c__1, &ap[kc + *n - k + 1]);
 
-       ap[kc] = r1;
-       kc = kc + *n - k + 1;
+        ap[kc] = r1;
+        kc = kc + *n - k + 1;
     }
     return;
 }
 /* sspffrt2_fla */
-

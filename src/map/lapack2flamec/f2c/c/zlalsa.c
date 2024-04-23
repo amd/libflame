@@ -1,5 +1,8 @@
-/* ../netlib/zlalsa.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlalsa.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b9 = 1.;
 static doublereal c_b10 = 0.;
@@ -10,11 +13,17 @@ static integer c__2 = 2;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLALSA + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlalsa. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlalsa.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlalsa. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlalsa.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlalsa. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlalsa.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -255,23 +264,44 @@ and if */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-void zlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, doublecomplex *b, integer *ldb, doublecomplex *bx, integer *ldbx, doublereal *u, integer *ldu, doublereal *vt, integer * k, doublereal *difl, doublereal *difr, doublereal *z__, doublereal * poles, integer *givptr, integer *givcol, integer *ldgcol, integer * perm, doublereal *givnum, doublereal *c__, doublereal *s, doublereal * rwork, integer *iwork, integer *info)
+void zlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, doublecomplex *b,
+             integer *ldb, doublecomplex *bx, integer *ldbx, doublereal *u, integer *ldu,
+             doublereal *vt, integer *k, doublereal *difl, doublereal *difr, doublereal *z__,
+             doublereal *poles, integer *givptr, integer *givcol, integer *ldgcol, integer *perm,
+             doublereal *givnum, doublereal *c__, doublereal *s, doublereal *rwork, integer *iwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlalsa inputs: icompq %" FLA_IS ", smlsiz %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldbx %" FLA_IS ", ldu %" FLA_IS ", ldgcol %" FLA_IS "",*icompq, *smlsiz, *n, *nrhs, *ldb, *ldbx, *ldu, *ldgcol);
+    AOCL_DTL_SNPRINTF("zlalsa inputs: icompq %" FLA_IS ", smlsiz %" FLA_IS ", n %" FLA_IS
+                      ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldbx %" FLA_IS ", ldu %" FLA_IS
+                      ", ldgcol %" FLA_IS "",
+                      *icompq, *smlsiz, *n, *nrhs, *ldb, *ldbx, *ldu, *ldgcol);
     /* System generated locals */
-    integer givcol_dim1, givcol_offset, perm_dim1, perm_offset, difl_dim1, difl_offset, difr_dim1, difr_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, u_dim1, u_offset, vt_dim1, vt_offset, z_dim1, z_offset, b_dim1, b_offset, bx_dim1, bx_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    integer givcol_dim1, givcol_offset, perm_dim1, perm_offset, difl_dim1, difl_offset, difr_dim1,
+        difr_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, u_dim1, u_offset,
+        vt_dim1, vt_offset, z_dim1, z_offset, b_dim1, b_offset, bx_dim1, bx_offset, i__1, i__2,
+        i__3, i__4, i__5, i__6;
     doublecomplex z__1;
     /* Builtin functions */
     double d_imag(doublecomplex *);
     integer pow_ii(integer *, integer *);
     /* Local variables */
-    integer i__, j, i1, ic, lf, nd, ll, nl, nr, im1, nlf, nrf, lvl, ndb1, nlp1, lvl2, nrp1, jcol, nlvl, sqre, jrow, jimag;
+    integer i__, j, i1, ic, lf, nd, ll, nl, nr, im1, nlf, nrf, lvl, ndb1, nlp1, lvl2, nrp1, jcol,
+        nlvl, sqre, jrow, jimag;
     extern /* Subroutine */
-    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer jreal, inode, ndiml, ndimr;
     extern /* Subroutine */
-    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlals0_(integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zlals0_(integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *, integer *, integer *, integer *, integer *,
+                doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
+                integer *, doublereal *, doublereal *, doublereal *, integer *),
+        dlasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -333,39 +363,39 @@ void zlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, double
     --iwork;
     /* Function Body */
     *info = 0;
-    if (*icompq < 0 || *icompq > 1)
+    if(*icompq < 0 || *icompq > 1)
     {
         *info = -1;
     }
-    else if (*smlsiz < 3)
+    else if(*smlsiz < 3)
     {
         *info = -2;
     }
-    else if (*n < *smlsiz)
+    else if(*n < *smlsiz)
     {
         *info = -3;
     }
-    else if (*nrhs < 1)
+    else if(*nrhs < 1)
     {
         *info = -4;
     }
-    else if (*ldb < *n)
+    else if(*ldb < *n)
     {
         *info = -6;
     }
-    else if (*ldbx < *n)
+    else if(*ldbx < *n)
     {
         *info = -8;
     }
-    else if (*ldu < *n)
+    else if(*ldu < *n)
     {
         *info = -10;
     }
-    else if (*ldgcol < *n)
+    else if(*ldgcol < *n)
     {
         *info = -19;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZLALSA", &i__1, (ftnlen)6);
@@ -379,7 +409,7 @@ void zlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, double
     dlasdt_(n, &nlvl, &nd, &iwork[inode], &iwork[ndiml], &iwork[ndimr], smlsiz);
     /* The following code applies back the left singular vector factors. */
     /* For applying back the right singular vector factors, go to 170. */
-    if (*icompq == 1)
+    if(*icompq == 1)
     {
         goto L170;
     }
@@ -389,9 +419,7 @@ void zlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, double
     /* singular vector matrices. */
     ndb1 = (nd + 1) / 2;
     i__1 = nd;
-    for (i__ = ndb1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = ndb1; i__ <= i__1; ++i__)
     {
         /* IC : center row of each node */
         /* NL : number of rows of left subproblem */
@@ -410,14 +438,10 @@ void zlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, double
         /* $ B( NLF, 1 ), LDB, ZERO, BX( NLF, 1 ), LDBX ) */
         j = nl * *nrhs << 1;
         i__2 = *nrhs;
-        for (jcol = 1;
-                jcol <= i__2;
-                ++jcol)
+        for(jcol = 1; jcol <= i__2; ++jcol)
         {
             i__3 = nlf + nl - 1;
-            for (jrow = nlf;
-                    jrow <= i__3;
-                    ++jrow)
+            for(jrow = nlf; jrow <= i__3; ++jrow)
             {
                 ++j;
                 i__4 = jrow + jcol * b_dim1;
@@ -426,17 +450,14 @@ void zlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, double
             }
             /* L20: */
         }
-        dgemm_("T", "N", &nl, nrhs, &nl, &c_b9, &u[nlf + u_dim1], ldu, &rwork[ (nl * *nrhs << 1) + 1], &nl, &c_b10, &rwork[1], &nl);
+        dgemm_("T", "N", &nl, nrhs, &nl, &c_b9, &u[nlf + u_dim1], ldu,
+               &rwork[(nl * *nrhs << 1) + 1], &nl, &c_b10, &rwork[1], &nl);
         j = nl * *nrhs << 1;
         i__2 = *nrhs;
-        for (jcol = 1;
-                jcol <= i__2;
-                ++jcol)
+        for(jcol = 1; jcol <= i__2; ++jcol)
         {
             i__3 = nlf + nl - 1;
-            for (jrow = nlf;
-                    jrow <= i__3;
-                    ++jrow)
+            for(jrow = nlf; jrow <= i__3; ++jrow)
             {
                 ++j;
                 rwork[j] = d_imag(&b[jrow + jcol * b_dim1]);
@@ -444,18 +465,15 @@ void zlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, double
             }
             /* L40: */
         }
-        dgemm_("T", "N", &nl, nrhs, &nl, &c_b9, &u[nlf + u_dim1], ldu, &rwork[ (nl * *nrhs << 1) + 1], &nl, &c_b10, &rwork[nl * *nrhs + 1], & nl);
+        dgemm_("T", "N", &nl, nrhs, &nl, &c_b9, &u[nlf + u_dim1], ldu,
+               &rwork[(nl * *nrhs << 1) + 1], &nl, &c_b10, &rwork[nl * *nrhs + 1], &nl);
         jreal = 0;
         jimag = nl * *nrhs;
         i__2 = *nrhs;
-        for (jcol = 1;
-                jcol <= i__2;
-                ++jcol)
+        for(jcol = 1; jcol <= i__2; ++jcol)
         {
             i__3 = nlf + nl - 1;
-            for (jrow = nlf;
-                    jrow <= i__3;
-                    ++jrow)
+            for(jrow = nlf; jrow <= i__3; ++jrow)
             {
                 ++jreal;
                 ++jimag;
@@ -476,14 +494,10 @@ void zlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, double
         /* $ B( NRF, 1 ), LDB, ZERO, BX( NRF, 1 ), LDBX ) */
         j = nr * *nrhs << 1;
         i__2 = *nrhs;
-        for (jcol = 1;
-                jcol <= i__2;
-                ++jcol)
+        for(jcol = 1; jcol <= i__2; ++jcol)
         {
             i__3 = nrf + nr - 1;
-            for (jrow = nrf;
-                    jrow <= i__3;
-                    ++jrow)
+            for(jrow = nrf; jrow <= i__3; ++jrow)
             {
                 ++j;
                 i__4 = jrow + jcol * b_dim1;
@@ -492,17 +506,14 @@ void zlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, double
             }
             /* L80: */
         }
-        dgemm_("T", "N", &nr, nrhs, &nr, &c_b9, &u[nrf + u_dim1], ldu, &rwork[ (nr * *nrhs << 1) + 1], &nr, &c_b10, &rwork[1], &nr);
+        dgemm_("T", "N", &nr, nrhs, &nr, &c_b9, &u[nrf + u_dim1], ldu,
+               &rwork[(nr * *nrhs << 1) + 1], &nr, &c_b10, &rwork[1], &nr);
         j = nr * *nrhs << 1;
         i__2 = *nrhs;
-        for (jcol = 1;
-                jcol <= i__2;
-                ++jcol)
+        for(jcol = 1; jcol <= i__2; ++jcol)
         {
             i__3 = nrf + nr - 1;
-            for (jrow = nrf;
-                    jrow <= i__3;
-                    ++jrow)
+            for(jrow = nrf; jrow <= i__3; ++jrow)
             {
                 ++j;
                 rwork[j] = d_imag(&b[jrow + jcol * b_dim1]);
@@ -510,18 +521,15 @@ void zlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, double
             }
             /* L100: */
         }
-        dgemm_("T", "N", &nr, nrhs, &nr, &c_b9, &u[nrf + u_dim1], ldu, &rwork[ (nr * *nrhs << 1) + 1], &nr, &c_b10, &rwork[nr * *nrhs + 1], & nr);
+        dgemm_("T", "N", &nr, nrhs, &nr, &c_b9, &u[nrf + u_dim1], ldu,
+               &rwork[(nr * *nrhs << 1) + 1], &nr, &c_b10, &rwork[nr * *nrhs + 1], &nr);
         jreal = 0;
         jimag = nr * *nrhs;
         i__2 = *nrhs;
-        for (jcol = 1;
-                jcol <= i__2;
-                ++jcol)
+        for(jcol = 1; jcol <= i__2; ++jcol)
         {
             i__3 = nrf + nr - 1;
-            for (jrow = nrf;
-                    jrow <= i__3;
-                    ++jrow)
+            for(jrow = nrf; jrow <= i__3; ++jrow)
             {
                 ++jreal;
                 ++jimag;
@@ -541,9 +549,7 @@ void zlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, double
     /* Next copy the rows of B that correspond to unchanged rows */
     /* in the bidiagonal matrix to BX. */
     i__1 = nd;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         ic = iwork[inode + i__ - 1];
         zcopy_(nrhs, &b[ic + b_dim1], ldb, &bx[ic + bx_dim1], ldbx);
@@ -553,14 +559,12 @@ void zlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, double
     /* the other subproblems bottom-up on the tree. */
     j = pow_ii(&c__2, &nlvl);
     sqre = 0;
-    for (lvl = nlvl;
-            lvl >= 1;
-            --lvl)
+    for(lvl = nlvl; lvl >= 1; --lvl)
     {
         lvl2 = (lvl << 1) - 1;
         /* find the first node LF and last node LL on */
         /* the current level LVL */
-        if (lvl == 1)
+        if(lvl == 1)
         {
             lf = 1;
             ll = 1;
@@ -572,9 +576,7 @@ void zlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, double
             ll = (lf << 1) - 1;
         }
         i__1 = ll;
-        for (i__ = lf;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = lf; i__ <= i__1; ++i__)
         {
             im1 = i__ - 1;
             ic = iwork[inode + im1];
@@ -583,7 +585,11 @@ void zlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, double
             nlf = ic - nl;
             nrf = ic + 1;
             --j;
-            zlals0_(icompq, &nl, &nr, &sqre, nrhs, &bx[nlf + bx_dim1], ldbx, & b[nlf + b_dim1], ldb, &perm[nlf + lvl * perm_dim1], & givptr[j], &givcol[nlf + lvl2 * givcol_dim1], ldgcol, & givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1], &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1], &z__[nlf + lvl * z_dim1], &k[j], &c__[ j], &s[j], &rwork[1], info);
+            zlals0_(icompq, &nl, &nr, &sqre, nrhs, &bx[nlf + bx_dim1], ldbx, &b[nlf + b_dim1], ldb,
+                    &perm[nlf + lvl * perm_dim1], &givptr[j], &givcol[nlf + lvl2 * givcol_dim1],
+                    ldgcol, &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1],
+                    &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1],
+                    &z__[nlf + lvl * z_dim1], &k[j], &c__[j], &s[j], &rwork[1], info);
             /* L150: */
         }
         /* L160: */
@@ -594,14 +600,12 @@ L170: /* First now go through the right singular vector matrices of all */
     /* the tree nodes top-down. */
     j = 0;
     i__1 = nlvl;
-    for (lvl = 1;
-            lvl <= i__1;
-            ++lvl)
+    for(lvl = 1; lvl <= i__1; ++lvl)
     {
         lvl2 = (lvl << 1) - 1;
         /* Find the first node LF and last node LL on */
         /* the current level LVL. */
-        if (lvl == 1)
+        if(lvl == 1)
         {
             lf = 1;
             ll = 1;
@@ -613,9 +617,7 @@ L170: /* First now go through the right singular vector matrices of all */
             ll = (lf << 1) - 1;
         }
         i__2 = lf;
-        for (i__ = ll;
-                i__ >= i__2;
-                --i__)
+        for(i__ = ll; i__ >= i__2; --i__)
         {
             im1 = i__ - 1;
             ic = iwork[inode + im1];
@@ -623,7 +625,7 @@ L170: /* First now go through the right singular vector matrices of all */
             nr = iwork[ndimr + im1];
             nlf = ic - nl;
             nrf = ic + 1;
-            if (i__ == ll)
+            if(i__ == ll)
             {
                 sqre = 0;
             }
@@ -632,7 +634,11 @@ L170: /* First now go through the right singular vector matrices of all */
                 sqre = 1;
             }
             ++j;
-            zlals0_(icompq, &nl, &nr, &sqre, nrhs, &b[nlf + b_dim1], ldb, &bx[ nlf + bx_dim1], ldbx, &perm[nlf + lvl * perm_dim1], & givptr[j], &givcol[nlf + lvl2 * givcol_dim1], ldgcol, & givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1], &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1], &z__[nlf + lvl * z_dim1], &k[j], &c__[ j], &s[j], &rwork[1], info);
+            zlals0_(icompq, &nl, &nr, &sqre, nrhs, &b[nlf + b_dim1], ldb, &bx[nlf + bx_dim1], ldbx,
+                    &perm[nlf + lvl * perm_dim1], &givptr[j], &givcol[nlf + lvl2 * givcol_dim1],
+                    ldgcol, &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1],
+                    &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1],
+                    &z__[nlf + lvl * z_dim1], &k[j], &c__[j], &s[j], &rwork[1], info);
             /* L180: */
         }
         /* L190: */
@@ -642,16 +648,14 @@ L170: /* First now go through the right singular vector matrices of all */
     /* matrices are in explicit form. Apply them back. */
     ndb1 = (nd + 1) / 2;
     i__1 = nd;
-    for (i__ = ndb1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = ndb1; i__ <= i__1; ++i__)
     {
         i1 = i__ - 1;
         ic = iwork[inode + i1];
         nl = iwork[ndiml + i1];
         nr = iwork[ndimr + i1];
         nlp1 = nl + 1;
-        if (i__ == nd)
+        if(i__ == nd)
         {
             nrp1 = nr;
         }
@@ -667,14 +671,10 @@ L170: /* First now go through the right singular vector matrices of all */
         /* $ B( NLF, 1 ), LDB, ZERO, BX( NLF, 1 ), LDBX ) */
         j = nlp1 * *nrhs << 1;
         i__2 = *nrhs;
-        for (jcol = 1;
-                jcol <= i__2;
-                ++jcol)
+        for(jcol = 1; jcol <= i__2; ++jcol)
         {
             i__3 = nlf + nlp1 - 1;
-            for (jrow = nlf;
-                    jrow <= i__3;
-                    ++jrow)
+            for(jrow = nlf; jrow <= i__3; ++jrow)
             {
                 ++j;
                 i__4 = jrow + jcol * b_dim1;
@@ -683,17 +683,14 @@ L170: /* First now go through the right singular vector matrices of all */
             }
             /* L210: */
         }
-        dgemm_("T", "N", &nlp1, nrhs, &nlp1, &c_b9, &vt[nlf + vt_dim1], ldu, & rwork[(nlp1 * *nrhs << 1) + 1], &nlp1, &c_b10, &rwork[1], & nlp1);
+        dgemm_("T", "N", &nlp1, nrhs, &nlp1, &c_b9, &vt[nlf + vt_dim1], ldu,
+               &rwork[(nlp1 * *nrhs << 1) + 1], &nlp1, &c_b10, &rwork[1], &nlp1);
         j = nlp1 * *nrhs << 1;
         i__2 = *nrhs;
-        for (jcol = 1;
-                jcol <= i__2;
-                ++jcol)
+        for(jcol = 1; jcol <= i__2; ++jcol)
         {
             i__3 = nlf + nlp1 - 1;
-            for (jrow = nlf;
-                    jrow <= i__3;
-                    ++jrow)
+            for(jrow = nlf; jrow <= i__3; ++jrow)
             {
                 ++j;
                 rwork[j] = d_imag(&b[jrow + jcol * b_dim1]);
@@ -701,18 +698,15 @@ L170: /* First now go through the right singular vector matrices of all */
             }
             /* L230: */
         }
-        dgemm_("T", "N", &nlp1, nrhs, &nlp1, &c_b9, &vt[nlf + vt_dim1], ldu, & rwork[(nlp1 * *nrhs << 1) + 1], &nlp1, &c_b10, &rwork[nlp1 * * nrhs + 1], &nlp1);
+        dgemm_("T", "N", &nlp1, nrhs, &nlp1, &c_b9, &vt[nlf + vt_dim1], ldu,
+               &rwork[(nlp1 * *nrhs << 1) + 1], &nlp1, &c_b10, &rwork[nlp1 * *nrhs + 1], &nlp1);
         jreal = 0;
         jimag = nlp1 * *nrhs;
         i__2 = *nrhs;
-        for (jcol = 1;
-                jcol <= i__2;
-                ++jcol)
+        for(jcol = 1; jcol <= i__2; ++jcol)
         {
             i__3 = nlf + nlp1 - 1;
-            for (jrow = nlf;
-                    jrow <= i__3;
-                    ++jrow)
+            for(jrow = nlf; jrow <= i__3; ++jrow)
             {
                 ++jreal;
                 ++jimag;
@@ -733,14 +727,10 @@ L170: /* First now go through the right singular vector matrices of all */
         /* $ B( NRF, 1 ), LDB, ZERO, BX( NRF, 1 ), LDBX ) */
         j = nrp1 * *nrhs << 1;
         i__2 = *nrhs;
-        for (jcol = 1;
-                jcol <= i__2;
-                ++jcol)
+        for(jcol = 1; jcol <= i__2; ++jcol)
         {
             i__3 = nrf + nrp1 - 1;
-            for (jrow = nrf;
-                    jrow <= i__3;
-                    ++jrow)
+            for(jrow = nrf; jrow <= i__3; ++jrow)
             {
                 ++j;
                 i__4 = jrow + jcol * b_dim1;
@@ -749,17 +739,14 @@ L170: /* First now go through the right singular vector matrices of all */
             }
             /* L270: */
         }
-        dgemm_("T", "N", &nrp1, nrhs, &nrp1, &c_b9, &vt[nrf + vt_dim1], ldu, & rwork[(nrp1 * *nrhs << 1) + 1], &nrp1, &c_b10, &rwork[1], & nrp1);
+        dgemm_("T", "N", &nrp1, nrhs, &nrp1, &c_b9, &vt[nrf + vt_dim1], ldu,
+               &rwork[(nrp1 * *nrhs << 1) + 1], &nrp1, &c_b10, &rwork[1], &nrp1);
         j = nrp1 * *nrhs << 1;
         i__2 = *nrhs;
-        for (jcol = 1;
-                jcol <= i__2;
-                ++jcol)
+        for(jcol = 1; jcol <= i__2; ++jcol)
         {
             i__3 = nrf + nrp1 - 1;
-            for (jrow = nrf;
-                    jrow <= i__3;
-                    ++jrow)
+            for(jrow = nrf; jrow <= i__3; ++jrow)
             {
                 ++j;
                 rwork[j] = d_imag(&b[jrow + jcol * b_dim1]);
@@ -767,18 +754,15 @@ L170: /* First now go through the right singular vector matrices of all */
             }
             /* L290: */
         }
-        dgemm_("T", "N", &nrp1, nrhs, &nrp1, &c_b9, &vt[nrf + vt_dim1], ldu, & rwork[(nrp1 * *nrhs << 1) + 1], &nrp1, &c_b10, &rwork[nrp1 * * nrhs + 1], &nrp1);
+        dgemm_("T", "N", &nrp1, nrhs, &nrp1, &c_b9, &vt[nrf + vt_dim1], ldu,
+               &rwork[(nrp1 * *nrhs << 1) + 1], &nrp1, &c_b10, &rwork[nrp1 * *nrhs + 1], &nrp1);
         jreal = 0;
         jimag = nrp1 * *nrhs;
         i__2 = *nrhs;
-        for (jcol = 1;
-                jcol <= i__2;
-                ++jcol)
+        for(jcol = 1; jcol <= i__2; ++jcol)
         {
             i__3 = nrf + nrp1 - 1;
-            for (jrow = nrf;
-                    jrow <= i__3;
-                    ++jrow)
+            for(jrow = nrf; jrow <= i__3; ++jrow)
             {
                 ++jreal;
                 ++jimag;

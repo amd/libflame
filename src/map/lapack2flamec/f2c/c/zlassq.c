@@ -1,16 +1,25 @@
-/* ../netlib/zlassq.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlassq.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZLASSQ updates a sum of squares represented in scaled form. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLASSQ + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlassq. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlassq.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlassq. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlassq.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlassq. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlassq.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -95,7 +104,8 @@
 void zlassq_(integer *n, doublecomplex *x, integer *incx, doublereal *scl, doublereal *sumsq)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlassq inputs: n %" FLA_IS ", incx %" FLA_IS ", scl %lf, sumsq %lf", *n, *incx, *scl, *sumsq);
+    AOCL_DTL_SNPRINTF("zlassq inputs: n %" FLA_IS ", incx %" FLA_IS ", scl %lf, sumsq %lf", *n,
+                      *incx, *scl, *sumsq);
     /* System generated locals */
     integer i__1, i__2;
     doublereal r__1, r__2;
@@ -129,19 +139,23 @@ void zlassq_(integer *n, doublecomplex *x, integer *incx, doublereal *scl, doubl
     sbi = 0.;
     /* .. */
     /* Quick return if possible */
-    if (disnan_(scl) || disnan_(sumsq)) {
-    AOCL_DTL_TRACE_LOG_EXIT
+    if(disnan_(scl) || disnan_(sumsq))
+    {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (*sumsq == 0.) {
+    if(*sumsq == 0.)
+    {
         *scl = 1.;
     }
-    if (*scl == 0.) {
+    if(*scl == 0.)
+    {
         *scl = 1.;
         *sumsq = 0.;
     }
-    if (*n <= 0) {
-    AOCL_DTL_TRACE_LOG_EXIT
+    if(*n <= 0)
+    {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute the sum of squares in 3 accumulators: */
@@ -156,48 +170,56 @@ void zlassq_(integer *n, doublecomplex *x, integer *incx, doublereal *scl, doubl
     amed = 0.;
     abig = 0.;
     ix = 1;
-    if (*incx < 0) {
+    if(*incx < 0)
+    {
         ix = 1 - (*n - 1) * *incx;
     }
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__) {
+    for(i__ = 1; i__ <= i__1; ++i__)
+    {
         i__2 = ix;
         ax = (r__1 = x[i__2].r, f2c_abs(r__1));
-        if (ax > tbig) {
+        if(ax > tbig)
+        {
             /* Computing 2nd power */
             r__1 = ax * sbig;
             abig += r__1 * r__1;
             notbig = FALSE_;
         }
-        else if (ax < tsml) {
-            if (notbig) {
+        else if(ax < tsml)
+        {
+            if(notbig)
+            {
                 /* Computing 2nd power */
                 r__1 = ax * ssml;
                 asml += r__1 * r__1;
             }
         }
-        else {
+        else
+        {
             /* Computing 2nd power */
             r__1 = ax;
             amed += r__1 * r__1;
         }
         ax = (r__1 = d_imag(&x[ix]), f2c_abs(r__1));
-        if (ax > tbig) {
+        if(ax > tbig)
+        {
             /* Computing 2nd power */
             r__1 = ax * sbig;
             abig += r__1 * r__1;
             notbig = FALSE_;
         }
-        else if (ax < tsml) {
-            if (notbig) {
+        else if(ax < tsml)
+        {
+            if(notbig)
+            {
                 /* Computing 2nd power */
                 r__1 = ax * ssml;
                 asml += r__1 * r__1;
             }
         }
-        else {
+        else
+        {
             /* Computing 2nd power */
             r__1 = ax;
             amed += r__1 * r__1;
@@ -205,46 +227,57 @@ void zlassq_(integer *n, doublecomplex *x, integer *incx, doublereal *scl, doubl
         ix += *incx;
     }
     /* Put the existing sum of squares into one of the accumulators */
-    if (*sumsq > 0.f) {
+    if(*sumsq > 0.f)
+    {
         ax = *scl * sqrt(*sumsq);
-        if (ax > tbig) {
+        if(ax > tbig)
+        {
             /* Computing 2nd power */
             r__1 = *scl * sbig;
-            abig += (r__1 * r__1)* *sumsq;
+            abig += (r__1 * r__1) * *sumsq;
             notbig = FALSE_;
         }
-        else if (ax < tsml) {
-            if (notbig) {
+        else if(ax < tsml)
+        {
+            if(notbig)
+            {
                 /* Computing 2nd power */
                 r__1 = *scl * ssml;
-                asml += (r__1 * r__1)* *sumsq;
+                asml += (r__1 * r__1) * *sumsq;
             }
         }
-        else {
+        else
+        {
             /* Computing 2nd power */
             r__1 = *scl;
-            amed += (r__1 * r__1)* *sumsq;
+            amed += (r__1 * r__1) * *sumsq;
         }
     }
     /* Combine abig and amed or amed and asml if more than one */
     /* accumulator was used. */
-    if (abig > 0.) {
-        if (amed > 0. || disnan_(&amed)) {
+    if(abig > 0.)
+    {
+        if(amed > 0. || disnan_(&amed))
+        {
             abig += amed * sbig * sbi;
         }
         *scl = 1. / sbig;
         *sumsq = abig;
     }
-    else if (asml > 0.) {
+    else if(asml > 0.)
+    {
         /* Combine amed and asml if asml > 0. */
-        if (amed > 0. || disnan_(&amed)) {
+        if(amed > 0. || disnan_(&amed))
+        {
             amed = sqrt(amed);
             asml = sqrt(asml) / ssml;
-            if (asml > amed) {
+            if(asml > amed)
+            {
                 ymin = amed;
                 ymax = asml;
             }
-            else {
+            else
+            {
                 ymin = asml;
                 ymax = amed;
             }
@@ -255,12 +288,14 @@ void zlassq_(integer *n, doublecomplex *x, integer *incx, doublereal *scl, doubl
             r__2 = ymin / ymax;
             *sumsq = r__1 * r__1 * (r__2 * r__2 + 1.);
         }
-        else {
+        else
+        {
             *scl = 1. / ssml;
             *sumsq = asml;
         }
     }
-    else {
+    else
+    {
         /* Otherwise all values are mid-range or zero */
         *scl = 1.;
         *sumsq = amed;

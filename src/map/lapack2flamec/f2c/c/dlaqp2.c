@@ -1,5 +1,8 @@
-/* ../netlib/dlaqp2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlaqp2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b DLAQP2 computes a QR factorization with column pivoting of the matrix block. */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLAQP2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaqp2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaqp2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaqp2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaqp2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaqp2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaqp2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -135,10 +144,13 @@ if JPVT(i) = 0, */
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *lda, integer *jpvt, doublereal *tau, doublereal *vn1, doublereal *vn2, doublereal *work)
+void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *lda, integer *jpvt,
+             doublereal *tau, doublereal *vn1, doublereal *vn2, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaqp2 inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS ", lda %" FLA_IS "",*m, *n, *offset, *lda);
+    AOCL_DTL_SNPRINTF("dlaqp2 inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS
+                      ", lda %" FLA_IS "",
+                      *m, *n, *offset, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1, d__2;
@@ -152,13 +164,17 @@ void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *ld
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     doublereal temp2, tol3z;
     extern /* Subroutine */
-    void dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+        void
+        dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *);
     integer offpi, itemp;
     extern /* Subroutine */
-    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    void dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+        void
+        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern integer fla_idamax(integer *, doublereal *, integer *);
     /* -- LAPACK auxiliary routine (version 3.5.0) -- */
@@ -193,13 +209,11 @@ void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *ld
     /* Function Body */
     /* Computing MIN */
     i__1 = *m - *offset;
-    mn = fla_min(i__1,*n);
+    mn = fla_min(i__1, *n);
     tol3z = sqrt(dlamch_("Epsilon"));
     /* Compute factorization. */
     i__1 = mn;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         offpi = *offset + i__;
         /* Determine ith pivot column and swap if necessary. */
@@ -217,9 +231,9 @@ void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *ld
 #else
         pvt = i__ - 1 + idamax_(&i__2, &vn1[i__], &c__1);
 #endif
-        if (pvt != i__)
+        if(pvt != i__)
         {
-            dswap_(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], & c__1);
+            dswap_(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
             itemp = jpvt[pvt];
             jpvt[pvt] = jpvt[i__];
             jpvt[i__] = itemp;
@@ -227,48 +241,48 @@ void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *ld
             vn2[pvt] = vn2[i__];
         }
         /* Generate elementary reflector H(i). */
-        if (offpi < *m)
+        if(offpi < *m)
         {
             i__2 = *m - offpi + 1;
-            dlarfg_(&i__2, &a[offpi + i__ * a_dim1], &a[offpi + 1 + i__ * a_dim1], &c__1, &tau[i__]);
+            dlarfg_(&i__2, &a[offpi + i__ * a_dim1], &a[offpi + 1 + i__ * a_dim1], &c__1,
+                    &tau[i__]);
         }
         else
         {
-            dlarfg_(&c__1, &a[*m + i__ * a_dim1], &a[*m + i__ * a_dim1], & c__1, &tau[i__]);
+            dlarfg_(&c__1, &a[*m + i__ * a_dim1], &a[*m + i__ * a_dim1], &c__1, &tau[i__]);
         }
-        if (i__ < *n)
+        if(i__ < *n)
         {
             /* Apply H(i)**T to A(offset+i:m,i+1:n) from the left. */
             aii = a[offpi + i__ * a_dim1];
             a[offpi + i__ * a_dim1] = 1.;
             i__2 = *m - offpi + 1;
             i__3 = *n - i__;
-            dlarf_("Left", &i__2, &i__3, &a[offpi + i__ * a_dim1], &c__1, & tau[i__], &a[offpi + (i__ + 1) * a_dim1], lda, &work[1]);
+            dlarf_("Left", &i__2, &i__3, &a[offpi + i__ * a_dim1], &c__1, &tau[i__],
+                   &a[offpi + (i__ + 1) * a_dim1], lda, &work[1]);
             a[offpi + i__ * a_dim1] = aii;
         }
         /* Update partial column norms. */
         i__2 = *n;
-        for (j = i__ + 1;
-                j <= i__2;
-                ++j)
+        for(j = i__ + 1; j <= i__2; ++j)
         {
-            if (vn1[j] != 0.)
+            if(vn1[j] != 0.)
             {
                 /* NOTE: The following 4 lines follow from the analysis in */
                 /* Lapack Working Note 176. */
                 /* Computing 2nd power */
                 d__2 = (d__1 = a[offpi + j * a_dim1], f2c_dabs(d__1)) / vn1[j];
                 temp = 1. - d__2 * d__2;
-                temp = fla_max(temp,0.);
+                temp = fla_max(temp, 0.);
                 /* Computing 2nd power */
                 d__1 = vn1[j] / vn2[j];
                 temp2 = temp * (d__1 * d__1);
-                if (temp2 <= tol3z)
+                if(temp2 <= tol3z)
                 {
-                    if (offpi < *m)
+                    if(offpi < *m)
                     {
                         i__3 = *m - offpi;
-                        vn1[j] = dnrm2_(&i__3, &a[offpi + 1 + j * a_dim1], & c__1);
+                        vn1[j] = dnrm2_(&i__3, &a[offpi + 1 + j * a_dim1], &c__1);
                         vn2[j] = vn1[j];
                     }
                     else

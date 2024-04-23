@@ -1,23 +1,29 @@
-/* zhegs2.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* zhegs2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b1 = {1., 0.};
 static integer c__1 = 1;
-/* > \brief \b ZHEGS2 reduces a Hermitian definite generalized eigenproblem to standard form, using the factor ization results obtained from cpotrf (unblocked algorithm). */
+/* > \brief \b ZHEGS2 reduces a Hermitian definite generalized eigenproblem to standard form, using
+ * the factor ization results obtained from cpotrf (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZHEGS2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhegs2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhegs2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhegs2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhegs2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhegs2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhegs2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -52,7 +58,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > ITYPE is INTEGER */
 /* > = 1: compute inv(U**H)*A*inv(U) or inv(L)*A*inv(L**H);
-*/
+ */
 /* > = 2 or 3: compute U*A*U**H or L**H *A*L. */
 /* > \endverbatim */
 /* > */
@@ -121,7 +127,8 @@ static integer c__1 = 1;
 /* > \ingroup complex16HEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, integer *info)
+void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, integer *lda,
+                doublecomplex *b, integer *ldb, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
@@ -132,11 +139,21 @@ void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
     doublecomplex ct;
     doublereal akk, bkk;
     extern /* Subroutine */
-    void zher2_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zher2_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+               integer *, doublecomplex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    void zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), ztrmv_( char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *), zlacgv_(integer *, doublecomplex *, integer *);
+        void
+        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
+        ztrmv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *,
+               integer *),
+        ztrsv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *,
+               integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zdscal_(integer *, doublereal *, doublecomplex *, integer *),
+        zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -167,41 +184,39 @@ void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (*itype < 1 || *itype > 3)
+    if(*itype < 1 || *itype > 3)
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZHEGS2", &i__1, (ftnlen)6);
         return;
     }
-    if (*itype == 1)
+    if(*itype == 1)
     {
-        if (upper)
+        if(upper)
         {
             /* Compute inv(U**H)*A*inv(U) */
             i__1 = *n;
-            for (k = 1;
-                    k <= i__1;
-                    ++k)
+            for(k = 1; k <= i__1; ++k)
             {
                 /* Update the upper triangle of A(k:n,k:n) */
                 i__2 = k + k * a_dim1;
@@ -214,7 +229,7 @@ void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
                 i__2 = k + k * a_dim1;
                 a[i__2].r = akk;
                 a[i__2].i = 0.; // , expr subst
-                if (k < *n)
+                if(k < *n)
                 {
                     i__2 = *n - k;
                     d__1 = 1. / bkk;
@@ -227,17 +242,21 @@ void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
                     i__2 = *n - k;
                     zlacgv_(&i__2, &b[k + (k + 1) * b_dim1], ldb);
                     i__2 = *n - k;
-                    zaxpy_(&i__2, &ct, &b[k + (k + 1) * b_dim1], ldb, &a[k + ( k + 1) * a_dim1], lda);
+                    zaxpy_(&i__2, &ct, &b[k + (k + 1) * b_dim1], ldb, &a[k + (k + 1) * a_dim1],
+                           lda);
                     i__2 = *n - k;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zher2_(uplo, &i__2, &z__1, &a[k + (k + 1) * a_dim1], lda, &b[k + (k + 1) * b_dim1], ldb, &a[k + 1 + (k + 1) * a_dim1], lda);
+                    zher2_(uplo, &i__2, &z__1, &a[k + (k + 1) * a_dim1], lda,
+                           &b[k + (k + 1) * b_dim1], ldb, &a[k + 1 + (k + 1) * a_dim1], lda);
                     i__2 = *n - k;
-                    zaxpy_(&i__2, &ct, &b[k + (k + 1) * b_dim1], ldb, &a[k + ( k + 1) * a_dim1], lda);
+                    zaxpy_(&i__2, &ct, &b[k + (k + 1) * b_dim1], ldb, &a[k + (k + 1) * a_dim1],
+                           lda);
                     i__2 = *n - k;
                     zlacgv_(&i__2, &b[k + (k + 1) * b_dim1], ldb);
                     i__2 = *n - k;
-                    ztrsv_(uplo, "Conjugate transpose", "Non-unit", &i__2, &b[ k + 1 + (k + 1) * b_dim1], ldb, &a[k + (k + 1) * a_dim1], lda);
+                    ztrsv_(uplo, "Conjugate transpose", "Non-unit", &i__2,
+                           &b[k + 1 + (k + 1) * b_dim1], ldb, &a[k + (k + 1) * a_dim1], lda);
                     i__2 = *n - k;
                     zlacgv_(&i__2, &a[k + (k + 1) * a_dim1], lda);
                 }
@@ -248,9 +267,7 @@ void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
         {
             /* Compute inv(L)*A*inv(L**H) */
             i__1 = *n;
-            for (k = 1;
-                    k <= i__1;
-                    ++k)
+            for(k = 1; k <= i__1; ++k)
             {
                 /* Update the lower triangle of A(k:n,k:n) */
                 i__2 = k + k * a_dim1;
@@ -263,7 +280,7 @@ void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
                 i__2 = k + k * a_dim1;
                 a[i__2].r = akk;
                 a[i__2].i = 0.; // , expr subst
-                if (k < *n)
+                if(k < *n)
                 {
                     i__2 = *n - k;
                     d__1 = 1. / bkk;
@@ -272,15 +289,19 @@ void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
                     ct.r = d__1;
                     ct.i = 0.; // , expr subst
                     i__2 = *n - k;
-                    zaxpy_(&i__2, &ct, &b[k + 1 + k * b_dim1], &c__1, &a[k + 1 + k * a_dim1], &c__1);
+                    zaxpy_(&i__2, &ct, &b[k + 1 + k * b_dim1], &c__1, &a[k + 1 + k * a_dim1],
+                           &c__1);
                     i__2 = *n - k;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zher2_(uplo, &i__2, &z__1, &a[k + 1 + k * a_dim1], &c__1, &b[k + 1 + k * b_dim1], &c__1, &a[k + 1 + (k + 1) * a_dim1], lda);
+                    zher2_(uplo, &i__2, &z__1, &a[k + 1 + k * a_dim1], &c__1,
+                           &b[k + 1 + k * b_dim1], &c__1, &a[k + 1 + (k + 1) * a_dim1], lda);
                     i__2 = *n - k;
-                    zaxpy_(&i__2, &ct, &b[k + 1 + k * b_dim1], &c__1, &a[k + 1 + k * a_dim1], &c__1);
+                    zaxpy_(&i__2, &ct, &b[k + 1 + k * b_dim1], &c__1, &a[k + 1 + k * a_dim1],
+                           &c__1);
                     i__2 = *n - k;
-                    ztrsv_(uplo, "No transpose", "Non-unit", &i__2, &b[k + 1 + (k + 1) * b_dim1], ldb, &a[k + 1 + k * a_dim1], &c__1);
+                    ztrsv_(uplo, "No transpose", "Non-unit", &i__2, &b[k + 1 + (k + 1) * b_dim1],
+                           ldb, &a[k + 1 + k * a_dim1], &c__1);
                 }
                 /* L20: */
             }
@@ -288,13 +309,11 @@ void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
     }
     else
     {
-        if (upper)
+        if(upper)
         {
             /* Compute U*A*U**H */
             i__1 = *n;
-            for (k = 1;
-                    k <= i__1;
-                    ++k)
+            for(k = 1; k <= i__1; ++k)
             {
                 /* Update the upper triangle of A(1:k,1:k) */
                 i__2 = k + k * a_dim1;
@@ -302,14 +321,16 @@ void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
                 i__2 = k + k * b_dim1;
                 bkk = b[i__2].r;
                 i__2 = k - 1;
-                ztrmv_(uplo, "No transpose", "Non-unit", &i__2, &b[b_offset], ldb, &a[k * a_dim1 + 1], &c__1);
+                ztrmv_(uplo, "No transpose", "Non-unit", &i__2, &b[b_offset], ldb,
+                       &a[k * a_dim1 + 1], &c__1);
                 d__1 = akk * .5;
                 ct.r = d__1;
                 ct.i = 0.; // , expr subst
                 i__2 = k - 1;
                 zaxpy_(&i__2, &ct, &b[k * b_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 i__2 = k - 1;
-                zher2_(uplo, &i__2, &c_b1, &a[k * a_dim1 + 1], &c__1, &b[k * b_dim1 + 1], &c__1, &a[a_offset], lda);
+                zher2_(uplo, &i__2, &c_b1, &a[k * a_dim1 + 1], &c__1, &b[k * b_dim1 + 1], &c__1,
+                       &a[a_offset], lda);
                 i__2 = k - 1;
                 zaxpy_(&i__2, &ct, &b[k * b_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 i__2 = k - 1;
@@ -327,9 +348,7 @@ void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
         {
             /* Compute L**H *A*L */
             i__1 = *n;
-            for (k = 1;
-                    k <= i__1;
-                    ++k)
+            for(k = 1; k <= i__1; ++k)
             {
                 /* Update the lower triangle of A(1:k,1:k) */
                 i__2 = k + k * a_dim1;
@@ -339,7 +358,8 @@ void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
                 i__2 = k - 1;
                 zlacgv_(&i__2, &a[k + a_dim1], lda);
                 i__2 = k - 1;
-                ztrmv_(uplo, "Conjugate transpose", "Non-unit", &i__2, &b[ b_offset], ldb, &a[k + a_dim1], lda);
+                ztrmv_(uplo, "Conjugate transpose", "Non-unit", &i__2, &b[b_offset], ldb,
+                       &a[k + a_dim1], lda);
                 d__1 = akk * .5;
                 ct.r = d__1;
                 ct.i = 0.; // , expr subst
@@ -348,7 +368,8 @@ void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
                 i__2 = k - 1;
                 zaxpy_(&i__2, &ct, &b[k + b_dim1], ldb, &a[k + a_dim1], lda);
                 i__2 = k - 1;
-                zher2_(uplo, &i__2, &c_b1, &a[k + a_dim1], lda, &b[k + b_dim1], ldb, &a[a_offset], lda);
+                zher2_(uplo, &i__2, &c_b1, &a[k + a_dim1], lda, &b[k + b_dim1], ldb, &a[a_offset],
+                       lda);
                 i__2 = k - 1;
                 zaxpy_(&i__2, &ct, &b[k + b_dim1], ldb, &a[k + a_dim1], lda);
                 i__2 = k - 1;

@@ -1,16 +1,25 @@
-/* ../netlib/cla_syamv.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cla_syamv.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CLA_SYAMV computes a matrix-vector product using a symmetric indefinite matrix to calculate err or bounds. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLA_SYAMV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cla_sya mv.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cla_sya
+ * mv.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cla_sya mv.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cla_sya
+ * mv.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cla_sya mv.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cla_sya
+ * mv.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -164,15 +173,18 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cla_syamv_(integer *uplo, integer *n, real *alpha, complex *a, integer *lda, complex *x, integer *incx, real *beta, real *y, integer *incy)
+void cla_syamv_(integer *uplo, integer *n, real *alpha, complex *a, integer *lda, complex *x,
+                integer *incx, real *beta, real *y, integer *incy)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cla_syamv inputs: uplo %lld, n %lld, lda %lld, incx %lld, incy %lld",*uplo, *n, *lda, *incx, *incy);
+    snprintf(buffer, 256, "cla_syamv inputs: uplo %lld, n %lld, lda %lld, incx %lld, incy %lld",
+             *uplo, *n, *lda, *incx, *incy);
 #else
-    snprintf(buffer, 256,"cla_syamv inputs: uplo %d, n %d, lda %d, incx %d, incy %d",*uplo, *n, *lda, *incx, *incy);
+    snprintf(buffer, 256, "cla_syamv inputs: uplo %d, n %d, lda %d, incx %d, incy %d", *uplo, *n,
+             *lda, *incx, *incy);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -188,7 +200,8 @@ void cla_syamv_(integer *uplo, integer *n, real *alpha, complex *a, integer *lda
     real temp, safe1;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilauplo_(char *);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -223,40 +236,40 @@ void cla_syamv_(integer *uplo, integer *n, real *alpha, complex *a, integer *lda
     --y;
     /* Function Body */
     info = 0;
-    if (*uplo != ilauplo_("U") && *uplo != ilauplo_("L") )
+    if(*uplo != ilauplo_("U") && *uplo != ilauplo_("L"))
     {
         info = 1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         info = 2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         info = 5;
     }
-    else if (*incx == 0)
+    else if(*incx == 0)
     {
         info = 7;
     }
-    else if (*incy == 0)
+    else if(*incy == 0)
     {
         info = 10;
     }
-    if (info != 0)
+    if(info != 0)
     {
         xerbla_("CLA_SYAMV", &info, (ftnlen)9);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Quick return if possible. */
-    if (*n == 0 || *alpha == 0.f && *beta == 1.f)
+    if(*n == 0 || *alpha == 0.f && *beta == 1.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Set up the start points in X and Y. */
-    if (*incx > 0)
+    if(*incx > 0)
     {
         kx = 1;
     }
@@ -264,7 +277,7 @@ void cla_syamv_(integer *uplo, integer *n, real *alpha, complex *a, integer *lda
     {
         kx = 1 - (*n - 1) * *incx;
     }
-    if (*incy > 0)
+    if(*incy > 0)
     {
         ky = 1;
     }
@@ -281,21 +294,19 @@ void cla_syamv_(integer *uplo, integer *n, real *alpha, complex *a, integer *lda
     /* the inexact flag. Still doesn't help change the iteration order */
     /* to per-column. */
     iy = ky;
-    if (*incx == 1)
+    if(*incx == 1)
     {
-        if (*uplo == ilauplo_("U"))
+        if(*uplo == ilauplo_("U"))
         {
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
-                if (*beta == 0.f)
+                if(*beta == 0.f)
                 {
                     symb_zero__ = TRUE_;
                     y[iy] = 0.f;
                 }
-                else if (y[iy] == 0.f)
+                else if(y[iy] == 0.f)
                 {
                     symb_zero__ = TRUE_;
                 }
@@ -304,34 +315,40 @@ void cla_syamv_(integer *uplo, integer *n, real *alpha, complex *a, integer *lda
                     symb_zero__ = FALSE_;
                     y[iy] = *beta * (r__1 = y[iy], f2c_abs(r__1));
                 }
-                if (*alpha != 0.f)
+                if(*alpha != 0.f)
                 {
                     i__2 = i__;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         i__3 = j + i__ * a_dim1;
-                        temp = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag( &a[j + i__ * a_dim1]), f2c_abs(r__2));
+                        temp = (r__1 = a[i__3].r, f2c_abs(r__1))
+                               + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2));
                         i__3 = j;
-                        symb_zero__ = symb_zero__ && (x[i__3].r == 0.f && x[ i__3].i == 0.f || temp == 0.f);
+                        symb_zero__
+                            = symb_zero__ && (x[i__3].r == 0.f && x[i__3].i == 0.f || temp == 0.f);
                         i__3 = j;
-                        y[iy] += *alpha * ((r__1 = x[i__3].r, f2c_abs(r__1)) + ( r__2 = r_imag(&x[j]), f2c_abs(r__2))) * temp;
+                        y[iy] += *alpha
+                                 * ((r__1 = x[i__3].r, f2c_abs(r__1))
+                                    + (r__2 = r_imag(&x[j]), f2c_abs(r__2)))
+                                 * temp;
                     }
                     i__2 = *n;
-                    for (j = i__ + 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = i__ + 1; j <= i__2; ++j)
                     {
                         i__3 = i__ + j * a_dim1;
-                        temp = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag( &a[i__ + j * a_dim1]), f2c_abs(r__2));
+                        temp = (r__1 = a[i__3].r, f2c_abs(r__1))
+                               + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
                         i__3 = j;
-                        symb_zero__ = symb_zero__ && (x[i__3].r == 0.f && x[ i__3].i == 0.f || temp == 0.f);
+                        symb_zero__
+                            = symb_zero__ && (x[i__3].r == 0.f && x[i__3].i == 0.f || temp == 0.f);
                         i__3 = j;
-                        y[iy] += *alpha * ((r__1 = x[i__3].r, f2c_abs(r__1)) + ( r__2 = r_imag(&x[j]), f2c_abs(r__2))) * temp;
+                        y[iy] += *alpha
+                                 * ((r__1 = x[i__3].r, f2c_abs(r__1))
+                                    + (r__2 = r_imag(&x[j]), f2c_abs(r__2)))
+                                 * temp;
                     }
                 }
-                if (! symb_zero__)
+                if(!symb_zero__)
                 {
                     y[iy] += r_sign(&safe1, &y[iy]);
                 }
@@ -341,16 +358,14 @@ void cla_syamv_(integer *uplo, integer *n, real *alpha, complex *a, integer *lda
         else
         {
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
-                if (*beta == 0.f)
+                if(*beta == 0.f)
                 {
                     symb_zero__ = TRUE_;
                     y[iy] = 0.f;
                 }
-                else if (y[iy] == 0.f)
+                else if(y[iy] == 0.f)
                 {
                     symb_zero__ = TRUE_;
                 }
@@ -359,34 +374,40 @@ void cla_syamv_(integer *uplo, integer *n, real *alpha, complex *a, integer *lda
                     symb_zero__ = FALSE_;
                     y[iy] = *beta * (r__1 = y[iy], f2c_abs(r__1));
                 }
-                if (*alpha != 0.f)
+                if(*alpha != 0.f)
                 {
                     i__2 = i__;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         i__3 = i__ + j * a_dim1;
-                        temp = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag( &a[i__ + j * a_dim1]), f2c_abs(r__2));
+                        temp = (r__1 = a[i__3].r, f2c_abs(r__1))
+                               + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
                         i__3 = j;
-                        symb_zero__ = symb_zero__ && (x[i__3].r == 0.f && x[ i__3].i == 0.f || temp == 0.f);
+                        symb_zero__
+                            = symb_zero__ && (x[i__3].r == 0.f && x[i__3].i == 0.f || temp == 0.f);
                         i__3 = j;
-                        y[iy] += *alpha * ((r__1 = x[i__3].r, f2c_abs(r__1)) + ( r__2 = r_imag(&x[j]), f2c_abs(r__2))) * temp;
+                        y[iy] += *alpha
+                                 * ((r__1 = x[i__3].r, f2c_abs(r__1))
+                                    + (r__2 = r_imag(&x[j]), f2c_abs(r__2)))
+                                 * temp;
                     }
                     i__2 = *n;
-                    for (j = i__ + 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = i__ + 1; j <= i__2; ++j)
                     {
                         i__3 = j + i__ * a_dim1;
-                        temp = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag( &a[j + i__ * a_dim1]), f2c_abs(r__2));
+                        temp = (r__1 = a[i__3].r, f2c_abs(r__1))
+                               + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2));
                         i__3 = j;
-                        symb_zero__ = symb_zero__ && (x[i__3].r == 0.f && x[ i__3].i == 0.f || temp == 0.f);
+                        symb_zero__
+                            = symb_zero__ && (x[i__3].r == 0.f && x[i__3].i == 0.f || temp == 0.f);
                         i__3 = j;
-                        y[iy] += *alpha * ((r__1 = x[i__3].r, f2c_abs(r__1)) + ( r__2 = r_imag(&x[j]), f2c_abs(r__2))) * temp;
+                        y[iy] += *alpha
+                                 * ((r__1 = x[i__3].r, f2c_abs(r__1))
+                                    + (r__2 = r_imag(&x[j]), f2c_abs(r__2)))
+                                 * temp;
                     }
                 }
-                if (! symb_zero__)
+                if(!symb_zero__)
                 {
                     y[iy] += r_sign(&safe1, &y[iy]);
                 }
@@ -396,19 +417,17 @@ void cla_syamv_(integer *uplo, integer *n, real *alpha, complex *a, integer *lda
     }
     else
     {
-        if (*uplo == ilauplo_("U"))
+        if(*uplo == ilauplo_("U"))
         {
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
-                if (*beta == 0.f)
+                if(*beta == 0.f)
                 {
                     symb_zero__ = TRUE_;
                     y[iy] = 0.f;
                 }
-                else if (y[iy] == 0.f)
+                else if(y[iy] == 0.f)
                 {
                     symb_zero__ = TRUE_;
                 }
@@ -418,36 +437,42 @@ void cla_syamv_(integer *uplo, integer *n, real *alpha, complex *a, integer *lda
                     y[iy] = *beta * (r__1 = y[iy], f2c_abs(r__1));
                 }
                 jx = kx;
-                if (*alpha != 0.f)
+                if(*alpha != 0.f)
                 {
                     i__2 = i__;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         i__3 = j + i__ * a_dim1;
-                        temp = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag( &a[j + i__ * a_dim1]), f2c_abs(r__2));
+                        temp = (r__1 = a[i__3].r, f2c_abs(r__1))
+                               + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2));
                         i__3 = j;
-                        symb_zero__ = symb_zero__ && (x[i__3].r == 0.f && x[ i__3].i == 0.f || temp == 0.f);
+                        symb_zero__
+                            = symb_zero__ && (x[i__3].r == 0.f && x[i__3].i == 0.f || temp == 0.f);
                         i__3 = jx;
-                        y[iy] += *alpha * ((r__1 = x[i__3].r, f2c_abs(r__1)) + ( r__2 = r_imag(&x[jx]), f2c_abs(r__2))) * temp;
+                        y[iy] += *alpha
+                                 * ((r__1 = x[i__3].r, f2c_abs(r__1))
+                                    + (r__2 = r_imag(&x[jx]), f2c_abs(r__2)))
+                                 * temp;
                         jx += *incx;
                     }
                     i__2 = *n;
-                    for (j = i__ + 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = i__ + 1; j <= i__2; ++j)
                     {
                         i__3 = i__ + j * a_dim1;
-                        temp = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag( &a[i__ + j * a_dim1]), f2c_abs(r__2));
+                        temp = (r__1 = a[i__3].r, f2c_abs(r__1))
+                               + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
                         i__3 = j;
-                        symb_zero__ = symb_zero__ && (x[i__3].r == 0.f && x[ i__3].i == 0.f || temp == 0.f);
+                        symb_zero__
+                            = symb_zero__ && (x[i__3].r == 0.f && x[i__3].i == 0.f || temp == 0.f);
                         i__3 = jx;
-                        y[iy] += *alpha * ((r__1 = x[i__3].r, f2c_abs(r__1)) + ( r__2 = r_imag(&x[jx]), f2c_abs(r__2))) * temp;
+                        y[iy] += *alpha
+                                 * ((r__1 = x[i__3].r, f2c_abs(r__1))
+                                    + (r__2 = r_imag(&x[jx]), f2c_abs(r__2)))
+                                 * temp;
                         jx += *incx;
                     }
                 }
-                if (! symb_zero__)
+                if(!symb_zero__)
                 {
                     y[iy] += r_sign(&safe1, &y[iy]);
                 }
@@ -457,16 +482,14 @@ void cla_syamv_(integer *uplo, integer *n, real *alpha, complex *a, integer *lda
         else
         {
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
-                if (*beta == 0.f)
+                if(*beta == 0.f)
                 {
                     symb_zero__ = TRUE_;
                     y[iy] = 0.f;
                 }
-                else if (y[iy] == 0.f)
+                else if(y[iy] == 0.f)
                 {
                     symb_zero__ = TRUE_;
                 }
@@ -476,36 +499,42 @@ void cla_syamv_(integer *uplo, integer *n, real *alpha, complex *a, integer *lda
                     y[iy] = *beta * (r__1 = y[iy], f2c_abs(r__1));
                 }
                 jx = kx;
-                if (*alpha != 0.f)
+                if(*alpha != 0.f)
                 {
                     i__2 = i__;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         i__3 = i__ + j * a_dim1;
-                        temp = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag( &a[i__ + j * a_dim1]), f2c_abs(r__2));
+                        temp = (r__1 = a[i__3].r, f2c_abs(r__1))
+                               + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
                         i__3 = j;
-                        symb_zero__ = symb_zero__ && (x[i__3].r == 0.f && x[ i__3].i == 0.f || temp == 0.f);
+                        symb_zero__
+                            = symb_zero__ && (x[i__3].r == 0.f && x[i__3].i == 0.f || temp == 0.f);
                         i__3 = jx;
-                        y[iy] += *alpha * ((r__1 = x[i__3].r, f2c_abs(r__1)) + ( r__2 = r_imag(&x[jx]), f2c_abs(r__2))) * temp;
+                        y[iy] += *alpha
+                                 * ((r__1 = x[i__3].r, f2c_abs(r__1))
+                                    + (r__2 = r_imag(&x[jx]), f2c_abs(r__2)))
+                                 * temp;
                         jx += *incx;
                     }
                     i__2 = *n;
-                    for (j = i__ + 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = i__ + 1; j <= i__2; ++j)
                     {
                         i__3 = j + i__ * a_dim1;
-                        temp = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag( &a[j + i__ * a_dim1]), f2c_abs(r__2));
+                        temp = (r__1 = a[i__3].r, f2c_abs(r__1))
+                               + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2));
                         i__3 = j;
-                        symb_zero__ = symb_zero__ && (x[i__3].r == 0.f && x[ i__3].i == 0.f || temp == 0.f);
+                        symb_zero__
+                            = symb_zero__ && (x[i__3].r == 0.f && x[i__3].i == 0.f || temp == 0.f);
                         i__3 = jx;
-                        y[iy] += *alpha * ((r__1 = x[i__3].r, f2c_abs(r__1)) + ( r__2 = r_imag(&x[jx]), f2c_abs(r__2))) * temp;
+                        y[iy] += *alpha
+                                 * ((r__1 = x[i__3].r, f2c_abs(r__1))
+                                    + (r__2 = r_imag(&x[jx]), f2c_abs(r__2)))
+                                 * temp;
                         jx += *incx;
                     }
                 }
-                if (! symb_zero__)
+                if(!symb_zero__)
                 {
                     y[iy] += r_sign(&safe1, &y[iy]);
                 }

@@ -1,11 +1,10 @@
-/* cbbcsd.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* cbbcsd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    -1.f,0.f
-    }
-;
+static complex c_b1 = {-1.f, 0.f};
 static doublereal c_b11 = -.125;
 static integer c__1 = 1;
 /* > \brief \b CBBCSD */
@@ -14,11 +13,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CBBCSD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cbbcsd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cbbcsd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cbbcsd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cbbcsd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cbbcsd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cbbcsd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -77,7 +82,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > JOBU1 is CHARACTER */
 /* > = 'Y': U1 is updated;
-*/
+ */
 /* > otherwise: U1 is not updated. */
 /* > \endverbatim */
 /* > */
@@ -85,7 +90,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > JOBU2 is CHARACTER */
 /* > = 'Y': U2 is updated;
-*/
+ */
 /* > otherwise: U2 is not updated. */
 /* > \endverbatim */
 /* > */
@@ -93,7 +98,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > JOBV1T is CHARACTER */
 /* > = 'Y': V1T is updated;
-*/
+ */
 /* > otherwise: V1T is not updated. */
 /* > \endverbatim */
 /* > */
@@ -101,7 +106,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > JOBV2T is CHARACTER */
 /* > = 'Y': V2T is updated;
-*/
+ */
 /* > otherwise: V2T is not updated. */
 /* > \endverbatim */
 /* > */
@@ -110,7 +115,7 @@ static integer c__1 = 1;
 /* > TRANS is CHARACTER */
 /* > = 'T': X, U1, U2, V1T, and V2T are stored in row-major */
 /* > order;
-*/
+ */
 /* > otherwise: X, U1, U2, V1T, and V2T are stored in column- */
 /* > major order. */
 /* > \endverbatim */
@@ -334,16 +339,26 @@ the */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, integer *m, integer *p, integer *q, real *theta, real *phi, complex *u1, integer *ldu1, complex *u2, integer *ldu2, complex *v1t, integer *ldv1t, complex *v2t, integer *ldv2t, real * b11d, real *b11e, real *b12d, real *b12e, real *b21d, real *b21e, real *b22d, real *b22e, real *rwork, integer *lrwork, integer *info)
+void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, integer *m,
+             integer *p, integer *q, real *theta, real *phi, complex *u1, integer *ldu1,
+             complex *u2, integer *ldu2, complex *v1t, integer *ldv1t, complex *v2t, integer *ldv2t,
+             real *b11d, real *b11e, real *b12d, real *b12e, real *b21d, real *b21e, real *b22d,
+             real *b22e, real *rwork, integer *lrwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS ", ldu1 %" FLA_IS ", ldu2 %" FLA_IS ", ldv1t %" FLA_IS ", ldv2t %" FLA_IS "",*jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t);
+    AOCL_DTL_SNPRINTF(
+        "cbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %" FLA_IS
+        ", p %" FLA_IS ", q %" FLA_IS ", ldu1 %" FLA_IS ", ldu2 %" FLA_IS ", ldv1t %" FLA_IS
+        ", ldv2t %" FLA_IS "",
+        *jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t);
     /* System generated locals */
-    integer u1_dim1, u1_offset, u2_dim1, u2_offset, v1t_dim1, v1t_offset, v2t_dim1, v2t_offset, i__1, i__2;
+    integer u1_dim1, u1_offset, u2_dim1, u2_offset, v1t_dim1, v1t_offset, v2t_dim1, v2t_offset,
+        i__1, i__2;
     real r__1, r__2, r__3, r__4;
     doublereal d__1;
     /* Builtin functions */
-    double pow_dd(doublereal *, doublereal *), cos(doublereal), sin( doublereal), sqrt(doublereal), atan2(doublereal, doublereal);
+    double pow_dd(doublereal *, doublereal *), cos(doublereal), sin(doublereal), sqrt(doublereal),
+        atan2(doublereal, doublereal);
     /* Local variables */
     logical colmajor;
     real thetamin, thetamax;
@@ -356,13 +371,17 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
     real unfl, temp;
     integer iu1cs, iu2cs;
     extern /* Subroutine */
-    void slas2_(real *, real *, real *, real *, real *) ;
+        void
+        slas2_(real *, real *, real *, real *, real *);
     integer iu1sn, iu2sn;
     extern /* Subroutine */
-    void cscal_(integer *, complex *, complex *, integer *);
+        void
+        cscal_(integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void clasr_(char *, char *, char *, integer *, integer *, real *, real *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
+        void
+        clasr_(char *, char *, char *, integer *, integer *, real *, real *, complex *, integer *),
+        cswap_(integer *, complex *, integer *, complex *, integer *);
     integer maxit;
     real dummy;
     integer iv1tcs, iv2tcs;
@@ -371,14 +390,17 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
     real sigma11, sigma21;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real thresh, tolmul;
     logical lquery;
     real b11bulge, b12bulge;
     logical wantv1t, wantv2t;
     real b21bulge, b22bulge;
     extern /* Subroutine */
-    void slartgp_(real *, real *, real *, real *, real *), slartgs_(real *, real *, real *, real *, real *);
+        void
+        slartgp_(real *, real *, real *, real *, real *),
+        slartgs_(real *, real *, real *, real *, real *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -429,49 +451,49 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
     wantu2 = lsame_(jobu2, "Y", 1, 1);
     wantv1t = lsame_(jobv1t, "Y", 1, 1);
     wantv2t = lsame_(jobv2t, "Y", 1, 1);
-    colmajor = ! lsame_(trans, "T", 1, 1);
-    if (*m < 0)
+    colmajor = !lsame_(trans, "T", 1, 1);
+    if(*m < 0)
     {
         *info = -6;
     }
-    else if (*p < 0 || *p > *m)
+    else if(*p < 0 || *p > *m)
     {
         *info = -7;
     }
-    else if (*q < 0 || *q > *m)
+    else if(*q < 0 || *q > *m)
     {
         *info = -8;
     }
-    else if (*q > *p || *q > *m - *p || *q > *m - *q)
+    else if(*q > *p || *q > *m - *p || *q > *m - *q)
     {
         *info = -8;
     }
-    else if (wantu1 && *ldu1 < *p)
+    else if(wantu1 && *ldu1 < *p)
     {
         *info = -12;
     }
-    else if (wantu2 && *ldu2 < *m - *p)
+    else if(wantu2 && *ldu2 < *m - *p)
     {
         *info = -14;
     }
-    else if (wantv1t && *ldv1t < *q)
+    else if(wantv1t && *ldv1t < *q)
     {
         *info = -16;
     }
-    else if (wantv2t && *ldv2t < *m - *q)
+    else if(wantv2t && *ldv2t < *m - *q)
     {
         *info = -18;
     }
     /* Quick return if Q = 0 */
-    if (*info == 0 && *q == 0)
+    if(*info == 0 && *q == 0)
     {
         lrworkmin = 1;
-        rwork[1] = (real) lrworkmin;
+        rwork[1] = (real)lrworkmin;
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute workspace */
-    if (*info == 0)
+    if(*info == 0)
     {
         iu1cs = 1;
         iu1sn = iu1cs + *q;
@@ -483,20 +505,20 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
         iv2tsn = iv2tcs + *q;
         lrworkopt = iv2tsn + *q - 1;
         lrworkmin = lrworkopt;
-        rwork[1] = (real) lrworkopt;
-        if (*lrwork < lrworkmin && ! lquery)
+        rwork[1] = (real)lrworkopt;
+        if(*lrwork < lrworkmin && !lquery)
         {
             *info = -28;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CBBCSD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -506,42 +528,38 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
     unfl = slamch_("Safe minimum");
     /* Computing MAX */
     /* Computing MIN */
-    d__1 = (doublereal) eps;
+    d__1 = (doublereal)eps;
     r__3 = 100.f;
     r__4 = pow_dd(&d__1, &c_b11); // , expr subst
     r__1 = 10.f;
-    r__2 = fla_min(r__3,r__4); // , expr subst
-    tolmul = fla_max(r__1,r__2);
+    r__2 = fla_min(r__3, r__4); // , expr subst
+    tolmul = fla_max(r__1, r__2);
     tol = tolmul * eps;
     /* Computing MAX */
     r__1 = tol;
     r__2 = *q * 6 * *q * unfl; // , expr subst
-    thresh = fla_max(r__1,r__2);
+    thresh = fla_max(r__1, r__2);
     /* Test for negligible sines or cosines */
     i__1 = *q;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (theta[i__] < thresh)
+        if(theta[i__] < thresh)
         {
             theta[i__] = 0.f;
         }
-        else if (theta[i__] > 1.5707963267948966192313216916397514421f - thresh)
+        else if(theta[i__] > 1.5707963267948966192313216916397514421f - thresh)
         {
             theta[i__] = 1.5707963267948966192313216916397514421f;
         }
     }
     i__1 = *q - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (phi[i__] < thresh)
+        if(phi[i__] < thresh)
         {
             phi[i__] = 0.f;
         }
-        else if (phi[i__] > 1.5707963267948966192313216916397514421f - thresh)
+        else if(phi[i__] > 1.5707963267948966192313216916397514421f - thresh)
         {
             phi[i__] = 1.5707963267948966192313216916397514421f;
         }
@@ -550,19 +568,19 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
     imax = *q;
     while(imax > 1)
     {
-        if (phi[imax - 1] != 0.f)
+        if(phi[imax - 1] != 0.f)
         {
             break;
         }
         --imax;
     }
     imin = imax - 1;
-    if (imin > 1)
+    if(imin > 1)
     {
         while(phi[imin - 1] != 0.f)
         {
             --imin;
-            if (imin <= 1)
+            if(imin <= 1)
             {
                 break;
             }
@@ -578,9 +596,7 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
         b11d[imin] = cos(theta[imin]);
         b21d[imin] = -sin(theta[imin]);
         i__1 = imax - 1;
-        for (i__ = imin;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = imin; i__ <= i__1; ++i__)
         {
             b11e[i__] = -sin(theta[i__]) * sin(phi[i__]);
             b11d[i__ + 1] = cos(theta[i__ + 1]) * cos(phi[i__]);
@@ -595,15 +611,13 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
         b22d[imax] = cos(theta[imax]);
         /* Abort if not converging;
         otherwise, increment ITER */
-        if (iter > maxit)
+        if(iter > maxit)
         {
             *info = 0;
             i__1 = *q;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
-                if (phi[i__] != 0.f)
+                if(phi[i__] != 0.f)
                 {
                     ++(*info);
                 }
@@ -616,20 +630,18 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
         thetamax = theta[imin];
         thetamin = theta[imin];
         i__1 = imax;
-        for (i__ = imin + 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = imin + 1; i__ <= i__1; ++i__)
         {
-            if (theta[i__] > thetamax)
+            if(theta[i__] > thetamax)
             {
                 thetamax = theta[i__];
             }
-            if (theta[i__] < thetamin)
+            if(theta[i__] < thetamin)
             {
                 thetamin = theta[i__];
             }
         }
-        if (thetamax > 1.5707963267948966192313216916397514421f - thresh)
+        if(thetamax > 1.5707963267948966192313216916397514421f - thresh)
         {
             /* Zero on diagonals of B11 and B22;
             induce deflation with a */
@@ -637,7 +649,7 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
             mu = 0.f;
             nu = 1.f;
         }
-        else if (thetamin < thresh)
+        else if(thetamin < thresh)
         {
             /* Zero on diagonals of B12 and B22;
             induce deflation with a */
@@ -648,15 +660,15 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
         else
         {
             /* Compute shifts for B11 and B21 and use the lesser */
-            slas2_(&b11d[imax - 1], &b11e[imax - 1], &b11d[imax], &sigma11, & dummy);
-            slas2_(&b21d[imax - 1], &b21e[imax - 1], &b21d[imax], &sigma21, & dummy);
-            if (sigma11 <= sigma21)
+            slas2_(&b11d[imax - 1], &b11e[imax - 1], &b11d[imax], &sigma11, &dummy);
+            slas2_(&b21d[imax - 1], &b21e[imax - 1], &b21d[imax], &sigma21, &dummy);
+            if(sigma11 <= sigma21)
             {
                 mu = sigma11;
                 /* Computing 2nd power */
                 r__1 = mu;
                 nu = sqrt(1.f - r__1 * r__1);
-                if (mu < thresh)
+                if(mu < thresh)
                 {
                     mu = 0.f;
                     nu = 1.f;
@@ -668,7 +680,7 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
                 /* Computing 2nd power */
                 r__1 = nu;
                 mu = sqrt(1.f - r__1 * r__1);
-                if (nu < thresh)
+                if(nu < thresh)
                 {
                     mu = 1.f;
                     nu = 0.f;
@@ -676,13 +688,15 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
             }
         }
         /* Rotate to produce bulges in B11 and B21 */
-        if (mu <= nu)
+        if(mu <= nu)
         {
-            slartgs_(&b11d[imin], &b11e[imin], &mu, &rwork[iv1tcs + imin - 1], &rwork[iv1tsn + imin - 1]);
+            slartgs_(&b11d[imin], &b11e[imin], &mu, &rwork[iv1tcs + imin - 1],
+                     &rwork[iv1tsn + imin - 1]);
         }
         else
         {
-            slartgs_(&b21d[imin], &b21e[imin], &nu, &rwork[iv1tcs + imin - 1], &rwork[iv1tsn + imin - 1]);
+            slartgs_(&b21d[imin], &b21e[imin], &nu, &rwork[iv1tcs + imin - 1],
+                     &rwork[iv1tsn + imin - 1]);
         }
         temp = rwork[iv1tcs + imin - 1] * b11d[imin] + rwork[iv1tsn + imin - 1] * b11e[imin];
         b11e[imin] = rwork[iv1tcs + imin - 1] * b11e[imin] - rwork[iv1tsn + imin - 1] * b11d[imin];
@@ -711,17 +725,20 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
         r__2 = b11bulge;
         /* Computing 2nd power */
         r__3 = thresh;
-        if (r__1 * r__1 + r__2 * r__2 > r__3 * r__3)
+        if(r__1 * r__1 + r__2 * r__2 > r__3 * r__3)
         {
-            slartgp_(&b11bulge, &b11d[imin], &rwork[iu1sn + imin - 1], &rwork[ iu1cs + imin - 1], &r__);
+            slartgp_(&b11bulge, &b11d[imin], &rwork[iu1sn + imin - 1], &rwork[iu1cs + imin - 1],
+                     &r__);
         }
-        else if (mu <= nu)
+        else if(mu <= nu)
         {
-            slartgs_(&b11e[imin], &b11d[imin + 1], &mu, &rwork[iu1cs + imin - 1], &rwork[iu1sn + imin - 1]);
+            slartgs_(&b11e[imin], &b11d[imin + 1], &mu, &rwork[iu1cs + imin - 1],
+                     &rwork[iu1sn + imin - 1]);
         }
         else
         {
-            slartgs_(&b12d[imin], &b12e[imin], &nu, &rwork[iu1cs + imin - 1], &rwork[iu1sn + imin - 1]);
+            slartgs_(&b12d[imin], &b12e[imin], &nu, &rwork[iu1cs + imin - 1],
+                     &rwork[iu1sn + imin - 1]);
         }
         /* Computing 2nd power */
         r__1 = b21d[imin];
@@ -729,24 +746,28 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
         r__2 = b21bulge;
         /* Computing 2nd power */
         r__3 = thresh;
-        if (r__1 * r__1 + r__2 * r__2 > r__3 * r__3)
+        if(r__1 * r__1 + r__2 * r__2 > r__3 * r__3)
         {
-            slartgp_(&b21bulge, &b21d[imin], &rwork[iu2sn + imin - 1], &rwork[ iu2cs + imin - 1], &r__);
+            slartgp_(&b21bulge, &b21d[imin], &rwork[iu2sn + imin - 1], &rwork[iu2cs + imin - 1],
+                     &r__);
         }
-        else if (nu < mu)
+        else if(nu < mu)
         {
-            slartgs_(&b21e[imin], &b21d[imin + 1], &nu, &rwork[iu2cs + imin - 1], &rwork[iu2sn + imin - 1]);
+            slartgs_(&b21e[imin], &b21d[imin + 1], &nu, &rwork[iu2cs + imin - 1],
+                     &rwork[iu2sn + imin - 1]);
         }
         else
         {
-            slartgs_(&b22d[imin], &b22e[imin], &mu, &rwork[iu2cs + imin - 1], &rwork[iu2sn + imin - 1]);
+            slartgs_(&b22d[imin], &b22e[imin], &mu, &rwork[iu2cs + imin - 1],
+                     &rwork[iu2sn + imin - 1]);
         }
         rwork[iu2cs + imin - 1] = -rwork[iu2cs + imin - 1];
         rwork[iu2sn + imin - 1] = -rwork[iu2sn + imin - 1];
         temp = rwork[iu1cs + imin - 1] * b11e[imin] + rwork[iu1sn + imin - 1] * b11d[imin + 1];
-        b11d[imin + 1] = rwork[iu1cs + imin - 1] * b11d[imin + 1] - rwork[ iu1sn + imin - 1] * b11e[imin];
+        b11d[imin + 1]
+            = rwork[iu1cs + imin - 1] * b11d[imin + 1] - rwork[iu1sn + imin - 1] * b11e[imin];
         b11e[imin] = temp;
-        if (imax > imin + 1)
+        if(imax > imin + 1)
         {
             b11bulge = rwork[iu1sn + imin - 1] * b11e[imin + 1];
             b11e[imin + 1] = rwork[iu1cs + imin - 1] * b11e[imin + 1];
@@ -757,9 +778,10 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
         b12bulge = rwork[iu1sn + imin - 1] * b12d[imin + 1];
         b12d[imin + 1] = rwork[iu1cs + imin - 1] * b12d[imin + 1];
         temp = rwork[iu2cs + imin - 1] * b21e[imin] + rwork[iu2sn + imin - 1] * b21d[imin + 1];
-        b21d[imin + 1] = rwork[iu2cs + imin - 1] * b21d[imin + 1] - rwork[ iu2sn + imin - 1] * b21e[imin];
+        b21d[imin + 1]
+            = rwork[iu2cs + imin - 1] * b21d[imin + 1] - rwork[iu2sn + imin - 1] * b21e[imin];
         b21e[imin] = temp;
-        if (imax > imin + 1)
+        if(imax > imin + 1)
         {
             b21bulge = rwork[iu2sn + imin - 1] * b21e[imin + 1];
             b21e[imin + 1] = rwork[iu2cs + imin - 1] * b21e[imin + 1];
@@ -773,9 +795,7 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
         /* B12(IMIN,IMIN+1), B21(IMIN,IMIN+2), and B22(IMIN,IMIN+1) to */
         /* bottom-right */
         i__1 = imax - 1;
-        for (i__ = imin + 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = imin + 1; i__ <= i__1; ++i__)
         {
             /* Compute PHI(I-1) */
             x1 = sin(theta[i__ - 1]) * b11e[i__ - 1] + cos(theta[i__ - 1]) * b21e[i__ - 1];
@@ -824,47 +844,55 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
             /* If possible, chase bulges from B11(I-1,I+1), B12(I-1,I), */
             /* B21(I-1,I+1), and B22(I-1,I). If necessary, restart bulge- */
             /* chasing by applying the original shift again. */
-            if (! restart11 && ! restart21)
+            if(!restart11 && !restart21)
             {
                 slartgp_(&x2, &x1, &rwork[iv1tsn + i__ - 1], &rwork[iv1tcs + i__ - 1], &r__);
             }
-            else if (! restart11 && restart21)
+            else if(!restart11 && restart21)
             {
-                slartgp_(&b11bulge, &b11e[i__ - 1], &rwork[iv1tsn + i__ - 1], &rwork[iv1tcs + i__ - 1], &r__);
+                slartgp_(&b11bulge, &b11e[i__ - 1], &rwork[iv1tsn + i__ - 1],
+                         &rwork[iv1tcs + i__ - 1], &r__);
             }
-            else if (restart11 && ! restart21)
+            else if(restart11 && !restart21)
             {
-                slartgp_(&b21bulge, &b21e[i__ - 1], &rwork[iv1tsn + i__ - 1], &rwork[iv1tcs + i__ - 1], &r__);
+                slartgp_(&b21bulge, &b21e[i__ - 1], &rwork[iv1tsn + i__ - 1],
+                         &rwork[iv1tcs + i__ - 1], &r__);
             }
-            else if (mu <= nu)
+            else if(mu <= nu)
             {
-                slartgs_(&b11d[i__], &b11e[i__], &mu, &rwork[iv1tcs + i__ - 1], &rwork[iv1tsn + i__ - 1]);
+                slartgs_(&b11d[i__], &b11e[i__], &mu, &rwork[iv1tcs + i__ - 1],
+                         &rwork[iv1tsn + i__ - 1]);
             }
             else
             {
-                slartgs_(&b21d[i__], &b21e[i__], &nu, &rwork[iv1tcs + i__ - 1], &rwork[iv1tsn + i__ - 1]);
+                slartgs_(&b21d[i__], &b21e[i__], &nu, &rwork[iv1tcs + i__ - 1],
+                         &rwork[iv1tsn + i__ - 1]);
             }
             rwork[iv1tcs + i__ - 1] = -rwork[iv1tcs + i__ - 1];
             rwork[iv1tsn + i__ - 1] = -rwork[iv1tsn + i__ - 1];
-            if (! restart12 && ! restart22)
+            if(!restart12 && !restart22)
             {
                 slartgp_(&y2, &y1, &rwork[iv2tsn + i__ - 2], &rwork[iv2tcs + i__ - 2], &r__);
             }
-            else if (! restart12 && restart22)
+            else if(!restart12 && restart22)
             {
-                slartgp_(&b12bulge, &b12d[i__ - 1], &rwork[iv2tsn + i__ - 2], &rwork[iv2tcs + i__ - 2], &r__);
+                slartgp_(&b12bulge, &b12d[i__ - 1], &rwork[iv2tsn + i__ - 2],
+                         &rwork[iv2tcs + i__ - 2], &r__);
             }
-            else if (restart12 && ! restart22)
+            else if(restart12 && !restart22)
             {
-                slartgp_(&b22bulge, &b22d[i__ - 1], &rwork[iv2tsn + i__ - 2], &rwork[iv2tcs + i__ - 2], &r__);
+                slartgp_(&b22bulge, &b22d[i__ - 1], &rwork[iv2tsn + i__ - 2],
+                         &rwork[iv2tcs + i__ - 2], &r__);
             }
-            else if (nu < mu)
+            else if(nu < mu)
             {
-                slartgs_(&b12e[i__ - 1], &b12d[i__], &nu, &rwork[iv2tcs + i__ - 2], &rwork[iv2tsn + i__ - 2]);
+                slartgs_(&b12e[i__ - 1], &b12d[i__], &nu, &rwork[iv2tcs + i__ - 2],
+                         &rwork[iv2tsn + i__ - 2]);
             }
             else
             {
-                slartgs_(&b22e[i__ - 1], &b22d[i__], &mu, &rwork[iv2tcs + i__ - 2], &rwork[iv2tsn + i__ - 2]);
+                slartgs_(&b22e[i__ - 1], &b22d[i__], &mu, &rwork[iv2tcs + i__ - 2],
+                         &rwork[iv2tsn + i__ - 2]);
             }
             temp = rwork[iv1tcs + i__ - 1] * b11d[i__] + rwork[iv1tsn + i__ - 1] * b11e[i__];
             b11e[i__] = rwork[iv1tcs + i__ - 1] * b11e[i__] - rwork[iv1tsn + i__ - 1] * b11d[i__];
@@ -877,12 +905,14 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
             b21bulge = rwork[iv1tsn + i__ - 1] * b21d[i__ + 1];
             b21d[i__ + 1] = rwork[iv1tcs + i__ - 1] * b21d[i__ + 1];
             temp = rwork[iv2tcs + i__ - 2] * b12e[i__ - 1] + rwork[iv2tsn + i__ - 2] * b12d[i__];
-            b12d[i__] = rwork[iv2tcs + i__ - 2] * b12d[i__] - rwork[iv2tsn + i__ - 2] * b12e[i__ - 1];
+            b12d[i__]
+                = rwork[iv2tcs + i__ - 2] * b12d[i__] - rwork[iv2tsn + i__ - 2] * b12e[i__ - 1];
             b12e[i__ - 1] = temp;
             b12bulge = rwork[iv2tsn + i__ - 2] * b12e[i__];
             b12e[i__] = rwork[iv2tcs + i__ - 2] * b12e[i__];
             temp = rwork[iv2tcs + i__ - 2] * b22e[i__ - 1] + rwork[iv2tsn + i__ - 2] * b22d[i__];
-            b22d[i__] = rwork[iv2tcs + i__ - 2] * b22d[i__] - rwork[iv2tsn + i__ - 2] * b22e[i__ - 1];
+            b22d[i__]
+                = rwork[iv2tcs + i__ - 2] * b22d[i__] - rwork[iv2tsn + i__ - 2] * b22e[i__ - 1];
             b22e[i__ - 1] = temp;
             b22bulge = rwork[iv2tsn + i__ - 2] * b22e[i__];
             b22e[i__] = rwork[iv2tcs + i__ - 2] * b22e[i__];
@@ -933,60 +963,70 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
             /* If possible, chase bulges from B11(I+1,I), B12(I+1,I-1), */
             /* B21(I+1,I), and B22(I+1,I-1). If necessary, restart bulge- */
             /* chasing by applying the original shift again. */
-            if (! restart11 && ! restart12)
+            if(!restart11 && !restart12)
             {
                 slartgp_(&x2, &x1, &rwork[iu1sn + i__ - 1], &rwork[iu1cs + i__ - 1], &r__);
             }
-            else if (! restart11 && restart12)
+            else if(!restart11 && restart12)
             {
-                slartgp_(&b11bulge, &b11d[i__], &rwork[iu1sn + i__ - 1], & rwork[iu1cs + i__ - 1], &r__);
+                slartgp_(&b11bulge, &b11d[i__], &rwork[iu1sn + i__ - 1], &rwork[iu1cs + i__ - 1],
+                         &r__);
             }
-            else if (restart11 && ! restart12)
+            else if(restart11 && !restart12)
             {
-                slartgp_(&b12bulge, &b12e[i__ - 1], &rwork[iu1sn + i__ - 1], & rwork[iu1cs + i__ - 1], &r__);
+                slartgp_(&b12bulge, &b12e[i__ - 1], &rwork[iu1sn + i__ - 1],
+                         &rwork[iu1cs + i__ - 1], &r__);
             }
-            else if (mu <= nu)
+            else if(mu <= nu)
             {
-                slartgs_(&b11e[i__], &b11d[i__ + 1], &mu, &rwork[iu1cs + i__ - 1], &rwork[iu1sn + i__ - 1]);
+                slartgs_(&b11e[i__], &b11d[i__ + 1], &mu, &rwork[iu1cs + i__ - 1],
+                         &rwork[iu1sn + i__ - 1]);
             }
             else
             {
-                slartgs_(&b12d[i__], &b12e[i__], &nu, &rwork[iu1cs + i__ - 1], &rwork[iu1sn + i__ - 1]);
+                slartgs_(&b12d[i__], &b12e[i__], &nu, &rwork[iu1cs + i__ - 1],
+                         &rwork[iu1sn + i__ - 1]);
             }
-            if (! restart21 && ! restart22)
+            if(!restart21 && !restart22)
             {
                 slartgp_(&y2, &y1, &rwork[iu2sn + i__ - 1], &rwork[iu2cs + i__ - 1], &r__);
             }
-            else if (! restart21 && restart22)
+            else if(!restart21 && restart22)
             {
-                slartgp_(&b21bulge, &b21d[i__], &rwork[iu2sn + i__ - 1], & rwork[iu2cs + i__ - 1], &r__);
+                slartgp_(&b21bulge, &b21d[i__], &rwork[iu2sn + i__ - 1], &rwork[iu2cs + i__ - 1],
+                         &r__);
             }
-            else if (restart21 && ! restart22)
+            else if(restart21 && !restart22)
             {
-                slartgp_(&b22bulge, &b22e[i__ - 1], &rwork[iu2sn + i__ - 1], & rwork[iu2cs + i__ - 1], &r__);
+                slartgp_(&b22bulge, &b22e[i__ - 1], &rwork[iu2sn + i__ - 1],
+                         &rwork[iu2cs + i__ - 1], &r__);
             }
-            else if (nu < mu)
+            else if(nu < mu)
             {
-                slartgs_(&b21e[i__], &b21e[i__ + 1], &nu, &rwork[iu2cs + i__ - 1], &rwork[iu2sn + i__ - 1]);
+                slartgs_(&b21e[i__], &b21e[i__ + 1], &nu, &rwork[iu2cs + i__ - 1],
+                         &rwork[iu2sn + i__ - 1]);
             }
             else
             {
-                slartgs_(&b22d[i__], &b22e[i__], &mu, &rwork[iu2cs + i__ - 1], &rwork[iu2sn + i__ - 1]);
+                slartgs_(&b22d[i__], &b22e[i__], &mu, &rwork[iu2cs + i__ - 1],
+                         &rwork[iu2sn + i__ - 1]);
             }
             rwork[iu2cs + i__ - 1] = -rwork[iu2cs + i__ - 1];
             rwork[iu2sn + i__ - 1] = -rwork[iu2sn + i__ - 1];
             temp = rwork[iu1cs + i__ - 1] * b11e[i__] + rwork[iu1sn + i__ - 1] * b11d[i__ + 1];
-            b11d[i__ + 1] = rwork[iu1cs + i__ - 1] * b11d[i__ + 1] - rwork[ iu1sn + i__ - 1] * b11e[i__];
+            b11d[i__ + 1]
+                = rwork[iu1cs + i__ - 1] * b11d[i__ + 1] - rwork[iu1sn + i__ - 1] * b11e[i__];
             b11e[i__] = temp;
-            if (i__ < imax - 1)
+            if(i__ < imax - 1)
             {
                 b11bulge = rwork[iu1sn + i__ - 1] * b11e[i__ + 1];
                 b11e[i__ + 1] = rwork[iu1cs + i__ - 1] * b11e[i__ + 1];
             }
             temp = rwork[iu2cs + i__ - 1] * b21e[i__] + rwork[iu2sn + i__ - 1] * b21d[i__ + 1];
-            b21d[i__ + 1] = rwork[iu2cs + i__ - 1] * b21d[i__ + 1] - rwork[ iu2sn + i__ - 1] * b21e[i__];
+            b21d[i__ + 1]
+                = rwork[iu2cs + i__ - 1] * b21d[i__ + 1] - rwork[iu2sn + i__ - 1] * b21e[i__];
             b21e[i__] = temp;
-            if (i__ < imax - 1)
+            if(i__ < imax - 1)
             {
                 b21bulge = rwork[iu2sn + i__ - 1] * b21e[i__ + 1];
                 b21e[i__ + 1] = rwork[iu2cs + i__ - 1] * b21e[i__ + 1];
@@ -1026,97 +1066,111 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
         /* Computing 2nd power */
         r__3 = thresh;
         restart22 = r__1 * r__1 + r__2 * r__2 <= r__3 * r__3;
-        if (! restart12 && ! restart22)
+        if(!restart12 && !restart22)
         {
             slartgp_(&y2, &y1, &rwork[iv2tsn + imax - 2], &rwork[iv2tcs + imax - 2], &r__);
         }
-        else if (! restart12 && restart22)
+        else if(!restart12 && restart22)
         {
-            slartgp_(&b12bulge, &b12d[imax - 1], &rwork[iv2tsn + imax - 2], & rwork[iv2tcs + imax - 2], &r__);
+            slartgp_(&b12bulge, &b12d[imax - 1], &rwork[iv2tsn + imax - 2],
+                     &rwork[iv2tcs + imax - 2], &r__);
         }
-        else if (restart12 && ! restart22)
+        else if(restart12 && !restart22)
         {
-            slartgp_(&b22bulge, &b22d[imax - 1], &rwork[iv2tsn + imax - 2], & rwork[iv2tcs + imax - 2], &r__);
+            slartgp_(&b22bulge, &b22d[imax - 1], &rwork[iv2tsn + imax - 2],
+                     &rwork[iv2tcs + imax - 2], &r__);
         }
-        else if (nu < mu)
+        else if(nu < mu)
         {
-            slartgs_(&b12e[imax - 1], &b12d[imax], &nu, &rwork[iv2tcs + imax - 2], &rwork[iv2tsn + imax - 2]);
+            slartgs_(&b12e[imax - 1], &b12d[imax], &nu, &rwork[iv2tcs + imax - 2],
+                     &rwork[iv2tsn + imax - 2]);
         }
         else
         {
-            slartgs_(&b22e[imax - 1], &b22d[imax], &mu, &rwork[iv2tcs + imax - 2], &rwork[iv2tsn + imax - 2]);
+            slartgs_(&b22e[imax - 1], &b22d[imax], &mu, &rwork[iv2tcs + imax - 2],
+                     &rwork[iv2tsn + imax - 2]);
         }
         temp = rwork[iv2tcs + imax - 2] * b12e[imax - 1] + rwork[iv2tsn + imax - 2] * b12d[imax];
-        b12d[imax] = rwork[iv2tcs + imax - 2] * b12d[imax] - rwork[iv2tsn + imax - 2] * b12e[imax - 1];
+        b12d[imax]
+            = rwork[iv2tcs + imax - 2] * b12d[imax] - rwork[iv2tsn + imax - 2] * b12e[imax - 1];
         b12e[imax - 1] = temp;
         temp = rwork[iv2tcs + imax - 2] * b22e[imax - 1] + rwork[iv2tsn + imax - 2] * b22d[imax];
-        b22d[imax] = rwork[iv2tcs + imax - 2] * b22d[imax] - rwork[iv2tsn + imax - 2] * b22e[imax - 1];
+        b22d[imax]
+            = rwork[iv2tcs + imax - 2] * b22d[imax] - rwork[iv2tsn + imax - 2] * b22e[imax - 1];
         b22e[imax - 1] = temp;
         /* Update singular vectors */
-        if (wantu1)
+        if(wantu1)
         {
-            if (colmajor)
+            if(colmajor)
             {
                 i__1 = imax - imin + 1;
-                clasr_("R", "V", "F", p, &i__1, &rwork[iu1cs + imin - 1], & rwork[iu1sn + imin - 1], &u1[imin * u1_dim1 + 1], ldu1);
+                clasr_("R", "V", "F", p, &i__1, &rwork[iu1cs + imin - 1], &rwork[iu1sn + imin - 1],
+                       &u1[imin * u1_dim1 + 1], ldu1);
             }
             else
             {
                 i__1 = imax - imin + 1;
-                clasr_("L", "V", "F", &i__1, p, &rwork[iu1cs + imin - 1], & rwork[iu1sn + imin - 1], &u1[imin + u1_dim1], ldu1);
+                clasr_("L", "V", "F", &i__1, p, &rwork[iu1cs + imin - 1], &rwork[iu1sn + imin - 1],
+                       &u1[imin + u1_dim1], ldu1);
             }
         }
-        if (wantu2)
+        if(wantu2)
         {
-            if (colmajor)
+            if(colmajor)
             {
                 i__1 = *m - *p;
                 i__2 = imax - imin + 1;
-                clasr_("R", "V", "F", &i__1, &i__2, &rwork[iu2cs + imin - 1], &rwork[iu2sn + imin - 1], &u2[imin * u2_dim1 + 1], ldu2);
+                clasr_("R", "V", "F", &i__1, &i__2, &rwork[iu2cs + imin - 1],
+                       &rwork[iu2sn + imin - 1], &u2[imin * u2_dim1 + 1], ldu2);
             }
             else
             {
                 i__1 = imax - imin + 1;
                 i__2 = *m - *p;
-                clasr_("L", "V", "F", &i__1, &i__2, &rwork[iu2cs + imin - 1], &rwork[iu2sn + imin - 1], &u2[imin + u2_dim1], ldu2);
+                clasr_("L", "V", "F", &i__1, &i__2, &rwork[iu2cs + imin - 1],
+                       &rwork[iu2sn + imin - 1], &u2[imin + u2_dim1], ldu2);
             }
         }
-        if (wantv1t)
+        if(wantv1t)
         {
-            if (colmajor)
+            if(colmajor)
             {
                 i__1 = imax - imin + 1;
-                clasr_("L", "V", "F", &i__1, q, &rwork[iv1tcs + imin - 1], & rwork[iv1tsn + imin - 1], &v1t[imin + v1t_dim1], ldv1t);
+                clasr_("L", "V", "F", &i__1, q, &rwork[iv1tcs + imin - 1],
+                       &rwork[iv1tsn + imin - 1], &v1t[imin + v1t_dim1], ldv1t);
             }
             else
             {
                 i__1 = imax - imin + 1;
-                clasr_("R", "V", "F", q, &i__1, &rwork[iv1tcs + imin - 1], & rwork[iv1tsn + imin - 1], &v1t[imin * v1t_dim1 + 1], ldv1t);
+                clasr_("R", "V", "F", q, &i__1, &rwork[iv1tcs + imin - 1],
+                       &rwork[iv1tsn + imin - 1], &v1t[imin * v1t_dim1 + 1], ldv1t);
             }
         }
-        if (wantv2t)
+        if(wantv2t)
         {
-            if (colmajor)
+            if(colmajor)
             {
                 i__1 = imax - imin + 1;
                 i__2 = *m - *q;
-                clasr_("L", "V", "F", &i__1, &i__2, &rwork[iv2tcs + imin - 1], &rwork[iv2tsn + imin - 1], &v2t[imin + v2t_dim1], ldv2t);
+                clasr_("L", "V", "F", &i__1, &i__2, &rwork[iv2tcs + imin - 1],
+                       &rwork[iv2tsn + imin - 1], &v2t[imin + v2t_dim1], ldv2t);
             }
             else
             {
                 i__1 = *m - *q;
                 i__2 = imax - imin + 1;
-                clasr_("R", "V", "F", &i__1, &i__2, &rwork[iv2tcs + imin - 1], &rwork[iv2tsn + imin - 1], &v2t[imin * v2t_dim1 + 1], ldv2t);
+                clasr_("R", "V", "F", &i__1, &i__2, &rwork[iv2tcs + imin - 1],
+                       &rwork[iv2tsn + imin - 1], &v2t[imin * v2t_dim1 + 1], ldv2t);
             }
         }
         /* Fix signs on B11(IMAX-1,IMAX) and B21(IMAX-1,IMAX) */
-        if (b11e[imax - 1] + b21e[imax - 1] > 0.f)
+        if(b11e[imax - 1] + b21e[imax - 1] > 0.f)
         {
             b11d[imax] = -b11d[imax];
             b21d[imax] = -b21d[imax];
-            if (wantv1t)
+            if(wantv1t)
             {
-                if (colmajor)
+                if(colmajor)
                 {
                     cscal_(q, &c_b1, &v1t[imax + v1t_dim1], ldv1t);
                 }
@@ -1132,12 +1186,12 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
         theta[imax] = atan2((f2c_abs(y1)), (f2c_abs(x1)));
         /* Fix signs on B11(IMAX,IMAX), B12(IMAX,IMAX-1), B21(IMAX,IMAX), */
         /* and B22(IMAX,IMAX-1) */
-        if (b11d[imax] + b12e[imax - 1] < 0.f)
+        if(b11d[imax] + b12e[imax - 1] < 0.f)
         {
             b12d[imax] = -b12d[imax];
-            if (wantu1)
+            if(wantu1)
             {
-                if (colmajor)
+                if(colmajor)
                 {
                     cscal_(p, &c_b1, &u1[imax * u1_dim1 + 1], &c__1);
                 }
@@ -1147,12 +1201,12 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
                 }
             }
         }
-        if (b21d[imax] + b22e[imax - 1] > 0.f)
+        if(b21d[imax] + b22e[imax - 1] > 0.f)
         {
             b22d[imax] = -b22d[imax];
-            if (wantu2)
+            if(wantu2)
             {
-                if (colmajor)
+                if(colmajor)
                 {
                     i__1 = *m - *p;
                     cscal_(&i__1, &c_b1, &u2[imax * u2_dim1 + 1], &c__1);
@@ -1165,11 +1219,11 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
             }
         }
         /* Fix signs on B12(IMAX,IMAX) and B22(IMAX,IMAX) */
-        if (b12d[imax] + b22d[imax] < 0.f)
+        if(b12d[imax] + b22d[imax] < 0.f)
         {
-            if (wantv2t)
+            if(wantv2t)
             {
-                if (colmajor)
+                if(colmajor)
                 {
                     i__1 = *m - *q;
                     cscal_(&i__1, &c_b1, &v2t[imax + v2t_dim1], ldv2t);
@@ -1183,55 +1237,51 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
         }
         /* Test for negligible sines or cosines */
         i__1 = imax;
-        for (i__ = imin;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = imin; i__ <= i__1; ++i__)
         {
-            if (theta[i__] < thresh)
+            if(theta[i__] < thresh)
             {
                 theta[i__] = 0.f;
             }
-            else if (theta[i__] > 1.5707963267948966192313216916397514421f - thresh)
+            else if(theta[i__] > 1.5707963267948966192313216916397514421f - thresh)
             {
                 theta[i__] = 1.5707963267948966192313216916397514421f;
             }
         }
         i__1 = imax - 1;
-        for (i__ = imin;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = imin; i__ <= i__1; ++i__)
         {
-            if (phi[i__] < thresh)
+            if(phi[i__] < thresh)
             {
                 phi[i__] = 0.f;
             }
-            else if (phi[i__] > 1.5707963267948966192313216916397514421f - thresh)
+            else if(phi[i__] > 1.5707963267948966192313216916397514421f - thresh)
             {
                 phi[i__] = 1.5707963267948966192313216916397514421f;
             }
         }
         /* Deflate */
-        if (imax > 1)
+        if(imax > 1)
         {
             while(phi[imax - 1] == 0.f)
             {
                 --imax;
-                if (imax <= 1)
+                if(imax <= 1)
                 {
                     break;
                 }
             }
         }
-        if (imin > imax - 1)
+        if(imin > imax - 1)
         {
             imin = imax - 1;
         }
-        if (imin > 1)
+        if(imin > 1)
         {
             while(phi[imin - 1] != 0.f)
             {
                 --imin;
-                if (imin <= 1)
+                if(imin <= 1)
                 {
                     break;
                 }
@@ -1241,43 +1291,39 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
     }
     /* Postprocessing: order THETA from least to greatest */
     i__1 = *q;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         mini = i__;
         thetamin = theta[i__];
         i__2 = *q;
-        for (j = i__ + 1;
-                j <= i__2;
-                ++j)
+        for(j = i__ + 1; j <= i__2; ++j)
         {
-            if (theta[j] < thetamin)
+            if(theta[j] < thetamin)
             {
                 mini = j;
                 thetamin = theta[j];
             }
         }
-        if (mini != i__)
+        if(mini != i__)
         {
             theta[mini] = theta[i__];
             theta[i__] = thetamin;
-            if (colmajor)
+            if(colmajor)
             {
-                if (wantu1)
+                if(wantu1)
                 {
                     cswap_(p, &u1[i__ * u1_dim1 + 1], &c__1, &u1[mini * u1_dim1 + 1], &c__1);
                 }
-                if (wantu2)
+                if(wantu2)
                 {
                     i__2 = *m - *p;
                     cswap_(&i__2, &u2[i__ * u2_dim1 + 1], &c__1, &u2[mini * u2_dim1 + 1], &c__1);
                 }
-                if (wantv1t)
+                if(wantv1t)
                 {
                     cswap_(q, &v1t[i__ + v1t_dim1], ldv1t, &v1t[mini + v1t_dim1], ldv1t);
                 }
-                if (wantv2t)
+                if(wantv2t)
                 {
                     i__2 = *m - *q;
                     cswap_(&i__2, &v2t[i__ + v2t_dim1], ldv2t, &v2t[mini + v2t_dim1], ldv2t);
@@ -1285,23 +1331,24 @@ void cbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
             }
             else
             {
-                if (wantu1)
+                if(wantu1)
                 {
                     cswap_(p, &u1[i__ + u1_dim1], ldu1, &u1[mini + u1_dim1], ldu1);
                 }
-                if (wantu2)
+                if(wantu2)
                 {
                     i__2 = *m - *p;
                     cswap_(&i__2, &u2[i__ + u2_dim1], ldu2, &u2[mini + u2_dim1], ldu2);
                 }
-                if (wantv1t)
+                if(wantv1t)
                 {
                     cswap_(q, &v1t[i__ * v1t_dim1 + 1], &c__1, &v1t[mini * v1t_dim1 + 1], &c__1);
                 }
-                if (wantv2t)
+                if(wantv2t)
                 {
                     i__2 = *m - *q;
-                    cswap_(&i__2, &v2t[i__ * v2t_dim1 + 1], &c__1, &v2t[mini * v2t_dim1 + 1], &c__1);
+                    cswap_(&i__2, &v2t[i__ * v2t_dim1 + 1], &c__1, &v2t[mini * v2t_dim1 + 1],
+                           &c__1);
                 }
             }
         }

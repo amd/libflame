@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/dgghd3.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/dgghd3.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -14,11 +17,17 @@ static integer c__16 = 16;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DGGHD3 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgghd3. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgghd3.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgghd3. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgghd3.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgghd3. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgghd3.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -76,10 +85,10 @@ static integer c__16 = 16;
 /* > \verbatim */
 /* > COMPQ is CHARACTER*1 */
 /* > = 'N': do not compute Q;
-*/
+ */
 /* > = 'I': Q is initialized to the unit matrix, and the */
 /* > orthogonal matrix Q is returned;
-*/
+ */
 /* > = 'V': Q must contain an orthogonal matrix Q1 on entry, */
 /* > and the product Q1*Q is returned. */
 /* > \endverbatim */
@@ -88,10 +97,10 @@ static integer c__16 = 16;
 /* > \verbatim */
 /* > COMPZ is CHARACTER*1 */
 /* > = 'N': do not compute Z;
-*/
+ */
 /* > = 'I': Z is initialized to the unit matrix, and the */
 /* > orthogonal matrix Z is returned;
-*/
+ */
 /* > = 'V': Z must contain an orthogonal matrix Z1 on entry, */
 /* > and the product Z1*Z is returned. */
 /* > \endverbatim */
@@ -232,12 +241,18 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *q, integer *ldq, doublereal *z__, integer * ldz, doublereal *work, integer *lwork, integer *info)
+void dgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *a,
+             integer *lda, doublereal *b, integer *ldb, doublereal *q, integer *ldq,
+             doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgghd3 inputs: compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS "",*compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz, *lwork);
+    AOCL_DTL_SNPRINTF("dgghd3 inputs: compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS
+                      ", ihi %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS
+                      ", ldz %" FLA_IS ", lwork %" FLA_IS "",
+                      *compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8;
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
+        i__3, i__4, i__5, i__6, i__7, i__8;
     doublereal d__1;
     /* Local variables */
     doublereal c__;
@@ -250,29 +265,45 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
     integer cola, jcol, ierr;
     doublereal temp;
     extern /* Subroutine */
-    void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+        void
+        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+              doublereal *);
     integer jrow, topq, ppwo;
     doublereal temp1, temp2, temp3;
     integer kacc22;
     extern /* Subroutine */
-    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *);
     integer nbmin;
     extern /* Subroutine */
-    void dorm22_(char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dorm22_(char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, integer *, doublereal *, integer *, integer *);
     integer nblst;
     logical initq, wantq;
     extern /* Subroutine */
-    void dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *);
     logical initz, wantz;
     char compq2[1], compz2[1];
     extern /* Subroutine */
-    void dgghrd_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlartg_( doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dgghrd_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
+                integer *),
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
+        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
@@ -315,76 +346,76 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
     nb = ilaenv_(&c__1, "DGGHD3", " ", n, ilo, ihi, &c_n1);
     /* Computing MAX */
     i__1 = *n * 6 * nb;
-    lwkopt = fla_max(i__1,1);
-    work[1] = (doublereal) lwkopt;
+    lwkopt = fla_max(i__1, 1);
+    work[1] = (doublereal)lwkopt;
     initq = lsame_(compq, "I", 1, 1);
     wantq = initq || lsame_(compq, "V", 1, 1);
     initz = lsame_(compz, "I", 1, 1);
     wantz = initz || lsame_(compz, "V", 1, 1);
     lquery = *lwork == -1;
-    if (! lsame_(compq, "N", 1, 1) && ! wantq)
+    if(!lsame_(compq, "N", 1, 1) && !wantq)
     {
         *info = -1;
     }
-    else if (! lsame_(compz, "N", 1, 1) && ! wantz)
+    else if(!lsame_(compz, "N", 1, 1) && !wantz)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*ilo < 1)
+    else if(*ilo < 1)
     {
         *info = -4;
     }
-    else if (*ihi > *n || *ihi < *ilo - 1)
+    else if(*ihi > *n || *ihi < *ilo - 1)
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (wantq && *ldq < *n || *ldq < 1)
+    else if(wantq && *ldq < *n || *ldq < 1)
     {
         *info = -11;
     }
-    else if (wantz && *ldz < *n || *ldz < 1)
+    else if(wantz && *ldz < *n || *ldz < 1)
     {
         *info = -13;
     }
-    else if (*lwork < 1 && ! lquery)
+    else if(*lwork < 1 && !lquery)
     {
         *info = -15;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DGGHD3", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize Q and Z if desired. */
-    if (initq)
+    if(initq)
     {
         dlaset_("All", n, n, &c_b14, &c_b15, &q[q_offset], ldq);
     }
-    if (initz)
+    if(initz)
     {
         dlaset_("All", n, n, &c_b14, &c_b15, &z__[z_offset], ldz);
     }
     /* Zero out lower triangle of B. */
-    if (*n > 1)
+    if(*n > 1)
     {
         i__1 = *n - 1;
         i__2 = *n - 1;
@@ -392,7 +423,7 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
     }
     /* Quick return if possible */
     nh = *ihi - *ilo + 1;
-    if (nh <= 1)
+    if(nh <= 1)
     {
         work[1] = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
@@ -400,26 +431,26 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
     }
     /* Determine the blocksize. */
     nbmin = ilaenv_(&c__2, "DGGHD3", " ", n, ilo, ihi, &c_n1);
-    if (nb > 1 && nb < nh)
+    if(nb > 1 && nb < nh)
     {
         /* Determine when to use unblocked instead of blocked code. */
         /* Computing MAX */
         i__1 = nb;
         i__2 = ilaenv_(&c__3, "DGGHD3", " ", n, ilo, ihi, &c_n1); // , expr subst
-        nx = fla_max(i__1,i__2);
-        if (nx < nh)
+        nx = fla_max(i__1, i__2);
+        if(nx < nh)
         {
             /* Determine if workspace is large enough for blocked code. */
-            if (*lwork < lwkopt)
+            if(*lwork < lwkopt)
             {
                 /* Not enough workspace to use optimal NB: determine the */
                 /* minimum value of NB, and reduce NB or force use of */
                 /* unblocked code. */
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "DGGHD3", " ", n, ilo, ihi, & c_n1); // , expr subst
-                nbmin = fla_max(i__1,i__2);
-                if (*lwork >= *n * 6 * nbmin)
+                i__2 = ilaenv_(&c__2, "DGGHD3", " ", n, ilo, ihi, &c_n1); // , expr subst
+                nbmin = fla_max(i__1, i__2);
+                if(*lwork >= *n * 6 * nbmin)
                 {
                     nb = *lwork / (*n * 6);
                 }
@@ -430,7 +461,7 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
             }
         }
     }
-    if (nb < nbmin || nb >= nh)
+    if(nb < nbmin || nb >= nh)
     {
         /* Use unblocked code below */
         jcol = *ilo;
@@ -442,14 +473,12 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
         blk22 = kacc22 == 2;
         i__1 = *ihi - 2;
         i__2 = nb;
-        for (jcol = *ilo;
-                i__2 < 0 ? jcol >= i__1 : jcol <= i__1;
-                jcol += i__2)
+        for(jcol = *ilo; i__2 < 0 ? jcol >= i__1 : jcol <= i__1; jcol += i__2)
         {
             /* Computing MIN */
             i__3 = nb;
             i__4 = *ihi - jcol - 1; // , expr subst
-            nnb = fla_min(i__3,i__4);
+            nnb = fla_min(i__3, i__4);
             /* Initialize small orthogonal factors that will hold the */
             /* accumulated Givens rotations in workspace. */
             /* N2NB denotes the number of 2*NNB-by-2*NNB factors */
@@ -460,9 +489,7 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
             dlaset_("All", &nblst, &nblst, &c_b14, &c_b15, &work[1], &nblst);
             pw = nblst * nblst + 1;
             i__3 = n2nb;
-            for (i__ = 1;
-                    i__ <= i__3;
-                    ++i__)
+            for(i__ = 1; i__ <= i__3; ++i__)
             {
                 i__4 = nnb << 1;
                 i__5 = nnb << 1;
@@ -472,16 +499,12 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
             }
             /* Reduce columns JCOL:JCOL+NNB-1 of A to Hessenberg form. */
             i__3 = jcol + nnb - 1;
-            for (j = jcol;
-                    j <= i__3;
-                    ++j)
+            for(j = jcol; j <= i__3; ++j)
             {
                 /* Reduce Jth column of A. Store cosines and sines in Jth */
                 /* column of A and B, respectively. */
                 i__4 = j + 2;
-                for (i__ = *ihi;
-                        i__ >= i__4;
-                        --i__)
+                for(i__ = *ihi; i__ >= i__4; --i__)
                 {
                     temp = a[i__ - 1 + j * a_dim1];
                     dlartg_(&temp, &a[i__ + j * a_dim1], &c__, &s, &a[i__ - 1 + j * a_dim1]);
@@ -493,16 +516,12 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
                 len = j + 2 - jcol;
                 jrow = j + n2nb * nnb + 2;
                 i__4 = jrow;
-                for (i__ = *ihi;
-                        i__ >= i__4;
-                        --i__)
+                for(i__ = *ihi; i__ >= i__4; --i__)
                 {
                     c__ = a[i__ + j * a_dim1];
                     s = b[i__ + j * b_dim1];
                     i__5 = ppw + len - 1;
-                    for (jj = ppw;
-                            jj <= i__5;
-                            ++jj)
+                    for(jj = ppw; jj <= i__5; ++jj)
                     {
                         temp = work[jj + nblst];
                         work[jj + nblst] = c__ * temp - s * work[jj];
@@ -515,23 +534,17 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
                 j0 = jrow - nnb;
                 i__4 = j + 2;
                 i__5 = -nnb;
-                for (jrow = j0;
-                        i__5 < 0 ? jrow >= i__4 : jrow <= i__4;
-                        jrow += i__5)
+                for(jrow = j0; i__5 < 0 ? jrow >= i__4 : jrow <= i__4; jrow += i__5)
                 {
                     ppw = ppwo;
                     len = j + 2 - jcol;
                     i__6 = jrow;
-                    for (i__ = jrow + nnb - 1;
-                            i__ >= i__6;
-                            --i__)
+                    for(i__ = jrow + nnb - 1; i__ >= i__6; --i__)
                     {
                         c__ = a[i__ + j * a_dim1];
                         s = b[i__ + j * b_dim1];
                         i__7 = ppw + len - 1;
-                        for (jj = ppw;
-                                jj <= i__7;
-                                ++jj)
+                        for(jj = ppw; jj <= i__7; ++jj)
                         {
                             temp = work[jj + (nnb << 1)];
                             work[jj + (nnb << 1)] = c__ * temp - s * work[jj];
@@ -544,7 +557,7 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
                 }
                 /* TOP denotes the number of top rows in A and B that will */
                 /* not be updated during the next steps. */
-                if (jcol <= 2)
+                if(jcol <= 2)
                 {
                     top = 0;
                 }
@@ -555,17 +568,13 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
                 /* Propagate transformations through B and replace stored */
                 /* left sines/cosines by right sines/cosines. */
                 i__5 = j + 1;
-                for (jj = *n;
-                        jj >= i__5;
-                        --jj)
+                for(jj = *n; jj >= i__5; --jj)
                 {
                     /* Update JJth column of B. */
                     /* Computing MIN */
                     i__4 = jj + 1;
                     i__6 = j + 2;
-                    for (i__ = fla_min(i__4,*ihi);
-                            i__ >= i__6;
-                            --i__)
+                    for(i__ = fla_min(i__4, *ihi); i__ >= i__6; --i__)
                     {
                         c__ = a[i__ + j * a_dim1];
                         s = b[i__ + j * b_dim1];
@@ -574,13 +583,15 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
                         b[i__ - 1 + jj * b_dim1] = s * temp + c__ * b[i__ - 1 + jj * b_dim1];
                     }
                     /* Annihilate B( JJ+1, JJ ). */
-                    if (jj < *ihi)
+                    if(jj < *ihi)
                     {
                         temp = b[jj + 1 + (jj + 1) * b_dim1];
-                        dlartg_(&temp, &b[jj + 1 + jj * b_dim1], &c__, &s, &b[ jj + 1 + (jj + 1) * b_dim1]);
+                        dlartg_(&temp, &b[jj + 1 + jj * b_dim1], &c__, &s,
+                                &b[jj + 1 + (jj + 1) * b_dim1]);
                         b[jj + 1 + jj * b_dim1] = 0.;
                         i__6 = jj - top;
-                        drot_(&i__6, &b[top + 1 + (jj + 1) * b_dim1], &c__1, & b[top + 1 + jj * b_dim1], &c__1, &c__, &s);
+                        drot_(&i__6, &b[top + 1 + (jj + 1) * b_dim1], &c__1,
+                              &b[top + 1 + jj * b_dim1], &c__1, &c__, &s);
                         a[jj + 1 + j * a_dim1] = c__;
                         b[jj + 1 + j * b_dim1] = -s;
                     }
@@ -593,9 +604,7 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
                 /* $ A( TOP+1, J+1 ), LDA ) */
                 jj = (*ihi - j - 1) % 3;
                 i__5 = jj + 1;
-                for (i__ = *ihi - j - 3;
-                        i__ >= i__5;
-                        i__ += -3)
+                for(i__ = *ihi - j - 3; i__ >= i__5; i__ += -3)
                 {
                     c__ = a[j + 1 + i__ + j * a_dim1];
                     s = -b[j + 1 + i__ + j * b_dim1];
@@ -604,9 +613,7 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
                     c2 = a[j + 3 + i__ + j * a_dim1];
                     s2 = -b[j + 3 + i__ + j * b_dim1];
                     i__6 = *ihi;
-                    for (k = top + 1;
-                            k <= i__6;
-                            ++k)
+                    for(k = top + 1; k <= i__6; ++k)
                     {
                         temp = a[k + (j + i__) * a_dim1];
                         temp1 = a[k + (j + i__ + 1) * a_dim1];
@@ -620,19 +627,19 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
                         a[k + (j + i__) * a_dim1] = -s * temp1 + c__ * temp;
                     }
                 }
-                if (jj > 0)
+                if(jj > 0)
                 {
-                    for (i__ = jj;
-                            i__ >= 1;
-                            --i__)
+                    for(i__ = jj; i__ >= 1; --i__)
                     {
                         i__5 = *ihi - top;
                         d__1 = -b[j + 1 + i__ + j * b_dim1];
-                        drot_(&i__5, &a[top + 1 + (j + i__ + 1) * a_dim1], & c__1, &a[top + 1 + (j + i__) * a_dim1], &c__1, &a[j + 1 + i__ + j * a_dim1], &d__1);
+                        drot_(&i__5, &a[top + 1 + (j + i__ + 1) * a_dim1], &c__1,
+                              &a[top + 1 + (j + i__) * a_dim1], &c__1, &a[j + 1 + i__ + j * a_dim1],
+                              &d__1);
                     }
                 }
                 /* Update (J+1)th column of A by transformations from left. */
-                if (j < jcol + nnb - 1)
+                if(j < jcol + nnb - 1)
                 {
                     len = j + 1 - jcol;
                     /* Multiply with the trailing accumulated orthogonal */
@@ -643,25 +650,25 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
                     /* where U21 is a LEN-by-LEN matrix and U12 is lower */
                     /* triangular. */
                     jrow = *ihi - nblst + 1;
-                    dgemv_("Transpose", &nblst, &len, &c_b15, &work[1], & nblst, &a[jrow + (j + 1) * a_dim1], &c__1, &c_b14, &work[pw], &c__1);
+                    dgemv_("Transpose", &nblst, &len, &c_b15, &work[1], &nblst,
+                           &a[jrow + (j + 1) * a_dim1], &c__1, &c_b14, &work[pw], &c__1);
                     ppw = pw + len;
                     i__5 = jrow + nblst - len - 1;
-                    for (i__ = jrow;
-                            i__ <= i__5;
-                            ++i__)
+                    for(i__ = jrow; i__ <= i__5; ++i__)
                     {
                         work[ppw] = a[i__ + (j + 1) * a_dim1];
                         ++ppw;
                     }
                     i__5 = nblst - len;
-                    dtrmv_("Lower", "Transpose", "Non-unit", &i__5, &work[len * nblst + 1], &nblst, &work[pw + len], &c__1);
+                    dtrmv_("Lower", "Transpose", "Non-unit", &i__5, &work[len * nblst + 1], &nblst,
+                           &work[pw + len], &c__1);
                     i__5 = nblst - len;
-                    dgemv_("Transpose", &len, &i__5, &c_b15, &work[(len + 1) * nblst - len + 1], &nblst, &a[jrow + nblst - len + (j + 1) * a_dim1], &c__1, &c_b15, &work[pw + len], &c__1);
+                    dgemv_("Transpose", &len, &i__5, &c_b15, &work[(len + 1) * nblst - len + 1],
+                           &nblst, &a[jrow + nblst - len + (j + 1) * a_dim1], &c__1, &c_b15,
+                           &work[pw + len], &c__1);
                     ppw = pw;
                     i__5 = jrow + nblst - 1;
-                    for (i__ = jrow;
-                            i__ <= i__5;
-                            ++i__)
+                    for(i__ = jrow; i__ <= i__5; ++i__)
                     {
                         a[i__ + (j + 1) * a_dim1] = work[ppw];
                         ++ppw;
@@ -680,41 +687,39 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
                     j0 = jrow - nnb;
                     i__5 = jcol + 1;
                     i__6 = -nnb;
-                    for (jrow = j0;
-                            i__6 < 0 ? jrow >= i__5 : jrow <= i__5;
-                            jrow += i__6)
+                    for(jrow = j0; i__6 < 0 ? jrow >= i__5 : jrow <= i__5; jrow += i__6)
                     {
                         ppw = pw + len;
                         i__4 = jrow + nnb - 1;
-                        for (i__ = jrow;
-                                i__ <= i__4;
-                                ++i__)
+                        for(i__ = jrow; i__ <= i__4; ++i__)
                         {
                             work[ppw] = a[i__ + (j + 1) * a_dim1];
                             ++ppw;
                         }
                         ppw = pw;
                         i__4 = jrow + nnb + len - 1;
-                        for (i__ = jrow + nnb;
-                                i__ <= i__4;
-                                ++i__)
+                        for(i__ = jrow + nnb; i__ <= i__4; ++i__)
                         {
                             work[ppw] = a[i__ + (j + 1) * a_dim1];
                             ++ppw;
                         }
                         i__4 = nnb << 1;
-                        dtrmv_("Upper", "Transpose", "Non-unit", &len, &work[ ppwo + nnb], &i__4, &work[pw], &c__1);
+                        dtrmv_("Upper", "Transpose", "Non-unit", &len, &work[ppwo + nnb], &i__4,
+                               &work[pw], &c__1);
                         i__4 = nnb << 1;
-                        dtrmv_("Lower", "Transpose", "Non-unit", &nnb, &work[ ppwo + (len << 1) * nnb], &i__4, &work[pw + len], &c__1);
+                        dtrmv_("Lower", "Transpose", "Non-unit", &nnb,
+                               &work[ppwo + (len << 1) * nnb], &i__4, &work[pw + len], &c__1);
                         i__4 = nnb << 1;
-                        dgemv_("Transpose", &nnb, &len, &c_b15, &work[ppwo], & i__4, &a[jrow + (j + 1) * a_dim1], &c__1, & c_b15, &work[pw], &c__1);
+                        dgemv_("Transpose", &nnb, &len, &c_b15, &work[ppwo], &i__4,
+                               &a[jrow + (j + 1) * a_dim1], &c__1, &c_b15, &work[pw], &c__1);
                         i__4 = nnb << 1;
-                        dgemv_("Transpose", &len, &nnb, &c_b15, &work[ppwo + ( len << 1) * nnb + nnb], &i__4, &a[jrow + nnb + (j + 1) * a_dim1], &c__1, &c_b15, &work[pw + len], &c__1);
+                        dgemv_("Transpose", &len, &nnb, &c_b15,
+                               &work[ppwo + (len << 1) * nnb + nnb], &i__4,
+                               &a[jrow + nnb + (j + 1) * a_dim1], &c__1, &c_b15, &work[pw + len],
+                               &c__1);
                         ppw = pw;
                         i__4 = jrow + len + nnb - 1;
-                        for (i__ = jrow;
-                                i__ <= i__4;
-                                ++i__)
+                        for(i__ = jrow; i__ <= i__4; ++i__)
                         {
                             a[i__ + (j + 1) * a_dim1] = work[ppw];
                             ++ppw;
@@ -726,17 +731,16 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
             /* Apply accumulated orthogonal matrices to A. */
             cola = *n - jcol - nnb + 1;
             j = *ihi - nblst + 1;
-            dgemm_("Transpose", "No Transpose", &nblst, &cola, &nblst, &c_b15, &work[1], &nblst, &a[j + (jcol + nnb) * a_dim1], lda, & c_b14, &work[pw], &nblst);
+            dgemm_("Transpose", "No Transpose", &nblst, &cola, &nblst, &c_b15, &work[1], &nblst,
+                   &a[j + (jcol + nnb) * a_dim1], lda, &c_b14, &work[pw], &nblst);
             dlacpy_("All", &nblst, &cola, &work[pw], &nblst, &a[j + (jcol + nnb) * a_dim1], lda);
             ppwo = nblst * nblst + 1;
             j0 = j - nnb;
             i__3 = jcol + 1;
             i__6 = -nnb;
-            for (j = j0;
-                    i__6 < 0 ? j >= i__3 : j <= i__3;
-                    j += i__6)
+            for(j = j0; i__6 < 0 ? j >= i__3 : j <= i__3; j += i__6)
             {
-                if (blk22)
+                if(blk22)
                 {
                     /* Exploit the structure of */
                     /* [ U11 U12 ] */
@@ -747,7 +751,8 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
                     i__5 = nnb << 1;
                     i__4 = nnb << 1;
                     i__7 = *lwork - pw + 1;
-                    dorm22_("Left", "Transpose", &i__5, &cola, &nnb, &nnb, & work[ppwo], &i__4, &a[j + (jcol + nnb) * a_dim1], lda, &work[pw], &i__7, &ierr);
+                    dorm22_("Left", "Transpose", &i__5, &cola, &nnb, &nnb, &work[ppwo], &i__4,
+                            &a[j + (jcol + nnb) * a_dim1], lda, &work[pw], &i__7, &ierr);
                 }
                 else
                 {
@@ -756,23 +761,25 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
                     i__4 = nnb << 1;
                     i__7 = nnb << 1;
                     i__8 = nnb << 1;
-                    dgemm_("Transpose", "No Transpose", &i__5, &cola, &i__4, & c_b15, &work[ppwo], &i__7, &a[j + (jcol + nnb) * a_dim1], lda, &c_b14, &work[pw], &i__8);
+                    dgemm_("Transpose", "No Transpose", &i__5, &cola, &i__4, &c_b15, &work[ppwo],
+                           &i__7, &a[j + (jcol + nnb) * a_dim1], lda, &c_b14, &work[pw], &i__8);
                     i__5 = nnb << 1;
                     i__4 = nnb << 1;
-                    dlacpy_("All", &i__5, &cola, &work[pw], &i__4, &a[j + ( jcol + nnb) * a_dim1], lda);
+                    dlacpy_("All", &i__5, &cola, &work[pw], &i__4, &a[j + (jcol + nnb) * a_dim1],
+                            lda);
                 }
                 ppwo += (nnb << 2) * nnb;
             }
             /* Apply accumulated orthogonal matrices to Q. */
-            if (wantq)
+            if(wantq)
             {
                 j = *ihi - nblst + 1;
-                if (initq)
+                if(initq)
                 {
                     /* Computing MAX */
                     i__6 = 2;
                     i__3 = j - jcol + 1; // , expr subst
-                    topq = fla_max(i__6,i__3);
+                    topq = fla_max(i__6, i__3);
                     nh = *ihi - topq + 1;
                 }
                 else
@@ -780,31 +787,31 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
                     topq = 1;
                     nh = *n;
                 }
-                dgemm_("No Transpose", "No Transpose", &nh, &nblst, &nblst, & c_b15, &q[topq + j * q_dim1], ldq, &work[1], &nblst, & c_b14, &work[pw], &nh);
+                dgemm_("No Transpose", "No Transpose", &nh, &nblst, &nblst, &c_b15,
+                       &q[topq + j * q_dim1], ldq, &work[1], &nblst, &c_b14, &work[pw], &nh);
                 dlacpy_("All", &nh, &nblst, &work[pw], &nh, &q[topq + j * q_dim1], ldq);
                 ppwo = nblst * nblst + 1;
                 j0 = j - nnb;
                 i__6 = jcol + 1;
                 i__3 = -nnb;
-                for (j = j0;
-                        i__3 < 0 ? j >= i__6 : j <= i__6;
-                        j += i__3)
+                for(j = j0; i__3 < 0 ? j >= i__6 : j <= i__6; j += i__3)
                 {
-                    if (initq)
+                    if(initq)
                     {
                         /* Computing MAX */
                         i__5 = 2;
                         i__4 = j - jcol + 1; // , expr subst
-                        topq = fla_max(i__5,i__4);
+                        topq = fla_max(i__5, i__4);
                         nh = *ihi - topq + 1;
                     }
-                    if (blk22)
+                    if(blk22)
                     {
                         /* Exploit the structure of U. */
                         i__5 = nnb << 1;
                         i__4 = nnb << 1;
                         i__7 = *lwork - pw + 1;
-                        dorm22_("Right", "No Transpose", &nh, &i__5, &nnb, & nnb, &work[ppwo], &i__4, &q[topq + j * q_dim1], ldq, &work[pw], &i__7, &ierr);
+                        dorm22_("Right", "No Transpose", &nh, &i__5, &nnb, &nnb, &work[ppwo], &i__4,
+                                &q[topq + j * q_dim1], ldq, &work[pw], &i__7, &ierr);
                     }
                     else
                     {
@@ -812,7 +819,9 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
                         i__5 = nnb << 1;
                         i__4 = nnb << 1;
                         i__7 = nnb << 1;
-                        dgemm_("No Transpose", "No Transpose", &nh, &i__5, & i__4, &c_b15, &q[topq + j * q_dim1], ldq, & work[ppwo], &i__7, &c_b14, &work[pw], &nh);
+                        dgemm_("No Transpose", "No Transpose", &nh, &i__5, &i__4, &c_b15,
+                               &q[topq + j * q_dim1], ldq, &work[ppwo], &i__7, &c_b14, &work[pw],
+                               &nh);
                         i__5 = nnb << 1;
                         dlacpy_("All", &nh, &i__5, &work[pw], &nh, &q[topq + j * q_dim1], ldq);
                     }
@@ -820,45 +829,37 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
                 }
             }
             /* Accumulate right Givens rotations if required. */
-            if (wantz || top > 0)
+            if(wantz || top > 0)
             {
                 /* Initialize small orthogonal factors that will hold the */
                 /* accumulated Givens rotations in workspace. */
-                dlaset_("All", &nblst, &nblst, &c_b14, &c_b15, &work[1], & nblst);
+                dlaset_("All", &nblst, &nblst, &c_b14, &c_b15, &work[1], &nblst);
                 pw = nblst * nblst + 1;
                 i__3 = n2nb;
-                for (i__ = 1;
-                        i__ <= i__3;
-                        ++i__)
+                for(i__ = 1; i__ <= i__3; ++i__)
                 {
                     i__6 = nnb << 1;
                     i__5 = nnb << 1;
                     i__4 = nnb << 1;
-                    dlaset_("All", &i__6, &i__5, &c_b14, &c_b15, &work[pw], & i__4);
+                    dlaset_("All", &i__6, &i__5, &c_b14, &c_b15, &work[pw], &i__4);
                     pw += (nnb << 2) * nnb;
                 }
                 /* Accumulate Givens rotations into workspace array. */
                 i__3 = jcol + nnb - 1;
-                for (j = jcol;
-                        j <= i__3;
-                        ++j)
+                for(j = jcol; j <= i__3; ++j)
                 {
                     ppw = (nblst + 1) * (nblst - 2) - j + jcol + 1;
                     len = j + 2 - jcol;
                     jrow = j + n2nb * nnb + 2;
                     i__6 = jrow;
-                    for (i__ = *ihi;
-                            i__ >= i__6;
-                            --i__)
+                    for(i__ = *ihi; i__ >= i__6; --i__)
                     {
                         c__ = a[i__ + j * a_dim1];
                         a[i__ + j * a_dim1] = 0.;
                         s = b[i__ + j * b_dim1];
                         b[i__ + j * b_dim1] = 0.;
                         i__5 = ppw + len - 1;
-                        for (jj = ppw;
-                                jj <= i__5;
-                                ++jj)
+                        for(jj = ppw; jj <= i__5; ++jj)
                         {
                             temp = work[jj + nblst];
                             work[jj + nblst] = c__ * temp - s * work[jj];
@@ -871,28 +872,22 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
                     j0 = jrow - nnb;
                     i__6 = j + 2;
                     i__5 = -nnb;
-                    for (jrow = j0;
-                            i__5 < 0 ? jrow >= i__6 : jrow <= i__6;
-                            jrow += i__5)
+                    for(jrow = j0; i__5 < 0 ? jrow >= i__6 : jrow <= i__6; jrow += i__5)
                     {
                         ppw = ppwo;
                         len = j + 2 - jcol;
                         i__4 = jrow;
-                        for (i__ = jrow + nnb - 1;
-                                i__ >= i__4;
-                                --i__)
+                        for(i__ = jrow + nnb - 1; i__ >= i__4; --i__)
                         {
                             c__ = a[i__ + j * a_dim1];
                             a[i__ + j * a_dim1] = 0.;
                             s = b[i__ + j * b_dim1];
                             b[i__ + j * b_dim1] = 0.;
                             i__7 = ppw + len - 1;
-                            for (jj = ppw;
-                                    jj <= i__7;
-                                    ++jj)
+                            for(jj = ppw; jj <= i__7; ++jj)
                             {
                                 temp = work[jj + (nnb << 1)];
-                                work[jj + (nnb << 1)] = c__ * temp - s * work[ jj];
+                                work[jj + (nnb << 1)] = c__ * temp - s * work[jj];
                                 work[jj] = s * temp + c__ * work[jj];
                             }
                             ++len;
@@ -910,26 +905,26 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
                 dlaset_("Lower", &i__3, &nnb, &c_b14, &c_b14, &b[jcol + 2 + jcol * b_dim1], ldb);
             }
             /* Apply accumulated orthogonal matrices to A and B. */
-            if (top > 0)
+            if(top > 0)
             {
                 j = *ihi - nblst + 1;
-                dgemm_("No Transpose", "No Transpose", &top, &nblst, &nblst, & c_b15, &a[j * a_dim1 + 1], lda, &work[1], &nblst, & c_b14, &work[pw], &top);
+                dgemm_("No Transpose", "No Transpose", &top, &nblst, &nblst, &c_b15,
+                       &a[j * a_dim1 + 1], lda, &work[1], &nblst, &c_b14, &work[pw], &top);
                 dlacpy_("All", &top, &nblst, &work[pw], &top, &a[j * a_dim1 + 1], lda);
                 ppwo = nblst * nblst + 1;
                 j0 = j - nnb;
                 i__3 = jcol + 1;
                 i__5 = -nnb;
-                for (j = j0;
-                        i__5 < 0 ? j >= i__3 : j <= i__3;
-                        j += i__5)
+                for(j = j0; i__5 < 0 ? j >= i__3 : j <= i__3; j += i__5)
                 {
-                    if (blk22)
+                    if(blk22)
                     {
                         /* Exploit the structure of U. */
                         i__6 = nnb << 1;
                         i__4 = nnb << 1;
                         i__7 = *lwork - pw + 1;
-                        dorm22_("Right", "No Transpose", &top, &i__6, &nnb, & nnb, &work[ppwo], &i__4, &a[j * a_dim1 + 1], lda, &work[pw], &i__7, &ierr);
+                        dorm22_("Right", "No Transpose", &top, &i__6, &nnb, &nnb, &work[ppwo],
+                                &i__4, &a[j * a_dim1 + 1], lda, &work[pw], &i__7, &ierr);
                     }
                     else
                     {
@@ -937,30 +932,32 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
                         i__6 = nnb << 1;
                         i__4 = nnb << 1;
                         i__7 = nnb << 1;
-                        dgemm_("No Transpose", "No Transpose", &top, &i__6, & i__4, &c_b15, &a[j * a_dim1 + 1], lda, &work[ ppwo], &i__7, &c_b14, &work[pw], &top);
+                        dgemm_("No Transpose", "No Transpose", &top, &i__6, &i__4, &c_b15,
+                               &a[j * a_dim1 + 1], lda, &work[ppwo], &i__7, &c_b14, &work[pw],
+                               &top);
                         i__6 = nnb << 1;
                         dlacpy_("All", &top, &i__6, &work[pw], &top, &a[j * a_dim1 + 1], lda);
                     }
                     ppwo += (nnb << 2) * nnb;
                 }
                 j = *ihi - nblst + 1;
-                dgemm_("No Transpose", "No Transpose", &top, &nblst, &nblst, & c_b15, &b[j * b_dim1 + 1], ldb, &work[1], &nblst, & c_b14, &work[pw], &top);
+                dgemm_("No Transpose", "No Transpose", &top, &nblst, &nblst, &c_b15,
+                       &b[j * b_dim1 + 1], ldb, &work[1], &nblst, &c_b14, &work[pw], &top);
                 dlacpy_("All", &top, &nblst, &work[pw], &top, &b[j * b_dim1 + 1], ldb);
                 ppwo = nblst * nblst + 1;
                 j0 = j - nnb;
                 i__5 = jcol + 1;
                 i__3 = -nnb;
-                for (j = j0;
-                        i__3 < 0 ? j >= i__5 : j <= i__5;
-                        j += i__3)
+                for(j = j0; i__3 < 0 ? j >= i__5 : j <= i__5; j += i__3)
                 {
-                    if (blk22)
+                    if(blk22)
                     {
                         /* Exploit the structure of U. */
                         i__6 = nnb << 1;
                         i__4 = nnb << 1;
                         i__7 = *lwork - pw + 1;
-                        dorm22_("Right", "No Transpose", &top, &i__6, &nnb, & nnb, &work[ppwo], &i__4, &b[j * b_dim1 + 1], ldb, &work[pw], &i__7, &ierr);
+                        dorm22_("Right", "No Transpose", &top, &i__6, &nnb, &nnb, &work[ppwo],
+                                &i__4, &b[j * b_dim1 + 1], ldb, &work[pw], &i__7, &ierr);
                     }
                     else
                     {
@@ -968,7 +965,9 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
                         i__6 = nnb << 1;
                         i__4 = nnb << 1;
                         i__7 = nnb << 1;
-                        dgemm_("No Transpose", "No Transpose", &top, &i__6, & i__4, &c_b15, &b[j * b_dim1 + 1], ldb, &work[ ppwo], &i__7, &c_b14, &work[pw], &top);
+                        dgemm_("No Transpose", "No Transpose", &top, &i__6, &i__4, &c_b15,
+                               &b[j * b_dim1 + 1], ldb, &work[ppwo], &i__7, &c_b14, &work[pw],
+                               &top);
                         i__6 = nnb << 1;
                         dlacpy_("All", &top, &i__6, &work[pw], &top, &b[j * b_dim1 + 1], ldb);
                     }
@@ -976,15 +975,15 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
                 }
             }
             /* Apply accumulated orthogonal matrices to Z. */
-            if (wantz)
+            if(wantz)
             {
                 j = *ihi - nblst + 1;
-                if (initq)
+                if(initq)
                 {
                     /* Computing MAX */
                     i__3 = 2;
                     i__5 = j - jcol + 1; // , expr subst
-                    topq = fla_max(i__3,i__5);
+                    topq = fla_max(i__3, i__5);
                     nh = *ihi - topq + 1;
                 }
                 else
@@ -992,31 +991,31 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
                     topq = 1;
                     nh = *n;
                 }
-                dgemm_("No Transpose", "No Transpose", &nh, &nblst, &nblst, & c_b15, &z__[topq + j * z_dim1], ldz, &work[1], &nblst, &c_b14, &work[pw], &nh);
+                dgemm_("No Transpose", "No Transpose", &nh, &nblst, &nblst, &c_b15,
+                       &z__[topq + j * z_dim1], ldz, &work[1], &nblst, &c_b14, &work[pw], &nh);
                 dlacpy_("All", &nh, &nblst, &work[pw], &nh, &z__[topq + j * z_dim1], ldz);
                 ppwo = nblst * nblst + 1;
                 j0 = j - nnb;
                 i__3 = jcol + 1;
                 i__5 = -nnb;
-                for (j = j0;
-                        i__5 < 0 ? j >= i__3 : j <= i__3;
-                        j += i__5)
+                for(j = j0; i__5 < 0 ? j >= i__3 : j <= i__3; j += i__5)
                 {
-                    if (initq)
+                    if(initq)
                     {
                         /* Computing MAX */
                         i__6 = 2;
                         i__4 = j - jcol + 1; // , expr subst
-                        topq = fla_max(i__6,i__4);
+                        topq = fla_max(i__6, i__4);
                         nh = *ihi - topq + 1;
                     }
-                    if (blk22)
+                    if(blk22)
                     {
                         /* Exploit the structure of U. */
                         i__6 = nnb << 1;
                         i__4 = nnb << 1;
                         i__7 = *lwork - pw + 1;
-                        dorm22_("Right", "No Transpose", &nh, &i__6, &nnb, & nnb, &work[ppwo], &i__4, &z__[topq + j * z_dim1], ldz, &work[pw], &i__7, &ierr);
+                        dorm22_("Right", "No Transpose", &nh, &i__6, &nnb, &nnb, &work[ppwo], &i__4,
+                                &z__[topq + j * z_dim1], ldz, &work[pw], &i__7, &ierr);
                     }
                     else
                     {
@@ -1024,7 +1023,9 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
                         i__6 = nnb << 1;
                         i__4 = nnb << 1;
                         i__7 = nnb << 1;
-                        dgemm_("No Transpose", "No Transpose", &nh, &i__6, & i__4, &c_b15, &z__[topq + j * z_dim1], ldz, & work[ppwo], &i__7, &c_b14, &work[pw], &nh);
+                        dgemm_("No Transpose", "No Transpose", &nh, &i__6, &i__4, &c_b15,
+                               &z__[topq + j * z_dim1], ldz, &work[ppwo], &i__7, &c_b14, &work[pw],
+                               &nh);
                         i__6 = nnb << 1;
                         dlacpy_("All", &nh, &i__6, &work[pw], &nh, &z__[topq + j * z_dim1], ldz);
                     }
@@ -1037,22 +1038,23 @@ void dgghd3_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
     /* Avoid re-initialization of modified Q and Z. */
     *(unsigned char *)compq2 = *(unsigned char *)compq;
     *(unsigned char *)compz2 = *(unsigned char *)compz;
-    if (jcol != *ilo)
+    if(jcol != *ilo)
     {
-        if (wantq)
+        if(wantq)
         {
             *(unsigned char *)compq2 = 'V';
         }
-        if (wantz)
+        if(wantz)
         {
             *(unsigned char *)compz2 = 'V';
         }
     }
-    if (jcol < *ihi)
+    if(jcol < *ihi)
     {
-        dgghrd_(compq2, compz2, n, &jcol, ihi, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &ierr);
+        dgghrd_(compq2, compz2, n, &jcol, ihi, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
+                ldq, &z__[z_offset], ldz, &ierr);
     }
-    work[1] = (doublereal) lwkopt;
+    work[1] = (doublereal)lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DGGHD3 */

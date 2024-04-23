@@ -1,22 +1,27 @@
-/* ../netlib/ctftri.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ctftri.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {1.f, 0.f};
 /* > \brief \b CTFTRI */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CTFTRI + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctftri. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctftri.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctftri. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctftri.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctftri. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctftri.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -45,7 +50,7 @@ static complex c_b1 =
 /* > \verbatim */
 /* > TRANSR is CHARACTER*1 */
 /* > = 'N': The Normal TRANSR of RFP A is stored;
-*/
+ */
 /* > = 'C': The Conjugate-transpose TRANSR of RFP A is stored. */
 /* > \endverbatim */
 /* > */
@@ -53,7 +58,7 @@ static complex c_b1 =
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': A is upper triangular;
-*/
+ */
 /* > = 'L': A is lower triangular. */
 /* > \endverbatim */
 /* > */
@@ -61,7 +66,7 @@ static complex c_b1 =
 /* > \verbatim */
 /* > DIAG is CHARACTER*1 */
 /* > = 'N': A is non-unit triangular;
-*/
+ */
 /* > = 'U': A is unit triangular. */
 /* > \endverbatim */
 /* > */
@@ -74,7 +79,7 @@ static complex c_b1 =
 /* > \param[in,out] A */
 /* > \verbatim */
 /* > A is COMPLEX array, dimension ( N*(N+1)/2 );
-*/
+ */
 /* > On entry, the triangular matrix A in RFP format. RFP format */
 /* > is described by TRANSR, UPLO, and N as follows: If TRANSR = */
 /* > 'N' then RFP A is (0:N,0:k-1) when N is even;
@@ -226,9 +231,11 @@ void ctftri_(char *transr, char *uplo, char *diag, integer *n, complex *a, integ
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctftri inputs: transr %c, uplo %c, diag %c, n %lld",*transr, *uplo, *diag, *n);
+    snprintf(buffer, 256, "ctftri inputs: transr %c, uplo %c, diag %c, n %lld", *transr, *uplo,
+             *diag, *n);
 #else
-    snprintf(buffer, 256,"ctftri inputs: transr %c, uplo %c, diag %c, n %d",*transr, *uplo, *diag, *n);
+    snprintf(buffer, 256, "ctftri inputs: transr %c, uplo %c, diag %c, n %d", *transr, *uplo, *diag,
+             *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -240,13 +247,17 @@ void ctftri_(char *transr, char *uplo, char *diag, integer *n, complex *a, integ
     logical normaltransr;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+        void
+        ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
+               integer *, complex *, integer *);
     logical lower;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     extern /* Subroutine */
-    void ctrtri_(char *, char *, integer *, complex *, integer *, integer *);
+        void
+        ctrtri_(char *, char *, integer *, complex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -271,23 +282,23 @@ void ctftri_(char *transr, char *uplo, char *diag, integer *n, complex *a, integ
     *info = 0;
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
-    if (! normaltransr && ! lsame_(transr, "C", 1, 1))
+    if(!normaltransr && !lsame_(transr, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U", 1, 1))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }
-    else if (! lsame_(diag, "N", 1, 1) && ! lsame_(diag, "U", 1, 1))
+    else if(!lsame_(diag, "N", 1, 1) && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CTFTRI", &i__1, (ftnlen)6);
@@ -295,14 +306,14 @@ void ctftri_(char *transr, char *uplo, char *diag, integer *n, complex *a, integ
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* If N is odd, set NISODD = .TRUE. */
     /* If N is even, set K = N/2 and NISODD = .FALSE. */
-    if (*n % 2 == 0)
+    if(*n % 2 == 0)
     {
         k = *n / 2;
         nisodd = FALSE_;
@@ -312,7 +323,7 @@ void ctftri_(char *transr, char *uplo, char *diag, integer *n, complex *a, integ
         nisodd = TRUE_;
     }
     /* Set N1 and N2 depending on LOWER */
-    if (lower)
+    if(lower)
     {
         n2 = *n / 2;
         n1 = *n - n2;
@@ -323,19 +334,19 @@ void ctftri_(char *transr, char *uplo, char *diag, integer *n, complex *a, integ
         n2 = *n - n1;
     }
     /* start execution: there are eight cases */
-    if (nisodd)
+    if(nisodd)
     {
         /* N is odd */
-        if (normaltransr)
+        if(normaltransr)
         {
             /* N is odd and TRANSR = 'N' */
-            if (lower)
+            if(lower)
             {
                 /* SRPA for LOWER, NORMAL and N is odd ( a(0:n-1,0:n1-1) ) */
                 /* T1 -> a(0,0), T2 -> a(0,1), S -> a(n1,0) */
                 /* T1 -> a(0), T2 -> a(n), S -> a(n1) */
                 ctrtri_("L", diag, &n1, a, n, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
@@ -343,12 +354,12 @@ void ctftri_(char *transr, char *uplo, char *diag, integer *n, complex *a, integ
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
                 ctrmm_("R", "L", "N", diag, &n2, &n1, &q__1, a, n, &a[n1], n);
-                ctrtri_("U", diag, &n2, &a[*n], n, info) ;
-                if (*info > 0)
+                ctrtri_("U", diag, &n2, &a[*n], n, info);
+                if(*info > 0)
                 {
                     *info += n1;
                 }
-                if (*info > 0)
+                if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
@@ -360,8 +371,8 @@ void ctftri_(char *transr, char *uplo, char *diag, integer *n, complex *a, integ
                 /* SRPA for UPPER, NORMAL and N is odd ( a(0:n-1,0:n2-1) */
                 /* T1 -> a(n1+1,0), T2 -> a(n1,0), S -> a(0,0) */
                 /* T1 -> a(n2), T2 -> a(n1), S -> a(0) */
-                ctrtri_("L", diag, &n1, &a[n2], n, info) ;
-                if (*info > 0)
+                ctrtri_("L", diag, &n1, &a[n2], n, info);
+                if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
@@ -369,12 +380,12 @@ void ctftri_(char *transr, char *uplo, char *diag, integer *n, complex *a, integ
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
                 ctrmm_("L", "L", "C", diag, &n1, &n2, &q__1, &a[n2], n, a, n);
-                ctrtri_("U", diag, &n2, &a[n1], n, info) ;
-                if (*info > 0)
+                ctrtri_("U", diag, &n2, &a[n1], n, info);
+                if(*info > 0)
                 {
                     *info += n1;
                 }
-                if (*info > 0)
+                if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
@@ -385,12 +396,12 @@ void ctftri_(char *transr, char *uplo, char *diag, integer *n, complex *a, integ
         else
         {
             /* N is odd and TRANSR = 'C' */
-            if (lower)
+            if(lower)
             {
                 /* SRPA for LOWER, TRANSPOSE and N is odd */
                 /* T1 -> a(0), T2 -> a(1), S -> a(0+n1*n1) */
                 ctrtri_("U", diag, &n1, a, &n1, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
@@ -399,23 +410,23 @@ void ctftri_(char *transr, char *uplo, char *diag, integer *n, complex *a, integ
                 q__1.i = -0.f; // , expr subst
                 ctrmm_("L", "U", "N", diag, &n1, &n2, &q__1, a, &n1, &a[n1 * n1], &n1);
                 ctrtri_("L", diag, &n2, &a[1], &n1, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
                     *info += n1;
                 }
-                if (*info > 0)
+                if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
                 }
-                ctrmm_("R", "L", "C", diag, &n1, &n2, &c_b1, &a[1], &n1, &a[ n1 * n1], &n1);
+                ctrmm_("R", "L", "C", diag, &n1, &n2, &c_b1, &a[1], &n1, &a[n1 * n1], &n1);
             }
             else
             {
                 /* SRPA for UPPER, TRANSPOSE and N is odd */
                 /* T1 -> a(0+n2*n2), T2 -> a(0+n1*n2), S -> a(0) */
                 ctrtri_("U", diag, &n1, &a[n2 * n2], &n2, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
@@ -424,11 +435,11 @@ void ctftri_(char *transr, char *uplo, char *diag, integer *n, complex *a, integ
                 q__1.i = -0.f; // , expr subst
                 ctrmm_("R", "U", "C", diag, &n2, &n1, &q__1, &a[n2 * n2], &n2, a, &n2);
                 ctrtri_("L", diag, &n2, &a[n1 * n2], &n2, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
                     *info += n1;
                 }
-                if (*info > 0)
+                if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
@@ -440,17 +451,17 @@ void ctftri_(char *transr, char *uplo, char *diag, integer *n, complex *a, integ
     else
     {
         /* N is even */
-        if (normaltransr)
+        if(normaltransr)
         {
             /* N is even and TRANSR = 'N' */
-            if (lower)
+            if(lower)
             {
                 /* SRPA for LOWER, NORMAL, and N is even ( a(0:n,0:k-1) ) */
                 /* T1 -> a(1,0), T2 -> a(0,0), S -> a(k+1,0) */
                 /* T1 -> a(1), T2 -> a(0), S -> a(k+1) */
                 i__1 = *n + 1;
                 ctrtri_("L", diag, &k, &a[1], &i__1, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
@@ -462,11 +473,11 @@ void ctftri_(char *transr, char *uplo, char *diag, integer *n, complex *a, integ
                 ctrmm_("R", "L", "N", diag, &k, &k, &q__1, &a[1], &i__1, &a[k + 1], &i__2);
                 i__1 = *n + 1;
                 ctrtri_("U", diag, &k, a, &i__1, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
                     *info += k;
                 }
-                if (*info > 0)
+                if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
@@ -482,7 +493,7 @@ void ctftri_(char *transr, char *uplo, char *diag, integer *n, complex *a, integ
                 /* T1 -> a(k+1), T2 -> a(k), S -> a(0) */
                 i__1 = *n + 1;
                 ctrtri_("L", diag, &k, &a[k + 1], &i__1, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
@@ -494,44 +505,44 @@ void ctftri_(char *transr, char *uplo, char *diag, integer *n, complex *a, integ
                 ctrmm_("L", "L", "C", diag, &k, &k, &q__1, &a[k + 1], &i__1, a, &i__2);
                 i__1 = *n + 1;
                 ctrtri_("U", diag, &k, &a[k], &i__1, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
                     *info += k;
                 }
-                if (*info > 0)
+                if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                ctrmm_("R", "U", "N", diag, &k, &k, &c_b1, &a[k], &i__1, a, & i__2);
+                ctrmm_("R", "U", "N", diag, &k, &k, &c_b1, &a[k], &i__1, a, &i__2);
             }
         }
         else
         {
             /* N is even and TRANSR = 'C' */
-            if (lower)
+            if(lower)
             {
                 /* SRPA for LOWER, TRANSPOSE and N is even (see paper) */
                 /* T1 -> B(0,1), T2 -> B(0,0), S -> B(0,k+1) */
                 /* T1 -> a(0+k), T2 -> a(0+0), S -> a(0+k*(k+1));
                 lda=k */
                 ctrtri_("U", diag, &k, &a[k], &k, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
                 }
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                ctrmm_("L", "U", "N", diag, &k, &k, &q__1, &a[k], &k, &a[k * ( k + 1)], &k);
+                ctrmm_("L", "U", "N", diag, &k, &k, &q__1, &a[k], &k, &a[k * (k + 1)], &k);
                 ctrtri_("L", diag, &k, a, &k, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
                     *info += k;
                 }
-                if (*info > 0)
+                if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
@@ -545,25 +556,25 @@ void ctftri_(char *transr, char *uplo, char *diag, integer *n, complex *a, integ
                 /* T1 -> a(0+k*(k+1)), T2 -> a(0+k*k), S -> a(0+0));
                 lda=k */
                 ctrtri_("U", diag, &k, &a[k * (k + 1)], &k, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
                 }
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                ctrmm_("R", "U", "C", diag, &k, &k, &q__1, &a[k * (k + 1)], & k, a, &k);
+                ctrmm_("R", "U", "C", diag, &k, &k, &q__1, &a[k * (k + 1)], &k, a, &k);
                 ctrtri_("L", diag, &k, &a[k * k], &k, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
                     *info += k;
                 }
-                if (*info > 0)
+                if(*info > 0)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
                 }
-                ctrmm_("L", "L", "N", diag, &k, &k, &c_b1, &a[k * k], &k, a, & k);
+                ctrmm_("L", "L", "N", diag, &k, &k, &c_b1, &a[k * k], &k, a, &k);
             }
         }
     }

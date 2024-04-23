@@ -1,16 +1,25 @@
-/* ../netlib/zgtsv.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zgtsv.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief <b> ZGTSV computes the solution to system of linear equations A * X = B for GT matrices <b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZGTSV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgtsv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgtsv.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgtsv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgtsv.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgtsv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgtsv.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -110,10 +119,12 @@
 /* > \ingroup complex16GTsolve */
 /* ===================================================================== */
 /* Subroutine */
-void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, doublecomplex *du, doublecomplex *b, integer *ldb, integer *info)
+void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, doublecomplex *du,
+            doublecomplex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgtsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *ldb);
+    AOCL_DTL_SNPRINTF("zgtsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n, *nrhs,
+                      *ldb);
 
     /* System generated locals */
     integer b_dim1, b_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7;
@@ -126,7 +137,8 @@ void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, do
     integer j, k;
     doublecomplex temp, mult;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -158,41 +170,39 @@ void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, do
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -2;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZGTSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     i__1 = *n - 1;
-    for (k = 1;
-            k <= i__1;
-            ++k)
+    for(k = 1; k <= i__1; ++k)
     {
         i__2 = k;
-        if (dl[i__2].r == 0. && dl[i__2].i == 0.)
+        if(dl[i__2].r == 0. && dl[i__2].i == 0.)
         {
             /* Subdiagonal is zero, no elimination is required. */
             i__2 = k;
-            if (d__[i__2].r == 0. && d__[i__2].i == 0.)
+            if(d__[i__2].r == 0. && d__[i__2].i == 0.)
             {
                 /* Diagonal is zero: set INFO = K and return;
                 a unique */
@@ -206,7 +216,8 @@ void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, do
         {
             i__2 = k;
             i__3 = k;
-            if ((d__1 = d__[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[k]), f2c_dabs(d__2)) >= (d__3 = dl[i__3].r, f2c_dabs(d__3)) + (d__4 = d_imag(&dl[k]), f2c_dabs(d__4)))
+            if((d__1 = d__[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[k]), f2c_dabs(d__2))
+               >= (d__3 = dl[i__3].r, f2c_dabs(d__3)) + (d__4 = d_imag(&dl[k]), f2c_dabs(d__4)))
             {
                 /* No row interchange required */
                 z_div(&z__1, &dl[k], &d__[k]);
@@ -222,9 +233,7 @@ void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, do
                 d__[i__2].r = z__1.r;
                 d__[i__2].i = z__1.i; // , expr subst
                 i__2 = *nrhs;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = k + 1 + j * b_dim1;
                     i__4 = k + 1 + j * b_dim1;
@@ -237,7 +246,7 @@ void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, do
                     b[i__3].i = z__1.i; // , expr subst
                     /* L10: */
                 }
-                if (k < *n - 1)
+                if(k < *n - 1)
                 {
                     i__2 = k;
                     dl[i__2].r = 0.;
@@ -265,7 +274,7 @@ void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, do
                 z__1.i = du[i__3].i - z__2.i; // , expr subst
                 d__[i__2].r = z__1.r;
                 d__[i__2].i = z__1.i; // , expr subst
-                if (k < *n - 1)
+                if(k < *n - 1)
                 {
                     i__2 = k;
                     i__3 = k + 1;
@@ -276,7 +285,7 @@ void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, do
                     z__2.i = -mult.i; // , expr subst
                     i__3 = k;
                     z__1.r = z__2.r * dl[i__3].r - z__2.i * dl[i__3].i;
-                    z__1.i = z__2.r * dl[i__3].i + z__2.i * dl[i__3] .r; // , expr subst
+                    z__1.i = z__2.r * dl[i__3].i + z__2.i * dl[i__3].r; // , expr subst
                     du[i__2].r = z__1.r;
                     du[i__2].i = z__1.i; // , expr subst
                 }
@@ -284,9 +293,7 @@ void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, do
                 du[i__2].r = temp.r;
                 du[i__2].i = temp.i; // , expr subst
                 i__2 = *nrhs;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = k + j * b_dim1;
                     temp.r = b[i__3].r;
@@ -310,7 +317,7 @@ void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, do
         /* L30: */
     }
     i__1 = *n;
-    if (d__[i__1].r == 0. && d__[i__1].i == 0.)
+    if(d__[i__1].r == 0. && d__[i__1].i == 0.)
     {
         *info = *n;
         AOCL_DTL_TRACE_LOG_EXIT
@@ -318,15 +325,13 @@ void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, do
     }
     /* Back solve with the matrix U from the factorization. */
     i__1 = *nrhs;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         i__2 = *n + j * b_dim1;
         z_div(&z__1, &b[*n + j * b_dim1], &d__[*n]);
         b[i__2].r = z__1.r;
         b[i__2].i = z__1.i; // , expr subst
-        if (*n > 1)
+        if(*n > 1)
         {
             i__2 = *n - 1 + j * b_dim1;
             i__3 = *n - 1 + j * b_dim1;
@@ -340,9 +345,7 @@ void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, do
             b[i__2].r = z__1.r;
             b[i__2].i = z__1.i; // , expr subst
         }
-        for (k = *n - 2;
-                k >= 1;
-                --k)
+        for(k = *n - 2; k >= 1; --k)
         {
             i__2 = k + j * b_dim1;
             i__3 = k + j * b_dim1;

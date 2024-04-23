@@ -1,31 +1,33 @@
-/* ../netlib/zlabrd.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlabrd.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 /*
  *  Copyright (c) 2021-2023 Advanced Micro Devices, Inc.  All rights reserved.
  */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    0.,0.
-}
-;
-static doublecomplex c_b2 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b1 = {0., 0.};
+static doublecomplex c_b2 = {1., 0.};
 static integer c__1 = 1;
-/* > \brief \b ZLABRD reduces the first nb rows and columns of a general matrix to a bidiagonal form. */
+/* > \brief \b ZLABRD reduces the first nb rows and columns of a general matrix to a bidiagonal
+ * form. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLABRD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlabrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlabrd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlabrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlabrd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlabrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlabrd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -219,19 +221,28 @@ tauq is stored in TAUQ(i) and taup in TAUP(i). */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlabrd_(integer *m, integer *n, integer *nb, doublecomplex *a, integer *lda, doublereal *d__, doublereal *e, doublecomplex *tauq, doublecomplex *taup, doublecomplex *x, integer * ldx, doublecomplex *y, integer *ldy)
+void zlabrd_(integer *m, integer *n, integer *nb, doublecomplex *a, integer *lda, doublereal *d__,
+             doublereal *e, doublecomplex *tauq, doublecomplex *taup, doublecomplex *x,
+             integer *ldx, doublecomplex *y, integer *ldy)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlabrd inputs: m %" FLA_IS ", n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldx %" FLA_IS ", ldy %" FLA_IS "", *m, *n, *nb, *lda, *ldx, *ldy);
-    extern void fla_zlabrd(integer *m, integer *n, integer *nb, doublecomplex *a, integer *lda, doublereal *d__, doublereal *e, doublecomplex *tauq, doublecomplex *taup, doublecomplex *x, integer * ldx, doublecomplex *y, integer *ldy);
+    AOCL_DTL_SNPRINTF("zlabrd inputs: m %" FLA_IS ", n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS
+                      ", ldx %" FLA_IS ", ldy %" FLA_IS "",
+                      *m, *n, *nb, *lda, *ldx, *ldy);
+    extern void fla_zlabrd(integer * m, integer * n, integer * nb, doublecomplex * a, integer * lda,
+                           doublereal * d__, doublereal * e, doublecomplex * tauq,
+                           doublecomplex * taup, doublecomplex * x, integer * ldx,
+                           doublecomplex * y, integer * ldy);
     fla_zlabrd(m, n, nb, a, lda, d__, e, tauq, taup, x, ldx, y, ldy);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 
-void fla_zlabrd(integer *m, integer *n, integer *nb, doublecomplex *a, integer *lda, doublereal *d__, doublereal *e, doublecomplex *tauq, doublecomplex *taup, doublecomplex *x, integer * ldx, doublecomplex *y, integer *ldy)
+void fla_zlabrd(integer *m, integer *n, integer *nb, doublecomplex *a, integer *lda,
+                doublereal *d__, doublereal *e, doublecomplex *tauq, doublecomplex *taup,
+                doublecomplex *x, integer *ldx, doublecomplex *y, integer *ldy)
 {
-   /* System generated locals */
+    /* System generated locals */
     integer a_dim1, a_offset, x_dim1, x_offset, y_dim1, y_offset, i__1, i__2, i__3, i__4, i__5;
     doublecomplex z__1;
     /* Local variables */
@@ -239,7 +250,12 @@ void fla_zlabrd(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
     doublecomplex alpha;
     int thread_id, actual_num_threads;
     extern /* Subroutine */
-    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zlacgv_(integer *, doublecomplex *, integer *);
+        void
+        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
+        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
+               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
+        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *),
+        zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -279,31 +295,29 @@ void fla_zlabrd(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
     y -= y_offset;
 
     /* Function Body */
-    if (*m <= 0 || *n <= 0)
+    if(*m <= 0 || *n <= 0)
     {
         return;
     }
 
 #ifdef FLA_OPENMP_MULTITHREADING
     /* Get optimum thread number for CLABRD*/
-    FLA_Thread_optimum( FLA_LABRD, &actual_num_threads);
+    FLA_Thread_optimum(FLA_LABRD, &actual_num_threads);
 #endif
 
-    if (*m >= *n)
+    if(*m >= *n)
     {
         /* Reduce to upper bidiagonal form */
         i__1 = *nb;
 #ifdef FLA_OPENMP_MULTITHREADING
-        #pragma omp parallel num_threads(actual_num_threads) private(i__, i__2, i__3, i__4, i__5, thread_id)
+#pragma omp parallel num_threads(actual_num_threads) private(i__, i__2, i__3, i__4, i__5, thread_id)
         {
             thread_id = omp_get_thread_num();
 #else
         {
             thread_id = 0;
 #endif
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 if(thread_id == 0)
                 {
@@ -314,14 +328,16 @@ void fla_zlabrd(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
                     i__3 = i__ - 1;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zgemv_("No transpose", &i__2, &i__3, &z__1, &a[i__ + a_dim1], lda, &y[i__ + y_dim1], ldy, &c_b2, &a[i__ + i__ * a_dim1], & c__1);
+                    zgemv_("No transpose", &i__2, &i__3, &z__1, &a[i__ + a_dim1], lda,
+                           &y[i__ + y_dim1], ldy, &c_b2, &a[i__ + i__ * a_dim1], &c__1);
                     i__2 = i__ - 1;
                     zlacgv_(&i__2, &y[i__ + y_dim1], ldy);
                     i__2 = *m - i__ + 1;
                     i__3 = i__ - 1;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zgemv_("No transpose", &i__2, &i__3, &z__1, &x[i__ + x_dim1], ldx, &a[i__ * a_dim1 + 1], &c__1, &c_b2, &a[i__ + i__ * a_dim1], &c__1);
+                    zgemv_("No transpose", &i__2, &i__3, &z__1, &x[i__ + x_dim1], ldx,
+                           &a[i__ * a_dim1 + 1], &c__1, &c_b2, &a[i__ + i__ * a_dim1], &c__1);
                     /* Generate reflection Q(i) to annihilate A(i+1:m,i) */
                     i__2 = i__ + i__ * a_dim1;
                     alpha.r = a[i__2].r;
@@ -329,11 +345,11 @@ void fla_zlabrd(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
                     i__2 = *m - i__ + 1;
                     /* Computing MIN */
                     i__3 = i__ + 1;
-                    zlarfg_(&i__2, &alpha, &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, & tauq[i__]);
+                    zlarfg_(&i__2, &alpha, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1, &tauq[i__]);
                     i__2 = i__;
                     d__[i__2] = alpha.r;
                 }
-                if (i__ < *n)
+                if(i__ < *n)
                 {
                     if(thread_id == 0)
                     {
@@ -347,30 +363,40 @@ void fla_zlabrd(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
 #ifdef FLA_OPENMP_MULTITHREADING
                     /* Determine the sub partition range of current thread */
                     FLA_Thread_get_subrange(thread_id, actual_num_threads, i__3, &i__4, &i__5);
-                    #pragma omp barrier
-                    zgemv_("Conjugate transpose", &i__2, &i__4, &c_b2, &a[i__ + ( i__5 + i__ + 1) * a_dim1], lda, &a[i__ + i__ * a_dim1], & c__1, &c_b1, &y[i__5 + i__ + 1 + i__ * y_dim1], &c__1);
-                    #pragma omp barrier
+#pragma omp barrier
+                    zgemv_("Conjugate transpose", &i__2, &i__4, &c_b2,
+                           &a[i__ + (i__5 + i__ + 1) * a_dim1], lda, &a[i__ + i__ * a_dim1], &c__1,
+                           &c_b1, &y[i__5 + i__ + 1 + i__ * y_dim1], &c__1);
+#pragma omp barrier
 #else
-                    zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[i__ + ( i__ + 1) * a_dim1], lda, &a[i__ + i__ * a_dim1], & c__1, &c_b1, &y[i__ + 1 + i__ * y_dim1], &c__1);
+                    zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[i__ + (i__ + 1) * a_dim1],
+                           lda, &a[i__ + i__ * a_dim1], &c__1, &c_b1, &y[i__ + 1 + i__ * y_dim1],
+                           &c__1);
 #endif
                     if(thread_id == 0)
                     {
                         i__2 = *m - i__ + 1;
                         i__3 = i__ - 1;
-                        zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[i__ + a_dim1], lda, &a[i__ + i__ * a_dim1], &c__1, &c_b1, & y[i__ * y_dim1 + 1], &c__1);
+                        zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[i__ + a_dim1], lda,
+                               &a[i__ + i__ * a_dim1], &c__1, &c_b1, &y[i__ * y_dim1 + 1], &c__1);
                         i__2 = *n - i__;
                         i__3 = i__ - 1;
                         z__1.r = -1.;
                         z__1.i = -0.; // , expr subst
-                        zgemv_("No transpose", &i__2, &i__3, &z__1, &y[i__ + 1 + y_dim1], ldy, &y[i__ * y_dim1 + 1], &c__1, &c_b2, &y[ i__ + 1 + i__ * y_dim1], &c__1);
+                        zgemv_("No transpose", &i__2, &i__3, &z__1, &y[i__ + 1 + y_dim1], ldy,
+                               &y[i__ * y_dim1 + 1], &c__1, &c_b2, &y[i__ + 1 + i__ * y_dim1],
+                               &c__1);
                         i__2 = *m - i__ + 1;
                         i__3 = i__ - 1;
-                        zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &x[i__ + x_dim1], ldx, &a[i__ + i__ * a_dim1], &c__1, &c_b1, & y[i__ * y_dim1 + 1], &c__1);
+                        zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &x[i__ + x_dim1], ldx,
+                               &a[i__ + i__ * a_dim1], &c__1, &c_b1, &y[i__ * y_dim1 + 1], &c__1);
                         i__2 = i__ - 1;
                         i__3 = *n - i__;
                         z__1.r = -1.;
                         z__1.i = -0.; // , expr subst
-                        zgemv_("Conjugate transpose", &i__2, &i__3, &z__1, &a[(i__ + 1) * a_dim1 + 1], lda, &y[i__ * y_dim1 + 1], &c__1, & c_b2, &y[i__ + 1 + i__ * y_dim1], &c__1);
+                        zgemv_("Conjugate transpose", &i__2, &i__3, &z__1,
+                               &a[(i__ + 1) * a_dim1 + 1], lda, &y[i__ * y_dim1 + 1], &c__1, &c_b2,
+                               &y[i__ + 1 + i__ * y_dim1], &c__1);
                         i__2 = *n - i__;
                         zscal_(&i__2, &tauq[i__], &y[i__ + 1 + i__ * y_dim1], &c__1);
                         /* Update A(i,i+1:n) */
@@ -380,7 +406,8 @@ void fla_zlabrd(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
                         i__2 = *n - i__;
                         z__1.r = -1.;
                         z__1.i = -0.; // , expr subst
-                        zgemv_("No transpose", &i__2, &i__, &z__1, &y[i__ + 1 + y_dim1], ldy, &a[i__ + a_dim1], lda, &c_b2, &a[i__ + ( i__ + 1) * a_dim1], lda);
+                        zgemv_("No transpose", &i__2, &i__, &z__1, &y[i__ + 1 + y_dim1], ldy,
+                               &a[i__ + a_dim1], lda, &c_b2, &a[i__ + (i__ + 1) * a_dim1], lda);
                         zlacgv_(&i__, &a[i__ + a_dim1], lda);
                         i__2 = i__ - 1;
                         zlacgv_(&i__2, &x[i__ + x_dim1], ldx);
@@ -388,7 +415,9 @@ void fla_zlabrd(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
                         i__3 = *n - i__;
                         z__1.r = -1.;
                         z__1.i = -0.; // , expr subst
-                        zgemv_("Conjugate transpose", &i__2, &i__3, &z__1, &a[(i__ + 1) * a_dim1 + 1], lda, &x[i__ + x_dim1], ldx, &c_b2, & a[i__ + (i__ + 1) * a_dim1], lda);
+                        zgemv_("Conjugate transpose", &i__2, &i__3, &z__1,
+                               &a[(i__ + 1) * a_dim1 + 1], lda, &x[i__ + x_dim1], ldx, &c_b2,
+                               &a[i__ + (i__ + 1) * a_dim1], lda);
                         i__2 = i__ - 1;
                         zlacgv_(&i__2, &x[i__ + x_dim1], ldx);
                         /* Generate reflection P(i) to annihilate A(i,i+2:n) */
@@ -398,7 +427,8 @@ void fla_zlabrd(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
                         i__2 = *n - i__;
                         /* Computing MIN */
                         i__3 = i__ + 2;
-                        zlarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3,*n) * a_dim1], lda, & taup[i__]);
+                        zlarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda,
+                                &taup[i__]);
                         i__2 = i__;
                         e[i__2] = alpha.r;
                         i__2 = i__ + (i__ + 1) * a_dim1;
@@ -411,28 +441,41 @@ void fla_zlabrd(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
 #ifdef FLA_OPENMP_MULTITHREADING
                     /* Determine the sub partition range of current thread */
                     FLA_Thread_get_subrange(thread_id, actual_num_threads, i__2, &i__4, &i__5);
-                    #pragma omp barrier
-                    zgemv_("No transpose", &i__4, &i__3, &c_b2, &a[i__5 + i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + (i__ + 1) * a_dim1], lda, &c_b1, &x[i__5 + i__ + 1 + i__ * x_dim1], &c__1);
-                    #pragma omp barrier
+#pragma omp barrier
+                    zgemv_("No transpose", &i__4, &i__3, &c_b2,
+                           &a[i__5 + i__ + 1 + (i__ + 1) * a_dim1], lda,
+                           &a[i__ + (i__ + 1) * a_dim1], lda, &c_b1,
+                           &x[i__5 + i__ + 1 + i__ * x_dim1], &c__1);
+#pragma omp barrier
 #else
-                    zgemv_("No transpose", &i__2, &i__3, &c_b2, &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + (i__ + 1) * a_dim1], lda, &c_b1, &x[i__ + 1 + i__ * x_dim1], &c__1);
+                    zgemv_("No transpose", &i__2, &i__3, &c_b2, &a[i__ + 1 + (i__ + 1) * a_dim1],
+                           lda, &a[i__ + (i__ + 1) * a_dim1], lda, &c_b1,
+                           &x[i__ + 1 + i__ * x_dim1], &c__1);
 #endif
                     if(thread_id == 0)
                     {
                         i__2 = *n - i__;
-                        zgemv_("Conjugate transpose", &i__2, &i__, &c_b2, &y[i__ + 1 + y_dim1], ldy, &a[i__ + (i__ + 1) * a_dim1], lda, & c_b1, &x[i__ * x_dim1 + 1], &c__1);
+                        zgemv_("Conjugate transpose", &i__2, &i__, &c_b2, &y[i__ + 1 + y_dim1], ldy,
+                               &a[i__ + (i__ + 1) * a_dim1], lda, &c_b1, &x[i__ * x_dim1 + 1],
+                               &c__1);
                         i__2 = *m - i__;
                         z__1.r = -1.;
                         z__1.i = -0.; // , expr subst
-                        zgemv_("No transpose", &i__2, &i__, &z__1, &a[i__ + 1 + a_dim1], lda, &x[i__ * x_dim1 + 1], &c__1, &c_b2, &x[ i__ + 1 + i__ * x_dim1], &c__1);
+                        zgemv_("No transpose", &i__2, &i__, &z__1, &a[i__ + 1 + a_dim1], lda,
+                               &x[i__ * x_dim1 + 1], &c__1, &c_b2, &x[i__ + 1 + i__ * x_dim1],
+                               &c__1);
                         i__2 = i__ - 1;
                         i__3 = *n - i__;
-                        zgemv_("No transpose", &i__2, &i__3, &c_b2, &a[(i__ + 1) * a_dim1 + 1], lda, &a[i__ + (i__ + 1) * a_dim1], lda, & c_b1, &x[i__ * x_dim1 + 1], &c__1);
+                        zgemv_("No transpose", &i__2, &i__3, &c_b2, &a[(i__ + 1) * a_dim1 + 1], lda,
+                               &a[i__ + (i__ + 1) * a_dim1], lda, &c_b1, &x[i__ * x_dim1 + 1],
+                               &c__1);
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
                         z__1.r = -1.;
                         z__1.i = -0.; // , expr subst
-                        zgemv_("No transpose", &i__2, &i__3, &z__1, &x[i__ + 1 + x_dim1], ldx, &x[i__ * x_dim1 + 1], &c__1, &c_b2, &x[ i__ + 1 + i__ * x_dim1], &c__1);
+                        zgemv_("No transpose", &i__2, &i__3, &z__1, &x[i__ + 1 + x_dim1], ldx,
+                               &x[i__ * x_dim1 + 1], &c__1, &c_b2, &x[i__ + 1 + i__ * x_dim1],
+                               &c__1);
                         i__2 = *m - i__;
                         zscal_(&i__2, &taup[i__], &x[i__ + 1 + i__ * x_dim1], &c__1);
                         i__2 = *n - i__;
@@ -448,16 +491,14 @@ void fla_zlabrd(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
         /* Reduce to lower bidiagonal form */
         i__1 = *nb;
 #ifdef FLA_OPENMP_MULTITHREADING
-        #pragma omp parallel num_threads(actual_num_threads) private(i__, i__2, i__3, i__4, i__5, thread_id)
+#pragma omp parallel num_threads(actual_num_threads) private(i__, i__2, i__3, i__4, i__5, thread_id)
         {
             thread_id = omp_get_thread_num();
 #else
         {
             thread_id = 0;
 #endif
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 if(thread_id == 0)
                 {
@@ -470,7 +511,8 @@ void fla_zlabrd(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
                     i__3 = i__ - 1;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zgemv_("No transpose", &i__2, &i__3, &z__1, &y[i__ + y_dim1], ldy, &a[i__ + a_dim1], lda, &c_b2, &a[i__ + i__ * a_dim1], lda);
+                    zgemv_("No transpose", &i__2, &i__3, &z__1, &y[i__ + y_dim1], ldy,
+                           &a[i__ + a_dim1], lda, &c_b2, &a[i__ + i__ * a_dim1], lda);
                     i__2 = i__ - 1;
                     zlacgv_(&i__2, &a[i__ + a_dim1], lda);
                     i__2 = i__ - 1;
@@ -479,7 +521,8 @@ void fla_zlabrd(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
                     i__3 = *n - i__ + 1;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zgemv_("Conjugate transpose", &i__2, &i__3, &z__1, &a[i__ * a_dim1 + 1], lda, &x[i__ + x_dim1], ldx, &c_b2, &a[i__ + i__ * a_dim1], lda);
+                    zgemv_("Conjugate transpose", &i__2, &i__3, &z__1, &a[i__ * a_dim1 + 1], lda,
+                           &x[i__ + x_dim1], ldx, &c_b2, &a[i__ + i__ * a_dim1], lda);
                     i__2 = i__ - 1;
                     zlacgv_(&i__2, &x[i__ + x_dim1], ldx);
                     /* Generate reflection P(i) to annihilate A(i,i+1:n) */
@@ -489,11 +532,11 @@ void fla_zlabrd(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
                     i__2 = *n - i__ + 1;
                     /* Computing MIN */
                     i__3 = i__ + 1;
-                    zlarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3,*n) * a_dim1], lda, & taup[i__]);
+                    zlarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda, &taup[i__]);
                     i__2 = i__;
                     d__[i__2] = alpha.r;
                 }
-                if (i__ < *m)
+                if(i__ < *m)
                 {
                     if(thread_id == 0)
                     {
@@ -507,30 +550,39 @@ void fla_zlabrd(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
 #ifdef FLA_OPENMP_MULTITHREADING
                     /* Determine the sub partition range of current thread */
                     FLA_Thread_get_subrange(thread_id, actual_num_threads, i__2, &i__4, &i__5);
-                    #pragma omp barrier
-                    zgemv_("No transpose", &i__4, &i__3, &c_b2, &a[i__5 + i__ + 1 + i__ * a_dim1], lda, &a[i__ + i__ * a_dim1], lda, &c_b1, &x[i__5 + i__ + 1 + i__ * x_dim1], &c__1);
-                    #pragma omp barrier
+#pragma omp barrier
+                    zgemv_("No transpose", &i__4, &i__3, &c_b2, &a[i__5 + i__ + 1 + i__ * a_dim1],
+                           lda, &a[i__ + i__ * a_dim1], lda, &c_b1,
+                           &x[i__5 + i__ + 1 + i__ * x_dim1], &c__1);
+#pragma omp barrier
 #else
-                    zgemv_("No transpose", &i__2, &i__3, &c_b2, &a[i__ + 1 + i__ * a_dim1], lda, &a[i__ + i__ * a_dim1], lda, &c_b1, &x[ i__ + 1 + i__ * x_dim1], &c__1);
+                    zgemv_("No transpose", &i__2, &i__3, &c_b2, &a[i__ + 1 + i__ * a_dim1], lda,
+                           &a[i__ + i__ * a_dim1], lda, &c_b1, &x[i__ + 1 + i__ * x_dim1], &c__1);
 #endif
                     if(thread_id == 0)
                     {
                         i__2 = *n - i__ + 1;
                         i__3 = i__ - 1;
-                        zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &y[i__ + y_dim1], ldy, &a[i__ + i__ * a_dim1], lda, &c_b1, &x[ i__ * x_dim1 + 1], &c__1);
+                        zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &y[i__ + y_dim1], ldy,
+                               &a[i__ + i__ * a_dim1], lda, &c_b1, &x[i__ * x_dim1 + 1], &c__1);
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
                         z__1.r = -1.;
                         z__1.i = -0.; // , expr subst
-                        zgemv_("No transpose", &i__2, &i__3, &z__1, &a[i__ + 1 + a_dim1], lda, &x[i__ * x_dim1 + 1], &c__1, &c_b2, &x[ i__ + 1 + i__ * x_dim1], &c__1);
+                        zgemv_("No transpose", &i__2, &i__3, &z__1, &a[i__ + 1 + a_dim1], lda,
+                               &x[i__ * x_dim1 + 1], &c__1, &c_b2, &x[i__ + 1 + i__ * x_dim1],
+                               &c__1);
                         i__2 = i__ - 1;
                         i__3 = *n - i__ + 1;
-                        zgemv_("No transpose", &i__2, &i__3, &c_b2, &a[i__ * a_dim1 + 1], lda, &a[i__ + i__ * a_dim1], lda, &c_b1, &x[i__ * x_dim1 + 1], &c__1);
+                        zgemv_("No transpose", &i__2, &i__3, &c_b2, &a[i__ * a_dim1 + 1], lda,
+                               &a[i__ + i__ * a_dim1], lda, &c_b1, &x[i__ * x_dim1 + 1], &c__1);
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
                         z__1.r = -1.;
                         z__1.i = -0.; // , expr subst
-                        zgemv_("No transpose", &i__2, &i__3, &z__1, &x[i__ + 1 + x_dim1], ldx, &x[i__ * x_dim1 + 1], &c__1, &c_b2, &x[ i__ + 1 + i__ * x_dim1], &c__1);
+                        zgemv_("No transpose", &i__2, &i__3, &z__1, &x[i__ + 1 + x_dim1], ldx,
+                               &x[i__ * x_dim1 + 1], &c__1, &c_b2, &x[i__ + 1 + i__ * x_dim1],
+                               &c__1);
                         i__2 = *m - i__;
                         zscal_(&i__2, &taup[i__], &x[i__ + 1 + i__ * x_dim1], &c__1);
                         i__2 = *n - i__ + 1;
@@ -542,13 +594,16 @@ void fla_zlabrd(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
                         i__3 = i__ - 1;
                         z__1.r = -1.;
                         z__1.i = -0.; // , expr subst
-                        zgemv_("No transpose", &i__2, &i__3, &z__1, &a[i__ + 1 + a_dim1], lda, &y[i__ + y_dim1], ldy, &c_b2, &a[i__ + 1 + i__ * a_dim1], &c__1);
+                        zgemv_("No transpose", &i__2, &i__3, &z__1, &a[i__ + 1 + a_dim1], lda,
+                               &y[i__ + y_dim1], ldy, &c_b2, &a[i__ + 1 + i__ * a_dim1], &c__1);
                         i__2 = i__ - 1;
                         zlacgv_(&i__2, &y[i__ + y_dim1], ldy);
                         i__2 = *m - i__;
                         z__1.r = -1.;
                         z__1.i = -0.; // , expr subst
-                        zgemv_("No transpose", &i__2, &i__, &z__1, &x[i__ + 1 + x_dim1], ldx, &a[i__ * a_dim1 + 1], &c__1, &c_b2, &a[ i__ + 1 + i__ * a_dim1], &c__1);
+                        zgemv_("No transpose", &i__2, &i__, &z__1, &x[i__ + 1 + x_dim1], ldx,
+                               &a[i__ * a_dim1 + 1], &c__1, &c_b2, &a[i__ + 1 + i__ * a_dim1],
+                               &c__1);
                         /* Generate reflection Q(i) to annihilate A(i+2:m,i) */
                         i__2 = i__ + 1 + i__ * a_dim1;
                         alpha.r = a[i__2].r;
@@ -556,7 +611,8 @@ void fla_zlabrd(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
                         i__2 = *m - i__;
                         /* Computing MIN */
                         i__3 = i__ + 2;
-                        zlarfg_(&i__2, &alpha, &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, &tauq[i__]);
+                        zlarfg_(&i__2, &alpha, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1,
+                                &tauq[i__]);
                         i__2 = i__;
                         e[i__2] = alpha.r;
                         i__2 = i__ + 1 + i__ * a_dim1;
@@ -569,28 +625,40 @@ void fla_zlabrd(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
 #ifdef FLA_OPENMP_MULTITHREADING
                     /* Determine the sub partition range of current thread */
                     FLA_Thread_get_subrange(thread_id, actual_num_threads, i__3, &i__4, &i__5);
-                    #pragma omp barrier
-                    zgemv_("Conjugate transpose", &i__2, &i__4, &c_b2, &a[i__ + 1 + (i__5 + i__ + 1) * a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &y[i__5 + i__ + 1 + i__ * y_dim1], &c__1);
-                    #pragma omp barrier
+#pragma omp barrier
+                    zgemv_("Conjugate transpose", &i__2, &i__4, &c_b2,
+                           &a[i__ + 1 + (i__5 + i__ + 1) * a_dim1], lda, &a[i__ + 1 + i__ * a_dim1],
+                           &c__1, &c_b1, &y[i__5 + i__ + 1 + i__ * y_dim1], &c__1);
+#pragma omp barrier
 #else
-                    zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &y[i__ + 1 + i__ * y_dim1], &c__1);
+                    zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2,
+                           &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1,
+                           &c_b1, &y[i__ + 1 + i__ * y_dim1], &c__1);
 #endif
                     if(thread_id == 0)
                     {
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
-                        zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[i__ + 1 + a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1, & c_b1, &y[i__ * y_dim1 + 1], &c__1);
+                        zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[i__ + 1 + a_dim1],
+                               lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &y[i__ * y_dim1 + 1],
+                               &c__1);
                         i__2 = *n - i__;
                         i__3 = i__ - 1;
                         z__1.r = -1.;
                         z__1.i = -0.; // , expr subst
-                        zgemv_("No transpose", &i__2, &i__3, &z__1, &y[i__ + 1 + y_dim1], ldy, &y[i__ * y_dim1 + 1], &c__1, &c_b2, &y[ i__ + 1 + i__ * y_dim1], &c__1);
+                        zgemv_("No transpose", &i__2, &i__3, &z__1, &y[i__ + 1 + y_dim1], ldy,
+                               &y[i__ * y_dim1 + 1], &c__1, &c_b2, &y[i__ + 1 + i__ * y_dim1],
+                               &c__1);
                         i__2 = *m - i__;
-                        zgemv_("Conjugate transpose", &i__2, &i__, &c_b2, &x[i__ + 1 + x_dim1], ldx, &a[i__ + 1 + i__ * a_dim1], &c__1, & c_b1, &y[i__ * y_dim1 + 1], &c__1);
+                        zgemv_("Conjugate transpose", &i__2, &i__, &c_b2, &x[i__ + 1 + x_dim1], ldx,
+                               &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &y[i__ * y_dim1 + 1],
+                               &c__1);
                         i__2 = *n - i__;
                         z__1.r = -1.;
                         z__1.i = -0.; // , expr subst
-                        zgemv_("Conjugate transpose", &i__, &i__2, &z__1, &a[(i__ + 1) * a_dim1 + 1], lda, &y[i__ * y_dim1 + 1], &c__1, & c_b2, &y[i__ + 1 + i__ * y_dim1], &c__1);
+                        zgemv_("Conjugate transpose", &i__, &i__2, &z__1,
+                               &a[(i__ + 1) * a_dim1 + 1], lda, &y[i__ * y_dim1 + 1], &c__1, &c_b2,
+                               &y[i__ + 1 + i__ * y_dim1], &c__1);
                         i__2 = *n - i__;
                         zscal_(&i__2, &tauq[i__], &y[i__ + 1 + i__ * y_dim1], &c__1);
                     }

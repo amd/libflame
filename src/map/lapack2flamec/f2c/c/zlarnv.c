@@ -1,16 +1,25 @@
-/* zlarnv.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* zlarnv.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZLARNV returns a vector of random numbers from a uniform or normal distribution. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLARNV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlarnv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlarnv.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlarnv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlarnv.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlarnv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlarnv.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -88,8 +97,8 @@ the array */
 void zlarnv_(integer *idist, integer *iseed, integer *n, doublecomplex *x)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlarnv inputs: idist %" FLA_IS ", n %" FLA_IS "",*idist, *n);
-/* System generated locals */
+    AOCL_DTL_SNPRINTF("zlarnv inputs: idist %" FLA_IS ", n %" FLA_IS "", *idist, *n);
+    /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2;
     doublecomplex z__1, z__2, z__3;
@@ -101,7 +110,8 @@ void zlarnv_(integer *idist, integer *iseed, integer *n, doublecomplex *x)
     doublereal u[128];
     integer il, iv;
     extern /* Subroutine */
-    void dlaruv_(integer *, integer *, doublereal *);
+        void
+        dlaruv_(integer *, integer *, doublereal *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -126,25 +136,21 @@ void zlarnv_(integer *idist, integer *iseed, integer *n, doublecomplex *x)
     --iseed;
     /* Function Body */
     i__1 = *n;
-    for (iv = 1;
-            iv <= i__1;
-            iv += 64)
+    for(iv = 1; iv <= i__1; iv += 64)
     {
         /* Computing MIN */
         i__2 = 64;
         i__3 = *n - iv + 1; // , expr subst
-        il = fla_min(i__2,i__3);
+        il = fla_min(i__2, i__3);
         /* Call DLARUV to generate 2*IL real numbers from a uniform (0,1) */
         /* distribution (2*IL <= LV) */
         i__2 = il << 1;
         dlaruv_(&iseed[1], &i__2, u);
-        if (*idist == 1)
+        if(*idist == 1)
         {
             /* Copy generated numbers */
             i__2 = il;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = iv + i__ - 1;
                 i__4 = (i__ << 1) - 2;
@@ -156,13 +162,11 @@ void zlarnv_(integer *idist, integer *iseed, integer *n, doublecomplex *x)
                 /* L10: */
             }
         }
-        else if (*idist == 2)
+        else if(*idist == 2)
         {
             /* Convert generated numbers to uniform (-1,1) distribution */
             i__2 = il;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = iv + i__ - 1;
                 d__1 = u[(i__ << 1) - 2] * 2. - 1.;
@@ -174,13 +178,11 @@ void zlarnv_(integer *idist, integer *iseed, integer *n, doublecomplex *x)
                 /* L20: */
             }
         }
-        else if (*idist == 3)
+        else if(*idist == 3)
         {
             /* Convert generated numbers to normal (0,1) distribution */
             i__2 = il;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = iv + i__ - 1;
                 d__1 = sqrt(log(u[(i__ << 1) - 2]) * -2.);
@@ -195,14 +197,12 @@ void zlarnv_(integer *idist, integer *iseed, integer *n, doublecomplex *x)
                 /* L30: */
             }
         }
-        else if (*idist == 4)
+        else if(*idist == 4)
         {
             /* Convert generated numbers to complex numbers uniformly */
             /* distributed on the unit disk */
             i__2 = il;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = iv + i__ - 1;
                 d__1 = sqrt(u[(i__ << 1) - 2]);
@@ -217,14 +217,12 @@ void zlarnv_(integer *idist, integer *iseed, integer *n, doublecomplex *x)
                 /* L40: */
             }
         }
-        else if (*idist == 5)
+        else if(*idist == 5)
         {
             /* Convert generated numbers to complex numbers uniformly */
             /* distributed on the unit circle */
             i__2 = il;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = iv + i__ - 1;
                 d__1 = u[(i__ << 1) - 1] * 6.28318530717958647692528676655900576839;

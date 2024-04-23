@@ -1,11 +1,10 @@
-/* ../netlib/v3.9.0/zpotrf2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/zpotrf2.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b1 = {1., 0.};
 static doublereal c_b11 = -1.;
 static doublereal c_b12 = 1.;
 /* > \brief \b ZPOTRF2 */
@@ -52,7 +51,7 @@ static doublereal c_b12 = 1.;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -105,7 +104,7 @@ static doublereal c_b12 = 1.;
 void zpotrf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zpotrf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
+    AOCL_DTL_SNPRINTF("zpotrf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
     doublereal d__1;
@@ -117,13 +116,18 @@ void zpotrf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
     extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
-    void zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *);
+        void
+        zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *,
+               doublereal *, doublecomplex *, integer *);
     logical upper;
     extern /* Subroutine */
-    void ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *, integer *);
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -152,41 +156,41 @@ void zpotrf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZPOTRF2", &i__1, (ftnlen)7);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* N=1 case */
-    if (*n == 1)
+    if(*n == 1)
     {
         /* Test for non-positive-definiteness */
         i__1 = a_dim1 + 1;
         ajj = a[i__1].r;
-        if (ajj <= 0. || disnan_(&ajj))
+        if(ajj <= 0. || disnan_(&ajj))
         {
             *info = 1;
-    AOCL_DTL_TRACE_LOG_EXIT
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         /* Factor */
@@ -202,24 +206,26 @@ void zpotrf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
         n2 = *n - n1;
         /* Factor A11 */
         zpotrf2_(uplo, &n1, &a[a_dim1 + 1], lda, &iinfo);
-        if (iinfo != 0)
+        if(iinfo != 0)
         {
             *info = iinfo;
-    AOCL_DTL_TRACE_LOG_EXIT
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         /* Compute the Cholesky factorization A = U**H*U */
-        if (upper)
+        if(upper)
         {
             /* Update and scale A12 */
-            ztrsm_("L", "U", "C", "N", &n1, &n2, &c_b1, &a[a_dim1 + 1], lda, & a[(n1 + 1) * a_dim1 + 1], lda);
+            ztrsm_("L", "U", "C", "N", &n1, &n2, &c_b1, &a[a_dim1 + 1], lda,
+                   &a[(n1 + 1) * a_dim1 + 1], lda);
             /* Update and factor A22 */
-            zherk_(uplo, "C", &n2, &n1, &c_b11, &a[(n1 + 1) * a_dim1 + 1], lda, &c_b12, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+            zherk_(uplo, "C", &n2, &n1, &c_b11, &a[(n1 + 1) * a_dim1 + 1], lda, &c_b12,
+                   &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
             zpotrf2_(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
-            if (iinfo != 0)
+            if(iinfo != 0)
             {
                 *info = iinfo + n1;
-    AOCL_DTL_TRACE_LOG_EXIT
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* Compute the Cholesky factorization A = L*L**H */
@@ -227,14 +233,16 @@ void zpotrf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
         else
         {
             /* Update and scale A21 */
-            ztrsm_("R", "L", "C", "N", &n2, &n1, &c_b1, &a[a_dim1 + 1], lda, & a[n1 + 1 + a_dim1], lda);
+            ztrsm_("R", "L", "C", "N", &n2, &n1, &c_b1, &a[a_dim1 + 1], lda, &a[n1 + 1 + a_dim1],
+                   lda);
             /* Update and factor A22 */
-            zherk_(uplo, "N", &n2, &n1, &c_b11, &a[n1 + 1 + a_dim1], lda, & c_b12, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+            zherk_(uplo, "N", &n2, &n1, &c_b11, &a[n1 + 1 + a_dim1], lda, &c_b12,
+                   &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
             zpotrf2_(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
-            if (iinfo != 0)
+            if(iinfo != 0)
             {
                 *info = iinfo + n1;
-    AOCL_DTL_TRACE_LOG_EXIT
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
         }

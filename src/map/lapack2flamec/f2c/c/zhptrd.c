@@ -1,11 +1,10 @@
-/* ../netlib/zhptrd.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zhptrd.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b2 =
-{
-    0.,0.
-}
-;
+static doublecomplex c_b2 = {0., 0.};
 static integer c__1 = 1;
 /* > \brief \b ZHPTRD */
 /* =========== DOCUMENTATION =========== */
@@ -13,11 +12,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZHPTRD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhptrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhptrd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhptrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhptrd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhptrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhptrd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -46,7 +51,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -63,7 +68,7 @@ static integer c__1 = 1;
 /* > A, packed columnwise in a linear array. The j-th column of A */
 /* > is stored in the array AP as follows: */
 /* > if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AP(i + (j-1)*(2*n-j)/2) = A(i,j) for j<=i<=n. */
 /* > On exit, if UPLO = 'U', the diagonal and first superdiagonal */
 /* > of A are overwritten by the corresponding elements of the */
@@ -149,10 +154,11 @@ v(i+2:n) is stored on exit in AP, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zhptrd_(char *uplo, integer *n, doublecomplex *ap, doublereal *d__, doublereal *e, doublecomplex *tau, integer *info)
+void zhptrd_(char *uplo, integer *n, doublecomplex *ap, doublereal *d__, doublereal *e,
+             doublecomplex *tau, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhptrd inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
+    AOCL_DTL_SNPRINTF("zhptrd inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
     integer i__1, i__2, i__3;
     doublereal d__1;
@@ -161,14 +167,23 @@ void zhptrd_(char *uplo, integer *n, doublecomplex *ap, doublereal *d__, doubler
     integer i__, i1, ii, i1i1;
     doublecomplex taui;
     extern /* Subroutine */
-    void zhpr2_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *);
+        void
+        zhpr2_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+               integer *, doublecomplex *);
     doublecomplex alpha;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Double Complex */
-    VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        VOID
+        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                   integer *);
     logical upper;
     extern /* Subroutine */
-    void zhpmv_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+        void
+        zhpmv_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *,
+               doublecomplex *, doublecomplex *, integer *),
+        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -198,28 +213,28 @@ void zhptrd_(char *uplo, integer *n, doublecomplex *ap, doublereal *d__, doubler
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZHPTRD", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
-    if (*n <= 0)
+    if(*n <= 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (upper)
+    if(upper)
     {
         /* Reduce the upper triangle of A. */
         /* I1 is the index in AP of A(1,I+1). */
@@ -229,9 +244,7 @@ void zhptrd_(char *uplo, integer *n, doublecomplex *ap, doublereal *d__, doubler
         d__1 = ap[i__2].r;
         ap[i__1].r = d__1;
         ap[i__1].i = 0.; // , expr subst
-        for (i__ = *n - 1;
-                i__ >= 1;
-                --i__)
+        for(i__ = *n - 1; i__ >= 1; --i__)
         {
             /* Generate elementary reflector H(i) = I - tau * v * v**H */
             /* to annihilate A(1:i-1,i+1) */
@@ -241,14 +254,14 @@ void zhptrd_(char *uplo, integer *n, doublecomplex *ap, doublereal *d__, doubler
             zlarfg_(&i__, &alpha, &ap[i1], &c__1, &taui);
             i__1 = i__;
             e[i__1] = alpha.r;
-            if (taui.r != 0. || taui.i != 0.)
+            if(taui.r != 0. || taui.i != 0.)
             {
                 /* Apply H(i) from both sides to A(1:i,1:i) */
                 i__1 = i1 + i__ - 1;
                 ap[i__1].r = 1.;
                 ap[i__1].i = 0.; // , expr subst
                 /* Compute y := tau * A * v storing y in TAU(1:i) */
-                zhpmv_(uplo, &i__, &taui, &ap[1], &ap[i1], &c__1, &c_b2, &tau[ 1], &c__1);
+                zhpmv_(uplo, &i__, &taui, &ap[1], &ap[i1], &c__1, &c_b2, &tau[1], &c__1);
                 /* Compute w := y - 1/2 * tau * (y**H *v) * v */
                 z__3.r = -.5;
                 z__3.i = -0.; // , expr subst
@@ -264,7 +277,7 @@ void zhptrd_(char *uplo, integer *n, doublecomplex *ap, doublereal *d__, doubler
                 /* A := A - v * w**H - w * v**H */
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zhpr2_(uplo, &i__, &z__1, &ap[i1], &c__1, &tau[1], &c__1, &ap[ 1]);
+                zhpr2_(uplo, &i__, &z__1, &ap[i1], &c__1, &tau[1], &c__1, &ap[1]);
             }
             i__1 = i1 + i__ - 1;
             i__2 = i__;
@@ -290,9 +303,7 @@ void zhptrd_(char *uplo, integer *n, doublecomplex *ap, doublereal *d__, doubler
         ap[1].r = d__1;
         ap[1].i = 0.; // , expr subst
         i__1 = *n - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i1i1 = ii + *n - i__ + 1;
             /* Generate elementary reflector H(i) = I - tau * v * v**H */
@@ -304,7 +315,7 @@ void zhptrd_(char *uplo, integer *n, doublecomplex *ap, doublereal *d__, doubler
             zlarfg_(&i__2, &alpha, &ap[ii + 2], &c__1, &taui);
             i__2 = i__;
             e[i__2] = alpha.r;
-            if (taui.r != 0. || taui.i != 0.)
+            if(taui.r != 0. || taui.i != 0.)
             {
                 /* Apply H(i) from both sides to A(i+1:n,i+1:n) */
                 i__2 = ii + 1;
@@ -312,7 +323,7 @@ void zhptrd_(char *uplo, integer *n, doublecomplex *ap, doublereal *d__, doubler
                 ap[i__2].i = 0.; // , expr subst
                 /* Compute y := tau * A * v storing y in TAU(i:n-1) */
                 i__2 = *n - i__;
-                zhpmv_(uplo, &i__2, &taui, &ap[i1i1], &ap[ii + 1], &c__1, & c_b2, &tau[i__], &c__1);
+                zhpmv_(uplo, &i__2, &taui, &ap[i1i1], &ap[ii + 1], &c__1, &c_b2, &tau[i__], &c__1);
                 /* Compute w := y - 1/2 * tau * (y**H *v) * v */
                 z__3.r = -.5;
                 z__3.i = -0.; // , expr subst
@@ -331,7 +342,7 @@ void zhptrd_(char *uplo, integer *n, doublecomplex *ap, doublereal *d__, doubler
                 i__2 = *n - i__;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zhpr2_(uplo, &i__2, &z__1, &ap[ii + 1], &c__1, &tau[i__], & c__1, &ap[i1i1]);
+                zhpr2_(uplo, &i__2, &z__1, &ap[ii + 1], &c__1, &tau[i__], &c__1, &ap[i1i1]);
             }
             i__2 = ii + 1;
             i__3 = i__;

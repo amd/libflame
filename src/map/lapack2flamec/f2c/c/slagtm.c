@@ -1,16 +1,25 @@
-/* ../netlib/slagtm.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slagtm.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLAGTM performs a matrix-matrix product of the form C = αAB+βC, where A is a tridiagonal matr ix, B and C are rectangular matrices, and α and β are scalars, which may be 0, 1, or -1. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAGTM + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slagtm. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slagtm.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slagtm. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slagtm.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slagtm. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slagtm.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -132,12 +141,14 @@ otherwise, */
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slagtm_(char *trans, integer *n, integer *nrhs, real * alpha, real *dl, real *d__, real *du, real *x, integer *ldx, real * beta, real *b, integer *ldb)
+void slagtm_(char *trans, integer *n, integer *nrhs, real *alpha, real *dl, real *d__, real *du,
+             real *x, integer *ldx, real *beta, real *b, integer *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slagtm_ inputs: *trans %c, *n %d, *nrhs %d, *ldx %d, *ldb %d",*trans, *n, *nrhs, *ldx, *ldb);
+    snprintf(buffer, 256, "slagtm_ inputs: *trans %c, *n %d, *nrhs %d, *ldx %d, *ldb %d", *trans,
+             *n, *nrhs, *ldx, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -172,23 +183,19 @@ void slagtm_(char *trans, integer *n, integer *nrhs, real * alpha, real *dl, rea
     b_offset = 1 + b_dim1;
     b -= b_offset;
     /* Function Body */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Multiply B by BETA if BETA.NE.1. */
-    if (*beta == 0.f)
+    if(*beta == 0.f)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *n;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 b[i__ + j * b_dim1] = 0.f;
                 /* L10: */
@@ -196,17 +203,13 @@ void slagtm_(char *trans, integer *n, integer *nrhs, real * alpha, real *dl, rea
             /* L20: */
         }
     }
-    else if (*beta == -1.f)
+    else if(*beta == -1.f)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *n;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 b[i__ + j * b_dim1] = -b[i__ + j * b_dim1];
                 /* L30: */
@@ -214,30 +217,30 @@ void slagtm_(char *trans, integer *n, integer *nrhs, real * alpha, real *dl, rea
             /* L40: */
         }
     }
-    if (*alpha == 1.f)
+    if(*alpha == 1.f)
     {
-        if (lsame_(trans, "N", 1, 1))
+        if(lsame_(trans, "N", 1, 1))
         {
             /* Compute B := B + A*X */
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
-                if (*n == 1)
+                if(*n == 1)
                 {
                     b[j * b_dim1 + 1] += d__[1] * x[j * x_dim1 + 1];
                 }
                 else
                 {
-                    b[j * b_dim1 + 1] = b[j * b_dim1 + 1] + d__[1] * x[j * x_dim1 + 1] + du[1] * x[j * x_dim1 + 2];
-                    b[*n + j * b_dim1] = b[*n + j * b_dim1] + dl[*n - 1] * x[* n - 1 + j * x_dim1] + d__[*n] * x[*n + j * x_dim1] ;
+                    b[j * b_dim1 + 1] = b[j * b_dim1 + 1] + d__[1] * x[j * x_dim1 + 1]
+                                        + du[1] * x[j * x_dim1 + 2];
+                    b[*n + j * b_dim1] = b[*n + j * b_dim1] + dl[*n - 1] * x[*n - 1 + j * x_dim1]
+                                         + d__[*n] * x[*n + j * x_dim1];
                     i__2 = *n - 1;
-                    for (i__ = 2;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 2; i__ <= i__2; ++i__)
                     {
-                        b[i__ + j * b_dim1] = b[i__ + j * b_dim1] + dl[i__ - 1] * x[i__ - 1 + j * x_dim1] + d__[i__] * x[ i__ + j * x_dim1] + du[i__] * x[i__ + 1 + j * x_dim1];
+                        b[i__ + j * b_dim1]
+                            = b[i__ + j * b_dim1] + dl[i__ - 1] * x[i__ - 1 + j * x_dim1]
+                              + d__[i__] * x[i__ + j * x_dim1] + du[i__] * x[i__ + 1 + j * x_dim1];
                         /* L50: */
                     }
                 }
@@ -248,24 +251,24 @@ void slagtm_(char *trans, integer *n, integer *nrhs, real * alpha, real *dl, rea
         {
             /* Compute B := B + A**T*X */
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
-                if (*n == 1)
+                if(*n == 1)
                 {
                     b[j * b_dim1 + 1] += d__[1] * x[j * x_dim1 + 1];
                 }
                 else
                 {
-                    b[j * b_dim1 + 1] = b[j * b_dim1 + 1] + d__[1] * x[j * x_dim1 + 1] + dl[1] * x[j * x_dim1 + 2];
-                    b[*n + j * b_dim1] = b[*n + j * b_dim1] + du[*n - 1] * x[* n - 1 + j * x_dim1] + d__[*n] * x[*n + j * x_dim1] ;
+                    b[j * b_dim1 + 1] = b[j * b_dim1 + 1] + d__[1] * x[j * x_dim1 + 1]
+                                        + dl[1] * x[j * x_dim1 + 2];
+                    b[*n + j * b_dim1] = b[*n + j * b_dim1] + du[*n - 1] * x[*n - 1 + j * x_dim1]
+                                         + d__[*n] * x[*n + j * x_dim1];
                     i__2 = *n - 1;
-                    for (i__ = 2;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 2; i__ <= i__2; ++i__)
                     {
-                        b[i__ + j * b_dim1] = b[i__ + j * b_dim1] + du[i__ - 1] * x[i__ - 1 + j * x_dim1] + d__[i__] * x[ i__ + j * x_dim1] + dl[i__] * x[i__ + 1 + j * x_dim1];
+                        b[i__ + j * b_dim1]
+                            = b[i__ + j * b_dim1] + du[i__ - 1] * x[i__ - 1 + j * x_dim1]
+                              + d__[i__] * x[i__ + j * x_dim1] + dl[i__] * x[i__ + 1 + j * x_dim1];
                         /* L70: */
                     }
                 }
@@ -273,30 +276,30 @@ void slagtm_(char *trans, integer *n, integer *nrhs, real * alpha, real *dl, rea
             }
         }
     }
-    else if (*alpha == -1.f)
+    else if(*alpha == -1.f)
     {
-        if (lsame_(trans, "N", 1, 1))
+        if(lsame_(trans, "N", 1, 1))
         {
             /* Compute B := B - A*X */
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
-                if (*n == 1)
+                if(*n == 1)
                 {
                     b[j * b_dim1 + 1] -= d__[1] * x[j * x_dim1 + 1];
                 }
                 else
                 {
-                    b[j * b_dim1 + 1] = b[j * b_dim1 + 1] - d__[1] * x[j * x_dim1 + 1] - du[1] * x[j * x_dim1 + 2];
-                    b[*n + j * b_dim1] = b[*n + j * b_dim1] - dl[*n - 1] * x[* n - 1 + j * x_dim1] - d__[*n] * x[*n + j * x_dim1] ;
+                    b[j * b_dim1 + 1] = b[j * b_dim1 + 1] - d__[1] * x[j * x_dim1 + 1]
+                                        - du[1] * x[j * x_dim1 + 2];
+                    b[*n + j * b_dim1] = b[*n + j * b_dim1] - dl[*n - 1] * x[*n - 1 + j * x_dim1]
+                                         - d__[*n] * x[*n + j * x_dim1];
                     i__2 = *n - 1;
-                    for (i__ = 2;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 2; i__ <= i__2; ++i__)
                     {
-                        b[i__ + j * b_dim1] = b[i__ + j * b_dim1] - dl[i__ - 1] * x[i__ - 1 + j * x_dim1] - d__[i__] * x[ i__ + j * x_dim1] - du[i__] * x[i__ + 1 + j * x_dim1];
+                        b[i__ + j * b_dim1]
+                            = b[i__ + j * b_dim1] - dl[i__ - 1] * x[i__ - 1 + j * x_dim1]
+                              - d__[i__] * x[i__ + j * x_dim1] - du[i__] * x[i__ + 1 + j * x_dim1];
                         /* L90: */
                     }
                 }
@@ -307,24 +310,24 @@ void slagtm_(char *trans, integer *n, integer *nrhs, real * alpha, real *dl, rea
         {
             /* Compute B := B - A**T*X */
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
-                if (*n == 1)
+                if(*n == 1)
                 {
                     b[j * b_dim1 + 1] -= d__[1] * x[j * x_dim1 + 1];
                 }
                 else
                 {
-                    b[j * b_dim1 + 1] = b[j * b_dim1 + 1] - d__[1] * x[j * x_dim1 + 1] - dl[1] * x[j * x_dim1 + 2];
-                    b[*n + j * b_dim1] = b[*n + j * b_dim1] - du[*n - 1] * x[* n - 1 + j * x_dim1] - d__[*n] * x[*n + j * x_dim1] ;
+                    b[j * b_dim1 + 1] = b[j * b_dim1 + 1] - d__[1] * x[j * x_dim1 + 1]
+                                        - dl[1] * x[j * x_dim1 + 2];
+                    b[*n + j * b_dim1] = b[*n + j * b_dim1] - du[*n - 1] * x[*n - 1 + j * x_dim1]
+                                         - d__[*n] * x[*n + j * x_dim1];
                     i__2 = *n - 1;
-                    for (i__ = 2;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 2; i__ <= i__2; ++i__)
                     {
-                        b[i__ + j * b_dim1] = b[i__ + j * b_dim1] - du[i__ - 1] * x[i__ - 1 + j * x_dim1] - d__[i__] * x[ i__ + j * x_dim1] - dl[i__] * x[i__ + 1 + j * x_dim1];
+                        b[i__ + j * b_dim1]
+                            = b[i__ + j * b_dim1] - du[i__ - 1] * x[i__ - 1 + j * x_dim1]
+                              - d__[i__] * x[i__ + j * x_dim1] - dl[i__] * x[i__ + 1 + j * x_dim1];
                         /* L110: */
                     }
                 }

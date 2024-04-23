@@ -1,16 +1,25 @@
-/* ../netlib/zdrscl.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zdrscl.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZDRSCL multiplies a vector by the reciprocal of a real scalar. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZDRSCL + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zdrscl. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zdrscl.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zdrscl. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zdrscl.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zdrscl. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zdrscl.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -76,10 +85,12 @@ void zdrscl_(integer *n, doublereal *sa, doublecomplex *sx, integer *incx)
     logical done;
     doublereal cnum, cden1, cnum1;
     extern /* Subroutine */
-    void dlabad_(doublereal *, doublereal *);
+        void
+        dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    void zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+        void
+        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal bignum, smlnum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -104,12 +115,12 @@ void zdrscl_(integer *n, doublereal *sa, doublecomplex *sx, integer *incx)
     /* Quick return if possible */
     /* Logging and tracing code */
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF( "zdrscl inputs: n %" FLA_IS ", incx %" FLA_IS " \n", *n, *incx);
+    AOCL_DTL_SNPRINTF("zdrscl inputs: n %" FLA_IS ", incx %" FLA_IS " \n", *n, *incx);
 
     /* Parameter adjustments */
     --sx;
     /* Function Body */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -124,14 +135,14 @@ void zdrscl_(integer *n, doublereal *sa, doublecomplex *sx, integer *incx)
 L10:
     cden1 = cden * smlnum;
     cnum1 = cnum / bignum;
-    if (f2c_dabs(cden1) > f2c_dabs(cnum) && cnum != 0.)
+    if(f2c_dabs(cden1) > f2c_dabs(cnum) && cnum != 0.)
     {
         /* Pre-multiply X by SMLNUM if CDEN is large compared to CNUM. */
         mul = smlnum;
         done = FALSE_;
         cden = cden1;
     }
-    else if (f2c_dabs(cnum1) > f2c_dabs(cden))
+    else if(f2c_dabs(cnum1) > f2c_dabs(cden))
     {
         /* Pre-multiply X by BIGNUM if CDEN is small compared to CNUM. */
         mul = bignum;
@@ -146,7 +157,7 @@ L10:
     }
     /* Scale the vector X by MUL */
     zdscal_(n, &mul, &sx[1], incx);
-    if (! done)
+    if(!done)
     {
         goto L10;
     }

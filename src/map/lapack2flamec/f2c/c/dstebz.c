@@ -1,5 +1,8 @@
-/* ../netlib/dstebz.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dstebz.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -12,11 +15,17 @@ static integer c__0 = 0;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DSTEBZ + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dstebz. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dstebz.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dstebz. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dstebz.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dstebz. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dstebz.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -44,7 +53,8 @@ static integer c__0 = 0;
 /* > eigenvalues. */
 /* > */
 /* > To avoid overflow, the matrix must be scaled so that its */
-/* > largest element is no greater than overflow**(1/2) * underflow**(1/4) in absolute value, and for greatest */
+/* > largest element is no greater than overflow**(1/2) * underflow**(1/4) in absolute value, and
+ * for greatest */
 /* > accuracy, it should not be much smaller than that. */
 /* > */
 /* > See W. Kahan "Accurate Eigenvalues of a Symmetric Tridiagonal */
@@ -254,10 +264,15 @@ these eigenvalues are flagged by a */
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu, integer *il, integer *iu, doublereal *abstol, doublereal *d__, doublereal *e, integer *m, integer *nsplit, doublereal *w, integer *iblock, integer *isplit, doublereal *work, integer *iwork, integer *info)
+void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu, integer *il,
+             integer *iu, doublereal *abstol, doublereal *d__, doublereal *e, integer *m,
+             integer *nsplit, doublereal *w, integer *iblock, integer *isplit, doublereal *work,
+             integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dstebz inputs: range %c, order %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS "",*range, *order, *n, *il, *iu);
+    AOCL_DTL_SNPRINTF("dstebz inputs: range %c, order %c, n %" FLA_IS ", il %" FLA_IS
+                      ", iu %" FLA_IS "",
+                      *range, *order, *n, *il, *iu);
     /* System generated locals */
     integer i__1, i__2, i__3;
     doublereal d__1, d__2, d__3, d__4, d__5;
@@ -285,12 +300,17 @@ void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
     extern doublereal dlamch_(char *);
     integer ibegin;
     extern /* Subroutine */
-    void dlaebz_(integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dlaebz_(integer *, integer *, integer *, integer *, integer *, integer *, doublereal *,
+                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *,
+                doublereal *, doublereal *, integer *, integer *, doublereal *, integer *,
+                integer *);
     integer irange, idiscl;
     doublereal safemn;
     integer idumma[1];
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer idiscu, iorder;
     logical ncnvrg;
@@ -331,15 +351,15 @@ void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
     wlu = 0;
     wul = 0;
     /* Decode RANGE */
-    if (lsame_(range, "A", 1, 1))
+    if(lsame_(range, "A", 1, 1))
     {
         irange = 1;
     }
-    else if (lsame_(range, "V", 1, 1))
+    else if(lsame_(range, "V", 1, 1))
     {
         irange = 2;
     }
-    else if (lsame_(range, "I", 1, 1))
+    else if(lsame_(range, "I", 1, 1))
     {
         irange = 3;
     }
@@ -348,11 +368,11 @@ void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
         irange = 0;
     }
     /* Decode ORDER */
-    if (lsame_(order, "B", 1, 1))
+    if(lsame_(order, "B", 1, 1))
     {
         iorder = 2;
     }
-    else if (lsame_(order, "E", 1, 1))
+    else if(lsame_(order, "E", 1, 1))
     {
         iorder = 1;
     }
@@ -361,34 +381,34 @@ void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
         iorder = 0;
     }
     /* Check for Errors */
-    if (irange <= 0)
+    if(irange <= 0)
     {
         *info = -1;
     }
-    else if (iorder <= 0)
+    else if(iorder <= 0)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (irange == 2)
+    else if(irange == 2)
     {
-        if (*vl >= *vu)
+        if(*vl >= *vu)
         {
             *info = -5;
         }
     }
-    else if (irange == 3 && (*il < 1 || *il > fla_max(1,*n)))
+    else if(irange == 3 && (*il < 1 || *il > fla_max(1, *n)))
     {
         *info = -6;
     }
-    else if (irange == 3 && (*iu < fla_min(*n,*il) || *iu > *n))
+    else if(irange == 3 && (*iu < fla_min(*n, *il) || *iu > *n))
     {
         *info = -7;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DSTEBZ", &i__1, (ftnlen)6);
@@ -401,13 +421,13 @@ void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
     toofew = FALSE_;
     /* Quick return if possible */
     *m = 0;
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Simplifications: */
-    if (irange == 3 && *il == 1 && *iu == *n)
+    if(irange == 3 && *il == 1 && *iu == *n)
     {
         irange = 1;
     }
@@ -418,16 +438,16 @@ void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
     ulp = dlamch_("P");
     rtoli = ulp * 2.;
     nb = ilaenv_(&c__1, "DSTEBZ", " ", n, &c_n1, &c_n1, &c_n1);
-    if (nb <= 1)
+    if(nb <= 1)
     {
         nb = 0;
     }
     /* Special Case when N=1 */
-    if (*n == 1)
+    if(*n == 1)
     {
         *nsplit = 1;
         isplit[1] = 1;
-        if (irange == 2 && (*vl >= d__[1] || *vu < d__[1]))
+        if(irange == 2 && (*vl >= d__[1] || *vu < d__[1]))
         {
             *m = 0;
         }
@@ -445,16 +465,14 @@ void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
     work[*n] = 0.;
     pivmin = 1.;
     i__1 = *n;
-    for (j = 2;
-            j <= i__1;
-            ++j)
+    for(j = 2; j <= i__1; ++j)
     {
         /* Computing 2nd power */
         d__1 = e[j - 1];
         tmp1 = d__1 * d__1;
         /* Computing 2nd power */
         d__2 = ulp;
-        if ((d__1 = d__[j] * d__[j - 1], f2c_dabs(d__1)) * (d__2 * d__2) + safemn > tmp1)
+        if((d__1 = d__[j] * d__[j - 1], f2c_dabs(d__1)) * (d__2 * d__2) + safemn > tmp1)
         {
             isplit[*nsplit] = j - 1;
             ++(*nsplit);
@@ -463,14 +481,14 @@ void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
         else
         {
             work[j - 1] = tmp1;
-            pivmin = fla_max(pivmin,tmp1);
+            pivmin = fla_max(pivmin, tmp1);
         }
         /* L10: */
     }
     isplit[*nsplit] = *n;
     pivmin *= safemn;
     /* Compute Interval and ATOLI */
-    if (irange == 3)
+    if(irange == 3)
     {
         /* RANGE='I': Compute the interval containing eigenvalues */
         /* IL through IU. */
@@ -480,39 +498,37 @@ void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
         gl = d__[1];
         tmp1 = 0.;
         i__1 = *n - 1;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             tmp2 = sqrt(work[j]);
             /* Computing MAX */
             d__1 = gu;
             d__2 = d__[j] + tmp1 + tmp2; // , expr subst
-            gu = fla_max(d__1,d__2);
+            gu = fla_max(d__1, d__2);
             /* Computing MIN */
             d__1 = gl;
             d__2 = d__[j] - tmp1 - tmp2; // , expr subst
-            gl = fla_min(d__1,d__2);
+            gl = fla_min(d__1, d__2);
             tmp1 = tmp2;
             /* L20: */
         }
         /* Computing MAX */
         d__1 = gu;
         d__2 = d__[*n] + tmp1; // , expr subst
-        gu = fla_max(d__1,d__2);
+        gu = fla_max(d__1, d__2);
         /* Computing MIN */
         d__1 = gl;
         d__2 = d__[*n] - tmp1; // , expr subst
-        gl = fla_min(d__1,d__2);
+        gl = fla_min(d__1, d__2);
         /* Computing MAX */
         d__1 = f2c_dabs(gl);
         d__2 = f2c_dabs(gu); // , expr subst
-        tnorm = fla_max(d__1,d__2);
+        tnorm = fla_max(d__1, d__2);
         gl = gl - tnorm * 2.1 * ulp * *n - pivmin * 4.2000000000000002;
         gu = gu + tnorm * 2.1 * ulp * *n + pivmin * 2.1;
         /* Compute Iteration parameters */
-        itmax = (integer) ((log(tnorm + pivmin) - log(pivmin)) / log(2.)) + 2;
-        if (*abstol <= 0.)
+        itmax = (integer)((log(tnorm + pivmin) - log(pivmin)) / log(2.)) + 2;
+        if(*abstol <= 0.)
         {
             atoli = ulp * tnorm;
         }
@@ -532,8 +548,10 @@ void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
         iwork[4] = *n + 1;
         iwork[5] = *il - 1;
         iwork[6] = *iu;
-        dlaebz_(&c__3, &itmax, n, &c__2, &c__2, &nb, &atoli, &rtoli, &pivmin, &d__[1], &e[1], &work[1], &iwork[5], &work[*n + 1], &work[*n + 5], &iout, &iwork[1], &w[1], &iblock[1], &iinfo);
-        if (iwork[6] == *iu)
+        dlaebz_(&c__3, &itmax, n, &c__2, &c__2, &nb, &atoli, &rtoli, &pivmin, &d__[1], &e[1],
+                &work[1], &iwork[5], &work[*n + 1], &work[*n + 5], &iout, &iwork[1], &w[1],
+                &iblock[1], &iinfo);
+        if(iwork[6] == *iu)
         {
             wl = work[*n + 1];
             wlu = work[*n + 3];
@@ -551,7 +569,7 @@ void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
             wul = work[*n + 1];
             nwu = iwork[3];
         }
-        if (nwl < 0 || nwl >= *n || nwu < 1 || nwu > *n)
+        if(nwl < 0 || nwl >= *n || nwu < 1 || nwu > *n)
         {
             *info = 4;
             AOCL_DTL_TRACE_LOG_EXIT
@@ -563,20 +581,20 @@ void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
         /* RANGE='A' or 'V' -- Set ATOLI */
         /* Computing MAX */
         d__3 = f2c_dabs(d__[1]) + f2c_dabs(e[1]);
-        d__4 = (d__1 = d__[*n], f2c_dabs(d__1)) + ( d__2 = e[*n - 1], f2c_dabs(d__2)); // , expr subst
-        tnorm = fla_max(d__3,d__4);
+        d__4
+            = (d__1 = d__[*n], f2c_dabs(d__1)) + (d__2 = e[*n - 1], f2c_dabs(d__2)); // , expr subst
+        tnorm = fla_max(d__3, d__4);
         i__1 = *n - 1;
-        for (j = 2;
-                j <= i__1;
-                ++j)
+        for(j = 2; j <= i__1; ++j)
         {
             /* Computing MAX */
             d__4 = tnorm;
-            d__5 = (d__1 = d__[j], f2c_dabs(d__1)) + (d__2 = e[j - 1], f2c_dabs(d__2)) + (d__3 = e[j], f2c_dabs(d__3));  // , expr subst
-            tnorm = fla_max(d__4,d__5);
+            d__5 = (d__1 = d__[j], f2c_dabs(d__1)) + (d__2 = e[j - 1], f2c_dabs(d__2))
+                   + (d__3 = e[j], f2c_dabs(d__3)); // , expr subst
+            tnorm = fla_max(d__4, d__5);
             /* L30: */
         }
-        if (*abstol <= 0.)
+        if(*abstol <= 0.)
         {
             atoli = ulp * tnorm;
         }
@@ -584,7 +602,7 @@ void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
         {
             atoli = *abstol;
         }
-        if (irange == 2)
+        if(irange == 2)
         {
             wl = *vl;
             wu = *vu;
@@ -604,26 +622,24 @@ void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
     nwl = 0;
     nwu = 0;
     i__1 = *nsplit;
-    for (jb = 1;
-            jb <= i__1;
-            ++jb)
+    for(jb = 1; jb <= i__1; ++jb)
     {
         ioff = iend;
         ibegin = ioff + 1;
         iend = isplit[jb];
         in = iend - ioff;
-        if (in == 1)
+        if(in == 1)
         {
             /* Special Case -- IN=1 */
-            if (irange == 1 || wl >= d__[ibegin] - pivmin)
+            if(irange == 1 || wl >= d__[ibegin] - pivmin)
             {
                 ++nwl;
             }
-            if (irange == 1 || wu >= d__[ibegin] - pivmin)
+            if(irange == 1 || wu >= d__[ibegin] - pivmin)
             {
                 ++nwu;
             }
-            if (irange == 1 || wl < d__[ibegin] - pivmin && wu >= d__[ibegin] - pivmin)
+            if(irange == 1 || wl < d__[ibegin] - pivmin && wu >= d__[ibegin] - pivmin)
             {
                 ++(*m);
                 w[*m] = d__[ibegin];
@@ -639,59 +655,57 @@ void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
             gl = d__[ibegin];
             tmp1 = 0.;
             i__2 = iend - 1;
-            for (j = ibegin;
-                    j <= i__2;
-                    ++j)
+            for(j = ibegin; j <= i__2; ++j)
             {
                 tmp2 = (d__1 = e[j], f2c_dabs(d__1));
                 /* Computing MAX */
                 d__1 = gu;
                 d__2 = d__[j] + tmp1 + tmp2; // , expr subst
-                gu = fla_max(d__1,d__2);
+                gu = fla_max(d__1, d__2);
                 /* Computing MIN */
                 d__1 = gl;
                 d__2 = d__[j] - tmp1 - tmp2; // , expr subst
-                gl = fla_min(d__1,d__2);
+                gl = fla_min(d__1, d__2);
                 tmp1 = tmp2;
                 /* L40: */
             }
             /* Computing MAX */
             d__1 = gu;
             d__2 = d__[iend] + tmp1; // , expr subst
-            gu = fla_max(d__1,d__2);
+            gu = fla_max(d__1, d__2);
             /* Computing MIN */
             d__1 = gl;
             d__2 = d__[iend] - tmp1; // , expr subst
-            gl = fla_min(d__1,d__2);
+            gl = fla_min(d__1, d__2);
             /* Computing MAX */
             d__1 = f2c_dabs(gl);
             d__2 = f2c_dabs(gu); // , expr subst
-            bnorm = fla_max(d__1,d__2);
+            bnorm = fla_max(d__1, d__2);
             gl = gl - bnorm * 2.1 * ulp * in - pivmin * 2.1;
             gu = gu + bnorm * 2.1 * ulp * in + pivmin * 2.1;
             /* Compute ATOLI for the current submatrix */
-            if (*abstol <= 0.)
+            if(*abstol <= 0.)
             {
                 /* Computing MAX */
                 d__1 = f2c_dabs(gl);
                 d__2 = f2c_dabs(gu); // , expr subst
-                atoli = ulp * fla_max(d__1,d__2);
+                atoli = ulp * fla_max(d__1, d__2);
             }
             else
             {
                 atoli = *abstol;
             }
-            if (irange > 1)
+            if(irange > 1)
             {
-                if (gu < wl)
+                if(gu < wl)
                 {
                     nwl += in;
                     nwu += in;
                     goto L70;
                 }
-                gl = fla_max(gl,wl);
-                gu = fla_min(gu,wu);
-                if (gl >= gu)
+                gl = fla_max(gl, wl);
+                gu = fla_min(gu, wu);
+                if(gl >= gu)
                 {
                     goto L70;
                 }
@@ -699,23 +713,25 @@ void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
             /* Set Up Initial Interval */
             work[*n + 1] = gl;
             work[*n + in + 1] = gu;
-            dlaebz_(&c__1, &c__0, &in, &in, &c__1, &nb, &atoli, &rtoli, & pivmin, &d__[ibegin], &e[ibegin], &work[ibegin], idumma, & work[*n + 1], &work[*n + (in << 1) + 1], &im, &iwork[1], & w[*m + 1], &iblock[*m + 1], &iinfo);
+            dlaebz_(&c__1, &c__0, &in, &in, &c__1, &nb, &atoli, &rtoli, &pivmin, &d__[ibegin],
+                    &e[ibegin], &work[ibegin], idumma, &work[*n + 1], &work[*n + (in << 1) + 1],
+                    &im, &iwork[1], &w[*m + 1], &iblock[*m + 1], &iinfo);
             nwl += iwork[1];
             nwu += iwork[in + 1];
             iwoff = *m - iwork[1];
             /* Compute Eigenvalues */
-            itmax = (integer) ((log(gu - gl + pivmin) - log(pivmin)) / log(2.) ) + 2;
-            dlaebz_(&c__2, &itmax, &in, &in, &c__1, &nb, &atoli, &rtoli, & pivmin, &d__[ibegin], &e[ibegin], &work[ibegin], idumma, & work[*n + 1], &work[*n + (in << 1) + 1], &iout, &iwork[1], &w[*m + 1], &iblock[*m + 1], &iinfo);
+            itmax = (integer)((log(gu - gl + pivmin) - log(pivmin)) / log(2.)) + 2;
+            dlaebz_(&c__2, &itmax, &in, &in, &c__1, &nb, &atoli, &rtoli, &pivmin, &d__[ibegin],
+                    &e[ibegin], &work[ibegin], idumma, &work[*n + 1], &work[*n + (in << 1) + 1],
+                    &iout, &iwork[1], &w[*m + 1], &iblock[*m + 1], &iinfo);
             /* Copy Eigenvalues Into W and IBLOCK */
             /* Use -JB for block number for unconverged eigenvalues. */
             i__2 = iout;
-            for (j = 1;
-                    j <= i__2;
-                    ++j)
+            for(j = 1; j <= i__2; ++j)
             {
                 tmp1 = (work[j + *n] + work[j + in + *n]) * .5;
                 /* Flag non-convergence. */
-                if (j > iout - iinfo)
+                if(j > iout - iinfo)
                 {
                     ncnvrg = TRUE_;
                     ib = -jb;
@@ -725,9 +741,7 @@ void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
                     ib = jb;
                 }
                 i__3 = iwork[j + in] + iwoff;
-                for (je = iwork[j] + 1 + iwoff;
-                        je <= i__3;
-                        ++je)
+                for(je = iwork[j] + 1 + iwoff; je <= i__3; ++je)
                 {
                     w[je] = tmp1;
                     iblock[je] = ib;
@@ -737,28 +751,25 @@ void dstebz_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
             }
             *m += im;
         }
-L70:
-        ;
+    L70:;
     }
     /* If RANGE='I', then (WL,WU) contains eigenvalues NWL+1,...,NWU */
     /* If NWL+1 < IL or NWU > IU, discard extra eigenvalues. */
-    if (irange == 3)
+    if(irange == 3)
     {
         im = 0;
         idiscl = *il - 1 - nwl;
         idiscu = nwu - *iu;
-        if (idiscl > 0 || idiscu > 0)
+        if(idiscl > 0 || idiscu > 0)
         {
             i__1 = *m;
-            for (je = 1;
-                    je <= i__1;
-                    ++je)
+            for(je = 1; je <= i__1; ++je)
             {
-                if (w[je] <= wlu && idiscl > 0)
+                if(w[je] <= wlu && idiscl > 0)
                 {
                     --idiscl;
                 }
-                else if (w[je] >= wul && idiscu > 0)
+                else if(w[je] >= wul && idiscu > 0)
                 {
                     --idiscu;
                 }
@@ -772,7 +783,7 @@ L70:
             }
             *m = im;
         }
-        if (idiscl > 0 || idiscu > 0)
+        if(idiscl > 0 || idiscu > 0)
         {
             /* Code to deal with effects of bad arithmetic: */
             /* Some low eigenvalues to be discarded are not in (WL,WLU], */
@@ -782,21 +793,17 @@ L70:
             /* eigenvalue(s). */
             /* (If N(w) is monotone non-decreasing, this should never */
             /* happen.) */
-            if (idiscl > 0)
+            if(idiscl > 0)
             {
                 wkill = wu;
                 i__1 = idiscl;
-                for (jdisc = 1;
-                        jdisc <= i__1;
-                        ++jdisc)
+                for(jdisc = 1; jdisc <= i__1; ++jdisc)
                 {
                     iw = 0;
                     i__2 = *m;
-                    for (je = 1;
-                            je <= i__2;
-                            ++je)
+                    for(je = 1; je <= i__2; ++je)
                     {
-                        if (iblock[je] != 0 && (w[je] < wkill || iw == 0))
+                        if(iblock[je] != 0 && (w[je] < wkill || iw == 0))
                         {
                             iw = je;
                             wkill = w[je];
@@ -807,21 +814,17 @@ L70:
                     /* L100: */
                 }
             }
-            if (idiscu > 0)
+            if(idiscu > 0)
             {
                 wkill = wl;
                 i__1 = idiscu;
-                for (jdisc = 1;
-                        jdisc <= i__1;
-                        ++jdisc)
+                for(jdisc = 1; jdisc <= i__1; ++jdisc)
                 {
                     iw = 0;
                     i__2 = *m;
-                    for (je = 1;
-                            je <= i__2;
-                            ++je)
+                    for(je = 1; je <= i__2; ++je)
                     {
-                        if (iblock[je] != 0 && (w[je] > wkill || iw == 0))
+                        if(iblock[je] != 0 && (w[je] > wkill || iw == 0))
                         {
                             iw = je;
                             wkill = w[je];
@@ -834,11 +837,9 @@ L70:
             }
             im = 0;
             i__1 = *m;
-            for (je = 1;
-                    je <= i__1;
-                    ++je)
+            for(je = 1; je <= i__1; ++je)
             {
-                if (iblock[je] != 0)
+                if(iblock[je] != 0)
                 {
                     ++im;
                     w[im] = w[je];
@@ -848,7 +849,7 @@ L70:
             }
             *m = im;
         }
-        if (idiscl < 0 || idiscu < 0)
+        if(idiscl < 0 || idiscu < 0)
         {
             toofew = TRUE_;
         }
@@ -856,28 +857,24 @@ L70:
     /* If ORDER='B', do nothing -- the eigenvalues are already sorted */
     /* by block. */
     /* If ORDER='E', sort the eigenvalues from smallest to largest */
-    if (iorder == 1 && *nsplit > 1)
+    if(iorder == 1 && *nsplit > 1)
     {
         i__1 = *m - 1;
-        for (je = 1;
-                je <= i__1;
-                ++je)
+        for(je = 1; je <= i__1; ++je)
         {
             ie = 0;
             tmp1 = w[je];
             i__2 = *m;
-            for (j = je + 1;
-                    j <= i__2;
-                    ++j)
+            for(j = je + 1; j <= i__2; ++j)
             {
-                if (w[j] < tmp1)
+                if(w[j] < tmp1)
                 {
                     ie = j;
                     tmp1 = w[j];
                 }
                 /* L140: */
             }
-            if (ie != 0)
+            if(ie != 0)
             {
                 itmp1 = iblock[ie];
                 w[ie] = w[je];
@@ -889,11 +886,11 @@ L70:
         }
     }
     *info = 0;
-    if (ncnvrg)
+    if(ncnvrg)
     {
         ++(*info);
     }
-    if (toofew)
+    if(toofew)
     {
         *info += 2;
     }

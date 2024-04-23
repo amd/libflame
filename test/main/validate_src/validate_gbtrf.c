@@ -12,6 +12,8 @@
 void validate_gbtrf(integer m_A, integer n_A, integer kl, integer ku, void *AB, void *AB_test,
                     integer ldab, integer *IPIV, integer datatype, double *residual, integer *info)
 {
+    if(m_A == 0 || n_A == 0)
+        return;
     void *work = NULL;
 
     *info = 0;

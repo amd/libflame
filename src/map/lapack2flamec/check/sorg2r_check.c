@@ -1,7 +1,8 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int sorg2r_check(integer *m, integer *n, integer *k, float *a, integer *lda, float *tau, float *work, integer *info)
+int sorg2r_check(integer *m, integer *n, integer *k, float *a, integer *lda, float *tau,
+                 float *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
@@ -26,7 +27,7 @@ int sorg2r_check(integer *m, integer *n, integer *k, float *a, integer *lda, flo
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }

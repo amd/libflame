@@ -108,12 +108,14 @@ static real c_b9 = 1.f;
 /* > \ingroup realPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void spotrs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb, integer *info)
+void spotrs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"spotrs inputs: uplo %c, n %d, nrhs %d, lda %d, ldb %d",*uplo, *n, *nrhs, *lda, *ldb);
+    snprintf(buffer, 256, "spotrs inputs: uplo %c, n %d, nrhs %d, lda %d, ldb %d", *uplo, *n, *nrhs,
+             *lda, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -122,7 +124,10 @@ void spotrs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real 
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
+               real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -154,7 +159,7 @@ void spotrs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real 
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -166,11 +171,11 @@ void spotrs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real 
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
@@ -191,21 +196,21 @@ void spotrs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real 
     {
         /* Solve A*X = B where A = U**T *U. */
         /* Solve U**T *X = B, overwriting B with X. */
-        aocl_blas_strsm("Left", "Upper", "Transpose", "Non-unit", n, nrhs, &c_b9, &a[a_offset], lda,
-                        &b[b_offset], ldb);
+        strsm_("Left", "Upper", "Transpose", "Non-unit", n, nrhs, &c_b9, &a[a_offset], lda,
+               &b[b_offset], ldb);
         /* Solve U*X = B, overwriting B with X. */
-        aocl_blas_strsm("Left", "Upper", "No transpose", "Non-unit", n, nrhs, &c_b9, &a[a_offset],
-                        lda, &b[b_offset], ldb);
+        strsm_("Left", "Upper", "No transpose", "Non-unit", n, nrhs, &c_b9, &a[a_offset], lda,
+               &b[b_offset], ldb);
     }
     else
     {
         /* Solve A*X = B where A = L*L**T. */
         /* Solve L*X = B, overwriting B with X. */
-        aocl_blas_strsm("Left", "Lower", "No transpose", "Non-unit", n, nrhs, &c_b9, &a[a_offset],
-                        lda, &b[b_offset], ldb);
+        strsm_("Left", "Lower", "No transpose", "Non-unit", n, nrhs, &c_b9, &a[a_offset], lda,
+               &b[b_offset], ldb);
         /* Solve L**T *X = B, overwriting B with X. */
-        aocl_blas_strsm("Left", "Lower", "Transpose", "Non-unit", n, nrhs, &c_b9, &a[a_offset], lda,
-                        &b[b_offset], ldb);
+        strsm_("Left", "Lower", "Transpose", "Non-unit", n, nrhs, &c_b9, &a[a_offset], lda,
+               &b[b_offset], ldb);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

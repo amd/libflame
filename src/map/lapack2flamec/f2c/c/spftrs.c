@@ -198,7 +198,8 @@ static real c_b10 = 1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void spftrs_(char *transr, char *uplo, integer *n, integer * nrhs, real *a, real *b, integer *ldb, integer *info)
+void spftrs_(char *transr, char *uplo, integer *n, integer *nrhs, real *a, real *b, integer *ldb,
+             integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_spftrs(transr, uplo, n, nrhs, a, b, ldb, info);
@@ -228,7 +229,10 @@ void aocl_lapack_spftrs(char *transr, char *uplo, aocl_int64_t *n, aocl_int64_t 
     extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
-    void stfsm_(char *, char *, char *, char *, char *, integer *, integer *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        stfsm_(char *, char *, char *, char *, char *, integer *, integer *, real *, real *, real *,
+               integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -258,11 +262,11 @@ void aocl_lapack_spftrs(char *transr, char *uplo, aocl_int64_t *n, aocl_int64_t 
     *info = 0;
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
-    if (! normaltransr && ! lsame_(transr, "T", 1, 1))
+    if(!normaltransr && !lsame_(transr, "T", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U", 1, 1))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }
@@ -274,7 +278,7 @@ void aocl_lapack_spftrs(char *transr, char *uplo, aocl_int64_t *n, aocl_int64_t 
     {
         *info = -4;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }

@@ -1,5 +1,8 @@
-/* ../netlib/dstedc.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dstedc.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__9 = 9;
 static integer c__0 = 0;
@@ -13,11 +16,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DSTEDC + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dstedc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dstedc.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dstedc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dstedc.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dstedc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dstedc.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -182,10 +191,13 @@ the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal *z__, integer *ldz,
+             doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dstedc inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*compz, *n, *ldz, *lwork, *liwork);
+    AOCL_DTL_SNPRINTF("dstedc inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS
+                      ", liwork %" FLA_IS "",
+                      *compz, *n, *ldz, *lwork, *liwork);
     /* System generated locals */
     integer z_dim1, z_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -199,27 +211,41 @@ void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
     integer ii, lgn;
     doublereal eps, tiny;
     extern /* Subroutine */
-    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer lwmin;
     extern /* Subroutine */
-    void dlaed0_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dlaed0_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *,
+                integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer start;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+        void
+        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *),
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer finish;
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
     extern /* Subroutine */
-    void dsterf_(integer *, doublereal *, doublereal *, integer *), dlasrt_(char *, integer *, doublereal *, integer *);
+        void
+        dsterf_(integer *, doublereal *, doublereal *, integer *),
+        dlasrt_(char *, integer *, doublereal *, integer *);
     integer liwmin, icompz;
     extern /* Subroutine */
-    void dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *,
+                doublereal *, integer *);
     doublereal orgnrm;
     logical lquery;
     integer smlsiz, storez, strtrw;
@@ -257,15 +283,15 @@ void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
     lwmin = 0;
     liwmin = 0;
     lquery = *lwork == -1 || *liwork == -1;
-    if (lsame_(compz, "N", 1, 1))
+    if(lsame_(compz, "N", 1, 1))
     {
         icompz = 0;
     }
-    else if (lsame_(compz, "V", 1, 1))
+    else if(lsame_(compz, "V", 1, 1))
     {
         icompz = 1;
     }
-    else if (lsame_(compz, "I", 1, 1))
+    else if(lsame_(compz, "I", 1, 1))
     {
         icompz = 2;
     }
@@ -273,51 +299,51 @@ void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
     {
         icompz = -1;
     }
-    if (icompz < 0)
+    if(icompz < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*ldz < 1 || icompz > 0 && *ldz < fla_max(1,*n))
+    else if(*ldz < 1 || icompz > 0 && *ldz < fla_max(1, *n))
     {
         *info = -6;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
         /* Compute the workspace requirements */
         smlsiz = ilaenv_(&c__9, "DSTEDC", " ", &c__0, &c__0, &c__0, &c__0);
-        if (*n <= 1 || icompz == 0)
+        if(*n <= 1 || icompz == 0)
         {
             liwmin = 1;
             lwmin = 1;
         }
-        else if (*n <= smlsiz)
+        else if(*n <= smlsiz)
         {
             liwmin = 1;
             lwmin = *n - 1 << 1;
         }
         else
         {
-            lgn = (integer) (log((doublereal) (*n)) / log(2.));
-            if (pow_ii(&c__2, &lgn) < *n)
+            lgn = (integer)(log((doublereal)(*n)) / log(2.));
+            if(pow_ii(&c__2, &lgn) < *n)
             {
                 ++lgn;
             }
-            if (pow_ii(&c__2, &lgn) < *n)
+            if(pow_ii(&c__2, &lgn) < *n)
             {
                 ++lgn;
             }
-            if (icompz == 1)
+            if(icompz == 1)
             {
                 /* Computing 2nd power */
                 i__1 = *n;
                 lwmin = *n * 3 + 1 + (*n << 1) * lgn + (i__1 * i__1 << 2);
                 liwmin = *n * 6 + 6 + *n * 5 * lgn;
             }
-            else if (icompz == 2)
+            else if(icompz == 2)
             {
                 /* Computing 2nd power */
                 i__1 = *n;
@@ -325,38 +351,38 @@ void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
                 liwmin = *n * 5 + 3;
             }
         }
-        work[1] = (doublereal) lwmin;
+        work[1] = (doublereal)lwmin;
         iwork[1] = liwmin;
-        if (*lwork < lwmin && ! lquery)
+        if(*lwork < lwmin && !lquery)
         {
             *info = -8;
         }
-        else if (*liwork < liwmin && ! lquery)
+        else if(*liwork < liwmin && !lquery)
         {
             *info = -10;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DSTEDC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (icompz != 0)
+        if(icompz != 0)
         {
             z__[z_dim1 + 1] = 1.;
         }
@@ -372,14 +398,14 @@ void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
     /* as the default. If the conditional clause is removed, then */
     /* information on the size of workspace needs to be changed. */
     /* If COMPZ = 'N', use DSTERF to compute the eigenvalues. */
-    if (icompz == 0)
+    if(icompz == 0)
     {
         dsterf_(n, &d__[1], &e[1], info);
         goto L50;
     }
     /* If N is smaller than the minimum divide size (SMLSIZ+1), then */
     /* solve the problem with another solver. */
-    if (*n <= smlsiz)
+    if(*n <= smlsiz)
     {
         dsteqr_(compz, n, &d__[1], &e[1], &z__[z_offset], ldz, &work[1], info);
     }
@@ -387,7 +413,7 @@ void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
     {
         /* If COMPZ = 'V', the Z matrix must be stored elsewhere for later */
         /* use. */
-        if (icompz == 1)
+        if(icompz == 1)
         {
             storez = *n * *n + 1;
         }
@@ -395,21 +421,21 @@ void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
         {
             storez = 1;
         }
-        if (icompz == 2)
+        if(icompz == 2)
         {
             dlaset_("Full", n, n, &c_b17, &c_b18, &z__[z_offset], ldz);
         }
         /* Scale. */
         orgnrm = dlanst_("M", n, &d__[1], &e[1]);
-        if (orgnrm == 0.)
+        if(orgnrm == 0.)
         {
             goto L50;
         }
         eps = dlamch_("Epsilon");
         start = 1;
         /* while ( START <= N ) */
-L10:
-        if (start <= *n)
+    L10:
+        if(start <= *n)
         {
             /* Let FINISH be the position of the next subdiagonal entry */
             /* such that E( FINISH ) <= TINY or FINISH = N if no such */
@@ -417,11 +443,12 @@ L10:
             /* between START and FINISH constitutes an independent */
             /* sub-problem. */
             finish = start;
-L20:
-            if (finish < *n)
+        L20:
+            if(finish < *n)
             {
-                tiny = eps * sqrt((d__1 = d__[finish], f2c_abs(d__1))) * sqrt(( d__2 = d__[finish + 1], f2c_abs(d__2)));
-                if ((d__1 = e[finish], f2c_abs(d__1)) > tiny)
+                tiny = eps * sqrt((d__1 = d__[finish], f2c_abs(d__1)))
+                       * sqrt((d__2 = d__[finish + 1], f2c_abs(d__2)));
+                if((d__1 = e[finish], f2c_abs(d__1)) > tiny)
                 {
                     ++finish;
                     goto L20;
@@ -429,20 +456,20 @@ L20:
             }
             /* (Sub) Problem determined. Compute its size and solve it. */
             m = finish - start + 1;
-            if (m == 1)
+            if(m == 1)
             {
                 start = finish + 1;
                 goto L10;
             }
-            if (m > smlsiz)
+            if(m > smlsiz)
             {
                 /* Scale. */
                 orgnrm = dlanst_("M", &m, &d__[start], &e[start]);
-                dlascl_("G", &c__0, &c__0, &orgnrm, &c_b18, &m, &c__1, &d__[ start], &m, info);
+                dlascl_("G", &c__0, &c__0, &orgnrm, &c_b18, &m, &c__1, &d__[start], &m, info);
                 i__1 = m - 1;
                 i__2 = m - 1;
-                dlascl_("G", &c__0, &c__0, &orgnrm, &c_b18, &i__1, &c__1, &e[ start], &i__2, info);
-                if (icompz == 1)
+                dlascl_("G", &c__0, &c__0, &orgnrm, &c_b18, &i__1, &c__1, &e[start], &i__2, info);
+                if(icompz == 1)
                 {
                     strtrw = 1;
                 }
@@ -450,35 +477,38 @@ L20:
                 {
                     strtrw = start;
                 }
-                dlaed0_(&icompz, n, &m, &d__[start], &e[start], &z__[strtrw + start * z_dim1], ldz, &work[1], n, &work[storez], & iwork[1], info);
-                if (*info != 0)
+                dlaed0_(&icompz, n, &m, &d__[start], &e[start], &z__[strtrw + start * z_dim1], ldz,
+                        &work[1], n, &work[storez], &iwork[1], info);
+                if(*info != 0)
                 {
                     *info = (*info / (m + 1) + start - 1) * (*n + 1) + *info % (m + 1) + start - 1;
                     goto L50;
                 }
                 /* Scale back. */
-                dlascl_("G", &c__0, &c__0, &c_b18, &orgnrm, &m, &c__1, &d__[ start], &m, info);
+                dlascl_("G", &c__0, &c__0, &c_b18, &orgnrm, &m, &c__1, &d__[start], &m, info);
             }
             else
             {
-                if (icompz == 1)
+                if(icompz == 1)
                 {
                     /* Since QR won't update a Z matrix which is larger than */
                     /* the length of D, we must solve the sub-problem in a */
                     /* workspace and then multiply back into Z. */
-                    dsteqr_("I", &m, &d__[start], &e[start], &work[1], &m, & work[m * m + 1], info);
-                    dlacpy_("A", n, &m, &z__[start * z_dim1 + 1], ldz, &work[ storez], n);
-                    dgemm_("N", "N", n, &m, &m, &c_b18, &work[storez], n, & work[1], &m, &c_b17, &z__[start * z_dim1 + 1], ldz);
+                    dsteqr_("I", &m, &d__[start], &e[start], &work[1], &m, &work[m * m + 1], info);
+                    dlacpy_("A", n, &m, &z__[start * z_dim1 + 1], ldz, &work[storez], n);
+                    dgemm_("N", "N", n, &m, &m, &c_b18, &work[storez], n, &work[1], &m, &c_b17,
+                           &z__[start * z_dim1 + 1], ldz);
                 }
-                else if (icompz == 2)
+                else if(icompz == 2)
                 {
-                    dsteqr_("I", &m, &d__[start], &e[start], &z__[start + start * z_dim1], ldz, &work[1], info);
+                    dsteqr_("I", &m, &d__[start], &e[start], &z__[start + start * z_dim1], ldz,
+                            &work[1], info);
                 }
                 else
                 {
                     dsterf_(&m, &d__[start], &e[start], info);
                 }
-                if (*info != 0)
+                if(*info != 0)
                 {
                     *info = start * (*n + 1) + finish;
                     goto L50;
@@ -488,7 +518,7 @@ L20:
             goto L10;
         }
         /* endwhile */
-        if (icompz == 0)
+        if(icompz == 0)
         {
             /* Use Quick Sort */
             dlasrt_("I", n, &d__[1], info);
@@ -497,26 +527,22 @@ L20:
         {
             /* Use Selection Sort to minimize swaps of eigenvectors */
             i__1 = *n;
-            for (ii = 2;
-                    ii <= i__1;
-                    ++ii)
+            for(ii = 2; ii <= i__1; ++ii)
             {
                 i__ = ii - 1;
                 k = i__;
                 p = d__[i__];
                 i__2 = *n;
-                for (j = ii;
-                        j <= i__2;
-                        ++j)
+                for(j = ii; j <= i__2; ++j)
                 {
-                    if (d__[j] < p)
+                    if(d__[j] < p)
                     {
                         k = j;
                         p = d__[j];
                     }
                     /* L30: */
                 }
-                if (k != i__)
+                if(k != i__)
                 {
                     d__[k] = d__[i__];
                     d__[i__] = p;
@@ -527,11 +553,10 @@ L20:
         }
     }
 L50:
-    work[1] = (doublereal) lwmin;
+    work[1] = (doublereal)lwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DSTEDC */
 }
 /* dstedc_ */
-

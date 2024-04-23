@@ -130,15 +130,18 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ctptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, complex *ap, complex *b, integer *ldb, integer *info)
+void ctptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, complex *ap,
+             complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctptrs inputs: uplo %c, trans %c, diag %c, n %lld, nrhs %lld, ldb %lld",*uplo, *trans, *diag, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "ctptrs inputs: uplo %c, trans %c, diag %c, n %lld, nrhs %lld, ldb %lld",
+             *uplo, *trans, *diag, *n, *nrhs, *ldb);
 #else
-    snprintf(buffer, 256,"ctptrs inputs: uplo %c, trans %c, diag %c, n %d, nrhs %d, ldb %d",*uplo, *trans, *diag, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "ctptrs inputs: uplo %c, trans %c, diag %c, n %d, nrhs %d, ldb %d", *uplo,
+             *trans, *diag, *n, *nrhs, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -149,7 +152,9 @@ void ctptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    void ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -181,15 +186,15 @@ void ctptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!lsame_(trans, "N", 1, 1) && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
@@ -201,7 +206,7 @@ void ctptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
@@ -228,7 +233,7 @@ void ctptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
             for(*info = 1; *info <= i__1; ++(*info))
             {
                 i__2 = jc + *info - 1;
-                if(ap[i__2].real == 0.f && ap[i__2].imag == 0.f)
+                if(ap[i__2].r == 0.f && ap[i__2].i == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
@@ -244,7 +249,7 @@ void ctptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
             for(*info = 1; *info <= i__1; ++(*info))
             {
                 i__2 = jc;
-                if(ap[i__2].real == 0.f && ap[i__2].imag == 0.f)
+                if(ap[i__2].r == 0.f && ap[i__2].i == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;

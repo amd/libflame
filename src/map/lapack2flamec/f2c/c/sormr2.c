@@ -154,12 +154,14 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sormr2_(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *info)
+void sormr2_(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda,
+             real *tau, real *c__, integer *ldc, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sormr2 inputs: side %c, trans %c, m %d, n %d, k %d, lda %d, ldc %d",*side, *trans, *m, *n, *k, *lda, *ldc);
+    snprintf(buffer, 256, "sormr2 inputs: side %c, trans %c, m %d, n %d, k %d, lda %d, ldc %d",
+             *side, *trans, *m, *n, *k, *lda, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -170,7 +172,9 @@ void sormr2_(char *side, char *trans, integer *m, integer *n, integer *k, real *
     logical left;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -215,11 +219,11 @@ void sormr2_(char *side, char *trans, integer *m, integer *n, integer *k, real *
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1))
     {
         *info = -2;
     }
@@ -235,11 +239,11 @@ void sormr2_(char *side, char *trans, integer *m, integer *n, integer *k, real *
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*k))
+    else if(*lda < fla_max(1, *k))
     {
         *info = -7;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -10;
     }
@@ -293,8 +297,7 @@ void sormr2_(char *side, char *trans, integer *m, integer *n, integer *k, real *
         /* Apply H(i) */
         aii = a[i__ + (nq - *k + i__) * a_dim1];
         a[i__ + (nq - *k + i__) * a_dim1] = 1.f;
-        aocl_lapack_slarf(side, &mi, &ni, &a[i__ + a_dim1], lda, &tau[i__], &c__[c_offset], ldc,
-                          &work[1]);
+        slarf_(side, &mi, &ni, &a[i__ + a_dim1], lda, &tau[i__], &c__[c_offset], ldc, &work[1]);
         a[i__ + (nq - *k + i__) * a_dim1] = aii;
         /* L10: */
     }

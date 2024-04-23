@@ -1,12 +1,12 @@
-/* ./cgesc2.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cgesc2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-static scomplex c_b13 = {1.f, 0.f};
-static aocl_int64_t c_n1 = -1;
+static integer c__1 = 1;
+static complex c_b13 = {1.f, 0.f};
+static integer c_n1 = -1;
 /* > \brief \b CGESC2 solves a system of linear equations using the LU factorization with complete
  * pivoting co mputed by sgetc2. */
 /* =========== DOCUMENTATION =========== */
@@ -115,15 +115,16 @@ for 1 <= j <= N, column j of the */
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-void cgesc2_(integer *n, complex *a, integer *lda, complex * rhs, integer *ipiv, integer *jpiv, real *scale)
+void cgesc2_(integer *n, complex *a, integer *lda, complex *rhs, integer *ipiv, integer *jpiv,
+             real *scale)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgesc2 inputs: n %lld, lda %lld",*n, *lda);
+    snprintf(buffer, 256, "cgesc2 inputs: n %lld, lda %lld", *n, *lda);
 #else
-    snprintf(buffer, 256,"cgesc2 inputs: n %d, lda %d",*n, *lda);
+    snprintf(buffer, 256, "cgesc2 inputs: n %d, lda %d", *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -139,12 +140,15 @@ void cgesc2_(integer *n, complex *a, integer *lda, complex * rhs, integer *ipiv,
     real eps;
     complex temp;
     extern /* Subroutine */
-    void cscal_(integer *, complex *, complex *, integer *), slabad_(real *, real *);
+        void
+        cscal_(integer *, complex *, complex *, integer *),
+        slabad_(real *, real *);
     extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
     real bignum;
     extern /* Subroutine */
-    void claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
+        void
+        claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
     real smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -190,12 +194,12 @@ void cgesc2_(integer *n, complex *a, integer *lda, complex * rhs, integer *ipiv,
             i__4 = j;
             i__5 = j + i__ * a_dim1;
             i__6 = i__;
-            q__2.real = a[i__5].real * rhs[i__6].real - a[i__5].imag * rhs[i__6].imag;
-            q__2.imag = a[i__5].real * rhs[i__6].imag + a[i__5].imag * rhs[i__6].real; // , expr subst
-            q__1.real = rhs[i__4].real - q__2.real;
-            q__1.imag = rhs[i__4].imag - q__2.imag; // , expr subst
-            rhs[i__3].real = q__1.real;
-            rhs[i__3].imag = q__1.imag; // , expr subst
+            q__2.r = a[i__5].r * rhs[i__6].r - a[i__5].i * rhs[i__6].i;
+            q__2.i = a[i__5].r * rhs[i__6].i + a[i__5].i * rhs[i__6].r; // , expr subst
+            q__1.r = rhs[i__4].r - q__2.r;
+            q__1.i = rhs[i__4].i - q__2.i; // , expr subst
+            rhs[i__3].r = q__1.r;
+            rhs[i__3].i = q__1.i; // , expr subst
             /* L10: */
         }
         /* L20: */
@@ -204,7 +208,7 @@ void cgesc2_(integer *n, complex *a, integer *lda, complex * rhs, integer *ipiv,
     *scale = 1.f;
     /* Check for scaling */
     i__ = icamax_(n, &rhs[1], &c__1);
-    if (smlnum * 2.f * c_abs(&rhs[i__]) > c_abs(&a[*n + *n * a_dim1]))
+    if(smlnum * 2.f * c_abs(&rhs[i__]) > c_abs(&a[*n + *n * a_dim1]))
     {
         r__1 = c_abs(&rhs[i__]);
         q__1.r = .5f / r__1;
@@ -221,10 +225,10 @@ void cgesc2_(integer *n, complex *a, integer *lda, complex * rhs, integer *ipiv,
         temp.imag = q__1.imag; // , expr subst
         i__1 = i__;
         i__2 = i__;
-        q__1.real = rhs[i__2].real * temp.real - rhs[i__2].imag * temp.imag;
-        q__1.imag = rhs[i__2].real * temp.imag + rhs[i__2].imag * temp.real; // , expr subst
-        rhs[i__1].real = q__1.real;
-        rhs[i__1].imag = q__1.imag; // , expr subst
+        q__1.r = rhs[i__2].r * temp.r - rhs[i__2].i * temp.i;
+        q__1.i = rhs[i__2].r * temp.i + rhs[i__2].i * temp.r; // , expr subst
+        rhs[i__1].r = q__1.r;
+        rhs[i__1].i = q__1.i; // , expr subst
         i__1 = *n;
         for(j = i__ + 1; j <= i__1; ++j)
         {
@@ -232,14 +236,14 @@ void cgesc2_(integer *n, complex *a, integer *lda, complex * rhs, integer *ipiv,
             i__3 = i__;
             i__4 = j;
             i__5 = i__ + j * a_dim1;
-            q__3.real = a[i__5].real * temp.real - a[i__5].imag * temp.imag;
-            q__3.imag = a[i__5].real * temp.imag + a[i__5].imag * temp.real; // , expr subst
-            q__2.real = rhs[i__4].real * q__3.real - rhs[i__4].imag * q__3.imag;
-            q__2.imag = rhs[i__4].real * q__3.imag + rhs[i__4].imag * q__3.real; // , expr subst
-            q__1.real = rhs[i__3].real - q__2.real;
-            q__1.imag = rhs[i__3].imag - q__2.imag; // , expr subst
-            rhs[i__2].real = q__1.real;
-            rhs[i__2].imag = q__1.imag; // , expr subst
+            q__3.r = a[i__5].r * temp.r - a[i__5].i * temp.i;
+            q__3.i = a[i__5].r * temp.i + a[i__5].i * temp.r; // , expr subst
+            q__2.r = rhs[i__4].r * q__3.r - rhs[i__4].i * q__3.i;
+            q__2.i = rhs[i__4].r * q__3.i + rhs[i__4].i * q__3.r; // , expr subst
+            q__1.r = rhs[i__3].r - q__2.r;
+            q__1.i = rhs[i__3].i - q__2.i; // , expr subst
+            rhs[i__2].r = q__1.r;
+            rhs[i__2].i = q__1.i; // , expr subst
             /* L30: */
         }
         /* L40: */

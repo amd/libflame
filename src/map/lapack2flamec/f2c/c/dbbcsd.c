@@ -1,5 +1,8 @@
-/* dbbcsd.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dbbcsd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b10 = -.125;
 static doublereal c_b35 = -1.;
@@ -336,12 +339,21 @@ the */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, integer *m, integer *p, integer *q, doublereal * theta, doublereal *phi, doublereal *u1, integer *ldu1, doublereal *u2, integer *ldu2, doublereal *v1t, integer *ldv1t, doublereal *v2t, integer *ldv2t, doublereal *b11d, doublereal *b11e, doublereal *b12d, doublereal *b12e, doublereal *b21d, doublereal *b21e, doublereal * b22d, doublereal *b22e, doublereal *work, integer *lwork, integer * info)
+void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, integer *m,
+             integer *p, integer *q, doublereal *theta, doublereal *phi, doublereal *u1,
+             integer *ldu1, doublereal *u2, integer *ldu2, doublereal *v1t, integer *ldv1t,
+             doublereal *v2t, integer *ldv2t, doublereal *b11d, doublereal *b11e, doublereal *b12d,
+             doublereal *b12e, doublereal *b21d, doublereal *b21e, doublereal *b22d,
+             doublereal *b22e, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS ", ldu1 %" FLA_IS ", ldu2 %" FLA_IS ", ldv1t %" FLA_IS ", ldv2t %" FLA_IS ", lwork %" FLA_IS "",*jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t, *lwork);
+    AOCL_DTL_SNPRINTF(
+        "dbbcsd inputs: jobu1 %c, jobu2 %c, jobv1t %c, jobv2t %c, trans %c, m %" FLA_IS
+        ", p %" FLA_IS ", q %" FLA_IS ", ldu1 %" FLA_IS ", ldu2 %" FLA_IS ", ldv1t %" FLA_IS
+        ", ldv2t %" FLA_IS ", lwork %" FLA_IS "",
+        *jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *m, *p, *q, *ldu1, *ldu2, *ldv1t, *ldv2t, *lwork);
     /* System generated locals */
-    aocl_int64_t u1_dim1, u1_offset, u2_dim1, u2_offset, v1t_dim1, v1t_offset, v2t_dim1, v2t_offset,
+    integer u1_dim1, u1_offset, u2_dim1, u2_offset, v1t_dim1, v1t_offset, v2t_dim1, v2t_offset,
         i__1, i__2;
     doublereal d__1, d__2, d__3, d__4;
     /* Builtin functions */
@@ -356,13 +368,18 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
     aocl_int64_t imin, mini, imax, iter;
     doublereal unfl, temp;
     extern /* Subroutine */
-    void dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     integer iu1cs, iu2cs, iu1sn, iu2sn;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
+               doublereal *, integer *),
+        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer maxit;
     doublereal dummy;
     aocl_int64_t iv1tcs, iv2tcs;
@@ -371,14 +388,17 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
     extern doublereal dlamch_(char *);
     doublereal sigma11, sigma21;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal thresh, tolmul;
     logical lquery;
     doublereal b11bulge, b12bulge;
     logical wantv1t, wantv2t;
     doublereal b21bulge, b22bulge;
     extern /* Subroutine */
-    void dlartgp_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlartgs_( doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlartgp_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
+        dlartgs_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -429,8 +449,8 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
     wantu2 = lsame_(jobu2, "Y", 1, 1);
     wantv1t = lsame_(jobv1t, "Y", 1, 1);
     wantv2t = lsame_(jobv2t, "Y", 1, 1);
-    colmajor = ! lsame_(trans, "T", 1, 1);
-    if (*m < 0)
+    colmajor = !lsame_(trans, "T", 1, 1);
+    if(*m < 0)
     {
         *info = -6;
     }
@@ -466,7 +486,7 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
     if(*info == 0 && *q == 0)
     {
         lworkmin = 1;
-        work[1] = (doublereal) lworkmin;
+        work[1] = (doublereal)lworkmin;
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -509,13 +529,13 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
     d__3 = 100.;
     d__4 = pow_dd(&eps, &c_b10); // , expr subst
     d__1 = 10.;
-    d__2 = fla_min(d__3,d__4); // , expr subst
-    tolmul = fla_max(d__1,d__2);
+    d__2 = fla_min(d__3, d__4); // , expr subst
+    tolmul = fla_max(d__1, d__2);
     tol = tolmul * eps;
     /* Computing MAX */
     d__1 = tol;
     d__2 = *q * 6 * *q * unfl; // , expr subst
-    thresh = fla_max(d__1,d__2);
+    thresh = fla_max(d__1, d__2);
     /* Test for negligible sines or cosines */
     i__1 = *q;
     for(i__ = 1; i__ <= i__1; ++i__)
@@ -524,7 +544,7 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
         {
             theta[i__] = 0.;
         }
-        else if (theta[i__] > 1.5707963267948966192313216916397514421 - thresh)
+        else if(theta[i__] > 1.5707963267948966192313216916397514421 - thresh)
         {
             theta[i__] = 1.5707963267948966192313216916397514421;
         }
@@ -536,7 +556,7 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
         {
             phi[i__] = 0.;
         }
-        else if (phi[i__] > 1.5707963267948966192313216916397514421 - thresh)
+        else if(phi[i__] > 1.5707963267948966192313216916397514421 - thresh)
         {
             phi[i__] = 1.5707963267948966192313216916397514421;
         }
@@ -618,7 +638,7 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
                 thetamin = theta[i__];
             }
         }
-        if (thetamax > 1.5707963267948966192313216916397514421 - thresh)
+        if(thetamax > 1.5707963267948966192313216916397514421 - thresh)
         {
             /* Zero on diagonals of B11 and B22;
             induce deflation with a */
@@ -1079,14 +1099,14 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
             if(colmajor)
             {
                 i__1 = imax - imin + 1;
-                aocl_lapack_dlasr("R", "V", "F", p, &i__1, &work[iu1cs + imin - 1],
-                                  &work[iu1sn + imin - 1], &u1[imin * u1_dim1 + 1], ldu1);
+                dlasr_("R", "V", "F", p, &i__1, &work[iu1cs + imin - 1], &work[iu1sn + imin - 1],
+                       &u1[imin * u1_dim1 + 1], ldu1);
             }
             else
             {
                 i__1 = imax - imin + 1;
-                aocl_lapack_dlasr("L", "V", "F", &i__1, p, &work[iu1cs + imin - 1],
-                                  &work[iu1sn + imin - 1], &u1[imin + u1_dim1], ldu1);
+                dlasr_("L", "V", "F", &i__1, p, &work[iu1cs + imin - 1], &work[iu1sn + imin - 1],
+                       &u1[imin + u1_dim1], ldu1);
             }
         }
         if(wantu2)
@@ -1095,15 +1115,15 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
             {
                 i__1 = *m - *p;
                 i__2 = imax - imin + 1;
-                aocl_lapack_dlasr("R", "V", "F", &i__1, &i__2, &work[iu2cs + imin - 1],
-                                  &work[iu2sn + imin - 1], &u2[imin * u2_dim1 + 1], ldu2);
+                dlasr_("R", "V", "F", &i__1, &i__2, &work[iu2cs + imin - 1],
+                       &work[iu2sn + imin - 1], &u2[imin * u2_dim1 + 1], ldu2);
             }
             else
             {
                 i__1 = imax - imin + 1;
                 i__2 = *m - *p;
-                aocl_lapack_dlasr("L", "V", "F", &i__1, &i__2, &work[iu2cs + imin - 1],
-                                  &work[iu2sn + imin - 1], &u2[imin + u2_dim1], ldu2);
+                dlasr_("L", "V", "F", &i__1, &i__2, &work[iu2cs + imin - 1],
+                       &work[iu2sn + imin - 1], &u2[imin + u2_dim1], ldu2);
             }
         }
         if(wantv1t)
@@ -1111,14 +1131,14 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
             if(colmajor)
             {
                 i__1 = imax - imin + 1;
-                aocl_lapack_dlasr("L", "V", "F", &i__1, q, &work[iv1tcs + imin - 1],
-                                  &work[iv1tsn + imin - 1], &v1t[imin + v1t_dim1], ldv1t);
+                dlasr_("L", "V", "F", &i__1, q, &work[iv1tcs + imin - 1], &work[iv1tsn + imin - 1],
+                       &v1t[imin + v1t_dim1], ldv1t);
             }
             else
             {
                 i__1 = imax - imin + 1;
-                aocl_lapack_dlasr("R", "V", "F", q, &i__1, &work[iv1tcs + imin - 1],
-                                  &work[iv1tsn + imin - 1], &v1t[imin * v1t_dim1 + 1], ldv1t);
+                dlasr_("R", "V", "F", q, &i__1, &work[iv1tcs + imin - 1], &work[iv1tsn + imin - 1],
+                       &v1t[imin * v1t_dim1 + 1], ldv1t);
             }
         }
         if(wantv2t)
@@ -1127,15 +1147,15 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
             {
                 i__1 = imax - imin + 1;
                 i__2 = *m - *q;
-                aocl_lapack_dlasr("L", "V", "F", &i__1, &i__2, &work[iv2tcs + imin - 1],
-                                  &work[iv2tsn + imin - 1], &v2t[imin + v2t_dim1], ldv2t);
+                dlasr_("L", "V", "F", &i__1, &i__2, &work[iv2tcs + imin - 1],
+                       &work[iv2tsn + imin - 1], &v2t[imin + v2t_dim1], ldv2t);
             }
             else
             {
                 i__1 = *m - *q;
                 i__2 = imax - imin + 1;
-                aocl_lapack_dlasr("R", "V", "F", &i__1, &i__2, &work[iv2tcs + imin - 1],
-                                  &work[iv2tsn + imin - 1], &v2t[imin * v2t_dim1 + 1], ldv2t);
+                dlasr_("R", "V", "F", &i__1, &i__2, &work[iv2tcs + imin - 1],
+                       &work[iv2tsn + imin - 1], &v2t[imin * v2t_dim1 + 1], ldv2t);
             }
         }
         /* Fix signs on B11(IMAX-1,IMAX) and B21(IMAX-1,IMAX) */
@@ -1218,7 +1238,7 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
             {
                 theta[i__] = 0.;
             }
-            else if (theta[i__] > 1.5707963267948966192313216916397514421 - thresh)
+            else if(theta[i__] > 1.5707963267948966192313216916397514421 - thresh)
             {
                 theta[i__] = 1.5707963267948966192313216916397514421;
             }
@@ -1230,7 +1250,7 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
             {
                 phi[i__] = 0.;
             }
-            else if (phi[i__] > 1.5707963267948966192313216916397514421 - thresh)
+            else if(phi[i__] > 1.5707963267948966192313216916397514421 - thresh)
             {
                 phi[i__] = 1.5707963267948966192313216916397514421;
             }
@@ -1326,8 +1346,8 @@ void dbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans,
                 if(wantv2t)
                 {
                     i__2 = *m - *q;
-                    aocl_blas_dswap(&i__2, &v2t[i__ * v2t_dim1 + 1], &c__1,
-                                    &v2t[mini * v2t_dim1 + 1], &c__1);
+                    dswap_(&i__2, &v2t[i__ * v2t_dim1 + 1], &c__1, &v2t[mini * v2t_dim1 + 1],
+                           &c__1);
                 }
             }
         }

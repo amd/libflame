@@ -121,10 +121,13 @@ void aocl_lapack_slapll(aocl_int64_t *n, real *x, aocl_int64_t *incx, real *y, a
     /* Local variables */
     real c__, a11, a12, a22, tau;
     extern /* Subroutine */
-    void slas2_(real *, real *, real *, real *, real *) ;
+        void
+        slas2_(real *, real *, real *, real *, real *);
     real ssmax;
     extern /* Subroutine */
-    void saxpy_(integer *, real *, real *, integer *, real *, integer *), slarfg_(integer *, real *, real *, integer *, real *);
+        void
+        saxpy_(integer *, real *, real *, integer *, real *, integer *),
+        slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

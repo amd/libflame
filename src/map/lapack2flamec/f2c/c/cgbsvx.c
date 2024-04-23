@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief <b> CGBSVX computes the solution to system of linear equations A * X = B for GB
  * matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -373,20 +373,29 @@ if EQUED = 'N' or 'R', C */
 /* > \ingroup complexGBsolve */
 /* ===================================================================== */
 /* Subroutine */
-void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, complex *ab, integer *ldab, complex *afb, integer *ldafb, integer *ipiv, char *equed, real *r__, real *c__, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, real *rwork, integer *info)
+void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integer *nrhs,
+             complex *ab, integer *ldab, complex *afb, integer *ldafb, integer *ipiv, char *equed,
+             real *r__, real *c__, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond,
+             real *ferr, real *berr, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgbsvx inputs: fact %c, trans %c, n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, ldafb %lld, equed %c, ldb %lld, ldx %lld",*fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx);
+    snprintf(buffer, 256,
+             "cgbsvx inputs: fact %c, trans %c, n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, "
+             "ldafb %lld, equed %c, ldb %lld, ldx %lld",
+             *fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx);
 #else
-    snprintf(buffer, 256,"cgbsvx inputs: fact %c, trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldafb %d, equed %c, ldb %d, ldx %d",*fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx);
+    snprintf(buffer, 256,
+             "cgbsvx inputs: fact %c, trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldafb %d, "
+             "equed %c, ldb %d, ldx %d",
+             *fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
+    integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
         i__2, i__3, i__4, i__5;
     real r__1, r__2;
     scomplex q__1;
@@ -399,24 +408,40 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     extern logical lsame_(char *, char *, integer, integer);
     real rcmin, rcmax, anorm;
     extern /* Subroutine */
-    void ccopy_(integer *, complex *, integer *, complex *, integer *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *);
     logical equil;
     extern real clangb_(char *, integer *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    void claqgb_(integer *, integer *, integer *, integer *, complex *, integer *, real *, real *, real *, real *, real *, char *), cgbcon_(char *, integer *, integer *, integer *, complex *, integer *, integer *, real *, real *, complex *, real *, integer *);
+        void
+        claqgb_(integer *, integer *, integer *, integer *, complex *, integer *, real *, real *,
+                real *, real *, real *, char *),
+        cgbcon_(char *, integer *, integer *, integer *, complex *, integer *, integer *, real *,
+                real *, complex *, real *, integer *);
     real colcnd;
     extern real clantb_(char *, char *, char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    void cgbequ_(integer *, integer *, integer *, integer *, complex *, integer *, real *, real *, real *, real *, real *, integer *);
+        void
+        cgbequ_(integer *, integer *, integer *, integer *, complex *, integer *, real *, real *,
+                real *, real *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    void cgbrfs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), cgbtrf_(integer *, integer *, integer *, integer *, complex *, integer *, integer *, integer *);
+        void
+        cgbrfs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *,
+                integer *, integer *, complex *, integer *, complex *, integer *, real *, real *,
+                complex *, real *, integer *),
+        cgbtrf_(integer *, integer *, integer *, integer *, complex *, integer *, integer *,
+                integer *);
     logical nofact;
     extern /* Subroutine */
-    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern /* Subroutine */
-    void cgbtrs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+        void
+        cgbtrs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *,
+                complex *, integer *, integer *);
     integer infequ;
     logical colequ;
     real rowcnd;
@@ -474,7 +499,7 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     notran = lsame_(trans, "N", 1, 1);
     smlnum = 0.f;
     bignum = 0.f;
-    if (nofact || equil)
+    if(nofact || equil)
     {
         *(unsigned char *)equed = 'N';
         rowequ = FALSE_;
@@ -488,11 +513,11 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
         bignum = 1.f / smlnum;
     }
     /* Test the input parameters. */
-    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -520,7 +545,7 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     {
         *info = -10;
     }
-    else if (lsame_(fact, "F", 1, 1) && ! (rowequ || colequ || lsame_(equed, "N", 1, 1)))
+    else if(lsame_(fact, "F", 1, 1) && !(rowequ || colequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -12;
     }
@@ -536,11 +561,11 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
                 /* Computing MIN */
                 r__1 = rcmin;
                 r__2 = r__[j]; // , expr subst
-                rcmin = fla_min(r__1,r__2);
+                rcmin = fla_min(r__1, r__2);
                 /* Computing MAX */
                 r__1 = rcmax;
                 r__2 = r__[j]; // , expr subst
-                rcmax = fla_max(r__1,r__2);
+                rcmax = fla_max(r__1, r__2);
                 /* L10: */
             }
             if(rcmin <= 0.f)
@@ -549,7 +574,7 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
             }
             else if(*n > 0)
             {
-                rowcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+                rowcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
             }
             else
             {
@@ -566,11 +591,11 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
                 /* Computing MIN */
                 r__1 = rcmin;
                 r__2 = c__[j]; // , expr subst
-                rcmin = fla_min(r__1,r__2);
+                rcmin = fla_min(r__1, r__2);
                 /* Computing MAX */
                 r__1 = rcmax;
                 r__2 = c__[j]; // , expr subst
-                rcmax = fla_max(r__1,r__2);
+                rcmax = fla_max(r__1, r__2);
                 /* L20: */
             }
             if(rcmin <= 0.f)
@@ -579,7 +604,7 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
             }
             else if(*n > 0)
             {
-                colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+                colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
             }
             else
             {
@@ -588,11 +613,11 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
         }
         if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -16;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -18;
             }
@@ -608,12 +633,13 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        aocl_lapack_cgbequ(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], &rowcnd, &colcnd,
-                           &amax, &infequ);
+        cgbequ_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], &rowcnd, &colcnd, &amax,
+                &infequ);
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            claqgb_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], & rowcnd, &colcnd, &amax, equed);
+            claqgb_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], &rowcnd, &colcnd, &amax,
+                    equed);
             rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
             colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }
@@ -632,10 +658,10 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
                     i__3 = i__ + j * b_dim1;
                     i__4 = i__;
                     i__5 = i__ + j * b_dim1;
-                    q__1.real = r__[i__4] * b[i__5].real;
-                    q__1.imag = r__[i__4] * b[i__5].imag; // , expr subst
-                    b[i__3].real = q__1.real;
-                    b[i__3].imag = q__1.imag; // , expr subst
+                    q__1.r = r__[i__4] * b[i__5].r;
+                    q__1.i = r__[i__4] * b[i__5].i; // , expr subst
+                    b[i__3].r = q__1.r;
+                    b[i__3].i = q__1.i; // , expr subst
                     /* L30: */
                 }
                 /* L40: */
@@ -653,10 +679,10 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__;
                 i__5 = i__ + j * b_dim1;
-                q__1.real = c__[i__4] * b[i__5].real;
-                q__1.imag = c__[i__4] * b[i__5].imag; // , expr subst
-                b[i__3].real = q__1.real;
-                b[i__3].imag = q__1.imag; // , expr subst
+                q__1.r = c__[i__4] * b[i__5].r;
+                q__1.i = c__[i__4] * b[i__5].i; // , expr subst
+                b[i__3].r = q__1.r;
+                b[i__3].i = q__1.i; // , expr subst
                 /* L50: */
             }
             /* L60: */
@@ -670,13 +696,13 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
         {
             /* Computing MAX */
             i__2 = j - *ku;
-            j1 = fla_max(i__2,1);
+            j1 = fla_max(i__2, 1);
             /* Computing MIN */
             i__2 = j + *kl;
-            j2 = fla_min(i__2,*n);
+            j2 = fla_min(i__2, *n);
             i__2 = j2 - j1 + 1;
-            aocl_blas_ccopy(&i__2, &ab[*ku + 1 - j + j1 + j * ab_dim1], &c__1,
-                            &afb[*kl + *ku + 1 - j + j1 + j * afb_dim1], &c__1);
+            ccopy_(&i__2, &ab[*ku + 1 - j + j1 + j * ab_dim1], &c__1,
+                   &afb[*kl + *ku + 1 - j + j1 + j * afb_dim1], &c__1);
             /* L70: */
         }
         aocl_lapack_cgbtrf(n, n, kl, ku, &afb[afb_offset], ldafb, &ipiv[1], info);
@@ -694,15 +720,13 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
                 /* Computing MIN */
                 i__4 = *n + *ku + 1 - j;
                 i__5 = *kl + *ku + 1; // , expr subst
-                i__3 = fla_min(i__4,i__5);
-                for (i__ = fla_max(i__2,1);
-                        i__ <= i__3;
-                        ++i__)
+                i__3 = fla_min(i__4, i__5);
+                for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
                 {
                     /* Computing MAX */
                     r__1 = anorm;
                     r__2 = c_abs(&ab[i__ + j * ab_dim1]); // , expr subst
-                    anorm = fla_max(r__1,r__2);
+                    anorm = fla_max(r__1, r__2);
                     /* L80: */
                 }
                 /* L90: */
@@ -710,12 +734,13 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
             /* Computing MIN */
             i__3 = *info - 1;
             i__2 = *kl + *ku; // , expr subst
-            i__1 = fla_min(i__3,i__2);
+            i__1 = fla_min(i__3, i__2);
             /* Computing MAX */
             i__4 = 1;
             i__5 = *kl + *ku + 2 - *info; // , expr subst
-            rpvgrw = clantb_("M", "U", "N", info, &i__1, &afb[fla_max(i__4,i__5) + afb_dim1], ldafb, &rwork[1]);
-            if (rpvgrw == 0.f)
+            rpvgrw = clantb_("M", "U", "N", info, &i__1, &afb[fla_max(i__4, i__5) + afb_dim1],
+                             ldafb, &rwork[1]);
+            if(rpvgrw == 0.f)
             {
                 rpvgrw = 1.f;
             }
@@ -741,7 +766,7 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     }
     anorm = aocl_lapack_clangb(norm, n, kl, ku, &ab[ab_offset], ldab, &rwork[1]);
     i__1 = *kl + *ku;
-    rpvgrw = aocl_lapack_clantb("M", "U", "N", n, &i__1, &afb[afb_offset], ldafb, &rwork[1]);
+    rpvgrw = clantb_("M", "U", "N", n, &i__1, &afb[afb_offset], ldafb, &rwork[1]);
     if(rpvgrw == 0.f)
     {
         rpvgrw = 1.f;
@@ -751,17 +776,15 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
         rpvgrw = aocl_lapack_clangb("M", n, kl, ku, &ab[ab_offset], ldab, &rwork[1]) / rpvgrw;
     }
     /* Compute the reciprocal of the condition number of A. */
-    aocl_lapack_cgbcon(norm, n, kl, ku, &afb[afb_offset], ldafb, &ipiv[1], &anorm, rcond, &work[1],
-                       &rwork[1], info);
+    cgbcon_(norm, n, kl, ku, &afb[afb_offset], ldafb, &ipiv[1], &anorm, rcond, &work[1], &rwork[1],
+            info);
     /* Compute the solution matrix X. */
-    aocl_lapack_clacpy("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
-    aocl_lapack_cgbtrs(trans, n, kl, ku, nrhs, &afb[afb_offset], ldafb, &ipiv[1], &x[x_offset], ldx,
-                       info);
+    clacpy_("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
+    cgbtrs_(trans, n, kl, ku, nrhs, &afb[afb_offset], ldafb, &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    aocl_lapack_cgbrfs(trans, n, kl, ku, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb,
-                       &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1],
-                       &rwork[1], info);
+    cgbrfs_(trans, n, kl, ku, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb, &ipiv[1],
+            &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(notran)
@@ -777,10 +800,10 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
                     i__2 = i__ + j * x_dim1;
                     i__4 = i__;
                     i__5 = i__ + j * x_dim1;
-                    q__1.real = c__[i__4] * x[i__5].real;
-                    q__1.imag = c__[i__4] * x[i__5].imag; // , expr subst
-                    x[i__2].real = q__1.real;
-                    x[i__2].imag = q__1.imag; // , expr subst
+                    q__1.r = c__[i__4] * x[i__5].r;
+                    q__1.i = c__[i__4] * x[i__5].i; // , expr subst
+                    x[i__2].r = q__1.r;
+                    x[i__2].i = q__1.i; // , expr subst
                     /* L100: */
                 }
                 /* L110: */
@@ -804,10 +827,10 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
                 i__2 = i__ + j * x_dim1;
                 i__4 = i__;
                 i__5 = i__ + j * x_dim1;
-                q__1.real = r__[i__4] * x[i__5].real;
-                q__1.imag = r__[i__4] * x[i__5].imag; // , expr subst
-                x[i__2].real = q__1.real;
-                x[i__2].imag = q__1.imag; // , expr subst
+                q__1.r = r__[i__4] * x[i__5].r;
+                q__1.i = r__[i__4] * x[i__5].i; // , expr subst
+                x[i__2].r = q__1.r;
+                x[i__2].i = q__1.i; // , expr subst
                 /* L130: */
             }
             /* L140: */

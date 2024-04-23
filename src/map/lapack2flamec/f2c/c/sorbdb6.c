@@ -1,8 +1,8 @@
-/* ./sorbdb6.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sorbdb6.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b5 = 1.f;
 static real c_b6 = 0.f;
@@ -157,12 +157,16 @@ static real c_b13 = -1.f;
 /* > \ingroup unbdb6 */
 /* ===================================================================== */
 /* Subroutine */
-void sorbdb6_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, real *x2, integer *incx2, real *q1, integer *ldq1, real *q2, integer *ldq2, real *work, integer *lwork, integer *info)
+void sorbdb6_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, real *x2,
+              integer *incx2, real *q1, integer *ldq1, real *q2, integer *ldq2, real *work,
+              integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sorbdb6 inputs: m1 %d, m2 %d, n %d, incx1 %d, incx2 %d, ldq1 %d, ldq2 %d",*m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2);
+    snprintf(buffer, 256,
+             "sorbdb6 inputs: m1 %d, m2 %d, n %d, incx1 %d, incx2 %d, ldq1 %d, ldq2 %d", *m1, *m2,
+             *n, *incx1, *incx2, *ldq1, *ldq2);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -173,7 +177,11 @@ void sorbdb6_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, re
     integer i__;
     real scl1, scl2, ssq1, ssq2;
     extern /* Subroutine */
-    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slassq_(integer *, real *, integer *, real *, real *);
+        void
+        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+               real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slassq_(integer *, real *, integer *, real *, real *);
     real normsq1, normsq2;
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -227,11 +235,11 @@ void sorbdb6_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, re
     {
         *info = -7;
     }
-    else if (*ldq1 < fla_max(1,*m1))
+    else if(*ldq1 < fla_max(1, *m1))
     {
         *info = -9;
     }
-    else if (*ldq2 < fla_max(1,*m2))
+    else if(*ldq2 < fla_max(1, *m2))
     {
         *info = -11;
     }
@@ -255,6 +263,17 @@ void sorbdb6_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, re
     norm = scl * sqrt(ssq);
     /* First, project X onto the orthogonal complement of Q's column */
     /* space */
+    scl1 = 0.f;
+    ssq1 = 1.f;
+    slassq_(m1, &x1[1], incx1, &scl1, &ssq1);
+    scl2 = 0.f;
+    ssq2 = 1.f;
+    slassq_(m2, &x2[1], incx2, &scl2, &ssq2);
+    /* Computing 2nd power */
+    r__1 = scl1;
+    /* Computing 2nd power */
+    r__2 = scl2;
+    normsq1 = r__1 * r__1 * ssq1 + r__2 * r__2 * ssq2;
     if(*m1 == 0)
     {
         i__1 = *n;
@@ -268,25 +287,29 @@ void sorbdb6_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, re
         aocl_blas_sgemv("C", m1, n, &c_b5, &q1[q1_offset], ldq1, &x1[1], incx1, &c_b6, &work[1],
                         &c__1);
     }
-    aocl_blas_sgemv("C", m2, n, &c_b5, &q2[q2_offset], ldq2, &x2[1], incx2, &c_b5, &work[1], &c__1);
-    aocl_blas_sgemv("N", m1, n, &c_b13, &q1[q1_offset], ldq1, &work[1], &c__1, &c_b5, &x1[1],
-                    incx1);
-    aocl_blas_sgemv("N", m2, n, &c_b13, &q2[q2_offset], ldq2, &work[1], &c__1, &c_b5, &x2[1],
-                    incx2);
-    scl = 0.f;
-    ssq = 0.f;
-    aocl_lapack_slassq(m1, &x1[1], incx1, &scl, &ssq);
-    aocl_lapack_slassq(m2, &x2[1], incx2, &scl, &ssq);
-    norm_new__ = scl * sqrt(ssq);
+    sgemv_("C", m2, n, &c_b4, &q2[q2_offset], ldq2, &x2[1], incx2, &c_b4, &work[1], &c__1);
+    sgemv_("N", m1, n, &c_b12, &q1[q1_offset], ldq1, &work[1], &c__1, &c_b4, &x1[1], incx1);
+    sgemv_("N", m2, n, &c_b12, &q2[q2_offset], ldq2, &work[1], &c__1, &c_b4, &x2[1], incx2);
+    scl1 = 0.f;
+    ssq1 = 1.f;
+    slassq_(m1, &x1[1], incx1, &scl1, &ssq1);
+    scl2 = 0.f;
+    ssq2 = 1.f;
+    slassq_(m2, &x2[1], incx2, &scl2, &ssq2);
+    /* Computing 2nd power */
+    r__1 = scl1;
+    /* Computing 2nd power */
+    r__2 = scl2;
+    normsq2 = r__1 * r__1 * ssq1 + r__2 * r__2 * ssq2;
     /* If projection is sufficiently large in norm, then stop. */
     /* If projection is zero, then stop. */
     /* Otherwise, project again. */
-    if(norm_new__ >= norm * .83f)
+    if(normsq2 >= normsq1 * .01f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if(norm_new__ <= (*n * eps * norm))
+    if(normsq2 == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -310,30 +333,32 @@ void sorbdb6_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, re
         aocl_blas_sgemv("C", m1, n, &c_b5, &q1[q1_offset], ldq1, &x1[1], incx1, &c_b6, &work[1],
                         &c__1);
     }
-    aocl_blas_sgemv("C", m2, n, &c_b5, &q2[q2_offset], ldq2, &x2[1], incx2, &c_b5, &work[1], &c__1);
-    aocl_blas_sgemv("N", m1, n, &c_b13, &q1[q1_offset], ldq1, &work[1], &c__1, &c_b5, &x1[1],
-                    incx1);
-    aocl_blas_sgemv("N", m2, n, &c_b13, &q2[q2_offset], ldq2, &work[1], &c__1, &c_b5, &x2[1],
-                    incx2);
-    scl = 0.f;
-    ssq = 0.f;
-    aocl_lapack_slassq(m1, &x1[1], incx1, &scl, &ssq);
-    aocl_lapack_slassq(m2, &x2[1], incx2, &scl, &ssq);
-    norm_new__ = scl * sqrt(ssq);
+    sgemv_("C", m2, n, &c_b4, &q2[q2_offset], ldq2, &x2[1], incx2, &c_b4, &work[1], &c__1);
+    sgemv_("N", m1, n, &c_b12, &q1[q1_offset], ldq1, &work[1], &c__1, &c_b4, &x1[1], incx1);
+    sgemv_("N", m2, n, &c_b12, &q2[q2_offset], ldq2, &work[1], &c__1, &c_b4, &x2[1], incx2);
+    scl1 = 0.f;
+    ssq1 = 1.f;
+    slassq_(m1, &x1[1], incx1, &scl1, &ssq1);
+    scl2 = 0.f;
+    ssq2 = 1.f;
+    slassq_(m1, &x1[1], incx1, &scl1, &ssq1);
+    /* Computing 2nd power */
+    r__1 = scl1;
+    /* Computing 2nd power */
+    r__2 = scl2;
+    normsq2 = r__1 * r__1 * ssq1 + r__2 * r__2 * ssq2;
     /* If second projection is sufficiently large in norm, then do */
     /* nothing more. Alternatively, if it shrunk significantly, then */
     /* truncate it to zero. */
-    if(norm_new__ < norm * .83f)
+    if(normsq2 < normsq1 * .01f)
     {
-        i__1 = (*m1 - 1) * *incx1 + 1;
-        i__2 = *incx1;
-        for(ix = 1; i__2 < 0 ? ix >= i__1 : ix <= i__1; ix += i__2)
+        i__1 = *m1;
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             x1[ix] = 0.f;
         }
-        i__2 = (*m2 - 1) * *incx2 + 1;
-        i__1 = *incx2;
-        for(ix = 1; i__1 < 0 ? ix >= i__2 : ix <= i__2; ix += i__1)
+        i__1 = *m2;
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             x2[ix] = 0.f;
         }

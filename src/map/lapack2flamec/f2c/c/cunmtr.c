@@ -1,5 +1,8 @@
-/* cunmtr.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* cunmtr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -144,7 +147,7 @@ LDA >= fla_max(1,N) if SIDE = 'R'. */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If SIDE = 'L', LWORK >= fla_max(1,N);
-*/
+ */
 /* > if SIDE = 'R', LWORK >= fla_max(1,M). */
 /* > For optimum performance LWORK >= N*NB if SIDE = 'L', and */
 /* > LWORK >=M*NB if SIDE = 'R', where NB is the optimal */
@@ -172,7 +175,8 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *c__, integer *ldc, complex *work, integer *lwork, integer *info)
+void cunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex *a, integer *lda,
+             complex *tau, complex *c__, integer *ldc, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     integer a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
@@ -187,10 +191,15 @@ void cunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
     integer iinfo;
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void cunmql_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *), cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+        void
+        cunmql_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
+                complex *, integer *, complex *, integer *, integer *),
+        cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
+                complex *, integer *, complex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
@@ -229,22 +238,22 @@ void cunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
     if(left)
     {
         nq = *m;
-        nw = fla_max(1,*n);
+        nw = fla_max(1, *n);
     }
     else
     {
         nq = *n;
-        nw = fla_max(1,*m);
+        nw = fla_max(1, *m);
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!lsame_(trans, "N", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -3;
     }
@@ -256,15 +265,15 @@ void cunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,nq))
+    else if(*lda < fla_max(1, nq))
     {
         *info = -7;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -10;
     }
-    else if (*lwork < nw && ! lquery)
+    else if(*lwork < nw && !lquery)
     {
         *info = -12;
     }
@@ -301,19 +310,19 @@ void cunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
             }
         }
         lwkopt = nw * nb;
-        work[1].r = (real) lwkopt;
+        work[1].r = (real)lwkopt;
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
     {
         i__2 = -(*info);
         xerbla_("CUNMTR", &i__2, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -321,7 +330,7 @@ void cunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
     {
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(left)
@@ -338,8 +347,8 @@ void cunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
     {
         /* Q was determined by a call to CHETRD with UPLO = 'U' */
         i__2 = nq - 1;
-        aocl_lapack_cunmql(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &tau[1],
-                           &c__[c_offset], ldc, &work[1], lwork, &iinfo);
+        cunmql_(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &tau[1], &c__[c_offset],
+                ldc, &work[1], lwork, &iinfo);
     }
     else
     {
@@ -355,10 +364,10 @@ void cunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
             i2 = 2;
         }
         i__2 = nq - 1;
-        aocl_lapack_cunmqr(side, trans, &mi, &ni, &i__2, &a[a_dim1 + 2], lda, &tau[1],
-                           &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
+        cunmqr_(side, trans, &mi, &ni, &i__2, &a[a_dim1 + 2], lda, &tau[1], &c__[i1 + i2 * c_dim1],
+                ldc, &work[1], lwork, &iinfo);
     }
-    work[1].r = (real) lwkopt;
+    work[1].r = (real)lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

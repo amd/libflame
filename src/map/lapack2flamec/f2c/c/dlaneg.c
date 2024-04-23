@@ -112,12 +112,11 @@
 /* > Jason Riedy, University of California, Berkeley, USA \n */
 /* > */
 /* ===================================================================== */
-/** Generated wrapper function */
-aocl_int_t dlaneg_(aocl_int_t *n, doublereal *d__, doublereal *lld, doublereal *sigma,
-                   doublereal *pivmin, aocl_int_t *r__)
+integer dlaneg_(integer *n, doublereal *d__, doublereal *lld, doublereal *sigma, doublereal *pivmin,
+                integer *r__)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaneg inputs: n %" FLA_IS ", r__ %" FLA_IS "",*n, *r__);
+    AOCL_DTL_SNPRINTF("dlaneg inputs: n %" FLA_IS ", r__ %" FLA_IS "", *n, *r__);
     /* System generated locals */
     aocl_int64_t ret_val, i__1, i__2, i__3, i__4;
     /* Local variables */
@@ -170,10 +169,8 @@ aocl_int_t dlaneg_(aocl_int_t *n, doublereal *d__, doublereal *lld, doublereal *
         /* Computing MIN */
         i__3 = bj + 127;
         i__4 = *r__ - 1; // , expr subst
-        i__2 = fla_min(i__3,i__4);
-        for (j = bj;
-                j <= i__2;
-                ++j)
+        i__2 = fla_min(i__3, i__4);
+        for(j = bj; j <= i__2; ++j)
         {
             dplus = d__[j] + t;
             if(dplus < 0.)
@@ -196,10 +193,8 @@ aocl_int_t dlaneg_(aocl_int_t *n, doublereal *d__, doublereal *lld, doublereal *
             /* Computing MIN */
             i__3 = bj + 127;
             i__4 = *r__ - 1; // , expr subst
-            i__2 = fla_min(i__3,i__4);
-            for (j = bj;
-                    j <= i__2;
-                    ++j)
+            i__2 = fla_min(i__3, i__4);
+            for(j = bj; j <= i__2; ++j)
             {
                 dplus = d__[j] + t;
                 if(dplus < 0.)
@@ -227,10 +222,8 @@ aocl_int_t dlaneg_(aocl_int_t *n, doublereal *d__, doublereal *lld, doublereal *
         bsav = p;
         /* Computing MAX */
         i__3 = bj - 127;
-        i__2 = fla_max(i__3,*r__);
-        for (j = bj;
-                j >= i__2;
-                --j)
+        i__2 = fla_max(i__3, *r__);
+        for(j = bj; j >= i__2; --j)
         {
             dminus = lld[j] + p;
             if(dminus < 0.)
@@ -249,10 +242,8 @@ aocl_int_t dlaneg_(aocl_int_t *n, doublereal *d__, doublereal *lld, doublereal *
             p = bsav;
             /* Computing MAX */
             i__3 = bj - 127;
-            i__2 = fla_max(i__3,*r__);
-            for (j = bj;
-                    j >= i__2;
-                    --j)
+            i__2 = fla_max(i__3, *r__);
+            for(j = bj; j >= i__2; --j)
             {
                 dminus = lld[j] + p;
                 if(dminus < 0.)

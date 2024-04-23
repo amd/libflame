@@ -7,8 +7,8 @@
 static aocl_int64_t c__0 = 0;
 static real c_b11 = 0.f;
 static real c_b12 = 1.f;
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c__2 = 2;
+static integer c__1 = 1;
+static integer c__2 = 2;
 /* > \brief \b SLASDA computes the singular value decomposition (SVD) of a real upper bidiagonal
  * matrix with d iagonal d and off-diagonal e. Used by sbdsdc. */
 /* =========== DOCUMENTATION =========== */
@@ -274,32 +274,45 @@ static aocl_int64_t c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *d__, real *e, real *u, integer *ldu, real *vt, integer *k, real *difl, real *difr, real *z__, real *poles, integer * givptr, integer *givcol, integer *ldgcol, integer *perm, real *givnum, real *c__, real *s, real *work, integer *iwork, integer *info)
+void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *d__, real *e,
+             real *u, integer *ldu, real *vt, integer *k, real *difl, real *difr, real *z__,
+             real *poles, integer *givptr, integer *givcol, integer *ldgcol, integer *perm,
+             real *givnum, real *c__, real *s, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slasda inputs: icompq %d, smlsiz %d, n %d, sqre %d, ldu %d, ldgcol %d",*icompq, *smlsiz, *n, *sqre, *ldu, *ldgcol);
+    snprintf(buffer, 256, "slasda inputs: icompq %d, smlsiz %d, n %d, sqre %d, ldu %d, ldgcol %d",
+             *icompq, *smlsiz, *n, *sqre, *ldu, *ldgcol);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t givcol_dim1, givcol_offset, perm_dim1, perm_offset, difl_dim1, difl_offset,
-        difr_dim1, difr_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, u_dim1,
-        u_offset, vt_dim1, vt_offset, z_dim1, z_offset, i__1, i__2;
+    integer givcol_dim1, givcol_offset, perm_dim1, perm_offset, difl_dim1, difl_offset, difr_dim1,
+        difr_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, u_dim1, u_offset,
+        vt_dim1, vt_offset, z_dim1, z_offset, i__1, i__2;
     /* Builtin functions */
     integer pow_ii(aocl_int64_t *, aocl_int64_t *);
     /* Local variables */
-    aocl_int64_t i__, j, m, i1, ic, lf, nd, ll, nl, vf, nr, vl, im1, ncc, nlf, nrf, vfi, iwk, vli,
-        lvl, nru, ndb1, nlp1, lvl2, nrp1;
+    integer i__, j, m, i1, ic, lf, nd, ll, nl, vf, nr, vl, im1, ncc, nlf, nrf, vfi, iwk, vli, lvl,
+        nru, ndb1, nlp1, lvl2, nrp1;
     real beta;
     aocl_int64_t idxq, nlvl;
     real alpha;
     integer inode, ndiml, ndimr, idxqi, itemp, sqrei;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *), slasd6_(integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, real *, real *, integer *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *),
+        slasd6_(integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *,
+                integer *, integer *, integer *, integer *, integer *, real *, integer *, real *,
+                real *, real *, real *, integer *, real *, real *, real *, integer *, integer *);
     integer nwork1, nwork2;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slasdq_( char *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slasdq_(char *, integer *, integer *, integer *, integer *, integer *, real *, real *,
+                real *, integer *, real *, integer *, real *, integer *, real *, integer *),
+        slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *),
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     integer smlszp;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -393,12 +406,13 @@ void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *
     {
         if(*icompq == 0)
         {
-            aocl_lapack_slasdq("U", sqre, n, &c__0, &c__0, &c__0, &d__[1], &e[1], &vt[vt_offset],
-                               ldu, &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
+            slasdq_("U", sqre, n, &c__0, &c__0, &c__0, &d__[1], &e[1], &vt[vt_offset], ldu,
+                    &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
         }
         else
         {
-            slasdq_("U", sqre, n, &m, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldu, &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
+            slasdq_("U", sqre, n, &m, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldu, &u[u_offset],
+                    ldu, &u[u_offset], ldu, &work[1], info);
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -441,23 +455,21 @@ void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *
         sqrei = 1;
         if(*icompq == 0)
         {
-            aocl_lapack_slaset("A", &nlp1, &nlp1, &c_b11, &c_b12, &work[nwork1], &smlszp);
-            aocl_lapack_slasdq("U", &sqrei, &nl, &nlp1, &nru, &ncc, &d__[nlf], &e[nlf],
-                               &work[nwork1], &smlszp, &work[nwork2], &nl, &work[nwork2], &nl,
-                               &work[nwork2], info);
+            slaset_("A", &nlp1, &nlp1, &c_b11, &c_b12, &work[nwork1], &smlszp);
+            slasdq_("U", &sqrei, &nl, &nlp1, &nru, &ncc, &d__[nlf], &e[nlf], &work[nwork1], &smlszp,
+                    &work[nwork2], &nl, &work[nwork2], &nl, &work[nwork2], info);
             itemp = nwork1 + nl * smlszp;
             aocl_blas_scopy(&nlp1, &work[nwork1], &c__1, &work[vfi], &c__1);
             aocl_blas_scopy(&nlp1, &work[itemp], &c__1, &work[vli], &c__1);
         }
         else
         {
-            aocl_lapack_slaset("A", &nl, &nl, &c_b11, &c_b12, &u[nlf + u_dim1], ldu);
-            aocl_lapack_slaset("A", &nlp1, &nlp1, &c_b11, &c_b12, &vt[nlf + vt_dim1], ldu);
-            aocl_lapack_slasdq("U", &sqrei, &nl, &nlp1, &nl, &ncc, &d__[nlf], &e[nlf],
-                               &vt[nlf + vt_dim1], ldu, &u[nlf + u_dim1], ldu, &u[nlf + u_dim1],
-                               ldu, &work[nwork1], info);
-            aocl_blas_scopy(&nlp1, &vt[nlf + vt_dim1], &c__1, &work[vfi], &c__1);
-            aocl_blas_scopy(&nlp1, &vt[nlf + nlp1 * vt_dim1], &c__1, &work[vli], &c__1);
+            slaset_("A", &nl, &nl, &c_b11, &c_b12, &u[nlf + u_dim1], ldu);
+            slaset_("A", &nlp1, &nlp1, &c_b11, &c_b12, &vt[nlf + vt_dim1], ldu);
+            slasdq_("U", &sqrei, &nl, &nlp1, &nl, &ncc, &d__[nlf], &e[nlf], &vt[nlf + vt_dim1], ldu,
+                    &u[nlf + u_dim1], ldu, &u[nlf + u_dim1], ldu, &work[nwork1], info);
+            scopy_(&nlp1, &vt[nlf + vt_dim1], &c__1, &work[vfi], &c__1);
+            scopy_(&nlp1, &vt[nlf + nlp1 * vt_dim1], &c__1, &work[vli], &c__1);
         }
         if(*info != 0)
         {
@@ -484,23 +496,21 @@ void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *
         nrp1 = nr + sqrei;
         if(*icompq == 0)
         {
-            aocl_lapack_slaset("A", &nrp1, &nrp1, &c_b11, &c_b12, &work[nwork1], &smlszp);
-            aocl_lapack_slasdq("U", &sqrei, &nr, &nrp1, &nru, &ncc, &d__[nrf], &e[nrf],
-                               &work[nwork1], &smlszp, &work[nwork2], &nr, &work[nwork2], &nr,
-                               &work[nwork2], info);
+            slaset_("A", &nrp1, &nrp1, &c_b11, &c_b12, &work[nwork1], &smlszp);
+            slasdq_("U", &sqrei, &nr, &nrp1, &nru, &ncc, &d__[nrf], &e[nrf], &work[nwork1], &smlszp,
+                    &work[nwork2], &nr, &work[nwork2], &nr, &work[nwork2], info);
             itemp = nwork1 + (nrp1 - 1) * smlszp;
             aocl_blas_scopy(&nrp1, &work[nwork1], &c__1, &work[vfi], &c__1);
             aocl_blas_scopy(&nrp1, &work[itemp], &c__1, &work[vli], &c__1);
         }
         else
         {
-            aocl_lapack_slaset("A", &nr, &nr, &c_b11, &c_b12, &u[nrf + u_dim1], ldu);
-            aocl_lapack_slaset("A", &nrp1, &nrp1, &c_b11, &c_b12, &vt[nrf + vt_dim1], ldu);
-            aocl_lapack_slasdq("U", &sqrei, &nr, &nrp1, &nr, &ncc, &d__[nrf], &e[nrf],
-                               &vt[nrf + vt_dim1], ldu, &u[nrf + u_dim1], ldu, &u[nrf + u_dim1],
-                               ldu, &work[nwork1], info);
-            aocl_blas_scopy(&nrp1, &vt[nrf + vt_dim1], &c__1, &work[vfi], &c__1);
-            aocl_blas_scopy(&nrp1, &vt[nrf + nrp1 * vt_dim1], &c__1, &work[vli], &c__1);
+            slaset_("A", &nr, &nr, &c_b11, &c_b12, &u[nrf + u_dim1], ldu);
+            slaset_("A", &nrp1, &nrp1, &c_b11, &c_b12, &vt[nrf + vt_dim1], ldu);
+            slasdq_("U", &sqrei, &nr, &nrp1, &nr, &ncc, &d__[nrf], &e[nrf], &vt[nrf + vt_dim1], ldu,
+                    &u[nrf + u_dim1], ldu, &u[nrf + u_dim1], ldu, &work[nwork1], info);
+            scopy_(&nrp1, &vt[nrf + vt_dim1], &c__1, &work[vfi], &c__1);
+            scopy_(&nrp1, &vt[nrf + nrp1 * vt_dim1], &c__1, &work[vli], &c__1);
         }
         if(*info != 0)
         {
@@ -557,31 +567,22 @@ void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *
             beta = e[ic];
             if(*icompq == 0)
             {
-                givptr_sca = givptr[1];
-                k_sca = k[1];
-                aocl_lapack_slasd6(icompq, &nl, &nr, &sqrei, &d__[nlf], &work[vfi], &work[vli],
-                                   &alpha, &beta, &iwork[idxqi], &perm[perm_offset], &givptr_sca,
-                                   &givcol[givcol_offset], ldgcol, &givnum[givnum_offset], ldu,
-                                   &poles[poles_offset], &difl[difl_offset], &difr[difr_offset],
-                                   &z__[z_offset], &k_sca, &c__[1], &s[1], &work[nwork1],
-                                   &iwork[iwk], info);
-                givptr[1] = (aocl_int_t)givptr_sca;
-                k[1] = (aocl_int_t)k_sca;
+                slasd6_(icompq, &nl, &nr, &sqrei, &d__[nlf], &work[vfi], &work[vli], &alpha, &beta,
+                        &iwork[idxqi], &perm[perm_offset], &givptr[1], &givcol[givcol_offset],
+                        ldgcol, &givnum[givnum_offset], ldu, &poles[poles_offset],
+                        &difl[difl_offset], &difr[difr_offset], &z__[z_offset], &k[1], &c__[1],
+                        &s[1], &work[nwork1], &iwork[iwk], info);
             }
             else
             {
                 --j;
-                givptr_sca = givptr[j];
-                k_sca = k[j];
-                aocl_lapack_slasd6(icompq, &nl, &nr, &sqrei, &d__[nlf], &work[vfi], &work[vli],
-                                   &alpha, &beta, &iwork[idxqi], &perm[nlf + lvl * perm_dim1],
-                                   &givptr_sca, &givcol[nlf + lvl2 * givcol_dim1], ldgcol,
-                                   &givnum[nlf + lvl2 * givnum_dim1], ldu,
-                                   &poles[nlf + lvl2 * poles_dim1], &difl[nlf + lvl * difl_dim1],
-                                   &difr[nlf + lvl2 * difr_dim1], &z__[nlf + lvl * z_dim1], &k_sca,
-                                   &c__[j], &s[j], &work[nwork1], &iwork[iwk], info);
-                givptr[j] = (aocl_int_t)givptr_sca;
-                k[j] = (aocl_int_t)k_sca;
+                slasd6_(icompq, &nl, &nr, &sqrei, &d__[nlf], &work[vfi], &work[vli], &alpha, &beta,
+                        &iwork[idxqi], &perm[nlf + lvl * perm_dim1], &givptr[j],
+                        &givcol[nlf + lvl2 * givcol_dim1], ldgcol,
+                        &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1],
+                        &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1],
+                        &z__[nlf + lvl * z_dim1], &k[j], &c__[j], &s[j], &work[nwork1], &iwork[iwk],
+                        info);
             }
             if(*info != 0)
             {

@@ -1,7 +1,10 @@
-/* csysv_rook.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* csysv_rook.f -- translated by f2c (version 20190311). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c_n1 = -1;
+static integer c_n1 = -1;
 /* > \brief <b> CSYSV_ROOK computes the solution to system of linear equations A * X = B for SY
  * matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -198,19 +201,27 @@ the routine */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void csysv_rook_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, integer *ipiv, complex *b, integer *ldb, complex *work, integer *lwork, integer *info)
+void csysv_rook_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, integer *ipiv,
+                 complex *b, integer *ldb, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("csysv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb);
+    AOCL_DTL_SNPRINTF("csysv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS "",
+                      *uplo, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     real r__1;
     /* Local variables */
     extern /* Subroutine */
-    void csytrf_rook_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), csytrs_rook_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+        void
+        csytrf_rook_(char *, integer *, complex *, integer *, integer *, complex *, integer *,
+                     integer *),
+        csytrs_rook_(char *, integer *, integer *, complex *, integer *, integer *, complex *,
+                     integer *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK driver routine -- */
@@ -243,7 +254,7 @@ void csysv_rook_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -255,11 +266,11 @@ void csysv_rook_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
@@ -275,34 +286,33 @@ void csysv_rook_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda
         }
         else
         {
-            csytrf_rook_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], & c_n1, info);
-            lwkopt = (integer) work[1].r;
+            csytrf_rook_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], &c_n1, info);
+            lwkopt = (integer)work[1].r;
         }
-        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].real = r__1;
-        work[1].imag = 0.f; // , expr subst
+        work[1].r = (real)lwkopt;
+        work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CSYSV_ROOK ", &i__1, (ftnlen)11);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute the factorization A = U*D*U**T or A = L*D*L**T. */
-    aocl_lapack_csytrf_rook(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], lwork, info);
+    csytrf_rook_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], lwork, info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */
         /* Solve with TRS_ROOK ( Use Level 2 BLAS) */
         csytrs_rook_(uplo, n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb, info);
     }
-    work[1].r = (real) lwkopt;
+    work[1].r = (real)lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

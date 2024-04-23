@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {1., 0.};
-static aocl_int64_t c__1 = 1;
+static doublecomplex c_b1 = {1., 0.};
+static integer c__1 = 1;
 /* > \brief \b ZGERFS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -183,14 +183,19 @@ for 1<=i<=N, row i of the */
 /* > \ingroup complex16GEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zgerfs_(char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *lda, doublecomplex *af, integer *ldaf, integer *ipiv, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *ferr, doublereal *berr, doublecomplex *work, doublereal *rwork, integer *info)
+void zgerfs_(char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *lda,
+             doublecomplex *af, integer *ldaf, integer *ipiv, doublecomplex *b, integer *ldb,
+             doublecomplex *x, integer *ldx, doublereal *ferr, doublereal *berr,
+             doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgerfs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*trans, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("zgerfs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
+                      ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",
+                      *trans, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
 
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
-        i__2, i__3, i__4, i__5;
+    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2,
+        i__3, i__4, i__5;
     doublereal d__1, d__2, d__3, d__4;
     dcomplex z__1;
     /* Builtin functions */
@@ -205,16 +210,24 @@ void zgerfs_(char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3], count;
     extern /* Subroutine */
-    void zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
+        void
+        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
+               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     char transn[1], transt[1];
     doublereal lstres;
     extern /* Subroutine */
-    void zgetrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zgetrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *,
+                doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -263,7 +276,7 @@ void zgerfs_(char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *
     /* Function Body */
     *info = 0;
     notran = lsame_(trans, "N", 1, 1);
-    if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
@@ -275,19 +288,19 @@ void zgerfs_(char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -10;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -12;
     }
@@ -336,11 +349,11 @@ void zgerfs_(char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *
     L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - op(A) * X, */
         /* where op(A) = A, A**T, or A**H, depending on TRANS. */
-        aocl_blas_zcopy(n, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
-        z__1.real = -1.;
-        z__1.imag = -0.; // , expr subst
-        aocl_blas_zgemv(trans, n, n, &z__1, &a[a_offset], lda, &x[j * x_dim1 + 1], &c__1, &c_b1,
-                        &work[1], &c__1);
+        zcopy_(n, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
+        z__1.r = -1.;
+        z__1.i = -0.; // , expr subst
+        zgemv_(trans, n, n, &z__1, &a[a_offset], lda, &x[j * x_dim1 + 1], &c__1, &c_b1, &work[1],
+               &c__1);
         /* Compute componentwise relative backward error from formula */
         /* fla_max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(op(A))*f2c_dabs(X) + f2c_dabs(B) )(i) ) */
         /* where f2c_dabs(Z) is the componentwise absolute value of the matrix */
@@ -351,22 +364,26 @@ void zgerfs_(char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            rwork[i__] = (d__1 = b[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&b[ i__ + j * b_dim1]), f2c_dabs(d__2));
+            rwork[i__] = (d__1 = b[i__3].r, f2c_dabs(d__1))
+                         + (d__2 = d_imag(&b[i__ + j * b_dim1]), f2c_dabs(d__2));
             /* L30: */
         }
         /* Compute f2c_dabs(op(A))*f2c_dabs(X) + f2c_dabs(B). */
-        if (notran)
+        if(notran)
         {
             i__2 = *n;
             for(k = 1; k <= i__2; ++k)
             {
                 i__3 = k + j * x_dim1;
-                xk = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[k + j * x_dim1]), f2c_dabs(d__2));
+                xk = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                     + (d__2 = d_imag(&x[k + j * x_dim1]), f2c_dabs(d__2));
                 i__3 = *n;
                 for(i__ = 1; i__ <= i__3; ++i__)
                 {
                     i__4 = i__ + k * a_dim1;
-                    rwork[i__] += ((d__1 = a[i__4].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[i__ + k * a_dim1]), f2c_dabs(d__2))) * xk;
+                    rwork[i__] += ((d__1 = a[i__4].r, f2c_dabs(d__1))
+                                   + (d__2 = d_imag(&a[i__ + k * a_dim1]), f2c_dabs(d__2)))
+                                  * xk;
                     /* L40: */
                 }
                 /* L50: */
@@ -383,7 +400,10 @@ void zgerfs_(char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *
                 {
                     i__4 = i__ + k * a_dim1;
                     i__5 = i__ + j * x_dim1;
-                    s += ((d__1 = a[i__4].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[ i__ + k * a_dim1]), f2c_dabs(d__2))) * ((d__3 = x[i__5] .r, f2c_dabs(d__3)) + (d__4 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__4)));
+                    s += ((d__1 = a[i__4].r, f2c_dabs(d__1))
+                          + (d__2 = d_imag(&a[i__ + k * a_dim1]), f2c_dabs(d__2)))
+                         * ((d__3 = x[i__5].r, f2c_dabs(d__3))
+                            + (d__4 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__4)));
                     /* L60: */
                 }
                 rwork[k] += s;
@@ -399,16 +419,20 @@ void zgerfs_(char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *
                 /* Computing MAX */
                 i__3 = i__;
                 d__3 = s;
-                d__4 = ((d__1 = work[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2))) / rwork[i__]; // , expr subst
-                s = fla_max(d__3,d__4);
+                d__4 = ((d__1 = work[i__3].r, f2c_dabs(d__1))
+                        + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)))
+                       / rwork[i__]; // , expr subst
+                s = fla_max(d__3, d__4);
             }
             else
             {
                 /* Computing MAX */
                 i__3 = i__;
                 d__3 = s;
-                d__4 = ((d__1 = work[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + safe1) / (rwork[i__] + safe1); // , expr subst
-                s = fla_max(d__3,d__4);
+                d__4 = ((d__1 = work[i__3].r, f2c_dabs(d__1))
+                        + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + safe1)
+                       / (rwork[i__] + safe1); // , expr subst
+                s = fla_max(d__3, d__4);
             }
             /* L80: */
         }
@@ -450,25 +474,27 @@ void zgerfs_(char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *
             if(rwork[i__] > safe2)
             {
                 i__3 = i__;
-                rwork[i__] = (d__1 = work[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + nz * eps * rwork[i__] ;
+                rwork[i__] = (d__1 = work[i__3].r, f2c_dabs(d__1))
+                             + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + nz * eps * rwork[i__];
             }
             else
             {
                 i__3 = i__;
-                rwork[i__] = (d__1 = work[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + nz * eps * rwork[i__] + safe1;
+                rwork[i__] = (d__1 = work[i__3].r, f2c_dabs(d__1))
+                             + (d__2 = d_imag(&work[i__]), f2c_dabs(d__2)) + nz * eps * rwork[i__]
+                             + safe1;
             }
             /* L90: */
         }
         kase = 0;
     L100:
-        aocl_lapack_zlacn2(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
+        zlacn2_(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(op(A)**H). */
-                aocl_lapack_zgetrs(transt, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
-                                   info);
+                zgetrs_(transt, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
                 i__2 = *n;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
@@ -497,8 +523,7 @@ void zgerfs_(char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *
                     work[i__3].imag = z__1.imag; // , expr subst
                     /* L120: */
                 }
-                aocl_lapack_zgetrs(transn, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
-                                   info);
+                zgetrs_(transn, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
             }
             goto L100;
         }
@@ -510,8 +535,9 @@ void zgerfs_(char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *
             /* Computing MAX */
             i__3 = i__ + j * x_dim1;
             d__3 = lstres;
-            d__4 = (d__1 = x[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__2)); // , expr subst
-            lstres = fla_max(d__3,d__4);
+            d__4 = (d__1 = x[i__3].r, f2c_dabs(d__1))
+                   + (d__2 = d_imag(&x[i__ + j * x_dim1]), f2c_dabs(d__2)); // , expr subst
+            lstres = fla_max(d__3, d__4);
             /* L130: */
         }
         if(lstres != 0.)

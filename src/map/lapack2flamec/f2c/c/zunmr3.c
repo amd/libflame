@@ -172,10 +172,14 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zunmr3_(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work, integer * info)
+void zunmr3_(char *side, char *trans, integer *m, integer *n, integer *k, integer *l,
+             doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc,
+             doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zunmr3 inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",*side, *trans, *m, *n, *k, *l, *lda, *ldc);
+    AOCL_DTL_SNPRINTF("zunmr3 inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
+                      ", l %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",
+                      *side, *trans, *m, *n, *k, *l, *lda, *ldc);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3;
     dcomplex z__1;
@@ -187,7 +191,10 @@ void zunmr3_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     doublecomplex taui;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void zlarz_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zlarz_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -230,11 +237,11 @@ void zunmr3_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -254,11 +261,11 @@ void zunmr3_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     {
         *info = -6;
     }
-    else if (*lda < fla_max(1,*k))
+    else if(*lda < fla_max(1, *k))
     {
         *info = -8;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -11;
     }
@@ -266,13 +273,13 @@ void zunmr3_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     {
         i__1 = -(*info);
         xerbla_("ZUNMR3", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || *k == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(left && !notran || !left && notran)
@@ -328,8 +335,8 @@ void zunmr3_(char *side, char *trans, integer *m, integer *n, integer *k, intege
             taui.real = z__1.real;
             taui.imag = z__1.imag; // , expr subst
         }
-        aocl_lapack_zlarz(side, &mi, &ni, l, &a[i__ + ja * a_dim1], lda, &taui,
-                          &c__[ic + jc * c_dim1], ldc, &work[1]);
+        zlarz_(side, &mi, &ni, l, &a[i__ + ja * a_dim1], lda, &taui, &c__[ic + jc * c_dim1], ldc,
+               &work[1]);
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT

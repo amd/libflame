@@ -126,12 +126,14 @@
 /* > \ingroup realPOsolve */
 /* ===================================================================== */
 /* Subroutine */
-void sposv_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb, integer *info)
+void sposv_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb,
+            integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sposv inputs: uplo %c, n %d, nrhs %d, lda %d, ldb %d",*uplo, *n, *nrhs, *lda, *ldb);
+    snprintf(buffer, 256, "sposv inputs: uplo %c, n %d, nrhs %d, lda %d, ldb %d", *uplo, *n, *nrhs,
+             *lda, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -139,7 +141,10 @@ void sposv_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), spotrf_( char *, integer *, real *, integer *, integer *), spotrs_( char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        spotrf_(char *, integer *, real *, integer *, integer *),
+        spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -166,7 +171,7 @@ void sposv_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -178,11 +183,11 @@ void sposv_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
@@ -194,7 +199,7 @@ void sposv_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *
         return;
     }
     /* Compute the Cholesky factorization A = U**T*U or A = L*L**T. */
-    aocl_lapack_spotrf(uplo, n, &a[a_offset], lda, info);
+    spotrf_(uplo, n, &a[a_offset], lda, info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */

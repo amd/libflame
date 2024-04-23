@@ -140,10 +140,12 @@
 /* > \ingroup doubleGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dgeequb_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax, integer *info)
+void dgeequb_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *r__, doublereal *c__,
+              doublereal *rowcnd, doublereal *colcnd, doublereal *amax, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgeequb inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
+    AOCL_DTL_SNPRINTF("dgeequb inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
+                      *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal d__1, d__2, d__3;
@@ -154,7 +156,8 @@ void dgeequb_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *
     doublereal radix, rcmin, rcmax;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum, logrdx, smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -193,7 +196,7 @@ void dgeequb_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
@@ -235,7 +238,7 @@ void dgeequb_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *
             /* Computing MAX */
             d__2 = r__[i__];
             d__3 = (d__1 = a[i__ + j * a_dim1], f2c_dabs(d__1)); // , expr subst
-            r__[i__] = fla_max(d__2,d__3);
+            r__[i__] = fla_max(d__2, d__3);
             /* L20: */
         }
         /* L30: */
@@ -258,11 +261,11 @@ void dgeequb_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *
         /* Computing MAX */
         d__1 = rcmax;
         d__2 = r__[i__]; // , expr subst
-        rcmax = fla_max(d__1,d__2);
+        rcmax = fla_max(d__1, d__2);
         /* Computing MIN */
         d__1 = rcmin;
         d__2 = r__[i__]; // , expr subst
-        rcmin = fla_min(d__1,d__2);
+        rcmin = fla_min(d__1, d__2);
         /* L40: */
     }
     *amax = rcmax;
@@ -290,12 +293,12 @@ void dgeequb_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *
             /* Computing MIN */
             /* Computing MAX */
             d__2 = r__[i__];
-            d__1 = fla_max(d__2,smlnum);
-            r__[i__] = 1. / fla_min(d__1,bignum);
+            d__1 = fla_max(d__2, smlnum);
+            r__[i__] = 1. / fla_min(d__1, bignum);
             /* L60: */
         }
         /* Compute ROWCND = fla_min(R(I)) / fla_max(R(I)). */
-        *rowcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+        *rowcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
     }
     /* Compute column scale factors */
     i__1 = *n;
@@ -315,7 +318,7 @@ void dgeequb_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *
             /* Computing MAX */
             d__2 = c__[j];
             d__3 = (d__1 = a[i__ + j * a_dim1], f2c_dabs(d__1)) * r__[i__]; // , expr subst
-            c__[j] = fla_max(d__2,d__3);
+            c__[j] = fla_max(d__2, d__3);
             /* L80: */
         }
         if(c__[j] > 0.)
@@ -334,11 +337,11 @@ void dgeequb_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *
         /* Computing MIN */
         d__1 = rcmin;
         d__2 = c__[j]; // , expr subst
-        rcmin = fla_min(d__1,d__2);
+        rcmin = fla_min(d__1, d__2);
         /* Computing MAX */
         d__1 = rcmax;
         d__2 = c__[j]; // , expr subst
-        rcmax = fla_max(d__1,d__2);
+        rcmax = fla_max(d__1, d__2);
         /* L100: */
     }
     if(rcmin == 0.)
@@ -365,12 +368,12 @@ void dgeequb_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *
             /* Computing MIN */
             /* Computing MAX */
             d__2 = c__[j];
-            d__1 = fla_max(d__2,smlnum);
-            c__[j] = 1. / fla_min(d__1,bignum);
+            d__1 = fla_max(d__2, smlnum);
+            c__[j] = 1. / fla_min(d__1, bignum);
             /* L120: */
         }
         /* Compute COLCND = fla_min(C(J)) / fla_max(C(J)). */
-        *colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+        *colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

@@ -107,8 +107,7 @@ array.f"> */
 /* > \ingroup auxOTHERauxiliary */
 
 /*  ===================================================================== */
-/* Subroutine */ int xerbla_array_(char *srname_array__, integer *
-                                    srname_len__, integer *info)
+/* Subroutine */ int xerbla_array_(char *srname_array__, integer *srname_len__, integer *info)
 {
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3;
@@ -152,8 +151,8 @@ array.f"> */
     s_copy(srname, "");
     /* Computing MIN */
     i__2 = *srname_len__, i__3 = i_len(srname, (ftnlen)32);
-    i__1 = fla_min(i__2,i__3);
-    for (i__ = 1; i__ <= i__1; ++i__)
+    i__1 = fla_min(i__2, i__3);
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         *(unsigned char *)&srname[i__ - 1] = *(unsigned char *)&srname_array__[i__];
     }

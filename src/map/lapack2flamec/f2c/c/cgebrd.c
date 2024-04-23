@@ -1,11 +1,10 @@
-/* ../netlib/cgebrd.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cgebrd.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {1.f, 0.f};
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static integer c__3 = 3;
@@ -16,11 +15,17 @@ static integer c__2 = 2;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CGEBRD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgebrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgebrd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgebrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgebrd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgebrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgebrd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -73,7 +78,7 @@ the */
 /* > reflectors, and the elements above the first superdiagonal, */
 /* > with the array TAUP, represent the unitary matrix P as */
 /* > a product of elementary reflectors;
-*/
+ */
 /* > if m < n, the diagonal and the first subdiagonal are */
 /* > overwritten with the lower bidiagonal matrix B;
 the */
@@ -103,7 +108,7 @@ the */
 /* > E is REAL array, dimension (fla_min(M,N)-1) */
 /* > The off-diagonal elements of the bidiagonal matrix B: */
 /* > if m >= n, E(i) = A(i,i+1) for i = 1,2,...,n-1;
-*/
+ */
 /* > if m < n, E(i) = A(i+1,i) for i = 1,2,...,m-1. */
 /* > \endverbatim */
 /* > */
@@ -213,15 +218,17 @@ tauq is stored in TAUQ(i) and taup in TAUP(i). */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgebrd_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tauq, complex *taup, complex *work, integer *lwork, integer *info)
+void cgebrd_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tauq,
+             complex *taup, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgebrd inputs: m %lld, n %lld, lda %lld, lwork %lld",*m, *n, *lda, *lwork);
+    snprintf(buffer, 256, "cgebrd inputs: m %lld, n %lld, lda %lld, lwork %lld", *m, *n, *lda,
+             *lwork);
 #else
-    snprintf(buffer, 256,"cgebrd inputs: m %d, n %d, lda %d, lwork %d",*m, *n, *lda, *lwork);
+    snprintf(buffer, 256, "cgebrd inputs: m %d, n %d, lda %d, lwork %d", *m, *n, *lda, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -232,10 +239,17 @@ void cgebrd_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
     /* Local variables */
     integer i__, j, nb, nx, ws;
     extern /* Subroutine */
-    void cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+        void
+        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
+               complex *, integer *, complex *, complex *, integer *);
     integer nbmin, iinfo, minmn;
     extern /* Subroutine */
-    void cgebd2_(integer *, integer *, complex *, integer *, real *, real *, complex *, complex *, complex *, integer *), clabrd_(integer *, integer *, integer *, complex *, integer *, real *, real *, complex *, complex *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        cgebd2_(integer *, integer *, complex *, integer *, real *, real *, complex *, complex *,
+                complex *, integer *),
+        clabrd_(integer *, integer *, integer *, complex *, integer *, real *, real *, complex *,
+                complex *, complex *, integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwrkx, ldwrky, lwkopt;
     logical lquery;
@@ -274,74 +288,74 @@ void cgebrd_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
     /* Computing MAX */
     i__1 = 1;
     i__2 = ilaenv_(&c__1, "CGEBRD", " ", m, n, &c_n1, &c_n1); // , expr subst
-    nb = fla_max(i__1,i__2);
+    nb = fla_max(i__1, i__2);
     lwkopt = (*m + *n) * nb;
-    r__1 = (real) lwkopt;
+    r__1 = (real)lwkopt;
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     lquery = *lwork == -1;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
     else /* if(complicated condition) */
     {
         /* Computing MAX */
-        i__1 = fla_max(1,*m);
-        if (*lwork < fla_max(i__1,*n) && ! lquery)
+        i__1 = fla_max(1, *m);
+        if(*lwork < fla_max(i__1, *n) && !lquery)
         {
             *info = -10;
         }
     }
-    if (*info < 0)
+    if(*info < 0)
     {
         i__1 = -(*info);
         xerbla_("CGEBRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Quick return if possible */
-    minmn = fla_min(*m,*n);
-    if (minmn == 0)
+    minmn = fla_min(*m, *n);
+    if(minmn == 0)
     {
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    ws = fla_max(*m,*n);
+    ws = fla_max(*m, *n);
     ldwrkx = *m;
     ldwrky = *n;
-    if (nb > 1 && nb < minmn)
+    if(nb > 1 && nb < minmn)
     {
         /* Set the crossover point NX. */
         /* Computing MAX */
         i__1 = nb;
         i__2 = ilaenv_(&c__3, "CGEBRD", " ", m, n, &c_n1, &c_n1); // , expr subst
-        nx = fla_max(i__1,i__2);
+        nx = fla_max(i__1, i__2);
         /* Determine when to switch from blocked to unblocked code. */
-        if (nx < minmn)
+        if(nx < minmn)
         {
             ws = (*m + *n) * nb;
-            if (*lwork < ws)
+            if(*lwork < ws)
             {
                 /* Not enough work space for the optimal NB, consider using */
                 /* a smaller block size. */
                 nbmin = ilaenv_(&c__2, "CGEBRD", " ", m, n, &c_n1, &c_n1);
-                if (*lwork >= (*m + *n) * nbmin)
+                if(*lwork >= (*m + *n) * nbmin)
                 {
                     nb = *lwork / (*m + *n);
                 }
@@ -359,35 +373,35 @@ void cgebrd_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
     }
     i__1 = minmn - nx;
     i__2 = nb;
-    for (i__ = 1;
-            i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-            i__ += i__2)
+    for(i__ = 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
     {
         /* Reduce rows and columns i:i+ib-1 to bidiagonal form and return */
         /* the matrices X and Y which are needed to update the unreduced */
         /* part of the matrix */
         i__3 = *m - i__ + 1;
         i__4 = *n - i__ + 1;
-        clabrd_(&i__3, &i__4, &nb, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[ i__], &tauq[i__], &taup[i__], &work[1], &ldwrkx, &work[ldwrkx * nb + 1], &ldwrky);
+        clabrd_(&i__3, &i__4, &nb, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__], &tauq[i__],
+                &taup[i__], &work[1], &ldwrkx, &work[ldwrkx * nb + 1], &ldwrky);
         /* Update the trailing submatrix A(i+ib:m,i+ib:n), using */
         /* an update of the form A := A - V*Y**H - X*U**H */
         i__3 = *m - i__ - nb + 1;
         i__4 = *n - i__ - nb + 1;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemm_("No transpose", "Conjugate transpose", &i__3, &i__4, &nb, & q__1, &a[i__ + nb + i__ * a_dim1], lda, &work[ldwrkx * nb + nb + 1], &ldwrky, &c_b1, &a[i__ + nb + (i__ + nb) * a_dim1], lda);
+        cgemm_("No transpose", "Conjugate transpose", &i__3, &i__4, &nb, &q__1,
+               &a[i__ + nb + i__ * a_dim1], lda, &work[ldwrkx * nb + nb + 1], &ldwrky, &c_b1,
+               &a[i__ + nb + (i__ + nb) * a_dim1], lda);
         i__3 = *m - i__ - nb + 1;
         i__4 = *n - i__ - nb + 1;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemm_("No transpose", "No transpose", &i__3, &i__4, &nb, &q__1, & work[nb + 1], &ldwrkx, &a[i__ + (i__ + nb) * a_dim1], lda, & c_b1, &a[i__ + nb + (i__ + nb) * a_dim1], lda);
+        cgemm_("No transpose", "No transpose", &i__3, &i__4, &nb, &q__1, &work[nb + 1], &ldwrkx,
+               &a[i__ + (i__ + nb) * a_dim1], lda, &c_b1, &a[i__ + nb + (i__ + nb) * a_dim1], lda);
         /* Copy diagonal and off-diagonal elements of B back into A */
-        if (*m >= *n)
+        if(*m >= *n)
         {
             i__3 = i__ + nb - 1;
-            for (j = i__;
-                    j <= i__3;
-                    ++j)
+            for(j = i__; j <= i__3; ++j)
             {
                 i__4 = j + j * a_dim1;
                 i__5 = j;
@@ -403,9 +417,7 @@ void cgebrd_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
         else
         {
             i__3 = i__ + nb - 1;
-            for (j = i__;
-                    j <= i__3;
-                    ++j)
+            for(j = i__; j <= i__3; ++j)
             {
                 i__4 = j + j * a_dim1;
                 i__5 = j;
@@ -423,12 +435,12 @@ void cgebrd_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
     /* Use unblocked code to reduce the remainder of the matrix */
     i__2 = *m - i__ + 1;
     i__1 = *n - i__ + 1;
-    cgebd2_(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__], & tauq[i__], &taup[i__], &work[1], &iinfo);
-    work[1].r = (real) ws;
+    cgebd2_(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__], &tauq[i__], &taup[i__],
+            &work[1], &iinfo);
+    work[1].r = (real)ws;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGEBRD */
 }
 /* cgebrd_ */
-

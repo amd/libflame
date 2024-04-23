@@ -230,10 +230,14 @@ i off-diagonal elements of an */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dsygvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *w, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+void dsygvd_(integer *itype, char *jobz, char *uplo, integer *n, doublereal *a, integer *lda,
+             doublereal *b, integer *ldb, doublereal *w, doublereal *work, integer *lwork,
+             integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsygvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*itype, *jobz, *uplo, *n, *lda, *ldb, *lwork, *liwork);
+    AOCL_DTL_SNPRINTF("dsygvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS
+                      ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",
+                      *itype, *jobz, *uplo, *n, *lda, *ldb, *lwork, *liwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     doublereal d__1, d__2;
@@ -241,18 +245,28 @@ void dsygvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *a,
     integer lopt;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *);
     integer lwmin;
     char trans[1];
     integer liopt;
     extern /* Subroutine */
-    void dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *);
     logical upper, wantz;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dpotrf_( char *, integer *, doublereal *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        dpotrf_(char *, integer *, doublereal *, integer *, integer *);
     integer liwmin;
     extern /* Subroutine */
-    void dsyevd_(char *, char *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *, integer *, integer *), dsygst_(integer *, char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dsyevd_(char *, char *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                integer *, integer *, integer *, integer *),
+        dsygst_(integer *, char *, integer *, doublereal *, integer *, doublereal *, integer *,
+                integer *);
     logical lquery;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -313,11 +327,11 @@ void dsygvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *a,
     {
         *info = -1;
     }
-    else if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    else if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (upper || lsame_(uplo, "L", 1, 1)))
+    else if(!(upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -3;
     }
@@ -325,18 +339,18 @@ void dsygvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *a,
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
     if(*info == 0)
     {
-        work[1] = aocl_lapack_droundup_lwork(&lopt);
-        iwork[1] = (aocl_int_t)(liopt);
+        work[1] = (doublereal)lopt;
+        iwork[1] = liopt;
         if(*lwork < lwmin && !lquery)
         {
             *info = -11;
@@ -365,7 +379,7 @@ void dsygvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *a,
         return;
     }
     /* Form a Cholesky factorization of B. */
-    aocl_lapack_dpotrf(uplo, n, &b[b_offset], ldb, info);
+    dpotrf_(uplo, n, &b[b_offset], ldb, info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -373,17 +387,16 @@ void dsygvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *a,
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    aocl_lapack_dsygst(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
-    aocl_lapack_dsyevd(jobz, uplo, n, &a[a_offset], lda, &w[1], &work[1], lwork, &iwork[1], liwork,
-                       info);
+    dsygst_(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
+    dsyevd_(jobz, uplo, n, &a[a_offset], lda, &w[1], &work[1], lwork, &iwork[1], liwork, info);
     /* Computing MAX */
-    d__1 = (doublereal) lopt;
-    lopt = (integer) fla_max(d__1,work[1]);
+    d__1 = (doublereal)lopt;
+    lopt = (integer)fla_max(d__1, work[1]);
     /* Computing MAX */
-    d__1 = (doublereal) liopt;
-    d__2 = (doublereal) iwork[1]; // , expr subst
-    liopt = (integer) fla_max(d__1,d__2);
-    if (wantz && *info == 0)
+    d__1 = (doublereal)liopt;
+    d__2 = (doublereal)iwork[1]; // , expr subst
+    liopt = (integer)fla_max(d__1, d__2);
+    if(wantz && *info == 0)
     {
         /* Backtransform eigenvectors to the original problem. */
         if(*itype == 1 || *itype == 2)
@@ -399,7 +412,8 @@ void dsygvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *a,
             {
                 *(unsigned char *)trans = 'T';
             }
-            dtrsm_("Left", uplo, trans, "Non-unit", n, n, &c_b11, &b[b_offset], ldb, &a[a_offset], lda);
+            dtrsm_("Left", uplo, trans, "Non-unit", n, n, &c_b11, &b[b_offset], ldb, &a[a_offset],
+                   lda);
         }
         else if(*itype == 3)
         {
@@ -414,10 +428,11 @@ void dsygvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *a,
             {
                 *(unsigned char *)trans = 'N';
             }
-            dtrmm_("Left", uplo, trans, "Non-unit", n, n, &c_b11, &b[b_offset], ldb, &a[a_offset], lda);
+            dtrmm_("Left", uplo, trans, "Non-unit", n, n, &c_b11, &b[b_offset], ldb, &a[a_offset],
+                   lda);
         }
     }
-    work[1] = (doublereal) lopt;
+    work[1] = (doublereal)lopt;
     iwork[1] = liopt;
     AOCL_DTL_TRACE_LOG_EXIT
     return;

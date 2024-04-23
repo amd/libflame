@@ -1,7 +1,8 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int cgebd2_check(integer *m, integer *n, scomplex *a, integer *lda, real *d__, real *e, scomplex *tauq, scomplex *taup, scomplex *work, integer *info)
+int cgebd2_check(integer *m, integer *n, scomplex *a, integer *lda, real *d__, real *e,
+                 scomplex *tauq, scomplex *taup, scomplex *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
@@ -25,7 +26,7 @@ int cgebd2_check(integer *m, integer *n, scomplex *a, integer *lda, real *d__, r
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }

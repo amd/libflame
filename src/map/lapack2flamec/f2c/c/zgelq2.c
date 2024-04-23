@@ -118,10 +118,11 @@ conjg(v(i+1:n)) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgelq2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *work, integer *info)
+void zgelq2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau,
+             doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgelq2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
+    AOCL_DTL_SNPRINTF("zgelq2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *lda);
 
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
@@ -129,7 +130,12 @@ void zgelq2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     integer i__, k;
     doublecomplex alpha;
     extern /* Subroutine */
-    void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zlacgv_(integer *, doublecomplex *, integer *);
+        void
+        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *),
+        zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -165,7 +171,7 @@ void zgelq2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
@@ -176,7 +182,7 @@ void zgelq2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    k = fla_min(*m,*n);
+    k = fla_min(*m, *n);
     i__1 = k;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
@@ -189,8 +195,8 @@ void zgelq2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
         i__2 = *n - i__ + 1;
         /* Computing MIN */
         i__3 = i__ + 1;
-        zlarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3,*n) * a_dim1], lda, &tau[i__] );
-        if (i__ < *m)
+        zlarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda, &tau[i__]);
+        if(i__ < *m)
         {
             /* Apply H(i) to A(i+1:m,i:n) from the right */
             i__2 = i__ + i__ * a_dim1;
@@ -198,8 +204,8 @@ void zgelq2_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
             a[i__2].imag = 0.; // , expr subst
             i__2 = *m - i__;
             i__3 = *n - i__ + 1;
-            aocl_lapack_zlarf("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &tau[i__],
-                              &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
+            zlarf_("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &tau[i__],
+                   &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
         }
         i__2 = i__ + i__ * a_dim1;
         a[i__2].real = alpha.real;

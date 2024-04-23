@@ -93,15 +93,15 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cpptri_(char *uplo, integer *n, complex *ap, integer * info)
+void cpptri_(char *uplo, integer *n, complex *ap, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cpptri inputs: uplo %c, n %lld",*uplo, *n);
+    snprintf(buffer, 256, "cpptri inputs: uplo %c, n %lld", *uplo, *n);
 #else
-    snprintf(buffer, 256,"cpptri inputs: uplo %c, n %d",*uplo, *n);
+    snprintf(buffer, 256, "cpptri inputs: uplo %c, n %d", *uplo, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -114,15 +114,21 @@ void cpptri_(char *uplo, integer *n, complex *ap, integer * info)
     real ajj;
     integer jjn;
     extern /* Subroutine */
-    void chpr_(char *, integer *, real *, complex *, integer *, complex *);
+        void
+        chpr_(char *, integer *, real *, complex *, integer *, complex *);
     extern /* Complex */
-    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+        VOID
+        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
+        void
+        ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    void csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), ctptri_(char *, char *, integer *, complex *, integer *);
+        void
+        csscal_(integer *, real *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        ctptri_(char *, char *, integer *, complex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -149,7 +155,7 @@ void cpptri_(char *uplo, integer *n, complex *ap, integer * info)
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -171,7 +177,7 @@ void cpptri_(char *uplo, integer *n, complex *ap, integer * info)
         return;
     }
     /* Invert the triangular Cholesky factor U or L. */
-    aocl_lapack_ctptri(uplo, "Non-unit", n, &ap[1], info);
+    ctptri_(uplo, "Non-unit", n, &ap[1], info);
     if(*info > 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -207,15 +213,15 @@ void cpptri_(char *uplo, integer *n, complex *ap, integer * info)
             jjn = jj + *n - j + 1;
             i__2 = jj;
             i__3 = *n - j + 1;
-            aocl_lapack_cdotc_f2c(&q__1, &i__3, &ap[jj], &c__1, &ap[jj], &c__1);
-            r__1 = q__1.real;
-            ap[i__2].real = r__1;
-            ap[i__2].imag = 0.f; // , expr subst
+            cdotc_f2c_(&q__1, &i__3, &ap[jj], &c__1, &ap[jj], &c__1);
+            r__1 = q__1.r;
+            ap[i__2].r = r__1;
+            ap[i__2].i = 0.f; // , expr subst
             if(j < *n)
             {
                 i__2 = *n - j;
-                aocl_blas_ctpmv("Lower", "Conjugate transpose", "Non-unit", &i__2, &ap[jjn],
-                                &ap[jj + 1], &c__1);
+                ctpmv_("Lower", "Conjugate transpose", "Non-unit", &i__2, &ap[jjn], &ap[jj + 1],
+                       &c__1);
             }
             jj = jjn;
             /* L20: */

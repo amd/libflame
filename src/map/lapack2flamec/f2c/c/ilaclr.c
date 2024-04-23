@@ -127,7 +127,7 @@ aocl_int64_t aocl_lapack_ilaclr(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, a
     {
         i__1 = *m + a_dim1;
         i__2 = *m + *n * a_dim1;
-        if(a[i__1].real != 0.f || a[i__1].imag != 0.f || (a[i__2].real != 0.f || a[i__2].imag != 0.f))
+        if(a[i__1].r != 0.f || a[i__1].i != 0.f || (a[i__2].r != 0.f || a[i__2].i != 0.f))
         {
             ret_val = *m;
         }
@@ -142,11 +142,12 @@ aocl_int64_t aocl_lapack_ilaclr(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, a
                 for(;;)
                 {
                     /* while(complicated condition) */
-                    i__2 = fla_max(i__,1) + j * a_dim1;
-                    if (!(a[i__2].r == 0.f && a[i__2].i == 0.f && i__ >= 1)) break;
+                    i__2 = fla_max(i__, 1) + j * a_dim1;
+                    if(!(a[i__2].r == 0.f && a[i__2].i == 0.f && i__ >= 1))
+                        break;
                     --i__;
                 }
-                ret_val = fla_max(ret_val,i__);
+                ret_val = fla_max(ret_val, i__);
             }
         }
     }

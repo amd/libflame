@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief <b> ZPBSVX computes the solution to system of linear equations A * X = B for OTHER
  * matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -149,7 +149,7 @@ static aocl_int64_t c__1 = 1;
 /* > equilibrated matrix diag(S)*A*diag(S). The j-th column of A */
 /* > is stored in the j-th column of the array AB as follows: */
 /* > if UPLO = 'U', AB(KD+1+i-j,j) = A(i,j) for fla_max(1,j-KD)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(N,j+KD). */
 /* > See below for further details. */
 /* > */
@@ -343,13 +343,20 @@ if EQUED = 'Y', */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, doublecomplex *ab, integer *ldab, doublecomplex *afb, integer *ldafb, char *equed, doublereal *s, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal * ferr, doublereal *berr, doublecomplex *work, doublereal *rwork, integer *info)
+void zpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, doublecomplex *ab,
+             integer *ldab, doublecomplex *afb, integer *ldafb, char *equed, doublereal *s,
+             doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond,
+             doublereal *ferr, doublereal *berr, doublecomplex *work, doublereal *rwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zpbsvx inputs: fact %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *uplo, *n, *kd, *nrhs, *ldab, *ldafb, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("zpbsvx inputs: fact %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS
+                      ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", ldb %" FLA_IS
+                      ", ldx %" FLA_IS "",
+                      *fact, *uplo, *n, *kd, *nrhs, *ldab, *ldafb, *ldb, *ldx);
 
     /* System generated locals */
-    aocl_int64_t ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
+    integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
         i__2, i__3, i__4, i__5;
     doublereal d__1, d__2;
     dcomplex z__1;
@@ -360,21 +367,38 @@ void zpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, dou
     doublereal scond, anorm;
     logical equil, rcequ, upper;
     extern /* Subroutine */
-    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern doublereal zlanhb_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern doublereal zlanhb_(char *, char *, integer *, integer *, doublecomplex *, integer *,
+                              doublereal *);
     doublereal bignum;
     extern /* Subroutine */
-    void zlaqhb_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, char *);
+        void
+        zlaqhb_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *,
+                doublereal *, doublereal *, char *);
     integer infequ;
     extern /* Subroutine */
-    void zpbcon_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zpbequ_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, integer *), zpbrfs_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zpbtrf_(char *, integer *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zpbcon_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *,
+                doublereal *, doublecomplex *, doublereal *, integer *),
+        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *),
+        zpbequ_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *,
+                doublereal *, doublereal *, integer *),
+        zpbrfs_(char *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
+                doublereal *, doublereal *, doublecomplex *, doublereal *, integer *),
+        zpbtrf_(char *, integer *, integer *, doublecomplex *, integer *, integer *);
     doublereal smlnum;
     extern /* Subroutine */
-    void zpbtrs_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zpbtrs_(char *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -420,7 +444,7 @@ void zpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, dou
     upper = lsame_(uplo, "U", 1, 1);
     smlnum = 0.;
     bignum = 0.;
-    if (nofact || equil)
+    if(nofact || equil)
     {
         *(unsigned char *)equed = 'N';
         rcequ = FALSE_;
@@ -432,11 +456,11 @@ void zpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, dou
         bignum = 1. / smlnum;
     }
     /* Test the input parameters. */
-    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -460,7 +484,7 @@ void zpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, dou
     {
         *info = -9;
     }
-    else if (lsame_(fact, "F", 1, 1) && ! (rcequ || lsame_(equed, "N", 1, 1)))
+    else if(lsame_(fact, "F", 1, 1) && !(rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -10;
     }
@@ -476,11 +500,11 @@ void zpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, dou
                 /* Computing MIN */
                 d__1 = smin;
                 d__2 = s[j]; // , expr subst
-                smin = fla_min(d__1,d__2);
+                smin = fla_min(d__1, d__2);
                 /* Computing MAX */
                 d__1 = smax;
                 d__2 = s[j]; // , expr subst
-                smax = fla_max(d__1,d__2);
+                smax = fla_max(d__1, d__2);
                 /* L10: */
             }
             if(smin <= 0.)
@@ -489,7 +513,7 @@ void zpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, dou
             }
             else if(*n > 0)
             {
-                scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
+                scond = fla_max(smin, smlnum) / fla_min(smax, bignum);
             }
             else
             {
@@ -498,11 +522,11 @@ void zpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, dou
         }
         if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -13;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -15;
             }
@@ -518,7 +542,7 @@ void zpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, dou
     if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        aocl_lapack_zpbequ(uplo, n, kd, &ab[ab_offset], ldab, &s[1], &scond, &amax, &infequ);
+        zpbequ_(uplo, n, kd, &ab[ab_offset], ldab, &s[1], &scond, &amax, &infequ);
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
@@ -557,10 +581,10 @@ void zpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, dou
             {
                 /* Computing MAX */
                 i__2 = j - *kd;
-                j1 = fla_max(i__2,1);
+                j1 = fla_max(i__2, 1);
                 i__2 = j - j1 + 1;
-                aocl_blas_zcopy(&i__2, &ab[*kd + 1 - j + j1 + j * ab_dim1], &c__1,
-                                &afb[*kd + 1 - j + j1 + j * afb_dim1], &c__1);
+                zcopy_(&i__2, &ab[*kd + 1 - j + j1 + j * ab_dim1], &c__1,
+                       &afb[*kd + 1 - j + j1 + j * afb_dim1], &c__1);
                 /* L40: */
             }
         }
@@ -571,7 +595,7 @@ void zpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, dou
             {
                 /* Computing MIN */
                 i__2 = j + *kd;
-                j2 = fla_min(i__2,*n);
+                j2 = fla_min(i__2, *n);
                 i__2 = j2 - j + 1;
                 aocl_blas_zcopy(&i__2, &ab[j * ab_dim1 + 1], &c__1, &afb[j * afb_dim1 + 1], &c__1);
                 /* L50: */
@@ -589,14 +613,14 @@ void zpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, dou
     /* Compute the norm of the matrix A. */
     anorm = aocl_lapack_zlanhb("1", uplo, n, kd, &ab[ab_offset], ldab, &rwork[1]);
     /* Compute the reciprocal of the condition number of A. */
-    aocl_lapack_zpbcon(uplo, n, kd, &afb[afb_offset], ldafb, &anorm, rcond, &work[1], &rwork[1],
-                       info);
+    zpbcon_(uplo, n, kd, &afb[afb_offset], ldafb, &anorm, rcond, &work[1], &rwork[1], info);
     /* Compute the solution matrix X. */
     aocl_lapack_zlacpy("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
     aocl_lapack_zpbtrs(uplo, n, kd, nrhs, &afb[afb_offset], ldafb, &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    zpbrfs_(uplo, n, kd, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb, &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
+    zpbrfs_(uplo, n, kd, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb, &b[b_offset], ldb,
+            &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(rcequ)

@@ -140,10 +140,12 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complex16GTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zgtcon_(char *norm, integer *n, doublecomplex *dl, doublecomplex *d__, doublecomplex *du, doublecomplex *du2, integer * ipiv, doublereal *anorm, doublereal *rcond, doublecomplex *work, integer *info)
+void zgtcon_(char *norm, integer *n, doublecomplex *dl, doublecomplex *d__, doublecomplex *du,
+             doublecomplex *du2, integer *ipiv, doublereal *anorm, doublereal *rcond,
+             doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgtcon inputs: norm %c, n %" FLA_IS "",*norm, *n);
+    AOCL_DTL_SNPRINTF("zgtcon inputs: norm %c, n %" FLA_IS "", *norm, *n);
 
     /* System generated locals */
     aocl_int64_t i__1, i__2;
@@ -152,11 +154,15 @@ void zgtcon_(char *norm, integer *n, doublecomplex *dl, doublecomplex *d__, doub
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical onenrm;
     extern /* Subroutine */
-    void zgttrs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zgttrs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
+                doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -190,7 +196,7 @@ void zgtcon_(char *norm, integer *n, doublecomplex *dl, doublecomplex *d__, doub
     /* Function Body */
     *info = 0;
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
-    if (! onenrm && ! lsame_(norm, "I", 1, 1))
+    if(!onenrm && !lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }
@@ -227,7 +233,7 @@ void zgtcon_(char *norm, integer *n, doublecomplex *dl, doublecomplex *d__, doub
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        if(d__[i__2].real == 0. && d__[i__2].imag == 0.)
+        if(d__[i__2].r == 0. && d__[i__2].i == 0.)
         {
             AOCL_DTL_TRACE_LOG_EXIT
             return;
@@ -245,19 +251,20 @@ void zgtcon_(char *norm, integer *n, doublecomplex *dl, doublecomplex *d__, doub
     }
     kase = 0;
 L20:
-    aocl_lapack_zlacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    zlacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == kase1)
         {
             /* Multiply by inv(U)*inv(L). */
-            zgttrs_("No transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &work[1], n, info);
+            zgttrs_("No transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &work[1],
+                    n, info);
         }
         else
         {
             /* Multiply by inv(L**H)*inv(U**H). */
-            aocl_lapack_zgttrs("Conjugate transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1],
-                               &ipiv[1], &work[1], n, info);
+            zgttrs_("Conjugate transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1],
+                    &work[1], n, info);
         }
         goto L20;
     }

@@ -105,10 +105,12 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlar2v_(integer *n, doublereal *x, doublereal *y, doublereal *z__, integer *incx, doublereal *c__, doublereal *s, integer *incc)
+void dlar2v_(integer *n, doublereal *x, doublereal *y, doublereal *z__, integer *incx,
+             doublereal *c__, doublereal *s, integer *incc)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlar2v inputs: n %" FLA_IS ", incx %" FLA_IS ", incc %" FLA_IS "",*n, *incx, *incc);
+    AOCL_DTL_SNPRINTF("dlar2v inputs: n %" FLA_IS ", incx %" FLA_IS ", incc %" FLA_IS "", *n, *incx,
+                      *incc);
     /* System generated locals */
     aocl_int64_t i__1;
     /* Local variables */

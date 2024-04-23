@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief <b> SPPSVX computes the solution to system of linear equations A * X = B for OTHER
  * matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -314,12 +314,15 @@ if EQUED = 'Y', */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real *afp, char *equed, real *s, real *b, integer * ldb, real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork, integer *info)
+void sppsvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *ap, real *afp, char *equed,
+             real *s, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *ferr,
+             real *berr, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sppsvx inputs: fact %c, uplo %c, n %d, nrhs %d, ldb %d, ldx %d",*fact, *uplo, *n, *nrhs, *ldb, *ldx);
+    snprintf(buffer, 256, "sppsvx inputs: fact %c, uplo %c, n %d, nrhs %d, ldb %d, ldx %d", *fact,
+             *uplo, *n, *nrhs, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -332,21 +335,31 @@ void sppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real 
     real scond, anorm;
     logical equil, rcequ;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer infequ;
     extern /* Subroutine */
-    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+        void
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     extern real slansp_(char *, char *, integer *, real *, real *);
     extern /* Subroutine */
-    void sppcon_(char *, integer *, real *, real *, real *, real *, integer *, integer *), slaqsp_(char *, integer *, real *, real *, real *, real *, char *) ;
+        void
+        sppcon_(char *, integer *, real *, real *, real *, real *, integer *, integer *),
+        slaqsp_(char *, integer *, real *, real *, real *, real *, char *);
     real smlnum;
     extern /* Subroutine */
-    void sppequ_(char *, integer *, real *, real *, real *, real *, integer *), spprfs_(char *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), spptrf_( char *, integer *, real *, integer *), spptrs_(char *, integer *, integer *, real *, real *, integer *, integer *);
+        void
+        sppequ_(char *, integer *, real *, real *, real *, real *, integer *),
+        spprfs_(char *, integer *, integer *, real *, real *, real *, integer *, real *, integer *,
+                real *, real *, real *, integer *, integer *),
+        spptrf_(char *, integer *, real *, integer *),
+        spptrs_(char *, integer *, integer *, real *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -387,7 +400,7 @@ void sppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real 
     equil = lsame_(fact, "E", 1, 1);
     smlnum = 0.f;
     bignum = 0.f;
-    if (nofact || equil)
+    if(nofact || equil)
     {
         *(unsigned char *)equed = 'N';
         rcequ = FALSE_;
@@ -399,11 +412,11 @@ void sppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real 
         bignum = 1.f / smlnum;
     }
     /* Test the input parameters. */
-    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    else if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -415,7 +428,7 @@ void sppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real 
     {
         *info = -4;
     }
-    else if (lsame_(fact, "F", 1, 1) && ! (rcequ || lsame_(equed, "N", 1, 1)))
+    else if(lsame_(fact, "F", 1, 1) && !(rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -7;
     }
@@ -431,11 +444,11 @@ void sppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real 
                 /* Computing MIN */
                 r__1 = smin;
                 r__2 = s[j]; // , expr subst
-                smin = fla_min(r__1,r__2);
+                smin = fla_min(r__1, r__2);
                 /* Computing MAX */
                 r__1 = smax;
                 r__2 = s[j]; // , expr subst
-                smax = fla_max(r__1,r__2);
+                smax = fla_max(r__1, r__2);
                 /* L10: */
             }
             if(smin <= 0.f)
@@ -444,7 +457,7 @@ void sppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real 
             }
             else if(*n > 0)
             {
-                scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
+                scond = fla_max(smin, smlnum) / fla_min(smax, bignum);
             }
             else
             {
@@ -453,11 +466,11 @@ void sppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real 
         }
         if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -10;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -12;
             }
@@ -473,7 +486,7 @@ void sppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real 
     if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        aocl_lapack_sppequ(uplo, n, &ap[1], &s[1], &scond, &amax, &infequ);
+        sppequ_(uplo, n, &ap[1], &s[1], &scond, &amax, &infequ);
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
@@ -519,8 +532,8 @@ void sppsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real 
     aocl_lapack_spptrs(uplo, n, nrhs, &afp[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    aocl_lapack_spprfs(uplo, n, nrhs, &ap[1], &afp[1], &b[b_offset], ldb, &x[x_offset], ldx,
-                       &ferr[1], &berr[1], &work[1], &iwork[1], info);
+    spprfs_(uplo, n, nrhs, &ap[1], &afp[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1],
+            &berr[1], &work[1], &iwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(rcequ)

@@ -85,7 +85,7 @@ static doublereal c_b9 = -1.;
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > */
 /* > On exit, if INFO = 0, the factor S from the split Cholesky */
@@ -153,10 +153,11 @@ the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dpbstf_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab, integer *info)
+void dpbstf_(char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dpbstf inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",*uplo, *n, *kd, *ldab);
+    AOCL_DTL_SNPRINTF("dpbstf inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",
+                      *uplo, *n, *kd, *ldab);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3;
     doublereal d__1;
@@ -167,11 +168,14 @@ void dpbstf_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
     doublereal ajj;
     integer kld;
     extern /* Subroutine */
-    void dsyr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dscal_( integer *, doublereal *, doublereal *, integer *);
+        void
+        dsyr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *),
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -200,7 +204,7 @@ void dpbstf_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -232,7 +236,7 @@ void dpbstf_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
     /* Computing MAX */
     i__1 = 1;
     i__2 = *ldab - 1; // , expr subst
-    kld = fla_max(i__1,i__2);
+    kld = fla_max(i__1, i__2);
     /* Set the splitting point m. */
     m = (*n + *kd) / 2;
     if(upper)
@@ -251,13 +255,13 @@ void dpbstf_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
             ab[*kd + 1 + j * ab_dim1] = ajj;
             /* Computing MIN */
             i__2 = j - 1;
-            km = fla_min(i__2,*kd);
+            km = fla_min(i__2, *kd);
             /* Compute elements j-km:j-1 of the j-th column and update the */
             /* the leading submatrix within the band. */
             d__1 = 1. / ajj;
-            aocl_blas_dscal(&km, &d__1, &ab[*kd + 1 - km + j * ab_dim1], &c__1);
-            aocl_blas_dsyr("Upper", &km, &c_b9, &ab[*kd + 1 - km + j * ab_dim1], &c__1,
-                           &ab[*kd + 1 + (j - km) * ab_dim1], &kld);
+            dscal_(&km, &d__1, &ab[*kd + 1 - km + j * ab_dim1], &c__1);
+            dsyr_("Upper", &km, &c_b9, &ab[*kd + 1 - km + j * ab_dim1], &c__1,
+                  &ab[*kd + 1 + (j - km) * ab_dim1], &kld);
             /* L10: */
         }
         /* Factorize the updated submatrix A(1:m,1:m) as U**T*U. */
@@ -275,15 +279,15 @@ void dpbstf_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
             /* Computing MIN */
             i__2 = *kd;
             i__3 = m - j; // , expr subst
-            km = fla_min(i__2,i__3);
+            km = fla_min(i__2, i__3);
             /* Compute elements j+1:j+km of the j-th row and update the */
             /* trailing submatrix within the band. */
             if(km > 0)
             {
                 d__1 = 1. / ajj;
-                aocl_blas_dscal(&km, &d__1, &ab[*kd + (j + 1) * ab_dim1], &kld);
-                aocl_blas_dsyr("Upper", &km, &c_b9, &ab[*kd + (j + 1) * ab_dim1], &kld,
-                               &ab[*kd + 1 + (j + 1) * ab_dim1], &kld);
+                dscal_(&km, &d__1, &ab[*kd + (j + 1) * ab_dim1], &kld);
+                dsyr_("Upper", &km, &c_b9, &ab[*kd + (j + 1) * ab_dim1], &kld,
+                      &ab[*kd + 1 + (j + 1) * ab_dim1], &kld);
             }
             /* L20: */
         }
@@ -304,13 +308,13 @@ void dpbstf_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
             ab[j * ab_dim1 + 1] = ajj;
             /* Computing MIN */
             i__2 = j - 1;
-            km = fla_min(i__2,*kd);
+            km = fla_min(i__2, *kd);
             /* Compute elements j-km:j-1 of the j-th row and update the */
             /* trailing submatrix within the band. */
             d__1 = 1. / ajj;
-            aocl_blas_dscal(&km, &d__1, &ab[km + 1 + (j - km) * ab_dim1], &kld);
-            aocl_blas_dsyr("Lower", &km, &c_b9, &ab[km + 1 + (j - km) * ab_dim1], &kld,
-                           &ab[(j - km) * ab_dim1 + 1], &kld);
+            dscal_(&km, &d__1, &ab[km + 1 + (j - km) * ab_dim1], &kld);
+            dsyr_("Lower", &km, &c_b9, &ab[km + 1 + (j - km) * ab_dim1], &kld,
+                  &ab[(j - km) * ab_dim1 + 1], &kld);
             /* L30: */
         }
         /* Factorize the updated submatrix A(1:m,1:m) as U**T*U. */
@@ -328,15 +332,15 @@ void dpbstf_(char *uplo, integer *n, integer *kd, doublereal * ab, integer *ldab
             /* Computing MIN */
             i__2 = *kd;
             i__3 = m - j; // , expr subst
-            km = fla_min(i__2,i__3);
+            km = fla_min(i__2, i__3);
             /* Compute elements j+1:j+km of the j-th column and update the */
             /* trailing submatrix within the band. */
             if(km > 0)
             {
                 d__1 = 1. / ajj;
-                aocl_blas_dscal(&km, &d__1, &ab[j * ab_dim1 + 2], &c__1);
-                aocl_blas_dsyr("Lower", &km, &c_b9, &ab[j * ab_dim1 + 2], &c__1,
-                               &ab[(j + 1) * ab_dim1 + 1], &kld);
+                dscal_(&km, &d__1, &ab[j * ab_dim1 + 2], &c__1);
+                dsyr_("Lower", &km, &c_b9, &ab[j * ab_dim1 + 2], &c__1, &ab[(j + 1) * ab_dim1 + 1],
+                      &kld);
             }
             /* L40: */
         }

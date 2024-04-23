@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b CLAR2V applies a vector of plane rotations with real cosines and scomplex sines from both sides to a sequence of 2-by-2 symmetric/Hermitian matrices. */
+#include "FLA_f2c.h" /* > \brief \b CLAR2V applies a vector of plane rotations with real cosines and complex sines from both sides to a sequence of 2-by-2 symmetric/Hermitian matrices. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -108,15 +108,16 @@ the elements of y are assumed to be real. */
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clar2v_(integer *n, complex *x, complex *y, complex *z__, integer *incx, real *c__, complex *s, integer *incc)
+void clar2v_(integer *n, complex *x, complex *y, complex *z__, integer *incx, real *c__, complex *s,
+             integer *incc)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clar2v inputs: n %lld, incx %lld, incc %lld",*n, *incx, *incc);
+    snprintf(buffer, 256, "clar2v inputs: n %lld, incx %lld, incc %lld", *n, *incx, *incc);
 #else
-    snprintf(buffer, 256,"clar2v inputs: n %d, incx %d, incc %d",*n, *incx, *incc);
+    snprintf(buffer, 256, "clar2v inputs: n %d, incx %d, incc %d", *n, *incx, *incc);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

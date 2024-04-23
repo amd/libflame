@@ -1,8 +1,8 @@
-/* ./dsytrf.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dsytrf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
@@ -182,10 +182,12 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dsytrf_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipiv, doublereal *work, integer *lwork, integer *info)
+void dsytrf_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work,
+             integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsytrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *lda, *lwork);
+    AOCL_DTL_SNPRINTF("dsytrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",
+                      *uplo, *n, *lda, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -194,10 +196,14 @@ void dsytrf_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipiv
     integer nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
-    void dsytf2_(char *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dsytf2_(char *, integer *, doublereal *, integer *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void dlasyf_(char *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dlasyf_(char *, integer *, integer *, integer *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
@@ -228,7 +234,7 @@ void dsytrf_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipiv
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -236,7 +242,7 @@ void dsytrf_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipiv
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -247,11 +253,8 @@ void dsytrf_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipiv
     if(*info == 0)
     {
         /* Determine the block size */
-        nb = aocl_lapack_ilaenv(&c__1, "DSYTRF", uplo, n, &c_n1, &c_n1, &c_n1);
-        /* Computing MAX */
-        i__1 = 1;
-        i__2 = *n * nb; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
+        nb = ilaenv_(&c__1, "DSYTRF", uplo, n, &c_n1, &c_n1, &c_n1);
+        lwkopt = *n * nb;
         work[1] = (doublereal)lwkopt;
     }
     if(*info != 0)
@@ -275,11 +278,11 @@ void dsytrf_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipiv
         {
             /* Computing MAX */
             i__1 = *lwork / ldwork;
-            nb = fla_max(i__1,1);
+            nb = fla_max(i__1, 1);
             /* Computing MAX */
             i__1 = 2;
-            i__2 = ilaenv_(&c__2, "DSYTRF", uplo, n, &c_n1, &c_n1, & c_n1); // , expr subst
-            nbmin = fla_max(i__1,i__2);
+            i__2 = ilaenv_(&c__2, "DSYTRF", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+            nbmin = fla_max(i__1, i__2);
         }
     }
     else
@@ -343,8 +346,8 @@ void dsytrf_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipiv
             /* Factorize columns k:k+kb-1 of A and use blocked code to */
             /* update columns k+kb:n */
             i__1 = *n - k + 1;
-            aocl_lapack_dlasyf(uplo, &i__1, &nb, &kb, &a[k + k * a_dim1], lda, &ipiv[k], &work[1],
-                               &ldwork, &iinfo);
+            dlasyf_(uplo, &i__1, &nb, &kb, &a[k + k * a_dim1], lda, &ipiv[k], &work[1], &ldwork,
+                    &iinfo);
         }
         else
         {
@@ -377,7 +380,7 @@ void dsytrf_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipiv
         goto L20;
     }
 L40:
-    work[1] = (doublereal) lwkopt;
+    work[1] = (doublereal)lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DSYTRF */

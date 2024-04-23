@@ -1,5 +1,8 @@
-/* cggbal.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* cggbal.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static real c_b36 = 10.f;
@@ -175,15 +178,19 @@ and second, applying a diagonal similarity */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cggbal_(char *job, integer *n, complex *a, integer *lda, complex *b, integer *ldb, integer *ilo, integer *ihi, real *lscale, real *rscale, real *work, integer *info)
+void cggbal_(char *job, integer *n, complex *a, integer *lda, complex *b, integer *ldb,
+             integer *ilo, integer *ihi, real *lscale, real *rscale, real *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cggbal inputs: job %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS "",*job, *n, *lda, *ldb, *ilo, *ihi);
+    AOCL_DTL_SNPRINTF("cggbal inputs: job %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS
+                      ", ilo %" FLA_IS ", ihi %" FLA_IS "",
+                      *job, *n, *lda, *ldb, *ilo, *ihi);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2, r__3;
     /* Builtin functions */
-    double r_lg10(real *), r_imag(complex *), c_abs(complex *), r_sign(real *, real *), pow_ri(real *, integer *);
+    double r_lg10(real *), r_imag(complex *), c_abs(complex *), r_sign(real *, real *),
+        pow_ri(real *, integer *);
     /* Local variables */
     aocl_int64_t i__, j, k, l, m;
     real t;
@@ -200,18 +207,23 @@ void cggbal_(char *job, integer *n, complex *a, integer *lda, complex *b, intege
     real coef2, coef5, gamma, alpha;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     real sfmin;
     extern /* Subroutine */
-    void cswap_(integer *, complex *, integer *, complex *, integer *);
+        void
+        cswap_(integer *, complex *, integer *, complex *, integer *);
     real sfmax;
     integer iflow, kount;
     extern /* Subroutine */
-    void saxpy_(integer *, real *, real *, integer *, real *, integer *);
+        void
+        saxpy_(integer *, real *, real *, integer *, real *, integer *);
     real pgamma;
     extern real slamch_(char *);
     extern /* Subroutine */
-    void csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        csscal_(integer *, real *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lsfmin, lsfmax;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -249,7 +261,8 @@ void cggbal_(char *job, integer *n, complex *a, integer *lda, complex *b, intege
     --work;
     /* Function Body */
     *info = 0;
-    if (! lsame_(job, "N", 1, 1) && ! lsame_(job, "P", 1, 1) && ! lsame_(job, "S", 1, 1) && ! lsame_(job, "B", 1, 1))
+    if(!lsame_(job, "N", 1, 1) && !lsame_(job, "P", 1, 1) && !lsame_(job, "S", 1, 1)
+       && !lsame_(job, "B", 1, 1))
     {
         *info = -1;
     }
@@ -257,11 +270,11 @@ void cggbal_(char *job, integer *n, complex *a, integer *lda, complex *b, intege
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -269,7 +282,7 @@ void cggbal_(char *job, integer *n, complex *a, integer *lda, complex *b, intege
     {
         i__1 = -(*info);
         xerbla_("CGGBAL", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -277,7 +290,7 @@ void cggbal_(char *job, integer *n, complex *a, integer *lda, complex *b, intege
     {
         *ilo = 1;
         *ihi = *n;
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 1)
@@ -286,10 +299,10 @@ void cggbal_(char *job, integer *n, complex *a, integer *lda, complex *b, intege
         *ihi = *n;
         lscale[1] = 1.f;
         rscale[1] = 1.f;
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (lsame_(job, "N", 1, 1))
+    if(lsame_(job, "N", 1, 1))
     {
         *ilo = 1;
         *ihi = *n;
@@ -300,12 +313,12 @@ void cggbal_(char *job, integer *n, complex *a, integer *lda, complex *b, intege
             rscale[i__] = 1.f;
             /* L10: */
         }
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     k = 1;
     l = *n;
-    if (lsame_(job, "S", 1, 1))
+    if(lsame_(job, "S", 1, 1))
     {
         goto L190;
     }
@@ -331,7 +344,7 @@ L30:
             jp1 = j + 1;
             i__2 = i__ + j * a_dim1;
             i__3 = i__ + j * b_dim1;
-            if(a[i__2].real != 0.f || a[i__2].imag != 0.f || (b[i__3].real != 0.f || b[i__3].imag != 0.f))
+            if(a[i__2].r != 0.f || a[i__2].i != 0.f || (b[i__3].r != 0.f || b[i__3].i != 0.f))
             {
                 goto L50;
             }
@@ -345,7 +358,7 @@ L30:
         {
             i__2 = i__ + j * a_dim1;
             i__3 = i__ + j * b_dim1;
-            if(a[i__2].real != 0.f || a[i__2].imag != 0.f || (b[i__3].real != 0.f || b[i__3].imag != 0.f))
+            if(a[i__2].r != 0.f || a[i__2].i != 0.f || (b[i__3].r != 0.f || b[i__3].i != 0.f))
             {
                 goto L80;
             }
@@ -372,7 +385,7 @@ L100:
             ip1 = i__ + 1;
             i__3 = i__ + j * a_dim1;
             i__4 = i__ + j * b_dim1;
-            if(a[i__3].real != 0.f || a[i__3].imag != 0.f || (b[i__4].real != 0.f || b[i__4].imag != 0.f))
+            if(a[i__3].r != 0.f || a[i__3].i != 0.f || (b[i__4].r != 0.f || b[i__4].i != 0.f))
             {
                 goto L120;
             }
@@ -386,7 +399,7 @@ L100:
         {
             i__3 = i__ + j * a_dim1;
             i__4 = i__ + j * b_dim1;
-            if(a[i__3].real != 0.f || a[i__3].imag != 0.f || (b[i__4].real != 0.f || b[i__4].imag != 0.f))
+            if(a[i__3].r != 0.f || a[i__3].i != 0.f || (b[i__4].r != 0.f || b[i__4].i != 0.f))
             {
                 goto L150;
             }
@@ -431,7 +444,7 @@ L180:
 L190:
     *ilo = k;
     *ihi = l;
-    if (lsame_(job, "P", 1, 1))
+    if(lsame_(job, "P", 1, 1))
     {
         i__1 = *ihi;
         for(i__ = *ilo; i__ <= i__1; ++i__)
@@ -440,12 +453,12 @@ L190:
             rscale[i__] = 1.f;
             /* L195: */
         }
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*ilo == *ihi)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Balance the submatrix in rows ILO to IHI. */
@@ -472,23 +485,25 @@ L190:
         for(j = *ilo; j <= i__2; ++j)
         {
             i__3 = i__ + j * a_dim1;
-            if(a[i__3].real == 0.f && a[i__3].imag == 0.f)
+            if(a[i__3].r == 0.f && a[i__3].i == 0.f)
             {
                 ta = 0.f;
                 goto L210;
             }
             i__3 = i__ + j * a_dim1;
-            r__3 = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
+            r__3 = (r__1 = a[i__3].r, f2c_abs(r__1))
+                   + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
             ta = r_lg10(&r__3) / basl;
         L210:
             i__3 = i__ + j * b_dim1;
-            if(b[i__3].real == 0.f && b[i__3].imag == 0.f)
+            if(b[i__3].r == 0.f && b[i__3].i == 0.f)
             {
                 tb = 0.f;
                 goto L220;
             }
             i__3 = i__ + j * b_dim1;
-            r__3 = (r__1 = b[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&b[i__ + j * b_dim1]), f2c_abs(r__2));
+            r__3 = (r__1 = b[i__3].r, f2c_abs(r__1))
+                   + (r__2 = r_imag(&b[i__ + j * b_dim1]), f2c_abs(r__2));
             tb = r_lg10(&r__3) / basl;
         L220:
             work[i__ + (*n << 2)] = work[i__ + (*n << 2)] - ta - tb;
@@ -505,7 +520,8 @@ L190:
     it = 1;
     /* Start generalized conjugate gradient iteration */
 L250:
-    gamma = sdot_(&nr, &work[*ilo + (*n << 2)], &c__1, &work[*ilo + (*n << 2)], &c__1) + sdot_(&nr, &work[*ilo + *n * 5], &c__1, &work[*ilo + * n * 5], &c__1);
+    gamma = sdot_(&nr, &work[*ilo + (*n << 2)], &c__1, &work[*ilo + (*n << 2)], &c__1)
+            + sdot_(&nr, &work[*ilo + *n * 5], &c__1, &work[*ilo + *n * 5], &c__1);
     ew = 0.f;
     ewc = 0.f;
     i__1 = *ihi;
@@ -532,10 +548,10 @@ L250:
     }
     t = coef5 * (ewc - ew * 3.f);
     tc = coef5 * (ew - ewc * 3.f);
-    aocl_blas_sscal(&nr, &beta, &work[*ilo], &c__1);
-    aocl_blas_sscal(&nr, &beta, &work[*ilo + *n], &c__1);
-    aocl_blas_saxpy(&nr, &coef, &work[*ilo + (*n << 2)], &c__1, &work[*ilo + *n], &c__1);
-    aocl_blas_saxpy(&nr, &coef, &work[*ilo + *n * 5], &c__1, &work[*ilo], &c__1);
+    sscal_(&nr, &beta, &work[*ilo], &c__1);
+    sscal_(&nr, &beta, &work[*ilo + *n], &c__1);
+    saxpy_(&nr, &coef, &work[*ilo + (*n << 2)], &c__1, &work[*ilo + *n], &c__1);
+    saxpy_(&nr, &coef, &work[*ilo + *n * 5], &c__1, &work[*ilo], &c__1);
     i__1 = *ihi;
     for(i__ = *ilo; i__ <= i__1; ++i__)
     {
@@ -553,7 +569,7 @@ L250:
         for(j = *ilo; j <= i__2; ++j)
         {
             i__3 = i__ + j * a_dim1;
-            if(a[i__3].real == 0.f && a[i__3].imag == 0.f)
+            if(a[i__3].r == 0.f && a[i__3].i == 0.f)
             {
                 goto L280;
             }
@@ -561,7 +577,7 @@ L250:
             sum += work[j];
         L280:
             i__3 = i__ + j * b_dim1;
-            if(b[i__3].real == 0.f && b[i__3].imag == 0.f)
+            if(b[i__3].r == 0.f && b[i__3].i == 0.f)
             {
                 goto L290;
             }
@@ -581,7 +597,7 @@ L250:
         for(i__ = *ilo; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * a_dim1;
-            if(a[i__3].real == 0.f && a[i__3].imag == 0.f)
+            if(a[i__3].r == 0.f && a[i__3].i == 0.f)
             {
                 goto L310;
             }
@@ -589,7 +605,7 @@ L250:
             sum += work[i__ + *n];
         L310:
             i__3 = i__ + j * b_dim1;
-            if(b[i__3].real == 0.f && b[i__3].imag == 0.f)
+            if(b[i__3].r == 0.f && b[i__3].i == 0.f)
             {
                 goto L320;
             }
@@ -600,8 +616,8 @@ L250:
         work[j + *n * 3] = (real)kount * work[j] + sum;
         /* L330: */
     }
-    sum = aocl_blas_sdot(&nr, &work[*ilo + *n], &c__1, &work[*ilo + (*n << 1)], &c__1)
-          + aocl_blas_sdot(&nr, &work[*ilo], &c__1, &work[*ilo + *n * 3], &c__1);
+    sum = sdot_(&nr, &work[*ilo + *n], &c__1, &work[*ilo + (*n << 1)], &c__1)
+          + sdot_(&nr, &work[*ilo], &c__1, &work[*ilo + *n * 3], &c__1);
     alpha = gamma / sum;
     /* Determine correction to current iteration */
     cmax = 0.f;
@@ -609,13 +625,13 @@ L250:
     for(i__ = *ilo; i__ <= i__1; ++i__)
     {
         cor = alpha * work[i__ + *n];
-        if (f2c_abs(cor) > cmax)
+        if(f2c_abs(cor) > cmax)
         {
             cmax = f2c_abs(cor);
         }
         lscale[i__] += cor;
         cor = alpha * work[i__];
-        if (f2c_abs(cor) > cmax)
+        if(f2c_abs(cor) > cmax)
         {
             cmax = f2c_abs(cor);
         }
@@ -629,7 +645,7 @@ L250:
     r__1 = -alpha;
     saxpy_(&nr, &r__1, &work[*ilo + (*n << 1)], &c__1, &work[*ilo + (*n << 2)], &c__1);
     r__1 = -alpha;
-    aocl_blas_saxpy(&nr, &r__1, &work[*ilo + *n * 3], &c__1, &work[*ilo + *n * 5], &c__1);
+    saxpy_(&nr, &r__1, &work[*ilo + *n * 3], &c__1, &work[*ilo + *n * 5], &c__1);
     pgamma = gamma;
     ++it;
     if(it <= nrp2)
@@ -653,15 +669,15 @@ L350:
         /* Computing MAX */
         r__1 = rab;
         r__2 = c_abs(&b[i__ + (irab + *ilo - 1) * b_dim1]); // , expr subst
-        rab = fla_max(r__1,r__2);
+        rab = fla_max(r__1, r__2);
         r__1 = rab + sfmin;
-        lrab = (integer) (r_lg10(&r__1) / basl + 1.f);
-        ir = (integer) (lscale[i__] + r_sign(&c_b72, &lscale[i__]));
+        lrab = (integer)(r_lg10(&r__1) / basl + 1.f);
+        ir = (integer)(lscale[i__] + r_sign(&c_b72, &lscale[i__]));
         /* Computing MIN */
-        i__2 = fla_max(ir,lsfmin);
-        i__2 = fla_min(i__2,lsfmax);
+        i__2 = fla_max(ir, lsfmin);
+        i__2 = fla_min(i__2, lsfmax);
         i__3 = lsfmax - lrab; // ; expr subst
-        ir = fla_min(i__2,i__3);
+        ir = fla_min(i__2, i__3);
         lscale[i__] = pow_ri(&c_b36, &ir);
         icab = icamax_(ihi, &a[i__ * a_dim1 + 1], &c__1);
         cab = c_abs(&a[icab + i__ * a_dim1]);
@@ -669,15 +685,15 @@ L350:
         /* Computing MAX */
         r__1 = cab;
         r__2 = c_abs(&b[icab + i__ * b_dim1]); // , expr subst
-        cab = fla_max(r__1,r__2);
+        cab = fla_max(r__1, r__2);
         r__1 = cab + sfmin;
-        lcab = (integer) (r_lg10(&r__1) / basl + 1.f);
-        jc = (integer) (rscale[i__] + r_sign(&c_b72, &rscale[i__]));
+        lcab = (integer)(r_lg10(&r__1) / basl + 1.f);
+        jc = (integer)(rscale[i__] + r_sign(&c_b72, &rscale[i__]));
         /* Computing MIN */
-        i__2 = fla_max(jc,lsfmin);
-        i__2 = fla_min(i__2,lsfmax);
+        i__2 = fla_max(jc, lsfmin);
+        i__2 = fla_min(i__2, lsfmax);
         i__3 = lsfmax - lcab; // ; expr subst
-        jc = fla_min(i__2,i__3);
+        jc = fla_min(i__2, i__3);
         rscale[i__] = pow_ri(&c_b36, &jc);
         /* L360: */
     }

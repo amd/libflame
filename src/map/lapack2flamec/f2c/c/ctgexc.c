@@ -200,15 +200,20 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctgexc_(logical *wantq, logical *wantz, integer *n, complex *a, integer *lda, complex *b, integer *ldb, complex *q, integer *ldq, complex *z__, integer *ldz, integer *ifst, integer * ilst, integer *info)
+void ctgexc_(logical *wantq, logical *wantz, integer *n, complex *a, integer *lda, complex *b,
+             integer *ldb, complex *q, integer *ldq, complex *z__, integer *ldz, integer *ifst,
+             integer *ilst, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctgexc inputs: n %lld, lda %lld, ldb %lld, ldq %lld, ldz %lld, ifst %lld, ilst %lld",*n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
+    snprintf(buffer, 256,
+             "ctgexc inputs: n %lld, lda %lld, ldb %lld, ldq %lld, ldz %lld, ifst %lld, ilst %lld",
+             *n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
 #else
-    snprintf(buffer, 256,"ctgexc inputs: n %d, lda %d, ldb %d, ldq %d, ldz %d, ifst %d, ilst %d",*n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
+    snprintf(buffer, 256, "ctgexc inputs: n %d, lda %d, ldb %d, ldq %d, ldz %d, ifst %d, ilst %d",
+             *n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -217,7 +222,10 @@ void ctgexc_(logical *wantq, logical *wantz, integer *n, complex *a, integer *ld
     /* Local variables */
     integer here;
     extern /* Subroutine */
-    void ctgex2_(logical *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ctgex2_(logical *, logical *, integer *, complex *, integer *, complex *, integer *,
+                complex *, integer *, complex *, integer *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -254,19 +262,19 @@ void ctgexc_(logical *wantq, logical *wantz, integer *n, complex *a, integer *ld
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldq < 1 || *wantq && *ldq < fla_max(1,*n))
+    else if(*ldq < 1 || *wantq && *ldq < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldz < 1 || *wantz && *ldz < fla_max(1,*n))
+    else if(*ldz < 1 || *wantz && *ldz < fla_max(1, *n))
     {
         *info = -11;
     }
@@ -300,8 +308,8 @@ void ctgexc_(logical *wantq, logical *wantz, integer *n, complex *a, integer *ld
     {
         here = *ifst;
     L10: /* Swap with next one below */
-        aocl_lapack_ctgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
-                           &z__[z_offset], ldz, &here, info);
+        ctgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                &z__[z_offset], ldz, &here, info);
         if(*info != 0)
         {
             *ilst = here;
@@ -319,8 +327,8 @@ void ctgexc_(logical *wantq, logical *wantz, integer *n, complex *a, integer *ld
     {
         here = *ifst - 1;
     L20: /* Swap with next one above */
-        aocl_lapack_ctgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
-                           &z__[z_offset], ldz, &here, info);
+        ctgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                &z__[z_offset], ldz, &here, info);
         if(*info != 0)
         {
             *ilst = here;

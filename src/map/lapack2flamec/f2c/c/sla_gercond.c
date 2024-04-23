@@ -146,31 +146,9 @@ row i of the matrix was interchanged */
 /* > \date September 2012 */
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
-/** Generated wrapper function */
-real sla_gercond_(char *trans, aocl_int_t *n, real *a, aocl_int_t *lda, real *af, aocl_int_t *ldaf,
-                  aocl_int_t *ipiv, aocl_int_t *cmode, real *c__, aocl_int_t *info, real *work,
-                  aocl_int_t *iwork)
-{
-#if FLA_ENABLE_ILP64
-    return aocl_lapack_sla_gercond(trans, n, a, lda, af, ldaf, ipiv, cmode, c__, info, work, iwork);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldaf_64 = *ldaf;
-    aocl_int64_t cmode_64 = *cmode;
-    aocl_int64_t info_64 = *info;
-
-    real ret_val = aocl_lapack_sla_gercond(trans, &n_64, a, &lda_64, af, &ldaf_64, ipiv, &cmode_64,
-                                           c__, &info_64, work, iwork);
-
-    *info = (aocl_int_t)info_64;
-    return ret_val;
-#endif
-}
-
-real aocl_lapack_sla_gercond(char *trans, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *af,
-                             aocl_int64_t *ldaf, aocl_int_t *ipiv, aocl_int64_t *cmode, real *c__,
-                             aocl_int64_t *info, real *work, aocl_int_t *iwork)
+real sla_gercond_(char *trans, integer *n, real *a, integer *lda, real *af, integer *ldaf,
+                  integer *ipiv, integer *cmode, real *c__, integer *info, real *work,
+                  integer *iwork)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, i__1, i__2;
@@ -182,10 +160,14 @@ real aocl_lapack_sla_gercond(char *trans, aocl_int64_t *n, real *a, aocl_int64_t
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    void slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     extern /* Subroutine */
-    void sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *,
+                integer *);
     logical notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -222,7 +204,7 @@ real aocl_lapack_sla_gercond(char *trans, aocl_int64_t *n, real *a, aocl_int64_t
     ret_val = 0.f;
     *info = 0;
     notrans = lsame_(trans, "N", 1, 1);
-    if (! notrans && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    if(!notrans && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
@@ -230,11 +212,11 @@ real aocl_lapack_sla_gercond(char *trans, aocl_int64_t *n, real *a, aocl_int64_t
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -321,7 +303,7 @@ real aocl_lapack_sla_gercond(char *trans, aocl_int64_t *n, real *a, aocl_int64_t
     ainvnm = 0.f;
     kase = 0;
 L10:
-    aocl_lapack_slacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+    slacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == 2)
@@ -334,8 +316,8 @@ L10:
             }
             if(notrans)
             {
-                aocl_lapack_sgetrs("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1],
-                                   &work[1], n, info);
+                sgetrs_("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
+                        info);
             }
             else
             {
@@ -386,8 +368,8 @@ L10:
             }
             else
             {
-                aocl_lapack_sgetrs("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1],
-                                   &work[1], n, info);
+                sgetrs_("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
+                        info);
             }
             /* Multiply by R. */
             i__1 = *n;

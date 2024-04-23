@@ -1,16 +1,25 @@
-/* ../netlib/slaqr1.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slaqr1.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLAQR1 sets a scalar multiple of the first column of the product of 2-by-2 or 3-by-3 matrix H a nd specified shifts. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAQR1 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaqr1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaqr1.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaqr1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaqr1.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaqr1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaqr1.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -107,7 +116,8 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slaqr1_(integer *n, real *h__, integer *ldh, real *sr1, real *si1, real *sr2, real *si2, real *v)
+void slaqr1_(integer *n, real *h__, integer *ldh, real *sr1, real *si1, real *sr2, real *si2,
+             real *v)
 {
     /* System generated locals */
     integer h_dim1, h_offset;
@@ -137,14 +147,15 @@ void slaqr1_(integer *n, real *h__, integer *ldh, real *sr1, real *si1, real *sr
     h__ -= h_offset;
     --v;
     /* Function Body */
-    if (*n != 2 && *n != 3)
+    if(*n != 2 && *n != 3)
     {
         return;
     }
-    if (*n == 2)
+    if(*n == 2)
     {
-        s = (r__1 = h__[h_dim1 + 1] - *sr2, f2c_abs(r__1)) + f2c_abs(*si2) + (r__2 = h__[h_dim1 + 2], f2c_abs(r__2));
-        if (s == 0.f)
+        s = (r__1 = h__[h_dim1 + 1] - *sr2, f2c_abs(r__1)) + f2c_abs(*si2)
+            + (r__2 = h__[h_dim1 + 2], f2c_abs(r__2));
+        if(s == 0.f)
         {
             v[1] = 0.f;
             v[2] = 0.f;
@@ -152,14 +163,16 @@ void slaqr1_(integer *n, real *h__, integer *ldh, real *sr1, real *si1, real *sr
         else
         {
             h21s = h__[h_dim1 + 2] / s;
-            v[1] = h21s * h__[(h_dim1 << 1) + 1] + (h__[h_dim1 + 1] - *sr1) * ((h__[h_dim1 + 1] - *sr2) / s) - *si1 * (*si2 / s);
-            v[2] = h21s * (h__[h_dim1 + 1] + h__[(h_dim1 << 1) + 2] - *sr1 - * sr2);
+            v[1] = h21s * h__[(h_dim1 << 1) + 1]
+                   + (h__[h_dim1 + 1] - *sr1) * ((h__[h_dim1 + 1] - *sr2) / s) - *si1 * (*si2 / s);
+            v[2] = h21s * (h__[h_dim1 + 1] + h__[(h_dim1 << 1) + 2] - *sr1 - *sr2);
         }
     }
     else
     {
-        s = (r__1 = h__[h_dim1 + 1] - *sr2, f2c_abs(r__1)) + f2c_abs(*si2) + (r__2 = h__[h_dim1 + 2], f2c_abs(r__2)) + (r__3 = h__[h_dim1 + 3], f2c_abs( r__3));
-        if (s == 0.f)
+        s = (r__1 = h__[h_dim1 + 1] - *sr2, f2c_abs(r__1)) + f2c_abs(*si2)
+            + (r__2 = h__[h_dim1 + 2], f2c_abs(r__2)) + (r__3 = h__[h_dim1 + 3], f2c_abs(r__3));
+        if(s == 0.f)
         {
             v[1] = 0.f;
             v[2] = 0.f;
@@ -169,9 +182,12 @@ void slaqr1_(integer *n, real *h__, integer *ldh, real *sr1, real *si1, real *sr
         {
             h21s = h__[h_dim1 + 2] / s;
             h31s = h__[h_dim1 + 3] / s;
-            v[1] = (h__[h_dim1 + 1] - *sr1) * ((h__[h_dim1 + 1] - *sr2) / s) - *si1 * (*si2 / s) + h__[(h_dim1 << 1) + 1] * h21s + h__[ h_dim1 * 3 + 1] * h31s;
-            v[2] = h21s * (h__[h_dim1 + 1] + h__[(h_dim1 << 1) + 2] - *sr1 - * sr2) + h__[h_dim1 * 3 + 2] * h31s;
-            v[3] = h31s * (h__[h_dim1 + 1] + h__[h_dim1 * 3 + 3] - *sr1 - * sr2) + h21s * h__[(h_dim1 << 1) + 3];
+            v[1] = (h__[h_dim1 + 1] - *sr1) * ((h__[h_dim1 + 1] - *sr2) / s) - *si1 * (*si2 / s)
+                   + h__[(h_dim1 << 1) + 1] * h21s + h__[h_dim1 * 3 + 1] * h31s;
+            v[2] = h21s * (h__[h_dim1 + 1] + h__[(h_dim1 << 1) + 2] - *sr1 - *sr2)
+                   + h__[h_dim1 * 3 + 2] * h31s;
+            v[3] = h31s * (h__[h_dim1 + 1] + h__[h_dim1 * 3 + 3] - *sr1 - *sr2)
+                   + h21s * h__[(h_dim1 << 1) + 3];
         }
     }
     return;

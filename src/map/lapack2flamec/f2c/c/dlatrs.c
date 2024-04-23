@@ -1,9 +1,13 @@
-/* dlatrs.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dlatrs.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static doublereal c_b46 = .5;
-/* > \brief \b DLATRS solves a triangular system of equations with the scale factor set to prevent overflow. */
+/* > \brief \b DLATRS solves a triangular system of equations with the scale factor set to prevent
+ * overflow. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -236,10 +240,13 @@ b(i), i=1,..,n}
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, doublereal *a, integer *lda, doublereal *x, doublereal *scale, doublereal *cnorm, integer *info)
+void dlatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, doublereal *a,
+             integer *lda, doublereal *x, doublereal *scale, doublereal *cnorm, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlatrs inputs: uplo %c, trans %c, diag %c, normin %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *trans, *diag, *normin, *n, *lda);
+    AOCL_DTL_SNPRINTF("dlatrs inputs: uplo %c, trans %c, diag %c, normin %c, n %" FLA_IS
+                      ", lda %" FLA_IS "",
+                      *uplo, *trans, *diag, *normin, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1, d__2, d__3;
@@ -251,20 +258,25 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
     integer imax;
     doublereal tmax, tjjs, xmax, grow, sumj;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     doublereal tscal, uscal;
     extern doublereal dasum_(integer *, doublereal *, integer *);
     integer jlast;
     extern /* Subroutine */
-    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-    void dtrsv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *);
-    extern doublereal dlamch_(char *), dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
+        void
+        dtrsv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *);
+    extern doublereal dlamch_(char *),
+        dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical notran;
     aocl_int64_t jfirst;
@@ -304,19 +316,19 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
     nounit = lsame_(diag, "N", 1, 1);
     tjjs = 0.;
     /* Test the input parameters. */
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
-    else if (! lsame_(normin, "Y", 1, 1) && ! lsame_(normin, "N", 1, 1))
+    else if(!lsame_(normin, "Y", 1, 1) && !lsame_(normin, "N", 1, 1))
     {
         *info = -4;
     }
@@ -324,7 +336,7 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -7;
     }
@@ -332,20 +344,20 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
     {
         i__1 = -(*info);
         xerbla_("DLATRS", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     *scale = 1.;
-    if (*n == 0)
+    if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine machine dependent parameters to control overflow. */
     smlnum = dlamch_("Safe minimum") / dlamch_("Precision");
     bignum = 1. / smlnum;
-    if (lsame_(normin, "N", 1, 1))
+    if(lsame_(normin, "N", 1, 1))
     {
         /* Compute the 1-norm of each column, not including the diagonal. */
         if(upper)
@@ -384,7 +396,7 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
     {
         /* Avoid NaN generation if entries in CNORM exceed the */
         /* overflow threshold */
-        if (tmax <= dlamch_("Overflow"))
+        if(tmax <= dlamch_("Overflow"))
         {
             /* Case 1: All entries in CNORM are valid floating-point numbers */
             tscal = 1. / (smlnum * tmax);
@@ -397,43 +409,37 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
             /* with the largest absolute value. If this entry is not +/- Infinity, */
             /* use this value as TSCAL. */
             tmax = 0.;
-            if (upper)
+            if(upper)
             {
                 /* A is upper triangular. */
                 i__1 = *n;
-                for (j = 2;
-                        j <= i__1;
-                        ++j)
+                for(j = 2; j <= i__1; ++j)
                 {
                     /* Computing MAX */
                     i__2 = j - 1;
-                    d__1 = dlange_("M", &i__2, &c__1, &a[j * a_dim1 + 1], & c__1, &sumj);
-                    tmax = fla_max(d__1,tmax);
+                    d__1 = dlange_("M", &i__2, &c__1, &a[j * a_dim1 + 1], &c__1, &sumj);
+                    tmax = fla_max(d__1, tmax);
                 }
             }
             else
             {
                 /* A is lower triangular. */
                 i__1 = *n - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     /* Computing MAX */
                     i__2 = *n - j;
                     d__1 = dlange_("M", &i__2, &c__1, &a[j + 1 + j * a_dim1], &c__1, &sumj);
-                    tmax = fla_max(d__1,tmax);
+                    tmax = fla_max(d__1, tmax);
                 }
             }
-            if (tmax <= dlamch_("Overflow"))
+            if(tmax <= dlamch_("Overflow"))
             {
                 tscal = 1. / (smlnum * tmax);
                 i__1 = *n;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
-                    if (cnorm[j] <= dlamch_("Overflow"))
+                    if(cnorm[j] <= dlamch_("Overflow"))
                     {
                         cnorm[j] *= tscal;
                     }
@@ -442,12 +448,10 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
                         /* Recompute the 1-norm without introducing Infinity */
                         /* in the summation */
                         cnorm[j] = 0.;
-                        if (upper)
+                        if(upper)
                         {
                             i__2 = j - 1;
-                            for (i__ = 1;
-                                    i__ <= i__2;
-                                    ++i__)
+                            for(i__ = 1; i__ <= i__2; ++i__)
                             {
                                 cnorm[j] += tscal * (d__1 = a[i__ + j * a_dim1], f2c_dabs(d__1));
                             }
@@ -455,9 +459,7 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
                         else
                         {
                             i__2 = *n;
-                            for (i__ = j + 1;
-                                    i__ <= i__2;
-                                    ++i__)
+                            for(i__ = j + 1; i__ <= i__2; ++i__)
                             {
                                 cnorm[j] += tscal * (d__1 = a[i__ + j * a_dim1], f2c_dabs(d__1));
                             }
@@ -470,7 +472,7 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
                 /* At least one entry of A is not a valid floating-point entry. */
                 /* Rely on TRSV to propagate Inf and NaN. */
                 dtrsv_(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1);
-    AOCL_DTL_TRACE_LOG_EXIT
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
         }
@@ -507,7 +509,7 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
             /* Initially, G(0) = max{
             x(i), i=1,...,n}
             . */
-            grow = 1. / fla_max(xbnd,smlnum);
+            grow = 1. / fla_max(xbnd, smlnum);
             xbnd = grow;
             i__1 = jlast;
             i__2 = jinc;
@@ -522,9 +524,9 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
                 tjj = (d__1 = a[j + j * a_dim1], f2c_dabs(d__1));
                 /* Computing MIN */
                 d__1 = xbnd;
-                d__2 = fla_min(1.,tjj) * grow; // , expr subst
-                xbnd = fla_min(d__1,d__2);
-                if (tjj + cnorm[j] >= smlnum)
+                d__2 = fla_min(1., tjj) * grow; // , expr subst
+                xbnd = fla_min(d__1, d__2);
+                if(tjj + cnorm[j] >= smlnum)
                 {
                     /* G(j) = G(j-1)*( 1 + CNORM(j) / f2c_dabs(A(j,j)) ) */
                     grow *= tjj / (tjj + cnorm[j]);
@@ -546,8 +548,8 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
            . */
             /* Computing MIN */
             d__1 = 1.;
-            d__2 = 1. / fla_max(xbnd,smlnum); // , expr subst
-            grow = fla_min(d__1,d__2);
+            d__2 = 1. / fla_max(xbnd, smlnum); // , expr subst
+            grow = fla_min(d__1, d__2);
             i__2 = jlast;
             i__1 = jinc;
             for(j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1)
@@ -591,7 +593,7 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
             /* Initially, M(0) = max{
             x(i), i=1,...,n}
             . */
-            grow = 1. / fla_max(xbnd,smlnum);
+            grow = 1. / fla_max(xbnd, smlnum);
             xbnd = grow;
             i__1 = jlast;
             i__2 = jinc;
@@ -607,16 +609,16 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
                 /* Computing MIN */
                 d__1 = grow;
                 d__2 = xbnd / xj; // , expr subst
-                grow = fla_min(d__1,d__2);
+                grow = fla_min(d__1, d__2);
                 /* M(j) = M(j-1)*( 1 + CNORM(j) ) / f2c_dabs(A(j,j)) */
                 tjj = (d__1 = a[j + j * a_dim1], f2c_dabs(d__1));
-                if (xj > tjj)
+                if(xj > tjj)
                 {
                     xbnd *= tjj / xj;
                 }
                 /* L60: */
             }
-            grow = fla_min(grow,xbnd);
+            grow = fla_min(grow, xbnd);
         }
         else
         {
@@ -626,8 +628,8 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
            . */
             /* Computing MIN */
             d__1 = 1.;
-            d__2 = 1. / fla_max(xbnd,smlnum); // , expr subst
-            grow = fla_min(d__1,d__2);
+            d__2 = 1. / fla_max(xbnd, smlnum); // , expr subst
+            grow = fla_min(d__1, d__2);
             i__2 = jlast;
             i__1 = jinc;
             for(j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1)
@@ -671,7 +673,7 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
             {
                 /* Compute x(j) = b(j) / A(j,j), scaling x if necessary. */
                 xj = (d__1 = x[j], f2c_dabs(d__1));
-                if (nounit)
+                if(nounit)
                 {
                     tjjs = a[j + j * a_dim1] * tscal;
                 }
@@ -684,10 +686,10 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
                     }
                 }
                 tjj = f2c_dabs(tjjs);
-                if (tjj > smlnum)
+                if(tjj > smlnum)
                 {
                     /* f2c_dabs(A(j,j)) > SMLNUM: */
-                    if (tjj < 1.)
+                    if(tjj < 1.)
                     {
                         if(xj > tjj * bignum)
                         {
@@ -704,7 +706,7 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
                 else if(tjj > 0.)
                 {
                     /* 0 < f2c_dabs(A(j,j)) <= SMLNUM: */
-                    if (xj > tjj * bignum)
+                    if(xj > tjj * bignum)
                     {
                         /* Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM */
                         /* to avoid overflow when dividing by A(j,j). */
@@ -778,8 +780,7 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
                         /* x(j+1:n) := x(j+1:n) - x(j) * A(j+1:n,j) */
                         i__3 = *n - j;
                         d__1 = -x[j] * tscal;
-                        aocl_blas_daxpy(&i__3, &d__1, &a[j + 1 + j * a_dim1], &c__1, &x[j + 1],
-                                        &c__1);
+                        daxpy_(&i__3, &d__1, &a[j + 1 + j * a_dim1], &c__1, &x[j + 1], &c__1);
                         i__3 = *n - j;
                         i__ = j + idamax_(&i__3, &x[j + 1], &c__1);
                         xmax = (d__1 = x[i__], f2c_dabs(d__1));
@@ -799,8 +800,8 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
                 /* k<>j */
                 xj = (d__1 = x[j], f2c_dabs(d__1));
                 uscal = tscal;
-                rec = 1. / fla_max(xmax,1.);
-                if (cnorm[j] > (bignum - xj) * rec)
+                rec = 1. / fla_max(xmax, 1.);
+                if(cnorm[j] > (bignum - xj) * rec)
                 {
                     /* If x(j) could overflow, scale x by 1/(2*XMAX). */
                     rec *= .5;
@@ -813,13 +814,13 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
                         tjjs = tscal;
                     }
                     tjj = f2c_dabs(tjjs);
-                    if (tjj > 1.)
+                    if(tjj > 1.)
                     {
                         /* Divide by A(j,j) when scaling x if A(j,j) > 1. */
                         /* Computing MIN */
                         d__1 = 1.;
                         d__2 = rec * tjj; // , expr subst
-                        rec = fla_min(d__1,d__2);
+                        rec = fla_min(d__1, d__2);
                         uscal /= tjjs;
                     }
                     if(rec < 1.)
@@ -842,8 +843,7 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
                     else if(j < *n)
                     {
                         i__3 = *n - j;
-                        sumj = aocl_blas_ddot(&i__3, &a[j + 1 + j * a_dim1], &c__1, &x[j + 1],
-                                              &c__1);
+                        sumj = ddot_(&i__3, &a[j + 1 + j * a_dim1], &c__1, &x[j + 1], &c__1);
                     }
                 }
                 else
@@ -874,7 +874,7 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
                     /* was not used to scale the dotproduct. */
                     x[j] -= sumj;
                     xj = (d__1 = x[j], f2c_dabs(d__1));
-                    if (nounit)
+                    if(nounit)
                     {
                         tjjs = a[j + j * a_dim1] * tscal;
                     }
@@ -888,10 +888,10 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
                     }
                     /* Compute x(j) = x(j) / A(j,j), scaling if necessary. */
                     tjj = f2c_dabs(tjjs);
-                    if (tjj > smlnum)
+                    if(tjj > smlnum)
                     {
                         /* f2c_dabs(A(j,j)) > SMLNUM: */
-                        if (tjj < 1.)
+                        if(tjj < 1.)
                         {
                             if(xj > tjj * bignum)
                             {
@@ -907,7 +907,7 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
                     else if(tjj > 0.)
                     {
                         /* 0 < f2c_dabs(A(j,j)) <= SMLNUM: */
-                        if (xj > tjj * bignum)
+                        if(xj > tjj * bignum)
                         {
                             /* Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM. */
                             rec = tjj * bignum / xj;
@@ -942,7 +942,7 @@ void dlatrs_(char *uplo, char *trans, char *diag, char * normin, integer *n, dou
                 /* Computing MAX */
                 d__2 = xmax;
                 d__3 = (d__1 = x[j], f2c_dabs(d__1)); // , expr subst
-                xmax = fla_max(d__2,d__3);
+                xmax = fla_max(d__2, d__3);
                 /* L160: */
             }
         }

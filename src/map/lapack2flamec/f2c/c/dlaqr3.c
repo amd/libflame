@@ -1,15 +1,15 @@
-/* ./dlaqr3.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlaqr3.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 static logical c_true = TRUE_;
 static doublereal c_b17 = 0.;
 static doublereal c_b18 = 1.;
-static aocl_int64_t c__12 = 12;
+static integer c__12 = 12;
 /* > \brief \b DLAQR3 performs the orthogonal similarity transformation of a Hessenberg matrix to
  * detect and d eflate fully converged eigenvalues from a trailing principal submatrix (aggressive
  * early deflation). */
@@ -277,12 +277,20 @@ DLAQR3 */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw, doublereal *h__, integer * ldh, integer *iloz, integer *ihiz, doublereal *z__, integer *ldz, integer *ns, integer *nd, doublereal *sr, doublereal *si, doublereal * v, integer *ldv, integer *nh, doublereal *t, integer *ldt, integer * nv, doublereal *wv, integer *ldwv, doublereal *work, integer *lwork)
+void dlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw,
+             doublereal *h__, integer *ldh, integer *iloz, integer *ihiz, doublereal *z__,
+             integer *ldz, integer *ns, integer *nd, doublereal *sr, doublereal *si, doublereal *v,
+             integer *ldv, integer *nh, doublereal *t, integer *ldt, integer *nv, doublereal *wv,
+             integer *ldwv, doublereal *work, integer *lwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaqr3 inputs: n %" FLA_IS ", ktop %" FLA_IS ", kbot %" FLA_IS ", nw %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS ", ldv %" FLA_IS ", nh %" FLA_IS ", ldt %" FLA_IS ", nv %" FLA_IS ", ldwv %" FLA_IS ", lwork %" FLA_IS "",*n, *ktop, *kbot, *nw, *ldh, *iloz, *ihiz, *ldz, *ldv, *nh, *ldt, *nv, *ldwv, *lwork);
+    AOCL_DTL_SNPRINTF(
+        "dlaqr3 inputs: n %" FLA_IS ", ktop %" FLA_IS ", kbot %" FLA_IS ", nw %" FLA_IS
+        ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS ", ldv %" FLA_IS
+        ", nh %" FLA_IS ", ldt %" FLA_IS ", nv %" FLA_IS ", ldwv %" FLA_IS ", lwork %" FLA_IS "",
+        *n, *ktop, *kbot, *nw, *ldh, *iloz, *ihiz, *ldz, *ldv, *nh, *ldt, *nv, *ldwv, *lwork);
     /* System generated locals */
-    aocl_int64_t h_dim1, h_offset, t_dim1, t_offset, v_dim1, v_offset, wv_dim1, wv_offset, z_dim1,
+    integer h_dim1, h_offset, t_dim1, t_offset, v_dim1, v_offset, wv_dim1, wv_offset, z_dim1,
         z_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6;
     /* Builtin functions */
@@ -298,21 +306,44 @@ void dlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     doublereal beta;
     integer kend, kcol, info, nmin, ifst, ilst, ltop, krow;
     extern /* Subroutine */
-    void dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *),
+        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     logical bulge;
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer infqr, kwtop;
     extern /* Subroutine */
-    void dlanv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlaqr4_( logical *, logical *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dlabad_(doublereal *, doublereal *);
+        void
+        dlanv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *, doublereal *, doublereal *, doublereal *),
+        dlaqr4_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, doublereal *, integer *, integer *, doublereal *, integer *,
+                doublereal *, integer *, integer *),
+        dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    void dgehrd_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *), dlahqr_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dgehrd_(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, integer *, integer *),
+        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *),
+        dlahqr_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, doublereal *, integer *, integer *, doublereal *, integer *,
+                integer *),
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal safmin;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     doublereal safmax;
     extern /* Subroutine */
-    void dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dtrexc_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *), dormhr_(char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
+        dtrexc_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *,
+                integer *, doublereal *, integer *),
+        dormhr_(char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     logical sorted;
     doublereal smlnum;
     aocl_int64_t lwkopt;
@@ -359,8 +390,8 @@ void dlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     /* Computing MIN */
     i__1 = *nw;
     i__2 = *kbot - *ktop + 1; // , expr subst
-    jw = fla_min(i__1,i__2);
-    if (jw <= 2)
+    jw = fla_min(i__1, i__2);
+    if(jw <= 2)
     {
         lwkopt = 1;
     }
@@ -368,26 +399,26 @@ void dlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     {
         /* ==== Workspace query call to DGEHRD ==== */
         i__1 = jw - 1;
-        aocl_lapack_dgehrd(&jw, &c__1, &i__1, &t[t_offset], ldt, &work[1], &work[1], &c_n1, &info);
+        dgehrd_(&jw, &c__1, &i__1, &t[t_offset], ldt, &work[1], &work[1], &c_n1, &info);
         lwk1 = (integer)work[1];
         /* ==== Workspace query call to DORMHR ==== */
         i__1 = jw - 1;
-        aocl_lapack_dormhr("R", "N", &jw, &jw, &c__1, &i__1, &t[t_offset], ldt, &work[1],
-                           &v[v_offset], ldv, &work[1], &c_n1, &info);
+        dormhr_("R", "N", &jw, &jw, &c__1, &i__1, &t[t_offset], ldt, &work[1], &v[v_offset], ldv,
+                &work[1], &c_n1, &info);
         lwk2 = (integer)work[1];
         /* ==== Workspace query call to DLAQR4 ==== */
-        aocl_lapack_dlaqr4(&c_true, &c_true, &jw, &c__1, &jw, &t[t_offset], ldt, &sr[1], &si[1],
-                           &c__1, &jw, &v[v_offset], ldv, &work[1], &c_n1, &infqr);
+        dlaqr4_(&c_true, &c_true, &jw, &c__1, &jw, &t[t_offset], ldt, &sr[1], &si[1], &c__1, &jw,
+                &v[v_offset], ldv, &work[1], &c_n1, &infqr);
         lwk3 = (integer)work[1];
         /* ==== Optimal workspace ==== */
         /* Computing MAX */
-        i__1 = jw + fla_max(lwk1,lwk2);
-        lwkopt = fla_max(i__1,lwk3);
+        i__1 = jw + fla_max(lwk1, lwk2);
+        lwkopt = fla_max(i__1, lwk3);
     }
     /* ==== Quick return in case of workspace query. ==== */
     if(*lwork == -1)
     {
-        work[1] = (doublereal) lwkopt;
+        work[1] = (doublereal)lwkopt;
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -415,7 +446,7 @@ void dlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     /* Computing MIN */
     i__1 = *nw;
     i__2 = *kbot - *ktop + 1; // , expr subst
-    jw = fla_min(i__1,i__2);
+    jw = fla_min(i__1, i__2);
     kwtop = *kbot - jw + 1;
     if(kwtop == *ktop)
     {
@@ -434,8 +465,8 @@ void dlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
         *nd = 0;
         /* Computing MAX */
         d__2 = smlnum;
-        d__3 = ulp * (d__1 = h__[kwtop + kwtop * h_dim1], f2c_dabs( d__1)); // , expr subst
-        if (f2c_dabs(s) <= fla_max(d__2,d__3))
+        d__3 = ulp * (d__1 = h__[kwtop + kwtop * h_dim1], f2c_dabs(d__1)); // , expr subst
+        if(f2c_dabs(s) <= fla_max(d__2, d__3))
         {
             *ns = 0;
             *nd = 1;
@@ -457,18 +488,18 @@ void dlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     i__1 = jw - 1;
     i__2 = *ldh + 1;
     i__3 = *ldt + 1;
-    aocl_blas_dcopy(&i__1, &h__[kwtop + 1 + kwtop * h_dim1], &i__2, &t[t_dim1 + 2], &i__3);
-    aocl_lapack_dlaset("A", &jw, &jw, &c_b17, &c_b18, &v[v_offset], ldv);
-    nmin = aocl_lapack_ilaenv(&c__12, "DLAQR3", "SV", &jw, &c__1, &jw, lwork);
+    dcopy_(&i__1, &h__[kwtop + 1 + kwtop * h_dim1], &i__2, &t[t_dim1 + 2], &i__3);
+    dlaset_("A", &jw, &jw, &c_b17, &c_b18, &v[v_offset], ldv);
+    nmin = ilaenv_(&c__12, "DLAQR3", "SV", &jw, &c__1, &jw, lwork);
     if(jw > nmin)
     {
-        aocl_lapack_dlaqr4(&c_true, &c_true, &jw, &c__1, &jw, &t[t_offset], ldt, &sr[kwtop],
-                           &si[kwtop], &c__1, &jw, &v[v_offset], ldv, &work[1], lwork, &infqr);
+        dlaqr4_(&c_true, &c_true, &jw, &c__1, &jw, &t[t_offset], ldt, &sr[kwtop], &si[kwtop], &c__1,
+                &jw, &v[v_offset], ldv, &work[1], lwork, &infqr);
     }
     else
     {
-        aocl_lapack_dlahqr(&c_true, &c_true, &jw, &c__1, &jw, &t[t_offset], ldt, &sr[kwtop],
-                           &si[kwtop], &c__1, &jw, &v[v_offset], ldv, &infqr);
+        dlahqr_(&c_true, &c_true, &jw, &c__1, &jw, &t[t_offset], ldt, &sr[kwtop], &si[kwtop], &c__1,
+                &jw, &v[v_offset], ldv, &infqr);
     }
     /* ==== DTREXC needs a clean margin near the diagonal ==== */
     i__1 = jw - 3;
@@ -501,14 +532,14 @@ L20:
         {
             /* ==== Real eigenvalue ==== */
             foo = (d__1 = t[*ns + *ns * t_dim1], f2c_dabs(d__1));
-            if (foo == 0.)
+            if(foo == 0.)
             {
                 foo = f2c_dabs(s);
             }
             /* Computing MAX */
             d__2 = smlnum;
             d__3 = ulp * foo; // , expr subst
-            if ((d__1 = s * v[*ns * v_dim1 + 1], f2c_dabs(d__1)) <= fla_max(d__2,d__3))
+            if((d__1 = s * v[*ns * v_dim1 + 1], f2c_dabs(d__1)) <= fla_max(d__2, d__3))
             {
                 /* ==== Deflatable ==== */
                 --(*ns);
@@ -518,16 +549,18 @@ L20:
                 /* ==== Undeflatable. Move it up out of the way. */
                 /* . (DTREXC can not fail in this case.) ==== */
                 ifst = *ns;
-                aocl_lapack_dtrexc("V", &jw, &t[t_offset], ldt, &v[v_offset], ldv, &ifst, &ilst,
-                                   &work[1], &info);
+                dtrexc_("V", &jw, &t[t_offset], ldt, &v[v_offset], ldv, &ifst, &ilst, &work[1],
+                        &info);
                 ++ilst;
             }
         }
         else
         {
             /* ==== Complex conjugate pair ==== */
-            foo = (d__3 = t[*ns + *ns * t_dim1], f2c_dabs(d__3)) + sqrt((d__1 = t[* ns + (*ns - 1) * t_dim1], f2c_dabs(d__1))) * sqrt((d__2 = t[* ns - 1 + *ns * t_dim1], f2c_dabs(d__2)));
-            if (foo == 0.)
+            foo = (d__3 = t[*ns + *ns * t_dim1], f2c_dabs(d__3))
+                  + sqrt((d__1 = t[*ns + (*ns - 1) * t_dim1], f2c_dabs(d__1)))
+                        * sqrt((d__2 = t[*ns - 1 + *ns * t_dim1], f2c_dabs(d__2)));
+            if(foo == 0.)
             {
                 foo = f2c_dabs(s);
             }
@@ -537,7 +570,7 @@ L20:
             /* Computing MAX */
             d__5 = smlnum;
             d__6 = ulp * foo; // , expr subst
-            if (fla_max(d__3,d__4) <= fla_max(d__5,d__6))
+            if(fla_max(d__3, d__4) <= fla_max(d__5, d__6))
             {
                 /* ==== Deflatable ==== */
                 *ns += -2;
@@ -548,8 +581,8 @@ L20:
                 /* . Fortunately, DTREXC does the right thing with */
                 /* . ILST in case of a rare exchange failure. ==== */
                 ifst = *ns;
-                aocl_lapack_dtrexc("V", &jw, &t[t_offset], ldt, &v[v_offset], ldv, &ifst, &ilst,
-                                   &work[1], &info);
+                dtrexc_("V", &jw, &t[t_offset], ldt, &v[v_offset], ldv, &ifst, &ilst, &work[1],
+                        &info);
                 ilst += 2;
             }
         }
@@ -597,7 +630,9 @@ L20:
             }
             else
             {
-                evi = (d__3 = t[i__ + i__ * t_dim1], f2c_dabs(d__3)) + sqrt((d__1 = t[i__ + 1 + i__ * t_dim1], f2c_dabs(d__1))) * sqrt((d__2 = t[i__ + (i__ + 1) * t_dim1], f2c_dabs(d__2)));
+                evi = (d__3 = t[i__ + i__ * t_dim1], f2c_dabs(d__3))
+                      + sqrt((d__1 = t[i__ + 1 + i__ * t_dim1], f2c_dabs(d__1)))
+                            * sqrt((d__2 = t[i__ + (i__ + 1) * t_dim1], f2c_dabs(d__2)));
             }
             if(k == kend)
             {
@@ -609,7 +644,9 @@ L20:
             }
             else
             {
-                evk = (d__3 = t[k + k * t_dim1], f2c_dabs(d__3)) + sqrt((d__1 = t[ k + 1 + k * t_dim1], f2c_dabs(d__1))) * sqrt((d__2 = t[k + (k + 1) * t_dim1], f2c_dabs(d__2)));
+                evk = (d__3 = t[k + k * t_dim1], f2c_dabs(d__3))
+                      + sqrt((d__1 = t[k + 1 + k * t_dim1], f2c_dabs(d__1)))
+                            * sqrt((d__2 = t[k + (k + 1) * t_dim1], f2c_dabs(d__2)));
             }
             if(evi >= evk)
             {
@@ -620,8 +657,8 @@ L20:
                 sorted = FALSE_;
                 ifst = i__;
                 ilst = k;
-                aocl_lapack_dtrexc("V", &jw, &t[t_offset], ldt, &v[v_offset], ldv, &ifst, &ilst,
-                                   &work[1], &info);
+                dtrexc_("V", &jw, &t[t_offset], ldt, &v[v_offset], ldv, &ifst, &ilst, &work[1],
+                        &info);
                 if(info == 0)
                 {
                     i__ = ilst;
@@ -688,12 +725,10 @@ L60:
             work[1] = 1.;
             i__1 = jw - 2;
             i__2 = jw - 2;
-            aocl_lapack_dlaset("L", &i__1, &i__2, &c_b17, &c_b17, &t[t_dim1 + 3], ldt);
-            aocl_lapack_dlarf("L", ns, &jw, &work[1], &c__1, &tau, &t[t_offset], ldt,
-                              &work[jw + 1]);
-            aocl_lapack_dlarf("R", ns, ns, &work[1], &c__1, &tau, &t[t_offset], ldt, &work[jw + 1]);
-            aocl_lapack_dlarf("R", &jw, ns, &work[1], &c__1, &tau, &v[v_offset], ldv,
-                              &work[jw + 1]);
+            dlaset_("L", &i__1, &i__2, &c_b17, &c_b17, &t[t_dim1 + 3], ldt);
+            dlarf_("L", ns, &jw, &work[1], &c__1, &tau, &t[t_offset], ldt, &work[jw + 1]);
+            dlarf_("R", ns, ns, &work[1], &c__1, &tau, &t[t_offset], ldt, &work[jw + 1]);
+            dlarf_("R", &jw, ns, &work[1], &c__1, &tau, &v[v_offset], ldv, &work[jw + 1]);
             i__1 = *lwork - jw;
             dgehrd_(&jw, &c__1, ns, &t[t_offset], ldt, &work[1], &work[jw + 1], &i__1, &info);
         }
@@ -712,8 +747,8 @@ L60:
         if(*ns > 1 && s != 0.)
         {
             i__1 = *lwork - jw;
-            aocl_lapack_dormhr("R", "N", &jw, ns, &c__1, ns, &t[t_offset], ldt, &work[1],
-                               &v[v_offset], ldv, &work[jw + 1], &i__1, &info);
+            dormhr_("R", "N", &jw, ns, &c__1, ns, &t[t_offset], ldt, &work[1], &v[v_offset], ldv,
+                    &work[jw + 1], &i__1, &info);
         }
         /* ==== Update vertical slab in H ==== */
         if(*wantt)
@@ -731,8 +766,9 @@ L60:
             /* Computing MIN */
             i__3 = *nv;
             i__4 = kwtop - krow; // , expr subst
-            kln = fla_min(i__3,i__4);
-            dgemm_("N", "N", &kln, &jw, &jw, &c_b18, &h__[krow + kwtop * h_dim1], ldh, &v[v_offset], ldv, &c_b17, &wv[wv_offset], ldwv);
+            kln = fla_min(i__3, i__4);
+            dgemm_("N", "N", &kln, &jw, &jw, &c_b18, &h__[krow + kwtop * h_dim1], ldh, &v[v_offset],
+                   ldv, &c_b17, &wv[wv_offset], ldwv);
             dlacpy_("A", &kln, &jw, &wv[wv_offset], ldwv, &h__[krow + kwtop * h_dim1], ldh);
             /* L70: */
         }
@@ -746,8 +782,9 @@ L60:
                 /* Computing MIN */
                 i__3 = *nh;
                 i__4 = *n - kcol + 1; // , expr subst
-                kln = fla_min(i__3,i__4);
-                dgemm_("C", "N", &jw, &kln, &jw, &c_b18, &v[v_offset], ldv, & h__[kwtop + kcol * h_dim1], ldh, &c_b17, &t[t_offset], ldt);
+                kln = fla_min(i__3, i__4);
+                dgemm_("C", "N", &jw, &kln, &jw, &c_b18, &v[v_offset], ldv,
+                       &h__[kwtop + kcol * h_dim1], ldh, &c_b17, &t[t_offset], ldt);
                 dlacpy_("A", &jw, &kln, &t[t_offset], ldt, &h__[kwtop + kcol * h_dim1], ldh);
                 /* L80: */
             }
@@ -762,8 +799,9 @@ L60:
                 /* Computing MIN */
                 i__3 = *nv;
                 i__4 = *ihiz - krow + 1; // , expr subst
-                kln = fla_min(i__3,i__4);
-                dgemm_("N", "N", &kln, &jw, &jw, &c_b18, &z__[krow + kwtop * z_dim1], ldz, &v[v_offset], ldv, &c_b17, &wv[ wv_offset], ldwv);
+                kln = fla_min(i__3, i__4);
+                dgemm_("N", "N", &kln, &jw, &jw, &c_b18, &z__[krow + kwtop * z_dim1], ldz,
+                       &v[v_offset], ldv, &c_b17, &wv[wv_offset], ldwv);
                 dlacpy_("A", &kln, &jw, &wv[wv_offset], ldwv, &z__[krow + kwtop * z_dim1], ldz);
                 /* L90: */
             }

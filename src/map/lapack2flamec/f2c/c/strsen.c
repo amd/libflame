@@ -1,8 +1,8 @@
-/* ./strsen.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/strsen.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c_n1 = -1;
 /* > \brief \b STRSEN */
@@ -194,9 +194,9 @@ and if COMPQ = 'V', LDQ >= N. */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If JOB = 'N', LWORK >= fla_max(1,N);
-*/
+ */
 /* > if JOB = 'E', LWORK >= fla_max(1,M*(N-M));
-*/
+ */
 /* > if JOB = 'V' or 'B', LWORK >= fla_max(1,2*M*(N-M)). */
 /* > */
 /* > If LWORK = -1, then a workspace query is assumed;
@@ -217,7 +217,7 @@ the routine */
 /* > LIWORK is INTEGER */
 /* > The dimension of the array IWORK. */
 /* > If JOB = 'N' or 'E', LIWORK >= 1;
-*/
+ */
 /* > if JOB = 'V' or 'B', LIWORK >= fla_max(1,M*(N-M)). */
 /* > */
 /* > If LIWORK = -1, then a workspace query is assumed;
@@ -324,12 +324,17 @@ S and */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integer *ldt, real *q, integer *ldq, real *wr, real *wi, integer *m, real *s, real *sep, real *work, integer *lwork, integer * iwork, integer *liwork, integer *info)
+void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integer *ldt, real *q,
+             integer *ldq, real *wr, real *wi, integer *m, real *s, real *sep, real *work,
+             integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"strsen inputs: job %c, compq %c, n %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*job, *compq, *n, *ldt, *ldq, *lwork, *liwork);
+    snprintf(buffer, 256,
+             "strsen inputs: job %c, compq %c, n %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS
+             ", lwork %" FLA_IS ", liwork %" FLA_IS "",
+             *job, *compq, *n, *ldt, *ldq, *lwork, *liwork);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -350,19 +355,26 @@ void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integ
     logical wantq, wants;
     real rnorm;
     extern /* Subroutine */
-    void slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical wantbh;
     extern /* Subroutine */
-    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+        void
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     integer liwmin;
     extern /* Subroutine */
-    void strexc_(char *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *);
+        void
+        strexc_(char *, integer *, real *, integer *, real *, integer *, integer *, integer *,
+                real *, integer *);
     logical wantsp, lquery;
     extern /* Subroutine */
-    void strsyl_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
+        void
+        strsyl_(char *, char *, integer *, integer *, integer *, real *, integer *, real *,
+                integer *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -406,11 +418,11 @@ void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integ
     lquery = *lwork == -1;
     liwmin = 0;
     lwmin = 0;
-    if (! lsame_(job, "N", 1, 1) && ! wants && ! wantsp)
+    if(!lsame_(job, "N", 1, 1) && !wants && !wantsp)
     {
         *info = -1;
     }
-    else if (! lsame_(compq, "N", 1, 1) && ! wantq)
+    else if(!lsame_(compq, "N", 1, 1) && !wantq)
     {
         *info = -2;
     }
@@ -418,7 +430,7 @@ void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integ
     {
         *info = -4;
     }
-    else if (*ldt < fla_max(1,*n))
+    else if(*ldt < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -477,17 +489,17 @@ void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integ
             /* Computing MAX */
             i__1 = 1;
             i__2 = nn << 1; // , expr subst
-            lwmin = fla_max(i__1,i__2);
-            liwmin = fla_max(1,nn);
+            lwmin = fla_max(i__1, i__2);
+            liwmin = fla_max(1, nn);
         }
-        else if (lsame_(job, "N", 1, 1))
+        else if(lsame_(job, "N", 1, 1))
         {
-            lwmin = fla_max(1,*n);
+            lwmin = fla_max(1, *n);
             liwmin = 1;
         }
-        else if (lsame_(job, "E", 1, 1))
+        else if(lsame_(job, "E", 1, 1))
         {
-            lwmin = fla_max(1,nn);
+            lwmin = fla_max(1, nn);
             liwmin = 1;
         }
         if(*lwork < lwmin && !lquery)
@@ -501,8 +513,8 @@ void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integ
     }
     if(*info == 0)
     {
-        work[1] = aocl_lapack_sroundup_lwork(&lwmin);
-        iwork[1] = (aocl_int_t)(liwmin);
+        work[1] = (real)lwmin;
+        iwork[1] = liwmin;
     }
     if(*info != 0)
     {
@@ -558,8 +570,8 @@ void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integ
                 kk = k;
                 if(k != ks)
                 {
-                    aocl_lapack_strexc(compq, n, &t[t_offset], ldt, &q[q_offset], ldq, &kk, &ks,
-                                       &work[1], &ierr);
+                    strexc_(compq, n, &t[t_offset], ldt, &q[q_offset], ldq, &kk, &ks, &work[1],
+                            &ierr);
                 }
                 if(ierr == 1 || ierr == 2)
                 {
@@ -587,12 +599,12 @@ void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integ
     {
         /* Solve Sylvester equation for R: */
         /* T11*R - R*T22 = scale*T12 */
-        aocl_lapack_slacpy("F", &n1, &n2, &t[(n1 + 1) * t_dim1 + 1], ldt, &work[1], &n1);
-        aocl_lapack_strsyl("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt,
-                           &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, &ierr);
+        slacpy_("F", &n1, &n2, &t[(n1 + 1) * t_dim1 + 1], ldt, &work[1], &n1);
+        strsyl_("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt, &t[n1 + 1 + (n1 + 1) * t_dim1], ldt,
+                &work[1], &n1, &scale, &ierr);
         /* Estimate the reciprocal of the condition number of the cluster */
         /* of eigenvalues. */
-        rnorm = aocl_lapack_slange("F", &n1, &n2, &work[1], &n1, &work[1]);
+        rnorm = slange_("F", &n1, &n2, &work[1], &n1, &work[1]);
         if(rnorm == 0.f)
         {
             *s = 1.f;
@@ -608,22 +620,20 @@ void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integ
         est = 0.f;
         kase = 0;
     L30:
-        aocl_lapack_slacn2(&nn, &work[nn + 1], &work[1], &iwork[1], &est, &kase, isave);
+        slacn2_(&nn, &work[nn + 1], &work[1], &iwork[1], &est, &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Solve T11*R - R*T22 = scale*X. */
-                aocl_lapack_strsyl("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt,
-                                   &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale,
-                                   &ierr);
+                strsyl_("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt,
+                        &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, &ierr);
             }
             else
             {
                 /* Solve T11**T*R - R*T22**T = scale*X. */
-                aocl_lapack_strsyl("T", "T", &c_n1, &n1, &n2, &t[t_offset], ldt,
-                                   &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale,
-                                   &ierr);
+                strsyl_("T", "T", &c_n1, &n1, &n2, &t[t_offset], ldt,
+                        &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, &ierr);
             }
             goto L30;
         }
@@ -642,12 +652,13 @@ L40: /* Store the output eigenvalues in WR and WI. */
     {
         if(t[k + 1 + k * t_dim1] != 0.f)
         {
-            wi[k] = sqrt((r__1 = t[k + (k + 1) * t_dim1], f2c_abs(r__1))) * sqrt(( r__2 = t[k + 1 + k * t_dim1], f2c_abs(r__2)));
+            wi[k] = sqrt((r__1 = t[k + (k + 1) * t_dim1], f2c_abs(r__1)))
+                    * sqrt((r__2 = t[k + 1 + k * t_dim1], f2c_abs(r__2)));
             wi[k + 1] = -wi[k];
         }
         /* L60: */
     }
-    work[1] = (real) lwmin;
+    work[1] = (real)lwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

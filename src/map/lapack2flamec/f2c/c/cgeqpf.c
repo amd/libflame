@@ -148,12 +148,14 @@ v(i+1:m) is stored on exit in A(i+1:m,i). */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgeqpf_(integer *m, integer *n, complex *a, integer *lda, integer *jpvt, complex *tau, complex *work, real *rwork, integer * info)
+void cgeqpf_(integer *m, integer *n, complex *a, integer *lda, integer *jpvt, complex *tau,
+             complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"cgeqpf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
+    snprintf(buffer, 256, "cgeqpf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
+             *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -170,16 +172,24 @@ void cgeqpf_(integer *m, integer *n, complex *a, integer *lda, integer *jpvt, co
     aocl_int64_t pvt;
     real temp, temp2, tol3z;
     extern /* Subroutine */
-    void clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), cswap_(integer *, complex *, integer *, complex *, integer *);
+        void
+        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+               complex *),
+        cswap_(integer *, complex *, integer *, complex *, integer *);
     integer itemp;
     extern /* Subroutine */
-    void cgeqr2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *);
+        void
+        cgeqr2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *);
     extern real scnrm2_(integer *, complex *, integer *);
     extern /* Subroutine */
-    void cunm2r_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *);
+        void
+        cunm2r_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
+                complex *, integer *, complex *, integer *),
+        clarfg_(integer *, complex *, complex *, integer *, complex *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -220,7 +230,7 @@ void cgeqpf_(integer *m, integer *n, complex *a, integer *lda, integer *jpvt, co
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
@@ -231,7 +241,7 @@ void cgeqpf_(integer *m, integer *n, complex *a, integer *lda, integer *jpvt, co
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    mn = fla_min(*m,*n);
+    mn = fla_min(*m, *n);
     tol3z = sqrt(slamch_("Epsilon"));
     /* Move initial columns up front */
     itemp = 1;
@@ -262,12 +272,13 @@ void cgeqpf_(integer *m, integer *n, complex *a, integer *lda, integer *jpvt, co
     /* Compute the QR factorization and update remaining columns */
     if(itemp > 0)
     {
-        ma = fla_min(itemp,*m);
+        ma = fla_min(itemp, *m);
         cgeqr2_(m, &ma, &a[a_offset], lda, &tau[1], &work[1], info);
-        if (ma < *n)
+        if(ma < *n)
         {
             i__1 = *n - ma;
-            cunm2r_("Left", "Conjugate transpose", m, &i__1, &ma, &a[a_offset], lda, &tau[1], &a[(ma + 1) * a_dim1 + 1], lda, &work[1], info);
+            cunm2r_("Left", "Conjugate transpose", m, &i__1, &ma, &a[a_offset], lda, &tau[1],
+                    &a[(ma + 1) * a_dim1 + 1], lda, &work[1], info);
         }
     }
     if(itemp < mn)
@@ -288,10 +299,10 @@ void cgeqpf_(integer *m, integer *n, complex *a, integer *lda, integer *jpvt, co
         {
             /* Determine ith pivot column and swap if necessary */
             i__2 = *n - i__ + 1;
-            pvt = i__ - 1 + aocl_blas_isamax(&i__2, &rwork[i__], &c__1);
+            pvt = i__ - 1 + isamax_(&i__2, &rwork[i__], &c__1);
             if(pvt != i__)
             {
-                aocl_blas_cswap(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
+                cswap_(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
                 itemp = jpvt[pvt];
                 jpvt[pvt] = jpvt[i__];
                 jpvt[i__] = (aocl_int_t)(itemp);
@@ -305,10 +316,10 @@ void cgeqpf_(integer *m, integer *n, complex *a, integer *lda, integer *jpvt, co
             i__2 = *m - i__ + 1;
             /* Computing MIN */
             i__3 = i__ + 1;
-            clarfg_(&i__2, &aii, &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, &tau[ i__]);
+            clarfg_(&i__2, &aii, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1, &tau[i__]);
             i__2 = i__ + i__ * a_dim1;
-            a[i__2].real = aii.real;
-            a[i__2].imag = aii.imag; // , expr subst
+            a[i__2].r = aii.r;
+            a[i__2].i = aii.i; // , expr subst
             if(i__ < *n)
             {
                 /* Apply H(i) to A(i:m,i+1:n) from the left */
@@ -321,8 +332,8 @@ void cgeqpf_(integer *m, integer *n, complex *a, integer *lda, integer *jpvt, co
                 i__2 = *m - i__ + 1;
                 i__3 = *n - i__;
                 r_cnjg(&q__1, &tau[i__]);
-                aocl_lapack_clarf("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &q__1,
-                                  &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
+                clarf_("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &q__1,
+                       &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
                 i__2 = i__ + i__ * a_dim1;
                 a[i__2].real = aii.real;
                 a[i__2].imag = aii.imag; // , expr subst
@@ -339,7 +350,7 @@ void cgeqpf_(integer *m, integer *n, complex *a, integer *lda, integer *jpvt, co
                     /* Computing MAX */
                     r__1 = 0.f;
                     r__2 = (temp + 1.f) * (1.f - temp); // , expr subst
-                    temp = fla_max(r__1,r__2);
+                    temp = fla_max(r__1, r__2);
                     /* Computing 2nd power */
                     r__1 = rwork[j] / rwork[*n + j];
                     temp2 = temp * (r__1 * r__1);

@@ -1,7 +1,3 @@
-/*
- *     Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
- */
-
 /* ../netlib/dopgtr.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -114,7 +110,8 @@
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dopgtr_(char *uplo, integer *n, doublereal *ap, doublereal *tau, doublereal *q, integer *ldq, doublereal *work, integer *info)
+void dopgtr_(char *uplo, integer *n, doublereal *ap, doublereal *tau, doublereal *q, integer *ldq,
+             doublereal *work, integer *info)
 {
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, i__1, i__2, i__3;
@@ -124,7 +121,12 @@ void dopgtr_(char *uplo, integer *n, doublereal *ap, doublereal *tau, doublereal
     integer iinfo;
     logical upper;
     extern /* Subroutine */
-    void dorg2l_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dorg2r_fla(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dorg2l_(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, integer *),
+        dorg2r_fla(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                   doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -156,7 +158,7 @@ void dopgtr_(char *uplo, integer *n, doublereal *ap, doublereal *tau, doublereal
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -164,7 +166,7 @@ void dopgtr_(char *uplo, integer *n, doublereal *ap, doublereal *tau, doublereal
     {
         *info = -2;
     }
-    else if (*ldq < fla_max(1,*n))
+    else if(*ldq < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -211,7 +213,7 @@ void dopgtr_(char *uplo, integer *n, doublereal *ap, doublereal *tau, doublereal
         i__1 = *n - 1;
         i__2 = *n - 1;
         i__3 = *n - 1;
-        aocl_lapack_dorg2l(&i__1, &i__2, &i__3, &q[q_offset], ldq, &tau[1], &work[1], &iinfo);
+        dorg2l_(&i__1, &i__2, &i__3, &q[q_offset], ldq, &tau[1], &work[1], &iinfo);
     }
     else
     {

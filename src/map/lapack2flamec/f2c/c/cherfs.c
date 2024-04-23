@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {1.f, 0.f};
-static aocl_int64_t c__1 = 1;
+static complex c_b1 = {1.f, 0.f};
+static integer c__1 = 1;
 /* > \brief \b CHERFS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -189,21 +189,26 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexHEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cherfs_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, complex *af, integer *ldaf, integer *ipiv, complex * b, integer *ldb, complex *x, integer *ldx, real *ferr, real *berr, complex *work, real *rwork, integer *info)
+void cherfs_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, complex *af,
+             integer *ldaf, integer *ipiv, complex *b, integer *ldb, complex *x, integer *ldx,
+             real *ferr, real *berr, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cherfs inputs: uplo %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ldb %lld, ldx %lld",*uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
+    snprintf(buffer, 256,
+             "cherfs inputs: uplo %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ldb %lld, ldx %lld",
+             *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
 #else
-    snprintf(buffer, 256,"cherfs inputs: uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d",*uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
+    snprintf(buffer, 256, "cherfs inputs: uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d",
+             *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
-        i__2, i__3, i__4, i__5;
+    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2,
+        i__3, i__4, i__5;
     real r__1, r__2, r__3, r__4;
     scomplex q__1;
     /* Builtin functions */
@@ -217,18 +222,26 @@ void cherfs_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, c
     real safe1, safe2;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void chemv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * );
+        void
+        chemv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *,
+               complex *, integer *);
     integer isave[3];
     extern /* Subroutine */
-    void ccopy_(integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *),
+        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     integer count;
     logical upper;
     extern /* Subroutine */
-    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
+        void
+        clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), chetrs_( char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        chetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *,
+                integer *);
     real lstres;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -278,7 +291,7 @@ void cherfs_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, c
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -290,19 +303,19 @@ void cherfs_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, c
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -10;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -12;
     }
@@ -340,11 +353,11 @@ void cherfs_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, c
         lstres = 3.f;
     L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - A * X */
-        aocl_blas_ccopy(n, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
-        q__1.real = -1.f;
-        q__1.imag = -0.f; // , expr subst
-        aocl_blas_chemv(uplo, n, &q__1, &a[a_offset], lda, &x[j * x_dim1 + 1], &c__1, &c_b1,
-                        &work[1], &c__1);
+        ccopy_(n, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
+        q__1.r = -1.f;
+        q__1.i = -0.f; // , expr subst
+        chemv_(uplo, n, &q__1, &a[a_offset], lda, &x[j * x_dim1 + 1], &c__1, &c_b1, &work[1],
+               &c__1);
         /* Compute componentwise relative backward error from formula */
         /* fla_max(i) ( f2c_abs(R(i)) / ( f2c_abs(A)*f2c_abs(X) + f2c_abs(B) )(i) ) */
         /* where f2c_abs(Z) is the componentwise absolute value of the matrix */
@@ -355,26 +368,33 @@ void cherfs_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, c
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            rwork[i__] = (r__1 = b[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&b[ i__ + j * b_dim1]), f2c_abs(r__2));
+            rwork[i__] = (r__1 = b[i__3].r, f2c_abs(r__1))
+                         + (r__2 = r_imag(&b[i__ + j * b_dim1]), f2c_abs(r__2));
             /* L30: */
         }
         /* Compute f2c_abs(A)*f2c_abs(X) + f2c_abs(B). */
-        if (upper)
+        if(upper)
         {
             i__2 = *n;
             for(k = 1; k <= i__2; ++k)
             {
                 s = 0.f;
                 i__3 = k + j * x_dim1;
-                xk = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[k + j * x_dim1]), f2c_abs(r__2));
+                xk = (r__1 = x[i__3].r, f2c_abs(r__1))
+                     + (r__2 = r_imag(&x[k + j * x_dim1]), f2c_abs(r__2));
                 i__3 = k - 1;
                 for(i__ = 1; i__ <= i__3; ++i__)
                 {
                     i__4 = i__ + k * a_dim1;
-                    rwork[i__] += ((r__1 = a[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs(r__2))) * xk;
+                    rwork[i__] += ((r__1 = a[i__4].r, f2c_abs(r__1))
+                                   + (r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs(r__2)))
+                                  * xk;
                     i__4 = i__ + k * a_dim1;
                     i__5 = i__ + j * x_dim1;
-                    s += ((r__1 = a[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ i__ + k * a_dim1]), f2c_abs(r__2))) * ((r__3 = x[i__5] .r, f2c_abs(r__3)) + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4)));
+                    s += ((r__1 = a[i__4].r, f2c_abs(r__1))
+                          + (r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs(r__2)))
+                         * ((r__3 = x[i__5].r, f2c_abs(r__3))
+                            + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4)));
                     /* L40: */
                 }
                 i__3 = k + k * a_dim1;
@@ -389,17 +409,23 @@ void cherfs_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, c
             {
                 s = 0.f;
                 i__3 = k + j * x_dim1;
-                xk = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[k + j * x_dim1]), f2c_abs(r__2));
+                xk = (r__1 = x[i__3].r, f2c_abs(r__1))
+                     + (r__2 = r_imag(&x[k + j * x_dim1]), f2c_abs(r__2));
                 i__3 = k + k * a_dim1;
                 rwork[k] += (r__1 = a[i__3].r, f2c_abs(r__1)) * xk;
                 i__3 = *n;
                 for(i__ = k + 1; i__ <= i__3; ++i__)
                 {
                     i__4 = i__ + k * a_dim1;
-                    rwork[i__] += ((r__1 = a[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs(r__2))) * xk;
+                    rwork[i__] += ((r__1 = a[i__4].r, f2c_abs(r__1))
+                                   + (r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs(r__2)))
+                                  * xk;
                     i__4 = i__ + k * a_dim1;
                     i__5 = i__ + j * x_dim1;
-                    s += ((r__1 = a[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ i__ + k * a_dim1]), f2c_abs(r__2))) * ((r__3 = x[i__5] .r, f2c_abs(r__3)) + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4)));
+                    s += ((r__1 = a[i__4].r, f2c_abs(r__1))
+                          + (r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs(r__2)))
+                         * ((r__3 = x[i__5].r, f2c_abs(r__3))
+                            + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4)));
                     /* L60: */
                 }
                 rwork[k] += s;
@@ -415,16 +441,20 @@ void cherfs_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, c
                 /* Computing MAX */
                 i__3 = i__;
                 r__3 = s;
-                r__4 = ((r__1 = work[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2))) / rwork[i__]; // , expr subst
-                s = fla_max(r__3,r__4);
+                r__4 = ((r__1 = work[i__3].r, f2c_abs(r__1))
+                        + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)))
+                       / rwork[i__]; // , expr subst
+                s = fla_max(r__3, r__4);
             }
             else
             {
                 /* Computing MAX */
                 i__3 = i__;
                 r__3 = s;
-                r__4 = ((r__1 = work[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + safe1) / (rwork[i__] + safe1); // , expr subst
-                s = fla_max(r__3,r__4);
+                r__4 = ((r__1 = work[i__3].r, f2c_abs(r__1))
+                        + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + safe1)
+                       / (rwork[i__] + safe1); // , expr subst
+                s = fla_max(r__3, r__4);
             }
             /* L80: */
         }
@@ -466,25 +496,27 @@ void cherfs_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, c
             if(rwork[i__] > safe2)
             {
                 i__3 = i__;
-                rwork[i__] = (r__1 = work[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__] ;
+                rwork[i__] = (r__1 = work[i__3].r, f2c_abs(r__1))
+                             + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__];
             }
             else
             {
                 i__3 = i__;
-                rwork[i__] = (r__1 = work[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__] + safe1;
+                rwork[i__] = (r__1 = work[i__3].r, f2c_abs(r__1))
+                             + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__]
+                             + safe1;
             }
             /* L90: */
         }
         kase = 0;
     L100:
-        aocl_lapack_clacn2(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
+        clacn2_(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(A**H). */
-                aocl_lapack_chetrs(uplo, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
-                                   info);
+                chetrs_(uplo, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
                 i__2 = *n;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
@@ -513,8 +545,7 @@ void cherfs_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, c
                     work[i__3].imag = q__1.imag; // , expr subst
                     /* L120: */
                 }
-                aocl_lapack_chetrs(uplo, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
-                                   info);
+                chetrs_(uplo, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
             }
             goto L100;
         }
@@ -526,8 +557,9 @@ void cherfs_(char *uplo, integer *n, integer *nrhs, complex * a, integer *lda, c
             /* Computing MAX */
             i__3 = i__ + j * x_dim1;
             r__3 = lstres;
-            r__4 = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__2)); // , expr subst
-            lstres = fla_max(r__3,r__4);
+            r__4 = (r__1 = x[i__3].r, f2c_abs(r__1))
+                   + (r__2 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__2)); // , expr subst
+            lstres = fla_max(r__3, r__4);
             /* L130: */
         }
         if(lstres != 0.f)

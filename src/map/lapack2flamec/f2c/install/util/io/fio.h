@@ -22,20 +22,21 @@ use or performance of this software.
 ****************************************************************/
 
 #include "f2c_config.h"
-#include <stdio.h>
+
 #include <errno.h>
 #include <stddef.h>
-#include <sys/types.h>
+#include <stdio.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 
 #ifdef HAVE_FSEEKO
 #define OFF_T off_t
 #ifdef _WIN32
-	#define FSEEK fseek
-	#define FTELL ftell
+#define FSEEK fseek
+#define FTELL ftell
 #else
-	#define FSEEK fseeko
-	#define FTELL ftello
+#define FSEEK fseeko
+#define FTELL ftello
 #endif
 #else
 #define OFF_T long
@@ -53,38 +54,39 @@ typedef long uiolen;
 
 /*units*/
 typedef struct
-{	FILE *ufd;	/*0=unconnected*/
-	char *ufnm;
+{
+    FILE *ufd; /*0=unconnected*/
+    char *ufnm;
 #ifndef MSDOS
-	long uinode;
-	int udev;
+    long uinode;
+    int udev;
 #endif
-	int url;	/*0=sequential*/
-	flag useek;	/*true=can backspace, use dir, ...*/
-	flag ufmt;
-	flag urw;	/* (1 for can read) | (2 for can write) */
-	flag ublnk;
-	flag uend;
-	flag uwrt;	/*last io was write*/
-	flag uscrtch;
+    int url; /*0=sequential*/
+    flag useek; /*true=can backspace, use dir, ...*/
+    flag ufmt;
+    flag urw; /* (1 for can read) | (2 for can write) */
+    flag ublnk;
+    flag uend;
+    flag uwrt; /*last io was write*/
+    flag uscrtch;
 } unit;
 
-extern int (*f__getn)(void);	/* for formatted input */
-extern void (*f__putn)(int);	/* for formatted output */
+extern int (*f__getn)(void); /* for formatted input */
+extern void (*f__putn)(int); /* for formatted output */
 extern void x_putc(int);
-extern long f__inode(char*,int*);
-extern void sig_die(const char*,int);
-extern void f__fatal(int, const char*);
-extern int t_runc(alist*);
-extern int f__nowreading(unit*), f__nowwriting(unit*);
-extern int fk_open(int,int,ftnint);
+extern long f__inode(char *, int *);
+extern void sig_die(const char *, int);
+extern void f__fatal(int, const char *);
+extern int t_runc(alist *);
+extern int f__nowreading(unit *), f__nowwriting(unit *);
+extern int fk_open(int, int, ftnint);
 extern int en_fio(void);
 extern void f_init(void);
 extern int (*f__donewrec)(void), t_putc(int), x_wSL(void);
-extern void b_char(const char*,char*,ftnlen), g_char(const char*,ftnlen,char*);
-extern int c_sfe(cilist*);
+extern void b_char(const char *, char *, ftnlen), g_char(const char *, ftnlen, char *);
+extern int c_sfe(cilist *);
 extern int z_rnew(void);
-extern int err__fl(int,int,const char*);
+extern int err__fl(int, int, const char *);
 extern int xrd_SL(void);
 extern int f__putbuf(int);
 extern int f__canseek(FILE *f);
@@ -99,11 +101,11 @@ extern char *f__icvt(integer value, int *ndigit, int *sign, int base);
 extern int t_getc(void);
 
 extern flag f__init;
-extern cilist *f__elist;	/*active external io list*/
-extern flag f__reading,f__external,f__sequential,f__formatted;
+extern cilist *f__elist; /*active external io list*/
+extern flag f__reading, f__external, f__sequential, f__formatted;
 extern int (*f__doend)(void);
-extern FILE *f__cf;	/*current file*/
-extern unit *f__curunit;	/*current unit*/
+extern FILE *f__cf; /*current file*/
+extern unit *f__curunit; /*current unit*/
 extern unit f__units[];
 
 extern char *f__icptr;
@@ -111,24 +113,31 @@ extern char *f__icend;
 extern icilist *f__svic;
 extern int f__icnum;
 
-#define err(f,m,s) {if(f) errno= m; else f__fatal(m,s); return(m);}
-#define errfl(f,m,s) return err__fl((int)f,m,s)
+#define err(f, m, s)        \
+    {                       \
+        if(f)               \
+            errno = m;      \
+        else                \
+            f__fatal(m, s); \
+        return (m);         \
+    }
+#define errfl(f, m, s) return err__fl((int)f, m, s)
 
 /*Table sizes*/
 #define MXUNIT 100
 
-extern int f__recpos;	/*position in current record*/
-extern OFF_T f__cursor;	/* offset to move to */
-extern OFF_T f__hiwater;	/* so TL doesn't confuse us */
+extern int f__recpos; /*position in current record*/
+extern OFF_T f__cursor; /* offset to move to */
+extern OFF_T f__hiwater; /* so TL doesn't confuse us */
 
-#define WRITE	1
-#define READ	2
-#define SEQ	3
-#define DIR	4
-#define FMT	5
-#define UNF	6
-#define EXT	7
-#define INT	8
+#define WRITE 1
+#define READ 2
+#define SEQ 3
+#define DIR 4
+#define FMT 5
+#define UNF 6
+#define EXT 7
+#define INT 8
 
 #define buf_end(x) (x->_flag & _IONBF ? x->_ptr : x->_base + BUFSIZ)
 
@@ -150,7 +159,7 @@ extern icilist *f__svic;
 extern int f__icnum, f__recpos;
 extern int f__Aquote;
 
-extern int x_rsne(cilist*);
+extern int x_rsne(cilist *);
 extern void x_wsne(cilist *a);
 
 extern flag f__lquit;
@@ -161,8 +170,8 @@ extern ftnint L_len;
 extern int f__scale;
 
 extern int (*l_getc)(void);
-extern int (*l_ungetc)(int,FILE*);
-extern int (*f__lioproc)(ftnint*, char*, ftnlen, ftnint);
+extern int (*l_ungetc)(int, FILE *);
+extern int (*f__lioproc)(ftnint *, char *, ftnlen, ftnint);
 
 int do_us(ftnint *number, char *ptr, ftnlen len);
 integer do_ud(ftnint *number, char *ptr, ftnlen len);

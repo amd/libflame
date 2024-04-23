@@ -1,8 +1,8 @@
-/* ./sgelsy.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sgelsy.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
@@ -208,7 +208,8 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sgelsy_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb, integer *jpvt, real *rcond, integer *rank, real *work, integer *lwork, integer *info)
+void sgelsy_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb,
+             integer *jpvt, real *rcond, integer *rank, real *work, integer *lwork, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgelsy(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, lwork, info);
@@ -249,23 +250,39 @@ void aocl_lapack_sgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     real anrm, bnrm, smin, smax;
     integer iascl, ibscl, ismin, ismax;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     real wsize;
     extern /* Subroutine */
-    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), slaic1_(integer *, integer *, real *, real *, real *, real *, real *, real *, real *), sgeqp3_( integer *, integer *, real *, integer *, integer *, real *, real *, integer *, integer *), slabad_(real *, real *);
+        void
+        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
+               real *, integer *),
+        slaic1_(integer *, integer *, real *, real *, real *, real *, real *, real *, real *),
+        sgeqp3_(integer *, integer *, real *, integer *, integer *, real *, real *, integer *,
+                integer *),
+        slabad_(real *, real *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
     extern /* Subroutine */
-    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+        void
+        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
+                integer *, integer *),
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     integer lwkmin;
     real sminpr, smaxpr, smlnum;
     aocl_int64_t lwkopt;
     logical lquery;
     extern /* Subroutine */
-    void sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), sormrz_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), stzrzf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+        void
+        sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
+                integer *, real *, integer *, integer *),
+        sormrz_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *,
+                real *, real *, integer *, real *, integer *, integer *),
+        stzrzf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -295,7 +312,7 @@ void aocl_lapack_sgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     --jpvt;
     --work;
     /* Function Body */
-    mn = fla_min(*m,*n);
+    mn = fla_min(*m, *n);
     ismin = mn + 1;
     ismax = (mn << 1) + 1;
     /* Test the input arguments. */
@@ -313,15 +330,15 @@ void aocl_lapack_sgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
     else /* if(complicated condition) */
     {
         /* Computing MAX */
-        i__1 = fla_max(1,*m);
-        if (*ldb < fla_max(i__1,*n))
+        i__1 = fla_max(1, *m);
+        if(*ldb < fla_max(i__1, *n))
         {
             *info = -7;
         }
@@ -341,21 +358,21 @@ void aocl_lapack_sgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
             nb3 = aocl_lapack_ilaenv(&c__1, "SORMQR", " ", m, n, nrhs, &c_n1);
             nb4 = aocl_lapack_ilaenv(&c__1, "SORMRQ", " ", m, n, nrhs, &c_n1);
             /* Computing MAX */
-            i__1 = fla_max(nb1,nb2);
-            i__1 = fla_max(i__1,nb3); // , expr subst
-            nb = fla_max(i__1,nb4);
+            i__1 = fla_max(nb1, nb2);
+            i__1 = fla_max(i__1, nb3); // , expr subst
+            nb = fla_max(i__1, nb4);
             /* Computing MAX */
             i__1 = mn << 1, i__2 = *n + 1;
-            i__1 = fla_max(i__1,i__2);
+            i__1 = fla_max(i__1, i__2);
             i__2 = mn + *nrhs; // ; expr subst
-            lwkmin = mn + fla_max(i__1,i__2);
+            lwkmin = mn + fla_max(i__1, i__2);
             /* Computing MAX */
             i__1 = lwkmin, i__2 = mn + (*n << 1) + nb * (*n + 1);
-            i__1 = fla_max( i__1,i__2);
+            i__1 = fla_max(i__1, i__2);
             i__2 = (mn << 1) + nb * *nrhs; // ; expr subst
-            lwkopt = fla_max(i__1,i__2);
+            lwkopt = fla_max(i__1, i__2);
         }
-        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
+        work[1] = (real)lwkopt;
         if(*lwork < lwkmin && !lquery)
         {
             *info = -12;
@@ -398,7 +415,7 @@ void aocl_lapack_sgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     else if(anrm == 0.f)
     {
         /* Matrix all zero. Return zero solution. */
-        i__1 = fla_max(*m,*n);
+        i__1 = fla_max(*m, *n);
         slaset_("F", &i__1, nrhs, &c_b31, &c_b31, &b[b_offset], ldb);
         *rank = 0;
         goto L70;
@@ -429,10 +446,10 @@ void aocl_lapack_sgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     work[ismax] = 1.f;
     smax = (r__1 = a[a_dim1 + 1], f2c_abs(r__1));
     smin = smax;
-    if ((r__1 = a[a_dim1 + 1], f2c_abs(r__1)) == 0.f)
+    if((r__1 = a[a_dim1 + 1], f2c_abs(r__1)) == 0.f)
     {
         *rank = 0;
-        i__1 = fla_max(*m,*n);
+        i__1 = fla_max(*m, *n);
         slaset_("F", &i__1, nrhs, &c_b31, &c_b31, &b[b_offset], ldb);
         goto L70;
     }
@@ -444,10 +461,10 @@ L10:
     if(*rank < mn)
     {
         i__ = *rank + 1;
-        aocl_lapack_slaic1(&c__2, rank, &work[ismin], &smin, &a[i__ * a_dim1 + 1],
-                           &a[i__ + i__ * a_dim1], &sminpr, &s1, &c1);
-        aocl_lapack_slaic1(&c__1, rank, &work[ismax], &smax, &a[i__ * a_dim1 + 1],
-                           &a[i__ + i__ * a_dim1], &smaxpr, &s2, &c2);
+        slaic1_(&c__2, rank, &work[ismin], &smin, &a[i__ * a_dim1 + 1], &a[i__ + i__ * a_dim1],
+                &sminpr, &s1, &c1);
+        slaic1_(&c__1, rank, &work[ismax], &smax, &a[i__ * a_dim1 + 1], &a[i__ + i__ * a_dim1],
+                &smaxpr, &s2, &c2);
         if(smaxpr * *rcond <= sminpr)
         {
             i__1 = *rank;
@@ -480,16 +497,16 @@ L10:
     /* Details of Householder rotations stored in WORK(MN+1:2*MN) */
     /* B(1:M,1:NRHS) := Q**T * B(1:M,1:NRHS) */
     i__1 = *lwork - (mn << 1);
-    aocl_lapack_sormqr("Left", "Transpose", m, nrhs, &mn, &a[a_offset], lda, &work[1], &b[b_offset],
-                       ldb, &work[(mn << 1) + 1], &i__1, info);
+    sormqr_("Left", "Transpose", m, nrhs, &mn, &a[a_offset], lda, &work[1], &b[b_offset], ldb,
+            &work[(mn << 1) + 1], &i__1, info);
     /* Computing MAX */
     r__1 = wsize;
     r__2 = (mn << 1) + work[(mn << 1) + 1]; // , expr subst
-    wsize = fla_max(r__1,r__2);
+    wsize = fla_max(r__1, r__2);
     /* workspace: 2*MN+NB*NRHS. */
     /* B(1:RANK,1:NRHS) := inv(T11) * B(1:RANK,1:NRHS) */
-    aocl_blas_strsm("Left", "Upper", "No transpose", "Non-unit", rank, nrhs, &c_b54, &a[a_offset],
-                    lda, &b[b_offset], ldb);
+    strsm_("Left", "Upper", "No transpose", "Non-unit", rank, nrhs, &c_b54, &a[a_offset], lda,
+           &b[b_offset], ldb);
     i__1 = *nrhs;
     for(j = 1; j <= i__1; ++j)
     {
@@ -506,8 +523,8 @@ L10:
     {
         i__1 = *n - *rank;
         i__2 = *lwork - (mn << 1);
-        aocl_lapack_sormrz("Left", "Transpose", n, nrhs, rank, &i__1, &a[a_offset], lda,
-                           &work[mn + 1], &b[b_offset], ldb, &work[(mn << 1) + 1], &i__2, info);
+        sormrz_("Left", "Transpose", n, nrhs, rank, &i__1, &a[a_offset], lda, &work[mn + 1],
+                &b[b_offset], ldb, &work[(mn << 1) + 1], &i__2, info);
     }
     /* workspace: 2*MN+NRHS. */
     /* B(1:N,1:NRHS) := P * B(1:N,1:NRHS) */
@@ -544,7 +561,7 @@ L10:
         aocl_lapack_slascl("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
 L70:
-    work[1] = (real) lwkopt;
+    work[1] = (real)lwkopt;
     return;
     /* End of SGELSY */
 }

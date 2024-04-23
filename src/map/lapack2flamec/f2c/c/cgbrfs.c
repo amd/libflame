@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {1.f, 0.f};
-static aocl_int64_t c__1 = 1;
+static complex c_b1 = {1.f, 0.f};
+static integer c__1 = 1;
 /* > \brief \b CGBRFS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -202,20 +202,29 @@ for 1<=i<=N, row i of the */
 /* > \ingroup complexGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, complex *ab, integer *ldab, complex *afb, integer * ldafb, integer *ipiv, complex *b, integer *ldb, complex *x, integer * ldx, real *ferr, real *berr, complex *work, real *rwork, integer * info)
+void cgbrfs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, complex *ab,
+             integer *ldab, complex *afb, integer *ldafb, integer *ipiv, complex *b, integer *ldb,
+             complex *x, integer *ldx, real *ferr, real *berr, complex *work, real *rwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgbrfs inputs: trans %c, n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, ldafb %lld, ldb %lld, ldx %lld",*trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldx);
+    snprintf(buffer, 256,
+             "cgbrfs inputs: trans %c, n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, ldafb %lld, "
+             "ldb %lld, ldx %lld",
+             *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldx);
 #else
-    snprintf(buffer, 256,"cgbrfs inputs: trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldafb %d, ldb %d, ldx %d",*trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldx);
+    snprintf(
+        buffer, 256,
+        "cgbrfs inputs: trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldafb %d, ldb %d, ldx %d",
+        *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
+    integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
         i__2, i__3, i__4, i__5, i__6, i__7;
     real r__1, r__2, r__3, r__4;
     scomplex q__1;
@@ -231,18 +240,26 @@ void cgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
     aocl_int64_t kase;
     real safe1, safe2;
     extern /* Subroutine */
-    void cgbmv_(char *, integer *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+        void
+        cgbmv_(char *, integer *, integer *, integer *, integer *, complex *, complex *, integer *,
+               complex *, integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    void ccopy_(integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *),
+        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     integer count;
     extern /* Subroutine */
-    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
+        void
+        clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), cgbtrs_( char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        cgbtrs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *,
+                complex *, integer *, integer *);
     logical notran;
     char transn[1], transt[1];
     real lstres;
@@ -294,7 +311,7 @@ void cgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
     /* Function Body */
     *info = 0;
     notran = lsame_(trans, "N", 1, 1);
-    if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
@@ -322,11 +339,11 @@ void cgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
     {
         *info = -9;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -12;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -14;
     }
@@ -364,7 +381,7 @@ void cgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
     /* Computing MIN */
     i__1 = *kl + *ku + 2;
     i__2 = *n + 1; // , expr subst
-    nz = fla_min(i__1,i__2);
+    nz = fla_min(i__1, i__2);
     eps = slamch_("Epsilon");
     safmin = slamch_("Safe minimum");
     safe1 = nz * safmin;
@@ -378,11 +395,11 @@ void cgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
     L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - op(A) * X, */
         /* where op(A) = A, A**T, or A**H, depending on TRANS. */
-        aocl_blas_ccopy(n, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
-        q__1.real = -1.f;
-        q__1.imag = -0.f; // , expr subst
-        aocl_blas_cgbmv(trans, n, n, kl, ku, &q__1, &ab[ab_offset], ldab, &x[j * x_dim1 + 1], &c__1,
-                        &c_b1, &work[1], &c__1);
+        ccopy_(n, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
+        q__1.r = -1.f;
+        q__1.i = -0.f; // , expr subst
+        cgbmv_(trans, n, n, kl, ku, &q__1, &ab[ab_offset], ldab, &x[j * x_dim1 + 1], &c__1, &c_b1,
+               &work[1], &c__1);
         /* Compute componentwise relative backward error from formula */
         /* fla_max(i) ( f2c_abs(R(i)) / ( f2c_abs(op(A))*f2c_abs(X) + f2c_abs(B) )(i) ) */
         /* where f2c_abs(Z) is the componentwise absolute value of the matrix */
@@ -393,31 +410,33 @@ void cgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            rwork[i__] = (r__1 = b[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&b[ i__ + j * b_dim1]), f2c_abs(r__2));
+            rwork[i__] = (r__1 = b[i__3].r, f2c_abs(r__1))
+                         + (r__2 = r_imag(&b[i__ + j * b_dim1]), f2c_abs(r__2));
             /* L30: */
         }
         /* Compute f2c_abs(op(A))*f2c_abs(X) + f2c_abs(B). */
-        if (notran)
+        if(notran)
         {
             i__2 = *n;
             for(k = 1; k <= i__2; ++k)
             {
                 kk = *ku + 1 - k;
                 i__3 = k + j * x_dim1;
-                xk = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[k + j * x_dim1]), f2c_abs(r__2));
+                xk = (r__1 = x[i__3].r, f2c_abs(r__1))
+                     + (r__2 = r_imag(&x[k + j * x_dim1]), f2c_abs(r__2));
                 /* Computing MAX */
                 i__3 = 1;
                 i__4 = k - *ku; // , expr subst
                 /* Computing MIN */
                 i__6 = *n;
                 i__7 = k + *kl; // , expr subst
-                i__5 = fla_min(i__6,i__7);
-                for (i__ = fla_max(i__3,i__4);
-                        i__ <= i__5;
-                        ++i__)
+                i__5 = fla_min(i__6, i__7);
+                for(i__ = fla_max(i__3, i__4); i__ <= i__5; ++i__)
                 {
                     i__3 = kk + i__ + k * ab_dim1;
-                    rwork[i__] += ((r__1 = ab[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&ab[kk + i__ + k * ab_dim1]), f2c_abs(r__2))) * xk;
+                    rwork[i__] += ((r__1 = ab[i__3].r, f2c_abs(r__1))
+                                   + (r__2 = r_imag(&ab[kk + i__ + k * ab_dim1]), f2c_abs(r__2)))
+                                  * xk;
                     /* L40: */
                 }
                 /* L50: */
@@ -436,14 +455,15 @@ void cgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
                 /* Computing MIN */
                 i__6 = *n;
                 i__7 = k + *kl; // , expr subst
-                i__4 = fla_min(i__6,i__7);
-                for (i__ = fla_max(i__5,i__3);
-                        i__ <= i__4;
-                        ++i__)
+                i__4 = fla_min(i__6, i__7);
+                for(i__ = fla_max(i__5, i__3); i__ <= i__4; ++i__)
                 {
                     i__5 = kk + i__ + k * ab_dim1;
                     i__3 = i__ + j * x_dim1;
-                    s += ((r__1 = ab[i__5].r, f2c_abs(r__1)) + (r__2 = r_imag(&ab[ kk + i__ + k * ab_dim1]), f2c_abs(r__2))) * ((r__3 = x[i__3].r, f2c_abs(r__3)) + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4)));
+                    s += ((r__1 = ab[i__5].r, f2c_abs(r__1))
+                          + (r__2 = r_imag(&ab[kk + i__ + k * ab_dim1]), f2c_abs(r__2)))
+                         * ((r__3 = x[i__3].r, f2c_abs(r__3))
+                            + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4)));
                     /* L60: */
                 }
                 rwork[k] += s;
@@ -459,16 +479,20 @@ void cgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
                 /* Computing MAX */
                 i__4 = i__;
                 r__3 = s;
-                r__4 = ((r__1 = work[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2))) / rwork[i__]; // , expr subst
-                s = fla_max(r__3,r__4);
+                r__4 = ((r__1 = work[i__4].r, f2c_abs(r__1))
+                        + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)))
+                       / rwork[i__]; // , expr subst
+                s = fla_max(r__3, r__4);
             }
             else
             {
                 /* Computing MAX */
                 i__4 = i__;
                 r__3 = s;
-                r__4 = ((r__1 = work[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + safe1) / (rwork[i__] + safe1); // , expr subst
-                s = fla_max(r__3,r__4);
+                r__4 = ((r__1 = work[i__4].r, f2c_abs(r__1))
+                        + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + safe1)
+                       / (rwork[i__] + safe1); // , expr subst
+                s = fla_max(r__3, r__4);
             }
             /* L80: */
         }
@@ -510,25 +534,28 @@ void cgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
             if(rwork[i__] > safe2)
             {
                 i__4 = i__;
-                rwork[i__] = (r__1 = work[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__] ;
+                rwork[i__] = (r__1 = work[i__4].r, f2c_abs(r__1))
+                             + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__];
             }
             else
             {
                 i__4 = i__;
-                rwork[i__] = (r__1 = work[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__] + safe1;
+                rwork[i__] = (r__1 = work[i__4].r, f2c_abs(r__1))
+                             + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__]
+                             + safe1;
             }
             /* L90: */
         }
         kase = 0;
     L100:
-        aocl_lapack_clacn2(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
+        clacn2_(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(op(A)**H). */
-                aocl_lapack_cgbtrs(transt, n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1],
-                                   &work[1], n, info);
+                cgbtrs_(transt, n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1], &work[1], n,
+                        info);
                 i__2 = *n;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
@@ -557,8 +584,8 @@ void cgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
                     work[i__4].imag = q__1.imag; // , expr subst
                     /* L120: */
                 }
-                aocl_lapack_cgbtrs(transn, n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1],
-                                   &work[1], n, info);
+                cgbtrs_(transn, n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1], &work[1], n,
+                        info);
             }
             goto L100;
         }
@@ -570,8 +597,9 @@ void cgbrfs_(char *trans, integer *n, integer *kl, integer * ku, integer *nrhs, 
             /* Computing MAX */
             i__4 = i__ + j * x_dim1;
             r__3 = lstres;
-            r__4 = (r__1 = x[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__2)); // , expr subst
-            lstres = fla_max(r__3,r__4);
+            r__4 = (r__1 = x[i__4].r, f2c_abs(r__1))
+                   + (r__2 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__2)); // , expr subst
+            lstres = fla_max(r__3, r__4);
             /* L130: */
         }
         if(lstres != 0.f)

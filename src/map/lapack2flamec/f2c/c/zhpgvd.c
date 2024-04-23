@@ -236,10 +236,15 @@ the */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-void zhpgvd_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex *ap, doublecomplex *bp, doublereal *w, doublecomplex *z__, integer *ldz, doublecomplex *work, integer *lwork, doublereal * rwork, integer *lrwork, integer *iwork, integer *liwork, integer * info)
+void zhpgvd_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *ap,
+             doublecomplex *bp, doublereal *w, doublecomplex *z__, integer *ldz,
+             doublecomplex *work, integer *lwork, doublereal *rwork, integer *lrwork,
+             integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhpgvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "",*itype, *jobz, *uplo, *n, *ldz);
+    AOCL_DTL_SNPRINTF("zhpgvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS
+                      ", ldz %" FLA_IS "",
+                      *itype, *jobz, *uplo, *n, *ldz);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1;
     doublereal d__1, d__2;
@@ -250,16 +255,24 @@ void zhpgvd_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex 
     char trans[1];
     logical upper, wantz;
     extern /* Subroutine */
-    void ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
+        ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer liwmin;
     extern /* Subroutine */
-    void zhpevd_(char *, char *, integer *, doublecomplex *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *, integer *, integer *, integer *);
+        void
+        zhpevd_(char *, char *, integer *, doublecomplex *, doublereal *, doublecomplex *,
+                integer *, doublecomplex *, integer *, doublereal *, integer *, integer *,
+                integer *, integer *);
     integer lrwmin;
     extern /* Subroutine */
-    void zhpgst_(integer *, char *, integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zhpgst_(integer *, char *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical lquery;
     extern /* Subroutine */
-    void zpptrf_(char *, integer *, doublecomplex *, integer *);
+        void
+        zpptrf_(char *, integer *, doublecomplex *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -298,11 +311,11 @@ void zhpgvd_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex 
     {
         *info = -1;
     }
-    else if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    else if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (upper || lsame_(uplo, "L", 1, 1)))
+    else if(!(upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -3;
     }
@@ -339,10 +352,10 @@ void zhpgvd_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex 
                 liwmin = 1;
             }
         }
-        work[1].real = (doublereal)lwmin;
-        work[1].imag = 0.; // , expr subst
+        work[1].r = (doublereal)lwmin;
+        work[1].i = 0.; // , expr subst
         rwork[1] = (doublereal)lrwmin;
-        iwork[1] = (aocl_int_t)(liwmin);
+        iwork[1] = liwmin;
         if(*lwork < lwmin && !lquery)
         {
             *info = -11;
@@ -360,44 +373,44 @@ void zhpgvd_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex 
     {
         i__1 = -(*info);
         xerbla_("ZHPGVD", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Form a Cholesky factorization of B. */
-    aocl_lapack_zpptrf(uplo, n, &bp[1], info);
+    zpptrf_(uplo, n, &bp[1], info);
     if(*info != 0)
     {
         *info = *n + *info;
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    aocl_lapack_zhpgst(itype, uplo, n, &ap[1], &bp[1], info);
-    aocl_lapack_zhpevd(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], lwork,
-                       &rwork[1], lrwork, &iwork[1], liwork, info);
+    zhpgst_(itype, uplo, n, &ap[1], &bp[1], info);
+    zhpevd_(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], lwork, &rwork[1], lrwork,
+            &iwork[1], liwork, info);
     /* Computing MAX */
-    d__1 = (doublereal) lwmin;
+    d__1 = (doublereal)lwmin;
     d__2 = work[1].r; // , expr subst
-    lwmin = (integer) fla_max(d__1,d__2);
+    lwmin = (integer)fla_max(d__1, d__2);
     /* Computing MAX */
-    d__1 = (doublereal) lrwmin;
-    lrwmin = (integer) fla_max(d__1,rwork[1]);
+    d__1 = (doublereal)lrwmin;
+    lrwmin = (integer)fla_max(d__1, rwork[1]);
     /* Computing MAX */
-    d__1 = (doublereal) liwmin;
-    d__2 = (doublereal) iwork[1]; // , expr subst
-    liwmin = (integer) fla_max(d__1,d__2);
-    if (wantz)
+    d__1 = (doublereal)liwmin;
+    d__2 = (doublereal)iwork[1]; // , expr subst
+    liwmin = (integer)fla_max(d__1, d__2);
+    if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */
         neig = *n;
@@ -446,9 +459,9 @@ void zhpgvd_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex 
             }
         }
     }
-    work[1].r = (doublereal) lwmin;
+    work[1].r = (doublereal)lwmin;
     work[1].i = 0.; // , expr subst
-    rwork[1] = (doublereal) lrwmin;
+    rwork[1] = (doublereal)lrwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
     return;

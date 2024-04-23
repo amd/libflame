@@ -1,15 +1,15 @@
-/* ./zlaqr3.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlaqr3.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {0., 0.};
-static dcomplex c_b2 = {1., 0.};
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static doublecomplex c_b1 = {0., 0.};
+static doublecomplex c_b2 = {1., 0.};
+static integer c__1 = 1;
+static integer c_n1 = -1;
 static logical c_true = TRUE_;
-static aocl_int64_t c__12 = 12;
+static integer c__12 = 12;
 /* > \brief \b ZLAQR3 performs the unitary similarity transformation of a Hessenberg matrix to
  * detect and defl ate fully converged eigenvalues from a trailing principal submatrix (aggressive
  * early deflation). */
@@ -269,12 +269,20 @@ ZLAQR3 */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw, doublecomplex *h__, integer *ldh, integer *iloz, integer *ihiz, doublecomplex *z__, integer *ldz, integer *ns, integer *nd, doublecomplex *sh, doublecomplex *v, integer *ldv, integer *nh, doublecomplex *t, integer *ldt, integer *nv, doublecomplex *wv, integer *ldwv, doublecomplex *work, integer *lwork)
+void zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw,
+             doublecomplex *h__, integer *ldh, integer *iloz, integer *ihiz, doublecomplex *z__,
+             integer *ldz, integer *ns, integer *nd, doublecomplex *sh, doublecomplex *v,
+             integer *ldv, integer *nh, doublecomplex *t, integer *ldt, integer *nv,
+             doublecomplex *wv, integer *ldwv, doublecomplex *work, integer *lwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaqr3 inputs: n %" FLA_IS ", ktop %" FLA_IS ", kbot %" FLA_IS ", nw %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS ", ldv %" FLA_IS ", nh %" FLA_IS ", ldt %" FLA_IS ", nv %" FLA_IS ", ldwv %" FLA_IS "",*n, *ktop, *kbot, *nw, *ldh, *iloz, *ihiz, *ldz, *ldv, *nh, *ldt, *nv, *ldwv);
+    AOCL_DTL_SNPRINTF("zlaqr3 inputs: n %" FLA_IS ", ktop %" FLA_IS ", kbot %" FLA_IS
+                      ", nw %" FLA_IS ", ldh %" FLA_IS ", iloz %" FLA_IS ", ihiz %" FLA_IS
+                      ", ldz %" FLA_IS ", ldv %" FLA_IS ", nh %" FLA_IS ", ldt %" FLA_IS
+                      ", nv %" FLA_IS ", ldwv %" FLA_IS "",
+                      *n, *ktop, *kbot, *nw, *ldh, *iloz, *ihiz, *ldz, *ldv, *nh, *ldt, *nv, *ldwv);
     /* System generated locals */
-    aocl_int64_t h_dim1, h_offset, t_dim1, t_offset, v_dim1, v_offset, wv_dim1, wv_offset, z_dim1,
+    integer h_dim1, h_offset, t_dim1, t_offset, v_dim1, v_offset, wv_dim1, wv_offset, z_dim1,
         z_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6;
     dcomplex z__1, z__2;
@@ -294,25 +302,48 @@ void zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     doublecomplex beta;
     integer kcol, info, nmin, ifst, ilst, ltop, krow;
     extern /* Subroutine */
-    void zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+        void
+        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *);
     integer infqr;
     extern /* Subroutine */
-    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
+               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     integer kwtop;
     extern /* Subroutine */
-    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), dlabad_(doublereal *, doublereal *), zlaqr4_(logical *, logical *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer * );
+        void
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        dlabad_(doublereal *, doublereal *),
+        zlaqr4_(logical *, logical *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     doublereal safmax;
     extern /* Subroutine */
-    void zgehrd_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zlahqr_(logical *, logical *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zgehrd_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                doublecomplex *, integer *, integer *),
+        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *),
+        zlahqr_(logical *, logical *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *),
+        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *),
+        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
+                integer *);
     doublereal smlnum;
     extern /* Subroutine */
-    void ztrexc_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, integer *);
+        void
+        ztrexc_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
+                integer *, integer *, integer *);
     integer lwkopt;
     extern /* Subroutine */
-    void zunmhr_(char *, char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer * );
+        void
+        zunmhr_(char *, char *, integer *, integer *, integer *, integer *, doublecomplex *,
+                integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *,
+                integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -359,8 +390,8 @@ void zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     /* Computing MIN */
     i__1 = *nw;
     i__2 = *kbot - *ktop + 1; // , expr subst
-    jw = fla_min(i__1,i__2);
-    if (jw <= 2)
+    jw = fla_min(i__1, i__2);
+    if(jw <= 2)
     {
         lwkopt = 1;
     }
@@ -368,48 +399,48 @@ void zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     {
         /* ==== Workspace query call to ZGEHRD ==== */
         i__1 = jw - 1;
-        aocl_lapack_zgehrd(&jw, &c__1, &i__1, &t[t_offset], ldt, &work[1], &work[1], &c_n1, &info);
-        lwk1 = (integer)work[1].real;
+        zgehrd_(&jw, &c__1, &i__1, &t[t_offset], ldt, &work[1], &work[1], &c_n1, &info);
+        lwk1 = (integer)work[1].r;
         /* ==== Workspace query call to ZUNMHR ==== */
         i__1 = jw - 1;
-        aocl_lapack_zunmhr("R", "N", &jw, &jw, &c__1, &i__1, &t[t_offset], ldt, &work[1],
-                           &v[v_offset], ldv, &work[1], &c_n1, &info);
-        lwk2 = (integer)work[1].real;
+        zunmhr_("R", "N", &jw, &jw, &c__1, &i__1, &t[t_offset], ldt, &work[1], &v[v_offset], ldv,
+                &work[1], &c_n1, &info);
+        lwk2 = (integer)work[1].r;
         /* ==== Workspace query call to ZLAQR4 ==== */
-        aocl_lapack_zlaqr4(&c_true, &c_true, &jw, &c__1, &jw, &t[t_offset], ldt, &sh[1], &c__1, &jw,
-                           &v[v_offset], ldv, &work[1], &c_n1, &infqr);
-        lwk3 = (integer)work[1].real;
+        zlaqr4_(&c_true, &c_true, &jw, &c__1, &jw, &t[t_offset], ldt, &sh[1], &c__1, &jw,
+                &v[v_offset], ldv, &work[1], &c_n1, &infqr);
+        lwk3 = (integer)work[1].r;
         /* ==== Optimal workspace ==== */
         /* Computing MAX */
-        i__1 = jw + fla_max(lwk1,lwk2);
-        lwkopt = fla_max(i__1,lwk3);
+        i__1 = jw + fla_max(lwk1, lwk2);
+        lwkopt = fla_max(i__1, lwk3);
     }
     /* ==== Quick return in case of workspace query. ==== */
     if(*lwork == -1)
     {
-        d__1 = (doublereal) lwkopt;
+        d__1 = (doublereal)lwkopt;
         z__1.r = d__1;
         z__1.i = 0.; // , expr subst
         work[1].r = z__1.r;
         work[1].i = z__1.i; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* ==== Nothing to do ... */
     /* ... for an empty active block ... ==== */
     *ns = 0;
     *nd = 0;
-    work[1].real = 1.;
-    work[1].imag = 0.; // , expr subst
+    work[1].r = 1.;
+    work[1].i = 0.; // , expr subst
     if(*ktop > *kbot)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* ... nor for an empty deflation window. ==== */
     if(*nw < 1)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* ==== Machine constants ==== */
@@ -420,7 +451,7 @@ void zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     /* Computing MIN */
     i__1 = *nw;
     i__2 = *kbot - *ktop + 1; // , expr subst
-    jw = fla_min(i__1,i__2);
+    jw = fla_min(i__1, i__2);
     kwtop = *kbot - jw + 1;
     if(kwtop == *ktop)
     {
@@ -445,8 +476,11 @@ void zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
         /* Computing MAX */
         i__1 = kwtop + kwtop * h_dim1;
         d__5 = smlnum;
-        d__6 = ulp * ((d__1 = h__[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&h__[kwtop + kwtop * h_dim1]), f2c_dabs(d__2))); // , expr subst
-        if ((d__3 = s.r, f2c_dabs(d__3)) + (d__4 = d_imag(&s), f2c_dabs(d__4)) <= fla_max( d__5,d__6))
+        d__6 = ulp
+               * ((d__1 = h__[i__1].r, f2c_dabs(d__1))
+                  + (d__2 = d_imag(&h__[kwtop + kwtop * h_dim1]), f2c_dabs(d__2))); // , expr subst
+        if((d__3 = s.r, f2c_dabs(d__3)) + (d__4 = d_imag(&s), f2c_dabs(d__4))
+           <= fla_max(d__5, d__6))
         {
             *ns = 0;
             *nd = 1;
@@ -459,7 +493,7 @@ void zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
         }
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* ==== Convert to spike-triangular form. (In case of a */
@@ -471,18 +505,18 @@ void zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     i__1 = jw - 1;
     i__2 = *ldh + 1;
     i__3 = *ldt + 1;
-    aocl_blas_zcopy(&i__1, &h__[kwtop + 1 + kwtop * h_dim1], &i__2, &t[t_dim1 + 2], &i__3);
-    aocl_lapack_zlaset("A", &jw, &jw, &c_b1, &c_b2, &v[v_offset], ldv);
-    nmin = aocl_lapack_ilaenv(&c__12, "ZLAQR3", "SV", &jw, &c__1, &jw, lwork);
+    zcopy_(&i__1, &h__[kwtop + 1 + kwtop * h_dim1], &i__2, &t[t_dim1 + 2], &i__3);
+    zlaset_("A", &jw, &jw, &c_b1, &c_b2, &v[v_offset], ldv);
+    nmin = ilaenv_(&c__12, "ZLAQR3", "SV", &jw, &c__1, &jw, lwork);
     if(jw > nmin)
     {
-        aocl_lapack_zlaqr4(&c_true, &c_true, &jw, &c__1, &jw, &t[t_offset], ldt, &sh[kwtop], &c__1,
-                           &jw, &v[v_offset], ldv, &work[1], lwork, &infqr);
+        zlaqr4_(&c_true, &c_true, &jw, &c__1, &jw, &t[t_offset], ldt, &sh[kwtop], &c__1, &jw,
+                &v[v_offset], ldv, &work[1], lwork, &infqr);
     }
     else
     {
-        aocl_lapack_zlahqr(&c_true, &c_true, &jw, &c__1, &jw, &t[t_offset], ldt, &sh[kwtop], &c__1,
-                           &jw, &v[v_offset], ldv, &infqr);
+        zlahqr_(&c_true, &c_true, &jw, &c__1, &jw, &t[t_offset], ldt, &sh[kwtop], &c__1, &jw,
+                &v[v_offset], ldv, &infqr);
     }
     /* ==== Deflation detection loop ==== */
     *ns = jw;
@@ -492,8 +526,9 @@ void zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     {
         /* ==== Small spike tip deflation test ==== */
         i__2 = *ns + *ns * t_dim1;
-        foo = (d__1 = t[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&t[*ns + *ns * t_dim1]), f2c_dabs(d__2));
-        if (foo == 0.)
+        foo = (d__1 = t[i__2].r, f2c_dabs(d__1))
+              + (d__2 = d_imag(&t[*ns + *ns * t_dim1]), f2c_dabs(d__2));
+        if(foo == 0.)
         {
             foo = (d__1 = s.r, f2c_dabs(d__1)) + (d__2 = d_imag(&s), f2c_dabs(d__2));
         }
@@ -501,7 +536,10 @@ void zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
         /* Computing MAX */
         d__5 = smlnum;
         d__6 = ulp * foo; // , expr subst
-        if (((d__1 = s.r, f2c_dabs(d__1)) + (d__2 = d_imag(&s), f2c_dabs(d__2))) * (( d__3 = v[i__2].r, f2c_dabs(d__3)) + (d__4 = d_imag(&v[*ns * v_dim1 + 1]), f2c_dabs(d__4))) <= fla_max(d__5,d__6))
+        if(((d__1 = s.r, f2c_dabs(d__1)) + (d__2 = d_imag(&s), f2c_dabs(d__2)))
+               * ((d__3 = v[i__2].r, f2c_dabs(d__3))
+                  + (d__4 = d_imag(&v[*ns * v_dim1 + 1]), f2c_dabs(d__4)))
+           <= fla_max(d__5, d__6))
         {
             /* ==== One more converged eigenvalue ==== */
             --(*ns);
@@ -511,7 +549,7 @@ void zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
             /* ==== One undeflatable eigenvalue. Move it up out of the */
             /* . way. (ZTREXC can not fail in this case.) ==== */
             ifst = *ns;
-            aocl_lapack_ztrexc("V", &jw, &t[t_offset], ldt, &v[v_offset], ldv, &ifst, &ilst, &info);
+            ztrexc_("V", &jw, &t[t_offset], ldt, &v[v_offset], ldv, &ifst, &ilst, &info);
             ++ilst;
         }
         /* L10: */
@@ -535,7 +573,10 @@ void zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
             {
                 i__3 = j + j * t_dim1;
                 i__4 = ifst + ifst * t_dim1;
-                if ((d__1 = t[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&t[j + j * t_dim1]), f2c_dabs(d__2)) > (d__3 = t[i__4].r, f2c_dabs(d__3)) + (d__4 = d_imag(&t[ifst + ifst * t_dim1]), f2c_dabs(d__4)) )
+                if((d__1 = t[i__3].r, f2c_dabs(d__1))
+                       + (d__2 = d_imag(&t[j + j * t_dim1]), f2c_dabs(d__2))
+                   > (d__3 = t[i__4].r, f2c_dabs(d__3))
+                         + (d__4 = d_imag(&t[ifst + ifst * t_dim1]), f2c_dabs(d__4)))
                 {
                     ifst = j;
                 }
@@ -560,9 +601,9 @@ void zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
         sh[i__2].imag = t[i__3].imag; // , expr subst
         /* L40: */
     }
-    if(*ns < jw || s.real == 0. && s.imag == 0.)
+    if(*ns < jw || s.r == 0. && s.i == 0.)
     {
-        if(*ns > 1 && (s.real != 0. || s.imag != 0.))
+        if(*ns > 1 && (s.r != 0. || s.i != 0.))
         {
             /* ==== Reflect spike back into lower triangle ==== */
             aocl_blas_zcopy(ns, &v[v_offset], ldv, &work[1], &c__1);
@@ -584,11 +625,9 @@ void zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
             i__2 = jw - 2;
             aocl_lapack_zlaset("L", &i__1, &i__2, &c_b1, &c_b1, &t[t_dim1 + 3], ldt);
             d_cnjg(&z__1, &tau);
-            aocl_lapack_zlarf("L", ns, &jw, &work[1], &c__1, &z__1, &t[t_offset], ldt,
-                              &work[jw + 1]);
-            aocl_lapack_zlarf("R", ns, ns, &work[1], &c__1, &tau, &t[t_offset], ldt, &work[jw + 1]);
-            aocl_lapack_zlarf("R", &jw, ns, &work[1], &c__1, &tau, &v[v_offset], ldv,
-                              &work[jw + 1]);
+            zlarf_("L", ns, &jw, &work[1], &c__1, &z__1, &t[t_offset], ldt, &work[jw + 1]);
+            zlarf_("R", ns, ns, &work[1], &c__1, &tau, &t[t_offset], ldt, &work[jw + 1]);
+            zlarf_("R", &jw, ns, &work[1], &c__1, &tau, &v[v_offset], ldv, &work[jw + 1]);
             i__1 = *lwork - jw;
             zgehrd_(&jw, &c__1, ns, &t[t_offset], ldt, &work[1], &work[jw + 1], &i__1, &info);
         }
@@ -609,11 +648,11 @@ void zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
         aocl_blas_zcopy(&i__1, &t[t_dim1 + 2], &i__2, &h__[kwtop + 1 + kwtop * h_dim1], &i__3);
         /* ==== Accumulate orthogonal matrix in order update */
         /* . H and Z, if requested. ==== */
-        if(*ns > 1 && (s.real != 0. || s.imag != 0.))
+        if(*ns > 1 && (s.r != 0. || s.i != 0.))
         {
             i__1 = *lwork - jw;
-            aocl_lapack_zunmhr("R", "N", &jw, ns, &c__1, ns, &t[t_offset], ldt, &work[1],
-                               &v[v_offset], ldv, &work[jw + 1], &i__1, &info);
+            zunmhr_("R", "N", &jw, ns, &c__1, ns, &t[t_offset], ldt, &work[1], &v[v_offset], ldv,
+                    &work[jw + 1], &i__1, &info);
         }
         /* ==== Update vertical slab in H ==== */
         if(*wantt)
@@ -631,8 +670,9 @@ void zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
             /* Computing MIN */
             i__3 = *nv;
             i__4 = kwtop - krow; // , expr subst
-            kln = fla_min(i__3,i__4);
-            zgemm_("N", "N", &kln, &jw, &jw, &c_b2, &h__[krow + kwtop * h_dim1], ldh, &v[v_offset], ldv, &c_b1, &wv[wv_offset], ldwv);
+            kln = fla_min(i__3, i__4);
+            zgemm_("N", "N", &kln, &jw, &jw, &c_b2, &h__[krow + kwtop * h_dim1], ldh, &v[v_offset],
+                   ldv, &c_b1, &wv[wv_offset], ldwv);
             zlacpy_("A", &kln, &jw, &wv[wv_offset], ldwv, &h__[krow + kwtop * h_dim1], ldh);
             /* L60: */
         }
@@ -646,8 +686,9 @@ void zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
                 /* Computing MIN */
                 i__3 = *nh;
                 i__4 = *n - kcol + 1; // , expr subst
-                kln = fla_min(i__3,i__4);
-                zgemm_("C", "N", &jw, &kln, &jw, &c_b2, &v[v_offset], ldv, & h__[kwtop + kcol * h_dim1], ldh, &c_b1, &t[t_offset], ldt);
+                kln = fla_min(i__3, i__4);
+                zgemm_("C", "N", &jw, &kln, &jw, &c_b2, &v[v_offset], ldv,
+                       &h__[kwtop + kcol * h_dim1], ldh, &c_b1, &t[t_offset], ldt);
                 zlacpy_("A", &jw, &kln, &t[t_offset], ldt, &h__[kwtop + kcol * h_dim1], ldh);
                 /* L70: */
             }
@@ -662,8 +703,9 @@ void zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
                 /* Computing MIN */
                 i__3 = *nv;
                 i__4 = *ihiz - krow + 1; // , expr subst
-                kln = fla_min(i__3,i__4);
-                zgemm_("N", "N", &kln, &jw, &jw, &c_b2, &z__[krow + kwtop * z_dim1], ldz, &v[v_offset], ldv, &c_b1, &wv[wv_offset], ldwv);
+                kln = fla_min(i__3, i__4);
+                zgemm_("N", "N", &kln, &jw, &jw, &c_b2, &z__[krow + kwtop * z_dim1], ldz,
+                       &v[v_offset], ldv, &c_b1, &wv[wv_offset], ldwv);
                 zlacpy_("A", &kln, &jw, &wv[wv_offset], ldwv, &z__[krow + kwtop * z_dim1], ldz);
                 /* L80: */
             }
@@ -679,10 +721,10 @@ void zlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     *ns -= infqr;
     /* ==== Return optimal workspace. ==== */
     d__1 = (doublereal)lwkopt;
-    z__1.real = d__1;
-    z__1.imag = 0.; // , expr subst
-    work[1].real = z__1.real;
-    work[1].imag = z__1.imag; // , expr subst
+    z__1.r = d__1;
+    z__1.i = 0.; // , expr subst
+    work[1].r = z__1.r;
+    work[1].i = z__1.i; // , expr subst
     /* ==== End of ZLAQR3 ==== */
     AOCL_DTL_TRACE_LOG_EXIT
     return;

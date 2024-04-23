@@ -156,7 +156,8 @@
 /* > \ingroup auxOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, integer *in, real *y, real *tol, integer *info)
+void slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, integer *in, real *y,
+             real *tol, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slagts(job, n, a, b, c__, d__, in, y, tol, info);
@@ -186,7 +187,8 @@ void aocl_lapack_slagts(aocl_int64_t *job, aocl_int64_t *n, real *a, real *b, re
     real ak, eps, temp, pert, absak, sfmin;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -217,7 +219,7 @@ void aocl_lapack_slagts(aocl_int64_t *job, aocl_int64_t *n, real *a, real *b, re
     --a;
     /* Function Body */
     *info = 0;
-    if (f2c_abs(*job) > 2 || *job == 0)
+    if(f2c_abs(*job) > 2 || *job == 0)
     {
         *info = -1;
     }
@@ -243,22 +245,23 @@ void aocl_lapack_slagts(aocl_int64_t *job, aocl_int64_t *n, real *a, real *b, re
         if(*tol <= 0.f)
         {
             *tol = f2c_abs(a[1]);
-            if (*n > 1)
+            if(*n > 1)
             {
                 /* Computing MAX */
                 r__1 = *tol, r__2 = f2c_abs(a[2]);
-                r__1 = fla_max(r__1,r__2);
+                r__1 = fla_max(r__1, r__2);
                 r__2 = f2c_abs(b[1]); // ; expr subst
-                *tol = fla_max(r__1,r__2);
+                *tol = fla_max(r__1, r__2);
             }
             i__1 = *n;
             for(k = 3; k <= i__1; ++k)
             {
                 /* Computing MAX */
-                r__4 = *tol, r__5 = (r__1 = a[k], f2c_abs(r__1)), r__4 = fla_max(r__4, r__5), r__5 = (r__2 = b[k - 1], f2c_abs(r__2));
-                r__4 = fla_max(r__4,r__5);
+                r__4 = *tol, r__5 = (r__1 = a[k], f2c_abs(r__1)), r__4 = fla_max(r__4, r__5),
+                r__5 = (r__2 = b[k - 1], f2c_abs(r__2));
+                r__4 = fla_max(r__4, r__5);
                 r__5 = (r__3 = d__[k - 2], f2c_abs(r__3)); // ; expr subst
-                *tol = fla_max(r__4,r__5);
+                *tol = fla_max(r__4, r__5);
                 /* L10: */
             }
             *tol *= eps;
@@ -268,7 +271,7 @@ void aocl_lapack_slagts(aocl_int64_t *job, aocl_int64_t *n, real *a, real *b, re
             }
         }
     }
-    if (f2c_abs(*job) == 1)
+    if(f2c_abs(*job) == 1)
     {
         i__1 = *n;
         for(k = 2; k <= i__1; ++k)
@@ -303,11 +306,11 @@ void aocl_lapack_slagts(aocl_int64_t *job, aocl_int64_t *n, real *a, real *b, re
                 }
                 ak = a[k];
                 absak = f2c_abs(ak);
-                if (absak < 1.f)
+                if(absak < 1.f)
                 {
                     if(absak < sfmin)
                     {
-                        if (absak == 0.f || f2c_abs(temp) * sfmin > absak)
+                        if(absak == 0.f || f2c_abs(temp) * sfmin > absak)
                         {
                             *info = k;
                             return;
@@ -318,7 +321,7 @@ void aocl_lapack_slagts(aocl_int64_t *job, aocl_int64_t *n, real *a, real *b, re
                             ak *= bignum;
                         }
                     }
-                    else if (f2c_abs(temp) > absak * bignum)
+                    else if(f2c_abs(temp) > absak * bignum)
                     {
                         *info = k;
                         return;
@@ -346,13 +349,13 @@ void aocl_lapack_slagts(aocl_int64_t *job, aocl_int64_t *n, real *a, real *b, re
                 }
                 ak = a[k];
                 pert = r_sign(tol, &ak);
-L40:
+            L40:
                 absak = f2c_abs(ak);
-                if (absak < 1.f)
+                if(absak < 1.f)
                 {
                     if(absak < sfmin)
                     {
-                        if (absak == 0.f || f2c_abs(temp) * sfmin > absak)
+                        if(absak == 0.f || f2c_abs(temp) * sfmin > absak)
                         {
                             ak += pert;
                             pert *= 2;
@@ -364,7 +367,7 @@ L40:
                             ak *= bignum;
                         }
                     }
-                    else if (f2c_abs(temp) > absak * bignum)
+                    else if(f2c_abs(temp) > absak * bignum)
                     {
                         ak += pert;
                         pert *= 2;
@@ -398,11 +401,11 @@ L40:
                 }
                 ak = a[k];
                 absak = f2c_abs(ak);
-                if (absak < 1.f)
+                if(absak < 1.f)
                 {
                     if(absak < sfmin)
                     {
-                        if (absak == 0.f || f2c_abs(temp) * sfmin > absak)
+                        if(absak == 0.f || f2c_abs(temp) * sfmin > absak)
                         {
                             *info = k;
                             return;
@@ -413,7 +416,7 @@ L40:
                             ak *= bignum;
                         }
                     }
-                    else if (f2c_abs(temp) > absak * bignum)
+                    else if(f2c_abs(temp) > absak * bignum)
                     {
                         *info = k;
                         return;
@@ -442,13 +445,13 @@ L40:
                 }
                 ak = a[k];
                 pert = r_sign(tol, &ak);
-L70:
+            L70:
                 absak = f2c_abs(ak);
-                if (absak < 1.f)
+                if(absak < 1.f)
                 {
                     if(absak < sfmin)
                     {
-                        if (absak == 0.f || f2c_abs(temp) * sfmin > absak)
+                        if(absak == 0.f || f2c_abs(temp) * sfmin > absak)
                         {
                             ak += pert;
                             pert *= 2;
@@ -460,7 +463,7 @@ L70:
                             ak *= bignum;
                         }
                     }
-                    else if (f2c_abs(temp) > absak * bignum)
+                    else if(f2c_abs(temp) > absak * bignum)
                     {
                         ak += pert;
                         pert *= 2;

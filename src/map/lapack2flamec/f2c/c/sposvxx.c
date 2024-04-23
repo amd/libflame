@@ -1,6 +1,9 @@
 #ifdef FLA_ENABLE_XBLAS
-/* ../netlib/sposvxx.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sposvxx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief <b> SPOSVXX computes the solution to system of linear equations A * X = B for PO matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -497,7 +500,11 @@ defaults */
 /* > \ingroup realPOsolve */
 /* ===================================================================== */
 /* Subroutine */
-void sposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integer *lda, real *af, integer *ldaf, char *equed, real *s, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *rpvgrw, real *berr, integer *n_err_bnds__, real * err_bnds_norm__, real *err_bnds_comp__, integer *nparams, real * params, real *work, integer *iwork, integer *info)
+void sposvxx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *af,
+              integer *ldaf, char *equed, real *s, real *b, integer *ldb, real *x, integer *ldx,
+              real *rcond, real *rpvgrw, real *berr, integer *n_err_bnds__, real *err_bnds_norm__,
+              real *err_bnds_comp__, integer *nparams, real *params, real *work, integer *iwork,
+              integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sposvxx inputs: fact %c ,uplo %c ,n %" FLA_IS ",nrhs %" FLA_IS
@@ -518,14 +525,24 @@ void sposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integ
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer infequ;
     extern /* Subroutine */
-    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+        void
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     real smlnum;
     extern /* Subroutine */
-    void slaqsy_(char *, integer *, real *, integer *, real *, real *, real *, char *), spotrf_(char *, integer *, real *, integer *, integer *), spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *), slascl2_(integer *, integer *, real *, real *, integer *), spoequb_(integer *, real *, integer *, real *, real *, real *, integer *), sporfsx_(char *, char *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, real *, real *, integer *, real *, real *, integer *, integer *);
+        void
+        slaqsy_(char *, integer *, real *, integer *, real *, real *, real *, char *),
+        spotrf_(char *, integer *, real *, integer *, integer *),
+        spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *),
+        slascl2_(integer *, integer *, real *, real *, integer *),
+        spoequb_(integer *, real *, integer *, real *, real *, real *, integer *),
+        sporfsx_(char *, char *, integer *, integer *, real *, integer *, real *, integer *, real *,
+                 real *, integer *, real *, integer *, real *, real *, integer *, real *, real *,
+                 integer *, real *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -590,11 +607,11 @@ void sposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integ
     /* pivot growth is set here, the rest is initialized in SPORFSX. */
     *rpvgrw = 0.f;
     /* Test the input parameters. PARAMS is not tested until SPORFSX. */
-    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    else if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -606,15 +623,15 @@ void sposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integ
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (lsame_(fact, "F", 1, 1) && ! (rcequ || lsame_(equed, "N", 1, 1)))
+    else if(lsame_(fact, "F", 1, 1) && !(rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -9;
     }
@@ -630,11 +647,11 @@ void sposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integ
                 /* Computing MIN */
                 r__1 = smin;
                 r__2 = s[j]; // , expr subst
-                smin = fla_min(r__1,r__2);
+                smin = fla_min(r__1, r__2);
                 /* Computing MAX */
                 r__1 = smax;
                 r__2 = s[j]; // , expr subst
-                smax = fla_max(r__1,r__2);
+                smax = fla_max(r__1, r__2);
                 /* L10: */
             }
             if(smin <= 0.f)
@@ -643,7 +660,7 @@ void sposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integ
             }
             else if(*n > 0)
             {
-                scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
+                scond = fla_max(smin, smlnum) / fla_min(smax, bignum);
             }
             else
             {
@@ -652,11 +669,11 @@ void sposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integ
         }
         if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -12;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -14;
             }
@@ -695,7 +712,7 @@ void sposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integ
             /* Pivot in column INFO is exactly 0 */
             /* Compute the reciprocal pivot growth factor of the */
             /* leading rank-deficient INFO columns of A. */
-            *rpvgrw = sla_porpvgrw_(uplo, info, &a[a_offset], lda, &af[ af_offset], ldaf, &work[1]);
+            *rpvgrw = sla_porpvgrw_(uplo, info, &a[a_offset], lda, &af[af_offset], ldaf, &work[1]);
             return;
         }
     }

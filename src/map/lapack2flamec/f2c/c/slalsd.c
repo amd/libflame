@@ -179,7 +179,8 @@ in this case a minimum norm solution is returned. */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-void slalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ldb, real *rcond, integer *rank, real *work, integer *iwork, integer *info)
+void slalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, real *e, real *b,
+             integer *ldb, real *rcond, integer *rank, real *work, integer *iwork, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slalsd(uplo, smlsiz, n, nrhs, d__, e, b, ldb, rcond, rank, work, iwork, info);
@@ -227,23 +228,43 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     real rcnd;
     integer perm, nsub, nlvl, sqre, bxst;
     extern /* Subroutine */
-    void srot_(integer *, real *, integer *, real *, integer *, real *, real *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        srot_(integer *, real *, integer *, real *, integer *, real *, real *),
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *);
     integer poles, sizei, nsize;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     integer nwork, icmpq1, icmpq2;
     extern real slamch_(char *);
     extern /* Subroutine */
-    void slasda_(integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slalsa_(integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        slasda_(integer *, integer *, integer *, integer *, real *, real *, real *, integer *,
+                real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *,
+                integer *, real *, real *, real *, real *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slalsa_(integer *, integer *, integer *, integer *, real *, integer *, real *, integer *,
+                real *, integer *, real *, integer *, real *, real *, real *, real *, integer *,
+                integer *, integer *, integer *, real *, real *, real *, real *, integer *,
+                integer *),
+        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
+                integer *, integer *);
     integer givcol;
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    void slasdq_(char *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slartg_(real *, real *, real *, real *, real * ), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+        void
+        slasdq_(char *, integer *, integer *, integer *, integer *, integer *, real *, real *,
+                real *, integer *, real *, integer *, real *, integer *, real *, integer *),
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
+        slartg_(real *, real *, real *, real *, real *),
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     real orgnrm;
     integer givnum;
     extern real slanst_(char *, integer *, real *, real *);
     extern /* Subroutine */
-    void slasrt_(char *, integer *, real *, integer *);
+        void
+        slasrt_(char *, integer *, real *, integer *);
     integer givptr, smlszp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -319,7 +340,7 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
         else
         {
             *rank = 1;
-            slascl_("G", &c__0, &c__0, &d__[1], &c_b11, &c__1, nrhs, &b[ b_offset], ldb, info);
+            slascl_("G", &c__0, &c__0, &d__[1], &c_b11, &c__1, nrhs, &b[b_offset], ldb, info);
             d__[1] = f2c_abs(d__[1]);
         }
         return;
@@ -336,8 +357,7 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
             d__[i__ + 1] = cs * d__[i__ + 1];
             if(*nrhs == 1)
             {
-                aocl_blas_srot(&c__1, &b[i__ + b_dim1], &c__1, &b[i__ + 1 + b_dim1], &c__1, &cs,
-                               &sn);
+                srot_(&c__1, &b[i__ + b_dim1], &c__1, &b[i__ + 1 + b_dim1], &c__1, &cs, &sn);
             }
             else
             {
@@ -356,8 +376,8 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                 {
                     cs = work[(j << 1) - 1];
                     sn = work[j * 2];
-                    aocl_blas_srot(&c__1, &b[j + i__ * b_dim1], &c__1, &b[j + 1 + i__ * b_dim1],
-                                   &c__1, &cs, &sn);
+                    srot_(&c__1, &b[j + i__ * b_dim1], &c__1, &b[j + 1 + i__ * b_dim1], &c__1, &cs,
+                          &sn);
                     /* L20: */
                 }
                 /* L30: */
@@ -366,7 +386,7 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     }
     /* Scale. */
     nm1 = *n - 1;
-    orgnrm = aocl_lapack_slanst("M", n, &d__[1], &e[1]);
+    orgnrm = slanst_("M", n, &d__[1], &e[1]);
     if(orgnrm == 0.f)
     {
         slaset_("A", n, nrhs, &c_b6, &c_b6, &b[b_offset], ldb);
@@ -379,9 +399,9 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     if(*n <= *smlsiz)
     {
         nwork = *n * *n + 1;
-        aocl_lapack_slaset("A", n, n, &c_b6, &c_b11, &work[1], n);
-        aocl_lapack_slasdq("U", &c__0, n, n, &c__0, nrhs, &d__[1], &e[1], &work[1], n, &work[1], n,
-                           &b[b_offset], ldb, &work[nwork], info);
+        slaset_("A", n, n, &c_b6, &c_b11, &work[1], n);
+        slasdq_("U", &c__0, n, n, &c__0, nrhs, &d__[1], &e[1], &work[1], n, &work[1], n,
+                &b[b_offset], ldb, &work[nwork], info);
         if(*info != 0)
         {
             return;
@@ -396,15 +416,15 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
             }
             else
             {
-                aocl_lapack_slascl("G", &c__0, &c__0, &d__[i__], &c_b11, &c__1, nrhs,
-                                   &b[i__ + b_dim1], ldb, info);
+                slascl_("G", &c__0, &c__0, &d__[i__], &c_b11, &c__1, nrhs, &b[i__ + b_dim1], ldb,
+                        info);
                 ++(*rank);
             }
             /* L40: */
         }
-        aocl_blas_sgemm("T", "N", n, nrhs, n, &c_b11, &work[1], n, &b[b_offset], ldb, &c_b6,
-                        &work[nwork], n);
-        aocl_lapack_slacpy("A", n, nrhs, &work[nwork], n, &b[b_offset], ldb);
+        sgemm_("T", "N", n, nrhs, n, &c_b11, &work[1], n, &b[b_offset], ldb, &c_b6, &work[nwork],
+               n);
+        slacpy_("A", n, nrhs, &work[nwork], n, &b[b_offset], ldb);
         /* Unscale. */
         slascl_("G", &c__0, &c__0, &c_b11, &orgnrm, n, &c__1, &d__[1], n, info);
         slasrt_("D", n, &d__[1], info);
@@ -439,7 +459,7 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((r__1 = d__[i__], f2c_abs(r__1)) < eps)
+        if((r__1 = d__[i__], f2c_abs(r__1)) < eps)
         {
             d__[i__] = r_sign(&eps, &d__[i__]);
         }
@@ -448,7 +468,7 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     i__1 = nm1;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((r__1 = e[i__], f2c_abs(r__1)) < eps || i__ == nm1)
+        if((r__1 = e[i__], f2c_abs(r__1)) < eps || i__ == nm1)
         {
             ++nsub;
             iwork[nsub] = (aocl_int_t)(st);
@@ -460,7 +480,7 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                 nsize = i__ - st + 1;
                 iwork[sizei + nsub - 1] = (aocl_int_t)(nsize);
             }
-            else if ((r__1 = e[i__], f2c_abs(r__1)) >= eps)
+            else if((r__1 = e[i__], f2c_abs(r__1)) >= eps)
             {
                 /* A subproblem with E(NM1) not too small but I = NM1. */
                 nsize = *n - st + 1;
@@ -488,10 +508,9 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
             else if(nsize <= *smlsiz)
             {
                 /* This is a small subproblem and is solved by SLASDQ. */
-                aocl_lapack_slaset("A", &nsize, &nsize, &c_b6, &c_b11, &work[vt + st1], n);
-                aocl_lapack_slasdq("U", &c__0, &nsize, &nsize, &c__0, nrhs, &d__[st], &e[st],
-                                   &work[vt + st1], n, &work[nwork], n, &b[st + b_dim1], ldb,
-                                   &work[nwork], info);
+                slaset_("A", &nsize, &nsize, &c_b6, &c_b11, &work[vt + st1], n);
+                slasdq_("U", &c__0, &nsize, &nsize, &c__0, nrhs, &d__[st], &e[st], &work[vt + st1],
+                        n, &work[nwork], n, &b[st + b_dim1], ldb, &work[nwork], info);
                 if(*info != 0)
                 {
                     return;
@@ -501,23 +520,22 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
             else
             {
                 /* A large problem. Solve it using divide and conquer. */
-                aocl_lapack_slasda(&icmpq1, smlsiz, &nsize, &sqre, &d__[st], &e[st], &work[u + st1],
-                                   n, &work[vt + st1], &iwork[k + st1], &work[difl + st1],
-                                   &work[difr + st1], &work[z__ + st1], &work[poles + st1],
-                                   &iwork[givptr + st1], &iwork[givcol + st1], n,
-                                   &iwork[perm + st1], &work[givnum + st1], &work[c__ + st1],
-                                   &work[s + st1], &work[nwork], &iwork[iwk], info);
+                slasda_(&icmpq1, smlsiz, &nsize, &sqre, &d__[st], &e[st], &work[u + st1], n,
+                        &work[vt + st1], &iwork[k + st1], &work[difl + st1], &work[difr + st1],
+                        &work[z__ + st1], &work[poles + st1], &iwork[givptr + st1],
+                        &iwork[givcol + st1], n, &iwork[perm + st1], &work[givnum + st1],
+                        &work[c__ + st1], &work[s + st1], &work[nwork], &iwork[iwk], info);
                 if(*info != 0)
                 {
                     return;
                 }
                 bxst = bx + st1;
-                aocl_lapack_slalsa(&icmpq2, smlsiz, &nsize, nrhs, &b[st + b_dim1], ldb, &work[bxst],
-                                   n, &work[u + st1], n, &work[vt + st1], &iwork[k + st1],
-                                   &work[difl + st1], &work[difr + st1], &work[z__ + st1],
-                                   &work[poles + st1], &iwork[givptr + st1], &iwork[givcol + st1],
-                                   n, &iwork[perm + st1], &work[givnum + st1], &work[c__ + st1],
-                                   &work[s + st1], &work[nwork], &iwork[iwk], info);
+                slalsa_(&icmpq2, smlsiz, &nsize, nrhs, &b[st + b_dim1], ldb, &work[bxst], n,
+                        &work[u + st1], n, &work[vt + st1], &iwork[k + st1], &work[difl + st1],
+                        &work[difr + st1], &work[z__ + st1], &work[poles + st1],
+                        &iwork[givptr + st1], &iwork[givcol + st1], n, &iwork[perm + st1],
+                        &work[givnum + st1], &work[c__ + st1], &work[s + st1], &work[nwork],
+                        &iwork[iwk], info);
                 if(*info != 0)
                 {
                     return;
@@ -534,15 +552,15 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     {
         /* Some of the elements in D can be negative because 1-by-1 */
         /* subproblems were not solved explicitly. */
-        if ((r__1 = d__[i__], f2c_abs(r__1)) <= tol)
+        if((r__1 = d__[i__], f2c_abs(r__1)) <= tol)
         {
             aocl_lapack_slaset("A", &c__1, nrhs, &c_b6, &c_b6, &work[bx + i__ - 1], n);
         }
         else
         {
             ++(*rank);
-            aocl_lapack_slascl("G", &c__0, &c__0, &d__[i__], &c_b11, &c__1, nrhs,
-                               &work[bx + i__ - 1], n, info);
+            slascl_("G", &c__0, &c__0, &d__[i__], &c_b11, &c__1, nrhs, &work[bx + i__ - 1], n,
+                    info);
         }
         d__[i__] = (r__1 = d__[i__], f2c_abs(r__1));
         /* L70: */
@@ -562,17 +580,16 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
         }
         else if(nsize <= *smlsiz)
         {
-            aocl_blas_sgemm("T", "N", &nsize, nrhs, &nsize, &c_b11, &work[vt + st1], n, &work[bxst],
-                            n, &c_b6, &b[st + b_dim1], ldb);
+            sgemm_("T", "N", &nsize, nrhs, &nsize, &c_b11, &work[vt + st1], n, &work[bxst], n,
+                   &c_b6, &b[st + b_dim1], ldb);
         }
         else
         {
-            aocl_lapack_slalsa(&icmpq2, smlsiz, &nsize, nrhs, &work[bxst], n, &b[st + b_dim1], ldb,
-                               &work[u + st1], n, &work[vt + st1], &iwork[k + st1],
-                               &work[difl + st1], &work[difr + st1], &work[z__ + st1],
-                               &work[poles + st1], &iwork[givptr + st1], &iwork[givcol + st1], n,
-                               &iwork[perm + st1], &work[givnum + st1], &work[c__ + st1],
-                               &work[s + st1], &work[nwork], &iwork[iwk], info);
+            slalsa_(&icmpq2, smlsiz, &nsize, nrhs, &work[bxst], n, &b[st + b_dim1], ldb,
+                    &work[u + st1], n, &work[vt + st1], &iwork[k + st1], &work[difl + st1],
+                    &work[difr + st1], &work[z__ + st1], &work[poles + st1], &iwork[givptr + st1],
+                    &iwork[givcol + st1], n, &iwork[perm + st1], &work[givnum + st1],
+                    &work[c__ + st1], &work[s + st1], &work[nwork], &iwork[iwk], info);
             if(*info != 0)
             {
                 return;

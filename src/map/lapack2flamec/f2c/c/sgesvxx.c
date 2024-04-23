@@ -1,6 +1,9 @@
 #ifdef FLA_ENABLE_XBLAS
-/* ../netlib/sgesvxx.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sgesvxx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief <b> SGESVXX computes the solution to system of linear equations A * X = B for GE matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -545,7 +548,11 @@ defaults */
 /* > \ingroup realGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-void sgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, integer *lda, real *af, integer *ldaf, integer *ipiv, char *equed, real *r__, real *c__, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *rpvgrw, real *berr, integer * n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer * nparams, real *params, real *work, integer *iwork, integer *info)
+void sgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, integer *lda, real *af,
+              integer *ldaf, integer *ipiv, char *equed, real *r__, real *c__, real *b,
+              integer *ldb, real *x, integer *ldx, real *rcond, real *rpvgrw, real *berr,
+              integer *n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer *nparams,
+              real *params, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgesvxx inputs: fact %c ,trans %c ,n %" FLA_IS ",nrhs %" FLA_IS
@@ -567,20 +574,33 @@ void sgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, inte
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    void slaqge_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, char *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        slaqge_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *,
+                char *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer infequ;
     logical colequ;
     extern /* Subroutine */
-    void sgetrf_(integer *, integer *, real *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+        void
+        sgetrf_(integer *, integer *, real *, integer *, integer *, integer *),
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     real rowcnd;
     logical notran;
     extern /* Subroutine */
-    void sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *,
+                integer *);
     real smlnum;
     logical rowequ;
     extern /* Subroutine */
-    void slascl2_(integer *, integer *, real *, real *, integer *), sgeequb_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *), sgerfsx_(char *, char *, integer *, integer *, real *, integer *, real *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, real *, integer *, real *, real *, integer *, real *, real *, integer *, integer *);
+        void
+        slascl2_(integer *, integer *, real *, real *, integer *),
+        sgeequb_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *,
+                 integer *),
+        sgerfsx_(char *, char *, integer *, integer *, real *, integer *, real *, integer *,
+                 integer *, real *, real *, real *, integer *, real *, integer *, real *, real *,
+                 integer *, real *, real *, integer *, real *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -650,11 +670,11 @@ void sgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, inte
     /* pivot growth is set here, the rest is initialized in SGERFSX. */
     *rpvgrw = 0.f;
     /* Test the input parameters. PARAMS is not tested until SGERFSX. */
-    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -666,15 +686,15 @@ void sgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, inte
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (lsame_(fact, "F", 1, 1) && ! (rowequ || colequ || lsame_(equed, "N", 1, 1)))
+    else if(lsame_(fact, "F", 1, 1) && !(rowequ || colequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -10;
     }
@@ -690,11 +710,11 @@ void sgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, inte
                 /* Computing MIN */
                 r__1 = rcmin;
                 r__2 = r__[j]; // , expr subst
-                rcmin = fla_min(r__1,r__2);
+                rcmin = fla_min(r__1, r__2);
                 /* Computing MAX */
                 r__1 = rcmax;
                 r__2 = r__[j]; // , expr subst
-                rcmax = fla_max(r__1,r__2);
+                rcmax = fla_max(r__1, r__2);
                 /* L10: */
             }
             if(rcmin <= 0.f)
@@ -703,7 +723,7 @@ void sgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, inte
             }
             else if(*n > 0)
             {
-                rowcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+                rowcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
             }
             else
             {
@@ -720,11 +740,11 @@ void sgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, inte
                 /* Computing MIN */
                 r__1 = rcmin;
                 r__2 = c__[j]; // , expr subst
-                rcmin = fla_min(r__1,r__2);
+                rcmin = fla_min(r__1, r__2);
                 /* Computing MAX */
                 r__1 = rcmax;
                 r__2 = c__[j]; // , expr subst
-                rcmax = fla_max(r__1,r__2);
+                rcmax = fla_max(r__1, r__2);
                 /* L20: */
             }
             if(rcmin <= 0.f)
@@ -733,7 +753,7 @@ void sgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, inte
             }
             else if(*n > 0)
             {
-                colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+                colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
             }
             else
             {
@@ -742,11 +762,11 @@ void sgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, inte
         }
         if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -14;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -16;
             }
@@ -765,7 +785,7 @@ void sgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, inte
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            slaqge_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, & colcnd, &amax, equed);
+            slaqge_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, &colcnd, &amax, equed);
             rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
             colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }
@@ -813,7 +833,7 @@ void sgesvxx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, inte
             /* Pivot in column INFO is exactly 0 */
             /* Compute the reciprocal pivot growth factor of the */
             /* leading rank-deficient INFO columns of A. */
-            *rpvgrw = sla_gerpvgrw_(n, info, &a[a_offset], lda, &af[ af_offset], ldaf);
+            *rpvgrw = sla_gerpvgrw_(n, info, &a[a_offset], lda, &af[af_offset], ldaf);
             return;
         }
     }

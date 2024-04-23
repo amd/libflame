@@ -129,10 +129,13 @@ ILO=1 and IHI=0, if N=0. */
 /* > \ingroup doubleGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doublereal *scale, integer *m, doublereal *v, integer * ldv, integer *info)
+void dgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doublereal *scale,
+             integer *m, doublereal *v, integer *ldv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgebak inputs: job %c, side %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", m %" FLA_IS ", ldv %" FLA_IS "",*job, *side, *n, *ilo, *ihi, *m, *ldv);
+    AOCL_DTL_SNPRINTF("dgebak inputs: job %c, side %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS
+                      ", m %" FLA_IS ", ldv %" FLA_IS "",
+                      *job, *side, *n, *ilo, *ihi, *m, *ldv);
     /* System generated locals */
     aocl_int64_t v_dim1, v_offset, i__1;
     /* Local variables */
@@ -140,13 +143,16 @@ void dgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doub
     doublereal s;
     integer ii;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical leftv;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical rightv;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -178,7 +184,8 @@ void dgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doub
     rightv = lsame_(side, "R", 1, 1);
     leftv = lsame_(side, "L", 1, 1);
     *info = 0;
-    if (! lsame_(job, "N", 1, 1) && ! lsame_(job, "P", 1, 1) && ! lsame_(job, "S", 1, 1) && ! lsame_(job, "B", 1, 1))
+    if(!lsame_(job, "N", 1, 1) && !lsame_(job, "P", 1, 1) && !lsame_(job, "S", 1, 1)
+       && !lsame_(job, "B", 1, 1))
     {
         *info = -1;
     }
@@ -190,11 +197,11 @@ void dgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doub
     {
         *info = -3;
     }
-    else if (*ilo < 1 || *ilo > fla_max(1,*n))
+    else if(*ilo < 1 || *ilo > fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*ihi < fla_min(*ilo,*n) || *ihi > *n)
+    else if(*ihi < fla_min(*ilo, *n) || *ihi > *n)
     {
         *info = -5;
     }
@@ -202,7 +209,7 @@ void dgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doub
     {
         *info = -7;
     }
-    else if (*ldv < fla_max(1,*n))
+    else if(*ldv < fla_max(1, *n))
     {
         *info = -9;
     }
@@ -224,7 +231,7 @@ void dgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doub
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (lsame_(job, "N", 1, 1))
+    if(lsame_(job, "N", 1, 1))
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -234,7 +241,7 @@ void dgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doub
         goto L30;
     }
     /* Backward balance */
-    if (lsame_(job, "S", 1, 1) || lsame_(job, "B", 1, 1))
+    if(lsame_(job, "S", 1, 1) || lsame_(job, "B", 1, 1))
     {
         if(rightv)
         {
@@ -261,7 +268,7 @@ void dgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doub
     /* For I = ILO-1 step -1 until 1, */
     /* IHI+1 step 1 until N do -- */
 L30:
-    if (lsame_(job, "P", 1, 1) || lsame_(job, "B", 1, 1))
+    if(lsame_(job, "P", 1, 1) || lsame_(job, "B", 1, 1))
     {
         if(rightv)
         {
@@ -282,7 +289,7 @@ L30:
                 {
                     goto L40;
                 }
-                aocl_blas_dswap(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
+                dswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
             L40:;
             }
         }
@@ -305,7 +312,7 @@ L30:
                 {
                     goto L50;
                 }
-                aocl_blas_dswap(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
+                dswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
             L50:;
             }
         }

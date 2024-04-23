@@ -1,16 +1,11 @@
-/* ../netlib/v3.9.0/cungtsqr.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/cungtsqr.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
-static complex c_b2 =
-{
-    0.f,0.f
-}
-;
+static complex c_b1 = {1.f, 0.f};
+static complex c_b2 = {0.f, 0.f};
 static integer c__1 = 1;
 /* > \brief \b CUNGTSQR */
 /* =========== DOCUMENTATION =========== */
@@ -18,11 +13,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CUNGTSQR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cuntsqr .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cuntsqr
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zungtsq r.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zungtsq
+ * r.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zungtsq r.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zungtsq
+ * r.f"> */
 /* > [TXT]</a> */
 /* > */
 /* Definition: */
@@ -173,12 +174,16 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void cungtsqr_(integer *m, integer *n, integer *mb, integer * nb, complex *a, integer *lda, complex *t, integer *ldt, complex *work, integer *lwork, integer *info)
+void cungtsqr_(integer *m, integer *n, integer *mb, integer *nb, complex *a, integer *lda,
+               complex *t, integer *ldt, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"cungtsqr inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS ", lwork %" FLA_IS "",*m, *n, *mb, *nb, *lda, *ldt, *lwork);
+    snprintf(buffer, 256,
+             "cungtsqr inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS
+             ", lda %" FLA_IS ", ldt %" FLA_IS ", lwork %" FLA_IS "",
+             *m, *n, *mb, *nb, *lda, *ldt, *lwork);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -186,10 +191,16 @@ void cungtsqr_(integer *m, integer *n, integer *mb, integer * nb, complex *a, in
     complex q__1;
     /* Local variables */
     extern /* Subroutine */
-    void clamtsqr_(char *, char *, integer *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer * );
+        void
+        clamtsqr_(char *, char *, integer *, integer *, integer *, integer *, integer *, complex *,
+                  integer *, complex *, integer *, complex *, integer *, complex *, integer *,
+                  integer *);
     integer lworkopt, j, lc, lw, ldc, iinfo;
     extern /* Subroutine */
-    void ccopy_(integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *),
+        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     integer nblocal;
     /* -- LAPACK computational routine (version 3.9.0) -- */
@@ -222,23 +233,23 @@ void cungtsqr_(integer *m, integer *n, integer *mb, integer * nb, complex *a, in
     /* Function Body */
     lquery = *lwork == -1;
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0 || *m < *n)
+    else if(*n < 0 || *m < *n)
     {
         *info = -2;
     }
-    else if (*mb <= *n)
+    else if(*mb <= *n)
     {
         *info = -3;
     }
-    else if (*nb < 1)
+    else if(*nb < 1)
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -6;
     }
@@ -246,8 +257,8 @@ void cungtsqr_(integer *m, integer *n, integer *mb, integer * nb, complex *a, in
     {
         /* Computing MAX */
         i__1 = 1;
-        i__2 = fla_min(*nb,*n); // , expr subst
-        if (*ldt < fla_max(i__1,i__2))
+        i__2 = fla_min(*nb, *n); // , expr subst
+        if(*ldt < fla_max(i__1, i__2))
         {
             *info = -8;
         }
@@ -256,14 +267,14 @@ void cungtsqr_(integer *m, integer *n, integer *mb, integer * nb, complex *a, in
             /* Test the input LWORK for the dimension of the array WORK. */
             /* This workspace is used to store array C(LDC, N) and WORK(LWORK) */
             /* in the call to CLAMTSQR. See the documentation for CLAMTSQR. */
-            if (*lwork < 2 && ! lquery)
+            if(*lwork < 2 && !lquery)
             {
                 *info = -10;
             }
             else
             {
                 /* Set block size for column blocks */
-                nblocal = fla_min(*nb,*n);
+                nblocal = fla_min(*nb, *n);
                 /* LWORK = -1, then set the size for the array C(LDC,N) */
                 /* in CLAMTSQR call and set the optimal size of the work array */
                 /* WORK(LWORK) in CLAMTSQR call. */
@@ -271,7 +282,7 @@ void cungtsqr_(integer *m, integer *n, integer *mb, integer * nb, complex *a, in
                 lc = ldc * *n;
                 lw = *n * nblocal;
                 lworkopt = lc + lw;
-                if (*lwork < fla_max(1,lworkopt) && ! lquery)
+                if(*lwork < fla_max(1, lworkopt) && !lquery)
                 {
                     *info = -10;
                 }
@@ -279,16 +290,16 @@ void cungtsqr_(integer *m, integer *n, integer *mb, integer * nb, complex *a, in
         }
     }
     /* Handle error in the input parameters and return workspace query. */
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CUNGTSQR", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-        q__1.r = (real) lworkopt;
+        q__1.r = (real)lworkopt;
         q__1.i = 0.f; // , expr subst
         work[1].r = q__1.r;
         work[1].i = q__1.i; // , expr subst
@@ -296,9 +307,9 @@ void cungtsqr_(integer *m, integer *n, integer *mb, integer * nb, complex *a, in
         return;
     }
     /* Quick return if possible */
-    if (fla_min(*m,*n) == 0)
+    if(fla_min(*m, *n) == 0)
     {
-        q__1.r = (real) lworkopt;
+        q__1.r = (real)lworkopt;
         q__1.i = 0.f; // , expr subst
         work[1].r = q__1.r;
         work[1].i = q__1.i; // , expr subst
@@ -315,21 +326,20 @@ void cungtsqr_(integer *m, integer *n, integer *mb, integer * nb, complex *a, in
     /* on the diagonal and zeros elsewhere. */
     claset_("F", m, n, &c_b2, &c_b1, &work[1], &ldc);
     /* (1b) On input, WORK(1:LDC*N) stores ( I );
-    */
+     */
     /* ( 0 ) */
     /* On output, WORK(1:LDC*N) stores Q1_in. */
-    clamtsqr_("L", "N", m, n, n, mb, &nblocal, &a[a_offset], lda, &t[t_offset], ldt, &work[1], &ldc, &work[lc + 1], &lw, &iinfo);
+    clamtsqr_("L", "N", m, n, n, mb, &nblocal, &a[a_offset], lda, &t[t_offset], ldt, &work[1], &ldc,
+              &work[lc + 1], &lw, &iinfo);
     /* (2) Copy the result from the part of the work array (1:M,1:N) */
     /* with the leading dimension LDC that starts at WORK(1) into */
     /* the output array A(1:M,1:N) column-by-column. */
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         ccopy_(m, &work[(j - 1) * ldc + 1], &c__1, &a[j * a_dim1 + 1], &c__1);
     }
-    q__1.r = (real) lworkopt;
+    q__1.r = (real)lworkopt;
     q__1.i = 0.f; // , expr subst
     work[1].r = q__1.r;
     work[1].i = q__1.i; // , expr subst

@@ -195,15 +195,18 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real *c__, real *s, complex *a, integer *lda)
+void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real *c__, real *s,
+            complex *a, integer *lda)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clasr inputs: side %c, pivot %c, direct %c, m %lld, n %lld, lda %lld",*side, *pivot, *direct, *m, *n, *lda);
+    snprintf(buffer, 256, "clasr inputs: side %c, pivot %c, direct %c, m %lld, n %lld, lda %lld",
+             *side, *pivot, *direct, *m, *n, *lda);
 #else
-    snprintf(buffer, 256,"clasr inputs: side %c, pivot %c, direct %c, m %d, n %d, lda %d",*side, *pivot, *direct, *m, *n, *lda);
+    snprintf(buffer, 256, "clasr inputs: side %c, pivot %c, direct %c, m %d, n %d, lda %d", *side,
+             *pivot, *direct, *m, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -216,7 +219,8 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
     extern logical lsame_(char *, char *, integer, integer);
     real ctemp, stemp;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -246,15 +250,15 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
     a -= a_offset;
     /* Function Body */
     info = 0;
-    if (! (lsame_(side, "L", 1, 1) || lsame_(side, "R", 1, 1)))
+    if(!(lsame_(side, "L", 1, 1) || lsame_(side, "R", 1, 1)))
     {
         info = 1;
     }
-    else if (! (lsame_(pivot, "V", 1, 1) || lsame_(pivot, "T", 1, 1) || lsame_(pivot, "B", 1, 1)))
+    else if(!(lsame_(pivot, "V", 1, 1) || lsame_(pivot, "T", 1, 1) || lsame_(pivot, "B", 1, 1)))
     {
         info = 2;
     }
-    else if (! (lsame_(direct, "F", 1, 1) || lsame_(direct, "B", 1, 1)))
+    else if(!(lsame_(direct, "F", 1, 1) || lsame_(direct, "B", 1, 1)))
     {
         info = 3;
     }
@@ -266,7 +270,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
     {
         info = 5;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         info = 9;
     }
@@ -282,12 +286,12 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (lsame_(side, "L", 1, 1))
+    if(lsame_(side, "L", 1, 1))
     {
         /* Form P * A */
-        if (lsame_(pivot, "V", 1, 1))
+        if(lsame_(pivot, "V", 1, 1))
         {
-            if (lsame_(direct, "F", 1, 1))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *m - 1;
                 for(j = 1; j <= i__1; ++j)
@@ -306,29 +310,29 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.real = ctemp * temp.real;
                             q__2.imag = ctemp * temp.imag; // , expr subst
                             i__4 = j + i__ * a_dim1;
-                            q__3.real = stemp * a[i__4].real;
-                            q__3.imag = stemp * a[i__4].imag; // , expr subst
-                            q__1.real = q__2.real - q__3.real;
-                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
-                            a[i__3].real = q__1.real;
-                            a[i__3].imag = q__1.imag; // , expr subst
+                            q__3.r = stemp * a[i__4].r;
+                            q__3.i = stemp * a[i__4].i; // , expr subst
+                            q__1.r = q__2.r - q__3.r;
+                            q__1.i = q__2.i - q__3.i; // , expr subst
+                            a[i__3].r = q__1.r;
+                            a[i__3].i = q__1.i; // , expr subst
                             i__3 = j + i__ * a_dim1;
                             q__2.real = stemp * temp.real;
                             q__2.imag = stemp * temp.imag; // , expr subst
                             i__4 = j + i__ * a_dim1;
-                            q__3.real = ctemp * a[i__4].real;
-                            q__3.imag = ctemp * a[i__4].imag; // , expr subst
-                            q__1.real = q__2.real + q__3.real;
-                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
-                            a[i__3].real = q__1.real;
-                            a[i__3].imag = q__1.imag; // , expr subst
+                            q__3.r = ctemp * a[i__4].r;
+                            q__3.i = ctemp * a[i__4].i; // , expr subst
+                            q__1.r = q__2.r + q__3.r;
+                            q__1.i = q__2.i + q__3.i; // , expr subst
+                            a[i__3].r = q__1.r;
+                            a[i__3].i = q__1.i; // , expr subst
                             /* L10: */
                         }
                     }
                     /* L20: */
                 }
             }
-            else if (lsame_(direct, "B", 1, 1))
+            else if(lsame_(direct, "B", 1, 1))
             {
                 for(j = *m - 1; j >= 1; --j)
                 {
@@ -346,22 +350,22 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.real = ctemp * temp.real;
                             q__2.imag = ctemp * temp.imag; // , expr subst
                             i__3 = j + i__ * a_dim1;
-                            q__3.real = stemp * a[i__3].real;
-                            q__3.imag = stemp * a[i__3].imag; // , expr subst
-                            q__1.real = q__2.real - q__3.real;
-                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
-                            a[i__2].real = q__1.real;
-                            a[i__2].imag = q__1.imag; // , expr subst
+                            q__3.r = stemp * a[i__3].r;
+                            q__3.i = stemp * a[i__3].i; // , expr subst
+                            q__1.r = q__2.r - q__3.r;
+                            q__1.i = q__2.i - q__3.i; // , expr subst
+                            a[i__2].r = q__1.r;
+                            a[i__2].i = q__1.i; // , expr subst
                             i__2 = j + i__ * a_dim1;
                             q__2.real = stemp * temp.real;
                             q__2.imag = stemp * temp.imag; // , expr subst
                             i__3 = j + i__ * a_dim1;
-                            q__3.real = ctemp * a[i__3].real;
-                            q__3.imag = ctemp * a[i__3].imag; // , expr subst
-                            q__1.real = q__2.real + q__3.real;
-                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
-                            a[i__2].real = q__1.real;
-                            a[i__2].imag = q__1.imag; // , expr subst
+                            q__3.r = ctemp * a[i__3].r;
+                            q__3.i = ctemp * a[i__3].i; // , expr subst
+                            q__1.r = q__2.r + q__3.r;
+                            q__1.i = q__2.i + q__3.i; // , expr subst
+                            a[i__2].r = q__1.r;
+                            a[i__2].i = q__1.i; // , expr subst
                             /* L30: */
                         }
                     }
@@ -369,9 +373,9 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                 }
             }
         }
-        else if (lsame_(pivot, "T", 1, 1))
+        else if(lsame_(pivot, "T", 1, 1))
         {
-            if (lsame_(direct, "F", 1, 1))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *m;
                 for(j = 2; j <= i__1; ++j)
@@ -390,29 +394,29 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.real = ctemp * temp.real;
                             q__2.imag = ctemp * temp.imag; // , expr subst
                             i__4 = i__ * a_dim1 + 1;
-                            q__3.real = stemp * a[i__4].real;
-                            q__3.imag = stemp * a[i__4].imag; // , expr subst
-                            q__1.real = q__2.real - q__3.real;
-                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
-                            a[i__3].real = q__1.real;
-                            a[i__3].imag = q__1.imag; // , expr subst
+                            q__3.r = stemp * a[i__4].r;
+                            q__3.i = stemp * a[i__4].i; // , expr subst
+                            q__1.r = q__2.r - q__3.r;
+                            q__1.i = q__2.i - q__3.i; // , expr subst
+                            a[i__3].r = q__1.r;
+                            a[i__3].i = q__1.i; // , expr subst
                             i__3 = i__ * a_dim1 + 1;
                             q__2.real = stemp * temp.real;
                             q__2.imag = stemp * temp.imag; // , expr subst
                             i__4 = i__ * a_dim1 + 1;
-                            q__3.real = ctemp * a[i__4].real;
-                            q__3.imag = ctemp * a[i__4].imag; // , expr subst
-                            q__1.real = q__2.real + q__3.real;
-                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
-                            a[i__3].real = q__1.real;
-                            a[i__3].imag = q__1.imag; // , expr subst
+                            q__3.r = ctemp * a[i__4].r;
+                            q__3.i = ctemp * a[i__4].i; // , expr subst
+                            q__1.r = q__2.r + q__3.r;
+                            q__1.i = q__2.i + q__3.i; // , expr subst
+                            a[i__3].r = q__1.r;
+                            a[i__3].i = q__1.i; // , expr subst
                             /* L50: */
                         }
                     }
                     /* L60: */
                 }
             }
-            else if (lsame_(direct, "B", 1, 1))
+            else if(lsame_(direct, "B", 1, 1))
             {
                 for(j = *m; j >= 2; --j)
                 {
@@ -430,22 +434,22 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.real = ctemp * temp.real;
                             q__2.imag = ctemp * temp.imag; // , expr subst
                             i__3 = i__ * a_dim1 + 1;
-                            q__3.real = stemp * a[i__3].real;
-                            q__3.imag = stemp * a[i__3].imag; // , expr subst
-                            q__1.real = q__2.real - q__3.real;
-                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
-                            a[i__2].real = q__1.real;
-                            a[i__2].imag = q__1.imag; // , expr subst
+                            q__3.r = stemp * a[i__3].r;
+                            q__3.i = stemp * a[i__3].i; // , expr subst
+                            q__1.r = q__2.r - q__3.r;
+                            q__1.i = q__2.i - q__3.i; // , expr subst
+                            a[i__2].r = q__1.r;
+                            a[i__2].i = q__1.i; // , expr subst
                             i__2 = i__ * a_dim1 + 1;
                             q__2.real = stemp * temp.real;
                             q__2.imag = stemp * temp.imag; // , expr subst
                             i__3 = i__ * a_dim1 + 1;
-                            q__3.real = ctemp * a[i__3].real;
-                            q__3.imag = ctemp * a[i__3].imag; // , expr subst
-                            q__1.real = q__2.real + q__3.real;
-                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
-                            a[i__2].real = q__1.real;
-                            a[i__2].imag = q__1.imag; // , expr subst
+                            q__3.r = ctemp * a[i__3].r;
+                            q__3.i = ctemp * a[i__3].i; // , expr subst
+                            q__1.r = q__2.r + q__3.r;
+                            q__1.i = q__2.i + q__3.i; // , expr subst
+                            a[i__2].r = q__1.r;
+                            a[i__2].i = q__1.i; // , expr subst
                             /* L70: */
                         }
                     }
@@ -453,9 +457,9 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                 }
             }
         }
-        else if (lsame_(pivot, "B", 1, 1))
+        else if(lsame_(pivot, "B", 1, 1))
         {
-            if (lsame_(direct, "F", 1, 1))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *m - 1;
                 for(j = 1; j <= i__1; ++j)
@@ -472,31 +476,31 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             temp.imag = a[i__3].imag; // , expr subst
                             i__3 = j + i__ * a_dim1;
                             i__4 = *m + i__ * a_dim1;
-                            q__2.real = stemp * a[i__4].real;
-                            q__2.imag = stemp * a[i__4].imag; // , expr subst
-                            q__3.real = ctemp * temp.real;
-                            q__3.imag = ctemp * temp.imag; // , expr subst
-                            q__1.real = q__2.real + q__3.real;
-                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
-                            a[i__3].real = q__1.real;
-                            a[i__3].imag = q__1.imag; // , expr subst
+                            q__2.r = stemp * a[i__4].r;
+                            q__2.i = stemp * a[i__4].i; // , expr subst
+                            q__3.r = ctemp * temp.r;
+                            q__3.i = ctemp * temp.i; // , expr subst
+                            q__1.r = q__2.r + q__3.r;
+                            q__1.i = q__2.i + q__3.i; // , expr subst
+                            a[i__3].r = q__1.r;
+                            a[i__3].i = q__1.i; // , expr subst
                             i__3 = *m + i__ * a_dim1;
                             i__4 = *m + i__ * a_dim1;
-                            q__2.real = ctemp * a[i__4].real;
-                            q__2.imag = ctemp * a[i__4].imag; // , expr subst
-                            q__3.real = stemp * temp.real;
-                            q__3.imag = stemp * temp.imag; // , expr subst
-                            q__1.real = q__2.real - q__3.real;
-                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
-                            a[i__3].real = q__1.real;
-                            a[i__3].imag = q__1.imag; // , expr subst
+                            q__2.r = ctemp * a[i__4].r;
+                            q__2.i = ctemp * a[i__4].i; // , expr subst
+                            q__3.r = stemp * temp.r;
+                            q__3.i = stemp * temp.i; // , expr subst
+                            q__1.r = q__2.r - q__3.r;
+                            q__1.i = q__2.i - q__3.i; // , expr subst
+                            a[i__3].r = q__1.r;
+                            a[i__3].i = q__1.i; // , expr subst
                             /* L90: */
                         }
                     }
                     /* L100: */
                 }
             }
-            else if (lsame_(direct, "B", 1, 1))
+            else if(lsame_(direct, "B", 1, 1))
             {
                 for(j = *m - 1; j >= 1; --j)
                 {
@@ -512,24 +516,24 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             temp.imag = a[i__2].imag; // , expr subst
                             i__2 = j + i__ * a_dim1;
                             i__3 = *m + i__ * a_dim1;
-                            q__2.real = stemp * a[i__3].real;
-                            q__2.imag = stemp * a[i__3].imag; // , expr subst
-                            q__3.real = ctemp * temp.real;
-                            q__3.imag = ctemp * temp.imag; // , expr subst
-                            q__1.real = q__2.real + q__3.real;
-                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
-                            a[i__2].real = q__1.real;
-                            a[i__2].imag = q__1.imag; // , expr subst
+                            q__2.r = stemp * a[i__3].r;
+                            q__2.i = stemp * a[i__3].i; // , expr subst
+                            q__3.r = ctemp * temp.r;
+                            q__3.i = ctemp * temp.i; // , expr subst
+                            q__1.r = q__2.r + q__3.r;
+                            q__1.i = q__2.i + q__3.i; // , expr subst
+                            a[i__2].r = q__1.r;
+                            a[i__2].i = q__1.i; // , expr subst
                             i__2 = *m + i__ * a_dim1;
                             i__3 = *m + i__ * a_dim1;
-                            q__2.real = ctemp * a[i__3].real;
-                            q__2.imag = ctemp * a[i__3].imag; // , expr subst
-                            q__3.real = stemp * temp.real;
-                            q__3.imag = stemp * temp.imag; // , expr subst
-                            q__1.real = q__2.real - q__3.real;
-                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
-                            a[i__2].real = q__1.real;
-                            a[i__2].imag = q__1.imag; // , expr subst
+                            q__2.r = ctemp * a[i__3].r;
+                            q__2.i = ctemp * a[i__3].i; // , expr subst
+                            q__3.r = stemp * temp.r;
+                            q__3.i = stemp * temp.i; // , expr subst
+                            q__1.r = q__2.r - q__3.r;
+                            q__1.i = q__2.i - q__3.i; // , expr subst
+                            a[i__2].r = q__1.r;
+                            a[i__2].i = q__1.i; // , expr subst
                             /* L110: */
                         }
                     }
@@ -538,12 +542,12 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
             }
         }
     }
-    else if (lsame_(side, "R", 1, 1))
+    else if(lsame_(side, "R", 1, 1))
     {
         /* Form A * P**T */
-        if (lsame_(pivot, "V", 1, 1))
+        if(lsame_(pivot, "V", 1, 1))
         {
-            if (lsame_(direct, "F", 1, 1))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *n - 1;
                 for(j = 1; j <= i__1; ++j)
@@ -562,29 +566,29 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.real = ctemp * temp.real;
                             q__2.imag = ctemp * temp.imag; // , expr subst
                             i__4 = i__ + j * a_dim1;
-                            q__3.real = stemp * a[i__4].real;
-                            q__3.imag = stemp * a[i__4].imag; // , expr subst
-                            q__1.real = q__2.real - q__3.real;
-                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
-                            a[i__3].real = q__1.real;
-                            a[i__3].imag = q__1.imag; // , expr subst
+                            q__3.r = stemp * a[i__4].r;
+                            q__3.i = stemp * a[i__4].i; // , expr subst
+                            q__1.r = q__2.r - q__3.r;
+                            q__1.i = q__2.i - q__3.i; // , expr subst
+                            a[i__3].r = q__1.r;
+                            a[i__3].i = q__1.i; // , expr subst
                             i__3 = i__ + j * a_dim1;
                             q__2.real = stemp * temp.real;
                             q__2.imag = stemp * temp.imag; // , expr subst
                             i__4 = i__ + j * a_dim1;
-                            q__3.real = ctemp * a[i__4].real;
-                            q__3.imag = ctemp * a[i__4].imag; // , expr subst
-                            q__1.real = q__2.real + q__3.real;
-                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
-                            a[i__3].real = q__1.real;
-                            a[i__3].imag = q__1.imag; // , expr subst
+                            q__3.r = ctemp * a[i__4].r;
+                            q__3.i = ctemp * a[i__4].i; // , expr subst
+                            q__1.r = q__2.r + q__3.r;
+                            q__1.i = q__2.i + q__3.i; // , expr subst
+                            a[i__3].r = q__1.r;
+                            a[i__3].i = q__1.i; // , expr subst
                             /* L130: */
                         }
                     }
                     /* L140: */
                 }
             }
-            else if (lsame_(direct, "B", 1, 1))
+            else if(lsame_(direct, "B", 1, 1))
             {
                 for(j = *n - 1; j >= 1; --j)
                 {
@@ -602,22 +606,22 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.real = ctemp * temp.real;
                             q__2.imag = ctemp * temp.imag; // , expr subst
                             i__3 = i__ + j * a_dim1;
-                            q__3.real = stemp * a[i__3].real;
-                            q__3.imag = stemp * a[i__3].imag; // , expr subst
-                            q__1.real = q__2.real - q__3.real;
-                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
-                            a[i__2].real = q__1.real;
-                            a[i__2].imag = q__1.imag; // , expr subst
+                            q__3.r = stemp * a[i__3].r;
+                            q__3.i = stemp * a[i__3].i; // , expr subst
+                            q__1.r = q__2.r - q__3.r;
+                            q__1.i = q__2.i - q__3.i; // , expr subst
+                            a[i__2].r = q__1.r;
+                            a[i__2].i = q__1.i; // , expr subst
                             i__2 = i__ + j * a_dim1;
                             q__2.real = stemp * temp.real;
                             q__2.imag = stemp * temp.imag; // , expr subst
                             i__3 = i__ + j * a_dim1;
-                            q__3.real = ctemp * a[i__3].real;
-                            q__3.imag = ctemp * a[i__3].imag; // , expr subst
-                            q__1.real = q__2.real + q__3.real;
-                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
-                            a[i__2].real = q__1.real;
-                            a[i__2].imag = q__1.imag; // , expr subst
+                            q__3.r = ctemp * a[i__3].r;
+                            q__3.i = ctemp * a[i__3].i; // , expr subst
+                            q__1.r = q__2.r + q__3.r;
+                            q__1.i = q__2.i + q__3.i; // , expr subst
+                            a[i__2].r = q__1.r;
+                            a[i__2].i = q__1.i; // , expr subst
                             /* L150: */
                         }
                     }
@@ -625,9 +629,9 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                 }
             }
         }
-        else if (lsame_(pivot, "T", 1, 1))
+        else if(lsame_(pivot, "T", 1, 1))
         {
-            if (lsame_(direct, "F", 1, 1))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *n;
                 for(j = 2; j <= i__1; ++j)
@@ -646,29 +650,29 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.real = ctemp * temp.real;
                             q__2.imag = ctemp * temp.imag; // , expr subst
                             i__4 = i__ + a_dim1;
-                            q__3.real = stemp * a[i__4].real;
-                            q__3.imag = stemp * a[i__4].imag; // , expr subst
-                            q__1.real = q__2.real - q__3.real;
-                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
-                            a[i__3].real = q__1.real;
-                            a[i__3].imag = q__1.imag; // , expr subst
+                            q__3.r = stemp * a[i__4].r;
+                            q__3.i = stemp * a[i__4].i; // , expr subst
+                            q__1.r = q__2.r - q__3.r;
+                            q__1.i = q__2.i - q__3.i; // , expr subst
+                            a[i__3].r = q__1.r;
+                            a[i__3].i = q__1.i; // , expr subst
                             i__3 = i__ + a_dim1;
                             q__2.real = stemp * temp.real;
                             q__2.imag = stemp * temp.imag; // , expr subst
                             i__4 = i__ + a_dim1;
-                            q__3.real = ctemp * a[i__4].real;
-                            q__3.imag = ctemp * a[i__4].imag; // , expr subst
-                            q__1.real = q__2.real + q__3.real;
-                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
-                            a[i__3].real = q__1.real;
-                            a[i__3].imag = q__1.imag; // , expr subst
+                            q__3.r = ctemp * a[i__4].r;
+                            q__3.i = ctemp * a[i__4].i; // , expr subst
+                            q__1.r = q__2.r + q__3.r;
+                            q__1.i = q__2.i + q__3.i; // , expr subst
+                            a[i__3].r = q__1.r;
+                            a[i__3].i = q__1.i; // , expr subst
                             /* L170: */
                         }
                     }
                     /* L180: */
                 }
             }
-            else if (lsame_(direct, "B", 1, 1))
+            else if(lsame_(direct, "B", 1, 1))
             {
                 for(j = *n; j >= 2; --j)
                 {
@@ -686,22 +690,22 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             q__2.real = ctemp * temp.real;
                             q__2.imag = ctemp * temp.imag; // , expr subst
                             i__3 = i__ + a_dim1;
-                            q__3.real = stemp * a[i__3].real;
-                            q__3.imag = stemp * a[i__3].imag; // , expr subst
-                            q__1.real = q__2.real - q__3.real;
-                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
-                            a[i__2].real = q__1.real;
-                            a[i__2].imag = q__1.imag; // , expr subst
+                            q__3.r = stemp * a[i__3].r;
+                            q__3.i = stemp * a[i__3].i; // , expr subst
+                            q__1.r = q__2.r - q__3.r;
+                            q__1.i = q__2.i - q__3.i; // , expr subst
+                            a[i__2].r = q__1.r;
+                            a[i__2].i = q__1.i; // , expr subst
                             i__2 = i__ + a_dim1;
                             q__2.real = stemp * temp.real;
                             q__2.imag = stemp * temp.imag; // , expr subst
                             i__3 = i__ + a_dim1;
-                            q__3.real = ctemp * a[i__3].real;
-                            q__3.imag = ctemp * a[i__3].imag; // , expr subst
-                            q__1.real = q__2.real + q__3.real;
-                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
-                            a[i__2].real = q__1.real;
-                            a[i__2].imag = q__1.imag; // , expr subst
+                            q__3.r = ctemp * a[i__3].r;
+                            q__3.i = ctemp * a[i__3].i; // , expr subst
+                            q__1.r = q__2.r + q__3.r;
+                            q__1.i = q__2.i + q__3.i; // , expr subst
+                            a[i__2].r = q__1.r;
+                            a[i__2].i = q__1.i; // , expr subst
                             /* L190: */
                         }
                     }
@@ -709,9 +713,9 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                 }
             }
         }
-        else if (lsame_(pivot, "B", 1, 1))
+        else if(lsame_(pivot, "B", 1, 1))
         {
-            if (lsame_(direct, "F", 1, 1))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *n - 1;
                 for(j = 1; j <= i__1; ++j)
@@ -728,31 +732,31 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             temp.imag = a[i__3].imag; // , expr subst
                             i__3 = i__ + j * a_dim1;
                             i__4 = i__ + *n * a_dim1;
-                            q__2.real = stemp * a[i__4].real;
-                            q__2.imag = stemp * a[i__4].imag; // , expr subst
-                            q__3.real = ctemp * temp.real;
-                            q__3.imag = ctemp * temp.imag; // , expr subst
-                            q__1.real = q__2.real + q__3.real;
-                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
-                            a[i__3].real = q__1.real;
-                            a[i__3].imag = q__1.imag; // , expr subst
+                            q__2.r = stemp * a[i__4].r;
+                            q__2.i = stemp * a[i__4].i; // , expr subst
+                            q__3.r = ctemp * temp.r;
+                            q__3.i = ctemp * temp.i; // , expr subst
+                            q__1.r = q__2.r + q__3.r;
+                            q__1.i = q__2.i + q__3.i; // , expr subst
+                            a[i__3].r = q__1.r;
+                            a[i__3].i = q__1.i; // , expr subst
                             i__3 = i__ + *n * a_dim1;
                             i__4 = i__ + *n * a_dim1;
-                            q__2.real = ctemp * a[i__4].real;
-                            q__2.imag = ctemp * a[i__4].imag; // , expr subst
-                            q__3.real = stemp * temp.real;
-                            q__3.imag = stemp * temp.imag; // , expr subst
-                            q__1.real = q__2.real - q__3.real;
-                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
-                            a[i__3].real = q__1.real;
-                            a[i__3].imag = q__1.imag; // , expr subst
+                            q__2.r = ctemp * a[i__4].r;
+                            q__2.i = ctemp * a[i__4].i; // , expr subst
+                            q__3.r = stemp * temp.r;
+                            q__3.i = stemp * temp.i; // , expr subst
+                            q__1.r = q__2.r - q__3.r;
+                            q__1.i = q__2.i - q__3.i; // , expr subst
+                            a[i__3].r = q__1.r;
+                            a[i__3].i = q__1.i; // , expr subst
                             /* L210: */
                         }
                     }
                     /* L220: */
                 }
             }
-            else if (lsame_(direct, "B", 1, 1))
+            else if(lsame_(direct, "B", 1, 1))
             {
                 for(j = *n - 1; j >= 1; --j)
                 {
@@ -768,24 +772,24 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
                             temp.imag = a[i__2].imag; // , expr subst
                             i__2 = i__ + j * a_dim1;
                             i__3 = i__ + *n * a_dim1;
-                            q__2.real = stemp * a[i__3].real;
-                            q__2.imag = stemp * a[i__3].imag; // , expr subst
-                            q__3.real = ctemp * temp.real;
-                            q__3.imag = ctemp * temp.imag; // , expr subst
-                            q__1.real = q__2.real + q__3.real;
-                            q__1.imag = q__2.imag + q__3.imag; // , expr subst
-                            a[i__2].real = q__1.real;
-                            a[i__2].imag = q__1.imag; // , expr subst
+                            q__2.r = stemp * a[i__3].r;
+                            q__2.i = stemp * a[i__3].i; // , expr subst
+                            q__3.r = ctemp * temp.r;
+                            q__3.i = ctemp * temp.i; // , expr subst
+                            q__1.r = q__2.r + q__3.r;
+                            q__1.i = q__2.i + q__3.i; // , expr subst
+                            a[i__2].r = q__1.r;
+                            a[i__2].i = q__1.i; // , expr subst
                             i__2 = i__ + *n * a_dim1;
                             i__3 = i__ + *n * a_dim1;
-                            q__2.real = ctemp * a[i__3].real;
-                            q__2.imag = ctemp * a[i__3].imag; // , expr subst
-                            q__3.real = stemp * temp.real;
-                            q__3.imag = stemp * temp.imag; // , expr subst
-                            q__1.real = q__2.real - q__3.real;
-                            q__1.imag = q__2.imag - q__3.imag; // , expr subst
-                            a[i__2].real = q__1.real;
-                            a[i__2].imag = q__1.imag; // , expr subst
+                            q__2.r = ctemp * a[i__3].r;
+                            q__2.i = ctemp * a[i__3].i; // , expr subst
+                            q__3.r = stemp * temp.r;
+                            q__3.i = stemp * temp.i; // , expr subst
+                            q__1.r = q__2.r - q__3.r;
+                            q__1.i = q__2.i - q__3.i; // , expr subst
+                            a[i__2].r = q__1.r;
+                            a[i__2].i = q__1.i; // , expr subst
                             /* L230: */
                         }
                     }

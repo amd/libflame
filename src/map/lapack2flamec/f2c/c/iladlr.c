@@ -135,11 +135,11 @@ aocl_int64_t aocl_lapack_iladlr(aocl_int64_t *m, aocl_int64_t *n, doublereal *a,
         for(j = 1; j <= i__1; ++j)
         {
             i__ = *m;
-            while(a[fla_max(i__,1) + j * a_dim1] == 0. && i__ >= 1)
+            while(a[fla_max(i__, 1) + j * a_dim1] == 0. && i__ >= 1)
             {
                 --i__;
             }
-            ret_val = fla_max(ret_val,i__);
+            ret_val = fla_max(ret_val, i__);
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

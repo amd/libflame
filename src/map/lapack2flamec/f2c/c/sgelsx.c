@@ -180,7 +180,8 @@ only the remaining */
 /* > \ingroup realGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-void sgelsx_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb, integer *jpvt, real *rcond, integer *rank, real *work, integer *info)
+void sgelsx_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb,
+             integer *jpvt, real *rcond, integer *rank, real *work, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgelsx(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, info);
@@ -218,16 +219,30 @@ void aocl_lapack_sgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     real anrm, bnrm, smin, smax;
     integer iascl, ibscl, ismin, ismax;
     extern /* Subroutine */
-    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), slaic1_(integer *, integer *, real *, real *, real *, real *, real *, real *, real *), sorm2r_( char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *), slabad_(real *, real *);
+        void
+        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
+               real *, integer *),
+        slaic1_(integer *, integer *, real *, real *, real *, real *, real *, real *, real *),
+        sorm2r_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
+                integer *, real *, integer *),
+        slabad_(real *, real *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern /* Subroutine */
-    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), sgeqpf_(integer *, integer *, real *, integer *, integer *, real *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+        void
+        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
+                integer *, integer *),
+        sgeqpf_(integer *, integer *, real *, integer *, integer *, real *, real *, integer *),
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     real sminpr, smaxpr, smlnum;
     extern /* Subroutine */
-    void slatzm_(char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, real *), stzrqf_(integer *, integer *, real *, integer *, real *, integer * );
+        void
+        slatzm_(char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *,
+                real *),
+        stzrqf_(integer *, integer *, real *, integer *, real *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -258,7 +273,7 @@ void aocl_lapack_sgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     --jpvt;
     --work;
     /* Function Body */
-    mn = fla_min(*m,*n);
+    mn = fla_min(*m, *n);
     ismin = mn + 1;
     ismax = (mn << 1) + 1;
     /* Test the input arguments. */
@@ -275,15 +290,15 @@ void aocl_lapack_sgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
     else /* if(complicated condition) */
     {
         /* Computing MAX */
-        i__1 = fla_max(1,*m);
-        if (*ldb < fla_max(i__1,*n))
+        i__1 = fla_max(1, *m);
+        if(*ldb < fla_max(i__1, *n))
         {
             *info = -7;
         }
@@ -296,8 +311,8 @@ void aocl_lapack_sgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     }
     /* Quick return if possible */
     /* Computing MIN */
-    i__1 = fla_min(*m,*n);
-    if (fla_min(i__1,*nrhs) == 0)
+    i__1 = fla_min(*m, *n);
+    if(fla_min(i__1, *nrhs) == 0)
     {
         *rank = 0;
         return;
@@ -323,7 +338,7 @@ void aocl_lapack_sgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     else if(anrm == 0.f)
     {
         /* Matrix all zero. Return zero solution. */
-        i__1 = fla_max(*m,*n);
+        i__1 = fla_max(*m, *n);
         slaset_("F", &i__1, nrhs, &c_b13, &c_b13, &b[b_offset], ldb);
         *rank = 0;
         goto L100;
@@ -352,10 +367,10 @@ void aocl_lapack_sgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     work[ismax] = 1.f;
     smax = (r__1 = a[a_dim1 + 1], f2c_abs(r__1));
     smin = smax;
-    if ((r__1 = a[a_dim1 + 1], f2c_abs(r__1)) == 0.f)
+    if((r__1 = a[a_dim1 + 1], f2c_abs(r__1)) == 0.f)
     {
         *rank = 0;
-        i__1 = fla_max(*m,*n);
+        i__1 = fla_max(*m, *n);
         slaset_("F", &i__1, nrhs, &c_b13, &c_b13, &b[b_offset], ldb);
         goto L100;
     }
@@ -367,10 +382,10 @@ L10:
     if(*rank < mn)
     {
         i__ = *rank + 1;
-        aocl_lapack_slaic1(&c__2, rank, &work[ismin], &smin, &a[i__ * a_dim1 + 1],
-                           &a[i__ + i__ * a_dim1], &sminpr, &s1, &c1);
-        aocl_lapack_slaic1(&c__1, rank, &work[ismax], &smax, &a[i__ * a_dim1 + 1],
-                           &a[i__ + i__ * a_dim1], &smaxpr, &s2, &c2);
+        slaic1_(&c__2, rank, &work[ismin], &smin, &a[i__ * a_dim1 + 1], &a[i__ + i__ * a_dim1],
+                &sminpr, &s1, &c1);
+        slaic1_(&c__1, rank, &work[ismax], &smax, &a[i__ * a_dim1 + 1], &a[i__ + i__ * a_dim1],
+                &smaxpr, &s2, &c2);
         if(smaxpr * *rcond <= sminpr)
         {
             i__1 = *rank;
@@ -398,12 +413,12 @@ L10:
     }
     /* Details of Householder rotations stored in WORK(MN+1:2*MN) */
     /* B(1:M,1:NRHS) := Q**T * B(1:M,1:NRHS) */
-    aocl_lapack_sorm2r("Left", "Transpose", m, nrhs, &mn, &a[a_offset], lda, &work[1], &b[b_offset],
-                       ldb, &work[(mn << 1) + 1], info);
+    sorm2r_("Left", "Transpose", m, nrhs, &mn, &a[a_offset], lda, &work[1], &b[b_offset], ldb,
+            &work[(mn << 1) + 1], info);
     /* workspace NRHS */
     /* B(1:RANK,1:NRHS) := inv(T11) * B(1:RANK,1:NRHS) */
-    aocl_blas_strsm("Left", "Upper", "No transpose", "Non-unit", rank, nrhs, &c_b36, &a[a_offset],
-                    lda, &b[b_offset], ldb);
+    strsm_("Left", "Upper", "No transpose", "Non-unit", rank, nrhs, &c_b36, &a[a_offset], lda,
+           &b[b_offset], ldb);
     i__1 = *n;
     for(i__ = *rank + 1; i__ <= i__1; ++i__)
     {
@@ -422,7 +437,7 @@ L10:
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = *n - *rank + 1;
-            aocl_lapack_slatzm("Left", &i__2, nrhs, &a[i__ + (*rank + 1) * a_dim1], lda, &work[mn + i__],
+            slatzm_("Left", &i__2, nrhs, &a[i__ + (*rank + 1) * a_dim1], lda, &work[mn + i__],
                     &b[i__ + b_dim1], &b[*rank + 1 + b_dim1], ldb, &work[(mn << 1) + 1]);
             /* L50: */
         }

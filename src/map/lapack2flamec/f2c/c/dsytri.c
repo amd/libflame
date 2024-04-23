@@ -116,10 +116,11 @@ the matrix is singular and its */
 /* > \ingroup doubleSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dsytri_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipiv, doublereal *work, integer *info)
+void dsytri_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsytri inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
+    AOCL_DTL_SNPRINTF("dsytri inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
     doublereal d__1;
@@ -132,11 +133,16 @@ void dsytri_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipiv
     doublereal temp, akkp1;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer kstep;
     logical upper;
     extern /* Subroutine */
-    void dsymv_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dsymv_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+               doublereal *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -167,7 +173,7 @@ void dsytri_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipiv
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -175,7 +181,7 @@ void dsytri_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipiv
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -243,8 +249,8 @@ void dsytri_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipiv
                 i__1 = k - 1;
                 aocl_blas_dcopy(&i__1, &a[k * a_dim1 + 1], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
-                aocl_blas_dsymv(uplo, &i__1, &c_b11, &a[a_offset], lda, &work[1], &c__1, &c_b13,
-                                &a[k * a_dim1 + 1], &c__1);
+                dsymv_(uplo, &i__1, &c_b11, &a[a_offset], lda, &work[1], &c__1, &c_b13,
+                       &a[k * a_dim1 + 1], &c__1);
                 i__1 = k - 1;
                 a[k + k * a_dim1]
                     -= aocl_blas_ddot(&i__1, &work[1], &c__1, &a[k * a_dim1 + 1], &c__1);
@@ -269,32 +275,32 @@ void dsytri_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipiv
                 i__1 = k - 1;
                 aocl_blas_dcopy(&i__1, &a[k * a_dim1 + 1], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
-                aocl_blas_dsymv(uplo, &i__1, &c_b11, &a[a_offset], lda, &work[1], &c__1, &c_b13,
-                                &a[k * a_dim1 + 1], &c__1);
+                dsymv_(uplo, &i__1, &c_b11, &a[a_offset], lda, &work[1], &c__1, &c_b13,
+                       &a[k * a_dim1 + 1], &c__1);
                 i__1 = k - 1;
                 a[k + k * a_dim1]
                     -= aocl_blas_ddot(&i__1, &work[1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 i__1 = k - 1;
-                a[k + (k + 1) * a_dim1] -= aocl_blas_ddot(&i__1, &a[k * a_dim1 + 1], &c__1,
-                                                          &a[(k + 1) * a_dim1 + 1], &c__1);
+                a[k + (k + 1) * a_dim1]
+                    -= ddot_(&i__1, &a[k * a_dim1 + 1], &c__1, &a[(k + 1) * a_dim1 + 1], &c__1);
                 i__1 = k - 1;
-                aocl_blas_dcopy(&i__1, &a[(k + 1) * a_dim1 + 1], &c__1, &work[1], &c__1);
+                dcopy_(&i__1, &a[(k + 1) * a_dim1 + 1], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
-                aocl_blas_dsymv(uplo, &i__1, &c_b11, &a[a_offset], lda, &work[1], &c__1, &c_b13,
-                                &a[(k + 1) * a_dim1 + 1], &c__1);
+                dsymv_(uplo, &i__1, &c_b11, &a[a_offset], lda, &work[1], &c__1, &c_b13,
+                       &a[(k + 1) * a_dim1 + 1], &c__1);
                 i__1 = k - 1;
                 a[k + 1 + (k + 1) * a_dim1]
-                    -= aocl_blas_ddot(&i__1, &work[1], &c__1, &a[(k + 1) * a_dim1 + 1], &c__1);
+                    -= ddot_(&i__1, &work[1], &c__1, &a[(k + 1) * a_dim1 + 1], &c__1);
             }
             kstep = 2;
         }
         kp = (i__1 = ipiv[k], f2c_dabs(i__1));
-        if (kp != k)
+        if(kp != k)
         {
             /* Interchange rows and columns K and KP in the leading */
             /* submatrix A(1:k+1,1:k+1) */
             i__1 = kp - 1;
-            aocl_blas_dswap(&i__1, &a[k * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
+            dswap_(&i__1, &a[k * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
             i__1 = k - kp - 1;
             aocl_blas_dswap(&i__1, &a[kp + 1 + k * a_dim1], &c__1, &a[kp + (kp + 1) * a_dim1], lda);
             temp = a[k + k * a_dim1];
@@ -333,8 +339,8 @@ void dsytri_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipiv
                 i__1 = *n - k;
                 aocl_blas_dcopy(&i__1, &a[k + 1 + k * a_dim1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
-                aocl_blas_dsymv(uplo, &i__1, &c_b11, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1],
-                                &c__1, &c_b13, &a[k + 1 + k * a_dim1], &c__1);
+                dsymv_(uplo, &i__1, &c_b11, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1], &c__1,
+                       &c_b13, &a[k + 1 + k * a_dim1], &c__1);
                 i__1 = *n - k;
                 a[k + k * a_dim1]
                     -= aocl_blas_ddot(&i__1, &work[1], &c__1, &a[k + 1 + k * a_dim1], &c__1);
@@ -359,25 +365,27 @@ void dsytri_(char *uplo, integer *n, doublereal *a, integer * lda, integer *ipiv
                 i__1 = *n - k;
                 aocl_blas_dcopy(&i__1, &a[k + 1 + k * a_dim1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
-                aocl_blas_dsymv(uplo, &i__1, &c_b11, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1],
-                                &c__1, &c_b13, &a[k + 1 + k * a_dim1], &c__1);
+                dsymv_(uplo, &i__1, &c_b11, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1], &c__1,
+                       &c_b13, &a[k + 1 + k * a_dim1], &c__1);
                 i__1 = *n - k;
                 a[k + k * a_dim1]
                     -= aocl_blas_ddot(&i__1, &work[1], &c__1, &a[k + 1 + k * a_dim1], &c__1);
                 i__1 = *n - k;
-                a[k + (k - 1) * a_dim1] -= ddot_(&i__1, &a[k + 1 + k * a_dim1], &c__1, &a[k + 1 + (k - 1) * a_dim1], &c__1);
+                a[k + (k - 1) * a_dim1] -= ddot_(&i__1, &a[k + 1 + k * a_dim1], &c__1,
+                                                 &a[k + 1 + (k - 1) * a_dim1], &c__1);
                 i__1 = *n - k;
-                aocl_blas_dcopy(&i__1, &a[k + 1 + (k - 1) * a_dim1], &c__1, &work[1], &c__1);
+                dcopy_(&i__1, &a[k + 1 + (k - 1) * a_dim1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
-                dsymv_(uplo, &i__1, &c_b11, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1], &c__1, &c_b13, &a[k + 1 + (k - 1) * a_dim1], &c__1);
+                dsymv_(uplo, &i__1, &c_b11, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1], &c__1,
+                       &c_b13, &a[k + 1 + (k - 1) * a_dim1], &c__1);
                 i__1 = *n - k;
                 a[k - 1 + (k - 1) * a_dim1]
-                    -= aocl_blas_ddot(&i__1, &work[1], &c__1, &a[k + 1 + (k - 1) * a_dim1], &c__1);
+                    -= ddot_(&i__1, &work[1], &c__1, &a[k + 1 + (k - 1) * a_dim1], &c__1);
             }
             kstep = 2;
         }
         kp = (i__1 = ipiv[k], f2c_dabs(i__1));
-        if (kp != k)
+        if(kp != k)
         {
             /* Interchange rows and columns K and KP in the trailing */
             /* submatrix A(k-1:n,k-1:n) */

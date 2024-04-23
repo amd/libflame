@@ -1,5 +1,8 @@
-/* ../netlib/sbdsdc.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sbdsdc.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__9 = 9;
 static integer c__0 = 0;
@@ -12,11 +15,17 @@ static real c_b29 = 0.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SBDSDC + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sbdsdc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sbdsdc.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sbdsdc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sbdsdc.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sbdsdc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sbdsdc.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -71,10 +80,10 @@ static real c_b29 = 0.f;
 /* > Specifies whether singular vectors are to be computed */
 /* > as follows: */
 /* > = 'N': Compute singular values only;
-*/
+ */
 /* > = 'P': Compute singular values and compute singular */
 /* > vectors in compact form;
-*/
+ */
 /* > = 'I': Compute singular values and singular vectors. */
 /* > \endverbatim */
 /* > */
@@ -198,7 +207,9 @@ static real c_b29 = 0.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, integer *ldu, real *vt, integer *ldvt, real *q, integer *iq, real *work, integer *iwork, integer *info)
+void sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, integer *ldu,
+             real *vt, integer *ldvt, real *q, integer *iq, real *work, integer *iwork,
+             integer *info)
 {
     /* System generated locals */
     integer u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
@@ -218,22 +229,37 @@ void sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, i
     extern logical lsame_(char *, char *, integer, integer);
     integer poles;
     extern /* Subroutine */
-    void slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *);
+        void
+        slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *);
     integer iuplo, nsize, start;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * ), slasd0_(integer *, integer *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *),
+        sswap_(integer *, real *, integer *, real *, integer *),
+        slasd0_(integer *, integer *, real *, real *, real *, integer *, real *, integer *,
+                integer *, integer *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    void slasda_(integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        slasda_(integer *, integer *, integer *, integer *, real *, real *, real *, integer *,
+                real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *,
+                integer *, real *, real *, real *, real *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
+                integer *, integer *);
     integer givcol;
     extern /* Subroutine */
-    void slasdq_(char *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
+        void
+        slasdq_(char *, integer *, integer *, integer *, integer *, integer *, real *, real *,
+                real *, integer *, real *, integer *, real *, integer *, real *, integer *);
     integer icompq;
     extern /* Subroutine */
-    void slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real *);
+        void
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *),
+        slartg_(real *, real *, real *, real *, real *);
     real orgnrm;
     integer givnum;
     extern real slanst_(char *, integer *, real *, real *);
@@ -287,23 +313,23 @@ void sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, i
     is = 0;
     ic = 0;
     z__ = 0;
-    if (lsame_(uplo, "U", 1, 1))
+    if(lsame_(uplo, "U", 1, 1))
     {
         iuplo = 1;
     }
-    if (lsame_(uplo, "L", 1, 1))
+    if(lsame_(uplo, "L", 1, 1))
     {
         iuplo = 2;
     }
-    if (lsame_(compq, "N", 1, 1))
+    if(lsame_(compq, "N", 1, 1))
     {
         icompq = 0;
     }
-    else if (lsame_(compq, "P", 1, 1))
+    else if(lsame_(compq, "P", 1, 1))
     {
         icompq = 1;
     }
-    else if (lsame_(compq, "I", 1, 1))
+    else if(lsame_(compq, "I", 1, 1))
     {
         icompq = 2;
     }
@@ -311,46 +337,46 @@ void sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, i
     {
         icompq = -1;
     }
-    if (iuplo == 0)
+    if(iuplo == 0)
     {
         *info = -1;
     }
-    else if (icompq < 0)
+    else if(icompq < 0)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*ldu < 1 || icompq == 2 && *ldu < *n)
+    else if(*ldu < 1 || icompq == 2 && *ldu < *n)
     {
         *info = -7;
     }
-    else if (*ldvt < 1 || icompq == 2 && *ldvt < *n)
+    else if(*ldvt < 1 || icompq == 2 && *ldvt < *n)
     {
         *info = -9;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SBDSDC", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         return;
     }
     smlsiz = ilaenv_(&c__9, "SBDSDC", " ", &c__0, &c__0, &c__0, &c__0);
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (icompq == 1)
+        if(icompq == 1)
         {
             q[1] = r_sign(&c_b15, &d__[1]);
             q[smlsiz * *n + 1] = 1.f;
         }
-        else if (icompq == 2)
+        else if(icompq == 2)
         {
             u[u_dim1 + 1] = r_sign(&c_b15, &d__[1]);
             vt[vt_dim1 + 1] = 1.f;
@@ -363,34 +389,32 @@ void sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, i
     /* by applying Givens rotations on the left */
     wstart = 1;
     qstart = 3;
-    if (icompq == 1)
+    if(icompq == 1)
     {
         scopy_(n, &d__[1], &c__1, &q[1], &c__1);
         i__1 = *n - 1;
         scopy_(&i__1, &e[1], &c__1, &q[*n + 1], &c__1);
     }
-    if (iuplo == 2)
+    if(iuplo == 2)
     {
         qstart = 5;
-        if (icompq == 2)
+        if(icompq == 2)
         {
             wstart = (*n << 1) - 1;
         }
         i__1 = *n - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             slartg_(&d__[i__], &e[i__], &cs, &sn, &r__);
             d__[i__] = r__;
             e[i__] = sn * d__[i__ + 1];
             d__[i__ + 1] = cs * d__[i__ + 1];
-            if (icompq == 1)
+            if(icompq == 1)
             {
                 q[i__ + (*n << 1)] = cs;
                 q[i__ + *n * 3] = sn;
             }
-            else if (icompq == 2)
+            else if(icompq == 2)
             {
                 work[i__] = cs;
                 work[nm1 + i__] = -sn;
@@ -399,51 +423,55 @@ void sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, i
         }
     }
     /* If ICOMPQ = 0, use SLASDQ to compute the singular values. */
-    if (icompq == 0)
+    if(icompq == 0)
     {
         /* Ignore WSTART, instead using WORK( 1 ), since the two vectors */
         /* for CS and -SN above are added only if ICOMPQ == 2, */
         /* and adding them exceeds documented WORK size of 4*n. */
-        slasdq_("U", &c__0, n, &c__0, &c__0, &c__0, &d__[1], &e[1], &vt[ vt_offset], ldvt, &u[u_offset], ldu, &u[u_offset], ldu, &work[ 1], info);
+        slasdq_("U", &c__0, n, &c__0, &c__0, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt,
+                &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
         goto L40;
     }
     /* If N is smaller than the minimum divide size SMLSIZ, then solve */
     /* the problem with another solver. */
-    if (*n <= smlsiz)
+    if(*n <= smlsiz)
     {
-        if (icompq == 2)
+        if(icompq == 2)
         {
             slaset_("A", n, n, &c_b29, &c_b15, &u[u_offset], ldu);
             slaset_("A", n, n, &c_b29, &c_b15, &vt[vt_offset], ldvt);
-            slasdq_("U", &c__0, n, n, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt, &u[u_offset], ldu, &u[u_offset], ldu, &work[ wstart], info);
+            slasdq_("U", &c__0, n, n, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt, &u[u_offset],
+                    ldu, &u[u_offset], ldu, &work[wstart], info);
         }
-        else if (icompq == 1)
+        else if(icompq == 1)
         {
             iu = 1;
             ivt = iu + *n;
             slaset_("A", n, n, &c_b29, &c_b15, &q[iu + (qstart - 1) * *n], n);
             slaset_("A", n, n, &c_b29, &c_b15, &q[ivt + (qstart - 1) * *n], n);
-            slasdq_("U", &c__0, n, n, n, &c__0, &d__[1], &e[1], &q[ivt + ( qstart - 1) * *n], n, &q[iu + (qstart - 1) * *n], n, &q[ iu + (qstart - 1) * *n], n, &work[wstart], info);
+            slasdq_("U", &c__0, n, n, n, &c__0, &d__[1], &e[1], &q[ivt + (qstart - 1) * *n], n,
+                    &q[iu + (qstart - 1) * *n], n, &q[iu + (qstart - 1) * *n], n, &work[wstart],
+                    info);
         }
         goto L40;
     }
-    if (icompq == 2)
+    if(icompq == 2)
     {
         slaset_("A", n, n, &c_b29, &c_b15, &u[u_offset], ldu);
         slaset_("A", n, n, &c_b29, &c_b15, &vt[vt_offset], ldvt);
     }
     /* Scale. */
     orgnrm = slanst_("M", n, &d__[1], &e[1]);
-    if (orgnrm == 0.f)
+    if(orgnrm == 0.f)
     {
         return;
     }
     slascl_("G", &c__0, &c__0, &orgnrm, &c_b15, n, &c__1, &d__[1], n, &ierr);
-    slascl_("G", &c__0, &c__0, &orgnrm, &c_b15, &nm1, &c__1, &e[1], &nm1, & ierr);
+    slascl_("G", &c__0, &c__0, &orgnrm, &c_b15, &nm1, &c__1, &e[1], &nm1, &ierr);
     eps = slamch_("Epsilon");
-    mlvl = (integer) (log((real) (*n) / (real) (smlsiz + 1)) / log(2.f)) + 1;
+    mlvl = (integer)(log((real)(*n) / (real)(smlsiz + 1)) / log(2.f)) + 1;
     smlszp = smlsiz + 1;
-    if (icompq == 1)
+    if(icompq == 1)
     {
         iu = 1;
         ivt = smlsiz + 1;
@@ -460,11 +488,9 @@ void sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, i
         givcol = perm + mlvl;
     }
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((r__1 = d__[i__], f2c_abs(r__1)) < eps)
+        if((r__1 = d__[i__], f2c_abs(r__1)) < eps)
         {
             d__[i__] = r_sign(&eps, &d__[i__]);
         }
@@ -473,20 +499,18 @@ void sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, i
     start = 1;
     sqre = 0;
     i__1 = nm1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((r__1 = e[i__], f2c_abs(r__1)) < eps || i__ == nm1)
+        if((r__1 = e[i__], f2c_abs(r__1)) < eps || i__ == nm1)
         {
             /* Subproblem found. First determine its size and then */
             /* apply divide and conquer on it. */
-            if (i__ < nm1)
+            if(i__ < nm1)
             {
                 /* A subproblem with E(I) small for I < NM1. */
                 nsize = i__ - start + 1;
             }
-            else if ((r__1 = e[i__], f2c_abs(r__1)) >= eps)
+            else if((r__1 = e[i__], f2c_abs(r__1)) >= eps)
             {
                 /* A subproblem with E(NM1) not too small but I = NM1. */
                 nsize = *n - start + 1;
@@ -497,27 +521,36 @@ void sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, i
                 /* 1-by-1 subproblem at D(N). Solve this 1-by-1 problem */
                 /* first. */
                 nsize = i__ - start + 1;
-                if (icompq == 2)
+                if(icompq == 2)
                 {
                     u[*n + *n * u_dim1] = r_sign(&c_b15, &d__[*n]);
                     vt[*n + *n * vt_dim1] = 1.f;
                 }
-                else if (icompq == 1)
+                else if(icompq == 1)
                 {
                     q[*n + (qstart - 1) * *n] = r_sign(&c_b15, &d__[*n]);
                     q[*n + (smlsiz + qstart - 1) * *n] = 1.f;
                 }
                 d__[*n] = (r__1 = d__[*n], f2c_abs(r__1));
             }
-            if (icompq == 2)
+            if(icompq == 2)
             {
-                slasd0_(&nsize, &sqre, &d__[start], &e[start], &u[start + start * u_dim1], ldu, &vt[start + start * vt_dim1], ldvt, &smlsiz, &iwork[1], &work[wstart], info);
+                slasd0_(&nsize, &sqre, &d__[start], &e[start], &u[start + start * u_dim1], ldu,
+                        &vt[start + start * vt_dim1], ldvt, &smlsiz, &iwork[1], &work[wstart],
+                        info);
             }
             else
             {
-                slasda_(&icompq, &smlsiz, &nsize, &sqre, &d__[start], &e[ start], &q[start + (iu + qstart - 2) * *n], n, &q[ start + (ivt + qstart - 2) * *n], &iq[start + k * *n], &q[start + (difl + qstart - 2) * *n], &q[start + ( difr + qstart - 2) * *n], &q[start + (z__ + qstart - 2) * *n], &q[start + (poles + qstart - 2) * *n], &iq[ start + givptr * *n], &iq[start + givcol * *n], n, & iq[start + perm * *n], &q[start + (givnum + qstart - 2) * *n], &q[start + (ic + qstart - 2) * *n], &q[ start + (is + qstart - 2) * *n], &work[wstart], & iwork[1], info);
+                slasda_(&icompq, &smlsiz, &nsize, &sqre, &d__[start], &e[start],
+                        &q[start + (iu + qstart - 2) * *n], n, &q[start + (ivt + qstart - 2) * *n],
+                        &iq[start + k * *n], &q[start + (difl + qstart - 2) * *n],
+                        &q[start + (difr + qstart - 2) * *n], &q[start + (z__ + qstart - 2) * *n],
+                        &q[start + (poles + qstart - 2) * *n], &iq[start + givptr * *n],
+                        &iq[start + givcol * *n], n, &iq[start + perm * *n],
+                        &q[start + (givnum + qstart - 2) * *n], &q[start + (ic + qstart - 2) * *n],
+                        &q[start + (is + qstart - 2) * *n], &work[wstart], &iwork[1], info);
             }
-            if (*info != 0)
+            if(*info != 0)
             {
                 return;
             }
@@ -529,49 +562,45 @@ void sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, i
     slascl_("G", &c__0, &c__0, &c_b15, &orgnrm, n, &c__1, &d__[1], n, &ierr);
 L40: /* Use Selection Sort to minimize swaps of singular vectors */
     i__1 = *n;
-    for (ii = 2;
-            ii <= i__1;
-            ++ii)
+    for(ii = 2; ii <= i__1; ++ii)
     {
         i__ = ii - 1;
         kk = i__;
         p = d__[i__];
         i__2 = *n;
-        for (j = ii;
-                j <= i__2;
-                ++j)
+        for(j = ii; j <= i__2; ++j)
         {
-            if (d__[j] > p)
+            if(d__[j] > p)
             {
                 kk = j;
                 p = d__[j];
             }
             /* L50: */
         }
-        if (kk != i__)
+        if(kk != i__)
         {
             d__[kk] = d__[i__];
             d__[i__] = p;
-            if (icompq == 1)
+            if(icompq == 1)
             {
                 iq[i__] = kk;
             }
-            else if (icompq == 2)
+            else if(icompq == 2)
             {
-                sswap_(n, &u[i__ * u_dim1 + 1], &c__1, &u[kk * u_dim1 + 1], & c__1);
+                sswap_(n, &u[i__ * u_dim1 + 1], &c__1, &u[kk * u_dim1 + 1], &c__1);
                 sswap_(n, &vt[i__ + vt_dim1], ldvt, &vt[kk + vt_dim1], ldvt);
             }
         }
-        else if (icompq == 1)
+        else if(icompq == 1)
         {
             iq[i__] = i__;
         }
         /* L60: */
     }
     /* If ICOMPQ = 1, use IQ(N,1) as the indicator for UPLO */
-    if (icompq == 1)
+    if(icompq == 1)
     {
-        if (iuplo == 1)
+        if(iuplo == 1)
         {
             iq[*n] = 1;
         }
@@ -582,7 +611,7 @@ L40: /* Use Selection Sort to minimize swaps of singular vectors */
     }
     /* If B is lower bidiagonal, update U by those Givens rotations */
     /* which rotated B to be upper bidiagonal */
-    if (iuplo == 2 && icompq == 2)
+    if(iuplo == 2 && icompq == 2)
     {
         slasr_("L", "V", "B", n, n, &work[1], &work[*n], &u[u_offset], ldu);
     }

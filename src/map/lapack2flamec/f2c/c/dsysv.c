@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c_n1 = -1;
+static integer c_n1 = -1;
 /* > \brief <b> DSYSV computes the solution to system of linear equations A * X = B for SY
  * matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -170,20 +170,30 @@ the routine */
 /* > \ingroup doubleSYsolve */
 /* ===================================================================== */
 /* Subroutine */
-void dsysv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipiv, doublereal *b, integer *ldb, doublereal *work, integer *lwork, integer *info)
+void dsysv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipiv,
+            doublereal *b, integer *ldb, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsysv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb, *lwork);
+    AOCL_DTL_SNPRINTF("dsysv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS ", lwork %" FLA_IS "",
+                      *uplo, *n, *nrhs, *lda, *ldb, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dsytrf_( char *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        dsytrf_(char *, integer *, doublereal *, integer *, integer *, doublereal *, integer *,
+                integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    void dsytrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dsytrs2_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dsytrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *,
+                integer *, integer *),
+        dsytrs2_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *,
+                 integer *, doublereal *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -215,7 +225,7 @@ void dsysv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, 
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -227,11 +237,11 @@ void dsysv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, 
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
@@ -247,7 +257,7 @@ void dsysv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, 
         }
         else
         {
-            aocl_lapack_dsytrf(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], &c_n1, info);
+            dsytrf_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], &c_n1, info);
             lwkopt = (integer)work[1];
         }
         work[1] = (doublereal)lwkopt;
@@ -265,7 +275,7 @@ void dsysv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, 
         return;
     }
     /* Compute the factorization A = U*D*U**T or A = L*D*L**T. */
-    aocl_lapack_dsytrf(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], lwork, info);
+    dsytrf_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], lwork, info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */
@@ -281,7 +291,7 @@ void dsysv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, 
                                 &work[1], info);
         }
     }
-    work[1] = (doublereal) lwkopt;
+    work[1] = (doublereal)lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DSYSV */

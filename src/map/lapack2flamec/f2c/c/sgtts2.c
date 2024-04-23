@@ -125,12 +125,14 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup realGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sgtts2_(integer *itrans, integer *n, integer *nrhs, real *dl, real *d__, real *du, real *du2, integer *ipiv, real *b, integer * ldb)
+void sgtts2_(integer *itrans, integer *n, integer *nrhs, real *dl, real *d__, real *du, real *du2,
+             integer *ipiv, real *b, integer *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sgtts2 inputs: itrans %d, n %d, nrhs %d, ldb %d",*itrans, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "sgtts2 inputs: itrans %d, n %d, nrhs %d, ldb %d", *itrans, *n, *nrhs,
+             *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */

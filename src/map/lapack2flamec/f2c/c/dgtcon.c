@@ -145,10 +145,12 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup doubleGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dgtcon_(char *norm, integer *n, doublereal *dl, doublereal *d__, doublereal *du, doublereal *du2, integer *ipiv, doublereal *anorm, doublereal *rcond, doublereal *work, integer * iwork, integer *info)
+void dgtcon_(char *norm, integer *n, doublereal *dl, doublereal *d__, doublereal *du,
+             doublereal *du2, integer *ipiv, doublereal *anorm, doublereal *rcond, doublereal *work,
+             integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgtcon inputs: norm %c, n %" FLA_IS "",*norm, *n);
+    AOCL_DTL_SNPRINTF("dgtcon inputs: norm %c, n %" FLA_IS "", *norm, *n);
     /* System generated locals */
     aocl_int64_t i__1;
     /* Local variables */
@@ -156,11 +158,16 @@ void dgtcon_(char *norm, integer *n, doublereal *dl, doublereal *d__, doublereal
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical onenrm;
     extern /* Subroutine */
-    void dgttrs_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dgttrs_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *,
+                doublereal *, integer *, doublereal *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -193,7 +200,7 @@ void dgtcon_(char *norm, integer *n, doublereal *dl, doublereal *d__, doublereal
     /* Function Body */
     *info = 0;
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
-    if (! onenrm && ! lsame_(norm, "I", 1, 1))
+    if(!onenrm && !lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }
@@ -247,19 +254,20 @@ void dgtcon_(char *norm, integer *n, doublereal *dl, doublereal *d__, doublereal
     }
     kase = 0;
 L20:
-    aocl_lapack_dlacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+    dlacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == kase1)
         {
             /* Multiply by inv(U)*inv(L). */
-            dgttrs_("No transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &work[1], n, info);
+            dgttrs_("No transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &work[1],
+                    n, info);
         }
         else
         {
             /* Multiply by inv(L**T)*inv(U**T). */
-            aocl_lapack_dgttrs("Transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1],
-                               &work[1], n, info);
+            dgttrs_("Transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &work[1], n,
+                    info);
         }
         goto L20;
     }

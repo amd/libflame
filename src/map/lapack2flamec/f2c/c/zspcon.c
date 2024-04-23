@@ -116,10 +116,11 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zspcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublereal *anorm, doublereal *rcond, doublecomplex * work, integer *info)
+void zspcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublereal *anorm,
+             doublereal *rcond, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zspcon inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
+    AOCL_DTL_SNPRINTF("zspcon inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
 
     /* System generated locals */
     aocl_int64_t i__1, i__2;
@@ -129,10 +130,14 @@ void zspcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublerea
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     extern /* Subroutine */
-    void zsptrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zsptrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -161,7 +166,7 @@ void zspcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublerea
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -201,7 +206,7 @@ void zspcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublerea
         for(i__ = *n; i__ >= 1; --i__)
         {
             i__1 = ip;
-            if(ipiv[i__] > 0 && (ap[i__1].real == 0. && ap[i__1].imag == 0.))
+            if(ipiv[i__] > 0 && (ap[i__1].r == 0. && ap[i__1].i == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
@@ -218,7 +223,7 @@ void zspcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublerea
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = ip;
-            if(ipiv[i__] > 0 && (ap[i__2].real == 0. && ap[i__2].imag == 0.))
+            if(ipiv[i__] > 0 && (ap[i__2].r == 0. && ap[i__2].i == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
@@ -230,7 +235,7 @@ void zspcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublerea
     /* Estimate the 1-norm of the inverse. */
     kase = 0;
 L30:
-    aocl_lapack_zlacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    zlacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         /* Multiply by inv(L*D*L**T) or inv(U*D*U**T). */

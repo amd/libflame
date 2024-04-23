@@ -30,41 +30,25 @@ void F77_fla_finalize()
 {
     FLA_Finalize();
 }
-void F77_fla_initialized( integer* ok )
+void F77_fla_initialized(integer *ok)
 {
     *ok = (FLA_Initialized() ? 1 : 0);
 }
-void F77_fla_memory_leak_counter_status( integer* stat )
+void F77_fla_memory_leak_counter_status(integer *stat)
 {
     *stat = (FLA_Memory_leak_counter_status() ? 1 : 0);
 }
-void F77_fla_memory_leak_counter_set( integer* stat )
+void F77_fla_memory_leak_counter_set(integer *stat)
 {
     FLA_Memory_leak_counter_set((*stat ? TRUE : FALSE));
 }
-void F77_fla_obj_show( char* prefix, integer* m, integer* n, void* buffer, integer* ldim )
+void F77_fla_obj_show(char *prefix, integer *m, integer *n, void *buffer, integer *ldim)
 {
     FLA_Error init_result;
     FLA_Datatype datatype;
     FLA_Obj A;
 
-     datatype = FLA_INT; 
-
-     switch( *prefix ) {
-     case 'i':
-     case 'I': datatype = FLA_INT;            break;
-     case 's':
-     case 'S': datatype = FLA_FLOAT;          break;
-     case 'd':
-     case 'D': datatype = FLA_DOUBLE;         break;
-     case 'c':
-     case 'C': datatype = FLA_COMPLEX;        break;
-     case 'z':
-     case 'Z': datatype = FLA_DOUBLE_COMPLEX; break;
-     default:
-       fprintf(stderr, "Invalid prefix %c, where i,s,d,c,z are allowed.\n", *prefix);
-       FLA_Abort();
-     }
+    datatype = FLA_INT;
 
     switch(*prefix)
     {
@@ -106,8 +90,8 @@ void F77_fla_obj_show( char* prefix, integer* m, integer* n, void* buffer, integ
 // Transform tau.
 int FLAME_invert_stau(FLA_Obj t)
 {
-    fla_dim_t m = FLA_Obj_vector_dim(t);
-    fla_dim_t inc = FLA_Obj_vector_inc(t);
+    dim_t m = FLA_Obj_vector_dim(t);
+    dim_t inc = FLA_Obj_vector_inc(t);
     float *buff = FLA_Obj_buffer_at_view(t);
     float one = 1.0F;
     float zero = 0.0F;
@@ -124,8 +108,8 @@ int FLAME_invert_stau(FLA_Obj t)
 }
 int FLAME_invert_dtau(FLA_Obj t)
 {
-    fla_dim_t m = FLA_Obj_vector_dim(t);
-    fla_dim_t inc = FLA_Obj_vector_inc(t);
+    dim_t m = FLA_Obj_vector_dim(t);
+    dim_t inc = FLA_Obj_vector_inc(t);
     double *buff = FLA_Obj_buffer_at_view(t);
     double one = 1.0;
     double zero = 0.0;
@@ -142,8 +126,8 @@ int FLAME_invert_dtau(FLA_Obj t)
 }
 int FLAME_invert_ctau(FLA_Obj t)
 {
-    fla_dim_t m = FLA_Obj_vector_dim(t);
-    fla_dim_t inc = FLA_Obj_vector_inc(t);
+    dim_t m = FLA_Obj_vector_dim(t);
+    dim_t inc = FLA_Obj_vector_inc(t);
     scomplex *buff = FLA_Obj_buffer_at_view(t);
     float one = 1.0F;
     float conjsign = one; // if conjugate -one;
@@ -169,8 +153,8 @@ int FLAME_invert_ctau(FLA_Obj t)
 }
 int FLAME_invert_ztau(FLA_Obj t)
 {
-    fla_dim_t m = FLA_Obj_vector_dim(t);
-    fla_dim_t inc = FLA_Obj_vector_inc(t);
+    dim_t m = FLA_Obj_vector_dim(t);
+    dim_t inc = FLA_Obj_vector_inc(t);
     dcomplex *buff = FLA_Obj_buffer_at_view(t);
     double one = 1.0;
     double conjsign = one; // if conjugate -one;

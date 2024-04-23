@@ -1,6 +1,3 @@
-/*
-   Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
-*/
 /* ../netlib/dormhr.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -155,7 +152,7 @@ LDA >= fla_max(1,N) if SIDE = 'R'. */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If SIDE = 'L', LWORK >= fla_max(1,N);
-*/
+ */
 /* > if SIDE = 'R', LWORK >= fla_max(1,M). */
 /* > For optimum performance LWORK >= N*NB if SIDE = 'L', and */
 /* > LWORK >= M*NB if SIDE = 'R', where NB is the optimal */
@@ -184,7 +181,9 @@ the routine */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda, doublereal * tau, doublereal *c__, integer *ldc, doublereal *work, integer *lwork, integer *info)
+void dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integer *ihi,
+             doublereal *a, integer *lda, doublereal *tau, doublereal *c__, integer *ldc,
+             doublereal *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2;
@@ -198,10 +197,13 @@ void dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
     extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void dormqr_fla(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dormqr_fla(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                   doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -248,11 +250,11 @@ void dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
         nq = *n;
         nw = *m;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "T", 1, 1))
+    else if(!lsame_(trans, "N", 1, 1) && !lsame_(trans, "T", 1, 1))
     {
         *info = -2;
     }
@@ -264,23 +266,23 @@ void dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
     {
         *info = -4;
     }
-    else if (*ilo < 1 || *ilo > fla_max(1,nq))
+    else if(*ilo < 1 || *ilo > fla_max(1, nq))
     {
         *info = -5;
     }
-    else if (*ihi < fla_min(*ilo,nq) || *ihi > nq)
+    else if(*ihi < fla_min(*ilo, nq) || *ihi > nq)
     {
         *info = -6;
     }
-    else if (*lda < fla_max(1,nq))
+    else if(*lda < fla_max(1, nq))
     {
         *info = -8;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -11;
     }
-    else if (*lwork < fla_max(1,nw) && ! lquery)
+    else if(*lwork < fla_max(1, nw) && !lquery)
     {
         *info = -13;
     }
@@ -294,8 +296,8 @@ void dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
         {
             nb = aocl_lapack_ilaenv(&c__1, "DORMQR", ch__1, m, &nh, &nh, &c_n1);
         }
-        lwkopt = fla_max(1,nw) * nb;
-        work[1] = (doublereal) lwkopt;
+        lwkopt = fla_max(1, nw) * nb;
+        work[1] = (doublereal)lwkopt;
     }
     if(*info != 0)
     {
@@ -327,8 +329,9 @@ void dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
         i1 = 1;
         i2 = *ilo + 1;
     }
-    dormqr_fla(side, trans, &mi, &ni, &nh, &a[*ilo + 1 + *ilo * a_dim1], lda, & tau[*ilo], &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
-    work[1] = (doublereal) lwkopt;
+    dormqr_fla(side, trans, &mi, &ni, &nh, &a[*ilo + 1 + *ilo * a_dim1], lda, &tau[*ilo],
+               &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
+    work[1] = (doublereal)lwkopt;
     return;
     /* End of DORMHR */
 }

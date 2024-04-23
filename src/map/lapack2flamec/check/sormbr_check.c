@@ -1,8 +1,11 @@
 #include "FLA_f2c.h"
+#include "FLA_lapack2flame_return_defs.h"
 static integer c__1 = 1;
 static integer c_n1 = -1;
 
-int sormbr_check(char *vect, char *side, char *trans, integer *m, integer *n, integer *k, float *a, integer *lda, float *tau, float *c__, integer *ldc, float *work, integer *lwork, integer *info)
+int sormbr_check(char *vect, char *side, char *trans, integer *m, integer *n, integer *k, float *a,
+                 integer *lda, float *tau, float *c__, integer *ldc, float *work, integer *lwork,
+                 integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
@@ -41,15 +44,15 @@ int sormbr_check(char *vect, char *side, char *trans, integer *m, integer *n, in
         nq = *n;
         nw = *m;
     }
-    if (! applyq && ! lsame_(vect, "P", 1, 1))
+    if(!applyq && !lsame_(vect, "P", 1, 1))
     {
         *info = -1;
     }
-    else if (! left && ! lsame_(side, "R", 1, 1))
+    else if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -2;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1))
     {
         *info = -3;
     }
@@ -69,16 +72,16 @@ int sormbr_check(char *vect, char *side, char *trans, integer *m, integer *n, in
     {
         /* Computing MAX */
         i__1 = 1;
-        i__2 = fla_min(nq,*k); // , expr subst
-        if (applyq && *lda < fla_max(1,nq) || ! applyq && *lda < fla_max(i__1,i__2))
+        i__2 = fla_min(nq, *k); // , expr subst
+        if(applyq && *lda < fla_max(1, nq) || !applyq && *lda < fla_max(i__1, i__2))
         {
             *info = -8;
         }
-        else if (*ldc < fla_max(1,*m))
+        else if(*ldc < fla_max(1, *m))
         {
             *info = -11;
         }
-        else if (*lwork < fla_max(1,nw) && ! lquery)
+        else if(*lwork < fla_max(1, nw) && !lquery)
         {
             *info = -13;
         }
@@ -115,8 +118,8 @@ int sormbr_check(char *vect, char *side, char *trans, integer *m, integer *n, in
                 nb = aocl_lapack_ilaenv(&c__1, "SORMLQ", ch__1, m, &i__1, &i__2, &c_n1);
             }
         }
-        lwkopt = fla_max(1,nw) * nb;
-        work[1] = (float) lwkopt;
+        lwkopt = fla_max(1, nw) * nb;
+        work[1] = (float)lwkopt;
     }
     if(*info != 0)
     {

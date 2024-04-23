@@ -144,12 +144,14 @@ for 1 <= i <= N, row i of the matrix was */
 /* > \ingroup realGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sgbcon_(char *norm, integer *n, integer *kl, integer *ku, real *ab, integer *ldab, integer *ipiv, real *anorm, real *rcond, real *work, integer *iwork, integer *info)
+void sgbcon_(char *norm, integer *n, integer *kl, integer *ku, real *ab, integer *ldab,
+             integer *ipiv, real *anorm, real *rcond, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sgbcon inputs: norm %c, n %d, kl %d, ku %d, ldab %d",*norm, *n, *kl, *ku, *ldab);
+    snprintf(buffer, 256, "sgbcon inputs: norm %c, n %d, kl %d, ku %d, ldab %d", *norm, *n, *kl,
+             *ku, *ldab);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -165,14 +167,20 @@ void sgbcon_(char *norm, integer *n, integer *kl, integer *ku, real *ab, integer
     integer isave[3];
     logical lnoti;
     extern /* Subroutine */
-    void srscl_(integer *, real *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        srscl_(integer *, real *, real *, integer *),
+        saxpy_(integer *, real *, real *, integer *, real *, integer *),
+        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real ainvnm;
     extern /* Subroutine */
-    void slatbs_(char *, char *, char *, char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *);
+        void
+        slatbs_(char *, char *, char *, char *, integer *, integer *, real *, integer *, real *,
+                real *, real *, integer *);
     logical onenrm;
     char normin[1];
     real smlnum;
@@ -209,7 +217,7 @@ void sgbcon_(char *norm, integer *n, integer *kl, integer *ku, real *ab, integer
     /* Function Body */
     *info = 0;
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
-    if (! onenrm && ! lsame_(norm, "I", 1, 1))
+    if(!onenrm && !lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }
@@ -269,7 +277,7 @@ void sgbcon_(char *norm, integer *n, integer *kl, integer *ku, real *ab, integer
     lnoti = *kl > 0;
     kase = 0;
 L10:
-    aocl_lapack_slacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+    slacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == kase1)
@@ -283,7 +291,7 @@ L10:
                     /* Computing MIN */
                     i__2 = *kl;
                     i__3 = *n - j; // , expr subst
-                    lm = fla_min(i__2,i__3);
+                    lm = fla_min(i__2, i__3);
                     jp = ipiv[j];
                     t = work[jp];
                     if(jp != j)
@@ -292,22 +300,21 @@ L10:
                         work[j] = t;
                     }
                     r__1 = -t;
-                    aocl_blas_saxpy(&lm, &r__1, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1],
-                                    &c__1);
+                    saxpy_(&lm, &r__1, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1], &c__1);
                     /* L20: */
                 }
             }
             /* Multiply by inv(U). */
             i__1 = *kl + *ku;
-            aocl_lapack_slatbs("Upper", "No transpose", "Non-unit", normin, n, &i__1,
-                               &ab[ab_offset], ldab, &work[1], &scale, &work[(*n << 1) + 1], info);
+            slatbs_("Upper", "No transpose", "Non-unit", normin, n, &i__1, &ab[ab_offset], ldab,
+                    &work[1], &scale, &work[(*n << 1) + 1], info);
         }
         else
         {
             /* Multiply by inv(U**T). */
             i__1 = *kl + *ku;
-            aocl_lapack_slatbs("Upper", "Transpose", "Non-unit", normin, n, &i__1, &ab[ab_offset],
-                               ldab, &work[1], &scale, &work[(*n << 1) + 1], info);
+            slatbs_("Upper", "Transpose", "Non-unit", normin, n, &i__1, &ab[ab_offset], ldab,
+                    &work[1], &scale, &work[(*n << 1) + 1], info);
             /* Multiply by inv(L**T). */
             if(lnoti)
             {
@@ -316,8 +323,8 @@ L10:
                     /* Computing MIN */
                     i__1 = *kl;
                     i__2 = *n - j; // , expr subst
-                    lm = fla_min(i__1,i__2);
-                    work[j] -= sdot_(&lm, &ab[kd + 1 + j * ab_dim1], &c__1, & work[j + 1], &c__1);
+                    lm = fla_min(i__1, i__2);
+                    work[j] -= sdot_(&lm, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1], &c__1);
                     jp = ipiv[j];
                     if(jp != j)
                     {
@@ -334,7 +341,7 @@ L10:
         if(scale != 1.f)
         {
             ix = isamax_(n, &work[1], &c__1);
-            if (scale < (r__1 = work[ix], f2c_abs(r__1)) * smlnum || scale == 0.f)
+            if(scale < (r__1 = work[ix], f2c_abs(r__1)) * smlnum || scale == 0.f)
             {
                 goto L40;
             }

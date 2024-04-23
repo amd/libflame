@@ -274,7 +274,9 @@ here the magnitude of a scomplex number */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void shsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n, real *h__, integer *ldh, real *wr, real *wi, real *vl, integer *ldvl, real *vr, integer *ldvr, integer *mm, integer *m, real *work, integer *ifaill, integer *ifailr, integer *info)
+void shsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n, real *h__,
+             integer *ldh, real *wr, real *wi, real *vl, integer *ldvl, real *vr, integer *ldvr,
+             integer *mm, integer *m, real *work, integer *ifaill, integer *ifailr, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_shsein(side, eigsrc, initv, select, n, h__, ldh, wr, wi, vl, ldvl, vr, ldvr, mm, m,
@@ -322,7 +324,10 @@ void aocl_lapack_shsein(char *side, char *eigsrc, char *initv, logical *select, 
     real hnorm;
     extern real slamch_(char *);
     extern /* Subroutine */
-    void slaein_(logical *, logical *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *, real *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        slaein_(logical *, logical *, integer *, real *, integer *, real *, real *, real *, real *,
+                real *, integer *, real *, real *, real *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern logical sisnan_(real *);
     logical noinit;
@@ -410,11 +415,11 @@ void aocl_lapack_shsein(char *side, char *eigsrc, char *initv, logical *select, 
     {
         *info = -1;
     }
-    else if (! fromqr && ! lsame_(eigsrc, "N", 1, 1))
+    else if(!fromqr && !lsame_(eigsrc, "N", 1, 1))
     {
         *info = -2;
     }
-    else if (! noinit && ! lsame_(initv, "U", 1, 1))
+    else if(!noinit && !lsame_(initv, "U", 1, 1))
     {
         *info = -3;
     }
@@ -422,7 +427,7 @@ void aocl_lapack_shsein(char *side, char *eigsrc, char *initv, logical *select, 
     {
         *info = -5;
     }
-    else if (*ldh < fla_max(1,*n))
+    else if(*ldh < fla_max(1, *n))
     {
         *info = -7;
     }
@@ -514,7 +519,7 @@ void aocl_lapack_shsein(char *side, char *eigsrc, char *initv, logical *select, 
                 /* Compute infinity-norm of submatrix H(KL:KR,KL:KR) if it */
                 /* has not ben computed before. */
                 i__2 = kr - kl + 1;
-                hnorm = aocl_lapack_slanhs("I", &i__2, &h__[kl + kl * h_dim1], ldh, &work[1]);
+                hnorm = slanhs_("I", &i__2, &h__[kl + kl * h_dim1], ldh, &work[1]);
                 if(sisnan_(&hnorm))
                 {
                     *info = -6;
@@ -538,7 +543,9 @@ void aocl_lapack_shsein(char *side, char *eigsrc, char *initv, logical *select, 
             i__2 = kl;
             for(i__ = k - 1; i__ >= i__2; --i__)
             {
-                if (select[i__] && (r__1 = wr[i__] - wkr, f2c_abs(r__1)) + (r__2 = wi[i__] - wki, f2c_abs(r__2)) < eps3)
+                if(select[i__]
+                   && (r__1 = wr[i__] - wkr, f2c_abs(r__1)) + (r__2 = wi[i__] - wki, f2c_abs(r__2))
+                          < eps3)
                 {
                     wkr += eps3;
                     goto L60;
@@ -559,10 +566,9 @@ void aocl_lapack_shsein(char *side, char *eigsrc, char *initv, logical *select, 
             {
                 /* Compute left eigenvector. */
                 i__2 = *n - kl + 1;
-                aocl_lapack_slaein(&c_false, &noinit, &i__2, &h__[kl + kl * h_dim1], ldh, &wkr,
-                                   &wki, &vl[kl + ksr * vl_dim1], &vl[kl + ksi * vl_dim1], &work[1],
-                                   &ldwork, &work[*n * *n + *n + 1], &eps3, &smlnum, &bignum,
-                                   &iinfo);
+                slaein_(&c_false, &noinit, &i__2, &h__[kl + kl * h_dim1], ldh, &wkr, &wki,
+                        &vl[kl + ksr * vl_dim1], &vl[kl + ksi * vl_dim1], &work[1], &ldwork,
+                        &work[*n * *n + *n + 1], &eps3, &smlnum, &bignum, &iinfo);
                 if(iinfo > 0)
                 {
                     if(pair)
@@ -600,10 +606,9 @@ void aocl_lapack_shsein(char *side, char *eigsrc, char *initv, logical *select, 
             if(rightv)
             {
                 /* Compute right eigenvector. */
-                aocl_lapack_slaein(&c_true, &noinit, &kr, &h__[h_offset], ldh, &wkr, &wki,
-                                   &vr[ksr * vr_dim1 + 1], &vr[ksi * vr_dim1 + 1], &work[1],
-                                   &ldwork, &work[*n * *n + *n + 1], &eps3, &smlnum, &bignum,
-                                   &iinfo);
+                slaein_(&c_true, &noinit, &kr, &h__[h_offset], ldh, &wkr, &wki,
+                        &vr[ksr * vr_dim1 + 1], &vr[ksi * vr_dim1 + 1], &work[1], &ldwork,
+                        &work[*n * *n + *n + 1], &eps3, &smlnum, &bignum, &iinfo);
                 if(iinfo > 0)
                 {
                     if(pair)

@@ -141,17 +141,23 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zppsv_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, doublecomplex *b, integer *ldb, integer *info)
+void zppsv_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, doublecomplex *b,
+            integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zppsv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *ldb);
+    AOCL_DTL_SNPRINTF("zppsv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",
+                      *uplo, *n, *nrhs, *ldb);
 
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zpptrf_( char *, integer *, doublecomplex *, integer *), zpptrs_( char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zpptrf_(char *, integer *, doublecomplex *, integer *),
+        zpptrs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
+                integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -176,7 +182,7 @@ void zppsv_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, doublecomp
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -188,7 +194,7 @@ void zppsv_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, doublecomp
     {
         *info = -3;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -200,7 +206,7 @@ void zppsv_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, doublecomp
         return;
     }
     /* Compute the Cholesky factorization A = U**H *U or A = L*L**H. */
-    aocl_lapack_zpptrf(uplo, n, &ap[1], info);
+    zpptrf_(uplo, n, &ap[1], info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */

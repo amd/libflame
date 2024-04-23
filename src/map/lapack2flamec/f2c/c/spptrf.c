@@ -124,7 +124,7 @@ void spptrf_(char *uplo, integer *n, real *ap, integer *info)
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"spptrf inputs: uplo %c, n %d",*uplo, *n);
+    snprintf(buffer, 256, "spptrf inputs: uplo %c, n %d", *uplo, *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -137,13 +137,17 @@ void spptrf_(char *uplo, integer *n, real *ap, integer *info)
     real ajj;
     extern real sdot_(integer *, real *, integer *, real *, integer *);
     extern /* Subroutine */
-    void sspr_(char *, integer *, real *, real *, integer *, real *);
+        void
+        sspr_(char *, integer *, real *, real *, integer *, real *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     logical upper;
     extern /* Subroutine */
-    void stpsv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        stpsv_(char *, char *, char *, integer *, real *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -170,7 +174,7 @@ void spptrf_(char *uplo, integer *n, real *ap, integer *info)
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -204,11 +208,11 @@ void spptrf_(char *uplo, integer *n, real *ap, integer *info)
             if(j > 1)
             {
                 i__2 = j - 1;
-                aocl_blas_stpsv("Upper", "Transpose", "Non-unit", &i__2, &ap[1], &ap[jc], &c__1);
+                stpsv_("Upper", "Transpose", "Non-unit", &i__2, &ap[1], &ap[jc], &c__1);
             }
             /* Compute U(J,J) and test for non-positive-definiteness. */
             i__2 = j - 1;
-            ajj = ap[jj] - aocl_blas_sdot(&i__2, &ap[jc], &c__1, &ap[jc], &c__1);
+            ajj = ap[jj] - sdot_(&i__2, &ap[jc], &c__1, &ap[jc], &c__1);
             if(ajj <= 0.f)
             {
                 ap[jj] = ajj;

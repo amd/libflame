@@ -150,12 +150,14 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *ap, real *tau, real *c__, integer *ldc, real *work, integer *info)
+void sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *ap, real *tau,
+             real *c__, integer *ldc, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sopmtr inputs: side %c, uplo %c, trans %c, m %d, n %d, ldc %d",*side, *uplo, *trans, *m, *n, *ldc);
+    snprintf(buffer, 256, "sopmtr inputs: side %c, uplo %c, trans %c, m %d, n %d, ldc %d", *side,
+             *uplo, *trans, *m, *n, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -166,10 +168,12 @@ void sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *
     logical left;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
+        void
+        slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, forwrd;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -213,15 +217,15 @@ void sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1))
     {
         *info = -3;
     }
@@ -233,7 +237,7 @@ void sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *
     {
         *info = -5;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -9;
     }
@@ -293,8 +297,8 @@ void sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *
             /* Apply H(i) */
             aii = ap[ii];
             ap[ii] = 1.f;
-            aocl_lapack_slarf(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &tau[i__], &c__[c_offset],
-                              ldc, &work[1]);
+            slarf_(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &tau[i__], &c__[c_offset], ldc,
+                   &work[1]);
             ap[ii] = aii;
             if(forwrd)
             {
@@ -354,8 +358,8 @@ void sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *
                 jc = i__ + 1;
             }
             /* Apply H(i) */
-            aocl_lapack_slarf(side, &mi, &ni, &ap[ii], &c__1, &tau[i__], &c__[ic + jc * c_dim1],
-                              ldc, &work[1]);
+            slarf_(side, &mi, &ni, &ap[ii], &c__1, &tau[i__], &c__[ic + jc * c_dim1], ldc,
+                   &work[1]);
             ap[ii] = aii;
             if(forwrd)
             {

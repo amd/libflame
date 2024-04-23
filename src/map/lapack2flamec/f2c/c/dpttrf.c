@@ -90,14 +90,15 @@ if k < N, the factorization could not */
 void dpttrf_(integer *n, doublereal *d__, doublereal *e, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dpttrf inputs: n %" FLA_IS "",*n);
+    AOCL_DTL_SNPRINTF("dpttrf inputs: n %" FLA_IS "", *n);
     /* System generated locals */
     aocl_int64_t i__1;
     /* Local variables */
     aocl_int64_t i__, i4;
     doublereal ei;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

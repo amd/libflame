@@ -1,20 +1,30 @@
-/* ../netlib/cgeevx.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cgeevx.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__0 = 0;
 static integer c_n1 = -1;
-/* > \brief <b> CGEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE mat rices</b> */
+/* > \brief <b> CGEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors
+ * for GE mat rices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CGEEVX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgeevx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgeevx.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgeevx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgeevx.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgeevx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgeevx.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -77,15 +87,15 @@ static integer c_n1 = -1;
 /* > and/or permuted to improve the conditioning of its */
 /* > eigenvalues. */
 /* > = 'N': Do not diagonally scale or permute;
-*/
+ */
 /* > = 'P': Perform permutations to make the matrix more nearly */
 /* > upper triangular. Do not diagonally scale;
-*/
+ */
 /* > = 'S': Diagonally scale the matrix, ie. replace A by */
 /* > D*A*D**(-1), where D is a diagonal matrix chosen */
 /* > to make the rows and columns of A more equal in */
 /* > norm. Do not permute;
-*/
+ */
 /* > = 'B': Both diagonally scale and permute A. */
 /* > */
 /* > Computed reciprocal condition numbers will be for the matrix */
@@ -97,7 +107,7 @@ static integer c_n1 = -1;
 /* > \verbatim */
 /* > JOBVL is CHARACTER*1 */
 /* > = 'N': left eigenvectors of A are not computed;
-*/
+ */
 /* > = 'V': left eigenvectors of A are computed. */
 /* > If SENSE = 'E' or 'B', JOBVL must = 'V'. */
 /* > \endverbatim */
@@ -106,7 +116,7 @@ static integer c_n1 = -1;
 /* > \verbatim */
 /* > JOBVR is CHARACTER*1 */
 /* > = 'N': right eigenvectors of A are not computed;
-*/
+ */
 /* > = 'V': right eigenvectors of A are computed. */
 /* > If SENSE = 'E' or 'B', JOBVR must = 'V'. */
 /* > \endverbatim */
@@ -116,11 +126,11 @@ static integer c_n1 = -1;
 /* > SENSE is CHARACTER*1 */
 /* > Determines which reciprocal condition numbers are computed. */
 /* > = 'N': None are computed;
-*/
+ */
 /* > = 'E': Computed for eigenvalues only;
-*/
+ */
 /* > = 'V': Computed for right eigenvectors only;
-*/
+ */
 /* > = 'B': Computed for eigenvalues and right eigenvectors. */
 /* > */
 /* > If SENSE = 'E' or 'B', both left and right eigenvectors */
@@ -286,15 +296,24 @@ elements 1:ILO-1 and i+1:N of W */
 /* > \ingroup complexGEeigen */
 /* ===================================================================== */
 /* Subroutine */
-void cgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, complex *a, integer *lda, complex *w, complex *vl, integer *ldvl, complex *vr, integer *ldvr, integer *ilo, integer *ihi, real *scale, real *abnrm, real *rconde, real *rcondv, complex *work, integer *lwork, real *rwork, integer *info)
+void cgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, complex *a,
+             integer *lda, complex *w, complex *vl, integer *ldvl, complex *vr, integer *ldvr,
+             integer *ilo, integer *ihi, real *scale, real *abnrm, real *rconde, real *rcondv,
+             complex *work, integer *lwork, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgeevx inputs: balanc %c, jobvl %c, jobvr %c, sense %c, n %lld, lda %lld, ldvl %lld, ldvr %lld, lwork %lld",*balanc, *jobvl, *jobvr, *sense, *n, *lda, *ldvl, *ldvr, *lwork);
+    snprintf(buffer, 256,
+             "cgeevx inputs: balanc %c, jobvl %c, jobvr %c, sense %c, n %lld, lda %lld, ldvl %lld, "
+             "ldvr %lld, lwork %lld",
+             *balanc, *jobvl, *jobvr, *sense, *n, *lda, *ldvl, *ldvr, *lwork);
 #else
-    snprintf(buffer, 256,"cgeevx inputs: balanc %c, jobvl %c, jobvr %c, sense %c, n %d, lda %d, ldvl %d, ldvr %d, lwork %d",*balanc, *jobvl, *jobvr, *sense, *n, *lda, *ldvl, *ldvr, *lwork);
+    snprintf(buffer, 256,
+             "cgeevx inputs: balanc %c, jobvl %c, jobvr %c, sense %c, n %d, lda %d, ldvl %d, ldvr "
+             "%d, lwork %d",
+             *balanc, *jobvl, *jobvr, *sense, *n, *lda, *ldvl, *ldvr, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -314,28 +333,49 @@ void cgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, c
     real anrm;
     integer ierr, itau, iwrk, nout;
     extern /* Subroutine */
-    void cscal_(integer *, complex *, complex *, integer *);
+        void
+        cscal_(integer *, complex *, complex *, integer *);
     integer icond;
     extern logical lsame_(char *, char *, integer, integer);
     extern real scnrm2_(integer *, complex *, integer *);
     extern /* Subroutine */
-    void cgebak_(char *, char *, integer *, integer *, integer *, real *, integer *, complex *, integer *, integer *), cgebal_(char *, integer *, complex *, integer *, integer *, integer *, real *, integer *), slabad_(real *, real *);
+        void
+        cgebak_(char *, char *, integer *, integer *, integer *, real *, integer *, complex *,
+                integer *, integer *),
+        cgebal_(char *, integer *, complex *, integer *, integer *, integer *, real *, integer *),
+        slabad_(real *, real *);
     logical scalea;
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     real cscale;
     extern /* Subroutine */
-    void cgehrd_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
+        void
+        cgehrd_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *, integer *),
+        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
+                integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    void csscal_(integer *, real *, complex *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        csscal_(integer *, real *, complex *, integer *),
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     logical select[1] = {0};
     real bignum;
     extern /* Subroutine */
-    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
+                integer *, integer *);
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    void chseqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *), cunghr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), ctrsna_(char *, char *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, integer *, integer *, complex *, integer *, real *, integer *);
+        void
+        chseqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
+                complex *, integer *, complex *, integer *, integer *),
+        cunghr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *, integer *),
+        ctrsna_(char *, char *, logical *, integer *, complex *, integer *, complex *, integer *,
+                complex *, integer *, real *, real *, integer *, integer *, complex *, integer *,
+                real *, integer *);
     integer minwrk, maxwrk;
     logical wantvl, wntsnb;
     integer hswork;
@@ -343,7 +383,10 @@ void cgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, c
     real smlnum;
     logical lquery, wantvr, wntsnn, wntsnv;
     extern /* Subroutine */
-    void ctrevc3_(char *, char *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, complex *, integer *, real *, integer *, integer *);
+        void
+        ctrevc3_(char *, char *, logical *, integer *, complex *, integer *, complex *, integer *,
+                 complex *, integer *, integer *, integer *, complex *, integer *, real *,
+                 integer *, integer *);
     /* -- LAPACK driver routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -392,35 +435,36 @@ void cgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, c
     wntsne = lsame_(sense, "E", 1, 1);
     wntsnv = lsame_(sense, "V", 1, 1);
     wntsnb = lsame_(sense, "B", 1, 1);
-    if (! (lsame_(balanc, "N", 1, 1) || lsame_(balanc, "S", 1, 1) || lsame_(balanc, "P", 1, 1) || lsame_(balanc, "B", 1, 1)))
+    if(!(lsame_(balanc, "N", 1, 1) || lsame_(balanc, "S", 1, 1) || lsame_(balanc, "P", 1, 1)
+         || lsame_(balanc, "B", 1, 1)))
     {
         *info = -1;
     }
-    else if (! wantvl && ! lsame_(jobvl, "N", 1, 1))
+    else if(!wantvl && !lsame_(jobvl, "N", 1, 1))
     {
         *info = -2;
     }
-    else if (! wantvr && ! lsame_(jobvr, "N", 1, 1))
+    else if(!wantvr && !lsame_(jobvr, "N", 1, 1))
     {
         *info = -3;
     }
-    else if (! (wntsnn || wntsne || wntsnb || wntsnv) || (wntsne || wntsnb) && ! (wantvl && wantvr))
+    else if(!(wntsnn || wntsne || wntsnb || wntsnv) || (wntsne || wntsnb) && !(wantvl && wantvr))
     {
         *info = -4;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldvl < 1 || wantvl && *ldvl < *n)
+    else if(*ldvl < 1 || wantvl && *ldvl < *n)
     {
         *info = -10;
     }
-    else if (*ldvr < 1 || wantvr && *ldvr < *n)
+    else if(*ldvr < 1 || wantvr && *ldvr < *n)
     {
         *info = -12;
     }
@@ -434,111 +478,119 @@ void cgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, c
     /* HSWORK refers to the workspace preferred by CHSEQR, as */
     /* calculated below. HSWORK is computed assuming ILO=1 and IHI=N, */
     /* the worst case.) */
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (*n == 0)
+        if(*n == 0)
         {
             minwrk = 1;
             maxwrk = 1;
         }
         else
         {
-            maxwrk = *n + *n * ilaenv_(&c__1, "CGEHRD", " ", n, &c__1, n, & c__0);
-            if (wantvl)
+            maxwrk = *n + *n * ilaenv_(&c__1, "CGEHRD", " ", n, &c__1, n, &c__0);
+            if(wantvl)
             {
-                ctrevc3_("L", "B", select, n, &a[a_offset], lda, &vl[ vl_offset], ldvl, &vr[vr_offset], ldvr, n, &nout, & work[1], &c_n1, &rwork[1], &c_n1, &ierr);
-                lwork_trevc__ = (integer) work[1].r;
-                maxwrk = fla_max(maxwrk,lwork_trevc__);
-                chseqr_("S", "V", n, &c__1, n, &a[a_offset], lda, &w[1], &vl[ vl_offset], ldvl, &work[1], &c_n1, info);
+                ctrevc3_("L", "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl,
+                         &vr[vr_offset], ldvr, n, &nout, &work[1], &c_n1, &rwork[1], &c_n1, &ierr);
+                lwork_trevc__ = (integer)work[1].r;
+                maxwrk = fla_max(maxwrk, lwork_trevc__);
+                chseqr_("S", "V", n, &c__1, n, &a[a_offset], lda, &w[1], &vl[vl_offset], ldvl,
+                        &work[1], &c_n1, info);
             }
-            else if (wantvr)
+            else if(wantvr)
             {
-                ctrevc3_("R", "B", select, n, &a[a_offset], lda, &vl[ vl_offset], ldvl, &vr[vr_offset], ldvr, n, &nout, & work[1], &c_n1, &rwork[1], &c_n1, &ierr);
-                lwork_trevc__ = (integer) work[1].r;
-                maxwrk = fla_max(maxwrk,lwork_trevc__);
-                chseqr_("S", "V", n, &c__1, n, &a[a_offset], lda, &w[1], &vr[ vr_offset], ldvr, &work[1], &c_n1, info);
+                ctrevc3_("R", "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl,
+                         &vr[vr_offset], ldvr, n, &nout, &work[1], &c_n1, &rwork[1], &c_n1, &ierr);
+                lwork_trevc__ = (integer)work[1].r;
+                maxwrk = fla_max(maxwrk, lwork_trevc__);
+                chseqr_("S", "V", n, &c__1, n, &a[a_offset], lda, &w[1], &vr[vr_offset], ldvr,
+                        &work[1], &c_n1, info);
             }
             else
             {
-                if (wntsnn)
+                if(wntsnn)
                 {
-                    chseqr_("E", "N", n, &c__1, n, &a[a_offset], lda, &w[1], & vr[vr_offset], ldvr, &work[1], &c_n1, info);
+                    chseqr_("E", "N", n, &c__1, n, &a[a_offset], lda, &w[1], &vr[vr_offset], ldvr,
+                            &work[1], &c_n1, info);
                 }
                 else
                 {
-                    chseqr_("S", "N", n, &c__1, n, &a[a_offset], lda, &w[1], & vr[vr_offset], ldvr, &work[1], &c_n1, info);
+                    chseqr_("S", "N", n, &c__1, n, &a[a_offset], lda, &w[1], &vr[vr_offset], ldvr,
+                            &work[1], &c_n1, info);
                 }
             }
-            hswork = (integer) work[1].r;
-            if (! wantvl && ! wantvr)
+            hswork = (integer)work[1].r;
+            if(!wantvl && !wantvr)
             {
                 minwrk = *n << 1;
-                if (! (wntsnn || wntsne))
+                if(!(wntsnn || wntsne))
                 {
                     /* Computing MAX */
                     i__1 = minwrk;
                     i__2 = *n * *n + (*n << 1); // , expr subst
-                    minwrk = fla_max(i__1,i__2);
+                    minwrk = fla_max(i__1, i__2);
                 }
-                maxwrk = fla_max(maxwrk,hswork);
-                if (! (wntsnn || wntsne))
+                maxwrk = fla_max(maxwrk, hswork);
+                if(!(wntsnn || wntsne))
                 {
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = *n * *n + (*n << 1); // , expr subst
-                    maxwrk = fla_max(i__1,i__2);
+                    maxwrk = fla_max(i__1, i__2);
                 }
             }
             else
             {
                 minwrk = *n << 1;
-                if (! (wntsnn || wntsne))
+                if(!(wntsnn || wntsne))
                 {
                     /* Computing MAX */
                     i__1 = minwrk;
                     i__2 = *n * *n + (*n << 1); // , expr subst
-                    minwrk = fla_max(i__1,i__2);
+                    minwrk = fla_max(i__1, i__2);
                 }
-                maxwrk = fla_max(maxwrk,hswork);
+                maxwrk = fla_max(maxwrk, hswork);
                 /* Computing MAX */
                 i__1 = maxwrk;
-                i__2 = *n + (*n - 1) * ilaenv_(&c__1, "CUNGHR", " ", n, &c__1, n, &c_n1); // , expr subst
-                maxwrk = fla_max(i__1,i__2);
-                if (! (wntsnn || wntsne))
+                i__2 = *n
+                       + (*n - 1)
+                             * ilaenv_(&c__1, "CUNGHR", " ", n, &c__1, n, &c_n1); // , expr subst
+                maxwrk = fla_max(i__1, i__2);
+                if(!(wntsnn || wntsne))
                 {
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = *n * *n + (*n << 1); // , expr subst
-                    maxwrk = fla_max(i__1,i__2);
+                    maxwrk = fla_max(i__1, i__2);
                 }
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n << 1; // , expr subst
-                maxwrk = fla_max(i__1,i__2);
+                maxwrk = fla_max(i__1, i__2);
             }
-            maxwrk = fla_max(maxwrk,minwrk);
+            maxwrk = fla_max(maxwrk, minwrk);
         }
-        work[1].r = (real) maxwrk;
+        work[1].r = (real)maxwrk;
         work[1].i = 0.f; // , expr subst
-        if (*lwork < minwrk && ! lquery)
+        if(*lwork < minwrk && !lquery)
         {
             *info = -20;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CGEEVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -554,27 +606,27 @@ void cgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, c
     icond = 0;
     anrm = clange_("M", n, n, &a[a_offset], lda, dum);
     scalea = FALSE_;
-    if (anrm > 0.f && anrm < smlnum)
+    if(anrm > 0.f && anrm < smlnum)
     {
         scalea = TRUE_;
         cscale = smlnum;
     }
-    else if (anrm > bignum)
+    else if(anrm > bignum)
     {
         scalea = TRUE_;
         cscale = bignum;
     }
-    if (scalea)
+    if(scalea)
     {
-        clascl_("G", &c__0, &c__0, &anrm, &cscale, n, n, &a[a_offset], lda, & ierr);
+        clascl_("G", &c__0, &c__0, &anrm, &cscale, n, n, &a[a_offset], lda, &ierr);
     }
     /* Balance the matrix and compute ABNRM */
     cgebal_(balanc, n, &a[a_offset], lda, ilo, ihi, &scale[1], &ierr);
     *abnrm = clange_("1", n, n, &a[a_offset], lda, dum);
-    if (scalea)
+    if(scalea)
     {
         dum[0] = *abnrm;
-        slascl_("G", &c__0, &c__0, &cscale, &anrm, &c__1, &c__1, dum, &c__1, & ierr);
+        slascl_("G", &c__0, &c__0, &cscale, &anrm, &c__1, &c__1, dum, &c__1, &ierr);
         *abnrm = dum[0];
     }
     /* Reduce to upper Hessenberg form */
@@ -583,25 +635,26 @@ void cgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, c
     itau = 1;
     iwrk = itau + *n;
     i__1 = *lwork - iwrk + 1;
-    cgehrd_(n, ilo, ihi, &a[a_offset], lda, &work[itau], &work[iwrk], &i__1, & ierr);
-    if (wantvl)
+    cgehrd_(n, ilo, ihi, &a[a_offset], lda, &work[itau], &work[iwrk], &i__1, &ierr);
+    if(wantvl)
     {
         /* Want left eigenvectors */
         /* Copy Householder vectors to VL */
         *(unsigned char *)side = 'L';
-        clacpy_("L", n, n, &a[a_offset], lda, &vl[vl_offset], ldvl) ;
+        clacpy_("L", n, n, &a[a_offset], lda, &vl[vl_offset], ldvl);
         /* Generate unitary matrix in VL */
         /* (CWorkspace: need 2*N-1, prefer N+(N-1)*NB) */
         /* (RWorkspace: none) */
         i__1 = *lwork - iwrk + 1;
-        cunghr_(n, ilo, ihi, &vl[vl_offset], ldvl, &work[itau], &work[iwrk], & i__1, &ierr);
+        cunghr_(n, ilo, ihi, &vl[vl_offset], ldvl, &work[itau], &work[iwrk], &i__1, &ierr);
         /* Perform QR iteration, accumulating Schur vectors in VL */
         /* (CWorkspace: need 1, prefer HSWORK (see comments) ) */
         /* (RWorkspace: none) */
         iwrk = itau;
         i__1 = *lwork - iwrk + 1;
-        chseqr_("S", "V", n, ilo, ihi, &a[a_offset], lda, &w[1], &vl[ vl_offset], ldvl, &work[iwrk], &i__1, info);
-        if (wantvr)
+        chseqr_("S", "V", n, ilo, ihi, &a[a_offset], lda, &w[1], &vl[vl_offset], ldvl, &work[iwrk],
+                &i__1, info);
+        if(wantvr)
         {
             /* Want left and right eigenvectors */
             /* Copy Schur vectors to VR */
@@ -609,29 +662,30 @@ void cgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, c
             clacpy_("F", n, n, &vl[vl_offset], ldvl, &vr[vr_offset], ldvr);
         }
     }
-    else if (wantvr)
+    else if(wantvr)
     {
         /* Want right eigenvectors */
         /* Copy Householder vectors to VR */
         *(unsigned char *)side = 'R';
-        clacpy_("L", n, n, &a[a_offset], lda, &vr[vr_offset], ldvr) ;
+        clacpy_("L", n, n, &a[a_offset], lda, &vr[vr_offset], ldvr);
         /* Generate unitary matrix in VR */
         /* (CWorkspace: need 2*N-1, prefer N+(N-1)*NB) */
         /* (RWorkspace: none) */
         i__1 = *lwork - iwrk + 1;
-        cunghr_(n, ilo, ihi, &vr[vr_offset], ldvr, &work[itau], &work[iwrk], & i__1, &ierr);
+        cunghr_(n, ilo, ihi, &vr[vr_offset], ldvr, &work[itau], &work[iwrk], &i__1, &ierr);
         /* Perform QR iteration, accumulating Schur vectors in VR */
         /* (CWorkspace: need 1, prefer HSWORK (see comments) ) */
         /* (RWorkspace: none) */
         iwrk = itau;
         i__1 = *lwork - iwrk + 1;
-        chseqr_("S", "V", n, ilo, ihi, &a[a_offset], lda, &w[1], &vr[ vr_offset], ldvr, &work[iwrk], &i__1, info);
+        chseqr_("S", "V", n, ilo, ihi, &a[a_offset], lda, &w[1], &vr[vr_offset], ldvr, &work[iwrk],
+                &i__1, info);
     }
     else
     {
         /* Compute eigenvalues only */
         /* If condition numbers desired, compute Schur form */
-        if (wntsnn)
+        if(wntsnn)
         {
             *(unsigned char *)job = 'E';
         }
@@ -643,44 +697,43 @@ void cgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, c
         /* (RWorkspace: none) */
         iwrk = itau;
         i__1 = *lwork - iwrk + 1;
-        chseqr_(job, "N", n, ilo, ihi, &a[a_offset], lda, &w[1], &vr[ vr_offset], ldvr, &work[iwrk], &i__1, info);
+        chseqr_(job, "N", n, ilo, ihi, &a[a_offset], lda, &w[1], &vr[vr_offset], ldvr, &work[iwrk],
+                &i__1, info);
     }
     /* If INFO .NE. 0 from CHSEQR, then quit */
-    if (*info != 0)
+    if(*info != 0)
     {
         goto L50;
     }
-    if (wantvl || wantvr)
+    if(wantvl || wantvr)
     {
         /* Compute left and/or right eigenvectors */
         /* (CWorkspace: need 2*N, prefer N + 2*N*NB) */
         /* (RWorkspace: need N) */
         i__1 = *lwork - iwrk + 1;
-        ctrevc3_(side, "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl, &vr[vr_offset], ldvr, n, &nout, &work[iwrk], &i__1, & rwork[1], n, &ierr);
+        ctrevc3_(side, "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl, &vr[vr_offset],
+                 ldvr, n, &nout, &work[iwrk], &i__1, &rwork[1], n, &ierr);
     }
     /* Compute condition numbers if desired */
     /* (CWorkspace: need N*N+2*N unless SENSE = 'E') */
     /* (RWorkspace: need 2*N unless SENSE = 'E') */
-    if (! wntsnn)
+    if(!wntsnn)
     {
-        ctrsna_(sense, "A", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl, &vr[vr_offset], ldvr, &rconde[1], &rcondv[1], n, &nout, &work[iwrk], n, &rwork[1], &icond);
+        ctrsna_(sense, "A", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl, &vr[vr_offset],
+                ldvr, &rconde[1], &rcondv[1], n, &nout, &work[iwrk], n, &rwork[1], &icond);
     }
-    if (wantvl)
+    if(wantvl)
     {
         /* Undo balancing of left eigenvectors */
         cgebak_(balanc, "L", n, ilo, ihi, &scale[1], n, &vl[vl_offset], ldvl, &ierr);
         /* Normalize left eigenvectors and make largest component real */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             scl = 1.f / scnrm2_(n, &vl[i__ * vl_dim1 + 1], &c__1);
             csscal_(n, &scl, &vl[i__ * vl_dim1 + 1], &c__1);
             i__2 = *n;
-            for (k = 1;
-                    k <= i__2;
-                    ++k)
+            for(k = 1; k <= i__2; ++k)
             {
                 i__3 = k + i__ * vl_dim1;
                 /* Computing 2nd power */
@@ -708,22 +761,18 @@ void cgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, c
             /* L20: */
         }
     }
-    if (wantvr)
+    if(wantvr)
     {
         /* Undo balancing of right eigenvectors */
         cgebak_(balanc, "R", n, ilo, ihi, &scale[1], n, &vr[vr_offset], ldvr, &ierr);
         /* Normalize right eigenvectors and make largest component real */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             scl = 1.f / scnrm2_(n, &vr[i__ * vr_dim1 + 1], &c__1);
             csscal_(n, &scl, &vr[i__ * vr_dim1 + 1], &c__1);
             i__2 = *n;
-            for (k = 1;
-                    k <= i__2;
-                    ++k)
+            for(k = 1; k <= i__2; ++k)
             {
                 i__3 = k + i__ * vr_dim1;
                 /* Computing 2nd power */
@@ -753,18 +802,18 @@ void cgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, c
     }
     /* Undo scaling if necessary */
 L50:
-    if (scalea)
+    if(scalea)
     {
         i__1 = *n - *info;
         /* Computing MAX */
         i__3 = *n - *info;
-        i__2 = fla_max(i__3,1);
+        i__2 = fla_max(i__3, 1);
         clascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &w[*info + 1], &i__2, &ierr);
-        if (*info == 0)
+        if(*info == 0)
         {
-            if ((wntsnv || wntsnb) && icond == 0)
+            if((wntsnv || wntsnb) && icond == 0)
             {
-                slascl_("G", &c__0, &c__0, &cscale, &anrm, n, &c__1, &rcondv[ 1], n, &ierr);
+                slascl_("G", &c__0, &c__0, &cscale, &anrm, n, &c__1, &rcondv[1], n, &ierr);
             }
         }
         else
@@ -773,7 +822,7 @@ L50:
             clascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &w[1], n, &ierr);
         }
     }
-    work[1].r = (real) maxwrk;
+    work[1].r = (real)maxwrk;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

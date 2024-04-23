@@ -146,7 +146,9 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlags2_(logical *upper, doublereal *a1, doublereal *a2, doublereal *a3, doublereal *b1, doublereal *b2, doublereal *b3, doublereal *csu, doublereal *snu, doublereal *csv, doublereal *snv, doublereal *csq, doublereal *snq)
+void dlags2_(logical *upper, doublereal *a1, doublereal *a2, doublereal *a3, doublereal *b1,
+             doublereal *b2, doublereal *b3, doublereal *csu, doublereal *snu, doublereal *csv,
+             doublereal *snv, doublereal *csq, doublereal *snq)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
@@ -156,7 +158,10 @@ void dlags2_(logical *upper, doublereal *a1, doublereal *a2, doublereal *a3, dou
         csr, snl, snr, aua11, aua12, aua21, aua22, avb11, avb12, avb21, avb22, ua11r, ua22r, vb11r,
         vb22r;
     extern /* Subroutine */
-    void dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *, doublereal *, doublereal *),
+        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -185,7 +190,7 @@ void dlags2_(logical *upper, doublereal *a1, doublereal *a2, doublereal *a3, dou
         /* ( CSL -SNL )*( A B )*( CSR SNR ) = ( R 0 ) */
         /* ( SNL CSL ) ( 0 D ) ( -SNR CSR ) ( 0 T ) */
         dlasv2_(&a, &b, &d__, &s1, &s2, &snr, &csr, &snl, &csl);
-        if (f2c_dabs(csl) >= f2c_dabs(snl) || f2c_dabs(csr) >= f2c_dabs(snr))
+        if(f2c_dabs(csl) >= f2c_dabs(snl) || f2c_dabs(csr) >= f2c_dabs(snr))
         {
             /* Compute the (1,1) and (1,2) elements of U**T *A and V**T *B, */
             /* and (1,2) element of |U|**T *|A| and |V|**T *|B|. */
@@ -196,9 +201,10 @@ void dlags2_(logical *upper, doublereal *a1, doublereal *a2, doublereal *a3, dou
             aua12 = f2c_dabs(csl) * f2c_dabs(*a2) + f2c_dabs(snl) * f2c_dabs(*a3);
             avb12 = f2c_dabs(csr) * f2c_dabs(*b2) + f2c_dabs(snr) * f2c_dabs(*b3);
             /* zero (1,2) elements of U**T *A and V**T *B */
-            if (f2c_dabs(ua11r) + f2c_dabs(ua12) != 0.)
+            if(f2c_dabs(ua11r) + f2c_dabs(ua12) != 0.)
             {
-                if (aua12 / (f2c_dabs(ua11r) + f2c_dabs(ua12)) <= avb12 / (f2c_dabs(vb11r) + f2c_dabs(vb12)))
+                if(aua12 / (f2c_dabs(ua11r) + f2c_dabs(ua12))
+                   <= avb12 / (f2c_dabs(vb11r) + f2c_dabs(vb12)))
                 {
                     d__1 = -ua11r;
                     dlartg_(&d__1, &ua12, csq, snq, &r__);
@@ -230,9 +236,10 @@ void dlags2_(logical *upper, doublereal *a1, doublereal *a2, doublereal *a3, dou
             aua22 = f2c_dabs(snl) * f2c_dabs(*a2) + f2c_dabs(csl) * f2c_dabs(*a3);
             avb22 = f2c_dabs(snr) * f2c_dabs(*b2) + f2c_dabs(csr) * f2c_dabs(*b3);
             /* zero (2,2) elements of U**T*A and V**T*B, and then swap. */
-            if (f2c_dabs(ua21) + f2c_dabs(ua22) != 0.)
+            if(f2c_dabs(ua21) + f2c_dabs(ua22) != 0.)
             {
-                if (aua22 / (f2c_dabs(ua21) + f2c_dabs(ua22)) <= avb22 / (f2c_dabs(vb21) + f2c_dabs(vb22)))
+                if(aua22 / (f2c_dabs(ua21) + f2c_dabs(ua22))
+                   <= avb22 / (f2c_dabs(vb21) + f2c_dabs(vb22)))
                 {
                     d__1 = -ua21;
                     dlartg_(&d__1, &ua22, csq, snq, &r__);
@@ -266,7 +273,7 @@ void dlags2_(logical *upper, doublereal *a1, doublereal *a2, doublereal *a3, dou
         /* ( CSL -SNL )*( A 0 )*( CSR SNR ) = ( R 0 ) */
         /* ( SNL CSL ) ( C D ) ( -SNR CSR ) ( 0 T ) */
         dlasv2_(&a, &c__, &d__, &s1, &s2, &snr, &csr, &snl, &csl);
-        if (f2c_dabs(csr) >= f2c_dabs(snr) || f2c_dabs(csl) >= f2c_dabs(snl))
+        if(f2c_dabs(csr) >= f2c_dabs(snr) || f2c_dabs(csl) >= f2c_dabs(snl))
         {
             /* Compute the (2,1) and (2,2) elements of U**T *A and V**T *B, */
             /* and (2,1) element of |U|**T *|A| and |V|**T *|B|. */
@@ -277,9 +284,10 @@ void dlags2_(logical *upper, doublereal *a1, doublereal *a2, doublereal *a3, dou
             aua21 = f2c_dabs(snr) * f2c_dabs(*a1) + f2c_dabs(csr) * f2c_dabs(*a2);
             avb21 = f2c_dabs(snl) * f2c_dabs(*b1) + f2c_dabs(csl) * f2c_dabs(*b2);
             /* zero (2,1) elements of U**T *A and V**T *B. */
-            if (f2c_dabs(ua21) + f2c_dabs(ua22r) != 0.)
+            if(f2c_dabs(ua21) + f2c_dabs(ua22r) != 0.)
             {
-                if (aua21 / (f2c_dabs(ua21) + f2c_dabs(ua22r)) <= avb21 / (f2c_dabs(vb21) + f2c_dabs(vb22r)))
+                if(aua21 / (f2c_dabs(ua21) + f2c_dabs(ua22r))
+                   <= avb21 / (f2c_dabs(vb21) + f2c_dabs(vb22r)))
                 {
                     dlartg_(&ua22r, &ua21, csq, snq, &r__);
                 }
@@ -308,9 +316,10 @@ void dlags2_(logical *upper, doublereal *a1, doublereal *a2, doublereal *a3, dou
             aua11 = f2c_dabs(csr) * f2c_dabs(*a1) + f2c_dabs(snr) * f2c_dabs(*a2);
             avb11 = f2c_dabs(csl) * f2c_dabs(*b1) + f2c_dabs(snl) * f2c_dabs(*b2);
             /* zero (1,1) elements of U**T*A and V**T*B, and then swap. */
-            if (f2c_dabs(ua11) + f2c_dabs(ua12) != 0.)
+            if(f2c_dabs(ua11) + f2c_dabs(ua12) != 0.)
             {
-                if (aua11 / (f2c_dabs(ua11) + f2c_dabs(ua12)) <= avb11 / (f2c_dabs(vb11) + f2c_dabs(vb12)))
+                if(aua11 / (f2c_dabs(ua11) + f2c_dabs(ua12))
+                   <= avb11 / (f2c_dabs(vb11) + f2c_dabs(vb12)))
                 {
                     dlartg_(&ua12, &ua11, csq, snq, &r__);
                 }

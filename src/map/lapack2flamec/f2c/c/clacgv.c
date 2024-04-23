@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b CLACGV conjugates a scomplex vector. */
+#include "FLA_f2c.h" /* > \brief \b CLACGV conjugates a complex vector. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -75,9 +75,9 @@ void clacgv_(integer *n, complex *x, integer *incx)
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clacgv inputs: n %lld, incx %lld",*n, *incx);
+    snprintf(buffer, 256, "clacgv inputs: n %lld, incx %lld", *n, *incx);
 #else
-    snprintf(buffer, 256,"clacgv inputs: n %d, incx %d",*n, *incx);
+    snprintf(buffer, 256, "clacgv inputs: n %d, incx %d", *n, *incx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

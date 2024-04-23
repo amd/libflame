@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief <b> SSTEV computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for OTHER m atrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -116,12 +116,13 @@ i */
 /* > \ingroup realOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void sstev_(char *jobz, integer *n, real *d__, real *e, real * z__, integer *ldz, real *work, integer *info)
+void sstev_(char *jobz, integer *n, real *d__, real *e, real *z__, integer *ldz, real *work,
+            integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sstev inputs: jobz %c, n %" FLA_IS ", ldz %" FLA_IS "",*jobz, *n, *ldz);
+    snprintf(buffer, 256, "sstev inputs: jobz %c, n %" FLA_IS ", ldz %" FLA_IS "", *jobz, *n, *ldz);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -135,20 +136,24 @@ void sstev_(char *jobz, integer *n, real *d__, real *e, real * z__, integer *ldz
     real rmin, rmax, tnrm, sigma;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     logical wantz;
     aocl_int64_t iscale;
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern real slanst_(char *, integer *, real *, real *);
     extern /* Subroutine */
-    void ssterf_(integer *, real *, real *, integer *);
+        void
+        ssterf_(integer *, real *, real *, integer *);
     real smlnum;
     extern /* Subroutine */
-    void ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
+        void
+        ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -180,7 +185,7 @@ void sstev_(char *jobz, integer *n, real *d__, real *e, real * z__, integer *ldz
     /* Function Body */
     wantz = lsame_(jobz, "V", 1, 1);
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
@@ -223,7 +228,7 @@ void sstev_(char *jobz, integer *n, real *d__, real *e, real * z__, integer *ldz
     rmax = sqrt(bignum);
     /* Scale matrix to allowable range, if necessary. */
     iscale = 0;
-    tnrm = aocl_lapack_slanst("M", n, &d__[1], &e[1]);
+    tnrm = slanst_("M", n, &d__[1], &e[1]);
     if(tnrm > 0.f && tnrm < rmin)
     {
         iscale = 1;

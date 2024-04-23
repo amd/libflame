@@ -113,9 +113,9 @@ static doublereal c_b25 = -1.;
 /* > LDV is INTEGER */
 /* > The leading dimension of the array V. */
 /* > If STOREV = 'C' and SIDE = 'L', LDV >= fla_max(1,M);
-*/
+ */
 /* > if STOREV = 'C' and SIDE = 'R', LDV >= fla_max(1,N);
-*/
+ */
 /* > if STOREV = 'R', LDV >= K. */
 /* > \endverbatim */
 /* > */
@@ -155,7 +155,7 @@ static doublereal c_b25 = -1.;
 /* > LDWORK is INTEGER */
 /* > The leading dimension of the array WORK. */
 /* > If SIDE = 'L', LDWORK >= fla_max(1,N);
-*/
+ */
 /* > if SIDE = 'R', LDWORK >= fla_max(1,M). */
 /* > \endverbatim */
 /* Authors: */
@@ -197,20 +197,30 @@ the corresponding */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, doublereal *v, integer * ldv, doublereal *t, integer *ldt, doublereal *c__, integer *ldc, doublereal *work, integer *ldwork)
+void dlarfb_(char *side, char *trans, char *direct, char *storev, integer *m, integer *n,
+             integer *k, doublereal *v, integer *ldv, doublereal *t, integer *ldt, doublereal *c__,
+             integer *ldc, doublereal *work, integer *ldwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlarfb inputs: side %c, trans %c, direct %c, storev %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS ", ldc %" FLA_IS ", ldwork %" FLA_IS "",*side, *trans, *direct, *storev, *m, *n, *k, *ldv, *ldt, *ldc, *ldwork);
+    AOCL_DTL_SNPRINTF("dlarfb inputs: side %c, trans %c, direct %c, storev %c, m %" FLA_IS
+                      ", n %" FLA_IS ", k %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS
+                      ", ldc %" FLA_IS ", ldwork %" FLA_IS "",
+                      *side, *trans, *direct, *storev, *m, *n, *k, *ldv, *ldt, *ldc, *ldwork);
     /* System generated locals */
-    aocl_int64_t c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1,
+    integer c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1,
         i__2;
     /* Local variables */
     integer i__, j;
     extern /* Subroutine */
-    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *);
     char transt[1];
     /* -- LAPACK auxiliary routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -250,7 +260,7 @@ void dlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (lsame_(trans, "N", 1, 1))
+    if(lsame_(trans, "N", 1, 1))
     {
         *(unsigned char *)transt = 'T';
     }
@@ -258,14 +268,14 @@ void dlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
     {
         *(unsigned char *)transt = 'N';
     }
-    if (lsame_(storev, "C", 1, 1))
+    if(lsame_(storev, "C", 1, 1))
     {
-        if (lsame_(direct, "F", 1, 1))
+        if(lsame_(direct, "F", 1, 1))
         {
             /* Let V = ( V1 ) (first K rows) */
             /* ( V2 ) */
             /* where V1 is unit lower triangular. */
-            if (lsame_(side, "L", 1, 1))
+            if(lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**T * C where C = ( C1 ) */
                 /* ( C2 ) */
@@ -278,31 +288,29 @@ void dlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                     /* L10: */
                 }
                 /* W := W * V1 */
-                aocl_blas_dtrmm("Right", "Lower", "No transpose", "Unit", n, k, &c_b14,
-                                &v[v_offset], ldv, &work[work_offset], ldwork);
+                dtrmm_("Right", "Lower", "No transpose", "Unit", n, k, &c_b14, &v[v_offset], ldv,
+                       &work[work_offset], ldwork);
                 if(*m > *k)
                 {
                     /* W := W + C2**T * V2 */
                     i__1 = *m - *k;
-                    aocl_blas_dgemm("Transpose", "No transpose", n, k, &i__1, &c_b14,
-                                    &c__[*k + 1 + c_dim1], ldc, &v[*k + 1 + v_dim1], ldv, &c_b14,
-                                    &work[work_offset], ldwork);
+                    dgemm_("Transpose", "No transpose", n, k, &i__1, &c_b14, &c__[*k + 1 + c_dim1],
+                           ldc, &v[*k + 1 + v_dim1], ldv, &c_b14, &work[work_offset], ldwork);
                 }
                 /* W := W * T**T or W * T */
-                aocl_blas_dtrmm("Right", "Upper", transt, "Non-unit", n, k, &c_b14, &t[t_offset],
-                                ldt, &work[work_offset], ldwork);
+                dtrmm_("Right", "Upper", transt, "Non-unit", n, k, &c_b14, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - V * W**T */
                 if(*m > *k)
                 {
                     /* C2 := C2 - V2 * W**T */
                     i__1 = *m - *k;
-                    aocl_blas_dgemm("No transpose", "Transpose", &i__1, n, k, &c_b25,
-                                    &v[*k + 1 + v_dim1], ldv, &work[work_offset], ldwork, &c_b14,
-                                    &c__[*k + 1 + c_dim1], ldc);
+                    dgemm_("No transpose", "Transpose", &i__1, n, k, &c_b25, &v[*k + 1 + v_dim1],
+                           ldv, &work[work_offset], ldwork, &c_b14, &c__[*k + 1 + c_dim1], ldc);
                 }
                 /* W := W * V1**T */
-                aocl_blas_dtrmm("Right", "Lower", "Transpose", "Unit", n, k, &c_b14, &v[v_offset],
-                                ldv, &work[work_offset], ldwork);
+                dtrmm_("Right", "Lower", "Transpose", "Unit", n, k, &c_b14, &v[v_offset], ldv,
+                       &work[work_offset], ldwork);
                 /* C1 := C1 - W**T */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
@@ -316,7 +324,7 @@ void dlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                     /* L30: */
                 }
             }
-            else if (lsame_(side, "R", 1, 1))
+            else if(lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H**T where C = ( C1 C2 ) */
                 /* W := C * V = (C1*V1 + C2*V2) (stored in WORK) */
@@ -329,31 +337,31 @@ void dlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                     /* L40: */
                 }
                 /* W := W * V1 */
-                aocl_blas_dtrmm("Right", "Lower", "No transpose", "Unit", m, k, &c_b14,
-                                &v[v_offset], ldv, &work[work_offset], ldwork);
+                dtrmm_("Right", "Lower", "No transpose", "Unit", m, k, &c_b14, &v[v_offset], ldv,
+                       &work[work_offset], ldwork);
                 if(*n > *k)
                 {
                     /* W := W + C2 * V2 */
                     i__1 = *n - *k;
-                    aocl_blas_dgemm("No transpose", "No transpose", m, k, &i__1, &c_b14,
-                                    &c__[(*k + 1) * c_dim1 + 1], ldc, &v[*k + 1 + v_dim1], ldv,
-                                    &c_b14, &work[work_offset], ldwork);
+                    dgemm_("No transpose", "No transpose", m, k, &i__1, &c_b14,
+                           &c__[(*k + 1) * c_dim1 + 1], ldc, &v[*k + 1 + v_dim1], ldv, &c_b14,
+                           &work[work_offset], ldwork);
                 }
                 /* W := W * T or W * T**T */
-                aocl_blas_dtrmm("Right", "Upper", trans, "Non-unit", m, k, &c_b14, &t[t_offset],
-                                ldt, &work[work_offset], ldwork);
+                dtrmm_("Right", "Upper", trans, "Non-unit", m, k, &c_b14, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - W * V**T */
                 if(*n > *k)
                 {
                     /* C2 := C2 - W * V2**T */
                     i__1 = *n - *k;
-                    aocl_blas_dgemm("No transpose", "Transpose", m, &i__1, k, &c_b25,
-                                    &work[work_offset], ldwork, &v[*k + 1 + v_dim1], ldv, &c_b14,
-                                    &c__[(*k + 1) * c_dim1 + 1], ldc);
+                    dgemm_("No transpose", "Transpose", m, &i__1, k, &c_b25, &work[work_offset],
+                           ldwork, &v[*k + 1 + v_dim1], ldv, &c_b14, &c__[(*k + 1) * c_dim1 + 1],
+                           ldc);
                 }
                 /* W := W * V1**T */
-                aocl_blas_dtrmm("Right", "Lower", "Transpose", "Unit", m, k, &c_b14, &v[v_offset],
-                                ldv, &work[work_offset], ldwork);
+                dtrmm_("Right", "Lower", "Transpose", "Unit", m, k, &c_b14, &v[v_offset], ldv,
+                       &work[work_offset], ldwork);
                 /* C1 := C1 - W */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
@@ -373,7 +381,7 @@ void dlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
             /* Let V = ( V1 ) */
             /* ( V2 ) (last K rows) */
             /* where V2 is unit upper triangular. */
-            if (lsame_(side, "L", 1, 1))
+            if(lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**T * C where C = ( C1 ) */
                 /* ( C2 ) */
@@ -387,30 +395,29 @@ void dlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                     /* L70: */
                 }
                 /* W := W * V2 */
-                aocl_blas_dtrmm("Right", "Upper", "No transpose", "Unit", n, k, &c_b14,
-                                &v[*m - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
+                dtrmm_("Right", "Upper", "No transpose", "Unit", n, k, &c_b14,
+                       &v[*m - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
                 if(*m > *k)
                 {
                     /* W := W + C1**T * V1 */
                     i__1 = *m - *k;
-                    aocl_blas_dgemm("Transpose", "No transpose", n, k, &i__1, &c_b14,
-                                    &c__[c_offset], ldc, &v[v_offset], ldv, &c_b14,
-                                    &work[work_offset], ldwork);
+                    dgemm_("Transpose", "No transpose", n, k, &i__1, &c_b14, &c__[c_offset], ldc,
+                           &v[v_offset], ldv, &c_b14, &work[work_offset], ldwork);
                 }
                 /* W := W * T**T or W * T */
-                aocl_blas_dtrmm("Right", "Lower", transt, "Non-unit", n, k, &c_b14, &t[t_offset],
-                                ldt, &work[work_offset], ldwork);
+                dtrmm_("Right", "Lower", transt, "Non-unit", n, k, &c_b14, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - V * W**T */
                 if(*m > *k)
                 {
                     /* C1 := C1 - V1 * W**T */
                     i__1 = *m - *k;
-                    aocl_blas_dgemm("No transpose", "Transpose", &i__1, n, k, &c_b25, &v[v_offset],
-                                    ldv, &work[work_offset], ldwork, &c_b14, &c__[c_offset], ldc);
+                    dgemm_("No transpose", "Transpose", &i__1, n, k, &c_b25, &v[v_offset], ldv,
+                           &work[work_offset], ldwork, &c_b14, &c__[c_offset], ldc);
                 }
                 /* W := W * V2**T */
-                aocl_blas_dtrmm("Right", "Upper", "Transpose", "Unit", n, k, &c_b14,
-                                &v[*m - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
+                dtrmm_("Right", "Upper", "Transpose", "Unit", n, k, &c_b14,
+                       &v[*m - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
                 /* C2 := C2 - W**T */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
@@ -424,7 +431,7 @@ void dlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                     /* L90: */
                 }
             }
-            else if (lsame_(side, "R", 1, 1))
+            else if(lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H**T where C = ( C1 C2 ) */
                 /* W := C * V = (C1*V1 + C2*V2) (stored in WORK) */
@@ -432,36 +439,34 @@ void dlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
                 {
-                    aocl_blas_dcopy(m, &c__[(*n - *k + j) * c_dim1 + 1], &c__1,
-                                    &work[j * work_dim1 + 1], &c__1);
+                    dcopy_(m, &c__[(*n - *k + j) * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1],
+                           &c__1);
                     /* L100: */
                 }
                 /* W := W * V2 */
-                aocl_blas_dtrmm("Right", "Upper", "No transpose", "Unit", m, k, &c_b14,
-                                &v[*n - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
+                dtrmm_("Right", "Upper", "No transpose", "Unit", m, k, &c_b14,
+                       &v[*n - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
                 if(*n > *k)
                 {
                     /* W := W + C1 * V1 */
                     i__1 = *n - *k;
-                    aocl_blas_dgemm("No transpose", "No transpose", m, k, &i__1, &c_b14,
-                                    &c__[c_offset], ldc, &v[v_offset], ldv, &c_b14,
-                                    &work[work_offset], ldwork);
+                    dgemm_("No transpose", "No transpose", m, k, &i__1, &c_b14, &c__[c_offset], ldc,
+                           &v[v_offset], ldv, &c_b14, &work[work_offset], ldwork);
                 }
                 /* W := W * T or W * T**T */
-                aocl_blas_dtrmm("Right", "Lower", trans, "Non-unit", m, k, &c_b14, &t[t_offset],
-                                ldt, &work[work_offset], ldwork);
+                dtrmm_("Right", "Lower", trans, "Non-unit", m, k, &c_b14, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - W * V**T */
                 if(*n > *k)
                 {
                     /* C1 := C1 - W * V1**T */
                     i__1 = *n - *k;
-                    aocl_blas_dgemm("No transpose", "Transpose", m, &i__1, k, &c_b25,
-                                    &work[work_offset], ldwork, &v[v_offset], ldv, &c_b14,
-                                    &c__[c_offset], ldc);
+                    dgemm_("No transpose", "Transpose", m, &i__1, k, &c_b25, &work[work_offset],
+                           ldwork, &v[v_offset], ldv, &c_b14, &c__[c_offset], ldc);
                 }
                 /* W := W * V2**T */
-                aocl_blas_dtrmm("Right", "Upper", "Transpose", "Unit", m, k, &c_b14,
-                                &v[*n - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
+                dtrmm_("Right", "Upper", "Transpose", "Unit", m, k, &c_b14,
+                       &v[*n - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
                 /* C2 := C2 - W */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
@@ -477,13 +482,13 @@ void dlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
             }
         }
     }
-    else if (lsame_(storev, "R", 1, 1))
+    else if(lsame_(storev, "R", 1, 1))
     {
-        if (lsame_(direct, "F", 1, 1))
+        if(lsame_(direct, "F", 1, 1))
         {
             /* Let V = ( V1 V2 ) (V1: first K columns) */
             /* where V1 is unit upper triangular. */
-            if (lsame_(side, "L", 1, 1))
+            if(lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**T * C where C = ( C1 ) */
                 /* ( C2 ) */
@@ -496,31 +501,29 @@ void dlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                     /* L130: */
                 }
                 /* W := W * V1**T */
-                aocl_blas_dtrmm("Right", "Upper", "Transpose", "Unit", n, k, &c_b14, &v[v_offset],
-                                ldv, &work[work_offset], ldwork);
+                dtrmm_("Right", "Upper", "Transpose", "Unit", n, k, &c_b14, &v[v_offset], ldv,
+                       &work[work_offset], ldwork);
                 if(*m > *k)
                 {
                     /* W := W + C2**T * V2**T */
                     i__1 = *m - *k;
-                    aocl_blas_dgemm("Transpose", "Transpose", n, k, &i__1, &c_b14,
-                                    &c__[*k + 1 + c_dim1], ldc, &v[(*k + 1) * v_dim1 + 1], ldv,
-                                    &c_b14, &work[work_offset], ldwork);
+                    dgemm_("Transpose", "Transpose", n, k, &i__1, &c_b14, &c__[*k + 1 + c_dim1],
+                           ldc, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b14, &work[work_offset], ldwork);
                 }
                 /* W := W * T**T or W * T */
-                aocl_blas_dtrmm("Right", "Upper", transt, "Non-unit", n, k, &c_b14, &t[t_offset],
-                                ldt, &work[work_offset], ldwork);
+                dtrmm_("Right", "Upper", transt, "Non-unit", n, k, &c_b14, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - V**T * W**T */
                 if(*m > *k)
                 {
                     /* C2 := C2 - V2**T * W**T */
                     i__1 = *m - *k;
-                    aocl_blas_dgemm("Transpose", "Transpose", &i__1, n, k, &c_b25,
-                                    &v[(*k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork,
-                                    &c_b14, &c__[*k + 1 + c_dim1], ldc);
+                    dgemm_("Transpose", "Transpose", &i__1, n, k, &c_b25, &v[(*k + 1) * v_dim1 + 1],
+                           ldv, &work[work_offset], ldwork, &c_b14, &c__[*k + 1 + c_dim1], ldc);
                 }
                 /* W := W * V1 */
-                aocl_blas_dtrmm("Right", "Upper", "No transpose", "Unit", n, k, &c_b14,
-                                &v[v_offset], ldv, &work[work_offset], ldwork);
+                dtrmm_("Right", "Upper", "No transpose", "Unit", n, k, &c_b14, &v[v_offset], ldv,
+                       &work[work_offset], ldwork);
                 /* C1 := C1 - W**T */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
@@ -534,7 +537,7 @@ void dlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                     /* L150: */
                 }
             }
-            else if (lsame_(side, "R", 1, 1))
+            else if(lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H**T where C = ( C1 C2 ) */
                 /* W := C * V**T = (C1*V1**T + C2*V2**T) (stored in WORK) */
@@ -547,31 +550,31 @@ void dlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                     /* L160: */
                 }
                 /* W := W * V1**T */
-                aocl_blas_dtrmm("Right", "Upper", "Transpose", "Unit", m, k, &c_b14, &v[v_offset],
-                                ldv, &work[work_offset], ldwork);
+                dtrmm_("Right", "Upper", "Transpose", "Unit", m, k, &c_b14, &v[v_offset], ldv,
+                       &work[work_offset], ldwork);
                 if(*n > *k)
                 {
                     /* W := W + C2 * V2**T */
                     i__1 = *n - *k;
-                    aocl_blas_dgemm("No transpose", "Transpose", m, k, &i__1, &c_b14,
-                                    &c__[(*k + 1) * c_dim1 + 1], ldc, &v[(*k + 1) * v_dim1 + 1],
-                                    ldv, &c_b14, &work[work_offset], ldwork);
+                    dgemm_("No transpose", "Transpose", m, k, &i__1, &c_b14,
+                           &c__[(*k + 1) * c_dim1 + 1], ldc, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b14,
+                           &work[work_offset], ldwork);
                 }
                 /* W := W * T or W * T**T */
-                aocl_blas_dtrmm("Right", "Upper", trans, "Non-unit", m, k, &c_b14, &t[t_offset],
-                                ldt, &work[work_offset], ldwork);
+                dtrmm_("Right", "Upper", trans, "Non-unit", m, k, &c_b14, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - W * V */
                 if(*n > *k)
                 {
                     /* C2 := C2 - W * V2 */
                     i__1 = *n - *k;
-                    aocl_blas_dgemm("No transpose", "No transpose", m, &i__1, k, &c_b25,
-                                    &work[work_offset], ldwork, &v[(*k + 1) * v_dim1 + 1], ldv,
-                                    &c_b14, &c__[(*k + 1) * c_dim1 + 1], ldc);
+                    dgemm_("No transpose", "No transpose", m, &i__1, k, &c_b25, &work[work_offset],
+                           ldwork, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b14,
+                           &c__[(*k + 1) * c_dim1 + 1], ldc);
                 }
                 /* W := W * V1 */
-                aocl_blas_dtrmm("Right", "Upper", "No transpose", "Unit", m, k, &c_b14,
-                                &v[v_offset], ldv, &work[work_offset], ldwork);
+                dtrmm_("Right", "Upper", "No transpose", "Unit", m, k, &c_b14, &v[v_offset], ldv,
+                       &work[work_offset], ldwork);
                 /* C1 := C1 - W */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
@@ -590,7 +593,7 @@ void dlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         {
             /* Let V = ( V1 V2 ) (V2: last K columns) */
             /* where V2 is unit lower triangular. */
-            if (lsame_(side, "L", 1, 1))
+            if(lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**T * C where C = ( C1 ) */
                 /* ( C2 ) */
@@ -604,28 +607,29 @@ void dlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                     /* L190: */
                 }
                 /* W := W * V2**T */
-                dtrmm_("Right", "Lower", "Transpose", "Unit", n, k, &c_b14, & v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
-                if (*m > *k)
+                dtrmm_("Right", "Lower", "Transpose", "Unit", n, k, &c_b14,
+                       &v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
+                if(*m > *k)
                 {
                     /* W := W + C1**T * V1**T */
                     i__1 = *m - *k;
-                    aocl_blas_dgemm("Transpose", "Transpose", n, k, &i__1, &c_b14, &c__[c_offset],
-                                    ldc, &v[v_offset], ldv, &c_b14, &work[work_offset], ldwork);
+                    dgemm_("Transpose", "Transpose", n, k, &i__1, &c_b14, &c__[c_offset], ldc,
+                           &v[v_offset], ldv, &c_b14, &work[work_offset], ldwork);
                 }
                 /* W := W * T**T or W * T */
-                aocl_blas_dtrmm("Right", "Lower", transt, "Non-unit", n, k, &c_b14, &t[t_offset],
-                                ldt, &work[work_offset], ldwork);
+                dtrmm_("Right", "Lower", transt, "Non-unit", n, k, &c_b14, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - V**T * W**T */
                 if(*m > *k)
                 {
                     /* C1 := C1 - V1**T * W**T */
                     i__1 = *m - *k;
-                    aocl_blas_dgemm("Transpose", "Transpose", &i__1, n, k, &c_b25, &v[v_offset],
-                                    ldv, &work[work_offset], ldwork, &c_b14, &c__[c_offset], ldc);
+                    dgemm_("Transpose", "Transpose", &i__1, n, k, &c_b25, &v[v_offset], ldv,
+                           &work[work_offset], ldwork, &c_b14, &c__[c_offset], ldc);
                 }
                 /* W := W * V2 */
-                aocl_blas_dtrmm("Right", "Lower", "No transpose", "Unit", n, k, &c_b14,
-                                &v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
+                dtrmm_("Right", "Lower", "No transpose", "Unit", n, k, &c_b14,
+                       &v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
                 /* C2 := C2 - W**T */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
@@ -639,7 +643,7 @@ void dlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                     /* L210: */
                 }
             }
-            else if (lsame_(side, "R", 1, 1))
+            else if(lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H' where C = ( C1 C2 ) */
                 /* W := C * V**T = (C1*V1**T + C2*V2**T) (stored in WORK) */
@@ -647,35 +651,34 @@ void dlarfb_(char *side, char *trans, char *direct, char * storev, integer *m, i
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
                 {
-                    aocl_blas_dcopy(m, &c__[(*n - *k + j) * c_dim1 + 1], &c__1,
-                                    &work[j * work_dim1 + 1], &c__1);
+                    dcopy_(m, &c__[(*n - *k + j) * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1],
+                           &c__1);
                     /* L220: */
                 }
                 /* W := W * V2**T */
-                dtrmm_("Right", "Lower", "Transpose", "Unit", m, k, &c_b14, & v[(*n - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
-                if (*n > *k)
+                dtrmm_("Right", "Lower", "Transpose", "Unit", m, k, &c_b14,
+                       &v[(*n - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
+                if(*n > *k)
                 {
                     /* W := W + C1 * V1**T */
                     i__1 = *n - *k;
-                    aocl_blas_dgemm("No transpose", "Transpose", m, k, &i__1, &c_b14,
-                                    &c__[c_offset], ldc, &v[v_offset], ldv, &c_b14,
-                                    &work[work_offset], ldwork);
+                    dgemm_("No transpose", "Transpose", m, k, &i__1, &c_b14, &c__[c_offset], ldc,
+                           &v[v_offset], ldv, &c_b14, &work[work_offset], ldwork);
                 }
                 /* W := W * T or W * T**T */
-                aocl_blas_dtrmm("Right", "Lower", trans, "Non-unit", m, k, &c_b14, &t[t_offset],
-                                ldt, &work[work_offset], ldwork);
+                dtrmm_("Right", "Lower", trans, "Non-unit", m, k, &c_b14, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - W * V */
                 if(*n > *k)
                 {
                     /* C1 := C1 - W * V1 */
                     i__1 = *n - *k;
-                    aocl_blas_dgemm("No transpose", "No transpose", m, &i__1, k, &c_b25,
-                                    &work[work_offset], ldwork, &v[v_offset], ldv, &c_b14,
-                                    &c__[c_offset], ldc);
+                    dgemm_("No transpose", "No transpose", m, &i__1, k, &c_b25, &work[work_offset],
+                           ldwork, &v[v_offset], ldv, &c_b14, &c__[c_offset], ldc);
                 }
                 /* W := W * V2 */
-                aocl_blas_dtrmm("Right", "Lower", "No transpose", "Unit", m, k, &c_b14,
-                                &v[(*n - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
+                dtrmm_("Right", "Lower", "No transpose", "Unit", m, k, &c_b14,
+                       &v[(*n - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
                 /* C1 := C1 - W */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)

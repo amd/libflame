@@ -1,5 +1,8 @@
-/* dorbdb6.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dorbdb6.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b5 = 1.;
 static doublereal c_b6 = 0.;
@@ -155,10 +158,15 @@ static doublereal c_b13 = -1.;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dorbdb6_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *incx1, doublereal *x2, integer *incx2, doublereal *q1, integer *ldq1, doublereal *q2, integer *ldq2, doublereal *work, integer *lwork, integer *info)
+void dorbdb6_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *incx1, doublereal *x2,
+              integer *incx2, doublereal *q1, integer *ldq1, doublereal *q2, integer *ldq2,
+              doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dorbdb6 inputs: m1 %" FLA_IS ", m2 %" FLA_IS ", n %" FLA_IS ", incx1 %" FLA_IS ", incx2 %" FLA_IS ", ldq1 %" FLA_IS ", ldq2 %" FLA_IS ", lwork %" FLA_IS "",*m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2, *lwork);
+    AOCL_DTL_SNPRINTF("dorbdb6 inputs: m1 %" FLA_IS ", m2 %" FLA_IS ", n %" FLA_IS
+                      ", incx1 %" FLA_IS ", incx2 %" FLA_IS ", ldq1 %" FLA_IS ", ldq2 %" FLA_IS
+                      ", lwork %" FLA_IS "",
+                      *m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2, *lwork);
     /* System generated locals */
     integer q1_dim1, q1_offset, q2_dim1, q2_offset, i__1, i__2;
     /* Builtin functions */
@@ -168,10 +176,14 @@ void dorbdb6_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
     integer i__, ix;
     doublereal scl, eps, ssq, norm;
     extern /* Subroutine */
-    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlassq_( integer *, doublereal *, integer *, doublereal *, doublereal *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -224,11 +236,11 @@ void dorbdb6_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
     {
         *info = -7;
     }
-    else if (*ldq1 < fla_max(1,*m1))
+    else if(*ldq1 < fla_max(1, *m1))
     {
         *info = -9;
     }
-    else if (*ldq2 < fla_max(1,*m2))
+    else if(*ldq2 < fla_max(1, *m2))
     {
         *info = -11;
     }
@@ -240,7 +252,7 @@ void dorbdb6_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
     {
         i__1 = -(*info);
         xerbla_("DORBDB6", &i__1, (ftnlen)7);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     eps = dlamch_("Precision");
@@ -251,7 +263,7 @@ void dorbdb6_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
     /* never made it into 1989 when assert() was introduced into the C */
     /* programming language. */
     norm = 1.;
-    if (*m1 == 0)
+    if(*m1 == 0)
     {
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
@@ -263,9 +275,9 @@ void dorbdb6_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
     {
         dgemv_("C", m1, n, &c_b5, &q1[q1_offset], ldq1, &x1[1], incx1, &c_b6, &work[1], &c__1);
     }
-    dgemv_("C", m2, n, &c_b5, &q2[q2_offset], ldq2, &x2[1], incx2, &c_b5, & work[1], &c__1);
-    dgemv_("N", m1, n, &c_b13, &q1[q1_offset], ldq1, &work[1], &c__1, &c_b5, & x1[1], incx1);
-    dgemv_("N", m2, n, &c_b13, &q2[q2_offset], ldq2, &work[1], &c__1, &c_b5, & x2[1], incx2);
+    dgemv_("C", m2, n, &c_b5, &q2[q2_offset], ldq2, &x2[1], incx2, &c_b5, &work[1], &c__1);
+    dgemv_("N", m1, n, &c_b13, &q1[q1_offset], ldq1, &work[1], &c__1, &c_b5, &x1[1], incx1);
+    dgemv_("N", m2, n, &c_b13, &q2[q2_offset], ldq2, &work[1], &c__1, &c_b5, &x2[1], incx2);
     scl = 0.;
     ssq = 0.;
     dlassq_(m1, &x1[1], incx1, &scl, &ssq);
@@ -274,30 +286,26 @@ void dorbdb6_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
     /* If projection is sufficiently large in norm, then stop. */
     /* If projection is zero, then stop. */
     /* Otherwise, project again. */
-    if (norm_new__ >= norm * .01)
+    if(norm_new__ >= norm * .01)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (norm_new__ <= *n * eps * norm)
+    if(norm_new__ <= *n * eps * norm)
     {
         i__1 = (*m1 - 1) * *incx1 + 1;
         i__2 = *incx1;
-        for (ix = 1;
-                i__2 < 0 ? ix >= i__1 : ix <= i__1;
-                ix += i__2)
+        for(ix = 1; i__2 < 0 ? ix >= i__1 : ix <= i__1; ix += i__2)
         {
             x1[ix] = 0.;
         }
         i__2 = (*m2 - 1) * *incx2 + 1;
         i__1 = *incx2;
-        for (ix = 1;
-                i__1 < 0 ? ix >= i__2 : ix <= i__2;
-                ix += i__1)
+        for(ix = 1; i__1 < 0 ? ix >= i__2 : ix <= i__2; ix += i__1)
         {
             x2[ix] = 0.;
         }
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     norm = norm_new__;
@@ -318,9 +326,9 @@ void dorbdb6_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
     {
         dgemv_("C", m1, n, &c_b5, &q1[q1_offset], ldq1, &x1[1], incx1, &c_b6, &work[1], &c__1);
     }
-    dgemv_("C", m2, n, &c_b5, &q2[q2_offset], ldq2, &x2[1], incx2, &c_b5, & work[1], &c__1);
-    dgemv_("N", m1, n, &c_b13, &q1[q1_offset], ldq1, &work[1], &c__1, &c_b5, & x1[1], incx1);
-    dgemv_("N", m2, n, &c_b13, &q2[q2_offset], ldq2, &work[1], &c__1, &c_b5, & x2[1], incx2);
+    dgemv_("C", m2, n, &c_b5, &q2[q2_offset], ldq2, &x2[1], incx2, &c_b5, &work[1], &c__1);
+    dgemv_("N", m1, n, &c_b13, &q1[q1_offset], ldq1, &work[1], &c__1, &c_b5, &x1[1], incx1);
+    dgemv_("N", m2, n, &c_b13, &q2[q2_offset], ldq2, &work[1], &c__1, &c_b5, &x2[1], incx2);
     scl = 0.;
     ssq = 0.;
     dlassq_(m1, &x1[1], incx1, &scl, &ssq);
@@ -329,21 +337,17 @@ void dorbdb6_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
     /* If second projection is sufficiently large in norm, then do */
     /* nothing more. Alternatively, if it shrunk significantly, then */
     /* truncate it to zero. */
-    if (norm_new__ < norm * .01)
+    if(norm_new__ < norm * .01)
     {
         i__1 = (*m1 - 1) * *incx1 + 1;
         i__2 = *incx1;
-        for (ix = 1;
-                i__2 < 0 ? ix >= i__1 : ix <= i__1;
-                ix += i__2)
+        for(ix = 1; i__2 < 0 ? ix >= i__1 : ix <= i__1; ix += i__2)
         {
             x1[ix] = 0.;
         }
         i__2 = (*m2 - 1) * *incx2 + 1;
         i__1 = *incx2;
-        for (ix = 1;
-                i__1 < 0 ? ix >= i__2 : ix <= i__2;
-                ix += i__1)
+        for(ix = 1; i__1 < 0 ? ix >= i__2 : ix <= i__2; ix += i__1)
         {
             x2[ix] = 0.;
         }

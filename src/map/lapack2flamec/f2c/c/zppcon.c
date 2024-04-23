@@ -117,10 +117,11 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zppcon_(char *uplo, integer *n, doublecomplex *ap, doublereal *anorm, doublereal *rcond, doublecomplex *work, doublereal *rwork, integer *info)
+void zppcon_(char *uplo, integer *n, doublecomplex *ap, doublereal *anorm, doublereal *rcond,
+             doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zppcon inputs: uplo %c, n %" FLA_IS ", anorm %lf",*uplo, *n, *anorm);
+    AOCL_DTL_SNPRINTF("zppcon inputs: uplo %c, n %" FLA_IS ", anorm %lf", *uplo, *n, *anorm);
 
     /* System generated locals */
     aocl_int64_t i__1;
@@ -134,19 +135,24 @@ void zppcon_(char *uplo, integer *n, doublecomplex *ap, doublereal *anorm, doubl
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
+        void
+        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     doublereal scalel, scaleu;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     extern integer izamax_(integer *, doublecomplex *, integer *);
     extern /* Subroutine */
-    void zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
+        void
+        zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
     char normin[1];
     doublereal smlnum;
     extern /* Subroutine */
-    void zlatps_(char *, char *, char *, char *, integer *, doublecomplex *, doublecomplex *, doublereal *, doublereal *, integer *);
+        void
+        zlatps_(char *, char *, char *, char *, integer *, doublecomplex *, doublecomplex *,
+                doublereal *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -181,7 +187,7 @@ void zppcon_(char *uplo, integer *n, doublecomplex *ap, doublereal *anorm, doubl
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -218,28 +224,28 @@ void zppcon_(char *uplo, integer *n, doublecomplex *ap, doublereal *anorm, doubl
     kase = 0;
     *(unsigned char *)normin = 'N';
 L10:
-    aocl_lapack_zlacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    zlacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(upper)
         {
             /* Multiply by inv(U**H). */
-            aocl_lapack_zlatps("Upper", "Conjugate transpose", "Non-unit", normin, n, &ap[1],
-                               &work[1], &scalel, &rwork[1], info);
+            zlatps_("Upper", "Conjugate transpose", "Non-unit", normin, n, &ap[1], &work[1],
+                    &scalel, &rwork[1], info);
             *(unsigned char *)normin = 'Y';
             /* Multiply by inv(U). */
-            aocl_lapack_zlatps("Upper", "No transpose", "Non-unit", normin, n, &ap[1], &work[1],
-                               &scaleu, &rwork[1], info);
+            zlatps_("Upper", "No transpose", "Non-unit", normin, n, &ap[1], &work[1], &scaleu,
+                    &rwork[1], info);
         }
         else
         {
             /* Multiply by inv(L). */
-            aocl_lapack_zlatps("Lower", "No transpose", "Non-unit", normin, n, &ap[1], &work[1],
-                               &scalel, &rwork[1], info);
+            zlatps_("Lower", "No transpose", "Non-unit", normin, n, &ap[1], &work[1], &scalel,
+                    &rwork[1], info);
             *(unsigned char *)normin = 'Y';
             /* Multiply by inv(L**H). */
-            aocl_lapack_zlatps("Lower", "Conjugate transpose", "Non-unit", normin, n, &ap[1],
-                               &work[1], &scaleu, &rwork[1], info);
+            zlatps_("Lower", "Conjugate transpose", "Non-unit", normin, n, &ap[1], &work[1],
+                    &scaleu, &rwork[1], info);
         }
         /* Multiply by 1/SCALE if doing so will not cause overflow. */
         scale = scalel * scaleu;
@@ -247,7 +253,10 @@ L10:
         {
             ix = aocl_blas_izamax(n, &work[1], &c__1);
             i__1 = ix;
-            if (scale < ((d__1 = work[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(& work[ix]), f2c_dabs(d__2))) * smlnum || scale == 0.)
+            if(scale < ((d__1 = work[i__1].r, f2c_dabs(d__1))
+                        + (d__2 = d_imag(&work[ix]), f2c_dabs(d__2)))
+                           * smlnum
+               || scale == 0.)
             {
                 goto L20;
             }

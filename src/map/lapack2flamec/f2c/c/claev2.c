@@ -130,7 +130,8 @@ void claev2_(complex *a, complex *b, complex *c__, real *rt1, real *rt2, real *c
     real t;
     scomplex w;
     extern /* Subroutine */
-    void slaev2_(real *, real *, real *, real *, real *, real *, real *);
+        void
+        slaev2_(real *, real *, real *, real *, real *, real *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -147,7 +148,7 @@ void claev2_(complex *a, complex *b, complex *c__, real *rt1, real *rt2, real *c
     /* .. Intrinsic Functions .. */
     /* .. */
     /* .. Executable Statements .. */
-    if (c_abs(b) == 0.f)
+    if(c_abs(b) == 0.f)
     {
         w.real = 1.f;
         w.imag = 0.f; // , expr subst

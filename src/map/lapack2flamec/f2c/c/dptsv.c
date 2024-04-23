@@ -109,15 +109,21 @@
 /* > \ingroup doublePTsolve */
 /* ===================================================================== */
 /* Subroutine */
-void dptsv_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublereal *b, integer *ldb, integer *info)
+void dptsv_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublereal *b, integer *ldb,
+            integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dptsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *ldb);
+    AOCL_DTL_SNPRINTF("dptsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n, *nrhs,
+                      *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dpttrf_( integer *, doublereal *, doublereal *, integer *), dpttrs_( integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        dpttrf_(integer *, doublereal *, doublereal *, integer *),
+        dpttrs_(integer *, integer *, doublereal *, doublereal *, doublereal *, integer *,
+                integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -149,7 +155,7 @@ void dptsv_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublerea
     {
         *info = -2;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -161,7 +167,7 @@ void dptsv_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublerea
         return;
     }
     /* Compute the L*D*L**T (or U**T*D*U) factorization of A. */
-    aocl_lapack_dpttrf(n, &d__[1], &e[1], info);
+    dpttrf_(n, &d__[1], &e[1], info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */

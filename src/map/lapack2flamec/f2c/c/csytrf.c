@@ -1,8 +1,8 @@
-/* ./csytrf.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/csytrf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
@@ -182,15 +182,18 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void csytrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work, integer *lwork, integer *info)
+void csytrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work,
+             integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"csytrf inputs: uplo %c, n %lld, lda %lld, lwork %lld",*uplo, *n, *lda, *lwork);
+    snprintf(buffer, 256, "csytrf inputs: uplo %c, n %lld, lda %lld, lwork %lld", *uplo, *n, *lda,
+             *lwork);
 #else
-    snprintf(buffer, 256,"csytrf inputs: uplo %c, n %d, lda %d, lwork %d",*uplo, *n, *lda, *lwork);
+    snprintf(buffer, 256, "csytrf inputs: uplo %c, n %d, lda %d, lwork %d", *uplo, *n, *lda,
+             *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -203,10 +206,14 @@ void csytrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
     integer nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
-    void csytf2_(char *, integer *, complex *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        csytf2_(char *, integer *, complex *, integer *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void clasyf_(char *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+        void
+        clasyf_(char *, integer *, integer *, integer *, complex *, integer *, integer *, complex *,
+                integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
@@ -237,7 +244,7 @@ void csytrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -245,7 +252,7 @@ void csytrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -256,14 +263,10 @@ void csytrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
     if(*info == 0)
     {
         /* Determine the block size */
-        nb = aocl_lapack_ilaenv(&c__1, "CSYTRF", uplo, n, &c_n1, &c_n1, &c_n1);
-        /* Computing MAX */
-        i__1 = 1;
-        i__2 = *n * nb; // , expr subst
-        lwkopt = fla_max(i__1, i__2);
-        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].real = r__1;
-        work[1].imag = 0.f; // , expr subst
+        nb = ilaenv_(&c__1, "CSYTRF", uplo, n, &c_n1, &c_n1, &c_n1);
+        lwkopt = *n * nb;
+        work[1].r = (real)lwkopt;
+        work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -286,11 +289,11 @@ void csytrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
         {
             /* Computing MAX */
             i__1 = *lwork / ldwork;
-            nb = fla_max(i__1,1);
+            nb = fla_max(i__1, 1);
             /* Computing MAX */
             i__1 = 2;
-            i__2 = ilaenv_(&c__2, "CSYTRF", uplo, n, &c_n1, &c_n1, & c_n1); // , expr subst
-            nbmin = fla_max(i__1,i__2);
+            i__2 = ilaenv_(&c__2, "CSYTRF", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+            nbmin = fla_max(i__1, i__2);
         }
     }
     else
@@ -388,7 +391,7 @@ void csytrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
         goto L20;
     }
 L40:
-    work[1].r = (real) lwkopt;
+    work[1].r = (real)lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

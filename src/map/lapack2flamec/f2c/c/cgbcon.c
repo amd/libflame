@@ -145,15 +145,18 @@ for 1 <= i <= N, row i of the matrix was */
 /* > \ingroup complexGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cgbcon_(char *norm, integer *n, integer *kl, integer *ku, complex *ab, integer *ldab, integer *ipiv, real *anorm, real *rcond, complex *work, real *rwork, integer *info)
+void cgbcon_(char *norm, integer *n, integer *kl, integer *ku, complex *ab, integer *ldab,
+             integer *ipiv, real *anorm, real *rcond, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgbcon inputs: norm %c, n %lld, kl %lld, ku %lld, ldab %lld",*norm, *n, *kl, *ku, *ldab);
+    snprintf(buffer, 256, "cgbcon inputs: norm %c, n %lld, kl %lld, ku %lld, ldab %lld", *norm, *n,
+             *kl, *ku, *ldab);
 #else
-    snprintf(buffer, 256,"cgbcon inputs: norm %c, n %d, kl %d, ku %d, ldab %d",*norm, *n, *kl, *ku, *ldab);
+    snprintf(buffer, 256, "cgbcon inputs: norm %c, n %d, kl %d, ku %d, ldab %d", *norm, *n, *kl,
+             *ku, *ldab);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -169,21 +172,28 @@ void cgbcon_(char *norm, integer *n, integer *kl, integer *ku, complex *ab, inte
     aocl_int64_t kd, lm, jp, ix, kase, kase1;
     real scale;
     extern /* Complex */
-    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+        VOID
+        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+        void
+        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical lnoti;
     extern /* Subroutine */
-    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
+        void
+        clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    void clatbs_(char *, char *, char *, char *, integer *, integer *, complex *, integer *, complex *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clatbs_(char *, char *, char *, char *, integer *, integer *, complex *, integer *,
+                complex *, real *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     extern /* Subroutine */
-    void csrscl_(integer *, real *, complex *, integer *);
+        void
+        csrscl_(integer *, real *, complex *, integer *);
     logical onenrm;
     char normin[1];
     real smlnum;
@@ -224,7 +234,7 @@ void cgbcon_(char *norm, integer *n, integer *kl, integer *ku, complex *ab, inte
     /* Function Body */
     *info = 0;
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
-    if (! onenrm && ! lsame_(norm, "I", 1, 1))
+    if(!onenrm && !lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }
@@ -284,7 +294,7 @@ void cgbcon_(char *norm, integer *n, integer *kl, integer *ku, complex *ab, inte
     lnoti = *kl > 0;
     kase = 0;
 L10:
-    aocl_lapack_clacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    clacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == kase1)
@@ -298,39 +308,38 @@ L10:
                     /* Computing MIN */
                     i__2 = *kl;
                     i__3 = *n - j; // , expr subst
-                    lm = fla_min(i__2,i__3);
+                    lm = fla_min(i__2, i__3);
                     jp = ipiv[j];
                     i__2 = jp;
-                    t.real = work[i__2].real;
-                    t.imag = work[i__2].imag; // , expr subst
+                    t.r = work[i__2].r;
+                    t.i = work[i__2].i; // , expr subst
                     if(jp != j)
                     {
                         i__2 = jp;
                         i__3 = j;
-                        work[i__2].real = work[i__3].real;
-                        work[i__2].imag = work[i__3].imag; // , expr subst
+                        work[i__2].r = work[i__3].r;
+                        work[i__2].i = work[i__3].i; // , expr subst
                         i__2 = j;
                         work[i__2].real = t.real;
                         work[i__2].imag = t.imag; // , expr subst
                     }
-                    q__1.real = -t.real;
-                    q__1.imag = -t.imag; // , expr subst
-                    aocl_blas_caxpy(&lm, &q__1, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1],
-                                    &c__1);
+                    q__1.r = -t.r;
+                    q__1.i = -t.i; // , expr subst
+                    caxpy_(&lm, &q__1, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1], &c__1);
                     /* L20: */
                 }
             }
             /* Multiply by inv(U). */
             i__1 = *kl + *ku;
-            aocl_lapack_clatbs("Upper", "No transpose", "Non-unit", normin, n, &i__1,
-                               &ab[ab_offset], ldab, &work[1], &scale, &rwork[1], info);
+            clatbs_("Upper", "No transpose", "Non-unit", normin, n, &i__1, &ab[ab_offset], ldab,
+                    &work[1], &scale, &rwork[1], info);
         }
         else
         {
             /* Multiply by inv(U**H). */
             i__1 = *kl + *ku;
-            aocl_lapack_clatbs("Upper", "Conjugate transpose", "Non-unit", normin, n, &i__1,
-                               &ab[ab_offset], ldab, &work[1], &scale, &rwork[1], info);
+            clatbs_("Upper", "Conjugate transpose", "Non-unit", normin, n, &i__1, &ab[ab_offset],
+                    ldab, &work[1], &scale, &rwork[1], info);
             /* Multiply by inv(L**H). */
             if(lnoti)
             {
@@ -339,14 +348,14 @@ L10:
                     /* Computing MIN */
                     i__1 = *kl;
                     i__2 = *n - j; // , expr subst
-                    lm = fla_min(i__1,i__2);
+                    lm = fla_min(i__1, i__2);
                     i__1 = j;
                     i__2 = j;
-                    aocl_lapack_cdotc_f2c(&q__2, &lm, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1], &c__1);
-                    q__1.real = work[i__2].real - q__2.real;
-                    q__1.imag = work[i__2].imag - q__2.imag; // , expr subst
-                    work[i__1].real = q__1.real;
-                    work[i__1].imag = q__1.imag; // , expr subst
+                    cdotc_f2c_(&q__2, &lm, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1], &c__1);
+                    q__1.r = work[i__2].r - q__2.r;
+                    q__1.i = work[i__2].i - q__2.i; // , expr subst
+                    work[i__1].r = q__1.r;
+                    work[i__1].i = q__1.i; // , expr subst
                     jp = ipiv[j];
                     if(jp != j)
                     {
@@ -355,8 +364,8 @@ L10:
                         t.imag = work[i__1].imag; // , expr subst
                         i__1 = jp;
                         i__2 = j;
-                        work[i__1].real = work[i__2].real;
-                        work[i__1].imag = work[i__2].imag; // , expr subst
+                        work[i__1].r = work[i__2].r;
+                        work[i__1].i = work[i__2].i; // , expr subst
                         i__1 = j;
                         work[i__1].real = t.real;
                         work[i__1].imag = t.imag; // , expr subst
@@ -371,7 +380,10 @@ L10:
         {
             ix = aocl_blas_icamax(n, &work[1], &c__1);
             i__1 = ix;
-            if (scale < ((r__1 = work[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(& work[ix]), f2c_abs(r__2))) * smlnum || scale == 0.f)
+            if(scale < ((r__1 = work[i__1].r, f2c_abs(r__1))
+                        + (r__2 = r_imag(&work[ix]), f2c_abs(r__2)))
+                           * smlnum
+               || scale == 0.f)
             {
                 goto L40;
             }

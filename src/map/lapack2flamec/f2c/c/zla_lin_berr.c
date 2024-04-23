@@ -96,10 +96,12 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zla_lin_berr_(integer *n, integer *nz, integer *nrhs, doublecomplex *res, doublereal *ayb, doublereal *berr)
+void zla_lin_berr_(integer *n, integer *nz, integer *nrhs, doublecomplex *res, doublereal *ayb,
+                   doublereal *berr)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zla_lin_berr inputs: n %" FLA_IS ", nz %" FLA_IS ", nrhs %" FLA_IS "", *n, *nz, *nrhs);
+    AOCL_DTL_SNPRINTF("zla_lin_berr inputs: n %" FLA_IS ", nz %" FLA_IS ", nrhs %" FLA_IS "", *n,
+                      *nz, *nrhs);
     /* System generated locals */
     aocl_int64_t ayb_dim1, ayb_offset, res_dim1, res_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2, d__3;
@@ -154,7 +156,8 @@ void zla_lin_berr_(integer *n, integer *nz, integer *nrhs, doublecomplex *res, d
             if(ayb[i__ + j * ayb_dim1] != 0.)
             {
                 i__3 = i__ + j * res_dim1;
-                d__3 = (d__1 = res[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&res[ i__ + j * res_dim1]), f2c_dabs(d__2));
+                d__3 = (d__1 = res[i__3].r, f2c_dabs(d__1))
+                       + (d__2 = d_imag(&res[i__ + j * res_dim1]), f2c_dabs(d__2));
                 z__3.r = d__3;
                 z__3.i = 0.; // , expr subst
                 z__2.r = safe1 + z__3.r;
@@ -165,7 +168,7 @@ void zla_lin_berr_(integer *n, integer *nz, integer *nrhs, doublecomplex *res, d
                 tmp = z__1.real;
                 /* Computing MAX */
                 d__1 = berr[j];
-                berr[j] = fla_max(d__1,tmp);
+                berr[j] = fla_max(d__1, tmp);
             }
             /* If AYB is exactly 0.0 (and if computed by CLA_yyAMV), then we know */
             /* the true residual also must be exactly 0.0. */

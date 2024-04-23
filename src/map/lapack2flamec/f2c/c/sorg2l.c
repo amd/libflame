@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b SORG2L generates all or part of the orthogonal matrix Q from a QL factorization
  * determined by s geqlf (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
@@ -112,12 +112,13 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sorg2l_(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work, integer *info)
+void sorg2l_(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sorg2l inputs: m %d, n %d, k %d, lda %d",*m, *n, *k, *lda);
+    snprintf(buffer, 256, "sorg2l inputs: m %d, n %d, k %d, lda %d", *m, *n, *k, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -126,7 +127,10 @@ void sorg2l_(integer *m, integer *n, integer *k, real *a, integer *lda, real *ta
     /* Local variables */
     integer i__, j, l, ii;
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *), slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sscal_(integer *, real *, real *, integer *),
+        slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -166,7 +170,7 @@ void sorg2l_(integer *m, integer *n, integer *k, real *a, integer *lda, real *ta
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
@@ -204,8 +208,8 @@ void sorg2l_(integer *m, integer *n, integer *k, real *a, integer *lda, real *ta
         a[*m - *n + ii + ii * a_dim1] = 1.f;
         i__2 = *m - *n + ii;
         i__3 = ii - 1;
-        aocl_lapack_slarf("Left", &i__2, &i__3, &a[ii * a_dim1 + 1], &c__1, &tau[i__], &a[a_offset],
-                          lda, &work[1]);
+        slarf_("Left", &i__2, &i__3, &a[ii * a_dim1 + 1], &c__1, &tau[i__], &a[a_offset], lda,
+               &work[1]);
         i__2 = *m - *n + ii - 1;
         r__1 = -tau[i__];
         aocl_blas_sscal(&i__2, &r__1, &a[ii * a_dim1 + 1], &c__1);

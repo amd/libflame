@@ -4,7 +4,7 @@
 int sgetrf_check(integer *m, integer *n, float *a, integer *lda, integer *ipiv, integer *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1; 
+    integer a_dim1, a_offset, i__1;
     /* Parameter adjustments */
     a_dim1 = *lda;
     a_offset = 1 + a_dim1;
@@ -20,7 +20,7 @@ int sgetrf_check(integer *m, integer *n, float *a, integer *lda, integer *ipiv, 
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }

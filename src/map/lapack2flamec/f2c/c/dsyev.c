@@ -137,7 +137,8 @@ i */
 /* > \ingroup doubleSYeigen */
 /* ===================================================================== */
 /* Subroutine */
-void dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, doublereal *w, doublereal *work, integer *lwork, integer *info)
+void dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, doublereal *w,
+            doublereal *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
@@ -152,7 +153,8 @@ void dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, dou
     aocl_int64_t imax;
     doublereal rmin, rmax;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
     extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
@@ -160,19 +162,29 @@ void dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, dou
     extern doublereal dlamch_(char *);
     integer iscale;
     extern /* Subroutine */
-    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *);
     doublereal safmin;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     integer indtau;
     extern /* Subroutine */
-    void dsterf_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dsterf_(integer *, doublereal *, doublereal *, integer *);
     extern doublereal dlansy_(char *, char *, integer *, doublereal *, integer *, doublereal *);
     integer indwrk;
     extern /* Subroutine */
-    void dorgtr_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsytrd_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+        void
+        dorgtr_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *,
+                integer *),
+        dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *,
+                doublereal *, integer *),
+        dsytrd_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, doublereal *, integer *, integer *);
     integer llwork;
     doublereal smlnum;
     aocl_int64_t lwkopt;
@@ -213,11 +225,11 @@ void dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, dou
     lower = lsame_(uplo, "L", 1, 1);
     lquery = *lwork == -1;
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (lower || lsame_(uplo, "U", 1, 1)))
+    else if(!(lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -2;
     }
@@ -225,7 +237,7 @@ void dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, dou
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
@@ -235,12 +247,12 @@ void dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, dou
         /* Computing MAX */
         i__1 = 1;
         i__2 = (nb + 2) * *n; // , expr subst
-        lwkopt = fla_max(i__1,i__2);
-        work[1] = (doublereal) lwkopt;
+        lwkopt = fla_max(i__1, i__2);
+        work[1] = (doublereal)lwkopt;
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n * 3 - 1; // , expr subst
-        if (*lwork < fla_max(i__1,i__2) && ! lquery)
+        if(*lwork < fla_max(i__1, i__2) && !lquery)
         {
             *info = -8;
         }
@@ -303,8 +315,8 @@ void dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, dou
     indtau = inde + *n;
     indwrk = indtau + *n;
     llwork = *lwork - indwrk + 1;
-    aocl_lapack_dsytrd(uplo, n, &a[a_offset], lda, &w[1], &work[inde], &work[indtau], &work[indwrk],
-                       &llwork, &iinfo);
+    dsytrd_(uplo, n, &a[a_offset], lda, &w[1], &work[inde], &work[indtau], &work[indwrk], &llwork,
+            &iinfo);
     /* For eigenvalues only, call DSTERF. For eigenvectors, first call */
     /* DORGTR to generate the orthogonal matrix, then call DSTEQR. */
     if(!wantz)
@@ -313,9 +325,8 @@ void dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, dou
     }
     else
     {
-        aocl_lapack_dorgtr(uplo, n, &a[a_offset], lda, &work[indtau], &work[indwrk], &llwork,
-                           &iinfo);
-        aocl_lapack_dsteqr(jobz, n, &w[1], &work[inde], &a[a_offset], lda, &work[indtau], info);
+        dorgtr_(uplo, n, &a[a_offset], lda, &work[indtau], &work[indwrk], &llwork, &iinfo);
+        dsteqr_(jobz, n, &w[1], &work[inde], &a[a_offset], lda, &work[indtau], info);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)
@@ -332,7 +343,7 @@ void dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, dou
         aocl_blas_dscal(&imax, &d__1, &w[1], &c__1);
     }
     /* Set WORK(1) to optimal workspace size. */
-    work[1] = (doublereal) lwkopt;
+    work[1] = (doublereal)lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DSYEV */

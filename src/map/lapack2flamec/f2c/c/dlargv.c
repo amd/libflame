@@ -99,10 +99,13 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlargv_(integer *n, doublereal *x, integer *incx, doublereal *y, integer *incy, doublereal *c__, integer *incc)
+void dlargv_(integer *n, doublereal *x, integer *incx, doublereal *y, integer *incy,
+             doublereal *c__, integer *incc)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlargv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS ", incc %" FLA_IS "",*n, *incx, *incy, *incc);
+    AOCL_DTL_SNPRINTF("dlargv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS
+                      ", incc %" FLA_IS "",
+                      *n, *incx, *incy, *incc);
     /* System generated locals */
     aocl_int64_t i__1;
     /* Builtin functions */
@@ -152,7 +155,7 @@ void dlargv_(integer *n, doublereal *x, integer *incx, doublereal *y, integer *i
             y[iy] = 1.;
             x[ix] = g;
         }
-        else if (f2c_dabs(f) > f2c_dabs(g))
+        else if(f2c_dabs(f) > f2c_dabs(g))
         {
             t = g / f;
             tt = sqrt(t * t + 1.);

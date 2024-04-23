@@ -265,7 +265,11 @@ and if */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-void slalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, real *b, integer *ldb, real *bx, integer *ldbx, real * u, integer *ldu, real *vt, integer *k, real *difl, real *difr, real * z__, real *poles, integer *givptr, integer *givcol, integer *ldgcol, integer *perm, real *givnum, real *c__, real *s, real *work, integer * iwork, integer *info)
+void slalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, real *b, integer *ldb,
+             real *bx, integer *ldbx, real *u, integer *ldu, real *vt, integer *k, real *difl,
+             real *difr, real *z__, real *poles, integer *givptr, integer *givcol, integer *ldgcol,
+             integer *perm, real *givnum, real *c__, real *s, real *work, integer *iwork,
+             integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slalsa(icompq, smlsiz, n, nrhs, b, ldb, bx, ldbx, u, ldu, vt, k, difl, difr, z__,
@@ -303,19 +307,28 @@ void aocl_lapack_slalsa(aocl_int64_t *icompq, aocl_int64_t *smlsiz, aocl_int64_t
         ",givcol %" FLA_IS ",ldgcol %" FLA_IS ",perm %" FLA_IS "",
         *icompq, *smlsiz, *n, *nrhs, *ldb, *ldbx, *ldu, *k, *givptr, *givcol, *ldgcol, *perm);
     /* System generated locals */
-    aocl_int64_t givcol_dim1, givcol_offset, perm_dim1, perm_offset, b_dim1, b_offset, bx_dim1,
+    integer givcol_dim1, givcol_offset, perm_dim1, perm_offset, b_dim1, b_offset, bx_dim1,
         bx_offset, difl_dim1, difl_offset, difr_dim1, difr_offset, givnum_dim1, givnum_offset,
         poles_dim1, poles_offset, u_dim1, u_offset, vt_dim1, vt_offset, z_dim1, z_offset, i__1,
         i__2;
     /* Builtin functions */
     integer pow_ii(aocl_int64_t *, aocl_int64_t *);
     /* Local variables */
-    integer i__, j, i1, ic, lf, nd, ll, nl, nr, im1, nlf, nrf, lvl, ndb1, nlp1, lvl2, nrp1, nlvl, sqre, inode, ndiml;
+    integer i__, j, i1, ic, lf, nd, ll, nl, nr, im1, nlf, nrf, lvl, ndb1, nlp1, lvl2, nrp1, nlvl,
+        sqre, inode, ndiml;
     extern /* Subroutine */
-    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *);
     integer ndimr;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *), slals0_(integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, integer *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *),
+        slals0_(integer *, integer *, integer *, integer *, integer *, real *, integer *, real *,
+                integer *, integer *, integer *, integer *, integer *, real *, integer *, real *,
+                real *, real *, real *, integer *, real *, real *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -443,10 +456,10 @@ void aocl_lapack_slalsa(aocl_int64_t *icompq, aocl_int64_t *smlsiz, aocl_int64_t
         nr = iwork[ndimr + i1];
         nlf = ic - nl;
         nrf = ic + 1;
-        aocl_blas_sgemm("T", "N", &nl, nrhs, &nl, &c_b7, &u[nlf + u_dim1], ldu, &b[nlf + b_dim1],
-                        ldb, &c_b8, &bx[nlf + bx_dim1], ldbx);
-        aocl_blas_sgemm("T", "N", &nr, nrhs, &nr, &c_b7, &u[nrf + u_dim1], ldu, &b[nrf + b_dim1],
-                        ldb, &c_b8, &bx[nrf + bx_dim1], ldbx);
+        sgemm_("T", "N", &nl, nrhs, &nl, &c_b7, &u[nlf + u_dim1], ldu, &b[nlf + b_dim1], ldb, &c_b8,
+               &bx[nlf + bx_dim1], ldbx);
+        sgemm_("T", "N", &nr, nrhs, &nr, &c_b7, &u[nrf + u_dim1], ldu, &b[nrf + b_dim1], ldb, &c_b8,
+               &bx[nrf + bx_dim1], ldbx);
         /* L10: */
     }
     /* Next copy the rows of B that correspond to unchanged rows */
@@ -488,16 +501,11 @@ void aocl_lapack_slalsa(aocl_int64_t *icompq, aocl_int64_t *smlsiz, aocl_int64_t
             nlf = ic - nl;
             nrf = ic + 1;
             --j;
-            givptr_sca = givptr[j];
-            k_sca = k[j];
-            aocl_lapack_slals0(
-                icompq, &nl, &nr, &sqre, nrhs, &bx[nlf + bx_dim1], ldbx, &b[nlf + b_dim1], ldb,
-                &perm[nlf + lvl * perm_dim1], &givptr_sca, &givcol[nlf + lvl2 * givcol_dim1], ldgcol,
-                &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1],
-                &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1],
-                &z__[nlf + lvl * z_dim1], &k_sca, &c__[j], &s[j], &work[1], info);
-            givptr[j] = (aocl_int_t)givptr_sca;
-            k[j] = (aocl_int_t)k_sca;
+            slals0_(icompq, &nl, &nr, &sqre, nrhs, &bx[nlf + bx_dim1], ldbx, &b[nlf + b_dim1], ldb,
+                    &perm[nlf + lvl * perm_dim1], &givptr[j], &givcol[nlf + lvl2 * givcol_dim1],
+                    ldgcol, &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1],
+                    &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1],
+                    &z__[nlf + lvl * z_dim1], &k[j], &c__[j], &s[j], &work[1], info);
             /* L30: */
         }
         /* L40: */
@@ -542,16 +550,11 @@ L50: /* First now go through the right singular vector matrices of all */
                 sqre = 1;
             }
             ++j;
-            givptr_sca = givptr[j];
-            k_sca = k[j];
-            aocl_lapack_slals0(
-                icompq, &nl, &nr, &sqre, nrhs, &b[nlf + b_dim1], ldb, &bx[nlf + bx_dim1], ldbx,
-                &perm[nlf + lvl * perm_dim1], &givptr_sca, &givcol[nlf + lvl2 * givcol_dim1], ldgcol,
-                &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1],
-                &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1],
-                &z__[nlf + lvl * z_dim1], &k_sca, &c__[j], &s[j], &work[1], info);
-            givptr[j] = (aocl_int_t)givptr_sca;
-            k[j] = (aocl_int_t)k_sca;
+            slals0_(icompq, &nl, &nr, &sqre, nrhs, &b[nlf + b_dim1], ldb, &bx[nlf + bx_dim1], ldbx,
+                    &perm[nlf + lvl * perm_dim1], &givptr[j], &givcol[nlf + lvl2 * givcol_dim1],
+                    ldgcol, &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1],
+                    &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1],
+                    &z__[nlf + lvl * z_dim1], &k[j], &c__[j], &s[j], &work[1], info);
             /* L60: */
         }
         /* L70: */
@@ -578,10 +581,10 @@ L50: /* First now go through the right singular vector matrices of all */
         }
         nlf = ic - nl;
         nrf = ic + 1;
-        aocl_blas_sgemm("T", "N", &nlp1, nrhs, &nlp1, &c_b7, &vt[nlf + vt_dim1], ldu,
-                        &b[nlf + b_dim1], ldb, &c_b8, &bx[nlf + bx_dim1], ldbx);
-        aocl_blas_sgemm("T", "N", &nrp1, nrhs, &nrp1, &c_b7, &vt[nrf + vt_dim1], ldu,
-                        &b[nrf + b_dim1], ldb, &c_b8, &bx[nrf + bx_dim1], ldbx);
+        sgemm_("T", "N", &nlp1, nrhs, &nlp1, &c_b7, &vt[nlf + vt_dim1], ldu, &b[nlf + b_dim1], ldb,
+               &c_b8, &bx[nlf + bx_dim1], ldbx);
+        sgemm_("T", "N", &nrp1, nrhs, &nrp1, &c_b7, &vt[nrf + vt_dim1], ldu, &b[nrf + b_dim1], ldb,
+               &c_b8, &bx[nrf + bx_dim1], ldbx);
         /* L80: */
     }
 L90:

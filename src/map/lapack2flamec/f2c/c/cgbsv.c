@@ -160,15 +160,18 @@ elements marked */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgbsv_(integer *n, integer *kl, integer *ku, integer * nrhs, complex *ab, integer *ldab, integer *ipiv, complex *b, integer * ldb, integer *info)
+void cgbsv_(integer *n, integer *kl, integer *ku, integer *nrhs, complex *ab, integer *ldab,
+            integer *ipiv, complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgbsv inputs: n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, ldb %lld",*n, *kl, *ku, *nrhs, *ldab, *ldb);
+    snprintf(buffer, 256, "cgbsv inputs: n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, ldb %lld",
+             *n, *kl, *ku, *nrhs, *ldab, *ldb);
 #else
-    snprintf(buffer, 256,"cgbsv inputs: n %d, kl %d, ku %d, nrhs %d, ldab %d, ldb %d",*n, *kl, *ku, *nrhs, *ldab, *ldb);
+    snprintf(buffer, 256, "cgbsv inputs: n %d, kl %d, ku %d, nrhs %d, ldab %d, ldb %d", *n, *kl,
+             *ku, *nrhs, *ldab, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -176,7 +179,12 @@ void cgbsv_(integer *n, integer *kl, integer *ku, integer * nrhs, complex *ab, i
     aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    void cgbtrf_(integer *, integer *, integer *, integer *, complex *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cgbtrs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+        void
+        cgbtrf_(integer *, integer *, integer *, integer *, complex *, integer *, integer *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        cgbtrs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *,
+                complex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -222,7 +230,7 @@ void cgbsv_(integer *n, integer *kl, integer *ku, integer * nrhs, complex *ab, i
     {
         *info = -6;
     }
-    else if (*ldb < fla_max(*n,1))
+    else if(*ldb < fla_max(*n, 1))
     {
         *info = -9;
     }
@@ -234,12 +242,12 @@ void cgbsv_(integer *n, integer *kl, integer *ku, integer * nrhs, complex *ab, i
         return;
     }
     /* Compute the LU factorization of the band matrix A. */
-    aocl_lapack_cgbtrf(n, n, kl, ku, &ab[ab_offset], ldab, &ipiv[1], info);
+    cgbtrf_(n, n, kl, ku, &ab[ab_offset], ldab, &ipiv[1], info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */
-        aocl_lapack_cgbtrs("No transpose", n, kl, ku, nrhs, &ab[ab_offset], ldab, &ipiv[1],
-                           &b[b_offset], ldb, info);
+        cgbtrs_("No transpose", n, kl, ku, nrhs, &ab[ab_offset], ldab, &ipiv[1], &b[b_offset], ldb,
+                info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

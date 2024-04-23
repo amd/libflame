@@ -135,21 +135,27 @@ static aocl_int64_t c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void zsycon_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv, doublereal *anorm, doublereal *rcond, doublecomplex *work, integer *info)
+void zsycon_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv,
+                  doublereal *anorm, doublereal *rcond, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zsycon_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
+    AOCL_DTL_SNPRINTF("zsycon_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
+                      *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
     integer i__, kase;
     extern /* Subroutine */
-    void zsytrs_rook_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zsytrs_rook_(char *, integer *, integer *, doublecomplex *, integer *, integer *,
+                     doublecomplex *, integer *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -183,7 +189,7 @@ void zsycon_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, intege
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -191,7 +197,7 @@ void zsycon_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, intege
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -226,7 +232,7 @@ void zsycon_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, intege
         for(i__ = *n; i__ >= 1; --i__)
         {
             i__1 = i__ + i__ * a_dim1;
-            if(ipiv[i__] > 0 && (a[i__1].real == 0. && a[i__1].imag == 0.))
+            if(ipiv[i__] > 0 && (a[i__1].r == 0. && a[i__1].i == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
@@ -241,7 +247,7 @@ void zsycon_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, intege
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
-            if(ipiv[i__] > 0 && (a[i__2].real == 0. && a[i__2].imag == 0.))
+            if(ipiv[i__] > 0 && (a[i__2].r == 0. && a[i__2].i == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
@@ -252,7 +258,7 @@ void zsycon_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, intege
     /* Estimate the 1-norm of the inverse. */
     kase = 0;
 L30:
-    aocl_lapack_zlacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    zlacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         /* Multiply by inv(L*D*L**T) or inv(U*D*U**T). */

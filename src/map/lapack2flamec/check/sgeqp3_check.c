@@ -1,8 +1,10 @@
 #include "FLA_f2c.h"
+#include "FLA_lapack2flame_return_defs.h"
 static integer c__1 = 1;
 static integer c_n1 = -1;
 
-int sgeqp3_check(integer *m, integer *n, float *a, integer *lda, integer *jpvt, float *tau, float *work, integer *lwork, integer *info)
+int sgeqp3_check(integer *m, integer *n, float *a, integer *lda, integer *jpvt, float *tau,
+                 float *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
@@ -30,14 +32,14 @@ int sgeqp3_check(integer *m, integer *n, float *a, integer *lda, integer *jpvt, 
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
     if(*info == 0)
     {
-        minmn = fla_min(*m,*n);
-        if (minmn == 0)
+        minmn = fla_min(*m, *n);
+        if(minmn == 0)
         {
             iws = 1;
             lwkopt = 1;

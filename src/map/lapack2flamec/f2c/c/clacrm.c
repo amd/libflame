@@ -114,15 +114,18 @@ B is N by N and real;
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clacrm_(integer *m, integer *n, complex *a, integer *lda, real *b, integer *ldb, complex *c__, integer *ldc, real *rwork)
+void clacrm_(integer *m, integer *n, complex *a, integer *lda, real *b, integer *ldb, complex *c__,
+             integer *ldc, real *rwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clacrm inputs: m %lld, n %lld, lda %lld, ldb %lld, ldc %lld",*m, *n, *lda, *ldb, *ldc);
+    snprintf(buffer, 256, "clacrm inputs: m %lld, n %lld, lda %lld, ldb %lld, ldc %lld", *m, *n,
+             *lda, *ldb, *ldc);
 #else
-    snprintf(buffer, 256,"clacrm inputs: m %d, n %d, lda %d, ldb %d, ldc %d",*m, *n, *lda, *ldb, *ldc);
+    snprintf(buffer, 256, "clacrm inputs: m %d, n %d, lda %d, ldb %d, ldc %d", *m, *n, *lda, *ldb,
+             *ldc);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -135,7 +138,9 @@ void clacrm_(integer *m, integer *n, complex *a, integer *lda, real *b, integer 
     /* Local variables */
     integer i__, j, l;
     extern /* Subroutine */
-    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -185,7 +190,7 @@ void clacrm_(integer *m, integer *n, complex *a, integer *lda, real *b, integer 
         /* L20: */
     }
     l = *m * *n + 1;
-    aocl_blas_sgemm("N", "N", m, n, n, &c_b6, &rwork[1], m, &b[b_offset], ldb, &c_b7, &rwork[l], m);
+    sgemm_("N", "N", m, n, n, &c_b6, &rwork[1], m, &b[b_offset], ldb, &c_b7, &rwork[l], m);
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {
@@ -211,7 +216,7 @@ void clacrm_(integer *m, integer *n, complex *a, integer *lda, real *b, integer 
         }
         /* L60: */
     }
-    aocl_blas_sgemm("N", "N", m, n, n, &c_b6, &rwork[1], m, &b[b_offset], ldb, &c_b7, &rwork[l], m);
+    sgemm_("N", "N", m, n, n, &c_b6, &rwork[1], m, &b[b_offset], ldb, &c_b7, &rwork[l], m);
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {

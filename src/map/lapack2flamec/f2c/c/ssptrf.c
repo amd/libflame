@@ -3,11 +3,6 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-
-/*
- *     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
- */
-
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b SSPTRF */
@@ -166,7 +161,7 @@ void ssptrf_(char *uplo, integer *n, real *ap, integer *ipiv, integer *info)
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"ssptrf inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
+    snprintf(buffer, 256, "ssptrf inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -183,18 +178,22 @@ void ssptrf_(char *uplo, integer *n, real *ap, integer *ipiv, integer *info)
     real wkm1, wkp1;
     integer imax, jmax;
     extern /* Subroutine */
-    void sspr_(char *, integer *, real *, real *, integer *, real *);
+        void
+        sspr_(char *, integer *, real *, real *, integer *, real *);
     real alpha;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     integer kstep;
     logical upper;
     extern /* Subroutine */
-    void sswap_(integer *, real *, integer *, real *, integer *);
+        void
+        sswap_(integer *, real *, integer *, real *, integer *);
     real absakk;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real colmax, rowmax;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -225,7 +224,7 @@ void ssptrf_(char *uplo, integer *n, real *ap, integer *ipiv, integer *info)
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     imax = 0;
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -272,7 +271,7 @@ void ssptrf_(char *uplo, integer *n, real *ap, integer *ipiv, integer *info)
         {
             colmax = 0.f;
         }
-        if (fla_max(absakk,colmax) == 0.f)
+        if(fla_max(absakk, colmax) == 0.f)
         {
             /* Column K is zero: set INFO and continue */
             if(*info == 0)
@@ -295,7 +294,7 @@ void ssptrf_(char *uplo, integer *n, real *ap, integer *ipiv, integer *info)
                 i__1 = k;
                 for(j = imax + 1; j <= i__1; ++j)
                 {
-                    if ((r__1 = ap[kx], f2c_abs(r__1)) > rowmax)
+                    if((r__1 = ap[kx], f2c_abs(r__1)) > rowmax)
                     {
                         rowmax = (r__1 = ap[kx], f2c_abs(r__1));
                         jmax = j;
@@ -310,15 +309,15 @@ void ssptrf_(char *uplo, integer *n, real *ap, integer *ipiv, integer *info)
                     jmax = aocl_blas_isamax(&i__1, &ap[kpc], &c__1);
                     /* Computing MAX */
                     r__2 = rowmax;
-                    r__3 = (r__1 = ap[kpc + jmax - 1], f2c_abs( r__1)); // , expr subst
-                    rowmax = fla_max(r__2,r__3);
+                    r__3 = (r__1 = ap[kpc + jmax - 1], f2c_abs(r__1)); // , expr subst
+                    rowmax = fla_max(r__2, r__3);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
                     /* no interchange, use 1-by-1 pivot block */
                     kp = k;
                 }
-                else if ((r__1 = ap[kpc + imax - 1], f2c_abs(r__1)) >= alpha * rowmax)
+                else if((r__1 = ap[kpc + imax - 1], f2c_abs(r__1)) >= alpha * rowmax)
                 {
                     /* interchange rows and columns K and IMAX, use 1-by-1 */
                     /* pivot block */
@@ -460,7 +459,7 @@ void ssptrf_(char *uplo, integer *n, real *ap, integer *ipiv, integer *info)
         {
             colmax = 0.f;
         }
-        if (fla_max(absakk,colmax) == 0.f)
+        if(fla_max(absakk, colmax) == 0.f)
         {
             /* Column K is zero: set INFO and continue */
             if(*info == 0)
@@ -485,7 +484,7 @@ void ssptrf_(char *uplo, integer *n, real *ap, integer *ipiv, integer *info)
                 i__1 = imax - 1;
                 for(j = k; j <= i__1; ++j)
                 {
-                    if ((r__1 = ap[kx], f2c_abs(r__1)) > rowmax)
+                    if((r__1 = ap[kx], f2c_abs(r__1)) > rowmax)
                     {
                         rowmax = (r__1 = ap[kx], f2c_abs(r__1));
                         jmax = j;
@@ -500,15 +499,15 @@ void ssptrf_(char *uplo, integer *n, real *ap, integer *ipiv, integer *info)
                     jmax = imax + aocl_blas_isamax(&i__1, &ap[kpc + 1], &c__1);
                     /* Computing MAX */
                     r__2 = rowmax;
-                    r__3 = (r__1 = ap[kpc + jmax - imax], f2c_abs( r__1)); // , expr subst
-                    rowmax = fla_max(r__2,r__3);
+                    r__3 = (r__1 = ap[kpc + jmax - imax], f2c_abs(r__1)); // , expr subst
+                    rowmax = fla_max(r__2, r__3);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
                     /* no interchange, use 1-by-1 pivot block */
                     kp = k;
                 }
-                else if ((r__1 = ap[kpc], f2c_abs(r__1)) >= alpha * rowmax)
+                else if((r__1 = ap[kpc], f2c_abs(r__1)) >= alpha * rowmax)
                 {
                     /* interchange rows and columns K and IMAX, use 1-by-1 */
                     /* pivot block */

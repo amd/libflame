@@ -1,5 +1,8 @@
-/* slaed4.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* slaed4.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLAED4 used by SSTEDC. Finds a single root of the secular equation. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -135,10 +138,11 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *rho, real *dlam, integer *info)
+void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *rho, real *dlam,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slaed4 inputs: n %" FLA_IS ", i__ %" FLA_IS "",*n, *i__);
+    AOCL_DTL_SNPRINTF("slaed4 inputs: n %" FLA_IS ", i__ %" FLA_IS "", *n, *i__);
     /* System generated locals */
     aocl_int64_t i__1;
     real r__1;
@@ -159,7 +163,9 @@ void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
     aocl_int64_t niter;
     logical swtch;
     extern /* Subroutine */
-    void slaed5_(integer *, real *, real *, real *, real *, real *), slaed6_(integer *, logical *, real *, real *, real *, real *, real *, integer *);
+        void
+        slaed5_(integer *, real *, real *, real *, real *, real *),
+        slaed6_(integer *, logical *, real *, real *, real *, real *, real *, integer *);
     logical swtch3;
     extern real slamch_(char *);
     logical orgati;
@@ -199,13 +205,13 @@ void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         /* Presumably, I=1 upon entry */
         *dlam = d__[1] + *rho * z__[1] * z__[1];
         delta[1] = 1.f;
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 2)
     {
         slaed5_(i__, &d__[1], &z__[1], &delta[1], rho, dlam);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute machine epsilon */
@@ -305,21 +311,21 @@ void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         temp = z__[*n] / delta[*n];
         phi = z__[*n] * temp;
         dphi = temp * temp;
-        erretm = (-phi - psi) * 8.f + erretm - phi + rhoinv + f2c_abs(tau) * ( dpsi + dphi);
+        erretm = (-phi - psi) * 8.f + erretm - phi + rhoinv + f2c_abs(tau) * (dpsi + dphi);
         w = rhoinv + phi + psi;
         /* Test for convergence */
-        if (f2c_abs(w) <= eps * erretm)
+        if(f2c_abs(w) <= eps * erretm)
         {
             *dlam = d__[*i__] + tau;
             goto L250;
         }
         if(w <= 0.f)
         {
-            dltlb = fla_max(dltlb,tau);
+            dltlb = fla_max(dltlb, tau);
         }
         else
         {
-            dltub = fla_min(dltub,tau);
+            dltub = fla_min(dltub, tau);
         }
         /* Calculate the new step */
         ++niter;
@@ -340,11 +346,11 @@ void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         }
         else if(a >= 0.f)
         {
-            eta = (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1)))) / ( c__ * 2.f);
+            eta = (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1)))) / (c__ * 2.f);
         }
         else
         {
-            eta = b * 2.f / (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1) )));
+            eta = b * 2.f / (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1))));
         }
         /* Note, eta should be positive if w is negative, and */
         /* eta should be negative otherwise. However, */
@@ -392,25 +398,25 @@ void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         temp = z__[*n] / delta[*n];
         phi = z__[*n] * temp;
         dphi = temp * temp;
-        erretm = (-phi - psi) * 8.f + erretm - phi + rhoinv + f2c_abs(tau) * ( dpsi + dphi);
+        erretm = (-phi - psi) * 8.f + erretm - phi + rhoinv + f2c_abs(tau) * (dpsi + dphi);
         w = rhoinv + phi + psi;
         /* Main loop to update the values of the array DELTA */
         iter = niter + 1;
         for(niter = iter; niter <= 30; ++niter)
         {
             /* Test for convergence */
-            if (f2c_abs(w) <= eps * erretm)
+            if(f2c_abs(w) <= eps * erretm)
             {
                 *dlam = d__[*i__] + tau;
                 goto L250;
             }
             if(w <= 0.f)
             {
-                dltlb = fla_max(dltlb,tau);
+                dltlb = fla_max(dltlb, tau);
             }
             else
             {
-                dltub = fla_min(dltub,tau);
+                dltub = fla_min(dltub, tau);
             }
             /* Calculate the new step */
             c__ = w - delta[*n - 1] * dpsi - delta[*n] * dphi;
@@ -422,7 +428,7 @@ void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             }
             else
             {
-                eta = b * 2.f / (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs( r__1))));
+                eta = b * 2.f / (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1))));
             }
             /* Note, eta should be positive if w is negative, and */
             /* eta should be negative otherwise. However, */
@@ -470,7 +476,7 @@ void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             temp = z__[*n] / delta[*n];
             phi = z__[*n] * temp;
             dphi = temp * temp;
-            erretm = (-phi - psi) * 8.f + erretm - phi + rhoinv + f2c_abs(tau) * ( dpsi + dphi);
+            erretm = (-phi - psi) * 8.f + erretm - phi + rhoinv + f2c_abs(tau) * (dpsi + dphi);
             w = rhoinv + phi + psi;
             /* L90: */
         }
@@ -519,7 +525,7 @@ void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             b = z__[*i__] * z__[*i__] * del;
             if(a > 0.f)
             {
-                tau = b * 2.f / (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs( r__1))));
+                tau = b * 2.f / (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1))));
             }
             else
             {
@@ -537,7 +543,7 @@ void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             b = z__[ip1] * z__[ip1] * del;
             if(a < 0.f)
             {
-                tau = b * 2.f / (a - sqrt((r__1 = a * a + b * 4.f * c__, f2c_abs( r__1))));
+                tau = b * 2.f / (a - sqrt((r__1 = a * a + b * 4.f * c__, f2c_abs(r__1))));
             }
             else
             {
@@ -626,9 +632,10 @@ void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         dw = dpsi + dphi + temp * temp;
         temp = z__[ii] * temp;
         w += temp;
-        erretm = (phi - psi) * 8.f + erretm + rhoinv * 2.f + f2c_abs(temp) * 3.f + f2c_abs(tau) * dw;
+        erretm
+            = (phi - psi) * 8.f + erretm + rhoinv * 2.f + f2c_abs(temp) * 3.f + f2c_abs(tau) * dw;
         /* Test for convergence */
-        if (f2c_abs(w) <= eps * erretm)
+        if(f2c_abs(w) <= eps * erretm)
         {
             if(orgati)
             {
@@ -642,11 +649,11 @@ void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         }
         if(w <= 0.f)
         {
-            dltlb = fla_max(dltlb,tau);
+            dltlb = fla_max(dltlb, tau);
         }
         else
         {
-            dltub = fla_min(dltub,tau);
+            dltub = fla_min(dltub, tau);
         }
         /* Calculate the new step */
         ++niter;
@@ -687,7 +694,7 @@ void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             }
             else
             {
-                eta = b * 2.f / (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs( r__1))));
+                eta = b * 2.f / (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1))));
             }
         }
         else
@@ -711,7 +718,7 @@ void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
                 zz[2] = z__[iip1] * z__[iip1];
             }
             zz[1] = z__[ii] * z__[ii];
-            aocl_lapack_slaed6(&niter, &orgati, &c__, &delta[iim1], zz, &w, &eta, info);
+            slaed6_(&niter, &orgati, &c__, &delta[iim1], zz, &w, &eta, info);
             if(*info != 0)
             {
                 goto L250;
@@ -775,18 +782,19 @@ void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         dw = dpsi + dphi + temp * temp;
         temp = z__[ii] * temp;
         w = rhoinv + phi + psi + temp;
-        erretm = (phi - psi) * 8.f + erretm + rhoinv * 2.f + f2c_abs(temp) * 3.f + (r__1 = tau + eta, f2c_abs(r__1)) * dw;
+        erretm = (phi - psi) * 8.f + erretm + rhoinv * 2.f + f2c_abs(temp) * 3.f
+                 + (r__1 = tau + eta, f2c_abs(r__1)) * dw;
         swtch = FALSE_;
         if(orgati)
         {
-            if (-w > f2c_abs(prew) / 10.f)
+            if(-w > f2c_abs(prew) / 10.f)
             {
                 swtch = TRUE_;
             }
         }
         else
         {
-            if (w > f2c_abs(prew) / 10.f)
+            if(w > f2c_abs(prew) / 10.f)
             {
                 swtch = TRUE_;
             }
@@ -797,7 +805,7 @@ void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         for(niter = iter; niter <= 30; ++niter)
         {
             /* Test for convergence */
-            if (f2c_abs(w) <= eps * erretm)
+            if(f2c_abs(w) <= eps * erretm)
             {
                 if(orgati)
                 {
@@ -811,11 +819,11 @@ void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             }
             if(w <= 0.f)
             {
-                dltlb = fla_max(dltlb,tau);
+                dltlb = fla_max(dltlb, tau);
             }
             else
             {
-                dltub = fla_min(dltub,tau);
+                dltub = fla_min(dltub, tau);
             }
             /* Calculate the new step */
             if(!swtch3)
@@ -874,7 +882,7 @@ void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
                 }
                 else if(a <= 0.f)
                 {
-                    eta = (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1))) ) / (c__ * 2.f);
+                    eta = (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1)))) / (c__ * 2.f);
                 }
                 else
                 {
@@ -910,7 +918,7 @@ void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
                         zz[2] = z__[iip1] * z__[iip1];
                     }
                 }
-                aocl_lapack_slaed6(&niter, &orgati, &c__, &delta[iim1], zz, &w, &eta, info);
+                slaed6_(&niter, &orgati, &c__, &delta[iim1], zz, &w, &eta, info);
                 if(*info != 0)
                 {
                     goto L250;
@@ -975,8 +983,9 @@ void slaed4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
             dw = dpsi + dphi + temp * temp;
             temp = z__[ii] * temp;
             w = rhoinv + phi + psi + temp;
-            erretm = (phi - psi) * 8.f + erretm + rhoinv * 2.f + f2c_abs(temp) * 3.f + f2c_abs(tau) * dw;
-            if (w * prew > 0.f && f2c_abs(w) > f2c_abs(prew) / 10.f)
+            erretm = (phi - psi) * 8.f + erretm + rhoinv * 2.f + f2c_abs(temp) * 3.f
+                     + f2c_abs(tau) * dw;
+            if(w * prew > 0.f && f2c_abs(w) > f2c_abs(prew) / 10.f)
             {
                 swtch = !swtch;
             }

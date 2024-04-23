@@ -29,29 +29,21 @@
                 ( u2 )
   where tau is a real scalar and u2 is a real (n-1)-element vector.
 */
-#define LAPACK_larfg(prefix)                                            \
-  void F77_ ## prefix ## larfg( integer *n,                                  \
-                               PREFIX2LAPACK_TYPEDEF(prefix)* chi,      \
-                               PREFIX2LAPACK_TYPEDEF(prefix)* x2,       \
-                               integer* inc_x2,                             \
-                               PREFIX2LAPACK_TYPEDEF(prefix)* tau )
+#define LAPACK_larfg(prefix)                                                       \
+    void F77_##prefix##larfg(integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * chi,      \
+                             PREFIX2LAPACK_TYPEDEF(prefix) * x2, integer * inc_x2, \
+                             PREFIX2LAPACK_TYPEDEF(prefix) * tau)
 
-#define LAPACK_larfg_body(prefix)                                       \
-  FLA_Error    init_result;                                             \
-  AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                         \
-  FLA_Init_safe( &init_result );                                        \
-  if ( *n > 0 ) {                                                       \
-    FLA_Househ2_UT_l_op ## prefix ( *n - 1,                             \
-                                    chi,                                \
-                                    x2,                                 \
-                                    *inc_x2,                            \
-                                    tau );                              \
-      /* TODO: invert tau */
-}                                                                     \
-FLA_Finalize_safe( init_result );
-\
-AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);                  	      \
-return;
+#define LAPACK_larfg_body(prefix)                                   \
+    FLA_Error init_result;                                          \
+    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);                   \
+    FLA_Init_safe(&init_result);                                    \
+    if(*n > 0)                                                      \
+    {                                                               \
+        FLA_Househ2_UT_l_op##prefix(*n - 1, chi, x2, *inc_x2, tau); \
+    /* TODO: invert tau */
+}
+FLA_Finalize_safe(init_result);
 
 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
 return;
@@ -62,12 +54,10 @@ LAPACK_larfg(s){LAPACK_larfg_body(s)} LAPACK_larfg(d){LAPACK_larfg_body(d)} LAPA
     LAPACK_larfg_body(z)
 }
 
-#define LAPACK_larfgp(prefix)                                           \
-  void F77_ ## prefix ## larfgp( integer *n,                                 \
-                                PREFIX2LAPACK_TYPEDEF(prefix)* chi,     \
-                                PREFIX2LAPACK_TYPEDEF(prefix)* x2,      \
-                                integer* inc_x2,                            \
-                                PREFIX2LAPACK_TYPEDEF(prefix)* tau )
+#define LAPACK_larfgp(prefix)                                                       \
+    void F77_##prefix##larfgp(integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * chi,      \
+                              PREFIX2LAPACK_TYPEDEF(prefix) * x2, integer * inc_x2, \
+                              PREFIX2LAPACK_TYPEDEF(prefix) * tau)
 
 LAPACK_larfgp(s){LAPACK_larfg_body(s)} LAPACK_larfgp(d){LAPACK_larfg_body(d)} LAPACK_larfgp(c){
     LAPACK_larfg_body(c)} LAPACK_larfgp(z)

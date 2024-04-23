@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/iparam2stage.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/iparam2stage.f -- translated by f2c (version 20160102). You must link the
+ resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
+ Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
+ with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 #ifdef FLA_OPENMP_MULTITHREADING
 #include <omp.h>
@@ -12,11 +15,17 @@ static integer c_n1 = -1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download IPARAM2STAGE + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/iparam2 stage.F"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/iparam2
+ * stage.F"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/iparam2 stage.F"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/iparam2
+ * stage.F"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/iparam2 stage.F"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/iparam2
+ * stage.F"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -146,7 +155,8 @@ static integer c_n1 = -1;
 /* > \endverbatim */
 /* > */
 /* ===================================================================== */
-integer iparam2stage_(integer *ispec, char *name__, char *opts, integer *ni, integer *nbi, integer *ibi, integer *nxi)
+integer iparam2stage_(integer *ispec, char *name__, char *opts, integer *ni, integer *nbi,
+                      integer *ibi, integer *nxi)
 {
     /* System generated locals */
     integer ret_val, i__1, i__2, i__3;
@@ -179,7 +189,7 @@ integer iparam2stage_(integer *ispec, char *name__, char *opts, integer *ni, int
     /* .. */
     /* .. Executable Statements .. */
     /* Invalid value for ISPEC */
-    if (*ispec < 17 || *ispec > 21)
+    if(*ispec < 17 || *ispec > 21)
     {
         ret_val = -1;
         return ret_val;
@@ -191,77 +201,71 @@ integer iparam2stage_(integer *ispec, char *name__, char *opts, integer *ni, int
     nthreads = fla_thread_get_num_threads();
 #endif
     /* WRITE(*,*) 'IPARAM VOICI NTHREADS ISPEC ',NTHREADS, ISPEC */
-    if (*ispec != 19)
+    if(*ispec != 19)
     {
         /* Convert NAME to upper case if the first character is lower case. */
         ret_val = -1;
-        s_copy(subnam, name__, (ftnlen) 12, name_len);
+        s_copy(subnam, name__, (ftnlen)12, name_len);
         ic = *(unsigned char *)subnam;
         iz = 'Z';
-        if (iz == 90 || iz == 122)
+        if(iz == 90 || iz == 122)
         {
             /* ASCII character set */
-            if (ic >= 97 && ic <= 122)
+            if(ic >= 97 && ic <= 122)
             {
-                *(unsigned char *)subnam = (char) (ic - 32);
-                for (i__ = 2;
-                        i__ <= 12;
-                        ++i__)
+                *(unsigned char *)subnam = (char)(ic - 32);
+                for(i__ = 2; i__ <= 12; ++i__)
                 {
                     ic = *(unsigned char *)&subnam[i__ - 1];
-                    if (ic >= 97 && ic <= 122)
+                    if(ic >= 97 && ic <= 122)
                     {
-                        *(unsigned char *)&subnam[i__ - 1] = (char) (ic - 32);
+                        *(unsigned char *)&subnam[i__ - 1] = (char)(ic - 32);
                     }
                     /* L100: */
                 }
             }
         }
-        else if (iz == 233 || iz == 169)
+        else if(iz == 233 || iz == 169)
         {
             /* EBCDIC character set */
-            if (ic >= 129 && ic <= 137 || ic >= 145 && ic <= 153 || ic >= 162 && ic <= 169)
+            if(ic >= 129 && ic <= 137 || ic >= 145 && ic <= 153 || ic >= 162 && ic <= 169)
             {
-                *(unsigned char *)subnam = (char) (ic + 64);
-                for (i__ = 2;
-                        i__ <= 12;
-                        ++i__)
+                *(unsigned char *)subnam = (char)(ic + 64);
+                for(i__ = 2; i__ <= 12; ++i__)
                 {
                     ic = *(unsigned char *)&subnam[i__ - 1];
-                    if (ic >= 129 && ic <= 137 || ic >= 145 && ic <= 153 || ic >= 162 && ic <= 169)
+                    if(ic >= 129 && ic <= 137 || ic >= 145 && ic <= 153 || ic >= 162 && ic <= 169)
                     {
-                        *(unsigned char *)&subnam[i__ - 1] = (char) (ic + 64);
+                        *(unsigned char *)&subnam[i__ - 1] = (char)(ic + 64);
                     }
                     /* L110: */
                 }
             }
         }
-        else if (iz == 218 || iz == 250)
+        else if(iz == 218 || iz == 250)
         {
             /* Prime machines: ASCII+128 */
-            if (ic >= 225 && ic <= 250)
+            if(ic >= 225 && ic <= 250)
             {
-                *(unsigned char *)subnam = (char) (ic - 32);
-                for (i__ = 2;
-                        i__ <= 12;
-                        ++i__)
+                *(unsigned char *)subnam = (char)(ic - 32);
+                for(i__ = 2; i__ <= 12; ++i__)
                 {
                     ic = *(unsigned char *)&subnam[i__ - 1];
-                    if (ic >= 225 && ic <= 250)
+                    if(ic >= 225 && ic <= 250)
                     {
-                        *(unsigned char *)&subnam[i__ - 1] = (char) (ic - 32);
+                        *(unsigned char *)&subnam[i__ - 1] = (char)(ic - 32);
                     }
                     /* L120: */
                 }
             }
         }
         *(unsigned char *)prec = *(unsigned char *)subnam;
-        s_copy(algo, subnam + 3, (ftnlen) 3, (ftnlen) 3);
-        s_copy(stag, subnam + 7, (ftnlen) 5, (ftnlen) 5);
+        s_copy(algo, subnam + 3, (ftnlen)3, (ftnlen)3);
+        s_copy(stag, subnam + 7, (ftnlen)5, (ftnlen)5);
         rprec = *(unsigned char *)prec == 'S' || *(unsigned char *)prec == 'D';
         cprec = *(unsigned char *)prec == 'C' || *(unsigned char *)prec == 'Z';
         /* Invalid value for PRECISION */
-        if (! (rprec || cprec))
+        if(!(rprec || cprec))
         {
             ret_val = -1;
             return ret_val;
@@ -269,14 +273,14 @@ integer iparam2stage_(integer *ispec, char *name__, char *opts, integer *ni, int
     }
     /* WRITE(*,*),'RPREC,CPREC ',RPREC,CPREC, */
     /* $ ' ALGO ',ALGO,' STAGE ',STAG */
-    if (*ispec == 17 || *ispec == 18)
+    if(*ispec == 17 || *ispec == 18)
     {
         /* ISPEC = 17, 18: block size KD, IB */
         /* Could be also dependent from N but for now it */
         /* depend only on sequential or parallel */
-        if (nthreads > 4)
+        if(nthreads > 4)
         {
-            if (cprec)
+            if(cprec)
             {
                 kd = 128;
                 ib = 32;
@@ -287,9 +291,9 @@ integer iparam2stage_(integer *ispec, char *name__, char *opts, integer *ni, int
                 ib = 40;
             }
         }
-        else if (nthreads > 1)
+        else if(nthreads > 1)
         {
-            if (cprec)
+            if(cprec)
             {
                 kd = 64;
                 ib = 32;
@@ -302,7 +306,7 @@ integer iparam2stage_(integer *ispec, char *name__, char *opts, integer *ni, int
         }
         else
         {
-            if (cprec)
+            if(cprec)
             {
                 kd = 16;
                 ib = 16;
@@ -313,28 +317,28 @@ integer iparam2stage_(integer *ispec, char *name__, char *opts, integer *ni, int
                 ib = 16;
             }
         }
-        if (*ispec == 17)
+        if(*ispec == 17)
         {
             ret_val = kd;
         }
-        if (*ispec == 18)
+        if(*ispec == 18)
         {
             ret_val = ib;
         }
     }
-    else if (*ispec == 19)
+    else if(*ispec == 19)
     {
         /* ISPEC = 19: */
         /* LHOUS length of the Houselholder representation */
         /* matrix (V,T) of the second stage. should be >= 1. */
         /* Will add the VECT OPTION HERE next release */
         *(unsigned char *)vect = *(unsigned char *)opts;
-        if (*(unsigned char *)vect == 'N')
+        if(*(unsigned char *)vect == 'N')
         {
             /* Computing MAX */
             i__1 = 1;
             i__2 = *ni << 2; // , expr subst
-            lhous = fla_max(i__1,i__2);
+            lhous = fla_max(i__1, i__2);
         }
         else
         {
@@ -342,9 +346,9 @@ integer iparam2stage_(integer *ispec, char *name__, char *opts, integer *ni, int
             /* Computing MAX */
             i__1 = 1;
             i__2 = *ni << 2; // , expr subst
-            lhous = fla_max(i__1,i__2) + *ibi;
+            lhous = fla_max(i__1, i__2) + *ibi;
         }
-        if (lhous >= 0)
+        if(lhous >= 0)
         {
             ret_val = lhous;
         }
@@ -353,7 +357,7 @@ integer iparam2stage_(integer *ispec, char *name__, char *opts, integer *ni, int
             ret_val = -1;
         }
     }
-    else if (*ispec == 20)
+    else if(*ispec == 20)
     {
         /* ISPEC = 20: (21 for future use) */
         /* LWORK length of the workspace for */
@@ -370,54 +374,58 @@ integer iparam2stage_(integer *ispec, char *name__, char *opts, integer *ni, int
         /* + (KD+1)*N */
         lwork = -1;
         *(unsigned char *)subnam = *(unsigned char *)prec;
-        s_copy(subnam + 1, "GEQRF", (ftnlen) 5, (ftnlen) 5);
+        s_copy(subnam + 1, "GEQRF", (ftnlen)5, (ftnlen)5);
         qroptnb = ilaenv_(&c__1, subnam, " ", ni, nbi, &c_n1, &c_n1);
-        s_copy(subnam + 1, "GELQF", (ftnlen) 5, (ftnlen) 5);
+        s_copy(subnam + 1, "GELQF", (ftnlen)5, (ftnlen)5);
         lqoptnb = ilaenv_(&c__1, subnam, " ", nbi, ni, &c_n1, &c_n1);
         /* Could be QR or LQ for TRD and the max for BRD */
-        factoptnb = fla_max(qroptnb,lqoptnb);
-        if (s_cmp(algo, "TRD", (ftnlen) 3, (ftnlen) 3) == 0)
+        factoptnb = fla_max(qroptnb, lqoptnb);
+        if(s_cmp(algo, "TRD", (ftnlen)3, (ftnlen)3) == 0)
         {
-            if (s_cmp(stag, "2STAG", (ftnlen) 5, (ftnlen) 5) == 0)
+            if(s_cmp(stag, "2STAG", (ftnlen)5, (ftnlen)5) == 0)
             {
                 /* Computing MAX */
                 i__1 = *nbi + 1;
                 /* Computing MAX */
                 i__2 = (*nbi << 1) * *nbi;
                 i__3 = *nbi * nthreads; // , expr subst
-                lwork = *ni * *nbi + *ni * fla_max(i__1,factoptnb) + fla_max(i__2, i__3) + (*nbi + 1) * *ni;
+                lwork = *ni * *nbi + *ni * fla_max(i__1, factoptnb) + fla_max(i__2, i__3)
+                        + (*nbi + 1) * *ni;
             }
-            else if (s_cmp(stag, "HE2HB", (ftnlen) 5, (ftnlen) 5) == 0 || s_cmp(stag, "SY2SB", (ftnlen) 5, (ftnlen) 5) == 0)
+            else if(s_cmp(stag, "HE2HB", (ftnlen)5, (ftnlen)5) == 0
+                    || s_cmp(stag, "SY2SB", (ftnlen)5, (ftnlen)5) == 0)
             {
-                lwork = *ni * *nbi + *ni * fla_max(*nbi,factoptnb) + (*nbi << 1) * *nbi;
+                lwork = *ni * *nbi + *ni * fla_max(*nbi, factoptnb) + (*nbi << 1) * *nbi;
             }
-            else if (s_cmp(stag, "HB2ST", (ftnlen) 5, (ftnlen) 5) == 0 || s_cmp(stag, "SB2ST", (ftnlen) 5, (ftnlen) 5) == 0)
+            else if(s_cmp(stag, "HB2ST", (ftnlen)5, (ftnlen)5) == 0
+                    || s_cmp(stag, "SB2ST", (ftnlen)5, (ftnlen)5) == 0)
             {
                 lwork = ((*nbi << 1) + 1) * *ni + *nbi * nthreads;
             }
         }
-        else if (s_cmp(algo, "BRD", (ftnlen) 3, (ftnlen) 3) == 0)
+        else if(s_cmp(algo, "BRD", (ftnlen)3, (ftnlen)3) == 0)
         {
-            if (s_cmp(stag, "2STAG", (ftnlen) 5, (ftnlen) 5) == 0)
+            if(s_cmp(stag, "2STAG", (ftnlen)5, (ftnlen)5) == 0)
             {
                 /* Computing MAX */
                 i__1 = *nbi + 1;
                 /* Computing MAX */
                 i__2 = (*nbi << 1) * *nbi;
                 i__3 = *nbi * nthreads; // , expr subst
-                lwork = (*ni << 1) * *nbi + *ni * fla_max(i__1,factoptnb) + fla_max( i__2,i__3) + (*nbi + 1) * *ni;
+                lwork = (*ni << 1) * *nbi + *ni * fla_max(i__1, factoptnb) + fla_max(i__2, i__3)
+                        + (*nbi + 1) * *ni;
             }
-            else if (s_cmp(stag, "GE2GB", (ftnlen) 5, (ftnlen) 5) == 0)
+            else if(s_cmp(stag, "GE2GB", (ftnlen)5, (ftnlen)5) == 0)
             {
-                lwork = *ni * *nbi + *ni * fla_max(*nbi,factoptnb) + (*nbi << 1) * *nbi;
+                lwork = *ni * *nbi + *ni * fla_max(*nbi, factoptnb) + (*nbi << 1) * *nbi;
             }
-            else if (s_cmp(stag, "GB2BD", (ftnlen) 5, (ftnlen) 5) == 0)
+            else if(s_cmp(stag, "GB2BD", (ftnlen)5, (ftnlen)5) == 0)
             {
                 lwork = (*nbi * 3 + 1) * *ni + *nbi * nthreads;
             }
         }
-        lwork = fla_max(1,lwork);
-        if (lwork > 0)
+        lwork = fla_max(1, lwork);
+        if(lwork > 0)
         {
             ret_val = lwork;
         }
@@ -426,7 +434,7 @@ integer iparam2stage_(integer *ispec, char *name__, char *opts, integer *ni, int
             ret_val = -1;
         }
     }
-    else if (*ispec == 21)
+    else if(*ispec == 21)
     {
         /* ISPEC = 21 for future use */
         ret_val = *nxi;
@@ -435,4 +443,3 @@ integer iparam2stage_(integer *ispec, char *name__, char *opts, integer *ni, int
     return ret_val;
 }
 /* iparam2stage_ */
-

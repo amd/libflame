@@ -1,6 +1,8 @@
 #include "FLA_f2c.h"
+#include "FLA_lapack2flame_return_defs.h"
 
-int dorg2r_check(integer *m, integer *n, integer *k, double * a, integer *lda, double *tau, double *work, integer *info)
+int dorg2r_check(integer *m, integer *n, integer *k, double *a, integer *lda, double *tau,
+                 double *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
@@ -17,15 +19,15 @@ int dorg2r_check(integer *m, integer *n, integer *k, double * a, integer *lda, d
     {
         *info = -1;
     }
-    else if(*n < *m)
+    else if(*n < 0 || *n > *m)
     {
         *info = -2;
     }
-    else if(*k < 0 || *k > *m)
+    else if(*k < 0 || *k > *n)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
@@ -36,7 +38,7 @@ int dorg2r_check(integer *m, integer *n, integer *k, double * a, integer *lda, d
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */
-    if(*m <= 0)
+    if(*n <= 0)
     {
         return LAPACK_QUICK_RETURN;
     }

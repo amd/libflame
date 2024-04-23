@@ -168,10 +168,14 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void zhpgv_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex *ap, doublecomplex *bp, doublereal *w, doublecomplex *z__, integer *ldz, doublecomplex *work, doublereal *rwork, integer * info)
+void zhpgv_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *ap,
+            doublecomplex *bp, doublereal *w, doublecomplex *z__, integer *ldz, doublecomplex *work,
+            doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhpgv inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "",*itype, *jobz, *uplo, *n, *ldz);
+    AOCL_DTL_SNPRINTF("zhpgv inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS
+                      ", ldz %" FLA_IS "",
+                      *itype, *jobz, *uplo, *n, *ldz);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1;
     /* Local variables */
@@ -180,10 +184,17 @@ void zhpgv_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex *
     char trans[1];
     logical upper;
     extern /* Subroutine */
-    void zhpev_(char *, char *, integer *, doublecomplex *, doublereal *, doublecomplex *, integer *, doublecomplex *, doublereal *, integer *);
+        void
+        zhpev_(char *, char *, integer *, doublecomplex *, doublereal *, doublecomplex *, integer *,
+               doublecomplex *, doublereal *, integer *);
     logical wantz;
     extern /* Subroutine */
-    void ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zhpgst_(integer *, char *, integer *, doublecomplex *, doublecomplex *, integer *), zpptrf_( char *, integer *, doublecomplex *, integer *);
+        void
+        ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
+        ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zhpgst_(integer *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
+        zpptrf_(char *, integer *, doublecomplex *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -218,11 +229,11 @@ void zhpgv_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex *
     {
         *info = -1;
     }
-    else if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    else if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (upper || lsame_(uplo, "L", 1, 1)))
+    else if(!(upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -3;
     }
@@ -238,26 +249,26 @@ void zhpgv_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex *
     {
         i__1 = -(*info);
         xerbla_("ZHPGV ", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Form a Cholesky factorization of B. */
-    aocl_lapack_zpptrf(uplo, n, &bp[1], info);
+    zpptrf_(uplo, n, &bp[1], info);
     if(*info != 0)
     {
         *info = *n + *info;
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    aocl_lapack_zhpgst(itype, uplo, n, &ap[1], &bp[1], info);
-    aocl_lapack_zhpev(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], &rwork[1], info);
+    zhpgst_(itype, uplo, n, &ap[1], &bp[1], info);
+    zhpev_(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], &rwork[1], info);
     if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */

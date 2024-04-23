@@ -214,10 +214,14 @@ the */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-void dspgvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *ap, doublereal *bp, doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+void dspgvd_(integer *itype, char *jobz, char *uplo, integer *n, doublereal *ap, doublereal *bp,
+             doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *lwork,
+             integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dspgvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*itype, *jobz, *uplo, *n, *ldz, *lwork, *liwork);
+    AOCL_DTL_SNPRINTF("dspgvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS
+                      ", ldz %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",
+                      *itype, *jobz, *uplo, *n, *ldz, *lwork, *liwork);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1;
     doublereal d__1, d__2;
@@ -228,13 +232,20 @@ void dspgvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *ap
     char trans[1];
     logical upper;
     extern /* Subroutine */
-    void dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *), dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *),
+        dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
     logical wantz;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dspevd_( char *, char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        dspevd_(char *, char *, integer *, doublereal *, doublereal *, doublereal *, integer *,
+                doublereal *, integer *, integer *, integer *, integer *);
     integer liwmin;
     extern /* Subroutine */
-    void dpptrf_(char *, integer *, doublereal *, integer *), dspgst_(integer *, char *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dpptrf_(char *, integer *, doublereal *, integer *),
+        dspgst_(integer *, char *, integer *, doublereal *, doublereal *, integer *);
     logical lquery;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -273,11 +284,11 @@ void dspgvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *ap
     {
         *info = -1;
     }
-    else if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    else if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (upper || lsame_(uplo, "L", 1, 1)))
+    else if(!(upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -3;
     }
@@ -312,7 +323,7 @@ void dspgvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *ap
             }
         }
         work[1] = (doublereal)lwmin;
-        iwork[1] = (aocl_int_t)(liwmin);
+        iwork[1] = liwmin;
         if(*lwork < lwmin && !lquery)
         {
             *info = -11;
@@ -341,7 +352,7 @@ void dspgvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *ap
         return;
     }
     /* Form a Cholesky factorization of BP. */
-    aocl_lapack_dpptrf(uplo, n, &bp[1], info);
+    dpptrf_(uplo, n, &bp[1], info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -349,17 +360,17 @@ void dspgvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *ap
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    aocl_lapack_dspgst(itype, uplo, n, &ap[1], &bp[1], info);
-    aocl_lapack_dspevd(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], lwork,
-                       &iwork[1], liwork, info);
+    dspgst_(itype, uplo, n, &ap[1], &bp[1], info);
+    dspevd_(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], lwork, &iwork[1], liwork,
+            info);
     /* Computing MAX */
-    d__1 = (doublereal) lwmin;
-    lwmin = (integer) fla_max(d__1,work[1]);
+    d__1 = (doublereal)lwmin;
+    lwmin = (integer)fla_max(d__1, work[1]);
     /* Computing MAX */
-    d__1 = (doublereal) liwmin;
-    d__2 = (doublereal) iwork[1]; // , expr subst
-    liwmin = (integer) fla_max(d__1,d__2);
-    if (wantz)
+    d__1 = (doublereal)liwmin;
+    d__2 = (doublereal)iwork[1]; // , expr subst
+    liwmin = (integer)fla_max(d__1, d__2);
+    if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */
         neig = *n;
@@ -408,7 +419,7 @@ void dspgvd_(integer *itype, char *jobz, char *uplo, integer * n, doublereal *ap
             }
         }
     }
-    work[1] = (doublereal) lwmin;
+    work[1] = (doublereal)lwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
     return;

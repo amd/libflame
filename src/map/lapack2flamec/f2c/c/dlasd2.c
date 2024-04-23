@@ -272,10 +272,17 @@ and entries in the second half */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__, doublereal *z__, doublereal *alpha, doublereal * beta, doublereal *u, integer *ldu, doublereal *vt, integer *ldvt, doublereal *dsigma, doublereal *u2, integer *ldu2, doublereal *vt2, integer *ldvt2, integer *idxp, integer *idx, integer *idxc, integer * idxq, integer *coltyp, integer *info)
+void dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__, doublereal *z__,
+             doublereal *alpha, doublereal *beta, doublereal *u, integer *ldu, doublereal *vt,
+             integer *ldvt, doublereal *dsigma, doublereal *u2, integer *ldu2, doublereal *vt2,
+             integer *ldvt2, integer *idxp, integer *idx, integer *idxc, integer *idxq,
+             integer *coltyp, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlasd2 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS ", ldu %" FLA_IS ", ldvt %" FLA_IS ", ldu2 %" FLA_IS ", ldvt2 %" FLA_IS ", idxq %" FLA_IS "",*nl, *nr, *sqre, *ldu, *ldvt, *ldu2, *ldvt2, *idxq);
+    AOCL_DTL_SNPRINTF("dlasd2 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS
+                      ", ldu %" FLA_IS ", ldvt %" FLA_IS ", ldu2 %" FLA_IS ", ldvt2 %" FLA_IS
+                      ", idxq %" FLA_IS "",
+                      *nl, *nr, *sqre, *ldu, *ldvt, *ldu2, *ldvt2, *idxq);
     /* System generated locals */
     aocl_int64_t u_dim1, u_offset, u2_dim1, u2_offset, vt_dim1, vt_offset, vt2_dim1, vt2_offset,
         i__1;
@@ -290,14 +297,21 @@ void dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
     doublereal eps, tau, tol;
     integer psm[4], nlp1, nlp2, idxi, idxj;
     extern /* Subroutine */
-    void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+        void
+        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+              doublereal *);
     integer ctot[4], idxjp;
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer jprev;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
     extern /* Subroutine */
-    void dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *),
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal hlftol;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -348,7 +362,7 @@ void dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
     jprev = 0;
     c__ = 1.;
     s = 0.;
-    if (*nl < 1)
+    if(*nl < 1)
     {
         *info = -1;
     }
@@ -451,10 +465,10 @@ void dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
     /* Computing MAX */
     d__1 = f2c_dabs(*alpha);
     d__2 = f2c_dabs(*beta); // , expr subst
-    tol = fla_max(d__1,d__2);
+    tol = fla_max(d__1, d__2);
     /* Computing MAX */
     d__2 = (d__1 = d__[n], f2c_dabs(d__1));
-    tol = eps * 8. * fla_max(d__2,tol);
+    tol = eps * 8. * fla_max(d__2, tol);
     /* There are 2 kinds of deflation -- first a value in the z-vector */
     /* is small, second two (or more) singular values are very close */
     /* together (their difference is (*small_val). */
@@ -475,7 +489,7 @@ void dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
     i__1 = n;
     for(j = 2; j <= i__1; ++j)
     {
-        if ((d__1 = z__[j], f2c_dabs(d__1)) <= tol)
+        if((d__1 = z__[j], f2c_dabs(d__1)) <= tol)
         {
             /* Deflate due to small z component. */
             --k2;
@@ -501,7 +515,7 @@ L100:
     {
         goto L110;
     }
-    if ((d__1 = z__[j], f2c_dabs(d__1)) <= tol)
+    if((d__1 = z__[j], f2c_dabs(d__1)) <= tol)
     {
         /* Deflate due to small z component. */
         --k2;
@@ -511,7 +525,7 @@ L100:
     else
     {
         /* Check if singular values are close enough to allow deflation. */
-        if ((d__1 = d__[j] - d__[jprev], f2c_dabs(d__1)) <= tol)
+        if((d__1 = d__[j] - d__[jprev], f2c_dabs(d__1)) <= tol)
         {
             /* Deflation is possible. */
             s = z__[jprev];
@@ -535,9 +549,8 @@ L100:
             {
                 --idxj;
             }
-            aocl_blas_drot(&n, &u[idxjp * u_dim1 + 1], &c__1, &u[idxj * u_dim1 + 1], &c__1, &c__,
-                           &s);
-            aocl_blas_drot(&m, &vt[idxjp + vt_dim1], ldvt, &vt[idxj + vt_dim1], ldvt, &c__, &s);
+            drot_(&n, &u[idxjp * u_dim1 + 1], &c__1, &u[idxj * u_dim1 + 1], &c__1, &c__, &s);
+            drot_(&m, &vt[idxjp + vt_dim1], ldvt, &vt[idxj + vt_dim1], ldvt, &c__, &s);
             if(coltyp[j] != coltyp[jprev])
             {
                 coltyp[j] = 3;
@@ -619,7 +632,7 @@ L120: /* Count up the total number of the various types of columns, then */
     /* Determine DSIGMA(1), DSIGMA(2) and Z(1) */
     dsigma[1] = 0.;
     hlftol = tol / 2.;
-    if (f2c_dabs(dsigma[2]) <= hlftol)
+    if(f2c_dabs(dsigma[2]) <= hlftol)
     {
         dsigma[2] = hlftol;
     }
@@ -640,7 +653,7 @@ L120: /* Count up the total number of the various types of columns, then */
     }
     else
     {
-        if (f2c_dabs(z1) <= tol)
+        if(f2c_dabs(z1) <= tol)
         {
             z__[1] = tol;
         }

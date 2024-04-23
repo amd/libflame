@@ -207,10 +207,15 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup doubleGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dgtrfs_(char *trans, integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublereal *du, doublereal *dlf, doublereal *df, doublereal *duf, doublereal *du2, integer *ipiv, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal * ferr, doublereal *berr, doublereal *work, integer *iwork, integer * info)
+void dgtrfs_(char *trans, integer *n, integer *nrhs, doublereal *dl, doublereal *d__,
+             doublereal *du, doublereal *dlf, doublereal *df, doublereal *duf, doublereal *du2,
+             integer *ipiv, doublereal *b, integer *ldb, doublereal *x, integer *ldx,
+             doublereal *ferr, doublereal *berr, doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgtrfs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*trans, *n, *nrhs, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("dgtrfs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS
+                      ", ldx %" FLA_IS "",
+                      *trans, *n, *nrhs, *ldb, *ldx);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
     doublereal d__1, d__2, d__3, d__4;
@@ -224,20 +229,29 @@ void dgtrfs_(char *trans, integer *n, integer *nrhs, doublereal *dl, doublereal 
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     integer count;
     extern /* Subroutine */
-    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+                integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    void dlagtm_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dlagtm_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *,
+                doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     char transn[1];
     extern /* Subroutine */
-    void dgttrs_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dgttrs_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *,
+                doublereal *, integer *, doublereal *, integer *, integer *);
     char transt[1];
     doublereal lstres;
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -285,7 +299,7 @@ void dgtrfs_(char *trans, integer *n, integer *nrhs, doublereal *dl, doublereal 
     /* Function Body */
     *info = 0;
     notran = lsame_(trans, "N", 1, 1);
-    if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
@@ -297,11 +311,11 @@ void dgtrfs_(char *trans, integer *n, integer *nrhs, doublereal *dl, doublereal 
     {
         *info = -3;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -13;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -15;
     }
@@ -351,43 +365,60 @@ void dgtrfs_(char *trans, integer *n, integer *nrhs, doublereal *dl, doublereal 
         /* Compute residual R = B - op(A) * X, */
         /* where op(A) = A, A**T, or A**H, depending on TRANS. */
         dcopy_(n, &b[j * b_dim1 + 1], &c__1, &work[*n + 1], &c__1);
-        dlagtm_(trans, n, &c__1, &c_b18, &dl[1], &d__[1], &du[1], &x[j * x_dim1 + 1], ldx, &c_b19, &work[*n + 1], n);
+        dlagtm_(trans, n, &c__1, &c_b18, &dl[1], &d__[1], &du[1], &x[j * x_dim1 + 1], ldx, &c_b19,
+                &work[*n + 1], n);
         /* Compute f2c_dabs(op(A))*f2c_dabs(x) + f2c_dabs(b) for use in the backward */
         /* error bound. */
         if(notran)
         {
             if(*n == 1)
             {
-                work[1] = (d__1 = b[j * b_dim1 + 1], f2c_dabs(d__1)) + (d__2 = d__[ 1] * x[j * x_dim1 + 1], f2c_dabs(d__2));
+                work[1] = (d__1 = b[j * b_dim1 + 1], f2c_dabs(d__1))
+                          + (d__2 = d__[1] * x[j * x_dim1 + 1], f2c_dabs(d__2));
             }
             else
             {
-                work[1] = (d__1 = b[j * b_dim1 + 1], f2c_dabs(d__1)) + (d__2 = d__[ 1] * x[j * x_dim1 + 1], f2c_dabs(d__2)) + (d__3 = du[1] * x[j * x_dim1 + 2], f2c_dabs(d__3));
+                work[1] = (d__1 = b[j * b_dim1 + 1], f2c_dabs(d__1))
+                          + (d__2 = d__[1] * x[j * x_dim1 + 1], f2c_dabs(d__2))
+                          + (d__3 = du[1] * x[j * x_dim1 + 2], f2c_dabs(d__3));
                 i__2 = *n - 1;
                 for(i__ = 2; i__ <= i__2; ++i__)
                 {
-                    work[i__] = (d__1 = b[i__ + j * b_dim1], f2c_dabs(d__1)) + ( d__2 = dl[i__ - 1] * x[i__ - 1 + j * x_dim1], f2c_dabs( d__2)) + (d__3 = d__[i__] * x[i__ + j * x_dim1], f2c_dabs(d__3)) + (d__4 = du[i__] * x[i__ + 1 + j * x_dim1], f2c_dabs(d__4));
+                    work[i__] = (d__1 = b[i__ + j * b_dim1], f2c_dabs(d__1))
+                                + (d__2 = dl[i__ - 1] * x[i__ - 1 + j * x_dim1], f2c_dabs(d__2))
+                                + (d__3 = d__[i__] * x[i__ + j * x_dim1], f2c_dabs(d__3))
+                                + (d__4 = du[i__] * x[i__ + 1 + j * x_dim1], f2c_dabs(d__4));
                     /* L30: */
                 }
-                work[*n] = (d__1 = b[*n + j * b_dim1], f2c_dabs(d__1)) + (d__2 = dl[*n - 1] * x[*n - 1 + j * x_dim1], f2c_dabs(d__2)) + ( d__3 = d__[*n] * x[*n + j * x_dim1], f2c_dabs(d__3));
+                work[*n] = (d__1 = b[*n + j * b_dim1], f2c_dabs(d__1))
+                           + (d__2 = dl[*n - 1] * x[*n - 1 + j * x_dim1], f2c_dabs(d__2))
+                           + (d__3 = d__[*n] * x[*n + j * x_dim1], f2c_dabs(d__3));
             }
         }
         else
         {
             if(*n == 1)
             {
-                work[1] = (d__1 = b[j * b_dim1 + 1], f2c_dabs(d__1)) + (d__2 = d__[ 1] * x[j * x_dim1 + 1], f2c_dabs(d__2));
+                work[1] = (d__1 = b[j * b_dim1 + 1], f2c_dabs(d__1))
+                          + (d__2 = d__[1] * x[j * x_dim1 + 1], f2c_dabs(d__2));
             }
             else
             {
-                work[1] = (d__1 = b[j * b_dim1 + 1], f2c_dabs(d__1)) + (d__2 = d__[ 1] * x[j * x_dim1 + 1], f2c_dabs(d__2)) + (d__3 = dl[1] * x[j * x_dim1 + 2], f2c_dabs(d__3));
+                work[1] = (d__1 = b[j * b_dim1 + 1], f2c_dabs(d__1))
+                          + (d__2 = d__[1] * x[j * x_dim1 + 1], f2c_dabs(d__2))
+                          + (d__3 = dl[1] * x[j * x_dim1 + 2], f2c_dabs(d__3));
                 i__2 = *n - 1;
                 for(i__ = 2; i__ <= i__2; ++i__)
                 {
-                    work[i__] = (d__1 = b[i__ + j * b_dim1], f2c_dabs(d__1)) + ( d__2 = du[i__ - 1] * x[i__ - 1 + j * x_dim1], f2c_dabs( d__2)) + (d__3 = d__[i__] * x[i__ + j * x_dim1], f2c_dabs(d__3)) + (d__4 = dl[i__] * x[i__ + 1 + j * x_dim1], f2c_dabs(d__4));
+                    work[i__] = (d__1 = b[i__ + j * b_dim1], f2c_dabs(d__1))
+                                + (d__2 = du[i__ - 1] * x[i__ - 1 + j * x_dim1], f2c_dabs(d__2))
+                                + (d__3 = d__[i__] * x[i__ + j * x_dim1], f2c_dabs(d__3))
+                                + (d__4 = dl[i__] * x[i__ + 1 + j * x_dim1], f2c_dabs(d__4));
                     /* L40: */
                 }
-                work[*n] = (d__1 = b[*n + j * b_dim1], f2c_dabs(d__1)) + (d__2 = du[*n - 1] * x[*n - 1 + j * x_dim1], f2c_dabs(d__2)) + ( d__3 = d__[*n] * x[*n + j * x_dim1], f2c_dabs(d__3));
+                work[*n] = (d__1 = b[*n + j * b_dim1], f2c_dabs(d__1))
+                           + (d__2 = du[*n - 1] * x[*n - 1 + j * x_dim1], f2c_dabs(d__2))
+                           + (d__3 = d__[*n] * x[*n + j * x_dim1], f2c_dabs(d__3));
             }
         }
         /* Compute componentwise relative backward error from formula */
@@ -404,15 +435,16 @@ void dgtrfs_(char *trans, integer *n, integer *nrhs, doublereal *dl, doublereal 
             {
                 /* Computing MAX */
                 d__2 = s;
-                d__3 = (d__1 = work[*n + i__], f2c_dabs(d__1)) / work[ i__]; // , expr subst
-                s = fla_max(d__2,d__3);
+                d__3 = (d__1 = work[*n + i__], f2c_dabs(d__1)) / work[i__]; // , expr subst
+                s = fla_max(d__2, d__3);
             }
             else
             {
                 /* Computing MAX */
                 d__2 = s;
-                d__3 = ((d__1 = work[*n + i__], f2c_dabs(d__1)) + safe1) / (work[i__] + safe1); // , expr subst
-                s = fla_max(d__2,d__3);
+                d__3 = ((d__1 = work[*n + i__], f2c_dabs(d__1)) + safe1)
+                       / (work[i__] + safe1); // , expr subst
+                s = fla_max(d__2, d__3);
             }
             /* L50: */
         }
@@ -425,9 +457,9 @@ void dgtrfs_(char *trans, integer *n, integer *nrhs, doublereal *dl, doublereal 
         if(berr[j] > eps && berr[j] * 2. <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            aocl_lapack_dgttrs(trans, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1],
-                               &work[*n + 1], n, info);
-            aocl_blas_daxpy(n, &c_b19, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            dgttrs_(trans, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &work[*n + 1], n,
+                    info);
+            daxpy_(n, &c_b19, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;
@@ -464,15 +496,14 @@ void dgtrfs_(char *trans, integer *n, integer *nrhs, doublereal *dl, doublereal 
         }
         kase = 0;
     L70:
-        aocl_lapack_dlacn2(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase,
-                           isave);
+        dlacn2_(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(op(A)**T). */
-                aocl_lapack_dgttrs(transt, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1],
-                                   &work[*n + 1], n, info);
+                dgttrs_(transt, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1],
+                        &work[*n + 1], n, info);
                 i__2 = *n;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
@@ -489,8 +520,8 @@ void dgtrfs_(char *trans, integer *n, integer *nrhs, doublereal *dl, doublereal 
                     work[*n + i__] = work[i__] * work[*n + i__];
                     /* L90: */
                 }
-                aocl_lapack_dgttrs(transn, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1],
-                                   &work[*n + 1], n, info);
+                dgttrs_(transn, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1],
+                        &work[*n + 1], n, info);
             }
             goto L70;
         }
@@ -502,7 +533,7 @@ void dgtrfs_(char *trans, integer *n, integer *nrhs, doublereal *dl, doublereal 
             /* Computing MAX */
             d__2 = lstres;
             d__3 = (d__1 = x[i__ + j * x_dim1], f2c_dabs(d__1)); // , expr subst
-            lstres = fla_max(d__2,d__3);
+            lstres = fla_max(d__2, d__3);
             /* L100: */
         }
         if(lstres != 0.)

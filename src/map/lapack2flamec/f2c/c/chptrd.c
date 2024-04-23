@@ -1,8 +1,11 @@
-/* chptrd.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* chptrd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b2 = {0.f, 0.f};
-static aocl_int64_t c__1 = 1;
+static complex c_b2 = {0.f, 0.f};
+static integer c__1 = 1;
 /* > \brief \b CHPTRD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -153,7 +156,7 @@ v(i+2:n) is stored on exit in AP, */
 void chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *tau, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("chptrd inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
+    AOCL_DTL_SNPRINTF("chptrd inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3;
     real r__1;
@@ -162,16 +165,23 @@ void chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *t
     integer i__, i1, ii, i1i1;
     complex taui;
     extern /* Subroutine */
-    void chpr2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *);
+        void
+        chpr2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *);
     complex alpha;
     extern /* Complex */
-    VOID cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+        VOID
+        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void chpmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+        void
+        chpmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *,
+               integer *),
+        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    void clarfg_(integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clarfg_(integer *, complex *, complex *, integer *, complex *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -200,7 +210,7 @@ void chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *t
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -212,13 +222,13 @@ void chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *t
     {
         i__1 = -(*info);
         xerbla_("CHPTRD", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n <= 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(upper)
@@ -228,9 +238,9 @@ void chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *t
         i1 = *n * (*n - 1) / 2 + 1;
         i__1 = i1 + *n - 1;
         i__2 = i1 + *n - 1;
-        r__1 = ap[i__2].real;
-        ap[i__1].real = r__1;
-        ap[i__1].imag = 0.f; // , expr subst
+        r__1 = ap[i__2].r;
+        ap[i__1].r = r__1;
+        ap[i__1].i = 0.f; // , expr subst
         for(i__ = *n - 1; i__ >= 1; --i__)
         {
             /* Generate elementary reflector H(i) = I - tau * v * v**H */
@@ -240,14 +250,14 @@ void chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *t
             alpha.i = ap[i__1].i; // , expr subst
             clarfg_(&i__, &alpha, &ap[i1], &c__1, &taui);
             e[i__] = alpha.r;
-            if (taui.r != 0.f || taui.i != 0.f)
+            if(taui.r != 0.f || taui.i != 0.f)
             {
                 /* Apply H(i) from both sides to A(1:i,1:i) */
                 i__1 = i1 + i__ - 1;
                 ap[i__1].real = 1.f;
                 ap[i__1].imag = 0.f; // , expr subst
                 /* Compute y := tau * A * v storing y in TAU(1:i) */
-                aocl_blas_chpmv(uplo, &i__, &taui, &ap[1], &ap[i1], &c__1, &c_b2, &tau[1], &c__1);
+                chpmv_(uplo, &i__, &taui, &ap[1], &ap[i1], &c__1, &c_b2, &tau[1], &c__1);
                 /* Compute w := y - 1/2 * tau * (y**H *v) * v */
                 q__3.real = -.5f;
                 q__3.imag = -0.f; // , expr subst
@@ -261,9 +271,9 @@ void chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *t
                 aocl_blas_caxpy(&i__, &alpha, &ap[i1], &c__1, &tau[1], &c__1);
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**H - w * v**H */
-                q__1.real = -1.f;
-                q__1.imag = -0.f; // , expr subst
-                aocl_blas_chpr2(uplo, &i__, &q__1, &ap[i1], &c__1, &tau[1], &c__1, &ap[1]);
+                q__1.r = -1.f;
+                q__1.i = -0.f; // , expr subst
+                chpr2_(uplo, &i__, &q__1, &ap[i1], &c__1, &tau[1], &c__1, &ap[1]);
             }
             i__1 = i1 + i__ - 1;
             i__2 = i__;
@@ -299,7 +309,7 @@ void chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *t
             i__2 = *n - i__;
             clarfg_(&i__2, &alpha, &ap[ii + 2], &c__1, &taui);
             e[i__] = alpha.r;
-            if (taui.r != 0.f || taui.i != 0.f)
+            if(taui.r != 0.f || taui.i != 0.f)
             {
                 /* Apply H(i) from both sides to A(i+1:n,i+1:n) */
                 i__2 = ii + 1;
@@ -307,8 +317,7 @@ void chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *t
                 ap[i__2].imag = 0.f; // , expr subst
                 /* Compute y := tau * A * v storing y in TAU(i:n-1) */
                 i__2 = *n - i__;
-                aocl_blas_chpmv(uplo, &i__2, &taui, &ap[i1i1], &ap[ii + 1], &c__1, &c_b2, &tau[i__],
-                                &c__1);
+                chpmv_(uplo, &i__2, &taui, &ap[i1i1], &ap[ii + 1], &c__1, &c_b2, &tau[i__], &c__1);
                 /* Compute w := y - 1/2 * tau * (y**H *v) * v */
                 q__3.real = -.5f;
                 q__3.imag = -0.f; // , expr subst
@@ -325,10 +334,9 @@ void chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *t
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**H - w * v**H */
                 i__2 = *n - i__;
-                q__1.real = -1.f;
-                q__1.imag = -0.f; // , expr subst
-                aocl_blas_chpr2(uplo, &i__2, &q__1, &ap[ii + 1], &c__1, &tau[i__], &c__1,
-                                &ap[i1i1]);
+                q__1.r = -1.f;
+                q__1.i = -0.f; // , expr subst
+                chpr2_(uplo, &i__2, &q__1, &ap[ii + 1], &c__1, &tau[i__], &c__1, &ap[i1i1]);
             }
             i__2 = ii + 1;
             i__3 = i__;

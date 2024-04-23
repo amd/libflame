@@ -222,16 +222,24 @@ A Direct Method for Reordering Eigenvalues in the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dtgexc_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal * q, integer *ldq, doublereal *z__, integer *ldz, integer *ifst, integer *ilst, doublereal *work, integer *lwork, integer *info)
+void dtgexc_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer *lda, doublereal *b,
+             integer *ldb, doublereal *q, integer *ldq, doublereal *z__, integer *ldz,
+             integer *ifst, integer *ilst, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dtgexc inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", ifst %" FLA_IS ", ilst %" FLA_IS ", lwork %" FLA_IS "",*n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst, *lwork);
+    AOCL_DTL_SNPRINTF("dtgexc inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS
+                      ", ldz %" FLA_IS ", ifst %" FLA_IS ", ilst %" FLA_IS ", lwork %" FLA_IS "",
+                      *n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1;
     /* Local variables */
     integer nbf, nbl, here, lwmin;
     extern /* Subroutine */
-    void dtgex2_(logical *, logical *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dtgex2_(logical *, logical *, integer *, doublereal *, integer *, doublereal *, integer *,
+                doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *,
+                doublereal *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer nbnext;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -274,19 +282,19 @@ void dtgexc_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer 
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldq < 1 || *wantq && *ldq < fla_max(1,*n))
+    else if(*ldq < 1 || *wantq && *ldq < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldz < 1 || *wantz && *ldz < fla_max(1,*n))
+    else if(*ldz < 1 || *wantz && *ldz < fla_max(1, *n))
     {
         *info = -11;
     }
@@ -395,9 +403,8 @@ void dtgexc_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer 
                     nbnext = 2;
                 }
             }
-            aocl_lapack_dtgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
-                               ldq, &z__[z_offset], ldz, &here, &nbf, &nbnext, &work[1], lwork,
-                               info);
+            dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                    &z__[z_offset], ldz, &here, &nbf, &nbnext, &work[1], lwork, info);
             if(*info != 0)
             {
                 *ilst = here;
@@ -427,9 +434,8 @@ void dtgexc_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer 
                 }
             }
             i__1 = here + 1;
-            aocl_lapack_dtgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
-                               ldq, &z__[z_offset], ldz, &i__1, &c__1, &nbnext, &work[1], lwork,
-                               info);
+            dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                    &z__[z_offset], ldz, &i__1, &c__1, &nbnext, &work[1], lwork, info);
             if(*info != 0)
             {
                 *ilst = here;
@@ -439,9 +445,8 @@ void dtgexc_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer 
             if(nbnext == 1)
             {
                 /* Swap two 1-by-1 blocks. */
-                aocl_lapack_dtgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
-                                   &q[q_offset], ldq, &z__[z_offset], ldz, &here, &c__1, &c__1,
-                                   &work[1], lwork, info);
+                dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                        &z__[z_offset], ldz, &here, &c__1, &c__1, &work[1], lwork, info);
                 if(*info != 0)
                 {
                     *ilst = here;
@@ -460,9 +465,8 @@ void dtgexc_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer 
                 if(nbnext == 2)
                 {
                     /* 2-by-2 block did not split. */
-                    aocl_lapack_dtgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
-                                       &q[q_offset], ldq, &z__[z_offset], ldz, &here, &c__1,
-                                       &nbnext, &work[1], lwork, info);
+                    dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
+                            ldq, &z__[z_offset], ldz, &here, &c__1, &nbnext, &work[1], lwork, info);
                     if(*info != 0)
                     {
                         *ilst = here;
@@ -474,9 +478,8 @@ void dtgexc_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer 
                 else
                 {
                     /* 2-by-2 block did split. */
-                    aocl_lapack_dtgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
-                                       &q[q_offset], ldq, &z__[z_offset], ldz, &here, &c__1, &c__1,
-                                       &work[1], lwork, info);
+                    dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
+                            ldq, &z__[z_offset], ldz, &here, &c__1, &c__1, &work[1], lwork, info);
                     if(*info != 0)
                     {
                         *ilst = here;
@@ -484,9 +487,8 @@ void dtgexc_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer 
                         return;
                     }
                     ++here;
-                    aocl_lapack_dtgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
-                                       &q[q_offset], ldq, &z__[z_offset], ldz, &here, &c__1, &c__1,
-                                       &work[1], lwork, info);
+                    dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
+                            ldq, &z__[z_offset], ldz, &here, &c__1, &c__1, &work[1], lwork, info);
                     if(*info != 0)
                     {
                         *ilst = here;
@@ -518,9 +520,8 @@ void dtgexc_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer 
                 }
             }
             i__1 = here - nbnext;
-            aocl_lapack_dtgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
-                               ldq, &z__[z_offset], ldz, &i__1, &nbnext, &nbf, &work[1], lwork,
-                               info);
+            dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                    &z__[z_offset], ldz, &i__1, &nbnext, &nbf, &work[1], lwork, info);
             if(*info != 0)
             {
                 *ilst = here;
@@ -550,9 +551,8 @@ void dtgexc_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer 
                 }
             }
             i__1 = here - nbnext;
-            aocl_lapack_dtgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
-                               ldq, &z__[z_offset], ldz, &i__1, &nbnext, &c__1, &work[1], lwork,
-                               info);
+            dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                    &z__[z_offset], ldz, &i__1, &nbnext, &c__1, &work[1], lwork, info);
             if(*info != 0)
             {
                 *ilst = here;
@@ -562,9 +562,8 @@ void dtgexc_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer 
             if(nbnext == 1)
             {
                 /* Swap two 1-by-1 blocks. */
-                aocl_lapack_dtgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
-                                   &q[q_offset], ldq, &z__[z_offset], ldz, &here, &nbnext, &c__1,
-                                   &work[1], lwork, info);
+                dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                        &z__[z_offset], ldz, &here, &nbnext, &c__1, &work[1], lwork, info);
                 if(*info != 0)
                 {
                     *ilst = here;
@@ -584,9 +583,8 @@ void dtgexc_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer 
                 {
                     /* 2-by-2 block did not split. */
                     i__1 = here - 1;
-                    aocl_lapack_dtgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
-                                       &q[q_offset], ldq, &z__[z_offset], ldz, &i__1, &c__2, &c__1,
-                                       &work[1], lwork, info);
+                    dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
+                            ldq, &z__[z_offset], ldz, &i__1, &c__2, &c__1, &work[1], lwork, info);
                     if(*info != 0)
                     {
                         *ilst = here;
@@ -598,9 +596,8 @@ void dtgexc_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer 
                 else
                 {
                     /* 2-by-2 block did split. */
-                    aocl_lapack_dtgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
-                                       &q[q_offset], ldq, &z__[z_offset], ldz, &here, &c__1, &c__1,
-                                       &work[1], lwork, info);
+                    dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
+                            ldq, &z__[z_offset], ldz, &here, &c__1, &c__1, &work[1], lwork, info);
                     if(*info != 0)
                     {
                         *ilst = here;
@@ -608,9 +605,8 @@ void dtgexc_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer 
                         return;
                     }
                     --here;
-                    aocl_lapack_dtgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
-                                       &q[q_offset], ldq, &z__[z_offset], ldz, &here, &c__1, &c__1,
-                                       &work[1], lwork, info);
+                    dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
+                            ldq, &z__[z_offset], ldz, &here, &c__1, &c__1, &work[1], lwork, info);
                     if(*info != 0)
                     {
                         *ilst = here;
@@ -627,7 +623,7 @@ void dtgexc_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer 
         }
     }
     *ilst = here;
-    work[1] = (doublereal) lwmin;
+    work[1] = (doublereal)lwmin;
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DTGEXC */

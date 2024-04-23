@@ -84,10 +84,10 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dlasrt_(char *id, integer *n, doublereal *d__, integer * info)
+void dlasrt_(char *id, integer *n, doublereal *d__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlasrt inputs: id %c, n %" FLA_IS "",*id, *n);
+    AOCL_DTL_SNPRINTF("dlasrt inputs: id %c, n %" FLA_IS "", *id, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     /* Local variables */
@@ -102,7 +102,8 @@ void dlasrt_(char *id, integer *n, doublereal *d__, integer * info)
     doublereal dmnmx;
     integer start;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer stkpnt;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -130,11 +131,11 @@ void dlasrt_(char *id, integer *n, doublereal *d__, integer * info)
     /* Function Body */
     *info = 0;
     dir = -1;
-    if (lsame_(id, "D", 1, 1))
+    if(lsame_(id, "D", 1, 1))
     {
         dir = 0;
     }
-    else if (lsame_(id, "I", 1, 1))
+    else if(lsame_(id, "I", 1, 1))
     {
         dir = 1;
     }

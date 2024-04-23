@@ -1,7 +1,8 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int zgelq2_check(integer *m, integer *n, dcomplex *a, integer *lda, dcomplex *tau, dcomplex *work, integer *info)
+int zgelq2_check(integer *m, integer *n, dcomplex *a, integer *lda, dcomplex *tau, dcomplex *work,
+                 integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
@@ -22,7 +23,7 @@ int zgelq2_check(integer *m, integer *n, dcomplex *a, integer *lda, dcomplex *ta
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }

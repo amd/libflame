@@ -172,10 +172,14 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dormr3_(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, doublereal *a, integer *lda, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work, integer *info)
+void dormr3_(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, doublereal *a,
+             integer *lda, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dormr3 inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",*side, *trans, *m, *n, *k, *l, *lda, *ldc);
+    AOCL_DTL_SNPRINTF("dormr3 inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
+                      ", l %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",
+                      *side, *trans, *m, *n, *k, *l, *lda, *ldc);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
     /* Local variables */
@@ -183,7 +187,10 @@ void dormr3_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     logical left;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dlarz_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlarz_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+               doublereal *, integer *, doublereal *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -226,11 +233,11 @@ void dormr3_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1))
     {
         *info = -2;
     }
@@ -250,11 +257,11 @@ void dormr3_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     {
         *info = -6;
     }
-    else if (*lda < fla_max(1,*k))
+    else if(*lda < fla_max(1, *k))
     {
         *info = -8;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -11;
     }
@@ -312,8 +319,8 @@ void dormr3_(char *side, char *trans, integer *m, integer *n, integer *k, intege
             jc = i__;
         }
         /* Apply H(i) or H(i)**T */
-        aocl_lapack_dlarz(side, &mi, &ni, l, &a[i__ + ja * a_dim1], lda, &tau[i__],
-                          &c__[ic + jc * c_dim1], ldc, &work[1]);
+        dlarz_(side, &mi, &ni, l, &a[i__ + ja * a_dim1], lda, &tau[i__], &c__[ic + jc * c_dim1],
+               ldc, &work[1]);
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT

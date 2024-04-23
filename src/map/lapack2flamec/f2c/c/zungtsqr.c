@@ -1,16 +1,11 @@
-/* ../netlib/v3.9.0/zungtsqr.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/zungtsqr.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    1.,0.
-}
-;
-static doublecomplex c_b2 =
-{
-    0.,0.
-}
-;
+static doublecomplex c_b1 = {1., 0.};
+static doublecomplex c_b2 = {0., 0.};
 static integer c__1 = 1;
 /* > \brief \b ZUNGTSQR */
 /* =========== DOCUMENTATION =========== */
@@ -18,11 +13,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZUNGTSQR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zuntsqr .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zuntsqr
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zungtsq r.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zungtsq
+ * r.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zungtsq r.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zungtsq
+ * r.f"> */
 /* > [TXT]</a> */
 /* > */
 /* Definition: */
@@ -173,19 +174,29 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void zungtsqr_(integer *m, integer *n, integer *mb, integer * nb, doublecomplex *a, integer *lda, doublecomplex *t, integer *ldt, doublecomplex *work, integer *lwork, integer *info)
+void zungtsqr_(integer *m, integer *n, integer *mb, integer *nb, doublecomplex *a, integer *lda,
+               doublecomplex *t, integer *ldt, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zungtsqr inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS ", lwork %" FLA_IS "", *m, *n, *mb, *nb, *lda, *ldt, *lwork);
+    AOCL_DTL_SNPRINTF("zungtsqr inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS
+                      ", lda %" FLA_IS ", ldt %" FLA_IS ", lwork %" FLA_IS "",
+                      *m, *n, *mb, *nb, *lda, *ldt, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2;
     doublecomplex z__1;
     /* Local variables */
     extern /* Subroutine */
-    void zlamtsqr_(char *, char *, integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zlamtsqr_(char *, char *, integer *, integer *, integer *, integer *, integer *,
+                  doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                  integer *, doublecomplex *, integer *, integer *);
     integer lworkopt, j, lc, lw, ldc, iinfo;
     extern /* Subroutine */
-    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
+                integer *);
     logical lquery;
     integer nblocal;
     /* -- LAPACK computational routine (version 3.9.0) -- */
@@ -218,23 +229,23 @@ void zungtsqr_(integer *m, integer *n, integer *mb, integer * nb, doublecomplex 
     /* Function Body */
     lquery = *lwork == -1;
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0 || *m < *n)
+    else if(*n < 0 || *m < *n)
     {
         *info = -2;
     }
-    else if (*mb <= *n)
+    else if(*mb <= *n)
     {
         *info = -3;
     }
-    else if (*nb < 1)
+    else if(*nb < 1)
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -6;
     }
@@ -242,8 +253,8 @@ void zungtsqr_(integer *m, integer *n, integer *mb, integer * nb, doublecomplex 
     {
         /* Computing MAX */
         i__1 = 1;
-        i__2 = fla_min(*nb,*n); // , expr subst
-        if (*ldt < fla_max(i__1,i__2))
+        i__2 = fla_min(*nb, *n); // , expr subst
+        if(*ldt < fla_max(i__1, i__2))
         {
             *info = -8;
         }
@@ -252,14 +263,14 @@ void zungtsqr_(integer *m, integer *n, integer *mb, integer * nb, doublecomplex 
             /* Test the input LWORK for the dimension of the array WORK. */
             /* This workspace is used to store array C(LDC, N) and WORK(LWORK) */
             /* in the call to ZLAMTSQR. See the documentation for ZLAMTSQR. */
-            if (*lwork < 2 && ! lquery)
+            if(*lwork < 2 && !lquery)
             {
                 *info = -10;
             }
             else
             {
                 /* Set block size for column blocks */
-                nblocal = fla_min(*nb,*n);
+                nblocal = fla_min(*nb, *n);
                 /* LWORK = -1, then set the size for the array C(LDC,N) */
                 /* in ZLAMTSQR call and set the optimal size of the work array */
                 /* WORK(LWORK) in ZLAMTSQR call. */
@@ -267,7 +278,7 @@ void zungtsqr_(integer *m, integer *n, integer *mb, integer * nb, doublecomplex 
                 lc = ldc * *n;
                 lw = *n * nblocal;
                 lworkopt = lc + lw;
-                if (*lwork < fla_max(1,lworkopt) && ! lquery)
+                if(*lwork < fla_max(1, lworkopt) && !lquery)
                 {
                     *info = -10;
                 }
@@ -275,30 +286,30 @@ void zungtsqr_(integer *m, integer *n, integer *mb, integer * nb, doublecomplex 
         }
     }
     /* Handle error in the input parameters and return workspace query. */
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZUNGTSQR", &i__1, (ftnlen)8);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-        z__1.r = (doublereal) lworkopt;
+        z__1.r = (doublereal)lworkopt;
         z__1.i = 0.; // , expr subst
         work[1].r = z__1.r;
         work[1].i = z__1.i; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
-    if (fla_min(*m,*n) == 0)
+    if(fla_min(*m, *n) == 0)
     {
-        z__1.r = (doublereal) lworkopt;
+        z__1.r = (doublereal)lworkopt;
         z__1.i = 0.; // , expr subst
         work[1].r = z__1.r;
         work[1].i = z__1.i; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* (1) Form explicitly the tall-skinny M-by-N left submatrix Q1_in */
@@ -311,21 +322,20 @@ void zungtsqr_(integer *m, integer *n, integer *mb, integer * nb, doublecomplex 
     /* on the diagonal and zeros elsewhere. */
     zlaset_("F", m, n, &c_b2, &c_b1, &work[1], &ldc);
     /* (1b) On input, WORK(1:LDC*N) stores ( I );
-    */
+     */
     /* ( 0 ) */
     /* On output, WORK(1:LDC*N) stores Q1_in. */
-    zlamtsqr_("L", "N", m, n, n, mb, &nblocal, &a[a_offset], lda, &t[t_offset], ldt, &work[1], &ldc, &work[lc + 1], &lw, &iinfo);
+    zlamtsqr_("L", "N", m, n, n, mb, &nblocal, &a[a_offset], lda, &t[t_offset], ldt, &work[1], &ldc,
+              &work[lc + 1], &lw, &iinfo);
     /* (2) Copy the result from the part of the work array (1:M,1:N) */
     /* with the leading dimension LDC that starts at WORK(1) into */
     /* the output array A(1:M,1:N) column-by-column. */
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         zcopy_(m, &work[(j - 1) * ldc + 1], &c__1, &a[j * a_dim1 + 1], &c__1);
     }
-    z__1.r = (doublereal) lworkopt;
+    z__1.r = (doublereal)lworkopt;
     z__1.i = 0.; // , expr subst
     work[1].r = z__1.r;
     work[1].i = z__1.i; // , expr subst

@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/ctplqt.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/ctplqt.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CTPLQT */
 /* Definition: */
 /* =========== */
@@ -164,15 +167,19 @@ that is, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctplqt_(integer *m, integer *n, integer *l, integer *mb, complex *a, integer *lda, complex *b, integer *ldb, complex *t, integer *ldt, complex *work, integer *info)
+void ctplqt_(integer *m, integer *n, integer *l, integer *mb, complex *a, integer *lda, complex *b,
+             integer *ldb, complex *t, integer *ldt, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctplqt inputs: m %lld, n %lld, l %lld, mb %lld, lda %lld, ldb %lld, ldt %lld",*m, *n, *l, *mb, *lda, *ldb, *ldt);
+    snprintf(buffer, 256,
+             "ctplqt inputs: m %lld, n %lld, l %lld, mb %lld, lda %lld, ldb %lld, ldt %lld", *m, *n,
+             *l, *mb, *lda, *ldb, *ldt);
 #else
-    snprintf(buffer, 256,"ctplqt inputs: m %d, n %d, l %d, mb %d, lda %d, ldb %d, ldt %d",*m, *n, *l, *mb, *lda, *ldb, *ldt);
+    snprintf(buffer, 256, "ctplqt inputs: m %d, n %d, l %d, mb %d, lda %d, ldb %d, ldt %d", *m, *n,
+             *l, *mb, *lda, *ldb, *ldt);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -181,7 +188,13 @@ void ctplqt_(integer *m, integer *n, integer *l, integer *mb, complex *a, intege
     /* Local variables */
     integer i__, ib, lb, nb, iinfo;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), ctprfb_( char *, char *, char *, char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *), ctplqt2_(integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        ctprfb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *,
+                complex *, integer *, complex *, integer *, complex *, integer *, complex *,
+                integer *, complex *, integer *),
+        ctplqt2_(integer *, integer *, integer *, complex *, integer *, complex *, integer *,
+                 complex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -211,35 +224,35 @@ void ctplqt_(integer *m, integer *n, integer *l, integer *mb, complex *a, intege
     --work;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*l < 0 || *l > fla_min(*m,*n) && fla_min(*m,*n) >= 0)
+    else if(*l < 0 || *l > fla_min(*m, *n) && fla_min(*m, *n) >= 0)
     {
         *info = -3;
     }
-    else if (*mb < 1 || *mb > *m && *m > 0)
+    else if(*mb < 1 || *mb > *m && *m > 0)
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -6;
     }
-    else if (*ldb < fla_max(1,*m))
+    else if(*ldb < fla_max(1, *m))
     {
         *info = -8;
     }
-    else if (*ldt < *mb)
+    else if(*ldt < *mb)
     {
         *info = -10;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CTPLQT", &i__1, (ftnlen)6);
@@ -247,25 +260,23 @@ void ctplqt_(integer *m, integer *n, integer *l, integer *mb, complex *a, intege
         return;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     i__1 = *m;
     i__2 = *mb;
-    for (i__ = 1;
-            i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-            i__ += i__2)
+    for(i__ = 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
     {
         /* Compute the QR factorization of the current block */
         /* Computing MIN */
         i__3 = *m - i__ + 1;
-        ib = fla_min(i__3,*mb);
+        ib = fla_min(i__3, *mb);
         /* Computing MIN */
         i__3 = *n - *l + i__ + ib - 1;
-        nb = fla_min(i__3,*n);
-        if (i__ >= *l)
+        nb = fla_min(i__3, *n);
+        if(i__ >= *l)
         {
             lb = 0;
         }
@@ -273,13 +284,16 @@ void ctplqt_(integer *m, integer *n, integer *l, integer *mb, complex *a, intege
         {
             lb = nb - *n + *l - i__ + 1;
         }
-        ctplqt2_(&ib, &nb, &lb, &a[i__ + i__ * a_dim1], lda, &b[i__ + b_dim1], ldb, &t[i__ * t_dim1 + 1], ldt, &iinfo);
+        ctplqt2_(&ib, &nb, &lb, &a[i__ + i__ * a_dim1], lda, &b[i__ + b_dim1], ldb,
+                 &t[i__ * t_dim1 + 1], ldt, &iinfo);
         /* Update by applying H**T to B(I+IB:M,:) from the right */
-        if (i__ + ib <= *m)
+        if(i__ + ib <= *m)
         {
             i__3 = *m - i__ - ib + 1;
             i__4 = *m - i__ - ib + 1;
-            ctprfb_("R", "N", "F", "R", &i__3, &nb, &ib, &lb, &b[i__ + b_dim1], ldb, &t[i__ * t_dim1 + 1], ldt, &a[i__ + ib + i__ * a_dim1], lda, &b[i__ + ib + b_dim1], ldb, &work[1], &i__4);
+            ctprfb_("R", "N", "F", "R", &i__3, &nb, &ib, &lb, &b[i__ + b_dim1], ldb,
+                    &t[i__ * t_dim1 + 1], ldt, &a[i__ + ib + i__ * a_dim1], lda,
+                    &b[i__ + ib + b_dim1], ldb, &work[1], &i__4);
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

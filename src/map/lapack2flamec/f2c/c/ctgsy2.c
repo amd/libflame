@@ -1,5 +1,8 @@
-/* ../netlib/ctgsy2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ctgsy2.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__2 = 2;
 static integer c__1 = 1;
@@ -9,11 +12,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CTGSY2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctgsy2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctgsy2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctgsy2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctgsy2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctgsy2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctgsy2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -245,37 +254,55 @@ static integer c__1 = 1;
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-void ctgsy2_(char *trans, integer *ijob, integer *m, integer * n, complex *a, integer *lda, complex *b, integer *ldb, complex *c__, integer *ldc, complex *d__, integer *ldd, complex *e, integer *lde, complex *f, integer *ldf, real *scale, real *rdsum, real *rdscal, integer *info)
+void ctgsy2_(char *trans, integer *ijob, integer *m, integer *n, complex *a, integer *lda,
+             complex *b, integer *ldb, complex *c__, integer *ldc, complex *d__, integer *ldd,
+             complex *e, integer *lde, complex *f, integer *ldf, real *scale, real *rdsum,
+             real *rdscal, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctgsy2 inputs: trans %c, ijob %lld, m %lld, n %lld, lda %lld, ldb %lld, ldc %lld, ldd %lld, lde %lld, ldf %lld",*trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf);
+    snprintf(buffer, 256,
+             "ctgsy2 inputs: trans %c, ijob %lld, m %lld, n %lld, lda %lld, ldb %lld, ldc %lld, "
+             "ldd %lld, lde %lld, ldf %lld",
+             *trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf);
 #else
-    snprintf(buffer, 256,"ctgsy2 inputs: trans %c, ijob %d, m %d, n %d, lda %d, ldb %d, ldc %d, ldd %d, lde %d, ldf %d",*trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf);
+    snprintf(buffer, 256,
+             "ctgsy2 inputs: trans %c, ijob %d, m %d, n %d, lda %d, ldb %d, ldc %d, ldd %d, lde "
+             "%d, ldf %d",
+             *trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1, d_offset, e_dim1, e_offset, f_dim1, f_offset, i__1, i__2, i__3, i__4;
+    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1, d_offset, e_dim1,
+        e_offset, f_dim1, f_offset, i__1, i__2, i__3, i__4;
     complex q__1, q__2, q__3, q__4, q__5, q__6;
     /* Builtin functions */
     void r_cnjg(complex *, complex *);
     /* Local variables */
     integer i__, j, k;
     complex z__[4] /* was [2][2] */
-    , rhs[2];
+        ,
+        rhs[2];
     integer ierr, ipiv[2], jpiv[2];
     complex alpha;
     extern /* Subroutine */
-    void cscal_(integer *, complex *, complex *, integer *);
+        void
+        cscal_(integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void caxpy_(integer *, complex *, complex *, integer *, complex *, integer *), cgesc2_(integer *, complex *, integer *, complex *, integer *, integer *, real *), cgetc2_( integer *, complex *, integer *, integer *, integer *, integer *), clatdf_(integer *, integer *, complex *, integer *, complex *, real *, real *, integer *, integer *);
+        void
+        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *),
+        cgesc2_(integer *, complex *, integer *, complex *, integer *, integer *, real *),
+        cgetc2_(integer *, complex *, integer *, integer *, integer *, integer *),
+        clatdf_(integer *, integer *, complex *, integer *, complex *, real *, real *, integer *,
+                integer *);
     real scaloc;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -323,60 +350,60 @@ void ctgsy2_(char *trans, integer *ijob, integer *m, integer * n, complex *a, in
     *info = 0;
     ierr = 0;
     notran = lsame_(trans, "N", 1, 1);
-    if (! notran && ! lsame_(trans, "C", 1, 1))
+    if(!notran && !lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (notran)
+    else if(notran)
     {
-        if (*ijob < 0 || *ijob > 2)
+        if(*ijob < 0 || *ijob > 2)
         {
             *info = -2;
         }
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (*m <= 0)
+        if(*m <= 0)
         {
             *info = -3;
         }
-        else if (*n <= 0)
+        else if(*n <= 0)
         {
             *info = -4;
         }
-        else if (*lda < fla_max(1,*m))
+        else if(*lda < fla_max(1, *m))
         {
             *info = -6;
         }
-        else if (*ldb < fla_max(1,*n))
+        else if(*ldb < fla_max(1, *n))
         {
             *info = -8;
         }
-        else if (*ldc < fla_max(1,*m))
+        else if(*ldc < fla_max(1, *m))
         {
             *info = -10;
         }
-        else if (*ldd < fla_max(1,*m))
+        else if(*ldd < fla_max(1, *m))
         {
             *info = -12;
         }
-        else if (*lde < fla_max(1,*n))
+        else if(*lde < fla_max(1, *n))
         {
             *info = -14;
         }
-        else if (*ldf < fla_max(1,*m))
+        else if(*ldf < fla_max(1, *m))
         {
             *info = -16;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CTGSY2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (notran)
+    if(notran)
     {
         /* Solve (I, J) - system */
         /* A(I, I) * R(I, J) - L(I, J) * B(J, J) = C(I, J) */
@@ -386,13 +413,9 @@ void ctgsy2_(char *trans, integer *ijob, integer *m, integer * n, complex *a, in
         *scale = 1.f;
         scaloc = 1.f;
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
-            for (i__ = *m;
-                    i__ >= 1;
-                    --i__)
+            for(i__ = *m; i__ >= 1; --i__)
             {
                 /* Build 2 by 2 system */
                 i__2 = i__ + i__ * a_dim1;
@@ -420,19 +443,17 @@ void ctgsy2_(char *trans, integer *ijob, integer *m, integer * n, complex *a, in
                 rhs[1].i = f[i__2].i; // , expr subst
                 /* Solve Z * x = RHS */
                 cgetc2_(&c__2, z__, &c__2, ipiv, jpiv, &ierr);
-                if (ierr > 0)
+                if(ierr > 0)
                 {
                     *info = ierr;
                 }
-                if (*ijob == 0)
+                if(*ijob == 0)
                 {
                     cgesc2_(&c__2, z__, &c__2, rhs, ipiv, jpiv, &scaloc);
-                    if (scaloc != 1.f)
+                    if(scaloc != 1.f)
                     {
                         i__2 = *n;
-                        for (k = 1;
-                                k <= i__2;
-                                ++k)
+                        for(k = 1; k <= i__2; ++k)
                         {
                             q__1.r = scaloc;
                             q__1.i = 0.f; // , expr subst
@@ -457,7 +478,7 @@ void ctgsy2_(char *trans, integer *ijob, integer *m, integer * n, complex *a, in
                 f[i__2].r = rhs[1].r;
                 f[i__2].i = rhs[1].i; // , expr subst
                 /* Substitute R(I, J) and L(I, J) into remaining equation. */
-                if (i__ > 1)
+                if(i__ > 1)
                 {
                     q__1.r = -rhs[0].r;
                     q__1.i = -rhs[0].i; // , expr subst
@@ -468,12 +489,14 @@ void ctgsy2_(char *trans, integer *ijob, integer *m, integer * n, complex *a, in
                     i__2 = i__ - 1;
                     caxpy_(&i__2, &alpha, &d__[i__ * d_dim1 + 1], &c__1, &f[j * f_dim1 + 1], &c__1);
                 }
-                if (j < *n)
+                if(j < *n)
                 {
                     i__2 = *n - j;
-                    caxpy_(&i__2, &rhs[1], &b[j + (j + 1) * b_dim1], ldb, & c__[i__ + (j + 1) * c_dim1], ldc);
+                    caxpy_(&i__2, &rhs[1], &b[j + (j + 1) * b_dim1], ldb,
+                           &c__[i__ + (j + 1) * c_dim1], ldc);
                     i__2 = *n - j;
-                    caxpy_(&i__2, &rhs[1], &e[j + (j + 1) * e_dim1], lde, &f[ i__ + (j + 1) * f_dim1], ldf);
+                    caxpy_(&i__2, &rhs[1], &e[j + (j + 1) * e_dim1], lde,
+                           &f[i__ + (j + 1) * f_dim1], ldf);
                 }
                 /* L20: */
             }
@@ -489,13 +512,9 @@ void ctgsy2_(char *trans, integer *ijob, integer *m, integer * n, complex *a, in
         *scale = 1.f;
         scaloc = 1.f;
         i__1 = *m;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            for (j = *n;
-                    j >= 1;
-                    --j)
+            for(j = *n; j >= 1; --j)
             {
                 /* Build 2 by 2 system Z**H */
                 r_cnjg(&q__1, &a[i__ + i__ * a_dim1]);
@@ -523,17 +542,15 @@ void ctgsy2_(char *trans, integer *ijob, integer *m, integer * n, complex *a, in
                 rhs[1].i = f[i__2].i; // , expr subst
                 /* Solve Z**H * x = RHS */
                 cgetc2_(&c__2, z__, &c__2, ipiv, jpiv, &ierr);
-                if (ierr > 0)
+                if(ierr > 0)
                 {
                     *info = ierr;
                 }
                 cgesc2_(&c__2, z__, &c__2, rhs, ipiv, jpiv, &scaloc);
-                if (scaloc != 1.f)
+                if(scaloc != 1.f)
                 {
                     i__2 = *n;
-                    for (k = 1;
-                            k <= i__2;
-                            ++k)
+                    for(k = 1; k <= i__2; ++k)
                     {
                         q__1.r = scaloc;
                         q__1.i = 0.f; // , expr subst
@@ -554,9 +571,7 @@ void ctgsy2_(char *trans, integer *ijob, integer *m, integer * n, complex *a, in
                 f[i__2].i = rhs[1].i; // , expr subst
                 /* Substitute R(I, J) and L(I, J) into remaining equation. */
                 i__2 = j - 1;
-                for (k = 1;
-                        k <= i__2;
-                        ++k)
+                for(k = 1; k <= i__2; ++k)
                 {
                     i__3 = i__ + k * f_dim1;
                     i__4 = i__ + k * f_dim1;
@@ -575,9 +590,7 @@ void ctgsy2_(char *trans, integer *ijob, integer *m, integer * n, complex *a, in
                     /* L50: */
                 }
                 i__2 = *m;
-                for (k = i__ + 1;
-                        k <= i__2;
-                        ++k)
+                for(k = i__ + 1; k <= i__2; ++k)
                 {
                     i__3 = k + j * c_dim1;
                     i__4 = k + j * c_dim1;

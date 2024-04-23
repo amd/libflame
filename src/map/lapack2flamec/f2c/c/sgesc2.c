@@ -1,11 +1,11 @@
-/* ./sgesc2.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sgesc2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static integer c__1 = 1;
+static integer c_n1 = -1;
 /* > \brief \b SGESC2 solves a system of linear equations using the LU factorization with complete
  * pivoting co mputed by sgetc2. */
 /* =========== DOCUMENTATION =========== */
@@ -113,7 +113,8 @@ for 1 <= j <= N, column j of the */
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-void sgesc2_(integer *n, real *a, integer *lda, real *rhs, integer *ipiv, integer *jpiv, real *scale)
+void sgesc2_(integer *n, real *a, integer *lda, real *rhs, integer *ipiv, integer *jpiv,
+             real *scale)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgesc2(n, a, lda, rhs, ipiv, jpiv, scale);
@@ -138,12 +139,15 @@ void aocl_lapack_sgesc2(aocl_int64_t *n, real *a, aocl_int64_t *lda, real *rhs, 
     aocl_int64_t i__, j;
     real eps, temp;
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *), slabad_(real *, real *);
+        void
+        sscal_(integer *, real *, real *, integer *),
+        slabad_(real *, real *);
     extern real slamch_(char *);
     real bignum;
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    void slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
+        void
+        slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
     real smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -194,7 +198,8 @@ void aocl_lapack_sgesc2(aocl_int64_t *n, real *a, aocl_int64_t *lda, real *rhs, 
     *scale = 1.f;
     /* Check for scaling */
     i__ = isamax_(n, &rhs[1], &c__1);
-    if (smlnum * 2.f * (r__1 = rhs[i__], f2c_abs(r__1)) > (r__2 = a[*n + *n * a_dim1], f2c_abs(r__2)))
+    if(smlnum * 2.f * (r__1 = rhs[i__], f2c_abs(r__1))
+       > (r__2 = a[*n + *n * a_dim1], f2c_abs(r__2)))
     {
         temp = .5f / (r__1 = rhs[i__], f2c_abs(r__1));
         sscal_(n, &temp, &rhs[1], &c__1);

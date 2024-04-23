@@ -1,28 +1,16 @@
-/* ./ctgsyl.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ctgsyl.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    0.f,0.f
-}
-;
+static complex c_b1 = {0.f, 0.f};
 static integer c__2 = 2;
 static integer c_n1 = -1;
 static integer c__5 = 5;
 static integer c__1 = 1;
-static complex c_b44 =
-{
-    -1.f,0.f
-    }
-;
-static complex c_b45 =
-{
-    1.f,0.f
-}
-;
+static complex c_b44 = {-1.f, 0.f};
+static complex c_b45 = {1.f, 0.f};
 /* > \brief \b CTGSYL */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -307,38 +295,55 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctgsyl_(char *trans, integer *ijob, integer *m, integer * n, complex *a, integer *lda, complex *b, integer *ldb, complex *c__, integer *ldc, complex *d__, integer *ldd, complex *e, integer *lde, complex *f, integer *ldf, real *scale, real *dif, complex *work, integer *lwork, integer *iwork, integer *info)
+void ctgsyl_(char *trans, integer *ijob, integer *m, integer *n, complex *a, integer *lda,
+             complex *b, integer *ldb, complex *c__, integer *ldc, complex *d__, integer *ldd,
+             complex *e, integer *lde, complex *f, integer *ldf, real *scale, real *dif,
+             complex *work, integer *lwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctgsyl inputs: trans %c, ijob %lld, m %lld, n %lld, lda %lld, ldb %lld, ldc %lld, ldd %lld, lde %lld, ldf %lld, lwork %lld",*trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf, *lwork);
+    snprintf(buffer, 256,
+             "ctgsyl inputs: trans %c, ijob %lld, m %lld, n %lld, lda %lld, ldb %lld, ldc %lld, "
+             "ldd %lld, lde %lld, ldf %lld, lwork %lld",
+             *trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf, *lwork);
 #else
-    snprintf(buffer, 256,"ctgsyl inputs: trans %c, ijob %d, m %d, n %d, lda %d, ldb %d, ldc %d, ldd %d, lde %d, ldf %d, lwork %d",*trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf, *lwork);
+    snprintf(buffer, 256,
+             "ctgsyl inputs: trans %c, ijob %d, m %d, n %d, lda %d, ldb %d, ldc %d, ldd %d, lde "
+             "%d, ldf %d, lwork %d",
+             *trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1, d_offset, e_dim1,
+    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1, d_offset, e_dim1,
         e_offset, f_dim1, f_offset, i__1, i__2, i__3, i__4;
-    real r__1;
-    scomplex q__1;
+    complex q__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     aocl_int64_t i__, j, k, p, q, ie, je, mb, nb, is, js, pq;
     real dsum;
     extern /* Subroutine */
-    void cscal_(integer *, complex *, complex *, integer *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+        void
+        cscal_(integer *, complex *, complex *, integer *),
+        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
+               complex *, integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     integer ifunc, linfo, lwmin;
     real scale2;
     extern /* Subroutine */
-    void ctgsy2_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, real *, integer *);
+        void
+        ctgsy2_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *,
+                complex *, integer *, complex *, integer *, complex *, integer *, complex *,
+                integer *, real *, real *, real *, integer *);
     real dscale, scaloc;
     extern /* Subroutine */
-    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer iround;
     logical notran;
@@ -392,7 +397,7 @@ void ctgsyl_(char *trans, integer *ijob, integer *m, integer * n, complex *a, in
     scale2 = 0.f;
     notran = lsame_(trans, "N", 1, 1);
     lquery = *lwork == -1;
-    if (! notran && ! lsame_(trans, "C", 1, 1))
+    if(!notran && !lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
@@ -413,27 +418,27 @@ void ctgsyl_(char *trans, integer *ijob, integer *m, integer * n, complex *a, in
         {
             *info = -4;
         }
-        else if (*lda < fla_max(1,*m))
+        else if(*lda < fla_max(1, *m))
         {
             *info = -6;
         }
-        else if (*ldb < fla_max(1,*n))
+        else if(*ldb < fla_max(1, *n))
         {
             *info = -8;
         }
-        else if (*ldc < fla_max(1,*m))
+        else if(*ldc < fla_max(1, *m))
         {
             *info = -10;
         }
-        else if (*ldd < fla_max(1,*m))
+        else if(*ldd < fla_max(1, *m))
         {
             *info = -12;
         }
-        else if (*lde < fla_max(1,*n))
+        else if(*lde < fla_max(1, *n))
         {
             *info = -14;
         }
-        else if (*ldf < fla_max(1,*m))
+        else if(*ldf < fla_max(1, *m))
         {
             *info = -16;
         }
@@ -447,7 +452,7 @@ void ctgsyl_(char *trans, integer *ijob, integer *m, integer * n, complex *a, in
                 /* Computing MAX */
                 i__1 = 1;
                 i__2 = (*m << 1) * *n; // , expr subst
-                lwmin = fla_max(i__1,i__2);
+                lwmin = fla_max(i__1, i__2);
             }
             else
             {
@@ -458,9 +463,8 @@ void ctgsyl_(char *trans, integer *ijob, integer *m, integer * n, complex *a, in
         {
             lwmin = 1;
         }
-        r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-        work[1].real = r__1;
-        work[1].imag = 0.f; // , expr subst
+        work[1].r = (real)lwmin;
+        work[1].i = 0.f; // , expr subst
         if(*lwork < lwmin && !lquery)
         {
             *info = -20;
@@ -520,9 +524,9 @@ void ctgsyl_(char *trans, integer *ijob, integer *m, integer * n, complex *a, in
             dscale = 0.f;
             dsum = 1.f;
             pq = *m * *n;
-            aocl_lapack_ctgsy2(trans, &ifunc, m, n, &a[a_offset], lda, &b[b_offset], ldb,
-                               &c__[c_offset], ldc, &d__[d_offset], ldd, &e[e_offset], lde,
-                               &f[f_offset], ldf, scale, &dsum, &dscale, info);
+            ctgsy2_(trans, &ifunc, m, n, &a[a_offset], lda, &b[b_offset], ldb, &c__[c_offset], ldc,
+                    &d__[d_offset], ldd, &e[e_offset], lde, &f[f_offset], ldf, scale, &dsum,
+                    &dscale, info);
             if(dscale != 0.f)
             {
                 if(*ijob == 1 || *ijob == 3)
@@ -541,10 +545,10 @@ void ctgsyl_(char *trans, integer *ijob, integer *m, integer * n, complex *a, in
                     ifunc = *ijob;
                 }
                 scale2 = *scale;
-                aocl_lapack_clacpy("F", m, n, &c__[c_offset], ldc, &work[1], m);
-                aocl_lapack_clacpy("F", m, n, &f[f_offset], ldf, &work[*m * *n + 1], m);
-                aocl_lapack_claset("F", m, n, &c_b1, &c_b1, &c__[c_offset], ldc);
-                aocl_lapack_claset("F", m, n, &c_b1, &c_b1, &f[f_offset], ldf);
+                clacpy_("F", m, n, &c__[c_offset], ldc, &work[1], m);
+                clacpy_("F", m, n, &f[f_offset], ldf, &work[*m * *n + 1], m);
+                claset_("F", m, n, &c_b1, &c_b1, &c__[c_offset], ldc);
+                claset_("F", m, n, &c_b1, &c_b1, &f[f_offset], ldf);
             }
             else if(isolve == 2 && iround == 2)
             {
@@ -574,7 +578,7 @@ L40:
     }
     goto L40;
 L50:
-    iwork[p + 1] = (aocl_int_t)(*m + 1);
+    iwork[p + 1] = *m + 1;
     if(iwork[p] == iwork[p + 1])
     {
         --p;
@@ -596,7 +600,7 @@ L60:
     }
     goto L60;
 L70:
-    iwork[q + 1] = (aocl_int_t)(*n + 1);
+    iwork[q + 1] = *n + 1;
     if(iwork[q] == iwork[q + 1])
     {
         --q;
@@ -626,10 +630,10 @@ L70:
                     is = iwork[i__];
                     ie = iwork[i__ + 1] - 1;
                     mb = ie - is + 1;
-                    aocl_lapack_ctgsy2(trans, &ifunc, &mb, &nb, &a[is + is * a_dim1], lda,
-                                       &b[js + js * b_dim1], ldb, &c__[is + js * c_dim1], ldc,
-                                       &d__[is + is * d_dim1], ldd, &e[js + js * e_dim1], lde,
-                                       &f[is + js * f_dim1], ldf, &scaloc, &dsum, &dscale, &linfo);
+                    ctgsy2_(trans, &ifunc, &mb, &nb, &a[is + is * a_dim1], lda,
+                            &b[js + js * b_dim1], ldb, &c__[is + js * c_dim1], ldc,
+                            &d__[is + is * d_dim1], ldd, &e[js + js * e_dim1], lde,
+                            &f[is + js * f_dim1], ldf, &scaloc, &dsum, &dscale, &linfo);
                     if(linfo > 0)
                     {
                         *info = linfo;
@@ -665,13 +669,13 @@ L70:
                         for(k = js; k <= i__3; ++k)
                         {
                             i__4 = *m - ie;
-                            q__1.real = scaloc;
-                            q__1.imag = 0.f; // , expr subst
-                            aocl_blas_cscal(&i__4, &q__1, &c__[ie + 1 + k * c_dim1], &c__1);
+                            q__1.r = scaloc;
+                            q__1.i = 0.f; // , expr subst
+                            cscal_(&i__4, &q__1, &c__[ie + 1 + k * c_dim1], &c__1);
                             i__4 = *m - ie;
-                            q__1.real = scaloc;
-                            q__1.imag = 0.f; // , expr subst
-                            aocl_blas_cscal(&i__4, &q__1, &f[ie + 1 + k * f_dim1], &c__1);
+                            q__1.r = scaloc;
+                            q__1.i = 0.f; // , expr subst
+                            cscal_(&i__4, &q__1, &f[ie + 1 + k * f_dim1], &c__1);
                             /* L100: */
                         }
                         i__3 = *n;
@@ -691,24 +695,22 @@ L70:
                     if(i__ > 1)
                     {
                         i__3 = is - 1;
-                        aocl_blas_cgemm("N", "N", &i__3, &nb, &mb, &c_b44, &a[is * a_dim1 + 1], lda,
-                                        &c__[is + js * c_dim1], ldc, &c_b45, &c__[js * c_dim1 + 1],
-                                        ldc);
+                        cgemm_("N", "N", &i__3, &nb, &mb, &c_b44, &a[is * a_dim1 + 1], lda,
+                               &c__[is + js * c_dim1], ldc, &c_b45, &c__[js * c_dim1 + 1], ldc);
                         i__3 = is - 1;
-                        aocl_blas_cgemm("N", "N", &i__3, &nb, &mb, &c_b44, &d__[is * d_dim1 + 1],
-                                        ldd, &c__[is + js * c_dim1], ldc, &c_b45,
-                                        &f[js * f_dim1 + 1], ldf);
+                        cgemm_("N", "N", &i__3, &nb, &mb, &c_b44, &d__[is * d_dim1 + 1], ldd,
+                               &c__[is + js * c_dim1], ldc, &c_b45, &f[js * f_dim1 + 1], ldf);
                     }
                     if(j < q)
                     {
                         i__3 = *n - je;
-                        aocl_blas_cgemm("N", "N", &mb, &i__3, &nb, &c_b45, &f[is + js * f_dim1],
-                                        ldf, &b[js + (je + 1) * b_dim1], ldb, &c_b45,
-                                        &c__[is + (je + 1) * c_dim1], ldc);
+                        cgemm_("N", "N", &mb, &i__3, &nb, &c_b45, &f[is + js * f_dim1], ldf,
+                               &b[js + (je + 1) * b_dim1], ldb, &c_b45,
+                               &c__[is + (je + 1) * c_dim1], ldc);
                         i__3 = *n - je;
-                        aocl_blas_cgemm("N", "N", &mb, &i__3, &nb, &c_b45, &f[is + js * f_dim1],
-                                        ldf, &e[js + (je + 1) * e_dim1], lde, &c_b45,
-                                        &f[is + (je + 1) * f_dim1], ldf);
+                        cgemm_("N", "N", &mb, &i__3, &nb, &c_b45, &f[is + js * f_dim1], ldf,
+                               &e[js + (je + 1) * e_dim1], lde, &c_b45, &f[is + (je + 1) * f_dim1],
+                               ldf);
                     }
                     /* L120: */
                 }
@@ -732,10 +734,10 @@ L70:
                     ifunc = *ijob;
                 }
                 scale2 = *scale;
-                aocl_lapack_clacpy("F", m, n, &c__[c_offset], ldc, &work[1], m);
-                aocl_lapack_clacpy("F", m, n, &f[f_offset], ldf, &work[*m * *n + 1], m);
-                aocl_lapack_claset("F", m, n, &c_b1, &c_b1, &c__[c_offset], ldc);
-                aocl_lapack_claset("F", m, n, &c_b1, &c_b1, &f[f_offset], ldf);
+                clacpy_("F", m, n, &c__[c_offset], ldc, &work[1], m);
+                clacpy_("F", m, n, &f[f_offset], ldf, &work[*m * *n + 1], m);
+                claset_("F", m, n, &c_b1, &c_b1, &c__[c_offset], ldc);
+                claset_("F", m, n, &c_b1, &c_b1, &f[f_offset], ldf);
             }
             else if(isolve == 2 && iround == 2)
             {
@@ -766,10 +768,10 @@ L70:
                 js = iwork[j];
                 je = iwork[j + 1] - 1;
                 nb = je - js + 1;
-                aocl_lapack_ctgsy2(trans, &ifunc, &mb, &nb, &a[is + is * a_dim1], lda,
-                                   &b[js + js * b_dim1], ldb, &c__[is + js * c_dim1], ldc,
-                                   &d__[is + is * d_dim1], ldd, &e[js + js * e_dim1], lde,
-                                   &f[is + js * f_dim1], ldf, &scaloc, &dsum, &dscale, &linfo);
+                ctgsy2_(trans, &ifunc, &mb, &nb, &a[is + is * a_dim1], lda, &b[js + js * b_dim1],
+                        ldb, &c__[is + js * c_dim1], ldc, &d__[is + is * d_dim1], ldd,
+                        &e[js + js * e_dim1], lde, &f[is + js * f_dim1], ldf, &scaloc, &dsum,
+                        &dscale, &linfo);
                 if(linfo > 0)
                 {
                     *info = linfo;
@@ -804,9 +806,9 @@ L70:
                     for(k = js; k <= i__3; ++k)
                     {
                         i__4 = *m - ie;
-                        q__1.real = scaloc;
-                        q__1.imag = 0.f; // , expr subst
-                        aocl_blas_cscal(&i__4, &q__1, &c__[ie + 1 + k * c_dim1], &c__1);
+                        q__1.r = scaloc;
+                        q__1.i = 0.f; // , expr subst
+                        cscal_(&i__4, &q__1, &c__[ie + 1 + k * c_dim1], &c__1);
                         i__4 = *m - ie;
                         q__1.real = scaloc;
                         q__1.imag = 0.f; // , expr subst
@@ -830,29 +832,27 @@ L70:
                 if(j > p + 2)
                 {
                     i__3 = js - 1;
-                    aocl_blas_cgemm("N", "C", &mb, &i__3, &nb, &c_b45, &c__[is + js * c_dim1], ldc,
-                                    &b[js * b_dim1 + 1], ldb, &c_b45, &f[is + f_dim1], ldf);
+                    cgemm_("N", "C", &mb, &i__3, &nb, &c_b45, &c__[is + js * c_dim1], ldc,
+                           &b[js * b_dim1 + 1], ldb, &c_b45, &f[is + f_dim1], ldf);
                     i__3 = js - 1;
-                    aocl_blas_cgemm("N", "C", &mb, &i__3, &nb, &c_b45, &f[is + js * f_dim1], ldf,
-                                    &e[js * e_dim1 + 1], lde, &c_b45, &f[is + f_dim1], ldf);
+                    cgemm_("N", "C", &mb, &i__3, &nb, &c_b45, &f[is + js * f_dim1], ldf,
+                           &e[js * e_dim1 + 1], lde, &c_b45, &f[is + f_dim1], ldf);
                 }
                 if(i__ < p)
                 {
                     i__3 = *m - ie;
-                    aocl_blas_cgemm("C", "N", &i__3, &nb, &mb, &c_b44, &a[is + (ie + 1) * a_dim1],
-                                    lda, &c__[is + js * c_dim1], ldc, &c_b45,
-                                    &c__[ie + 1 + js * c_dim1], ldc);
+                    cgemm_("C", "N", &i__3, &nb, &mb, &c_b44, &a[is + (ie + 1) * a_dim1], lda,
+                           &c__[is + js * c_dim1], ldc, &c_b45, &c__[ie + 1 + js * c_dim1], ldc);
                     i__3 = *m - ie;
-                    aocl_blas_cgemm("C", "N", &i__3, &nb, &mb, &c_b44, &d__[is + (ie + 1) * d_dim1],
-                                    ldd, &f[is + js * f_dim1], ldf, &c_b45,
-                                    &c__[ie + 1 + js * c_dim1], ldc);
+                    cgemm_("C", "N", &i__3, &nb, &mb, &c_b44, &d__[is + (ie + 1) * d_dim1], ldd,
+                           &f[is + js * f_dim1], ldf, &c_b45, &c__[ie + 1 + js * c_dim1], ldc);
                 }
                 /* L200: */
             }
             /* L210: */
         }
     }
-    work[1].r = (real) lwmin;
+    work[1].r = (real)lwmin;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

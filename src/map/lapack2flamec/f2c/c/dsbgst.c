@@ -99,7 +99,7 @@ static doublereal c_b20 = -1.;
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(ka+1+i-j,j) = A(i,j) for fla_max(1,j-ka)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+ka). */
 /* > */
 /* > On exit, the transformed matrix X**T*A*X, stored in the same */
@@ -162,10 +162,14 @@ LDX >= 1 otherwise. */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dsbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, doublereal *ab, integer *ldab, doublereal *bb, integer * ldbb, doublereal *x, integer *ldx, doublereal *work, integer *info)
+void dsbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, doublereal *ab,
+             integer *ldab, doublereal *bb, integer *ldbb, doublereal *x, integer *ldx,
+             doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsbgst inputs: vect %c, uplo %c, n %" FLA_IS ", ka %" FLA_IS ", kb %" FLA_IS ", ldab %" FLA_IS ", ldbb %" FLA_IS ", ldx %" FLA_IS "",*vect, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldx);
+    AOCL_DTL_SNPRINTF("dsbgst inputs: vect %c, uplo %c, n %" FLA_IS ", ka %" FLA_IS ", kb %" FLA_IS
+                      ", ldab %" FLA_IS ", ldbb %" FLA_IS ", ldx %" FLA_IS "",
+                      *vect, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldx);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, bb_dim1, bb_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4;
     doublereal d__1;
@@ -180,14 +184,28 @@ void dsbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, doubl
     doublereal bii;
     integer kbt, nrt, inca;
     extern /* Subroutine */
-    void dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *), dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+              doublereal *, integer *),
+        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+              doublereal *),
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     logical upper, wantx;
     extern /* Subroutine */
-    void dlar2v_(integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlargv_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dlar2v_(integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *,
+                doublereal *, integer *),
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
+        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        dlargv_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+                integer *);
     logical update;
     extern /* Subroutine */
-    void dlartv_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dlartv_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -226,11 +244,11 @@ void dsbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, doubl
     ka1 = *ka + 1;
     kb1 = *kb + 1;
     *info = 0;
-    if (! wantx && ! lsame_(vect, "N", 1, 1))
+    if(!wantx && !lsame_(vect, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -254,7 +272,7 @@ void dsbgst_(char *vect, char *uplo, integer *n, integer *ka, integer *kb, doubl
     {
         *info = -9;
     }
-    else if (*ldx < 1 || wantx && *ldx < fla_max(1,*n))
+    else if(*ldx < 1 || wantx && *ldx < fla_max(1, *n))
     {
         *info = -11;
     }
@@ -339,12 +357,12 @@ L10:
         /* Computing MIN */
         i__1 = *kb;
         i__2 = i__ - 1; // , expr subst
-        kbt = fla_min(i__1,i__2);
+        kbt = fla_min(i__1, i__2);
         i0 = i__ - 1;
         /* Computing MIN */
         i__1 = *n;
         i__2 = i__ + *ka; // , expr subst
-        i1 = fla_min(i__1,i__2);
+        i1 = fla_min(i__1, i__2);
         i2 = i__ - kbt + ka1;
         if(i__ < m + 1)
         {
@@ -383,9 +401,7 @@ L10:
             i__1 = 1;
             i__2 = i__ - *ka; // , expr subst
             i__3 = i__;
-            for (j = fla_max(i__1,i__2);
-                    j <= i__3;
-                    ++j)
+            for(j = fla_max(i__1, i__2); j <= i__3; ++j)
             {
                 ab[j - i__ + ka1 + i__ * ab_dim1] /= bii;
                 /* L30: */
@@ -408,9 +424,7 @@ L10:
                 i__1 = 1;
                 i__2 = i__ - *ka; // , expr subst
                 i__4 = i__ - kbt - 1;
-                for (j = fla_max(i__1,i__2);
-                        j <= i__4;
-                        ++j)
+                for(j = fla_max(i__1, i__2); j <= i__4; ++j)
                 {
                     ab[j - k + ka1 + k * ab_dim1]
                         -= bb[k - i__ + kb1 + i__ * bb_dim1] * ab[j - i__ + ka1 + i__ * ab_dim1];
@@ -425,9 +439,7 @@ L10:
                 i__4 = j - *ka;
                 i__1 = i__ - kbt; // , expr subst
                 i__2 = i__ - 1;
-                for (k = fla_max(i__4,i__1);
-                        k <= i__2;
-                        ++k)
+                for(k = fla_max(i__4, i__1); k <= i__2; ++k)
                 {
                     ab[k - j + ka1 + j * ab_dim1]
                         -= bb[k - i__ + kb1 + i__ * bb_dim1] * ab[i__ - j + ka1 + j * ab_dim1];
@@ -440,13 +452,13 @@ L10:
                 /* post-multiply X by inv(S(i)) */
                 i__3 = *n - m;
                 d__1 = 1. / bii;
-                aocl_blas_dscal(&i__3, &d__1, &x[m + 1 + i__ * x_dim1], &c__1);
+                dscal_(&i__3, &d__1, &x[m + 1 + i__ * x_dim1], &c__1);
                 if(kbt > 0)
                 {
                     i__3 = *n - m;
-                    aocl_blas_dger(&i__3, &kbt, &c_b20, &x[m + 1 + i__ * x_dim1], &c__1,
-                                   &bb[kb1 - kbt + i__ * bb_dim1], &c__1,
-                                   &x[m + 1 + (i__ - kbt) * x_dim1], ldx);
+                    dger_(&i__3, &kbt, &c_b20, &x[m + 1 + i__ * x_dim1], &c__1,
+                          &bb[kb1 - kbt + i__ * bb_dim1], &c__1, &x[m + 1 + (i__ - kbt) * x_dim1],
+                          ldx);
                 }
             }
             /* store a(i,i1) in RA1 for use in next loop over K */
@@ -481,7 +493,7 @@ L10:
             /* Computing MAX */
             i__2 = 1;
             i__4 = k - i0 + 2; // , expr subst
-            j2 = i__ - k - 1 + fla_max(i__2,i__4) * ka1;
+            j2 = i__ - k - 1 + fla_max(i__2, i__4) * ka1;
             nr = (*n - j2 + *ka) / ka1;
             j1 = j2 + (nr - 1) * ka1;
             if(update)
@@ -489,7 +501,7 @@ L10:
                 /* Computing MAX */
                 i__2 = j2;
                 i__4 = i__ + (*ka << 1) - k + 1; // , expr subst
-                j2t = fla_max(i__2,i__4);
+                j2t = fla_max(i__2, i__4);
             }
             else
             {
@@ -510,8 +522,8 @@ L10:
             /* have been created outside the band */
             if(nrt > 0)
             {
-                aocl_lapack_dlargv(&nrt, &ab[j2t * ab_dim1 + 1], &inca, &work[j2t - m], &ka1,
-                                   &work[*n + j2t - m], &ka1);
+                dlargv_(&nrt, &ab[j2t * ab_dim1 + 1], &inca, &work[j2t - m], &ka1,
+                        &work[*n + j2t - m], &ka1);
             }
             if(nr > 0)
             {
@@ -519,16 +531,16 @@ L10:
                 i__4 = *ka - 1;
                 for(l = 1; l <= i__4; ++l)
                 {
-                    aocl_lapack_dlartv(&nr, &ab[ka1 - l + j2 * ab_dim1], &inca,
-                                       &ab[*ka - l + (j2 + 1) * ab_dim1], &inca, &work[*n + j2 - m],
-                                       &work[j2 - m], &ka1);
+                    dlartv_(&nr, &ab[ka1 - l + j2 * ab_dim1], &inca,
+                            &ab[*ka - l + (j2 + 1) * ab_dim1], &inca, &work[*n + j2 - m],
+                            &work[j2 - m], &ka1);
                     /* L100: */
                 }
                 /* apply rotations in 1st set from both sides to diagonal */
                 /* blocks */
-                aocl_lapack_dlar2v(&nr, &ab[ka1 + j2 * ab_dim1], &ab[ka1 + (j2 + 1) * ab_dim1],
-                                   &ab[*ka + (j2 + 1) * ab_dim1], &inca, &work[*n + j2 - m],
-                                   &work[j2 - m], &ka1);
+                dlar2v_(&nr, &ab[ka1 + j2 * ab_dim1], &ab[ka1 + (j2 + 1) * ab_dim1],
+                        &ab[*ka + (j2 + 1) * ab_dim1], &inca, &work[*n + j2 - m], &work[j2 - m],
+                        &ka1);
             }
             /* start applying rotations in 1st set from the left */
             i__4 = *kb - k + 1;
@@ -537,9 +549,9 @@ L10:
                 nrt = (*n - j2 + l) / ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_dlartv(&nrt, &ab[l + (j2 + ka1 - l) * ab_dim1], &inca,
-                                       &ab[l + 1 + (j2 + ka1 - l) * ab_dim1], &inca,
-                                       &work[*n + j2 - m], &work[j2 - m], &ka1);
+                    dlartv_(&nrt, &ab[l + (j2 + ka1 - l) * ab_dim1], &inca,
+                            &ab[l + 1 + (j2 + ka1 - l) * ab_dim1], &inca, &work[*n + j2 - m],
+                            &work[j2 - m], &ka1);
                 }
                 /* L110: */
             }
@@ -551,9 +563,8 @@ L10:
                 for(j = j2; i__2 < 0 ? j >= i__4 : j <= i__4; j += i__2)
                 {
                     i__1 = *n - m;
-                    aocl_blas_drot(&i__1, &x[m + 1 + j * x_dim1], &c__1,
-                                   &x[m + 1 + (j + 1) * x_dim1], &c__1, &work[*n + j - m],
-                                   &work[j - m]);
+                    drot_(&i__1, &x[m + 1 + j * x_dim1], &c__1, &x[m + 1 + (j + 1) * x_dim1], &c__1,
+                          &work[*n + j - m], &work[j - m]);
                     /* L120: */
                 }
             }
@@ -575,14 +586,14 @@ L10:
                 /* Computing MAX */
                 i__3 = 2;
                 i__2 = k - i0 + 1; // , expr subst
-                j2 = i__ - k - 1 + fla_max(i__3,i__2) * ka1;
+                j2 = i__ - k - 1 + fla_max(i__3, i__2) * ka1;
             }
             else
             {
                 /* Computing MAX */
                 i__3 = 1;
                 i__2 = k - i0 + 1; // , expr subst
-                j2 = i__ - k - 1 + fla_max(i__3,i__2) * ka1;
+                j2 = i__ - k - 1 + fla_max(i__3, i__2) * ka1;
             }
             /* finish applying rotations in 2nd set from the left */
             for(l = *kb - k; l >= 1; --l)
@@ -590,9 +601,9 @@ L10:
                 nrt = (*n - j2 + *ka + l) / ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_dlartv(&nrt, &ab[l + (j2 - l + 1) * ab_dim1], &inca,
-                                       &ab[l + 1 + (j2 - l + 1) * ab_dim1], &inca,
-                                       &work[*n + j2 - *ka], &work[j2 - *ka], &ka1);
+                    dlartv_(&nrt, &ab[l + (j2 - l + 1) * ab_dim1], &inca,
+                            &ab[l + 1 + (j2 - l + 1) * ab_dim1], &inca, &work[*n + j2 - *ka],
+                            &work[j2 - *ka], &ka1);
                 }
                 /* L140: */
             }
@@ -630,29 +641,27 @@ L10:
             /* Computing MAX */
             i__3 = 1;
             i__2 = k - i0 + 1; // , expr subst
-            j2 = i__ - k - 1 + fla_max(i__3,i__2) * ka1;
+            j2 = i__ - k - 1 + fla_max(i__3, i__2) * ka1;
             nr = (*n - j2 + *ka) / ka1;
             j1 = j2 + (nr - 1) * ka1;
             if(nr > 0)
             {
                 /* generate rotations in 2nd set to annihilate elements */
                 /* which have been created outside the band */
-                aocl_lapack_dlargv(&nr, &ab[j2 * ab_dim1 + 1], &inca, &work[j2], &ka1,
-                                   &work[*n + j2], &ka1);
+                dlargv_(&nr, &ab[j2 * ab_dim1 + 1], &inca, &work[j2], &ka1, &work[*n + j2], &ka1);
                 /* apply rotations in 2nd set from the right */
                 i__3 = *ka - 1;
                 for(l = 1; l <= i__3; ++l)
                 {
-                    aocl_lapack_dlartv(&nr, &ab[ka1 - l + j2 * ab_dim1], &inca,
-                                       &ab[*ka - l + (j2 + 1) * ab_dim1], &inca, &work[*n + j2],
-                                       &work[j2], &ka1);
+                    dlartv_(&nr, &ab[ka1 - l + j2 * ab_dim1], &inca,
+                            &ab[*ka - l + (j2 + 1) * ab_dim1], &inca, &work[*n + j2], &work[j2],
+                            &ka1);
                     /* L180: */
                 }
                 /* apply rotations in 2nd set from both sides to diagonal */
                 /* blocks */
-                aocl_lapack_dlar2v(&nr, &ab[ka1 + j2 * ab_dim1], &ab[ka1 + (j2 + 1) * ab_dim1],
-                                   &ab[*ka + (j2 + 1) * ab_dim1], &inca, &work[*n + j2], &work[j2],
-                                   &ka1);
+                dlar2v_(&nr, &ab[ka1 + j2 * ab_dim1], &ab[ka1 + (j2 + 1) * ab_dim1],
+                        &ab[*ka + (j2 + 1) * ab_dim1], &inca, &work[*n + j2], &work[j2], &ka1);
             }
             /* start applying rotations in 2nd set from the left */
             i__3 = *kb - k + 1;
@@ -661,9 +670,9 @@ L10:
                 nrt = (*n - j2 + l) / ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_dlartv(&nrt, &ab[l + (j2 + ka1 - l) * ab_dim1], &inca,
-                                       &ab[l + 1 + (j2 + ka1 - l) * ab_dim1], &inca, &work[*n + j2],
-                                       &work[j2], &ka1);
+                    dlartv_(&nrt, &ab[l + (j2 + ka1 - l) * ab_dim1], &inca,
+                            &ab[l + 1 + (j2 + ka1 - l) * ab_dim1], &inca, &work[*n + j2], &work[j2],
+                            &ka1);
                 }
                 /* L190: */
             }
@@ -675,8 +684,8 @@ L10:
                 for(j = j2; i__2 < 0 ? j >= i__3 : j <= i__3; j += i__2)
                 {
                     i__4 = *n - m;
-                    aocl_blas_drot(&i__4, &x[m + 1 + j * x_dim1], &c__1,
-                                   &x[m + 1 + (j + 1) * x_dim1], &c__1, &work[*n + j], &work[j]);
+                    drot_(&i__4, &x[m + 1 + j * x_dim1], &c__1, &x[m + 1 + (j + 1) * x_dim1], &c__1,
+                          &work[*n + j], &work[j]);
                     /* L200: */
                 }
             }
@@ -688,16 +697,16 @@ L10:
             /* Computing MAX */
             i__3 = 1;
             i__4 = k - i0 + 2; // , expr subst
-            j2 = i__ - k - 1 + fla_max(i__3,i__4) * ka1;
+            j2 = i__ - k - 1 + fla_max(i__3, i__4) * ka1;
             /* finish applying rotations in 1st set from the left */
             for(l = *kb - k; l >= 1; --l)
             {
                 nrt = (*n - j2 + l) / ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_dlartv(&nrt, &ab[l + (j2 + ka1 - l) * ab_dim1], &inca,
-                                       &ab[l + 1 + (j2 + ka1 - l) * ab_dim1], &inca,
-                                       &work[*n + j2 - m], &work[j2 - m], &ka1);
+                    dlartv_(&nrt, &ab[l + (j2 + ka1 - l) * ab_dim1], &inca,
+                            &ab[l + 1 + (j2 + ka1 - l) * ab_dim1], &inca, &work[*n + j2 - m],
+                            &work[j2 - m], &ka1);
                 }
                 /* L220: */
             }
@@ -731,9 +740,7 @@ L10:
             i__2 = 1;
             i__3 = i__ - *ka; // , expr subst
             i__4 = i__;
-            for (j = fla_max(i__2,i__3);
-                    j <= i__4;
-                    ++j)
+            for(j = fla_max(i__2, i__3); j <= i__4; ++j)
             {
                 ab[i__ - j + 1 + j * ab_dim1] /= bii;
                 /* L260: */
@@ -756,9 +763,7 @@ L10:
                 i__2 = 1;
                 i__3 = i__ - *ka; // , expr subst
                 i__1 = i__ - kbt - 1;
-                for (j = fla_max(i__2,i__3);
-                        j <= i__1;
-                        ++j)
+                for(j = fla_max(i__2, i__3); j <= i__1; ++j)
                 {
                     ab[k - j + 1 + j * ab_dim1]
                         -= bb[i__ - k + 1 + k * bb_dim1] * ab[i__ - j + 1 + j * ab_dim1];
@@ -773,9 +778,7 @@ L10:
                 i__1 = j - *ka;
                 i__2 = i__ - kbt; // , expr subst
                 i__3 = i__ - 1;
-                for (k = fla_max(i__1,i__2);
-                        k <= i__3;
-                        ++k)
+                for(k = fla_max(i__1, i__2); k <= i__3; ++k)
                 {
                     ab[j - k + 1 + k * ab_dim1]
                         -= bb[i__ - k + 1 + k * bb_dim1] * ab[j - i__ + 1 + i__ * ab_dim1];
@@ -788,14 +791,14 @@ L10:
                 /* post-multiply X by inv(S(i)) */
                 i__4 = *n - m;
                 d__1 = 1. / bii;
-                aocl_blas_dscal(&i__4, &d__1, &x[m + 1 + i__ * x_dim1], &c__1);
+                dscal_(&i__4, &d__1, &x[m + 1 + i__ * x_dim1], &c__1);
                 if(kbt > 0)
                 {
                     i__4 = *n - m;
                     i__3 = *ldbb - 1;
-                    aocl_blas_dger(&i__4, &kbt, &c_b20, &x[m + 1 + i__ * x_dim1], &c__1,
-                                   &bb[kbt + 1 + (i__ - kbt) * bb_dim1], &i__3,
-                                   &x[m + 1 + (i__ - kbt) * x_dim1], ldx);
+                    dger_(&i__4, &kbt, &c_b20, &x[m + 1 + i__ * x_dim1], &c__1,
+                          &bb[kbt + 1 + (i__ - kbt) * bb_dim1], &i__3,
+                          &x[m + 1 + (i__ - kbt) * x_dim1], ldx);
                 }
             }
             /* store a(i1,i) in RA1 for use in next loop over K */
@@ -830,7 +833,7 @@ L10:
             /* Computing MAX */
             i__3 = 1;
             i__1 = k - i0 + 2; // , expr subst
-            j2 = i__ - k - 1 + fla_max(i__3,i__1) * ka1;
+            j2 = i__ - k - 1 + fla_max(i__3, i__1) * ka1;
             nr = (*n - j2 + *ka) / ka1;
             j1 = j2 + (nr - 1) * ka1;
             if(update)
@@ -838,7 +841,7 @@ L10:
                 /* Computing MAX */
                 i__3 = j2;
                 i__1 = i__ + (*ka << 1) - k + 1; // , expr subst
-                j2t = fla_max(i__3,i__1);
+                j2t = fla_max(i__3, i__1);
             }
             else
             {
@@ -860,8 +863,8 @@ L10:
             /* have been created outside the band */
             if(nrt > 0)
             {
-                aocl_lapack_dlargv(&nrt, &ab[ka1 + (j2t - *ka) * ab_dim1], &inca, &work[j2t - m],
-                                   &ka1, &work[*n + j2t - m], &ka1);
+                dlargv_(&nrt, &ab[ka1 + (j2t - *ka) * ab_dim1], &inca, &work[j2t - m], &ka1,
+                        &work[*n + j2t - m], &ka1);
             }
             if(nr > 0)
             {
@@ -869,16 +872,15 @@ L10:
                 i__1 = *ka - 1;
                 for(l = 1; l <= i__1; ++l)
                 {
-                    aocl_lapack_dlartv(&nr, &ab[l + 1 + (j2 - l) * ab_dim1], &inca,
-                                       &ab[l + 2 + (j2 - l) * ab_dim1], &inca, &work[*n + j2 - m],
-                                       &work[j2 - m], &ka1);
+                    dlartv_(&nr, &ab[l + 1 + (j2 - l) * ab_dim1], &inca,
+                            &ab[l + 2 + (j2 - l) * ab_dim1], &inca, &work[*n + j2 - m],
+                            &work[j2 - m], &ka1);
                     /* L330: */
                 }
                 /* apply rotations in 1st set from both sides to diagonal */
                 /* blocks */
-                aocl_lapack_dlar2v(&nr, &ab[j2 * ab_dim1 + 1], &ab[(j2 + 1) * ab_dim1 + 1],
-                                   &ab[j2 * ab_dim1 + 2], &inca, &work[*n + j2 - m], &work[j2 - m],
-                                   &ka1);
+                dlar2v_(&nr, &ab[j2 * ab_dim1 + 1], &ab[(j2 + 1) * ab_dim1 + 1],
+                        &ab[j2 * ab_dim1 + 2], &inca, &work[*n + j2 - m], &work[j2 - m], &ka1);
             }
             /* start applying rotations in 1st set from the right */
             i__1 = *kb - k + 1;
@@ -887,9 +889,9 @@ L10:
                 nrt = (*n - j2 + l) / ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_dlartv(&nrt, &ab[ka1 - l + 1 + j2 * ab_dim1], &inca,
-                                       &ab[ka1 - l + (j2 + 1) * ab_dim1], &inca, &work[*n + j2 - m],
-                                       &work[j2 - m], &ka1);
+                    dlartv_(&nrt, &ab[ka1 - l + 1 + j2 * ab_dim1], &inca,
+                            &ab[ka1 - l + (j2 + 1) * ab_dim1], &inca, &work[*n + j2 - m],
+                            &work[j2 - m], &ka1);
                 }
                 /* L340: */
             }
@@ -901,9 +903,8 @@ L10:
                 for(j = j2; i__3 < 0 ? j >= i__1 : j <= i__1; j += i__3)
                 {
                     i__2 = *n - m;
-                    aocl_blas_drot(&i__2, &x[m + 1 + j * x_dim1], &c__1,
-                                   &x[m + 1 + (j + 1) * x_dim1], &c__1, &work[*n + j - m],
-                                   &work[j - m]);
+                    drot_(&i__2, &x[m + 1 + j * x_dim1], &c__1, &x[m + 1 + (j + 1) * x_dim1], &c__1,
+                          &work[*n + j - m], &work[j - m]);
                     /* L350: */
                 }
             }
@@ -925,14 +926,14 @@ L10:
                 /* Computing MAX */
                 i__4 = 2;
                 i__3 = k - i0 + 1; // , expr subst
-                j2 = i__ - k - 1 + fla_max(i__4,i__3) * ka1;
+                j2 = i__ - k - 1 + fla_max(i__4, i__3) * ka1;
             }
             else
             {
                 /* Computing MAX */
                 i__4 = 1;
                 i__3 = k - i0 + 1; // , expr subst
-                j2 = i__ - k - 1 + fla_max(i__4,i__3) * ka1;
+                j2 = i__ - k - 1 + fla_max(i__4, i__3) * ka1;
             }
             /* finish applying rotations in 2nd set from the right */
             for(l = *kb - k; l >= 1; --l)
@@ -940,9 +941,9 @@ L10:
                 nrt = (*n - j2 + *ka + l) / ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_dlartv(&nrt, &ab[ka1 - l + 1 + (j2 - *ka) * ab_dim1], &inca,
-                                       &ab[ka1 - l + (j2 - *ka + 1) * ab_dim1], &inca,
-                                       &work[*n + j2 - *ka], &work[j2 - *ka], &ka1);
+                    dlartv_(&nrt, &ab[ka1 - l + 1 + (j2 - *ka) * ab_dim1], &inca,
+                            &ab[ka1 - l + (j2 - *ka + 1) * ab_dim1], &inca, &work[*n + j2 - *ka],
+                            &work[j2 - *ka], &ka1);
                 }
                 /* L370: */
             }
@@ -981,25 +982,28 @@ L10:
             /* Computing MAX */
             i__4 = 1;
             i__3 = k - i0 + 1; // , expr subst
-            j2 = i__ - k - 1 + fla_max(i__4,i__3) * ka1;
+            j2 = i__ - k - 1 + fla_max(i__4, i__3) * ka1;
             nr = (*n - j2 + *ka) / ka1;
             j1 = j2 + (nr - 1) * ka1;
             if(nr > 0)
             {
                 /* generate rotations in 2nd set to annihilate elements */
                 /* which have been created outside the band */
-                dlargv_(&nr, &ab[ka1 + (j2 - *ka) * ab_dim1], &inca, &work[j2], &ka1, &work[*n + j2], &ka1);
+                dlargv_(&nr, &ab[ka1 + (j2 - *ka) * ab_dim1], &inca, &work[j2], &ka1,
+                        &work[*n + j2], &ka1);
                 /* apply rotations in 2nd set from the left */
                 i__4 = *ka - 1;
                 for(l = 1; l <= i__4; ++l)
                 {
-                    dlartv_(&nr, &ab[l + 1 + (j2 - l) * ab_dim1], &inca, &ab[ l + 2 + (j2 - l) * ab_dim1], &inca, &work[*n + j2], &work[j2], &ka1);
+                    dlartv_(&nr, &ab[l + 1 + (j2 - l) * ab_dim1], &inca,
+                            &ab[l + 2 + (j2 - l) * ab_dim1], &inca, &work[*n + j2], &work[j2],
+                            &ka1);
                     /* L410: */
                 }
                 /* apply rotations in 2nd set from both sides to diagonal */
                 /* blocks */
-                aocl_lapack_dlar2v(&nr, &ab[j2 * ab_dim1 + 1], &ab[(j2 + 1) * ab_dim1 + 1],
-                                   &ab[j2 * ab_dim1 + 2], &inca, &work[*n + j2], &work[j2], &ka1);
+                dlar2v_(&nr, &ab[j2 * ab_dim1 + 1], &ab[(j2 + 1) * ab_dim1 + 1],
+                        &ab[j2 * ab_dim1 + 2], &inca, &work[*n + j2], &work[j2], &ka1);
             }
             /* start applying rotations in 2nd set from the right */
             i__4 = *kb - k + 1;
@@ -1008,9 +1012,9 @@ L10:
                 nrt = (*n - j2 + l) / ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_dlartv(&nrt, &ab[ka1 - l + 1 + j2 * ab_dim1], &inca,
-                                       &ab[ka1 - l + (j2 + 1) * ab_dim1], &inca, &work[*n + j2],
-                                       &work[j2], &ka1);
+                    dlartv_(&nrt, &ab[ka1 - l + 1 + j2 * ab_dim1], &inca,
+                            &ab[ka1 - l + (j2 + 1) * ab_dim1], &inca, &work[*n + j2], &work[j2],
+                            &ka1);
                 }
                 /* L420: */
             }
@@ -1022,8 +1026,8 @@ L10:
                 for(j = j2; i__3 < 0 ? j >= i__4 : j <= i__4; j += i__3)
                 {
                     i__1 = *n - m;
-                    aocl_blas_drot(&i__1, &x[m + 1 + j * x_dim1], &c__1,
-                                   &x[m + 1 + (j + 1) * x_dim1], &c__1, &work[*n + j], &work[j]);
+                    drot_(&i__1, &x[m + 1 + j * x_dim1], &c__1, &x[m + 1 + (j + 1) * x_dim1], &c__1,
+                          &work[*n + j], &work[j]);
                     /* L430: */
                 }
             }
@@ -1035,16 +1039,16 @@ L10:
             /* Computing MAX */
             i__4 = 1;
             i__1 = k - i0 + 2; // , expr subst
-            j2 = i__ - k - 1 + fla_max(i__4,i__1) * ka1;
+            j2 = i__ - k - 1 + fla_max(i__4, i__1) * ka1;
             /* finish applying rotations in 1st set from the right */
             for(l = *kb - k; l >= 1; --l)
             {
                 nrt = (*n - j2 + l) / ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_dlartv(&nrt, &ab[ka1 - l + 1 + j2 * ab_dim1], &inca,
-                                       &ab[ka1 - l + (j2 + 1) * ab_dim1], &inca, &work[*n + j2 - m],
-                                       &work[j2 - m], &ka1);
+                    dlartv_(&nrt, &ab[ka1 - l + 1 + j2 * ab_dim1], &inca,
+                            &ab[ka1 - l + (j2 + 1) * ab_dim1], &inca, &work[*n + j2 - m],
+                            &work[j2 - m], &ka1);
                 }
                 /* L450: */
             }
@@ -1083,12 +1087,12 @@ L490:
         /* Computing MIN */
         i__3 = *kb;
         i__4 = m - i__; // , expr subst
-        kbt = fla_min(i__3,i__4);
+        kbt = fla_min(i__3, i__4);
         i0 = i__ + 1;
         /* Computing MAX */
         i__3 = 1;
         i__4 = i__ - *ka; // , expr subst
-        i1 = fla_max(i__3,i__4);
+        i1 = fla_max(i__3, i__4);
         i2 = i__ + kbt - ka1;
         if(i__ > m)
         {
@@ -1136,10 +1140,8 @@ L490:
             /* Computing MIN */
             i__4 = *n;
             i__1 = i__ + *ka; // , expr subst
-            i__3 = fla_min(i__4,i__1);
-            for (j = i__;
-                    j <= i__3;
-                    ++j)
+            i__3 = fla_min(i__4, i__1);
+            for(j = i__; j <= i__3; ++j)
             {
                 ab[i__ - j + ka1 + j * ab_dim1] /= bii;
                 /* L510: */
@@ -1161,10 +1163,8 @@ L490:
                 /* Computing MIN */
                 i__1 = *n;
                 i__2 = i__ + *ka; // , expr subst
-                i__4 = fla_min(i__1,i__2);
-                for (j = i__ + kbt + 1;
-                        j <= i__4;
-                        ++j)
+                i__4 = fla_min(i__1, i__2);
+                for(j = i__ + kbt + 1; j <= i__4; ++j)
                 {
                     ab[k - j + ka1 + j * ab_dim1]
                         -= bb[i__ - k + kb1 + k * bb_dim1] * ab[i__ - j + ka1 + j * ab_dim1];
@@ -1178,10 +1178,8 @@ L490:
                 /* Computing MIN */
                 i__1 = j + *ka;
                 i__2 = i__ + kbt; // , expr subst
-                i__4 = fla_min(i__1,i__2);
-                for (k = i__ + 1;
-                        k <= i__4;
-                        ++k)
+                i__4 = fla_min(i__1, i__2);
+                for(k = i__ + 1; k <= i__4; ++k)
                 {
                     ab[j - k + ka1 + k * ab_dim1]
                         -= bb[i__ - k + kb1 + k * bb_dim1] * ab[j - i__ + ka1 + i__ * ab_dim1];
@@ -1193,13 +1191,12 @@ L490:
             {
                 /* post-multiply X by inv(S(i)) */
                 d__1 = 1. / bii;
-                aocl_blas_dscal(&nx, &d__1, &x[i__ * x_dim1 + 1], &c__1);
+                dscal_(&nx, &d__1, &x[i__ * x_dim1 + 1], &c__1);
                 if(kbt > 0)
                 {
                     i__3 = *ldbb - 1;
-                    aocl_blas_dger(&nx, &kbt, &c_b20, &x[i__ * x_dim1 + 1], &c__1,
-                                   &bb[*kb + (i__ + 1) * bb_dim1], &i__3,
-                                   &x[(i__ + 1) * x_dim1 + 1], ldx);
+                    dger_(&nx, &kbt, &c_b20, &x[i__ * x_dim1 + 1], &c__1,
+                          &bb[*kb + (i__ + 1) * bb_dim1], &i__3, &x[(i__ + 1) * x_dim1 + 1], ldx);
                 }
             }
             /* store a(i1,i) in RA1 for use in next loop over K */
@@ -1233,7 +1230,7 @@ L490:
             /* Computing MAX */
             i__4 = 1;
             i__1 = k + i0 - m + 1; // , expr subst
-            j2 = i__ + k + 1 - fla_max(i__4,i__1) * ka1;
+            j2 = i__ + k + 1 - fla_max(i__4, i__1) * ka1;
             nr = (j2 + *ka - 1) / ka1;
             j1 = j2 - (nr - 1) * ka1;
             if(update)
@@ -1241,7 +1238,7 @@ L490:
                 /* Computing MIN */
                 i__4 = j2;
                 i__1 = i__ - (*ka << 1) + k - 1; // , expr subst
-                j2t = fla_min(i__4,i__1);
+                j2t = fla_min(i__4, i__1);
             }
             else
             {
@@ -1262,8 +1259,8 @@ L490:
             /* have been created outside the band */
             if(nrt > 0)
             {
-                aocl_lapack_dlargv(&nrt, &ab[(j1 + *ka) * ab_dim1 + 1], &inca, &work[j1], &ka1,
-                                   &work[*n + j1], &ka1);
+                dlargv_(&nrt, &ab[(j1 + *ka) * ab_dim1 + 1], &inca, &work[j1], &ka1, &work[*n + j1],
+                        &ka1);
             }
             if(nr > 0)
             {
@@ -1271,15 +1268,15 @@ L490:
                 i__1 = *ka - 1;
                 for(l = 1; l <= i__1; ++l)
                 {
-                    aocl_lapack_dlartv(&nr, &ab[ka1 - l + (j1 + l) * ab_dim1], &inca,
-                                       &ab[*ka - l + (j1 + l) * ab_dim1], &inca, &work[*n + j1],
-                                       &work[j1], &ka1);
+                    dlartv_(&nr, &ab[ka1 - l + (j1 + l) * ab_dim1], &inca,
+                            &ab[*ka - l + (j1 + l) * ab_dim1], &inca, &work[*n + j1], &work[j1],
+                            &ka1);
                     /* L580: */
                 }
                 /* apply rotations in 1st set from both sides to diagonal */
                 /* blocks */
-                aocl_lapack_dlar2v(&nr, &ab[ka1 + j1 * ab_dim1], &ab[ka1 + (j1 - 1) * ab_dim1],
-                                   &ab[*ka + j1 * ab_dim1], &inca, &work[*n + j1], &work[j1], &ka1);
+                dlar2v_(&nr, &ab[ka1 + j1 * ab_dim1], &ab[ka1 + (j1 - 1) * ab_dim1],
+                        &ab[*ka + j1 * ab_dim1], &inca, &work[*n + j1], &work[j1], &ka1);
             }
             /* start applying rotations in 1st set from the right */
             i__1 = *kb - k + 1;
@@ -1289,9 +1286,8 @@ L490:
                 j1t = j2 - (nrt - 1) * ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_dlartv(&nrt, &ab[l + j1t * ab_dim1], &inca,
-                                       &ab[l + 1 + (j1t - 1) * ab_dim1], &inca, &work[*n + j1t],
-                                       &work[j1t], &ka1);
+                    dlartv_(&nrt, &ab[l + j1t * ab_dim1], &inca, &ab[l + 1 + (j1t - 1) * ab_dim1],
+                            &inca, &work[*n + j1t], &work[j1t], &ka1);
                 }
                 /* L590: */
             }
@@ -1302,8 +1298,8 @@ L490:
                 i__4 = ka1;
                 for(j = j1; i__4 < 0 ? j >= i__1 : j <= i__1; j += i__4)
                 {
-                    aocl_blas_drot(&nx, &x[j * x_dim1 + 1], &c__1, &x[(j - 1) * x_dim1 + 1], &c__1,
-                                   &work[*n + j], &work[j]);
+                    drot_(&nx, &x[j * x_dim1 + 1], &c__1, &x[(j - 1) * x_dim1 + 1], &c__1,
+                          &work[*n + j], &work[j]);
                     /* L600: */
                 }
             }
@@ -1325,14 +1321,14 @@ L490:
                 /* Computing MAX */
                 i__3 = 2;
                 i__4 = k + i0 - m; // , expr subst
-                j2 = i__ + k + 1 - fla_max(i__3,i__4) * ka1;
+                j2 = i__ + k + 1 - fla_max(i__3, i__4) * ka1;
             }
             else
             {
                 /* Computing MAX */
                 i__3 = 1;
                 i__4 = k + i0 - m; // , expr subst
-                j2 = i__ + k + 1 - fla_max(i__3,i__4) * ka1;
+                j2 = i__ + k + 1 - fla_max(i__3, i__4) * ka1;
             }
             /* finish applying rotations in 2nd set from the right */
             for(l = *kb - k; l >= 1; --l)
@@ -1341,10 +1337,9 @@ L490:
                 j1t = j2 - (nrt - 1) * ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_dlartv(&nrt, &ab[l + (j1t + *ka) * ab_dim1], &inca,
-                                       &ab[l + 1 + (j1t + *ka - 1) * ab_dim1], &inca,
-                                       &work[*n + m - *kb + j1t + *ka], &work[m - *kb + j1t + *ka],
-                                       &ka1);
+                    dlartv_(&nrt, &ab[l + (j1t + *ka) * ab_dim1], &inca,
+                            &ab[l + 1 + (j1t + *ka - 1) * ab_dim1], &inca,
+                            &work[*n + m - *kb + j1t + *ka], &work[m - *kb + j1t + *ka], &ka1);
                 }
                 /* L620: */
             }
@@ -1383,29 +1378,29 @@ L490:
             /* Computing MAX */
             i__3 = 1;
             i__4 = k + i0 - m; // , expr subst
-            j2 = i__ + k + 1 - fla_max(i__3,i__4) * ka1;
+            j2 = i__ + k + 1 - fla_max(i__3, i__4) * ka1;
             nr = (j2 + *ka - 1) / ka1;
             j1 = j2 - (nr - 1) * ka1;
             if(nr > 0)
             {
                 /* generate rotations in 2nd set to annihilate elements */
                 /* which have been created outside the band */
-                aocl_lapack_dlargv(&nr, &ab[(j1 + *ka) * ab_dim1 + 1], &inca, &work[m - *kb + j1],
-                                   &ka1, &work[*n + m - *kb + j1], &ka1);
+                dlargv_(&nr, &ab[(j1 + *ka) * ab_dim1 + 1], &inca, &work[m - *kb + j1], &ka1,
+                        &work[*n + m - *kb + j1], &ka1);
                 /* apply rotations in 2nd set from the left */
                 i__3 = *ka - 1;
                 for(l = 1; l <= i__3; ++l)
                 {
-                    aocl_lapack_dlartv(&nr, &ab[ka1 - l + (j1 + l) * ab_dim1], &inca,
-                                       &ab[*ka - l + (j1 + l) * ab_dim1], &inca,
-                                       &work[*n + m - *kb + j1], &work[m - *kb + j1], &ka1);
+                    dlartv_(&nr, &ab[ka1 - l + (j1 + l) * ab_dim1], &inca,
+                            &ab[*ka - l + (j1 + l) * ab_dim1], &inca, &work[*n + m - *kb + j1],
+                            &work[m - *kb + j1], &ka1);
                     /* L660: */
                 }
                 /* apply rotations in 2nd set from both sides to diagonal */
                 /* blocks */
-                aocl_lapack_dlar2v(&nr, &ab[ka1 + j1 * ab_dim1], &ab[ka1 + (j1 - 1) * ab_dim1],
-                                   &ab[*ka + j1 * ab_dim1], &inca, &work[*n + m - *kb + j1],
-                                   &work[m - *kb + j1], &ka1);
+                dlar2v_(&nr, &ab[ka1 + j1 * ab_dim1], &ab[ka1 + (j1 - 1) * ab_dim1],
+                        &ab[*ka + j1 * ab_dim1], &inca, &work[*n + m - *kb + j1],
+                        &work[m - *kb + j1], &ka1);
             }
             /* start applying rotations in 2nd set from the right */
             i__3 = *kb - k + 1;
@@ -1415,9 +1410,8 @@ L490:
                 j1t = j2 - (nrt - 1) * ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_dlartv(&nrt, &ab[l + j1t * ab_dim1], &inca,
-                                       &ab[l + 1 + (j1t - 1) * ab_dim1], &inca,
-                                       &work[*n + m - *kb + j1t], &work[m - *kb + j1t], &ka1);
+                    dlartv_(&nrt, &ab[l + j1t * ab_dim1], &inca, &ab[l + 1 + (j1t - 1) * ab_dim1],
+                            &inca, &work[*n + m - *kb + j1t], &work[m - *kb + j1t], &ka1);
                 }
                 /* L670: */
             }
@@ -1428,8 +1422,8 @@ L490:
                 i__4 = ka1;
                 for(j = j1; i__4 < 0 ? j >= i__3 : j <= i__3; j += i__4)
                 {
-                    aocl_blas_drot(&nx, &x[j * x_dim1 + 1], &c__1, &x[(j - 1) * x_dim1 + 1], &c__1,
-                                   &work[*n + m - *kb + j], &work[m - *kb + j]);
+                    drot_(&nx, &x[j * x_dim1 + 1], &c__1, &x[(j - 1) * x_dim1 + 1], &c__1,
+                          &work[*n + m - *kb + j], &work[m - *kb + j]);
                     /* L680: */
                 }
             }
@@ -1441,7 +1435,7 @@ L490:
             /* Computing MAX */
             i__3 = 1;
             i__1 = k + i0 - m + 1; // , expr subst
-            j2 = i__ + k + 1 - fla_max(i__3,i__1) * ka1;
+            j2 = i__ + k + 1 - fla_max(i__3, i__1) * ka1;
             /* finish applying rotations in 1st set from the right */
             for(l = *kb - k; l >= 1; --l)
             {
@@ -1449,9 +1443,8 @@ L490:
                 j1t = j2 - (nrt - 1) * ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_dlartv(&nrt, &ab[l + j1t * ab_dim1], &inca,
-                                       &ab[l + 1 + (j1t - 1) * ab_dim1], &inca, &work[*n + j1t],
-                                       &work[j1t], &ka1);
+                    dlartv_(&nrt, &ab[l + j1t * ab_dim1], &inca, &ab[l + 1 + (j1t - 1) * ab_dim1],
+                            &inca, &work[*n + j1t], &work[j1t], &ka1);
                 }
                 /* L700: */
             }
@@ -1461,10 +1454,8 @@ L490:
         {
             /* Computing MIN */
             i__3 = i__ + *kb;
-            i__4 = fla_min(i__3,m) - (*ka << 1) - 1;
-            for (j = 2;
-                    j <= i__4;
-                    ++j)
+            i__4 = fla_min(i__3, m) - (*ka << 1) - 1;
+            for(j = 2; j <= i__4; ++j)
             {
                 work[*n + j] = work[*n + j + *ka];
                 work[j] = work[j + *ka];
@@ -1488,10 +1479,8 @@ L490:
             /* Computing MIN */
             i__3 = *n;
             i__1 = i__ + *ka; // , expr subst
-            i__4 = fla_min(i__3,i__1);
-            for (j = i__;
-                    j <= i__4;
-                    ++j)
+            i__4 = fla_min(i__3, i__1);
+            for(j = i__; j <= i__4; ++j)
             {
                 ab[j - i__ + 1 + i__ * ab_dim1] /= bii;
                 /* L740: */
@@ -1513,10 +1502,8 @@ L490:
                 /* Computing MIN */
                 i__1 = *n;
                 i__2 = i__ + *ka; // , expr subst
-                i__3 = fla_min(i__1,i__2);
-                for (j = i__ + kbt + 1;
-                        j <= i__3;
-                        ++j)
+                i__3 = fla_min(i__1, i__2);
+                for(j = i__ + kbt + 1; j <= i__3; ++j)
                 {
                     ab[j - k + 1 + k * ab_dim1]
                         -= bb[k - i__ + 1 + i__ * bb_dim1] * ab[j - i__ + 1 + i__ * ab_dim1];
@@ -1530,10 +1517,8 @@ L490:
                 /* Computing MIN */
                 i__1 = j + *ka;
                 i__2 = i__ + kbt; // , expr subst
-                i__3 = fla_min(i__1,i__2);
-                for (k = i__ + 1;
-                        k <= i__3;
-                        ++k)
+                i__3 = fla_min(i__1, i__2);
+                for(k = i__ + 1; k <= i__3; ++k)
                 {
                     ab[k - j + 1 + j * ab_dim1]
                         -= bb[k - i__ + 1 + i__ * bb_dim1] * ab[i__ - j + 1 + j * ab_dim1];
@@ -1545,11 +1530,11 @@ L490:
             {
                 /* post-multiply X by inv(S(i)) */
                 d__1 = 1. / bii;
-                aocl_blas_dscal(&nx, &d__1, &x[i__ * x_dim1 + 1], &c__1);
+                dscal_(&nx, &d__1, &x[i__ * x_dim1 + 1], &c__1);
                 if(kbt > 0)
                 {
-                    aocl_blas_dger(&nx, &kbt, &c_b20, &x[i__ * x_dim1 + 1], &c__1,
-                                   &bb[i__ * bb_dim1 + 2], &c__1, &x[(i__ + 1) * x_dim1 + 1], ldx);
+                    dger_(&nx, &kbt, &c_b20, &x[i__ * x_dim1 + 1], &c__1, &bb[i__ * bb_dim1 + 2],
+                          &c__1, &x[(i__ + 1) * x_dim1 + 1], ldx);
                 }
             }
             /* store a(i,i1) in RA1 for use in next loop over K */
@@ -1584,7 +1569,7 @@ L490:
             /* Computing MAX */
             i__3 = 1;
             i__1 = k + i0 - m + 1; // , expr subst
-            j2 = i__ + k + 1 - fla_max(i__3,i__1) * ka1;
+            j2 = i__ + k + 1 - fla_max(i__3, i__1) * ka1;
             nr = (j2 + *ka - 1) / ka1;
             j1 = j2 - (nr - 1) * ka1;
             if(update)
@@ -1592,7 +1577,7 @@ L490:
                 /* Computing MIN */
                 i__3 = j2;
                 i__1 = i__ - (*ka << 1) + k - 1; // , expr subst
-                j2t = fla_min(i__3,i__1);
+                j2t = fla_min(i__3, i__1);
             }
             else
             {
@@ -1613,8 +1598,8 @@ L490:
             /* have been created outside the band */
             if(nrt > 0)
             {
-                aocl_lapack_dlargv(&nrt, &ab[ka1 + j1 * ab_dim1], &inca, &work[j1], &ka1,
-                                   &work[*n + j1], &ka1);
+                dlargv_(&nrt, &ab[ka1 + j1 * ab_dim1], &inca, &work[j1], &ka1, &work[*n + j1],
+                        &ka1);
             }
             if(nr > 0)
             {
@@ -1622,14 +1607,14 @@ L490:
                 i__1 = *ka - 1;
                 for(l = 1; l <= i__1; ++l)
                 {
-                    aocl_lapack_dlartv(&nr, &ab[l + 1 + j1 * ab_dim1], &inca,
-                                       &ab[l + 2 + (j1 - 1) * ab_dim1], &inca, &work[*n + j1],
-                                       &work[j1], &ka1);
+                    dlartv_(&nr, &ab[l + 1 + j1 * ab_dim1], &inca, &ab[l + 2 + (j1 - 1) * ab_dim1],
+                            &inca, &work[*n + j1], &work[j1], &ka1);
                     /* L810: */
                 }
                 /* apply rotations in 1st set from both sides to diagonal */
                 /* blocks */
-                dlar2v_(&nr, &ab[j1 * ab_dim1 + 1], &ab[(j1 - 1) * ab_dim1 + 1], &ab[(j1 - 1) * ab_dim1 + 2], &inca, &work[*n + j1], &work[j1], &ka1);
+                dlar2v_(&nr, &ab[j1 * ab_dim1 + 1], &ab[(j1 - 1) * ab_dim1 + 1],
+                        &ab[(j1 - 1) * ab_dim1 + 2], &inca, &work[*n + j1], &work[j1], &ka1);
             }
             /* start applying rotations in 1st set from the left */
             i__1 = *kb - k + 1;
@@ -1639,7 +1624,9 @@ L490:
                 j1t = j2 - (nrt - 1) * ka1;
                 if(nrt > 0)
                 {
-                    dlartv_(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca, &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca, &work[*n + j1t], &work[j1t], &ka1);
+                    dlartv_(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca,
+                            &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca, &work[*n + j1t],
+                            &work[j1t], &ka1);
                 }
                 /* L820: */
             }
@@ -1650,8 +1637,8 @@ L490:
                 i__3 = ka1;
                 for(j = j1; i__3 < 0 ? j >= i__1 : j <= i__1; j += i__3)
                 {
-                    aocl_blas_drot(&nx, &x[j * x_dim1 + 1], &c__1, &x[(j - 1) * x_dim1 + 1], &c__1,
-                                   &work[*n + j], &work[j]);
+                    drot_(&nx, &x[j * x_dim1 + 1], &c__1, &x[(j - 1) * x_dim1 + 1], &c__1,
+                          &work[*n + j], &work[j]);
                     /* L830: */
                 }
             }
@@ -1673,14 +1660,14 @@ L490:
                 /* Computing MAX */
                 i__4 = 2;
                 i__3 = k + i0 - m; // , expr subst
-                j2 = i__ + k + 1 - fla_max(i__4,i__3) * ka1;
+                j2 = i__ + k + 1 - fla_max(i__4, i__3) * ka1;
             }
             else
             {
                 /* Computing MAX */
                 i__4 = 1;
                 i__3 = k + i0 - m; // , expr subst
-                j2 = i__ + k + 1 - fla_max(i__4,i__3) * ka1;
+                j2 = i__ + k + 1 - fla_max(i__4, i__3) * ka1;
             }
             /* finish applying rotations in 2nd set from the left */
             for(l = *kb - k; l >= 1; --l)
@@ -1689,10 +1676,9 @@ L490:
                 j1t = j2 - (nrt - 1) * ka1;
                 if(nrt > 0)
                 {
-                    aocl_lapack_dlartv(&nrt, &ab[ka1 - l + 1 + (j1t + l - 1) * ab_dim1], &inca,
-                                       &ab[ka1 - l + (j1t + l - 1) * ab_dim1], &inca,
-                                       &work[*n + m - *kb + j1t + *ka], &work[m - *kb + j1t + *ka],
-                                       &ka1);
+                    dlartv_(&nrt, &ab[ka1 - l + 1 + (j1t + l - 1) * ab_dim1], &inca,
+                            &ab[ka1 - l + (j1t + l - 1) * ab_dim1], &inca,
+                            &work[*n + m - *kb + j1t + *ka], &work[m - *kb + j1t + *ka], &ka1);
                 }
                 /* L850: */
             }
@@ -1730,29 +1716,28 @@ L490:
             /* Computing MAX */
             i__4 = 1;
             i__3 = k + i0 - m; // , expr subst
-            j2 = i__ + k + 1 - fla_max(i__4,i__3) * ka1;
+            j2 = i__ + k + 1 - fla_max(i__4, i__3) * ka1;
             nr = (j2 + *ka - 1) / ka1;
             j1 = j2 - (nr - 1) * ka1;
             if(nr > 0)
             {
                 /* generate rotations in 2nd set to annihilate elements */
                 /* which have been created outside the band */
-                aocl_lapack_dlargv(&nr, &ab[ka1 + j1 * ab_dim1], &inca, &work[m - *kb + j1], &ka1,
-                                   &work[*n + m - *kb + j1], &ka1);
+                dlargv_(&nr, &ab[ka1 + j1 * ab_dim1], &inca, &work[m - *kb + j1], &ka1,
+                        &work[*n + m - *kb + j1], &ka1);
                 /* apply rotations in 2nd set from the right */
                 i__4 = *ka - 1;
                 for(l = 1; l <= i__4; ++l)
                 {
-                    aocl_lapack_dlartv(&nr, &ab[l + 1 + j1 * ab_dim1], &inca,
-                                       &ab[l + 2 + (j1 - 1) * ab_dim1], &inca,
-                                       &work[*n + m - *kb + j1], &work[m - *kb + j1], &ka1);
+                    dlartv_(&nr, &ab[l + 1 + j1 * ab_dim1], &inca, &ab[l + 2 + (j1 - 1) * ab_dim1],
+                            &inca, &work[*n + m - *kb + j1], &work[m - *kb + j1], &ka1);
                     /* L890: */
                 }
                 /* apply rotations in 2nd set from both sides to diagonal */
                 /* blocks */
-                aocl_lapack_dlar2v(&nr, &ab[j1 * ab_dim1 + 1], &ab[(j1 - 1) * ab_dim1 + 1],
-                                   &ab[(j1 - 1) * ab_dim1 + 2], &inca, &work[*n + m - *kb + j1],
-                                   &work[m - *kb + j1], &ka1);
+                dlar2v_(&nr, &ab[j1 * ab_dim1 + 1], &ab[(j1 - 1) * ab_dim1 + 1],
+                        &ab[(j1 - 1) * ab_dim1 + 2], &inca, &work[*n + m - *kb + j1],
+                        &work[m - *kb + j1], &ka1);
             }
             /* start applying rotations in 2nd set from the left */
             i__4 = *kb - k + 1;
@@ -1762,7 +1747,9 @@ L490:
                 j1t = j2 - (nrt - 1) * ka1;
                 if(nrt > 0)
                 {
-                    dlartv_(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca, &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca, &work[*n + m - *kb + j1t], &work[m - *kb + j1t], &ka1);
+                    dlartv_(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca,
+                            &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca,
+                            &work[*n + m - *kb + j1t], &work[m - *kb + j1t], &ka1);
                 }
                 /* L900: */
             }
@@ -1773,8 +1760,8 @@ L490:
                 i__3 = ka1;
                 for(j = j1; i__3 < 0 ? j >= i__4 : j <= i__4; j += i__3)
                 {
-                    aocl_blas_drot(&nx, &x[j * x_dim1 + 1], &c__1, &x[(j - 1) * x_dim1 + 1], &c__1,
-                                   &work[*n + m - *kb + j], &work[m - *kb + j]);
+                    drot_(&nx, &x[j * x_dim1 + 1], &c__1, &x[(j - 1) * x_dim1 + 1], &c__1,
+                          &work[*n + m - *kb + j], &work[m - *kb + j]);
                     /* L910: */
                 }
             }
@@ -1786,7 +1773,7 @@ L490:
             /* Computing MAX */
             i__4 = 1;
             i__1 = k + i0 - m + 1; // , expr subst
-            j2 = i__ + k + 1 - fla_max(i__4,i__1) * ka1;
+            j2 = i__ + k + 1 - fla_max(i__4, i__1) * ka1;
             /* finish applying rotations in 1st set from the left */
             for(l = *kb - k; l >= 1; --l)
             {
@@ -1794,7 +1781,9 @@ L490:
                 j1t = j2 - (nrt - 1) * ka1;
                 if(nrt > 0)
                 {
-                    dlartv_(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca, &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca, &work[*n + j1t], &work[j1t], &ka1);
+                    dlartv_(&nrt, &ab[ka1 - l + 1 + (j1t - ka1 + l) * ab_dim1], &inca,
+                            &ab[ka1 - l + (j1t - ka1 + l) * ab_dim1], &inca, &work[*n + j1t],
+                            &work[j1t], &ka1);
                 }
                 /* L930: */
             }
@@ -1804,10 +1793,8 @@ L490:
         {
             /* Computing MIN */
             i__4 = i__ + *kb;
-            i__3 = fla_min(i__4,m) - (*ka << 1) - 1;
-            for (j = 2;
-                    j <= i__3;
-                    ++j)
+            i__3 = fla_min(i__4, m) - (*ka << 1) - 1;
+            for(j = 2; j <= i__3; ++j)
             {
                 work[*n + j] = work[*n + j + *ka];
                 work[j] = work[j + *ka];

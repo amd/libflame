@@ -164,35 +164,9 @@ row i of the matrix was interchanged */
 /* > \date September 2012 */
 /* > \ingroup realGBcomputational */
 /* ===================================================================== */
-/** Generated wrapper function */
-real sla_gbrcond_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, real *ab,
-                  aocl_int_t *ldab, real *afb, aocl_int_t *ldafb, aocl_int_t *ipiv,
-                  aocl_int_t *cmode, real *c__, aocl_int_t *info, real *work, aocl_int_t *iwork)
-{
-#if FLA_ENABLE_ILP64
-    return aocl_lapack_sla_gbrcond(trans, n, kl, ku, ab, ldab, afb, ldafb, ipiv, cmode, c__, info,
-                                   work, iwork);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kl_64 = *kl;
-    aocl_int64_t ku_64 = *ku;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldafb_64 = *ldafb;
-    aocl_int64_t cmode_64 = *cmode;
-    aocl_int64_t info_64 = *info;
-
-    real ret_val = aocl_lapack_sla_gbrcond(trans, &n_64, &kl_64, &ku_64, ab, &ldab_64, afb,
-                                           &ldafb_64, ipiv, &cmode_64, c__, &info_64, work, iwork);
-
-    *info = (aocl_int_t)info_64;
-    return ret_val;
-#endif
-}
-
-real aocl_lapack_sla_gbrcond(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
-                             real *ab, aocl_int64_t *ldab, real *afb, aocl_int64_t *ldafb,
-                             aocl_int_t *ipiv, aocl_int64_t *cmode, real *c__, aocl_int64_t *info,
-                             real *work, aocl_int_t *iwork)
+real sla_gbrcond_(char *trans, integer *n, integer *kl, integer *ku, real *ab, integer *ldab,
+                  real *afb, integer *ldafb, integer *ipiv, integer *cmode, real *c__,
+                  integer *info, real *work, integer *iwork)
 {
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, afb_dim1, afb_offset, i__1, i__2, i__3, i__4;
@@ -204,10 +178,14 @@ real aocl_lapack_sla_gbrcond(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aoc
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    void slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     extern /* Subroutine */
-    void sgbtrs_(char *, integer *, integer *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        sgbtrs_(char *, integer *, integer *, integer *, integer *, real *, integer *, integer *,
+                real *, integer *, integer *);
     logical notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -244,7 +222,7 @@ real aocl_lapack_sla_gbrcond(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aoc
     ret_val = 0.f;
     *info = 0;
     notrans = lsame_(trans, "N", 1, 1);
-    if (! notrans && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    if(!notrans && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
@@ -295,10 +273,8 @@ real aocl_lapack_sla_gbrcond(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aoc
                 i__2 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__3 = fla_min(i__4,*n);
-                for (j = fla_max(i__2,1);
-                        j <= i__3;
-                        ++j)
+                i__3 = fla_min(i__4, *n);
+                for(j = fla_max(i__2, 1); j <= i__3; ++j)
                 {
                     tmp += (r__1 = ab[kd + i__ - j + j * ab_dim1] * c__[j], f2c_abs(r__1));
                 }
@@ -309,10 +285,8 @@ real aocl_lapack_sla_gbrcond(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aoc
                 i__3 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__2 = fla_min(i__4,*n);
-                for (j = fla_max(i__3,1);
-                        j <= i__2;
-                        ++j)
+                i__2 = fla_min(i__4, *n);
+                for(j = fla_max(i__3, 1); j <= i__2; ++j)
                 {
                     tmp += (r__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs(r__1));
                 }
@@ -323,10 +297,8 @@ real aocl_lapack_sla_gbrcond(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aoc
                 i__2 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__3 = fla_min(i__4,*n);
-                for (j = fla_max(i__2,1);
-                        j <= i__3;
-                        ++j)
+                i__3 = fla_min(i__4, *n);
+                for(j = fla_max(i__2, 1); j <= i__3; ++j)
                 {
                     tmp += (r__1 = ab[kd + i__ - j + j * ab_dim1] / c__[j], f2c_abs(r__1));
                 }
@@ -346,10 +318,8 @@ real aocl_lapack_sla_gbrcond(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aoc
                 i__3 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__2 = fla_min(i__4,*n);
-                for (j = fla_max(i__3,1);
-                        j <= i__2;
-                        ++j)
+                i__2 = fla_min(i__4, *n);
+                for(j = fla_max(i__3, 1); j <= i__2; ++j)
                 {
                     tmp += (r__1 = ab[ke - i__ + j + i__ * ab_dim1] * c__[j], f2c_abs(r__1));
                 }
@@ -360,12 +330,10 @@ real aocl_lapack_sla_gbrcond(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aoc
                 i__2 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__3 = fla_min(i__4,*n);
-                for (j = fla_max(i__2,1);
-                        j <= i__3;
-                        ++j)
+                i__3 = fla_min(i__4, *n);
+                for(j = fla_max(i__2, 1); j <= i__3; ++j)
                 {
-                    tmp += (r__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_abs(r__1) );
+                    tmp += (r__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_abs(r__1));
                 }
             }
             else
@@ -374,10 +342,8 @@ real aocl_lapack_sla_gbrcond(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aoc
                 i__3 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__2 = fla_min(i__4,*n);
-                for (j = fla_max(i__3,1);
-                        j <= i__2;
-                        ++j)
+                i__2 = fla_min(i__4, *n);
+                for(j = fla_max(i__3, 1); j <= i__2; ++j)
                 {
                     tmp += (r__1 = ab[ke - i__ + j + i__ * ab_dim1] / c__[j], f2c_abs(r__1));
                 }
@@ -389,7 +355,7 @@ real aocl_lapack_sla_gbrcond(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aoc
     ainvnm = 0.f;
     kase = 0;
 L10:
-    aocl_lapack_slacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+    slacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == 2)
@@ -402,13 +368,13 @@ L10:
             }
             if(notrans)
             {
-                aocl_lapack_sgbtrs("No transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb,
-                                   &ipiv[1], &work[1], n, info);
+                sgbtrs_("No transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1],
+                        &work[1], n, info);
             }
             else
             {
-                aocl_lapack_sgbtrs("Transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1],
-                                   &work[1], n, info);
+                sgbtrs_("Transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1], &work[1],
+                        n, info);
             }
             /* Multiply by inv(C). */
             if(*cmode == 1)
@@ -449,13 +415,13 @@ L10:
             }
             if(notrans)
             {
-                aocl_lapack_sgbtrs("Transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1],
-                                   &work[1], n, info);
+                sgbtrs_("Transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1], &work[1],
+                        n, info);
             }
             else
             {
-                aocl_lapack_sgbtrs("No transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb,
-                                   &ipiv[1], &work[1], n, info);
+                sgbtrs_("No transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1],
+                        &work[1], n, info);
             }
             /* Multiply by R. */
             i__1 = *n;

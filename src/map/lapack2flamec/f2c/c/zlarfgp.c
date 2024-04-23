@@ -1,22 +1,28 @@
-/* ../netlib/zlarfgp.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlarfgp.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b5 =
-{
-    1.,0.
-}
-;
-/* > \brief \b ZLARFGP generates an elementary reflector (Householder matrix) with non-negative beta. */
+static doublecomplex c_b5 = {1., 0.};
+/* > \brief \b ZLARFGP generates an elementary reflector (Householder matrix) with non-negative
+ * beta. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLARFGP + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlarfgp .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlarfgp
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlarfgp .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlarfgp
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlarfgp .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlarfgp
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -99,28 +105,33 @@ static doublecomplex c_b5 =
 void zlarfgp_(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx, doublecomplex *tau)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlarfgp inputs: n %" FLA_IS ", incx %" FLA_IS "",*n, *incx);
+    AOCL_DTL_SNPRINTF("zlarfgp inputs: n %" FLA_IS ", incx %" FLA_IS "", *n, *incx);
 
     /* System generated locals */
     integer i__1, i__2;
     doublereal d__1, d__2;
     doublecomplex z__1, z__2;
     /* Builtin functions */
-    double d_imag(doublecomplex *), d_sign(doublereal *, doublereal *), z_abs( doublecomplex *);
+    double d_imag(doublecomplex *), d_sign(doublereal *, doublereal *), z_abs(doublecomplex *);
     /* Local variables */
     integer j;
     doublecomplex savealpha;
     integer knt;
     doublereal beta, alphi, alphr;
     extern /* Subroutine */
-    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     doublereal xnorm;
-    extern doublereal dlapy2_(doublereal *, doublereal *), dlapy3_(doublereal *, doublereal *, doublereal *), dznrm2_(integer *, doublecomplex *, integer *), dlamch_(char *);
+    extern doublereal dlapy2_(doublereal *, doublereal *),
+        dlapy3_(doublereal *, doublereal *, doublereal *),
+        dznrm2_(integer *, doublecomplex *, integer *), dlamch_(char *);
     extern /* Subroutine */
-    void zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+        void
+        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal bignum;
     extern /* Double Complex */
-    void zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
+        void
+        zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
     doublereal smlnum;
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -145,7 +156,7 @@ void zlarfgp_(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx,
     /* Parameter adjustments */
     --x;
     /* Function Body */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         tau->r = 0., tau->i = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
@@ -155,13 +166,13 @@ void zlarfgp_(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx,
     xnorm = dznrm2_(&i__1, &x[1], incx);
     alphr = alpha->r;
     alphi = d_imag(alpha);
-    if (xnorm == 0.)
+    if(xnorm == 0.)
     {
         /* H = [1-alpha/f2c_abs(alpha) 0;
         0 I], sign chosen so ALPHA >= 0. */
-        if (alphi == 0.)
+        if(alphi == 0.)
         {
-            if (alphr >= 0.)
+            if(alphr >= 0.)
             {
                 /* When TAU.eq.ZERO, the vector is special-cased to be */
                 /* all zeros in the application routines. We do not need */
@@ -174,9 +185,7 @@ void zlarfgp_(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx,
                 /* zero checks when TAU.ne.ZERO, and we must clear X. */
                 tau->r = 2., tau->i = 0.;
                 i__1 = *n - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = (j - 1) * *incx + 1;
                     x[i__2].r = 0.;
@@ -197,9 +206,7 @@ void zlarfgp_(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx,
             z__1.i = d__2; // , expr subst
             tau->r = z__1.r, tau->i = z__1.i;
             i__1 = *n - 1;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = (j - 1) * *incx + 1;
                 x[i__2].r = 0.;
@@ -216,18 +223,18 @@ void zlarfgp_(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx,
         smlnum = dlamch_("S") / dlamch_("E");
         bignum = 1. / smlnum;
         knt = 0;
-        if (f2c_abs(beta) < smlnum)
+        if(f2c_abs(beta) < smlnum)
         {
             /* XNORM, BETA may be inaccurate;
             scale X and recompute them */
-L10:
+        L10:
             ++knt;
             i__1 = *n - 1;
             zdscal_(&i__1, &bignum, &x[1], incx);
             beta *= bignum;
             alphi *= bignum;
             alphr *= bignum;
-            if (f2c_abs(beta) < smlnum && knt < 20)
+            if(f2c_abs(beta) < smlnum && knt < 20)
             {
                 goto L10;
             }
@@ -245,7 +252,7 @@ L10:
         z__1.r = alpha->r + beta;
         z__1.i = alpha->i; // , expr subst
         alpha->r = z__1.r, alpha->i = z__1.i;
-        if (beta < 0.)
+        if(beta < 0.)
         {
             beta = -beta;
             z__2.r = -alpha->r;
@@ -270,7 +277,7 @@ L10:
         }
         zladiv_f2c_(&z__1, &c_b5, alpha);
         alpha->r = z__1.r, alpha->i = z__1.i;
-        if (z_abs(tau) <= smlnum)
+        if(z_abs(tau) <= smlnum)
         {
             /* In the case where the computed TAU ends up being a denormalized number, */
             /* it loses relative accuracy. This is a BIG problem. Solution: flush TAU */
@@ -279,9 +286,9 @@ L10:
             /* (Thanks Pat. Thanks MathWorks.) */
             alphr = savealpha.r;
             alphi = d_imag(&savealpha);
-            if (alphi == 0.)
+            if(alphi == 0.)
             {
-                if (alphr >= 0.)
+                if(alphr >= 0.)
                 {
                     tau->r = 0., tau->i = 0.;
                 }
@@ -289,9 +296,7 @@ L10:
                 {
                     tau->r = 2., tau->i = 0.;
                     i__1 = *n - 1;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
                         i__2 = (j - 1) * *incx + 1;
                         x[i__2].r = 0.;
@@ -311,9 +316,7 @@ L10:
                 z__1.i = d__2; // , expr subst
                 tau->r = z__1.r, tau->i = z__1.i;
                 i__1 = *n - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = (j - 1) * *incx + 1;
                     x[i__2].r = 0.;
@@ -330,9 +333,7 @@ L10:
         }
         /* If BETA is subnormal, it may lose relative accuracy */
         i__1 = knt;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             beta *= smlnum;
             /* L20: */
@@ -344,4 +345,3 @@ L10:
     /* End of ZLARFGP */
 }
 /* zlarfgp_ */
-

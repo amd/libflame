@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b CSYMV computes a matrix-vector product for a scomplex symmetric matrix. */
+#include "FLA_f2c.h" /* > \brief \b CSYMV computes a matrix-vector product for a complex symmetric matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -152,15 +152,18 @@
 /* > \ingroup complexSYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, complex *x, integer *incx, complex *beta, complex *y, integer *incy)
+void csymv_(char *uplo, integer *n, complex *alpha, complex *a, integer *lda, complex *x,
+            integer *incx, complex *beta, complex *y, integer *incy)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"csymv inputs: uplo %c, n %lld, lda %lld, incx %lld, incy %lld",*uplo, *n, *lda, *incx, *incy);
+    snprintf(buffer, 256, "csymv inputs: uplo %c, n %lld, lda %lld, incx %lld, incy %lld", *uplo,
+             *n, *lda, *incx, *incy);
 #else
-    snprintf(buffer, 256,"csymv inputs: uplo %c, n %d, lda %d, incx %d, incy %d",*uplo, *n, *lda, *incx, *incy);
+    snprintf(buffer, 256, "csymv inputs: uplo %c, n %d, lda %d, incx %d, incy %d", *uplo, *n, *lda,
+             *incx, *incy);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -172,7 +175,8 @@ void csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, c
     complex temp1, temp2;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -202,7 +206,7 @@ void csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, c
     --y;
     /* Function Body */
     info = 0;
-    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         info = 1;
     }
@@ -210,7 +214,7 @@ void csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, c
     {
         info = 2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         info = 5;
     }
@@ -229,7 +233,7 @@ void csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, c
         return;
     }
     /* Quick return if possible. */
-    if(*n == 0 || alpha->real == 0.f && alpha->imag == 0.f && (beta->real == 1.f && beta->imag == 0.f))
+    if(*n == 0 || alpha->r == 0.f && alpha->i == 0.f && (beta->r == 1.f && beta->i == 0.f))
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -255,11 +259,11 @@ void csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, c
     /* accessed sequentially with one pass through the triangular part */
     /* of A. */
     /* First form y := beta*y. */
-    if(beta->real != 1.f || beta->imag != 0.f)
+    if(beta->r != 1.f || beta->i != 0.f)
     {
         if(*incy == 1)
         {
-            if(beta->real == 0.f && beta->imag == 0.f)
+            if(beta->r == 0.f && beta->i == 0.f)
             {
                 i__1 = *n;
                 for(i__ = 1; i__ <= i__1; ++i__)
@@ -277,10 +281,10 @@ void csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, c
                 {
                     i__2 = i__;
                     i__3 = i__;
-                    q__1.real = beta->real * y[i__3].real - beta->imag * y[i__3].imag;
-                    q__1.imag = beta->real * y[i__3].imag + beta->imag * y[i__3].real; // , expr subst
-                    y[i__2].real = q__1.real;
-                    y[i__2].imag = q__1.imag; // , expr subst
+                    q__1.r = beta->r * y[i__3].r - beta->i * y[i__3].i;
+                    q__1.i = beta->r * y[i__3].i + beta->i * y[i__3].r; // , expr subst
+                    y[i__2].r = q__1.r;
+                    y[i__2].i = q__1.i; // , expr subst
                     /* L20: */
                 }
             }
@@ -288,7 +292,7 @@ void csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, c
         else
         {
             iy = ky;
-            if(beta->real == 0.f && beta->imag == 0.f)
+            if(beta->r == 0.f && beta->i == 0.f)
             {
                 i__1 = *n;
                 for(i__ = 1; i__ <= i__1; ++i__)
@@ -307,22 +311,22 @@ void csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, c
                 {
                     i__2 = iy;
                     i__3 = iy;
-                    q__1.real = beta->real * y[i__3].real - beta->imag * y[i__3].imag;
-                    q__1.imag = beta->real * y[i__3].imag + beta->imag * y[i__3].real; // , expr subst
-                    y[i__2].real = q__1.real;
-                    y[i__2].imag = q__1.imag; // , expr subst
+                    q__1.r = beta->r * y[i__3].r - beta->i * y[i__3].i;
+                    q__1.i = beta->r * y[i__3].i + beta->i * y[i__3].r; // , expr subst
+                    y[i__2].r = q__1.r;
+                    y[i__2].i = q__1.i; // , expr subst
                     iy += *incy;
                     /* L40: */
                 }
             }
         }
     }
-    if(alpha->real == 0.f && alpha->imag == 0.f)
+    if(alpha->r == 0.f && alpha->i == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (lsame_(uplo, "U", 1, 1))
+    if(lsame_(uplo, "U", 1, 1))
     {
         /* Form y when A is stored in upper triangle. */
         if(*incx == 1 && *incy == 1)
@@ -343,20 +347,20 @@ void csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, c
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = i__ + j * a_dim1;
-                    q__2.real = temp1.real * a[i__5].real - temp1.imag * a[i__5].imag;
-                    q__2.imag = temp1.real * a[i__5].imag + temp1.imag * a[i__5].real; // , expr subst
-                    q__1.real = y[i__4].real + q__2.real;
-                    q__1.imag = y[i__4].imag + q__2.imag; // , expr subst
-                    y[i__3].real = q__1.real;
-                    y[i__3].imag = q__1.imag; // , expr subst
+                    q__2.r = temp1.r * a[i__5].r - temp1.i * a[i__5].i;
+                    q__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5].r; // , expr subst
+                    q__1.r = y[i__4].r + q__2.r;
+                    q__1.i = y[i__4].i + q__2.i; // , expr subst
+                    y[i__3].r = q__1.r;
+                    y[i__3].i = q__1.i; // , expr subst
                     i__3 = i__ + j * a_dim1;
                     i__4 = i__;
-                    q__2.real = a[i__3].real * x[i__4].real - a[i__3].imag * x[i__4].imag;
-                    q__2.imag = a[i__3].real * x[i__4].imag + a[i__3].imag * x[i__4].real; // , expr subst
-                    q__1.real = temp2.real + q__2.real;
-                    q__1.imag = temp2.imag + q__2.imag; // , expr subst
-                    temp2.real = q__1.real;
-                    temp2.imag = q__1.imag; // , expr subst
+                    q__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
+                    q__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
+                    q__1.r = temp2.r + q__2.r;
+                    q__1.i = temp2.i + q__2.i; // , expr subst
+                    temp2.r = q__1.r;
+                    temp2.i = q__1.i; // , expr subst
                     /* L50: */
                 }
                 i__2 = j;
@@ -397,20 +401,20 @@ void csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, c
                     i__3 = iy;
                     i__4 = iy;
                     i__5 = i__ + j * a_dim1;
-                    q__2.real = temp1.real * a[i__5].real - temp1.imag * a[i__5].imag;
-                    q__2.imag = temp1.real * a[i__5].imag + temp1.imag * a[i__5].real; // , expr subst
-                    q__1.real = y[i__4].real + q__2.real;
-                    q__1.imag = y[i__4].imag + q__2.imag; // , expr subst
-                    y[i__3].real = q__1.real;
-                    y[i__3].imag = q__1.imag; // , expr subst
+                    q__2.r = temp1.r * a[i__5].r - temp1.i * a[i__5].i;
+                    q__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5].r; // , expr subst
+                    q__1.r = y[i__4].r + q__2.r;
+                    q__1.i = y[i__4].i + q__2.i; // , expr subst
+                    y[i__3].r = q__1.r;
+                    y[i__3].i = q__1.i; // , expr subst
                     i__3 = i__ + j * a_dim1;
                     i__4 = ix;
-                    q__2.real = a[i__3].real * x[i__4].real - a[i__3].imag * x[i__4].imag;
-                    q__2.imag = a[i__3].real * x[i__4].imag + a[i__3].imag * x[i__4].real; // , expr subst
-                    q__1.real = temp2.real + q__2.real;
-                    q__1.imag = temp2.imag + q__2.imag; // , expr subst
-                    temp2.real = q__1.real;
-                    temp2.imag = q__1.imag; // , expr subst
+                    q__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
+                    q__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
+                    q__1.r = temp2.r + q__2.r;
+                    q__1.i = temp2.i + q__2.i; // , expr subst
+                    temp2.r = q__1.r;
+                    temp2.i = q__1.i; // , expr subst
                     ix += *incx;
                     iy += *incy;
                     /* L70: */
@@ -464,20 +468,20 @@ void csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, c
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = i__ + j * a_dim1;
-                    q__2.real = temp1.real * a[i__5].real - temp1.imag * a[i__5].imag;
-                    q__2.imag = temp1.real * a[i__5].imag + temp1.imag * a[i__5].real; // , expr subst
-                    q__1.real = y[i__4].real + q__2.real;
-                    q__1.imag = y[i__4].imag + q__2.imag; // , expr subst
-                    y[i__3].real = q__1.real;
-                    y[i__3].imag = q__1.imag; // , expr subst
+                    q__2.r = temp1.r * a[i__5].r - temp1.i * a[i__5].i;
+                    q__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5].r; // , expr subst
+                    q__1.r = y[i__4].r + q__2.r;
+                    q__1.i = y[i__4].i + q__2.i; // , expr subst
+                    y[i__3].r = q__1.r;
+                    y[i__3].i = q__1.i; // , expr subst
                     i__3 = i__ + j * a_dim1;
                     i__4 = i__;
-                    q__2.real = a[i__3].real * x[i__4].real - a[i__3].imag * x[i__4].imag;
-                    q__2.imag = a[i__3].real * x[i__4].imag + a[i__3].imag * x[i__4].real; // , expr subst
-                    q__1.real = temp2.real + q__2.real;
-                    q__1.imag = temp2.imag + q__2.imag; // , expr subst
-                    temp2.real = q__1.real;
-                    temp2.imag = q__1.imag; // , expr subst
+                    q__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
+                    q__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
+                    q__1.r = temp2.r + q__2.r;
+                    q__1.i = temp2.i + q__2.i; // , expr subst
+                    temp2.r = q__1.r;
+                    temp2.i = q__1.i; // , expr subst
                     /* L90: */
                 }
                 i__2 = j;
@@ -524,20 +528,20 @@ void csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, c
                     i__3 = iy;
                     i__4 = iy;
                     i__5 = i__ + j * a_dim1;
-                    q__2.real = temp1.real * a[i__5].real - temp1.imag * a[i__5].imag;
-                    q__2.imag = temp1.real * a[i__5].imag + temp1.imag * a[i__5].real; // , expr subst
-                    q__1.real = y[i__4].real + q__2.real;
-                    q__1.imag = y[i__4].imag + q__2.imag; // , expr subst
-                    y[i__3].real = q__1.real;
-                    y[i__3].imag = q__1.imag; // , expr subst
+                    q__2.r = temp1.r * a[i__5].r - temp1.i * a[i__5].i;
+                    q__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5].r; // , expr subst
+                    q__1.r = y[i__4].r + q__2.r;
+                    q__1.i = y[i__4].i + q__2.i; // , expr subst
+                    y[i__3].r = q__1.r;
+                    y[i__3].i = q__1.i; // , expr subst
                     i__3 = i__ + j * a_dim1;
                     i__4 = ix;
-                    q__2.real = a[i__3].real * x[i__4].real - a[i__3].imag * x[i__4].imag;
-                    q__2.imag = a[i__3].real * x[i__4].imag + a[i__3].imag * x[i__4].real; // , expr subst
-                    q__1.real = temp2.real + q__2.real;
-                    q__1.imag = temp2.imag + q__2.imag; // , expr subst
-                    temp2.real = q__1.real;
-                    temp2.imag = q__1.imag; // , expr subst
+                    q__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
+                    q__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
+                    q__1.r = temp2.r + q__2.r;
+                    q__1.i = temp2.i + q__2.i; // , expr subst
+                    temp2.r = q__1.r;
+                    temp2.i = q__1.i; // , expr subst
                     /* L110: */
                 }
                 i__2 = jy;

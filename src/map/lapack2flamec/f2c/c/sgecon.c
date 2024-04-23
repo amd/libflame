@@ -1,8 +1,8 @@
-/* ./sgecon.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sgecon.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b SGECON */
@@ -128,12 +128,13 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup gecon */
 /* ===================================================================== */
 /* Subroutine */
-void sgecon_(char *norm, integer *n, real *a, integer *lda, real *anorm, real *rcond, real *work, integer *iwork, integer *info)
+void sgecon_(char *norm, integer *n, real *a, integer *lda, real *anorm, real *rcond, real *work,
+             integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sgecon inputs: norm %c, n %d, lda %d",*norm, *n, *lda);
+    snprintf(buffer, 256, "sgecon inputs: norm %c, n %d, lda %d", *norm, *n, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -148,17 +149,22 @@ void sgecon_(char *norm, integer *n, real *a, integer *lda, real *anorm, real *r
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    void srscl_(integer *, real *, real *, integer *), slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        srscl_(integer *, real *, real *, integer *),
+        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real ainvnm;
     extern logical sisnan_(real *);
     logical onenrm;
     char normin[1];
     extern /* Subroutine */
-    void slatrs_(char *, char *, char *, char *, integer *, real *, integer *, real *, real *, real *, integer *);
+        void
+        slatrs_(char *, char *, char *, char *, integer *, real *, integer *, real *, real *,
+                real *, integer *);
     real smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -192,7 +198,7 @@ void sgecon_(char *norm, integer *n, real *a, integer *lda, real *anorm, real *r
     /* Test the input parameters. */
     *info = 0;
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
-    if (! onenrm && ! lsame_(norm, "I", 1, 1))
+    if(!onenrm && !lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }
@@ -200,7 +206,7 @@ void sgecon_(char *norm, integer *n, real *a, integer *lda, real *anorm, real *r
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -242,26 +248,26 @@ void sgecon_(char *norm, integer *n, real *a, integer *lda, real *anorm, real *r
     }
     kase = 0;
 L10:
-    aocl_lapack_slacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+    slacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == kase1)
         {
             /* Multiply by inv(L). */
-            aocl_lapack_slatrs("Lower", "No transpose", "Unit", normin, n, &a[a_offset], lda,
-                               &work[1], &sl, &work[(*n << 1) + 1], info);
+            slatrs_("Lower", "No transpose", "Unit", normin, n, &a[a_offset], lda, &work[1], &sl,
+                    &work[(*n << 1) + 1], info);
             /* Multiply by inv(U). */
-            aocl_lapack_slatrs("Upper", "No transpose", "Non-unit", normin, n, &a[a_offset], lda,
-                               &work[1], &su, &work[*n * 3 + 1], info);
+            slatrs_("Upper", "No transpose", "Non-unit", normin, n, &a[a_offset], lda, &work[1],
+                    &su, &work[*n * 3 + 1], info);
         }
         else
         {
             /* Multiply by inv(U**T). */
-            aocl_lapack_slatrs("Upper", "Transpose", "Non-unit", normin, n, &a[a_offset], lda,
-                               &work[1], &su, &work[*n * 3 + 1], info);
+            slatrs_("Upper", "Transpose", "Non-unit", normin, n, &a[a_offset], lda, &work[1], &su,
+                    &work[*n * 3 + 1], info);
             /* Multiply by inv(L**T). */
-            aocl_lapack_slatrs("Lower", "Transpose", "Unit", normin, n, &a[a_offset], lda, &work[1],
-                               &sl, &work[(*n << 1) + 1], info);
+            slatrs_("Lower", "Transpose", "Unit", normin, n, &a[a_offset], lda, &work[1], &sl,
+                    &work[(*n << 1) + 1], info);
         }
         /* Divide X by 1/(SL*SU) if doing so will not cause overflow. */
         scale = sl * su;
@@ -269,7 +275,7 @@ L10:
         if(scale != 1.f)
         {
             ix = isamax_(n, &work[1], &c__1);
-            if (scale < (r__1 = work[ix], f2c_abs(r__1)) * smlnum || scale == 0.f)
+            if(scale < (r__1 = work[ix], f2c_abs(r__1)) * smlnum || scale == 0.f)
             {
                 goto L20;
             }

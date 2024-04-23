@@ -70,11 +70,11 @@ integer ilauplo_(char *uplo)
     /* .. External Functions .. */
     /* .. */
     /* .. Executable Statements .. */
-    if (lsame_(uplo, "U", 1, 1))
+    if(lsame_(uplo, "U", 1, 1))
     {
         ret_val = 121;
     }
-    else if (lsame_(uplo, "L", 1, 1))
+    else if(lsame_(uplo, "L", 1, 1))
     {
         ret_val = 122;
     }

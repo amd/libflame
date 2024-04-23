@@ -1,8 +1,10 @@
 #include "FLA_f2c.h" /* Table of constant values */
+#include "FLA_lapack2flame_return_defs.h"
 static integer c__1 = 1;
 static integer c_n1 = -1;
 
-int dgelqf_check(integer *m, integer *n, double *a, integer * lda, double *tau, double *work, integer *lwork, integer *info)
+int dgelqf_check(integer *m, integer *n, double *a, integer *lda, double *tau, double *work,
+                 integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
@@ -31,11 +33,11 @@ int dgelqf_check(integer *m, integer *n, double *a, integer * lda, double *tau, 
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
-    else if (*lwork < fla_max(1,*m) && ! lquery)
+    else if(*lwork < fla_max(1, *m) && !lquery)
     {
         *info = -7;
     }
@@ -50,8 +52,8 @@ int dgelqf_check(integer *m, integer *n, double *a, integer * lda, double *tau, 
         return LAPACK_QUERY_RETURN;
     }
     /* Quick return if possible */
-    k = fla_min(*m,*n);
-    if (k == 0)
+    k = fla_min(*m, *n);
+    if(k == 0)
     {
         work[1] = 1.;
         return LAPACK_QUICK_RETURN;

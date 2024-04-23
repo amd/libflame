@@ -1,16 +1,25 @@
-/* ../netlib/slaed6.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slaed6.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLAED6 used by sstedc. Computes one Newton step in solution of the secular equation. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAED6 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed6. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed6.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaed6. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaed6.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed6. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed6.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -38,7 +47,7 @@
 /* > It is assumed that */
 /* > */
 /* > if ORGATI = .true. the root is between d(2) and d(3);
-*/
+ */
 /* > otherwise it is between d(1) and d(2) */
 /* > */
 /* > This routine will be called by SLAED4 when necessary. In most cases, */
@@ -127,12 +136,13 @@ otherwise it is between d(1) and d(2). See */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slaed6_(integer *kniter, logical *orgati, real *rho, real *d__, real *z__, real *finit, real *tau, integer *info)
+void slaed6_(integer *kniter, logical *orgati, real *rho, real *d__, real *z__, real *finit,
+             real *tau, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slaed6_ inputs: *kniter %d",*kniter);
+    snprintf(buffer, 256, "slaed6_ inputs: *kniter %d", *kniter);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -177,7 +187,7 @@ void slaed6_(integer *kniter, logical *orgati, real *rho, real *d__, real *z__, 
     /* Function Body */
     *info = 0;
     sclinv = 0.f;
-    if (*orgati)
+    if(*orgati)
     {
         lbd = d__[2];
         ubd = d__[3];
@@ -187,7 +197,7 @@ void slaed6_(integer *kniter, logical *orgati, real *rho, real *d__, real *z__, 
         lbd = d__[1];
         ubd = d__[2];
     }
-    if (*finit < 0.f)
+    if(*finit < 0.f)
     {
         lbd = 0.f;
     }
@@ -197,9 +207,9 @@ void slaed6_(integer *kniter, logical *orgati, real *rho, real *d__, real *z__, 
     }
     niter = 1;
     *tau = 0.f;
-    if (*kniter == 2)
+    if(*kniter == 2)
     {
-        if (*orgati)
+        if(*orgati)
         {
             temp = (d__[3] - d__[2]) / 2.f;
             c__ = *rho + z__[1] / (d__[1] - d__[2] - temp);
@@ -215,36 +225,38 @@ void slaed6_(integer *kniter, logical *orgati, real *rho, real *d__, real *z__, 
         }
         /* Computing MAX */
         r__1 = f2c_abs(a), r__2 = f2c_abs(b);
-        r__1 = fla_max(r__1,r__2);
+        r__1 = fla_max(r__1, r__2);
         r__2 = f2c_abs(c__); // ; expr subst
-        temp = fla_max(r__1,r__2);
+        temp = fla_max(r__1, r__2);
         a /= temp;
         b /= temp;
         c__ /= temp;
-        if (c__ == 0.f)
+        if(c__ == 0.f)
         {
             *tau = b / a;
         }
-        else if (a <= 0.f)
+        else if(a <= 0.f)
         {
-            *tau = (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1)))) / ( c__ * 2.f);
+            *tau = (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1)))) / (c__ * 2.f);
         }
         else
         {
-            *tau = b * 2.f / (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs( r__1))));
+            *tau = b * 2.f / (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1))));
         }
-        if (*tau < lbd || *tau > ubd)
+        if(*tau < lbd || *tau > ubd)
         {
             *tau = (lbd + ubd) / 2.f;
         }
-        if (d__[1] == *tau || d__[2] == *tau || d__[3] == *tau)
+        if(d__[1] == *tau || d__[2] == *tau || d__[3] == *tau)
         {
             *tau = 0.f;
         }
         else
         {
-            temp = *finit + *tau * z__[1] / (d__[1] * (d__[1] - *tau)) + *tau * z__[2] / (d__[2] * (d__[2] - *tau)) + *tau * z__[3] / ( d__[3] * (d__[3] - *tau));
-            if (temp <= 0.f)
+            temp = *finit + *tau * z__[1] / (d__[1] * (d__[1] - *tau))
+                   + *tau * z__[2] / (d__[2] * (d__[2] - *tau))
+                   + *tau * z__[3] / (d__[3] * (d__[3] - *tau));
+            if(temp <= 0.f)
             {
                 lbd = *tau;
             }
@@ -252,7 +264,7 @@ void slaed6_(integer *kniter, logical *orgati, real *rho, real *d__, real *z__, 
             {
                 ubd = *tau;
             }
-            if (f2c_abs(*finit) <= f2c_abs(temp))
+            if(f2c_abs(*finit) <= f2c_abs(temp))
             {
                 *tau = 0.f;
             }
@@ -264,32 +276,32 @@ void slaed6_(integer *kniter, logical *orgati, real *rho, real *d__, real *z__, 
     /* others but recomputed at each call */
     eps = slamch_("Epsilon");
     base = slamch_("Base");
-    i__1 = (integer) (log(slamch_("SafMin")) / log(base) / 3.f);
+    i__1 = (integer)(log(slamch_("SafMin")) / log(base) / 3.f);
     small1 = pow_ri(&base, &i__1);
     sminv1 = 1.f / small1;
     small2 = small1 * small1;
     sminv2 = sminv1 * sminv1;
     /* Determine if scaling of inputs necessary to avoid overflow */
     /* when computing 1/TEMP**3 */
-    if (*orgati)
+    if(*orgati)
     {
         /* Computing MIN */
         r__3 = (r__1 = d__[2] - *tau, f2c_abs(r__1));
-        r__4 = (r__2 = d__[3] - * tau, f2c_abs(r__2)); // , expr subst
-        temp = fla_min(r__3,r__4);
+        r__4 = (r__2 = d__[3] - *tau, f2c_abs(r__2)); // , expr subst
+        temp = fla_min(r__3, r__4);
     }
     else
     {
         /* Computing MIN */
         r__3 = (r__1 = d__[1] - *tau, f2c_abs(r__1));
-        r__4 = (r__2 = d__[2] - * tau, f2c_abs(r__2)); // , expr subst
-        temp = fla_min(r__3,r__4);
+        r__4 = (r__2 = d__[2] - *tau, f2c_abs(r__2)); // , expr subst
+        temp = fla_min(r__3, r__4);
     }
     scale = FALSE_;
-    if (temp <= small1)
+    if(temp <= small1)
     {
         scale = TRUE_;
-        if (temp <= small2)
+        if(temp <= small2)
         {
             /* Scale up by power of radix nearest 1/SAFMIN**(2/3) */
             sclfac = sminv2;
@@ -302,9 +314,7 @@ void slaed6_(integer *kniter, logical *orgati, real *rho, real *d__, real *z__, 
             sclinv = small1;
         }
         /* Scaling up safe because D, Z, TAU scaled elsewhere to be O(1) */
-        for (i__ = 1;
-                i__ <= 3;
-                ++i__)
+        for(i__ = 1; i__ <= 3; ++i__)
         {
             dscale[i__ - 1] = d__[i__] * sclfac;
             zscale[i__ - 1] = z__[i__] * sclfac;
@@ -317,9 +327,7 @@ void slaed6_(integer *kniter, logical *orgati, real *rho, real *d__, real *z__, 
     else
     {
         /* Copy D and Z to DSCALE and ZSCALE */
-        for (i__ = 1;
-                i__ <= 3;
-                ++i__)
+        for(i__ = 1; i__ <= 3; ++i__)
         {
             dscale[i__ - 1] = d__[i__];
             zscale[i__ - 1] = z__[i__];
@@ -329,9 +337,7 @@ void slaed6_(integer *kniter, logical *orgati, real *rho, real *d__, real *z__, 
     fc = 0.f;
     df = 0.f;
     ddf = 0.f;
-    for (i__ = 1;
-            i__ <= 3;
-            ++i__)
+    for(i__ = 1; i__ <= 3; ++i__)
     {
         temp = 1.f / (dscale[i__ - 1] - *tau);
         temp1 = zscale[i__ - 1] * temp;
@@ -343,11 +349,11 @@ void slaed6_(integer *kniter, logical *orgati, real *rho, real *d__, real *z__, 
         /* L30: */
     }
     f = *finit + *tau * fc;
-    if (f2c_abs(f) <= 0.f)
+    if(f2c_abs(f) <= 0.f)
     {
         goto L60;
     }
-    if (f <= 0.f)
+    if(f <= 0.f)
     {
         lbd = *tau;
     }
@@ -360,15 +366,13 @@ void slaed6_(integer *kniter, logical *orgati, real *rho, real *d__, real *z__, 
     /* It is not hard to see that */
     /* 1) Iterations will go up monotonically */
     /* if FINIT < 0;
-    */
+     */
     /* 2) Iterations will go down monotonically */
     /* if FINIT > 0. */
     iter = niter + 1;
-    for (niter = iter;
-            niter <= 40;
-            ++niter)
+    for(niter = iter; niter <= 40; ++niter)
     {
-        if (*orgati)
+        if(*orgati)
         {
             temp1 = dscale[1] - *tau;
             temp2 = dscale[2] - *tau;
@@ -383,30 +387,30 @@ void slaed6_(integer *kniter, logical *orgati, real *rho, real *d__, real *z__, 
         c__ = f - (temp1 + temp2) * df + temp1 * temp2 * ddf;
         /* Computing MAX */
         r__1 = f2c_abs(a), r__2 = f2c_abs(b);
-        r__1 = fla_max(r__1,r__2);
+        r__1 = fla_max(r__1, r__2);
         r__2 = f2c_abs(c__); // ; expr subst
-        temp = fla_max(r__1,r__2);
+        temp = fla_max(r__1, r__2);
         a /= temp;
         b /= temp;
         c__ /= temp;
-        if (c__ == 0.f)
+        if(c__ == 0.f)
         {
             eta = b / a;
         }
-        else if (a <= 0.f)
+        else if(a <= 0.f)
         {
-            eta = (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1)))) / ( c__ * 2.f);
+            eta = (a - sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1)))) / (c__ * 2.f);
         }
         else
         {
-            eta = b * 2.f / (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1) )));
+            eta = b * 2.f / (a + sqrt((r__1 = a * a - b * 4.f * c__, f2c_abs(r__1))));
         }
-        if (f * eta >= 0.f)
+        if(f * eta >= 0.f)
         {
             eta = -f / df;
         }
         *tau += eta;
-        if (*tau < lbd || *tau > ubd)
+        if(*tau < lbd || *tau > ubd)
         {
             *tau = (lbd + ubd) / 2.f;
         }
@@ -414,11 +418,9 @@ void slaed6_(integer *kniter, logical *orgati, real *rho, real *d__, real *z__, 
         erretm = 0.f;
         df = 0.f;
         ddf = 0.f;
-        for (i__ = 1;
-                i__ <= 3;
-                ++i__)
+        for(i__ = 1; i__ <= 3; ++i__)
         {
-            if (dscale[i__ - 1] - *tau != 0.f)
+            if(dscale[i__ - 1] - *tau != 0.f)
             {
                 temp = 1.f / (dscale[i__ - 1] - *tau);
                 temp1 = zscale[i__ - 1] * temp;
@@ -438,11 +440,11 @@ void slaed6_(integer *kniter, logical *orgati, real *rho, real *d__, real *z__, 
         }
         f = *finit + *tau * fc;
         erretm = (f2c_abs(*finit) + f2c_abs(*tau) * erretm) * 8.f + f2c_abs(*tau) * df;
-        if (f2c_abs(f) <= eps * 4.f * erretm || ubd - lbd <= eps * 4.f * f2c_abs(*tau) )
+        if(f2c_abs(f) <= eps * 4.f * erretm || ubd - lbd <= eps * 4.f * f2c_abs(*tau))
         {
             goto L60;
         }
-        if (f <= 0.f)
+        if(f <= 0.f)
         {
             lbd = *tau;
         }
@@ -454,7 +456,7 @@ void slaed6_(integer *kniter, logical *orgati, real *rho, real *d__, real *z__, 
     }
     *info = 1;
 L60: /* Undo scaling */
-    if (scale)
+    if(scale)
     {
         *tau *= sclinv;
     }

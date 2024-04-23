@@ -1,16 +1,25 @@
-/* ../netlib/zlaqr1.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlaqr1.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZLAQR1 sets a scalar multiple of the first column of the product of 2-by-2 or 3-by-3 matrix H a nd specified shifts. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLAQR1 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaqr1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaqr1.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaqr1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaqr1.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaqr1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaqr1.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -93,10 +102,11 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlaqr1_(integer *n, doublecomplex *h__, integer *ldh, doublecomplex *s1, doublecomplex *s2, doublecomplex *v)
+void zlaqr1_(integer *n, doublecomplex *h__, integer *ldh, doublecomplex *s1, doublecomplex *s2,
+             doublecomplex *v)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaqr1 inputs: n %" FLA_IS ", ldh %" FLA_IS "",*n, *ldh);
+    AOCL_DTL_SNPRINTF("zlaqr1 inputs: n %" FLA_IS ", ldh %" FLA_IS "", *n, *ldh);
     /* System generated locals */
     integer h_dim1, h_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6;
@@ -133,12 +143,12 @@ void zlaqr1_(integer *n, doublecomplex *h__, integer *ldh, doublecomplex *s1, do
     h__ -= h_offset;
     --v;
     /* Function Body */
-    if (*n != 2 && *n != 3)
+    if(*n != 2 && *n != 3)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (*n == 2)
+    if(*n == 2)
     {
         i__1 = h_dim1 + 1;
         z__2.r = h__[i__1].r - s2->r;
@@ -146,8 +156,10 @@ void zlaqr1_(integer *n, doublecomplex *h__, integer *ldh, doublecomplex *s1, do
         z__1.r = z__2.r;
         z__1.i = z__2.i; // , expr subst
         i__2 = h_dim1 + 2;
-        s = (d__1 = z__1.r, f2c_abs(d__1)) + (d__2 = d_imag(&z__1), f2c_abs(d__2)) + ( (d__3 = h__[i__2].r, f2c_abs(d__3)) + (d__4 = d_imag(&h__[h_dim1 + 2]), f2c_abs(d__4)));
-        if (s == 0.)
+        s = (d__1 = z__1.r, f2c_abs(d__1)) + (d__2 = d_imag(&z__1), f2c_abs(d__2))
+            + ((d__3 = h__[i__2].r, f2c_abs(d__3))
+               + (d__4 = d_imag(&h__[h_dim1 + 2]), f2c_abs(d__4)));
+        if(s == 0.)
         {
             v[1].r = 0.;
             v[1].i = 0.; // , expr subst
@@ -181,7 +193,7 @@ void zlaqr1_(integer *n, doublecomplex *h__, integer *ldh, doublecomplex *s1, do
             i__1 = h_dim1 + 1;
             i__2 = (h_dim1 << 1) + 2;
             z__4.r = h__[i__1].r + h__[i__2].r;
-            z__4.i = h__[i__1].i + h__[ i__2].i; // , expr subst
+            z__4.i = h__[i__1].i + h__[i__2].i; // , expr subst
             z__3.r = z__4.r - s1->r;
             z__3.i = z__4.i - s1->i; // , expr subst
             z__2.r = z__3.r - s2->r;
@@ -201,8 +213,12 @@ void zlaqr1_(integer *n, doublecomplex *h__, integer *ldh, doublecomplex *s1, do
         z__1.i = z__2.i; // , expr subst
         i__2 = h_dim1 + 2;
         i__3 = h_dim1 + 3;
-        s = (d__1 = z__1.r, f2c_abs(d__1)) + (d__2 = d_imag(&z__1), f2c_abs(d__2)) + ( (d__3 = h__[i__2].r, f2c_abs(d__3)) + (d__4 = d_imag(&h__[h_dim1 + 2]), f2c_abs(d__4))) + ((d__5 = h__[i__3].r, f2c_abs(d__5)) + (d__6 = d_imag(&h__[h_dim1 + 3]), f2c_abs(d__6)));
-        if (s == 0.)
+        s = (d__1 = z__1.r, f2c_abs(d__1)) + (d__2 = d_imag(&z__1), f2c_abs(d__2))
+            + ((d__3 = h__[i__2].r, f2c_abs(d__3))
+               + (d__4 = d_imag(&h__[h_dim1 + 2]), f2c_abs(d__4)))
+            + ((d__5 = h__[i__3].r, f2c_abs(d__5))
+               + (d__6 = d_imag(&h__[h_dim1 + 3]), f2c_abs(d__6)));
+        if(s == 0.)
         {
             v[1].r = 0.;
             v[1].i = 0.; // , expr subst
@@ -248,7 +264,7 @@ void zlaqr1_(integer *n, doublecomplex *h__, integer *ldh, doublecomplex *s1, do
             i__1 = h_dim1 + 1;
             i__2 = (h_dim1 << 1) + 2;
             z__5.r = h__[i__1].r + h__[i__2].r;
-            z__5.i = h__[i__1].i + h__[ i__2].i; // , expr subst
+            z__5.i = h__[i__1].i + h__[i__2].i; // , expr subst
             z__4.r = z__5.r - s1->r;
             z__4.i = z__5.i - s1->i; // , expr subst
             z__3.r = z__4.r - s2->r;
@@ -265,7 +281,7 @@ void zlaqr1_(integer *n, doublecomplex *h__, integer *ldh, doublecomplex *s1, do
             i__1 = h_dim1 + 1;
             i__2 = h_dim1 * 3 + 3;
             z__5.r = h__[i__1].r + h__[i__2].r;
-            z__5.i = h__[i__1].i + h__[ i__2].i; // , expr subst
+            z__5.i = h__[i__1].i + h__[i__2].i; // , expr subst
             z__4.r = z__5.r - s1->r;
             z__4.i = z__5.i - s1->i; // , expr subst
             z__3.r = z__4.r - s2->r;

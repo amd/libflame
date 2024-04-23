@@ -1,16 +1,25 @@
-/* slapy2.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* slapy2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLAPY2 returns sqrt(x2+y2). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAPY2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slapy2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slapy2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slapy2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slapy2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slapy2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slapy2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -78,22 +87,22 @@ real slapy2_(real *x, real *y)
     /* .. Executable Statements .. */
     x_is_nan__ = (*x != *x);
     y_is_nan__ = (*y != *y);
-    if (x_is_nan__)
+    if(x_is_nan__)
     {
         ret_val = *x;
     }
-    if (y_is_nan__)
+    if(y_is_nan__)
     {
         ret_val = *y;
     }
     hugeval = slamch_("Overflow");
-    if (! (x_is_nan__ || y_is_nan__))
+    if(!(x_is_nan__ || y_is_nan__))
     {
         xabs = f2c_abs(*x);
         yabs = f2c_abs(*y);
-        w = fla_max(xabs,yabs);
-        z__ = fla_min(xabs,yabs);
-        if (z__ == 0.f || w > hugeval)
+        w = fla_max(xabs, yabs);
+        z__ = fla_min(xabs, yabs);
+        if(z__ == 0.f || w > hugeval)
         {
             ret_val = w;
         }

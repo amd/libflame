@@ -1,9 +1,12 @@
-/* ctgsja.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ctgsja.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {0.f, 0.f};
-static scomplex c_b2 = {1.f, 0.f};
-static aocl_int64_t c__1 = 1;
+static complex c_b1 = {0.f, 0.f};
+static complex c_b2 = {1.f, 0.f};
+static integer c__1 = 1;
 static real c_b39 = -1.f;
 static real c_b42 = 1.f;
 /* > \brief \b CTGSJA */
@@ -390,12 +393,19 @@ V1**H *B13*Q1 = S1*R1, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, integer *k, integer *l, complex *a, integer * lda, complex *b, integer *ldb, real *tola, real *tolb, real *alpha, real *beta, complex *u, integer *ldu, complex *v, integer *ldv, complex *q, integer *ldq, complex *work, integer *ncycle, integer * info)
+void ctgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, integer *k,
+             integer *l, complex *a, integer *lda, complex *b, integer *ldb, real *tola, real *tolb,
+             real *alpha, real *beta, complex *u, integer *ldu, complex *v, integer *ldv,
+             complex *q, integer *ldq, complex *work, integer *ncycle, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ctgsja inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", p %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS ", ldq %" FLA_IS ", ncycle %" FLA_IS "",*jobu, *jobv, *jobq, *m, *p, *n, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq, *ncycle);
+    AOCL_DTL_SNPRINTF("ctgsja inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", p %" FLA_IS
+                      ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS
+                      ", ldu %" FLA_IS ", ldv %" FLA_IS ", ldq %" FLA_IS ", ncycle %" FLA_IS "",
+                      *jobu, *jobv, *jobq, *m, *p, *n, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq,
+                      *ncycle);
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
         v_offset, i__1, i__2, i__3, i__4;
     real r__1;
     scomplex q__1;
@@ -410,19 +420,28 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     real rwk;
     complex snu, snv;
     extern /* Subroutine */
-    void crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
+        void
+        crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
     real gamma;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void ccopy_(integer *, complex *, integer *, complex *, integer *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *);
     logical initq, initu, initv, wantq, upper;
     real error, ssmin;
     logical wantu, wantv;
     extern /* Subroutine */
-    void clags2_(logical *, real *, complex *, real *, real *, complex *, real *, real *, complex *, real *, complex *, real *, complex *), clapll_(integer *, complex *, integer *, complex *, integer *, real *), csscal_(integer *, real *, complex *, integer *);
+        void
+        clags2_(logical *, real *, complex *, real *, real *, complex *, real *, real *, complex *,
+                real *, complex *, real *, complex *),
+        clapll_(integer *, complex *, integer *, complex *, integer *, real *),
+        csscal_(integer *, real *, complex *, integer *);
     integer kcycle;
     extern /* Subroutine */
-    void claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slartg_(real *, real *, real *, real *, real * );
+        void
+        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slartg_(real *, real *, real *, real *, real *);
     real hugenum;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -472,15 +491,15 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     initq = lsame_(jobq, "I", 1, 1);
     wantq = initq || lsame_(jobq, "Q", 1, 1);
     *info = 0;
-    if (! (initu || wantu || lsame_(jobu, "N", 1, 1)))
+    if(!(initu || wantu || lsame_(jobu, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (initv || wantv || lsame_(jobv, "N", 1, 1)))
+    else if(!(initv || wantv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (initq || wantq || lsame_(jobq, "N", 1, 1)))
+    else if(!(initq || wantq || lsame_(jobq, "N", 1, 1)))
     {
         *info = -3;
     }
@@ -496,11 +515,11 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     {
         *info = -6;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -10;
     }
-    else if (*ldb < fla_max(1,*p))
+    else if(*ldb < fla_max(1, *p))
     {
         *info = -12;
     }
@@ -520,7 +539,7 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     {
         i__1 = -(*info);
         xerbla_("CTGSJA", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize U, V and Q, if necessary */
@@ -564,7 +583,7 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
                 i__3 = i__ + (*n - *l + i__) * b_dim1;
                 b1 = b[i__3].real;
                 i__3 = j + (*n - *l + j) * b_dim1;
-                b3 = b[i__3].real;
+                b3 = b[i__3].r;
                 if(upper)
                 {
                     if(*k + i__ <= *m)
@@ -594,21 +613,23 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
                 if(*k + j <= *m)
                 {
                     r_cnjg(&q__1, &snu);
-                    aocl_lapack_crot(l, &a[*k + j + (*n - *l + 1) * a_dim1], lda,
-                                     &a[*k + i__ + (*n - *l + 1) * a_dim1], lda, &csu, &q__1);
+                    crot_(l, &a[*k + j + (*n - *l + 1) * a_dim1], lda,
+                          &a[*k + i__ + (*n - *l + 1) * a_dim1], lda, &csu, &q__1);
                 }
                 /* Update I-th and J-th rows of matrix B: V**H *B */
                 r_cnjg(&q__1, &snv);
-                aocl_lapack_crot(l, &b[j + (*n - *l + 1) * b_dim1], ldb,
-                                 &b[i__ + (*n - *l + 1) * b_dim1], ldb, &csv, &q__1);
+                crot_(l, &b[j + (*n - *l + 1) * b_dim1], ldb, &b[i__ + (*n - *l + 1) * b_dim1], ldb,
+                      &csv, &q__1);
                 /* Update (N-L+I)-th and (N-L+J)-th columns of matrices */
                 /* A and B: A*Q and B*Q */
                 /* Computing MIN */
                 i__4 = *k + *l;
-                i__3 = fla_min(i__4,*m);
-                crot_(&i__3, &a[(*n - *l + j) * a_dim1 + 1], &c__1, &a[(*n - * l + i__) * a_dim1 + 1], &c__1, &csq, &snq);
-                crot_(l, &b[(*n - *l + j) * b_dim1 + 1], &c__1, &b[(*n - *l + i__) * b_dim1 + 1], &c__1, &csq, &snq);
-                if (upper)
+                i__3 = fla_min(i__4, *m);
+                crot_(&i__3, &a[(*n - *l + j) * a_dim1 + 1], &c__1,
+                      &a[(*n - *l + i__) * a_dim1 + 1], &c__1, &csq, &snq);
+                crot_(l, &b[(*n - *l + j) * b_dim1 + 1], &c__1, &b[(*n - *l + i__) * b_dim1 + 1],
+                      &c__1, &csq, &snq);
+                if(upper)
                 {
                     if(*k + i__ <= *m)
                     {
@@ -662,8 +683,8 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
                 /* Update unitary matrices U, V, Q, if desired. */
                 if(wantu && *k + j <= *m)
                 {
-                    aocl_lapack_crot(m, &u[(*k + j) * u_dim1 + 1], &c__1,
-                                     &u[(*k + i__) * u_dim1 + 1], &c__1, &csu, &snu);
+                    crot_(m, &u[(*k + j) * u_dim1 + 1], &c__1, &u[(*k + i__) * u_dim1 + 1], &c__1,
+                          &csu, &snu);
                 }
                 if(wantv)
                 {
@@ -672,8 +693,8 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
                 }
                 if(wantq)
                 {
-                    aocl_lapack_crot(n, &q[(*n - *l + j) * q_dim1 + 1], &c__1,
-                                     &q[(*n - *l + i__) * q_dim1 + 1], &c__1, &csq, &snq);
+                    crot_(n, &q[(*n - *l + j) * q_dim1 + 1], &c__1,
+                          &q[(*n - *l + i__) * q_dim1 + 1], &c__1, &csq, &snq);
                 }
                 /* L10: */
             }
@@ -689,23 +710,19 @@ void ctgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
             /* Computing MIN */
             i__2 = *l;
             i__3 = *m - *k; // , expr subst
-            i__1 = fla_min(i__2,i__3);
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            i__1 = fla_min(i__2, i__3);
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = *l - i__ + 1;
-                aocl_blas_ccopy(&i__2, &a[*k + i__ + (*n - *l + i__) * a_dim1], lda, &work[1],
-                                &c__1);
+                ccopy_(&i__2, &a[*k + i__ + (*n - *l + i__) * a_dim1], lda, &work[1], &c__1);
                 i__2 = *l - i__ + 1;
-                aocl_blas_ccopy(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb, &work[*l + 1],
-                                &c__1);
+                ccopy_(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb, &work[*l + 1], &c__1);
                 i__2 = *l - i__ + 1;
                 clapll_(&i__2, &work[1], &c__1, &work[*l + 1], &c__1, &ssmin);
-                error = fla_max(error,ssmin);
+                error = fla_max(error, ssmin);
                 /* L30: */
             }
-            if (f2c_abs(error) <= fla_min(*tola,*tolb))
+            if(f2c_abs(error) <= fla_min(*tola, *tolb))
             {
                 goto L50;
             }
@@ -729,22 +746,20 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
     /* Computing MIN */
     i__2 = *l;
     i__3 = *m - *k; // , expr subst
-    i__1 = fla_min(i__2,i__3);
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    i__1 = fla_min(i__2, i__3);
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = *k + i__ + (*n - *l + i__) * a_dim1;
         a1 = a[i__2].real;
         i__2 = i__ + (*n - *l + i__) * b_dim1;
         b1 = b[i__2].r;
         gamma = b1 / a1;
-        if (gamma <= hugenum && gamma >= -hugenum)
+        if(gamma <= hugenum && gamma >= -hugenum)
         {
-            if (gamma < 0.f)
+            if(gamma < 0.f)
             {
                 i__2 = *l - i__ + 1;
-                aocl_blas_csscal(&i__2, &c_b39, &b[i__ + (*n - *l + i__) * b_dim1], ldb);
+                csscal_(&i__2, &c_b39, &b[i__ + (*n - *l + i__) * b_dim1], ldb);
                 if(wantv)
                 {
                     aocl_blas_csscal(p, &c_b39, &v[i__ * v_dim1 + 1], &c__1);
@@ -762,10 +777,10 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
             {
                 i__2 = *l - i__ + 1;
                 r__1 = 1.f / beta[*k + i__];
-                aocl_blas_csscal(&i__2, &r__1, &b[i__ + (*n - *l + i__) * b_dim1], ldb);
+                csscal_(&i__2, &r__1, &b[i__ + (*n - *l + i__) * b_dim1], ldb);
                 i__2 = *l - i__ + 1;
-                aocl_blas_ccopy(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb,
-                                &a[*k + i__ + (*n - *l + i__) * a_dim1], lda);
+                ccopy_(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb,
+                       &a[*k + i__ + (*n - *l + i__) * a_dim1], lda);
             }
         }
         else
@@ -773,8 +788,8 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
             alpha[*k + i__] = 0.f;
             beta[*k + i__] = 1.f;
             i__2 = *l - i__ + 1;
-            aocl_blas_ccopy(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb,
-                            &a[*k + i__ + (*n - *l + i__) * a_dim1], lda);
+            ccopy_(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb,
+                   &a[*k + i__ + (*n - *l + i__) * a_dim1], lda);
         }
         /* L70: */
     }

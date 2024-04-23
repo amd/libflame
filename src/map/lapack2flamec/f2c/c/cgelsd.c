@@ -1,15 +1,15 @@
-/* ./cgelsd.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cgelsd.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {0.f, 0.f};
-static aocl_int64_t c__9 = 9;
-static aocl_int64_t c__0 = 0;
-static aocl_int64_t c__6 = 6;
-static aocl_int64_t c_n1 = -1;
-static aocl_int64_t c__1 = 1;
+static complex c_b1 = {0.f, 0.f};
+static integer c__9 = 9;
+static integer c__0 = 0;
+static integer c__6 = 6;
+static integer c_n1 = -1;
+static integer c__1 = 1;
 static real c_b80 = 0.f;
 /* > \brief <b> CGELSD computes the minimum-norm solution to a linear least squares problem for GE
  * matrices</b > */
@@ -223,15 +223,20 @@ the routine */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-void cgelsd_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, complex *b, integer *ldb, real *s, real *rcond, integer *rank, complex *work, integer *lwork, real *rwork, integer * iwork, integer *info)
+void cgelsd_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, complex *b,
+             integer *ldb, real *s, real *rcond, integer *rank, complex *work, integer *lwork,
+             real *rwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgelsd inputs: m %lld, n %lld, nrhs %lld, lda %lld, ldb %lld, lwork %lld",*m, *n, *nrhs, *lda, *ldb, *lwork);
+    snprintf(buffer, 256,
+             "cgelsd inputs: m %lld, n %lld, nrhs %lld, lda %lld, ldb %lld, lwork %lld", *m, *n,
+             *nrhs, *lda, *ldb, *lwork);
 #else
-    snprintf(buffer, 256,"cgelsd inputs: m %d, n %d, nrhs %d, lda %d, ldb %d, lwork %d",*m, *n, *nrhs, *lda, *ldb, *lwork);
+    snprintf(buffer, 256, "cgelsd inputs: m %d, n %d, nrhs %d, lda %d, ldb %d, lwork %d", *m, *n,
+             *nrhs, *lda, *ldb, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -247,20 +252,43 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, c
     real sfmin;
     integer minmn, maxmn, itaup, itauq, mnthr, nwork;
     extern /* Subroutine */
-    void cgebrd_(integer *, integer *, complex *, integer *, real *, real *, complex *, complex *, complex *, integer *, integer *), slabad_(real *, real *);
+        void
+        cgebrd_(integer *, integer *, complex *, integer *, real *, real *, complex *, complex *,
+                complex *, integer *, integer *),
+        slabad_(real *, real *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    void cgelqf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clalsd_( char *, integer *, integer *, integer *, real *, real *, complex *, integer *, real *, integer *, complex *, real *, integer *, integer *), clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *), cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+        void
+        cgelqf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+                integer *),
+        clalsd_(char *, integer *, integer *, integer *, real *, real *, complex *, integer *,
+                real *, integer *, complex *, real *, integer *, integer *),
+        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
+                integer *, integer *),
+        cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+                integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
     extern /* Subroutine */
-    void slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), cunmbr_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *), slaset_( char *, integer *, integer *, real *, real *, real *, integer *), cunmlq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+        void
+        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
+                integer *, integer *),
+        cunmbr_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *,
+                complex *, complex *, integer *, complex *, integer *, integer *),
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *),
+        cunmlq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
+                complex *, integer *, complex *, integer *, integer *);
     integer ldwork;
     extern /* Subroutine */
-    void cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+        void
+        cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
+                complex *, integer *, complex *, integer *, integer *);
     integer liwork, minwrk, maxwrk;
     real smlnum;
     aocl_int64_t lrwork;
@@ -299,11 +327,11 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, c
     --iwork;
     /* Function Body */
     *info = 0;
-    minmn = fla_min(*m,*n);
-    maxmn = fla_max(*m,*n);
+    minmn = fla_min(*m, *n);
+    maxmn = fla_max(*m, *n);
     lquery = *lwork == -1;
     mnthr = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
@@ -315,11 +343,11 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, c
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,maxmn))
+    else if(*ldb < fla_max(1, maxmn))
     {
         *info = -7;
     }
@@ -340,8 +368,8 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, c
             smlsiz = aocl_lapack_ilaenv(&c__9, "CGELSD", " ", &c__0, &c__0, &c__0, &c__0);
             mnthr = aocl_lapack_ilaenv(&c__6, "CGELSD", " ", m, n, nrhs, &c_n1);
             /* Computing MAX */
-            i__1 = (integer) (log((real) minmn / (real) (smlsiz + 1)) / log( 2.f)) + 1;
-            nlvl = fla_max(i__1,0);
+            i__1 = (integer)(log((real)minmn / (real)(smlsiz + 1)) / log(2.f)) + 1;
+            nlvl = fla_max(i__1, 0);
             liwork = minmn * 3 * nlvl + minmn * 11;
             mm = *m;
             if(*m >= *n && *m >= mnthr)
@@ -352,11 +380,11 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, c
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n * ilaenv_(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
-                maxwrk = fla_max(i__1,i__2);
+                maxwrk = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *nrhs * ilaenv_(&c__1, "CUNMQR", "LC", m, nrhs, n, &c_n1); // , expr subst
-                maxwrk = fla_max(i__1,i__2);
+                maxwrk = fla_max(i__1, i__2);
             }
             if(*m >= *n)
             {
@@ -366,27 +394,34 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, c
                 i__3 = smlsiz + 1;
                 i__1 = i__3 * i__3;
                 i__2 = *n * (*nrhs + 1) + (*nrhs << 1); // , expr subst
-                lrwork = *n * 10 + (*n << 1) * smlsiz + (*n << 3) * nlvl + smlsiz * 3 * *nrhs + fla_max(i__1,i__2);
+                lrwork = *n * 10 + (*n << 1) * smlsiz + (*n << 3) * nlvl + smlsiz * 3 * *nrhs
+                         + fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = maxwrk;
-                i__2 = (*n << 1) + (mm + *n) * ilaenv_(&c__1, "CGEBRD", " ", &mm, n, &c_n1, &c_n1); // , expr subst
-                maxwrk = fla_max(i__1,i__2);
+                i__2 = (*n << 1)
+                       + (mm + *n)
+                             * ilaenv_(&c__1, "CGEBRD", " ", &mm, n, &c_n1, &c_n1); // , expr subst
+                maxwrk = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = maxwrk;
-                i__2 = (*n << 1) + *nrhs * ilaenv_(&c__1, "CUNMBR", "QLC", &mm, nrhs, n, &c_n1); // , expr subst
-                maxwrk = fla_max(i__1,i__2);
+                i__2 = (*n << 1)
+                       + *nrhs
+                             * ilaenv_(&c__1, "CUNMBR", "QLC", &mm, nrhs, n, &c_n1); // , expr subst
+                maxwrk = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = maxwrk;
-                i__2 = (*n << 1) + (*n - 1) * ilaenv_(&c__1, "CUNMBR", "PLN", n, nrhs, n, &c_n1); // , expr subst
-                maxwrk = fla_max(i__1,i__2);
+                i__2 = (*n << 1)
+                       + (*n - 1)
+                             * ilaenv_(&c__1, "CUNMBR", "PLN", n, nrhs, n, &c_n1); // , expr subst
+                maxwrk = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = (*n << 1) + *n * *nrhs; // , expr subst
-                maxwrk = fla_max(i__1,i__2);
+                maxwrk = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = (*n << 1) + mm;
                 i__2 = (*n << 1) + *n * *nrhs; // , expr subst
-                minwrk = fla_max(i__1,i__2);
+                minwrk = fla_max(i__1, i__2);
             }
             if(*n > *m)
             {
@@ -395,84 +430,98 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, c
                 i__3 = smlsiz + 1;
                 i__1 = i__3 * i__3;
                 i__2 = *n * (*nrhs + 1) + (*nrhs << 1); // , expr subst
-                lrwork = *m * 10 + (*m << 1) * smlsiz + (*m << 3) * nlvl + smlsiz * 3 * *nrhs + fla_max(i__1,i__2);
-                if (*n >= mnthr)
+                lrwork = *m * 10 + (*m << 1) * smlsiz + (*m << 3) * nlvl + smlsiz * 3 * *nrhs
+                         + fla_max(i__1, i__2);
+                if(*n >= mnthr)
                 {
                     /* Path 2a - underdetermined, with many more columns */
                     /* than rows. */
-                    maxwrk = *m + *m * aocl_lapack_ilaenv(&c__1, "CGELQF", " ", m, n, &c_n1, &c_n1);
+                    maxwrk = *m + *m * ilaenv_(&c__1, "CGELQF", " ", m, n, &c_n1, &c_n1);
                     /* Computing MAX */
                     i__1 = maxwrk;
-                    i__2 = *m * *m + (*m << 2) + (*m << 1) * ilaenv_(&c__1, "CGEBRD", " ", m, m, &c_n1, &c_n1); // , expr subst
-                    maxwrk = fla_max(i__1,i__2);
+                    i__2
+                        = *m * *m + (*m << 2)
+                          + (*m << 1)
+                                * ilaenv_(&c__1, "CGEBRD", " ", m, m, &c_n1, &c_n1); // , expr subst
+                    maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
-                    i__2 = *m * *m + (*m << 2) + *nrhs * ilaenv_(&c__1, "CUNMBR", "QLC", m, nrhs, m, &c_n1); // , expr subst
-                    maxwrk = fla_max(i__1,i__2);
+                    i__2 = *m * *m + (*m << 2)
+                           + *nrhs
+                                 * ilaenv_(&c__1, "CUNMBR", "QLC", m, nrhs, m,
+                                           &c_n1); // , expr subst
+                    maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
-                    i__2 = *m * *m + (*m << 2) + (*m - 1) * ilaenv_(&c__1, "CUNMLQ", "LC", n, nrhs, m, &c_n1); // , expr subst
-                    maxwrk = fla_max(i__1,i__2);
-                    if (*nrhs > 1)
+                    i__2
+                        = *m * *m + (*m << 2)
+                          + (*m - 1)
+                                * ilaenv_(&c__1, "CUNMLQ", "LC", n, nrhs, m, &c_n1); // , expr subst
+                    maxwrk = fla_max(i__1, i__2);
+                    if(*nrhs > 1)
                     {
                         /* Computing MAX */
                         i__1 = maxwrk;
                         i__2 = *m * *m + *m + *m * *nrhs; // , expr subst
-                        maxwrk = fla_max(i__1,i__2);
+                        maxwrk = fla_max(i__1, i__2);
                     }
                     else
                     {
                         /* Computing MAX */
                         i__1 = maxwrk;
                         i__2 = *m * *m + (*m << 1); // , expr subst
-                        maxwrk = fla_max(i__1,i__2);
+                        maxwrk = fla_max(i__1, i__2);
                     }
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = *m * *m + (*m << 2) + *m * *nrhs; // , expr subst
-                    maxwrk = fla_max(i__1,i__2);
+                    maxwrk = fla_max(i__1, i__2);
                     /* XXX: Ensure the Path 2a case below is triggered. The workspace */
                     /* calculation should use queries for all routines eventually. */
                     /* Computing MAX */
                     /* Computing MAX */
-                    i__3 = *m, i__4 = (*m << 1) - 4, i__3 = fla_max(i__3,i__4);
-                    i__3 = fla_max(i__3,*nrhs);
+                    i__3 = *m, i__4 = (*m << 1) - 4, i__3 = fla_max(i__3, i__4);
+                    i__3 = fla_max(i__3, *nrhs);
                     i__4 = *n - *m * 3; // ; expr subst
                     i__1 = maxwrk;
-                    i__2 = (*m << 2) + *m * *m + fla_max(i__3,i__4) ; // , expr subst
-                    maxwrk = fla_max(i__1,i__2);
+                    i__2 = (*m << 2) + *m * *m + fla_max(i__3, i__4); // , expr subst
+                    maxwrk = fla_max(i__1, i__2);
                 }
                 else
                 {
                     /* Path 2 - underdetermined. */
-                    maxwrk = (*m << 1)
-                             + (*n + *m)
-                                   * aocl_lapack_ilaenv(&c__1, "CGEBRD", " ", m, n, &c_n1, &c_n1);
+                    maxwrk
+                        = (*m << 1) + (*n + *m) * ilaenv_(&c__1, "CGEBRD", " ", m, n, &c_n1, &c_n1);
                     /* Computing MAX */
                     i__1 = maxwrk;
-                    i__2 = (*m << 1) + *nrhs * ilaenv_(&c__1, "CUNMBR", "QLC", m, nrhs, m, &c_n1); // , expr subst
-                    maxwrk = fla_max(i__1,i__2);
+                    i__2 = (*m << 1)
+                           + *nrhs
+                                 * ilaenv_(&c__1, "CUNMBR", "QLC", m, nrhs, m,
+                                           &c_n1); // , expr subst
+                    maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
-                    i__2 = (*m << 1) + *m * ilaenv_(&c__1, "CUNMBR", "PLN", n, nrhs, m, &c_n1); // , expr subst
-                    maxwrk = fla_max(i__1,i__2);
+                    i__2
+                        = (*m << 1)
+                          + *m * ilaenv_(&c__1, "CUNMBR", "PLN", n, nrhs, m, &c_n1); // , expr subst
+                    maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*m << 1) + *m * *nrhs; // , expr subst
-                    maxwrk = fla_max(i__1,i__2);
+                    maxwrk = fla_max(i__1, i__2);
                 }
                 /* Computing MAX */
                 i__1 = (*m << 1) + *n;
                 i__2 = (*m << 1) + *m * *nrhs; // , expr subst
-                minwrk = fla_max(i__1,i__2);
+                minwrk = fla_max(i__1, i__2);
             }
         }
-        minwrk = fla_min(minwrk,maxwrk);
-        work[1].r = (real) maxwrk;
+        minwrk = fla_min(minwrk, maxwrk);
+        work[1].r = (real)maxwrk;
         work[1].i = 0.f; // , expr subst
         iwork[1] = liwork;
-        rwork[1] = (real) lrwork;
-        if (*lwork < minwrk && ! lquery)
+        rwork[1] = (real)lrwork;
+        if(*lwork < minwrk && !lquery)
         {
             *info = -12;
         }
@@ -519,7 +568,7 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, c
     else if(anrm == 0.f)
     {
         /* Matrix all zero. Return zero solution. */
-        i__1 = fla_max(*m,*n);
+        i__1 = fla_max(*m, *n);
         claset_("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         slaset_("F", &minmn, &c__1, &c_b80, &c_b80, &s[1], &c__1);
         *rank = 0;
@@ -566,8 +615,8 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, c
             /* (RWorkspace: need N) */
             /* (CWorkspace: need NRHS, prefer NRHS*NB) */
             i__1 = *lwork - nwork + 1;
-            aocl_lapack_cunmqr("L", "C", m, nrhs, n, &a[a_offset], lda, &work[itau], &b[b_offset],
-                               ldb, &work[nwork], &i__1, info);
+            cunmqr_("L", "C", m, nrhs, n, &a[a_offset], lda, &work[itau], &b[b_offset], ldb,
+                    &work[nwork], &i__1, info);
             /* Zero out below R. */
             if(*n > 1)
             {
@@ -585,44 +634,44 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, c
         /* (RWorkspace: need N) */
         /* (CWorkspace: need 2*N+MM, prefer 2*N+(MM+N)*NB) */
         i__1 = *lwork - nwork + 1;
-        aocl_lapack_cgebrd(&mm, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                           &work[nwork], &i__1, info);
+        cgebrd_(&mm, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq], &work[itaup],
+                &work[nwork], &i__1, info);
         /* Multiply B by transpose of left bidiagonalizing vectors of R. */
         /* (CWorkspace: need 2*N+NRHS, prefer 2*N+NRHS*NB) */
         i__1 = *lwork - nwork + 1;
-        aocl_lapack_cunmbr("Q", "L", "C", &mm, nrhs, n, &a[a_offset], lda, &work[itauq],
-                           &b[b_offset], ldb, &work[nwork], &i__1, info);
+        cunmbr_("Q", "L", "C", &mm, nrhs, n, &a[a_offset], lda, &work[itauq], &b[b_offset], ldb,
+                &work[nwork], &i__1, info);
         /* Solve the bidiagonal least squares problem. */
-        aocl_lapack_clalsd("U", &smlsiz, n, nrhs, &s[1], &rwork[ie], &b[b_offset], ldb, rcond, rank,
-                           &work[nwork], &rwork[nrwork], &iwork[1], info);
+        clalsd_("U", &smlsiz, n, nrhs, &s[1], &rwork[ie], &b[b_offset], ldb, rcond, rank,
+                &work[nwork], &rwork[nrwork], &iwork[1], info);
         if(*info != 0)
         {
             goto L10;
         }
         /* Multiply B by right bidiagonalizing vectors of R. */
         i__1 = *lwork - nwork + 1;
-        aocl_lapack_cunmbr("P", "L", "N", n, nrhs, n, &a[a_offset], lda, &work[itaup], &b[b_offset],
-                           ldb, &work[nwork], &i__1, info);
+        cunmbr_("P", "L", "N", n, nrhs, n, &a[a_offset], lda, &work[itaup], &b[b_offset], ldb,
+                &work[nwork], &i__1, info);
     }
     else /* if(complicated condition) */
     {
         /* Computing MAX */
-        i__1 = *m, i__2 = (*m << 1) - 4, i__1 = fla_max(i__1,i__2);
-        i__1 = fla_max( i__1,*nrhs);
+        i__1 = *m, i__2 = (*m << 1) - 4, i__1 = fla_max(i__1, i__2);
+        i__1 = fla_max(i__1, *nrhs);
         i__2 = *n - *m * 3; // ; expr subst
-        if (*n >= mnthr && *lwork >= (*m << 2) + *m * *m + fla_max(i__1,i__2))
+        if(*n >= mnthr && *lwork >= (*m << 2) + *m * *m + fla_max(i__1, i__2))
         {
             /* Path 2a - underdetermined, with many more columns than rows */
             /* and sufficient workspace for an efficient algorithm. */
             ldwork = *m;
             /* Computing MAX */
             /* Computing MAX */
-            i__3 = *m, i__4 = (*m << 1) - 4, i__3 = fla_max(i__3,i__4);
-            i__3 = fla_max(i__3,*nrhs);
+            i__3 = *m, i__4 = (*m << 1) - 4, i__3 = fla_max(i__3, i__4);
+            i__3 = fla_max(i__3, *nrhs);
             i__4 = *n - *m * 3; // ; expr subst
-            i__1 = (*m << 2) + *m * *lda + fla_max(i__3,i__4);
+            i__1 = (*m << 2) + *m * *lda + fla_max(i__3, i__4);
             i__2 = *m * *lda + *m + *m * *nrhs; // , expr subst
-            if (*lwork >= fla_max(i__1,i__2))
+            if(*lwork >= fla_max(i__1, i__2))
             {
                 ldwork = *lda;
             }
@@ -637,7 +686,7 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, c
             aocl_lapack_clacpy("L", m, m, &a[a_offset], lda, &work[il], &ldwork);
             i__1 = *m - 1;
             i__2 = *m - 1;
-            aocl_lapack_claset("U", &i__1, &i__2, &c_b1, &c_b1, &work[il + ldwork], &ldwork);
+            claset_("U", &i__1, &i__2, &c_b1, &c_b1, &work[il + ldwork], &ldwork);
             itauq = il + ldwork * *m;
             itaup = itauq + *m;
             nwork = itaup + *m;
@@ -647,24 +696,24 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, c
             /* (RWorkspace: need M) */
             /* (CWorkspace: need M*M+4*M, prefer M*M+4*M+2*M*NB) */
             i__1 = *lwork - nwork + 1;
-            aocl_lapack_cgebrd(m, m, &work[il], &ldwork, &s[1], &rwork[ie], &work[itauq],
-                               &work[itaup], &work[nwork], &i__1, info);
+            cgebrd_(m, m, &work[il], &ldwork, &s[1], &rwork[ie], &work[itauq], &work[itaup],
+                    &work[nwork], &i__1, info);
             /* Multiply B by transpose of left bidiagonalizing vectors of L. */
             /* (CWorkspace: need M*M+4*M+NRHS, prefer M*M+4*M+NRHS*NB) */
             i__1 = *lwork - nwork + 1;
-            aocl_lapack_cunmbr("Q", "L", "C", m, nrhs, m, &work[il], &ldwork, &work[itauq],
-                               &b[b_offset], ldb, &work[nwork], &i__1, info);
+            cunmbr_("Q", "L", "C", m, nrhs, m, &work[il], &ldwork, &work[itauq], &b[b_offset], ldb,
+                    &work[nwork], &i__1, info);
             /* Solve the bidiagonal least squares problem. */
-            aocl_lapack_clalsd("U", &smlsiz, m, nrhs, &s[1], &rwork[ie], &b[b_offset], ldb, rcond,
-                               rank, &work[nwork], &rwork[nrwork], &iwork[1], info);
+            clalsd_("U", &smlsiz, m, nrhs, &s[1], &rwork[ie], &b[b_offset], ldb, rcond, rank,
+                    &work[nwork], &rwork[nrwork], &iwork[1], info);
             if(*info != 0)
             {
                 goto L10;
             }
             /* Multiply B by right bidiagonalizing vectors of L. */
             i__1 = *lwork - nwork + 1;
-            aocl_lapack_cunmbr("P", "L", "N", m, nrhs, m, &work[il], &ldwork, &work[itaup],
-                               &b[b_offset], ldb, &work[nwork], &i__1, info);
+            cunmbr_("P", "L", "N", m, nrhs, m, &work[il], &ldwork, &work[itaup], &b[b_offset], ldb,
+                    &work[nwork], &i__1, info);
             /* Zero out below first M rows of B. */
             i__1 = *n - *m;
             aocl_lapack_claset("F", &i__1, nrhs, &c_b1, &c_b1, &b[*m + 1 + b_dim1], ldb);
@@ -672,8 +721,8 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, c
             /* Multiply transpose(Q) by B. */
             /* (CWorkspace: need NRHS, prefer NRHS*NB) */
             i__1 = *lwork - nwork + 1;
-            aocl_lapack_cunmlq("L", "C", n, nrhs, m, &a[a_offset], lda, &work[itau], &b[b_offset],
-                               ldb, &work[nwork], &i__1, info);
+            cunmlq_("L", "C", n, nrhs, m, &a[a_offset], lda, &work[itau], &b[b_offset], ldb,
+                    &work[nwork], &i__1, info);
         }
         else
         {
@@ -687,34 +736,36 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, c
             /* (RWorkspace: need M) */
             /* (CWorkspace: need 2*M+N, prefer 2*M+(M+N)*NB) */
             i__1 = *lwork - nwork + 1;
-            aocl_lapack_cgebrd(m, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
-                               &work[itaup], &work[nwork], &i__1, info);
+            cgebrd_(m, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq], &work[itaup],
+                    &work[nwork], &i__1, info);
             /* Multiply B by transpose of left bidiagonalizing vectors. */
             /* (CWorkspace: need 2*M+NRHS, prefer 2*M+NRHS*NB) */
             i__1 = *lwork - nwork + 1;
-            cunmbr_("Q", "L", "C", m, nrhs, n, &a[a_offset], lda, &work[itauq], &b[b_offset], ldb, &work[nwork], &i__1, info);
+            cunmbr_("Q", "L", "C", m, nrhs, n, &a[a_offset], lda, &work[itauq], &b[b_offset], ldb,
+                    &work[nwork], &i__1, info);
             /* Solve the bidiagonal least squares problem. */
-            aocl_lapack_clalsd("L", &smlsiz, m, nrhs, &s[1], &rwork[ie], &b[b_offset], ldb, rcond,
-                               rank, &work[nwork], &rwork[nrwork], &iwork[1], info);
+            clalsd_("L", &smlsiz, m, nrhs, &s[1], &rwork[ie], &b[b_offset], ldb, rcond, rank,
+                    &work[nwork], &rwork[nrwork], &iwork[1], info);
             if(*info != 0)
             {
                 goto L10;
             }
             /* Multiply B by right bidiagonalizing vectors of A. */
             i__1 = *lwork - nwork + 1;
-            cunmbr_("P", "L", "N", n, nrhs, m, &a[a_offset], lda, &work[itaup], &b[b_offset], ldb, &work[nwork], &i__1, info);
+            cunmbr_("P", "L", "N", n, nrhs, m, &a[a_offset], lda, &work[itaup], &b[b_offset], ldb,
+                    &work[nwork], &i__1, info);
         }
     }
     /* Undo scaling. */
     if(iascl == 1)
     {
-        aocl_lapack_clascl("G", &c__0, &c__0, &anrm, &smlnum, n, nrhs, &b[b_offset], ldb, info);
-        aocl_lapack_slascl("G", &c__0, &c__0, &smlnum, &anrm, &minmn, &c__1, &s[1], &minmn, info);
+        clascl_("G", &c__0, &c__0, &anrm, &smlnum, n, nrhs, &b[b_offset], ldb, info);
+        slascl_("G", &c__0, &c__0, &smlnum, &anrm, &minmn, &c__1, &s[1], &minmn, info);
     }
     else if(iascl == 2)
     {
-        aocl_lapack_clascl("G", &c__0, &c__0, &anrm, &bignum, n, nrhs, &b[b_offset], ldb, info);
-        aocl_lapack_slascl("G", &c__0, &c__0, &bignum, &anrm, &minmn, &c__1, &s[1], &minmn, info);
+        clascl_("G", &c__0, &c__0, &anrm, &bignum, n, nrhs, &b[b_offset], ldb, info);
+        slascl_("G", &c__0, &c__0, &bignum, &anrm, &minmn, &c__1, &s[1], &minmn, info);
     }
     if(ibscl == 1)
     {
@@ -725,10 +776,10 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, c
         aocl_lapack_clascl("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
 L10:
-    work[1].r = (real) maxwrk;
+    work[1].r = (real)maxwrk;
     work[1].i = 0.f; // , expr subst
     iwork[1] = liwork;
-    rwork[1] = (real) lrwork;
+    rwork[1] = (real)lrwork;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGELSD */

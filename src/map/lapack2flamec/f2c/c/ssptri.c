@@ -116,7 +116,7 @@ void ssptri_(char *uplo, integer *n, real *ap, integer *ipiv, real *work, intege
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"ssptri inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
+    snprintf(buffer, 256, "ssptri inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -133,7 +133,11 @@ void ssptri_(char *uplo, integer *n, real *ap, integer *ipiv, real *work, intege
     integer kstep;
     logical upper;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer * ), sspmv_(char *, integer *, real *, real *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *),
+        sswap_(integer *, real *, integer *, real *, integer *),
+        sspmv_(char *, integer *, real *, real *, real *, integer *, real *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer kcnext;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -163,7 +167,7 @@ void ssptri_(char *uplo, integer *n, real *ap, integer *ipiv, real *work, intege
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -241,10 +245,9 @@ void ssptri_(char *uplo, integer *n, real *ap, integer *ipiv, real *work, intege
                 i__1 = k - 1;
                 aocl_blas_scopy(&i__1, &ap[kc], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
-                aocl_blas_sspmv(uplo, &i__1, &c_b11, &ap[1], &work[1], &c__1, &c_b13, &ap[kc],
-                                &c__1);
+                sspmv_(uplo, &i__1, &c_b11, &ap[1], &work[1], &c__1, &c_b13, &ap[kc], &c__1);
                 i__1 = k - 1;
-                ap[kc + k - 1] -= aocl_blas_sdot(&i__1, &work[1], &c__1, &ap[kc], &c__1);
+                ap[kc + k - 1] -= sdot_(&i__1, &work[1], &c__1, &ap[kc], &c__1);
             }
             kstep = 1;
         }
@@ -266,25 +269,23 @@ void ssptri_(char *uplo, integer *n, real *ap, integer *ipiv, real *work, intege
                 i__1 = k - 1;
                 aocl_blas_scopy(&i__1, &ap[kc], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
-                aocl_blas_sspmv(uplo, &i__1, &c_b11, &ap[1], &work[1], &c__1, &c_b13, &ap[kc],
-                                &c__1);
+                sspmv_(uplo, &i__1, &c_b11, &ap[1], &work[1], &c__1, &c_b13, &ap[kc], &c__1);
                 i__1 = k - 1;
-                ap[kc + k - 1] -= aocl_blas_sdot(&i__1, &work[1], &c__1, &ap[kc], &c__1);
+                ap[kc + k - 1] -= sdot_(&i__1, &work[1], &c__1, &ap[kc], &c__1);
                 i__1 = k - 1;
                 ap[kcnext + k - 1] -= sdot_(&i__1, &ap[kc], &c__1, &ap[kcnext], &c__1);
                 i__1 = k - 1;
                 aocl_blas_scopy(&i__1, &ap[kcnext], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
-                aocl_blas_sspmv(uplo, &i__1, &c_b11, &ap[1], &work[1], &c__1, &c_b13, &ap[kcnext],
-                                &c__1);
+                sspmv_(uplo, &i__1, &c_b11, &ap[1], &work[1], &c__1, &c_b13, &ap[kcnext], &c__1);
                 i__1 = k - 1;
-                ap[kcnext + k] -= aocl_blas_sdot(&i__1, &work[1], &c__1, &ap[kcnext], &c__1);
+                ap[kcnext + k] -= sdot_(&i__1, &work[1], &c__1, &ap[kcnext], &c__1);
             }
             kstep = 2;
             kcnext = kcnext + k + 1;
         }
         kp = (i__1 = ipiv[k], f2c_abs(i__1));
-        if (kp != k)
+        if(kp != k)
         {
             /* Interchange rows and columns K and KP in the leading */
             /* submatrix A(1:k+1,1:k+1) */
@@ -341,8 +342,8 @@ void ssptri_(char *uplo, integer *n, real *ap, integer *ipiv, real *work, intege
                 i__1 = *n - k;
                 aocl_blas_scopy(&i__1, &ap[kc + 1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
-                aocl_blas_sspmv(uplo, &i__1, &c_b11, &ap[kc + *n - k + 1], &work[1], &c__1, &c_b13,
-                                &ap[kc + 1], &c__1);
+                sspmv_(uplo, &i__1, &c_b11, &ap[kc + *n - k + 1], &work[1], &c__1, &c_b13,
+                       &ap[kc + 1], &c__1);
                 i__1 = *n - k;
                 ap[kc] -= aocl_blas_sdot(&i__1, &work[1], &c__1, &ap[kc + 1], &c__1);
             }
@@ -366,8 +367,8 @@ void ssptri_(char *uplo, integer *n, real *ap, integer *ipiv, real *work, intege
                 i__1 = *n - k;
                 aocl_blas_scopy(&i__1, &ap[kc + 1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
-                aocl_blas_sspmv(uplo, &i__1, &c_b11, &ap[kc + (*n - k + 1)], &work[1], &c__1,
-                                &c_b13, &ap[kc + 1], &c__1);
+                sspmv_(uplo, &i__1, &c_b11, &ap[kc + (*n - k + 1)], &work[1], &c__1, &c_b13,
+                       &ap[kc + 1], &c__1);
                 i__1 = *n - k;
                 ap[kc] -= aocl_blas_sdot(&i__1, &work[1], &c__1, &ap[kc + 1], &c__1);
                 i__1 = *n - k;
@@ -375,16 +376,16 @@ void ssptri_(char *uplo, integer *n, real *ap, integer *ipiv, real *work, intege
                 i__1 = *n - k;
                 aocl_blas_scopy(&i__1, &ap[kcnext + 2], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
-                aocl_blas_sspmv(uplo, &i__1, &c_b11, &ap[kc + (*n - k + 1)], &work[1], &c__1,
-                                &c_b13, &ap[kcnext + 2], &c__1);
+                sspmv_(uplo, &i__1, &c_b11, &ap[kc + (*n - k + 1)], &work[1], &c__1, &c_b13,
+                       &ap[kcnext + 2], &c__1);
                 i__1 = *n - k;
-                ap[kcnext] -= aocl_blas_sdot(&i__1, &work[1], &c__1, &ap[kcnext + 2], &c__1);
+                ap[kcnext] -= sdot_(&i__1, &work[1], &c__1, &ap[kcnext + 2], &c__1);
             }
             kstep = 2;
             kcnext -= *n - k + 3;
         }
         kp = (i__1 = ipiv[k], f2c_abs(i__1));
-        if (kp != k)
+        if(kp != k)
         {
             /* Interchange rows and columns K and KP in the trailing */
             /* submatrix A(k-1:n,k-1:n) */
@@ -392,7 +393,7 @@ void ssptri_(char *uplo, integer *n, real *ap, integer *ipiv, real *work, intege
             if(kp < *n)
             {
                 i__1 = *n - kp;
-                aocl_blas_sswap(&i__1, &ap[kc + kp - k + 1], &c__1, &ap[kpc + 1], &c__1);
+                sswap_(&i__1, &ap[kc + kp - k + 1], &c__1, &ap[kpc + 1], &c__1);
             }
             kx = kc + kp - k;
             i__1 = kp - 1;

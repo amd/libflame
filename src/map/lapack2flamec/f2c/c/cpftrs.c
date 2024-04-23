@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {1.f, 0.f};
+static complex c_b1 = {1.f, 0.f};
 /* > \brief \b CPFTRS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -220,15 +220,18 @@ static scomplex c_b1 = {1.f, 0.f};
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, complex *a, complex *b, integer *ldb, integer *info)
+void cpftrs_(char *transr, char *uplo, integer *n, integer *nrhs, complex *a, complex *b,
+             integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cpftrs inputs: transr %c, uplo %c, n %lld, nrhs %lld, ldb %lld",*transr, *uplo, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "cpftrs inputs: transr %c, uplo %c, n %lld, nrhs %lld, ldb %lld", *transr,
+             *uplo, *n, *nrhs, *ldb);
 #else
-    snprintf(buffer, 256,"cpftrs inputs: transr %c, uplo %c, n %d, nrhs %d, ldb %d",*transr, *uplo, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "cpftrs inputs: transr %c, uplo %c, n %d, nrhs %d, ldb %d", *transr,
+             *uplo, *n, *nrhs, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -238,10 +241,13 @@ void cpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, complex *a, c
     logical normaltransr;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void ctfsm_(char *, char *, char *, char *, char *, integer *, integer *, complex *, complex *, complex *, integer *);
+        void
+        ctfsm_(char *, char *, char *, char *, char *, integer *, integer *, complex *, complex *,
+               complex *, integer *);
     logical lower;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -271,11 +277,11 @@ void cpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, complex *a, c
     *info = 0;
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
-    if (! normaltransr && ! lsame_(transr, "C", 1, 1))
+    if(!normaltransr && !lsame_(transr, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U", 1, 1))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }
@@ -287,7 +293,7 @@ void cpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, complex *a, c
     {
         *info = -4;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }

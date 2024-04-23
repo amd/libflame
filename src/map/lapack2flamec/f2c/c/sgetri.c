@@ -1,8 +1,8 @@
-/* ./sgetri.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sgetri.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
@@ -117,7 +117,8 @@ the matrix is */
 /* > \ingroup getri */
 /* ===================================================================== */
 /* Subroutine */
-void sgetri_(integer *n, real *a, integer *lda, integer *ipiv, real *work, integer *lwork, integer *info)
+void sgetri_(integer *n, real *a, integer *lda, integer *ipiv, real *work, integer *lwork,
+             integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgetri(n, a, lda, ipiv, work, lwork, info);
@@ -144,12 +145,21 @@ void aocl_lapack_sgetri(aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t 
     /* Local variables */
     integer i__, j, jb, nb, jj, jp, nn, iws, nbmin;
     extern /* Subroutine */
-    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer *), strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *),
+        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+               real *, integer *),
+        sswap_(integer *, real *, integer *, real *, integer *),
+        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
+               real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
     extern /* Subroutine */
-    void strtri_(char *, char *, integer *, real *, integer *, integer *);
+        void
+        strtri_(char *, char *, integer *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -180,17 +190,17 @@ void aocl_lapack_sgetri(aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t 
     *info = 0;
     nb = aocl_lapack_ilaenv(&c__1, "SGETRI", " ", n, &c_n1, &c_n1, &c_n1);
     lwkopt = *n * nb;
-    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
+    work[1] = (real)lwkopt;
     lquery = *lwork == -1;
     if(*n < 0)
     {
         *info = -1;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -3;
     }
-    else if (*lwork < fla_max(1,*n) && ! lquery)
+    else if(*lwork < fla_max(1, *n) && !lquery)
     {
         *info = -6;
     }
@@ -211,7 +221,7 @@ void aocl_lapack_sgetri(aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t 
     }
     /* Form inv(U). If INFO > 0 from STRTRI, then U is singular, */
     /* and the inverse is not computed. */
-    aocl_lapack_strtri("Upper", "Non-unit", n, &a[a_offset], lda, info);
+    strtri_("Upper", "Non-unit", n, &a[a_offset], lda, info);
     if(*info > 0)
     {
         return;
@@ -222,14 +232,14 @@ void aocl_lapack_sgetri(aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t 
     {
         /* Computing MAX */
         i__1 = ldwork * nb;
-        iws = fla_max(i__1,1);
-        if (*lwork < iws)
+        iws = fla_max(i__1, 1);
+        if(*lwork < iws)
         {
             nb = *lwork / ldwork;
             /* Computing MAX */
             i__1 = 2;
-            i__2 = ilaenv_(&c__2, "SGETRI", " ", n, &c_n1, &c_n1, & c_n1); // , expr subst
-            nbmin = fla_max(i__1,i__2);
+            i__2 = ilaenv_(&c__2, "SGETRI", " ", n, &c_n1, &c_n1, &c_n1); // , expr subst
+            nbmin = fla_max(i__1, i__2);
         }
     }
     else
@@ -254,8 +264,8 @@ void aocl_lapack_sgetri(aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t 
             if(j < *n)
             {
                 i__1 = *n - j;
-                aocl_blas_sgemv("No transpose", n, &i__1, &c_b20, &a[(j + 1) * a_dim1 + 1], lda,
-                                &work[j + 1], &c__1, &c_b22, &a[j * a_dim1 + 1], &c__1);
+                sgemv_("No transpose", n, &i__1, &c_b20, &a[(j + 1) * a_dim1 + 1], lda,
+                       &work[j + 1], &c__1, &c_b22, &a[j * a_dim1 + 1], &c__1);
             }
             /* L20: */
         }
@@ -270,7 +280,7 @@ void aocl_lapack_sgetri(aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t 
             /* Computing MIN */
             i__2 = nb;
             i__3 = *n - j + 1; // , expr subst
-            jb = fla_min(i__2,i__3);
+            jb = fla_min(i__2, i__3);
             /* Copy current block column of L to WORK and replace with */
             /* zeros. */
             i__2 = j + jb - 1;
@@ -289,12 +299,12 @@ void aocl_lapack_sgetri(aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t 
             if(j + jb <= *n)
             {
                 i__2 = *n - j - jb + 1;
-                aocl_blas_sgemm("No transpose", "No transpose", n, &jb, &i__2, &c_b20,
-                                &a[(j + jb) * a_dim1 + 1], lda, &work[j + jb], &ldwork, &c_b22,
-                                &a[j * a_dim1 + 1], lda);
+                sgemm_("No transpose", "No transpose", n, &jb, &i__2, &c_b20,
+                       &a[(j + jb) * a_dim1 + 1], lda, &work[j + jb], &ldwork, &c_b22,
+                       &a[j * a_dim1 + 1], lda);
             }
-            aocl_blas_strsm("Right", "Lower", "No transpose", "Unit", n, &jb, &c_b22, &work[j],
-                            &ldwork, &a[j * a_dim1 + 1], lda);
+            strsm_("Right", "Lower", "No transpose", "Unit", n, &jb, &c_b22, &work[j], &ldwork,
+                   &a[j * a_dim1 + 1], lda);
             /* L50: */
         }
     }
@@ -308,7 +318,7 @@ void aocl_lapack_sgetri(aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t 
         }
         /* L60: */
     }
-    work[1] = (real) iws;
+    work[1] = (real)iws;
     return;
     /* End of SGETRI */
 }

@@ -135,15 +135,16 @@ static aocl_int64_t c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void csycon_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, real *anorm, real *rcond, complex *work, integer *info)
+void csycon_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, real *anorm,
+                  real *rcond, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"csycon_rook inputs: uplo %c, n %lld, lda %lld",*uplo, *n, *lda);
+    snprintf(buffer, 256, "csycon_rook inputs: uplo %c, n %lld, lda %lld", *uplo, *n, *lda);
 #else
-    snprintf(buffer, 256,"csycon_rook inputs: uplo %c, n %d, lda %d",*uplo, *n, *lda);
+    snprintf(buffer, 256, "csycon_rook inputs: uplo %c, n %d, lda %d", *uplo, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -152,13 +153,17 @@ void csycon_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
     /* Local variables */
     integer i__;
     extern /* Subroutine */
-    void csytrs_rook_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+        void
+        csytrs_rook_(char *, integer *, integer *, complex *, integer *, integer *, complex *,
+                     integer *, integer *);
     integer kase;
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clacn2_(integer *, complex *, complex *, real *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     /* -- LAPACK computational routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -192,7 +197,7 @@ void csycon_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -200,7 +205,7 @@ void csycon_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -235,7 +240,7 @@ void csycon_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
         for(i__ = *n; i__ >= 1; --i__)
         {
             i__1 = i__ + i__ * a_dim1;
-            if(ipiv[i__] > 0 && (a[i__1].real == 0.f && a[i__1].imag == 0.f))
+            if(ipiv[i__] > 0 && (a[i__1].r == 0.f && a[i__1].i == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                 return;
@@ -250,7 +255,7 @@ void csycon_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
-            if(ipiv[i__] > 0 && (a[i__2].real == 0.f && a[i__2].imag == 0.f))
+            if(ipiv[i__] > 0 && (a[i__2].r == 0.f && a[i__2].i == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                 return;
@@ -261,7 +266,7 @@ void csycon_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
     /* Estimate the 1-norm of the inverse. */
     kase = 0;
 L30:
-    aocl_lapack_clacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    clacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         /* Multiply by inv(L*D*L**T) or inv(U*D*U**T). */

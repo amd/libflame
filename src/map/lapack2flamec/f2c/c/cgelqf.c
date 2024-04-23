@@ -1,8 +1,8 @@
-/* ./cgelqf.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cgelqf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
@@ -147,15 +147,17 @@ conjg(v(i+1:n)) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgelqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *work, integer *lwork, integer *info)
+void cgelqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *work,
+             integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgelqf inputs: m %lld, n %lld, lda %lld, lwork %lld",*m, *n, *lda, *lwork);
+    snprintf(buffer, 256, "cgelqf inputs: m %lld, n %lld, lda %lld, lwork %lld", *m, *n, *lda,
+             *lwork);
 #else
-    snprintf(buffer, 256,"cgelqf inputs: m %d, n %d, lda %d, lwork %d",*m, *n, *lda, *lwork);
+    snprintf(buffer, 256, "cgelqf inputs: m %d, n %d, lda %d, lwork %d", *m, *n, *lda, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -165,7 +167,13 @@ void cgelqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     /* Local variables */
     integer i__, k, ib, nb, nx, iws, nbmin, iinfo;
     extern /* Subroutine */
-    void cgelq2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *), clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *), clarft_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        cgelq2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *),
+        clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *,
+                integer *, complex *, integer *, complex *, integer *, complex *, integer *),
+        clarft_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
@@ -197,9 +205,8 @@ void cgelqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     *info = 0;
     nb = aocl_lapack_ilaenv(&c__1, "CGELQF", " ", m, n, &c_n1, &c_n1);
     lwkopt = *m * nb;
-    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].real = r__1;
-    work[1].imag = 0.f; // , expr subst
+    work[1].r = (real)lwkopt;
+    work[1].i = 0.f; // , expr subst
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -209,11 +216,11 @@ void cgelqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
-    else if (*lwork < fla_max(1,*m) && ! lquery)
+    else if(*lwork < fla_max(1, *m) && !lquery)
     {
         *info = -7;
     }
@@ -230,8 +237,8 @@ void cgelqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         return;
     }
     /* Quick return if possible */
-    k = fla_min(*m,*n);
-    if (k == 0)
+    k = fla_min(*m, *n);
+    if(k == 0)
     {
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
@@ -247,8 +254,8 @@ void cgelqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         /* Computing MAX */
         i__1 = 0;
         i__2 = ilaenv_(&c__3, "CGELQF", " ", m, n, &c_n1, &c_n1); // , expr subst
-        nx = fla_max(i__1,i__2);
-        if (nx < k)
+        nx = fla_max(i__1, i__2);
+        if(nx < k)
         {
             /* Determine if workspace is large enough for blocked code. */
             ldwork = *m;
@@ -260,8 +267,8 @@ void cgelqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "CGELQF", " ", m, n, &c_n1, & c_n1); // , expr subst
-                nbmin = fla_max(i__1,i__2);
+                i__2 = ilaenv_(&c__2, "CGELQF", " ", m, n, &c_n1, &c_n1); // , expr subst
+                nbmin = fla_max(i__1, i__2);
             }
         }
     }
@@ -274,25 +281,24 @@ void cgelqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         {
             /* Computing MIN */
             i__3 = k - i__ + 1;
-            ib = fla_min(i__3,nb);
+            ib = fla_min(i__3, nb);
             /* Compute the LQ factorization of the current block */
             /* A(i:i+ib-1,i:n) */
             i__3 = *n - i__ + 1;
-            aocl_lapack_cgelq2(&ib, &i__3, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1],
-                               &iinfo);
+            cgelq2_(&ib, &i__3, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &iinfo);
             if(i__ + ib <= *m)
             {
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i) H(i+1) . . . H(i+ib-1) */
                 i__3 = *n - i__ + 1;
-                aocl_lapack_clarft("Forward", "Rowwise", &i__3, &ib, &a[i__ + i__ * a_dim1], lda,
-                                   &tau[i__], &work[1], &ldwork);
+                clarft_("Forward", "Rowwise", &i__3, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__],
+                        &work[1], &ldwork);
                 /* Apply H to A(i+ib:m,i:n) from the right */
                 i__3 = *m - i__ - ib + 1;
                 i__4 = *n - i__ + 1;
-                aocl_lapack_clarfb("Right", "No transpose", "Forward", "Rowwise", &i__3, &i__4, &ib,
-                                   &a[i__ + i__ * a_dim1], lda, &work[1], &ldwork,
-                                   &a[i__ + ib + i__ * a_dim1], lda, &work[ib + 1], &ldwork);
+                clarfb_("Right", "No transpose", "Forward", "Rowwise", &i__3, &i__4, &ib,
+                        &a[i__ + i__ * a_dim1], lda, &work[1], &ldwork, &a[i__ + ib + i__ * a_dim1],
+                        lda, &work[ib + 1], &ldwork);
             }
             /* L10: */
         }
@@ -308,7 +314,7 @@ void cgelqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         i__1 = *n - i__ + 1;
         cgelq2_(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &iinfo);
     }
-    work[1].r = (real) iws;
+    work[1].r = (real)iws;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

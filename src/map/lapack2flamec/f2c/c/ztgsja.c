@@ -1,9 +1,12 @@
-/* ztgsja.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ztgsja.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {0., 0.};
-static dcomplex c_b2 = {1., 0.};
-static aocl_int64_t c__1 = 1;
+static doublecomplex c_b1 = {0., 0.};
+static doublecomplex c_b2 = {1., 0.};
+static integer c__1 = 1;
 static doublereal c_b39 = -1.;
 static doublereal c_b42 = 1.;
 /* > \brief \b ZTGSJA */
@@ -390,11 +393,19 @@ V1**H *B13*Q1 = S1*R1, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ztgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, integer *k, integer *l, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublereal *tola, doublereal *tolb, doublereal *alpha, doublereal *beta, doublecomplex * u, integer *ldu, doublecomplex *v, integer *ldv, doublecomplex *q, integer *ldq, doublecomplex *work, integer *ncycle, integer *info)
+void ztgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, integer *k,
+             integer *l, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb,
+             doublereal *tola, doublereal *tolb, doublereal *alpha, doublereal *beta,
+             doublecomplex *u, integer *ldu, doublecomplex *v, integer *ldv, doublecomplex *q,
+             integer *ldq, doublecomplex *work, integer *ncycle, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztgsja inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", p %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS ", ldq %" FLA_IS "",*jobu, *jobv, *jobq, *m, *p, *n, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq);
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4;
+    AOCL_DTL_SNPRINTF("ztgsja inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", p %" FLA_IS
+                      ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS
+                      ", ldu %" FLA_IS ", ldv %" FLA_IS ", ldq %" FLA_IS "",
+                      *jobu, *jobv, *jobq, *m, *p, *n, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq);
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
+        v_offset, i__1, i__2, i__3, i__4;
     doublereal d__1;
     dcomplex z__1;
     /* Builtin functions */
@@ -408,17 +419,29 @@ void ztgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     doublereal rwk;
     doublecomplex snu, snv;
     extern /* Subroutine */
-    void zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
+        void
+        zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
+              doublecomplex *);
     doublereal gamma;
     extern logical lsame_(char *, char *, integer, integer);
     logical initq, initu, initv, wantq, upper;
     doublereal error, ssmin;
     logical wantu, wantv;
     extern /* Subroutine */
-    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlags2_(logical *, doublereal *, doublecomplex *, doublereal *, doublereal *, doublecomplex *, doublereal *, doublereal *, doublecomplex *, doublereal *, doublecomplex *, doublereal *, doublecomplex *);
+        void
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zlags2_(logical *, doublereal *, doublecomplex *, doublereal *, doublereal *,
+                doublecomplex *, doublereal *, doublereal *, doublecomplex *, doublereal *,
+                doublecomplex *, doublereal *, doublecomplex *);
     integer kcycle;
     extern /* Subroutine */
-    void dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *), zlapll_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *), zlaset_( char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
+        void
+        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zdscal_(integer *, doublereal *, doublecomplex *, integer *),
+        zlapll_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *),
+        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
+                integer *);
     doublereal hugenum;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -468,15 +491,15 @@ void ztgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     initq = lsame_(jobq, "I", 1, 1);
     wantq = initq || lsame_(jobq, "Q", 1, 1);
     *info = 0;
-    if (! (initu || wantu || lsame_(jobu, "N", 1, 1)))
+    if(!(initu || wantu || lsame_(jobu, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (initv || wantv || lsame_(jobv, "N", 1, 1)))
+    else if(!(initv || wantv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (initq || wantq || lsame_(jobq, "N", 1, 1)))
+    else if(!(initq || wantq || lsame_(jobq, "N", 1, 1)))
     {
         *info = -3;
     }
@@ -492,11 +515,11 @@ void ztgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     {
         *info = -6;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -10;
     }
-    else if (*ldb < fla_max(1,*p))
+    else if(*ldb < fla_max(1, *p))
     {
         *info = -12;
     }
@@ -516,7 +539,7 @@ void ztgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     {
         i__1 = -(*info);
         xerbla_("ZTGSJA", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize U, V and Q, if necessary */
@@ -560,7 +583,7 @@ void ztgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
                 i__3 = i__ + (*n - *l + i__) * b_dim1;
                 b1 = b[i__3].real;
                 i__3 = j + (*n - *l + j) * b_dim1;
-                b3 = b[i__3].real;
+                b3 = b[i__3].r;
                 if(upper)
                 {
                     if(*k + i__ <= *m)
@@ -590,21 +613,23 @@ void ztgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
                 if(*k + j <= *m)
                 {
                     d_cnjg(&z__1, &snu);
-                    aocl_lapack_zrot(l, &a[*k + j + (*n - *l + 1) * a_dim1], lda,
-                                     &a[*k + i__ + (*n - *l + 1) * a_dim1], lda, &csu, &z__1);
+                    zrot_(l, &a[*k + j + (*n - *l + 1) * a_dim1], lda,
+                          &a[*k + i__ + (*n - *l + 1) * a_dim1], lda, &csu, &z__1);
                 }
                 /* Update I-th and J-th rows of matrix B: V**H *B */
                 d_cnjg(&z__1, &snv);
-                aocl_lapack_zrot(l, &b[j + (*n - *l + 1) * b_dim1], ldb,
-                                 &b[i__ + (*n - *l + 1) * b_dim1], ldb, &csv, &z__1);
+                zrot_(l, &b[j + (*n - *l + 1) * b_dim1], ldb, &b[i__ + (*n - *l + 1) * b_dim1], ldb,
+                      &csv, &z__1);
                 /* Update (N-L+I)-th and (N-L+J)-th columns of matrices */
                 /* A and B: A*Q and B*Q */
                 /* Computing MIN */
                 i__4 = *k + *l;
-                i__3 = fla_min(i__4,*m);
-                zrot_(&i__3, &a[(*n - *l + j) * a_dim1 + 1], &c__1, &a[(*n - * l + i__) * a_dim1 + 1], &c__1, &csq, &snq);
-                zrot_(l, &b[(*n - *l + j) * b_dim1 + 1], &c__1, &b[(*n - *l + i__) * b_dim1 + 1], &c__1, &csq, &snq);
-                if (upper)
+                i__3 = fla_min(i__4, *m);
+                zrot_(&i__3, &a[(*n - *l + j) * a_dim1 + 1], &c__1,
+                      &a[(*n - *l + i__) * a_dim1 + 1], &c__1, &csq, &snq);
+                zrot_(l, &b[(*n - *l + j) * b_dim1 + 1], &c__1, &b[(*n - *l + i__) * b_dim1 + 1],
+                      &c__1, &csq, &snq);
+                if(upper)
                 {
                     if(*k + i__ <= *m)
                     {
@@ -658,8 +683,8 @@ void ztgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
                 /* Update unitary matrices U, V, Q, if desired. */
                 if(wantu && *k + j <= *m)
                 {
-                    aocl_lapack_zrot(m, &u[(*k + j) * u_dim1 + 1], &c__1,
-                                     &u[(*k + i__) * u_dim1 + 1], &c__1, &csu, &snu);
+                    zrot_(m, &u[(*k + j) * u_dim1 + 1], &c__1, &u[(*k + i__) * u_dim1 + 1], &c__1,
+                          &csu, &snu);
                 }
                 if(wantv)
                 {
@@ -668,8 +693,8 @@ void ztgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
                 }
                 if(wantq)
                 {
-                    aocl_lapack_zrot(n, &q[(*n - *l + j) * q_dim1 + 1], &c__1,
-                                     &q[(*n - *l + i__) * q_dim1 + 1], &c__1, &csq, &snq);
+                    zrot_(n, &q[(*n - *l + j) * q_dim1 + 1], &c__1,
+                          &q[(*n - *l + i__) * q_dim1 + 1], &c__1, &csq, &snq);
                 }
                 /* L10: */
             }
@@ -685,23 +710,19 @@ void ztgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
             /* Computing MIN */
             i__2 = *l;
             i__3 = *m - *k; // , expr subst
-            i__1 = fla_min(i__2,i__3);
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            i__1 = fla_min(i__2, i__3);
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = *l - i__ + 1;
-                aocl_blas_zcopy(&i__2, &a[*k + i__ + (*n - *l + i__) * a_dim1], lda, &work[1],
-                                &c__1);
+                zcopy_(&i__2, &a[*k + i__ + (*n - *l + i__) * a_dim1], lda, &work[1], &c__1);
                 i__2 = *l - i__ + 1;
-                aocl_blas_zcopy(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb, &work[*l + 1],
-                                &c__1);
+                zcopy_(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb, &work[*l + 1], &c__1);
                 i__2 = *l - i__ + 1;
                 zlapll_(&i__2, &work[1], &c__1, &work[*l + 1], &c__1, &ssmin);
-                error = fla_max(error,ssmin);
+                error = fla_max(error, ssmin);
                 /* L30: */
             }
-            if (f2c_dabs(error) <= fla_min(*tola,*tolb))
+            if(f2c_dabs(error) <= fla_min(*tola, *tolb))
             {
                 goto L50;
             }
@@ -725,22 +746,20 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
     /* Computing MIN */
     i__2 = *l;
     i__3 = *m - *k; // , expr subst
-    i__1 = fla_min(i__2,i__3);
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    i__1 = fla_min(i__2, i__3);
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = *k + i__ + (*n - *l + i__) * a_dim1;
         a1 = a[i__2].real;
         i__2 = i__ + (*n - *l + i__) * b_dim1;
         b1 = b[i__2].r;
         gamma = b1 / a1;
-        if (gamma <= hugenum && gamma >= -hugenum)
+        if(gamma <= hugenum && gamma >= -hugenum)
         {
-            if (gamma < 0.)
+            if(gamma < 0.)
             {
                 i__2 = *l - i__ + 1;
-                aocl_blas_zdscal(&i__2, &c_b39, &b[i__ + (*n - *l + i__) * b_dim1], ldb);
+                zdscal_(&i__2, &c_b39, &b[i__ + (*n - *l + i__) * b_dim1], ldb);
                 if(wantv)
                 {
                     aocl_blas_zdscal(p, &c_b39, &v[i__ * v_dim1 + 1], &c__1);
@@ -758,10 +777,10 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
             {
                 i__2 = *l - i__ + 1;
                 d__1 = 1. / beta[*k + i__];
-                aocl_blas_zdscal(&i__2, &d__1, &b[i__ + (*n - *l + i__) * b_dim1], ldb);
+                zdscal_(&i__2, &d__1, &b[i__ + (*n - *l + i__) * b_dim1], ldb);
                 i__2 = *l - i__ + 1;
-                aocl_blas_zcopy(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb,
-                                &a[*k + i__ + (*n - *l + i__) * a_dim1], lda);
+                zcopy_(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb,
+                       &a[*k + i__ + (*n - *l + i__) * a_dim1], lda);
             }
         }
         else
@@ -769,8 +788,8 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
             alpha[*k + i__] = 0.;
             beta[*k + i__] = 1.;
             i__2 = *l - i__ + 1;
-            aocl_blas_zcopy(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb,
-                            &a[*k + i__ + (*n - *l + i__) * a_dim1], lda);
+            zcopy_(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb,
+                   &a[*k + i__ + (*n - *l + i__) * a_dim1], lda);
         }
         /* L70: */
     }

@@ -135,10 +135,11 @@
 /* > \ingroup doubleGEauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlaqge_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax, char *equed)
+void dlaqge_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *r__, doublereal *c__,
+             doublereal *rowcnd, doublereal *colcnd, doublereal *amax, char *equed)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaqge inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
+    AOCL_DTL_SNPRINTF("dlaqge inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -178,7 +179,7 @@ void dlaqge_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *r
     /* Initialize LARGE and SMALL. */
     small_val = dlamch_("Safe minimum") / dlamch_("Precision");
     large = 1. / small_val;
-    if (*rowcnd >= .1 && *amax >= small_val && *amax <= large)
+    if(*rowcnd >= .1 && *amax >= small_val && *amax <= large)
     {
         /* No row scaling */
         if(*colcnd >= .1)

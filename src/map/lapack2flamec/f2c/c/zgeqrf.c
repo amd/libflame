@@ -1,5 +1,8 @@
-/* zgeqrf.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* zgeqrf.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 #if !FLA_ENABLE_AMD_OPT
 static aocl_int64_t c__1 = 1;
@@ -53,9 +56,9 @@ integer get_block_size_zgeqrf(aocl_int64_t *m, aocl_int64_t *n);
 /* > where: */
 /* > */
 /* > Q is a M-by-M orthogonal matrix;
-*/
+ */
 /* > R is an upper-triangular N-by-N matrix;
-*/
+ */
 /* > 0 is a (M-N)-by-N zero matrix, if M > N. */
 /* > */
 /* > \endverbatim */
@@ -154,22 +157,31 @@ v(i+1:m) is stored on exit in A(i+1:m,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgeqrf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *work, integer *lwork, integer *info)
+void zgeqrf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau,
+             doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgeqrf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
+    AOCL_DTL_SNPRINTF("zgeqrf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
     integer i__, k, ib, nb, nx, iws, nbmin, iinfo;
     extern /* Subroutine */
-    void zgeqr2_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zgeqr2_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void zlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublecomplex *,
+                integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *);
     integer ldwork;
     extern /* Subroutine */
-    void zlarft_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zlarft_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                doublecomplex *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
@@ -197,7 +209,7 @@ void zgeqrf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     --tau;
     --work;
     /* Function Body */
-    k = fla_min(*m,*n);
+    k = fla_min(*m, *n);
     *info = 0;
     nb = ilaenv_(&c__1, "ZGEQRF", " ", m, n, &c_n1, &c_n1);
     lquery = *lwork == -1;
@@ -209,13 +221,13 @@ void zgeqrf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
-    else if (! lquery)
+    else if(!lquery)
     {
-        if (*lwork <= 0 || *m > 0 && *lwork < fla_max(1,*n))
+        if(*lwork <= 0 || *m > 0 && *lwork < fla_max(1, *n))
         {
             *info = -7;
         }
@@ -229,7 +241,7 @@ void zgeqrf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     }
     else if(lquery)
     {
-        if (k == 0)
+        if(k == 0)
         {
             lwkopt = 1;
         }
@@ -237,13 +249,13 @@ void zgeqrf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
         {
             lwkopt = *n * nb;
         }
-        work[1].r = (doublereal) lwkopt;
+        work[1].r = (doublereal)lwkopt;
         work[1].i = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
-    if (k == 0)
+    if(k == 0)
     {
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
@@ -259,8 +271,8 @@ void zgeqrf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
         /* Computing MAX */
         i__1 = 0;
         i__2 = ilaenv_(&c__3, "ZGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
-        nx = fla_max(i__1,i__2);
-        if (nx < k)
+        nx = fla_max(i__1, i__2);
+        if(nx < k)
         {
             /* Determine if workspace is large enough for blocked code. */
             ldwork = *n;
@@ -272,8 +284,8 @@ void zgeqrf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "ZGEQRF", " ", m, n, &c_n1, & c_n1); // , expr subst
-                nbmin = fla_max(i__1,i__2);
+                i__2 = ilaenv_(&c__2, "ZGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
+                nbmin = fla_max(i__1, i__2);
             }
         }
     }
@@ -286,23 +298,24 @@ void zgeqrf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
         {
             /* Computing MIN */
             i__3 = k - i__ + 1;
-            ib = fla_min(i__3,nb);
+            ib = fla_min(i__3, nb);
             /* Compute the QR factorization of the current block */
             /* A(i:m,i:i+ib-1) */
             i__3 = *m - i__ + 1;
-            aocl_lapack_zgeqr2(&i__3, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1],
-                               &iinfo);
+            zgeqr2_(&i__3, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &iinfo);
             if(i__ + ib <= *n)
             {
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i) H(i+1) . . . H(i+ib-1) */
                 i__3 = *m - i__ + 1;
-                aocl_lapack_zlarft("Forward", "Columnwise", &i__3, &ib, &a[i__ + i__ * a_dim1], lda,
-                                   &tau[i__], &work[1], &ldwork);
+                zlarft_("Forward", "Columnwise", &i__3, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__],
+                        &work[1], &ldwork);
                 /* Apply H**H to A(i:m,i+ib:n) from the left */
                 i__3 = *m - i__ + 1;
                 i__4 = *n - i__ - ib + 1;
-                zlarfb_("Left", "Conjugate transpose", "Forward", "Columnwise", &i__3, &i__4, &ib, &a[i__ + i__ * a_dim1], lda, & work[1], &ldwork, &a[i__ + (i__ + ib) * a_dim1], lda, &work[ib + 1], &ldwork);
+                zlarfb_("Left", "Conjugate transpose", "Forward", "Columnwise", &i__3, &i__4, &ib,
+                        &a[i__ + i__ * a_dim1], lda, &work[1], &ldwork,
+                        &a[i__ + (i__ + ib) * a_dim1], lda, &work[ib + 1], &ldwork);
             }
             /* L10: */
         }
@@ -318,7 +331,7 @@ void zgeqrf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
         i__1 = *n - i__ + 1;
         zgeqr2_(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &iinfo);
     }
-    work[1].r = (doublereal) iws;
+    work[1].r = (doublereal)iws;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

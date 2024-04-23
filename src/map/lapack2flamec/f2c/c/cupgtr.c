@@ -110,12 +110,14 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cupgtr_(char *uplo, integer *n, complex *ap, complex * tau, complex *q, integer *ldq, complex *work, integer *info)
+void cupgtr_(char *uplo, integer *n, complex *ap, complex *tau, complex *q, integer *ldq,
+             complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"cupgtr inputs: uplo %c, n %" FLA_IS ", ldq %" FLA_IS "",*uplo, *n, *ldq);
+    snprintf(buffer, 256, "cupgtr inputs: uplo %c, n %" FLA_IS ", ldq %" FLA_IS "", *uplo, *n,
+             *ldq);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -126,7 +128,12 @@ void cupgtr_(char *uplo, integer *n, complex *ap, complex * tau, complex *q, int
     integer iinfo;
     logical upper;
     extern /* Subroutine */
-    void cung2l_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), cung2r_( integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        cung2l_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *),
+        cung2r_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -158,7 +165,7 @@ void cupgtr_(char *uplo, integer *n, complex *ap, complex * tau, complex *q, int
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -166,7 +173,7 @@ void cupgtr_(char *uplo, integer *n, complex *ap, complex * tau, complex *q, int
     {
         *info = -2;
     }
-    else if (*ldq < fla_max(1,*n))
+    else if(*ldq < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -224,7 +231,7 @@ void cupgtr_(char *uplo, integer *n, complex *ap, complex * tau, complex *q, int
         i__1 = *n - 1;
         i__2 = *n - 1;
         i__3 = *n - 1;
-        aocl_lapack_cung2l(&i__1, &i__2, &i__3, &q[q_offset], ldq, &tau[1], &work[1], &iinfo);
+        cung2l_(&i__1, &i__2, &i__3, &q[q_offset], ldq, &tau[1], &work[1], &iinfo);
     }
     else
     {

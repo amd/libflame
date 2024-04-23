@@ -136,15 +136,18 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ctrcon_(char *norm, char *uplo, char *diag, integer *n, complex *a, integer *lda, real *rcond, complex *work, real *rwork, integer *info)
+void ctrcon_(char *norm, char *uplo, char *diag, integer *n, complex *a, integer *lda, real *rcond,
+             complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctrcon inputs: norm %c, uplo %c, diag %c, n %lld, lda %lld",*norm, *uplo, *diag, *n, *lda);
+    snprintf(buffer, 256, "ctrcon inputs: norm %c, uplo %c, diag %c, n %lld, lda %lld", *norm,
+             *uplo, *diag, *n, *lda);
 #else
-    snprintf(buffer, 256,"ctrcon inputs: norm %c, uplo %c, diag %c, n %d, lda %d",*norm, *uplo, *diag, *n, *lda);
+    snprintf(buffer, 256, "ctrcon inputs: norm %c, uplo %c, diag %c, n %d, lda %d", *norm, *uplo,
+             *diag, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -161,15 +164,20 @@ void ctrcon_(char *norm, char *uplo, char *diag, integer *n, complex *a, integer
     real anorm;
     logical upper;
     extern /* Subroutine */
-    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
+        void
+        clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     real xnorm;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern real clantr_(char *, char *, char *, integer *, integer *, complex *, integer *, real *);
     real ainvnm;
     extern /* Subroutine */
-    void clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *, real *, integer *), csrscl_(integer *, real *, complex *, integer *);
+        void
+        clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *,
+                real *, integer *),
+        csrscl_(integer *, real *, complex *, integer *);
     logical onenrm;
     char normin[1];
     real smlnum;
@@ -212,15 +220,15 @@ void ctrcon_(char *norm, char *uplo, char *diag, integer *n, complex *a, integer
     upper = lsame_(uplo, "U", 1, 1);
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
-    if (! onenrm && ! lsame_(norm, "I", 1, 1))
+    if(!onenrm && !lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
@@ -228,7 +236,7 @@ void ctrcon_(char *norm, char *uplo, char *diag, integer *n, complex *a, integer
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -247,7 +255,7 @@ void ctrcon_(char *norm, char *uplo, char *diag, integer *n, complex *a, integer
         return;
     }
     *rcond = 0.f;
-    smlnum = slamch_("Safe minimum") * (real) fla_max(1,*n);
+    smlnum = slamch_("Safe minimum") * (real)fla_max(1, *n);
     /* Compute the norm of the triangular matrix A. */
     anorm = aocl_lapack_clantr(norm, uplo, diag, n, n, &a[a_offset], lda, &rwork[1]);
     /* Continue only if ANORM > 0. */
@@ -266,20 +274,20 @@ void ctrcon_(char *norm, char *uplo, char *diag, integer *n, complex *a, integer
         }
         kase = 0;
     L10:
-        aocl_lapack_clacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+        clacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
         if(kase != 0)
         {
             if(kase == kase1)
             {
                 /* Multiply by inv(A). */
-                aocl_lapack_clatrs(uplo, "No transpose", diag, normin, n, &a[a_offset], lda,
-                                   &work[1], &scale, &rwork[1], info);
+                clatrs_(uplo, "No transpose", diag, normin, n, &a[a_offset], lda, &work[1], &scale,
+                        &rwork[1], info);
             }
             else
             {
                 /* Multiply by inv(A**H). */
-                aocl_lapack_clatrs(uplo, "Conjugate transpose", diag, normin, n, &a[a_offset], lda,
-                                   &work[1], &scale, &rwork[1], info);
+                clatrs_(uplo, "Conjugate transpose", diag, normin, n, &a[a_offset], lda, &work[1],
+                        &scale, &rwork[1], info);
             }
             *(unsigned char *)normin = 'Y';
             /* Multiply by 1/SCALE if doing so will not cause overflow. */
@@ -287,8 +295,9 @@ void ctrcon_(char *norm, char *uplo, char *diag, integer *n, complex *a, integer
             {
                 ix = aocl_blas_icamax(n, &work[1], &c__1);
                 i__1 = ix;
-                xnorm = (r__1 = work[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(& work[ix]), f2c_abs(r__2));
-                if (scale < xnorm * smlnum || scale == 0.f)
+                xnorm = (r__1 = work[i__1].r, f2c_abs(r__1))
+                        + (r__2 = r_imag(&work[ix]), f2c_abs(r__2));
+                if(scale < xnorm * smlnum || scale == 0.f)
                 {
                     goto L20;
                 }

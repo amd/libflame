@@ -3,11 +3,6 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-
-/*
- *     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
- */
-
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b DSPTRF */
@@ -162,10 +157,10 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dsptrf_(char *uplo, integer *n, doublereal *ap, integer * ipiv, integer *info)
+void dsptrf_(char *uplo, integer *n, doublereal *ap, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsptrf inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
+    AOCL_DTL_SNPRINTF("dsptrf inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     doublereal d__1, d__2, d__3;
@@ -180,19 +175,23 @@ void dsptrf_(char *uplo, integer *n, doublereal *ap, integer * ipiv, integer *in
     doublereal wkm1, wkp1;
     integer imax, jmax;
     extern /* Subroutine */
-    void dspr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+        void
+        dspr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *);
     doublereal alpha;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer kstep;
     logical upper;
     doublereal absakk;
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal colmax, rowmax;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -222,7 +221,7 @@ void dsptrf_(char *uplo, integer *n, doublereal *ap, integer * ipiv, integer *in
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     imax = 0;
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -246,7 +245,7 @@ void dsptrf_(char *uplo, integer *n, doublereal *ap, integer * ipiv, integer *in
         /* 1 or 2 */
         k = *n;
         kc = (*n - 1) * *n / 2 + 1;
-L10:
+    L10:
         kpc = knc = kc;
         /* If K < 1, exit from loop */
         if(k < 1)
@@ -269,7 +268,7 @@ L10:
         {
             colmax = 0.;
         }
-        if (fla_max(absakk,colmax) == 0.)
+        if(fla_max(absakk, colmax) == 0.)
         {
             /* Column K is zero: set INFO and continue */
             if(*info == 0)
@@ -293,7 +292,7 @@ L10:
                 i__1 = k;
                 for(j = imax + 1; j <= i__1; ++j)
                 {
-                    if ((d__1 = ap[kx], f2c_dabs(d__1)) > rowmax)
+                    if((d__1 = ap[kx], f2c_dabs(d__1)) > rowmax)
                     {
                         rowmax = (d__1 = ap[kx], f2c_dabs(d__1));
                         /* jmax = j; */
@@ -308,15 +307,15 @@ L10:
                     jmax = aocl_blas_idamax(&i__1, &ap[kpc], &c__1);
                     /* Computing MAX */
                     d__2 = rowmax;
-                    d__3 = (d__1 = ap[kpc + jmax - 1], f2c_dabs( d__1)); // , expr subst
-                    rowmax = fla_max(d__2,d__3);
+                    d__3 = (d__1 = ap[kpc + jmax - 1], f2c_dabs(d__1)); // , expr subst
+                    rowmax = fla_max(d__2, d__3);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
                     /* no interchange, use 1-by-1 pivot block */
                     kp = k;
                 }
-                else if ((d__1 = ap[kpc + imax - 1], f2c_dabs(d__1)) >= alpha * rowmax)
+                else if((d__1 = ap[kpc + imax - 1], f2c_dabs(d__1)) >= alpha * rowmax)
                 {
                     /* interchange rows and columns K and IMAX, use 1-by-1 */
                     /* pivot block */
@@ -458,7 +457,7 @@ L10:
         {
             colmax = 0.;
         }
-        if (fla_max(absakk,colmax) == 0.)
+        if(fla_max(absakk, colmax) == 0.)
         {
             /* Column K is zero: set INFO and continue */
             if(*info == 0)
@@ -483,7 +482,7 @@ L10:
                 i__1 = imax - 1;
                 for(j = k; j <= i__1; ++j)
                 {
-                    if ((d__1 = ap[kx], f2c_dabs(d__1)) > rowmax)
+                    if((d__1 = ap[kx], f2c_dabs(d__1)) > rowmax)
                     {
                         rowmax = (d__1 = ap[kx], f2c_dabs(d__1));
                         /* jmax = j; */
@@ -498,15 +497,15 @@ L10:
                     jmax = imax + aocl_blas_idamax(&i__1, &ap[kpc + 1], &c__1);
                     /* Computing MAX */
                     d__2 = rowmax;
-                    d__3 = (d__1 = ap[kpc + jmax - imax], f2c_dabs( d__1)); // , expr subst
-                    rowmax = fla_max(d__2,d__3);
+                    d__3 = (d__1 = ap[kpc + jmax - imax], f2c_dabs(d__1)); // , expr subst
+                    rowmax = fla_max(d__2, d__3);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
                     /* no interchange, use 1-by-1 pivot block */
                     kp = k;
                 }
-                else if ((d__1 = ap[kpc], f2c_dabs(d__1)) >= alpha * rowmax)
+                else if((d__1 = ap[kpc], f2c_dabs(d__1)) >= alpha * rowmax)
                 {
                     /* interchange rows and columns K and IMAX, use 1-by-1 */
                     /* pivot block */

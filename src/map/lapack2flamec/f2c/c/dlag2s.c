@@ -1,5 +1,8 @@
-/* dlag2s.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dlag2s.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLAG2S converts a double precision matrix to a single precision matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -100,10 +103,13 @@ if */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlag2s_(integer *m, integer *n, doublereal *a, integer * lda, real *sa, integer *ldsa, integer *info)
+void dlag2s_(integer *m, integer *n, doublereal *a, integer *lda, real *sa, integer *ldsa,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlag2s inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldsa %" FLA_IS "",*m, *n, *lda, *ldsa);
+    AOCL_DTL_SNPRINTF("dlag2s inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldsa %" FLA_IS
+                      "",
+                      *m, *n, *lda, *ldsa);
     /* System generated locals */
     aocl_int64_t sa_dim1, sa_offset, a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -145,7 +151,7 @@ void dlag2s_(integer *m, integer *n, doublereal *a, integer * lda, real *sa, int
                 *info = 1;
                 goto L30;
             }
-            sa[i__ + j * sa_dim1] = (real) a[i__ + j * a_dim1];
+            sa[i__ + j * sa_dim1] = (real)a[i__ + j * a_dim1];
             /* L10: */
         }
         /* L20: */

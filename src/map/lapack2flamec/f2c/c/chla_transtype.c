@@ -60,9 +60,9 @@ void chla_transtype_(char *ret_val, aocl_int_t *trans)
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chla_transtype inputs: ret_val %c, trans %lld",*ret_val, *trans);
+    snprintf(buffer, 256, "chla_transtype inputs: ret_val %c, trans %lld", *ret_val, *trans);
 #else
-    snprintf(buffer, 256,"chla_transtype inputs: ret_val %c, trans %d",*ret_val, *trans);
+    snprintf(buffer, 256, "chla_transtype inputs: ret_val %c, trans %d", *ret_val, *trans);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -93,7 +93,7 @@ void chla_transtype_(char *ret_val, aocl_int_t *trans)
         *(unsigned char *)ret_val = 'X';
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return ;
+    return;
     /* End of CHLA_TRANSTYPE */
 }
 /* chla_transtype__ */

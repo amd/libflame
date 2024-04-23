@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b SGEQL2 computes the QL factorization of a general rectangular matrix using an
  * unblocked algorit hm. */
 /* =========== DOCUMENTATION =========== */
@@ -151,7 +151,10 @@ void aocl_lapack_sgeql2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
     aocl_int64_t i__, k;
     real aii;
     extern /* Subroutine */
-    void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
+        void
+        slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -187,7 +190,7 @@ void aocl_lapack_sgeql2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
@@ -197,23 +200,21 @@ void aocl_lapack_sgeql2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
         xerbla_("SGEQL2", &i__1, (ftnlen)6);
         return;
     }
-    k = fla_min(*m,*n);
-    for (i__ = k;
-            i__ >= 1;
-            --i__)
+    k = fla_min(*m, *n);
+    for(i__ = k; i__ >= 1; --i__)
     {
         /* Generate elementary reflector H(i) to annihilate */
         /* A(1:m-k+i-1,n-k+i) */
         i__1 = *m - k + i__;
-        aocl_lapack_slarfg(&i__1, &a[*m - k + i__ + (*n - k + i__) * a_dim1],
-                           &a[(*n - k + i__) * a_dim1 + 1], &c__1, &tau[i__]);
+        slarfg_(&i__1, &a[*m - k + i__ + (*n - k + i__) * a_dim1], &a[(*n - k + i__) * a_dim1 + 1],
+                &c__1, &tau[i__]);
         /* Apply H(i) to A(1:m-k+i,1:n-k+i-1) from the left */
         aii = a[*m - k + i__ + (*n - k + i__) * a_dim1];
         a[*m - k + i__ + (*n - k + i__) * a_dim1] = 1.f;
         i__1 = *m - k + i__;
         i__2 = *n - k + i__ - 1;
-        aocl_lapack_slarf("Left", &i__1, &i__2, &a[(*n - k + i__) * a_dim1 + 1], &c__1, &tau[i__],
-                          &a[a_offset], lda, &work[1]);
+        slarf_("Left", &i__1, &i__2, &a[(*n - k + i__) * a_dim1 + 1], &c__1, &tau[i__],
+               &a[a_offset], lda, &work[1]);
         a[*m - k + i__ + (*n - k + i__) * a_dim1] = aii;
         /* L10: */
     }

@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {1., 0.};
-static aocl_int64_t c__1 = 1;
+static doublecomplex c_b1 = {1., 0.};
+static integer c__1 = 1;
 /* > \brief \b ZLARZ applies an elementary reflector (as returned by stzrzf) to a general matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -144,10 +144,13 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlarz_(char *side, integer *m, integer *n, integer *l, doublecomplex *v, integer *incv, doublecomplex *tau, doublecomplex * c__, integer *ldc, doublecomplex *work)
+void zlarz_(char *side, integer *m, integer *n, integer *l, doublecomplex *v, integer *incv,
+            doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlarz inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *l, *incv, *ldc);
+    AOCL_DTL_SNPRINTF("zlarz inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS
+                      ", incv %" FLA_IS ", ldc %" FLA_IS "",
+                      *side, *m, *n, *l, *incv, *ldc);
 
     /* System generated locals */
     aocl_int64_t c_dim1, c_offset;
@@ -155,7 +158,16 @@ void zlarz_(char *side, integer *m, integer *n, integer *l, doublecomplex *v, in
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlacgv_(integer *, doublecomplex *, integer *);
+        void
+        zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+               integer *, doublecomplex *, integer *),
+        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
+               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
+        zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+               integer *, doublecomplex *, integer *),
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -179,18 +191,18 @@ void zlarz_(char *side, integer *m, integer *n, integer *l, doublecomplex *v, in
     c__ -= c_offset;
     --work;
     /* Function Body */
-    if (lsame_(side, "L", 1, 1))
+    if(lsame_(side, "L", 1, 1))
     {
         /* Form H * C */
-        if(tau->real != 0. || tau->imag != 0.)
+        if(tau->r != 0. || tau->i != 0.)
         {
             /* w( 1:n ) = conjg( C( 1, 1:n ) ) */
             aocl_blas_zcopy(n, &c__[c_offset], ldc, &work[1], &c__1);
             aocl_lapack_zlacgv(n, &work[1], &c__1);
             /* w( 1:n ) = conjg( w( 1:n ) + C( m-l+1:m, 1:n )**H * v( 1:l ) ) */
-            aocl_blas_zgemv("Conjugate transpose", l, n, &c_b1, &c__[*m - *l + 1 + c_dim1], ldc,
-                            &v[1], incv, &c_b1, &work[1], &c__1);
-            aocl_lapack_zlacgv(n, &work[1], &c__1);
+            zgemv_("Conjugate transpose", l, n, &c_b1, &c__[*m - *l + 1 + c_dim1], ldc, &v[1], incv,
+                   &c_b1, &work[1], &c__1);
+            zlacgv_(n, &work[1], &c__1);
             /* C( 1, 1:n ) = C( 1, 1:n ) - tau * w( 1:n ) */
             z__1.real = -tau->real;
             z__1.imag = -tau->imag; // , expr subst
@@ -206,23 +218,23 @@ void zlarz_(char *side, integer *m, integer *n, integer *l, doublecomplex *v, in
     else
     {
         /* Form C * H */
-        if(tau->real != 0. || tau->imag != 0.)
+        if(tau->r != 0. || tau->i != 0.)
         {
             /* w( 1:m ) = C( 1:m, 1 ) */
             aocl_blas_zcopy(m, &c__[c_offset], &c__1, &work[1], &c__1);
             /* w( 1:m ) = w( 1:m ) + C( 1:m, n-l+1:n, 1:n ) * v( 1:l ) */
-            aocl_blas_zgemv("No transpose", m, l, &c_b1, &c__[(*n - *l + 1) * c_dim1 + 1], ldc,
-                            &v[1], incv, &c_b1, &work[1], &c__1);
+            zgemv_("No transpose", m, l, &c_b1, &c__[(*n - *l + 1) * c_dim1 + 1], ldc, &v[1], incv,
+                   &c_b1, &work[1], &c__1);
             /* C( 1:m, 1 ) = C( 1:m, 1 ) - tau * w( 1:m ) */
             z__1.real = -tau->real;
             z__1.imag = -tau->imag; // , expr subst
             aocl_blas_zaxpy(m, &z__1, &work[1], &c__1, &c__[c_offset], &c__1);
             /* C( 1:m, n-l+1:n ) = C( 1:m, n-l+1:n ) - ... */
             /* tau * w( 1:m ) * v( 1:l )**H */
-            z__1.real = -tau->real;
-            z__1.imag = -tau->imag; // , expr subst
-            aocl_blas_zgerc(m, l, &z__1, &work[1], &c__1, &v[1], incv,
-                            &c__[(*n - *l + 1) * c_dim1 + 1], ldc);
+            z__1.r = -tau->r;
+            z__1.i = -tau->i; // , expr subst
+            zgerc_(m, l, &z__1, &work[1], &c__1, &v[1], incv, &c__[(*n - *l + 1) * c_dim1 + 1],
+                   ldc);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

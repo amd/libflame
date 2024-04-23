@@ -159,7 +159,10 @@ void aocl_lapack_slatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, real 
     /* Local variables */
     integer i__;
     extern /* Subroutine */
-    void slarz_(char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), slarfg_(integer *, real *, real *, integer *, real *);
+        void
+        slarz_(char *, integer *, integer *, integer *, real *, integer *, real *, real *,
+               integer *, real *),
+        slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -209,8 +212,8 @@ void aocl_lapack_slatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, real 
         /* Apply H(i) to A(1:i-1,i:n) from the right */
         i__1 = i__ - 1;
         i__2 = *n - i__ + 1;
-        aocl_lapack_slarz("Right", &i__1, &i__2, l, &a[i__ + (*n - *l + 1) * a_dim1], lda,
-                          &tau[i__], &a[i__ * a_dim1 + 1], lda, &work[1]);
+        slarz_("Right", &i__1, &i__2, l, &a[i__ + (*n - *l + 1) * a_dim1], lda, &tau[i__],
+               &a[i__ * a_dim1 + 1], lda, &work[1]);
         /* L20: */
     }
     return;

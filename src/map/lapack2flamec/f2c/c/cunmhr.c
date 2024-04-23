@@ -1,5 +1,8 @@
-/* cunmhr.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* cunmhr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -149,7 +152,7 @@ LDA >= fla_max(1,N) if SIDE = 'R'. */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If SIDE = 'L', LWORK >= fla_max(1,N);
-*/
+ */
 /* > if SIDE = 'R', LWORK >= fla_max(1,M). */
 /* > For optimum performance LWORK >= N*NB if SIDE = 'L', and */
 /* > LWORK >= M*NB if SIDE = 'R', where NB is the optimal */
@@ -177,10 +180,14 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cunmhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integer *ihi, complex *a, integer *lda, complex *tau, complex *c__, integer *ldc, complex *work, integer *lwork, integer * info)
+void cunmhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integer *ihi,
+             complex *a, integer *lda, complex *tau, complex *c__, integer *ldc, complex *work,
+             integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cunmhr inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",*side, *trans, *m, *n, *ilo, *ihi, *lda, *ldc);
+    AOCL_DTL_SNPRINTF("cunmhr inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", ilo %" FLA_IS
+                      ", ihi %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",
+                      *side, *trans, *m, *n, *ilo, *ihi, *lda, *ldc);
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__2;
     char ch__1[2];
@@ -193,10 +200,13 @@ void cunmhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
     extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+        void
+        cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
+                complex *, integer *, complex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
@@ -235,18 +245,18 @@ void cunmhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
     if(left)
     {
         nq = *m;
-        nw = fla_max(1,*n);
+        nw = fla_max(1, *n);
     }
     else
     {
         nq = *n;
-        nw = fla_max(1,*m);
+        nw = fla_max(1, *m);
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(trans, "N", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!lsame_(trans, "N", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -258,23 +268,23 @@ void cunmhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
     {
         *info = -4;
     }
-    else if (*ilo < 1 || *ilo > fla_max(1,nq))
+    else if(*ilo < 1 || *ilo > fla_max(1, nq))
     {
         *info = -5;
     }
-    else if (*ihi < fla_min(*ilo,nq) || *ihi > nq)
+    else if(*ihi < fla_min(*ilo, nq) || *ihi > nq)
     {
         *info = -6;
     }
-    else if (*lda < fla_max(1,nq))
+    else if(*lda < fla_max(1, nq))
     {
         *info = -8;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -11;
     }
-    else if (*lwork < nw && ! lquery)
+    else if(*lwork < nw && !lquery)
     {
         *info = -13;
     }
@@ -289,19 +299,19 @@ void cunmhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
             nb = aocl_lapack_ilaenv(&c__1, "CUNMQR", ch__1, m, &nh, &nh, &c_n1);
         }
         lwkopt = nw * nb;
-        work[1].r = (real) lwkopt;
+        work[1].r = (real)lwkopt;
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
     {
         i__2 = -(*info);
         xerbla_("CUNMHR", &i__2, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -309,7 +319,7 @@ void cunmhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
     {
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(left)
@@ -326,8 +336,9 @@ void cunmhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
         i1 = 1;
         i2 = *ilo + 1;
     }
-    cunmqr_(side, trans, &mi, &ni, &nh, &a[*ilo + 1 + *ilo * a_dim1], lda, & tau[*ilo], &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
-    work[1].r = (real) lwkopt;
+    cunmqr_(side, trans, &mi, &ni, &nh, &a[*ilo + 1 + *ilo * a_dim1], lda, &tau[*ilo],
+            &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
+    work[1].r = (real)lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

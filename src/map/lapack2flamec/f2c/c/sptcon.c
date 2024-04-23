@@ -120,7 +120,7 @@ void sptcon_(integer *n, real *d__, real *e, real *anorm, real *rcond, real *wor
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sptcon inputs: n %" FLA_IS "",*n);
+    snprintf(buffer, 256, "sptcon inputs: n %" FLA_IS "", *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -129,7 +129,8 @@ void sptcon_(integer *n, real *d__, real *e, real *anorm, real *rcond, real *wor
     /* Local variables */
     integer i__, ix;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real ainvnm;
     /* -- LAPACK computational routine (version 3.4.2) -- */

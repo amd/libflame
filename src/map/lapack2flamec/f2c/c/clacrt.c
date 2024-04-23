@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b CLACRT performs a linear transformation of a pair of scomplex vectors. */
+#include "FLA_f2c.h" /* > \brief \b CLACRT performs a linear transformation of a pair of complex vectors. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -100,15 +100,16 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clacrt_(integer *n, complex *cx, integer *incx, complex * cy, integer *incy, complex *c__, complex *s)
+void clacrt_(integer *n, complex *cx, integer *incx, complex *cy, integer *incy, complex *c__,
+             complex *s)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clacrt inputs: n %lld, incx %lld, incy %lld",*n, *incx, *incy);
+    snprintf(buffer, 256, "clacrt inputs: n %lld, incx %lld, incy %lld", *n, *incx, *incy);
 #else
-    snprintf(buffer, 256,"clacrt inputs: n %d, incx %d, incy %d",*n, *incx, *incy);
+    snprintf(buffer, 256, "clacrt inputs: n %d, incx %d, incy %d", *n, *incx, *incy);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -161,23 +162,23 @@ void clacrt_(integer *n, complex *cx, integer *incx, complex * cy, integer *incy
         q__2.real = c__->real * cx[i__2].real - c__->imag * cx[i__2].imag;
         q__2.imag = c__->real * cx[i__2].imag + c__->imag * cx[i__2].real; // , expr subst
         i__3 = iy;
-        q__3.real = s->real * cy[i__3].real - s->imag * cy[i__3].imag;
-        q__3.imag = s->real * cy[i__3].imag + s->imag * cy[i__3].real; // , expr subst
-        q__1.real = q__2.real + q__3.real;
-        q__1.imag = q__2.imag + q__3.imag; // , expr subst
-        ctemp.real = q__1.real;
-        ctemp.imag = q__1.imag; // , expr subst
+        q__3.r = s->r * cy[i__3].r - s->i * cy[i__3].i;
+        q__3.i = s->r * cy[i__3].i + s->i * cy[i__3].r; // , expr subst
+        q__1.r = q__2.r + q__3.r;
+        q__1.i = q__2.i + q__3.i; // , expr subst
+        ctemp.r = q__1.r;
+        ctemp.i = q__1.i; // , expr subst
         i__2 = iy;
         i__3 = iy;
         q__2.real = c__->real * cy[i__3].real - c__->imag * cy[i__3].imag;
         q__2.imag = c__->real * cy[i__3].imag + c__->imag * cy[i__3].real; // , expr subst
         i__4 = ix;
-        q__3.real = s->real * cx[i__4].real - s->imag * cx[i__4].imag;
-        q__3.imag = s->real * cx[i__4].imag + s->imag * cx[i__4].real; // , expr subst
-        q__1.real = q__2.real - q__3.real;
-        q__1.imag = q__2.imag - q__3.imag; // , expr subst
-        cy[i__2].real = q__1.real;
-        cy[i__2].imag = q__1.imag; // , expr subst
+        q__3.r = s->r * cx[i__4].r - s->i * cx[i__4].i;
+        q__3.i = s->r * cx[i__4].i + s->i * cx[i__4].r; // , expr subst
+        q__1.r = q__2.r - q__3.r;
+        q__1.i = q__2.i - q__3.i; // , expr subst
+        cy[i__2].r = q__1.r;
+        cy[i__2].i = q__1.i; // , expr subst
         i__2 = ix;
         cx[i__2].real = ctemp.real;
         cx[i__2].imag = ctemp.imag; // , expr subst
@@ -196,23 +197,23 @@ L20:
         q__2.real = c__->real * cx[i__2].real - c__->imag * cx[i__2].imag;
         q__2.imag = c__->real * cx[i__2].imag + c__->imag * cx[i__2].real; // , expr subst
         i__3 = i__;
-        q__3.real = s->real * cy[i__3].real - s->imag * cy[i__3].imag;
-        q__3.imag = s->real * cy[i__3].imag + s->imag * cy[i__3].real; // , expr subst
-        q__1.real = q__2.real + q__3.real;
-        q__1.imag = q__2.imag + q__3.imag; // , expr subst
-        ctemp.real = q__1.real;
-        ctemp.imag = q__1.imag; // , expr subst
+        q__3.r = s->r * cy[i__3].r - s->i * cy[i__3].i;
+        q__3.i = s->r * cy[i__3].i + s->i * cy[i__3].r; // , expr subst
+        q__1.r = q__2.r + q__3.r;
+        q__1.i = q__2.i + q__3.i; // , expr subst
+        ctemp.r = q__1.r;
+        ctemp.i = q__1.i; // , expr subst
         i__2 = i__;
         i__3 = i__;
         q__2.real = c__->real * cy[i__3].real - c__->imag * cy[i__3].imag;
         q__2.imag = c__->real * cy[i__3].imag + c__->imag * cy[i__3].real; // , expr subst
         i__4 = i__;
-        q__3.real = s->real * cx[i__4].real - s->imag * cx[i__4].imag;
-        q__3.imag = s->real * cx[i__4].imag + s->imag * cx[i__4].real; // , expr subst
-        q__1.real = q__2.real - q__3.real;
-        q__1.imag = q__2.imag - q__3.imag; // , expr subst
-        cy[i__2].real = q__1.real;
-        cy[i__2].imag = q__1.imag; // , expr subst
+        q__3.r = s->r * cx[i__4].r - s->i * cx[i__4].i;
+        q__3.i = s->r * cx[i__4].i + s->i * cx[i__4].r; // , expr subst
+        q__1.r = q__2.r - q__3.r;
+        q__1.i = q__2.i - q__3.i; // , expr subst
+        cy[i__2].r = q__1.r;
+        cy[i__2].i = q__1.i; // , expr subst
         i__2 = i__;
         cx[i__2].real = ctemp.real;
         cx[i__2].imag = ctemp.imag; // , expr subst

@@ -3,9 +3,6 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-/*
- *     Modifications Copyright (c) 2024-2026 Advanced Micro Devices, Inc.  All rights reserved.
- */
 #include "FLA_f2c.h" /* Table of constant values */
 #if FLA_ENABLE_AOCL_BLAS
 #include "blis.h"
@@ -130,10 +127,13 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work)
+void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, doublereal *tau,
+            doublereal *c__, integer *ldc, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlarf inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *incv, *ldc);
+    AOCL_DTL_SNPRINTF("dlarf inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS
+                      ", ldc %" FLA_IS "",
+                      *side, *m, *n, *incv, *ldc);
     /* System generated locals */
     aocl_int64_t c_dim1, c_offset;
     doublereal d__1;
@@ -145,12 +145,17 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
 #endif
     logical applyleft;
     extern /* Subroutine */
-    void dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+              doublereal *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *);
     integer lastc, lastv;
-    extern integer iladlc_(integer *, integer *, doublereal *, integer *), iladlr_(integer *, integer *, doublereal *, integer *);
+    extern integer iladlc_(integer *, integer *, doublereal *, integer *),
+        iladlr_(integer *, integer *, doublereal *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -222,21 +227,25 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
     if(applyleft)
     {
         /* Form H * C */
-        if(lastv > 0 && lastc > 0)
+        if(lastv > 0)
         {
+            /* w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1) */
+            dgemv_("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1], incv, &c_b5,
+                   &work[1], &c__1);
+            /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T */
             d__1 = -(*tau);
 #ifdef FLA_ENABLE_AMD_OPT
             /* Inline DGER for small size */
             if(lastc <= FLA_DGER_INLINE_SMALL_THRESH0 && lastv <= FLA_DGER_INLINE_SMALL_THRESH1)
             {
-                if (*incv == c__1)
+                if(*incv == c__1)
                 {
-                    for (j = 1; j <= lastc; ++j)
+                    for(j = 1; j <= lastc; ++j)
                     {
-                        if (work[j] != 0.)
+                        if(work[j] != 0.)
                         {
                             temp = d__1 * work[j];
-                            for (i__ = 1; i__ <= lastv; ++i__)
+                            for(i__ = 1; i__ <= lastv; ++i__)
                             {
                                 c__[i__ + j * *ldc] += v[i__] * temp;
                             }
@@ -245,13 +254,13 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
                 }
                 else
                 {
-                    for (j = 1; j <= lastc; ++j)
+                    for(j = 1; j <= lastc; ++j)
                     {
-                        if (work[j] != 0.)
+                        if(work[j] != 0.)
                         {
                             i__1 = 1;
                             temp = d__1 * work[j];
-                            for (i__ = 1; i__ <= lastv; ++i__)
+                            for(i__ = 1; i__ <= lastv; ++i__)
                             {
                                 c__[i__ + j * *ldc] += v[i__1] * temp;
                                 i__1 += *incv;
@@ -262,10 +271,10 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
             }
             else
             {
-                dger_(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[ c_offset], ldc);
+                dger_(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
             }
 #else
-            dger_(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[ c_offset], ldc);
+            dger_(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
 #endif
         }
     }
@@ -276,76 +285,11 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
         {
 #ifndef FLA_ENABLE_AMD_OPT
             /* w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1) */
-            aocl_blas_dgemv("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[1], incv,
-                            &c_b5, &work[1], &c__1);
+            dgemv_("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[1], incv, &c_b5,
+                   &work[1], &c__1);
             /* C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**T */
             d__1 = -(*tau);
-            aocl_blas_dger(&lastc, &lastv, &d__1, &work[1], &c__1, &v[1], incv, &c__[c_offset],
-                           ldc);
-#else
-            aocl_int64_t opt_nthreads = 1;
-            aocl_int64_t nb = 0;
-
-            fla_dlarf_right_tuning_params(lastc, lastv, &nb, &opt_nthreads);
-
-            d__1 = -(*tau);
-
-            /* If nb is non zero, process in blocks */
-            if(nb && opt_nthreads > 1)
-            {
-                /* The first panel will process starting unaligned elements
-                 * to ensure that all other panels aligned memory addresses
-                 */
-                uint64_t unaligned_bytes
-                    = ((uint64_t)(c__ + c_offset)) % ((nb * sizeof(doublereal)));
-                aocl_int64_t first_thread_rows
-                    = fla_min((nb - (unaligned_bytes / sizeof(doublereal))), lastc);
-                aocl_int64_t panels
-                    = (!!first_thread_rows) + (((lastc - first_thread_rows) + (nb - 1)) / nb);
-
-#ifdef FLA_OPENMP_MULTITHREADING
-#pragma omp parallel for num_threads(opt_nthreads) private(i__)
-#endif
-                for(i__ = 1; i__ <= panels; i__ += 1)
-                {
-                    aocl_int64_t completed_rows = i__ == 1 ? 0 : (i__ - 2) * nb + first_thread_rows;
-                    aocl_int64_t current_block_size
-                        = i__ == 1 ? first_thread_rows : fla_min(nb, lastc - completed_rows);
-                    aocl_int64_t cur_idx = completed_rows + 1;
-                    /* w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1) */
-                    aocl_blas_dgemv("No transpose", &current_block_size, &lastv, &c_b4,
-                                    &c__[c_dim1 + cur_idx], ldc, &v[1], incv, &c_b5, &work[cur_idx],
-                                    &c__1);
-                    aocl_blas_dger(&current_block_size, &lastv, &d__1, &work[cur_idx], &c__1, &v[1],
-                                   incv, &c__[c_dim1 + cur_idx], ldc);
-                }
-            }
-            else
-            {
-                /* w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1) */
-#if FLA_ENABLE_AOCL_BLAS && defined(BLIS_KERNELS_ZEN4)
-                aocl_fla_init();
-                if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *incv > 0)
-                {
-                    bli_dgemv_n_zen4_int_40x2_st(BLIS_NO_TRANSPOSE, BLIS_NO_CONJUGATE, lastc, lastv,
-                                                 &c_b4, &c__[c_offset], c__1, c_dim1, &v[1], *incv,
-                                                 &c_b5, &work[1], c__1, NULL);
-                }
-                else
-                {
-                    aocl_blas_dgemv("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc,
-                                    &v[1], incv, &c_b5, &work[1], &c__1);
-                }
-#else
-                aocl_blas_dgemv("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[1],
-                                incv, &c_b5, &work[1], &c__1);
-#endif
-                /* C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**T */
-                d__1 = -(*tau);
-                aocl_blas_dger(&lastc, &lastv, &d__1, &work[1], &c__1, &v[1], incv, &c__[c_offset],
-                               ldc);
-            }
-#endif /* FLA_ENABLE_AMD_OPT */
+            dger_(&lastc, &lastv, &d__1, &work[1], &c__1, &v[1], incv, &c__[c_offset], ldc);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

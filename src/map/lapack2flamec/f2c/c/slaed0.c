@@ -9,7 +9,7 @@ static aocl_int64_t c__0 = 0;
 static aocl_int64_t c__2 = 2;
 static real c_b23 = 1.f;
 static real c_b24 = 0.f;
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b SLAED0 used by sstedc. Computes all eigenvalues and corresponding eigenvectors of an
  * unreduced symmetric tridiagonal matrix using the divide and conquer method. */
 /* =========== DOCUMENTATION =========== */
@@ -173,7 +173,8 @@ static aocl_int64_t c__1 = 1;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void slaed0_(integer *icompq, integer *qsiz, integer *n, real *d__, real *e, real *q, integer *ldq, real *qstore, integer *ldqs, real *work, integer *iwork, integer *info)
+void slaed0_(integer *icompq, integer *qsiz, integer *n, real *d__, real *e, real *q, integer *ldq,
+             real *qstore, integer *ldqs, real *work, integer *iwork, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slaed0(icompq, qsiz, n, d__, e, q, ldq, qstore, ldqs, work, iwork, info);
@@ -211,23 +212,34 @@ void aocl_lapack_slaed0(aocl_int64_t *icompq, aocl_int64_t *qsiz, aocl_int64_t *
     real temp;
     integer curr;
     extern /* Subroutine */
-    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *);
     integer iperm, indxq, iwrem;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     integer iqptr, tlvls;
     extern /* Subroutine */
-    void slaed1_(integer *, real *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *), slaed7_(integer *, integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, integer *);
+        void
+        slaed1_(integer *, real *, real *, integer *, integer *, real *, integer *, real *,
+                integer *, integer *),
+        slaed7_(integer *, integer *, integer *, integer *, integer *, integer *, real *, real *,
+                integer *, integer *, real *, integer *, real *, integer *, integer *, integer *,
+                integer *, integer *, real *, real *, integer *, integer *);
     integer igivcl;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer igivnm, submat;
     extern /* Subroutine */
-    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+        void
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     integer curprb, subpbs, igivpt, curlvl, matsiz, iprmpt, smlsiz;
     extern /* Subroutine */
-    void ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
+        void
+        ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -269,11 +281,11 @@ void aocl_lapack_slaed0(aocl_int64_t *icompq, aocl_int64_t *qsiz, aocl_int64_t *
     iwrem = 0;
     iperm = 0;
     iq = 0;
-    if (*icompq < 0 || *icompq > 2)
+    if(*icompq < 0 || *icompq > 2)
     {
         *info = -1;
     }
-    else if (*icompq == 1 && *qsiz < fla_max(0,*n))
+    else if(*icompq == 1 && *qsiz < fla_max(0, *n))
     {
         *info = -2;
     }
@@ -281,11 +293,11 @@ void aocl_lapack_slaed0(aocl_int64_t *icompq, aocl_int64_t *qsiz, aocl_int64_t *
     {
         *info = -3;
     }
-    else if (*ldq < fla_max(1,*n))
+    else if(*ldq < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldqs < fla_max(1,*n))
+    else if(*ldqs < fla_max(1, *n))
     {
         *info = -9;
     }
@@ -390,8 +402,8 @@ L10:
         }
         if(*icompq == 2)
         {
-            aocl_lapack_ssteqr("I", &matsiz, &d__[submat], &e[submat], &q[submat + submat * q_dim1],
-                               ldq, &work[1], info);
+            ssteqr_("I", &matsiz, &d__[submat], &e[submat], &q[submat + submat * q_dim1], ldq,
+                    &work[1], info);
             if(*info != 0)
             {
                 goto L130;
@@ -399,17 +411,17 @@ L10:
         }
         else
         {
-            aocl_lapack_ssteqr("I", &matsiz, &d__[submat], &e[submat],
-                               &work[iq - 1 + iwork[iqptr + curr]], &matsiz, &work[1], info);
+            ssteqr_("I", &matsiz, &d__[submat], &e[submat], &work[iq - 1 + iwork[iqptr + curr]],
+                    &matsiz, &work[1], info);
             if(*info != 0)
             {
                 goto L130;
             }
             if(*icompq == 1)
             {
-                aocl_blas_sgemm("N", "N", qsiz, &matsiz, &matsiz, &c_b23, &q[submat * q_dim1 + 1],
-                                ldq, &work[iq - 1 + iwork[iqptr + curr]], &matsiz, &c_b24,
-                                &qstore[submat * qstore_dim1 + 1], ldqs);
+                sgemm_("N", "N", qsiz, &matsiz, &matsiz, &c_b23, &q[submat * q_dim1 + 1], ldq,
+                       &work[iq - 1 + iwork[iqptr + curr]], &matsiz, &c_b24,
+                       &qstore[submat * qstore_dim1 + 1], ldqs);
             }
             /* Computing 2nd power */
             i__2 = matsiz;
@@ -460,13 +472,17 @@ L80:
             /* tridiagonal form) are desired. */
             if(*icompq == 2)
             {
-                aocl_lapack_slaed1(&matsiz, &d__[submat], &q[submat + submat * q_dim1], ldq,
-                                   &iwork[indxq + submat], &e[submat + msd2 - 1], &msd2, &work[1],
-                                   &iwork[subpbs + 1], info);
+                slaed1_(&matsiz, &d__[submat], &q[submat + submat * q_dim1], ldq,
+                        &iwork[indxq + submat], &e[submat + msd2 - 1], &msd2, &work[1],
+                        &iwork[subpbs + 1], info);
             }
             else
             {
-                slaed7_(icompq, &matsiz, qsiz, &tlvls, &curlvl, &curprb, &d__[ submat], &qstore[submat * qstore_dim1 + 1], ldqs, & iwork[indxq + submat], &e[submat + msd2 - 1], &msd2, & work[iq], &iwork[iqptr], &iwork[iprmpt], &iwork[iperm], &iwork[igivpt], &iwork[igivcl], &work[igivnm], & work[iwrem], &iwork[subpbs + 1], info);
+                slaed7_(icompq, &matsiz, qsiz, &tlvls, &curlvl, &curprb, &d__[submat],
+                        &qstore[submat * qstore_dim1 + 1], ldqs, &iwork[indxq + submat],
+                        &e[submat + msd2 - 1], &msd2, &work[iq], &iwork[iqptr], &iwork[iprmpt],
+                        &iwork[iperm], &iwork[igivpt], &iwork[igivcl], &work[igivnm], &work[iwrem],
+                        &iwork[subpbs + 1], info);
             }
             if(*info != 0)
             {

@@ -198,20 +198,26 @@ static doublereal c_b10 = 1.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, doublereal *a, doublereal *b, integer *ldb, integer *info)
+void dpftrs_(char *transr, char *uplo, integer *n, integer *nrhs, doublereal *a, doublereal *b,
+             integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dpftrs inputs: transr %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*transr, *uplo, *n, *nrhs, *ldb);
+    AOCL_DTL_SNPRINTF("dpftrs inputs: transr %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS
+                      ", ldb %" FLA_IS "",
+                      *transr, *uplo, *n, *nrhs, *ldb);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
     logical normaltransr;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dtfsm_(char *, char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+        void
+        dtfsm_(char *, char *, char *, char *, char *, integer *, integer *, doublereal *,
+               doublereal *, doublereal *, integer *);
     logical lower;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -241,11 +247,11 @@ void dpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, doublereal *a
     *info = 0;
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
-    if (! normaltransr && ! lsame_(transr, "T", 1, 1))
+    if(!normaltransr && !lsame_(transr, "T", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U", 1, 1))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }
@@ -257,7 +263,7 @@ void dpftrs_(char *transr, char *uplo, integer *n, integer * nrhs, doublereal *a
     {
         *info = -4;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }

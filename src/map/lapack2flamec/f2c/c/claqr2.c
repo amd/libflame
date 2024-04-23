@@ -1,13 +1,13 @@
-/* ./claqr2.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/claqr2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {0.f, 0.f};
-static scomplex c_b2 = {1.f, 0.f};
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static complex c_b1 = {0.f, 0.f};
+static complex c_b2 = {1.f, 0.f};
+static integer c__1 = 1;
+static integer c_n1 = -1;
 static logical c_true = TRUE_;
 /* > \brief \b CLAQR2 performs the unitary similarity transformation of a Hessenberg matrix to
  * detect and defl ate fully converged eigenvalues from a trailing principal submatrix (aggressive
@@ -270,20 +270,30 @@ CLAQR2 */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw, complex *h__, integer *ldh, integer *iloz, integer *ihiz, complex *z__, integer *ldz, integer * ns, integer *nd, complex *sh, complex *v, integer *ldv, integer *nh, complex *t, integer *ldt, integer *nv, complex *wv, integer *ldwv, complex *work, integer *lwork)
+void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw,
+             complex *h__, integer *ldh, integer *iloz, integer *ihiz, complex *z__, integer *ldz,
+             integer *ns, integer *nd, complex *sh, complex *v, integer *ldv, integer *nh,
+             complex *t, integer *ldt, integer *nv, complex *wv, integer *ldwv, complex *work,
+             integer *lwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"claqr2 inputs: n %lld, ktop %lld, kbot %lld, nw %lld, ldh %lld, iloz %lld, ihiz %lld, ldz %lld, ldv %lld, nh %lld, ldt %lld, nv %lld, ldwv %lld, lwork %lld",*n, *ktop, *kbot, *nw, *ldh, *iloz, *ihiz, *ldz, *ldv, *nh, *ldt, *nv, *ldwv, *lwork);
+    snprintf(buffer, 256,
+             "claqr2 inputs: n %lld, ktop %lld, kbot %lld, nw %lld, ldh %lld, iloz %lld, ihiz "
+             "%lld, ldz %lld, ldv %lld, nh %lld, ldt %lld, nv %lld, ldwv %lld, lwork %lld",
+             *n, *ktop, *kbot, *nw, *ldh, *iloz, *ihiz, *ldz, *ldv, *nh, *ldt, *nv, *ldwv, *lwork);
 #else
-    snprintf(buffer, 256,"claqr2 inputs: n %d, ktop %d, kbot %d, nw %d, ldh %d, iloz %d, ihiz %d, ldz %d, ldv %d, nh %d, ldt %d, nv %d, ldwv %d, lwork %d",*n, *ktop, *kbot, *nw, *ldh, *iloz, *ihiz, *ldz, *ldv, *nh, *ldt, *nv, *ldwv, *lwork);
+    snprintf(buffer, 256,
+             "claqr2 inputs: n %d, ktop %d, kbot %d, nw %d, ldh %d, iloz %d, ihiz %d, ldz %d, ldv "
+             "%d, nh %d, ldt %d, nv %d, ldwv %d, lwork %d",
+             *n, *ktop, *kbot, *nw, *ldh, *iloz, *ihiz, *ldz, *ldv, *nh, *ldt, *nv, *ldwv, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t h_dim1, h_offset, t_dim1, t_offset, v_dim1, v_offset, wv_dim1, wv_offset, z_dim1,
+    integer h_dim1, h_offset, t_dim1, t_offset, v_dim1, v_offset, wv_dim1, wv_offset, z_dim1,
         z_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2, r__3, r__4, r__5, r__6;
     complex q__1, q__2;
@@ -300,16 +310,33 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     complex beta;
     integer kcol, info, ifst, ilst, ltop, krow;
     extern /* Subroutine */
-    void clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *);
+        void
+        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+               complex *),
+        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
+               complex *, integer *, complex *, complex *, integer *),
+        ccopy_(integer *, complex *, integer *, complex *, integer *);
     integer infqr, kwtop;
     extern /* Subroutine */
-    void slabad_(real *, real *), cgehrd_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *);
+        void
+        slabad_(real *, real *),
+        cgehrd_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *, integer *),
+        clarfg_(integer *, complex *, complex *, integer *, complex *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    void clahqr_(logical *, logical *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
+        void
+        clahqr_(logical *, logical *, integer *, integer *, integer *, complex *, integer *,
+                complex *, integer *, integer *, complex *, integer *, integer *),
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
     real safmin, safmax;
     extern /* Subroutine */
-    void ctrexc_(char *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, integer *), cunmhr_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+        void
+        ctrexc_(char *, integer *, complex *, integer *, complex *, integer *, integer *, integer *,
+                integer *),
+        cunmhr_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *,
+                complex *, complex *, integer *, complex *, integer *, integer *);
     real smlnum;
     aocl_int64_t lwkopt;
     /* -- LAPACK auxiliary routine -- */
@@ -358,8 +385,8 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     /* Computing MIN */
     i__1 = *nw;
     i__2 = *kbot - *ktop + 1; // , expr subst
-    jw = fla_min(i__1,i__2);
-    if (jw <= 2)
+    jw = fla_min(i__1, i__2);
+    if(jw <= 2)
     {
         lwkopt = 1;
     }
@@ -367,20 +394,20 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     {
         /* ==== Workspace query call to CGEHRD ==== */
         i__1 = jw - 1;
-        aocl_lapack_cgehrd(&jw, &c__1, &i__1, &t[t_offset], ldt, &work[1], &work[1], &c_n1, &info);
-        lwk1 = (integer)work[1].real;
+        cgehrd_(&jw, &c__1, &i__1, &t[t_offset], ldt, &work[1], &work[1], &c_n1, &info);
+        lwk1 = (integer)work[1].r;
         /* ==== Workspace query call to CUNMHR ==== */
         i__1 = jw - 1;
-        aocl_lapack_cunmhr("R", "N", &jw, &jw, &c__1, &i__1, &t[t_offset], ldt, &work[1],
-                           &v[v_offset], ldv, &work[1], &c_n1, &info);
-        lwk2 = (integer)work[1].real;
+        cunmhr_("R", "N", &jw, &jw, &c__1, &i__1, &t[t_offset], ldt, &work[1], &v[v_offset], ldv,
+                &work[1], &c_n1, &info);
+        lwk2 = (integer)work[1].r;
         /* ==== Optimal workspace ==== */
-        lwkopt = jw + fla_max(lwk1,lwk2);
+        lwkopt = jw + fla_max(lwk1, lwk2);
     }
     /* ==== Quick return in case of workspace query. ==== */
     if(*lwork == -1)
     {
-        r__1 = (real) lwkopt;
+        r__1 = (real)lwkopt;
         q__1.r = r__1;
         q__1.i = 0.f; // , expr subst
         work[1].r = q__1.r;
@@ -392,8 +419,8 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     /* ... for an empty active block ... ==== */
     *ns = 0;
     *nd = 0;
-    work[1].real = 1.f;
-    work[1].imag = 0.f; // , expr subst
+    work[1].r = 1.f;
+    work[1].i = 0.f; // , expr subst
     if(*ktop > *kbot)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -413,7 +440,7 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     /* Computing MIN */
     i__1 = *nw;
     i__2 = *kbot - *ktop + 1; // , expr subst
-    jw = fla_min(i__1,i__2);
+    jw = fla_min(i__1, i__2);
     kwtop = *kbot - jw + 1;
     if(kwtop == *ktop)
     {
@@ -438,8 +465,10 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
         /* Computing MAX */
         i__1 = kwtop + kwtop * h_dim1;
         r__5 = smlnum;
-        r__6 = ulp * ((r__1 = h__[i__1].r, f2c_abs(r__1)) + (r__2 = h__[i__1].i, f2c_abs(r__2))); // , expr subst
-        if ((r__3 = s.r, f2c_abs(r__3)) + (r__4 = s.i, f2c_abs(r__4)) <= fla_max( r__5,r__6))
+        r__6 = ulp
+               * ((r__1 = h__[i__1].r, f2c_abs(r__1))
+                  + (r__2 = h__[i__1].i, f2c_abs(r__2))); // , expr subst
+        if((r__3 = s.r, f2c_abs(r__3)) + (r__4 = s.i, f2c_abs(r__4)) <= fla_max(r__5, r__6))
         {
             *ns = 0;
             *nd = 1;
@@ -464,10 +493,10 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     i__1 = jw - 1;
     i__2 = *ldh + 1;
     i__3 = *ldt + 1;
-    aocl_blas_ccopy(&i__1, &h__[kwtop + 1 + kwtop * h_dim1], &i__2, &t[t_dim1 + 2], &i__3);
-    aocl_lapack_claset("A", &jw, &jw, &c_b1, &c_b2, &v[v_offset], ldv);
-    aocl_lapack_clahqr(&c_true, &c_true, &jw, &c__1, &jw, &t[t_offset], ldt, &sh[kwtop], &c__1, &jw,
-                       &v[v_offset], ldv, &infqr);
+    ccopy_(&i__1, &h__[kwtop + 1 + kwtop * h_dim1], &i__2, &t[t_dim1 + 2], &i__3);
+    claset_("A", &jw, &jw, &c_b1, &c_b2, &v[v_offset], ldv);
+    clahqr_(&c_true, &c_true, &jw, &c__1, &jw, &t[t_offset], ldt, &sh[kwtop], &c__1, &jw,
+            &v[v_offset], ldv, &infqr);
     /* ==== Deflation detection loop ==== */
     *ns = jw;
     ilst = infqr + 1;
@@ -477,7 +506,7 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
         /* ==== Small spike tip deflation test ==== */
         i__2 = *ns + *ns * t_dim1;
         foo = (r__1 = t[i__2].r, f2c_abs(r__1)) + (r__2 = t[i__2].i, f2c_abs(r__2));
-        if (foo == 0.f)
+        if(foo == 0.f)
         {
             foo = (r__1 = s.r, f2c_abs(r__1)) + (r__2 = s.i, f2c_abs(r__2));
         }
@@ -485,7 +514,9 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
         /* Computing MAX */
         r__5 = smlnum;
         r__6 = ulp * foo; // , expr subst
-        if (((r__1 = s.r, f2c_abs(r__1)) + (r__2 = s.i, f2c_abs(r__2))) * (( r__3 = v[i__2].r, f2c_abs(r__3)) + (r__4 = v[i__2].i, f2c_abs(r__4))) <= fla_max(r__5,r__6))
+        if(((r__1 = s.r, f2c_abs(r__1)) + (r__2 = s.i, f2c_abs(r__2)))
+               * ((r__3 = v[i__2].r, f2c_abs(r__3)) + (r__4 = v[i__2].i, f2c_abs(r__4)))
+           <= fla_max(r__5, r__6))
         {
             /* ==== One more converged eigenvalue ==== */
             --(*ns);
@@ -495,7 +526,7 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
             /* ==== One undeflatable eigenvalue. Move it up out of the */
             /* . way. (CTREXC can not fail in this case.) ==== */
             ifst = *ns;
-            aocl_lapack_ctrexc("V", &jw, &t[t_offset], ldt, &v[v_offset], ldv, &ifst, &ilst, &info);
+            ctrexc_("V", &jw, &t[t_offset], ldt, &v[v_offset], ldv, &ifst, &ilst, &info);
             ++ilst;
         }
         /* L10: */
@@ -519,7 +550,8 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
             {
                 i__3 = j + j * t_dim1;
                 i__4 = ifst + ifst * t_dim1;
-                if ((r__1 = t[i__3].r, f2c_abs(r__1)) + (r__2 = t[i__3].i, f2c_abs(r__2)) > (r__3 = t[i__4].r, f2c_abs(r__3)) + (r__4 = t[i__4].i, f2c_abs(r__4)) )
+                if((r__1 = t[i__3].r, f2c_abs(r__1)) + (r__2 = t[i__3].i, f2c_abs(r__2))
+                   > (r__3 = t[i__4].r, f2c_abs(r__3)) + (r__4 = t[i__4].i, f2c_abs(r__4)))
                 {
                     ifst = j;
                 }
@@ -544,9 +576,9 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
         sh[i__2].imag = t[i__3].imag; // , expr subst
         /* L40: */
     }
-    if(*ns < jw || s.real == 0.f && s.imag == 0.f)
+    if(*ns < jw || s.r == 0.f && s.i == 0.f)
     {
-        if(*ns > 1 && (s.real != 0.f || s.imag != 0.f))
+        if(*ns > 1 && (s.r != 0.f || s.i != 0.f))
         {
             /* ==== Reflect spike back into lower triangle ==== */
             aocl_blas_ccopy(ns, &v[v_offset], ldv, &work[1], &c__1);
@@ -570,9 +602,9 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
             claset_("L", &i__1, &i__2, &c_b1, &c_b1, &t[t_dim1 + 3], ldt);
             q__1.r = tau.r;
             q__1.i = -tau.i;
-            clarf_("L", ns, &jw, &work[1], &c__1, &q__1, &t[t_offset], ldt, & work[jw + 1]);
-            clarf_("R", ns, ns, &work[1], &c__1, &tau, &t[t_offset], ldt, & work[jw + 1]);
-            clarf_("R", &jw, ns, &work[1], &c__1, &tau, &v[v_offset], ldv, & work[jw + 1]);
+            clarf_("L", ns, &jw, &work[1], &c__1, &q__1, &t[t_offset], ldt, &work[jw + 1]);
+            clarf_("R", ns, ns, &work[1], &c__1, &tau, &t[t_offset], ldt, &work[jw + 1]);
+            clarf_("R", &jw, ns, &work[1], &c__1, &tau, &v[v_offset], ldv, &work[jw + 1]);
             i__1 = *lwork - jw;
             cgehrd_(&jw, &c__1, ns, &t[t_offset], ldt, &work[1], &work[jw + 1], &i__1, &info);
         }
@@ -594,11 +626,11 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
         aocl_blas_ccopy(&i__1, &t[t_dim1 + 2], &i__2, &h__[kwtop + 1 + kwtop * h_dim1], &i__3);
         /* ==== Accumulate orthogonal matrix in order update */
         /* . H and Z, if requested. ==== */
-        if(*ns > 1 && (s.real != 0.f || s.imag != 0.f))
+        if(*ns > 1 && (s.r != 0.f || s.i != 0.f))
         {
             i__1 = *lwork - jw;
-            aocl_lapack_cunmhr("R", "N", &jw, ns, &c__1, ns, &t[t_offset], ldt, &work[1],
-                               &v[v_offset], ldv, &work[jw + 1], &i__1, &info);
+            cunmhr_("R", "N", &jw, ns, &c__1, ns, &t[t_offset], ldt, &work[1], &v[v_offset], ldv,
+                    &work[jw + 1], &i__1, &info);
         }
         /* ==== Update vertical slab in H ==== */
         if(*wantt)
@@ -616,8 +648,9 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
             /* Computing MIN */
             i__3 = *nv;
             i__4 = kwtop - krow; // , expr subst
-            kln = fla_min(i__3,i__4);
-            cgemm_("N", "N", &kln, &jw, &jw, &c_b2, &h__[krow + kwtop * h_dim1], ldh, &v[v_offset], ldv, &c_b1, &wv[wv_offset], ldwv);
+            kln = fla_min(i__3, i__4);
+            cgemm_("N", "N", &kln, &jw, &jw, &c_b2, &h__[krow + kwtop * h_dim1], ldh, &v[v_offset],
+                   ldv, &c_b1, &wv[wv_offset], ldwv);
             clacpy_("A", &kln, &jw, &wv[wv_offset], ldwv, &h__[krow + kwtop * h_dim1], ldh);
             /* L60: */
         }
@@ -631,8 +664,9 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
                 /* Computing MIN */
                 i__3 = *nh;
                 i__4 = *n - kcol + 1; // , expr subst
-                kln = fla_min(i__3,i__4);
-                cgemm_("C", "N", &jw, &kln, &jw, &c_b2, &v[v_offset], ldv, & h__[kwtop + kcol * h_dim1], ldh, &c_b1, &t[t_offset], ldt);
+                kln = fla_min(i__3, i__4);
+                cgemm_("C", "N", &jw, &kln, &jw, &c_b2, &v[v_offset], ldv,
+                       &h__[kwtop + kcol * h_dim1], ldh, &c_b1, &t[t_offset], ldt);
                 clacpy_("A", &jw, &kln, &t[t_offset], ldt, &h__[kwtop + kcol * h_dim1], ldh);
                 /* L70: */
             }
@@ -647,8 +681,9 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
                 /* Computing MIN */
                 i__3 = *nv;
                 i__4 = *ihiz - krow + 1; // , expr subst
-                kln = fla_min(i__3,i__4);
-                cgemm_("N", "N", &kln, &jw, &jw, &c_b2, &z__[krow + kwtop * z_dim1], ldz, &v[v_offset], ldv, &c_b1, &wv[wv_offset], ldwv);
+                kln = fla_min(i__3, i__4);
+                cgemm_("N", "N", &kln, &jw, &jw, &c_b2, &z__[krow + kwtop * z_dim1], ldz,
+                       &v[v_offset], ldv, &c_b1, &wv[wv_offset], ldwv);
                 clacpy_("A", &kln, &jw, &wv[wv_offset], ldwv, &z__[krow + kwtop * z_dim1], ldz);
                 /* L80: */
             }
@@ -664,10 +699,10 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     *ns -= infqr;
     /* ==== Return optimal workspace. ==== */
     r__1 = (real)lwkopt;
-    q__1.real = r__1;
-    q__1.imag = 0.f; // , expr subst
-    work[1].real = q__1.real;
-    work[1].imag = q__1.imag; // , expr subst
+    q__1.r = r__1;
+    q__1.i = 0.f; // , expr subst
+    work[1].r = q__1.r;
+    work[1].i = q__1.i; // , expr subst
     /* ==== End of CLAQR2 ==== */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

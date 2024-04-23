@@ -1,5 +1,8 @@
-/* sgebak.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* sgebak.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SGEBAK */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -46,11 +49,11 @@
 /* > JOB is CHARACTER*1 */
 /* > Specifies the type of backward transformation required: */
 /* > = 'N': do nothing, return immediately;
-*/
+ */
 /* > = 'P': do backward transformation for permutation only;
-*/
+ */
 /* > = 'S': do backward transformation for scaling only;
-*/
+ */
 /* > = 'B': do backward transformations for both permutation and */
 /* > scaling. */
 /* > JOB must be the same as the argument JOB supplied to SGEBAL. */
@@ -125,10 +128,13 @@ ILO=1 and IHI=0, if N=0. */
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real *scale, integer *m, real *v, integer *ldv, integer *info)
+void sgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real *scale, integer *m,
+             real *v, integer *ldv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sgebak inputs: job %c, side %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", m %" FLA_IS ", ldv %" FLA_IS "",*job, *side, *n, *ilo, *ihi, *m, *ldv);
+    AOCL_DTL_SNPRINTF("sgebak inputs: job %c, side %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS
+                      ", m %" FLA_IS ", ldv %" FLA_IS "",
+                      *job, *side, *n, *ilo, *ihi, *m, *ldv);
     /* System generated locals */
     aocl_int64_t v_dim1, v_offset, i__1;
     /* Local variables */
@@ -137,10 +143,13 @@ void sgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real
     integer ii;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     logical leftv;
     extern /* Subroutine */
-    void sswap_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sswap_(integer *, real *, integer *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical rightv;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -171,7 +180,8 @@ void sgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real
     rightv = lsame_(side, "R", 1, 1);
     leftv = lsame_(side, "L", 1, 1);
     *info = 0;
-    if (! lsame_(job, "N", 1, 1) && ! lsame_(job, "P", 1, 1) && ! lsame_(job, "S", 1, 1) && ! lsame_(job, "B", 1, 1))
+    if(!lsame_(job, "N", 1, 1) && !lsame_(job, "P", 1, 1) && !lsame_(job, "S", 1, 1)
+       && !lsame_(job, "B", 1, 1))
     {
         *info = -1;
     }
@@ -183,11 +193,11 @@ void sgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real
     {
         *info = -3;
     }
-    else if (*ilo < 1 || *ilo > fla_max(1,*n))
+    else if(*ilo < 1 || *ilo > fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*ihi < fla_min(*ilo,*n) || *ihi > *n)
+    else if(*ihi < fla_min(*ilo, *n) || *ihi > *n)
     {
         *info = -5;
     }
@@ -195,7 +205,7 @@ void sgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real
     {
         *info = -7;
     }
-    else if (*ldv < fla_max(1,*n))
+    else if(*ldv < fla_max(1, *n))
     {
         *info = -9;
     }
@@ -203,23 +213,23 @@ void sgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real
     {
         i__1 = -(*info);
         xerbla_("SGEBAK", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*m == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (lsame_(job, "N", 1, 1))
+    if(lsame_(job, "N", 1, 1))
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*ilo == *ihi)
@@ -227,7 +237,7 @@ void sgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real
         goto L30;
     }
     /* Backward balance */
-    if (lsame_(job, "S", 1, 1) || lsame_(job, "B", 1, 1))
+    if(lsame_(job, "S", 1, 1) || lsame_(job, "B", 1, 1))
     {
         if(rightv)
         {
@@ -254,7 +264,7 @@ void sgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real
     /* For I = ILO-1 step -1 until 1, */
     /* IHI+1 step 1 until N do -- */
 L30:
-    if (lsame_(job, "P", 1, 1) || lsame_(job, "B", 1, 1))
+    if(lsame_(job, "P", 1, 1) || lsame_(job, "B", 1, 1))
     {
         if(rightv)
         {
@@ -270,12 +280,12 @@ L30:
                 {
                     i__ = *ilo - ii;
                 }
-                k = (integer) scale[i__];
-                if (k == i__)
+                k = (integer)scale[i__];
+                if(k == i__)
                 {
                     goto L40;
                 }
-                aocl_blas_sswap(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
+                sswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
             L40:;
             }
         }
@@ -293,12 +303,12 @@ L30:
                 {
                     i__ = *ilo - ii;
                 }
-                k = (integer) scale[i__];
-                if (k == i__)
+                k = (integer)scale[i__];
+                if(k == i__)
                 {
                     goto L50;
                 }
-                aocl_blas_sswap(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
+                sswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
             L50:;
             }
         }

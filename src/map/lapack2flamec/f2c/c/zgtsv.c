@@ -119,10 +119,12 @@
 /* > \ingroup complex16GTsolve */
 /* ===================================================================== */
 /* Subroutine */
-void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, doublecomplex *du, doublecomplex *b, integer *ldb, integer *info)
+void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, doublecomplex *du,
+            doublecomplex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgtsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *ldb);
+    AOCL_DTL_SNPRINTF("zgtsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n, *nrhs,
+                      *ldb);
 
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7;
@@ -135,7 +137,8 @@ void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, do
     integer j, k;
     doublecomplex temp, mult;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -175,7 +178,7 @@ void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, do
     {
         *info = -2;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
@@ -195,11 +198,11 @@ void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, do
     for(k = 1; k <= i__1; ++k)
     {
         i__2 = k;
-        if(dl[i__2].real == 0. && dl[i__2].imag == 0.)
+        if(dl[i__2].r == 0. && dl[i__2].i == 0.)
         {
             /* Subdiagonal is zero, no elimination is required. */
             i__2 = k;
-            if(d__[i__2].real == 0. && d__[i__2].imag == 0.)
+            if(d__[i__2].r == 0. && d__[i__2].i == 0.)
             {
                 /* Diagonal is zero: set INFO = K and return;
                 a unique */
@@ -213,7 +216,8 @@ void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, do
         {
             i__2 = k;
             i__3 = k;
-            if ((d__1 = d__[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[k]), f2c_dabs(d__2)) >= (d__3 = dl[i__3].r, f2c_dabs(d__3)) + (d__4 = d_imag(&dl[k]), f2c_dabs(d__4)))
+            if((d__1 = d__[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[k]), f2c_dabs(d__2))
+               >= (d__3 = dl[i__3].r, f2c_dabs(d__3)) + (d__4 = d_imag(&dl[k]), f2c_dabs(d__4)))
             {
                 /* No row interchange required */
                 z_div(&z__1, &dl[k], &d__[k]);
@@ -264,12 +268,12 @@ void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, do
                 temp.imag = d__[i__2].imag; // , expr subst
                 i__2 = k + 1;
                 i__3 = k;
-                z__2.real = mult.real * temp.real - mult.imag * temp.imag;
-                z__2.imag = mult.real * temp.imag + mult.imag * temp.real; // , expr subst
-                z__1.real = du[i__3].real - z__2.real;
-                z__1.imag = du[i__3].imag - z__2.imag; // , expr subst
-                d__[i__2].real = z__1.real;
-                d__[i__2].imag = z__1.imag; // , expr subst
+                z__2.r = mult.r * temp.r - mult.i * temp.i;
+                z__2.i = mult.r * temp.i + mult.i * temp.r; // , expr subst
+                z__1.r = du[i__3].r - z__2.r;
+                z__1.i = du[i__3].i - z__2.i; // , expr subst
+                d__[i__2].r = z__1.r;
+                d__[i__2].i = z__1.i; // , expr subst
                 if(k < *n - 1)
                 {
                     i__2 = k;
@@ -280,10 +284,10 @@ void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, do
                     z__2.real = -mult.real;
                     z__2.imag = -mult.imag; // , expr subst
                     i__3 = k;
-                    z__1.real = z__2.real * dl[i__3].real - z__2.imag * dl[i__3].imag;
-                    z__1.imag = z__2.real * dl[i__3].imag + z__2.imag * dl[i__3].real; // , expr subst
-                    du[i__2].real = z__1.real;
-                    du[i__2].imag = z__1.imag; // , expr subst
+                    z__1.r = z__2.r * dl[i__3].r - z__2.i * dl[i__3].i;
+                    z__1.i = z__2.r * dl[i__3].i + z__2.i * dl[i__3].r; // , expr subst
+                    du[i__2].r = z__1.r;
+                    du[i__2].i = z__1.i; // , expr subst
                 }
                 i__2 = k;
                 du[i__2].real = temp.real;
@@ -313,7 +317,7 @@ void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, do
         /* L30: */
     }
     i__1 = *n;
-    if(d__[i__1].real == 0. && d__[i__1].imag == 0.)
+    if(d__[i__1].r == 0. && d__[i__1].i == 0.)
     {
         *info = *n;
         AOCL_DTL_TRACE_LOG_EXIT
@@ -325,8 +329,8 @@ void zgtsv_(integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__, do
     {
         i__2 = *n + j * b_dim1;
         z_div(&z__1, &b[*n + j * b_dim1], &d__[*n]);
-        b[i__2].real = z__1.real;
-        b[i__2].imag = z__1.imag; // , expr subst
+        b[i__2].r = z__1.r;
+        b[i__2].i = z__1.i; // , expr subst
         if(*n > 1)
         {
             i__2 = *n - 1 + j * b_dim1;

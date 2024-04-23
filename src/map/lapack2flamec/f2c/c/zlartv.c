@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b ZLARTV applies a vector of plane rotations with real cosines and scomplex sines to the elements of a pair of vectors. */
+#include "FLA_f2c.h" /* > \brief \b ZLARTV applies a vector of plane rotations with real cosines and complex sines to the elements of a pair of vectors. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -102,10 +102,13 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlartv_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, integer *incy, doublereal *c__, doublecomplex *s, integer *incc)
+void zlartv_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, integer *incy,
+             doublereal *c__, doublecomplex *s, integer *incc)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlartv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS ", incc %" FLA_IS "",*n, *incx, *incy, *incc);
+    AOCL_DTL_SNPRINTF("zlartv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS
+                      ", incc %" FLA_IS "",
+                      *n, *incx, *incy, *incc);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3, i__4;
     dcomplex z__1, z__2, z__3, z__4;

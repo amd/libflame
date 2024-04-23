@@ -132,12 +132,13 @@ static real c_b5 = 1.f;
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma, real *sestpr, real *s, real *c__)
+void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma, real *sestpr,
+             real *s, real *c__)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slaic1_ inputs: *job %d, *j %d",*job, *j);
+    snprintf(buffer, 256, "slaic1_ inputs: *job %d, *j %d", *job, *j);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -176,14 +177,14 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
     absalp = f2c_abs(alpha);
     absgam = f2c_abs(*gamma);
     absest = f2c_abs(*sest);
-    if (*job == 1)
+    if(*job == 1)
     {
         /* Estimating largest singular value */
         /* special cases */
         if(*sest == 0.f)
         {
-            s1 = fla_max(absgam,absalp);
-            if (s1 == 0.f)
+            s1 = fla_max(absgam, absalp);
+            if(s1 == 0.f)
             {
                 *s = 0.f;
                 *c__ = 1.f;
@@ -205,7 +206,7 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
         {
             *s = 1.f;
             *c__ = 0.f;
-            tmp = fla_max(absest,absalp);
+            tmp = fla_max(absest, absalp);
             s1 = absest / tmp;
             s2 = absalp / tmp;
             *sestpr = tmp * sqrt(s1 * s1 + s2 * s2);
@@ -286,7 +287,7 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
         if(*sest == 0.f)
         {
             *sestpr = 0.f;
-            if (fla_max(absgam,absalp) == 0.f)
+            if(fla_max(absgam, absalp) == 0.f)
             {
                 sine = 1.f;
                 cosine = 0.f;
@@ -299,7 +300,7 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
             /* Computing MAX */
             r__1 = f2c_abs(sine);
             r__2 = f2c_abs(cosine); // , expr subst
-            s1 = fla_max(r__1,r__2);
+            s1 = fla_max(r__1, r__2);
             *s = sine / s1;
             *c__ = cosine / s1;
             tmp = sqrt(*s * *s + *c__ * *c__);
@@ -366,7 +367,7 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
             /* Computing MAX */
             r__3 = zeta1 * zeta1 + 1.f + (r__1 = zeta1 * zeta2, f2c_abs(r__1));
             r__4 = (r__2 = zeta1 * zeta2, f2c_abs(r__2)) + zeta2 * zeta2; // , expr subst
-            norma = fla_max(r__3,r__4);
+            norma = fla_max(r__3, r__4);
             /* See if root is closer to zero or to ONE */
             test = (zeta1 - zeta2) * 2.f * (zeta1 + zeta2) + 1.f;
             if(test >= 0.f)

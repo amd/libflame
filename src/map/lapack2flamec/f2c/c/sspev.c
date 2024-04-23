@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief <b> SSPEV computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for OTHER m atrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -132,12 +132,14 @@ i */
 /* > \ingroup realOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void sspev_(char *jobz, char *uplo, integer *n, real *ap, real *w, real *z__, integer *ldz, real *work, integer *info)
+void sspev_(char *jobz, char *uplo, integer *n, real *ap, real *w, real *z__, integer *ldz,
+            real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sspev inputs: jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "",*jobz, *uplo, *n, *ldz);
+    snprintf(buffer, 256, "sspev inputs: jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "", *jobz,
+             *uplo, *n, *ldz);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -154,21 +156,27 @@ void sspev_(char *jobz, char *uplo, integer *n, real *ap, real *w, real *z__, in
     extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     logical wantz;
     aocl_int64_t iscale;
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer indtau, indwrk;
     extern real slansp_(char *, char *, integer *, real *, real *);
     extern /* Subroutine */
-    void ssterf_(integer *, real *, real *, integer *);
+        void
+        ssterf_(integer *, real *, real *, integer *);
     real smlnum;
     extern /* Subroutine */
-    void sopgtr_(char *, integer *, real *, real *, real *, integer *, real *, integer *), ssptrd_(char *, integer *, real *, real *, real *, real *, integer *), ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
+        void
+        sopgtr_(char *, integer *, real *, real *, real *, integer *, real *, integer *),
+        ssptrd_(char *, integer *, real *, real *, real *, real *, integer *),
+        ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -200,11 +208,11 @@ void sspev_(char *jobz, char *uplo, integer *n, real *ap, real *w, real *z__, in
     /* Function Body */
     wantz = lsame_(jobz, "V", 1, 1);
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (lsame_(uplo, "U", 1, 1) || lsame_(uplo, "L", 1, 1)))
+    else if(!(lsame_(uplo, "U", 1, 1) || lsame_(uplo, "L", 1, 1)))
     {
         *info = -2;
     }
@@ -277,9 +285,8 @@ void sspev_(char *jobz, char *uplo, integer *n, real *ap, real *w, real *z__, in
     else
     {
         indwrk = indtau + *n;
-        aocl_lapack_sopgtr(uplo, n, &ap[1], &work[indtau], &z__[z_offset], ldz, &work[indwrk],
-                           &iinfo);
-        aocl_lapack_ssteqr(jobz, n, &w[1], &work[inde], &z__[z_offset], ldz, &work[indtau], info);
+        sopgtr_(uplo, n, &ap[1], &work[indtau], &z__[z_offset], ldz, &work[indwrk], &iinfo);
+        ssteqr_(jobz, n, &w[1], &work[inde], &z__[z_offset], ldz, &work[indtau], info);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)

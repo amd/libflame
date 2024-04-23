@@ -1,13 +1,13 @@
-/* ./slasd3.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slasd3.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c__0 = 0;
-static real c_b12 = 1.f;
-static real c_b25 = 0.f;
+static integer c__1 = 1;
+static integer c__0 = 0;
+static real c_b13 = 1.f;
+static real c_b26 = 0.f;
 /* > \brief \b SLASD3 finds all square roots of the roots of the secular equation, as defined by the
  * values in D and Z, and then updates the singular vectors by matrix multiplication. Used by
  * sbdsdc. */
@@ -218,7 +218,9 @@ the second */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slasd3_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, real *q, integer *ldq, real *dsigma, real *u, integer * ldu, real *u2, integer *ldu2, real *vt, integer *ldvt, real *vt2, integer *ldvt2, integer *idxc, integer *ctot, real *z__, integer * info)
+void slasd3_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, real *q, integer *ldq,
+             real *dsigma, real *u, integer *ldu, real *u2, integer *ldu2, real *vt, integer *ldvt,
+             real *vt2, integer *ldvt2, integer *idxc, integer *ctot, real *z__, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slasd3(nl, nr, sqre, k, d__, q, ldq, dsigma, u, ldu, u2, ldu2, vt, ldvt, vt2, ldvt2,
@@ -254,8 +256,8 @@ void aocl_lapack_slasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
                       ",ldvt2 %" FLA_IS ",idxc %" FLA_IS ",ctot %" FLA_IS "",
                       *nl, *nr, *sqre, *k, *ldq, *ldu, *ldu2, *ldvt, *ldvt2, *idxc, *ctot);
     /* System generated locals */
-    aocl_int64_t q_dim1, q_offset, u_dim1, u_offset, u2_dim1, u2_offset, vt_dim1, vt_offset,
-        vt2_dim1, vt2_offset, i__1, i__2;
+    integer q_dim1, q_offset, u_dim1, u_offset, u2_dim1, u2_offset, vt_dim1, vt_offset, vt2_dim1,
+        vt2_offset, i__1, i__2;
     real r__1, r__2;
     /* Builtin functions */
     double sqrt(doublereal), r_sign(real *, real *);
@@ -267,13 +269,21 @@ void aocl_lapack_slasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     extern real snrm2_(integer *, real *, integer *);
     integer ctemp;
     extern /* Subroutine */
-    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *);
     integer ktemp;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     extern real slamc3_(real *, real *);
     extern /* Subroutine */
-    void slasd4_(integer *, integer *, real *, real *, real *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+        void
+        slasd4_(integer *, integer *, real *, real *, real *, real *, real *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
+                integer *, integer *),
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -368,7 +378,7 @@ void aocl_lapack_slasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     {
         d__[1] = f2c_abs(z__[1]);
         scopy_(&m, &vt2[vt2_dim1 + 1], ldvt2, &vt[vt_dim1 + 1], ldvt);
-        if (z__[1] > 0.f)
+        if(z__[1] > 0.f)
         {
             aocl_blas_scopy(&n, &u2[u2_dim1 + 1], &c__1, &u[u_dim1 + 1], &c__1);
         }
@@ -401,9 +411,7 @@ void aocl_lapack_slasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     /* 2*DSIGMA(I) to prevent optimizing compilers from eliminating */
     /* this code. */
     i__1 = *k;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         dsigma[i__] = slamc3_(&dsigma[i__], &dsigma[i__]) - dsigma[i__];
         /* L20: */
@@ -418,9 +426,9 @@ void aocl_lapack_slasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     i__1 = *k;
     for(j = 1; j <= i__1; ++j)
     {
-        aocl_lapack_slasd4(k, &j, &dsigma[1], &z__[1], &u[j * u_dim1 + 1], &rho, &d__[j],
-                           &vt[j * vt_dim1 + 1], info);
-        /* If the zero finder fails, report the convergence failure. */
+        slasd4_(k, &j, &dsigma[1], &z__[1], &u[j * u_dim1 + 1], &rho, &d__[j], &vt[j * vt_dim1 + 1],
+                info);
+        /* If the zero finder fails, the computation is terminated. */
         if(*info != 0)
         {
             return;
@@ -478,27 +486,26 @@ void aocl_lapack_slasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     /* Update the left singular vector matrix. */
     if(*k == 2)
     {
-        aocl_blas_sgemm("N", "N", &n, k, k, &c_b12, &u2[u2_offset], ldu2, &q[q_offset], ldq, &c_b25,
-                        &u[u_offset], ldu);
+        sgemm_("N", "N", &n, k, k, &c_b13, &u2[u2_offset], ldu2, &q[q_offset], ldq, &c_b26,
+               &u[u_offset], ldu);
         goto L100;
     }
     if(ctot[1] > 0)
     {
-        ctot_sca = ctot[1];
-        aocl_blas_sgemm("N", "N", nl, k, &ctot_sca, &c_b12, &u2[(u2_dim1 << 1) + 1], ldu2,
-                        &q[q_dim1 + 2], ldq, &c_b25, &u[u_dim1 + 1], ldu);
+        sgemm_("N", "N", nl, k, &ctot[1], &c_b13, &u2[(u2_dim1 << 1) + 1], ldu2, &q[q_dim1 + 2],
+               ldq, &c_b26, &u[u_dim1 + 1], ldu);
         if(ctot[3] > 0)
         {
             ktemp = ctot[1] + 2 + ctot[2];
-            sgemm_("N", "N", nl, k, &ctot[3], &c_b13, &u2[ktemp * u2_dim1 + 1], ldu2, &q[ktemp + q_dim1], ldq, &c_b13, &u[u_dim1 + 1], ldu);
+            sgemm_("N", "N", nl, k, &ctot[3], &c_b13, &u2[ktemp * u2_dim1 + 1], ldu2,
+                   &q[ktemp + q_dim1], ldq, &c_b13, &u[u_dim1 + 1], ldu);
         }
     }
     else if(ctot[3] > 0)
     {
         ktemp = ctot[1] + 2 + ctot[2];
-        ctot_sca = ctot[3];
-        aocl_blas_sgemm("N", "N", nl, k, &ctot_sca, &c_b12, &u2[ktemp * u2_dim1 + 1], ldu2,
-                        &q[ktemp + q_dim1], ldq, &c_b25, &u[u_dim1 + 1], ldu);
+        sgemm_("N", "N", nl, k, &ctot[3], &c_b13, &u2[ktemp * u2_dim1 + 1], ldu2,
+               &q[ktemp + q_dim1], ldq, &c_b26, &u[u_dim1 + 1], ldu);
     }
     else
     {
@@ -507,9 +514,9 @@ void aocl_lapack_slasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     aocl_blas_scopy(k, &q[q_dim1 + 1], ldq, &u[nlp1 + u_dim1], ldu);
     ktemp = ctot[1] + 2;
     ctemp = ctot[2] + ctot[3];
-    aocl_blas_sgemm("N", "N", nr, k, &ctemp, &c_b12, &u2[nlp2 + ktemp * u2_dim1], ldu2,
-                    &q[ktemp + q_dim1], ldq, &c_b25, &u[nlp2 + u_dim1], ldu);
-/* Generate the right singular vectors. */
+    sgemm_("N", "N", nr, k, &ctemp, &c_b13, &u2[nlp2 + ktemp * u2_dim1], ldu2, &q[ktemp + q_dim1],
+           ldq, &c_b26, &u[nlp2 + u_dim1], ldu);
+    /* Generate the right singular vectors. */
 L100:
     i__1 = *k;
     for(i__ = 1; i__ <= i__1; ++i__)
@@ -528,18 +535,18 @@ L100:
     /* Update the right singular vector matrix. */
     if(*k == 2)
     {
-        sgemm_("N", "N", k, &m, k, &c_b13, &q[q_offset], ldq, &vt2[vt2_offset], ldvt2, &c_b26, &vt[vt_offset], ldvt);
+        sgemm_("N", "N", k, &m, k, &c_b13, &q[q_offset], ldq, &vt2[vt2_offset], ldvt2, &c_b26,
+               &vt[vt_offset], ldvt);
         return;
     }
     ktemp = ctot[1] + 1;
-    aocl_blas_sgemm("N", "N", k, &nlp1, &ktemp, &c_b12, &q[q_dim1 + 1], ldq, &vt2[vt2_dim1 + 1],
-                    ldvt2, &c_b25, &vt[vt_dim1 + 1], ldvt);
+    sgemm_("N", "N", k, &nlp1, &ktemp, &c_b13, &q[q_dim1 + 1], ldq, &vt2[vt2_dim1 + 1], ldvt2,
+           &c_b26, &vt[vt_dim1 + 1], ldvt);
     ktemp = ctot[1] + 2 + ctot[2];
     if(ktemp <= *ldvt2)
     {
-        ctot_sca = ctot[3];
-        aocl_blas_sgemm("N", "N", k, &nlp1, &ctot_sca, &c_b12, &q[ktemp * q_dim1 + 1], ldq,
-                        &vt2[ktemp + vt2_dim1], ldvt2, &c_b12, &vt[vt_dim1 + 1], ldvt);
+        sgemm_("N", "N", k, &nlp1, &ctot[3], &c_b13, &q[ktemp * q_dim1 + 1], ldq,
+               &vt2[ktemp + vt2_dim1], ldvt2, &c_b13, &vt[vt_dim1 + 1], ldvt);
     }
     ktemp = ctot[1] + 1;
     nrp1 = *nr + *sqre;
@@ -559,7 +566,8 @@ L100:
         }
     }
     ctemp = ctot[2] + 1 + ctot[3];
-    sgemm_("N", "N", k, &nrp1, &ctemp, &c_b13, &q[ktemp * q_dim1 + 1], ldq, & vt2[ktemp + nlp2 * vt2_dim1], ldvt2, &c_b26, &vt[nlp2 * vt_dim1 + 1], ldvt);
+    sgemm_("N", "N", k, &nrp1, &ctemp, &c_b13, &q[ktemp * q_dim1 + 1], ldq,
+           &vt2[ktemp + nlp2 * vt2_dim1], ldvt2, &c_b26, &vt[nlp2 * vt_dim1 + 1], ldvt);
     return;
     /* End of SLASD3 */
 }

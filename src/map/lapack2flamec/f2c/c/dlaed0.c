@@ -9,7 +9,7 @@ static aocl_int64_t c__0 = 0;
 static aocl_int64_t c__2 = 2;
 static doublereal c_b23 = 1.;
 static doublereal c_b24 = 0.;
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b DLAED0 used by sstedc. Computes all eigenvalues and corresponding eigenvectors of an
  * unreduced symmetric tridiagonal matrix using the divide and conquer method. */
 /* =========== DOCUMENTATION =========== */
@@ -173,10 +173,14 @@ static aocl_int64_t c__1 = 1;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void dlaed0_(integer *icompq, integer *qsiz, integer *n, doublereal *d__, doublereal *e, doublereal *q, integer *ldq, doublereal *qstore, integer *ldqs, doublereal *work, integer *iwork, integer *info)
+void dlaed0_(integer *icompq, integer *qsiz, integer *n, doublereal *d__, doublereal *e,
+             doublereal *q, integer *ldq, doublereal *qstore, integer *ldqs, doublereal *work,
+             integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaed0 inputs: icompq %" FLA_IS ", qsiz %" FLA_IS ", n %" FLA_IS ", ldq %" FLA_IS ", ldqs %" FLA_IS "",*icompq, *qsiz, *n, *ldq, *ldqs);
+    AOCL_DTL_SNPRINTF("dlaed0 inputs: icompq %" FLA_IS ", qsiz %" FLA_IS ", n %" FLA_IS
+                      ", ldq %" FLA_IS ", ldqs %" FLA_IS "",
+                      *icompq, *qsiz, *n, *ldq, *ldqs);
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, qstore_dim1, qstore_offset, i__1, i__2;
     doublereal d__1;
@@ -188,26 +192,39 @@ void dlaed0_(integer *icompq, integer *qsiz, integer *n, doublereal *d__, double
     doublereal temp;
     integer curr;
     extern /* Subroutine */
-    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer iperm;
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer indxq, iwrem;
     extern /* Subroutine */
-    void dlaed1_(integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dlaed1_(integer *, doublereal *, doublereal *, integer *, integer *, doublereal *,
+                integer *, doublereal *, integer *, integer *);
     integer iqptr;
     extern /* Subroutine */
-    void dlaed7_(integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *);
+        void
+        dlaed7_(integer *, integer *, integer *, integer *, integer *, integer *, doublereal *,
+                doublereal *, integer *, integer *, doublereal *, integer *, doublereal *,
+                integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *,
+                integer *, integer *);
     integer tlvls;
     extern /* Subroutine */
-    void dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     integer igivcl;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer igivnm, submat, curprb, subpbs, igivpt;
     extern /* Subroutine */
-    void dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *,
+                doublereal *, integer *);
     integer curlvl, matsiz, iprmpt, smlsiz;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -250,11 +267,11 @@ void dlaed0_(integer *icompq, integer *qsiz, integer *n, doublereal *d__, double
     iwrem = 0;
     iperm = 0;
     iq = 0;
-    if (*icompq < 0 || *icompq > 2)
+    if(*icompq < 0 || *icompq > 2)
     {
         *info = -1;
     }
-    else if (*icompq == 1 && *qsiz < fla_max(0,*n))
+    else if(*icompq == 1 && *qsiz < fla_max(0, *n))
     {
         *info = -2;
     }
@@ -262,11 +279,11 @@ void dlaed0_(integer *icompq, integer *qsiz, integer *n, doublereal *d__, double
     {
         *info = -3;
     }
-    else if (*ldq < fla_max(1,*n))
+    else if(*ldq < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldqs < fla_max(1,*n))
+    else if(*ldqs < fla_max(1, *n))
     {
         *info = -9;
     }
@@ -373,8 +390,8 @@ L10:
         }
         if(*icompq == 2)
         {
-            aocl_lapack_dsteqr("I", &matsiz, &d__[submat], &e[submat], &q[submat + submat * q_dim1],
-                               ldq, &work[1], info);
+            dsteqr_("I", &matsiz, &d__[submat], &e[submat], &q[submat + submat * q_dim1], ldq,
+                    &work[1], info);
             if(*info != 0)
             {
                 goto L130;
@@ -382,17 +399,17 @@ L10:
         }
         else
         {
-            aocl_lapack_dsteqr("I", &matsiz, &d__[submat], &e[submat],
-                               &work[iq - 1 + iwork[iqptr + curr]], &matsiz, &work[1], info);
+            dsteqr_("I", &matsiz, &d__[submat], &e[submat], &work[iq - 1 + iwork[iqptr + curr]],
+                    &matsiz, &work[1], info);
             if(*info != 0)
             {
                 goto L130;
             }
             if(*icompq == 1)
             {
-                aocl_blas_dgemm("N", "N", qsiz, &matsiz, &matsiz, &c_b23, &q[submat * q_dim1 + 1],
-                                ldq, &work[iq - 1 + iwork[iqptr + curr]], &matsiz, &c_b24,
-                                &qstore[submat * qstore_dim1 + 1], ldqs);
+                dgemm_("N", "N", qsiz, &matsiz, &matsiz, &c_b23, &q[submat * q_dim1 + 1], ldq,
+                       &work[iq - 1 + iwork[iqptr + curr]], &matsiz, &c_b24,
+                       &qstore[submat * qstore_dim1 + 1], ldqs);
             }
             /* Computing 2nd power */
             i__2 = matsiz;
@@ -443,13 +460,17 @@ L80:
             /* tridiagonal form) are desired. */
             if(*icompq == 2)
             {
-                aocl_lapack_dlaed1(&matsiz, &d__[submat], &q[submat + submat * q_dim1], ldq,
-                                   &iwork[indxq + submat], &e[submat + msd2 - 1], &msd2, &work[1],
-                                   &iwork[subpbs + 1], info);
+                dlaed1_(&matsiz, &d__[submat], &q[submat + submat * q_dim1], ldq,
+                        &iwork[indxq + submat], &e[submat + msd2 - 1], &msd2, &work[1],
+                        &iwork[subpbs + 1], info);
             }
             else
             {
-                dlaed7_(icompq, &matsiz, qsiz, &tlvls, &curlvl, &curprb, &d__[ submat], &qstore[submat * qstore_dim1 + 1], ldqs, & iwork[indxq + submat], &e[submat + msd2 - 1], &msd2, & work[iq], &iwork[iqptr], &iwork[iprmpt], &iwork[iperm], &iwork[igivpt], &iwork[igivcl], &work[igivnm], & work[iwrem], &iwork[subpbs + 1], info);
+                dlaed7_(icompq, &matsiz, qsiz, &tlvls, &curlvl, &curprb, &d__[submat],
+                        &qstore[submat * qstore_dim1 + 1], ldqs, &iwork[indxq + submat],
+                        &e[submat + msd2 - 1], &msd2, &work[iq], &iwork[iqptr], &iwork[iprmpt],
+                        &iwork[iperm], &iwork[igivpt], &iwork[igivcl], &work[igivnm], &work[iwrem],
+                        &iwork[subpbs + 1], info);
             }
             if(*info != 0)
             {

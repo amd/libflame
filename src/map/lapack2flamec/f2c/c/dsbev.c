@@ -5,7 +5,7 @@
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b11 = 1.;
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief <b> DSBEV computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for OTHER m atrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -84,7 +84,7 @@ static aocl_int64_t c__1 = 1;
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > */
 /* > On exit, AB is overwritten by values generated during the */
@@ -148,10 +148,13 @@ i */
 /* > \ingroup doubleOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void dsbev_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab, doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *info)
+void dsbev_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab,
+            doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsbev inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS ", ldz %" FLA_IS "",*jobz, *uplo, *n, *kd, *ldab, *ldz);
+    AOCL_DTL_SNPRINTF("dsbev inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS
+                      ", ldz %" FLA_IS "",
+                      *jobz, *uplo, *n, *kd, *ldab, *ldz);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, z_dim1, z_offset, i__1;
     doublereal d__1;
@@ -164,7 +167,8 @@ void dsbev_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, int
     aocl_int64_t imax;
     doublereal rmin, rmax;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
     extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
@@ -172,17 +176,26 @@ void dsbev_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, int
     extern doublereal dlamch_(char *);
     integer iscale;
     extern /* Subroutine */
-    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
-    extern doublereal dlansb_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *);
+        void
+        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *);
+    extern doublereal dlansb_(char *, char *, integer *, integer *, doublereal *, integer *,
+                              doublereal *);
     doublereal safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern /* Subroutine */
-    void dsbtrd_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsterf_( integer *, doublereal *, doublereal *, integer *);
+        void
+        dsbtrd_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, doublereal *, integer *, doublereal *, integer *),
+        dsterf_(integer *, doublereal *, doublereal *, integer *);
     integer indwrk;
     extern /* Subroutine */
-    void dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *,
+                doublereal *, integer *);
     doublereal smlnum;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -218,11 +231,11 @@ void dsbev_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, int
     wantz = lsame_(jobz, "V", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (lower || lsame_(uplo, "U", 1, 1)))
+    else if(!(lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -2;
     }
@@ -306,8 +319,8 @@ void dsbev_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, int
     /* Call DSBTRD to reduce symmetric band matrix to tridiagonal form. */
     inde = 1;
     indwrk = inde + *n;
-    aocl_lapack_dsbtrd(jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &work[inde], &z__[z_offset],
-                       ldz, &work[indwrk], &iinfo);
+    dsbtrd_(jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &work[inde], &z__[z_offset], ldz,
+            &work[indwrk], &iinfo);
     /* For eigenvalues only, call DSTERF. For eigenvectors, call SSTEQR. */
     if(!wantz)
     {
@@ -315,7 +328,7 @@ void dsbev_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, int
     }
     else
     {
-        aocl_lapack_dsteqr(jobz, n, &w[1], &work[inde], &z__[z_offset], ldz, &work[indwrk], info);
+        dsteqr_(jobz, n, &w[1], &work[inde], &z__[z_offset], ldz, &work[indwrk], info);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)

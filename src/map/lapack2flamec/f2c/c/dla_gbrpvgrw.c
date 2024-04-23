@@ -110,12 +110,13 @@
 /* > \date September 2012 */
 /* > \ingroup doubleGBcomputational */
 /* ===================================================================== */
-/** Generated wrapper function */
-doublereal dla_gbrpvgrw_(aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int_t *ncols,
-                         doublereal *ab, aocl_int_t *ldab, doublereal *afb, aocl_int_t *ldafb)
+doublereal dla_gbrpvgrw_(integer *n, integer *kl, integer *ku, integer *ncols, doublereal *ab,
+                         integer *ldab, doublereal *afb, integer *ldafb)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dla_gbrpvgrw inputs: n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ncols %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS "",*n, *kl, *ku, *ncols, *ldab, *ldafb);
+    AOCL_DTL_SNPRINTF("dla_gbrpvgrw inputs: n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
+                      ", ncols %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS "",
+                      *n, *kl, *ku, *ncols, *ldab, *ldafb);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, afb_dim1, afb_offset, i__1, i__2, i__3, i__4;
     doublereal ret_val, d__1, d__2;
@@ -155,31 +156,27 @@ doublereal dla_gbrpvgrw_(aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int
         i__2 = j - *ku;
         /* Computing MIN */
         i__4 = j + *kl;
-        i__3 = fla_min(i__4,*n);
-        for (i__ = fla_max(i__2,1);
-                i__ <= i__3;
-                ++i__)
+        i__3 = fla_min(i__4, *n);
+        for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
         {
             /* Computing MAX */
             d__2 = (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_dabs(d__1));
-            amax = fla_max(d__2,amax);
+            amax = fla_max(d__2, amax);
         }
         /* Computing MAX */
         i__3 = j - *ku;
         i__2 = j;
-        for (i__ = fla_max(i__3,1);
-                i__ <= i__2;
-                ++i__)
+        for(i__ = fla_max(i__3, 1); i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             d__2 = (d__1 = afb[kd + i__ - j + j * afb_dim1], f2c_dabs(d__1));
-            umax = fla_max(d__2,umax);
+            umax = fla_max(d__2, umax);
         }
         if(umax != 0.)
         {
             /* Computing MIN */
             d__1 = amax / umax;
-            rpvgrw = fla_min(d__1,rpvgrw);
+            rpvgrw = fla_min(d__1, rpvgrw);
         }
     }
     ret_val = rpvgrw;

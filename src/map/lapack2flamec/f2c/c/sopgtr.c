@@ -1,7 +1,3 @@
-/*
- *     Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
- */
-
 /* ../netlib/sopgtr.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -114,7 +110,8 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sopgtr_(char *uplo, integer *n, real *ap, real *tau, real *q, integer *ldq, real *work, integer *info)
+void sopgtr_(char *uplo, integer *n, real *ap, real *tau, real *q, integer *ldq, real *work,
+             integer *info)
 {
     /* System generated locals */
     aocl_int64_t q_dim1, q_offset, i__1, i__2, i__3;
@@ -124,7 +121,10 @@ void sopgtr_(char *uplo, integer *n, real *ap, real *tau, real *q, integer *ldq,
     integer iinfo;
     logical upper;
     extern /* Subroutine */
-    void sorg2l_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *), sorg2r_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sorg2l_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *),
+        sorg2r_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -156,7 +156,7 @@ void sopgtr_(char *uplo, integer *n, real *ap, real *tau, real *q, integer *ldq,
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -164,7 +164,7 @@ void sopgtr_(char *uplo, integer *n, real *ap, real *tau, real *q, integer *ldq,
     {
         *info = -2;
     }
-    else if (*ldq < fla_max(1,*n))
+    else if(*ldq < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -211,7 +211,7 @@ void sopgtr_(char *uplo, integer *n, real *ap, real *tau, real *q, integer *ldq,
         i__1 = *n - 1;
         i__2 = *n - 1;
         i__3 = *n - 1;
-        aocl_lapack_sorg2l(&i__1, &i__2, &i__3, &q[q_offset], ldq, &tau[1], &work[1], &iinfo);
+        sorg2l_(&i__1, &i__2, &i__3, &q[q_offset], ldq, &tau[1], &work[1], &iinfo);
     }
     else
     {

@@ -147,12 +147,14 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup realPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ldz, real *work, integer *info)
+void spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ldz, real *work,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"spteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "",*compz, *n, *ldz);
+    snprintf(buffer, 256, "spteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "", *compz, *n,
+             *ldz);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -162,16 +164,21 @@ void spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
     /* Local variables */
     real c__[1] /* was [1][1] */
         ;
-    aocl_int64_t i__;
+    integer i__;
     real vt[1] /* was [1][1] */
-    ;
+        ;
     integer nru;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slaset_( char *, integer *, integer *, real *, real *, real *, integer *), sbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *),
+        sbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, real *,
+                integer *, real *, integer *, real *, integer *, real *, integer *);
     integer icompz;
     extern /* Subroutine */
-    void spttrf_(integer *, real *, real *, integer *);
+        void
+        spttrf_(integer *, real *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -204,15 +211,15 @@ void spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
     --work;
     /* Function Body */
     *info = 0;
-    if (lsame_(compz, "N", 1, 1))
+    if(lsame_(compz, "N", 1, 1))
     {
         icompz = 0;
     }
-    else if (lsame_(compz, "V", 1, 1))
+    else if(lsame_(compz, "V", 1, 1))
     {
         icompz = 1;
     }
-    else if (lsame_(compz, "I", 1, 1))
+    else if(lsame_(compz, "I", 1, 1))
     {
         icompz = 2;
     }
@@ -228,7 +235,7 @@ void spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
     {
         *info = -2;
     }
-    else if (*ldz < 1 || icompz > 0 && *ldz < fla_max(1,*n))
+    else if(*ldz < 1 || icompz > 0 && *ldz < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -259,7 +266,7 @@ void spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
         aocl_lapack_slaset("Full", n, n, &c_b7, &c_b8, &z__[z_offset], ldz);
     }
     /* Call SPTTRF to factor the matrix. */
-    aocl_lapack_spttrf(n, &d__[1], &e[1], info);
+    spttrf_(n, &d__[1], &e[1], info);
     if(*info != 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -287,8 +294,8 @@ void spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
     {
         nru = 0;
     }
-    aocl_lapack_sbdsqr("Lower", n, &c__0, &nru, &c__0, &d__[1], &e[1], vt, &c__1, &z__[z_offset],
-                       ldz, c__, &c__1, &work[1], info);
+    sbdsqr_("Lower", n, &c__0, &nru, &c__0, &d__[1], &e[1], vt, &c__1, &z__[z_offset], ldz, c__,
+            &c__1, &work[1], info);
     /* Square the singular values. */
     if(*info == 0)
     {

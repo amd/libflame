@@ -100,10 +100,10 @@
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dtrttp_(char *uplo, integer *n, doublereal *a, integer * lda, doublereal *ap, integer *info)
+void dtrttp_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *ap, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dtrttp inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
+    AOCL_DTL_SNPRINTF("dtrttp inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -111,7 +111,8 @@ void dtrttp_(char *uplo, integer *n, doublereal *a, integer * lda, doublereal *a
     extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -139,7 +140,7 @@ void dtrttp_(char *uplo, integer *n, doublereal *a, integer * lda, doublereal *a
     /* Function Body */
     *info = 0;
     lower = lsame_(uplo, "L", 1, 1);
-    if (! lower && ! lsame_(uplo, "U", 1, 1))
+    if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -1;
     }
@@ -147,7 +148,7 @@ void dtrttp_(char *uplo, integer *n, doublereal *a, integer * lda, doublereal *a
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }

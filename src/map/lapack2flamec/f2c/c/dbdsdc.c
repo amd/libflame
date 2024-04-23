@@ -1,5 +1,8 @@
-/* ../netlib/dbdsdc.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dbdsdc.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__9 = 9;
 static integer c__0 = 0;
@@ -12,11 +15,17 @@ static doublereal c_b29 = 0.;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DBDSDC + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dbdsdc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dbdsdc.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dbdsdc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dbdsdc.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dbdsdc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dbdsdc.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -71,10 +80,10 @@ static doublereal c_b29 = 0.;
 /* > Specifies whether singular vectors are to be computed */
 /* > as follows: */
 /* > = 'N': Compute singular values only;
-*/
+ */
 /* > = 'P': Compute singular values and compute singular */
 /* > vectors in compact form;
-*/
+ */
 /* > = 'I': Compute singular values and singular vectors. */
 /* > \endverbatim */
 /* > */
@@ -198,10 +207,14 @@ static doublereal c_b29 = 0.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dbdsdc_(char *uplo, char *compq, integer *n, doublereal * d__, doublereal *e, doublereal *u, integer *ldu, doublereal *vt, integer *ldvt, doublereal *q, integer *iq, doublereal *work, integer * iwork, integer *info)
+void dbdsdc_(char *uplo, char *compq, integer *n, doublereal *d__, doublereal *e, doublereal *u,
+             integer *ldu, doublereal *vt, integer *ldvt, doublereal *q, integer *iq,
+             doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dbdsdc inputs: uplo %c, compq %c, n %" FLA_IS ", ldu %" FLA_IS ", ldvt %" FLA_IS "",*uplo, *compq, *n, *ldu, *ldvt);
+    AOCL_DTL_SNPRINTF("dbdsdc inputs: uplo %c, compq %c, n %" FLA_IS ", ldu %" FLA_IS
+                      ", ldvt %" FLA_IS "",
+                      *uplo, *compq, *n, *ldu, *ldvt);
     /* System generated locals */
     integer u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
     doublereal d__1;
@@ -219,16 +232,34 @@ void dbdsdc_(char *uplo, char *compq, integer *n, doublereal * d__, doublereal *
     integer ivt, difl, difr, ierr, perm, mlvl, sqre;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
+               doublereal *, integer *),
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer poles, iuplo, nsize, start;
     extern /* Subroutine */
-    void dlasd0_(integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *);
+        void
+        dlasd0_(integer *, integer *, doublereal *, doublereal *, doublereal *, integer *,
+                doublereal *, integer *, integer *, integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    void dlasda_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlasdq_(char *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlasda_(integer *, integer *, integer *, integer *, doublereal *, doublereal *,
+                doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, doublereal *, integer *, integer *, integer *, integer *,
+                doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *),
+        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *),
+        dlasdq_(char *, integer *, integer *, integer *, integer *, integer *, doublereal *,
+                doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+                integer *, doublereal *, integer *),
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
+        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer givcol;
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
     integer icompq;
@@ -283,23 +314,23 @@ void dbdsdc_(char *uplo, char *compq, integer *n, doublereal * d__, doublereal *
     is = 0;
     ic = 0;
     z__ = 0;
-    if (lsame_(uplo, "U", 1, 1))
+    if(lsame_(uplo, "U", 1, 1))
     {
         iuplo = 1;
     }
-    if (lsame_(uplo, "L", 1, 1))
+    if(lsame_(uplo, "L", 1, 1))
     {
         iuplo = 2;
     }
-    if (lsame_(compq, "N", 1, 1))
+    if(lsame_(compq, "N", 1, 1))
     {
         icompq = 0;
     }
-    else if (lsame_(compq, "P", 1, 1))
+    else if(lsame_(compq, "P", 1, 1))
     {
         icompq = 1;
     }
-    else if (lsame_(compq, "I", 1, 1))
+    else if(lsame_(compq, "I", 1, 1))
     {
         icompq = 2;
     }
@@ -307,27 +338,27 @@ void dbdsdc_(char *uplo, char *compq, integer *n, doublereal * d__, doublereal *
     {
         icompq = -1;
     }
-    if (iuplo == 0)
+    if(iuplo == 0)
     {
         *info = -1;
     }
-    else if (icompq < 0)
+    else if(icompq < 0)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*ldu < 1 || icompq == 2 && *ldu < *n)
+    else if(*ldu < 1 || icompq == 2 && *ldu < *n)
     {
         *info = -7;
     }
-    else if (*ldvt < 1 || icompq == 2 && *ldvt < *n)
+    else if(*ldvt < 1 || icompq == 2 && *ldvt < *n)
     {
         *info = -9;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DBDSDC", &i__1, (ftnlen)6);
@@ -335,20 +366,20 @@ void dbdsdc_(char *uplo, char *compq, integer *n, doublereal * d__, doublereal *
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     smlsiz = ilaenv_(&c__9, "DBDSDC", " ", &c__0, &c__0, &c__0, &c__0);
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (icompq == 1)
+        if(icompq == 1)
         {
             q[1] = d_sign(&c_b15, &d__[1]);
             q[smlsiz * *n + 1] = 1.;
         }
-        else if (icompq == 2)
+        else if(icompq == 2)
         {
             u[u_dim1 + 1] = d_sign(&c_b15, &d__[1]);
             vt[vt_dim1 + 1] = 1.;
@@ -362,34 +393,32 @@ void dbdsdc_(char *uplo, char *compq, integer *n, doublereal * d__, doublereal *
     /* by applying Givens rotations on the left */
     wstart = 1;
     qstart = 3;
-    if (icompq == 1)
+    if(icompq == 1)
     {
         dcopy_(n, &d__[1], &c__1, &q[1], &c__1);
         i__1 = *n - 1;
         dcopy_(&i__1, &e[1], &c__1, &q[*n + 1], &c__1);
     }
-    if (iuplo == 2)
+    if(iuplo == 2)
     {
         qstart = 5;
-        if (icompq == 2)
+        if(icompq == 2)
         {
             wstart = (*n << 1) - 1;
         }
         i__1 = *n - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             dlartg_(&d__[i__], &e[i__], &cs, &sn, &r__);
             d__[i__] = r__;
             e[i__] = sn * d__[i__ + 1];
             d__[i__ + 1] = cs * d__[i__ + 1];
-            if (icompq == 1)
+            if(icompq == 1)
             {
                 q[i__ + (*n << 1)] = cs;
                 q[i__ + *n * 3] = sn;
             }
-            else if (icompq == 2)
+            else if(icompq == 2)
             {
                 work[i__] = cs;
                 work[nm1 + i__] = -sn;
@@ -398,52 +427,56 @@ void dbdsdc_(char *uplo, char *compq, integer *n, doublereal * d__, doublereal *
         }
     }
     /* If ICOMPQ = 0, use DLASDQ to compute the singular values. */
-    if (icompq == 0)
+    if(icompq == 0)
     {
         /* Ignore WSTART, instead using WORK( 1 ), since the two vectors */
         /* for CS and -SN above are added only if ICOMPQ == 2, */
         /* and adding them exceeds documented WORK size of 4*n. */
-        dlasdq_("U", &c__0, n, &c__0, &c__0, &c__0, &d__[1], &e[1], &vt[ vt_offset], ldvt, &u[u_offset], ldu, &u[u_offset], ldu, &work[ 1], info);
+        dlasdq_("U", &c__0, n, &c__0, &c__0, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt,
+                &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
         goto L40;
     }
     /* If N is smaller than the minimum divide size SMLSIZ, then solve */
     /* the problem with another solver. */
-    if (*n <= smlsiz)
+    if(*n <= smlsiz)
     {
-        if (icompq == 2)
+        if(icompq == 2)
         {
             dlaset_("A", n, n, &c_b29, &c_b15, &u[u_offset], ldu);
             dlaset_("A", n, n, &c_b29, &c_b15, &vt[vt_offset], ldvt);
-            dlasdq_("U", &c__0, n, n, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt, &u[u_offset], ldu, &u[u_offset], ldu, &work[ wstart], info);
+            dlasdq_("U", &c__0, n, n, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt, &u[u_offset],
+                    ldu, &u[u_offset], ldu, &work[wstart], info);
         }
-        else if (icompq == 1)
+        else if(icompq == 1)
         {
             iu = 1;
             ivt = iu + *n;
             dlaset_("A", n, n, &c_b29, &c_b15, &q[iu + (qstart - 1) * *n], n);
             dlaset_("A", n, n, &c_b29, &c_b15, &q[ivt + (qstart - 1) * *n], n);
-            dlasdq_("U", &c__0, n, n, n, &c__0, &d__[1], &e[1], &q[ivt + ( qstart - 1) * *n], n, &q[iu + (qstart - 1) * *n], n, &q[ iu + (qstart - 1) * *n], n, &work[wstart], info);
+            dlasdq_("U", &c__0, n, n, n, &c__0, &d__[1], &e[1], &q[ivt + (qstart - 1) * *n], n,
+                    &q[iu + (qstart - 1) * *n], n, &q[iu + (qstart - 1) * *n], n, &work[wstart],
+                    info);
         }
         goto L40;
     }
-    if (icompq == 2)
+    if(icompq == 2)
     {
         dlaset_("A", n, n, &c_b29, &c_b15, &u[u_offset], ldu);
         dlaset_("A", n, n, &c_b29, &c_b15, &vt[vt_offset], ldvt);
     }
     /* Scale. */
     orgnrm = dlanst_("M", n, &d__[1], &e[1]);
-    if (orgnrm == 0.)
+    if(orgnrm == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     dlascl_("G", &c__0, &c__0, &orgnrm, &c_b15, n, &c__1, &d__[1], n, &ierr);
-    dlascl_("G", &c__0, &c__0, &orgnrm, &c_b15, &nm1, &c__1, &e[1], &nm1, & ierr);
+    dlascl_("G", &c__0, &c__0, &orgnrm, &c_b15, &nm1, &c__1, &e[1], &nm1, &ierr);
     eps = dlamch_("Epsilon") * .9;
-    mlvl = (integer) (log((doublereal) (*n) / (doublereal) (smlsiz + 1)) / log(2.)) + 1;
+    mlvl = (integer)(log((doublereal)(*n) / (doublereal)(smlsiz + 1)) / log(2.)) + 1;
     smlszp = smlsiz + 1;
-    if (icompq == 1)
+    if(icompq == 1)
     {
         iu = 1;
         ivt = smlsiz + 1;
@@ -460,11 +493,9 @@ void dbdsdc_(char *uplo, char *compq, integer *n, doublereal * d__, doublereal *
         givcol = perm + mlvl;
     }
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((d__1 = d__[i__], f2c_abs(d__1)) < eps)
+        if((d__1 = d__[i__], f2c_abs(d__1)) < eps)
         {
             d__[i__] = d_sign(&eps, &d__[i__]);
         }
@@ -473,20 +504,18 @@ void dbdsdc_(char *uplo, char *compq, integer *n, doublereal * d__, doublereal *
     start = 1;
     sqre = 0;
     i__1 = nm1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((d__1 = e[i__], f2c_abs(d__1)) < eps || i__ == nm1)
+        if((d__1 = e[i__], f2c_abs(d__1)) < eps || i__ == nm1)
         {
             /* Subproblem found. First determine its size and then */
             /* apply divide and conquer on it. */
-            if (i__ < nm1)
+            if(i__ < nm1)
             {
                 /* A subproblem with E(I) small for I < NM1. */
                 nsize = i__ - start + 1;
             }
-            else if ((d__1 = e[i__], f2c_abs(d__1)) >= eps)
+            else if((d__1 = e[i__], f2c_abs(d__1)) >= eps)
             {
                 /* A subproblem with E(NM1) not too small but I = NM1. */
                 nsize = *n - start + 1;
@@ -497,27 +526,36 @@ void dbdsdc_(char *uplo, char *compq, integer *n, doublereal * d__, doublereal *
                 /* 1-by-1 subproblem at D(N). Solve this 1-by-1 problem */
                 /* first. */
                 nsize = i__ - start + 1;
-                if (icompq == 2)
+                if(icompq == 2)
                 {
                     u[*n + *n * u_dim1] = d_sign(&c_b15, &d__[*n]);
                     vt[*n + *n * vt_dim1] = 1.;
                 }
-                else if (icompq == 1)
+                else if(icompq == 1)
                 {
                     q[*n + (qstart - 1) * *n] = d_sign(&c_b15, &d__[*n]);
                     q[*n + (smlsiz + qstart - 1) * *n] = 1.;
                 }
                 d__[*n] = (d__1 = d__[*n], f2c_abs(d__1));
             }
-            if (icompq == 2)
+            if(icompq == 2)
             {
-                dlasd0_(&nsize, &sqre, &d__[start], &e[start], &u[start + start * u_dim1], ldu, &vt[start + start * vt_dim1], ldvt, &smlsiz, &iwork[1], &work[wstart], info);
+                dlasd0_(&nsize, &sqre, &d__[start], &e[start], &u[start + start * u_dim1], ldu,
+                        &vt[start + start * vt_dim1], ldvt, &smlsiz, &iwork[1], &work[wstart],
+                        info);
             }
             else
             {
-                dlasda_(&icompq, &smlsiz, &nsize, &sqre, &d__[start], &e[ start], &q[start + (iu + qstart - 2) * *n], n, &q[ start + (ivt + qstart - 2) * *n], &iq[start + k * *n], &q[start + (difl + qstart - 2) * *n], &q[start + ( difr + qstart - 2) * *n], &q[start + (z__ + qstart - 2) * *n], &q[start + (poles + qstart - 2) * *n], &iq[ start + givptr * *n], &iq[start + givcol * *n], n, & iq[start + perm * *n], &q[start + (givnum + qstart - 2) * *n], &q[start + (ic + qstart - 2) * *n], &q[ start + (is + qstart - 2) * *n], &work[wstart], & iwork[1], info);
+                dlasda_(&icompq, &smlsiz, &nsize, &sqre, &d__[start], &e[start],
+                        &q[start + (iu + qstart - 2) * *n], n, &q[start + (ivt + qstart - 2) * *n],
+                        &iq[start + k * *n], &q[start + (difl + qstart - 2) * *n],
+                        &q[start + (difr + qstart - 2) * *n], &q[start + (z__ + qstart - 2) * *n],
+                        &q[start + (poles + qstart - 2) * *n], &iq[start + givptr * *n],
+                        &iq[start + givcol * *n], n, &iq[start + perm * *n],
+                        &q[start + (givnum + qstart - 2) * *n], &q[start + (ic + qstart - 2) * *n],
+                        &q[start + (is + qstart - 2) * *n], &work[wstart], &iwork[1], info);
             }
-            if (*info != 0)
+            if(*info != 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
@@ -530,49 +568,45 @@ void dbdsdc_(char *uplo, char *compq, integer *n, doublereal * d__, doublereal *
     dlascl_("G", &c__0, &c__0, &c_b15, &orgnrm, n, &c__1, &d__[1], n, &ierr);
 L40: /* Use Selection Sort to minimize swaps of singular vectors */
     i__1 = *n;
-    for (ii = 2;
-            ii <= i__1;
-            ++ii)
+    for(ii = 2; ii <= i__1; ++ii)
     {
         i__ = ii - 1;
         kk = i__;
         p = d__[i__];
         i__2 = *n;
-        for (j = ii;
-                j <= i__2;
-                ++j)
+        for(j = ii; j <= i__2; ++j)
         {
-            if (d__[j] > p)
+            if(d__[j] > p)
             {
                 kk = j;
                 p = d__[j];
             }
             /* L50: */
         }
-        if (kk != i__)
+        if(kk != i__)
         {
             d__[kk] = d__[i__];
             d__[i__] = p;
-            if (icompq == 1)
+            if(icompq == 1)
             {
                 iq[i__] = kk;
             }
-            else if (icompq == 2)
+            else if(icompq == 2)
             {
-                dswap_(n, &u[i__ * u_dim1 + 1], &c__1, &u[kk * u_dim1 + 1], & c__1);
+                dswap_(n, &u[i__ * u_dim1 + 1], &c__1, &u[kk * u_dim1 + 1], &c__1);
                 dswap_(n, &vt[i__ + vt_dim1], ldvt, &vt[kk + vt_dim1], ldvt);
             }
         }
-        else if (icompq == 1)
+        else if(icompq == 1)
         {
             iq[i__] = i__;
         }
         /* L60: */
     }
     /* If ICOMPQ = 1, use IQ(N,1) as the indicator for UPLO */
-    if (icompq == 1)
+    if(icompq == 1)
     {
-        if (iuplo == 1)
+        if(iuplo == 1)
         {
             iq[*n] = 1;
         }
@@ -583,7 +617,7 @@ L40: /* Use Selection Sort to minimize swaps of singular vectors */
     }
     /* If B is lower bidiagonal, update U by those Givens rotations */
     /* which rotated B to be upper bidiagonal */
-    if (iuplo == 2 && icompq == 2)
+    if(iuplo == 2 && icompq == 2)
     {
         dlasr_("L", "V", "B", n, n, &work[1], &work[*n], &u[u_offset], ldu);
     }

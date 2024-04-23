@@ -6,7 +6,7 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b11 = 1.;
 static doublereal c_b18 = 0.;
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief <b> DSBEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for OTHER matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -94,7 +94,7 @@ static aocl_int64_t c__1 = 1;
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > */
 /* > On exit, AB is overwritten by values generated during the */
@@ -198,10 +198,14 @@ i */
 /* > \ingroup doubleOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void dsbevd_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab, doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+void dsbevd_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab,
+             doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *lwork,
+             integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsbevd inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*jobz, *uplo, *n, *kd, *ldab, *ldz, *lwork, *liwork);
+    AOCL_DTL_SNPRINTF("dsbevd inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS
+                      ", ldab %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",
+                      *jobz, *uplo, *n, *kd, *ldab, *ldz, *lwork, *liwork);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, z_dim1, z_offset, i__1;
     doublereal d__1;
@@ -212,7 +216,10 @@ void dsbevd_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, in
     aocl_int64_t inde;
     doublereal anrm, rmin, rmax;
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *),
+        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
     extern logical lsame_(char *, char *, integer, integer);
     integer iinfo, lwmin;
@@ -221,16 +228,26 @@ void dsbevd_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, in
     extern doublereal dlamch_(char *);
     integer iscale;
     extern /* Subroutine */
-    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
-    extern doublereal dlansb_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *);
+        void
+        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *);
+    extern doublereal dlansb_(char *, char *, integer *, integer *, doublereal *, integer *,
+                              doublereal *);
     extern /* Subroutine */
-    void dstedc_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dstedc_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *,
+                doublereal *, integer *, integer *, integer *, integer *),
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern /* Subroutine */
-    void dsbtrd_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsterf_( integer *, doublereal *, doublereal *, integer *);
+        void
+        dsbtrd_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, doublereal *, integer *, doublereal *, integer *),
+        dsterf_(integer *, doublereal *, doublereal *, integer *);
     integer indwrk, liwmin;
     doublereal smlnum;
     logical lquery;
@@ -290,11 +307,11 @@ void dsbevd_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, in
             lwmin = *n << 1;
         }
     }
-    if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (lower || lsame_(uplo, "U", 1, 1)))
+    else if(!(lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -2;
     }
@@ -317,7 +334,7 @@ void dsbevd_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, in
     if(*info == 0)
     {
         work[1] = (doublereal)lwmin;
-        iwork[1] = (aocl_int_t)(liwmin);
+        iwork[1] = liwmin;
         if(*lwork < lwmin && !lquery)
         {
             *info = -11;
@@ -391,8 +408,8 @@ void dsbevd_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, in
     indwrk = inde + *n;
     indwk2 = indwrk + *n * *n;
     llwrk2 = *lwork - indwk2 + 1;
-    aocl_lapack_dsbtrd(jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &work[inde], &z__[z_offset],
-                       ldz, &work[indwrk], &iinfo);
+    dsbtrd_(jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &work[inde], &z__[z_offset], ldz,
+            &work[indwrk], &iinfo);
     /* For eigenvalues only, call DSTERF. For eigenvectors, call SSTEDC. */
     if(!wantz)
     {
@@ -400,11 +417,11 @@ void dsbevd_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, in
     }
     else
     {
-        aocl_lapack_dstedc("I", n, &w[1], &work[inde], &work[indwrk], n, &work[indwk2], &llwrk2,
-                           &iwork[1], liwork, info);
-        aocl_blas_dgemm("N", "N", n, n, n, &c_b11, &z__[z_offset], ldz, &work[indwrk], n, &c_b18,
-                        &work[indwk2], n);
-        aocl_lapack_dlacpy("A", n, n, &work[indwk2], n, &z__[z_offset], ldz);
+        dstedc_("I", n, &w[1], &work[inde], &work[indwrk], n, &work[indwk2], &llwrk2, &iwork[1],
+                liwork, info);
+        dgemm_("N", "N", n, n, n, &c_b11, &z__[z_offset], ldz, &work[indwrk], n, &c_b18,
+               &work[indwk2], n);
+        dlacpy_("A", n, n, &work[indwk2], n, &z__[z_offset], ldz);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)
@@ -412,7 +429,7 @@ void dsbevd_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, in
         d__1 = 1. / sigma;
         aocl_blas_dscal(n, &d__1, &w[1], &c__1);
     }
-    work[1] = (doublereal) lwmin;
+    work[1] = (doublereal)lwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
     return;

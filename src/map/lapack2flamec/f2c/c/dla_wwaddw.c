@@ -79,7 +79,7 @@
 void dla_wwaddw_(integer *n, doublereal *x, doublereal *y, doublereal *w)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dla_wwaddw inputs: n %" FLA_IS "",*n);
+    AOCL_DTL_SNPRINTF("dla_wwaddw inputs: n %" FLA_IS "", *n);
     /* System generated locals */
     aocl_int64_t i__1;
     /* Local variables */

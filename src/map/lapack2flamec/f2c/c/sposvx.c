@@ -304,12 +304,16 @@ if EQUED = 'Y', */
 /* > \ingroup realPOsolve */
 /* ===================================================================== */
 /* Subroutine */
-void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, integer *lda, real *af, integer *ldaf, char *equed, real *s, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork, integer *info)
+void sposvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *af,
+             integer *ldaf, char *equed, real *s, real *b, integer *ldb, real *x, integer *ldx,
+             real *rcond, real *ferr, real *berr, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sposvx inputs: fact %c, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
+    snprintf(buffer, 256,
+             "sposvx inputs: fact %c, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d",
+             *fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -325,15 +329,24 @@ void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer infequ;
     extern /* Subroutine */
-    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), spocon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
+        void
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
+        spocon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
     extern real slansy_(char *, char *, integer *, real *, integer *, real *);
     real smlnum;
     extern /* Subroutine */
-    void slaqsy_(char *, integer *, real *, integer *, real *, real *, real *, char *), spoequ_(integer *, real *, integer *, real *, real *, real *, integer *), sporfs_( char *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), spotrf_(char *, integer *, real *, integer *, integer *), spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
+        void
+        slaqsy_(char *, integer *, real *, integer *, real *, real *, real *, char *),
+        spoequ_(integer *, real *, integer *, real *, real *, real *, integer *),
+        sporfs_(char *, integer *, integer *, real *, integer *, real *, integer *, real *,
+                integer *, real *, integer *, real *, real *, real *, integer *, integer *),
+        spotrf_(char *, integer *, real *, integer *, integer *),
+        spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -378,7 +391,7 @@ void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
     equil = lsame_(fact, "E", 1, 1);
     smlnum = 0.f;
     bignum = 0.f;
-    if (nofact || equil)
+    if(nofact || equil)
     {
         *(unsigned char *)equed = 'N';
         rcequ = FALSE_;
@@ -390,11 +403,11 @@ void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
         bignum = 1.f / smlnum;
     }
     /* Test the input parameters. */
-    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    else if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -406,15 +419,15 @@ void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (lsame_(fact, "F", 1, 1) && ! (rcequ || lsame_(equed, "N", 1, 1)))
+    else if(lsame_(fact, "F", 1, 1) && !(rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -9;
     }
@@ -430,11 +443,11 @@ void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
                 /* Computing MIN */
                 r__1 = smin;
                 r__2 = s[j]; // , expr subst
-                smin = fla_min(r__1,r__2);
+                smin = fla_min(r__1, r__2);
                 /* Computing MAX */
                 r__1 = smax;
                 r__2 = s[j]; // , expr subst
-                smax = fla_max(r__1,r__2);
+                smax = fla_max(r__1, r__2);
                 /* L10: */
             }
             if(smin <= 0.f)
@@ -443,7 +456,7 @@ void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
             }
             else if(*n > 0)
             {
-                scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
+                scond = fla_max(smin, smlnum) / fla_min(smax, bignum);
             }
             else
             {
@@ -452,11 +465,11 @@ void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
         }
         if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -12;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -14;
             }
@@ -472,7 +485,7 @@ void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
     if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        aocl_lapack_spoequ(n, &a[a_offset], lda, &s[1], &scond, &amax, &infequ);
+        spoequ_(n, &a[a_offset], lda, &s[1], &scond, &amax, &infequ);
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
@@ -517,8 +530,8 @@ void sposvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *a, intege
     aocl_lapack_spotrs(uplo, n, nrhs, &af[af_offset], ldaf, &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    aocl_lapack_sporfs(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &b[b_offset], ldb,
-                       &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
+    sporfs_(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &b[b_offset], ldb, &x[x_offset],
+            ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(rcequ)

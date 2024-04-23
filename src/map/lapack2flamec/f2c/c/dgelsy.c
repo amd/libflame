@@ -1,8 +1,8 @@
-/* ./dgelsy.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dgelsy.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
@@ -208,10 +208,14 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dgelsy_(integer *m, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb, integer * jpvt, doublereal *rcond, integer *rank, doublereal *work, integer * lwork, integer *info)
+void dgelsy_(integer *m, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b,
+             integer *ldb, integer *jpvt, doublereal *rcond, integer *rank, doublereal *work,
+             integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgelsy inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*m, *n, *nrhs, *lda, *ldb);
+    AOCL_DTL_SNPRINTF("dgelsy inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS "",
+                      *m, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -222,28 +226,47 @@ void dgelsy_(integer *m, integer *n, integer *nrhs, doublereal *a, integer *lda,
     doublereal anrm, bnrm, smin, smax;
     integer iascl, ibscl;
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer ismin, ismax;
     extern /* Subroutine */
-    void dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlaic1_( integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *),
+        dlaic1_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *, doublereal *, doublereal *);
     doublereal wsize;
     extern /* Subroutine */
-    void dgeqp3_(integer *, integer *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *, integer *), dlabad_(doublereal *, doublereal *);
-    extern doublereal dlamch_(char *), dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
+        void
+        dgeqp3_(integer *, integer *, doublereal *, integer *, integer *, doublereal *,
+                doublereal *, integer *, integer *),
+        dlabad_(doublereal *, doublereal *);
+    extern doublereal dlamch_(char *),
+        dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
-    void dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *),
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     doublereal bignum;
     integer lwkmin;
     extern /* Subroutine */
-    void dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     doublereal sminpr, smaxpr, smlnum;
     extern /* Subroutine */
-    void dormrz_(char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dormrz_(char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    void dtzrzf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
+        void
+        dtzrzf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -273,7 +296,7 @@ void dgelsy_(integer *m, integer *n, integer *nrhs, doublereal *a, integer *lda,
     --jpvt;
     --work;
     /* Function Body */
-    mn = fla_min(*m,*n);
+    mn = fla_min(*m, *n);
     ismin = mn + 1;
     ismax = (mn << 1) + 1;
     /* Test the input arguments. */
@@ -291,15 +314,15 @@ void dgelsy_(integer *m, integer *n, integer *nrhs, doublereal *a, integer *lda,
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
     else /* if(complicated condition) */
     {
         /* Computing MAX */
-        i__1 = fla_max(1,*m);
-        if (*ldb < fla_max(i__1,*n))
+        i__1 = fla_max(1, *m);
+        if(*ldb < fla_max(i__1, *n))
         {
             *info = -7;
         }
@@ -319,19 +342,19 @@ void dgelsy_(integer *m, integer *n, integer *nrhs, doublereal *a, integer *lda,
             nb3 = aocl_lapack_ilaenv(&c__1, "DORMQR", " ", m, n, nrhs, &c_n1);
             nb4 = aocl_lapack_ilaenv(&c__1, "DORMRQ", " ", m, n, nrhs, &c_n1);
             /* Computing MAX */
-            i__1 = fla_max(nb1,nb2);
-            i__1 = fla_max(i__1,nb3); // , expr subst
-            nb = fla_max(i__1,nb4);
+            i__1 = fla_max(nb1, nb2);
+            i__1 = fla_max(i__1, nb3); // , expr subst
+            nb = fla_max(i__1, nb4);
             /* Computing MAX */
             i__1 = mn << 1, i__2 = *n + 1;
-            i__1 = fla_max(i__1,i__2);
+            i__1 = fla_max(i__1, i__2);
             i__2 = mn + *nrhs; // ; expr subst
-            lwkmin = mn + fla_max(i__1,i__2);
+            lwkmin = mn + fla_max(i__1, i__2);
             /* Computing MAX */
             i__1 = lwkmin, i__2 = mn + (*n << 1) + nb * (*n + 1);
-            i__1 = fla_max( i__1,i__2);
+            i__1 = fla_max(i__1, i__2);
             i__2 = (mn << 1) + nb * *nrhs; // ; expr subst
-            lwkopt = fla_max(i__1,i__2);
+            lwkopt = fla_max(i__1, i__2);
         }
         work[1] = (doublereal)lwkopt;
         if(*lwork < lwkmin && !lquery)
@@ -379,7 +402,7 @@ void dgelsy_(integer *m, integer *n, integer *nrhs, doublereal *a, integer *lda,
     else if(anrm == 0.)
     {
         /* Matrix all zero. Return zero solution. */
-        i__1 = fla_max(*m,*n);
+        i__1 = fla_max(*m, *n);
         dlaset_("F", &i__1, nrhs, &c_b31, &c_b31, &b[b_offset], ldb);
         *rank = 0;
         goto L70;
@@ -410,10 +433,10 @@ void dgelsy_(integer *m, integer *n, integer *nrhs, doublereal *a, integer *lda,
     work[ismax] = 1.;
     smax = (d__1 = a[a_dim1 + 1], f2c_dabs(d__1));
     smin = smax;
-    if ((d__1 = a[a_dim1 + 1], f2c_dabs(d__1)) == 0.)
+    if((d__1 = a[a_dim1 + 1], f2c_dabs(d__1)) == 0.)
     {
         *rank = 0;
-        i__1 = fla_max(*m,*n);
+        i__1 = fla_max(*m, *n);
         dlaset_("F", &i__1, nrhs, &c_b31, &c_b31, &b[b_offset], ldb);
         goto L70;
     }
@@ -425,10 +448,10 @@ L10:
     if(*rank < mn)
     {
         i__ = *rank + 1;
-        aocl_lapack_dlaic1(&c__2, rank, &work[ismin], &smin, &a[i__ * a_dim1 + 1],
-                           &a[i__ + i__ * a_dim1], &sminpr, &s1, &c1);
-        aocl_lapack_dlaic1(&c__1, rank, &work[ismax], &smax, &a[i__ * a_dim1 + 1],
-                           &a[i__ + i__ * a_dim1], &smaxpr, &s2, &c2);
+        dlaic1_(&c__2, rank, &work[ismin], &smin, &a[i__ * a_dim1 + 1], &a[i__ + i__ * a_dim1],
+                &sminpr, &s1, &c1);
+        dlaic1_(&c__1, rank, &work[ismax], &smax, &a[i__ * a_dim1 + 1], &a[i__ + i__ * a_dim1],
+                &smaxpr, &s2, &c2);
         if(smaxpr * *rcond <= sminpr)
         {
             i__1 = *rank;
@@ -461,16 +484,16 @@ L10:
     /* Details of Householder rotations stored in WORK(MN+1:2*MN) */
     /* B(1:M,1:NRHS) := Q**T * B(1:M,1:NRHS) */
     i__1 = *lwork - (mn << 1);
-    aocl_lapack_dormqr("Left", "Transpose", m, nrhs, &mn, &a[a_offset], lda, &work[1], &b[b_offset],
-                       ldb, &work[(mn << 1) + 1], &i__1, info);
+    dormqr_("Left", "Transpose", m, nrhs, &mn, &a[a_offset], lda, &work[1], &b[b_offset], ldb,
+            &work[(mn << 1) + 1], &i__1, info);
     /* Computing MAX */
     d__1 = wsize;
     d__2 = (mn << 1) + work[(mn << 1) + 1]; // , expr subst
-    wsize = fla_max(d__1,d__2);
+    wsize = fla_max(d__1, d__2);
     /* workspace: 2*MN+NB*NRHS. */
     /* B(1:RANK,1:NRHS) := inv(T11) * B(1:RANK,1:NRHS) */
-    aocl_blas_dtrsm("Left", "Upper", "No transpose", "Non-unit", rank, nrhs, &c_b54, &a[a_offset],
-                    lda, &b[b_offset], ldb);
+    dtrsm_("Left", "Upper", "No transpose", "Non-unit", rank, nrhs, &c_b54, &a[a_offset], lda,
+           &b[b_offset], ldb);
     i__1 = *nrhs;
     for(j = 1; j <= i__1; ++j)
     {
@@ -487,8 +510,8 @@ L10:
     {
         i__1 = *n - *rank;
         i__2 = *lwork - (mn << 1);
-        aocl_lapack_dormrz("Left", "Transpose", n, nrhs, rank, &i__1, &a[a_offset], lda,
-                           &work[mn + 1], &b[b_offset], ldb, &work[(mn << 1) + 1], &i__2, info);
+        dormrz_("Left", "Transpose", n, nrhs, rank, &i__1, &a[a_offset], lda, &work[mn + 1],
+                &b[b_offset], ldb, &work[(mn << 1) + 1], &i__2, info);
     }
     /* workspace: 2*MN+NRHS. */
     /* B(1:N,1:NRHS) := P * B(1:N,1:NRHS) */
@@ -525,7 +548,7 @@ L10:
         aocl_lapack_dlascl("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
 L70:
-    work[1] = (doublereal) lwkopt;
+    work[1] = (doublereal)lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DGELSY */

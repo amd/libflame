@@ -95,10 +95,12 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlapll_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, integer *incy, doublereal *ssmin)
+void zlapll_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, integer *incy,
+             doublereal *ssmin)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlapll inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "", *n, *incx, *incy);
+    AOCL_DTL_SNPRINTF("zlapll inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "", *n, *incx,
+                      *incy);
     /* System generated locals */
     aocl_int64_t i__1;
     doublereal d__1, d__2, d__3;
@@ -109,12 +111,17 @@ void zlapll_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, inte
     /* Local variables */
     dcomplex c__, a11, a12, a22, tau;
     extern /* Subroutine */
-    void dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     extern /* Double Complex */
-    VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        VOID
+        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                   integer *);
     doublereal ssmax;
     extern /* Subroutine */
-    void zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlarfg_( integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+        void
+        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

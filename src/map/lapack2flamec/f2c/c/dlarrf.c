@@ -1,18 +1,28 @@
-/* ../netlib/dlarrf.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlarrf.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b DLARRF finds a new relatively robust representation such that at least one of the eigenvalues i s relatively isolated. */
+/* > \brief \b DLARRF finds a new relatively robust representation such that at least one of the
+ * eigenvalues i s relatively isolated. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLARRF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarrf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarrf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarrf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -177,10 +187,14 @@ static integer c__1 = 1;
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void dlarrf_(integer *n, doublereal *d__, doublereal *l, doublereal *ld, integer *clstrt, integer *clend, doublereal *w, doublereal *wgap, doublereal *werr, doublereal *spdiam, doublereal * clgapl, doublereal *clgapr, doublereal *pivmin, doublereal *sigma, doublereal *dplus, doublereal *lplus, doublereal *work, integer *info)
+void dlarrf_(integer *n, doublereal *d__, doublereal *l, doublereal *ld, integer *clstrt,
+             integer *clend, doublereal *w, doublereal *wgap, doublereal *werr, doublereal *spdiam,
+             doublereal *clgapl, doublereal *clgapr, doublereal *pivmin, doublereal *sigma,
+             doublereal *dplus, doublereal *lplus, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlarrf inputs: n %" FLA_IS ", clstrt %" FLA_IS ", clend %" FLA_IS "",*n, *clstrt, *clend);
+    AOCL_DTL_SNPRINTF("dlarrf inputs: n %" FLA_IS ", clstrt %" FLA_IS ", clend %" FLA_IS "", *n,
+                      *clstrt, *clend);
     /* System generated locals */
     integer i__1;
     doublereal d__1, d__2, d__3;
@@ -188,14 +202,16 @@ void dlarrf_(integer *n, doublereal *d__, doublereal *l, doublereal *ld, integer
     double sqrt(doublereal);
     /* Local variables */
     integer i__;
-    doublereal s, bestshift, smlgrowth, eps, tmp, max1, max2, rrr1, rrr2, znm2, growthbound, fail, fact, oldp;
+    doublereal s, bestshift, smlgrowth, eps, tmp, max1, max2, rrr1, rrr2, znm2, growthbound, fail,
+        fact, oldp;
     integer indx;
     doublereal prod;
     integer ktry;
     doublereal fail2, avgap, ldmax, rdmax;
     integer shift;
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical dorrr1;
     extern doublereal dlamch_(char *);
     doublereal ldelta;
@@ -239,7 +255,7 @@ void dlarrf_(integer *n, doublereal *d__, doublereal *l, doublereal *ld, integer
     *info = 0;
     indx = 0;
     /* Quick return if possible */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -262,18 +278,18 @@ void dlarrf_(integer *n, doublereal *d__, doublereal *l, doublereal *ld, integer
     /* Setting NOFAIL to .FALSE. for quick fix for bug 113 */
     nofail = FALSE_;
     /* Compute the average gap length of the cluster */
-    clwdth = (d__1 = w[*clend] - w[*clstrt], f2c_abs(d__1)) + werr[*clend] + werr[ *clstrt];
-    avgap = clwdth / (doublereal) (*clend - *clstrt);
-    mingap = fla_min(*clgapl,*clgapr);
+    clwdth = (d__1 = w[*clend] - w[*clstrt], f2c_abs(d__1)) + werr[*clend] + werr[*clstrt];
+    avgap = clwdth / (doublereal)(*clend - *clstrt);
+    mingap = fla_min(*clgapl, *clgapr);
     /* Initial values for shifts to both ends of cluster */
     /* Computing MIN */
     d__1 = w[*clstrt];
     d__2 = w[*clend]; // , expr subst
-    lsigma = fla_min(d__1,d__2) - werr[*clstrt];
+    lsigma = fla_min(d__1, d__2) - werr[*clstrt];
     /* Computing MAX */
     d__1 = w[*clstrt];
     d__2 = w[*clend]; // , expr subst
-    rsigma = fla_max(d__1,d__2) + werr[*clend];
+    rsigma = fla_max(d__1, d__2) + werr[*clend];
     /* Use a small fudge to make sure that we really shift to the outside */
     lsigma -= f2c_abs(lsigma) * 4. * eps;
     rsigma += f2c_abs(rsigma) * 4. * eps;
@@ -283,16 +299,16 @@ void dlarrf_(integer *n, doublereal *d__, doublereal *l, doublereal *ld, integer
     /* Computing MAX */
     d__1 = avgap;
     d__2 = wgap[*clstrt]; // , expr subst
-    ldelta = fla_max(d__1,d__2) / fact;
+    ldelta = fla_max(d__1, d__2) / fact;
     /* Computing MAX */
     d__1 = avgap;
     d__2 = wgap[*clend - 1]; // , expr subst
-    rdelta = fla_max(d__1,d__2) / fact;
+    rdelta = fla_max(d__1, d__2) / fact;
     /* Initialize the record of the best representation found */
     s = dlamch_("S");
     smlgrowth = 1. / s;
-    fail = (doublereal) (*n - 1) * mingap / (*spdiam * eps);
-    fail2 = (doublereal) (*n - 1) * mingap / (*spdiam * sqrt(eps));
+    fail = (doublereal)(*n - 1) * mingap / (*spdiam * eps);
+    fail2 = (doublereal)(*n - 1) * mingap / (*spdiam * sqrt(eps));
     bestshift = lsigma;
     /* while (KTRY <= KTRYMAX) */
     ktry = 0;
@@ -301,14 +317,14 @@ L5:
     sawnan1 = FALSE_;
     sawnan2 = FALSE_;
     /* Ensure that we do not back off too much of the initial shifts */
-    ldelta = fla_min(ldmax,ldelta);
-    rdelta = fla_min(rdmax,rdelta);
+    ldelta = fla_min(ldmax, ldelta);
+    rdelta = fla_min(rdmax, rdelta);
     /* Compute the element growth when shifting to both ends of the cluster */
     /* accept the shift if there is no element growth at one of the two ends */
     /* Left end */
     s = -lsigma;
     dplus[1] = d__[1] + s;
-    if (f2c_abs(dplus[1]) < *pivmin)
+    if(f2c_abs(dplus[1]) < *pivmin)
     {
         dplus[1] = -(*pivmin);
         /* Need to set SAWNAN1 because refined RRR test should not be used */
@@ -317,14 +333,12 @@ L5:
     }
     max1 = f2c_abs(dplus[1]);
     i__1 = *n - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         lplus[i__] = ld[i__] / dplus[i__];
         s = s * lplus[i__] * l[i__] - lsigma;
         dplus[i__ + 1] = d__[i__ + 1] + s;
-        if ((d__1 = dplus[i__ + 1], f2c_abs(d__1)) < *pivmin)
+        if((d__1 = dplus[i__ + 1], f2c_abs(d__1)) < *pivmin)
         {
             dplus[i__ + 1] = -(*pivmin);
             /* Need to set SAWNAN1 because refined RRR test should not be used */
@@ -334,11 +348,11 @@ L5:
         /* Computing MAX */
         d__2 = max1;
         d__3 = (d__1 = dplus[i__ + 1], f2c_abs(d__1)); // , expr subst
-        max1 = fla_max(d__2,d__3);
+        max1 = fla_max(d__2, d__3);
         /* L6: */
     }
     sawnan1 = sawnan1 || disnan_(&max1);
-    if (forcer || max1 <= growthbound && ! sawnan1)
+    if(forcer || max1 <= growthbound && !sawnan1)
     {
         *sigma = lsigma;
         shift = 1;
@@ -347,7 +361,7 @@ L5:
     /* Right end */
     s = -rsigma;
     work[1] = d__[1] + s;
-    if (f2c_abs(work[1]) < *pivmin)
+    if(f2c_abs(work[1]) < *pivmin)
     {
         work[1] = -(*pivmin);
         /* Need to set SAWNAN2 because refined RRR test should not be used */
@@ -356,14 +370,12 @@ L5:
     }
     max2 = f2c_abs(work[1]);
     i__1 = *n - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         work[*n + i__] = ld[i__] / work[i__];
         s = s * work[*n + i__] * l[i__] - rsigma;
         work[i__ + 1] = d__[i__ + 1] + s;
-        if ((d__1 = work[i__ + 1], f2c_abs(d__1)) < *pivmin)
+        if((d__1 = work[i__ + 1], f2c_abs(d__1)) < *pivmin)
         {
             work[i__ + 1] = -(*pivmin);
             /* Need to set SAWNAN2 because refined RRR test should not be used */
@@ -373,11 +385,11 @@ L5:
         /* Computing MAX */
         d__2 = max2;
         d__3 = (d__1 = work[i__ + 1], f2c_abs(d__1)); // , expr subst
-        max2 = fla_max(d__2,d__3);
+        max2 = fla_max(d__2, d__3);
         /* L7: */
     }
     sawnan2 = sawnan2 || disnan_(&max2);
-    if (forcer || max2 <= growthbound && ! sawnan2)
+    if(forcer || max2 <= growthbound && !sawnan2)
     {
         *sigma = rsigma;
         shift = 2;
@@ -385,29 +397,29 @@ L5:
     }
     /* If we are at this point, both shifts led to too much element growth */
     /* Record the better of the two shifts (provided it didn't lead to NaN) */
-    if (sawnan1 && sawnan2)
+    if(sawnan1 && sawnan2)
     {
         /* both MAX1 and MAX2 are NaN */
         goto L50;
     }
     else
     {
-        if (! sawnan1)
+        if(!sawnan1)
         {
             indx = 1;
-            if (max1 <= smlgrowth)
+            if(max1 <= smlgrowth)
             {
                 smlgrowth = max1;
                 bestshift = lsigma;
             }
         }
-        if (! sawnan2)
+        if(!sawnan2)
         {
-            if (sawnan1 || max2 <= max1)
+            if(sawnan1 || max2 <= max1)
             {
                 indx = 2;
             }
-            if (max2 <= smlgrowth)
+            if(max2 <= smlgrowth)
             {
                 smlgrowth = max2;
                 bestshift = rsigma;
@@ -419,7 +431,7 @@ L5:
     /* we may still accept the representation, if it passes a */
     /* refined test for RRR. This test supposes that no NaN occurred. */
     /* Moreover, we use the refined RRR test only for isolated clusters. */
-    if (clwdth < mingap / 128. && fla_min(max1,max2) < fail2 && ! sawnan1 && ! sawnan2)
+    if(clwdth < mingap / 128. && fla_min(max1, max2) < fail2 && !sawnan1 && !sawnan2)
     {
         dorrr1 = TRUE_;
     }
@@ -428,21 +440,20 @@ L5:
         dorrr1 = FALSE_;
     }
     tryrrr1 = TRUE_;
-    if (tryrrr1 && dorrr1)
+    if(tryrrr1 && dorrr1)
     {
-        if (indx == 1)
+        if(indx == 1)
         {
             tmp = (d__1 = dplus[*n], f2c_abs(d__1));
             znm2 = 1.;
             prod = 1.;
             oldp = 1.;
-            for (i__ = *n - 1;
-                    i__ >= 1;
-                    --i__)
+            for(i__ = *n - 1; i__ >= 1; --i__)
             {
-                if (prod <= eps)
+                if(prod <= eps)
                 {
-                    prod = dplus[i__ + 1] * work[*n + i__ + 1] / (dplus[i__] * work[*n + i__]) * oldp;
+                    prod = dplus[i__ + 1] * work[*n + i__ + 1] / (dplus[i__] * work[*n + i__])
+                           * oldp;
                 }
                 else
                 {
@@ -455,28 +466,26 @@ L5:
                 /* Computing MAX */
                 d__2 = tmp;
                 d__3 = (d__1 = dplus[i__] * prod, f2c_abs(d__1)); // , expr subst
-                tmp = fla_max(d__2,d__3);
+                tmp = fla_max(d__2, d__3);
                 /* L15: */
             }
             rrr1 = tmp / (*spdiam * sqrt(znm2));
-            if (rrr1 <= 8.)
+            if(rrr1 <= 8.)
             {
                 *sigma = lsigma;
                 shift = 1;
                 goto L100;
             }
         }
-        else if (indx == 2)
+        else if(indx == 2)
         {
             tmp = (d__1 = work[*n], f2c_abs(d__1));
             znm2 = 1.;
             prod = 1.;
             oldp = 1.;
-            for (i__ = *n - 1;
-                    i__ >= 1;
-                    --i__)
+            for(i__ = *n - 1; i__ >= 1; --i__)
             {
-                if (prod <= eps)
+                if(prod <= eps)
                 {
                     prod = work[i__ + 1] * lplus[i__ + 1] / (work[i__] * lplus[i__]) * oldp;
                 }
@@ -491,11 +500,11 @@ L5:
                 /* Computing MAX */
                 d__2 = tmp;
                 d__3 = (d__1 = work[i__] * prod, f2c_abs(d__1)); // , expr subst
-                tmp = fla_max(d__2,d__3);
+                tmp = fla_max(d__2, d__3);
                 /* L16: */
             }
             rrr2 = tmp / (*spdiam * sqrt(znm2));
-            if (rrr2 <= 8.)
+            if(rrr2 <= 8.)
             {
                 *sigma = rsigma;
                 shift = 2;
@@ -504,18 +513,18 @@ L5:
         }
     }
 L50:
-    if (ktry < 1)
+    if(ktry < 1)
     {
         /* If we are here, both shifts failed also the RRR test. */
         /* Back off to the outside */
         /* Computing MAX */
         d__1 = lsigma - ldelta;
         d__2 = lsigma - ldmax; // , expr subst
-        lsigma = fla_max(d__1,d__2);
+        lsigma = fla_max(d__1, d__2);
         /* Computing MIN */
         d__1 = rsigma + rdelta;
         d__2 = rsigma + rdmax; // , expr subst
-        rsigma = fla_min(d__1,d__2);
+        rsigma = fla_min(d__1, d__2);
         ldelta *= 2.;
         rdelta *= 2.;
         ++ktry;
@@ -525,7 +534,7 @@ L50:
     {
         /* None of the representations investigated satisfied our */
         /* criteria. Take the best one we found. */
-        if (smlgrowth < fail || nofail)
+        if(smlgrowth < fail || nofail)
         {
             lsigma = bestshift;
             rsigma = bestshift;
@@ -540,10 +549,10 @@ L50:
         }
     }
 L100:
-    if (shift == 1)
+    if(shift == 1)
     {
     }
-    else if (shift == 2)
+    else if(shift == 2)
     {
         /* store new L and D back into DPLUS, LPLUS */
         dcopy_(n, &work[1], &c__1, &dplus[1], &c__1);

@@ -144,10 +144,14 @@ for 1 <= i <= N, row i of the matrix was */
 /* > \ingroup doubleGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dgbcon_(char *norm, integer *n, integer *kl, integer *ku, doublereal *ab, integer *ldab, integer *ipiv, doublereal *anorm, doublereal *rcond, doublereal *work, integer *iwork, integer *info)
+void dgbcon_(char *norm, integer *n, integer *kl, integer *ku, doublereal *ab, integer *ldab,
+             integer *ipiv, doublereal *anorm, doublereal *rcond, doublereal *work, integer *iwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgbcon inputs: norm %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS "",*norm, *n, *kl, *ku, *ldab);
+    AOCL_DTL_SNPRINTF("dgbcon inputs: norm %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
+                      ", ldab %" FLA_IS "",
+                      *norm, *n, *kl, *ku, *ldab);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3;
     doublereal d__1;
@@ -160,14 +164,21 @@ void dgbcon_(char *norm, integer *n, integer *kl, integer *ku, doublereal *ab, i
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    void drscl_(integer *, doublereal *, doublereal *, integer *);
+        void
+        drscl_(integer *, doublereal *, doublereal *, integer *);
     logical lnoti;
     extern /* Subroutine */
-    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *),
+        dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+                integer *);
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    void dlatbs_(char *, char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlatbs_(char *, char *, char *, char *, integer *, integer *, doublereal *, integer *,
+                doublereal *, doublereal *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical onenrm;
     char normin[1];
@@ -205,7 +216,7 @@ void dgbcon_(char *norm, integer *n, integer *kl, integer *ku, doublereal *ab, i
     /* Function Body */
     *info = 0;
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
-    if (! onenrm && ! lsame_(norm, "I", 1, 1))
+    if(!onenrm && !lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }
@@ -265,7 +276,7 @@ void dgbcon_(char *norm, integer *n, integer *kl, integer *ku, doublereal *ab, i
     lnoti = *kl > 0;
     kase = 0;
 L10:
-    aocl_lapack_dlacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+    dlacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == kase1)
@@ -279,7 +290,7 @@ L10:
                     /* Computing MIN */
                     i__2 = *kl;
                     i__3 = *n - j; // , expr subst
-                    lm = fla_min(i__2,i__3);
+                    lm = fla_min(i__2, i__3);
                     jp = ipiv[j];
                     t = work[jp];
                     if(jp != j)
@@ -288,22 +299,21 @@ L10:
                         work[j] = t;
                     }
                     d__1 = -t;
-                    aocl_blas_daxpy(&lm, &d__1, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1],
-                                    &c__1);
+                    daxpy_(&lm, &d__1, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1], &c__1);
                     /* L20: */
                 }
             }
             /* Multiply by inv(U). */
             i__1 = *kl + *ku;
-            aocl_lapack_dlatbs("Upper", "No transpose", "Non-unit", normin, n, &i__1,
-                               &ab[ab_offset], ldab, &work[1], &scale, &work[(*n << 1) + 1], info);
+            dlatbs_("Upper", "No transpose", "Non-unit", normin, n, &i__1, &ab[ab_offset], ldab,
+                    &work[1], &scale, &work[(*n << 1) + 1], info);
         }
         else
         {
             /* Multiply by inv(U**T). */
             i__1 = *kl + *ku;
-            aocl_lapack_dlatbs("Upper", "Transpose", "Non-unit", normin, n, &i__1, &ab[ab_offset],
-                               ldab, &work[1], &scale, &work[(*n << 1) + 1], info);
+            dlatbs_("Upper", "Transpose", "Non-unit", normin, n, &i__1, &ab[ab_offset], ldab,
+                    &work[1], &scale, &work[(*n << 1) + 1], info);
             /* Multiply by inv(L**T). */
             if(lnoti)
             {
@@ -312,8 +322,8 @@ L10:
                     /* Computing MIN */
                     i__1 = *kl;
                     i__2 = *n - j; // , expr subst
-                    lm = fla_min(i__1,i__2);
-                    work[j] -= ddot_(&lm, &ab[kd + 1 + j * ab_dim1], &c__1, & work[j + 1], &c__1);
+                    lm = fla_min(i__1, i__2);
+                    work[j] -= ddot_(&lm, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1], &c__1);
                     jp = ipiv[j];
                     if(jp != j)
                     {
@@ -330,7 +340,7 @@ L10:
         if(scale != 1.)
         {
             ix = idamax_(n, &work[1], &c__1);
-            if (scale < (d__1 = work[ix], f2c_dabs(d__1)) * smlnum || scale == 0.)
+            if(scale < (d__1 = work[ix], f2c_dabs(d__1)) * smlnum || scale == 0.)
             {
                 goto L40;
             }

@@ -122,10 +122,11 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16HEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zhecon_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv, doublereal *anorm, doublereal *rcond, doublecomplex *work, integer *info)
+void zhecon_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv,
+             doublereal *anorm, doublereal *rcond, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhecon inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
+    AOCL_DTL_SNPRINTF("zhecon inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
 
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
@@ -135,10 +136,14 @@ void zhecon_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     extern /* Subroutine */
-    void zhetrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zhetrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *,
+                doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -171,7 +176,7 @@ void zhecon_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -179,7 +184,7 @@ void zhecon_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
@@ -214,7 +219,7 @@ void zhecon_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
         for(i__ = *n; i__ >= 1; --i__)
         {
             i__1 = i__ + i__ * a_dim1;
-            if(ipiv[i__] > 0 && (a[i__1].real == 0. && a[i__1].imag == 0.))
+            if(ipiv[i__] > 0 && (a[i__1].r == 0. && a[i__1].i == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
@@ -229,7 +234,7 @@ void zhecon_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
-            if(ipiv[i__] > 0 && (a[i__2].real == 0. && a[i__2].imag == 0.))
+            if(ipiv[i__] > 0 && (a[i__2].r == 0. && a[i__2].i == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
@@ -240,7 +245,7 @@ void zhecon_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
     /* Estimate the 1-norm of the inverse. */
     kase = 0;
 L30:
-    aocl_lapack_zlacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    zlacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         /* Multiply by inv(L*D*L**H) or inv(U*D*U**H). */

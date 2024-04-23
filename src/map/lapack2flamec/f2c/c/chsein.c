@@ -253,15 +253,23 @@ here the magnitude of a scomplex number */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n, complex *h__, integer *ldh, complex *w, complex * vl, integer *ldvl, complex *vr, integer *ldvr, integer *mm, integer * m, complex *work, real *rwork, integer *ifaill, integer *ifailr, integer *info)
+void chsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n, complex *h__,
+             integer *ldh, complex *w, complex *vl, integer *ldvl, complex *vr, integer *ldvr,
+             integer *mm, integer *m, complex *work, real *rwork, integer *ifaill, integer *ifailr,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chsein inputs: side %c, eigsrc %c, initv %c, n %lld, ldh %lld, ldvl %lld, ldvr %lld, mm %lld",*side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm);
+    snprintf(buffer, 256,
+             "chsein inputs: side %c, eigsrc %c, initv %c, n %lld, ldh %lld, ldvl %lld, ldvr %lld, "
+             "mm %lld",
+             *side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm);
 #else
-    snprintf(buffer, 256,"chsein inputs: side %c, eigsrc %c, initv %c, n %d, ldh %d, ldvl %d, ldvr %d, mm %d",*side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm);
+    snprintf(buffer, 256,
+             "chsein inputs: side %c, eigsrc %c, initv %c, n %d, ldh %d, ldvl %d, ldvr %d, mm %d",
+             *side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -281,10 +289,13 @@ void chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
     logical leftv, bothv;
     real hnorm;
     extern /* Subroutine */
-    void claein_(logical *, logical *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, real *, real *, real *, integer *);
+        void
+        claein_(logical *, logical *, integer *, complex *, integer *, complex *, complex *,
+                complex *, integer *, real *, real *, real *, integer *);
     extern real slamch_(char *), clanhs_(char *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern logical sisnan_(real *);
     logical noinit;
     aocl_int64_t ldwork;
@@ -355,11 +366,11 @@ void chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
     {
         *info = -1;
     }
-    else if (! fromqr && ! lsame_(eigsrc, "N", 1, 1))
+    else if(!fromqr && !lsame_(eigsrc, "N", 1, 1))
     {
         *info = -2;
     }
-    else if (! noinit && ! lsame_(initv, "U", 1, 1))
+    else if(!noinit && !lsame_(initv, "U", 1, 1))
     {
         *info = -3;
     }
@@ -367,7 +378,7 @@ void chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
     {
         *info = -5;
     }
-    else if (*ldh < fla_max(1,*n))
+    else if(*ldh < fla_max(1, *n))
     {
         *info = -7;
     }
@@ -432,7 +443,7 @@ void chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
                 for(i__ = k; i__ >= i__2; --i__)
                 {
                     i__3 = i__ + (i__ - 1) * h_dim1;
-                    if(h__[i__3].real == 0.f && h__[i__3].imag == 0.f)
+                    if(h__[i__3].r == 0.f && h__[i__3].i == 0.f)
                     {
                         goto L30;
                     }
@@ -446,7 +457,7 @@ void chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
                     for(i__ = k; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + 1 + i__ * h_dim1;
-                        if(h__[i__3].real == 0.f && h__[i__3].imag == 0.f)
+                        if(h__[i__3].r == 0.f && h__[i__3].i == 0.f)
                         {
                             goto L50;
                         }
@@ -462,7 +473,7 @@ void chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
                 /* Compute infinity-norm of submatrix H(KL:KR,KL:KR) if it */
                 /* has not ben computed before. */
                 i__2 = kr - kl + 1;
-                hnorm = aocl_lapack_clanhs("I", &i__2, &h__[kl + kl * h_dim1], ldh, &rwork[1]);
+                hnorm = clanhs_("I", &i__2, &h__[kl + kl * h_dim1], ldh, &rwork[1]);
                 if(sisnan_(&hnorm))
                 {
                     *info = -6;
@@ -482,8 +493,8 @@ void chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
             /* selected eigenvalues affiliated to the submatrix */
             /* H(KL:KR,KL:KR). Close roots are modified by EPS3. */
             i__2 = k;
-            wk.real = w[i__2].real;
-            wk.imag = w[i__2].imag; // , expr subst
+            wk.r = w[i__2].r;
+            wk.i = w[i__2].i; // , expr subst
         L60:
             i__2 = kl;
             for(i__ = k - 1; i__ >= i__2; --i__)
@@ -493,7 +504,8 @@ void chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
                 q__2.i = w[i__3].i - wk.i; // , expr subst
                 q__1.r = q__2.r;
                 q__1.i = q__2.i; // , expr subst
-                if (select[i__] && (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2)) < eps3)
+                if(select[i__]
+                   && (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2)) < eps3)
                 {
                     q__1.real = wk.real + eps3;
                     q__1.imag = wk.imag; // , expr subst
@@ -504,15 +516,15 @@ void chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
                 /* L70: */
             }
             i__2 = k;
-            w[i__2].real = wk.real;
-            w[i__2].imag = wk.imag; // , expr subst
+            w[i__2].r = wk.r;
+            w[i__2].i = wk.i; // , expr subst
             if(leftv)
             {
                 /* Compute left eigenvector. */
                 i__2 = *n - kl + 1;
-                aocl_lapack_claein(&c_false, &noinit, &i__2, &h__[kl + kl * h_dim1], ldh, &wk,
-                                   &vl[kl + ks * vl_dim1], &work[1], &ldwork, &rwork[1], &eps3,
-                                   &smlnum, &iinfo);
+                claein_(&c_false, &noinit, &i__2, &h__[kl + kl * h_dim1], ldh, &wk,
+                        &vl[kl + ks * vl_dim1], &work[1], &ldwork, &rwork[1], &eps3, &smlnum,
+                        &iinfo);
                 if(iinfo > 0)
                 {
                     ++(*info);
@@ -534,9 +546,8 @@ void chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n
             if(rightv)
             {
                 /* Compute right eigenvector. */
-                aocl_lapack_claein(&c_true, &noinit, &kr, &h__[h_offset], ldh, &wk,
-                                   &vr[ks * vr_dim1 + 1], &work[1], &ldwork, &rwork[1], &eps3,
-                                   &smlnum, &iinfo);
+                claein_(&c_true, &noinit, &kr, &h__[h_offset], ldh, &wk, &vr[ks * vr_dim1 + 1],
+                        &work[1], &ldwork, &rwork[1], &eps3, &smlnum, &iinfo);
                 if(iinfo > 0)
                 {
                     ++(*info);

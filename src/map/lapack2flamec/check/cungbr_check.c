@@ -1,7 +1,9 @@
 #include "FLA_f2c.h" /* Table of constant values */
+#include "FLA_lapack2flame_return_defs.h"
 static integer c_n1 = -1;
 
-int cungbr_check(char *vect, integer *m, integer *n, integer *k, scomplex *a, integer *lda, scomplex *tau, scomplex *work, integer *lwork, integer *info)
+int cungbr_check(char *vect, integer *m, integer *n, integer *k, scomplex *a, integer *lda,
+                 scomplex *tau, scomplex *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -9,11 +11,10 @@ int cungbr_check(char *vect, integer *m, integer *n, integer *k, scomplex *a, in
     integer mn;
     integer iinfo;
     logical wantq;
-    extern integer 
-      cunglq_check( integer *, integer *, integer *, scomplex *, 
-                    integer *, scomplex *, scomplex *, integer *, integer *), 
-      cungqr_check(integer *, integer *, integer *, scomplex *, 
-              integer *, scomplex *, scomplex *, integer *, integer *);
+    extern integer cunglq_check(integer *, integer *, integer *, scomplex *, integer *, scomplex *,
+                                scomplex *, integer *, integer *),
+        cungqr_check(integer *, integer *, integer *, scomplex *, integer *, scomplex *, scomplex *,
+                     integer *, integer *);
     integer lwkopt;
     logical lquery;
 
@@ -26,9 +27,9 @@ int cungbr_check(char *vect, integer *m, integer *n, integer *k, scomplex *a, in
     /* Function Body */
     *info = 0;
     wantq = lsame_(vect, "Q", 1, 1);
-    mn = fla_min(*m,*n);
+    mn = fla_min(*m, *n);
     lquery = *lwork == -1;
-    if (! wantq && ! lsame_(vect, "P", 1, 1))
+    if(!wantq && !lsame_(vect, "P", 1, 1))
     {
         *info = -1;
     }
@@ -36,7 +37,8 @@ int cungbr_check(char *vect, integer *m, integer *n, integer *k, scomplex *a, in
     {
         *info = -2;
     }
-    else if (*n < 0 || wantq && (*n > *m || *n < fla_min(*m,*k)) || ! wantq && ( *m > *n || *m < fla_min(*n,*k)))
+    else if(*n < 0 || wantq && (*n > *m || *n < fla_min(*m, *k))
+            || !wantq && (*m > *n || *m < fla_min(*n, *k)))
     {
         *info = -3;
     }
@@ -44,11 +46,11 @@ int cungbr_check(char *vect, integer *m, integer *n, integer *k, scomplex *a, in
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -6;
     }
-    else if (*lwork < fla_max(1,mn) && ! lquery)
+    else if(*lwork < fla_max(1, mn) && !lquery)
     {
         *info = -9;
     }
@@ -93,7 +95,7 @@ int cungbr_check(char *vect, integer *m, integer *n, integer *k, scomplex *a, in
             }
         }
         lwkopt = work[1].real;
-        lwkopt = fla_max(lwkopt,mn);
+        lwkopt = fla_max(lwkopt, mn);
     }
     if(*info != 0)
     {

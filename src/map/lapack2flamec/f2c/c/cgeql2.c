@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b CGEQL2 computes the QL factorization of a general rectangular matrix using an
  * unblocked algorit hm. */
 /* =========== DOCUMENTATION =========== */
@@ -124,15 +124,16 @@ v(1:m-k+i-1) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgeql2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *work, integer *info)
+void cgeql2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *work,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgeql2 inputs: m %lld, n %lld, lda %lld",*m, *n, *lda);
+    snprintf(buffer, 256, "cgeql2 inputs: m %lld, n %lld, lda %lld", *m, *n, *lda);
 #else
-    snprintf(buffer, 256,"cgeql2 inputs: m %d, n %d, lda %d",*m, *n, *lda);
+    snprintf(buffer, 256, "cgeql2 inputs: m %d, n %d, lda %d", *m, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -145,7 +146,11 @@ void cgeql2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     integer i__, k;
     complex alpha;
     extern /* Subroutine */
-    void clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), clarfg_(integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+               complex *),
+        clarfg_(integer *, complex *, complex *, integer *, complex *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -181,7 +186,7 @@ void cgeql2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
@@ -192,10 +197,8 @@ void cgeql2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    k = fla_min(*m,*n);
-    for (i__ = k;
-            i__ >= 1;
-            --i__)
+    k = fla_min(*m, *n);
+    for(i__ = k; i__ >= 1; --i__)
     {
         /* Generate elementary reflector H(i) to annihilate */
         /* A(1:m-k+i-1,n-k+i) */
@@ -203,7 +206,7 @@ void cgeql2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         alpha.real = a[i__1].real;
         alpha.imag = a[i__1].imag; // , expr subst
         i__1 = *m - k + i__;
-        aocl_lapack_clarfg(&i__1, &alpha, &a[(*n - k + i__) * a_dim1 + 1], &c__1, &tau[i__]);
+        clarfg_(&i__1, &alpha, &a[(*n - k + i__) * a_dim1 + 1], &c__1, &tau[i__]);
         /* Apply H(i)**H to A(1:m-k+i,1:n-k+i-1) from the left */
         i__1 = *m - k + i__ + (*n - k + i__) * a_dim1;
         a[i__1].real = 1.f;
@@ -211,8 +214,8 @@ void cgeql2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         i__1 = *m - k + i__;
         i__2 = *n - k + i__ - 1;
         r_cnjg(&q__1, &tau[i__]);
-        aocl_lapack_clarf("Left", &i__1, &i__2, &a[(*n - k + i__) * a_dim1 + 1], &c__1, &q__1,
-                          &a[a_offset], lda, &work[1]);
+        clarf_("Left", &i__1, &i__2, &a[(*n - k + i__) * a_dim1 + 1], &c__1, &q__1, &a[a_offset],
+               lda, &work[1]);
         i__1 = *m - k + i__ + (*n - k + i__) * a_dim1;
         a[i__1].real = alpha.real;
         a[i__1].imag = alpha.imag; // , expr subst

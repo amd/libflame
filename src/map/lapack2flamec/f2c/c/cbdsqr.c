@@ -1,8 +1,8 @@
-/* ./cbdsqr.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cbdsqr.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b15 = -.125;
 static aocl_int64_t c__1 = 1;
@@ -236,15 +236,22 @@ if INFO = i, i */
 /* > \ingroup bdsqr */
 /* ===================================================================== */
 /* Subroutine */
-void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc, real *d__, real *e, complex *vt, integer *ldvt, complex *u, integer *ldu, complex *c__, integer *ldc, real *rwork, integer *info)
+void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer *nru, integer *ncc, real *d__, real *e,
+             complex *vt, integer *ldvt, complex *u, integer *ldu, complex *c__, integer *ldc,
+             real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cbdsqr inputs: uplo %c, n %lld, ncvt %lld, nru %lld, ncc %lld, ldvt %lld, ldu %lld, ldc %lld",*uplo, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
+    snprintf(buffer, 256,
+             "cbdsqr inputs: uplo %c, n %lld, ncvt %lld, nru %lld, ncc %lld, ldvt %lld, ldu %lld, "
+             "ldc %lld",
+             *uplo, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
 #else
-    snprintf(buffer, 256,"cbdsqr inputs: uplo %c, n %d, ncvt %d, nru %d, ncc %d, ldvt %d, ldu %d, ldc %d",*uplo, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
+    snprintf(buffer, 256,
+             "cbdsqr inputs: uplo %c, n %d, ncvt %d, nru %d, ncc %d, ldvt %d, ldu %d, ldc %d",
+             *uplo, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -272,26 +279,35 @@ void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc,
     aocl_int64_t isub, iter;
     real unfl, sinl, cosr, smin, smax, sinr;
     extern /* Subroutine */
-    void slas2_(real *, real *, real *, real *, real *) ;
+        void
+        slas2_(real *, real *, real *, real *, real *);
     extern logical lsame_(char *, char *, integer, integer);
     real oldcs;
     extern /* Subroutine */
-    void clasr_(char *, char *, char *, integer *, integer *, real *, real *, complex *, integer *);
+        void
+        clasr_(char *, char *, char *, integer *, integer *, real *, real *, complex *, integer *);
     integer oldll;
     real shift, sigmn, oldsn;
     extern /* Subroutine */
-    void cswap_(integer *, complex *, integer *, complex *, integer *);
+        void
+        cswap_(integer *, complex *, integer *, complex *, integer *);
     integer maxit;
     real sminl, sigmx;
     logical lower;
     extern /* Subroutine */
-    void csrot_(integer *, complex *, integer *, complex *, integer *, real *, real *), slasq1_(integer *, real *, real *, real *, integer *), slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
+        void
+        csrot_(integer *, complex *, integer *, complex *, integer *, real *, real *),
+        slasq1_(integer *, real *, real *, real *, integer *),
+        slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    void csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        csscal_(integer *, real *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real sminoa;
     extern /* Subroutine */
-    void slartg_(real *, real *, real *, real *, real * );
+        void
+        slartg_(real *, real *, real *, real *, real *);
     real thresh;
     logical rotate;
     real tolmul;
@@ -331,7 +347,7 @@ void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc,
     /* Function Body */
     *info = 0;
     lower = lsame_(uplo, "L", 1, 1);
-    if (! lsame_(uplo, "U", 1, 1) && ! lower)
+    if(!lsame_(uplo, "U", 1, 1) && !lower)
     {
         *info = -1;
     }
@@ -351,15 +367,15 @@ void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc,
     {
         *info = -5;
     }
-    else if (*ncvt == 0 && *ldvt < 1 || *ncvt > 0 && *ldvt < fla_max(1,*n))
+    else if(*ncvt == 0 && *ldvt < 1 || *ncvt > 0 && *ldvt < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldu < fla_max(1,*nru))
+    else if(*ldu < fla_max(1, *nru))
     {
         *info = -11;
     }
-    else if (*ncc == 0 && *ldc < 1 || *ncc > 0 && *ldc < fla_max(1,*n))
+    else if(*ncc == 0 && *ldc < 1 || *ncc > 0 && *ldc < fla_max(1, *n))
     {
         *info = -13;
     }
@@ -422,7 +438,7 @@ void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc,
         }
         if(*ncc > 0)
         {
-            aocl_lapack_clasr("L", "V", "F", n, ncc, &rwork[1], &rwork[*n], &c__[c_offset], ldc);
+            clasr_("L", "V", "F", n, ncc, &rwork[1], &rwork[*n], &c__[c_offset], ldc);
         }
     }
     /* Compute singular values to relative accuracy TOL */
@@ -434,8 +450,8 @@ void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc,
     r__3 = 100.f;
     r__4 = pow_dd(&d__1, &c_b15); // , expr subst
     r__1 = 10.f;
-    r__2 = fla_min(r__3,r__4); // , expr subst
-    tolmul = fla_max(r__1,r__2);
+    r__2 = fla_min(r__3, r__4); // , expr subst
+    tolmul = fla_max(r__1, r__2);
     tol = tolmul * eps;
     /* Compute approximate maximum, minimum singular values */
     smax = 0.f;
@@ -445,7 +461,7 @@ void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc,
         /* Computing MAX */
         r__2 = smax;
         r__3 = (r__1 = d__[i__], f2c_abs(r__1)); // , expr subst
-        smax = fla_max(r__2,r__3);
+        smax = fla_max(r__2, r__3);
         /* L20: */
     }
     i__1 = *n - 1;
@@ -454,15 +470,15 @@ void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc,
         /* Computing MAX */
         r__2 = smax;
         r__3 = (r__1 = e[i__], f2c_abs(r__1)); // , expr subst
-        smax = fla_max(r__2,r__3);
+        smax = fla_max(r__2, r__3);
         /* L30: */
     }
-    smin = 0.f;
+    sminl = 0.f;
     if(tol >= 0.f)
     {
         /* Relative accuracy desired */
         sminoa = f2c_dabs(d__[1]);
-        if (sminoa == 0.f)
+        if(sminoa == 0.f)
         {
             goto L50;
         }
@@ -470,9 +486,10 @@ void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc,
         i__1 = *n;
         for(i__ = 2; i__ <= i__1; ++i__)
         {
-            mu = (r__2 = d__[i__], f2c_abs(r__2)) * (mu / (mu + (r__1 = e[i__ - 1], f2c_abs(r__1))));
-            sminoa = fla_min(sminoa,mu);
-            if (sminoa == 0.f)
+            mu = (r__2 = d__[i__], f2c_abs(r__2))
+                 * (mu / (mu + (r__1 = e[i__ - 1], f2c_abs(r__1))));
+            sminoa = fla_min(sminoa, mu);
+            if(sminoa == 0.f)
             {
                 goto L50;
             }
@@ -483,7 +500,7 @@ void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc,
         /* Computing MAX */
         r__1 = tol * sminoa;
         r__2 = *n * 6 * *n * unfl; // , expr subst
-        thresh = fla_max(r__1,r__2);
+        thresh = fla_max(r__1, r__2);
     }
     else
     {
@@ -491,7 +508,7 @@ void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer * nru, integer *ncc,
         /* Computing MAX */
         r__1 = f2c_abs(tol) * smax;
         r__2 = *n * 6 * *n * unfl; // , expr subst
-        thresh = fla_max(r__1,r__2);
+        thresh = fla_max(r__1, r__2);
     }
     /* Prepare for main iteration loop for the singular values */
     /* (MAXIT is the maximum number of passes through the inner */
@@ -509,7 +526,7 @@ L60: /* Check for convergence or exceeding iteration count */
     {
         goto L160;
     }
-    if(iter >= *n)
+    if(iter > maxit)
     {
         iter -= *n;
         ++iterdivn;
@@ -519,7 +536,7 @@ L60: /* Check for convergence or exceeding iteration count */
         }
     }
     /* Find diagonal block of matrix to work on */
-    if (tol < 0.f && (r__1 = d__[m], f2c_abs(r__1)) <= thresh)
+    if(tol < 0.f && (r__1 = d__[m], f2c_abs(r__1)) <= thresh)
     {
         d__[m] = 0.f;
     }
@@ -531,7 +548,7 @@ L60: /* Check for convergence or exceeding iteration count */
         ll = m - lll;
         abss = (r__1 = d__[ll], f2c_abs(r__1));
         abse = (r__1 = e[ll], f2c_abs(r__1));
-        if (tol < 0.f && abss <= thresh)
+        if(tol < 0.f && abss <= thresh)
         {
             d__[ll] = 0.f;
         }
@@ -539,10 +556,10 @@ L60: /* Check for convergence or exceeding iteration count */
         {
             goto L80;
         }
-        smin = fla_min(smin,abss);
+        smin = fla_min(smin, abss);
         /* Computing MAX */
-        r__1 = fla_max(smax,abss);
-        smax = fla_max(r__1,abse);
+        r__1 = fla_max(smax, abss);
+        smax = fla_max(r__1, abse);
         /* L70: */
     }
     ll = 0;
@@ -569,16 +586,15 @@ L90:
         /* Compute singular vectors, if desired */
         if(*ncvt > 0)
         {
-            aocl_blas_csrot(ncvt, &vt[m - 1 + vt_dim1], ldvt, &vt[m + vt_dim1], ldvt, &cosr, &sinr);
+            csrot_(ncvt, &vt[m - 1 + vt_dim1], ldvt, &vt[m + vt_dim1], ldvt, &cosr, &sinr);
         }
         if(*nru > 0)
         {
-            aocl_blas_csrot(nru, &u[(m - 1) * u_dim1 + 1], &c__1, &u[m * u_dim1 + 1], &c__1, &cosl,
-                            &sinl);
+            csrot_(nru, &u[(m - 1) * u_dim1 + 1], &c__1, &u[m * u_dim1 + 1], &c__1, &cosl, &sinl);
         }
         if(*ncc > 0)
         {
-            aocl_blas_csrot(ncc, &c__[m - 1 + c_dim1], ldc, &c__[m + c_dim1], ldc, &cosl, &sinl);
+            csrot_(ncc, &c__[m - 1 + c_dim1], ldc, &c__[m + c_dim1], ldc, &cosl, &sinl);
         }
         m += -2;
         goto L60;
@@ -587,7 +603,7 @@ L90:
     /* (from larger end diagonal element towards smaller) */
     if(ll > oldm || m < oldll)
     {
-        if ((r__1 = d__[ll], f2c_abs(r__1)) >= (r__2 = d__[m], f2c_abs(r__2)))
+        if((r__1 = d__[ll], f2c_abs(r__1)) >= (r__2 = d__[m], f2c_abs(r__2)))
         {
             /* Chase bulge from top (big end) to bottom (small end) */
             idir = 1;
@@ -603,7 +619,8 @@ L90:
     {
         /* Run convergence test in forward direction */
         /* First apply standard test to bottom of matrix */
-        if ((r__2 = e[m - 1], f2c_abs(r__2)) <= f2c_abs(tol) * (r__1 = d__[m], f2c_abs( r__1)) || tol < 0.f && (r__3 = e[m - 1], f2c_abs(r__3)) <= thresh)
+        if((r__2 = e[m - 1], f2c_abs(r__2)) <= f2c_abs(tol) * (r__1 = d__[m], f2c_abs(r__1))
+           || tol < 0.f && (r__3 = e[m - 1], f2c_abs(r__3)) <= thresh)
         {
             e[m - 1] = 0.f;
             goto L60;
@@ -617,13 +634,14 @@ L90:
             i__1 = m - 1;
             for(lll = ll; lll <= i__1; ++lll)
             {
-                if ((r__1 = e[lll], f2c_abs(r__1)) <= tol * mu)
+                if((r__1 = e[lll], f2c_abs(r__1)) <= tol * mu)
                 {
                     e[lll] = 0.f;
                     goto L60;
                 }
-                mu = (r__2 = d__[lll + 1], f2c_abs(r__2)) * (mu / (mu + (r__1 = e[ lll], f2c_abs(r__1))));
-                sminl = fla_min(sminl,mu);
+                mu = (r__2 = d__[lll + 1], f2c_abs(r__2))
+                     * (mu / (mu + (r__1 = e[lll], f2c_abs(r__1))));
+                sminl = fla_min(sminl, mu);
                 /* L100: */
             }
         }
@@ -632,7 +650,8 @@ L90:
     {
         /* Run convergence test in backward direction */
         /* First apply standard test to top of matrix */
-        if ((r__2 = e[ll], f2c_abs(r__2)) <= f2c_abs(tol) * (r__1 = d__[ll], f2c_abs(r__1) ) || tol < 0.f && (r__3 = e[ll], f2c_abs(r__3)) <= thresh)
+        if((r__2 = e[ll], f2c_abs(r__2)) <= f2c_abs(tol) * (r__1 = d__[ll], f2c_abs(r__1))
+           || tol < 0.f && (r__3 = e[ll], f2c_abs(r__3)) <= thresh)
         {
             e[ll] = 0.f;
             goto L60;
@@ -646,13 +665,14 @@ L90:
             i__1 = ll;
             for(lll = m - 1; lll >= i__1; --lll)
             {
-                if ((r__1 = e[lll], f2c_abs(r__1)) <= tol * mu)
+                if((r__1 = e[lll], f2c_abs(r__1)) <= tol * mu)
                 {
                     e[lll] = 0.f;
                     goto L60;
                 }
-                mu = (r__2 = d__[lll], f2c_abs(r__2)) * (mu / (mu + (r__1 = e[lll], f2c_abs(r__1))));
-                sminl = fla_min(sminl,mu);
+                mu = (r__2 = d__[lll], f2c_abs(r__2))
+                     * (mu / (mu + (r__1 = e[lll], f2c_abs(r__1))));
+                sminl = fla_min(sminl, mu);
                 /* L110: */
             }
         }
@@ -664,7 +684,7 @@ L90:
     /* Computing MAX */
     r__1 = eps;
     r__2 = tol * .01f; // , expr subst
-    if (tol >= 0.f && *n * tol * (sminl / smax) <= fla_max(r__1,r__2))
+    if(tol >= 0.f && *n * tol * (sminl / smax) <= fla_max(r__1, r__2))
     {
         /* Use a zero shift to avoid loss of relative accuracy */
         shift = 0.f;
@@ -699,7 +719,7 @@ L90:
     if(shift == 0.f)
     {
         oldsn = 0;
-        if (idir == 1)
+        if(idir == 1)
         {
             /* Chase bulge from top to bottom */
             /* Save cosines and sines for later singular vector updates */
@@ -730,23 +750,22 @@ L90:
             if(*ncvt > 0)
             {
                 i__1 = m - ll + 1;
-                aocl_lapack_clasr("L", "V", "F", &i__1, ncvt, &rwork[1], &rwork[*n],
-                                  &vt[ll + vt_dim1], ldvt);
+                clasr_("L", "V", "F", &i__1, ncvt, &rwork[1], &rwork[*n], &vt[ll + vt_dim1], ldvt);
             }
             if(*nru > 0)
             {
                 i__1 = m - ll + 1;
-                aocl_lapack_clasr("R", "V", "F", nru, &i__1, &rwork[nm12 + 1], &rwork[nm13 + 1],
-                                  &u[ll * u_dim1 + 1], ldu);
+                clasr_("R", "V", "F", nru, &i__1, &rwork[nm12 + 1], &rwork[nm13 + 1],
+                       &u[ll * u_dim1 + 1], ldu);
             }
             if(*ncc > 0)
             {
                 i__1 = m - ll + 1;
-                aocl_lapack_clasr("L", "V", "F", &i__1, ncc, &rwork[nm12 + 1], &rwork[nm13 + 1],
-                                  &c__[ll + c_dim1], ldc);
+                clasr_("L", "V", "F", &i__1, ncc, &rwork[nm12 + 1], &rwork[nm13 + 1],
+                       &c__[ll + c_dim1], ldc);
             }
             /* Test convergence */
-            if ((r__1 = e[m - 1], f2c_abs(r__1)) <= thresh)
+            if((r__1 = e[m - 1], f2c_abs(r__1)) <= thresh)
             {
                 e[m - 1] = 0.f;
             }
@@ -782,23 +801,21 @@ L90:
             if(*ncvt > 0)
             {
                 i__1 = m - ll + 1;
-                aocl_lapack_clasr("L", "V", "B", &i__1, ncvt, &rwork[nm12 + 1], &rwork[nm13 + 1],
-                                  &vt[ll + vt_dim1], ldvt);
+                clasr_("L", "V", "B", &i__1, ncvt, &rwork[nm12 + 1], &rwork[nm13 + 1],
+                       &vt[ll + vt_dim1], ldvt);
             }
             if(*nru > 0)
             {
                 i__1 = m - ll + 1;
-                aocl_lapack_clasr("R", "V", "B", nru, &i__1, &rwork[1], &rwork[*n],
-                                  &u[ll * u_dim1 + 1], ldu);
+                clasr_("R", "V", "B", nru, &i__1, &rwork[1], &rwork[*n], &u[ll * u_dim1 + 1], ldu);
             }
             if(*ncc > 0)
             {
                 i__1 = m - ll + 1;
-                aocl_lapack_clasr("L", "V", "B", &i__1, ncc, &rwork[1], &rwork[*n],
-                                  &c__[ll + c_dim1], ldc);
+                clasr_("L", "V", "B", &i__1, ncc, &rwork[1], &rwork[*n], &c__[ll + c_dim1], ldc);
             }
             /* Test convergence */
-            if ((r__1 = e[ll], f2c_abs(r__1)) <= thresh)
+            if((r__1 = e[ll], f2c_abs(r__1)) <= thresh)
             {
                 e[ll] = 0.f;
             }
@@ -811,7 +828,8 @@ L90:
         {
             /* Chase bulge from top to bottom */
             /* Save cosines and sines for later singular vector updates */
-            f = ((r__1 = d__[ll], f2c_abs(r__1)) - shift) * (r_sign(&c_b49, &d__[ ll]) + shift / d__[ll]);
+            f = ((r__1 = d__[ll], f2c_abs(r__1)) - shift)
+                * (r_sign(&c_b49, &d__[ll]) + shift / d__[ll]);
             g = e[ll];
             i__1 = m - 1;
             for(i__ = ll; i__ <= i__1; ++i__)
@@ -845,23 +863,22 @@ L90:
             if(*ncvt > 0)
             {
                 i__1 = m - ll + 1;
-                aocl_lapack_clasr("L", "V", "F", &i__1, ncvt, &rwork[1], &rwork[*n],
-                                  &vt[ll + vt_dim1], ldvt);
+                clasr_("L", "V", "F", &i__1, ncvt, &rwork[1], &rwork[*n], &vt[ll + vt_dim1], ldvt);
             }
             if(*nru > 0)
             {
                 i__1 = m - ll + 1;
-                aocl_lapack_clasr("R", "V", "F", nru, &i__1, &rwork[nm12 + 1], &rwork[nm13 + 1],
-                                  &u[ll * u_dim1 + 1], ldu);
+                clasr_("R", "V", "F", nru, &i__1, &rwork[nm12 + 1], &rwork[nm13 + 1],
+                       &u[ll * u_dim1 + 1], ldu);
             }
             if(*ncc > 0)
             {
                 i__1 = m - ll + 1;
-                aocl_lapack_clasr("L", "V", "F", &i__1, ncc, &rwork[nm12 + 1], &rwork[nm13 + 1],
-                                  &c__[ll + c_dim1], ldc);
+                clasr_("L", "V", "F", &i__1, ncc, &rwork[nm12 + 1], &rwork[nm13 + 1],
+                       &c__[ll + c_dim1], ldc);
             }
             /* Test convergence */
-            if ((r__1 = e[m - 1], f2c_abs(r__1)) <= thresh)
+            if((r__1 = e[m - 1], f2c_abs(r__1)) <= thresh)
             {
                 e[m - 1] = 0.f;
             }
@@ -870,7 +887,8 @@ L90:
         {
             /* Chase bulge from bottom to top */
             /* Save cosines and sines for later singular vector updates */
-            f = ((r__1 = d__[m], f2c_abs(r__1)) - shift) * (r_sign(&c_b49, &d__[m] ) + shift / d__[m]);
+            f = ((r__1 = d__[m], f2c_abs(r__1)) - shift)
+                * (r_sign(&c_b49, &d__[m]) + shift / d__[m]);
             g = e[m - 1];
             i__1 = ll + 1;
             for(i__ = m; i__ >= i__1; --i__)
@@ -901,7 +919,7 @@ L90:
             }
             e[ll] = f;
             /* Test convergence */
-            if ((r__1 = e[ll], f2c_abs(r__1)) <= thresh)
+            if((r__1 = e[ll], f2c_abs(r__1)) <= thresh)
             {
                 e[ll] = 0.f;
             }
@@ -909,20 +927,18 @@ L90:
             if(*ncvt > 0)
             {
                 i__1 = m - ll + 1;
-                aocl_lapack_clasr("L", "V", "B", &i__1, ncvt, &rwork[nm12 + 1], &rwork[nm13 + 1],
-                                  &vt[ll + vt_dim1], ldvt);
+                clasr_("L", "V", "B", &i__1, ncvt, &rwork[nm12 + 1], &rwork[nm13 + 1],
+                       &vt[ll + vt_dim1], ldvt);
             }
             if(*nru > 0)
             {
                 i__1 = m - ll + 1;
-                aocl_lapack_clasr("R", "V", "B", nru, &i__1, &rwork[1], &rwork[*n],
-                                  &u[ll * u_dim1 + 1], ldu);
+                clasr_("R", "V", "B", nru, &i__1, &rwork[1], &rwork[*n], &u[ll * u_dim1 + 1], ldu);
             }
             if(*ncc > 0)
             {
                 i__1 = m - ll + 1;
-                aocl_lapack_clasr("L", "V", "B", &i__1, ncc, &rwork[1], &rwork[*n],
-                                  &c__[ll + c_dim1], ldc);
+                clasr_("L", "V", "B", &i__1, ncc, &rwork[1], &rwork[*n], &c__[ll + c_dim1], ldc);
             }
         }
     }

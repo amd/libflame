@@ -1,13 +1,13 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
-#include "FLA_f2c.h" 
 static integer c__1 = 1;
 static integer c_n1 = -1;
 
-int dsytrd_check(char *uplo, integer *n, double *a, integer * lda, double *d__, double *e, double *tau, double * work, integer *lwork, integer *info)
+int dsytrd_check(char *uplo, integer *n, double *a, integer *lda, double *d__, double *e,
+                 double *tau, double *work, integer *lwork, integer *info)
 {
     /* System generated locals */
-  integer a_dim1, a_offset, i__1;
+    integer a_dim1, a_offset, i__1;
     /* Local variables */
     integer nb;
     logical upper;
@@ -26,7 +26,7 @@ int dsytrd_check(char *uplo, integer *n, double *a, integer * lda, double *d__, 
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -34,7 +34,7 @@ int dsytrd_check(char *uplo, integer *n, double *a, integer * lda, double *d__, 
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }

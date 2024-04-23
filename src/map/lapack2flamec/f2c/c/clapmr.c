@@ -105,9 +105,9 @@ void clapmr_(logical *forwrd, integer *m, integer *n, complex *x, integer *ldx, 
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clapmr inputs: m %lld, n %lld, ldx %lld, k %lld",*m, *n, *ldx, *k);
+    snprintf(buffer, 256, "clapmr inputs: m %lld, n %lld, ldx %lld, k %lld", *m, *n, *ldx, *k);
 #else
-    snprintf(buffer, 256,"clapmr inputs: m %d, n %d, ldx %d, k %d",*m, *n, *ldx, *k);
+    snprintf(buffer, 256, "clapmr inputs: m %d, n %d, ldx %d, k %d", *m, *n, *ldx, *k);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -183,7 +183,7 @@ void clapmr_(logical *forwrd, integer *m, integer *n, complex *x, integer *ldx, 
             in = k[in];
             goto L20;
         L40: /* L50: */
-            ;
+             ;
         }
     }
     else
@@ -222,7 +222,7 @@ void clapmr_(logical *forwrd, integer *m, integer *n, complex *x, integer *ldx, 
             j = k[j];
             goto L60;
         L80: /* L90: */
-            ;
+             ;
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

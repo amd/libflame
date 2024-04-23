@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b CGEQR2P computes the QR factorization of a general rectangular matrix with
  * non-negative diagona l elements using an unblocked algorithm. */
 /* =========== DOCUMENTATION =========== */
@@ -121,15 +121,16 @@ v(i+1:m) is stored on exit in A(i+1:m,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgeqr2p_(integer *m, integer *n, complex *a, integer * lda, complex *tau, complex *work, integer *info)
+void cgeqr2p_(integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *work,
+              integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgeqr2p inputs: m %lld, n %lld, lda %lld",*m, *n, *lda);
+    snprintf(buffer, 256, "cgeqr2p inputs: m %lld, n %lld, lda %lld", *m, *n, *lda);
 #else
-    snprintf(buffer, 256,"cgeqr2p inputs: m %d, n %d, lda %d",*m, *n, *lda);
+    snprintf(buffer, 256, "cgeqr2p inputs: m %d, n %d, lda %d", *m, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -142,7 +143,11 @@ void cgeqr2p_(integer *m, integer *n, complex *a, integer * lda, complex *tau, c
     integer i__, k;
     complex alpha;
     extern /* Subroutine */
-    void clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clarfgp_(integer *, complex *, complex *, integer *, complex *);
+        void
+        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+               complex *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        clarfgp_(integer *, complex *, complex *, integer *, complex *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -178,7 +183,7 @@ void cgeqr2p_(integer *m, integer *n, complex *a, integer * lda, complex *tau, c
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
@@ -189,7 +194,7 @@ void cgeqr2p_(integer *m, integer *n, complex *a, integer * lda, complex *tau, c
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    k = fla_min(*m,*n);
+    k = fla_min(*m, *n);
     i__1 = k;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
@@ -197,8 +202,9 @@ void cgeqr2p_(integer *m, integer *n, complex *a, integer * lda, complex *tau, c
         i__2 = *m - i__ + 1;
         /* Computing MIN */
         i__3 = i__ + 1;
-        clarfgp_(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, &tau[i__]);
-        if (i__ < *n)
+        clarfgp_(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1,
+                 &tau[i__]);
+        if(i__ < *n)
         {
             /* Apply H(i)**H to A(i:m,i+1:n) from the left */
             i__2 = i__ + i__ * a_dim1;
@@ -210,8 +216,8 @@ void cgeqr2p_(integer *m, integer *n, complex *a, integer * lda, complex *tau, c
             i__2 = *m - i__ + 1;
             i__3 = *n - i__;
             r_cnjg(&q__1, &tau[i__]);
-            aocl_lapack_clarf("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &q__1,
-                              &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
+            clarf_("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &q__1,
+                   &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
             i__2 = i__ + i__ * a_dim1;
             a[i__2].real = alpha.real;
             a[i__2].imag = alpha.imag; // , expr subst

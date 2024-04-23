@@ -1,22 +1,28 @@
-/* ../netlib/v3.9.0/zgelqt3.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/zgelqt3.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    1.,0.
-}
-;
-/* > \brief \b ZGELQT3 recursively computes a LQ factorization of a general real or complex matrix using the c ompact WY representation of Q. */
+static doublecomplex c_b1 = {1., 0.};
+/* > \brief \b ZGELQT3 recursively computes a LQ factorization of a general real or complex matrix
+ * using the c ompact WY representation of Q. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DGEQRT3 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgelqt3 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgelqt3
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgelqt3 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgelqt3
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgelqt3 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgelqt3
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -125,10 +131,13 @@ the elements below the diagonal are not used. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgelqt3_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *t, integer *ldt, integer *info)
+void zgelqt3_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *t,
+              integer *ldt, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgelqt3 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS "",*m, *n, *lda, *ldt);
+    AOCL_DTL_SNPRINTF("zgelqt3 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS
+                      "",
+                      *m, *n, *lda, *ldt);
 
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4, i__5;
@@ -138,7 +147,13 @@ void zgelqt3_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomp
     /* Local variables */
     integer i__, j, i1, j1, m1, m2, iinfo;
     extern /* Subroutine */
-    void zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+        void
+        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
+               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
+        ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -164,33 +179,33 @@ void zgelqt3_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomp
     t -= t_offset;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < *m)
+    else if(*n < *m)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
-    else if (*ldt < fla_max(1,*m))
+    else if(*ldt < fla_max(1, *m))
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZGELQT3", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (*m == 1)
+    if(*m == 1)
     {
         /* Compute Householder transform when N=1 */
-        zlarfg_(n, &a[a_offset], &a[fla_min(2,*n) * a_dim1 + 1], lda, &t[t_offset] );
+        zlarfg_(n, &a[a_offset], &a[fla_min(2, *n) * a_dim1 + 1], lda, &t[t_offset]);
         i__1 = t_dim1 + 1;
         d_cnjg(&z__1, &t[t_dim1 + 1]);
         t[i__1].r = z__1.r;
@@ -203,22 +218,18 @@ void zgelqt3_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomp
         m2 = *m - m1;
         /* Computing MIN */
         i__1 = m1 + 1;
-        i1 = fla_min(i__1,*m);
+        i1 = fla_min(i__1, *m);
         /* Computing MIN */
         i__1 = *m + 1;
-        j1 = fla_min(i__1,*n);
+        j1 = fla_min(i__1, *n);
         /* Compute A(1:M1,1:N) <- (Y1,R1,T1), where Q1 = I - Y1 T1 Y1^H */
         zgelqt3_(&m1, n, &a[a_offset], lda, &t[t_offset], ldt, &iinfo);
         /* Compute A(J1:M,1:N) = A(J1:M,1:N) Q1^H [workspace: T(1:N1,J1:N)] */
         i__1 = m2;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = m1;
-            for (j = 1;
-                    j <= i__2;
-                    ++j)
+            for(j = 1; j <= i__2; ++j)
             {
                 i__3 = i__ + m1 + j * t_dim1;
                 i__4 = i__ + m1 + j * a_dim1;
@@ -228,28 +239,26 @@ void zgelqt3_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomp
         }
         ztrmm_("R", "U", "C", "U", &m2, &m1, &c_b1, &a[a_offset], lda, &t[i1 + t_dim1], ldt);
         i__1 = *n - m1;
-        zgemm_("N", "C", &m2, &m1, &i__1, &c_b1, &a[i1 + i1 * a_dim1], lda, & a[i1 * a_dim1 + 1], lda, &c_b1, &t[i1 + t_dim1], ldt);
+        zgemm_("N", "C", &m2, &m1, &i__1, &c_b1, &a[i1 + i1 * a_dim1], lda, &a[i1 * a_dim1 + 1],
+               lda, &c_b1, &t[i1 + t_dim1], ldt);
         ztrmm_("R", "U", "N", "N", &m2, &m1, &c_b1, &t[t_offset], ldt, &t[i1 + t_dim1], ldt);
         i__1 = *n - m1;
         z__1.r = -1.;
         z__1.i = -0.; // , expr subst
-        zgemm_("N", "N", &m2, &i__1, &m1, &z__1, &t[i1 + t_dim1], ldt, &a[i1 * a_dim1 + 1], lda, &c_b1, &a[i1 + i1 * a_dim1], lda);
+        zgemm_("N", "N", &m2, &i__1, &m1, &z__1, &t[i1 + t_dim1], ldt, &a[i1 * a_dim1 + 1], lda,
+               &c_b1, &a[i1 + i1 * a_dim1], lda);
         ztrmm_("R", "U", "N", "U", &m2, &m1, &c_b1, &a[a_offset], lda, &t[i1 + t_dim1], ldt);
         i__1 = m2;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = m1;
-            for (j = 1;
-                    j <= i__2;
-                    ++j)
+            for(j = 1; j <= i__2; ++j)
             {
                 i__3 = i__ + m1 + j * a_dim1;
                 i__4 = i__ + m1 + j * a_dim1;
                 i__5 = i__ + m1 + j * t_dim1;
                 z__1.r = a[i__4].r - t[i__5].r;
-                z__1.i = a[i__4].i - t[i__5] .i; // , expr subst
+                z__1.i = a[i__4].i - t[i__5].i; // , expr subst
                 a[i__3].r = z__1.r;
                 a[i__3].i = z__1.i; // , expr subst
                 i__3 = i__ + m1 + j * t_dim1;
@@ -262,14 +271,10 @@ void zgelqt3_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomp
         zgelqt3_(&m2, &i__1, &a[i1 + i1 * a_dim1], lda, &t[i1 + i1 * t_dim1], ldt, &iinfo);
         /* Compute T3 = T(J1:N1,1:N) = -T1 Y1^H Y2 T2 */
         i__1 = m2;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = m1;
-            for (j = 1;
-                    j <= i__2;
-                    ++j)
+            for(j = 1; j <= i__2; ++j)
             {
                 i__3 = j + (i__ + m1) * t_dim1;
                 i__4 = j + (i__ + m1) * a_dim1;
@@ -277,13 +282,16 @@ void zgelqt3_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomp
                 t[i__3].i = a[i__4].i; // , expr subst
             }
         }
-        ztrmm_("R", "U", "C", "U", &m1, &m2, &c_b1, &a[i1 + i1 * a_dim1], lda, &t[i1 * t_dim1 + 1], ldt);
+        ztrmm_("R", "U", "C", "U", &m1, &m2, &c_b1, &a[i1 + i1 * a_dim1], lda, &t[i1 * t_dim1 + 1],
+               ldt);
         i__1 = *n - *m;
-        zgemm_("N", "C", &m1, &m2, &i__1, &c_b1, &a[j1 * a_dim1 + 1], lda, &a[ i1 + j1 * a_dim1], lda, &c_b1, &t[i1 * t_dim1 + 1], ldt);
+        zgemm_("N", "C", &m1, &m2, &i__1, &c_b1, &a[j1 * a_dim1 + 1], lda, &a[i1 + j1 * a_dim1],
+               lda, &c_b1, &t[i1 * t_dim1 + 1], ldt);
         z__1.r = -1.;
         z__1.i = -0.; // , expr subst
-        ztrmm_("L", "U", "N", "N", &m1, &m2, &z__1, &t[t_offset], ldt, &t[i1 * t_dim1 + 1], ldt) ;
-        ztrmm_("R", "U", "N", "N", &m1, &m2, &c_b1, &t[i1 + i1 * t_dim1], ldt, &t[i1 * t_dim1 + 1], ldt);
+        ztrmm_("L", "U", "N", "N", &m1, &m2, &z__1, &t[t_offset], ldt, &t[i1 * t_dim1 + 1], ldt);
+        ztrmm_("R", "U", "N", "N", &m1, &m2, &c_b1, &t[i1 + i1 * t_dim1], ldt, &t[i1 * t_dim1 + 1],
+               ldt);
         /* Y = (Y1,Y2);
         L = [ L1 0 ];
         T = [T1 T3] */
@@ -294,4 +302,3 @@ void zgelqt3_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomp
     /* End of ZGELQT3 */
 }
 /* zgelqt3_ */
-

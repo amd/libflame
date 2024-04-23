@@ -264,12 +264,16 @@ these eigenvalues are flagged by a */
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *il, integer *iu, real *abstol, real *d__, real *e, integer *m, integer *nsplit, real *w, integer *iblock, integer * isplit, real *work, integer *iwork, integer *info)
+void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *il, integer *iu,
+             real *abstol, real *d__, real *e, integer *m, integer *nsplit, real *w,
+             integer *iblock, integer *isplit, real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sstebz inputs: range %c, order %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS "",*range, *order, *n, *il, *iu);
+    snprintf(buffer, 256,
+             "sstebz inputs: range %c, order %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS "",
+             *range, *order, *n, *il, *iu);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -301,11 +305,15 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
     real safemn;
     integer idumma[1];
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer idiscu;
     extern /* Subroutine */
-    void slaebz_(integer *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        slaebz_(integer *, integer *, integer *, integer *, integer *, integer *, real *, real *,
+                real *, real *, real *, real *, integer *, real *, real *, integer *, integer *,
+                real *, integer *, integer *);
     integer iorder;
     logical ncnvrg;
     real pivmin;
@@ -345,15 +353,15 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
     wlu = 0;
     wul = 0;
     /* Decode RANGE */
-    if (lsame_(range, "A", 1, 1))
+    if(lsame_(range, "A", 1, 1))
     {
         irange = 1;
     }
-    else if (lsame_(range, "V", 1, 1))
+    else if(lsame_(range, "V", 1, 1))
     {
         irange = 2;
     }
-    else if (lsame_(range, "I", 1, 1))
+    else if(lsame_(range, "I", 1, 1))
     {
         irange = 3;
     }
@@ -362,11 +370,11 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
         irange = 0;
     }
     /* Decode ORDER */
-    if (lsame_(order, "B", 1, 1))
+    if(lsame_(order, "B", 1, 1))
     {
         iorder = 2;
     }
-    else if (lsame_(order, "E", 1, 1))
+    else if(lsame_(order, "E", 1, 1))
     {
         iorder = 1;
     }
@@ -394,11 +402,11 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
             *info = -5;
         }
     }
-    else if (irange == 3 && (*il < 1 || *il > fla_max(1,*n)))
+    else if(irange == 3 && (*il < 1 || *il > fla_max(1, *n)))
     {
         *info = -6;
     }
-    else if (irange == 3 && (*iu < fla_min(*n,*il) || *iu > *n))
+    else if(irange == 3 && (*iu < fla_min(*n, *il) || *iu > *n))
     {
         *info = -7;
     }
@@ -431,7 +439,7 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
     safemn = slamch_("S");
     ulp = slamch_("P");
     rtoli = ulp * 2.f;
-    nb = aocl_lapack_ilaenv(&c__1, "SSTEBZ", " ", n, &c_n1, &c_n1, &c_n1);
+    nb = ilaenv_(&c__1, "SSTEBZ", " ", n, &c_n1, &c_n1, &c_n1);
     if(nb <= 1)
     {
         nb = 0;
@@ -466,7 +474,7 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
         tmp1 = r__1 * r__1;
         /* Computing 2nd power */
         r__2 = ulp;
-        if ((r__1 = d__[j] * d__[j - 1], f2c_abs(r__1)) * (r__2 * r__2) + safemn > tmp1)
+        if((r__1 = d__[j] * d__[j - 1], f2c_abs(r__1)) * (r__2 * r__2) + safemn > tmp1)
         {
             isplit[*nsplit] = (aocl_int_t)(j - 1);
             ++(*nsplit);
@@ -475,7 +483,7 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
         else
         {
             work[j - 1] = tmp1;
-            pivmin = fla_max(pivmin,tmp1);
+            pivmin = fla_max(pivmin, tmp1);
         }
         /* L10: */
     }
@@ -498,26 +506,26 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
             /* Computing MAX */
             r__1 = gu;
             r__2 = d__[j] + tmp1 + tmp2; // , expr subst
-            gu = fla_max(r__1,r__2);
+            gu = fla_max(r__1, r__2);
             /* Computing MIN */
             r__1 = gl;
             r__2 = d__[j] - tmp1 - tmp2; // , expr subst
-            gl = fla_min(r__1,r__2);
+            gl = fla_min(r__1, r__2);
             tmp1 = tmp2;
             /* L20: */
         }
         /* Computing MAX */
         r__1 = gu;
         r__2 = d__[*n] + tmp1; // , expr subst
-        gu = fla_max(r__1,r__2);
+        gu = fla_max(r__1, r__2);
         /* Computing MIN */
         r__1 = gl;
         r__2 = d__[*n] - tmp1; // , expr subst
-        gl = fla_min(r__1,r__2);
+        gl = fla_min(r__1, r__2);
         /* Computing MAX */
         r__1 = f2c_abs(gl);
         r__2 = f2c_abs(gu); // , expr subst
-        tnorm = fla_max(r__1,r__2);
+        tnorm = fla_max(r__1, r__2);
         gl = gl - tnorm * 2.1f * ulp * *n - pivmin * 4.2000000000000002f;
         gu = gu + tnorm * 2.1f * ulp * *n + pivmin * 2.1f;
         /* Compute Iteration parameters */
@@ -538,13 +546,13 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
         work[*n + 6] = gu;
         iwork[1] = -1;
         iwork[2] = -1;
-        iwork[3] = (aocl_int_t)(*n + 1);
-        iwork[4] = (aocl_int_t)(*n + 1);
-        iwork[5] = (aocl_int_t)(*il - 1);
-        iwork[6] = (aocl_int_t)(*iu);
-        aocl_lapack_slaebz(&c__3, &itmax, n, &c__2, &c__2, &nb, &atoli, &rtoli, &pivmin, &d__[1],
-                           &e[1], &work[1], &iwork[5], &work[*n + 1], &work[*n + 5], &iout,
-                           &iwork[1], &w[1], &iblock[1], &iinfo);
+        iwork[3] = *n + 1;
+        iwork[4] = *n + 1;
+        iwork[5] = *il - 1;
+        iwork[6] = *iu;
+        slaebz_(&c__3, &itmax, n, &c__2, &c__2, &nb, &atoli, &rtoli, &pivmin, &d__[1], &e[1],
+                &work[1], &iwork[5], &work[*n + 1], &work[*n + 5], &iout, &iwork[1], &w[1],
+                &iblock[1], &iinfo);
         if(iwork[6] == *iu)
         {
             wl = work[*n + 1];
@@ -575,15 +583,16 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
         /* RANGE='A' or 'V' -- Set ATOLI */
         /* Computing MAX */
         r__3 = f2c_abs(d__[1]) + f2c_abs(e[1]);
-        r__4 = (r__1 = d__[*n], f2c_abs(r__1)) + ( r__2 = e[*n - 1], f2c_abs(r__2)); // , expr subst
-        tnorm = fla_max(r__3,r__4);
+        r__4 = (r__1 = d__[*n], f2c_abs(r__1)) + (r__2 = e[*n - 1], f2c_abs(r__2)); // , expr subst
+        tnorm = fla_max(r__3, r__4);
         i__1 = *n - 1;
         for(j = 2; j <= i__1; ++j)
         {
             /* Computing MAX */
             r__4 = tnorm;
-            r__5 = (r__1 = d__[j], f2c_abs(r__1)) + (r__2 = e[j - 1], f2c_abs(r__2)) + (r__3 = e[j], f2c_abs(r__3));  // , expr subst
-            tnorm = fla_max(r__4,r__5);
+            r__5 = (r__1 = d__[j], f2c_abs(r__1)) + (r__2 = e[j - 1], f2c_abs(r__2))
+                   + (r__3 = e[j], f2c_abs(r__3)); // , expr subst
+            tnorm = fla_max(r__4, r__5);
             /* L30: */
         }
         if(*abstol <= 0.f)
@@ -653,26 +662,26 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
                 /* Computing MAX */
                 r__1 = gu;
                 r__2 = d__[j] + tmp1 + tmp2; // , expr subst
-                gu = fla_max(r__1,r__2);
+                gu = fla_max(r__1, r__2);
                 /* Computing MIN */
                 r__1 = gl;
                 r__2 = d__[j] - tmp1 - tmp2; // , expr subst
-                gl = fla_min(r__1,r__2);
+                gl = fla_min(r__1, r__2);
                 tmp1 = tmp2;
                 /* L40: */
             }
             /* Computing MAX */
             r__1 = gu;
             r__2 = d__[iend] + tmp1; // , expr subst
-            gu = fla_max(r__1,r__2);
+            gu = fla_max(r__1, r__2);
             /* Computing MIN */
             r__1 = gl;
             r__2 = d__[iend] - tmp1; // , expr subst
-            gl = fla_min(r__1,r__2);
+            gl = fla_min(r__1, r__2);
             /* Computing MAX */
             r__1 = f2c_abs(gl);
             r__2 = f2c_abs(gu); // , expr subst
-            bnorm = fla_max(r__1,r__2);
+            bnorm = fla_max(r__1, r__2);
             gl = gl - bnorm * 2.1f * ulp * in - pivmin * 2.1f;
             gu = gu + bnorm * 2.1f * ulp * in + pivmin * 2.1f;
             /* Compute ATOLI for the current submatrix */
@@ -681,7 +690,7 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
                 /* Computing MAX */
                 r__1 = f2c_abs(gl);
                 r__2 = f2c_abs(gu); // , expr subst
-                atoli = ulp * fla_max(r__1,r__2);
+                atoli = ulp * fla_max(r__1, r__2);
             }
             else
             {
@@ -695,9 +704,9 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
                     nwu += in;
                     goto L70;
                 }
-                gl = fla_max(gl,wl);
-                gu = fla_min(gu,wu);
-                if (gl >= gu)
+                gl = fla_max(gl, wl);
+                gu = fla_min(gu, wu);
+                if(gl >= gu)
                 {
                     goto L70;
                 }
@@ -705,19 +714,17 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
             /* Set Up Initial Interval */
             work[*n + 1] = gl;
             work[*n + in + 1] = gu;
-            aocl_lapack_slaebz(&c__1, &c__0, &in, &in, &c__1, &nb, &atoli, &rtoli, &pivmin,
-                               &d__[ibegin], &e[ibegin], &work[ibegin], idumma, &work[*n + 1],
-                               &work[*n + (in << 1) + 1], &im, &iwork[1], &w[*m + 1],
-                               &iblock[*m + 1], &iinfo);
+            slaebz_(&c__1, &c__0, &in, &in, &c__1, &nb, &atoli, &rtoli, &pivmin, &d__[ibegin],
+                    &e[ibegin], &work[ibegin], idumma, &work[*n + 1], &work[*n + (in << 1) + 1],
+                    &im, &iwork[1], &w[*m + 1], &iblock[*m + 1], &iinfo);
             nwl += iwork[1];
             nwu += iwork[in + 1];
             iwoff = *m - iwork[1];
             /* Compute Eigenvalues */
             itmax = (integer)((log(gu - gl + pivmin) - log(pivmin)) / log(2.f)) + 2;
-            aocl_lapack_slaebz(&c__2, &itmax, &in, &in, &c__1, &nb, &atoli, &rtoli, &pivmin,
-                               &d__[ibegin], &e[ibegin], &work[ibegin], idumma, &work[*n + 1],
-                               &work[*n + (in << 1) + 1], &iout, &iwork[1], &w[*m + 1],
-                               &iblock[*m + 1], &iinfo);
+            slaebz_(&c__2, &itmax, &in, &in, &c__1, &nb, &atoli, &rtoli, &pivmin, &d__[ibegin],
+                    &e[ibegin], &work[ibegin], idumma, &work[*n + 1], &work[*n + (in << 1) + 1],
+                    &iout, &iwork[1], &w[*m + 1], &iblock[*m + 1], &iinfo);
             /* Copy Eigenvalues Into W and IBLOCK */
             /* Use -JB for block number for unconverged eigenvalues. */
             i__2 = iout;

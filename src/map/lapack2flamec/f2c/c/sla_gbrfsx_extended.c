@@ -1,6 +1,9 @@
 #ifdef FLA_ENABLE_XBLAS
-/* ../netlib/sla_gbrfsx_extended.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sla_gbrfsx_extended.f -- translated by f2c (version 20100827). You must link the
+ resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
+ Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
+ with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b6 = -1.f;
@@ -412,7 +415,13 @@ i+1}
 /* > \ingroup realGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer *n, integer *kl, integer *ku, integer *nrhs, real *ab, integer *ldab, real *afb, integer *ldafb, integer *ipiv, logical *colequ, real *c__, real *b, integer *ldb, real *y, integer * ldy, real *berr_out__, integer *n_norms__, real *err_bnds_norm__, real *err_bnds_comp__, real *res, real *ayb, real *dy, real *y_tail__, real *rcond, integer *ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__, integer *info)
+void sla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *n, integer *kl,
+                          integer *ku, integer *nrhs, real *ab, integer *ldab, real *afb,
+                          integer *ldafb, integer *ipiv, logical *colequ, real *c__, real *b,
+                          integer *ldb, real *y, integer *ldy, real *berr_out__, integer *n_norms__,
+                          real *err_bnds_norm__, real *err_bnds_comp__, real *res, real *ayb,
+                          real *dy, real *y_tail__, real *rcond, integer *ithresh, real *rthresh,
+                          real *dz_ub__, logical *ignore_cwise__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sla_gbrfsx_extended inputs: n %" FLA_IS ",kl %" FLA_IS ",ku %" FLA_IS
@@ -429,32 +438,46 @@ void sla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer 
     real dxratmax, dzratmax;
     integer i__, j, m;
     extern /* Subroutine */
-    void sla_gbamv_(integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sla_gbamv_(integer *, integer *, integer *, integer *, integer *, real *, real *, integer *,
+                   real *, integer *, real *, real *, integer *);
     logical incr_prec__;
     real prev_dz_z__, yk, final_dx_x__, final_dz_z__;
     extern /* Subroutine */
-    void sla_wwaddw_(integer *, real *, real *, real * );
+        void
+        sla_wwaddw_(integer *, real *, real *, real *);
     real prevnormdx;
     integer cnt;
     real dyk, eps, incr_thresh__, dx_x__, dz_z__, ymin;
     extern /* Subroutine */
-    void sla_lin_berr_(integer *, integer *, integer *, real *, real *, real *), blas_sgbmv_x_(integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, integer *);
+        void
+        sla_lin_berr_(integer *, integer *, integer *, real *, real *, real *),
+        blas_sgbmv_x_(integer *, integer *, integer *, integer *, integer *, real *, real *,
+                      integer *, real *, integer *, real *, real *, integer *, integer *);
     integer y_prec_state__;
     extern /* Subroutine */
-    int blas_sgbmv2_x_(integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, integer *, real *, real *, integer *, integer *), sgbmv_(char *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        int
+        blas_sgbmv2_x_(integer *, integer *, integer *, integer *, integer *, real *, real *,
+                       integer *, real *, real *, integer *, real *, real *, integer *, integer *),
+        sgbmv_(char *, integer *, integer *, integer *, integer *, real *, real *, integer *,
+               real *, integer *, real *, real *, integer *);
     real dxrat, dzrat;
     char trans[1];
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     real normx, normy;
     extern /* Subroutine */
-    void saxpy_(integer *, real *, real *, integer *, real *, integer *);
+        void
+        saxpy_(integer *, real *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    void sgbtrs_(char *, integer *, integer *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        sgbtrs_(char *, integer *, integer *, integer *, integer *, real *, integer *, integer *,
+                real *, integer *, integer *);
     real normdx;
     extern /* Character */
-        void
+        VOID
         chla_transtype_(char *, integer *);
     real hugeval;
     integer x_state__, z_state__;
@@ -577,34 +600,34 @@ void sla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer 
             {
                 yk = (r__1 = y[i__ + j * y_dim1], f2c_abs(r__1));
                 dyk = (r__1 = dy[i__], f2c_abs(r__1));
-                if (yk != 0.f)
+                if(yk != 0.f)
                 {
                     /* Computing MAX */
                     r__1 = dz_z__;
                     r__2 = dyk / yk; // , expr subst
-                    dz_z__ = fla_max(r__1,r__2);
+                    dz_z__ = fla_max(r__1, r__2);
                 }
                 else if(dyk != 0.f)
                 {
                     dz_z__ = hugeval;
                 }
-                ymin = fla_min(ymin,yk);
-                normy = fla_max(normy,yk);
-                if (*colequ)
+                ymin = fla_min(ymin, yk);
+                normy = fla_max(normy, yk);
+                if(*colequ)
                 {
                     /* Computing MAX */
                     r__1 = normx;
                     r__2 = yk * c__[i__]; // , expr subst
-                    normx = fla_max(r__1,r__2);
+                    normx = fla_max(r__1, r__2);
                     /* Computing MAX */
                     r__1 = normdx;
                     r__2 = dyk * c__[i__]; // , expr subst
-                    normdx = fla_max(r__1,r__2);
+                    normdx = fla_max(r__1, r__2);
                 }
                 else
                 {
                     normx = normy;
-                    normdx = fla_max(normdx,dyk);
+                    normdx = fla_max(normdx, dyk);
                 }
             }
             if(normx != 0.f)
@@ -776,7 +799,8 @@ void sla_gbrfsx_extended_(integer *prec_type__, integer * trans_type__, integer 
             ayb[i__] = (r__1 = b[i__ + j * b_dim1], f2c_abs(r__1));
         }
         /* Compute f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s). */
-        sla_gbamv_(trans_type__, n, n, kl, ku, &c_b8, &ab[ab_offset], ldab, & y[j * y_dim1 + 1], &c__1, &c_b8, &ayb[1], &c__1);
+        sla_gbamv_(trans_type__, n, n, kl, ku, &c_b8, &ab[ab_offset], ldab, &y[j * y_dim1 + 1],
+                   &c__1, &c_b8, &ayb[1], &c__1);
         sla_lin_berr_(n, n, &c__1, &res[1], &ayb[1], &berr_out__[j]);
         /* End of loop for each RHS */
     }

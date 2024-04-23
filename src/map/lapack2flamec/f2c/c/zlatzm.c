@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {1., 0.};
-static aocl_int64_t c__1 = 1;
+static doublecomplex c_b1 = {1., 0.};
+static integer c__1 = 1;
 /* > \brief \b ZLATZM */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -150,17 +150,30 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zlatzm_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv, doublecomplex *tau, doublecomplex * c1, doublecomplex *c2, integer *ldc, doublecomplex *work)
+void zlatzm_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv,
+             doublecomplex *tau, doublecomplex *c1, doublecomplex *c2, integer *ldc,
+             doublecomplex *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlatzm inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *incv, *ldc);
+    AOCL_DTL_SNPRINTF("zlatzm inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS
+                      ", ldc %" FLA_IS "",
+                      *side, *m, *n, *incv, *ldc);
     /* System generated locals */
     aocl_int64_t c1_dim1, c1_offset, c2_dim1, c2_offset, i__1;
     dcomplex z__1;
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlacgv_(integer *, doublecomplex *, integer *);
+        void
+        zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+               integer *, doublecomplex *, integer *),
+        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
+               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
+        zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+               integer *, doublecomplex *, integer *),
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -189,19 +202,19 @@ void zlatzm_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv
     c1 -= c1_offset;
     --work;
     /* Function Body */
-    if (fla_min(*m,*n) == 0 || tau->r == 0. && tau->i == 0.)
+    if(fla_min(*m, *n) == 0 || tau->r == 0. && tau->i == 0.)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (lsame_(side, "L", 1, 1))
+    if(lsame_(side, "L", 1, 1))
     {
         /* w := ( C1 + v**H * C2 )**H */
         aocl_blas_zcopy(n, &c1[c1_offset], ldc, &work[1], &c__1);
         aocl_lapack_zlacgv(n, &work[1], &c__1);
         i__1 = *m - 1;
-        aocl_blas_zgemv("Conjugate transpose", &i__1, n, &c_b1, &c2[c2_offset], ldc, &v[1], incv,
-                        &c_b1, &work[1], &c__1);
+        zgemv_("Conjugate transpose", &i__1, n, &c_b1, &c2[c2_offset], ldc, &v[1], incv, &c_b1,
+               &work[1], &c__1);
         /* [ C1 ] := [ C1 ] - tau* [ 1 ] * w**H */
         /* [ C2 ] [ C2 ] [ v ] */
         aocl_lapack_zlacgv(n, &work[1], &c__1);
@@ -213,13 +226,13 @@ void zlatzm_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv
         z__1.imag = -tau->imag; // , expr subst
         aocl_blas_zgeru(&i__1, n, &z__1, &v[1], incv, &work[1], &c__1, &c2[c2_offset], ldc);
     }
-    else if (lsame_(side, "R", 1, 1))
+    else if(lsame_(side, "R", 1, 1))
     {
         /* w := C1 + C2 * v */
         aocl_blas_zcopy(m, &c1[c1_offset], &c__1, &work[1], &c__1);
         i__1 = *n - 1;
-        aocl_blas_zgemv("No transpose", m, &i__1, &c_b1, &c2[c2_offset], ldc, &v[1], incv, &c_b1,
-                        &work[1], &c__1);
+        zgemv_("No transpose", m, &i__1, &c_b1, &c2[c2_offset], ldc, &v[1], incv, &c_b1, &work[1],
+               &c__1);
         /* [ C1, C2 ] := [ C1, C2 ] - tau* w * [ 1 , v**H] */
         z__1.real = -tau->real;
         z__1.imag = -tau->imag; // , expr subst

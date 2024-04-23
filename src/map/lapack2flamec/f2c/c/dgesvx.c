@@ -349,10 +349,17 @@ if EQUED = 'N' or 'R', C */
 /* > \ingroup doubleGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-void dgesvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *a, integer *lda, doublereal *af, integer *ldaf, integer *ipiv, char *equed, doublereal *r__, doublereal *c__, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal * rcond, doublereal *ferr, doublereal *berr, doublereal *work, integer * iwork, integer *info)
+void dgesvx_(char *fact, char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda,
+             doublereal *af, integer *ldaf, integer *ipiv, char *equed, doublereal *r__,
+             doublereal *c__, doublereal *b, integer *ldb, doublereal *x, integer *ldx,
+             doublereal *rcond, doublereal *ferr, doublereal *berr, doublereal *work,
+             integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgesvx inputs: fact %c, trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *trans, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("dgesvx inputs: fact %c, trans %c, n %" FLA_IS ", nrhs %" FLA_IS
+                      ", lda %" FLA_IS ", ldaf %" FLA_IS ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS
+                      "",
+                      *fact, *trans, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
         i__2;
@@ -364,18 +371,35 @@ void dgesvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *a,
     extern logical lsame_(char *, char *, integer, integer);
     doublereal rcmin, rcmax, anorm;
     logical equil;
-    extern doublereal dlamch_(char *), dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
+    extern doublereal dlamch_(char *),
+        dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
-    void dlaqge_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, char *), dgecon_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+        void
+        dlaqge_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, doublereal *, doublereal *, char *),
+        dgecon_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, integer *, integer *);
     doublereal colcnd;
     logical nofact;
     extern /* Subroutine */
-    void dgeequ_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dgerfs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dgetrf_(integer *, integer *, doublereal *, integer *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dgeequ_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, doublereal *, doublereal *, integer *),
+        dgerfs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *,
+                integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, doublereal *, integer *, integer *),
+        dgetrf_(integer *, integer *, doublereal *, integer *, integer *, integer *),
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
-    aocl_int64_t infequ;
+    extern doublereal dlantr_(char *, char *, char *, integer *, integer *, doublereal *, integer *,
+                              doublereal *);
+    integer infequ;
     logical colequ;
     extern /* Subroutine */
-    void dgetrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dgetrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *,
+                integer *, integer *);
     doublereal rowcnd;
     logical notran;
     doublereal smlnum;
@@ -428,7 +452,7 @@ void dgesvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *a,
     notran = lsame_(trans, "N", 1, 1);
     smlnum = 0.;
     bignum = 0.;
-    if (nofact || equil)
+    if(nofact || equil)
     {
         *(unsigned char *)equed = 'N';
         rowequ = FALSE_;
@@ -442,11 +466,11 @@ void dgesvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *a,
         bignum = 1. / smlnum;
     }
     /* Test the input parameters. */
-    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -458,15 +482,15 @@ void dgesvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *a,
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (lsame_(fact, "F", 1, 1) && ! (rowequ || colequ || lsame_(equed, "N", 1, 1)))
+    else if(lsame_(fact, "F", 1, 1) && !(rowequ || colequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -10;
     }
@@ -482,11 +506,11 @@ void dgesvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *a,
                 /* Computing MIN */
                 d__1 = rcmin;
                 d__2 = r__[j]; // , expr subst
-                rcmin = fla_min(d__1,d__2);
+                rcmin = fla_min(d__1, d__2);
                 /* Computing MAX */
                 d__1 = rcmax;
                 d__2 = r__[j]; // , expr subst
-                rcmax = fla_max(d__1,d__2);
+                rcmax = fla_max(d__1, d__2);
                 /* L10: */
             }
             if(rcmin <= 0.)
@@ -495,7 +519,7 @@ void dgesvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *a,
             }
             else if(*n > 0)
             {
-                rowcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+                rowcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
             }
             else
             {
@@ -512,11 +536,11 @@ void dgesvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *a,
                 /* Computing MIN */
                 d__1 = rcmin;
                 d__2 = c__[j]; // , expr subst
-                rcmin = fla_min(d__1,d__2);
+                rcmin = fla_min(d__1, d__2);
                 /* Computing MAX */
                 d__1 = rcmax;
                 d__2 = c__[j]; // , expr subst
-                rcmax = fla_max(d__1,d__2);
+                rcmax = fla_max(d__1, d__2);
                 /* L20: */
             }
             if(rcmin <= 0.)
@@ -525,7 +549,7 @@ void dgesvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *a,
             }
             else if(*n > 0)
             {
-                colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+                colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
             }
             else
             {
@@ -534,11 +558,11 @@ void dgesvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *a,
         }
         if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -14;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -16;
             }
@@ -554,12 +578,11 @@ void dgesvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *a,
     if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        aocl_lapack_dgeequ(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, &colcnd, &amax,
-                           &infequ);
+        dgeequ_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, &colcnd, &amax, &infequ);
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            dlaqge_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, & colcnd, &amax, equed);
+            dlaqge_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, &colcnd, &amax, equed);
             rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
             colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }
@@ -606,7 +629,7 @@ void dgesvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *a,
         {
             /* Compute the reciprocal pivot growth factor of the */
             /* leading rank-deficient INFO columns of A. */
-            rpvgrw = aocl_lapack_dlantr("M", "U", "N", info, info, &af[af_offset], ldaf, &work[1]);
+            rpvgrw = dlantr_("M", "U", "N", info, info, &af[af_offset], ldaf, &work[1]);
             if(rpvgrw == 0.)
             {
                 rpvgrw = 1.;
@@ -631,8 +654,8 @@ void dgesvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *a,
     {
         *(unsigned char *)norm = 'I';
     }
-    anorm = aocl_lapack_dlange(norm, n, n, &a[a_offset], lda, &work[1]);
-    rpvgrw = aocl_lapack_dlantr("M", "U", "N", n, n, &af[af_offset], ldaf, &work[1]);
+    anorm = dlange_(norm, n, n, &a[a_offset], lda, &work[1]);
+    rpvgrw = dlantr_("M", "U", "N", n, n, &af[af_offset], ldaf, &work[1]);
     if(rpvgrw == 0.)
     {
         rpvgrw = 1.;
@@ -648,9 +671,8 @@ void dgesvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *a,
     aocl_lapack_dgetrs(trans, n, nrhs, &af[af_offset], ldaf, &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    aocl_lapack_dgerfs(trans, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1],
-                       &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1],
-                       &iwork[1], info);
+    dgerfs_(trans, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1], &b[b_offset], ldb,
+            &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(notran)

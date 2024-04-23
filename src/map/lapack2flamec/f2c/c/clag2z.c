@@ -3,12 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-/******************************************************************************
- * Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
-#include "FLA_f2c.h"
-/* > \brief \b CLAG2Z converts a scomplex single precision matrix to a scomplex double precision
- * matrix. */
+#include "FLA_f2c.h" /* > \brief \b CLAG2Z converts a complex single precision matrix to a complex double precision matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -103,15 +98,17 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clag2z_(integer *m, integer *n, complex *sa, integer * ldsa, doublecomplex *a, integer *lda, integer *info)
+void clag2z_(integer *m, integer *n, complex *sa, integer *ldsa, doublecomplex *a, integer *lda,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clag2z inputs: m %lld, n %lld, ldsa %lld, lda %lld",*m, *n, *ldsa, *lda);
+    snprintf(buffer, 256, "clag2z inputs: m %lld, n %lld, ldsa %lld, lda %lld", *m, *n, *ldsa,
+             *lda);
 #else
-    snprintf(buffer, 256,"clag2z inputs: m %d, n %d, ldsa %d, lda %d",*m, *n, *ldsa, *lda);
+    snprintf(buffer, 256, "clag2z inputs: m %d, n %d, ldsa %d, lda %d", *m, *n, *ldsa, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif

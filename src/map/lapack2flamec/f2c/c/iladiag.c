@@ -70,11 +70,11 @@ integer iladiag_(char *diag)
     /* .. External Functions .. */
     /* .. */
     /* .. Executable Statements .. */
-    if (lsame_(diag, "N", 1, 1))
+    if(lsame_(diag, "N", 1, 1))
     {
         ret_val = 131;
     }
-    else if (lsame_(diag, "U", 1, 1))
+    else if(lsame_(diag, "U", 1, 1))
     {
         ret_val = 132;
     }

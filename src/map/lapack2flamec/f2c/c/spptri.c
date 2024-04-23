@@ -98,7 +98,7 @@ void spptri_(char *uplo, integer *n, real *ap, integer *info)
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"spptri inputs: uplo %c, n %d",*uplo, *n);
+    snprintf(buffer, 256, "spptri inputs: uplo %c, n %d", *uplo, *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -109,13 +109,18 @@ void spptri_(char *uplo, integer *n, real *ap, integer *info)
     integer jjn;
     extern real sdot_(integer *, real *, integer *, real *, integer *);
     extern /* Subroutine */
-    void sspr_(char *, integer *, real *, real *, integer *, real *);
+        void
+        sspr_(char *, integer *, real *, real *, integer *, real *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     logical upper;
     extern /* Subroutine */
-    void stpmv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), stptri_(char *, char *, integer *, real *, integer *);
+        void
+        stpmv_(char *, char *, char *, integer *, real *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        stptri_(char *, char *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -140,7 +145,7 @@ void spptri_(char *uplo, integer *n, real *ap, integer *info)
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -162,7 +167,7 @@ void spptri_(char *uplo, integer *n, real *ap, integer *info)
         return;
     }
     /* Invert the triangular Cholesky factor U or L. */
-    aocl_lapack_stptri(uplo, "Non-unit", n, &ap[1], info);
+    stptri_(uplo, "Non-unit", n, &ap[1], info);
     if(*info > 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -196,12 +201,11 @@ void spptri_(char *uplo, integer *n, real *ap, integer *info)
         {
             jjn = jj + *n - j + 1;
             i__2 = *n - j + 1;
-            ap[jj] = aocl_blas_sdot(&i__2, &ap[jj], &c__1, &ap[jj], &c__1);
+            ap[jj] = sdot_(&i__2, &ap[jj], &c__1, &ap[jj], &c__1);
             if(j < *n)
             {
                 i__2 = *n - j;
-                aocl_blas_stpmv("Lower", "Transpose", "Non-unit", &i__2, &ap[jjn], &ap[jj + 1],
-                                &c__1);
+                stpmv_("Lower", "Transpose", "Non-unit", &i__2, &ap[jjn], &ap[jj + 1], &c__1);
             }
             jj = jjn;
             /* L20: */

@@ -103,10 +103,13 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlartv_(integer *n, doublereal *x, integer *incx, doublereal *y, integer *incy, doublereal *c__, doublereal *s, integer *incc)
+void dlartv_(integer *n, doublereal *x, integer *incx, doublereal *y, integer *incy,
+             doublereal *c__, doublereal *s, integer *incc)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlartv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS ", incc %" FLA_IS "",*n, *incx, *incy, *incc);
+    AOCL_DTL_SNPRINTF("dlartv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS
+                      ", incc %" FLA_IS "",
+                      *n, *incx, *incy, *incc);
     /* System generated locals */
     aocl_int64_t i__1;
     /* Local variables */

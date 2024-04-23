@@ -1,8 +1,8 @@
-/* ./ctrsen.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ctrsen.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c_n1 = -1;
 /* > \brief \b CTRSEN */
@@ -167,9 +167,9 @@ and if COMPQ = 'V', LDQ >= N. */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If JOB = 'N', LWORK >= 1;
-*/
+ */
 /* > if JOB = 'E', LWORK = fla_max(1,M*(N-M));
-*/
+ */
 /* > if JOB = 'V' or 'B', LWORK >= fla_max(1,2*M*(N-M)). */
 /* > */
 /* > If LWORK = -1, then a workspace query is assumed;
@@ -268,15 +268,19 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, integer *ldt, complex *q, integer *ldq, complex *w, integer *m, real *s, real *sep, complex *work, integer *lwork, integer *info)
+void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, integer *ldt,
+             complex *q, integer *ldq, complex *w, integer *m, real *s, real *sep, complex *work,
+             integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctrsen inputs: job %c, compq %c, n %lld, ldt %lld, ldq %lld, lwork %lld",*job, *compq, *n, *ldt, *ldq, *lwork);
+    snprintf(buffer, 256, "ctrsen inputs: job %c, compq %c, n %lld, ldt %lld, ldq %lld, lwork %lld",
+             *job, *compq, *n, *ldt, *ldq, *lwork);
 #else
-    snprintf(buffer, 256,"ctrsen inputs: job %c, compq %c, n %d, ldt %d, ldq %d, lwork %d",*job, *compq, *n, *ldt, *ldq, *lwork);
+    snprintf(buffer, 256, "ctrsen inputs: job %c, compq %c, n %d, ldt %d, ldq %d, lwork %d", *job,
+             *compq, *n, *ldt, *ldq, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -295,17 +299,24 @@ void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, in
     logical wantq, wants;
     real rnorm;
     extern /* Subroutine */
-    void clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
+        void
+        clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     real rwork[1];
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical wantbh;
     extern /* Subroutine */
-    void ctrexc_(char *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, integer *);
+        void
+        ctrexc_(char *, integer *, complex *, integer *, complex *, integer *, integer *, integer *,
+                integer *);
     logical wantsp;
     extern /* Subroutine */
-    void ctrsyl_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, integer *);
+        void
+        ctrsyl_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
+                integer *, complex *, integer *, real *, integer *);
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -366,21 +377,21 @@ void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, in
         /* Computing MAX */
         i__1 = 1;
         i__2 = nn << 1; // , expr subst
-        lwmin = fla_max(i__1,i__2);
+        lwmin = fla_max(i__1, i__2);
     }
-    else if (lsame_(job, "N", 1, 1))
+    else if(lsame_(job, "N", 1, 1))
     {
         lwmin = 1;
     }
-    else if (lsame_(job, "E", 1, 1))
+    else if(lsame_(job, "E", 1, 1))
     {
-        lwmin = fla_max(1,nn);
+        lwmin = fla_max(1, nn);
     }
-    if (! lsame_(job, "N", 1, 1) && ! wants && ! wantsp)
+    if(!lsame_(job, "N", 1, 1) && !wants && !wantsp)
     {
         *info = -1;
     }
-    else if (! lsame_(compq, "N", 1, 1) && ! wantq)
+    else if(!lsame_(compq, "N", 1, 1) && !wantq)
     {
         *info = -2;
     }
@@ -388,7 +399,7 @@ void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, in
     {
         *info = -4;
     }
-    else if (*ldt < fla_max(1,*n))
+    else if(*ldt < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -402,9 +413,8 @@ void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, in
     }
     if(*info == 0)
     {
-        r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-        work[1].real = r__1;
-        work[1].imag = 0.f; // , expr subst
+        work[1].r = (real)lwmin;
+        work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -442,7 +452,7 @@ void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, in
             /* Swap the K-th eigenvalue to position KS. */
             if(k != ks)
             {
-                aocl_lapack_ctrexc(compq, n, &t[t_offset], ldt, &q[q_offset], ldq, &k, &ks, &ierr);
+                ctrexc_(compq, n, &t[t_offset], ldt, &q[q_offset], ldq, &k, &ks, &ierr);
             }
         }
         /* L20: */
@@ -451,12 +461,12 @@ void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, in
     {
         /* Solve the Sylvester equation for R: */
         /* T11*R - R*T22 = scale*T12 */
-        aocl_lapack_clacpy("F", &n1, &n2, &t[(n1 + 1) * t_dim1 + 1], ldt, &work[1], &n1);
-        aocl_lapack_ctrsyl("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt,
-                           &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, &ierr);
+        clacpy_("F", &n1, &n2, &t[(n1 + 1) * t_dim1 + 1], ldt, &work[1], &n1);
+        ctrsyl_("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt, &t[n1 + 1 + (n1 + 1) * t_dim1], ldt,
+                &work[1], &n1, &scale, &ierr);
         /* Estimate the reciprocal of the condition number of the cluster */
         /* of eigenvalues. */
-        rnorm = aocl_lapack_clange("F", &n1, &n2, &work[1], &n1, rwork);
+        rnorm = clange_("F", &n1, &n2, &work[1], &n1, rwork);
         if(rnorm == 0.f)
         {
             *s = 1.f;
@@ -472,22 +482,20 @@ void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, in
         est = 0.f;
         kase = 0;
     L30:
-        aocl_lapack_clacn2(&nn, &work[nn + 1], &work[1], &est, &kase, isave);
+        clacn2_(&nn, &work[nn + 1], &work[1], &est, &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Solve T11*R - R*T22 = scale*X. */
-                aocl_lapack_ctrsyl("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt,
-                                   &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale,
-                                   &ierr);
+                ctrsyl_("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt,
+                        &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, &ierr);
             }
             else
             {
                 /* Solve T11**H*R - R*T22**H = scale*X. */
-                aocl_lapack_ctrsyl("C", "C", &c_n1, &n1, &n2, &t[t_offset], ldt,
-                                   &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale,
-                                   &ierr);
+                ctrsyl_("C", "C", &c_n1, &n1, &n2, &t[t_offset], ldt,
+                        &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, &ierr);
             }
             goto L30;
         }
@@ -503,7 +511,7 @@ L40: /* Copy reordered eigenvalues to W. */
         w[i__2].imag = t[i__3].imag; // , expr subst
         /* L50: */
     }
-    work[1].r = (real) lwmin;
+    work[1].r = (real)lwmin;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

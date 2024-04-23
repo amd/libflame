@@ -127,7 +127,7 @@ void dlae2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *rt1, doub
     adf = f2c_dabs(df);
     tb = *b + *b;
     ab = f2c_dabs(tb);
-    if (f2c_dabs(*a) > f2c_dabs(*c__))
+    if(f2c_dabs(*a) > f2c_dabs(*c__))
     {
         acmx = *a;
         acmn = *c__;

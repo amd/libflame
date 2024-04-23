@@ -1,5 +1,8 @@
-/* clascl.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* clascl.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CLASCL multiplies a general rectangular matrix by a real scalar defined as cto/cfrom. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -114,11 +117,11 @@
 /* > LDA is INTEGER */
 /* > The leading dimension of the array A. */
 /* > If TYPE = 'G', 'L', 'U', 'H', LDA >= fla_max(1,M);
-*/
+ */
 /* > TYPE = 'B', LDA >= KL+1;
-*/
+ */
 /* > TYPE = 'Q', LDA >= KU+1;
-*/
+ */
 /* > TYPE = 'Z', LDA >= 2*KL+KU+1. */
 /* > \endverbatim */
 /* > */
@@ -137,10 +140,13 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clascl_(char *type__, integer *kl, integer *ku, real * cfrom, real *cto, integer *m, integer *n, complex *a, integer *lda, integer *info)
+void clascl_(char *type__, integer *kl, integer *ku, real *cfrom, real *cto, integer *m, integer *n,
+             complex *a, integer *lda, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("clascl inputs: type__ %c, kl %" FLA_IS ", ku %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*type__, *kl, *ku, *m, *n, *lda);
+    AOCL_DTL_SNPRINTF("clascl inputs: type__ %c, kl %" FLA_IS ", ku %" FLA_IS ", m %" FLA_IS
+                      ", n %" FLA_IS ", lda %" FLA_IS "",
+                      *type__, *kl, *ku, *m, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     scomplex q__1;
@@ -155,7 +161,8 @@ void clascl_(char *type__, integer *kl, integer *ku, real * cfrom, real *cto, in
     extern real slamch_(char *);
     real cfromc;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern logical sisnan_(real *);
     real smlnum;
@@ -185,31 +192,31 @@ void clascl_(char *type__, integer *kl, integer *ku, real * cfrom, real *cto, in
     a -= a_offset;
     /* Function Body */
     *info = 0;
-    if (lsame_(type__, "G", 1, 1))
+    if(lsame_(type__, "G", 1, 1))
     {
         itype = 0;
     }
-    else if (lsame_(type__, "L", 1, 1))
+    else if(lsame_(type__, "L", 1, 1))
     {
         itype = 1;
     }
-    else if (lsame_(type__, "U", 1, 1))
+    else if(lsame_(type__, "U", 1, 1))
     {
         itype = 2;
     }
-    else if (lsame_(type__, "H", 1, 1))
+    else if(lsame_(type__, "H", 1, 1))
     {
         itype = 3;
     }
-    else if (lsame_(type__, "B", 1, 1))
+    else if(lsame_(type__, "B", 1, 1))
     {
         itype = 4;
     }
-    else if (lsame_(type__, "Q", 1, 1))
+    else if(lsame_(type__, "Q", 1, 1))
     {
         itype = 5;
     }
-    else if (lsame_(type__, "Z", 1, 1))
+    else if(lsame_(type__, "Z", 1, 1))
     {
         itype = 6;
     }
@@ -237,7 +244,7 @@ void clascl_(char *type__, integer *kl, integer *ku, real * cfrom, real *cto, in
     {
         *info = -7;
     }
-    else if (itype <= 3 && *lda < fla_max(1,*m))
+    else if(itype <= 3 && *lda < fla_max(1, *m))
     {
         *info = -9;
     }
@@ -245,7 +252,7 @@ void clascl_(char *type__, integer *kl, integer *ku, real * cfrom, real *cto, in
     {
         /* Computing MAX */
         i__1 = *m - 1;
-        if (*kl < 0 || *kl > fla_max(i__1,0))
+        if(*kl < 0 || *kl > fla_max(i__1, 0))
         {
             *info = -2;
         }
@@ -253,7 +260,7 @@ void clascl_(char *type__, integer *kl, integer *ku, real * cfrom, real *cto, in
         {
             /* Computing MAX */
             i__1 = *n - 1;
-            if (*ku < 0 || *ku > fla_max(i__1,0) || (itype == 4 || itype == 5) && *kl != *ku)
+            if(*ku < 0 || *ku > fla_max(i__1, 0) || (itype == 4 || itype == 5) && *kl != *ku)
             {
                 *info = -3;
             }
@@ -268,13 +275,13 @@ void clascl_(char *type__, integer *kl, integer *ku, real * cfrom, real *cto, in
     {
         i__1 = -(*info);
         xerbla_("CLASCL", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0 || *m == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine parameters */
@@ -303,13 +310,13 @@ L10:
             done = TRUE_;
             cfromc = 1.f;
         }
-        else if (f2c_abs(cfrom1) > f2c_abs(ctoc) && ctoc != 0.f)
+        else if(f2c_abs(cfrom1) > f2c_abs(ctoc) && ctoc != 0.f)
         {
             mul = smlnum;
             done = FALSE_;
             cfromc = cfrom1;
         }
-        else if (f2c_abs(cto1) > f2c_abs(cfromc))
+        else if(f2c_abs(cto1) > f2c_abs(cfromc))
         {
             mul = bignum;
             done = FALSE_;
@@ -319,7 +326,7 @@ L10:
         {
             mul = ctoc / cfromc;
             done = TRUE_;
-            if (mul == 1.f)
+            if(mul == 1.f)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
@@ -372,10 +379,8 @@ L10:
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
         {
-            i__2 = fla_min(j,*m);
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            i__2 = fla_min(j, *m);
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
@@ -396,10 +401,8 @@ L10:
         {
             /* Computing MIN */
             i__3 = j + 1;
-            i__2 = fla_min(i__3,*m);
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            i__2 = fla_min(i__3, *m);
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
@@ -423,10 +426,8 @@ L10:
             /* Computing MIN */
             i__3 = k3;
             i__4 = k4 - j; // , expr subst
-            i__2 = fla_min(i__3,i__4);
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            i__2 = fla_min(i__3, i__4);
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
@@ -450,9 +451,7 @@ L10:
             /* Computing MAX */
             i__2 = k1 - j;
             i__3 = k3;
-            for (i__ = fla_max(i__2,1);
-                    i__ <= i__3;
-                    ++i__)
+            for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
             {
                 i__2 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
@@ -480,10 +479,8 @@ L10:
             /* Computing MIN */
             i__4 = k3;
             i__5 = k4 - j; // , expr subst
-            i__2 = fla_min(i__4,i__5);
-            for (i__ = fla_max(i__3,k2);
-                    i__ <= i__2;
-                    ++i__)
+            i__2 = fla_min(i__4, i__5);
+            for(i__ = fla_max(i__3, k2); i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;

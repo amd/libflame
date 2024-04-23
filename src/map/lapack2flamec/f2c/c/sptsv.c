@@ -114,14 +114,18 @@ void sptsv_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ldb
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sptsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *ldb);
+    snprintf(buffer, 256, "sptsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n,
+             *nrhs, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), spttrf_( integer *, real *, real *, integer *), spttrs_(integer *, integer *, real *, real *, real *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        spttrf_(integer *, real *, real *, integer *),
+        spttrs_(integer *, integer *, real *, real *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -153,7 +157,7 @@ void sptsv_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ldb
     {
         *info = -2;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -165,7 +169,7 @@ void sptsv_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ldb
         return;
     }
     /* Compute the L*D*L**T (or U**T*D*U) factorization of A. */
-    aocl_lapack_spttrf(n, &d__[1], &e[1], info);
+    spttrf_(n, &d__[1], &e[1], info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */

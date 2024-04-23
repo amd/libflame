@@ -303,21 +303,30 @@ if EQUED = 'Y', */
 /* > \ingroup complexPOsolve */
 /* ===================================================================== */
 /* Subroutine */
-void cposvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, integer *lda, complex *af, integer *ldaf, char * equed, real *s, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, real *rwork, integer *info)
+void cposvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *a, integer *lda,
+             complex *af, integer *ldaf, char *equed, real *s, complex *b, integer *ldb, complex *x,
+             integer *ldx, real *rcond, real *ferr, real *berr, complex *work, real *rwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cposvx inputs: fact %c, uplo %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, equed %c, ldb %lld, ldx %lld",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx);
+    snprintf(buffer, 256,
+             "cposvx inputs: fact %c, uplo %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, equed %c, "
+             "ldb %lld, ldx %lld",
+             *fact, *uplo, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx);
 #else
-    snprintf(buffer, 256,"cposvx inputs: fact %c, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, equed %c, ldb %d, ldx %d",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx);
+    snprintf(
+        buffer, 256,
+        "cposvx inputs: fact %c, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, equed %c, ldb %d, ldx %d",
+        *fact, *uplo, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
-        i__2, i__3, i__4, i__5;
+    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2,
+        i__3, i__4, i__5;
     real r__1, r__2;
     scomplex q__1;
     /* Local variables */
@@ -328,17 +337,28 @@ void cposvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
     logical equil, rcequ;
     extern real clanhe_(char *, char *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    void claqhe_(char *, integer *, complex *, integer *, real *, real *, real *, char *);
+        void
+        claqhe_(char *, integer *, complex *, integer *, real *, real *, real *, char *);
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern /* Subroutine */
-    void cpocon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *);
+        void
+        cpocon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *,
+                integer *);
     integer infequ;
     extern /* Subroutine */
-    void cpoequ_(integer *, complex *, integer *, real *, real *, real *, integer *), cporfs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), cpotrf_(char *, integer *, complex *, integer *, integer *), cpotrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
+        void
+        cpoequ_(integer *, complex *, integer *, real *, real *, real *, integer *),
+        cporfs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, complex *,
+                integer *, complex *, integer *, real *, real *, complex *, real *, integer *),
+        cpotrf_(char *, integer *, complex *, integer *, integer *),
+        cpotrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *,
+                integer *);
     real smlnum;
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -384,7 +404,7 @@ void cposvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
     equil = lsame_(fact, "E", 1, 1);
     smlnum = 0.f;
     bignum = 0.f;
-    if (nofact || equil)
+    if(nofact || equil)
     {
         *(unsigned char *)equed = 'N';
         rcequ = FALSE_;
@@ -396,11 +416,11 @@ void cposvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
         bignum = 1.f / smlnum;
     }
     /* Test the input parameters. */
-    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    else if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -412,15 +432,15 @@ void cposvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (lsame_(fact, "F", 1, 1) && ! (rcequ || lsame_(equed, "N", 1, 1)))
+    else if(lsame_(fact, "F", 1, 1) && !(rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -9;
     }
@@ -436,11 +456,11 @@ void cposvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
                 /* Computing MIN */
                 r__1 = smin;
                 r__2 = s[j]; // , expr subst
-                smin = fla_min(r__1,r__2);
+                smin = fla_min(r__1, r__2);
                 /* Computing MAX */
                 r__1 = smax;
                 r__2 = s[j]; // , expr subst
-                smax = fla_max(r__1,r__2);
+                smax = fla_max(r__1, r__2);
                 /* L10: */
             }
             if(smin <= 0.f)
@@ -449,7 +469,7 @@ void cposvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
             }
             else if(*n > 0)
             {
-                scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
+                scond = fla_max(smin, smlnum) / fla_min(smax, bignum);
             }
             else
             {
@@ -458,11 +478,11 @@ void cposvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
         }
         if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -12;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -14;
             }
@@ -478,7 +498,7 @@ void cposvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
     if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        aocl_lapack_cpoequ(n, &a[a_offset], lda, &s[1], &scond, &amax, &infequ);
+        cpoequ_(n, &a[a_offset], lda, &s[1], &scond, &amax, &infequ);
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
@@ -529,8 +549,8 @@ void cposvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
     aocl_lapack_cpotrs(uplo, n, nrhs, &af[af_offset], ldaf, &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    aocl_lapack_cporfs(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &b[b_offset], ldb,
-                       &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
+    cporfs_(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &b[b_offset], ldb, &x[x_offset],
+            ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(rcequ)

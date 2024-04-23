@@ -159,12 +159,14 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sspsv_(char *uplo, integer *n, integer *nrhs, real *ap, integer *ipiv, real *b, integer *ldb, integer *info)
+void sspsv_(char *uplo, integer *n, integer *nrhs, real *ap, integer *ipiv, real *b, integer *ldb,
+            integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sspsv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "sspsv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",
+             *uplo, *n, *nrhs, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -172,7 +174,10 @@ void sspsv_(char *uplo, integer *n, integer *nrhs, real *ap, integer *ipiv, real
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), ssptrf_( char *, integer *, real *, integer *, integer *), ssptrs_( char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        ssptrf_(char *, integer *, real *, integer *, integer *),
+        ssptrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -198,7 +203,7 @@ void sspsv_(char *uplo, integer *n, integer *nrhs, real *ap, integer *ipiv, real
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -210,7 +215,7 @@ void sspsv_(char *uplo, integer *n, integer *nrhs, real *ap, integer *ipiv, real
     {
         *info = -3;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
@@ -222,7 +227,7 @@ void sspsv_(char *uplo, integer *n, integer *nrhs, real *ap, integer *ipiv, real
         return;
     }
     /* Compute the factorization A = U*D*U**T or A = L*D*L**T. */
-    aocl_lapack_ssptrf(uplo, n, &ap[1], &ipiv[1], info);
+    ssptrf_(uplo, n, &ap[1], &ipiv[1], info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */

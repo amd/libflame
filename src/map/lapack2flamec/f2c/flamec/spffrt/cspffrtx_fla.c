@@ -26,7 +26,7 @@ extern void c_div(complex *, complex *, complex *);
 
     * @param[in,out] ap
     ap is COMPLEX array, dimension (N*(N+1)/2)
-    On entry, the lower triangle of the symmetric matrix A, packed columnwise in a 
+    On entry, the lower triangle of the symmetric matrix A, packed columnwise in a
     linear array. The j-th column of A is stored in the array AP as follows:
             AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n.
     On exit, the block diagonal matrix D and the multipliers used
@@ -71,22 +71,19 @@ extern void c_div(complex *, complex *, complex *);
     \endverbatim
     *  */
 
-void  cspffrtx_fla(complex *ap, integer *n, integer *ncolm, complex *work, complex *work2 )
+void cspffrtx_fla(complex *ap, integer *n, integer *ncolm, complex *work, complex *work2)
 {
     complex z__1;
     integer i__1, k, kc;
     complex r1;
-    complex c_b1 =
-    {
-        1.,0.
-    };
+    complex c_b1 = {1., 0.};
     integer c__1 = 1;
 
     --ap;
     /* Factorize A as L*D*L**T using the lower triangle of A */
     /* K is the main loop index, increasing from 1 to ncolm in steps of */
     kc = 1;
-    for( k = 1; k <= *ncolm; k++ )
+    for(k = 1; k <= *ncolm; k++)
     {
         /* Update the trailing submatrix */
         /* W(k) = L(k)*D(k) */

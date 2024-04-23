@@ -132,15 +132,16 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void claic1_(integer *job, integer *j, complex *x, real *sest, complex *w, complex *gamma, real *sestpr, complex *s, complex *c__)
+void claic1_(integer *job, integer *j, complex *x, real *sest, complex *w, complex *gamma,
+             real *sestpr, complex *s, complex *c__)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"claic1 inputs: job %lld, j %lld",*job, *j);
+    snprintf(buffer, 256, "claic1 inputs: job %lld, j %lld", *job, *j);
 #else
-    snprintf(buffer, 256,"claic1 inputs: job %d, j %d",*job, *j);
+    snprintf(buffer, 256, "claic1 inputs: job %d, j %d", *job, *j);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -156,7 +157,10 @@ void claic1_(integer *job, integer *j, complex *x, real *sest, complex *w, compl
     real b, t, s1, s2, scl, eps, tmp;
     scomplex sine;
     real test, zeta1, zeta2;
-    scomplex alpha;
+    complex alpha;
+    extern /* Complex */
+        VOID
+        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     real norma, absgam, absalp;
     extern real slamch_(char *);
     scomplex cosine;
@@ -190,14 +194,14 @@ void claic1_(integer *job, integer *j, complex *x, real *sest, complex *w, compl
     absalp = c_abs(&alpha);
     absgam = c_abs(gamma);
     absest = f2c_abs(*sest);
-    if (*job == 1)
+    if(*job == 1)
     {
         /* Estimating largest singular value */
         /* special cases */
         if(*sest == 0.f)
         {
-            s1 = fla_max(absgam,absalp);
-            if (s1 == 0.f)
+            s1 = fla_max(absgam, absalp);
+            if(s1 == 0.f)
             {
                 s->real = 0.f, s->imag = 0.f;
                 c__->real = 1.f, c__->imag = 0.f;
@@ -236,7 +240,7 @@ void claic1_(integer *job, integer *j, complex *x, real *sest, complex *w, compl
         {
             s->r = 1.f, s->i = 0.f;
             c__->r = 0.f, c__->i = 0.f;
-            tmp = fla_max(absest,absalp);
+            tmp = fla_max(absest, absalp);
             s1 = absest / tmp;
             s2 = absalp / tmp;
             *sestpr = tmp * sqrt(s1 * s1 + s2 * s2);
@@ -308,7 +312,7 @@ void claic1_(integer *job, integer *j, complex *x, real *sest, complex *w, compl
             zeta2 = absgam / absest;
             b = (1.f - zeta1 * zeta1 - zeta2 * zeta2) * .5f;
             r__1 = zeta1 * zeta1;
-            c__->real = r__1, c__->imag = 0.f;
+            c__->r = r__1, c__->i = 0.f;
             if(b > 0.f)
             {
                 r__1 = b * b;
@@ -375,7 +379,7 @@ void claic1_(integer *job, integer *j, complex *x, real *sest, complex *w, compl
         if(*sest == 0.f)
         {
             *sestpr = 0.f;
-            if (fla_max(absgam,absalp) == 0.f)
+            if(fla_max(absgam, absalp) == 0.f)
             {
                 sine.real = 1.f;
                 sine.imag = 0.f; // , expr subst
@@ -396,7 +400,7 @@ void claic1_(integer *job, integer *j, complex *x, real *sest, complex *w, compl
             /* Computing MAX */
             r__1 = c_abs(&sine);
             r__2 = c_abs(&cosine); // , expr subst
-            s1 = fla_max(r__1,r__2);
+            s1 = fla_max(r__1, r__2);
             q__1.r = sine.r / s1;
             q__1.i = sine.i / s1; // , expr subst
             s->r = q__1.r, s->i = q__1.i;
@@ -504,7 +508,7 @@ void claic1_(integer *job, integer *j, complex *x, real *sest, complex *w, compl
             /* Computing MAX */
             r__1 = zeta1 * zeta1 + 1.f + zeta1 * zeta2;
             r__2 = zeta1 * zeta2 + zeta2 * zeta2; // , expr subst
-            norma = fla_max(r__1,r__2);
+            norma = fla_max(r__1, r__2);
             /* See if root is closer to zero or to ONE */
             test = (zeta1 - zeta2) * 2.f * (zeta1 + zeta2) + 1.f;
             if(test >= 0.f)
@@ -542,7 +546,7 @@ void claic1_(integer *job, integer *j, complex *x, real *sest, complex *w, compl
                 /* root is closer to ONE, shift by that amount */
                 b = (zeta2 * zeta2 + zeta1 * zeta1 - 1.f) * .5f;
                 r__1 = zeta1 * zeta1;
-                c__->real = r__1, c__->imag = 0.f;
+                c__->r = r__1, c__->i = 0.f;
                 if(b >= 0.f)
                 {
                     q__2.real = -c__->real;

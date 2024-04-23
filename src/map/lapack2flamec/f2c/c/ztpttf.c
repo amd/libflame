@@ -205,10 +205,11 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomplex *arf, integer *info)
+void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomplex *arf,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztpttf inputs: transr %c, uplo %c, n %" FLA_IS "",*transr, *uplo, *n);
+    AOCL_DTL_SNPRINTF("ztpttf inputs: transr %c, uplo %c, n %" FLA_IS "", *transr, *uplo, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3, i__4;
     dcomplex z__1;
@@ -220,7 +221,8 @@ void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomp
     extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -245,11 +247,11 @@ void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomp
     *info = 0;
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
-    if (! normaltransr && ! lsame_(transr, "C", 1, 1))
+    if(!normaltransr && !lsame_(transr, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U", 1, 1))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }
@@ -261,13 +263,13 @@ void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomp
     {
         i__1 = -(*info);
         xerbla_("ZTPTTF", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 1)
@@ -283,7 +285,7 @@ void ztpttf_(char *transr, char *uplo, integer *n, doublecomplex *ap, doublecomp
             arf[0].real = z__1.real;
             arf[0].imag = z__1.imag; // , expr subst
         }
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Size of array ARF(0:NT-1) */

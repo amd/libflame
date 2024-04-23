@@ -1,7 +1,8 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int ssytd2_check(char *uplo, integer *n, float *a, integer *lda, float *d__, float *e, float *tau, integer *info)
+int ssytd2_check(char *uplo, integer *n, float *a, integer *lda, float *d__, float *e, float *tau,
+                 integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
@@ -18,7 +19,7 @@ int ssytd2_check(char *uplo, integer *n, float *a, integer *lda, float *d__, flo
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -26,7 +27,7 @@ int ssytd2_check(char *uplo, integer *n, float *a, integer *lda, float *d__, flo
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }

@@ -136,7 +136,8 @@ static doublereal c_b4 = 1.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlasv2_(doublereal *f, doublereal *g, doublereal *h__, doublereal *ssmin, doublereal *ssmax, doublereal *snr, doublereal * csr, doublereal *snl, doublereal *csl)
+void dlasv2_(doublereal *f, doublereal *g, doublereal *h__, doublereal *ssmin, doublereal *ssmax,
+             doublereal *snr, doublereal *csr, doublereal *snl, doublereal *csl)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasv2 inputs: f %lf, g %lf, h %lf", *f, *g, *h__);
@@ -191,7 +192,7 @@ void dlasv2_(doublereal *f, doublereal *g, doublereal *h__, doublereal *ssmin, d
     }
     gt = *g;
     ga = f2c_dabs(gt);
-    if (ga == 0.)
+    if(ga == 0.)
     {
         /* Diagonal matrix */
         *ssmin = ha;

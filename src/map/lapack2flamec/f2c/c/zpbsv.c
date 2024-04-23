@@ -89,7 +89,7 @@
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(KD+1+i-j,j) = A(i,j) for fla_max(1,j-KD)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(N,j+KD). */
 /* > See below for further details. */
 /* > */
@@ -161,17 +161,24 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zpbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, doublecomplex *ab, integer *ldab, doublecomplex *b, integer * ldb, integer *info)
+void zpbsv_(char *uplo, integer *n, integer *kd, integer *nrhs, doublecomplex *ab, integer *ldab,
+            doublecomplex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zpbsv inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *kd, *nrhs, *ldab, *ldb);
+    AOCL_DTL_SNPRINTF("zpbsv inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS
+                      ", ldab %" FLA_IS ", ldb %" FLA_IS "",
+                      *uplo, *n, *kd, *nrhs, *ldab, *ldb);
 
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zpbtrf_( char *, integer *, integer *, doublecomplex *, integer *, integer *), zpbtrs_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zpbtrf_(char *, integer *, integer *, doublecomplex *, integer *, integer *),
+        zpbtrs_(char *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -198,7 +205,7 @@ void zpbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, doublecomplex *
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -218,7 +225,7 @@ void zpbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, doublecomplex *
     {
         *info = -6;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
@@ -230,7 +237,7 @@ void zpbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, doublecomplex *
         return;
     }
     /* Compute the Cholesky factorization A = U**H *U or A = L*L**H. */
-    aocl_lapack_zpbtrf(uplo, n, kd, &ab[ab_offset], ldab, info);
+    zpbtrf_(uplo, n, kd, &ab[ab_offset], ldab, info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */

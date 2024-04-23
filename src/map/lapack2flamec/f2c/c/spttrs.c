@@ -112,7 +112,8 @@ void spttrs_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ld
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"spttrs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *ldb);
+    snprintf(buffer, 256, "spttrs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n,
+             *nrhs, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -120,7 +121,9 @@ void spttrs_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ld
     /* Local variables */
     integer j, jb, nb;
     extern /* Subroutine */
-    void sptts2_(integer *, integer *, real *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sptts2_(integer *, integer *, real *, real *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -157,7 +160,7 @@ void spttrs_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ld
     {
         *info = -2;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -184,7 +187,7 @@ void spttrs_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ld
         /* Computing MAX */
         i__1 = 1;
         i__2 = ilaenv_(&c__1, "SPTTRS", " ", n, nrhs, &c_n1, &c_n1); // , expr subst
-        nb = fla_max(i__1,i__2);
+        nb = fla_max(i__1, i__2);
     }
     if(nb >= *nrhs)
     {
@@ -198,7 +201,7 @@ void spttrs_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ld
         {
             /* Computing MIN */
             i__3 = *nrhs - j + 1;
-            jb = fla_min(i__3,nb);
+            jb = fla_min(i__3, nb);
             sptts2_(n, &jb, &d__[1], &e[1], &b[j * b_dim1 + 1], ldb);
             /* L10: */
         }

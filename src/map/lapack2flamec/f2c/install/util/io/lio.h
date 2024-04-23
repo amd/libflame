@@ -50,21 +50,21 @@ use or performance of this software.
 #define TYQUAD 14
 #endif
 
-#define	LINTW	24
-#define	LINE	80
-#define	LLOGW	2
-#define	LGFMT	"%.9G"
+#define LINTW 24
+#define LINE 80
+#define LLOGW 2
+#define LGFMT "%.9G"
 /* LEFBL 20 should suffice; 24 overcomes a NeXT bug. */
-#define	LEFBL	24
+#define LEFBL 24
 
 typedef union
 {
-	char	flchar;
-	short	flshort;
-	ftnint	flint;
+    char flchar;
+    short flshort;
+    ftnint flint;
 #ifdef Allow_TYQUAD
-	longint fllongint;
+    longint fllongint;
 #endif
-	real	flreal;
-	doublereal	fldouble;
+    real flreal;
+    doublereal fldouble;
 } flex;

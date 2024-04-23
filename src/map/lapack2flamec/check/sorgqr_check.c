@@ -1,8 +1,10 @@
 #include "FLA_f2c.h"
+#include "FLA_lapack2flame_return_defs.h"
 static integer c__1 = 1;
 static integer c_n1 = -1;
 
-int sorgqr_check(integer *m, integer *n, integer *k, float *a, integer *lda, float *tau, float *work, integer *lwork, integer *info)
+int sorgqr_check(integer *m, integer *n, integer *k, float *a, integer *lda, float *tau,
+                 float *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
@@ -20,8 +22,8 @@ int sorgqr_check(integer *m, integer *n, integer *k, float *a, integer *lda, flo
     /* Function Body */
     *info = 0;
     nb = ilaenv_(&c__1, "SORGQR", " ", m, n, k, &c_n1);
-    lwkopt = fla_max(1,*n) * nb;
-    work[1] = (float) lwkopt;
+    lwkopt = fla_max(1, *n) * nb;
+    work[1] = (float)lwkopt;
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -35,11 +37,11 @@ int sorgqr_check(integer *m, integer *n, integer *k, float *a, integer *lda, flo
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
-    else if (*lwork < fla_max(1,*n) && ! lquery)
+    else if(*lwork < fla_max(1, *n) && !lquery)
     {
         *info = -8;
     }

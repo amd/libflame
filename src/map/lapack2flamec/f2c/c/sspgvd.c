@@ -1,8 +1,8 @@
-/* ./sspgvd.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sspgvd.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b SSPGVD */
@@ -207,12 +207,16 @@ the */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-void sspgvd_(integer *itype, char *jobz, char *uplo, integer * n, real *ap, real *bp, real *w, real *z__, integer *ldz, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real *bp, real *w,
+             real *z__, integer *ldz, real *work, integer *lwork, integer *iwork, integer *liwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sspgvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "",*itype, *jobz, *uplo, *n, *ldz);
+    snprintf(buffer, 256,
+             "sspgvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "",
+             *itype, *jobz, *uplo, *n, *ldz);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -225,13 +229,20 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer * n, real *ap, real
     char trans[1];
     logical upper, wantz;
     extern /* Subroutine */
-    void stpmv_(char *, char *, char *, integer *, real *, real *, integer *), stpsv_(char *, char *, char *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        stpmv_(char *, char *, char *, integer *, real *, real *, integer *),
+        stpsv_(char *, char *, char *, integer *, real *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer liwmin;
     extern /* Subroutine */
-    void sspevd_(char *, char *, integer *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *), spptrf_(char *, integer *, real *, integer *);
+        void
+        sspevd_(char *, char *, integer *, real *, real *, real *, integer *, real *, integer *,
+                integer *, integer *, integer *),
+        spptrf_(char *, integer *, real *, integer *);
     logical lquery;
     extern /* Subroutine */
-    void sspgst_(integer *, char *, integer *, real *, real *, integer *);
+        void
+        sspgst_(integer *, char *, integer *, real *, real *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -268,11 +279,11 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer * n, real *ap, real
     {
         *info = -1;
     }
-    else if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    else if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (upper || lsame_(uplo, "L", 1, 1)))
+    else if(!(upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -3;
     }
@@ -306,8 +317,8 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer * n, real *ap, real
                 lwmin = *n << 1;
             }
         }
-        work[1] = aocl_lapack_sroundup_lwork(&lwmin);
-        iwork[1] = (aocl_int_t)(liwmin);
+        work[1] = (real)lwmin;
+        iwork[1] = liwmin;
         if(*lwork < lwmin && !lquery)
         {
             *info = -11;
@@ -336,7 +347,7 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer * n, real *ap, real
         return;
     }
     /* Form a Cholesky factorization of BP. */
-    aocl_lapack_spptrf(uplo, n, &bp[1], info);
+    spptrf_(uplo, n, &bp[1], info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -344,17 +355,17 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer * n, real *ap, real
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    aocl_lapack_sspgst(itype, uplo, n, &ap[1], &bp[1], info);
-    aocl_lapack_sspevd(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], lwork,
-                       &iwork[1], liwork, info);
+    sspgst_(itype, uplo, n, &ap[1], &bp[1], info);
+    sspevd_(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], lwork, &iwork[1], liwork,
+            info);
     /* Computing MAX */
-    r__1 = (real) lwmin;
-    lwmin = fla_max(r__1,work[1]);
+    r__1 = (real)lwmin;
+    lwmin = fla_max(r__1, work[1]);
     /* Computing MAX */
-    r__1 = (real) liwmin;
-    r__2 = (real) iwork[1]; // , expr subst
-    liwmin = fla_max(r__1,r__2);
-    if (wantz)
+    r__1 = (real)liwmin;
+    r__2 = (real)iwork[1]; // , expr subst
+    liwmin = fla_max(r__1, r__2);
+    if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */
         neig = *n;
@@ -403,7 +414,7 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer * n, real *ap, real
             }
         }
     }
-    work[1] = (real) lwmin;
+    work[1] = (real)lwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

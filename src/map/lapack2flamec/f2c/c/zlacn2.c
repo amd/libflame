@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b ZLACN2 estimates the 1-norm of a square matrix, using reverse communication for
  * evaluating matr ix-vector products. */
 /* =========== DOCUMENTATION =========== */
@@ -129,7 +129,8 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlacn2_(integer *n, doublecomplex *v, doublecomplex *x, doublereal *est, integer *kase, integer *isave)
+void zlacn2_(integer *n, doublecomplex *v, doublecomplex *x, doublereal *est, integer *kase,
+             integer *isave)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlacn2 inputs: n %" FLA_IS ", est %lf, kase %" FLA_IS "", *n, *est, *kase);
@@ -144,9 +145,10 @@ void zlacn2_(integer *n, doublecomplex *v, doublecomplex *x, doublereal *est, in
     doublereal temp, absxi;
     integer jlast;
     extern /* Subroutine */
-    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern integer izmax1_(integer *, doublecomplex *, integer *);
-    extern doublereal dzsum1_(integer *, doublecomplex *, integer *), dlamch_( char *);
+    extern doublereal dzsum1_(integer *, doublecomplex *, integer *), dlamch_(char *);
     doublereal safmin, altsgn, estold;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -181,10 +183,10 @@ void zlacn2_(integer *n, doublecomplex *v, doublecomplex *x, doublereal *est, in
         {
             i__2 = i__;
             d__1 = 1. / (doublereal)(*n);
-            z__1.real = d__1;
-            z__1.imag = 0.; // , expr subst
-            x[i__2].real = z__1.real;
-            x[i__2].imag = z__1.imag; // , expr subst
+            z__1.r = d__1;
+            z__1.i = 0.; // , expr subst
+            x[i__2].r = z__1.r;
+            x[i__2].i = z__1.i; // , expr subst
             /* L10: */
         }
         *kase = 1;
@@ -221,7 +223,7 @@ L20:
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         absxi = z_abs(&x[i__]);
-        if (absxi > safmin)
+        if(absxi > safmin)
         {
             i__2 = i__;
             i__3 = i__;
@@ -281,7 +283,7 @@ L70:
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         absxi = z_abs(&x[i__]);
-        if (absxi > safmin)
+        if(absxi > safmin)
         {
             i__2 = i__;
             i__3 = i__;
@@ -309,7 +311,7 @@ L70:
 L90:
     jlast = isave[2];
     isave[2] = izmax1_(n, &x[1], &c__1);
-    if (z_abs(&x[jlast]) != z_abs(&x[isave[2]]) && isave[3] < 5)
+    if(z_abs(&x[jlast]) != z_abs(&x[isave[2]]) && isave[3] < 5)
     {
         ++isave[3];
         goto L50;
@@ -322,10 +324,10 @@ L100:
     {
         i__2 = i__;
         d__1 = altsgn * ((doublereal)(i__ - 1) / (doublereal)(*n - 1) + 1.);
-        z__1.real = d__1;
-        z__1.imag = 0.; // , expr subst
-        x[i__2].real = z__1.real;
-        x[i__2].imag = z__1.imag; // , expr subst
+        z__1.r = d__1;
+        z__1.i = 0.; // , expr subst
+        x[i__2].r = z__1.r;
+        x[i__2].i = z__1.i; // , expr subst
         altsgn = -altsgn;
         /* L110: */
     }
@@ -336,7 +338,7 @@ L100:
     /* ................ ENTRY (ISAVE( 1 ) = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L120:
-    temp = aocl_lapack_dzsum1(n, &x[1], &c__1) / (doublereal)(*n * 3) * 2.;
+    temp = dzsum1_(n, &x[1], &c__1) / (doublereal)(*n * 3) * 2.;
     if(temp > *est)
     {
         aocl_blas_zcopy(n, &x[1], &c__1, &v[1], &c__1);

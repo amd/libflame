@@ -1,6 +1,9 @@
 #ifdef FLA_ENABLE_XBLAS
-/* ../netlib/dla_porfsx_extended.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dla_porfsx_extended.f -- translated by f2c (version 20100827). You must link the
+ resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
+ Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
+ with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static doublereal c_b9 = -1.;
@@ -391,10 +394,21 @@ i+1}
 /* > \ingroup doublePOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal * af, integer *ldaf, logical *colequ, doublereal *c__, doublereal *b, integer *ldb, doublereal *y, integer *ldy, doublereal *berr_out__, integer *n_norms__, doublereal *err_bnds_norm__, doublereal * err_bnds_comp__, doublereal *res, doublereal *ayb, doublereal *dy, doublereal *y_tail__, doublereal *rcond, integer *ithresh, doublereal *rthresh, doublereal *dz_ub__, logical *ignore_cwise__, integer *info)
+void dla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs,
+                          doublereal *a, integer *lda, doublereal *af, integer *ldaf,
+                          logical *colequ, doublereal *c__, doublereal *b, integer *ldb,
+                          doublereal *y, integer *ldy, doublereal *berr_out__, integer *n_norms__,
+                          doublereal *err_bnds_norm__, doublereal *err_bnds_comp__, doublereal *res,
+                          doublereal *ayb, doublereal *dy, doublereal *y_tail__, doublereal *rcond,
+                          integer *ithresh, doublereal *rthresh, doublereal *dz_ub__,
+                          logical *ignore_cwise__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dla_porfsx_extended inputs: prec_type__ %" FLA_IS ", uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldy %" FLA_IS ", n_norms__ %" FLA_IS ", ithresh %" FLA_IS "",*prec_type__, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldy, *n_norms__, *ithresh);
+    AOCL_DTL_SNPRINTF("dla_porfsx_extended inputs: prec_type__ %" FLA_IS ", uplo %c, n %" FLA_IS
+                      ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS
+                      ", ldy %" FLA_IS ", n_norms__ %" FLA_IS ", ithresh %" FLA_IS "",
+                      *prec_type__, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldy, *n_norms__,
+                      *ithresh);
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, y_dim1, y_offset,
         err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1,
@@ -405,15 +419,19 @@ void dla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     integer i__, j;
     logical incr_prec__;
     extern /* Subroutine */
-    void dla_syamv_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dla_syamv_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+                   integer *, doublereal *, doublereal *, integer *);
     doublereal prev_dz_z__, yk, final_dx_x__;
     extern /* Subroutine */
-    void dla_wwaddw_(integer *, doublereal *, doublereal *, doublereal *);
+        void
+        dla_wwaddw_(integer *, doublereal *, doublereal *, doublereal *);
     doublereal final_dz_z__, prevnormdx;
     integer cnt;
     doublereal dyk, eps, incr_thresh__, dx_x__, dz_z__;
     extern /* Subroutine */
-    void dla_lin_berr_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *);
+        void
+        dla_lin_berr_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *);
     doublereal ymin;
     integer y_prec_state__;
     extern /* Subroutine */
@@ -429,12 +447,17 @@ void dla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
         dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal dxrat, dzrat;
     extern /* Subroutine */
-    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsymv_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *),
+        dsymv_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+               doublereal *, doublereal *, integer *);
     doublereal normx, normy;
     extern doublereal dlamch_(char *);
     doublereal normdx;
     extern /* Subroutine */
-    void dpotrs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dpotrs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *,
+                integer *);
     doublereal hugeval;
     extern integer ilauplo_(char *);
     integer x_state__, z_state__;
@@ -494,8 +517,8 @@ void dla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     /* Force HUGEVAL to Inf */
     hugeval *= hugeval;
     /* Using HUGEVAL may lead to spurious underflows. */
-    incr_thresh__ = (doublereal) (*n) * eps;
-    if (lsame_(uplo, "L", 1, 1))
+    incr_thresh__ = (doublereal)(*n) * eps;
+    if(lsame_(uplo, "L", 1, 1))
     {
         uplo2 = ilauplo_("L");
     }
@@ -563,34 +586,34 @@ void dla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
             {
                 yk = (d__1 = y[i__ + j * y_dim1], f2c_dabs(d__1));
                 dyk = (d__1 = dy[i__], f2c_dabs(d__1));
-                if (yk != 0.)
+                if(yk != 0.)
                 {
                     /* Computing MAX */
                     d__1 = dz_z__;
                     d__2 = dyk / yk; // , expr subst
-                    dz_z__ = fla_max(d__1,d__2);
+                    dz_z__ = fla_max(d__1, d__2);
                 }
                 else if(dyk != 0.)
                 {
                     dz_z__ = hugeval;
                 }
-                ymin = fla_min(ymin,yk);
-                normy = fla_max(normy,yk);
-                if (*colequ)
+                ymin = fla_min(ymin, yk);
+                normy = fla_max(normy, yk);
+                if(*colequ)
                 {
                     /* Computing MAX */
                     d__1 = normx;
                     d__2 = yk * c__[i__]; // , expr subst
-                    normx = fla_max(d__1,d__2);
+                    normx = fla_max(d__1, d__2);
                     /* Computing MAX */
                     d__1 = normdx;
                     d__2 = dyk * c__[i__]; // , expr subst
-                    normdx = fla_max(d__1,d__2);
+                    normdx = fla_max(d__1, d__2);
                 }
                 else
                 {
                     normx = normy;
-                    normdx = fla_max(normdx,dyk);
+                    normdx = fla_max(normdx, dyk);
                 }
             }
             if(normx != 0.)
@@ -748,7 +771,8 @@ void dla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
             ayb[i__] = (d__1 = b[i__ + j * b_dim1], f2c_dabs(d__1));
         }
         /* Compute f2c_dabs(op(A_s))*f2c_dabs(Y) + f2c_dabs(B_s). */
-        dla_syamv_(&uplo2, n, &c_b11, &a[a_offset], lda, &y[j * y_dim1 + 1], &c__1, &c_b11, &ayb[1], &c__1);
+        dla_syamv_(&uplo2, n, &c_b11, &a[a_offset], lda, &y[j * y_dim1 + 1], &c__1, &c_b11, &ayb[1],
+                   &c__1);
         dla_lin_berr_(n, n, &c__1, &res[1], &ayb[1], &berr_out__[j]);
         /* End of loop for each RHS. */
     }

@@ -4,13 +4,13 @@
 extern "C" {
 #endif
 
-double d_imag(dcomplex *z)
+double d_imag(doublecomplex *z)
 {
-    return (z->imag);
+    return (z->i);
 }
-double r_imag(scomplex *z)
+double r_imag(complex *z)
 {
-    return (z->imag);
+    return (z->i);
 }
 
 #ifdef __cplusplus

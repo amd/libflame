@@ -160,7 +160,7 @@ if STOREV = 'R', LDV >= K. */
 /* > LDWORK is INTEGER */
 /* > The leading dimension of the array WORK. */
 /* > If SIDE = 'L', LDWORK >= fla_max(1,N);
-*/
+ */
 /* > if SIDE = 'R', LDWORK >= fla_max(1,M). */
 /* > \endverbatim */
 /* Authors: */
@@ -183,22 +183,33 @@ if STOREV = 'R', LDV >= K. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slarzb_(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, integer *l, real *v, integer *ldv, real *t, integer *ldt, real *c__, integer *ldc, real * work, integer *ldwork)
+void slarzb_(char *side, char *trans, char *direct, char *storev, integer *m, integer *n,
+             integer *k, integer *l, real *v, integer *ldv, real *t, integer *ldt, real *c__,
+             integer *ldc, real *work, integer *ldwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slarzb inputs: side %c, trans %c, direct %c, storev %c, m %d, n %d, k %d, l %d, ldv %d, ldt %d, ldc %d",*side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *ldc);
+    snprintf(buffer, 256,
+             "slarzb inputs: side %c, trans %c, direct %c, storev %c, m %d, n %d, k %d, l %d, ldv "
+             "%d, ldt %d, ldc %d",
+             *side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1,
+    integer c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1,
         i__2;
     /* Local variables */
     integer i__, j, info;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *),
+        scopy_(integer *, real *, integer *, real *, integer *),
+        strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
+               real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     char transt[1];
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -240,11 +251,11 @@ void slarzb_(char *side, char *trans, char *direct, char * storev, integer *m, i
     }
     /* Check for currently supported options */
     info = 0;
-    if (! lsame_(direct, "B", 1, 1))
+    if(!lsame_(direct, "B", 1, 1))
     {
         info = -3;
     }
-    else if (! lsame_(storev, "R", 1, 1))
+    else if(!lsame_(storev, "R", 1, 1))
     {
         info = -4;
     }
@@ -255,7 +266,7 @@ void slarzb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (lsame_(trans, "N", 1, 1))
+    if(lsame_(trans, "N", 1, 1))
     {
         *(unsigned char *)transt = 'T';
     }
@@ -263,7 +274,7 @@ void slarzb_(char *side, char *trans, char *direct, char * storev, integer *m, i
     {
         *(unsigned char *)transt = 'N';
     }
-    if (lsame_(side, "L", 1, 1))
+    if(lsame_(side, "L", 1, 1))
     {
         /* Form H * C or H**T * C */
         /* W( 1:n, 1:k ) = C( 1:k, 1:n )**T */
@@ -277,12 +288,12 @@ void slarzb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         /* C( m-l+1:m, 1:n )**T * V( 1:k, 1:l )**T */
         if(*l > 0)
         {
-            aocl_blas_sgemm("Transpose", "Transpose", n, k, l, &c_b13, &c__[*m - *l + 1 + c_dim1],
-                            ldc, &v[v_offset], ldv, &c_b13, &work[work_offset], ldwork);
+            sgemm_("Transpose", "Transpose", n, k, l, &c_b13, &c__[*m - *l + 1 + c_dim1], ldc,
+                   &v[v_offset], ldv, &c_b13, &work[work_offset], ldwork);
         }
         /* W( 1:n, 1:k ) = W( 1:n, 1:k ) * T**T or W( 1:m, 1:k ) * T */
-        aocl_blas_strmm("Right", "Lower", transt, "Non-unit", n, k, &c_b13, &t[t_offset], ldt,
-                        &work[work_offset], ldwork);
+        strmm_("Right", "Lower", transt, "Non-unit", n, k, &c_b13, &t[t_offset], ldt,
+               &work[work_offset], ldwork);
         /* C( 1:k, 1:n ) = C( 1:k, 1:n ) - W( 1:n, 1:k )**T */
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
@@ -299,30 +310,30 @@ void slarzb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         /* V( 1:k, 1:l )**T * W( 1:n, 1:k )**T */
         if(*l > 0)
         {
-            aocl_blas_sgemm("Transpose", "Transpose", l, n, k, &c_b23, &v[v_offset], ldv,
-                            &work[work_offset], ldwork, &c_b13, &c__[*m - *l + 1 + c_dim1], ldc);
+            sgemm_("Transpose", "Transpose", l, n, k, &c_b23, &v[v_offset], ldv, &work[work_offset],
+                   ldwork, &c_b13, &c__[*m - *l + 1 + c_dim1], ldc);
         }
     }
-    else if (lsame_(side, "R", 1, 1))
+    else if(lsame_(side, "R", 1, 1))
     {
         /* Form C * H or C * H**T */
         /* W( 1:m, 1:k ) = C( 1:m, 1:k ) */
         i__1 = *k;
         for(j = 1; j <= i__1; ++j)
         {
-            aocl_blas_scopy(m, &c__[j * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
+            scopy_(m, &c__[j * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
             /* L40: */
         }
         /* W( 1:m, 1:k ) = W( 1:m, 1:k ) + ... */
         /* C( 1:m, n-l+1:n ) * V( 1:k, 1:l )**T */
         if(*l > 0)
         {
-            aocl_blas_sgemm("No transpose", "Transpose", m, k, l, &c_b13,
-                            &c__[(*n - *l + 1) * c_dim1 + 1], ldc, &v[v_offset], ldv, &c_b13,
-                            &work[work_offset], ldwork);
+            sgemm_("No transpose", "Transpose", m, k, l, &c_b13, &c__[(*n - *l + 1) * c_dim1 + 1],
+                   ldc, &v[v_offset], ldv, &c_b13, &work[work_offset], ldwork);
         }
         /* W( 1:m, 1:k ) = W( 1:m, 1:k ) * T or W( 1:m, 1:k ) * T**T */
-        strmm_("Right", "Lower", trans, "Non-unit", m, k, &c_b13, &t[t_offset], ldt, &work[work_offset], ldwork);
+        strmm_("Right", "Lower", trans, "Non-unit", m, k, &c_b13, &t[t_offset], ldt,
+               &work[work_offset], ldwork);
         /* C( 1:m, 1:k ) = C( 1:m, 1:k ) - W( 1:m, 1:k ) */
         i__1 = *k;
         for(j = 1; j <= i__1; ++j)
@@ -339,9 +350,8 @@ void slarzb_(char *side, char *trans, char *direct, char * storev, integer *m, i
         /* W( 1:m, 1:k ) * V( 1:k, 1:l ) */
         if(*l > 0)
         {
-            aocl_blas_sgemm("No transpose", "No transpose", m, l, k, &c_b23, &work[work_offset],
-                            ldwork, &v[v_offset], ldv, &c_b13, &c__[(*n - *l + 1) * c_dim1 + 1],
-                            ldc);
+            sgemm_("No transpose", "No transpose", m, l, k, &c_b23, &work[work_offset], ldwork,
+                   &v[v_offset], ldv, &c_b13, &c__[(*n - *l + 1) * c_dim1 + 1], ldc);
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

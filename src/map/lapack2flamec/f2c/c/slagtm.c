@@ -141,12 +141,14 @@ otherwise, */
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slagtm_(char *trans, integer *n, integer *nrhs, real * alpha, real *dl, real *d__, real *du, real *x, integer *ldx, real * beta, real *b, integer *ldb)
+void slagtm_(char *trans, integer *n, integer *nrhs, real *alpha, real *dl, real *d__, real *du,
+             real *x, integer *ldx, real *beta, real *b, integer *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slagtm_ inputs: *trans %c, *n %d, *nrhs %d, *ldx %d, *ldb %d",*trans, *n, *nrhs, *ldx, *ldb);
+    snprintf(buffer, 256, "slagtm_ inputs: *trans %c, *n %d, *nrhs %d, *ldx %d, *ldb %d", *trans,
+             *n, *nrhs, *ldx, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -217,7 +219,7 @@ void slagtm_(char *trans, integer *n, integer *nrhs, real * alpha, real *dl, rea
     }
     if(*alpha == 1.f)
     {
-        if (lsame_(trans, "N", 1, 1))
+        if(lsame_(trans, "N", 1, 1))
         {
             /* Compute B := B + A*X */
             i__1 = *nrhs;
@@ -276,7 +278,7 @@ void slagtm_(char *trans, integer *n, integer *nrhs, real * alpha, real *dl, rea
     }
     else if(*alpha == -1.f)
     {
-        if (lsame_(trans, "N", 1, 1))
+        if(lsame_(trans, "N", 1, 1))
         {
             /* Compute B := B - A*X */
             i__1 = *nrhs;

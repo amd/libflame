@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b SLANST returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
  * or the ele ment of largest absolute value of a real symmetric tridiagonal matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -103,7 +103,7 @@ real slanst_(char *norm, aocl_int_t *n, real *d__, real *e)
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slanst inputs: norm %c, n %d",*norm, *n);
+    snprintf(buffer, 256, "slanst inputs: norm %c, n %d", *norm, *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -118,7 +118,8 @@ real slanst_(char *norm, aocl_int_t *n, real *d__, real *e)
     real anorm;
     extern logical sisnan_(real *);
     extern /* Subroutine */
-    void slassq_(integer *, real *, integer *, real *, real *);
+        void
+        slassq_(integer *, real *, integer *, real *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -144,11 +145,11 @@ real slanst_(char *norm, aocl_int_t *n, real *d__, real *e)
     --d__;
     /* Function Body */
     anorm = 0.f;
-    if (*n <= 0)
+    if(*n <= 0)
     {
         anorm = 0.f;
     }
-    else if (lsame_(norm, "M", 1, 1))
+    else if(lsame_(norm, "M", 1, 1))
     {
         /* Find fla_max(f2c_abs(A(i,j))). */
         anorm = (r__1 = d__[*n], f2c_abs(r__1));
@@ -156,19 +157,19 @@ real slanst_(char *norm, aocl_int_t *n, real *d__, real *e)
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             sum = (r__1 = d__[i__], f2c_abs(r__1));
-            if (anorm < sum || sisnan_(&sum))
+            if(anorm < sum || sisnan_(&sum))
             {
                 anorm = sum;
             }
             sum = (r__1 = e[i__], f2c_abs(r__1));
-            if (anorm < sum || sisnan_(&sum))
+            if(anorm < sum || sisnan_(&sum))
             {
                 anorm = sum;
             }
             /* L10: */
         }
     }
-    else if (lsame_(norm, "O", 1, 1) || *(unsigned char *) norm == '1' || lsame_(norm, "I", 1, 1))
+    else if(lsame_(norm, "O", 1, 1) || *(unsigned char *)norm == '1' || lsame_(norm, "I", 1, 1))
     {
         /* Find norm1(A). */
         if(*n == 1)
@@ -179,15 +180,16 @@ real slanst_(char *norm, aocl_int_t *n, real *d__, real *e)
         {
             anorm = f2c_abs(d__[1]) + f2c_abs(e[1]);
             sum = (r__1 = e[*n - 1], f2c_abs(r__1)) + (r__2 = d__[*n], f2c_abs(r__2));
-            if (anorm < sum || sisnan_(&sum))
+            if(anorm < sum || sisnan_(&sum))
             {
                 anorm = sum;
             }
             i__1 = *n - 1;
             for(i__ = 2; i__ <= i__1; ++i__)
             {
-                sum = (r__1 = d__[i__], f2c_abs(r__1)) + (r__2 = e[i__], f2c_abs(r__2) ) + (r__3 = e[i__ - 1], f2c_abs(r__3));
-                if (anorm < sum || sisnan_(&sum))
+                sum = (r__1 = d__[i__], f2c_abs(r__1)) + (r__2 = e[i__], f2c_abs(r__2))
+                      + (r__3 = e[i__ - 1], f2c_abs(r__3));
+                if(anorm < sum || sisnan_(&sum))
                 {
                     anorm = sum;
                 }
@@ -195,7 +197,7 @@ real slanst_(char *norm, aocl_int_t *n, real *d__, real *e)
             }
         }
     }
-    else if (lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
+    else if(lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
     {
         /* Find normF(A). */
         scale = 0.f;

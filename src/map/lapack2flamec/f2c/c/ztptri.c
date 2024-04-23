@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {1., 0.};
-static aocl_int64_t c__1 = 1;
+static doublecomplex c_b1 = {1., 0.};
+static integer c__1 = 1;
 /* > \brief \b ZTPTRI */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -121,7 +121,7 @@ static aocl_int64_t c__1 = 1;
 void ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztptri inputs: uplo %c, diag %c, n %" FLA_IS "",*uplo, *diag, *n);
+    AOCL_DTL_SNPRINTF("ztptri inputs: uplo %c, diag %c, n %" FLA_IS "", *uplo, *diag, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     dcomplex z__1;
@@ -132,10 +132,13 @@ void ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *inf
     doublecomplex ajj;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     logical upper;
     extern /* Subroutine */
-    void ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer jclast;
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -164,11 +167,11 @@ void ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *inf
     upper = lsame_(uplo, "U", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
     jclast = 0;
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -2;
     }
@@ -180,7 +183,7 @@ void ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *inf
     {
         i__1 = -(*info);
         xerbla_("ZTPTRI", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Check for singularity if non-unit. */
@@ -194,9 +197,9 @@ void ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *inf
             {
                 jj += *info;
                 i__2 = jj;
-                if(ap[i__2].real == 0. && ap[i__2].imag == 0.)
+                if(ap[i__2].r == 0. && ap[i__2].i == 0.)
                 {
-    AOCL_DTL_TRACE_LOG_EXIT
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 /* L10: */
@@ -209,9 +212,9 @@ void ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *inf
             for(*info = 1; *info <= i__1; ++(*info))
             {
                 i__2 = jj;
-                if(ap[i__2].real == 0. && ap[i__2].imag == 0.)
+                if(ap[i__2].r == 0. && ap[i__2].i == 0.)
                 {
-    AOCL_DTL_TRACE_LOG_EXIT
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 jj = jj + *n - *info + 1;
@@ -248,7 +251,7 @@ void ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *inf
             }
             /* Compute elements 1:j-1 of j-th column. */
             i__2 = j - 1;
-            aocl_blas_ztpmv("Upper", "No transpose", diag, &i__2, &ap[1], &ap[jc], &c__1);
+            ztpmv_("Upper", "No transpose", diag, &i__2, &ap[1], &ap[jc], &c__1);
             i__2 = j - 1;
             aocl_blas_zscal(&i__2, &ajj, &ap[jc], &c__1);
             jc += j;
@@ -284,8 +287,7 @@ void ztptri_(char *uplo, char *diag, integer *n, doublecomplex *ap, integer *inf
             {
                 /* Compute elements j+1:n of j-th column. */
                 i__1 = *n - j;
-                aocl_blas_ztpmv("Lower", "No transpose", diag, &i__1, &ap[jclast], &ap[jc + 1],
-                                &c__1);
+                ztpmv_("Lower", "No transpose", diag, &i__1, &ap[jclast], &ap[jc + 1], &c__1);
                 i__1 = *n - j;
                 aocl_blas_zscal(&i__1, &ajj, &ap[jc + 1], &c__1);
             }

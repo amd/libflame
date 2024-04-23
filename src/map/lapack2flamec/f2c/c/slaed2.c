@@ -1,19 +1,29 @@
-/* ../netlib/slaed2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slaed2.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b3 = -1.f;
 static integer c__1 = 1;
-/* > \brief \b SLAED2 used by sstedc. Merges eigenvalues and deflates secular equation. Used when the original matrix is tridiagonal. */
+/* > \brief \b SLAED2 used by sstedc. Merges eigenvalues and deflates secular equation. Used when
+ * the original matrix is tridiagonal. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAED2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaed2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaed2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -170,11 +180,11 @@ static integer c__1 = 1;
 /* > During execution, a label which will indicate which of the */
 /* > following types a column in the Q2 matrix is: */
 /* > 1 : non-zero in the upper half only;
-*/
+ */
 /* > 2 : dense;
-*/
+ */
 /* > 3 : non-zero in the lower half only;
-*/
+ */
 /* > 4 : deflated. */
 /* > On exit, COLTYP(i) is the number of columns of type i, */
 /* > for i=1 to 4 only. */
@@ -203,7 +213,9 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slaed2_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *ldq, integer *indxq, real *rho, real *z__, real * dlamda, real *w, real *q2, integer *indx, integer *indxc, integer * indxp, integer *coltyp, integer *info)
+void slaed2_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *ldq, integer *indxq,
+             real *rho, real *z__, real *dlamda, real *w, real *q2, integer *indx, integer *indxc,
+             integer *indxp, integer *coltyp, integer *info)
 {
     /* System generated locals */
     integer q_dim1, q_offset, i__1, i__2;
@@ -218,13 +230,19 @@ void slaed2_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
     real eps, tau, tol;
     integer psm[4], imax, jmax, ctot[4];
     extern /* Subroutine */
-    void srot_(integer *, real *, integer *, real *, integer *, real *, real *), sscal_(integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer * );
+        void
+        srot_(integer *, real *, integer *, real *, integer *, real *, real *),
+        sscal_(integer *, real *, real *, integer *),
+        scopy_(integer *, real *, integer *, real *, integer *);
     extern real slapy2_(real *, real *), slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    void slamrg_(integer *, integer *, real *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+        void
+        slamrg_(integer *, integer *, real *, integer *, integer *, integer *),
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -265,11 +283,11 @@ void slaed2_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
     /* Function Body */
     *info = 0;
     pj = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -2;
     }
-    else if (*ldq < fla_max(1,*n))
+    else if(*ldq < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -278,25 +296,25 @@ void slaed2_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
         /* Computing MIN */
         i__1 = 1;
         i__2 = *n / 2; // , expr subst
-        if (fla_min(i__1,i__2) > *n1 || *n / 2 < *n1)
+        if(fla_min(i__1, i__2) > *n1 || *n / 2 < *n1)
         {
             *info = -3;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SLAED2", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         return;
     }
     n2 = *n - *n1;
     n1p1 = *n1 + 1;
-    if (*rho < 0.f)
+    if(*rho < 0.f)
     {
         sscal_(&n2, &c_b3, &z__[n1p1], &c__1);
     }
@@ -308,27 +326,21 @@ void slaed2_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
     *rho = (r__1 = *rho * 2.f, f2c_abs(r__1));
     /* Sort the eigenvalues into increasing order */
     i__1 = *n;
-    for (i__ = n1p1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = n1p1; i__ <= i__1; ++i__)
     {
         indxq[i__] += *n1;
         /* L10: */
     }
     /* re-integrate the deflated parts from the last pass */
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         dlamda[i__] = d__[indxq[i__]];
         /* L20: */
     }
     slamrg_(n1, &n2, &dlamda[1], &c__1, &c__1, &indxc[1]);
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         indx[i__] = indxq[indxc[i__]];
         /* L30: */
@@ -339,19 +351,17 @@ void slaed2_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
     eps = slamch_("Epsilon");
     /* Computing MAX */
     r__3 = (r__1 = d__[jmax], f2c_abs(r__1));
-    r__4 = (r__2 = z__[imax], f2c_abs(r__2)) ; // , expr subst
-    tol = eps * 8.f * fla_max(r__3,r__4);
+    r__4 = (r__2 = z__[imax], f2c_abs(r__2)); // , expr subst
+    tol = eps * 8.f * fla_max(r__3, r__4);
     /* If the rank-1 modifier is small enough, no more needs to be done */
     /* except to reorganize Q so that its columns correspond with the */
     /* elements in D. */
-    if (*rho * (r__1 = z__[imax], f2c_abs(r__1)) <= tol)
+    if(*rho * (r__1 = z__[imax], f2c_abs(r__1)) <= tol)
     {
         *k = 0;
         iq2 = 1;
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__ = indx[j];
             scopy_(n, &q[i__ * q_dim1 + 1], &c__1, &q2[iq2], &c__1);
@@ -369,17 +379,13 @@ void slaed2_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
     /* the corresponding eigensubspace so that the corresponding */
     /* components of Z are zero in this new basis. */
     i__1 = *n1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         coltyp[i__] = 1;
         /* L50: */
     }
     i__1 = *n;
-    for (i__ = n1p1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = n1p1; i__ <= i__1; ++i__)
     {
         coltyp[i__] = 3;
         /* L60: */
@@ -387,18 +393,16 @@ void slaed2_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
     *k = 0;
     k2 = *n + 1;
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         nj = indx[j];
-        if (*rho * (r__1 = z__[nj], f2c_abs(r__1)) <= tol)
+        if(*rho * (r__1 = z__[nj], f2c_abs(r__1)) <= tol)
         {
             /* Deflate due to small z component. */
             --k2;
             coltyp[nj] = 4;
             indxp[k2] = nj;
-            if (j == *n)
+            if(j == *n)
             {
                 goto L100;
             }
@@ -413,11 +417,11 @@ void slaed2_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
 L80:
     ++j;
     nj = indx[j];
-    if (j > *n)
+    if(j > *n)
     {
         goto L100;
     }
-    if (*rho * (r__1 = z__[nj], f2c_abs(r__1)) <= tol)
+    if(*rho * (r__1 = z__[nj], f2c_abs(r__1)) <= tol)
     {
         /* Deflate due to small z component. */
         --k2;
@@ -435,17 +439,17 @@ L80:
         t = d__[nj] - d__[pj];
         c__ /= tau;
         s = -s / tau;
-        if ((r__1 = t * c__ * s, f2c_abs(r__1)) <= tol)
+        if((r__1 = t * c__ * s, f2c_abs(r__1)) <= tol)
         {
             /* Deflation is possible. */
             z__[nj] = tau;
             z__[pj] = 0.f;
-            if (coltyp[nj] != coltyp[pj])
+            if(coltyp[nj] != coltyp[pj])
             {
                 coltyp[nj] = 2;
             }
             coltyp[pj] = 4;
-            srot_(n, &q[pj * q_dim1 + 1], &c__1, &q[nj * q_dim1 + 1], &c__1, & c__, &s);
+            srot_(n, &q[pj * q_dim1 + 1], &c__1, &q[nj * q_dim1 + 1], &c__1, &c__, &s);
             /* Computing 2nd power */
             r__1 = c__;
             /* Computing 2nd power */
@@ -459,10 +463,10 @@ L80:
             d__[pj] = t;
             --k2;
             i__ = 1;
-L90:
-            if (k2 + i__ <= *n)
+        L90:
+            if(k2 + i__ <= *n)
             {
-                if (d__[pj] < d__[indxp[k2 + i__]])
+                if(d__[pj] < d__[indxp[k2 + i__]])
                 {
                     indxp[k2 + i__ - 1] = indxp[k2 + i__];
                     indxp[k2 + i__] = pj;
@@ -499,17 +503,13 @@ L100: /* Record the last eigenvalue. */
     /* form a permutation which positions the four column types into */
     /* four uniform groups (although one or more of these groups may be */
     /* empty). */
-    for (j = 1;
-            j <= 4;
-            ++j)
+    for(j = 1; j <= 4; ++j)
     {
         ctot[j - 1] = 0;
         /* L110: */
     }
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         ct = coltyp[j];
         ++ctot[ct - 1];
@@ -525,9 +525,7 @@ L100: /* Record the last eigenvalue. */
     /* will place all type-1 columns first, all type-2 columns next, */
     /* then all type-3's, and finally all type-4's. */
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         js = indxp[j];
         ct = coltyp[js];
@@ -544,9 +542,7 @@ L100: /* Record the last eigenvalue. */
     iq1 = 1;
     iq2 = (ctot[0] + ctot[1]) * *n1 + 1;
     i__1 = ctot[0];
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         js = indx[i__];
         scopy_(n1, &q[js * q_dim1 + 1], &c__1, &q2[iq1], &c__1);
@@ -556,9 +552,7 @@ L100: /* Record the last eigenvalue. */
         /* L140: */
     }
     i__1 = ctot[1];
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         js = indx[i__];
         scopy_(n1, &q[js * q_dim1 + 1], &c__1, &q2[iq1], &c__1);
@@ -570,9 +564,7 @@ L100: /* Record the last eigenvalue. */
         /* L150: */
     }
     i__1 = ctot[2];
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         js = indx[i__];
         scopy_(&n2, &q[*n1 + 1 + js * q_dim1], &c__1, &q2[iq2], &c__1);
@@ -583,9 +575,7 @@ L100: /* Record the last eigenvalue. */
     }
     iq1 = iq2;
     i__1 = ctot[3];
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         js = indx[i__];
         scopy_(n, &q[js * q_dim1 + 1], &c__1, &q2[iq2], &c__1);
@@ -596,16 +586,14 @@ L100: /* Record the last eigenvalue. */
     }
     /* The deflated eigenvalues and their corresponding vectors go back */
     /* into the last N - K slots of D and Q respectively. */
-    if (*k < *n)
+    if(*k < *n)
     {
         slacpy_("A", n, &ctot[3], &q2[iq1], n, &q[(*k + 1) * q_dim1 + 1], ldq);
         i__1 = *n - *k;
         scopy_(&i__1, &z__[*k + 1], &c__1, &d__[*k + 1], &c__1);
     }
     /* Copy CTOT into COLTYP for referencing in SLAED3. */
-    for (j = 1;
-            j <= 4;
-            ++j)
+    for(j = 1; j <= 4; ++j)
     {
         coltyp[j] = ctot[j - 1];
         /* L180: */

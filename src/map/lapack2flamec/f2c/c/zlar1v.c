@@ -224,10 +224,16 @@ is largest */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void zlar1v_(integer *n, integer *b1, integer *bn, doublereal *lambda, doublereal *d__, doublereal *l, doublereal *ld, doublereal * lld, doublereal *pivmin, doublereal *gaptol, doublecomplex *z__, logical *wantnc, integer *negcnt, doublereal *ztz, doublereal *mingma, integer *r__, integer *isuppz, doublereal *nrminv, doublereal *resid, doublereal *rqcorr, doublereal *work)
+void zlar1v_(integer *n, integer *b1, integer *bn, doublereal *lambda, doublereal *d__,
+             doublereal *l, doublereal *ld, doublereal *lld, doublereal *pivmin, doublereal *gaptol,
+             doublecomplex *z__, logical *wantnc, integer *negcnt, doublereal *ztz,
+             doublereal *mingma, integer *r__, integer *isuppz, doublereal *nrminv,
+             doublereal *resid, doublereal *rqcorr, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlar1v inputs: n %" FLA_IS ", b1 %" FLA_IS ", bn %" FLA_IS ", lambda %lf, r__ %" FLA_IS "",*n, *b1, *bn, *lambda, *r__);
+    AOCL_DTL_SNPRINTF("zlar1v inputs: n %" FLA_IS ", b1 %" FLA_IS ", bn %" FLA_IS
+                      ", lambda %lf, r__ %" FLA_IS "",
+                      *n, *b1, *bn, *lambda, *r__);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3, i__4;
     doublereal d__1;
@@ -341,7 +347,7 @@ L60:
         for(i__ = *b1; i__ <= i__1; ++i__)
         {
             dplus = d__[i__] + s;
-            if (f2c_dabs(dplus) < *pivmin)
+            if(f2c_dabs(dplus) < *pivmin)
             {
                 dplus = -(*pivmin);
             }
@@ -362,7 +368,7 @@ L60:
         for(i__ = r1; i__ <= i__1; ++i__)
         {
             dplus = d__[i__] + s;
-            if (f2c_dabs(dplus) < *pivmin)
+            if(f2c_dabs(dplus) < *pivmin)
             {
                 dplus = -(*pivmin);
             }
@@ -404,7 +410,7 @@ L60:
         for(i__ = *bn - 1; i__ >= i__1; --i__)
         {
             dminus = lld[i__] + work[indp + i__];
-            if (f2c_dabs(dminus) < *pivmin)
+            if(f2c_dabs(dminus) < *pivmin)
             {
                 dminus = -(*pivmin);
             }
@@ -437,7 +443,7 @@ L60:
     {
         *negcnt = -1;
     }
-    if (f2c_dabs(*mingma) == 0.)
+    if(f2c_dabs(*mingma) == 0.)
     {
         *mingma = eps * work[inds + r1 - 1];
     }
@@ -450,7 +456,7 @@ L60:
         {
             tmp = eps * work[inds + i__];
         }
-        if (f2c_dabs(tmp) <= f2c_dabs(*mingma))
+        if(f2c_dabs(tmp) <= f2c_dabs(*mingma))
         {
             *mingma = tmp;
             *r__ = i__ + 1;
@@ -474,12 +480,13 @@ L60:
             i__3 = indlpl + i__;
             i__4 = i__ + 1;
             z__2.r = work[i__3] * z__[i__4].r;
-            z__2.i = work[i__3] * z__[i__4] .i; // , expr subst
+            z__2.i = work[i__3] * z__[i__4].i; // , expr subst
             z__1.r = -z__2.r;
             z__1.i = -z__2.i; // , expr subst
             z__[i__2].r = z__1.r;
             z__[i__2].i = z__1.i; // , expr subst
-            if ((z_abs(&z__[i__]) + z_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_dabs(d__1)) < *gaptol)
+            if((z_abs(&z__[i__]) + z_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_dabs(d__1))
+               < *gaptol)
             {
                 i__2 = i__;
                 z__[i__2].real = 0.;
@@ -489,9 +496,9 @@ L60:
             }
             i__2 = i__;
             i__3 = i__;
-            z__1.real = z__[i__2].real * z__[i__3].real - z__[i__2].imag * z__[i__3].imag;
-            z__1.imag = z__[i__2].real * z__[i__3].imag + z__[i__2].imag * z__[i__3].real; // , expr subst
-            *ztz += z__1.real;
+            z__1.r = z__[i__2].r * z__[i__3].r - z__[i__2].i * z__[i__3].i;
+            z__1.i = z__[i__2].r * z__[i__3].i + z__[i__2].i * z__[i__3].r; // , expr subst
+            *ztz += z__1.r;
             /* L210: */
         }
     L220:;
@@ -503,7 +510,7 @@ L60:
         for(i__ = *r__ - 1; i__ >= i__1; --i__)
         {
             i__2 = i__ + 1;
-            if(z__[i__2].real == 0. && z__[i__2].imag == 0.)
+            if(z__[i__2].r == 0. && z__[i__2].i == 0.)
             {
                 i__2 = i__;
                 d__1 = -(ld[i__ + 1] / ld[i__]);
@@ -518,14 +525,15 @@ L60:
                 i__2 = i__;
                 i__3 = indlpl + i__;
                 i__4 = i__ + 1;
-                z__2.real = work[i__3] * z__[i__4].real;
-                z__2.imag = work[i__3] * z__[i__4].imag; // , expr subst
-                z__1.real = -z__2.real;
-                z__1.imag = -z__2.imag; // , expr subst
-                z__[i__2].real = z__1.real;
-                z__[i__2].imag = z__1.imag; // , expr subst
+                z__2.r = work[i__3] * z__[i__4].r;
+                z__2.i = work[i__3] * z__[i__4].i; // , expr subst
+                z__1.r = -z__2.r;
+                z__1.i = -z__2.i; // , expr subst
+                z__[i__2].r = z__1.r;
+                z__[i__2].i = z__1.i; // , expr subst
             }
-            if ((z_abs(&z__[i__]) + z_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_dabs(d__1)) < *gaptol)
+            if((z_abs(&z__[i__]) + z_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_dabs(d__1))
+               < *gaptol)
             {
                 i__2 = i__;
                 z__[i__2].real = 0.;
@@ -535,9 +543,9 @@ L60:
             }
             i__2 = i__;
             i__3 = i__;
-            z__1.real = z__[i__2].real * z__[i__3].real - z__[i__2].imag * z__[i__3].imag;
-            z__1.imag = z__[i__2].real * z__[i__3].imag + z__[i__2].imag * z__[i__3].real; // , expr subst
-            *ztz += z__1.real;
+            z__1.r = z__[i__2].r * z__[i__3].r - z__[i__2].i * z__[i__3].i;
+            z__1.i = z__[i__2].r * z__[i__3].i + z__[i__2].i * z__[i__3].r; // , expr subst
+            *ztz += z__1.r;
             /* L230: */
         }
     L240:;
@@ -552,12 +560,13 @@ L60:
             i__3 = indumn + i__;
             i__4 = i__;
             z__2.r = work[i__3] * z__[i__4].r;
-            z__2.i = work[i__3] * z__[i__4] .i; // , expr subst
+            z__2.i = work[i__3] * z__[i__4].i; // , expr subst
             z__1.r = -z__2.r;
             z__1.i = -z__2.i; // , expr subst
             z__[i__2].r = z__1.r;
             z__[i__2].i = z__1.i; // , expr subst
-            if ((z_abs(&z__[i__]) + z_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_dabs(d__1)) < *gaptol)
+            if((z_abs(&z__[i__]) + z_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_dabs(d__1))
+               < *gaptol)
             {
                 i__2 = i__ + 1;
                 z__[i__2].real = 0.;
@@ -567,9 +576,9 @@ L60:
             }
             i__2 = i__ + 1;
             i__3 = i__ + 1;
-            z__1.real = z__[i__2].real * z__[i__3].real - z__[i__2].imag * z__[i__3].imag;
-            z__1.imag = z__[i__2].real * z__[i__3].imag + z__[i__2].imag * z__[i__3].real; // , expr subst
-            *ztz += z__1.real;
+            z__1.r = z__[i__2].r * z__[i__3].r - z__[i__2].i * z__[i__3].i;
+            z__1.i = z__[i__2].r * z__[i__3].i + z__[i__2].i * z__[i__3].r; // , expr subst
+            *ztz += z__1.r;
             /* L250: */
         }
     L260:;
@@ -581,7 +590,7 @@ L60:
         for(i__ = *r__; i__ <= i__1; ++i__)
         {
             i__2 = i__;
-            if(z__[i__2].real == 0. && z__[i__2].imag == 0.)
+            if(z__[i__2].r == 0. && z__[i__2].i == 0.)
             {
                 i__2 = i__ + 1;
                 d__1 = -(ld[i__ - 1] / ld[i__]);
@@ -596,14 +605,15 @@ L60:
                 i__2 = i__ + 1;
                 i__3 = indumn + i__;
                 i__4 = i__;
-                z__2.real = work[i__3] * z__[i__4].real;
-                z__2.imag = work[i__3] * z__[i__4].imag; // , expr subst
-                z__1.real = -z__2.real;
-                z__1.imag = -z__2.imag; // , expr subst
-                z__[i__2].real = z__1.real;
-                z__[i__2].imag = z__1.imag; // , expr subst
+                z__2.r = work[i__3] * z__[i__4].r;
+                z__2.i = work[i__3] * z__[i__4].i; // , expr subst
+                z__1.r = -z__2.r;
+                z__1.i = -z__2.i; // , expr subst
+                z__[i__2].r = z__1.r;
+                z__[i__2].i = z__1.i; // , expr subst
             }
-            if ((z_abs(&z__[i__]) + z_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_dabs(d__1)) < *gaptol)
+            if((z_abs(&z__[i__]) + z_abs(&z__[i__ + 1])) * (d__1 = ld[i__], f2c_dabs(d__1))
+               < *gaptol)
             {
                 i__2 = i__ + 1;
                 z__[i__2].real = 0.;
@@ -613,9 +623,9 @@ L60:
             }
             i__2 = i__ + 1;
             i__3 = i__ + 1;
-            z__1.real = z__[i__2].real * z__[i__3].real - z__[i__2].imag * z__[i__3].imag;
-            z__1.imag = z__[i__2].real * z__[i__3].imag + z__[i__2].imag * z__[i__3].real; // , expr subst
-            *ztz += z__1.real;
+            z__1.r = z__[i__2].r * z__[i__3].r - z__[i__2].i * z__[i__3].i;
+            z__1.i = z__[i__2].r * z__[i__3].i + z__[i__2].i * z__[i__3].r; // , expr subst
+            *ztz += z__1.r;
             /* L270: */
         }
     L280:;

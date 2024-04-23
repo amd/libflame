@@ -105,7 +105,8 @@
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slar2v_(integer *n, real *x, real *y, real *z__, integer *incx, real *c__, real *s, integer *incc)
+void slar2v_(integer *n, real *x, real *y, real *z__, integer *incx, real *c__, real *s,
+             integer *incc)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slar2v(n, x, y, z__, incx, c__, s, incc);

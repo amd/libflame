@@ -96,10 +96,12 @@
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dla_lin_berr_(integer *n, integer *nz, integer *nrhs, doublereal *res, doublereal *ayb, doublereal *berr)
+void dla_lin_berr_(integer *n, integer *nz, integer *nrhs, doublereal *res, doublereal *ayb,
+                   doublereal *berr)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dla_lin_berr inputs: n %" FLA_IS ", nz %" FLA_IS ", nrhs %" FLA_IS "",*n, *nz, *nrhs);
+    AOCL_DTL_SNPRINTF("dla_lin_berr inputs: n %" FLA_IS ", nz %" FLA_IS ", nrhs %" FLA_IS "", *n,
+                      *nz, *nrhs);
     /* System generated locals */
     aocl_int64_t ayb_dim1, ayb_offset, res_dim1, res_offset, i__1, i__2;
     doublereal d__1;
@@ -146,10 +148,11 @@ void dla_lin_berr_(integer *n, integer *nz, integer *nrhs, doublereal *res, doub
         {
             if(ayb[i__ + j * ayb_dim1] != 0.)
             {
-                tmp = (safe1 + (d__1 = res[i__ + j * res_dim1], f2c_dabs(d__1))) / ayb[i__ + j * ayb_dim1];
+                tmp = (safe1 + (d__1 = res[i__ + j * res_dim1], f2c_dabs(d__1)))
+                      / ayb[i__ + j * ayb_dim1];
                 /* Computing MAX */
                 d__1 = berr[j];
-                berr[j] = fla_max(d__1,tmp);
+                berr[j] = fla_max(d__1, tmp);
             }
             /* If AYB is exactly 0.0 (and if computed by SLA_yyAMV), then we know */
             /* the true residual also must be exactly 0.0. */

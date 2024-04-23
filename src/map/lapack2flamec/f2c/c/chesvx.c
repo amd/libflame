@@ -1,11 +1,11 @@
-/* ./chesvx.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/chesvx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static integer c__1 = 1;
+static integer c_n1 = -1;
 /* > \brief <b> CHESVX computes the solution to system of linear equations A * X = B for HE
  * matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -282,15 +282,24 @@ the routine */
 /* > \ingroup hesvx */
 /* ===================================================================== */
 /* Subroutine */
-void chesvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, integer *lda, complex *af, integer *ldaf, integer * ipiv, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, integer *lwork, real *rwork, integer *info)
+void chesvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *a, integer *lda,
+             complex *af, integer *ldaf, integer *ipiv, complex *b, integer *ldb, complex *x,
+             integer *ldx, real *rcond, real *ferr, real *berr, complex *work, integer *lwork,
+             real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chesvx inputs: fact %c, uplo %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ldb %lld, ldx %lld, lwork %lld",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx, *lwork);
+    snprintf(buffer, 256,
+             "chesvx inputs: fact %c, uplo %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ldb %lld, "
+             "ldx %lld, lwork %lld",
+             *fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx, *lwork);
 #else
-    snprintf(buffer, 256,"chesvx inputs: fact %c, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d, lwork %d",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx, *lwork);
+    snprintf(
+        buffer, 256,
+        "chesvx inputs: fact %c, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d, lwork %d",
+        *fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -304,14 +313,25 @@ void chesvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
     real anorm;
     extern real clanhe_(char *, char *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    void checon_(char *, integer *, complex *, integer *, integer *, real *, real *, complex *, integer *);
+        void
+        checon_(char *, integer *, complex *, integer *, integer *, real *, real *, complex *,
+                integer *);
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    void cherfs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), chetrf_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), clacpy_( char *, integer *, integer *, complex *, integer *, complex *, integer *);
+        void
+        cherfs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *,
+                complex *, integer *, complex *, integer *, real *, real *, complex *, real *,
+                integer *),
+        chetrf_(char *, integer *, complex *, integer *, integer *, complex *, integer *,
+                integer *),
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), chetrs_( char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        chetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *,
+                integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK driver routine -- */
@@ -356,11 +376,11 @@ void chesvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
     *info = 0;
     nofact = lsame_(fact, "N", 1, 1);
     lquery = *lwork == -1;
-    if (! nofact && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    else if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -372,19 +392,19 @@ void chesvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -11;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -13;
     }
@@ -393,7 +413,7 @@ void chesvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n << 1; // , expr subst
-        if (*lwork < fla_max(i__1,i__2) && ! lquery)
+        if(*lwork < fla_max(i__1, i__2) && !lquery)
         {
             *info = -18;
         }
@@ -403,18 +423,17 @@ void chesvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n << 1; // , expr subst
-        lwkopt = fla_max(i__1,i__2);
-        if (nofact)
+        lwkopt = fla_max(i__1, i__2);
+        if(nofact)
         {
             nb = aocl_lapack_ilaenv(&c__1, "CHETRF", uplo, n, &c_n1, &c_n1, &c_n1);
             /* Computing MAX */
             i__1 = lwkopt;
             i__2 = *n * nb; // , expr subst
-            lwkopt = fla_max(i__1,i__2);
+            lwkopt = fla_max(i__1, i__2);
         }
-        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].real = r__1;
-        work[1].imag = 0.f; // , expr subst
+        work[1].r = (real)lwkopt;
+        work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -450,13 +469,14 @@ void chesvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, int
     aocl_lapack_chetrs(uplo, n, nrhs, &af[af_offset], ldaf, &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solutions and */
     /* compute error bounds and backward error estimates for them. */
-    cherfs_(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
+    cherfs_(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1], &b[b_offset], ldb,
+            &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
     /* Set INFO = N+1 if the matrix is singular to working precision. */
     if(*rcond < slamch_("Epsilon"))
     {
         *info = *n + 1;
     }
-    work[1].r = (real) lwkopt;
+    work[1].r = (real)lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

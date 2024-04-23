@@ -1,18 +1,28 @@
-/* dlanv2.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dlanv2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b6 = 1.;
-/* > \brief \b DLANV2 computes the Schur factorization of a real 2-by-2 nonsymmetric matrix in standard form. */
+/* > \brief \b DLANV2 computes the Schur factorization of a real 2-by-2 nonsymmetric matrix in
+ * standard form. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLANV2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlanv2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlanv2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlanv2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlanv2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlanv2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlanv2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -114,14 +124,17 @@ static doublereal c_b6 = 1.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlanv2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doublereal *rt1r, doublereal *rt1i, doublereal *rt2r, doublereal *rt2i, doublereal *cs, doublereal *sn)
+void dlanv2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doublereal *rt1r,
+             doublereal *rt1i, doublereal *rt2r, doublereal *rt2i, doublereal *cs, doublereal *sn)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     doublereal d__1, d__2;
     /* Builtin functions */
-    double log(doublereal), pow_di(doublereal *, integer *), d_sign( doublereal *, doublereal *), sqrt(doublereal);
+    double log(doublereal), pow_di(doublereal *, integer *), d_sign(doublereal *, doublereal *),
+        sqrt(doublereal);
     /* Local variables */
-    doublereal p, z__, aa, bb, cc, dd, cs1, sn1, sab, sac, eps, tau, temp, scale, bcmax, bcmis, sigma;
+    doublereal p, z__, aa, bb, cc, dd, cs1, sn1, sab, sac, eps, tau, temp, scale, bcmax, bcmis,
+        sigma;
     integer count, i__1;
     doublereal safmn2;
     extern doublereal dlapy2_(doublereal *, doublereal *);
@@ -146,15 +159,15 @@ void dlanv2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, dou
     safmin = dlamch_("S");
     eps = dlamch_("P");
     d__1 = dlamch_("B");
-    i__1 = (integer) (log(safmin / eps) / log(dlamch_("B")) / 2.);
+    i__1 = (integer)(log(safmin / eps) / log(dlamch_("B")) / 2.);
     safmn2 = pow_di(&d__1, &i__1);
     safmx2 = 1. / safmn2;
-    if (*c__ == 0.)
+    if(*c__ == 0.)
     {
         *cs = 1.;
         *sn = 0.;
     }
-    else if (*b == 0.)
+    else if(*b == 0.)
     {
         /* Swap rows and columns */
         *cs = 0.;
@@ -165,7 +178,7 @@ void dlanv2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, dou
         *b = -(*c__);
         *c__ = 0.;
     }
-    else if (*a - *d__ == 0. && d_sign(&c_b6, b) != d_sign(&c_b6, c__))
+    else if(*a - *d__ == 0. && d_sign(&c_b6, b) != d_sign(&c_b6, c__))
     {
         *cs = 1.;
         *sn = 0.;
@@ -177,18 +190,18 @@ void dlanv2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, dou
         /* Computing MAX */
         d__1 = f2c_dabs(*b);
         d__2 = f2c_dabs(*c__); // , expr subst
-        bcmax = fla_max(d__1,d__2);
+        bcmax = fla_max(d__1, d__2);
         /* Computing MIN */
         d__1 = f2c_dabs(*b);
         d__2 = f2c_dabs(*c__); // , expr subst
-        bcmis = fla_min(d__1,d__2) * d_sign(&c_b6, b) * d_sign(&c_b6, c__);
+        bcmis = fla_min(d__1, d__2) * d_sign(&c_b6, b) * d_sign(&c_b6, c__);
         /* Computing MAX */
         d__1 = f2c_dabs(p);
-        scale = fla_max(d__1,bcmax);
+        scale = fla_max(d__1, bcmax);
         z__ = p / scale * p + bcmax / scale * bcmis;
         /* If Z is of the order of the machine accuracy, postpone the */
         /* decision on the nature of eigenvalues */
-        if (z__ >= eps * 4.)
+        if(z__ >= eps * 4.)
         {
             /* Real eigenvalues. Compute A and D. */
             d__1 = sqrt(scale) * sqrt(z__);
@@ -208,26 +221,26 @@ void dlanv2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, dou
             /* Make diagonal elements equal. */
             count = 0;
             sigma = *b + *c__;
-L10:
+        L10:
             ++count;
             /* Computing MAX */
             d__1 = f2c_dabs(temp);
             d__2 = f2c_dabs(sigma); // , expr subst
-            scale = fla_max(d__1,d__2);
-            if (scale >= safmx2)
+            scale = fla_max(d__1, d__2);
+            if(scale >= safmx2)
             {
                 sigma *= safmn2;
                 temp *= safmn2;
-                if (count <= 20)
+                if(count <= 20)
                 {
                     goto L10;
                 }
             }
-            if (scale <= safmn2)
+            if(scale <= safmn2)
             {
                 sigma *= safmx2;
                 temp *= safmx2;
-                if (count <= 20)
+                if(count <= 20)
                 {
                     goto L10;
                 }
@@ -251,11 +264,11 @@ L10:
             temp = (*a + *d__) * .5;
             *a = temp;
             *d__ = temp;
-            if (*c__ != 0.)
+            if(*c__ != 0.)
             {
-                if (*b != 0.)
+                if(*b != 0.)
                 {
-                    if (d_sign(&c_b6, b) == d_sign(&c_b6, c__))
+                    if(d_sign(&c_b6, b) == d_sign(&c_b6, c__))
                     {
                         /* Real eigenvalues: reduce to upper triangular form */
                         sab = sqrt((f2c_dabs(*b)));
@@ -288,7 +301,7 @@ L10:
     /* Store eigenvalues in (RT1R,RT1I) and (RT2R,RT2I). */
     *rt1r = *a;
     *rt2r = *d__;
-    if (*c__ == 0.)
+    if(*c__ == 0.)
     {
         *rt1i = 0.;
         *rt2i = 0.;

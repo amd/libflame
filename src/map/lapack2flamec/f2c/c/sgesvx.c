@@ -349,7 +349,10 @@ if EQUED = 'N' or 'R', C */
 /* > \ingroup realGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-void sgesvx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, integer *lda, real *af, integer *ldaf, integer *ipiv, char *equed, real *r__, real *c__, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork, integer *info)
+void sgesvx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, integer *lda, real *af,
+             integer *ldaf, integer *ipiv, char *equed, real *r__, real *c__, real *b, integer *ldb,
+             real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork,
+             integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgesvx(fact, trans, n, nrhs, a, lda, af, ldaf, ipiv, equed, r__, c__, b, ldb, x,
@@ -394,19 +397,31 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
     real colcnd;
     logical nofact;
     extern /* Subroutine */
-    void slaqge_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, char *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgecon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
+        void
+        slaqge_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *,
+                char *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        sgecon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
     real bignum;
     aocl_int64_t infequ;
     logical colequ;
     extern /* Subroutine */
-    void sgeequ_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *), sgerfs_( char *, integer *, integer *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), sgetrf_(integer *, integer *, real *, integer *, integer *, integer *);
+        void
+        sgeequ_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *,
+                integer *),
+        sgerfs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *,
+                real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *),
+        sgetrf_(integer *, integer *, real *, integer *, integer *, integer *);
     real rowcnd;
     extern /* Subroutine */
-    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+        void
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     logical notran;
     extern real slantr_(char *, char *, char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    void sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *,
+                integer *);
     real smlnum;
     logical rowequ;
     real rpvgrw;
@@ -457,7 +472,7 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
     notran = lsame_(trans, "N", 1, 1);
     smlnum = 0.f;
     bignum = 0.f;
-    if (nofact || equil)
+    if(nofact || equil)
     {
         *(unsigned char *)equed = 'N';
         rowequ = FALSE_;
@@ -471,11 +486,11 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
         bignum = 1.f / smlnum;
     }
     /* Test the input parameters. */
-    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -487,15 +502,15 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (lsame_(fact, "F", 1, 1) && ! (rowequ || colequ || lsame_(equed, "N", 1, 1)))
+    else if(lsame_(fact, "F", 1, 1) && !(rowequ || colequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -10;
     }
@@ -511,11 +526,11 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
                 /* Computing MIN */
                 r__1 = rcmin;
                 r__2 = r__[j]; // , expr subst
-                rcmin = fla_min(r__1,r__2);
+                rcmin = fla_min(r__1, r__2);
                 /* Computing MAX */
                 r__1 = rcmax;
                 r__2 = r__[j]; // , expr subst
-                rcmax = fla_max(r__1,r__2);
+                rcmax = fla_max(r__1, r__2);
                 /* L10: */
             }
             if(rcmin <= 0.f)
@@ -524,7 +539,7 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
             }
             else if(*n > 0)
             {
-                rowcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+                rowcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
             }
             else
             {
@@ -541,11 +556,11 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
                 /* Computing MIN */
                 r__1 = rcmin;
                 r__2 = c__[j]; // , expr subst
-                rcmin = fla_min(r__1,r__2);
+                rcmin = fla_min(r__1, r__2);
                 /* Computing MAX */
                 r__1 = rcmax;
                 r__2 = c__[j]; // , expr subst
-                rcmax = fla_max(r__1,r__2);
+                rcmax = fla_max(r__1, r__2);
                 /* L20: */
             }
             if(rcmin <= 0.f)
@@ -554,7 +569,7 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
             }
             else if(*n > 0)
             {
-                colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+                colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
             }
             else
             {
@@ -563,11 +578,11 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
         }
         if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -14;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -16;
             }
@@ -582,12 +597,11 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
     if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        aocl_lapack_sgeequ(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, &colcnd, &amax,
-                           &infequ);
+        sgeequ_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, &colcnd, &amax, &infequ);
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            slaqge_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, & colcnd, &amax, equed);
+            slaqge_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, &colcnd, &amax, equed);
             rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
             colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }
@@ -634,7 +648,7 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
         {
             /* Compute the reciprocal pivot growth factor of the */
             /* leading rank-deficient INFO columns of A. */
-            rpvgrw = aocl_lapack_slantr("M", "U", "N", info, info, &af[af_offset], ldaf, &work[1]);
+            rpvgrw = slantr_("M", "U", "N", info, info, &af[af_offset], ldaf, &work[1]);
             if(rpvgrw == 0.f)
             {
                 rpvgrw = 1.f;
@@ -658,8 +672,8 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
     {
         *(unsigned char *)norm = 'I';
     }
-    anorm = aocl_lapack_slange(norm, n, n, &a[a_offset], lda, &work[1]);
-    rpvgrw = aocl_lapack_slantr("M", "U", "N", n, n, &af[af_offset], ldaf, &work[1]);
+    anorm = slange_(norm, n, n, &a[a_offset], lda, &work[1]);
+    rpvgrw = slantr_("M", "U", "N", n, n, &af[af_offset], ldaf, &work[1]);
     if(rpvgrw == 0.f)
     {
         rpvgrw = 1.f;
@@ -675,9 +689,8 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
     aocl_lapack_sgetrs(trans, n, nrhs, &af[af_offset], ldaf, &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    aocl_lapack_sgerfs(trans, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1],
-                       &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1],
-                       &iwork[1], info);
+    sgerfs_(trans, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1], &b[b_offset], ldb,
+            &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(notran)

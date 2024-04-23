@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b ZLA_PORCOND_X computes the infinity norm condition number of op(A)*diag(x) for
  * Hermitian positi ve-definite matrices. */
 /* =========== DOCUMENTATION =========== */
@@ -121,13 +121,14 @@ static aocl_int64_t c__1 = 1;
 /* > \date September 2012 */
 /* > \ingroup complex16POcomputational */
 /* ===================================================================== */
-/** Generated wrapper function */
-doublereal zla_porcond_x_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
-                          dcomplex *af, aocl_int_t *ldaf, dcomplex *x, aocl_int_t *info,
-                          dcomplex *work, doublereal *rwork)
+doublereal zla_porcond_x_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *af,
+                          integer *ldaf, doublecomplex *x, integer *info, doublecomplex *work,
+                          doublereal *rwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zla_porcond_x inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS "", *uplo, *n, *lda, *ldaf);
+    AOCL_DTL_SNPRINTF("zla_porcond_x inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS
+                      "",
+                      *uplo, *n, *lda, *ldaf);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, i__1, i__2, i__3, i__4;
     doublereal ret_val, d__1, d__2;
@@ -145,10 +146,14 @@ doublereal zla_porcond_x_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
     doublereal anorm;
     logical upper;
     extern /* Subroutine */
-    void zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     extern /* Subroutine */
-    void zpotrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zpotrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -187,7 +192,7 @@ doublereal zla_porcond_x_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
     ret_val = 0.;
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -195,11 +200,11 @@ doublereal zla_porcond_x_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -211,7 +216,7 @@ doublereal zla_porcond_x_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
         return ret_val;
     }
     up = FALSE_;
-    if (lsame_(uplo, "U", 1, 1))
+    if(lsame_(uplo, "U", 1, 1))
     {
         up = TRUE_;
     }
@@ -229,7 +234,7 @@ doublereal zla_porcond_x_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
                 i__3 = j + i__ * a_dim1;
                 i__4 = j;
                 z__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4] .r; // , expr subst
+                z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
                 z__1.r = z__2.r;
                 z__1.i = z__2.i; // , expr subst
                 tmp += (d__1 = z__1.r, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1), f2c_dabs(d__2));
@@ -240,13 +245,13 @@ doublereal zla_porcond_x_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
                 i__3 = i__ + j * a_dim1;
                 i__4 = j;
                 z__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4] .r; // , expr subst
+                z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
                 z__1.r = z__2.r;
                 z__1.i = z__2.i; // , expr subst
                 tmp += (d__1 = z__1.r, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1), f2c_dabs(d__2));
             }
             rwork[i__] = tmp;
-            anorm = fla_max(anorm,tmp);
+            anorm = fla_max(anorm, tmp);
         }
     }
     else
@@ -261,7 +266,7 @@ doublereal zla_porcond_x_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
                 i__3 = i__ + j * a_dim1;
                 i__4 = j;
                 z__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4] .r; // , expr subst
+                z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
                 z__1.r = z__2.r;
                 z__1.i = z__2.i; // , expr subst
                 tmp += (d__1 = z__1.r, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1), f2c_dabs(d__2));
@@ -272,13 +277,13 @@ doublereal zla_porcond_x_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
                 i__3 = j + i__ * a_dim1;
                 i__4 = j;
                 z__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4] .r; // , expr subst
+                z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
                 z__1.r = z__2.r;
                 z__1.i = z__2.i; // , expr subst
                 tmp += (d__1 = z__1.r, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1), f2c_dabs(d__2));
             }
             rwork[i__] = tmp;
-            anorm = fla_max(anorm,tmp);
+            anorm = fla_max(anorm, tmp);
         }
     }
     /* Quick return if possible. */
@@ -297,7 +302,7 @@ doublereal zla_porcond_x_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *ld
     ainvnm = 0.;
     kase = 0;
 L10:
-    aocl_lapack_zlacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    zlacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == 2)

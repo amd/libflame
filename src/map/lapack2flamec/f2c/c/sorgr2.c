@@ -109,12 +109,13 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sorgr2_(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work, integer *info)
+void sorgr2_(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sorgr2 inputs: m %d, n %d, k %d, lda %d",*m, *n, *k, *lda);
+    snprintf(buffer, 256, "sorgr2 inputs: m %d, n %d, k %d, lda %d", *m, *n, *k, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -123,7 +124,10 @@ void sorgr2_(integer *m, integer *n, integer *k, real *a, integer *lda, real *ta
     /* Local variables */
     integer i__, j, l, ii;
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *), slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sscal_(integer *, real *, real *, integer *),
+        slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -163,7 +167,7 @@ void sorgr2_(integer *m, integer *n, integer *k, real *a, integer *lda, real *ta
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
@@ -207,8 +211,7 @@ void sorgr2_(integer *m, integer *n, integer *k, real *a, integer *lda, real *ta
         a[ii + (*n - *m + ii) * a_dim1] = 1.f;
         i__2 = ii - 1;
         i__3 = *n - *m + ii;
-        aocl_lapack_slarf("Right", &i__2, &i__3, &a[ii + a_dim1], lda, &tau[i__], &a[a_offset], lda,
-                          &work[1]);
+        slarf_("Right", &i__2, &i__3, &a[ii + a_dim1], lda, &tau[i__], &a[a_offset], lda, &work[1]);
         i__2 = *n - *m + ii - 1;
         r__1 = -tau[i__];
         aocl_blas_sscal(&i__2, &r__1, &a[ii + a_dim1], lda);

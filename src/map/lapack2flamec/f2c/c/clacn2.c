@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b CLACN2 estimates the 1-norm of a square matrix, using reverse communication for
  * evaluating matr ix-vector products. */
 /* =========== DOCUMENTATION =========== */
@@ -135,9 +135,9 @@ void clacn2_(integer *n, complex *v, complex *x, real *est, integer *kase, integ
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clacn2 inputs: n %lld, kase %lld, isave %lld",*n, *kase, *isave);
+    snprintf(buffer, 256, "clacn2 inputs: n %lld, kase %lld, isave %lld", *n, *kase, *isave);
 #else
-    snprintf(buffer, 256,"clacn2 inputs: n %d, kase %d, isave %d",*n, *kase, *isave);
+    snprintf(buffer, 256, "clacn2 inputs: n %d, kase %d, isave %d", *n, *kase, *isave);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -152,7 +152,8 @@ void clacn2_(integer *n, complex *v, complex *x, real *est, integer *kase, integ
     real temp, absxi;
     integer jlast;
     extern /* Subroutine */
-    void ccopy_(integer *, complex *, integer *, complex *, integer *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *);
     extern integer icmax1_(integer *, complex *, integer *);
     extern real scsum1_(integer *, complex *, integer *), slamch_(char *);
     real safmin, altsgn, estold;
@@ -189,10 +190,10 @@ void clacn2_(integer *n, complex *v, complex *x, real *est, integer *kase, integ
         {
             i__2 = i__;
             r__1 = 1.f / (real)(*n);
-            q__1.real = r__1;
-            q__1.imag = 0.f; // , expr subst
-            x[i__2].real = q__1.real;
-            x[i__2].imag = q__1.imag; // , expr subst
+            q__1.r = r__1;
+            q__1.i = 0.f; // , expr subst
+            x[i__2].r = q__1.r;
+            x[i__2].i = q__1.i; // , expr subst
             /* L10: */
         }
         *kase = 1;
@@ -229,7 +230,7 @@ L20:
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         absxi = c_abs(&x[i__]);
-        if (absxi > safmin)
+        if(absxi > safmin)
         {
             i__2 = i__;
             i__3 = i__;
@@ -289,7 +290,7 @@ L70:
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         absxi = c_abs(&x[i__]);
-        if (absxi > safmin)
+        if(absxi > safmin)
         {
             i__2 = i__;
             i__3 = i__;
@@ -317,7 +318,7 @@ L70:
 L90:
     jlast = isave[2];
     isave[2] = icmax1_(n, &x[1], &c__1);
-    if (c_abs(&x[jlast]) != c_abs(&x[isave[2]]) && isave[3] < 5)
+    if(c_abs(&x[jlast]) != c_abs(&x[isave[2]]) && isave[3] < 5)
     {
         ++isave[3];
         goto L50;
@@ -330,10 +331,10 @@ L100:
     {
         i__2 = i__;
         r__1 = altsgn * ((real)(i__ - 1) / (real)(*n - 1) + 1.f);
-        q__1.real = r__1;
-        q__1.imag = 0.f; // , expr subst
-        x[i__2].real = q__1.real;
-        x[i__2].imag = q__1.imag; // , expr subst
+        q__1.r = r__1;
+        q__1.i = 0.f; // , expr subst
+        x[i__2].r = q__1.r;
+        x[i__2].i = q__1.i; // , expr subst
         altsgn = -altsgn;
         /* L110: */
     }
@@ -344,7 +345,7 @@ L100:
     /* ................ ENTRY (ISAVE( 1 ) = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L120:
-    temp = aocl_lapack_scsum1(n, &x[1], &c__1) / (real)(*n * 3) * 2.f;
+    temp = scsum1_(n, &x[1], &c__1) / (real)(*n * 3) * 2.f;
     if(temp > *est)
     {
         aocl_blas_ccopy(n, &x[1], &c__1, &v[1], &c__1);

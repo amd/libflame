@@ -227,10 +227,16 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
     extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
-    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
+               real *, integer *),
+        ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *,
+               integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     extern /* Subroutine */
-    void spotrf_(char *, integer *, real *, integer *, integer *);
+        void
+        spotrf_(char *, integer *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -254,11 +260,11 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
     *info = 0;
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
-    if (! normaltransr && ! lsame_(transr, "T", 1, 1))
+    if(!normaltransr && !lsame_(transr, "T", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U", 1, 1))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }
@@ -311,14 +317,14 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 /* SRPA for LOWER, NORMAL and N is odd ( a(0:n-1,0:n1-1) ) */
                 /* T1 -> a(0,0), T2 -> a(0,1), S -> a(n1,0) */
                 /* T1 -> a(0), T2 -> a(n), S -> a(n1) */
-                aocl_lapack_spotrf("L", &n1, a, n, info);
+                spotrf_("L", &n1, a, n, info);
                 if(*info > 0)
                 {
                     return;
                 }
-                aocl_blas_strsm("R", "L", "T", "N", &n2, &n1, &c_b12, a, n, &a[n1], n);
-                aocl_blas_ssyrk("U", "N", &n2, &n1, &c_b15, &a[n1], n, &c_b12, &a[*n], n);
-                aocl_lapack_spotrf("U", &n2, &a[*n], n, info);
+                strsm_("R", "L", "T", "N", &n2, &n1, &c_b12, a, n, &a[n1], n);
+                ssyrk_("U", "N", &n2, &n1, &c_b15, &a[n1], n, &c_b12, &a[*n], n);
+                spotrf_("U", &n2, &a[*n], n, info);
                 if(*info > 0)
                 {
                     *info += n1;
@@ -329,14 +335,14 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 /* SRPA for UPPER, NORMAL and N is odd ( a(0:n-1,0:n2-1) */
                 /* T1 -> a(n1+1,0), T2 -> a(n1,0), S -> a(0,0) */
                 /* T1 -> a(n2), T2 -> a(n1), S -> a(0) */
-                aocl_lapack_spotrf("L", &n1, &a[n2], n, info);
+                spotrf_("L", &n1, &a[n2], n, info);
                 if(*info > 0)
                 {
                     return;
                 }
-                aocl_blas_strsm("L", "L", "N", "N", &n1, &n2, &c_b12, &a[n2], n, a, n);
-                aocl_blas_ssyrk("U", "T", &n2, &n1, &c_b15, a, n, &c_b12, &a[n1], n);
-                aocl_lapack_spotrf("U", &n2, &a[n1], n, info);
+                strsm_("L", "L", "N", "N", &n1, &n2, &c_b12, &a[n2], n, a, n);
+                ssyrk_("U", "T", &n2, &n1, &c_b15, a, n, &c_b12, &a[n1], n);
+                spotrf_("U", &n2, &a[n1], n, info);
                 if(*info > 0)
                 {
                     *info += n1;
@@ -352,14 +358,14 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 /* T1 -> A(0,0) , T2 -> A(1,0) , S -> A(0,n1) */
                 /* T1 -> a(0+0) , T2 -> a(1+0) , S -> a(0+n1*n1);
                 lda=n1 */
-                aocl_lapack_spotrf("U", &n1, a, &n1, info);
+                spotrf_("U", &n1, a, &n1, info);
                 if(*info > 0)
                 {
                     return;
                 }
-                aocl_blas_strsm("L", "U", "T", "N", &n1, &n2, &c_b12, a, &n1, &a[n1 * n1], &n1);
-                aocl_blas_ssyrk("L", "T", &n2, &n1, &c_b15, &a[n1 * n1], &n1, &c_b12, &a[1], &n1);
-                aocl_lapack_spotrf("L", &n2, &a[1], &n1, info);
+                strsm_("L", "U", "T", "N", &n1, &n2, &c_b12, a, &n1, &a[n1 * n1], &n1);
+                ssyrk_("L", "T", &n2, &n1, &c_b15, &a[n1 * n1], &n1, &c_b12, &a[1], &n1);
+                spotrf_("L", &n2, &a[1], &n1, info);
                 if(*info > 0)
                 {
                     *info += n1;
@@ -371,7 +377,7 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 /* T1 -> A(0,n1+1), T2 -> A(0,n1), S -> A(0,0) */
                 /* T1 -> a(n2*n2), T2 -> a(n1*n2), S -> a(0);
                 lda = n2 */
-                aocl_lapack_spotrf("U", &n1, &a[n2 * n2], &n2, info);
+                spotrf_("U", &n1, &a[n2 * n2], &n2, info);
                 if(*info > 0)
                 {
                     return;
@@ -379,7 +385,7 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 strsm_("R", "U", "N", "N", &n2, &n1, &c_b12, &a[n2 * n2], &n2, a, &n2);
                 ssyrk_("L", "N", &n2, &n1, &c_b15, a, &n2, &c_b12, &a[n1 * n2], &n2);
                 spotrf_("L", &n2, &a[n1 * n2], &n2, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
                     *info += n1;
                 }
@@ -398,7 +404,7 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 /* T1 -> a(1,0), T2 -> a(0,0), S -> a(k+1,0) */
                 /* T1 -> a(1), T2 -> a(0), S -> a(k+1) */
                 i__1 = *n + 1;
-                aocl_lapack_spotrf("L", &k, &a[1], &i__1, info);
+                spotrf_("L", &k, &a[1], &i__1, info);
                 if(*info > 0)
                 {
                     return;
@@ -410,7 +416,7 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 i__2 = *n + 1;
                 aocl_blas_ssyrk("U", "N", &k, &k, &c_b15, &a[k + 1], &i__1, &c_b12, a, &i__2);
                 i__1 = *n + 1;
-                aocl_lapack_spotrf("U", &k, a, &i__1, info);
+                spotrf_("U", &k, a, &i__1, info);
                 if(*info > 0)
                 {
                     *info += k;
@@ -422,7 +428,7 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 /* T1 -> a(k+1,0) , T2 -> a(k,0), S -> a(0,0) */
                 /* T1 -> a(k+1), T2 -> a(k), S -> a(0) */
                 i__1 = *n + 1;
-                aocl_lapack_spotrf("L", &k, &a[k + 1], &i__1, info);
+                spotrf_("L", &k, &a[k + 1], &i__1, info);
                 if(*info > 0)
                 {
                     return;
@@ -432,9 +438,9 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 aocl_blas_strsm("L", "L", "N", "N", &k, &k, &c_b12, &a[k + 1], &i__1, a, &i__2);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                aocl_blas_ssyrk("U", "T", &k, &k, &c_b15, a, &i__1, &c_b12, &a[k], &i__2);
+                ssyrk_("U", "T", &k, &k, &c_b15, a, &i__1, &c_b12, &a[k], &i__2);
                 i__1 = *n + 1;
-                aocl_lapack_spotrf("U", &k, &a[k], &i__1, info);
+                spotrf_("U", &k, &a[k], &i__1, info);
                 if(*info > 0)
                 {
                     *info += k;
@@ -450,15 +456,14 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 /* T1 -> B(0,1), T2 -> B(0,0), S -> B(0,k+1) */
                 /* T1 -> a(0+k), T2 -> a(0+0), S -> a(0+k*(k+1));
                 lda=k */
-                aocl_lapack_spotrf("U", &k, &a[k], &k, info);
+                spotrf_("U", &k, &a[k], &k, info);
                 if(*info > 0)
                 {
                     return;
                 }
-                aocl_blas_strsm("L", "U", "T", "N", &k, &k, &c_b12, &a[k], &n1, &a[k * (k + 1)],
-                                &k);
-                aocl_blas_ssyrk("L", "T", &k, &k, &c_b15, &a[k * (k + 1)], &k, &c_b12, a, &k);
-                aocl_lapack_spotrf("L", &k, a, &k, info);
+                strsm_("L", "U", "T", "N", &k, &k, &c_b12, &a[k], &n1, &a[k * (k + 1)], &k);
+                ssyrk_("L", "T", &k, &k, &c_b15, &a[k * (k + 1)], &k, &c_b12, a, &k);
+                spotrf_("L", &k, a, &k, info);
                 if(*info > 0)
                 {
                     *info += k;
@@ -470,14 +475,14 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 /* T1 -> B(0,k+1), T2 -> B(0,k), S -> B(0,0) */
                 /* T1 -> a(0+k*(k+1)), T2 -> a(0+k*k), S -> a(0+0));
                 lda=k */
-                aocl_lapack_spotrf("U", &k, &a[k * (k + 1)], &k, info);
+                spotrf_("U", &k, &a[k * (k + 1)], &k, info);
                 if(*info > 0)
                 {
                     return;
                 }
-                aocl_blas_strsm("R", "U", "N", "N", &k, &k, &c_b12, &a[k * (k + 1)], &k, a, &k);
-                aocl_blas_ssyrk("L", "N", &k, &k, &c_b15, a, &k, &c_b12, &a[k * k], &k);
-                aocl_lapack_spotrf("L", &k, &a[k * k], &k, info);
+                strsm_("R", "U", "N", "N", &k, &k, &c_b12, &a[k * (k + 1)], &k, a, &k);
+                ssyrk_("L", "N", &k, &k, &c_b15, a, &k, &c_b12, &a[k * k], &k);
+                spotrf_("L", &k, &a[k * k], &k, info);
                 if(*info > 0)
                 {
                     *info += k;

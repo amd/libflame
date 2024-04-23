@@ -81,7 +81,7 @@ static aocl_int64_t c__1 = 1;
 /* > first KD+1 rows of the array. The j-th column of U or L is */
 /* > stored in the j-th column of the array AB as follows: */
 /* > if UPLO ='U', AB(kd+1+i-j,j) = U(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO ='L', AB(1+i-j,j) = L(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > \endverbatim */
 /* > */
@@ -120,12 +120,14 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void spbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, real *ab, integer *ldab, real *b, integer *ldb, integer *info)
+void spbtrs_(char *uplo, integer *n, integer *kd, integer *nrhs, real *ab, integer *ldab, real *b,
+             integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"spbtrs inputs: uplo %c, n %d, kd %d, nrhs %d, ldab %d, ldb %d",*uplo, *n, *kd, *nrhs, *ldab, *ldb);
+    snprintf(buffer, 256, "spbtrs inputs: uplo %c, n %d, kd %d, nrhs %d, ldab %d, ldb %d", *uplo,
+             *n, *kd, *nrhs, *ldab, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -135,7 +137,9 @@ void spbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, real *ab, inte
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    void stbsv_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        stbsv_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -165,7 +169,7 @@ void spbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, real *ab, inte
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -185,7 +189,7 @@ void spbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, real *ab, inte
     {
         *info = -6;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
@@ -209,11 +213,11 @@ void spbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, real *ab, inte
         for(j = 1; j <= i__1; ++j)
         {
             /* Solve U**T *X = B, overwriting B with X. */
-            aocl_blas_stbsv("Upper", "Transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
-                            &b[j * b_dim1 + 1], &c__1);
+            stbsv_("Upper", "Transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
+                   &b[j * b_dim1 + 1], &c__1);
             /* Solve U*X = B, overwriting B with X. */
-            aocl_blas_stbsv("Upper", "No transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
-                            &b[j * b_dim1 + 1], &c__1);
+            stbsv_("Upper", "No transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
+                   &b[j * b_dim1 + 1], &c__1);
             /* L10: */
         }
     }
@@ -224,11 +228,11 @@ void spbtrs_(char *uplo, integer *n, integer *kd, integer * nrhs, real *ab, inte
         for(j = 1; j <= i__1; ++j)
         {
             /* Solve L*X = B, overwriting B with X. */
-            aocl_blas_stbsv("Lower", "No transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
-                            &b[j * b_dim1 + 1], &c__1);
+            stbsv_("Lower", "No transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
+                   &b[j * b_dim1 + 1], &c__1);
             /* Solve L**T *X = B, overwriting B with X. */
-            aocl_blas_stbsv("Lower", "Transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
-                            &b[j * b_dim1 + 1], &c__1);
+            stbsv_("Lower", "Transpose", "Non-unit", n, kd, &ab[ab_offset], ldab,
+                   &b[j * b_dim1 + 1], &c__1);
             /* L20: */
         }
     }

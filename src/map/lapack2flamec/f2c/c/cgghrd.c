@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {1.f, 0.f};
-static scomplex c_b2 = {0.f, 0.f};
-static aocl_int64_t c__1 = 1;
+static complex c_b1 = {1.f, 0.f};
+static complex c_b2 = {0.f, 0.f};
+static integer c__1 = 1;
 /* > \brief \b CGGHRD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -210,22 +210,30 @@ LDZ >= 1 otherwise. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, complex *a, integer *lda, complex *b, integer *ldb, complex *q, integer *ldq, complex *z__, integer *ldz, integer *info)
+void cgghrd_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, complex *a,
+             integer *lda, complex *b, integer *ldb, complex *q, integer *ldq, complex *z__,
+             integer *ldz, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgghrd inputs: compq %c, compz %c, n %lld, ilo %lld, ihi %lld, lda %lld, ldb %lld, ldq %lld, ldz %lld",*compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz);
+    snprintf(buffer, 256,
+             "cgghrd inputs: compq %c, compz %c, n %lld, ilo %lld, ihi %lld, lda %lld, ldb %lld, "
+             "ldq %lld, ldz %lld",
+             *compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz);
 #else
-    snprintf(buffer, 256,"cgghrd inputs: compq %c, compz %c, n %d, ilo %d, ihi %d, lda %d, ldb %d, ldq %d, ldz %d",*compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz);
+    snprintf(
+        buffer, 256,
+        "cgghrd inputs: compq %c, compz %c, n %d, ilo %d, ihi %d, lda %d, ldb %d, ldq %d, ldz %d",
+        *compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
         i__3;
-    scomplex q__1;
+    complex q__1;
     /* Builtin functions */
     void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
@@ -234,12 +242,16 @@ void cgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
     logical ilq, ilz;
     integer jcol;
     extern /* Subroutine */
-    void crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
+        void
+        crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
     integer jrow;
     extern logical lsame_(char *, char *, integer, integer);
     complex ctemp;
     extern /* Subroutine */
-    void claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), clartg_(complex *, complex *, real *, complex *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
+        clartg_(complex *, complex *, real *, complex *, complex *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer icompq, icompz;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -276,17 +288,17 @@ void cgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
     z_offset = 1 + z_dim1;
     z__ -= z_offset;
     /* Function Body */
-    if (lsame_(compq, "N", 1, 1))
+    if(lsame_(compq, "N", 1, 1))
     {
         ilq = FALSE_;
         icompq = 1;
     }
-    else if (lsame_(compq, "V", 1, 1))
+    else if(lsame_(compq, "V", 1, 1))
     {
         ilq = TRUE_;
         icompq = 2;
     }
-    else if (lsame_(compq, "I", 1, 1))
+    else if(lsame_(compq, "I", 1, 1))
     {
         ilq = TRUE_;
         icompq = 3;
@@ -296,17 +308,17 @@ void cgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
         icompq = 0;
     }
     /* Decode COMPZ */
-    if (lsame_(compz, "N", 1, 1))
+    if(lsame_(compz, "N", 1, 1))
     {
         ilz = FALSE_;
         icompz = 1;
     }
-    else if (lsame_(compz, "V", 1, 1))
+    else if(lsame_(compz, "V", 1, 1))
     {
         ilz = TRUE_;
         icompz = 2;
     }
-    else if (lsame_(compz, "I", 1, 1))
+    else if(lsame_(compz, "I", 1, 1))
     {
         ilz = TRUE_;
         icompz = 3;
@@ -337,11 +349,11 @@ void cgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
@@ -405,16 +417,16 @@ void cgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
             a[i__3].real = 0.f;
             a[i__3].imag = 0.f; // , expr subst
             i__3 = *n - jcol;
-            aocl_lapack_crot(&i__3, &a[jrow - 1 + (jcol + 1) * a_dim1], lda,
-                             &a[jrow + (jcol + 1) * a_dim1], lda, &c__, &s);
+            crot_(&i__3, &a[jrow - 1 + (jcol + 1) * a_dim1], lda, &a[jrow + (jcol + 1) * a_dim1],
+                  lda, &c__, &s);
             i__3 = *n + 2 - jrow;
-            aocl_lapack_crot(&i__3, &b[jrow - 1 + (jrow - 1) * b_dim1], ldb,
-                             &b[jrow + (jrow - 1) * b_dim1], ldb, &c__, &s);
+            crot_(&i__3, &b[jrow - 1 + (jrow - 1) * b_dim1], ldb, &b[jrow + (jrow - 1) * b_dim1],
+                  ldb, &c__, &s);
             if(ilq)
             {
                 r_cnjg(&q__1, &s);
-                aocl_lapack_crot(n, &q[(jrow - 1) * q_dim1 + 1], &c__1, &q[jrow * q_dim1 + 1],
-                                 &c__1, &c__, &q__1);
+                crot_(n, &q[(jrow - 1) * q_dim1 + 1], &c__1, &q[jrow * q_dim1 + 1], &c__1, &c__,
+                      &q__1);
             }
             /* Step 2: rotate columns JROW, JROW-1 to kill B(JROW,JROW-1) */
             i__3 = jrow + jrow * b_dim1;
@@ -427,12 +439,12 @@ void cgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, 
             aocl_lapack_crot(ihi, &a[jrow * a_dim1 + 1], &c__1, &a[(jrow - 1) * a_dim1 + 1], &c__1,
                              &c__, &s);
             i__3 = jrow - 1;
-            aocl_lapack_crot(&i__3, &b[jrow * b_dim1 + 1], &c__1, &b[(jrow - 1) * b_dim1 + 1],
-                             &c__1, &c__, &s);
+            crot_(&i__3, &b[jrow * b_dim1 + 1], &c__1, &b[(jrow - 1) * b_dim1 + 1], &c__1, &c__,
+                  &s);
             if(ilz)
             {
-                aocl_lapack_crot(n, &z__[jrow * z_dim1 + 1], &c__1, &z__[(jrow - 1) * z_dim1 + 1],
-                                 &c__1, &c__, &s);
+                crot_(n, &z__[jrow * z_dim1 + 1], &c__1, &z__[(jrow - 1) * z_dim1 + 1], &c__1, &c__,
+                      &s);
             }
             /* L30: */
         }

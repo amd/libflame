@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief <b> ZPTSVX computes the solution to system of linear equations A * X = B for PT
  * matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -230,10 +230,15 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16PTsolve */
 /* ===================================================================== */
 /* Subroutine */
-void zptsvx_(char *fact, integer *n, integer *nrhs, doublereal *d__, doublecomplex *e, doublereal *df, doublecomplex *ef, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr, doublecomplex * work, doublereal *rwork, integer *info)
+void zptsvx_(char *fact, integer *n, integer *nrhs, doublereal *d__, doublecomplex *e,
+             doublereal *df, doublecomplex *ef, doublecomplex *b, integer *ldb, doublecomplex *x,
+             integer *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr,
+             doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zptsvx inputs: fact %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *n, *nrhs, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("zptsvx inputs: fact %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS
+                      ", ldx %" FLA_IS "",
+                      *fact, *n, *nrhs, *ldb, *ldx);
 
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1;
@@ -241,14 +246,27 @@ void zptsvx_(char *fact, integer *n, integer *nrhs, doublereal *d__, doublecompl
     extern logical lsame_(char *, char *, integer, integer);
     doublereal anorm;
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern doublereal zlanht_(char *, integer *, doublereal *, doublecomplex * );
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern doublereal zlanht_(char *, integer *, doublereal *, doublecomplex *);
     extern /* Subroutine */
-    void zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zptcon_(integer *, doublereal *, doublecomplex *, doublereal *, doublereal *, doublereal *, integer *), zptrfs_(char *, integer *, integer *, doublereal *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zpttrf_(integer *, doublereal *, doublecomplex *, integer *), zpttrs_(char *, integer *, integer *, doublereal *, doublecomplex *, doublecomplex *, integer *, integer *);
+        void
+        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *),
+        zptcon_(integer *, doublereal *, doublecomplex *, doublereal *, doublereal *, doublereal *,
+                integer *),
+        zptrfs_(char *, integer *, integer *, doublereal *, doublecomplex *, doublereal *,
+                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *,
+                doublereal *, doublereal *, doublecomplex *, doublereal *, integer *),
+        zpttrf_(integer *, doublereal *, doublecomplex *, integer *),
+        zpttrs_(char *, integer *, integer *, doublereal *, doublecomplex *, doublecomplex *,
+                integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -288,7 +306,7 @@ void zptsvx_(char *fact, integer *n, integer *nrhs, doublereal *d__, doublecompl
     /* Function Body */
     *info = 0;
     nofact = lsame_(fact, "N", 1, 1);
-    if (! nofact && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
@@ -300,11 +318,11 @@ void zptsvx_(char *fact, integer *n, integer *nrhs, doublereal *d__, doublecompl
     {
         *info = -3;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -11;
     }
@@ -318,7 +336,7 @@ void zptsvx_(char *fact, integer *n, integer *nrhs, doublereal *d__, doublecompl
     if(nofact)
     {
         /* Compute the L*D*L**H (or U**H*D*U) factorization of A. */
-        aocl_blas_dcopy(n, &d__[1], &c__1, &df[1], &c__1);
+        dcopy_(n, &d__[1], &c__1, &df[1], &c__1);
         if(*n > 1)
         {
             i__1 = *n - 1;
@@ -342,8 +360,8 @@ void zptsvx_(char *fact, integer *n, integer *nrhs, doublereal *d__, doublecompl
     aocl_lapack_zpttrs("Lower", n, nrhs, &df[1], &ef[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solutions and */
     /* compute error bounds and backward error estimates for them. */
-    aocl_lapack_zptrfs("Lower", n, nrhs, &d__[1], &e[1], &df[1], &ef[1], &b[b_offset], ldb,
-                       &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
+    zptrfs_("Lower", n, nrhs, &d__[1], &e[1], &df[1], &ef[1], &b[b_offset], ldb, &x[x_offset], ldx,
+            &ferr[1], &berr[1], &work[1], &rwork[1], info);
     /* Set INFO = N+1 if the matrix is singular to working precision. */
     if(*rcond < dlamch_("Epsilon"))
     {

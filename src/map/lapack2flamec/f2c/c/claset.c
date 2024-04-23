@@ -83,7 +83,7 @@
 /* > A is COMPLEX array, dimension (LDA,N) */
 /* > On entry, the m by n matrix A. */
 /* > On exit, A(i,j) = ALPHA, 1 <= i <= m, 1 <= j <= n, i.ne.j;
-*/
+ */
 /* > A(i,i) = BETA , 1 <= i <= fla_min(m,n) */
 /* > \endverbatim */
 /* > */
@@ -102,15 +102,16 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void claset_(char *uplo, integer *m, integer *n, complex * alpha, complex *beta, complex *a, integer *lda)
+void claset_(char *uplo, integer *m, integer *n, complex *alpha, complex *beta, complex *a,
+             integer *lda)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"claset inputs: uplo %c, m %lld, n %lld, lda %lld",*uplo, *m, *n, *lda);
+    snprintf(buffer, 256, "claset inputs: uplo %c, m %lld, n %lld, lda %lld", *uplo, *m, *n, *lda);
 #else
-    snprintf(buffer, 256,"claset inputs: uplo %c, m %d, n %d, lda %d",*uplo, *m, *n, *lda);
+    snprintf(buffer, 256, "claset inputs: uplo %c, m %d, n %d, lda %d", *uplo, *m, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -140,7 +141,7 @@ void claset_(char *uplo, integer *m, integer *n, complex * alpha, complex *beta,
     a_offset = 1 + a_dim1;
     a -= a_offset;
     /* Function Body */
-    if (lsame_(uplo, "U", 1, 1))
+    if(lsame_(uplo, "U", 1, 1))
     {
         /* Set the diagonal to BETA and the strictly upper triangular */
         /* part of the array to ALPHA. */
@@ -149,10 +150,8 @@ void claset_(char *uplo, integer *m, integer *n, complex * alpha, complex *beta,
         {
             /* Computing MIN */
             i__3 = j - 1;
-            i__2 = fla_min(i__3,*m);
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            i__2 = fla_min(i__3, *m);
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 a[i__3].real = alpha->real;
@@ -161,10 +160,8 @@ void claset_(char *uplo, integer *m, integer *n, complex * alpha, complex *beta,
             }
             /* L20: */
         }
-        i__1 = fla_min(*n,*m);
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        i__1 = fla_min(*n, *m);
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
             a[i__2].real = beta->real;
@@ -172,14 +169,12 @@ void claset_(char *uplo, integer *m, integer *n, complex * alpha, complex *beta,
             /* L30: */
         }
     }
-    else if (lsame_(uplo, "L", 1, 1))
+    else if(lsame_(uplo, "L", 1, 1))
     {
         /* Set the diagonal to BETA and the strictly lower triangular */
         /* part of the array to ALPHA. */
-        i__1 = fla_min(*m,*n);
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        i__1 = fla_min(*m, *n);
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
             for(i__ = j + 1; i__ <= i__2; ++i__)
@@ -191,10 +186,8 @@ void claset_(char *uplo, integer *m, integer *n, complex * alpha, complex *beta,
             }
             /* L50: */
         }
-        i__1 = fla_min(*n,*m);
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        i__1 = fla_min(*n, *m);
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
             a[i__2].real = beta->real;
@@ -219,10 +212,8 @@ void claset_(char *uplo, integer *m, integer *n, complex * alpha, complex *beta,
             }
             /* L80: */
         }
-        i__1 = fla_min(*m,*n);
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        i__1 = fla_min(*m, *n);
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
             a[i__2].real = beta->real;

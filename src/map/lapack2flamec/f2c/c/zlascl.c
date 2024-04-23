@@ -1,5 +1,8 @@
-/* zlascl.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* zlascl.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZLASCL multiplies a general rectangular matrix by a real scalar defined as cto/cfrom. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -114,11 +117,11 @@
 /* > LDA is INTEGER */
 /* > The leading dimension of the array A. */
 /* > If TYPE = 'G', 'L', 'U', 'H', LDA >= fla_max(1,M);
-*/
+ */
 /* > TYPE = 'B', LDA >= KL+1;
-*/
+ */
 /* > TYPE = 'Q', LDA >= KU+1;
-*/
+ */
 /* > TYPE = 'Z', LDA >= 2*KL+KU+1. */
 /* > \endverbatim */
 /* > */
@@ -137,10 +140,13 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublereal *cto, integer *m, integer *n, doublecomplex *a, integer *lda, integer *info)
+void zlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublereal *cto, integer *m,
+             integer *n, doublecomplex *a, integer *lda, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlascl inputs: type__ %c, kl %" FLA_IS ", ku %" FLA_IS ", cfrom %lf, cto %lf, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*type__, *kl, *ku, *cfrom, *cto, *m, *n, *lda);
+    AOCL_DTL_SNPRINTF("zlascl inputs: type__ %c, kl %" FLA_IS ", ku %" FLA_IS
+                      ", cfrom %lf, cto %lf, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",
+                      *type__, *kl, *ku, *cfrom, *cto, *m, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     dcomplex z__1;
@@ -156,7 +162,8 @@ void zlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublere
     doublereal cfromc;
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum, smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -184,31 +191,31 @@ void zlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublere
     a -= a_offset;
     /* Function Body */
     *info = 0;
-    if (lsame_(type__, "G", 1, 1))
+    if(lsame_(type__, "G", 1, 1))
     {
         itype = 0;
     }
-    else if (lsame_(type__, "L", 1, 1))
+    else if(lsame_(type__, "L", 1, 1))
     {
         itype = 1;
     }
-    else if (lsame_(type__, "U", 1, 1))
+    else if(lsame_(type__, "U", 1, 1))
     {
         itype = 2;
     }
-    else if (lsame_(type__, "H", 1, 1))
+    else if(lsame_(type__, "H", 1, 1))
     {
         itype = 3;
     }
-    else if (lsame_(type__, "B", 1, 1))
+    else if(lsame_(type__, "B", 1, 1))
     {
         itype = 4;
     }
-    else if (lsame_(type__, "Q", 1, 1))
+    else if(lsame_(type__, "Q", 1, 1))
     {
         itype = 5;
     }
-    else if (lsame_(type__, "Z", 1, 1))
+    else if(lsame_(type__, "Z", 1, 1))
     {
         itype = 6;
     }
@@ -236,7 +243,7 @@ void zlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublere
     {
         *info = -7;
     }
-    else if (itype <= 3 && *lda < fla_max(1,*m))
+    else if(itype <= 3 && *lda < fla_max(1, *m))
     {
         *info = -9;
     }
@@ -244,7 +251,7 @@ void zlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublere
     {
         /* Computing MAX */
         i__1 = *m - 1;
-        if (*kl < 0 || *kl > fla_max(i__1,0))
+        if(*kl < 0 || *kl > fla_max(i__1, 0))
         {
             *info = -2;
         }
@@ -252,7 +259,7 @@ void zlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublere
         {
             /* Computing MAX */
             i__1 = *n - 1;
-            if (*ku < 0 || *ku > fla_max(i__1,0) || (itype == 4 || itype == 5) && *kl != *ku)
+            if(*ku < 0 || *ku > fla_max(i__1, 0) || (itype == 4 || itype == 5) && *kl != *ku)
             {
                 *info = -3;
             }
@@ -302,13 +309,13 @@ L10:
             done = TRUE_;
             cfromc = 1.;
         }
-        else if (f2c_dabs(cfrom1) > f2c_dabs(ctoc) && ctoc != 0.)
+        else if(f2c_dabs(cfrom1) > f2c_dabs(ctoc) && ctoc != 0.)
         {
             mul = smlnum;
             done = FALSE_;
             cfromc = cfrom1;
         }
-        else if (f2c_dabs(cto1) > f2c_dabs(cfromc))
+        else if(f2c_dabs(cto1) > f2c_dabs(cfromc))
         {
             mul = bignum;
             done = FALSE_;
@@ -318,7 +325,7 @@ L10:
         {
             mul = ctoc / cfromc;
             done = TRUE_;
-            if (mul == 1.)
+            if(mul == 1.)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
@@ -371,10 +378,8 @@ L10:
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
         {
-            i__2 = fla_min(j,*m);
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            i__2 = fla_min(j, *m);
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
@@ -395,10 +400,8 @@ L10:
         {
             /* Computing MIN */
             i__3 = j + 1;
-            i__2 = fla_min(i__3,*m);
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            i__2 = fla_min(i__3, *m);
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
@@ -422,10 +425,8 @@ L10:
             /* Computing MIN */
             i__3 = k3;
             i__4 = k4 - j; // , expr subst
-            i__2 = fla_min(i__3,i__4);
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            i__2 = fla_min(i__3, i__4);
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
@@ -449,9 +450,7 @@ L10:
             /* Computing MAX */
             i__2 = k1 - j;
             i__3 = k3;
-            for (i__ = fla_max(i__2,1);
-                    i__ <= i__3;
-                    ++i__)
+            for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
             {
                 i__2 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
@@ -479,10 +478,8 @@ L10:
             /* Computing MIN */
             i__4 = k3;
             i__5 = k4 - j; // , expr subst
-            i__2 = fla_min(i__4,i__5);
-            for (i__ = fla_max(i__3,k2);
-                    i__ <= i__2;
-                    ++i__)
+            i__2 = fla_min(i__4, i__5);
+            for(i__ = fla_max(i__3, k2); i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;

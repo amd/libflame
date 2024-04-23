@@ -137,12 +137,14 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup realGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sgttrs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *du, real *du2, integer *ipiv, real *b, integer *ldb, integer *info)
+void sgttrs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *du, real *du2,
+             integer *ipiv, real *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sgttrs inputs: trans %c, n %d, nrhs %d, ldb %d",*trans, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "sgttrs inputs: trans %c, n %d, nrhs %d, ldb %d", *trans, *n, *nrhs,
+             *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -150,7 +152,10 @@ void sgttrs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *
     /* Local variables */
     integer j, jb, nb;
     extern /* Subroutine */
-    void sgtts2_(integer *, integer *, integer *, real *, real *, real *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sgtts2_(integer *, integer *, integer *, real *, real *, real *, real *, integer *, real *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer itrans;
     logical notran;
@@ -197,7 +202,7 @@ void sgttrs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *
     {
         *info = -3;
     }
-    else if (*ldb < fla_max(*n,1))
+    else if(*ldb < fla_max(*n, 1))
     {
         *info = -10;
     }
@@ -232,8 +237,8 @@ void sgttrs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *
     {
         /* Computing MAX */
         i__1 = 1;
-        i__2 = ilaenv_(&c__1, "SGTTRS", trans, n, nrhs, &c_n1, & c_n1); // , expr subst
-        nb = fla_max(i__1,i__2);
+        i__2 = ilaenv_(&c__1, "SGTTRS", trans, n, nrhs, &c_n1, &c_n1); // , expr subst
+        nb = fla_max(i__1, i__2);
     }
     if(nb >= *nrhs)
     {
@@ -248,8 +253,9 @@ void sgttrs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *
         {
             /* Computing MIN */
             i__3 = *nrhs - j + 1;
-            jb = fla_min(i__3,nb);
-            sgtts2_(&itrans, n, &jb, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[ 1], &b[j * b_dim1 + 1], ldb);
+            jb = fla_min(i__3, nb);
+            sgtts2_(&itrans, n, &jb, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &b[j * b_dim1 + 1],
+                    ldb);
             /* L10: */
         }
     }

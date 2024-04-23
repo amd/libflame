@@ -1,5 +1,8 @@
-/* ../netlib/zungbr.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zungbr.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c_n1 = -1;
 /* > \brief \b ZUNGBR */
@@ -8,11 +11,17 @@ static integer c_n1 = -1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZUNGBR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zungbr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zungbr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zungbr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zungbr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zungbr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zungbr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -39,7 +48,7 @@ static integer c_n1 = -1;
 /* > is of order M: */
 /* > if m >= k, Q = H(1) H(2) . . . H(k) and ZUNGBR returns the first n */
 /* > columns of Q, where m >= n >= k;
-*/
+ */
 /* > if m < k, Q = H(1) H(2) . . . H(m-1) and ZUNGBR returns Q as an */
 /* > M-by-M matrix. */
 /* > */
@@ -47,7 +56,7 @@ static integer c_n1 = -1;
 /* > is of order N: */
 /* > if k < n, P**H = G(k) . . . G(2) G(1) and ZUNGBR returns the first m */
 /* > rows of P**H, where n >= m >= k;
-*/
+ */
 /* > if k >= n, P**H = G(n-1) . . . G(2) G(1) and ZUNGBR returns P**H as */
 /* > an N-by-N matrix. */
 /* > \endverbatim */
@@ -59,7 +68,7 @@ static integer c_n1 = -1;
 /* > Specifies whether the matrix Q or the matrix P**H is */
 /* > required, as defined in the transformation applied by ZGEBRD: */
 /* > = 'Q': generate Q;
-*/
+ */
 /* > = 'P': generate P**H. */
 /* > \endverbatim */
 /* > */
@@ -76,7 +85,7 @@ static integer c_n1 = -1;
 /* > The number of columns of the matrix Q or P**H to be returned. */
 /* > N >= 0. */
 /* > If VECT = 'Q', M >= N >= fla_min(M,K);
-*/
+ */
 /* > if VECT = 'P', N >= M >= fla_min(N,K). */
 /* > \endverbatim */
 /* > */
@@ -150,10 +159,13 @@ the routine */
 /* > \ingroup complex16GBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zungbr_(char *vect, integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex * work, integer *lwork, integer *info)
+void zungbr_(char *vect, integer *m, integer *n, integer *k, doublecomplex *a, integer *lda,
+             doublecomplex *tau, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zungbr inputs: vect %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "", *vect, *m, *n, *k, *lda, *lwork);
+    AOCL_DTL_SNPRINTF("zungbr inputs: vect %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
+                      ", lda %" FLA_IS ", lwork %" FLA_IS "",
+                      *vect, *m, *n, *k, *lda, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
@@ -162,11 +174,16 @@ void zungbr_(char *vect, integer *m, integer *n, integer *k, doublecomplex *a, i
     integer iinfo;
     logical wantq;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    void zunglq_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *), zungqr_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer *);
+        void
+        zunglq_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                doublecomplex *, integer *, integer *),
+        zungqr_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -197,103 +214,106 @@ void zungbr_(char *vect, integer *m, integer *n, integer *k, doublecomplex *a, i
     /* Function Body */
     *info = 0;
     wantq = lsame_(vect, "Q", 1, 1);
-    mn = fla_min(*m,*n);
+    mn = fla_min(*m, *n);
     lquery = *lwork == -1;
-    if (! wantq && ! lsame_(vect, "P", 1, 1))
+    if(!wantq && !lsame_(vect, "P", 1, 1))
     {
         *info = -1;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -2;
     }
-    else if (*n < 0 || wantq && (*n > *m || *n < fla_min(*m,*k)) || ! wantq && ( *m > *n || *m < fla_min(*n,*k)))
+    else if(*n < 0 || wantq && (*n > *m || *n < fla_min(*m, *k))
+            || !wantq && (*m > *n || *m < fla_min(*n, *k)))
     {
         *info = -3;
     }
-    else if (*k < 0)
+    else if(*k < 0)
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -6;
     }
-    else if (*lwork < fla_max(1,mn) && ! lquery)
+    else if(*lwork < fla_max(1, mn) && !lquery)
     {
         *info = -9;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
-        if (wantq)
+        if(wantq)
         {
-            if (*m >= *k)
+            if(*m >= *k)
             {
                 zungqr_(m, n, k, &a[a_offset], lda, &tau[1], &work[1], &c_n1, &iinfo);
             }
             else
             {
-                if (*m > 1)
+                if(*m > 1)
                 {
                     i__1 = *m - 1;
                     i__2 = *m - 1;
                     i__3 = *m - 1;
-                    zungqr_(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, & tau[1], &work[1], &c_n1, &iinfo);
+                    zungqr_(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1],
+                            &c_n1, &iinfo);
                 }
             }
         }
         else
         {
-            if (*k < *n)
+            if(*k < *n)
             {
                 zunglq_(m, n, k, &a[a_offset], lda, &tau[1], &work[1], &c_n1, &iinfo);
             }
             else
             {
-                if (*n > 1)
+                if(*n > 1)
                 {
                     i__1 = *n - 1;
                     i__2 = *n - 1;
                     i__3 = *n - 1;
-                    zunglq_(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, & tau[1], &work[1], &c_n1, &iinfo);
+                    zunglq_(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1],
+                            &c_n1, &iinfo);
                 }
             }
         }
-        lwkopt = (integer) work[1].r;
-        lwkopt = fla_max(lwkopt,mn);
+        lwkopt = (integer)work[1].r;
+        lwkopt = fla_max(lwkopt, mn);
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZUNGBR", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-        work[1].r = (doublereal) lwkopt;
+        work[1].r = (doublereal)lwkopt;
         work[1].i = 0.; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         work[1].r = 1.;
         work[1].i = 0.; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if (wantq)
+    if(wantq)
     {
         /* Form Q, determined by a call to ZGEBRD to reduce an m-by-k */
         /* matrix */
-        if (*m >= *k)
+        if(*m >= *k)
         {
             /* If m >= k, assume m >= n >= k */
-            zungqr_(m, n, k, &a[a_offset], lda, &tau[1], &work[1], lwork, & iinfo);
+            zungqr_(m, n, k, &a[a_offset], lda, &tau[1], &work[1], lwork, &iinfo);
         }
         else
         {
@@ -301,17 +321,13 @@ void zungbr_(char *vect, integer *m, integer *n, integer *k, doublecomplex *a, i
             /* Shift the vectors which define the elementary reflectors one */
             /* column to the right, and set the first row and column of Q */
             /* to those of the unit matrix */
-            for (j = *m;
-                    j >= 2;
-                    --j)
+            for(j = *m; j >= 2; --j)
             {
                 i__1 = j * a_dim1 + 1;
                 a[i__1].r = 0.;
                 a[i__1].i = 0.; // , expr subst
                 i__1 = *m;
-                for (i__ = j + 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = j + 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__ + j * a_dim1;
                     i__3 = i__ + (j - 1) * a_dim1;
@@ -325,22 +341,21 @@ void zungbr_(char *vect, integer *m, integer *n, integer *k, doublecomplex *a, i
             a[i__1].r = 1.;
             a[i__1].i = 0.; // , expr subst
             i__1 = *m;
-            for (i__ = 2;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 2; i__ <= i__1; ++i__)
             {
                 i__2 = i__ + a_dim1;
                 a[i__2].r = 0.;
                 a[i__2].i = 0.; // , expr subst
                 /* L30: */
             }
-            if (*m > 1)
+            if(*m > 1)
             {
                 /* Form Q(2:m,2:m) */
                 i__1 = *m - 1;
                 i__2 = *m - 1;
                 i__3 = *m - 1;
-                zungqr_(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[ 1], &work[1], lwork, &iinfo);
+                zungqr_(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1], lwork,
+                        &iinfo);
             }
         }
     }
@@ -348,10 +363,10 @@ void zungbr_(char *vect, integer *m, integer *n, integer *k, doublecomplex *a, i
     {
         /* Form P**H, determined by a call to ZGEBRD to reduce a k-by-n */
         /* matrix */
-        if (*k < *n)
+        if(*k < *n)
         {
             /* If k < n, assume k <= m <= n */
-            zunglq_(m, n, k, &a[a_offset], lda, &tau[1], &work[1], lwork, & iinfo);
+            zunglq_(m, n, k, &a[a_offset], lda, &tau[1], &work[1], lwork, &iinfo);
         }
         else
         {
@@ -363,9 +378,7 @@ void zungbr_(char *vect, integer *m, integer *n, integer *k, doublecomplex *a, i
             a[i__1].r = 1.;
             a[i__1].i = 0.; // , expr subst
             i__1 = *n;
-            for (i__ = 2;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 2; i__ <= i__1; ++i__)
             {
                 i__2 = i__ + a_dim1;
                 a[i__2].r = 0.;
@@ -373,13 +386,9 @@ void zungbr_(char *vect, integer *m, integer *n, integer *k, doublecomplex *a, i
                 /* L40: */
             }
             i__1 = *n;
-            for (j = 2;
-                    j <= i__1;
-                    ++j)
+            for(j = 2; j <= i__1; ++j)
             {
-                for (i__ = j - 1;
-                        i__ >= 2;
-                        --i__)
+                for(i__ = j - 1; i__ >= 2; --i__)
                 {
                     i__2 = i__ + j * a_dim1;
                     i__3 = i__ - 1 + j * a_dim1;
@@ -392,17 +401,18 @@ void zungbr_(char *vect, integer *m, integer *n, integer *k, doublecomplex *a, i
                 a[i__2].i = 0.; // , expr subst
                 /* L60: */
             }
-            if (*n > 1)
+            if(*n > 1)
             {
                 /* Form P**H(2:n,2:n) */
                 i__1 = *n - 1;
                 i__2 = *n - 1;
                 i__3 = *n - 1;
-                zunglq_(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[ 1], &work[1], lwork, &iinfo);
+                zunglq_(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1], lwork,
+                        &iinfo);
             }
         }
     }
-    work[1].r = (doublereal) lwkopt;
+    work[1].r = (doublereal)lwkopt;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

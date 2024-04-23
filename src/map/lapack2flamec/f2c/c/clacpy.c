@@ -105,9 +105,11 @@ void clacpy_(char *uplo, integer *m, integer *n, complex *a, integer *lda, compl
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clacpy inputs: uplo %c, m %lld, n %lld, lda %lld, ldb %lld",*uplo, *m, *n, *lda, *ldb);
+    snprintf(buffer, 256, "clacpy inputs: uplo %c, m %lld, n %lld, lda %lld, ldb %lld", *uplo, *m,
+             *n, *lda, *ldb);
 #else
-    snprintf(buffer, 256,"clacpy inputs: uplo %c, m %d, n %d, lda %d, ldb %d",*uplo, *m, *n, *lda, *ldb);
+    snprintf(buffer, 256, "clacpy inputs: uplo %c, m %d, n %d, lda %d, ldb %d", *uplo, *m, *n, *lda,
+             *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -140,15 +142,13 @@ void clacpy_(char *uplo, integer *m, integer *n, complex *a, integer *lda, compl
     b_offset = 1 + b_dim1;
     b -= b_offset;
     /* Function Body */
-    if (lsame_(uplo, "U", 1, 1))
+    if(lsame_(uplo, "U", 1, 1))
     {
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
         {
-            i__2 = fla_min(j,*m);
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            i__2 = fla_min(j, *m);
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * a_dim1;
@@ -159,7 +159,7 @@ void clacpy_(char *uplo, integer *m, integer *n, complex *a, integer *lda, compl
             /* L20: */
         }
     }
-    else if (lsame_(uplo, "L", 1, 1))
+    else if(lsame_(uplo, "L", 1, 1))
     {
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)

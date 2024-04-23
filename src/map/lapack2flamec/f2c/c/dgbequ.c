@@ -147,10 +147,14 @@
 /* > \ingroup doubleGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, integer *ldab, doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax, integer * info)
+void dgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, integer *ldab,
+             doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd,
+             doublereal *amax, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgbequ inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS "",*m, *n, *kl, *ku, *ldab);
+    AOCL_DTL_SNPRINTF("dgbequ inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
+                      ", ldab %" FLA_IS "",
+                      *m, *n, *kl, *ku, *ldab);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2, d__3;
@@ -159,7 +163,8 @@ void dgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
     doublereal rcmin, rcmax;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum, smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -245,15 +250,13 @@ void dgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
         i__2 = j - *ku;
         /* Computing MIN */
         i__4 = j + *kl;
-        i__3 = fla_min(i__4,*m);
-        for (i__ = fla_max(i__2,1);
-                i__ <= i__3;
-                ++i__)
+        i__3 = fla_min(i__4, *m);
+        for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
         {
             /* Computing MAX */
             d__2 = r__[i__];
             d__3 = (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_dabs(d__1)); // , expr subst
-            r__[i__] = fla_max(d__2,d__3);
+            r__[i__] = fla_max(d__2, d__3);
             /* L20: */
         }
         /* L30: */
@@ -267,11 +270,11 @@ void dgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
         /* Computing MAX */
         d__1 = rcmax;
         d__2 = r__[i__]; // , expr subst
-        rcmax = fla_max(d__1,d__2);
+        rcmax = fla_max(d__1, d__2);
         /* Computing MIN */
         d__1 = rcmin;
         d__2 = r__[i__]; // , expr subst
-        rcmin = fla_min(d__1,d__2);
+        rcmin = fla_min(d__1, d__2);
         /* L40: */
     }
     *amax = rcmax;
@@ -299,12 +302,12 @@ void dgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
             /* Computing MIN */
             /* Computing MAX */
             d__2 = r__[i__];
-            d__1 = fla_max(d__2,smlnum);
-            r__[i__] = 1. / fla_min(d__1,bignum);
+            d__1 = fla_max(d__2, smlnum);
+            r__[i__] = 1. / fla_min(d__1, bignum);
             /* L60: */
         }
         /* Compute ROWCND = fla_min(R(I)) / fla_max(R(I)) */
-        *rowcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+        *rowcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
     }
     /* Compute column scale factors */
     i__1 = *n;
@@ -323,15 +326,14 @@ void dgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
         i__3 = j - *ku;
         /* Computing MIN */
         i__4 = j + *kl;
-        i__2 = fla_min(i__4,*m);
-        for (i__ = fla_max(i__3,1);
-                i__ <= i__2;
-                ++i__)
+        i__2 = fla_min(i__4, *m);
+        for(i__ = fla_max(i__3, 1); i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             d__2 = c__[j];
-            d__3 = (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_dabs( d__1)) * r__[i__]; // , expr subst
-            c__[j] = fla_max(d__2,d__3);
+            d__3 = (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_dabs(d__1))
+                   * r__[i__]; // , expr subst
+            c__[j] = fla_max(d__2, d__3);
             /* L80: */
         }
         /* L90: */
@@ -345,11 +347,11 @@ void dgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
         /* Computing MIN */
         d__1 = rcmin;
         d__2 = c__[j]; // , expr subst
-        rcmin = fla_min(d__1,d__2);
+        rcmin = fla_min(d__1, d__2);
         /* Computing MAX */
         d__1 = rcmax;
         d__2 = c__[j]; // , expr subst
-        rcmax = fla_max(d__1,d__2);
+        rcmax = fla_max(d__1, d__2);
         /* L100: */
     }
     if(rcmin == 0.)
@@ -376,12 +378,12 @@ void dgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
             /* Computing MIN */
             /* Computing MAX */
             d__2 = c__[j];
-            d__1 = fla_max(d__2,smlnum);
-            c__[j] = 1. / fla_min(d__1,bignum);
+            d__1 = fla_max(d__2, smlnum);
+            c__[j] = 1. / fla_min(d__1, bignum);
             /* L120: */
         }
         /* Compute COLCND = fla_min(C(J)) / fla_max(C(J)) */
-        *colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+        *colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

@@ -4,8 +4,8 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {1., 0.};
-static aocl_int64_t c__1 = 1;
+static doublecomplex c_b1 = {1., 0.};
+static integer c__1 = 1;
 /* > \brief \b ZSYTRS_ROOK */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -133,10 +133,13 @@ static aocl_int64_t c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void zsytrs_rook_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *b, integer *ldb, integer *info)
+void zsytrs_rook_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda,
+                  integer *ipiv, doublecomplex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zsytrs_rook inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "", *uplo, *n, *nrhs, *lda, *ldb);
+    AOCL_DTL_SNPRINTF("zsytrs_rook inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS "",
+                      *uplo, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     dcomplex z__1, z__2, z__3;
@@ -150,10 +153,17 @@ void zsytrs_rook_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integ
     extern logical lsame_(char *, char *, integer, integer);
     doublecomplex denom;
     extern /* Subroutine */
-    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
+        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
+               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical upper;
     extern /* Subroutine */
-    void zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+               integer *, doublecomplex *, integer *),
+        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -185,7 +195,7 @@ void zsytrs_rook_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integ
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -197,11 +207,11 @@ void zsytrs_rook_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integ
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
@@ -209,13 +219,13 @@ void zsytrs_rook_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integ
     {
         i__1 = -(*info);
         xerbla_("ZSYTRS_ROOK", &i__1, (ftnlen)11);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(upper)
@@ -242,10 +252,10 @@ void zsytrs_rook_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integ
             /* Multiply by inv(U(K)), where U(K) is the transformation */
             /* stored in column K of A. */
             i__1 = k - 1;
-            z__1.real = -1.;
-            z__1.imag = -0.; // , expr subst
-            aocl_blas_zgeru(&i__1, nrhs, &z__1, &a[k * a_dim1 + 1], &c__1, &b[k + b_dim1], ldb,
-                            &b[b_dim1 + 1], ldb);
+            z__1.r = -1.;
+            z__1.i = -0.; // , expr subst
+            zgeru_(&i__1, nrhs, &z__1, &a[k * a_dim1 + 1], &c__1, &b[k + b_dim1], ldb,
+                   &b[b_dim1 + 1], ldb);
             /* Multiply by the inverse of the diagonal block. */
             z_div(&z__1, &c_b1, &a[k + k * a_dim1]);
             aocl_blas_zscal(nrhs, &z__1, &b[k + b_dim1], ldb);
@@ -270,15 +280,15 @@ void zsytrs_rook_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integ
             if(k > 2)
             {
                 i__1 = k - 2;
-                z__1.real = -1.;
-                z__1.imag = -0.; // , expr subst
-                aocl_blas_zgeru(&i__1, nrhs, &z__1, &a[k * a_dim1 + 1], &c__1, &b[k + b_dim1], ldb,
-                                &b[b_dim1 + 1], ldb);
+                z__1.r = -1.;
+                z__1.i = -0.; // , expr subst
+                zgeru_(&i__1, nrhs, &z__1, &a[k * a_dim1 + 1], &c__1, &b[k + b_dim1], ldb,
+                       &b[b_dim1 + 1], ldb);
                 i__1 = k - 2;
-                z__1.real = -1.;
-                z__1.imag = -0.; // , expr subst
-                aocl_blas_zgeru(&i__1, nrhs, &z__1, &a[(k - 1) * a_dim1 + 1], &c__1,
-                                &b[k - 1 + b_dim1], ldb, &b[b_dim1 + 1], ldb);
+                z__1.r = -1.;
+                z__1.i = -0.; // , expr subst
+                zgeru_(&i__1, nrhs, &z__1, &a[(k - 1) * a_dim1 + 1], &c__1, &b[k - 1 + b_dim1], ldb,
+                       &b[b_dim1 + 1], ldb);
             }
             /* Multiply by the inverse of the diagonal block. */
             i__1 = k - 1 + k * a_dim1;
@@ -343,10 +353,10 @@ void zsytrs_rook_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integ
             if(k > 1)
             {
                 i__1 = k - 1;
-                z__1.real = -1.;
-                z__1.imag = -0.; // , expr subst
-                aocl_blas_zgemv("Transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb,
-                                &a[k * a_dim1 + 1], &c__1, &c_b1, &b[k + b_dim1], ldb);
+                z__1.r = -1.;
+                z__1.i = -0.; // , expr subst
+                zgemv_("Transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb, &a[k * a_dim1 + 1],
+                       &c__1, &c_b1, &b[k + b_dim1], ldb);
             }
             /* Interchange rows K and IPIV(K). */
             kp = ipiv[k];
@@ -364,15 +374,15 @@ void zsytrs_rook_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integ
             if(k > 1)
             {
                 i__1 = k - 1;
-                z__1.real = -1.;
-                z__1.imag = -0.; // , expr subst
-                aocl_blas_zgemv("Transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb,
-                                &a[k * a_dim1 + 1], &c__1, &c_b1, &b[k + b_dim1], ldb);
+                z__1.r = -1.;
+                z__1.i = -0.; // , expr subst
+                zgemv_("Transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb, &a[k * a_dim1 + 1],
+                       &c__1, &c_b1, &b[k + b_dim1], ldb);
                 i__1 = k - 1;
-                z__1.real = -1.;
-                z__1.imag = -0.; // , expr subst
-                aocl_blas_zgemv("Transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb,
-                                &a[(k + 1) * a_dim1 + 1], &c__1, &c_b1, &b[k + 1 + b_dim1], ldb);
+                z__1.r = -1.;
+                z__1.i = -0.; // , expr subst
+                zgemv_("Transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb, &a[(k + 1) * a_dim1 + 1],
+                       &c__1, &c_b1, &b[k + 1 + b_dim1], ldb);
             }
             /* Interchange rows K and -IPIV(K) THEN K+1 and -IPIV(K+1). */
             kp = -ipiv[k];
@@ -416,10 +426,10 @@ void zsytrs_rook_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integ
             if(k < *n)
             {
                 i__1 = *n - k;
-                z__1.real = -1.;
-                z__1.imag = -0.; // , expr subst
-                aocl_blas_zgeru(&i__1, nrhs, &z__1, &a[k + 1 + k * a_dim1], &c__1, &b[k + b_dim1],
-                                ldb, &b[k + 1 + b_dim1], ldb);
+                z__1.r = -1.;
+                z__1.i = -0.; // , expr subst
+                zgeru_(&i__1, nrhs, &z__1, &a[k + 1 + k * a_dim1], &c__1, &b[k + b_dim1], ldb,
+                       &b[k + 1 + b_dim1], ldb);
             }
             /* Multiply by the inverse of the diagonal block. */
             z_div(&z__1, &c_b1, &a[k + k * a_dim1]);
@@ -445,15 +455,15 @@ void zsytrs_rook_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integ
             if(k < *n - 1)
             {
                 i__1 = *n - k - 1;
-                z__1.real = -1.;
-                z__1.imag = -0.; // , expr subst
-                aocl_blas_zgeru(&i__1, nrhs, &z__1, &a[k + 2 + k * a_dim1], &c__1, &b[k + b_dim1],
-                                ldb, &b[k + 2 + b_dim1], ldb);
+                z__1.r = -1.;
+                z__1.i = -0.; // , expr subst
+                zgeru_(&i__1, nrhs, &z__1, &a[k + 2 + k * a_dim1], &c__1, &b[k + b_dim1], ldb,
+                       &b[k + 2 + b_dim1], ldb);
                 i__1 = *n - k - 1;
-                z__1.real = -1.;
-                z__1.imag = -0.; // , expr subst
-                aocl_blas_zgeru(&i__1, nrhs, &z__1, &a[k + 2 + (k + 1) * a_dim1], &c__1,
-                                &b[k + 1 + b_dim1], ldb, &b[k + 2 + b_dim1], ldb);
+                z__1.r = -1.;
+                z__1.i = -0.; // , expr subst
+                zgeru_(&i__1, nrhs, &z__1, &a[k + 2 + (k + 1) * a_dim1], &c__1, &b[k + 1 + b_dim1],
+                       ldb, &b[k + 2 + b_dim1], ldb);
             }
             /* Multiply by the inverse of the diagonal block. */
             i__1 = k + 1 + k * a_dim1;
@@ -518,10 +528,10 @@ void zsytrs_rook_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integ
             if(k < *n)
             {
                 i__1 = *n - k;
-                z__1.real = -1.;
-                z__1.imag = -0.; // , expr subst
-                aocl_blas_zgemv("Transpose", &i__1, nrhs, &z__1, &b[k + 1 + b_dim1], ldb,
-                                &a[k + 1 + k * a_dim1], &c__1, &c_b1, &b[k + b_dim1], ldb);
+                z__1.r = -1.;
+                z__1.i = -0.; // , expr subst
+                zgemv_("Transpose", &i__1, nrhs, &z__1, &b[k + 1 + b_dim1], ldb,
+                       &a[k + 1 + k * a_dim1], &c__1, &c_b1, &b[k + b_dim1], ldb);
             }
             /* Interchange rows K and IPIV(K). */
             kp = ipiv[k];
@@ -539,16 +549,15 @@ void zsytrs_rook_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integ
             if(k < *n)
             {
                 i__1 = *n - k;
-                z__1.real = -1.;
-                z__1.imag = -0.; // , expr subst
-                aocl_blas_zgemv("Transpose", &i__1, nrhs, &z__1, &b[k + 1 + b_dim1], ldb,
-                                &a[k + 1 + k * a_dim1], &c__1, &c_b1, &b[k + b_dim1], ldb);
+                z__1.r = -1.;
+                z__1.i = -0.; // , expr subst
+                zgemv_("Transpose", &i__1, nrhs, &z__1, &b[k + 1 + b_dim1], ldb,
+                       &a[k + 1 + k * a_dim1], &c__1, &c_b1, &b[k + b_dim1], ldb);
                 i__1 = *n - k;
-                z__1.real = -1.;
-                z__1.imag = -0.; // , expr subst
-                aocl_blas_zgemv("Transpose", &i__1, nrhs, &z__1, &b[k + 1 + b_dim1], ldb,
-                                &a[k + 1 + (k - 1) * a_dim1], &c__1, &c_b1, &b[k - 1 + b_dim1],
-                                ldb);
+                z__1.r = -1.;
+                z__1.i = -0.; // , expr subst
+                zgemv_("Transpose", &i__1, nrhs, &z__1, &b[k + 1 + b_dim1], ldb,
+                       &a[k + 1 + (k - 1) * a_dim1], &c__1, &c_b1, &b[k - 1 + b_dim1], ldb);
             }
             /* Interchange rows K and -IPIV(K) THEN K-1 and -IPIV(K-1) */
             kp = -ipiv[k];

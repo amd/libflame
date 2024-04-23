@@ -1,6 +1,9 @@
 #ifdef FLA_ENABLE_XBLAS
-/* ../netlib/cgbsvxx.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cgbsvxx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief <b> CGBSVXX computes the solution to system of linear equations A * X = B for GB matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -565,15 +568,28 @@ defaults */
 /* > \ingroup complexGBsolve */
 /* ===================================================================== */
 /* Subroutine */
-void cgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, integer *nrhs, complex *ab, integer *ldab, complex * afb, integer *ldafb, integer *ipiv, char *equed, real *r__, real *c__, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *rpvgrw, real *berr, integer *n_err_bnds__, real * err_bnds_norm__, real *err_bnds_comp__, integer *nparams, real * params, complex *work, real *rwork, integer *info)
+void cgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integer *nrhs,
+              complex *ab, integer *ldab, complex *afb, integer *ldafb, integer *ipiv, char *equed,
+              real *r__, real *c__, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond,
+              real *rpvgrw, real *berr, integer *n_err_bnds__, real *err_bnds_norm__,
+              real *err_bnds_comp__, integer *nparams, real *params, complex *work, real *rwork,
+              integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgbsvxx inputs: fact %c, trans %c, n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, ldafb %lld, equed %c, ldb %lld, ldx %lld, n_err_bnds__ %lld, nparams %lld",*fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx, *n_err_bnds__, *nparams);
+    snprintf(buffer, 256,
+             "cgbsvxx inputs: fact %c, trans %c, n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, "
+             "ldafb %lld, equed %c, ldb %lld, ldx %lld, n_err_bnds__ %lld, nparams %lld",
+             *fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx, *n_err_bnds__,
+             *nparams);
 #else
-    snprintf(buffer, 256,"cgbsvxx inputs: fact %c, trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldafb %d, equed %c, ldb %d, ldx %d, n_err_bnds__ %d, nparams %d",*fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx, *n_err_bnds__, *nparams);
+    snprintf(buffer, 256,
+             "cgbsvxx inputs: fact %c, trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldafb %d, "
+             "equed %c, ldb %d, ldx %d, n_err_bnds__ %d, nparams %d",
+             *fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx, *n_err_bnds__,
+             *nparams);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -585,22 +601,31 @@ void cgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
     /* Local variables */
     integer i__, j;
     real amax;
-    extern real cla_gbrpvgrw_(integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *);
+    extern real cla_gbrpvgrw_(integer *, integer *, integer *, integer *, complex *, integer *,
+                              complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     real rcmin, rcmax;
     logical equil;
     extern /* Subroutine */
-    void claqgb_(integer *, integer *, integer *, integer *, complex *, integer *, real *, real *, real *, real *, real *, char *);
+        void
+        claqgb_(integer *, integer *, integer *, integer *, complex *, integer *, real *, real *,
+                real *, real *, real *, char *);
     real colcnd;
     extern real slamch_(char *);
     extern /* Subroutine */
-    void cgbtrf_(integer *, integer *, integer *, integer *, complex *, integer *, integer *, integer *);
+        void
+        cgbtrf_(integer *, integer *, integer *, integer *, complex *, integer *, integer *,
+                integer *);
     logical nofact;
     extern /* Subroutine */
-    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern /* Subroutine */
-    void cgbtrs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+        void
+        cgbtrs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *,
+                complex *, integer *, integer *);
     integer infequ;
     logical colequ;
     real rowcnd;
@@ -608,7 +633,14 @@ void cgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
     real smlnum;
     logical rowequ;
     extern /* Subroutine */
-    void clascl2_(integer *, integer *, real *, complex *, integer *), cgbequb_(integer *, integer *, integer *, integer *, complex *, integer *, real *, real *, real *, real *, real *, integer *), cgbrfsx_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, real *, real *, complex *, integer *, complex *, integer *, real *, real *, integer *, real *, real *, integer *, real *, complex *, real *, integer *);
+        void
+        clascl2_(integer *, integer *, real *, complex *, integer *),
+        cgbequb_(integer *, integer *, integer *, integer *, complex *, integer *, real *, real *,
+                 real *, real *, real *, integer *),
+        cgbrfsx_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *,
+                 complex *, integer *, integer *, real *, real *, complex *, integer *, complex *,
+                 integer *, real *, real *, integer *, real *, real *, integer *, real *, complex *,
+                 real *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -678,11 +710,11 @@ void cgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
     /* pivot growth is set here, the rest is initialized in CGBRFSX. */
     *rpvgrw = 0.f;
     /* Test the input parameters. PARAMS is not tested until SGERFSX. */
-    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -710,7 +742,7 @@ void cgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
     {
         *info = -10;
     }
-    else if (lsame_(fact, "F", 1, 1) && ! (rowequ || colequ || lsame_(equed, "N", 1, 1)))
+    else if(lsame_(fact, "F", 1, 1) && !(rowequ || colequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -12;
     }
@@ -726,11 +758,11 @@ void cgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
                 /* Computing MIN */
                 r__1 = rcmin;
                 r__2 = r__[j]; // , expr subst
-                rcmin = fla_min(r__1,r__2);
+                rcmin = fla_min(r__1, r__2);
                 /* Computing MAX */
                 r__1 = rcmax;
                 r__2 = r__[j]; // , expr subst
-                rcmax = fla_max(r__1,r__2);
+                rcmax = fla_max(r__1, r__2);
                 /* L10: */
             }
             if(rcmin <= 0.f)
@@ -739,7 +771,7 @@ void cgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
             }
             else if(*n > 0)
             {
-                rowcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+                rowcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
             }
             else
             {
@@ -756,11 +788,11 @@ void cgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
                 /* Computing MIN */
                 r__1 = rcmin;
                 r__2 = c__[j]; // , expr subst
-                rcmin = fla_min(r__1,r__2);
+                rcmin = fla_min(r__1, r__2);
                 /* Computing MAX */
                 r__1 = rcmax;
                 r__2 = c__[j]; // , expr subst
-                rcmax = fla_max(r__1,r__2);
+                rcmax = fla_max(r__1, r__2);
                 /* L20: */
             }
             if(rcmin <= 0.f)
@@ -769,7 +801,7 @@ void cgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
             }
             else if(*n > 0)
             {
-                colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+                colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
             }
             else
             {
@@ -778,11 +810,11 @@ void cgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
         }
         if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -15;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -16;
             }
@@ -803,7 +835,8 @@ void cgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            claqgb_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], & rowcnd, &colcnd, &amax, equed);
+            claqgb_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], &rowcnd, &colcnd, &amax,
+                    equed);
             rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
             colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }
@@ -864,7 +897,7 @@ void cgbsvxx_(char *fact, char *trans, integer *n, integer * kl, integer *ku, in
             /* Pivot in column INFO is exactly 0 */
             /* Compute the reciprocal pivot growth factor of the */
             /* leading rank-deficient INFO columns of A. */
-            *rpvgrw = cla_gbrpvgrw_(n, kl, ku, info, &ab[ab_offset], ldab, & afb[afb_offset], ldafb);
+            *rpvgrw = cla_gbrpvgrw_(n, kl, ku, info, &ab[ab_offset], ldab, &afb[afb_offset], ldafb);
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;
         }

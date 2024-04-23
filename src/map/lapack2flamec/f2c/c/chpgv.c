@@ -168,15 +168,18 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void chpgv_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, complex *bp, real *w, complex *z__, integer *ldz, complex *work, real *rwork, integer *info)
+void chpgv_(integer *itype, char *jobz, char *uplo, integer *n, complex *ap, complex *bp, real *w,
+            complex *z__, integer *ldz, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chpgv inputs: itype %lld, jobz %c, uplo %c, n %lld, ldz %lld",*itype, *jobz, *uplo, *n, *ldz);
+    snprintf(buffer, 256, "chpgv inputs: itype %lld, jobz %c, uplo %c, n %lld, ldz %lld", *itype,
+             *jobz, *uplo, *n, *ldz);
 #else
-    snprintf(buffer, 256,"chpgv inputs: itype %d, jobz %c, uplo %c, n %d, ldz %d",*itype, *jobz, *uplo, *n, *ldz);
+    snprintf(buffer, 256, "chpgv inputs: itype %d, jobz %c, uplo %c, n %d, ldz %d", *itype, *jobz,
+             *uplo, *n, *ldz);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -186,16 +189,23 @@ void chpgv_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, co
     integer j, neig;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void chpev_(char *, char *, integer *, complex *, real *, complex *, integer *, complex *, real *, integer *);
+        void
+        chpev_(char *, char *, integer *, complex *, real *, complex *, integer *, complex *,
+               real *, integer *);
     char trans[1];
     extern /* Subroutine */
-    void ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
+        void
+        ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    void ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *);
+        void
+        ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical wantz;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), chpgst_( integer *, char *, integer *, complex *, complex *, integer *), cpptrf_(char *, integer *, complex *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        chpgst_(integer *, char *, integer *, complex *, complex *, integer *),
+        cpptrf_(char *, integer *, complex *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -230,11 +240,11 @@ void chpgv_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, co
     {
         *info = -1;
     }
-    else if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    else if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (upper || lsame_(uplo, "L", 1, 1)))
+    else if(!(upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -3;
     }
@@ -260,7 +270,7 @@ void chpgv_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, co
         return;
     }
     /* Form a Cholesky factorization of B. */
-    aocl_lapack_cpptrf(uplo, n, &bp[1], info);
+    cpptrf_(uplo, n, &bp[1], info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -268,8 +278,8 @@ void chpgv_(integer *itype, char *jobz, char *uplo, integer * n, complex *ap, co
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    aocl_lapack_chpgst(itype, uplo, n, &ap[1], &bp[1], info);
-    aocl_lapack_chpev(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], &rwork[1], info);
+    chpgst_(itype, uplo, n, &ap[1], &bp[1], info);
+    chpev_(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], &rwork[1], info);
     if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */

@@ -118,7 +118,8 @@ static doublereal c_b11 = 1.;
 void dspgst_(integer *itype, char *uplo, integer *n, doublereal *ap, doublereal *bp, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dspgst inputs: itype %" FLA_IS ", uplo %c, n %" FLA_IS "",*itype, *uplo, *n);
+    AOCL_DTL_SNPRINTF("dspgst inputs: itype %" FLA_IS ", uplo %c, n %" FLA_IS "", *itype, *uplo,
+                      *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     doublereal d__1;
@@ -131,13 +132,22 @@ void dspgst_(integer *itype, char *uplo, integer *n, doublereal *ap, doublereal 
     doublereal bjj, bkk;
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern /* Subroutine */
-    void dspr2_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *), dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dspr2_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+               doublereal *),
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dspmv_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *),
+        dspmv_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *,
+               doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-    void dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *), dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *),
+        dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -163,11 +173,11 @@ void dspgst_(integer *itype, char *uplo, integer *n, doublereal *ap, doublereal 
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (*itype < 1 || *itype > 3)
+    if(*itype < 1 || *itype > 3)
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L", 1, 1))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -196,14 +206,14 @@ void dspgst_(integer *itype, char *uplo, integer *n, doublereal *ap, doublereal 
                 jj += j;
                 /* Compute the j-th column of the upper triangle of A */
                 bjj = bp[jj];
-                aocl_blas_dtpsv(uplo, "Transpose", "Nonunit", &j, &bp[1], &ap[j1], &c__1);
+                dtpsv_(uplo, "Transpose", "Nonunit", &j, &bp[1], &ap[j1], &c__1);
                 i__2 = j - 1;
-                aocl_blas_dspmv(uplo, &i__2, &c_b9, &ap[1], &bp[j1], &c__1, &c_b11, &ap[j1], &c__1);
+                dspmv_(uplo, &i__2, &c_b9, &ap[1], &bp[j1], &c__1, &c_b11, &ap[j1], &c__1);
                 i__2 = j - 1;
                 d__1 = 1. / bjj;
                 aocl_blas_dscal(&i__2, &d__1, &ap[j1], &c__1);
                 i__2 = j - 1;
-                ap[jj] = (ap[jj] - aocl_blas_ddot(&i__2, &ap[j1], &c__1, &bp[j1], &c__1)) / bjj;
+                ap[jj] = (ap[jj] - ddot_(&i__2, &ap[j1], &c__1, &bp[j1], &c__1)) / bjj;
                 /* L10: */
             }
         }
@@ -230,11 +240,11 @@ void dspgst_(integer *itype, char *uplo, integer *n, doublereal *ap, doublereal 
                     aocl_blas_dscal(&i__2, &d__1, &ap[kk + 1], &c__1);
                     ct = akk * -.5;
                     i__2 = *n - k;
-                    aocl_blas_daxpy(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
+                    daxpy_(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
                     i__2 = *n - k;
                     dspr2_(uplo, &i__2, &c_b9, &ap[kk + 1], &c__1, &bp[kk + 1], &c__1, &ap[k1k1]);
                     i__2 = *n - k;
-                    aocl_blas_daxpy(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
+                    daxpy_(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
                     i__2 = *n - k;
                     aocl_blas_dtpsv(uplo, "No transpose", "Non-unit", &i__2, &bp[k1k1], &ap[kk + 1],
                                     &c__1);
@@ -260,12 +270,12 @@ void dspgst_(integer *itype, char *uplo, integer *n, doublereal *ap, doublereal 
                 akk = ap[kk];
                 bkk = bp[kk];
                 i__2 = k - 1;
-                aocl_blas_dtpmv(uplo, "No transpose", "Non-unit", &i__2, &bp[1], &ap[k1], &c__1);
+                dtpmv_(uplo, "No transpose", "Non-unit", &i__2, &bp[1], &ap[k1], &c__1);
                 ct = akk * .5;
                 i__2 = k - 1;
                 aocl_blas_daxpy(&i__2, &ct, &bp[k1], &c__1, &ap[k1], &c__1);
                 i__2 = k - 1;
-                aocl_blas_dspr2(uplo, &i__2, &c_b11, &ap[k1], &c__1, &bp[k1], &c__1, &ap[1]);
+                dspr2_(uplo, &i__2, &c_b11, &ap[k1], &c__1, &bp[k1], &c__1, &ap[1]);
                 i__2 = k - 1;
                 aocl_blas_daxpy(&i__2, &ct, &bp[k1], &c__1, &ap[k1], &c__1);
                 i__2 = k - 1;
@@ -293,8 +303,8 @@ void dspgst_(integer *itype, char *uplo, integer *n, doublereal *ap, doublereal 
                 i__2 = *n - j;
                 aocl_blas_dscal(&i__2, &bjj, &ap[jj + 1], &c__1);
                 i__2 = *n - j;
-                aocl_blas_dspmv(uplo, &i__2, &c_b11, &ap[j1j1], &bp[jj + 1], &c__1, &c_b11,
-                                &ap[jj + 1], &c__1);
+                dspmv_(uplo, &i__2, &c_b11, &ap[j1j1], &bp[jj + 1], &c__1, &c_b11, &ap[jj + 1],
+                       &c__1);
                 i__2 = *n - j + 1;
                 aocl_blas_dtpmv(uplo, "Transpose", "Non-unit", &i__2, &bp[jj], &ap[jj], &c__1);
                 jj = j1j1;

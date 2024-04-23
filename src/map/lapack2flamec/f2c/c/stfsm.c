@@ -276,7 +276,8 @@ K=N/2. If */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integer *m, integer *n, real *alpha, real *a, real *b, integer *ldb)
+void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integer *m, integer *n,
+            real *alpha, real *a, real *b, integer *ldb)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_stfsm(transr, side, uplo, trans, diag, m, n, alpha, a, b, ldb);
@@ -304,10 +305,15 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
     logical normaltransr, lside;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *);
     logical lower;
     extern /* Subroutine */
-    void strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
+               real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical misodd, nisodd, notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -341,23 +347,23 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
     lside = lsame_(side, "L", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
     notrans = lsame_(trans, "N", 1, 1);
-    if (! normaltransr && ! lsame_(transr, "T", 1, 1))
+    if(!normaltransr && !lsame_(transr, "T", 1, 1))
     {
         info = -1;
     }
-    else if (! lside && ! lsame_(side, "R", 1, 1))
+    else if(!lside && !lsame_(side, "R", 1, 1))
     {
         info = -2;
     }
-    else if (! lower && ! lsame_(uplo, "U", 1, 1))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         info = -3;
     }
-    else if (! notrans && ! lsame_(trans, "T", 1, 1))
+    else if(!notrans && !lsame_(trans, "T", 1, 1))
     {
         info = -4;
     }
-    else if (! lsame_(diag, "N", 1, 1) && ! lsame_(diag, "U", 1, 1))
+    else if(!lsame_(diag, "N", 1, 1) && !lsame_(diag, "U", 1, 1))
     {
         info = -5;
     }
@@ -369,7 +375,7 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
     {
         info = -7;
     }
-    else if (*ldb < fla_max(1,*m))
+    else if(*ldb < fla_max(1, *m))
     {
         info = -11;
     }
@@ -440,13 +446,13 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* TRANS = 'N' */
                         if(*m == 1)
                         {
-                            aocl_blas_strsm("L", "L", "N", diag, &m1, n, alpha, a, m, &b[b_offset],
-                                            ldb);
+                            strsm_("L", "L", "N", diag, &m1, n, alpha, a, m, &b[b_offset], ldb);
                         }
                         else
                         {
-                            strsm_("L", "L", "N", diag, &m1, n, alpha, a, m, & b[b_offset], ldb);
-                            sgemm_("N", "N", &m2, n, &m1, &c_b23, &a[m1], m, & b[b_offset], ldb, alpha, &b[m1], ldb);
+                            strsm_("L", "L", "N", diag, &m1, n, alpha, a, m, &b[b_offset], ldb);
+                            sgemm_("N", "N", &m2, n, &m1, &c_b23, &a[m1], m, &b[b_offset], ldb,
+                                   alpha, &b[m1], ldb);
                             strsm_("L", "U", "T", diag, &m2, n, &c_b27, &a[*m], m, &b[m1], ldb);
                         }
                     }
@@ -456,17 +462,14 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* TRANS = 'T' */
                         if(*m == 1)
                         {
-                            aocl_blas_strsm("L", "L", "T", diag, &m1, n, alpha, a, m, &b[b_offset],
-                                            ldb);
+                            strsm_("L", "L", "T", diag, &m1, n, alpha, a, m, &b[b_offset], ldb);
                         }
                         else
                         {
-                            aocl_blas_strsm("L", "U", "N", diag, &m2, n, alpha, &a[*m], m, &b[m1],
-                                            ldb);
-                            aocl_blas_sgemm("T", "N", &m1, n, &m2, &c_b23, &a[m1], m, &b[m1], ldb,
-                                            alpha, &b[b_offset], ldb);
-                            aocl_blas_strsm("L", "L", "T", diag, &m1, n, &c_b27, a, m, &b[b_offset],
-                                            ldb);
+                            strsm_("L", "U", "N", diag, &m2, n, alpha, &a[*m], m, &b[m1], ldb);
+                            sgemm_("T", "N", &m1, n, &m2, &c_b23, &a[m1], m, &b[m1], ldb, alpha,
+                                   &b[b_offset], ldb);
+                            strsm_("L", "L", "T", diag, &m1, n, &c_b27, a, m, &b[b_offset], ldb);
                         }
                     }
                 }
@@ -477,22 +480,19 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
                     {
                         /* SIDE ='L', N is odd, TRANSR = 'N', UPLO = 'U', and */
                         /* TRANS = 'N' */
-                        aocl_blas_strsm("L", "L", "N", diag, &m1, n, alpha, &a[m2], m, &b[b_offset],
-                                        ldb);
-                        aocl_blas_sgemm("T", "N", &m2, n, &m1, &c_b23, a, m, &b[b_offset], ldb,
-                                        alpha, &b[m1], ldb);
-                        aocl_blas_strsm("L", "U", "T", diag, &m2, n, &c_b27, &a[m1], m, &b[m1],
-                                        ldb);
+                        strsm_("L", "L", "N", diag, &m1, n, alpha, &a[m2], m, &b[b_offset], ldb);
+                        sgemm_("T", "N", &m2, n, &m1, &c_b23, a, m, &b[b_offset], ldb, alpha,
+                               &b[m1], ldb);
+                        strsm_("L", "U", "T", diag, &m2, n, &c_b27, &a[m1], m, &b[m1], ldb);
                     }
                     else
                     {
                         /* SIDE ='L', N is odd, TRANSR = 'N', UPLO = 'U', and */
                         /* TRANS = 'T' */
-                        aocl_blas_strsm("L", "U", "N", diag, &m2, n, alpha, &a[m1], m, &b[m1], ldb);
-                        aocl_blas_sgemm("N", "N", &m1, n, &m2, &c_b23, a, m, &b[m1], ldb, alpha,
-                                        &b[b_offset], ldb);
-                        aocl_blas_strsm("L", "L", "T", diag, &m1, n, &c_b27, &a[m2], m,
-                                        &b[b_offset], ldb);
+                        strsm_("L", "U", "N", diag, &m2, n, alpha, &a[m1], m, &b[m1], ldb);
+                        sgemm_("N", "N", &m1, n, &m2, &c_b23, a, m, &b[m1], ldb, alpha,
+                               &b[b_offset], ldb);
+                        strsm_("L", "L", "T", diag, &m1, n, &c_b27, &a[m2], m, &b[b_offset], ldb);
                     }
                 }
             }
@@ -513,12 +513,10 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
                         }
                         else
                         {
-                            aocl_blas_strsm("L", "U", "T", diag, &m1, n, alpha, a, &m1,
-                                            &b[b_offset], ldb);
-                            aocl_blas_sgemm("T", "N", &m2, n, &m1, &c_b23, &a[m1 * m1], &m1,
-                                            &b[b_offset], ldb, alpha, &b[m1], ldb);
-                            aocl_blas_strsm("L", "L", "N", diag, &m2, n, &c_b27, &a[1], &m1, &b[m1],
-                                            ldb);
+                            strsm_("L", "U", "T", diag, &m1, n, alpha, a, &m1, &b[b_offset], ldb);
+                            sgemm_("T", "N", &m2, n, &m1, &c_b23, &a[m1 * m1], &m1, &b[b_offset],
+                                   ldb, alpha, &b[m1], ldb);
+                            strsm_("L", "L", "N", diag, &m2, n, &c_b27, &a[1], &m1, &b[m1], ldb);
                         }
                     }
                     else
@@ -532,12 +530,10 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
                         }
                         else
                         {
-                            aocl_blas_strsm("L", "L", "T", diag, &m2, n, alpha, &a[1], &m1, &b[m1],
-                                            ldb);
-                            aocl_blas_sgemm("N", "N", &m1, n, &m2, &c_b23, &a[m1 * m1], &m1, &b[m1],
-                                            ldb, alpha, &b[b_offset], ldb);
-                            aocl_blas_strsm("L", "U", "N", diag, &m1, n, &c_b27, a, &m1,
-                                            &b[b_offset], ldb);
+                            strsm_("L", "L", "T", diag, &m2, n, alpha, &a[1], &m1, &b[m1], ldb);
+                            sgemm_("N", "N", &m1, n, &m2, &c_b23, &a[m1 * m1], &m1, &b[m1], ldb,
+                                   alpha, &b[b_offset], ldb);
+                            strsm_("L", "U", "N", diag, &m1, n, &c_b27, a, &m1, &b[b_offset], ldb);
                         }
                     }
                 }
@@ -548,8 +544,10 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
                     {
                         /* SIDE ='L', N is odd, TRANSR = 'T', UPLO = 'U', and */
                         /* TRANS = 'N' */
-                        strsm_("L", "U", "T", diag, &m1, n, alpha, &a[m2 * m2], &m2, &b[b_offset], ldb);
-                        sgemm_("N", "N", &m2, n, &m1, &c_b23, a, &m2, &b[ b_offset], ldb, alpha, &b[m1], ldb);
+                        strsm_("L", "U", "T", diag, &m1, n, alpha, &a[m2 * m2], &m2, &b[b_offset],
+                               ldb);
+                        sgemm_("N", "N", &m2, n, &m1, &c_b23, a, &m2, &b[b_offset], ldb, alpha,
+                               &b[m1], ldb);
                         strsm_("L", "L", "N", diag, &m2, n, &c_b27, &a[m1 * m2], &m2, &b[m1], ldb);
                     }
                     else
@@ -557,8 +555,10 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* SIDE ='L', N is odd, TRANSR = 'T', UPLO = 'U', and */
                         /* TRANS = 'T' */
                         strsm_("L", "L", "T", diag, &m2, n, alpha, &a[m1 * m2], &m2, &b[m1], ldb);
-                        sgemm_("T", "N", &m1, n, &m2, &c_b23, a, &m2, &b[m1], ldb, alpha, &b[b_offset], ldb);
-                        strsm_("L", "U", "N", diag, &m1, n, &c_b27, &a[m2 * m2], &m2, &b[b_offset], ldb);
+                        sgemm_("T", "N", &m1, n, &m2, &c_b23, a, &m2, &b[m1], ldb, alpha,
+                               &b[b_offset], ldb);
+                        strsm_("L", "U", "N", diag, &m1, n, &c_b27, &a[m2 * m2], &m2, &b[b_offset],
+                               ldb);
                     }
                 }
             }
@@ -577,26 +577,24 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* SIDE ='L', N is even, TRANSR = 'N', UPLO = 'L', */
                         /* and TRANS = 'N' */
                         i__1 = *m + 1;
-                        aocl_blas_strsm("L", "L", "N", diag, &k, n, alpha, &a[1], &i__1,
-                                        &b[b_offset], ldb);
+                        strsm_("L", "L", "N", diag, &k, n, alpha, &a[1], &i__1, &b[b_offset], ldb);
                         i__1 = *m + 1;
-                        aocl_blas_sgemm("N", "N", &k, n, &k, &c_b23, &a[k + 1], &i__1, &b[b_offset],
-                                        ldb, alpha, &b[k], ldb);
+                        sgemm_("N", "N", &k, n, &k, &c_b23, &a[k + 1], &i__1, &b[b_offset], ldb,
+                               alpha, &b[k], ldb);
                         i__1 = *m + 1;
-                        aocl_blas_strsm("L", "U", "T", diag, &k, n, &c_b27, a, &i__1, &b[k], ldb);
+                        strsm_("L", "U", "T", diag, &k, n, &c_b27, a, &i__1, &b[k], ldb);
                     }
                     else
                     {
                         /* SIDE ='L', N is even, TRANSR = 'N', UPLO = 'L', */
                         /* and TRANS = 'T' */
                         i__1 = *m + 1;
-                        aocl_blas_strsm("L", "U", "N", diag, &k, n, alpha, a, &i__1, &b[k], ldb);
+                        strsm_("L", "U", "N", diag, &k, n, alpha, a, &i__1, &b[k], ldb);
                         i__1 = *m + 1;
-                        aocl_blas_sgemm("T", "N", &k, n, &k, &c_b23, &a[k + 1], &i__1, &b[k], ldb,
-                                        alpha, &b[b_offset], ldb);
+                        sgemm_("T", "N", &k, n, &k, &c_b23, &a[k + 1], &i__1, &b[k], ldb, alpha,
+                               &b[b_offset], ldb);
                         i__1 = *m + 1;
-                        aocl_blas_strsm("L", "L", "T", diag, &k, n, &c_b27, &a[1], &i__1,
-                                        &b[b_offset], ldb);
+                        strsm_("L", "L", "T", diag, &k, n, &c_b27, &a[1], &i__1, &b[b_offset], ldb);
                     }
                 }
                 else
@@ -607,28 +605,26 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* SIDE ='L', N is even, TRANSR = 'N', UPLO = 'U', */
                         /* and TRANS = 'N' */
                         i__1 = *m + 1;
-                        aocl_blas_strsm("L", "L", "N", diag, &k, n, alpha, &a[k + 1], &i__1,
-                                        &b[b_offset], ldb);
+                        strsm_("L", "L", "N", diag, &k, n, alpha, &a[k + 1], &i__1, &b[b_offset],
+                               ldb);
                         i__1 = *m + 1;
-                        aocl_blas_sgemm("T", "N", &k, n, &k, &c_b23, a, &i__1, &b[b_offset], ldb,
-                                        alpha, &b[k], ldb);
+                        sgemm_("T", "N", &k, n, &k, &c_b23, a, &i__1, &b[b_offset], ldb, alpha,
+                               &b[k], ldb);
                         i__1 = *m + 1;
-                        aocl_blas_strsm("L", "U", "T", diag, &k, n, &c_b27, &a[k], &i__1, &b[k],
-                                        ldb);
+                        strsm_("L", "U", "T", diag, &k, n, &c_b27, &a[k], &i__1, &b[k], ldb);
                     }
                     else
                     {
                         /* SIDE ='L', N is even, TRANSR = 'N', UPLO = 'U', */
                         /* and TRANS = 'T' */
                         i__1 = *m + 1;
-                        aocl_blas_strsm("L", "U", "N", diag, &k, n, alpha, &a[k], &i__1, &b[k],
-                                        ldb);
+                        strsm_("L", "U", "N", diag, &k, n, alpha, &a[k], &i__1, &b[k], ldb);
                         i__1 = *m + 1;
-                        aocl_blas_sgemm("N", "N", &k, n, &k, &c_b23, a, &i__1, &b[k], ldb, alpha,
-                                        &b[b_offset], ldb);
+                        sgemm_("N", "N", &k, n, &k, &c_b23, a, &i__1, &b[k], ldb, alpha,
+                               &b[b_offset], ldb);
                         i__1 = *m + 1;
-                        aocl_blas_strsm("L", "L", "T", diag, &k, n, &c_b27, &a[k + 1], &i__1,
-                                        &b[b_offset], ldb);
+                        strsm_("L", "L", "T", diag, &k, n, &c_b27, &a[k + 1], &i__1, &b[b_offset],
+                               ldb);
                     }
                 }
             }
@@ -642,18 +638,18 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
                     {
                         /* SIDE ='L', N is even, TRANSR = 'T', UPLO = 'L', */
                         /* and TRANS = 'N' */
-                        aocl_blas_strsm("L", "U", "T", diag, &k, n, alpha, &a[k], &k, &b[b_offset],
-                                        ldb);
-                        aocl_blas_sgemm("T", "N", &k, n, &k, &c_b23, &a[k * (k + 1)], &k,
-                                        &b[b_offset], ldb, alpha, &b[k], ldb);
-                        aocl_blas_strsm("L", "L", "N", diag, &k, n, &c_b27, a, &k, &b[k], ldb);
+                        strsm_("L", "U", "T", diag, &k, n, alpha, &a[k], &k, &b[b_offset], ldb);
+                        sgemm_("T", "N", &k, n, &k, &c_b23, &a[k * (k + 1)], &k, &b[b_offset], ldb,
+                               alpha, &b[k], ldb);
+                        strsm_("L", "L", "N", diag, &k, n, &c_b27, a, &k, &b[k], ldb);
                     }
                     else
                     {
                         /* SIDE ='L', N is even, TRANSR = 'T', UPLO = 'L', */
                         /* and TRANS = 'T' */
                         strsm_("L", "L", "T", diag, &k, n, alpha, a, &k, &b[k], ldb);
-                        sgemm_("N", "N", &k, n, &k, &c_b23, &a[k * (k + 1)], & k, &b[k], ldb, alpha, &b[b_offset], ldb);
+                        sgemm_("N", "N", &k, n, &k, &c_b23, &a[k * (k + 1)], &k, &b[k], ldb, alpha,
+                               &b[b_offset], ldb);
                         strsm_("L", "U", "N", diag, &k, n, &c_b27, &a[k], &k, &b[b_offset], ldb);
                     }
                 }
@@ -664,23 +660,21 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
                     {
                         /* SIDE ='L', N is even, TRANSR = 'T', UPLO = 'U', */
                         /* and TRANS = 'N' */
-                        aocl_blas_strsm("L", "U", "T", diag, &k, n, alpha, &a[k * (k + 1)], &k,
-                                        &b[b_offset], ldb);
-                        aocl_blas_sgemm("N", "N", &k, n, &k, &c_b23, a, &k, &b[b_offset], ldb,
-                                        alpha, &b[k], ldb);
-                        aocl_blas_strsm("L", "L", "N", diag, &k, n, &c_b27, &a[k * k], &k, &b[k],
-                                        ldb);
+                        strsm_("L", "U", "T", diag, &k, n, alpha, &a[k * (k + 1)], &k, &b[b_offset],
+                               ldb);
+                        sgemm_("N", "N", &k, n, &k, &c_b23, a, &k, &b[b_offset], ldb, alpha, &b[k],
+                               ldb);
+                        strsm_("L", "L", "N", diag, &k, n, &c_b27, &a[k * k], &k, &b[k], ldb);
                     }
                     else
                     {
                         /* SIDE ='L', N is even, TRANSR = 'T', UPLO = 'U', */
                         /* and TRANS = 'T' */
-                        aocl_blas_strsm("L", "L", "T", diag, &k, n, alpha, &a[k * k], &k, &b[k],
-                                        ldb);
-                        aocl_blas_sgemm("T", "N", &k, n, &k, &c_b23, a, &k, &b[k], ldb, alpha,
-                                        &b[b_offset], ldb);
-                        aocl_blas_strsm("L", "U", "N", diag, &k, n, &c_b27, &a[k * (k + 1)], &k,
-                                        &b[b_offset], ldb);
+                        strsm_("L", "L", "T", diag, &k, n, alpha, &a[k * k], &k, &b[k], ldb);
+                        sgemm_("T", "N", &k, n, &k, &c_b23, a, &k, &b[k], ldb, alpha, &b[b_offset],
+                               ldb);
+                        strsm_("L", "U", "N", diag, &k, n, &c_b27, &a[k * (k + 1)], &k,
+                               &b[b_offset], ldb);
                     }
                 }
             }
@@ -724,21 +718,20 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
                     {
                         /* SIDE ='R', N is odd, TRANSR = 'N', UPLO = 'L', and */
                         /* TRANS = 'N' */
-                        aocl_blas_strsm("R", "U", "T", diag, m, &n2, alpha, &a[*n], n,
-                                        &b[n1 * b_dim1], ldb);
-                        aocl_blas_sgemm("N", "N", m, &n1, &n2, &c_b23, &b[n1 * b_dim1], ldb, &a[n1],
-                                        n, alpha, b, ldb);
-                        aocl_blas_strsm("R", "L", "N", diag, m, &n1, &c_b27, a, n, b, ldb);
+                        strsm_("R", "U", "T", diag, m, &n2, alpha, &a[*n], n, &b[n1 * b_dim1], ldb);
+                        sgemm_("N", "N", m, &n1, &n2, &c_b23, &b[n1 * b_dim1], ldb, &a[n1], n,
+                               alpha, b, ldb);
+                        strsm_("R", "L", "N", diag, m, &n1, &c_b27, a, n, b, ldb);
                     }
                     else
                     {
                         /* SIDE ='R', N is odd, TRANSR = 'N', UPLO = 'L', and */
                         /* TRANS = 'T' */
-                        aocl_blas_strsm("R", "L", "T", diag, m, &n1, alpha, a, n, b, ldb);
-                        aocl_blas_sgemm("N", "T", m, &n2, &n1, &c_b23, b, ldb, &a[n1], n, alpha,
-                                        &b[n1 * b_dim1], ldb);
-                        aocl_blas_strsm("R", "U", "N", diag, m, &n2, &c_b27, &a[*n], n,
-                                        &b[n1 * b_dim1], ldb);
+                        strsm_("R", "L", "T", diag, m, &n1, alpha, a, n, b, ldb);
+                        sgemm_("N", "T", m, &n2, &n1, &c_b23, b, ldb, &a[n1], n, alpha,
+                               &b[n1 * b_dim1], ldb);
+                        strsm_("R", "U", "N", diag, m, &n2, &c_b27, &a[*n], n, &b[n1 * b_dim1],
+                               ldb);
                     }
                 }
                 else
@@ -748,21 +741,20 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
                     {
                         /* SIDE ='R', N is odd, TRANSR = 'N', UPLO = 'U', and */
                         /* TRANS = 'N' */
-                        aocl_blas_strsm("R", "L", "T", diag, m, &n1, alpha, &a[n2], n, b, ldb);
-                        aocl_blas_sgemm("N", "N", m, &n2, &n1, &c_b23, b, ldb, a, n, alpha,
-                                        &b[n1 * b_dim1], ldb);
-                        aocl_blas_strsm("R", "U", "N", diag, m, &n2, &c_b27, &a[n1], n,
-                                        &b[n1 * b_dim1], ldb);
+                        strsm_("R", "L", "T", diag, m, &n1, alpha, &a[n2], n, b, ldb);
+                        sgemm_("N", "N", m, &n2, &n1, &c_b23, b, ldb, a, n, alpha, &b[n1 * b_dim1],
+                               ldb);
+                        strsm_("R", "U", "N", diag, m, &n2, &c_b27, &a[n1], n, &b[n1 * b_dim1],
+                               ldb);
                     }
                     else
                     {
                         /* SIDE ='R', N is odd, TRANSR = 'N', UPLO = 'U', and */
                         /* TRANS = 'T' */
-                        aocl_blas_strsm("R", "U", "T", diag, m, &n2, alpha, &a[n1], n,
-                                        &b[n1 * b_dim1], ldb);
-                        aocl_blas_sgemm("N", "T", m, &n1, &n2, &c_b23, &b[n1 * b_dim1], ldb, a, n,
-                                        alpha, b, ldb);
-                        aocl_blas_strsm("R", "L", "N", diag, m, &n1, &c_b27, &a[n2], n, b, ldb);
+                        strsm_("R", "U", "T", diag, m, &n2, alpha, &a[n1], n, &b[n1 * b_dim1], ldb);
+                        sgemm_("N", "T", m, &n1, &n2, &c_b23, &b[n1 * b_dim1], ldb, a, n, alpha, b,
+                               ldb);
+                        strsm_("R", "L", "N", diag, m, &n1, &c_b27, &a[n2], n, b, ldb);
                     }
                 }
             }
@@ -776,21 +768,21 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
                     {
                         /* SIDE ='R', N is odd, TRANSR = 'T', UPLO = 'L', and */
                         /* TRANS = 'N' */
-                        aocl_blas_strsm("R", "L", "N", diag, m, &n2, alpha, &a[1], &n1,
-                                        &b[n1 * b_dim1], ldb);
-                        aocl_blas_sgemm("N", "T", m, &n1, &n2, &c_b23, &b[n1 * b_dim1], ldb,
-                                        &a[n1 * n1], &n1, alpha, b, ldb);
-                        aocl_blas_strsm("R", "U", "T", diag, m, &n1, &c_b27, a, &n1, b, ldb);
+                        strsm_("R", "L", "N", diag, m, &n2, alpha, &a[1], &n1, &b[n1 * b_dim1],
+                               ldb);
+                        sgemm_("N", "T", m, &n1, &n2, &c_b23, &b[n1 * b_dim1], ldb, &a[n1 * n1],
+                               &n1, alpha, b, ldb);
+                        strsm_("R", "U", "T", diag, m, &n1, &c_b27, a, &n1, b, ldb);
                     }
                     else
                     {
                         /* SIDE ='R', N is odd, TRANSR = 'T', UPLO = 'L', and */
                         /* TRANS = 'T' */
-                        aocl_blas_strsm("R", "U", "N", diag, m, &n1, alpha, a, &n1, b, ldb);
-                        aocl_blas_sgemm("N", "N", m, &n2, &n1, &c_b23, b, ldb, &a[n1 * n1], &n1,
-                                        alpha, &b[n1 * b_dim1], ldb);
-                        aocl_blas_strsm("R", "L", "T", diag, m, &n2, &c_b27, &a[1], &n1,
-                                        &b[n1 * b_dim1], ldb);
+                        strsm_("R", "U", "N", diag, m, &n1, alpha, a, &n1, b, ldb);
+                        sgemm_("N", "N", m, &n2, &n1, &c_b23, b, ldb, &a[n1 * n1], &n1, alpha,
+                               &b[n1 * b_dim1], ldb);
+                        strsm_("R", "L", "T", diag, m, &n2, &c_b27, &a[1], &n1, &b[n1 * b_dim1],
+                               ldb);
                     }
                 }
                 else
@@ -801,15 +793,19 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* SIDE ='R', N is odd, TRANSR = 'T', UPLO = 'U', and */
                         /* TRANS = 'N' */
                         strsm_("R", "U", "N", diag, m, &n1, alpha, &a[n2 * n2], &n2, b, ldb);
-                        sgemm_("N", "T", m, &n2, &n1, &c_b23, b, ldb, a, &n2, alpha, &b[n1 * b_dim1], ldb);
-                        strsm_("R", "L", "T", diag, m, &n2, &c_b27, &a[n1 * n2], &n2, &b[n1 * b_dim1], ldb);
+                        sgemm_("N", "T", m, &n2, &n1, &c_b23, b, ldb, a, &n2, alpha,
+                               &b[n1 * b_dim1], ldb);
+                        strsm_("R", "L", "T", diag, m, &n2, &c_b27, &a[n1 * n2], &n2,
+                               &b[n1 * b_dim1], ldb);
                     }
                     else
                     {
                         /* SIDE ='R', N is odd, TRANSR = 'T', UPLO = 'U', and */
                         /* TRANS = 'T' */
-                        strsm_("R", "L", "N", diag, m, &n2, alpha, &a[n1 * n2], &n2, &b[n1 * b_dim1], ldb);
-                        sgemm_("N", "N", m, &n1, &n2, &c_b23, &b[n1 * b_dim1], ldb, a, &n2, alpha, b, ldb);
+                        strsm_("R", "L", "N", diag, m, &n2, alpha, &a[n1 * n2], &n2,
+                               &b[n1 * b_dim1], ldb);
+                        sgemm_("N", "N", m, &n1, &n2, &c_b23, &b[n1 * b_dim1], ldb, a, &n2, alpha,
+                               b, ldb);
                         strsm_("R", "U", "T", diag, m, &n1, &c_b27, &a[n2 * n2], &n2, b, ldb);
                     }
                 }
@@ -829,26 +825,24 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* SIDE ='R', N is even, TRANSR = 'N', UPLO = 'L', */
                         /* and TRANS = 'N' */
                         i__1 = *n + 1;
-                        aocl_blas_strsm("R", "U", "T", diag, m, &k, alpha, a, &i__1, &b[k * b_dim1],
-                                        ldb);
+                        strsm_("R", "U", "T", diag, m, &k, alpha, a, &i__1, &b[k * b_dim1], ldb);
                         i__1 = *n + 1;
-                        aocl_blas_sgemm("N", "N", m, &k, &k, &c_b23, &b[k * b_dim1], ldb, &a[k + 1],
-                                        &i__1, alpha, b, ldb);
+                        sgemm_("N", "N", m, &k, &k, &c_b23, &b[k * b_dim1], ldb, &a[k + 1], &i__1,
+                               alpha, b, ldb);
                         i__1 = *n + 1;
-                        aocl_blas_strsm("R", "L", "N", diag, m, &k, &c_b27, &a[1], &i__1, b, ldb);
+                        strsm_("R", "L", "N", diag, m, &k, &c_b27, &a[1], &i__1, b, ldb);
                     }
                     else
                     {
                         /* SIDE ='R', N is even, TRANSR = 'N', UPLO = 'L', */
                         /* and TRANS = 'T' */
                         i__1 = *n + 1;
-                        aocl_blas_strsm("R", "L", "T", diag, m, &k, alpha, &a[1], &i__1, b, ldb);
+                        strsm_("R", "L", "T", diag, m, &k, alpha, &a[1], &i__1, b, ldb);
                         i__1 = *n + 1;
-                        aocl_blas_sgemm("N", "T", m, &k, &k, &c_b23, b, ldb, &a[k + 1], &i__1,
-                                        alpha, &b[k * b_dim1], ldb);
+                        sgemm_("N", "T", m, &k, &k, &c_b23, b, ldb, &a[k + 1], &i__1, alpha,
+                               &b[k * b_dim1], ldb);
                         i__1 = *n + 1;
-                        aocl_blas_strsm("R", "U", "N", diag, m, &k, &c_b27, a, &i__1,
-                                        &b[k * b_dim1], ldb);
+                        strsm_("R", "U", "N", diag, m, &k, &c_b27, a, &i__1, &b[k * b_dim1], ldb);
                     }
                 }
                 else
@@ -859,25 +853,24 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* SIDE ='R', N is even, TRANSR = 'N', UPLO = 'U', */
                         /* and TRANS = 'N' */
                         i__1 = *n + 1;
-                        aocl_blas_strsm("R", "L", "T", diag, m, &k, alpha, &a[k + 1], &i__1, b,
-                                        ldb);
+                        strsm_("R", "L", "T", diag, m, &k, alpha, &a[k + 1], &i__1, b, ldb);
                         i__1 = *n + 1;
-                        aocl_blas_sgemm("N", "N", m, &k, &k, &c_b23, b, ldb, a, &i__1, alpha,
-                                        &b[k * b_dim1], ldb);
+                        sgemm_("N", "N", m, &k, &k, &c_b23, b, ldb, a, &i__1, alpha, &b[k * b_dim1],
+                               ldb);
                         i__1 = *n + 1;
-                        aocl_blas_strsm("R", "U", "N", diag, m, &k, &c_b27, &a[k], &i__1,
-                                        &b[k * b_dim1], ldb);
+                        strsm_("R", "U", "N", diag, m, &k, &c_b27, &a[k], &i__1, &b[k * b_dim1],
+                               ldb);
                     }
                     else
                     {
                         /* SIDE ='R', N is even, TRANSR = 'N', UPLO = 'U', */
                         /* and TRANS = 'T' */
                         i__1 = *n + 1;
-                        aocl_blas_strsm("R", "U", "T", diag, m, &k, alpha, &a[k], &i__1,
-                                        &b[k * b_dim1], ldb);
+                        strsm_("R", "U", "T", diag, m, &k, alpha, &a[k], &i__1, &b[k * b_dim1],
+                               ldb);
                         i__1 = *n + 1;
-                        aocl_blas_sgemm("N", "T", m, &k, &k, &c_b23, &b[k * b_dim1], ldb, a, &i__1,
-                                        alpha, b, ldb);
+                        sgemm_("N", "T", m, &k, &k, &c_b23, &b[k * b_dim1], ldb, a, &i__1, alpha, b,
+                               ldb);
                         i__1 = *n + 1;
                         aocl_blas_strsm("R", "L", "N", diag, m, &k, &c_b27, &a[k + 1], &i__1, b,
                                         ldb);
@@ -894,21 +887,19 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
                     {
                         /* SIDE ='R', N is even, TRANSR = 'T', UPLO = 'L', */
                         /* and TRANS = 'N' */
-                        aocl_blas_strsm("R", "L", "N", diag, m, &k, alpha, a, &k, &b[k * b_dim1],
-                                        ldb);
-                        aocl_blas_sgemm("N", "T", m, &k, &k, &c_b23, &b[k * b_dim1], ldb,
-                                        &a[(k + 1) * k], &k, alpha, b, ldb);
-                        aocl_blas_strsm("R", "U", "T", diag, m, &k, &c_b27, &a[k], &k, b, ldb);
+                        strsm_("R", "L", "N", diag, m, &k, alpha, a, &k, &b[k * b_dim1], ldb);
+                        sgemm_("N", "T", m, &k, &k, &c_b23, &b[k * b_dim1], ldb, &a[(k + 1) * k],
+                               &k, alpha, b, ldb);
+                        strsm_("R", "U", "T", diag, m, &k, &c_b27, &a[k], &k, b, ldb);
                     }
                     else
                     {
                         /* SIDE ='R', N is even, TRANSR = 'T', UPLO = 'L', */
                         /* and TRANS = 'T' */
-                        aocl_blas_strsm("R", "U", "N", diag, m, &k, alpha, &a[k], &k, b, ldb);
-                        aocl_blas_sgemm("N", "N", m, &k, &k, &c_b23, b, ldb, &a[(k + 1) * k], &k,
-                                        alpha, &b[k * b_dim1], ldb);
-                        aocl_blas_strsm("R", "L", "T", diag, m, &k, &c_b27, a, &k, &b[k * b_dim1],
-                                        ldb);
+                        strsm_("R", "U", "N", diag, m, &k, alpha, &a[k], &k, b, ldb);
+                        sgemm_("N", "N", m, &k, &k, &c_b23, b, ldb, &a[(k + 1) * k], &k, alpha,
+                               &b[k * b_dim1], ldb);
+                        strsm_("R", "L", "T", diag, m, &k, &c_b27, a, &k, &b[k * b_dim1], ldb);
                     }
                 }
                 else
@@ -918,23 +909,21 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
                     {
                         /* SIDE ='R', N is even, TRANSR = 'T', UPLO = 'U', */
                         /* and TRANS = 'N' */
-                        aocl_blas_strsm("R", "U", "N", diag, m, &k, alpha, &a[(k + 1) * k], &k, b,
-                                        ldb);
-                        aocl_blas_sgemm("N", "T", m, &k, &k, &c_b23, b, ldb, a, &k, alpha,
-                                        &b[k * b_dim1], ldb);
-                        aocl_blas_strsm("R", "L", "T", diag, m, &k, &c_b27, &a[k * k], &k,
-                                        &b[k * b_dim1], ldb);
+                        strsm_("R", "U", "N", diag, m, &k, alpha, &a[(k + 1) * k], &k, b, ldb);
+                        sgemm_("N", "T", m, &k, &k, &c_b23, b, ldb, a, &k, alpha, &b[k * b_dim1],
+                               ldb);
+                        strsm_("R", "L", "T", diag, m, &k, &c_b27, &a[k * k], &k, &b[k * b_dim1],
+                               ldb);
                     }
                     else
                     {
                         /* SIDE ='R', N is even, TRANSR = 'T', UPLO = 'U', */
                         /* and TRANS = 'T' */
-                        aocl_blas_strsm("R", "L", "N", diag, m, &k, alpha, &a[k * k], &k,
-                                        &b[k * b_dim1], ldb);
-                        aocl_blas_sgemm("N", "N", m, &k, &k, &c_b23, &b[k * b_dim1], ldb, a, &k,
-                                        alpha, b, ldb);
-                        aocl_blas_strsm("R", "U", "T", diag, m, &k, &c_b27, &a[(k + 1) * k], &k, b,
-                                        ldb);
+                        strsm_("R", "L", "N", diag, m, &k, alpha, &a[k * k], &k, &b[k * b_dim1],
+                               ldb);
+                        sgemm_("N", "N", m, &k, &k, &c_b23, &b[k * b_dim1], ldb, a, &k, alpha, b,
+                               ldb);
+                        strsm_("R", "U", "T", diag, m, &k, &c_b27, &a[(k + 1) * k], &k, b, ldb);
                     }
                 }
             }

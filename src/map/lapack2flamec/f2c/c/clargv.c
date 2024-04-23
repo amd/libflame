@@ -1,5 +1,8 @@
-/* clargv.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* clargv.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CLARGV generates a vector of plane rotations with real cosines and complex sines. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -113,10 +116,13 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void clargv_(integer *n, complex *x, integer *incx, complex * y, integer *incy, real *c__, integer *incc)
+void clargv_(integer *n, complex *x, integer *incx, complex *y, integer *incy, real *c__,
+             integer *incc)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("clargv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS ", incc %" FLA_IS "",*n, *incx, *incy, *incc);
+    AOCL_DTL_SNPRINTF("clargv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS
+                      ", incc %" FLA_IS "",
+                      *n, *incx, *incy, *incc);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     real r__1, r__2, r__3, r__4, r__5, r__6, r__7, r__8, r__9, r__10;
@@ -203,10 +209,10 @@ void clargv_(integer *n, complex *x, integer *incx, complex * y, integer *incy, 
         r__8 = (r__2 = r_imag(&f), f2c_abs(r__2)); // , expr subst
         /* Computing MAX */
         r__9 = (r__3 = g.r, f2c_abs(r__3));
-        r__10 = (r__4 = r_imag(&g), f2c_abs(r__4)) ; // , expr subst
-        r__5 = fla_max(r__7,r__8);
-        r__6 = fla_max(r__9,r__10); // , expr subst
-        scale = fla_max(r__5,r__6);
+        r__10 = (r__4 = r_imag(&g), f2c_abs(r__4)); // , expr subst
+        r__5 = fla_max(r__7, r__8);
+        r__6 = fla_max(r__9, r__10); // , expr subst
+        scale = fla_max(r__5, r__6);
         fs.r = f.r;
         fs.i = f.i; // , expr subst
         gs.r = g.r;
@@ -225,14 +231,14 @@ void clargv_(integer *n, complex *x, integer *incx, complex * y, integer *incy, 
             gs.real = q__1.real;
             gs.imag = q__1.imag; // , expr subst
             scale *= safmn2;
-            if (scale >= safmx2 && count < 20)
+            if(scale >= safmx2 && count < 20)
             {
                 goto L10;
             }
         }
         else if(scale <= safmn2)
         {
-            if(g.real == 0.f && g.imag == 0.f)
+            if(g.r == 0.f && g.i == 0.f)
             {
                 cs = 1.f;
                 sn.real = 0.f;
@@ -267,10 +273,10 @@ void clargv_(integer *n, complex *x, integer *incx, complex * y, integer *incy, 
         /* Computing 2nd power */
         r__2 = r_imag(&gs);
         g2 = r__1 * r__1 + r__2 * r__2;
-        if (f2 <= fla_max(g2,1.f) * safmin)
+        if(f2 <= fla_max(g2, 1.f) * safmin)
         {
             /* This is a rare case: F is very small. */
-            if(f.real == 0.f && f.imag == 0.f)
+            if(f.r == 0.f && f.i == 0.f)
             {
                 cs = 0.f;
                 r__2 = g.real;
@@ -309,8 +315,8 @@ void clargv_(integer *n, complex *x, integer *incx, complex * y, integer *incy, 
             /* Do complex/real division explicitly with 2 real divisions */
             /* Computing MAX */
             r__3 = (r__1 = f.r, f2c_abs(r__1));
-            r__4 = (r__2 = r_imag(&f), f2c_abs( r__2)); // , expr subst
-            if (fla_max(r__3,r__4) > 1.f)
+            r__4 = (r__2 = r_imag(&f), f2c_abs(r__2)); // , expr subst
+            if(fla_max(r__3, r__4) > 1.f)
             {
                 r__1 = f.real;
                 r__2 = r_imag(&f);
@@ -375,10 +381,10 @@ void clargv_(integer *n, complex *x, integer *incx, complex * y, integer *incy, 
             sn.real = q__1.real;
             sn.imag = q__1.imag; // , expr subst
             r_cnjg(&q__2, &gs);
-            q__1.real = sn.real * q__2.real - sn.imag * q__2.imag;
-            q__1.imag = sn.real * q__2.imag + sn.imag * q__2.real; // , expr subst
-            sn.real = q__1.real;
-            sn.imag = q__1.imag; // , expr subst
+            q__1.r = sn.r * q__2.r - sn.i * q__2.i;
+            q__1.i = sn.r * q__2.i + sn.i * q__2.r; // , expr subst
+            sn.r = q__1.r;
+            sn.i = q__1.i; // , expr subst
             if(count != 0)
             {
                 if(count > 0)

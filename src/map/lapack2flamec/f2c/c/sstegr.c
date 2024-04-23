@@ -252,12 +252,18 @@ the */
 /* > Christof Voemel, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-void sstegr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, real *vu, integer *il, integer *iu, real *abstol, integer *m, real *w, real *z__, integer *ldz, integer *isuppz, real * work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+void sstegr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, real *vu,
+             integer *il, integer *iu, real *abstol, integer *m, real *w, real *z__, integer *ldz,
+             integer *isuppz, real *work, integer *lwork, integer *iwork, integer *liwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sstegr inputs: jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", m %" FLA_IS ", ldz %" FLA_IS ", isuppz %" FLA_IS "",*jobz, *range, *n, *il, *iu, *m, *ldz, *isuppz);
+    snprintf(buffer, 256,
+             "sstegr inputs: jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS
+             ", m %" FLA_IS ", ldz %" FLA_IS ", isuppz %" FLA_IS "",
+             *jobz, *range, *n, *il, *iu, *m, *ldz, *isuppz);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -265,7 +271,10 @@ void sstegr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     /* Local variables */
     logical tryrac;
     extern /* Subroutine */
-    void sstemr_(char *, char *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, real *, real *, integer *, integer *, integer *, logical *, real *, integer *, integer *, integer *, integer *);
+        void
+        sstemr_(char *, char *, integer *, real *, real *, real *, real *, integer *, integer *,
+                integer *, real *, real *, integer *, integer *, integer *, logical *, real *,
+                integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -293,7 +302,8 @@ void sstegr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     /* Function Body */
     *info = 0;
     tryrac = FALSE_;
-    sstemr_(jobz, range, n, &d__[1], &e[1], vl, vu, il, iu, m, &w[1], &z__[ z_offset], ldz, n, &isuppz[1], &tryrac, &work[1], lwork, &iwork[1], liwork, info);
+    sstemr_(jobz, range, n, &d__[1], &e[1], vl, vu, il, iu, m, &w[1], &z__[z_offset], ldz, n,
+            &isuppz[1], &tryrac, &work[1], lwork, &iwork[1], liwork, info);
     /* End of SSTEGR */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

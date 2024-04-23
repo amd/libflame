@@ -105,7 +105,7 @@ static doublereal c_b19 = -1.;
 /* > first kd+1 rows of the array. The j-th column of A is stored */
 /* > in the j-th column of the array AB as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > If DIAG = 'U', the diagonal elements of A are not referenced */
 /* > and are assumed to be 1. */
@@ -188,10 +188,15 @@ static doublereal c_b19 = -1.;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dtbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integer *nrhs, doublereal *ab, integer *ldab, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal *ferr, doublereal *berr, doublereal *work, integer *iwork, integer *info)
+void dtbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integer *nrhs,
+             doublereal *ab, integer *ldab, doublereal *b, integer *ldb, doublereal *x,
+             integer *ldx, doublereal *ferr, doublereal *berr, doublereal *work, integer *iwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dtbrfs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("dtbrfs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", kd %" FLA_IS
+                      ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",
+                      *uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb, *ldx);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4,
         i__5;
@@ -206,14 +211,23 @@ void dtbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    void dtbmv_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dtbsv_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dtbmv_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
+               integer *),
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        dtbsv_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
+               integer *),
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+                integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     char transt[1];
     logical nounit;
@@ -260,15 +274,15 @@ void dtbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
     upper = lsame_(uplo, "U", 1, 1);
     notran = lsame_(trans, "N", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
@@ -288,11 +302,11 @@ void dtbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
     {
         *info = -8;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -10;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -12;
     }
@@ -354,7 +368,7 @@ void dtbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
         if(notran)
         {
             /* Compute f2c_dabs(A)*f2c_dabs(X) + f2c_dabs(B). */
-            if (upper)
+            if(upper)
             {
                 if(nounit)
                 {
@@ -366,11 +380,11 @@ void dtbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                         i__3 = 1;
                         i__4 = k - *kd; // , expr subst
                         i__5 = k;
-                        for (i__ = fla_max(i__3,i__4);
-                                i__ <= i__5;
-                                ++i__)
+                        for(i__ = fla_max(i__3, i__4); i__ <= i__5; ++i__)
                         {
-                            work[i__] += (d__1 = ab[*kd + 1 + i__ - k + k * ab_dim1], f2c_dabs(d__1)) * xk;
+                            work[i__]
+                                += (d__1 = ab[*kd + 1 + i__ - k + k * ab_dim1], f2c_dabs(d__1))
+                                   * xk;
                             /* L30: */
                         }
                         /* L40: */
@@ -386,11 +400,11 @@ void dtbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                         i__5 = 1;
                         i__3 = k - *kd; // , expr subst
                         i__4 = k - 1;
-                        for (i__ = fla_max(i__5,i__3);
-                                i__ <= i__4;
-                                ++i__)
+                        for(i__ = fla_max(i__5, i__3); i__ <= i__4; ++i__)
                         {
-                            work[i__] += (d__1 = ab[*kd + 1 + i__ - k + k * ab_dim1], f2c_dabs(d__1)) * xk;
+                            work[i__]
+                                += (d__1 = ab[*kd + 1 + i__ - k + k * ab_dim1], f2c_dabs(d__1))
+                                   * xk;
                             /* L50: */
                         }
                         work[k] += xk;
@@ -409,12 +423,11 @@ void dtbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                         /* Computing MIN */
                         i__5 = *n;
                         i__3 = k + *kd; // , expr subst
-                        i__4 = fla_min(i__5,i__3);
-                        for (i__ = k;
-                                i__ <= i__4;
-                                ++i__)
+                        i__4 = fla_min(i__5, i__3);
+                        for(i__ = k; i__ <= i__4; ++i__)
                         {
-                            work[i__] += (d__1 = ab[i__ + 1 - k + k * ab_dim1], f2c_dabs(d__1)) * xk;
+                            work[i__]
+                                += (d__1 = ab[i__ + 1 - k + k * ab_dim1], f2c_dabs(d__1)) * xk;
                             /* L70: */
                         }
                         /* L80: */
@@ -429,12 +442,11 @@ void dtbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                         /* Computing MIN */
                         i__5 = *n;
                         i__3 = k + *kd; // , expr subst
-                        i__4 = fla_min(i__5,i__3);
-                        for (i__ = k + 1;
-                                i__ <= i__4;
-                                ++i__)
+                        i__4 = fla_min(i__5, i__3);
+                        for(i__ = k + 1; i__ <= i__4; ++i__)
                         {
-                            work[i__] += (d__1 = ab[i__ + 1 - k + k * ab_dim1], f2c_dabs(d__1)) * xk;
+                            work[i__]
+                                += (d__1 = ab[i__ + 1 - k + k * ab_dim1], f2c_dabs(d__1)) * xk;
                             /* L90: */
                         }
                         work[k] += xk;
@@ -446,7 +458,7 @@ void dtbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
         else
         {
             /* Compute f2c_dabs(A**T)*f2c_dabs(X) + f2c_dabs(B). */
-            if (upper)
+            if(upper)
             {
                 if(nounit)
                 {
@@ -458,11 +470,10 @@ void dtbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                         i__4 = 1;
                         i__5 = k - *kd; // , expr subst
                         i__3 = k;
-                        for (i__ = fla_max(i__4,i__5);
-                                i__ <= i__3;
-                                ++i__)
+                        for(i__ = fla_max(i__4, i__5); i__ <= i__3; ++i__)
                         {
-                            s += (d__1 = ab[*kd + 1 + i__ - k + k * ab_dim1], f2c_dabs(d__1)) * (d__2 = x[i__ + j * x_dim1], f2c_dabs(d__2));
+                            s += (d__1 = ab[*kd + 1 + i__ - k + k * ab_dim1], f2c_dabs(d__1))
+                                 * (d__2 = x[i__ + j * x_dim1], f2c_dabs(d__2));
                             /* L110: */
                         }
                         work[k] += s;
@@ -479,11 +490,10 @@ void dtbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                         i__3 = 1;
                         i__4 = k - *kd; // , expr subst
                         i__5 = k - 1;
-                        for (i__ = fla_max(i__3,i__4);
-                                i__ <= i__5;
-                                ++i__)
+                        for(i__ = fla_max(i__3, i__4); i__ <= i__5; ++i__)
                         {
-                            s += (d__1 = ab[*kd + 1 + i__ - k + k * ab_dim1], f2c_dabs(d__1)) * (d__2 = x[i__ + j * x_dim1], f2c_dabs(d__2));
+                            s += (d__1 = ab[*kd + 1 + i__ - k + k * ab_dim1], f2c_dabs(d__1))
+                                 * (d__2 = x[i__ + j * x_dim1], f2c_dabs(d__2));
                             /* L130: */
                         }
                         work[k] += s;
@@ -502,12 +512,11 @@ void dtbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                         /* Computing MIN */
                         i__3 = *n;
                         i__4 = k + *kd; // , expr subst
-                        i__5 = fla_min(i__3,i__4);
-                        for (i__ = k;
-                                i__ <= i__5;
-                                ++i__)
+                        i__5 = fla_min(i__3, i__4);
+                        for(i__ = k; i__ <= i__5; ++i__)
                         {
-                            s += (d__1 = ab[i__ + 1 - k + k * ab_dim1], f2c_dabs( d__1)) * (d__2 = x[i__ + j * x_dim1], f2c_dabs( d__2));
+                            s += (d__1 = ab[i__ + 1 - k + k * ab_dim1], f2c_dabs(d__1))
+                                 * (d__2 = x[i__ + j * x_dim1], f2c_dabs(d__2));
                             /* L150: */
                         }
                         work[k] += s;
@@ -523,12 +532,11 @@ void dtbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                         /* Computing MIN */
                         i__3 = *n;
                         i__4 = k + *kd; // , expr subst
-                        i__5 = fla_min(i__3,i__4);
-                        for (i__ = k + 1;
-                                i__ <= i__5;
-                                ++i__)
+                        i__5 = fla_min(i__3, i__4);
+                        for(i__ = k + 1; i__ <= i__5; ++i__)
                         {
-                            s += (d__1 = ab[i__ + 1 - k + k * ab_dim1], f2c_dabs( d__1)) * (d__2 = x[i__ + j * x_dim1], f2c_dabs( d__2));
+                            s += (d__1 = ab[i__ + 1 - k + k * ab_dim1], f2c_dabs(d__1))
+                                 * (d__2 = x[i__ + j * x_dim1], f2c_dabs(d__2));
                             /* L170: */
                         }
                         work[k] += s;
@@ -545,15 +553,16 @@ void dtbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
             {
                 /* Computing MAX */
                 d__2 = s;
-                d__3 = (d__1 = work[*n + i__], f2c_dabs(d__1)) / work[ i__]; // , expr subst
-                s = fla_max(d__2,d__3);
+                d__3 = (d__1 = work[*n + i__], f2c_dabs(d__1)) / work[i__]; // , expr subst
+                s = fla_max(d__2, d__3);
             }
             else
             {
                 /* Computing MAX */
                 d__2 = s;
-                d__3 = ((d__1 = work[*n + i__], f2c_dabs(d__1)) + safe1) / (work[i__] + safe1); // , expr subst
-                s = fla_max(d__2,d__3);
+                d__3 = ((d__1 = work[*n + i__], f2c_dabs(d__1)) + safe1)
+                       / (work[i__] + safe1); // , expr subst
+                s = fla_max(d__2, d__3);
             }
             /* L190: */
         }
@@ -590,15 +599,13 @@ void dtbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
         }
         kase = 0;
     L210:
-        aocl_lapack_dlacn2(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase,
-                           isave);
+        dlacn2_(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(op(A)**T). */
-                aocl_blas_dtbsv(uplo, transt, diag, n, kd, &ab[ab_offset], ldab, &work[*n + 1],
-                                &c__1);
+                dtbsv_(uplo, transt, diag, n, kd, &ab[ab_offset], ldab, &work[*n + 1], &c__1);
                 i__2 = *n;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
@@ -615,8 +622,7 @@ void dtbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                     work[*n + i__] = work[i__] * work[*n + i__];
                     /* L230: */
                 }
-                aocl_blas_dtbsv(uplo, trans, diag, n, kd, &ab[ab_offset], ldab, &work[*n + 1],
-                                &c__1);
+                dtbsv_(uplo, trans, diag, n, kd, &ab[ab_offset], ldab, &work[*n + 1], &c__1);
             }
             goto L210;
         }
@@ -628,7 +634,7 @@ void dtbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
             /* Computing MAX */
             d__2 = lstres;
             d__3 = (d__1 = x[i__ + j * x_dim1], f2c_dabs(d__1)); // , expr subst
-            lstres = fla_max(d__2,d__3);
+            lstres = fla_max(d__2, d__3);
             /* L240: */
         }
         if(lstres != 0.)

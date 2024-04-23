@@ -149,7 +149,8 @@ static real c_b5 = 1.f;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void slatzm_(char *side, integer *m, integer *n, real *v, integer *incv, real *tau, real *c1, real *c2, integer *ldc, real * work)
+void slatzm_(char *side, integer *m, integer *n, real *v, integer *incv, real *tau, real *c1,
+             real *c2, integer *ldc, real *work)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slatzm(side, m, n, v, incv, tau, c1, c2, ldc, work);
@@ -175,10 +176,16 @@ void aocl_lapack_slatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, a
     real r__1;
     /* Local variables */
     extern /* Subroutine */
-    void sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
+        void
+        sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+              integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *);
+        void
+        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+               real *, integer *),
+        scopy_(integer *, real *, integer *, real *, integer *),
+        saxpy_(integer *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -207,17 +214,17 @@ void aocl_lapack_slatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, a
     c1 -= c1_offset;
     --work;
     /* Function Body */
-    if (fla_min(*m,*n) == 0 || *tau == 0.f)
+    if(fla_min(*m, *n) == 0 || *tau == 0.f)
     {
         return;
     }
-    if (lsame_(side, "L", 1, 1))
+    if(lsame_(side, "L", 1, 1))
     {
         /* w := (C1 + v**T * C2)**T */
         aocl_blas_scopy(n, &c1[c1_offset], ldc, &work[1], &c__1);
         i__1 = *m - 1;
-        aocl_blas_sgemv("Transpose", &i__1, n, &c_b5, &c2[c2_offset], ldc, &v[1], incv, &c_b5,
-                        &work[1], &c__1);
+        sgemv_("Transpose", &i__1, n, &c_b5, &c2[c2_offset], ldc, &v[1], incv, &c_b5, &work[1],
+               &c__1);
         /* [ C1 ] := [ C1 ] - tau* [ 1 ] * w**T */
         /* [ C2 ] [ C2 ] [ v ] */
         r__1 = -(*tau);
@@ -226,13 +233,13 @@ void aocl_lapack_slatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, a
         r__1 = -(*tau);
         aocl_blas_sger(&i__1, n, &r__1, &v[1], incv, &work[1], &c__1, &c2[c2_offset], ldc);
     }
-    else if (lsame_(side, "R", 1, 1))
+    else if(lsame_(side, "R", 1, 1))
     {
         /* w := C1 + C2 * v */
         aocl_blas_scopy(m, &c1[c1_offset], &c__1, &work[1], &c__1);
         i__1 = *n - 1;
-        aocl_blas_sgemv("No transpose", m, &i__1, &c_b5, &c2[c2_offset], ldc, &v[1], incv, &c_b5,
-                        &work[1], &c__1);
+        sgemv_("No transpose", m, &i__1, &c_b5, &c2[c2_offset], ldc, &v[1], incv, &c_b5, &work[1],
+               &c__1);
         /* [ C1, C2 ] := [ C1, C2 ] - tau* w * [ 1 , v**T] */
         r__1 = -(*tau);
         aocl_blas_saxpy(m, &r__1, &work[1], &c__1, &c1[c1_offset], &c__1);

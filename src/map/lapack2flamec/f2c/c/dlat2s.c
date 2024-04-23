@@ -1,5 +1,8 @@
-/* dlat2s.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dlat2s.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLAT2S converts a double-precision triangular matrix to a single-precision triangular matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -104,10 +107,12 @@ if INFO>0, the content of */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlat2s_(char *uplo, integer *n, doublereal *a, integer * lda, real *sa, integer *ldsa, integer *info)
+void dlat2s_(char *uplo, integer *n, doublereal *a, integer *lda, real *sa, integer *ldsa,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlat2s inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldsa %" FLA_IS "",*uplo, *n, *lda, *ldsa);
+    AOCL_DTL_SNPRINTF("dlat2s inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldsa %" FLA_IS "",
+                      *uplo, *n, *lda, *ldsa);
     /* System generated locals */
     aocl_int64_t sa_dim1, sa_offset, a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -141,7 +146,7 @@ void dlat2s_(char *uplo, integer *n, doublereal *a, integer * lda, real *sa, int
     /* Function Body */
     rmax = slamch_("O");
     upper = lsame_(uplo, "U", 1, 1);
-    if (upper)
+    if(upper)
     {
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
@@ -154,7 +159,7 @@ void dlat2s_(char *uplo, integer *n, doublereal *a, integer * lda, real *sa, int
                     *info = 1;
                     goto L50;
                 }
-                sa[i__ + j * sa_dim1] = (real) a[i__ + j * a_dim1];
+                sa[i__ + j * sa_dim1] = (real)a[i__ + j * a_dim1];
                 /* L10: */
             }
             /* L20: */
@@ -173,7 +178,7 @@ void dlat2s_(char *uplo, integer *n, doublereal *a, integer * lda, real *sa, int
                     *info = 1;
                     goto L50;
                 }
-                sa[i__ + j * sa_dim1] = (real) a[i__ + j * a_dim1];
+                sa[i__ + j * sa_dim1] = (real)a[i__ + j * a_dim1];
                 /* L30: */
             }
             /* L40: */

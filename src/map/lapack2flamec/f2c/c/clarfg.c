@@ -1,22 +1,27 @@
-/* ../netlib/clarfg.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/clarfg.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b5 =
-{
-    1.f,0.f
-}
-;
+static complex c_b5 = {1.f, 0.f};
 /* > \brief \b CLARFG generates an elementary reflector (Householder matrix). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLARFG + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarfg. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarfg.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarfg. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarfg.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarfg. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarfg.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -98,15 +103,15 @@ static complex c_b5 =
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clarfg_(integer *n, complex *alpha, complex *x, integer * incx, complex *tau)
+void clarfg_(integer *n, complex *alpha, complex *x, integer *incx, complex *tau)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clarfg inputs: n %lld, incx %lld",*n, *incx);
+    snprintf(buffer, 256, "clarfg inputs: n %lld, incx %lld", *n, *incx);
 #else
-    snprintf(buffer, 256,"clarfg inputs: n %d, incx %d",*n, *incx);
+    snprintf(buffer, 256, "clarfg inputs: n %d, incx %d", *n, *incx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -120,14 +125,17 @@ void clarfg_(integer *n, complex *alpha, complex *x, integer * incx, complex *ta
     integer j, knt;
     real beta;
     extern /* Subroutine */
-    void cscal_(integer *, complex *, complex *, integer *);
+        void
+        cscal_(integer *, complex *, complex *, integer *);
     real alphi, alphr, xnorm;
     extern real scnrm2_(integer *, complex *, integer *), slapy3_(real *, real *, real *);
     extern /* Complex */
-    void cladiv_f2c_(complex *, complex *, complex *);
+        void
+        cladiv_f2c_(complex *, complex *, complex *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    void csscal_(integer *, real *, complex *, integer *);
+        void
+        csscal_(integer *, real *, complex *, integer *);
     real safmin, rsafmn;
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -152,7 +160,7 @@ void clarfg_(integer *n, complex *alpha, complex *x, integer * incx, complex *ta
     /* Parameter adjustments */
     --x;
     /* Function Body */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         tau->r = 0.f, tau->i = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -162,7 +170,7 @@ void clarfg_(integer *n, complex *alpha, complex *x, integer * incx, complex *ta
     xnorm = scnrm2_(&i__1, &x[1], incx);
     alphr = alpha->r;
     alphi = alpha->i;
-    if (xnorm == 0.f && alphi == 0.f)
+    if(xnorm == 0.f && alphi == 0.f)
     {
         /* H = I */
         tau->r = 0.f, tau->i = 0.f;
@@ -175,18 +183,18 @@ void clarfg_(integer *n, complex *alpha, complex *x, integer * incx, complex *ta
         safmin = slamch_("S") / slamch_("E");
         rsafmn = 1.f / safmin;
         knt = 0;
-        if (f2c_abs(beta) < safmin)
+        if(f2c_abs(beta) < safmin)
         {
             /* XNORM, BETA may be inaccurate;
             scale X and recompute them */
-L10:
+        L10:
             ++knt;
             i__1 = *n - 1;
             csscal_(&i__1, &rsafmn, &x[1], incx);
             beta *= rsafmn;
             alphi *= rsafmn;
             alphr *= rsafmn;
-            if (f2c_abs(beta) < safmin && knt < 20)
+            if(f2c_abs(beta) < safmin && knt < 20)
             {
                 goto L10;
             }
@@ -212,9 +220,7 @@ L10:
         cscal_(&i__1, alpha, &x[1], incx);
         /* If ALPHA is subnormal, it may lose relative accuracy */
         i__1 = knt;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             beta *= safmin;
             /* L20: */

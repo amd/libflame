@@ -1,17 +1,26 @@
 #ifdef FLA_ENABLE_XBLAS
-/* ../netlib/cposvxx.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cposvxx.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief <b> CPOSVXX computes the solution to system of linear equations A * X = B for PO matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CPOSVXX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cposvxx .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cposvxx
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cposvxx .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cposvxx
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cposvxx .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cposvxx
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -130,7 +139,7 @@ see the definitions of the FACT and EQUED options. */
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -234,9 +243,9 @@ otherwise, S is an output argument. If FACT = 'F' and EQUED */
 /* > On entry, the N-by-NRHS right hand side matrix B. */
 /* > On exit, */
 /* > if EQUED = 'N', B is not modified;
-*/
+ */
 /* > if EQUED = 'Y', B is overwritten by diag(S)*B;
-*/
+ */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LDB */
@@ -490,41 +499,64 @@ defaults */
 /* > \ingroup complexPOsolve */
 /* ===================================================================== */
 /* Subroutine */
-void cposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, integer *lda, complex *af, integer *ldaf, char * equed, real *s, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *rpvgrw, real *berr, integer *n_err_bnds__, real * err_bnds_norm__, real *err_bnds_comp__, integer *nparams, real * params, complex *work, real *rwork, integer *info)
+void cposvxx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *a, integer *lda,
+              complex *af, integer *ldaf, char *equed, real *s, complex *b, integer *ldb,
+              complex *x, integer *ldx, real *rcond, real *rpvgrw, real *berr,
+              integer *n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer *nparams,
+              real *params, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cposvxx inputs: fact %c, uplo %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ldb %lld, ldx %lld, n_err_bnds__ %lld, nparams %lld",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx, *n_err_bnds__, *nparams);
+    snprintf(buffer, 256,
+             "cposvxx inputs: fact %c, uplo %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ldb %lld, "
+             "ldx %lld, n_err_bnds__ %lld, nparams %lld",
+             *fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx, *n_err_bnds__, *nparams);
 #else
-    snprintf(buffer, 256,"cposvxx inputs: fact %c, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d, n_err_bnds__ %d, nparams %d",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx, *n_err_bnds__, *nparams);
+    snprintf(buffer, 256,
+             "cposvxx inputs: fact %c, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d, "
+             "n_err_bnds__ %d, nparams %d",
+             *fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx, *n_err_bnds__, *nparams);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1;
+    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset,
+        err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1;
     real r__1, r__2;
     /* Local variables */
     integer j;
     real amax, smin, smax;
-    extern real cla_porpvgrw_(char *, integer *, complex *, integer *, complex *, integer *, real *);
+    extern real cla_porpvgrw_(char *, integer *, complex *, integer *, complex *, integer *,
+                              real *);
     extern logical lsame_(char *, char *, integer, integer);
     real scond;
     logical equil, rcequ;
     extern /* Subroutine */
-    void claqhe_(char *, integer *, complex *, integer *, real *, real *, real *, char *);
+        void
+        claqhe_(char *, integer *, complex *, integer *, real *, real *, real *, char *);
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    void clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer infequ;
     extern /* Subroutine */
-    void cpotrf_(char *, integer *, complex *, integer *, integer *), cpotrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
+        void
+        cpotrf_(char *, integer *, complex *, integer *, integer *),
+        cpotrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *,
+                integer *);
     real smlnum;
     extern /* Subroutine */
-    void clascl2_(integer *, integer *, real *, complex *, integer *), cpoequb_(integer *, complex *, integer *, real *, real *, real *, integer *), cporfsx_(char *, char *, integer *, integer *, complex *, integer *, complex *, integer *, real *, complex *, integer *, complex *, integer *, real *, real *, integer *, real *, real *, integer *, real *, complex *, real *, integer *);
+        void
+        clascl2_(integer *, integer *, real *, complex *, integer *),
+        cpoequb_(integer *, complex *, integer *, real *, real *, real *, integer *),
+        cporfsx_(char *, char *, integer *, integer *, complex *, integer *, complex *, integer *,
+                 real *, complex *, integer *, complex *, integer *, real *, real *, integer *,
+                 real *, real *, integer *, real *, complex *, real *, integer *);
     /* -- LAPACK driver routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -575,7 +607,7 @@ void cposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, in
     equil = lsame_(fact, "E", 1, 1);
     smlnum = slamch_("Safe minimum");
     bignum = 1.f / smlnum;
-    if (nofact || equil)
+    if(nofact || equil)
     {
         *(unsigned char *)equed = 'N';
         rcequ = FALSE_;
@@ -589,92 +621,90 @@ void cposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, in
     /* pivot growth is set here, the rest is initialized in CPORFSX. */
     *rpvgrw = 0.f;
     /* Test the input parameters. PARAMS is not tested until CPORFSX. */
-    if (! nofact && ! equil && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    else if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (lsame_(fact, "F", 1, 1) && ! (rcequ || lsame_(equed, "N", 1, 1)))
+    else if(lsame_(fact, "F", 1, 1) && !(rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -9;
     }
     else
     {
-        if (rcequ)
+        if(rcequ)
         {
             smin = bignum;
             smax = 0.f;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Computing MIN */
                 r__1 = smin;
                 r__2 = s[j]; // , expr subst
-                smin = fla_min(r__1,r__2);
+                smin = fla_min(r__1, r__2);
                 /* Computing MAX */
                 r__1 = smax;
                 r__2 = s[j]; // , expr subst
-                smax = fla_max(r__1,r__2);
+                smax = fla_max(r__1, r__2);
                 /* L10: */
             }
-            if (smin <= 0.f)
+            if(smin <= 0.f)
             {
                 *info = -10;
             }
-            else if (*n > 0)
+            else if(*n > 0)
             {
-                scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
+                scond = fla_max(smin, smlnum) / fla_min(smax, bignum);
             }
             else
             {
                 scond = 1.f;
             }
         }
-        if (*info == 0)
+        if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -12;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -14;
             }
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CPOSVXX", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    if (equil)
+    if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
         cpoequb_(n, &a[a_offset], lda, &s[1], &scond, &amax, &infequ);
-        if (infequ == 0)
+        if(infequ == 0)
         {
             /* Equilibrate the matrix. */
             claqhe_(uplo, n, &a[a_offset], lda, &s[1], &scond, &amax, equed);
@@ -682,22 +712,22 @@ void cposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, in
         }
     }
     /* Scale the right-hand side. */
-    if (rcequ)
+    if(rcequ)
     {
         clascl2_(n, nrhs, &s[1], &b[b_offset], ldb);
     }
-    if (nofact || equil)
+    if(nofact || equil)
     {
         /* Compute the Cholesky factorization of A. */
         clacpy_(uplo, n, n, &a[a_offset], lda, &af[af_offset], ldaf);
         cpotrf_(uplo, n, &af[af_offset], ldaf, info);
         /* Return if INFO is non-zero. */
-        if (*info > 0)
+        if(*info > 0)
         {
             /* Pivot in column INFO is exactly 0 */
             /* Compute the reciprocal pivot growth factor of the */
             /* leading rank-deficient INFO columns of A. */
-            *rpvgrw = cla_porpvgrw_(uplo, n, &a[a_offset], lda, &af[ af_offset], ldaf, &rwork[1]);
+            *rpvgrw = cla_porpvgrw_(uplo, n, &a[a_offset], lda, &af[af_offset], ldaf, &rwork[1]);
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;
         }
@@ -709,9 +739,12 @@ void cposvxx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, in
     cpotrs_(uplo, n, nrhs, &af[af_offset], ldaf, &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    cporfsx_(uplo, equed, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, & s[1], &b[b_offset], ldb, &x[x_offset], ldx, rcond, &berr[1], n_err_bnds__, &err_bnds_norm__[err_bnds_norm_offset], & err_bnds_comp__[err_bnds_comp_offset], nparams, &params[1], &work[ 1], &rwork[1], info);
+    cporfsx_(uplo, equed, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &s[1], &b[b_offset],
+             ldb, &x[x_offset], ldx, rcond, &berr[1], n_err_bnds__,
+             &err_bnds_norm__[err_bnds_norm_offset], &err_bnds_comp__[err_bnds_comp_offset],
+             nparams, &params[1], &work[1], &rwork[1], info);
     /* Scale solutions. */
-    if (rcequ)
+    if(rcequ)
     {
         clascl2_(n, nrhs, &s[1], &x[x_offset], ldx);
     }

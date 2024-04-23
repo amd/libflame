@@ -1,7 +1,7 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int dtrtri_check(char *uplo, char *diag, integer *n, double * a, integer *lda, integer *info)
+int dtrtri_check(char *uplo, char *diag, integer *n, double *a, integer *lda, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
@@ -17,11 +17,11 @@ int dtrtri_check(char *uplo, char *diag, integer *n, double * a, integer *lda, i
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -2;
     }
@@ -29,7 +29,7 @@ int dtrtri_check(char *uplo, char *diag, integer *n, double * a, integer *lda, i
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }

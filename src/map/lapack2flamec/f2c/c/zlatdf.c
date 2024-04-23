@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {1., 0.};
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static doublecomplex c_b1 = {1., 0.};
+static integer c__1 = 1;
+static integer c_n1 = -1;
 static doublereal c_b24 = 1.;
 /* > \brief \b ZLATDF uses the LU factorization of the n-by-n matrix computed by sgetc2 and computes
  * a contrib ution to the reciprocal Dif-estimate. */
@@ -168,10 +168,13 @@ for 1 <= j <= N, column j of the */
 /* > 1995. */
 /* ===================================================================== */
 /* Subroutine */
-void zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, doublecomplex *rhs, doublereal *rdsum, doublereal * rdscal, integer *ipiv, integer *jpiv)
+void zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, doublecomplex *rhs,
+             doublereal *rdsum, doublereal *rdscal, integer *ipiv, integer *jpiv)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlatdf inputs: ijob %" FLA_IS ", n %" FLA_IS ", ldz %" FLA_IS ", rdsum %lf, rdscal %lf",*ijob, *n, *ldz, *rdsum, *rdscal);
+    AOCL_DTL_SNPRINTF("zlatdf inputs: ijob %" FLA_IS ", n %" FLA_IS ", ldz %" FLA_IS
+                      ", rdsum %lf, rdscal %lf",
+                      *ijob, *n, *ldz, *rdsum, *rdscal);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
     dcomplex z__1, z__2, z__3;
@@ -186,19 +189,30 @@ void zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, double
     dcomplex temp, work[8];
     doublereal scale;
     extern /* Subroutine */
-    void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     doublecomplex pmone;
     extern /* Double Complex */
-    VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        VOID
+        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                   integer *);
     doublereal rtemp, sminu, rwork[2];
     extern /* Subroutine */
-    void zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     doublereal splus;
     extern /* Subroutine */
-    void zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zgesc2_( integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublereal *), zgecon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *);
+        void
+        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zgesc2_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *,
+                doublereal *),
+        zgecon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
+                doublecomplex *, doublereal *, integer *);
     extern doublereal dzasum_(integer *, doublecomplex *, integer *);
     extern /* Subroutine */
-    void zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *), zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
+        void
+        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *),
+        zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -256,14 +270,14 @@ void zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, double
             /* Lockahead for L- part RHS(1:N-1) = +-1 */
             /* SPLUS and SMIN computed more efficiently than in BSOLVE[1]. */
             i__2 = *n - j;
-            aocl_lapack_zdotc_f2c(&z__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &z__[j + 1 + j * z_dim1],
+            zdotc_f2c_(&z__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &z__[j + 1 + j * z_dim1],
                        &c__1);
-            splus += z__1.real;
+            splus += z__1.r;
             i__2 = *n - j;
             aocl_lapack_zdotc_f2c(&z__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1], &c__1);
             sminu = z__1.real;
             i__2 = j;
-            splus *= rhs[i__2].real;
+            splus *= rhs[i__2].r;
             if(splus > sminu)
             {
                 i__2 = j;
@@ -381,7 +395,7 @@ void zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, double
         aocl_lapack_zlaswp(&c__1, &rhs[1], ldz, &c__1, &i__1, &jpiv[1], &c_n1);
         /* Compute the sum of squares */
         zlassq_(n, &rhs[1], &c__1, rdscal, rdsum);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* ENTRY IJOB = 2 */
@@ -394,17 +408,17 @@ void zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, double
     aocl_lapack_zdotc_f2c(&z__3, n, xm, &c__1, xm, &c__1);
     z_sqrt(&z__2, &z__3);
     z_div(&z__1, &c_b1, &z__2);
-    temp.real = z__1.real;
-    temp.imag = z__1.imag; // , expr subst
-    aocl_blas_zscal(n, &temp, xm, &c__1);
-    aocl_blas_zcopy(n, xm, &c__1, xp, &c__1);
-    aocl_blas_zaxpy(n, &c_b1, &rhs[1], &c__1, xp, &c__1);
-    z__1.real = -1.;
-    z__1.imag = -0.; // , expr subst
-    aocl_blas_zaxpy(n, &z__1, xm, &c__1, &rhs[1], &c__1);
-    aocl_lapack_zgesc2(n, &z__[z_offset], ldz, &rhs[1], &ipiv[1], &jpiv[1], &scale);
-    aocl_lapack_zgesc2(n, &z__[z_offset], ldz, xp, &ipiv[1], &jpiv[1], &scale);
-    if(aocl_blas_dzasum(n, xp, &c__1) > aocl_blas_dzasum(n, &rhs[1], &c__1))
+    temp.r = z__1.r;
+    temp.i = z__1.i; // , expr subst
+    zscal_(n, &temp, xm, &c__1);
+    zcopy_(n, xm, &c__1, xp, &c__1);
+    zaxpy_(n, &c_b1, &rhs[1], &c__1, xp, &c__1);
+    z__1.r = -1.;
+    z__1.i = -0.; // , expr subst
+    zaxpy_(n, &z__1, xm, &c__1, &rhs[1], &c__1);
+    zgesc2_(n, &z__[z_offset], ldz, &rhs[1], &ipiv[1], &jpiv[1], &scale);
+    zgesc2_(n, &z__[z_offset], ldz, xp, &ipiv[1], &jpiv[1], &scale);
+    if(dzasum_(n, xp, &c__1) > dzasum_(n, &rhs[1], &c__1))
     {
         aocl_blas_zcopy(n, xp, &c__1, &rhs[1], &c__1);
     }

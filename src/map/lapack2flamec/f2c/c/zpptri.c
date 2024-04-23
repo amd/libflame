@@ -96,7 +96,7 @@ static aocl_int64_t c__1 = 1;
 void zpptri_(char *uplo, integer *n, doublecomplex *ap, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zpptri inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
+    AOCL_DTL_SNPRINTF("zpptri inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
 
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3;
@@ -107,13 +107,20 @@ void zpptri_(char *uplo, integer *n, doublecomplex *ap, integer *info)
     doublereal ajj;
     integer jjn;
     extern /* Subroutine */
-    void zhpr_(char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *);
+        void
+        zhpr_(char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Double Complex */
-    VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        VOID
+        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                   integer *);
     logical upper;
     extern /* Subroutine */
-    void ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_(integer *, doublereal *, doublecomplex *, integer *), ztptri_(char *, char *, integer *, doublecomplex *, integer *);
+        void
+        ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zdscal_(integer *, doublereal *, doublecomplex *, integer *),
+        ztptri_(char *, char *, integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -140,7 +147,7 @@ void zpptri_(char *uplo, integer *n, doublecomplex *ap, integer *info)
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -162,7 +169,7 @@ void zpptri_(char *uplo, integer *n, doublecomplex *ap, integer *info)
         return;
     }
     /* Invert the triangular Cholesky factor U or L. */
-    aocl_lapack_ztptri(uplo, "Non-unit", n, &ap[1], info);
+    ztptri_(uplo, "Non-unit", n, &ap[1], info);
     if(*info > 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
@@ -198,15 +205,15 @@ void zpptri_(char *uplo, integer *n, doublecomplex *ap, integer *info)
             jjn = jj + *n - j + 1;
             i__2 = jj;
             i__3 = *n - j + 1;
-            aocl_lapack_zdotc_f2c(&z__1, &i__3, &ap[jj], &c__1, &ap[jj], &c__1);
-            d__1 = z__1.real;
-            ap[i__2].real = d__1;
-            ap[i__2].imag = 0.; // , expr subst
+            zdotc_f2c_(&z__1, &i__3, &ap[jj], &c__1, &ap[jj], &c__1);
+            d__1 = z__1.r;
+            ap[i__2].r = d__1;
+            ap[i__2].i = 0.; // , expr subst
             if(j < *n)
             {
                 i__2 = *n - j;
-                aocl_blas_ztpmv("Lower", "Conjugate transpose", "Non-unit", &i__2, &ap[jjn],
-                                &ap[jj + 1], &c__1);
+                ztpmv_("Lower", "Conjugate transpose", "Non-unit", &i__2, &ap[jjn], &ap[jj + 1],
+                       &c__1);
             }
             jj = jjn;
             /* L20: */

@@ -24,7 +24,7 @@ extern char *F77_aloc(ftnlen, const char *);
  */
 
 #ifdef KR_headers
-void getenv_(fname, value, flen, vlen) char *value, *fname;
+VOID getenv_(fname, value, flen, vlen) char *value, *fname;
 ftnlen vlen, flen;
 #else
 void getenv_(char *fname, char *value, ftnlen flen, ftnlen vlen)

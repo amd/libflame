@@ -1,8 +1,8 @@
-/* ./strsna.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/strsna.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static logical c_true = TRUE_;
@@ -270,17 +270,22 @@ v**T denotes the transpose of v, and norm(u) */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, integer *ldt, real *vl, integer *ldvl, real *vr, integer *ldvr, real *s, real *sep, integer *mm, integer *m, real * work, integer *ldwork, integer *iwork, integer *info)
+void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, integer *ldt, real *vl,
+             integer *ldvl, real *vr, integer *ldvr, real *s, real *sep, integer *mm, integer *m,
+             real *work, integer *ldwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"strsna inputs: job %c, howmny %c, n %" FLA_IS ", ldt %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS ", ldwork %" FLA_IS "",*job, *howmny, *n, *ldt, *ldvl, *ldvr, *mm, *ldwork);
+    snprintf(buffer, 256,
+             "strsna inputs: job %c, howmny %c, n %" FLA_IS ", ldt %" FLA_IS ", ldvl %" FLA_IS
+             ", ldvr %" FLA_IS ", mm %" FLA_IS ", ldwork %" FLA_IS "",
+             *job, *howmny, *n, *ldt, *ldvl, *ldvr, *mm, *ldwork);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, work_dim1, work_offset,
-        i__1, i__2;
+    integer t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, work_dim1, work_offset, i__1,
+        i__2;
     real r__1, r__2;
     /* Builtin functions */
     double sqrt(doublereal);
@@ -304,20 +309,28 @@ void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, inte
     logical wants;
     real dummy[1];
     extern /* Subroutine */
-    void slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slapy2_(real *, real *);
     extern /* Subroutine */
-    void slabad_(real *, real *);
+        void
+        slabad_(real *, real *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     logical wantbh;
     extern /* Subroutine */
-    void slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+        void
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     logical somcon;
     extern /* Subroutine */
-    void slaqtr_(logical *, logical *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *), strexc_(char *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *);
+        void
+        slaqtr_(logical *, logical *, integer *, real *, integer *, real *, real *, real *, real *,
+                real *, integer *),
+        strexc_(char *, integer *, real *, integer *, real *, integer *, integer *, integer *,
+                real *, integer *);
     real smlnum;
     logical wantsp;
     /* -- LAPACK computational routine -- */
@@ -365,12 +378,11 @@ void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, inte
     wantsp = lsame_(job, "V", 1, 1) || wantbh;
     somcon = lsame_(howmny, "S", 1, 1);
     *info = 0;
-    dumm = 0.f;
     if(!wants && !wantsp)
     {
         *info = -1;
     }
-    else if (! lsame_(howmny, "A", 1, 1) && ! somcon)
+    else if(!lsame_(howmny, "A", 1, 1) && !somcon)
     {
         *info = -2;
     }
@@ -378,7 +390,7 @@ void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, inte
     {
         *info = -4;
     }
-    else if (*ldt < fla_max(1,*n))
+    else if(*ldt < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -540,16 +552,13 @@ void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, inte
             else
             {
                 /* Complex eigenvalue. */
-                prod1
-                    = aocl_blas_sdot(n, &vr[ks * vr_dim1 + 1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
-                prod1 += aocl_blas_sdot(n, &vr[(ks + 1) * vr_dim1 + 1], &c__1,
-                                        &vl[(ks + 1) * vl_dim1 + 1], &c__1);
-                prod2 = aocl_blas_sdot(n, &vl[ks * vl_dim1 + 1], &c__1, &vr[(ks + 1) * vr_dim1 + 1],
-                                       &c__1);
-                prod2 -= aocl_blas_sdot(n, &vl[(ks + 1) * vl_dim1 + 1], &c__1,
-                                        &vr[ks * vr_dim1 + 1], &c__1);
-                r__1 = aocl_blas_snrm2(n, &vr[ks * vr_dim1 + 1], &c__1);
-                r__2 = aocl_blas_snrm2(n, &vr[(ks + 1) * vr_dim1 + 1], &c__1);
+                prod1 = sdot_(n, &vr[ks * vr_dim1 + 1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
+                prod1 += sdot_(n, &vr[(ks + 1) * vr_dim1 + 1], &c__1, &vl[(ks + 1) * vl_dim1 + 1],
+                               &c__1);
+                prod2 = sdot_(n, &vl[ks * vl_dim1 + 1], &c__1, &vr[(ks + 1) * vr_dim1 + 1], &c__1);
+                prod2 -= sdot_(n, &vl[(ks + 1) * vl_dim1 + 1], &c__1, &vr[ks * vr_dim1 + 1], &c__1);
+                r__1 = snrm2_(n, &vr[ks * vr_dim1 + 1], &c__1);
+                r__2 = snrm2_(n, &vr[(ks + 1) * vr_dim1 + 1], &c__1);
                 rnrm = slapy2_(&r__1, &r__2);
                 r__1 = aocl_blas_snrm2(n, &vl[ks * vl_dim1 + 1], &c__1);
                 r__2 = aocl_blas_snrm2(n, &vl[(ks + 1) * vl_dim1 + 1], &c__1);
@@ -568,8 +577,8 @@ void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, inte
             aocl_lapack_slacpy("Full", n, n, &t[t_offset], ldt, &work[work_offset], ldwork);
             ifst = k;
             ilst = 1;
-            aocl_lapack_strexc("No Q", n, &work[work_offset], ldwork, dummy, &c__1, &ifst, &ilst,
-                               &work[(*n + 1) * work_dim1 + 1], &ierr);
+            strexc_("No Q", n, &work[work_offset], ldwork, dummy, &c__1, &ifst, &ilst,
+                    &work[(*n + 1) * work_dim1 + 1], &ierr);
             if(ierr == 1 || ierr == 2)
             {
                 /* Could not swap because blocks not well separated */
@@ -600,7 +609,8 @@ void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, inte
                     /* eigenvalue lambda with positive imaginary part. (2,2) */
                     /* position of WORK is the scomplex eigenvalue lambda */
                     /* with negative imaginary part. */
-                    mu = sqrt((r__1 = work[(work_dim1 << 1) + 1], f2c_abs(r__1))) * sqrt((r__2 = work[work_dim1 + 2], f2c_abs(r__2)));
+                    mu = sqrt((r__1 = work[(work_dim1 << 1) + 1], f2c_abs(r__1)))
+                         * sqrt((r__2 = work[work_dim1 + 2], f2c_abs(r__2)));
                     delta = slapy2_(&mu, &work[work_dim1 + 2]);
                     cs = mu / delta;
                     sn = -work[work_dim1 + 2] / delta;
@@ -635,8 +645,8 @@ void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, inte
                 est = 0.f;
                 kase = 0;
             L50:
-                aocl_lapack_slacn2(&nn, &work[(*n + 2) * work_dim1 + 1],
-                                   &work[(*n + 4) * work_dim1 + 1], &iwork[1], &est, &kase, isave);
+                slacn2_(&nn, &work[(*n + 2) * work_dim1 + 1], &work[(*n + 4) * work_dim1 + 1],
+                        &iwork[1], &est, &kase, isave);
                 if(kase != 0)
                 {
                     if(kase == 1)
@@ -645,21 +655,19 @@ void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, inte
                         {
                             /* Real eigenvalue: solve C**T*x = scale*c. */
                             i__2 = *n - 1;
-                            aocl_lapack_slaqtr(&c_true, &c_true, &i__2, &work[(work_dim1 << 1) + 2],
-                                               ldwork, dummy, &dumm, &scale,
-                                               &work[(*n + 4) * work_dim1 + 1],
-                                               &work[(*n + 6) * work_dim1 + 1], &ierr);
+                            slaqtr_(&c_true, &c_true, &i__2, &work[(work_dim1 << 1) + 2], ldwork,
+                                    dummy, &dumm, &scale, &work[(*n + 4) * work_dim1 + 1],
+                                    &work[(*n + 6) * work_dim1 + 1], &ierr);
                         }
                         else
                         {
                             /* Complex eigenvalue: solve */
                             /* C**T*(p+iq) = scale*(c+id) in real arithmetic. */
                             i__2 = *n - 1;
-                            aocl_lapack_slaqtr(&c_true, &c_false, &i__2,
-                                               &work[(work_dim1 << 1) + 2], ldwork,
-                                               &work[(*n + 1) * work_dim1 + 1], &mu, &scale,
-                                               &work[(*n + 4) * work_dim1 + 1],
-                                               &work[(*n + 6) * work_dim1 + 1], &ierr);
+                            slaqtr_(&c_true, &c_false, &i__2, &work[(work_dim1 << 1) + 2], ldwork,
+                                    &work[(*n + 1) * work_dim1 + 1], &mu, &scale,
+                                    &work[(*n + 4) * work_dim1 + 1],
+                                    &work[(*n + 6) * work_dim1 + 1], &ierr);
                         }
                     }
                     else
@@ -668,28 +676,26 @@ void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, inte
                         {
                             /* Real eigenvalue: solve C*x = scale*c. */
                             i__2 = *n - 1;
-                            aocl_lapack_slaqtr(&c_false, &c_true, &i__2,
-                                               &work[(work_dim1 << 1) + 2], ldwork, dummy, &dumm,
-                                               &scale, &work[(*n + 4) * work_dim1 + 1],
-                                               &work[(*n + 6) * work_dim1 + 1], &ierr);
+                            slaqtr_(&c_false, &c_true, &i__2, &work[(work_dim1 << 1) + 2], ldwork,
+                                    dummy, &dumm, &scale, &work[(*n + 4) * work_dim1 + 1],
+                                    &work[(*n + 6) * work_dim1 + 1], &ierr);
                         }
                         else
                         {
                             /* Complex eigenvalue: solve */
                             /* C*(p+iq) = scale*(c+id) in real arithmetic. */
                             i__2 = *n - 1;
-                            aocl_lapack_slaqtr(&c_false, &c_false, &i__2,
-                                               &work[(work_dim1 << 1) + 2], ldwork,
-                                               &work[(*n + 1) * work_dim1 + 1], &mu, &scale,
-                                               &work[(*n + 4) * work_dim1 + 1],
-                                               &work[(*n + 6) * work_dim1 + 1], &ierr);
+                            slaqtr_(&c_false, &c_false, &i__2, &work[(work_dim1 << 1) + 2], ldwork,
+                                    &work[(*n + 1) * work_dim1 + 1], &mu, &scale,
+                                    &work[(*n + 4) * work_dim1 + 1],
+                                    &work[(*n + 6) * work_dim1 + 1], &ierr);
                         }
                     }
                     goto L50;
                 }
             }
-            sep[ks] = scale / fla_max(est,smlnum);
-            if (pair)
+            sep[ks] = scale / fla_max(est, smlnum);
+            if(pair)
             {
                 sep[ks + 1] = sep[ks];
             }

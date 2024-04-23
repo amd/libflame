@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b DGEQL2 computes the QL factorization of a general rectangular matrix using an
  * unblocked algorit hm. */
 /* =========== DOCUMENTATION =========== */
@@ -124,17 +124,22 @@ v(1:m-k+i-1) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dgeql2_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *info)
+void dgeql2_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *tau, doublereal *work,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgeql2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
+    AOCL_DTL_SNPRINTF("dgeql2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
     aocl_int64_t i__, k;
     doublereal aii;
     extern /* Subroutine */
-    void dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *),
+        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -170,7 +175,7 @@ void dgeql2_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
@@ -181,23 +186,21 @@ void dgeql2_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    k = fla_min(*m,*n);
-    for (i__ = k;
-            i__ >= 1;
-            --i__)
+    k = fla_min(*m, *n);
+    for(i__ = k; i__ >= 1; --i__)
     {
         /* Generate elementary reflector H(i) to annihilate */
         /* A(1:m-k+i-1,n-k+i) */
         i__1 = *m - k + i__;
-        aocl_lapack_dlarfg(&i__1, &a[*m - k + i__ + (*n - k + i__) * a_dim1],
-                           &a[(*n - k + i__) * a_dim1 + 1], &c__1, &tau[i__]);
+        dlarfg_(&i__1, &a[*m - k + i__ + (*n - k + i__) * a_dim1], &a[(*n - k + i__) * a_dim1 + 1],
+                &c__1, &tau[i__]);
         /* Apply H(i) to A(1:m-k+i,1:n-k+i-1) from the left */
         aii = a[*m - k + i__ + (*n - k + i__) * a_dim1];
         a[*m - k + i__ + (*n - k + i__) * a_dim1] = 1.;
         i__1 = *m - k + i__;
         i__2 = *n - k + i__ - 1;
-        aocl_lapack_dlarf("Left", &i__1, &i__2, &a[(*n - k + i__) * a_dim1 + 1], &c__1, &tau[i__],
-                          &a[a_offset], lda, &work[1]);
+        dlarf_("Left", &i__1, &i__2, &a[(*n - k + i__) * a_dim1 + 1], &c__1, &tau[i__],
+               &a[a_offset], lda, &work[1]);
         a[*m - k + i__ + (*n - k + i__) * a_dim1] = aii;
         /* L10: */
     }

@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief <b> SSPSVX computes the solution to system of linear equations A * X = B for OTHER
  * matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -275,12 +275,17 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real *afp, integer *ipiv, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork, integer *info)
+void sspsvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *ap, real *afp, integer *ipiv,
+             real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *ferr, real *berr,
+             real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sspsvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *uplo, *n, *nrhs, *ldb, *ldx);
+    snprintf(buffer, 256,
+             "sspsvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS
+             ", ldx %" FLA_IS "",
+             *fact, *uplo, *n, *nrhs, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -289,14 +294,22 @@ void sspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real 
     extern logical lsame_(char *, char *, integer, integer);
     real anorm;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slacpy_( char *, integer *, integer *, real *, integer *, real *, integer * );
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     extern real slansp_(char *, char *, integer *, real *, real *);
     extern /* Subroutine */
-    void sspcon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), ssprfs_( char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), ssptrf_(char *, integer *, real *, integer *, integer *), ssptrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
+        void
+        sspcon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *),
+        ssprfs_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+                integer *, real *, real *, real *, integer *, integer *),
+        ssptrf_(char *, integer *, real *, integer *, integer *),
+        ssptrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -335,11 +348,11 @@ void sspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real 
     /* Function Body */
     *info = 0;
     nofact = lsame_(fact, "N", 1, 1);
-    if (! nofact && ! lsame_(fact, "F", 1, 1))
+    if(!nofact && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    else if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
@@ -351,11 +364,11 @@ void sspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real 
     {
         *info = -4;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -11;
     }
@@ -389,8 +402,8 @@ void sspsvx_(char *fact, char *uplo, integer *n, integer * nrhs, real *ap, real 
     aocl_lapack_ssptrs(uplo, n, nrhs, &afp[1], &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solutions and */
     /* compute error bounds and backward error estimates for them. */
-    aocl_lapack_ssprfs(uplo, n, nrhs, &ap[1], &afp[1], &ipiv[1], &b[b_offset], ldb, &x[x_offset],
-                       ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
+    ssprfs_(uplo, n, nrhs, &ap[1], &afp[1], &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx,
+            &ferr[1], &berr[1], &work[1], &iwork[1], info);
     /* Set INFO = N+1 if the matrix is singular to working precision. */
     if(*rcond < slamch_("Epsilon"))
     {

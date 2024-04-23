@@ -1,8 +1,8 @@
-/* ./cunbdb5.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cunbdb5.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CUNBDB5 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -149,15 +149,22 @@
 /* > \ingroup unbdb5 */
 /* ===================================================================== */
 /* Subroutine */
-void cunbdb5_(integer *m1, integer *m2, integer *n, complex * x1, integer *incx1, complex *x2, integer *incx2, complex *q1, integer *ldq1, complex *q2, integer *ldq2, complex *work, integer *lwork, integer *info)
+void cunbdb5_(integer *m1, integer *m2, integer *n, complex *x1, integer *incx1, complex *x2,
+              integer *incx2, complex *q1, integer *ldq1, complex *q2, integer *ldq2, complex *work,
+              integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cunbdb5 inputs: m1 %lld, m2 %lld, n %lld, incx1 %lld, incx2 %lld, ldq1 %lld, ldq2 %lld",*m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2);
+    snprintf(
+        buffer, 256,
+        "cunbdb5 inputs: m1 %lld, m2 %lld, n %lld, incx1 %lld, incx2 %lld, ldq1 %lld, ldq2 %lld",
+        *m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2);
 #else
-    snprintf(buffer, 256,"cunbdb5 inputs: m1 %d, m2 %d, n %d, incx1 %d, incx2 %d, ldq1 %d, ldq2 %d",*m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2);
+    snprintf(buffer, 256,
+             "cunbdb5 inputs: m1 %d, m2 %d, n %d, incx1 %d, incx2 %d, ldq1 %d, ldq2 %d", *m1, *m2,
+             *n, *incx1, *incx2, *ldq1, *ldq2);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -170,7 +177,10 @@ void cunbdb5_(integer *m1, integer *m2, integer *n, complex * x1, integer *incx1
     integer i__, j, childinfo;
     extern real scnrm2_(integer *, complex *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), cunbdb6_( integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        cunbdb6_(integer *, integer *, integer *, complex *, integer *, complex *, integer *,
+                 complex *, integer *, complex *, integer *, complex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -223,11 +233,11 @@ void cunbdb5_(integer *m1, integer *m2, integer *n, complex * x1, integer *incx1
     {
         *info = -7;
     }
-    else if (*ldq1 < fla_max(1,*m1))
+    else if(*ldq1 < fla_max(1, *m1))
     {
         *info = -9;
     }
-    else if (*ldq2 < fla_max(1,*m2))
+    else if(*ldq2 < fla_max(1, *m2))
     {
         *info = -11;
     }
@@ -242,14 +252,13 @@ void cunbdb5_(integer *m1, integer *m2, integer *n, complex * x1, integer *incx1
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    eps = slamch_("Precision");
-    /* Project X onto the orthogonal complement of Q if X is nonzero */
-    scl = 0.f;
-    ssq = 0.f;
-    aocl_lapack_classq(m1, &x1[1], incx1, &scl, &ssq);
-    aocl_lapack_classq(m2, &x2[1], incx2, &scl, &ssq);
-    norm = scl * sqrt(ssq);
-    if(norm > *n * eps)
+    /* Project X onto the orthogonal complement of Q */
+    cunbdb6_(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1, &q2[q2_offset], ldq2,
+             &work[1], lwork, &childinfo);
+    /* If the projection is nonzero, then return */
+    r__1 = scnrm2_(m1, &x1[1], incx1);
+    r__2 = scnrm2_(m2, &x2[1], incx2);
+    if(r__1 != 0.f || r__2 != 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -276,9 +285,11 @@ void cunbdb5_(integer *m1, integer *m2, integer *n, complex * x1, integer *incx1
             x2[i__3].real = 0.f;
             x2[i__3].imag = 0.f; // , expr subst
         }
-        aocl_lapack_cunbdb6(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1,
-                            &q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
-        if(aocl_blas_scnrm2(m1, &x1[1], incx1) != 0.f || aocl_blas_scnrm2(m2, &x2[1], incx2) != 0.f)
+        cunbdb6_(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1, &q2[q2_offset],
+                 ldq2, &work[1], lwork, &childinfo);
+        r__1 = scnrm2_(m1, &x1[1], incx1);
+        r__2 = scnrm2_(m2, &x2[1], incx2);
+        if(r__1 != 0.f || r__2 != 0.f)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;
@@ -304,11 +315,13 @@ void cunbdb5_(integer *m1, integer *m2, integer *n, complex * x1, integer *incx1
             x2[i__3].imag = 0.f; // , expr subst
         }
         i__2 = i__;
-        x2[i__2].real = 1.f;
-        x2[i__2].imag = 0.f; // , expr subst
-        aocl_lapack_cunbdb6(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1,
-                            &q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
-        if(aocl_blas_scnrm2(m1, &x1[1], incx1) != 0.f || aocl_blas_scnrm2(m2, &x2[1], incx2) != 0.f)
+        x2[i__2].r = 1.f;
+        x2[i__2].i = 0.f; // , expr subst
+        cunbdb6_(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1, &q2[q2_offset],
+                 ldq2, &work[1], lwork, &childinfo);
+        r__1 = scnrm2_(m1, &x1[1], incx1);
+        r__2 = scnrm2_(m2, &x2[1], incx2);
+        if(r__1 != 0.f || r__2 != 0.f)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;

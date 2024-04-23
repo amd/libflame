@@ -89,7 +89,7 @@
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(KD+1+i-j,j) = A(i,j) for fla_max(1,j-KD)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(N,j+KD). */
 /* > See below for further details. */
 /* > */
@@ -161,12 +161,14 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void spbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, real *ab, integer *ldab, real *b, integer *ldb, integer *info)
+void spbsv_(char *uplo, integer *n, integer *kd, integer *nrhs, real *ab, integer *ldab, real *b,
+            integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"spbsv inputs: uplo %c, n %d, kd %d, nrhs %d, ldab %d, ldb %d",*uplo, *n, *kd, *nrhs, *ldab, *ldb);
+    snprintf(buffer, 256, "spbsv inputs: uplo %c, n %d, kd %d, nrhs %d, ldab %d, ldb %d", *uplo, *n,
+             *kd, *nrhs, *ldab, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -174,7 +176,11 @@ void spbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, real *ab, integ
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), spbtrf_( char *, integer *, integer *, real *, integer *, integer *), spbtrs_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        spbtrf_(char *, integer *, integer *, real *, integer *, integer *),
+        spbtrs_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *,
+                integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -201,7 +207,7 @@ void spbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, real *ab, integ
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
+    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -221,7 +227,7 @@ void spbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, real *ab, integ
     {
         *info = -6;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
@@ -233,7 +239,7 @@ void spbsv_(char *uplo, integer *n, integer *kd, integer * nrhs, real *ab, integ
         return;
     }
     /* Compute the Cholesky factorization A = U**T*U or A = L*L**T. */
-    aocl_lapack_spbtrf(uplo, n, kd, &ab[ab_offset], ldab, info);
+    spbtrf_(uplo, n, kd, &ab[ab_offset], ldab, info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */

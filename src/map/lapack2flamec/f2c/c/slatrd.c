@@ -1,6 +1,3 @@
-/******************************************************************************
-  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
- * ***************************************************************************/
 /* ../netlib/slatrd.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -209,7 +206,8 @@ v(i+1:n) is stored on exit in A(i+1:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slatrd_(char *uplo, integer *n, integer *nb, real *a, integer *lda, real *e, real *tau, real *w, integer *ldw)
+void slatrd_(char *uplo, integer *n, integer *nb, real *a, integer *lda, real *e, real *tau,
+             real *w, integer *ldw)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slatrd(uplo, n, nb, a, lda, e, tau, w, ldw);
@@ -238,7 +236,14 @@ void aocl_lapack_slatrd(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, real *a, 
     real alpha;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), saxpy_( integer *, real *, real *, integer *, real *, integer *), ssymv_( char *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), slarfg_(integer *, real *, real *, integer *, real *);
+        void
+        sscal_(integer *, real *, real *, integer *),
+        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+               real *, integer *),
+        saxpy_(integer *, real *, real *, integer *, real *, integer *),
+        ssymv_(char *, integer *, real *, real *, integer *, real *, integer *, real *, real *,
+               integer *),
+        slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -274,7 +279,7 @@ void aocl_lapack_slatrd(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, real *a, 
     {
         return;
     }
-    if (lsame_(uplo, "U", 1, 1))
+    if(lsame_(uplo, "U", 1, 1))
     {
         /* Reduce last NB columns of upper triangle */
         i__1 = *n - *nb + 1;
@@ -285,54 +290,49 @@ void aocl_lapack_slatrd(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, real *a, 
             {
                 /* Update A(1:i,i) */
                 i__2 = *n - i__;
-                aocl_blas_sgemv("No transpose", &i__, &i__2, &c_b5, &a[(i__ + 1) * a_dim1 + 1], lda,
-                                &w[i__ + (iw + 1) * w_dim1], ldw, &c_b6, &a[i__ * a_dim1 + 1],
-                                &c__1);
+                sgemv_("No transpose", &i__, &i__2, &c_b5, &a[(i__ + 1) * a_dim1 + 1], lda,
+                       &w[i__ + (iw + 1) * w_dim1], ldw, &c_b6, &a[i__ * a_dim1 + 1], &c__1);
                 i__2 = *n - i__;
-                aocl_blas_sgemv("No transpose", &i__, &i__2, &c_b5, &w[(iw + 1) * w_dim1 + 1], ldw,
-                                &a[i__ + (i__ + 1) * a_dim1], lda, &c_b6, &a[i__ * a_dim1 + 1],
-                                &c__1);
+                sgemv_("No transpose", &i__, &i__2, &c_b5, &w[(iw + 1) * w_dim1 + 1], ldw,
+                       &a[i__ + (i__ + 1) * a_dim1], lda, &c_b6, &a[i__ * a_dim1 + 1], &c__1);
             }
             if(i__ > 1)
             {
                 /* Generate elementary reflector H(i) to annihilate */
                 /* A(1:i-2,i) */
                 i__2 = i__ - 1;
-                aocl_lapack_slarfg(&i__2, &a[i__ - 1 + i__ * a_dim1], &a[i__ * a_dim1 + 1], &c__1,
-                                   &tau[i__ - 1]);
+                slarfg_(&i__2, &a[i__ - 1 + i__ * a_dim1], &a[i__ * a_dim1 + 1], &c__1,
+                        &tau[i__ - 1]);
                 e[i__ - 1] = a[i__ - 1 + i__ * a_dim1];
                 a[i__ - 1 + i__ * a_dim1] = 1.f;
                 /* Compute W(1:i-1,i) */
                 i__2 = i__ - 1;
-                aocl_blas_ssymv("Upper", &i__2, &c_b6, &a[a_offset], lda, &a[i__ * a_dim1 + 1],
-                                &c__1, &c_b16, &w[iw * w_dim1 + 1], &c__1);
+                ssymv_("Upper", &i__2, &c_b6, &a[a_offset], lda, &a[i__ * a_dim1 + 1], &c__1,
+                       &c_b16, &w[iw * w_dim1 + 1], &c__1);
                 if(i__ < *n)
                 {
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
-                    aocl_blas_sgemv("Transpose", &i__2, &i__3, &c_b6, &w[(iw + 1) * w_dim1 + 1],
-                                    ldw, &a[i__ * a_dim1 + 1], &c__1, &c_b16,
-                                    &w[i__ + 1 + iw * w_dim1], &c__1);
+                    sgemv_("Transpose", &i__2, &i__3, &c_b6, &w[(iw + 1) * w_dim1 + 1], ldw,
+                           &a[i__ * a_dim1 + 1], &c__1, &c_b16, &w[i__ + 1 + iw * w_dim1], &c__1);
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
-                    aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b5, &a[(i__ + 1) * a_dim1 + 1],
-                                    lda, &w[i__ + 1 + iw * w_dim1], &c__1, &c_b6,
-                                    &w[iw * w_dim1 + 1], &c__1);
+                    sgemv_("No transpose", &i__2, &i__3, &c_b5, &a[(i__ + 1) * a_dim1 + 1], lda,
+                           &w[i__ + 1 + iw * w_dim1], &c__1, &c_b6, &w[iw * w_dim1 + 1], &c__1);
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
-                    aocl_blas_sgemv("Transpose", &i__2, &i__3, &c_b6, &a[(i__ + 1) * a_dim1 + 1],
-                                    lda, &a[i__ * a_dim1 + 1], &c__1, &c_b16,
-                                    &w[i__ + 1 + iw * w_dim1], &c__1);
+                    sgemv_("Transpose", &i__2, &i__3, &c_b6, &a[(i__ + 1) * a_dim1 + 1], lda,
+                           &a[i__ * a_dim1 + 1], &c__1, &c_b16, &w[i__ + 1 + iw * w_dim1], &c__1);
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
-                    aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b5, &w[(iw + 1) * w_dim1 + 1],
-                                    ldw, &w[i__ + 1 + iw * w_dim1], &c__1, &c_b6,
-                                    &w[iw * w_dim1 + 1], &c__1);
+                    sgemv_("No transpose", &i__2, &i__3, &c_b5, &w[(iw + 1) * w_dim1 + 1], ldw,
+                           &w[i__ + 1 + iw * w_dim1], &c__1, &c_b6, &w[iw * w_dim1 + 1], &c__1);
                 }
                 i__2 = i__ - 1;
                 aocl_blas_sscal(&i__2, &tau[i__ - 1], &w[iw * w_dim1 + 1], &c__1);
                 i__2 = i__ - 1;
-                alpha = tau[i__ - 1] * -.5f * sdot_(&i__2, &w[iw * w_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
+                alpha = tau[i__ - 1] * -.5f
+                        * sdot_(&i__2, &w[iw * w_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
                 i__2 = i__ - 1;
                 aocl_blas_saxpy(&i__2, &alpha, &a[i__ * a_dim1 + 1], &c__1, &w[iw * w_dim1 + 1],
                                 &c__1);
@@ -349,12 +349,12 @@ void aocl_lapack_slatrd(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, real *a, 
             /* Update A(i:n,i) */
             i__2 = *n - i__ + 1;
             i__3 = i__ - 1;
-            aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b5, &a[i__ + a_dim1], lda,
-                            &w[i__ + w_dim1], ldw, &c_b6, &a[i__ + i__ * a_dim1], &c__1);
+            sgemv_("No transpose", &i__2, &i__3, &c_b5, &a[i__ + a_dim1], lda, &w[i__ + w_dim1],
+                   ldw, &c_b6, &a[i__ + i__ * a_dim1], &c__1);
             i__2 = *n - i__ + 1;
             i__3 = i__ - 1;
-            aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b5, &w[i__ + w_dim1], ldw,
-                            &a[i__ + a_dim1], lda, &c_b6, &a[i__ + i__ * a_dim1], &c__1);
+            sgemv_("No transpose", &i__2, &i__3, &c_b5, &w[i__ + w_dim1], ldw, &a[i__ + a_dim1],
+                   lda, &c_b6, &a[i__ + i__ * a_dim1], &c__1);
             if(i__ < *n)
             {
                 /* Generate elementary reflector H(i) to annihilate */
@@ -362,42 +362,40 @@ void aocl_lapack_slatrd(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, real *a, 
                 i__2 = *n - i__;
                 /* Computing MIN */
                 i__3 = i__ + 2;
-                slarfg_(&i__2, &a[i__ + 1 + i__ * a_dim1], &a[fla_min(i__3,*n) + i__ * a_dim1], &c__1, &tau[i__]);
+                slarfg_(&i__2, &a[i__ + 1 + i__ * a_dim1], &a[fla_min(i__3, *n) + i__ * a_dim1],
+                        &c__1, &tau[i__]);
                 e[i__] = a[i__ + 1 + i__ * a_dim1];
                 a[i__ + 1 + i__ * a_dim1] = 1.f;
                 /* Compute W(i+1:n,i) */
                 i__2 = *n - i__;
-                ssymv_("Lower", &i__2, &c_b6, &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &w[ i__ + 1 + i__ * w_dim1], &c__1);
+                ssymv_("Lower", &i__2, &c_b6, &a[i__ + 1 + (i__ + 1) * a_dim1], lda,
+                       &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &w[i__ + 1 + i__ * w_dim1],
+                       &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
-                aocl_blas_sgemv("Transpose", &i__2, &i__3, &c_b6, &w[i__ + 1 + w_dim1], ldw,
-                                &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &w[i__ * w_dim1 + 1],
-                                &c__1);
+                sgemv_("Transpose", &i__2, &i__3, &c_b6, &w[i__ + 1 + w_dim1], ldw,
+                       &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &w[i__ * w_dim1 + 1], &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
-                aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b5, &a[i__ + 1 + a_dim1], lda,
-                                &w[i__ * w_dim1 + 1], &c__1, &c_b6, &w[i__ + 1 + i__ * w_dim1],
-                                &c__1);
+                sgemv_("No transpose", &i__2, &i__3, &c_b5, &a[i__ + 1 + a_dim1], lda,
+                       &w[i__ * w_dim1 + 1], &c__1, &c_b6, &w[i__ + 1 + i__ * w_dim1], &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
-                aocl_blas_sgemv("Transpose", &i__2, &i__3, &c_b6, &a[i__ + 1 + a_dim1], lda,
-                                &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &w[i__ * w_dim1 + 1],
-                                &c__1);
+                sgemv_("Transpose", &i__2, &i__3, &c_b6, &a[i__ + 1 + a_dim1], lda,
+                       &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &w[i__ * w_dim1 + 1], &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
-                aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b5, &w[i__ + 1 + w_dim1], ldw,
-                                &w[i__ * w_dim1 + 1], &c__1, &c_b6, &w[i__ + 1 + i__ * w_dim1],
-                                &c__1);
+                sgemv_("No transpose", &i__2, &i__3, &c_b5, &w[i__ + 1 + w_dim1], ldw,
+                       &w[i__ * w_dim1 + 1], &c__1, &c_b6, &w[i__ + 1 + i__ * w_dim1], &c__1);
                 i__2 = *n - i__;
                 aocl_blas_sscal(&i__2, &tau[i__], &w[i__ + 1 + i__ * w_dim1], &c__1);
                 i__2 = *n - i__;
-                dotv = 0.f;
-                aocl_blas_sgemv("Transpose", &i__2, &c__1, &c_b6, &w[i__ + 1 + i__ * w_dim1], ldw,
-                                &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &dotv, &c__1);
-                alpha = tau[i__] * -.5f * dotv;
+                alpha = tau[i__] * -.5f
+                        * sdot_(&i__2, &w[i__ + 1 + i__ * w_dim1], &c__1,
+                                &a[i__ + 1 + i__ * a_dim1], &c__1);
                 i__2 = *n - i__;
-                aocl_blas_saxpy(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1,
-                                &w[i__ + 1 + i__ * w_dim1], &c__1);
+                saxpy_(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1, &w[i__ + 1 + i__ * w_dim1],
+                       &c__1);
             }
             /* L20: */
         }

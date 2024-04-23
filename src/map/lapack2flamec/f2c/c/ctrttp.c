@@ -107,9 +107,9 @@ void ctrttp_(char *uplo, integer *n, complex *a, integer *lda, complex *ap, inte
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctrttp inputs: uplo %c, n %lld, lda %lld",*uplo, *n, *lda);
+    snprintf(buffer, 256, "ctrttp inputs: uplo %c, n %lld, lda %lld", *uplo, *n, *lda);
 #else
-    snprintf(buffer, 256,"ctrttp inputs: uplo %c, n %d, lda %d",*uplo, *n, *lda);
+    snprintf(buffer, 256, "ctrttp inputs: uplo %c, n %d, lda %d", *uplo, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -120,7 +120,8 @@ void ctrttp_(char *uplo, integer *n, complex *a, integer *lda, complex *ap, inte
     extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -148,7 +149,7 @@ void ctrttp_(char *uplo, integer *n, complex *a, integer *lda, complex *ap, inte
     /* Function Body */
     *info = 0;
     lower = lsame_(uplo, "L", 1, 1);
-    if (! lower && ! lsame_(uplo, "U", 1, 1))
+    if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -1;
     }
@@ -156,7 +157,7 @@ void ctrttp_(char *uplo, integer *n, complex *a, integer *lda, complex *ap, inte
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }

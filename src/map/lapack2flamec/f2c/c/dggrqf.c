@@ -217,19 +217,30 @@ v(i+1:p) is stored on exit in B(i+1:p,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dggrqf_(integer *m, integer *p, integer *n, doublereal * a, integer *lda, doublereal *taua, doublereal *b, integer *ldb, doublereal *taub, doublereal *work, integer *lwork, integer *info)
+void dggrqf_(integer *m, integer *p, integer *n, doublereal *a, integer *lda, doublereal *taua,
+             doublereal *b, integer *ldb, doublereal *taub, doublereal *work, integer *lwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dggrqf inputs: m %" FLA_IS ", p %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*m, *p, *n, *lda, *ldb, *lwork);
+    AOCL_DTL_SNPRINTF("dggrqf inputs: m %" FLA_IS ", p %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS ", lwork %" FLA_IS "",
+                      *m, *p, *n, *lda, *ldb, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
     /* Local variables */
     integer nb, nb1, nb2, nb3, lopt;
     extern /* Subroutine */
-    void dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dgerqf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                integer *, integer *),
+        dgerqf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void dormrq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dormrq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -267,12 +278,12 @@ void dggrqf_(integer *m, integer *p, integer *n, doublereal * a, integer *lda, d
     nb2 = aocl_lapack_ilaenv(&c__1, "DGEQRF", " ", p, n, &c_n1, &c_n1);
     nb3 = aocl_lapack_ilaenv(&c__1, "DORMRQ", " ", m, n, p, &c_n1);
     /* Computing MAX */
-    i__1 = fla_max(nb1,nb2);
-    nb = fla_max(i__1,nb3);
+    i__1 = fla_max(nb1, nb2);
+    nb = fla_max(i__1, nb3);
     /* Computing MAX */
-    i__1 = fla_max(*n,*m);
-    lwkopt = fla_max(i__1,*p) * nb;
-    work[1] = (doublereal) lwkopt;
+    i__1 = fla_max(*n, *m);
+    lwkopt = fla_max(i__1, *p) * nb;
+    work[1] = (doublereal)lwkopt;
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -286,20 +297,20 @@ void dggrqf_(integer *m, integer *p, integer *n, doublereal * a, integer *lda, d
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*p))
+    else if(*ldb < fla_max(1, *p))
     {
         *info = -8;
     }
     else /* if(complicated condition) */
     {
         /* Computing MAX */
-        i__1 = fla_max(1,*m);
-        i__1 = fla_max(i__1,*p); // , expr subst
-        if (*lwork < fla_max(i__1,*n) && ! lquery)
+        i__1 = fla_max(1, *m);
+        i__1 = fla_max(i__1, *p); // , expr subst
+        if(*lwork < fla_max(i__1, *n) && !lquery)
         {
             *info = -11;
         }
@@ -317,24 +328,25 @@ void dggrqf_(integer *m, integer *p, integer *n, doublereal * a, integer *lda, d
         return;
     }
     /* RQ factorization of M-by-N matrix A: A = R*Q */
-    aocl_lapack_dgerqf(m, n, &a[a_offset], lda, &taua[1], &work[1], lwork, info);
+    dgerqf_(m, n, &a[a_offset], lda, &taua[1], &work[1], lwork, info);
     lopt = (integer)work[1];
     /* Update B := B*Q**T */
-    i__1 = fla_min(*m,*n);
+    i__1 = fla_min(*m, *n);
     /* Computing MAX */
     i__2 = 1;
     i__3 = *m - *n + 1; // , expr subst
-    dormrq_("Right", "Transpose", p, n, &i__1, &a[fla_max(i__2,i__3) + a_dim1], lda, &taua[1], &b[b_offset], ldb, &work[1], lwork, info);
+    dormrq_("Right", "Transpose", p, n, &i__1, &a[fla_max(i__2, i__3) + a_dim1], lda, &taua[1],
+            &b[b_offset], ldb, &work[1], lwork, info);
     /* Computing MAX */
     i__1 = lopt;
-    i__2 = (integer) work[1]; // , expr subst
-    lopt = fla_max(i__1,i__2);
+    i__2 = (integer)work[1]; // , expr subst
+    lopt = fla_max(i__1, i__2);
     /* QR factorization of P-by-N matrix B: B = Z*T */
     aocl_lapack_dgeqrf(p, n, &b[b_offset], ldb, &taub[1], &work[1], lwork, info);
     /* Computing MAX */
     i__1 = lopt;
-    i__2 = (integer) work[1]; // , expr subst
-    work[1] = (doublereal) fla_max(i__1,i__2);
+    i__2 = (integer)work[1]; // , expr subst
+    work[1] = (doublereal)fla_max(i__1, i__2);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DGGRQF */

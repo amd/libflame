@@ -1,9 +1,12 @@
 #include "FLA_f2c.h"
+#include "FLA_lapack2flame_return_defs.h"
 static integer c__6 = 6;
 static integer c__0 = 0;
 static integer c_n1 = -1;
 
-int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, integer *lda, double *s, double *u, integer * ldu, double *vt, integer *ldvt, double *work, integer *lwork, integer *info)
+int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, integer *lda,
+                 double *s, double *u, integer *ldu, double *vt, integer *ldvt, double *work,
+                 integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__2, i__3;
@@ -14,16 +17,22 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
     integer minmn, wrkbl, mnthr;
     logical wntua, wntva, wntun, wntuo, wntvn, wntvo, wntus, wntvs;
     integer bdspac;
-    extern void
-      dgebrd_(integer *, integer *, double *, integer *, double *, double *, double *, double *, double *, integer *, integer *),
-      dgelqf_(integer *, integer *, double *, integer *, double *, double *, integer *, integer *), 
-      dgeqrf_(integer *, integer *, double *, integer *, double *, double *, integer *, integer *), 
-      dorgbr_(char *, integer *, integer *, integer *, double *, integer *, double *, double *, integer *, integer *),
-      dorglq_(integer *, integer *, integer *, double *, integer *, double *, double *, integer *, integer *), 
-      dorgqr_(integer *, integer *, integer *, double *, integer *, double *, double *, integer *, integer *);
+    extern void dgebrd_(integer *, integer *, double *, integer *, double *, double *, double *,
+                        double *, double *, integer *, integer *),
+        dgelqf_(integer *, integer *, double *, integer *, double *, double *, integer *,
+                integer *),
+        dgeqrf_(integer *, integer *, double *, integer *, double *, double *, integer *,
+                integer *),
+        dorgbr_(char *, integer *, integer *, integer *, double *, integer *, double *, double *,
+                integer *, integer *),
+        dorglq_(integer *, integer *, integer *, double *, integer *, double *, double *, integer *,
+                integer *),
+        dorgqr_(integer *, integer *, integer *, double *, integer *, double *, double *, integer *,
+                integer *);
     integer minwrk, maxwrk;
     logical lquery, wntuas, wntvas;
-    integer lwork_dorgbr_p__, lwork_dorgbr_q__, lwork_dorglq_m__, lwork_dorglq_n__, lwork_dorgqr_m__, lwork_dorgqr_n__;
+    integer lwork_dorgbr_p__, lwork_dorgbr_q__, lwork_dorglq_m__, lwork_dorglq_n__,
+        lwork_dorgqr_m__, lwork_dorgqr_n__;
 
     /* Parameter adjustments */
     a_dim1 = *lda;
@@ -39,7 +48,7 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
     --work;
     /* Function Body */
     *info = 0;
-    minmn = fla_min(*m,*n);
+    minmn = fla_min(*m, *n);
     wntua = lsame_(jobu, "A", 1, 1);
     wntus = lsame_(jobu, "S", 1, 1);
     wntuas = wntua || wntus;
@@ -67,7 +76,7 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -6;
     }
@@ -96,22 +105,22 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
             bdspac = *n * 5;
             /* Compute space needed for DGEQRF */
             dgeqrf_(m, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
-            lwork_dgeqrf__ = (integer) dum[0];
+            lwork_dgeqrf__ = (integer)dum[0];
             /* Compute space needed for DORGQR */
             dorgqr_(m, n, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
-            lwork_dorgqr_n__ = (integer) dum[0];
+            lwork_dorgqr_n__ = (integer)dum[0];
             dorgqr_(m, m, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
-            lwork_dorgqr_m__ = (integer) dum[0];
+            lwork_dorgqr_m__ = (integer)dum[0];
             /* Compute space needed for DGEBRD */
             dgebrd_(n, n, &a[a_offset], lda, &s[1], dum, dum, dum, dum, &c_n1, &ierr);
-            lwork_dgebrd__ = (integer) dum[0];
+            lwork_dgebrd__ = (integer)dum[0];
             /* Compute space needed for DORGBR P */
             dorgbr_("P", n, n, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
-            lwork_dorgbr_p__ = (integer) dum[0];
+            lwork_dorgbr_p__ = (integer)dum[0];
             /* Compute space needed for DORGBR Q */
             dorgbr_("Q", n, n, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
-            lwork_dorgbr_q__ = (integer) dum[0];
-            if (*m >= mnthr)
+            lwork_dorgbr_q__ = (integer)dum[0];
+            if(*m >= mnthr)
             {
                 if(wntun)
                 {
@@ -120,18 +129,18 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = *n * 3 + lwork_dgebrd__; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
-                    if (wntvo || wntvas)
+                    maxwrk = fla_max(i__2, i__3);
+                    if(wntvo || wntvas)
                     {
                         /* Computing MAX */
                         i__2 = maxwrk;
                         i__3 = *n * 3 + lwork_dorgbr_p__; // , expr subst
-                        maxwrk = fla_max(i__2,i__3);
+                        maxwrk = fla_max(i__2, i__3);
                     }
-                    maxwrk = fla_max(maxwrk,bdspac);
+                    maxwrk = fla_max(maxwrk, bdspac);
                     /* Computing MAX */
                     i__2 = *n << 2;
-                    minwrk = fla_max(i__2,bdspac);
+                    minwrk = fla_max(i__2, bdspac);
                 }
                 else if(wntuo && wntvn)
                 {
@@ -140,23 +149,23 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_dorgqr_n__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
-                    wrkbl = fla_max(wrkbl,bdspac);
+                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = fla_max(wrkbl, bdspac);
                     /* Computing MAX */
                     i__2 = *n * *n + wrkbl;
                     i__3 = *n * *n + *m * *n + *n; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
+                    maxwrk = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = *n * 3 + *m;
-                    minwrk = fla_max(i__2,bdspac);
+                    minwrk = fla_max(i__2, bdspac);
                 }
                 else if(wntuo && wntvas)
                 {
@@ -166,27 +175,27 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_dorgqr_n__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
-                    wrkbl = fla_max(wrkbl,bdspac);
+                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = fla_max(wrkbl, bdspac);
                     /* Computing MAX */
                     i__2 = *n * *n + wrkbl;
                     i__3 = *n * *n + *m * *n + *n; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
+                    maxwrk = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = *n * 3 + *m;
-                    minwrk = fla_max(i__2,bdspac);
+                    minwrk = fla_max(i__2, bdspac);
                 }
                 else if(wntus && wntvn)
                 {
@@ -195,20 +204,20 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_dorgqr_n__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
-                    wrkbl = fla_max(wrkbl,bdspac);
+                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = fla_max(wrkbl, bdspac);
                     maxwrk = *n * *n + wrkbl;
                     /* Computing MAX */
                     i__2 = *n * 3 + *m;
-                    minwrk = fla_max(i__2,bdspac);
+                    minwrk = fla_max(i__2, bdspac);
                 }
                 else if(wntus && wntvo)
                 {
@@ -217,24 +226,24 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_dorgqr_n__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
-                    wrkbl = fla_max(wrkbl,bdspac);
+                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = fla_max(wrkbl, bdspac);
                     maxwrk = (*n << 1) * *n + wrkbl;
                     /* Computing MAX */
                     i__2 = *n * 3 + *m;
-                    minwrk = fla_max(i__2,bdspac);
+                    minwrk = fla_max(i__2, bdspac);
                 }
                 else if(wntus && wntvas)
                 {
@@ -244,24 +253,24 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_dorgqr_n__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
-                    wrkbl = fla_max(wrkbl,bdspac);
+                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = fla_max(wrkbl, bdspac);
                     maxwrk = *n * *n + wrkbl;
                     /* Computing MAX */
                     i__2 = *n * 3 + *m;
-                    minwrk = fla_max(i__2,bdspac);
+                    minwrk = fla_max(i__2, bdspac);
                 }
                 else if(wntua && wntvn)
                 {
@@ -270,20 +279,20 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_dorgqr_m__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
-                    wrkbl = fla_max(wrkbl,bdspac);
+                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = fla_max(wrkbl, bdspac);
                     maxwrk = *n * *n + wrkbl;
                     /* Computing MAX */
                     i__2 = *n * 3 + *m;
-                    minwrk = fla_max(i__2,bdspac);
+                    minwrk = fla_max(i__2, bdspac);
                 }
                 else if(wntua && wntvo)
                 {
@@ -292,24 +301,24 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_dorgqr_m__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
-                    wrkbl = fla_max(wrkbl,bdspac);
+                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = fla_max(wrkbl, bdspac);
                     maxwrk = (*n << 1) * *n + wrkbl;
                     /* Computing MAX */
                     i__2 = *n * 3 + *m;
-                    minwrk = fla_max(i__2,bdspac);
+                    minwrk = fla_max(i__2, bdspac);
                 }
                 else if(wntua && wntvas)
                 {
@@ -319,61 +328,61 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n + lwork_dorgqr_m__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *n * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
-                    wrkbl = fla_max(wrkbl,bdspac);
+                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = fla_max(wrkbl, bdspac);
                     maxwrk = *n * *n + wrkbl;
                     /* Computing MAX */
                     i__2 = *n * 3 + *m;
-                    minwrk = fla_max(i__2,bdspac);
+                    minwrk = fla_max(i__2, bdspac);
                 }
             }
             else
             {
                 /* Path 10 (M at least N, but not much larger) */
-                dgebrd_(m, n, &a[a_offset], lda, &s[1], dum, dum, dum, dum, & c_n1, &ierr);
-                lwork_dgebrd__ = (integer) dum[0];
+                dgebrd_(m, n, &a[a_offset], lda, &s[1], dum, dum, dum, dum, &c_n1, &ierr);
+                lwork_dgebrd__ = (integer)dum[0];
                 maxwrk = *n * 3 + lwork_dgebrd__;
                 if(wntus || wntuo)
                 {
                     dorgbr_("Q", m, n, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
-                    lwork_dorgbr_q__ = (integer) dum[0];
+                    lwork_dorgbr_q__ = (integer)dum[0];
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = *n * 3 + lwork_dorgbr_q__; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
+                    maxwrk = fla_max(i__2, i__3);
                 }
                 if(wntua)
                 {
                     dorgbr_("Q", m, m, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
-                    lwork_dorgbr_q__ = (integer) dum[0];
+                    lwork_dorgbr_q__ = (integer)dum[0];
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = *n * 3 + lwork_dorgbr_q__; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
+                    maxwrk = fla_max(i__2, i__3);
                 }
                 if(!wntvn)
                 {
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = *n * 3 + lwork_dorgbr_p__; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
+                    maxwrk = fla_max(i__2, i__3);
                 }
-                maxwrk = fla_max(maxwrk,bdspac);
+                maxwrk = fla_max(maxwrk, bdspac);
                 /* Computing MAX */
                 i__2 = *n * 3 + *m;
-                minwrk = fla_max(i__2,bdspac);
+                minwrk = fla_max(i__2, bdspac);
             }
         }
         else if(minmn > 0)
@@ -383,22 +392,22 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
             bdspac = *m * 5;
             /* Compute space needed for DGELQF */
             dgelqf_(m, n, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
-            lwork_dgelqf__ = (integer) dum[0];
+            lwork_dgelqf__ = (integer)dum[0];
             /* Compute space needed for DORGLQ */
             dorglq_(n, n, m, dum, n, dum, dum, &c_n1, &ierr);
-            lwork_dorglq_n__ = (integer) dum[0];
+            lwork_dorglq_n__ = (integer)dum[0];
             dorglq_(m, n, m, &a[a_offset], lda, dum, dum, &c_n1, &ierr);
-            lwork_dorglq_m__ = (integer) dum[0];
+            lwork_dorglq_m__ = (integer)dum[0];
             /* Compute space needed for DGEBRD */
             dgebrd_(m, m, &a[a_offset], lda, &s[1], dum, dum, dum, dum, &c_n1, &ierr);
-            lwork_dgebrd__ = (integer) dum[0];
+            lwork_dgebrd__ = (integer)dum[0];
             /* Compute space needed for DORGBR P */
             dorgbr_("P", m, m, m, &a[a_offset], n, dum, dum, &c_n1, &ierr);
-            lwork_dorgbr_p__ = (integer) dum[0];
+            lwork_dorgbr_p__ = (integer)dum[0];
             /* Compute space needed for DORGBR Q */
             dorgbr_("Q", m, m, m, &a[a_offset], n, dum, dum, &c_n1, &ierr);
-            lwork_dorgbr_q__ = (integer) dum[0];
-            if (*n >= mnthr)
+            lwork_dorgbr_q__ = (integer)dum[0];
+            if(*n >= mnthr)
             {
                 if(wntvn)
                 {
@@ -407,18 +416,18 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = *m * 3 + lwork_dgebrd__; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
-                    if (wntuo || wntuas)
+                    maxwrk = fla_max(i__2, i__3);
+                    if(wntuo || wntuas)
                     {
                         /* Computing MAX */
                         i__2 = maxwrk;
                         i__3 = *m * 3 + lwork_dorgbr_q__; // , expr subst
-                        maxwrk = fla_max(i__2,i__3);
+                        maxwrk = fla_max(i__2, i__3);
                     }
-                    maxwrk = fla_max(maxwrk,bdspac);
+                    maxwrk = fla_max(maxwrk, bdspac);
                     /* Computing MAX */
                     i__2 = *m << 2;
-                    minwrk = fla_max(i__2,bdspac);
+                    minwrk = fla_max(i__2, bdspac);
                 }
                 else if(wntvo && wntun)
                 {
@@ -427,23 +436,23 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_dorglq_m__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
-                    wrkbl = fla_max(wrkbl,bdspac);
+                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = fla_max(wrkbl, bdspac);
                     /* Computing MAX */
                     i__2 = *m * *m + wrkbl;
                     i__3 = *m * *m + *m * *n + *m; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
+                    maxwrk = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = *m * 3 + *n;
-                    minwrk = fla_max(i__2,bdspac);
+                    minwrk = fla_max(i__2, bdspac);
                 }
                 else if(wntvo && wntuas)
                 {
@@ -453,27 +462,27 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_dorglq_m__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
-                    wrkbl = fla_max(wrkbl,bdspac);
+                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = fla_max(wrkbl, bdspac);
                     /* Computing MAX */
                     i__2 = *m * *m + wrkbl;
                     i__3 = *m * *m + *m * *n + *m; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
+                    maxwrk = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = *m * 3 + *n;
-                    minwrk = fla_max(i__2,bdspac);
+                    minwrk = fla_max(i__2, bdspac);
                 }
                 else if(wntvs && wntun)
                 {
@@ -482,20 +491,20 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_dorglq_m__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
-                    wrkbl = fla_max(wrkbl,bdspac);
+                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = fla_max(wrkbl, bdspac);
                     maxwrk = *m * *m + wrkbl;
                     /* Computing MAX */
                     i__2 = *m * 3 + *n;
-                    minwrk = fla_max(i__2,bdspac);
+                    minwrk = fla_max(i__2, bdspac);
                 }
                 else if(wntvs && wntuo)
                 {
@@ -504,24 +513,24 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_dorglq_m__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
-                    wrkbl = fla_max(wrkbl,bdspac);
+                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = fla_max(wrkbl, bdspac);
                     maxwrk = (*m << 1) * *m + wrkbl;
                     /* Computing MAX */
                     i__2 = *m * 3 + *n;
-                    minwrk = fla_max(i__2,bdspac);
+                    minwrk = fla_max(i__2, bdspac);
                 }
                 else if(wntvs && wntuas)
                 {
@@ -531,24 +540,24 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_dorglq_m__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
-                    wrkbl = fla_max(wrkbl,bdspac);
+                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = fla_max(wrkbl, bdspac);
                     maxwrk = *m * *m + wrkbl;
                     /* Computing MAX */
                     i__2 = *m * 3 + *n;
-                    minwrk = fla_max(i__2,bdspac);
+                    minwrk = fla_max(i__2, bdspac);
                 }
                 else if(wntva && wntun)
                 {
@@ -557,20 +566,20 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_dorglq_n__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
-                    wrkbl = fla_max(wrkbl,bdspac);
+                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = fla_max(wrkbl, bdspac);
                     maxwrk = *m * *m + wrkbl;
                     /* Computing MAX */
                     i__2 = *m * 3 + *n;
-                    minwrk = fla_max(i__2,bdspac);
+                    minwrk = fla_max(i__2, bdspac);
                 }
                 else if(wntva && wntuo)
                 {
@@ -579,24 +588,24 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_dorglq_n__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
-                    wrkbl = fla_max(wrkbl,bdspac);
+                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = fla_max(wrkbl, bdspac);
                     maxwrk = (*m << 1) * *m + wrkbl;
                     /* Computing MAX */
                     i__2 = *m * 3 + *n;
-                    minwrk = fla_max(i__2,bdspac);
+                    minwrk = fla_max(i__2, bdspac);
                 }
                 else if(wntva && wntuas)
                 {
@@ -606,67 +615,67 @@ int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, int
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m + lwork_dorglq_n__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dgebrd__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_p__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
+                    wrkbl = fla_max(i__2, i__3);
                     /* Computing MAX */
                     i__2 = wrkbl;
                     i__3 = *m * 3 + lwork_dorgbr_q__; // , expr subst
-                    wrkbl = fla_max(i__2,i__3);
-                    wrkbl = fla_max(wrkbl,bdspac);
+                    wrkbl = fla_max(i__2, i__3);
+                    wrkbl = fla_max(wrkbl, bdspac);
                     maxwrk = *m * *m + wrkbl;
                     /* Computing MAX */
                     i__2 = *m * 3 + *n;
-                    minwrk = fla_max(i__2,bdspac);
+                    minwrk = fla_max(i__2, bdspac);
                 }
             }
             else
             {
                 /* Path 10t(N greater than M, but not much larger) */
-                dgebrd_(m, n, &a[a_offset], lda, &s[1], dum, dum, dum, dum, & c_n1, &ierr);
-                lwork_dgebrd__ = (integer) dum[0];
+                dgebrd_(m, n, &a[a_offset], lda, &s[1], dum, dum, dum, dum, &c_n1, &ierr);
+                lwork_dgebrd__ = (integer)dum[0];
                 maxwrk = *m * 3 + lwork_dgebrd__;
                 if(wntvs || wntvo)
                 {
                     /* Compute space needed for DORGBR P */
-                    dorgbr_("P", m, n, m, &a[a_offset], n, dum, dum, &c_n1, & ierr);
-                    lwork_dorgbr_p__ = (integer) dum[0];
+                    dorgbr_("P", m, n, m, &a[a_offset], n, dum, dum, &c_n1, &ierr);
+                    lwork_dorgbr_p__ = (integer)dum[0];
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = *m * 3 + lwork_dorgbr_p__; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
+                    maxwrk = fla_max(i__2, i__3);
                 }
                 if(wntva)
                 {
-                    dorgbr_("P", n, n, m, &a[a_offset], n, dum, dum, &c_n1, & ierr);
-                    lwork_dorgbr_p__ = (integer) dum[0];
+                    dorgbr_("P", n, n, m, &a[a_offset], n, dum, dum, &c_n1, &ierr);
+                    lwork_dorgbr_p__ = (integer)dum[0];
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = *m * 3 + lwork_dorgbr_p__; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
+                    maxwrk = fla_max(i__2, i__3);
                 }
                 if(!wntun)
                 {
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = *m * 3 + lwork_dorgbr_q__; // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
+                    maxwrk = fla_max(i__2, i__3);
                 }
-                maxwrk = fla_max(maxwrk,bdspac);
+                maxwrk = fla_max(maxwrk, bdspac);
                 /* Computing MAX */
                 i__2 = *m * 3 + *n;
-                minwrk = fla_max(i__2,bdspac);
+                minwrk = fla_max(i__2, bdspac);
             }
         }
-        maxwrk = fla_max(maxwrk,minwrk);
-        work[1] = (double) maxwrk;
-        if (*lwork < minwrk && ! lquery)
+        maxwrk = fla_max(maxwrk, minwrk);
+        work[1] = (double)maxwrk;
+        if(*lwork < minwrk && !lquery)
         {
             *info = -13;
         }

@@ -1,5 +1,8 @@
-/* ../netlib/cgebal.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cgebal.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b CGEBAL */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CGEBAL + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgebal. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgebal.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgebal. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgebal.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgebal. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgebal.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -50,11 +59,11 @@ and second, applying a diagonal similarity transformation */
 /* > Specifies the operations to be performed on A: */
 /* > = 'N': none: simply set ILO = 1, IHI = N, SCALE(I) = 1.0 */
 /* > for i = 1,...,N;
-*/
+ */
 /* > = 'P': permute only;
-*/
+ */
 /* > = 'S': scale only;
-*/
+ */
 /* > = 'B': both permute and scale. */
 /* > \endverbatim */
 /* > */
@@ -153,15 +162,16 @@ and second, applying a diagonal similarity transformation */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgebal_(char *job, integer *n, complex *a, integer *lda, integer *ilo, integer *ihi, real *scale, integer *info)
+void cgebal_(char *job, integer *n, complex *a, integer *lda, integer *ilo, integer *ihi,
+             real *scale, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgebal inputs: job %c, n %lld, lda %lld",*job, *n, *lda);
+    snprintf(buffer, 256, "cgebal inputs: job %c, n %lld, lda %lld", *job, *n, *lda);
 #else
-    snprintf(buffer, 256,"cgebal inputs: job %c, n %d, lda %d",*job, *n, *lda);
+    snprintf(buffer, 256, "cgebal inputs: job %c, n %d, lda %d", *job, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -177,13 +187,16 @@ void cgebal_(char *job, integer *n, complex *a, integer *lda, integer *ilo, inte
     integer ica, ira, iexc;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void cswap_(integer *, complex *, integer *, complex *, integer *);
+        void
+        cswap_(integer *, complex *, integer *, complex *, integer *);
     real sfmin1, sfmin2, sfmax1, sfmax2;
     extern real scnrm2_(integer *, complex *, integer *);
     extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    void csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        csscal_(integer *, real *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern logical sisnan_(real *);
     logical noconv;
     /* -- LAPACK computational routine (version 3.7.0) -- */
@@ -212,19 +225,20 @@ void cgebal_(char *job, integer *n, complex *a, integer *lda, integer *ilo, inte
     --scale;
     /* Function Body */
     *info = 0;
-    if (! lsame_(job, "N", 1, 1) && ! lsame_(job, "P", 1, 1) && ! lsame_(job, "S", 1, 1) && ! lsame_(job, "B", 1, 1))
+    if(!lsame_(job, "N", 1, 1) && !lsame_(job, "P", 1, 1) && !lsame_(job, "S", 1, 1)
+       && !lsame_(job, "B", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CGEBAL", &i__1, (ftnlen)6);
@@ -233,23 +247,21 @@ void cgebal_(char *job, integer *n, complex *a, integer *lda, integer *ilo, inte
     }
     k = 1;
     l = *n;
-    if (*n == 0)
+    if(*n == 0)
     {
         goto L210;
     }
-    if (lsame_(job, "N", 1, 1))
+    if(lsame_(job, "N", 1, 1))
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             scale[i__] = 1.f;
             /* L10: */
         }
         goto L210;
     }
-    if (lsame_(job, "S", 1, 1))
+    if(lsame_(job, "S", 1, 1))
     {
         goto L120;
     }
@@ -257,8 +269,8 @@ void cgebal_(char *job, integer *n, complex *a, integer *lda, integer *ilo, inte
     goto L50;
     /* Row and column exchange. */
 L20:
-    scale[m] = (real) j;
-    if (j == m)
+    scale[m] = (real)j;
+    if(j == m)
     {
         goto L30;
     }
@@ -266,47 +278,41 @@ L20:
     i__1 = *n - k + 1;
     cswap_(&i__1, &a[j + k * a_dim1], lda, &a[m + k * a_dim1], lda);
 L30:
-    switch (iexc)
+    switch(iexc)
     {
-    case 1:
-        goto L40;
-    case 2:
-        goto L80;
+        case 1:
+            goto L40;
+        case 2:
+            goto L80;
     }
     /* Search for rows isolating an eigenvalue and push them down. */
 L40:
-    if (l == 1)
+    if(l == 1)
     {
         goto L210;
     }
     --l;
 L50:
-    for (j = l;
-            j >= 1;
-            --j)
+    for(j = l; j >= 1; --j)
     {
         i__1 = l;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if (i__ == j)
+            if(i__ == j)
             {
                 goto L60;
             }
             i__2 = j + i__ * a_dim1;
-            if (a[i__2].r != 0.f || r_imag(&a[j + i__ * a_dim1]) != 0.f)
+            if(a[i__2].r != 0.f || r_imag(&a[j + i__ * a_dim1]) != 0.f)
             {
                 goto L70;
             }
-L60:
-            ;
+        L60:;
         }
         m = l;
         iexc = 1;
         goto L20;
-L70:
-        ;
+    L70:;
     }
     goto L90;
     /* Search for columns isolating an eigenvalue and push them left. */
@@ -314,43 +320,35 @@ L80:
     ++k;
 L90:
     i__1 = l;
-    for (j = k;
-            j <= i__1;
-            ++j)
+    for(j = k; j <= i__1; ++j)
     {
         i__2 = l;
-        for (i__ = k;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = k; i__ <= i__2; ++i__)
         {
-            if (i__ == j)
+            if(i__ == j)
             {
                 goto L100;
             }
             i__3 = i__ + j * a_dim1;
-            if (a[i__3].r != 0.f || r_imag(&a[i__ + j * a_dim1]) != 0.f)
+            if(a[i__3].r != 0.f || r_imag(&a[i__ + j * a_dim1]) != 0.f)
             {
                 goto L110;
             }
-L100:
-            ;
+        L100:;
         }
         m = k;
         iexc = 2;
         goto L20;
-L110:
-        ;
+    L110:;
     }
 L120:
     i__1 = l;
-    for (i__ = k;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = k; i__ <= i__1; ++i__)
     {
         scale[i__] = 1.f;
         /* L130: */
     }
-    if (lsame_(job, "P", 1, 1))
+    if(lsame_(job, "P", 1, 1))
     {
         goto L210;
     }
@@ -363,9 +361,7 @@ L120:
 L140:
     noconv = FALSE_;
     i__1 = l;
-    for (i__ = k;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = k; i__ <= i__1; ++i__)
     {
         i__2 = l - k + 1;
         c__ = scnrm2_(&i__2, &a[k + i__ * a_dim1], &c__1);
@@ -377,23 +373,23 @@ L140:
         ira = icamax_(&i__2, &a[i__ + k * a_dim1], lda);
         ra = c_abs(&a[i__ + (ira + k - 1) * a_dim1]);
         /* Guard against zero C or R due to underflow. */
-        if (c__ == 0.f || r__ == 0.f)
+        if(c__ == 0.f || r__ == 0.f)
         {
             goto L200;
         }
         g = r__ / 2.f;
         f = 1.f;
         s = c__ + r__;
-L160: /* Computing MAX */
-        r__1 = fla_max(f,c__);
+    L160: /* Computing MAX */
+        r__1 = fla_max(f, c__);
         /* Computing MIN */
-        r__2 = fla_min(r__,g);
-        if (c__ >= g || fla_max(r__1,ca) >= sfmax2 || fla_min(r__2,ra) <= sfmin2)
+        r__2 = fla_min(r__, g);
+        if(c__ >= g || fla_max(r__1, ca) >= sfmax2 || fla_min(r__2, ra) <= sfmin2)
         {
             goto L170;
         }
         r__1 = c__ + f + ca + r__ + g + ra;
-        if (sisnan_(&r__1))
+        if(sisnan_(&r__1))
         {
             /* Exit if NaN to avoid infinite loop */
             *info = -3;
@@ -409,12 +405,12 @@ L160: /* Computing MAX */
         g /= 2.f;
         ra /= 2.f;
         goto L160;
-L170:
+    L170:
         g = c__ / 2.f;
-L180: /* Computing MIN */
-        r__1 = fla_min(f,c__);
-        r__1 = fla_min(r__1,g); // , expr subst
-        if (g < r__ || fla_max(r__,ra) >= sfmax2 || fla_min(r__1,ca) <= sfmin2)
+    L180: /* Computing MIN */
+        r__1 = fla_min(f, c__);
+        r__1 = fla_min(r__1, g); // , expr subst
+        if(g < r__ || fla_max(r__, ra) >= sfmax2 || fla_min(r__1, ca) <= sfmin2)
         {
             goto L190;
         }
@@ -426,21 +422,21 @@ L180: /* Computing MIN */
         ra *= 2.f;
         goto L180;
         /* Now balance. */
-L190:
-        if (c__ + r__ >= s * .95f)
+    L190:
+        if(c__ + r__ >= s * .95f)
         {
             goto L200;
         }
-        if (f < 1.f && scale[i__] < 1.f)
+        if(f < 1.f && scale[i__] < 1.f)
         {
-            if (f * scale[i__] <= sfmin1)
+            if(f * scale[i__] <= sfmin1)
             {
                 goto L200;
             }
         }
-        if (f > 1.f && scale[i__] > 1.f)
+        if(f > 1.f && scale[i__] > 1.f)
         {
-            if (scale[i__] >= sfmax1 / f)
+            if(scale[i__] >= sfmax1 / f)
             {
                 goto L200;
             }
@@ -451,10 +447,9 @@ L190:
         i__2 = *n - k + 1;
         csscal_(&i__2, &g, &a[i__ + k * a_dim1], lda);
         csscal_(&l, &f, &a[i__ * a_dim1 + 1], &c__1);
-L200:
-        ;
+    L200:;
     }
-    if (noconv)
+    if(noconv)
     {
         goto L140;
     }
@@ -466,4 +461,3 @@ L210:
     /* End of CGEBAL */
 }
 /* cgebal_ */
-

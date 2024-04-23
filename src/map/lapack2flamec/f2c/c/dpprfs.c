@@ -170,10 +170,14 @@ static doublereal c_b14 = 1.;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dpprfs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, doublereal *afp, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal *ferr, doublereal *berr, doublereal *work, integer *iwork, integer *info)
+void dpprfs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, doublereal *afp, doublereal *b,
+             integer *ldb, doublereal *x, integer *ldx, doublereal *ferr, doublereal *berr,
+             doublereal *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dpprfs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*uplo, *n, *nrhs, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("dpprfs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS
+                      ", ldx %" FLA_IS "",
+                      *uplo, *n, *nrhs, *ldb, *ldx);
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3;
     doublereal d__1, d__2, d__3;
@@ -189,20 +193,28 @@ void dpprfs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, doublereal *
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     integer count;
     extern /* Subroutine */
-    void dspmv_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dspmv_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *,
+               doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-    void dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+                integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal lstres;
     extern /* Subroutine */
-    void dpptrs_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *);
+        void
+        dpptrs_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -242,7 +254,7 @@ void dpprfs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, doublereal *
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -254,11 +266,11 @@ void dpprfs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, doublereal *
     {
         *info = -3;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -9;
     }
@@ -296,9 +308,8 @@ void dpprfs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, doublereal *
         lstres = 3.;
     L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - A * X */
-        aocl_blas_dcopy(n, &b[j * b_dim1 + 1], &c__1, &work[*n + 1], &c__1);
-        aocl_blas_dspmv(uplo, n, &c_b12, &ap[1], &x[j * x_dim1 + 1], &c__1, &c_b14, &work[*n + 1],
-                        &c__1);
+        dcopy_(n, &b[j * b_dim1 + 1], &c__1, &work[*n + 1], &c__1);
+        dspmv_(uplo, n, &c_b12, &ap[1], &x[j * x_dim1 + 1], &c__1, &c_b14, &work[*n + 1], &c__1);
         /* Compute componentwise relative backward error from formula */
         /* fla_max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(A)*f2c_dabs(X) + f2c_dabs(B) )(i) ) */
         /* where f2c_dabs(Z) is the componentwise absolute value of the matrix */
@@ -325,7 +336,8 @@ void dpprfs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, doublereal *
                 for(i__ = 1; i__ <= i__3; ++i__)
                 {
                     work[i__] += (d__1 = ap[ik], f2c_dabs(d__1)) * xk;
-                    s += (d__1 = ap[ik], f2c_dabs(d__1)) * (d__2 = x[i__ + j * x_dim1], f2c_dabs(d__2));
+                    s += (d__1 = ap[ik], f2c_dabs(d__1))
+                         * (d__2 = x[i__ + j * x_dim1], f2c_dabs(d__2));
                     ++ik;
                     /* L40: */
                 }
@@ -347,7 +359,8 @@ void dpprfs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, doublereal *
                 for(i__ = k + 1; i__ <= i__3; ++i__)
                 {
                     work[i__] += (d__1 = ap[ik], f2c_dabs(d__1)) * xk;
-                    s += (d__1 = ap[ik], f2c_dabs(d__1)) * (d__2 = x[i__ + j * x_dim1], f2c_dabs(d__2));
+                    s += (d__1 = ap[ik], f2c_dabs(d__1))
+                         * (d__2 = x[i__ + j * x_dim1], f2c_dabs(d__2));
                     ++ik;
                     /* L60: */
                 }
@@ -364,15 +377,16 @@ void dpprfs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, doublereal *
             {
                 /* Computing MAX */
                 d__2 = s;
-                d__3 = (d__1 = work[*n + i__], f2c_dabs(d__1)) / work[ i__]; // , expr subst
-                s = fla_max(d__2,d__3);
+                d__3 = (d__1 = work[*n + i__], f2c_dabs(d__1)) / work[i__]; // , expr subst
+                s = fla_max(d__2, d__3);
             }
             else
             {
                 /* Computing MAX */
                 d__2 = s;
-                d__3 = ((d__1 = work[*n + i__], f2c_dabs(d__1)) + safe1) / (work[i__] + safe1); // , expr subst
-                s = fla_max(d__2,d__3);
+                d__3 = ((d__1 = work[*n + i__], f2c_dabs(d__1)) + safe1)
+                       / (work[i__] + safe1); // , expr subst
+                s = fla_max(d__2, d__3);
             }
             /* L80: */
         }
@@ -385,8 +399,8 @@ void dpprfs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, doublereal *
         if(berr[j] > eps && berr[j] * 2. <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            aocl_lapack_dpptrs(uplo, n, &c__1, &afp[1], &work[*n + 1], n, info);
-            aocl_blas_daxpy(n, &c_b14, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            dpptrs_(uplo, n, &c__1, &afp[1], &work[*n + 1], n, info);
+            daxpy_(n, &c_b14, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;
@@ -423,8 +437,7 @@ void dpprfs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, doublereal *
         }
         kase = 0;
     L100:
-        aocl_lapack_dlacn2(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase,
-                           isave);
+        dlacn2_(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
@@ -459,7 +472,7 @@ void dpprfs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, doublereal *
             /* Computing MAX */
             d__2 = lstres;
             d__3 = (d__1 = x[i__ + j * x_dim1], f2c_dabs(d__1)); // , expr subst
-            lstres = fla_max(d__2,d__3);
+            lstres = fla_max(d__2, d__3);
             /* L130: */
         }
         if(lstres != 0.)

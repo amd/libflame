@@ -3,11 +3,6 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-
-/*
- *     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
- */
-
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CHPTRF */
@@ -162,15 +157,15 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void chptrf_(char *uplo, integer *n, complex *ap, integer * ipiv, integer *info)
+void chptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chptrf inputs: uplo %c, n %lld",*uplo, *n);
+    snprintf(buffer, 256, "chptrf inputs: uplo %c, n %lld", *uplo, *n);
 #else
-    snprintf(buffer, 256,"chptrf inputs: uplo %c, n %d",*uplo, *n);
+    snprintf(buffer, 256, "chptrf inputs: uplo %c, n %d", *uplo, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -196,19 +191,23 @@ void chptrf_(char *uplo, integer *n, complex *ap, integer * ipiv, integer *info)
     integer knc, kpc, npp;
     complex wkm1, wkp1;
     extern /* Subroutine */
-    void chpr_(char *, integer *, real *, complex *, integer *, complex *);
+        void
+        chpr_(char *, integer *, real *, complex *, integer *, complex *);
     integer imax, jmax;
     real alpha;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void cswap_(integer *, complex *, integer *, complex *, integer *);
+        void
+        cswap_(integer *, complex *, integer *, complex *, integer *);
     integer kstep;
     logical upper;
     extern real slapy2_(real *, real *);
     real absakk;
     extern integer icamax_(integer *, complex *, integer *);
     extern /* Subroutine */
-    void csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        csscal_(integer *, real *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real colmax, rowmax;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -243,7 +242,7 @@ void chptrf_(char *uplo, integer *n, complex *ap, integer * ipiv, integer *info)
     imax = 0;
     jmax = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -267,7 +266,7 @@ void chptrf_(char *uplo, integer *n, complex *ap, integer * ipiv, integer *info)
         /* 1 or 2 */
         k = *n;
         kc = (*n - 1) * *n / 2 + 1;
-L10:
+    L10:
         kpc = knc = kc;
         /* If K < 1, exit from loop */
         if(k < 1)
@@ -286,13 +285,14 @@ L10:
             i__1 = k - 1;
             imax = aocl_blas_icamax(&i__1, &ap[kc], &c__1);
             i__1 = kc + imax - 1;
-            colmax = (r__1 = ap[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&ap[kc + imax - 1]), f2c_abs(r__2));
+            colmax = (r__1 = ap[i__1].r, f2c_abs(r__1))
+                     + (r__2 = r_imag(&ap[kc + imax - 1]), f2c_abs(r__2));
         }
         else
         {
             colmax = 0.f;
         }
-        if (fla_max(absakk,colmax) == 0.f)
+        if(fla_max(absakk, colmax) == 0.f)
         {
             /* Column K is zero: set INFO and continue */
             if(*info == 0)
@@ -324,10 +324,12 @@ L10:
                 for(j = imax + 1; j <= i__1; ++j)
                 {
                     i__2 = kx;
-                    if ((r__1 = ap[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&ap[ kx]), f2c_abs(r__2)) > rowmax)
+                    if((r__1 = ap[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&ap[kx]), f2c_abs(r__2))
+                       > rowmax)
                     {
                         i__2 = kx;
-                        rowmax = (r__1 = ap[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&ap[kx]), f2c_abs(r__2));
+                        rowmax = (r__1 = ap[i__2].r, f2c_abs(r__1))
+                                 + (r__2 = r_imag(&ap[kx]), f2c_abs(r__2));
                         jmax = j;
                     }
                     kx += j;
@@ -341,8 +343,9 @@ L10:
                     /* Computing MAX */
                     i__1 = kpc + jmax - 1;
                     r__3 = rowmax;
-                    r__4 = (r__1 = ap[i__1].r, f2c_abs(r__1)) + ( r__2 = r_imag(&ap[kpc + jmax - 1]), f2c_abs(r__2)); // , expr subst
-                    rowmax = fla_max(r__3,r__4);
+                    r__4 = (r__1 = ap[i__1].r, f2c_abs(r__1))
+                           + (r__2 = r_imag(&ap[kpc + jmax - 1]), f2c_abs(r__2)); // , expr subst
+                    rowmax = fla_max(r__3, r__4);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
@@ -352,7 +355,7 @@ L10:
                 else /* if(complicated condition) */
                 {
                     i__1 = kpc + imax - 1;
-                    if ((r__1 = ap[i__1].r, f2c_abs(r__1)) >= alpha * rowmax)
+                    if((r__1 = ap[i__1].r, f2c_abs(r__1)) >= alpha * rowmax)
                     {
                         /* interchange rows and columns K and IMAX, use 1-by-1 */
                         /* pivot block */
@@ -407,8 +410,8 @@ L10:
                 ap[i__1].real = r__1;
                 ap[i__1].imag = 0.f; // , expr subst
                 i__1 = kpc + kp - 1;
-                ap[i__1].real = r1;
-                ap[i__1].imag = 0.f; // , expr subst
+                ap[i__1].r = r1;
+                ap[i__1].i = 0.f; // , expr subst
                 if(kstep == 2)
                 {
                     i__1 = kc + k - 1;
@@ -432,9 +435,9 @@ L10:
             {
                 i__1 = kc + k - 1;
                 i__2 = kc + k - 1;
-                r__1 = ap[i__2].real;
-                ap[i__1].real = r__1;
-                ap[i__1].imag = 0.f; // , expr subst
+                r__1 = ap[i__2].r;
+                ap[i__1].r = r__1;
+                ap[i__1].i = 0.f; // , expr subst
                 if(kstep == 2)
                 {
                     i__1 = kc - 1;
@@ -494,44 +497,44 @@ L10:
                         q__3.imag = d11 * ap[i__1].imag; // , expr subst
                         r_cnjg(&q__5, &d12);
                         i__2 = j + (k - 1) * k / 2;
-                        q__4.real = q__5.real * ap[i__2].real - q__5.imag * ap[i__2].imag;
-                        q__4.imag = q__5.real * ap[i__2].imag + q__5.imag * ap[i__2].real; // , expr subst
-                        q__2.real = q__3.real - q__4.real;
-                        q__2.imag = q__3.imag - q__4.imag; // , expr subst
-                        q__1.real = d__ * q__2.real;
-                        q__1.imag = d__ * q__2.imag; // , expr subst
-                        wkm1.real = q__1.real;
-                        wkm1.imag = q__1.imag; // , expr subst
+                        q__4.r = q__5.r * ap[i__2].r - q__5.i * ap[i__2].i;
+                        q__4.i = q__5.r * ap[i__2].i + q__5.i * ap[i__2].r; // , expr subst
+                        q__2.r = q__3.r - q__4.r;
+                        q__2.i = q__3.i - q__4.i; // , expr subst
+                        q__1.r = d__ * q__2.r;
+                        q__1.i = d__ * q__2.i; // , expr subst
+                        wkm1.r = q__1.r;
+                        wkm1.i = q__1.i; // , expr subst
                         i__1 = j + (k - 1) * k / 2;
                         q__3.real = d22 * ap[i__1].real;
                         q__3.imag = d22 * ap[i__1].imag; // , expr subst
                         i__2 = j + (k - 2) * (k - 1) / 2;
-                        q__4.real = d12.real * ap[i__2].real - d12.imag * ap[i__2].imag;
-                        q__4.imag = d12.real * ap[i__2].imag + d12.imag * ap[i__2].real; // , expr subst
-                        q__2.real = q__3.real - q__4.real;
-                        q__2.imag = q__3.imag - q__4.imag; // , expr subst
-                        q__1.real = d__ * q__2.real;
-                        q__1.imag = d__ * q__2.imag; // , expr subst
-                        wk.real = q__1.real;
-                        wk.imag = q__1.imag; // , expr subst
+                        q__4.r = d12.r * ap[i__2].r - d12.i * ap[i__2].i;
+                        q__4.i = d12.r * ap[i__2].i + d12.i * ap[i__2].r; // , expr subst
+                        q__2.r = q__3.r - q__4.r;
+                        q__2.i = q__3.i - q__4.i; // , expr subst
+                        q__1.r = d__ * q__2.r;
+                        q__1.i = d__ * q__2.i; // , expr subst
+                        wk.r = q__1.r;
+                        wk.i = q__1.i; // , expr subst
                         for(i__ = j; i__ >= 1; --i__)
                         {
                             i__1 = i__ + (j - 1) * j / 2;
                             i__2 = i__ + (j - 1) * j / 2;
                             i__3 = i__ + (k - 1) * k / 2;
                             r_cnjg(&q__4, &wk);
-                            q__3.real = ap[i__3].real * q__4.real - ap[i__3].imag * q__4.imag;
-                            q__3.imag = ap[i__3].real * q__4.imag + ap[i__3].imag * q__4.real; // , expr subst
-                            q__2.real = ap[i__2].real - q__3.real;
-                            q__2.imag = ap[i__2].imag - q__3.imag; // , expr subst
+                            q__3.r = ap[i__3].r * q__4.r - ap[i__3].i * q__4.i;
+                            q__3.i = ap[i__3].r * q__4.i + ap[i__3].i * q__4.r; // , expr subst
+                            q__2.r = ap[i__2].r - q__3.r;
+                            q__2.i = ap[i__2].i - q__3.i; // , expr subst
                             i__4 = i__ + (k - 2) * (k - 1) / 2;
                             r_cnjg(&q__6, &wkm1);
-                            q__5.real = ap[i__4].real * q__6.real - ap[i__4].imag * q__6.imag;
-                            q__5.imag = ap[i__4].real * q__6.imag + ap[i__4].imag * q__6.real; // , expr subst
-                            q__1.real = q__2.real - q__5.real;
-                            q__1.imag = q__2.imag - q__5.imag; // , expr subst
-                            ap[i__1].real = q__1.real;
-                            ap[i__1].imag = q__1.imag; // , expr subst
+                            q__5.r = ap[i__4].r * q__6.r - ap[i__4].i * q__6.i;
+                            q__5.i = ap[i__4].r * q__6.i + ap[i__4].i * q__6.r; // , expr subst
+                            q__1.r = q__2.r - q__5.r;
+                            q__1.i = q__2.i - q__5.i; // , expr subst
+                            ap[i__1].r = q__1.r;
+                            ap[i__1].i = q__1.i; // , expr subst
                             /* L40: */
                         }
                         i__1 = j + (k - 1) * k / 2;
@@ -594,13 +597,14 @@ L10:
             i__1 = *n - k;
             imax = k + aocl_blas_icamax(&i__1, &ap[kc + 1], &c__1);
             i__1 = kc + imax - k;
-            colmax = (r__1 = ap[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&ap[kc + imax - k]), f2c_abs(r__2));
+            colmax = (r__1 = ap[i__1].r, f2c_abs(r__1))
+                     + (r__2 = r_imag(&ap[kc + imax - k]), f2c_abs(r__2));
         }
         else
         {
             colmax = 0.f;
         }
-        if (fla_max(absakk,colmax) == 0.f)
+        if(fla_max(absakk, colmax) == 0.f)
         {
             /* Column K is zero: set INFO and continue */
             if(*info == 0)
@@ -631,10 +635,12 @@ L10:
                 for(j = k; j <= i__1; ++j)
                 {
                     i__2 = kx;
-                    if ((r__1 = ap[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&ap[ kx]), f2c_abs(r__2)) > rowmax)
+                    if((r__1 = ap[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&ap[kx]), f2c_abs(r__2))
+                       > rowmax)
                     {
                         i__2 = kx;
-                        rowmax = (r__1 = ap[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&ap[kx]), f2c_abs(r__2));
+                        rowmax = (r__1 = ap[i__2].r, f2c_abs(r__1))
+                                 + (r__2 = r_imag(&ap[kx]), f2c_abs(r__2));
                         jmax = j;
                     }
                     kx = kx + *n - j;
@@ -648,8 +654,9 @@ L10:
                     /* Computing MAX */
                     i__1 = kpc + jmax - imax;
                     r__3 = rowmax;
-                    r__4 = (r__1 = ap[i__1].r, f2c_abs(r__1)) + ( r__2 = r_imag(&ap[kpc + jmax - imax]), f2c_abs(r__2)); // , expr subst
-                    rowmax = fla_max(r__3,r__4);
+                    r__4 = (r__1 = ap[i__1].r, f2c_abs(r__1))
+                           + (r__2 = r_imag(&ap[kpc + jmax - imax]), f2c_abs(r__2)); // , expr subst
+                    rowmax = fla_max(r__3, r__4);
                 }
                 if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
@@ -659,7 +666,7 @@ L10:
                 else /* if(complicated condition) */
                 {
                     i__1 = kpc;
-                    if ((r__1 = ap[i__1].r, f2c_abs(r__1)) >= alpha * rowmax)
+                    if((r__1 = ap[i__1].r, f2c_abs(r__1)) >= alpha * rowmax)
                     {
                         /* interchange rows and columns K and IMAX, use 1-by-1 */
                         /* pivot block */
@@ -717,8 +724,8 @@ L10:
                 ap[i__1].real = r__1;
                 ap[i__1].imag = 0.f; // , expr subst
                 i__1 = kpc;
-                ap[i__1].real = r1;
-                ap[i__1].imag = 0.f; // , expr subst
+                ap[i__1].r = r1;
+                ap[i__1].i = 0.f; // , expr subst
                 if(kstep == 2)
                 {
                     i__1 = kc;
@@ -742,9 +749,9 @@ L10:
             {
                 i__1 = kc;
                 i__2 = kc;
-                r__1 = ap[i__2].real;
-                ap[i__1].real = r__1;
-                ap[i__1].imag = 0.f; // , expr subst
+                r__1 = ap[i__2].r;
+                ap[i__1].r = r__1;
+                ap[i__1].i = 0.f; // , expr subst
                 if(kstep == 2)
                 {
                     i__1 = knc;
@@ -809,27 +816,27 @@ L10:
                         q__3.real = d11 * ap[i__2].real;
                         q__3.imag = d11 * ap[i__2].imag; // , expr subst
                         i__3 = j + k * ((*n << 1) - k - 1) / 2;
-                        q__4.real = d21.real * ap[i__3].real - d21.imag * ap[i__3].imag;
-                        q__4.imag = d21.real * ap[i__3].imag + d21.imag * ap[i__3].real; // , expr subst
-                        q__2.real = q__3.real - q__4.real;
-                        q__2.imag = q__3.imag - q__4.imag; // , expr subst
-                        q__1.real = d__ * q__2.real;
-                        q__1.imag = d__ * q__2.imag; // , expr subst
-                        wk.real = q__1.real;
-                        wk.imag = q__1.imag; // , expr subst
+                        q__4.r = d21.r * ap[i__3].r - d21.i * ap[i__3].i;
+                        q__4.i = d21.r * ap[i__3].i + d21.i * ap[i__3].r; // , expr subst
+                        q__2.r = q__3.r - q__4.r;
+                        q__2.i = q__3.i - q__4.i; // , expr subst
+                        q__1.r = d__ * q__2.r;
+                        q__1.i = d__ * q__2.i; // , expr subst
+                        wk.r = q__1.r;
+                        wk.i = q__1.i; // , expr subst
                         i__2 = j + k * ((*n << 1) - k - 1) / 2;
                         q__3.real = d22 * ap[i__2].real;
                         q__3.imag = d22 * ap[i__2].imag; // , expr subst
                         r_cnjg(&q__5, &d21);
                         i__3 = j + (k - 1) * ((*n << 1) - k) / 2;
-                        q__4.real = q__5.real * ap[i__3].real - q__5.imag * ap[i__3].imag;
-                        q__4.imag = q__5.real * ap[i__3].imag + q__5.imag * ap[i__3].real; // , expr subst
-                        q__2.real = q__3.real - q__4.real;
-                        q__2.imag = q__3.imag - q__4.imag; // , expr subst
-                        q__1.real = d__ * q__2.real;
-                        q__1.imag = d__ * q__2.imag; // , expr subst
-                        wkp1.real = q__1.real;
-                        wkp1.imag = q__1.imag; // , expr subst
+                        q__4.r = q__5.r * ap[i__3].r - q__5.i * ap[i__3].i;
+                        q__4.i = q__5.r * ap[i__3].i + q__5.i * ap[i__3].r; // , expr subst
+                        q__2.r = q__3.r - q__4.r;
+                        q__2.i = q__3.i - q__4.i; // , expr subst
+                        q__1.r = d__ * q__2.r;
+                        q__1.i = d__ * q__2.i; // , expr subst
+                        wkp1.r = q__1.r;
+                        wkp1.i = q__1.i; // , expr subst
                         i__2 = *n;
                         for(i__ = j; i__ <= i__2; ++i__)
                         {
@@ -837,18 +844,18 @@ L10:
                             i__4 = i__ + (j - 1) * ((*n << 1) - j) / 2;
                             i__5 = i__ + (k - 1) * ((*n << 1) - k) / 2;
                             r_cnjg(&q__4, &wk);
-                            q__3.real = ap[i__5].real * q__4.real - ap[i__5].imag * q__4.imag;
-                            q__3.imag = ap[i__5].real * q__4.imag + ap[i__5].imag * q__4.real; // , expr subst
-                            q__2.real = ap[i__4].real - q__3.real;
-                            q__2.imag = ap[i__4].imag - q__3.imag; // , expr subst
+                            q__3.r = ap[i__5].r * q__4.r - ap[i__5].i * q__4.i;
+                            q__3.i = ap[i__5].r * q__4.i + ap[i__5].i * q__4.r; // , expr subst
+                            q__2.r = ap[i__4].r - q__3.r;
+                            q__2.i = ap[i__4].i - q__3.i; // , expr subst
                             i__6 = i__ + k * ((*n << 1) - k - 1) / 2;
                             r_cnjg(&q__6, &wkp1);
-                            q__5.real = ap[i__6].real * q__6.real - ap[i__6].imag * q__6.imag;
-                            q__5.imag = ap[i__6].real * q__6.imag + ap[i__6].imag * q__6.real; // , expr subst
-                            q__1.real = q__2.real - q__5.real;
-                            q__1.imag = q__2.imag - q__5.imag; // , expr subst
-                            ap[i__3].real = q__1.real;
-                            ap[i__3].imag = q__1.imag; // , expr subst
+                            q__5.r = ap[i__6].r * q__6.r - ap[i__6].i * q__6.i;
+                            q__5.i = ap[i__6].r * q__6.i + ap[i__6].i * q__6.r; // , expr subst
+                            q__1.r = q__2.r - q__5.r;
+                            q__1.i = q__2.i - q__5.i; // , expr subst
+                            ap[i__3].r = q__1.r;
+                            ap[i__3].i = q__1.i; // , expr subst
                             /* L90: */
                         }
                         i__2 = j + (k - 1) * ((*n << 1) - k) / 2;

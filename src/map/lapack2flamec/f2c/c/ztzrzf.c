@@ -151,24 +151,33 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ztzrzf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *work, integer *lwork, integer *info)
+void ztzrzf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau,
+             doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztzrzf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
+    AOCL_DTL_SNPRINTF("ztzrzf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
     integer i__, m1, ib, nb, ki, kk, mu, nx, iws, nbmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwkmin, ldwork;
     extern /* Subroutine */
-    void zlarzb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zlarzb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *,
+                doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    void zlarzt_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zlatrz_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *);
+        void
+        zlarzt_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                doublecomplex *, integer *),
+        zlatrz_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                doublecomplex *);
     /* -- LAPACK computational routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -200,7 +209,7 @@ void ztzrzf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     *info = 0;
     lquery = *lwork == -1;
     nb = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
@@ -208,7 +217,7 @@ void ztzrzf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
@@ -224,10 +233,10 @@ void ztzrzf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
             /* Determine the block size. */
             nb = aocl_lapack_ilaenv(&c__1, "ZGERQF", " ", m, n, &c_n1, &c_n1);
             lwkopt = *m * nb;
-            lwkmin = fla_max(1,*m);
+            lwkmin = fla_max(1, *m);
         }
-        work[1].real = (doublereal)lwkopt;
-        work[1].imag = 0.; // , expr subst
+        work[1].r = (doublereal)lwkopt;
+        work[1].i = 0.; // , expr subst
         if(*lwork < lwkmin && !lquery)
         {
             *info = -7;
@@ -237,18 +246,18 @@ void ztzrzf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     {
         i__1 = -(*info);
         xerbla_("ZTZRZF", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*m == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(*m == *n)
@@ -261,7 +270,7 @@ void ztzrzf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
             tau[i__2].imag = 0.; // , expr subst
             /* L10: */
         }
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     nbmin = 2;
@@ -273,8 +282,8 @@ void ztzrzf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
         /* Computing MAX */
         i__1 = 0;
         i__2 = ilaenv_(&c__3, "ZGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
-        nx = fla_max(i__1,i__2);
-        if (nx < *m)
+        nx = fla_max(i__1, i__2);
+        if(nx < *m)
         {
             /* Determine if workspace is large enough for blocked code. */
             ldwork = *m;
@@ -286,8 +295,8 @@ void ztzrzf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "ZGERQF", " ", m, n, &c_n1, & c_n1); // , expr subst
-                nbmin = fla_max(i__1,i__2);
+                i__2 = ilaenv_(&c__2, "ZGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
+                nbmin = fla_max(i__1, i__2);
             }
         }
     }
@@ -297,38 +306,38 @@ void ztzrzf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
         /* The last kk rows are handled by the block method. */
         /* Computing MIN */
         i__1 = *m + 1;
-        m1 = fla_min(i__1,*n);
+        m1 = fla_min(i__1, *n);
         ki = (*m - nx - 1) / nb * nb;
         /* Computing MIN */
         i__1 = *m;
         i__2 = ki + nb; // , expr subst
-        kk = fla_min(i__1,i__2);
+        kk = fla_min(i__1, i__2);
         i__1 = *m - kk + 1;
         i__2 = -nb;
         for(i__ = *m - kk + ki + 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
         {
             /* Computing MIN */
             i__3 = *m - i__ + 1;
-            ib = fla_min(i__3,nb);
+            ib = fla_min(i__3, nb);
             /* Compute the TZ factorization of the current block */
             /* A(i:i+ib-1,i:n) */
             i__3 = *n - i__ + 1;
             i__4 = *n - *m;
-            aocl_lapack_zlatrz(&ib, &i__3, &i__4, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1]);
+            zlatrz_(&ib, &i__3, &i__4, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1]);
             if(i__ > 1)
             {
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i+ib-1) . . . H(i+1) H(i) */
                 i__3 = *n - *m;
-                aocl_lapack_zlarzt("Backward", "Rowwise", &i__3, &ib, &a[i__ + m1 * a_dim1], lda,
-                                   &tau[i__], &work[1], &ldwork);
+                zlarzt_("Backward", "Rowwise", &i__3, &ib, &a[i__ + m1 * a_dim1], lda, &tau[i__],
+                        &work[1], &ldwork);
                 /* Apply H to A(1:i-1,i:n) from the right */
                 i__3 = i__ - 1;
                 i__4 = *n - i__ + 1;
                 i__5 = *n - *m;
-                aocl_lapack_zlarzb("Right", "No transpose", "Backward", "Rowwise", &i__3, &i__4,
-                                   &ib, &i__5, &a[i__ + m1 * a_dim1], lda, &work[1], &ldwork,
-                                   &a[i__ * a_dim1 + 1], lda, &work[ib + 1], &ldwork);
+                zlarzb_("Right", "No transpose", "Backward", "Rowwise", &i__3, &i__4, &ib, &i__5,
+                        &a[i__ + m1 * a_dim1], lda, &work[1], &ldwork, &a[i__ * a_dim1 + 1], lda,
+                        &work[ib + 1], &ldwork);
             }
             /* L20: */
         }
@@ -344,7 +353,7 @@ void ztzrzf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
         i__2 = *n - *m;
         aocl_lapack_zlatrz(&mu, n, &i__2, &a[a_offset], lda, &tau[1], &work[1]);
     }
-    work[1].r = (doublereal) lwkopt;
+    work[1].r = (doublereal)lwkopt;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {1., 0.};
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static doublecomplex c_b1 = {1., 0.};
+static integer c__1 = 1;
+static integer c_n1 = -1;
 /* > \brief \b ZGETRS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -121,20 +121,27 @@ for 1<=i<=N, row i of the */
 /* > \ingroup complex16GEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zgetrs_(char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *b, integer *ldb, integer *info)
+void zgetrs_(char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *ipiv,
+             doublecomplex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgetrs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*trans, *n, *nrhs, *lda, *ldb);
+    AOCL_DTL_SNPRINTF("zgetrs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS "",
+                      *trans, *n, *nrhs, *lda, *ldb);
 
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     extern /* Subroutine */
-    void zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
+        void
+        zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -167,7 +174,7 @@ void zgetrs_(char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *
     /* Function Body */
     *info = 0;
     notran = lsame_(trans, "N", 1, 1);
-    if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
@@ -179,11 +186,11 @@ void zgetrs_(char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
@@ -206,21 +213,21 @@ void zgetrs_(char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *
         /* Apply row interchanges to the right hand sides. */
         aocl_lapack_zlaswp(nrhs, &b[b_offset], ldb, &c__1, n, &ipiv[1], &c__1);
         /* Solve L*X = B, overwriting B with X. */
-        aocl_blas_ztrsm("Left", "Lower", "No transpose", "Unit", n, nrhs, &c_b1, &a[a_offset], lda,
-                        &b[b_offset], ldb);
+        ztrsm_("Left", "Lower", "No transpose", "Unit", n, nrhs, &c_b1, &a[a_offset], lda,
+               &b[b_offset], ldb);
         /* Solve U*X = B, overwriting B with X. */
-        aocl_blas_ztrsm("Left", "Upper", "No transpose", "Non-unit", n, nrhs, &c_b1, &a[a_offset],
-                        lda, &b[b_offset], ldb);
+        ztrsm_("Left", "Upper", "No transpose", "Non-unit", n, nrhs, &c_b1, &a[a_offset], lda,
+               &b[b_offset], ldb);
     }
     else
     {
         /* Solve A**T * X = B or A**H * X = B. */
         /* Solve U**T *X = B or U**H *X = B, overwriting B with X. */
-        aocl_blas_ztrsm("Left", "Upper", trans, "Non-unit", n, nrhs, &c_b1, &a[a_offset], lda,
-                        &b[b_offset], ldb);
+        ztrsm_("Left", "Upper", trans, "Non-unit", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset],
+               ldb);
         /* Solve L**T *X = B, or L**H *X = B overwriting B with X. */
-        aocl_blas_ztrsm("Left", "Lower", trans, "Unit", n, nrhs, &c_b1, &a[a_offset], lda,
-                        &b[b_offset], ldb);
+        ztrsm_("Left", "Lower", trans, "Unit", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset],
+               ldb);
         /* Apply row interchanges to the solution vectors. */
         aocl_lapack_zlaswp(nrhs, &b[b_offset], ldb, &c__1, n, &ipiv[1], &c_n1);
     }

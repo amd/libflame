@@ -5,7 +5,7 @@
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b8 = -1.;
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b ZPBTF2 computes the Cholesky factorization of a symmetric/Hermitian positive definite
  * band matr ix (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
@@ -84,7 +84,7 @@ static aocl_int64_t c__1 = 1;
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > */
 /* > On exit, if INFO = 0, the triangular factor U or L from the */
@@ -145,7 +145,8 @@ static aocl_int64_t c__1 = 1;
 void zpbtf2_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ldab, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zpbtf2 inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",*uplo, *n, *kd, *ldab);
+    AOCL_DTL_SNPRINTF("zpbtf2 inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",
+                      *uplo, *n, *kd, *ldab);
 
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3;
@@ -157,11 +158,16 @@ void zpbtf2_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
     doublereal ajj;
     integer kld;
     extern /* Subroutine */
-    void zher_(char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zher_(char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *,
+              integer *);
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zdscal_( integer *, doublereal *, doublecomplex *, integer *), zlacgv_( integer *, doublecomplex *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zdscal_(integer *, doublereal *, doublecomplex *, integer *),
+        zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -190,7 +196,7 @@ void zpbtf2_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -222,8 +228,8 @@ void zpbtf2_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
     /* Computing MAX */
     i__1 = 1;
     i__2 = *ldab - 1; // , expr subst
-    kld = fla_max(i__1,i__2);
-    if (upper)
+    kld = fla_max(i__1, i__2);
+    if(upper)
     {
         /* Compute the Cholesky factorization A = U**H * U. */
         i__1 = *n;
@@ -231,7 +237,7 @@ void zpbtf2_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
         {
             /* Compute U(J,J) and test for non-positive-definiteness. */
             i__2 = *kd + 1 + j * ab_dim1;
-            ajj = ab[i__2].real;
+            ajj = ab[i__2].r;
             if(ajj <= 0.)
             {
                 i__2 = *kd + 1 + j * ab_dim1;
@@ -248,15 +254,15 @@ void zpbtf2_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
             /* Computing MIN */
             i__2 = *kd;
             i__3 = *n - j; // , expr subst
-            kn = fla_min(i__2,i__3);
-            if (kn > 0)
+            kn = fla_min(i__2, i__3);
+            if(kn > 0)
             {
                 d__1 = 1. / ajj;
-                aocl_blas_zdscal(&kn, &d__1, &ab[*kd + (j + 1) * ab_dim1], &kld);
-                aocl_lapack_zlacgv(&kn, &ab[*kd + (j + 1) * ab_dim1], &kld);
-                aocl_blas_zher("Upper", &kn, &c_b8, &ab[*kd + (j + 1) * ab_dim1], &kld,
-                               &ab[*kd + 1 + (j + 1) * ab_dim1], &kld);
-                aocl_lapack_zlacgv(&kn, &ab[*kd + (j + 1) * ab_dim1], &kld);
+                zdscal_(&kn, &d__1, &ab[*kd + (j + 1) * ab_dim1], &kld);
+                zlacgv_(&kn, &ab[*kd + (j + 1) * ab_dim1], &kld);
+                zher_("Upper", &kn, &c_b8, &ab[*kd + (j + 1) * ab_dim1], &kld,
+                      &ab[*kd + 1 + (j + 1) * ab_dim1], &kld);
+                zlacgv_(&kn, &ab[*kd + (j + 1) * ab_dim1], &kld);
             }
             /* L10: */
         }
@@ -269,7 +275,7 @@ void zpbtf2_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
         {
             /* Compute L(J,J) and test for non-positive-definiteness. */
             i__2 = j * ab_dim1 + 1;
-            ajj = ab[i__2].real;
+            ajj = ab[i__2].r;
             if(ajj <= 0.)
             {
                 i__2 = j * ab_dim1 + 1;
@@ -286,13 +292,13 @@ void zpbtf2_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
             /* Computing MIN */
             i__2 = *kd;
             i__3 = *n - j; // , expr subst
-            kn = fla_min(i__2,i__3);
-            if (kn > 0)
+            kn = fla_min(i__2, i__3);
+            if(kn > 0)
             {
                 d__1 = 1. / ajj;
-                aocl_blas_zdscal(&kn, &d__1, &ab[j * ab_dim1 + 2], &c__1);
-                aocl_blas_zher("Lower", &kn, &c_b8, &ab[j * ab_dim1 + 2], &c__1,
-                               &ab[(j + 1) * ab_dim1 + 1], &kld);
+                zdscal_(&kn, &d__1, &ab[j * ab_dim1 + 2], &c__1);
+                zher_("Lower", &kn, &c_b8, &ab[j * ab_dim1 + 2], &c__1, &ab[(j + 1) * ab_dim1 + 1],
+                      &kld);
             }
             /* L20: */
         }

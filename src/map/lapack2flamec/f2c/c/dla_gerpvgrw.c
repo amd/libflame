@@ -93,12 +93,13 @@
 /* > \date November 2011 */
 /* > \ingroup doubleGEcomputational */
 /* ===================================================================== */
-/** Generated wrapper function */
-doublereal dla_gerpvgrw_(aocl_int_t *n, aocl_int_t *ncols, doublereal *a, aocl_int_t *lda,
-                         doublereal *af, aocl_int_t *ldaf)
+doublereal dla_gerpvgrw_(integer *n, integer *ncols, doublereal *a, integer *lda, doublereal *af,
+                         integer *ldaf)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dla_gerpvgrw inputs: n %" FLA_IS ", ncols %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS "",*n, *ncols, *lda, *ldaf);
+    AOCL_DTL_SNPRINTF("dla_gerpvgrw inputs: n %" FLA_IS ", ncols %" FLA_IS ", lda %" FLA_IS
+                      ", ldaf %" FLA_IS "",
+                      *n, *ncols, *lda, *ldaf);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, i__1, i__2;
     doublereal ret_val, d__1, d__2;
@@ -138,20 +139,20 @@ doublereal dla_gerpvgrw_(aocl_int_t *n, aocl_int_t *ncols, doublereal *a, aocl_i
         {
             /* Computing MAX */
             d__2 = (d__1 = a[i__ + j * a_dim1], f2c_dabs(d__1));
-            amax = fla_max(d__2,amax);
+            amax = fla_max(d__2, amax);
         }
         i__2 = j;
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             d__2 = (d__1 = af[i__ + j * af_dim1], f2c_dabs(d__1));
-            umax = fla_max(d__2,umax);
+            umax = fla_max(d__2, umax);
         }
         if(umax != 0.)
         {
             /* Computing MIN */
             d__1 = amax / umax;
-            rpvgrw = fla_min(d__1,rpvgrw);
+            rpvgrw = fla_min(d__1, rpvgrw);
         }
     }
     ret_val = rpvgrw;

@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {1.f, 0.f};
-static aocl_int64_t c__1 = 1;
+static complex c_b1 = {1.f, 0.f};
+static integer c__1 = 1;
 /* > \brief \b CTPTRI */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -124,9 +124,9 @@ void ctptri_(char *uplo, char *diag, integer *n, complex *ap, integer *info)
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctptri inputs: uplo %c, diag %c, n %lld",*uplo, *diag, *n);
+    snprintf(buffer, 256, "ctptri inputs: uplo %c, diag %c, n %lld", *uplo, *diag, *n);
 #else
-    snprintf(buffer, 256,"ctptri inputs: uplo %c, diag %c, n %d",*uplo, *diag, *n);
+    snprintf(buffer, 256, "ctptri inputs: uplo %c, diag %c, n %d", *uplo, *diag, *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -139,13 +139,16 @@ void ctptri_(char *uplo, char *diag, integer *n, complex *ap, integer *info)
     integer j, jc, jj;
     complex ajj;
     extern /* Subroutine */
-    void cscal_(integer *, complex *, complex *, integer *);
+        void
+        cscal_(integer *, complex *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
+        void
+        ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer jclast;
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -174,11 +177,11 @@ void ctptri_(char *uplo, char *diag, integer *n, complex *ap, integer *info)
     upper = lsame_(uplo, "U", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
     jclast = 0;
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -2;
     }
@@ -204,7 +207,7 @@ void ctptri_(char *uplo, char *diag, integer *n, complex *ap, integer *info)
             {
                 jj += *info;
                 i__2 = jj;
-                if(ap[i__2].real == 0.f && ap[i__2].imag == 0.f)
+                if(ap[i__2].r == 0.f && ap[i__2].i == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
@@ -219,7 +222,7 @@ void ctptri_(char *uplo, char *diag, integer *n, complex *ap, integer *info)
             for(*info = 1; *info <= i__1; ++(*info))
             {
                 i__2 = jj;
-                if(ap[i__2].real == 0.f && ap[i__2].imag == 0.f)
+                if(ap[i__2].r == 0.f && ap[i__2].i == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
@@ -258,7 +261,7 @@ void ctptri_(char *uplo, char *diag, integer *n, complex *ap, integer *info)
             }
             /* Compute elements 1:j-1 of j-th column. */
             i__2 = j - 1;
-            aocl_blas_ctpmv("Upper", "No transpose", diag, &i__2, &ap[1], &ap[jc], &c__1);
+            ctpmv_("Upper", "No transpose", diag, &i__2, &ap[1], &ap[jc], &c__1);
             i__2 = j - 1;
             aocl_blas_cscal(&i__2, &ajj, &ap[jc], &c__1);
             jc += j;
@@ -294,8 +297,7 @@ void ctptri_(char *uplo, char *diag, integer *n, complex *ap, integer *info)
             {
                 /* Compute elements j+1:n of j-th column. */
                 i__1 = *n - j;
-                aocl_blas_ctpmv("Lower", "No transpose", diag, &i__1, &ap[jclast], &ap[jc + 1],
-                                &c__1);
+                ctpmv_("Lower", "No transpose", diag, &i__1, &ap[jclast], &ap[jc + 1], &c__1);
                 i__1 = *n - j;
                 aocl_blas_cscal(&i__1, &ajj, &ap[jc + 1], &c__1);
             }

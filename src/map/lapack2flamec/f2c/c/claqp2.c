@@ -144,15 +144,17 @@ if JPVT(i) = 0, */
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-void claqp2_(integer *m, integer *n, integer *offset, complex *a, integer *lda, integer *jpvt, complex *tau, real *vn1, real *vn2, complex *work)
+void claqp2_(integer *m, integer *n, integer *offset, complex *a, integer *lda, integer *jpvt,
+             complex *tau, real *vn1, real *vn2, complex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"claqp2 inputs: m %lld, n %lld, offset %lld, lda %lld",*m, *n, *offset, *lda);
+    snprintf(buffer, 256, "claqp2 inputs: m %lld, n %lld, offset %lld, lda %lld", *m, *n, *offset,
+             *lda);
 #else
-    snprintf(buffer, 256,"claqp2 inputs: m %d, n %d, offset %d, lda %d",*m, *n, *offset, *lda);
+    snprintf(buffer, 256, "claqp2 inputs: m %d, n %d, offset %d, lda %d", *m, *n, *offset, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -170,14 +172,18 @@ void claqp2_(integer *m, integer *n, integer *offset, complex *a, integer *lda, 
     aocl_int64_t pvt;
     real temp, temp2, tol3z;
     extern /* Subroutine */
-    void clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
+        void
+        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+               complex *);
     integer offpi;
     extern /* Subroutine */
-    void cswap_(integer *, complex *, integer *, complex *, integer *);
+        void
+        cswap_(integer *, complex *, integer *, complex *, integer *);
     integer itemp;
     extern real scnrm2_(integer *, complex *, integer *);
     extern /* Subroutine */
-    void clarfg_(integer *, complex *, complex *, integer *, complex *);
+        void
+        clarfg_(integer *, complex *, complex *, integer *, complex *);
     extern real slamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -211,7 +217,7 @@ void claqp2_(integer *m, integer *n, integer *offset, complex *a, integer *lda, 
     /* Function Body */
     /* Computing MIN */
     i__1 = *m - *offset;
-    mn = fla_min(i__1,*n);
+    mn = fla_min(i__1, *n);
     tol3z = sqrt(slamch_("Epsilon"));
     /* Compute factorization. */
     i__1 = mn;
@@ -220,10 +226,10 @@ void claqp2_(integer *m, integer *n, integer *offset, complex *a, integer *lda, 
         offpi = *offset + i__;
         /* Determine ith pivot column and swap if necessary. */
         i__2 = *n - i__ + 1;
-        pvt = i__ - 1 + aocl_blas_isamax(&i__2, &vn1[i__], &c__1);
+        pvt = i__ - 1 + isamax_(&i__2, &vn1[i__], &c__1);
         if(pvt != i__)
         {
-            aocl_blas_cswap(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
+            cswap_(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
             itemp = jpvt[pvt];
             jpvt[pvt] = jpvt[i__];
             jpvt[i__] = (aocl_int_t)(itemp);
@@ -234,13 +240,12 @@ void claqp2_(integer *m, integer *n, integer *offset, complex *a, integer *lda, 
         if(offpi < *m)
         {
             i__2 = *m - offpi + 1;
-            aocl_lapack_clarfg(&i__2, &a[offpi + i__ * a_dim1], &a[offpi + 1 + i__ * a_dim1], &c__1,
-                               &tau[i__]);
+            clarfg_(&i__2, &a[offpi + i__ * a_dim1], &a[offpi + 1 + i__ * a_dim1], &c__1,
+                    &tau[i__]);
         }
         else
         {
-            aocl_lapack_clarfg(&c__1, &a[*m + i__ * a_dim1], &a[*m + i__ * a_dim1], &c__1,
-                               &tau[i__]);
+            clarfg_(&c__1, &a[*m + i__ * a_dim1], &a[*m + i__ * a_dim1], &c__1, &tau[i__]);
         }
         if(i__ < *n)
         {
@@ -254,8 +259,8 @@ void claqp2_(integer *m, integer *n, integer *offset, complex *a, integer *lda, 
             i__2 = *m - offpi + 1;
             i__3 = *n - i__;
             r_cnjg(&q__1, &tau[i__]);
-            aocl_lapack_clarf("Left", &i__2, &i__3, &a[offpi + i__ * a_dim1], &c__1, &q__1,
-                              &a[offpi + (i__ + 1) * a_dim1], lda, &work[1]);
+            clarf_("Left", &i__2, &i__3, &a[offpi + i__ * a_dim1], &c__1, &q__1,
+                   &a[offpi + (i__ + 1) * a_dim1], lda, &work[1]);
             i__2 = offpi + i__ * a_dim1;
             a[i__2].real = aii.real;
             a[i__2].imag = aii.imag; // , expr subst
@@ -271,7 +276,7 @@ void claqp2_(integer *m, integer *n, integer *offset, complex *a, integer *lda, 
                 /* Computing 2nd power */
                 r__1 = c_abs(&a[offpi + j * a_dim1]) / vn1[j];
                 temp = 1.f - r__1 * r__1;
-                temp = fla_max(temp,0.f);
+                temp = fla_max(temp, 0.f);
                 /* Computing 2nd power */
                 r__1 = vn1[j] / vn2[j];
                 temp2 = temp * (r__1 * r__1);
@@ -280,7 +285,7 @@ void claqp2_(integer *m, integer *n, integer *offset, complex *a, integer *lda, 
                     if(offpi < *m)
                     {
                         i__3 = *m - offpi;
-                        vn1[j] = aocl_blas_scnrm2(&i__3, &a[offpi + 1 + j * a_dim1], &c__1);
+                        vn1[j] = scnrm2_(&i__3, &a[offpi + 1 + j * a_dim1], &c__1);
                         vn2[j] = vn1[j];
                     }
                     else

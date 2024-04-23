@@ -15,7 +15,7 @@ int cpotf2_check(char *uplo, integer *n, scomplex *a, integer *lda, integer *inf
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -23,7 +23,7 @@ int cpotf2_check(char *uplo, integer *n, scomplex *a, integer *lda, integer *inf
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }

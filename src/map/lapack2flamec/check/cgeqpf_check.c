@@ -1,5 +1,7 @@
 #include "FLA_f2c.h"
-int cgeqpf_check(integer *m, integer *n, scomplex *a, integer *lda, integer *jpvt, scomplex *tau, scomplex *work, float *rwork, integer * info)
+#include "FLA_lapack2flame_return_defs.h"
+int cgeqpf_check(integer *m, integer *n, scomplex *a, integer *lda, integer *jpvt, scomplex *tau,
+                 scomplex *work, float *rwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
@@ -21,7 +23,7 @@ int cgeqpf_check(integer *m, integer *n, scomplex *a, integer *lda, integer *jpv
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }

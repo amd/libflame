@@ -107,15 +107,17 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cpptrs_(char *uplo, integer *n, integer *nrhs, complex * ap, complex *b, integer *ldb, integer *info)
+void cpptrs_(char *uplo, integer *n, integer *nrhs, complex *ap, complex *b, integer *ldb,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cpptrs inputs: uplo %c, n %lld, nrhs %lld, ldb %lld",*uplo, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "cpptrs inputs: uplo %c, n %lld, nrhs %lld, ldb %lld", *uplo, *n, *nrhs,
+             *ldb);
 #else
-    snprintf(buffer, 256,"cpptrs inputs: uplo %c, n %d, nrhs %d, ldb %d",*uplo, *n, *nrhs, *ldb);
+    snprintf(buffer, 256, "cpptrs inputs: uplo %c, n %d, nrhs %d, ldb %d", *uplo, *n, *nrhs, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -126,7 +128,9 @@ void cpptrs_(char *uplo, integer *n, integer *nrhs, complex * ap, complex *b, in
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    void ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -154,7 +158,7 @@ void cpptrs_(char *uplo, integer *n, integer *nrhs, complex * ap, complex *b, in
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
@@ -166,7 +170,7 @@ void cpptrs_(char *uplo, integer *n, integer *nrhs, complex * ap, complex *b, in
     {
         *info = -3;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -190,8 +194,8 @@ void cpptrs_(char *uplo, integer *n, integer *nrhs, complex * ap, complex *b, in
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* Solve U**H *X = B, overwriting B with X. */
-            aocl_blas_ctpsv("Upper", "Conjugate transpose", "Non-unit", n, &ap[1],
-                            &b[i__ * b_dim1 + 1], &c__1);
+            ctpsv_("Upper", "Conjugate transpose", "Non-unit", n, &ap[1], &b[i__ * b_dim1 + 1],
+                   &c__1);
             /* Solve U*X = B, overwriting B with X. */
             aocl_blas_ctpsv("Upper", "No transpose", "Non-unit", n, &ap[1], &b[i__ * b_dim1 + 1],
                             &c__1);
@@ -208,8 +212,8 @@ void cpptrs_(char *uplo, integer *n, integer *nrhs, complex * ap, complex *b, in
             aocl_blas_ctpsv("Lower", "No transpose", "Non-unit", n, &ap[1], &b[i__ * b_dim1 + 1],
                             &c__1);
             /* Solve L**H *X = Y, overwriting B with X. */
-            aocl_blas_ctpsv("Lower", "Conjugate transpose", "Non-unit", n, &ap[1],
-                            &b[i__ * b_dim1 + 1], &c__1);
+            ctpsv_("Lower", "Conjugate transpose", "Non-unit", n, &ap[1], &b[i__ * b_dim1 + 1],
+                   &c__1);
             /* L20: */
         }
     }

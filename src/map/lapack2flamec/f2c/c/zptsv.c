@@ -110,16 +110,22 @@
 /* > \ingroup complex16PTsolve */
 /* ===================================================================== */
 /* Subroutine */
-void zptsv_(integer *n, integer *nrhs, doublereal *d__, doublecomplex *e, doublecomplex *b, integer *ldb, integer *info)
+void zptsv_(integer *n, integer *nrhs, doublereal *d__, doublecomplex *e, doublecomplex *b,
+            integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zptsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *ldb);
+    AOCL_DTL_SNPRINTF("zptsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n, *nrhs,
+                      *ldb);
 
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zpttrf_( integer *, doublereal *, doublecomplex *, integer *), zpttrs_( char *, integer *, integer *, doublereal *, doublecomplex *, doublecomplex *, integer *, integer *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zpttrf_(integer *, doublereal *, doublecomplex *, integer *),
+        zpttrs_(char *, integer *, integer *, doublereal *, doublecomplex *, doublecomplex *,
+                integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -151,7 +157,7 @@ void zptsv_(integer *n, integer *nrhs, doublereal *d__, doublecomplex *e, double
     {
         *info = -2;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -163,7 +169,7 @@ void zptsv_(integer *n, integer *nrhs, doublereal *d__, doublecomplex *e, double
         return;
     }
     /* Compute the L*D*L**H (or U**H*D*U) factorization of A. */
-    aocl_lapack_zpttrf(n, &d__[1], &e[1], info);
+    zpttrf_(n, &d__[1], &e[1], info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */

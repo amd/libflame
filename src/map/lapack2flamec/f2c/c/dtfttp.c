@@ -189,7 +189,7 @@
 void dtfttp_(char *transr, char *uplo, integer *n, doublereal *arf, doublereal *ap, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dtfttp inputs: transr %c, uplo %c, n %" FLA_IS "",*transr, *uplo, *n);
+    AOCL_DTL_SNPRINTF("dtfttp inputs: transr %c, uplo %c, n %" FLA_IS "", *transr, *uplo, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3;
     /* Local variables */
@@ -198,7 +198,8 @@ void dtfttp_(char *transr, char *uplo, integer *n, doublereal *arf, doublereal *
     extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -222,11 +223,11 @@ void dtfttp_(char *transr, char *uplo, integer *n, doublereal *arf, doublereal *
     *info = 0;
     normaltransr = lsame_(transr, "N", 1, 1);
     lower = lsame_(uplo, "L", 1, 1);
-    if (! normaltransr && ! lsame_(transr, "T", 1, 1))
+    if(!normaltransr && !lsame_(transr, "T", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U", 1, 1))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }

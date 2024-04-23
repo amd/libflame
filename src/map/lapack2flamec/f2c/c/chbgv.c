@@ -91,7 +91,7 @@
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(ka+1+i-j,j) = A(i,j) for fla_max(1,j-ka)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+ka). */
 /* > */
 /* > On exit, the contents of AB are destroyed. */
@@ -111,7 +111,7 @@
 /* > j-th column of B is stored in the j-th column of the array BB */
 /* > as follows: */
 /* > if UPLO = 'U', BB(kb+1+i-j,j) = B(i,j) for fla_max(1,j-kb)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', BB(1+i-j,j) = B(i,j) for j<=i<=fla_min(n,j+kb). */
 /* > */
 /* > On exit, the factor S from the split Cholesky factorization */
@@ -182,15 +182,22 @@
 /* > \ingroup complexOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, complex *ab, integer *ldab, complex *bb, integer *ldbb, real *w, complex *z__, integer *ldz, complex *work, real *rwork, integer *info)
+void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, complex *ab,
+            integer *ldab, complex *bb, integer *ldbb, real *w, complex *z__, integer *ldz,
+            complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chbgv inputs: jobz %c, uplo %c, n %lld, ka %lld, kb %lld, ldab %lld, ldbb %lld, ldz %lld",*jobz, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldz);
+    snprintf(
+        buffer, 256,
+        "chbgv inputs: jobz %c, uplo %c, n %lld, ka %lld, kb %lld, ldab %lld, ldbb %lld, ldz %lld",
+        *jobz, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldz);
 #else
-    snprintf(buffer, 256,"chbgv inputs: jobz %c, uplo %c, n %d, ka %d, kb %d, ldab %d, ldbb %d, ldz %d",*jobz, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldz);
+    snprintf(buffer, 256,
+             "chbgv inputs: jobz %c, uplo %c, n %d, ka %d, kb %d, ldab %d, ldbb %d, ldz %d", *jobz,
+             *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldz);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -203,10 +210,18 @@ void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
     integer iinfo;
     logical upper, wantz;
     extern /* Subroutine */
-    void chbtrd_(char *, char *, integer *, integer *, complex *, integer *, real *, real *, complex *, integer *, complex *, integer *), chbgst_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cpbstf_(char *, integer *, integer *, complex *, integer *, integer *);
+        void
+        chbtrd_(char *, char *, integer *, integer *, complex *, integer *, real *, real *,
+                complex *, integer *, complex *, integer *),
+        chbgst_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
+                integer *, complex *, integer *, complex *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        cpbstf_(char *, integer *, integer *, complex *, integer *, integer *);
     integer indwrk;
     extern /* Subroutine */
-    void csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *), ssterf_(integer *, real *, real *, integer *);
+        void
+        csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *),
+        ssterf_(integer *, real *, real *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -241,11 +256,11 @@ void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
     wantz = lsame_(jobz, "V", 1, 1);
     upper = lsame_(uplo, "U", 1, 1);
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (upper || lsame_(uplo, "L", 1, 1)))
+    else if(!(upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -2;
     }
@@ -287,7 +302,7 @@ void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
         return;
     }
     /* Form a split Cholesky factorization of B. */
-    aocl_lapack_cpbstf(uplo, n, kb, &bb[bb_offset], ldbb, info);
+    cpbstf_(uplo, n, kb, &bb[bb_offset], ldbb, info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -297,8 +312,8 @@ void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
     /* Transform problem to standard eigenvalue problem. */
     inde = 1;
     indwrk = inde + *n;
-    aocl_lapack_chbgst(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb,
-                       &z__[z_offset], ldz, &work[1], &rwork[indwrk], &iinfo);
+    chbgst_(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb, &z__[z_offset], ldz,
+            &work[1], &rwork[indwrk], &iinfo);
     /* Reduce to tridiagonal form. */
     if(wantz)
     {
@@ -308,8 +323,8 @@ void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
     {
         *(unsigned char *)vect = 'N';
     }
-    aocl_lapack_chbtrd(vect, uplo, n, ka, &ab[ab_offset], ldab, &w[1], &rwork[inde], &z__[z_offset],
-                       ldz, &work[1], &iinfo);
+    chbtrd_(vect, uplo, n, ka, &ab[ab_offset], ldab, &w[1], &rwork[inde], &z__[z_offset], ldz,
+            &work[1], &iinfo);
     /* For eigenvalues only, call SSTERF. For eigenvectors, call CSTEQR. */
     if(!wantz)
     {
@@ -317,7 +332,7 @@ void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
     }
     else
     {
-        aocl_lapack_csteqr(jobz, n, &w[1], &rwork[inde], &z__[z_offset], ldz, &rwork[indwrk], info);
+        csteqr_(jobz, n, &w[1], &rwork[inde], &z__[z_offset], ldz, &rwork[indwrk], info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

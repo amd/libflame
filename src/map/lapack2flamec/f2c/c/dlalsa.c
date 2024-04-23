@@ -265,24 +265,43 @@ and if */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-void dlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, doublereal *b, integer *ldb, doublereal *bx, integer * ldbx, doublereal *u, integer *ldu, doublereal *vt, integer *k, doublereal *difl, doublereal *difr, doublereal *z__, doublereal * poles, integer *givptr, integer *givcol, integer *ldgcol, integer * perm, doublereal *givnum, doublereal *c__, doublereal *s, doublereal * work, integer *iwork, integer *info)
+void dlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, doublereal *b,
+             integer *ldb, doublereal *bx, integer *ldbx, doublereal *u, integer *ldu,
+             doublereal *vt, integer *k, doublereal *difl, doublereal *difr, doublereal *z__,
+             doublereal *poles, integer *givptr, integer *givcol, integer *ldgcol, integer *perm,
+             doublereal *givnum, doublereal *c__, doublereal *s, doublereal *work, integer *iwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlalsa inputs: icompq %" FLA_IS ", smlsiz %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldbx %" FLA_IS ", ldu %" FLA_IS ", k %" FLA_IS ", givptr %" FLA_IS ", givcol %" FLA_IS ", ldgcol %" FLA_IS "",*icompq, *smlsiz, *n, *nrhs, *ldb, *ldbx, *ldu, *k, *givptr, *givcol, *ldgcol);
+    AOCL_DTL_SNPRINTF("dlalsa inputs: icompq %" FLA_IS ", smlsiz %" FLA_IS ", n %" FLA_IS
+                      ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldbx %" FLA_IS ", ldu %" FLA_IS
+                      ", k %" FLA_IS ", givptr %" FLA_IS ", givcol %" FLA_IS ", ldgcol %" FLA_IS "",
+                      *icompq, *smlsiz, *n, *nrhs, *ldb, *ldbx, *ldu, *k, *givptr, *givcol,
+                      *ldgcol);
     /* System generated locals */
-    aocl_int64_t givcol_dim1, givcol_offset, perm_dim1, perm_offset, b_dim1, b_offset, bx_dim1,
+    integer givcol_dim1, givcol_offset, perm_dim1, perm_offset, b_dim1, b_offset, bx_dim1,
         bx_offset, difl_dim1, difl_offset, difr_dim1, difr_offset, givnum_dim1, givnum_offset,
         poles_dim1, poles_offset, u_dim1, u_offset, vt_dim1, vt_offset, z_dim1, z_offset, i__1,
         i__2;
     /* Builtin functions */
     integer pow_ii(aocl_int64_t *, aocl_int64_t *);
     /* Local variables */
-    integer i__, j, i1, ic, lf, nd, ll, nl, nr, im1, nlf, nrf, lvl, ndb1, nlp1, lvl2, nrp1, nlvl, sqre;
+    integer i__, j, i1, ic, lf, nd, ll, nl, nr, im1, nlf, nrf, lvl, ndb1, nlp1, lvl2, nrp1, nlvl,
+        sqre;
     extern /* Subroutine */
-    void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer inode, ndiml, ndimr;
     extern /* Subroutine */
-    void dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dlals0_(integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        dlals0_(integer *, integer *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, integer *, integer *, integer *, integer *, integer *, doublereal *,
+                integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *,
+                doublereal *, doublereal *, doublereal *, integer *),
+        dlasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -411,10 +430,10 @@ void dlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, double
         nr = iwork[ndimr + i1];
         nlf = ic - nl;
         nrf = ic + 1;
-        aocl_blas_dgemm("T", "N", &nl, nrhs, &nl, &c_b7, &u[nlf + u_dim1], ldu, &b[nlf + b_dim1],
-                        ldb, &c_b8, &bx[nlf + bx_dim1], ldbx);
-        aocl_blas_dgemm("T", "N", &nr, nrhs, &nr, &c_b7, &u[nrf + u_dim1], ldu, &b[nrf + b_dim1],
-                        ldb, &c_b8, &bx[nrf + bx_dim1], ldbx);
+        dgemm_("T", "N", &nl, nrhs, &nl, &c_b7, &u[nlf + u_dim1], ldu, &b[nlf + b_dim1], ldb, &c_b8,
+               &bx[nlf + bx_dim1], ldbx);
+        dgemm_("T", "N", &nr, nrhs, &nr, &c_b7, &u[nrf + u_dim1], ldu, &b[nrf + b_dim1], ldb, &c_b8,
+               &bx[nrf + bx_dim1], ldbx);
         /* L10: */
     }
     /* Next copy the rows of B that correspond to unchanged rows */
@@ -456,16 +475,11 @@ void dlalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, double
             nlf = ic - nl;
             nrf = ic + 1;
             --j;
-            givptr_sca = givptr[j];
-            k_sca = k[j];
-            aocl_lapack_dlals0(
-                icompq, &nl, &nr, &sqre, nrhs, &bx[nlf + bx_dim1], ldbx, &b[nlf + b_dim1], ldb,
-                &perm[nlf + lvl * perm_dim1], &givptr_sca, &givcol[nlf + lvl2 * givcol_dim1], ldgcol,
-                &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1],
-                &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1],
-                &z__[nlf + lvl * z_dim1], &k_sca, &c__[j], &s[j], &work[1], info);
-            givptr[j] = (aocl_int_t)givptr_sca;
-            k[j] = (aocl_int_t)k_sca;
+            dlals0_(icompq, &nl, &nr, &sqre, nrhs, &bx[nlf + bx_dim1], ldbx, &b[nlf + b_dim1], ldb,
+                    &perm[nlf + lvl * perm_dim1], &givptr[j], &givcol[nlf + lvl2 * givcol_dim1],
+                    ldgcol, &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1],
+                    &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1],
+                    &z__[nlf + lvl * z_dim1], &k[j], &c__[j], &s[j], &work[1], info);
             /* L30: */
         }
         /* L40: */
@@ -510,16 +524,11 @@ L50: /* First now go through the right singular vector matrices of all */
                 sqre = 1;
             }
             ++j;
-            givptr_sca = givptr[j];
-            k_sca = k[j];
-            aocl_lapack_dlals0(
-                icompq, &nl, &nr, &sqre, nrhs, &b[nlf + b_dim1], ldb, &bx[nlf + bx_dim1], ldbx,
-                &perm[nlf + lvl * perm_dim1], &givptr_sca, &givcol[nlf + lvl2 * givcol_dim1], ldgcol,
-                &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1],
-                &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1],
-                &z__[nlf + lvl * z_dim1], &k_sca, &c__[j], &s[j], &work[1], info);
-            givptr[j] = (aocl_int_t)givptr_sca;
-            k[j] = (aocl_int_t)k_sca;
+            dlals0_(icompq, &nl, &nr, &sqre, nrhs, &b[nlf + b_dim1], ldb, &bx[nlf + bx_dim1], ldbx,
+                    &perm[nlf + lvl * perm_dim1], &givptr[j], &givcol[nlf + lvl2 * givcol_dim1],
+                    ldgcol, &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1],
+                    &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1],
+                    &z__[nlf + lvl * z_dim1], &k[j], &c__[j], &s[j], &work[1], info);
             /* L60: */
         }
         /* L70: */
@@ -546,10 +555,10 @@ L50: /* First now go through the right singular vector matrices of all */
         }
         nlf = ic - nl;
         nrf = ic + 1;
-        aocl_blas_dgemm("T", "N", &nlp1, nrhs, &nlp1, &c_b7, &vt[nlf + vt_dim1], ldu,
-                        &b[nlf + b_dim1], ldb, &c_b8, &bx[nlf + bx_dim1], ldbx);
-        aocl_blas_dgemm("T", "N", &nrp1, nrhs, &nrp1, &c_b7, &vt[nrf + vt_dim1], ldu,
-                        &b[nrf + b_dim1], ldb, &c_b8, &bx[nrf + bx_dim1], ldbx);
+        dgemm_("T", "N", &nlp1, nrhs, &nlp1, &c_b7, &vt[nlf + vt_dim1], ldu, &b[nlf + b_dim1], ldb,
+               &c_b8, &bx[nlf + bx_dim1], ldbx);
+        dgemm_("T", "N", &nrp1, nrhs, &nrp1, &c_b7, &vt[nrf + vt_dim1], ldu, &b[nrf + b_dim1], ldb,
+               &c_b8, &bx[nrf + bx_dim1], ldbx);
         /* L80: */
     }
 L90:

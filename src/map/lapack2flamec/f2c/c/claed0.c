@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__9 = 9;
-static aocl_int64_t c__0 = 0;
-static aocl_int64_t c__2 = 2;
-static aocl_int64_t c__1 = 1;
+static integer c__9 = 9;
+static integer c__0 = 0;
+static integer c__2 = 2;
+static integer c__1 = 1;
 /* > \brief \b CLAED0 used by sstedc. Computes all eigenvalues and corresponding eigenvectors of an
  * unreduced symmetric tridiagonal matrix using the divide and conquer method. */
 /* =========== DOCUMENTATION =========== */
@@ -145,15 +145,17 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void claed0_(integer *qsiz, integer *n, real *d__, real *e, complex *q, integer *ldq, complex *qstore, integer *ldqs, real *rwork, integer *iwork, integer *info)
+void claed0_(integer *qsiz, integer *n, real *d__, real *e, complex *q, integer *ldq,
+             complex *qstore, integer *ldqs, real *rwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"claed0 inputs: qsiz %lld, n %lld, ldq %lld, ldqs %lld",*qsiz, *n, *ldq, *ldqs);
+    snprintf(buffer, 256, "claed0 inputs: qsiz %lld, n %lld, ldq %lld, ldqs %lld", *qsiz, *n, *ldq,
+             *ldqs);
 #else
-    snprintf(buffer, 256,"claed0 inputs: qsiz %d, n %d, ldq %d, ldqs %d",*qsiz, *n, *ldq, *ldqs);
+    snprintf(buffer, 256, "claed0 inputs: qsiz %d, n %d, ldq %d, ldqs %d", *qsiz, *n, *ldq, *ldqs);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -168,23 +170,32 @@ void claed0_(integer *qsiz, integer *n, real *d__, real *e, complex *q, integer 
     real temp;
     integer curr, iperm;
     extern /* Subroutine */
-    void ccopy_(integer *, complex *, integer *, complex *, integer *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *);
     integer indxq, iwrem;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     integer iqptr;
     extern /* Subroutine */
-    void claed7_(integer *, integer *, integer *, integer *, integer *, integer *, real *, complex *, integer *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, real *, complex *, real *, integer *, integer *);
+        void
+        claed7_(integer *, integer *, integer *, integer *, integer *, integer *, real *, complex *,
+                integer *, real *, integer *, real *, integer *, integer *, integer *, integer *,
+                integer *, real *, complex *, real *, integer *, integer *);
     integer tlvls;
     extern /* Subroutine */
-    void clacrm_(integer *, integer *, complex *, integer *, real *, integer *, complex *, integer *, real *);
+        void
+        clacrm_(integer *, integer *, complex *, integer *, real *, integer *, complex *, integer *,
+                real *);
     integer igivcl;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer igivnm, submat, curprb, subpbs, igivpt, curlvl, matsiz, iprmpt, smlsiz;
     extern /* Subroutine */
-    void ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
+        void
+        ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -224,7 +235,7 @@ void claed0_(integer *qsiz, integer *n, real *d__, real *e, complex *q, integer 
     /* INFO = -1 */
     /* ELSE IF( ( ICOMPQ .EQ. 1 ) .AND. ( QSIZ .LT. MAX( 0, N ) ) ) */
     /* $ THEN */
-    if (*qsiz < fla_max(0,*n))
+    if(*qsiz < fla_max(0, *n))
     {
         *info = -1;
     }
@@ -232,11 +243,11 @@ void claed0_(integer *qsiz, integer *n, real *d__, real *e, complex *q, integer 
     {
         *info = -2;
     }
-    else if (*ldq < fla_max(1,*n))
+    else if(*ldq < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldqs < fla_max(1,*n))
+    else if(*ldqs < fla_max(1, *n))
     {
         *info = -8;
     }
@@ -339,10 +350,9 @@ L10:
             matsiz = iwork[i__ + 1] - iwork[i__];
         }
         ll = iq - 1 + iwork[iqptr + curr];
-        aocl_lapack_ssteqr("I", &matsiz, &d__[submat], &e[submat], &rwork[ll], &matsiz, &rwork[1],
-                           info);
-        aocl_lapack_clacrm(qsiz, &matsiz, &q[submat * q_dim1 + 1], ldq, &rwork[ll], &matsiz,
-                           &qstore[submat * qstore_dim1 + 1], ldqs, &rwork[iwrem]);
+        ssteqr_("I", &matsiz, &d__[submat], &e[submat], &rwork[ll], &matsiz, &rwork[1], info);
+        clacrm_(qsiz, &matsiz, &q[submat * q_dim1 + 1], ldq, &rwork[ll], &matsiz,
+                &qstore[submat * qstore_dim1 + 1], ldqs, &rwork[iwrem]);
         /* Computing 2nd power */
         i__2 = matsiz;
         iwork[iqptr + curr + 1] = (aocl_int_t)(iwork[iqptr + curr] + i__2 * i__2);
@@ -393,11 +403,11 @@ L80:
             /* when the eigenvectors of a full or band Hermitian matrix (which */
             /* was reduced to tridiagonal form) are desired. */
             /* I am free to use Q as a valuable working space until Loop 150. */
-            aocl_lapack_claed7(&matsiz, &msd2, qsiz, &tlvls, &curlvl, &curprb, &d__[submat],
-                               &qstore[submat * qstore_dim1 + 1], ldqs, &e[submat + msd2 - 1],
-                               &iwork[indxq + submat], &rwork[iq], &iwork[iqptr], &iwork[iprmpt],
-                               &iwork[iperm], &iwork[igivpt], &iwork[igivcl], &rwork[igivnm],
-                               &q[submat * q_dim1 + 1], &rwork[iwrem], &iwork[subpbs + 1], info);
+            claed7_(&matsiz, &msd2, qsiz, &tlvls, &curlvl, &curprb, &d__[submat],
+                    &qstore[submat * qstore_dim1 + 1], ldqs, &e[submat + msd2 - 1],
+                    &iwork[indxq + submat], &rwork[iq], &iwork[iqptr], &iwork[iprmpt],
+                    &iwork[iperm], &iwork[igivpt], &iwork[igivcl], &rwork[igivnm],
+                    &q[submat * q_dim1 + 1], &rwork[iwrem], &iwork[subpbs + 1], info);
             if(*info > 0)
             {
                 *info = submat * (*n + 1) + submat + matsiz - 1;

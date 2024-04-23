@@ -183,7 +183,9 @@ for 1<=i<=N, row i of the */
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sgerfs_(char *trans, integer *n, integer *nrhs, real *a, integer *lda, real *af, integer *ldaf, integer *ipiv, real *b, integer *ldb, real *x, integer *ldx, real *ferr, real *berr, real * work, integer *iwork, integer *info)
+void sgerfs_(char *trans, integer *n, integer *nrhs, real *a, integer *lda, real *af, integer *ldaf,
+             integer *ipiv, real *b, integer *ldb, real *x, integer *ldx, real *ferr, real *berr,
+             real *work, integer *iwork, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sgerfs(trans, n, nrhs, a, lda, af, ldaf, ipiv, b, ldb, x, ldx, ferr, berr, work,
@@ -214,8 +216,8 @@ void aocl_lapack_sgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
                       ",ldaf %" FLA_IS ",ldb %" FLA_IS ",ldx %" FLA_IS "",
                       *trans, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
-        i__2, i__3;
+    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2,
+        i__3;
     real r__1, r__2, r__3;
     /* Local variables */
     aocl_int64_t i__, j, k;
@@ -227,17 +229,25 @@ void aocl_lapack_sgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    void sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+               real *, integer *);
     integer count;
     extern /* Subroutine */
-    void scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *),
+        saxpy_(integer *, real *, real *, integer *, real *, integer *),
+        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     extern /* Subroutine */
-    void sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *,
+                integer *);
     char transt[1];
     real lstres;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -284,7 +294,7 @@ void aocl_lapack_sgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
     /* Function Body */
     *info = 0;
     notran = lsame_(trans, "N", 1, 1);
-    if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
@@ -296,19 +306,19 @@ void aocl_lapack_sgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -10;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -12;
     }
@@ -353,9 +363,9 @@ void aocl_lapack_sgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
     L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - op(A) * X, */
         /* where op(A) = A, A**T, or A**H, depending on TRANS. */
-        aocl_blas_scopy(n, &b[j * b_dim1 + 1], &c__1, &work[*n + 1], &c__1);
-        aocl_blas_sgemv(trans, n, n, &c_b15, &a[a_offset], lda, &x[j * x_dim1 + 1], &c__1, &c_b17,
-                        &work[*n + 1], &c__1);
+        scopy_(n, &b[j * b_dim1 + 1], &c__1, &work[*n + 1], &c__1);
+        sgemv_(trans, n, n, &c_b15, &a[a_offset], lda, &x[j * x_dim1 + 1], &c__1, &c_b17,
+               &work[*n + 1], &c__1);
         /* Compute componentwise relative backward error from formula */
         /* fla_max(i) ( f2c_abs(R(i)) / ( f2c_abs(op(A))*f2c_abs(X) + f2c_abs(B) )(i) ) */
         /* where f2c_abs(Z) is the componentwise absolute value of the matrix */
@@ -369,7 +379,7 @@ void aocl_lapack_sgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
             /* L30: */
         }
         /* Compute f2c_abs(op(A))*f2c_abs(X) + f2c_abs(B). */
-        if (notran)
+        if(notran)
         {
             i__2 = *n;
             for(k = 1; k <= i__2; ++k)
@@ -393,7 +403,8 @@ void aocl_lapack_sgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
                 i__3 = *n;
                 for(i__ = 1; i__ <= i__3; ++i__)
                 {
-                    s += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1)) * (r__2 = x[ i__ + j * x_dim1], f2c_abs(r__2));
+                    s += (r__1 = a[i__ + k * a_dim1], f2c_abs(r__1))
+                         * (r__2 = x[i__ + j * x_dim1], f2c_abs(r__2));
                     /* L60: */
                 }
                 work[k] += s;
@@ -408,15 +419,16 @@ void aocl_lapack_sgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
             {
                 /* Computing MAX */
                 r__2 = s;
-                r__3 = (r__1 = work[*n + i__], f2c_abs(r__1)) / work[ i__]; // , expr subst
-                s = fla_max(r__2,r__3);
+                r__3 = (r__1 = work[*n + i__], f2c_abs(r__1)) / work[i__]; // , expr subst
+                s = fla_max(r__2, r__3);
             }
             else
             {
                 /* Computing MAX */
                 r__2 = s;
-                r__3 = ((r__1 = work[*n + i__], f2c_abs(r__1)) + safe1) / (work[i__] + safe1); // , expr subst
-                s = fla_max(r__2,r__3);
+                r__3 = ((r__1 = work[*n + i__], f2c_abs(r__1)) + safe1)
+                       / (work[i__] + safe1); // , expr subst
+                s = fla_max(r__2, r__3);
             }
             /* L80: */
         }
@@ -429,9 +441,8 @@ void aocl_lapack_sgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
         if(berr[j] > eps && berr[j] * 2.f <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            aocl_lapack_sgetrs(trans, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[*n + 1], n,
-                               info);
-            aocl_blas_saxpy(n, &c_b17, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            sgetrs_(trans, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[*n + 1], n, info);
+            saxpy_(n, &c_b17, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;
@@ -468,15 +479,13 @@ void aocl_lapack_sgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
         }
         kase = 0;
     L100:
-        aocl_lapack_slacn2(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase,
-                           isave);
+        slacn2_(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(op(A)**T). */
-                aocl_lapack_sgetrs(transt, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[*n + 1],
-                                   n, info);
+                sgetrs_(transt, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[*n + 1], n, info);
                 i__2 = *n;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
@@ -493,8 +502,7 @@ void aocl_lapack_sgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
                     work[*n + i__] = work[i__] * work[*n + i__];
                     /* L120: */
                 }
-                aocl_lapack_sgetrs(trans, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[*n + 1],
-                                   n, info);
+                sgetrs_(trans, n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[*n + 1], n, info);
             }
             goto L100;
         }
@@ -506,7 +514,7 @@ void aocl_lapack_sgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
             /* Computing MAX */
             r__2 = lstres;
             r__3 = (r__1 = x[i__ + j * x_dim1], f2c_abs(r__1)); // , expr subst
-            lstres = fla_max(r__2,r__3);
+            lstres = fla_max(r__2, r__3);
             /* L130: */
         }
         if(lstres != 0.f)

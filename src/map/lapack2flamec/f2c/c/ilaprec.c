@@ -70,19 +70,19 @@ integer ilaprec_(char *prec)
     /* .. External Functions .. */
     /* .. */
     /* .. Executable Statements .. */
-    if (lsame_(prec, "S", 1, 1))
+    if(lsame_(prec, "S", 1, 1))
     {
         ret_val = 211;
     }
-    else if (lsame_(prec, "D", 1, 1))
+    else if(lsame_(prec, "D", 1, 1))
     {
         ret_val = 212;
     }
-    else if (lsame_(prec, "I", 1, 1))
+    else if(lsame_(prec, "I", 1, 1))
     {
         ret_val = 213;
     }
-    else if (lsame_(prec, "X", 1, 1) || lsame_(prec, "E", 1, 1))
+    else if(lsame_(prec, "X", 1, 1) || lsame_(prec, "E", 1, 1))
     {
         ret_val = 214;
     }

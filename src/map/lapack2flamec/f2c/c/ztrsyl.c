@@ -1,8 +1,8 @@
-/* ./ztrsyl.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ztrsyl.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZTRSYL */
@@ -155,10 +155,14 @@ perturbed */
 /* > \ingroup trsyl */
 /* ===================================================================== */
 /* Subroutine */
-void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *c__, integer *ldc, doublereal *scale, integer *info)
+void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, doublecomplex *a,
+             integer *lda, doublecomplex *b, integer *ldb, doublecomplex *c__, integer *ldc,
+             doublereal *scale, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztrsyl inputs: trana %c, tranb %c, isgn %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS "",*trana, *tranb, *isgn, *m, *n, *lda, *ldb, *ldc);
+    AOCL_DTL_SNPRINTF("ztrsyl inputs: trana %c, tranb %c, isgn %" FLA_IS ", m %" FLA_IS
+                      ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS "",
+                      *trana, *tranb, *isgn, *m, *n, *lda, *ldb, *ldc);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2;
@@ -177,19 +181,28 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
     doublecomplex suml, sumr;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Double Complex */
-    VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zdotu_f2c_( doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        VOID
+        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                   integer *),
+        zdotu_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                   integer *);
     extern /* Subroutine */
-    void dlabad_(doublereal *, doublereal *);
+        void
+        dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     doublereal scaloc;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *,
+                              doublereal *);
     doublereal bignum;
     extern /* Subroutine */
-    void zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+        void
+        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     extern /* Double Complex */
-    void zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
+        void
+        zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
     logical notrna, notrnb;
     doublereal smlnum;
     /* -- LAPACK computational routine -- */
@@ -228,11 +241,11 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
     notrna = lsame_(trana, "N", 1, 1);
     notrnb = lsame_(tranb, "N", 1, 1);
     *info = 0;
-    if (! notrna && ! lsame_(trana, "C", 1, 1))
+    if(!notrna && !lsame_(trana, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (! notrnb && ! lsame_(tranb, "C", 1, 1))
+    else if(!notrnb && !lsame_(tranb, "C", 1, 1))
     {
         *info = -2;
     }
@@ -248,15 +261,15 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -11;
     }
@@ -264,29 +277,30 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
     {
         i__1 = -(*info);
         xerbla_("ZTRSYL", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     *scale = 1.;
     if(*m == 0 || *n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Set constants to control overflow */
     eps = dlamch_("P");
     smlnum = dlamch_("S");
     bignum = 1. / smlnum;
+    dlabad_(&smlnum, &bignum);
     smlnum = smlnum * (doublereal)(*m * *n) / eps;
     bignum = 1. / smlnum;
     /* Computing MAX */
     d__1 = smlnum, d__2 = eps * zlange_("M", m, m, &a[a_offset], lda, dum);
-    d__1 = fla_max(d__1,d__2);
+    d__1 = fla_max(d__1, d__2);
     d__2 = eps * zlange_("M", n, n, &b[b_offset], ldb, dum); // ; expr subst
-    smin = fla_max(d__1,d__2);
-    sgn = (doublereal) (*isgn);
-    if (notrna && notrnb)
+    smin = fla_max(d__1, d__2);
+    sgn = (doublereal)(*isgn);
+    if(notrna && notrnb)
     {
         /* Solve A*X + ISGN*X*B = scale*C. */
         /* The (K,L)th block of X is determined starting from */
@@ -306,7 +320,8 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                 i__3 = k + 1;
                 /* Computing MIN */
                 i__4 = k + 1;
-                zdotu_f2c_(&z__1, &i__2, &a[k + fla_min(i__3,*m) * a_dim1], lda, &c__[ fla_min(i__4,*m) + l * c_dim1], &c__1);
+                zdotu_f2c_(&z__1, &i__2, &a[k + fla_min(i__3, *m) * a_dim1], lda,
+                           &c__[fla_min(i__4, *m) + l * c_dim1], &c__1);
                 suml.r = z__1.r;
                 suml.i = z__1.i; // , expr subst
                 i__2 = l - 1;
@@ -331,16 +346,16 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                 z__1.i = a[i__2].i + z__2.i; // , expr subst
                 a11.r = z__1.r;
                 a11.i = z__1.i; // , expr subst
-                da11 = (d__1 = a11.r, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs( d__2));
-                if (da11 <= smin)
+                da11 = (d__1 = a11.r, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs(d__2));
+                if(da11 <= smin)
                 {
                     a11.real = smin;
                     a11.imag = 0.; // , expr subst
                     da11 = smin;
                     *info = 1;
                 }
-                db = (d__1 = vec.r, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs( d__2));
-                if (da11 < 1. && db > 1.)
+                db = (d__1 = vec.r, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs(d__2));
+                if(da11 < 1. && db > 1.)
                 {
                     if(db > bignum * da11)
                     {
@@ -354,7 +369,7 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                 zladiv_f2c_(&z__1, &z__2, &a11);
                 x11.r = z__1.r;
                 x11.i = z__1.i; // , expr subst
-                if (scaloc != 1.)
+                if(scaloc != 1.)
                 {
                     i__2 = *n;
                     for(j = 1; j <= i__2; ++j)
@@ -414,16 +429,16 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                 z__1.i = z__2.i + z__3.i; // , expr subst
                 a11.r = z__1.r;
                 a11.i = z__1.i; // , expr subst
-                da11 = (d__1 = a11.r, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs( d__2));
-                if (da11 <= smin)
+                da11 = (d__1 = a11.r, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs(d__2));
+                if(da11 <= smin)
                 {
                     a11.real = smin;
                     a11.imag = 0.; // , expr subst
                     da11 = smin;
                     *info = 1;
                 }
-                db = (d__1 = vec.r, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs( d__2));
-                if (da11 < 1. && db > 1.)
+                db = (d__1 = vec.r, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs(d__2));
+                if(da11 < 1. && db > 1.)
                 {
                     if(db > bignum * da11)
                     {
@@ -437,7 +452,7 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                 zladiv_f2c_(&z__1, &z__2, &a11);
                 x11.r = z__1.r;
                 x11.i = z__1.i; // , expr subst
-                if (scaloc != 1.)
+                if(scaloc != 1.)
                 {
                     i__3 = *n;
                     for(j = 1; j <= i__3; ++j)
@@ -482,7 +497,8 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                 i__3 = l + 1;
                 /* Computing MIN */
                 i__4 = l + 1;
-                zdotc_f2c_(&z__1, &i__2, &c__[k + fla_min(i__3,*n) * c_dim1], ldc, &b[ l + fla_min(i__4,*n) * b_dim1], ldb);
+                zdotc_f2c_(&z__1, &i__2, &c__[k + fla_min(i__3, *n) * c_dim1], ldc,
+                           &b[l + fla_min(i__4, *n) * b_dim1], ldb);
                 sumr.r = z__1.r;
                 sumr.i = z__1.i; // , expr subst
                 i__2 = k + l * c_dim1;
@@ -505,16 +521,16 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                 d_cnjg(&z__1, &z__2);
                 a11.r = z__1.r;
                 a11.i = z__1.i; // , expr subst
-                da11 = (d__1 = a11.r, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs( d__2));
-                if (da11 <= smin)
+                da11 = (d__1 = a11.r, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs(d__2));
+                if(da11 <= smin)
                 {
                     a11.real = smin;
                     a11.imag = 0.; // , expr subst
                     da11 = smin;
                     *info = 1;
                 }
-                db = (d__1 = vec.r, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs( d__2));
-                if (da11 < 1. && db > 1.)
+                db = (d__1 = vec.r, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs(d__2));
+                if(da11 < 1. && db > 1.)
                 {
                     if(db > bignum * da11)
                     {
@@ -528,7 +544,7 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                 zladiv_f2c_(&z__1, &z__2, &a11);
                 x11.r = z__1.r;
                 x11.i = z__1.i; // , expr subst
-                if (scaloc != 1.)
+                if(scaloc != 1.)
                 {
                     i__2 = *n;
                     for(j = 1; j <= i__2; ++j)
@@ -565,7 +581,8 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                 i__2 = k + 1;
                 /* Computing MIN */
                 i__3 = k + 1;
-                zdotu_f2c_(&z__1, &i__1, &a[k + fla_min(i__2,*m) * a_dim1], lda, &c__[ fla_min(i__3,*m) + l * c_dim1], &c__1);
+                zdotu_f2c_(&z__1, &i__1, &a[k + fla_min(i__2, *m) * a_dim1], lda,
+                           &c__[fla_min(i__3, *m) + l * c_dim1], &c__1);
                 suml.r = z__1.r;
                 suml.i = z__1.i; // , expr subst
                 i__1 = *n - l;
@@ -573,7 +590,8 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                 i__2 = l + 1;
                 /* Computing MIN */
                 i__3 = l + 1;
-                zdotc_f2c_(&z__1, &i__1, &c__[k + fla_min(i__2,*n) * c_dim1], ldc, &b[ l + fla_min(i__3,*n) * b_dim1], ldb);
+                zdotc_f2c_(&z__1, &i__1, &c__[k + fla_min(i__2, *n) * c_dim1], ldc,
+                           &b[l + fla_min(i__3, *n) * b_dim1], ldb);
                 sumr.r = z__1.r;
                 sumr.i = z__1.i; // , expr subst
                 i__1 = k + l * c_dim1;
@@ -595,16 +613,16 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                 z__1.i = a[i__1].i + z__2.i; // , expr subst
                 a11.r = z__1.r;
                 a11.i = z__1.i; // , expr subst
-                da11 = (d__1 = a11.r, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs( d__2));
-                if (da11 <= smin)
+                da11 = (d__1 = a11.r, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs(d__2));
+                if(da11 <= smin)
                 {
                     a11.real = smin;
                     a11.imag = 0.; // , expr subst
                     da11 = smin;
                     *info = 1;
                 }
-                db = (d__1 = vec.r, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs( d__2));
-                if (da11 < 1. && db > 1.)
+                db = (d__1 = vec.r, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs(d__2));
+                if(da11 < 1. && db > 1.)
                 {
                     if(db > bignum * da11)
                     {
@@ -618,7 +636,7 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                 zladiv_f2c_(&z__1, &z__2, &a11);
                 x11.r = z__1.r;
                 x11.i = z__1.i; // , expr subst
-                if (scaloc != 1.)
+                if(scaloc != 1.)
                 {
                     i__1 = *n;
                     for(j = 1; j <= i__1; ++j)

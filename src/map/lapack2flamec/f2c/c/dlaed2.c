@@ -1,19 +1,29 @@
-/* ../netlib/dlaed2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlaed2.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b3 = -1.;
 static integer c__1 = 1;
-/* > \brief \b DLAED2 used by sstedc. Merges eigenvalues and deflates secular equation. Used when the original matrix is tridiagonal. */
+/* > \brief \b DLAED2 used by sstedc. Merges eigenvalues and deflates secular equation. Used when
+ * the original matrix is tridiagonal. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLAED2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaed2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaed2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaed2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaed2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaed2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaed2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -170,11 +180,11 @@ static integer c__1 = 1;
 /* > During execution, a label which will indicate which of the */
 /* > following types a column in the Q2 matrix is: */
 /* > 1 : non-zero in the upper half only;
-*/
+ */
 /* > 2 : dense;
-*/
+ */
 /* > 3 : non-zero in the lower half only;
-*/
+ */
 /* > 4 : deflated. */
 /* > On exit, COLTYP(i) is the number of columns of type i, */
 /* > for i=1 to 4 only. */
@@ -203,10 +213,15 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlaed2_(integer *k, integer *n, integer *n1, doublereal * d__, doublereal *q, integer *ldq, integer *indxq, doublereal *rho, doublereal *z__, doublereal *dlamda, doublereal *w, doublereal *q2, integer *indx, integer *indxc, integer *indxp, integer *coltyp, integer *info)
+void dlaed2_(integer *k, integer *n, integer *n1, doublereal *d__, doublereal *q, integer *ldq,
+             integer *indxq, doublereal *rho, doublereal *z__, doublereal *dlamda, doublereal *w,
+             doublereal *q2, integer *indx, integer *indxc, integer *indxp, integer *coltyp,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaed2 inputs: n %" FLA_IS ", n1 %" FLA_IS ", ldq %" FLA_IS ", indxq %" FLA_IS "",*n, *n1, *ldq, *indxq);
+    AOCL_DTL_SNPRINTF("dlaed2 inputs: n %" FLA_IS ", n1 %" FLA_IS ", ldq %" FLA_IS
+                      ", indxq %" FLA_IS "",
+                      *n, *n1, *ldq, *indxq);
     /* System generated locals */
     integer q_dim1, q_offset, i__1, i__2;
     doublereal d__1, d__2, d__3, d__4;
@@ -220,14 +235,21 @@ void dlaed2_(integer *k, integer *n, integer *n1, doublereal * d__, doublereal *
     doublereal eps, tau, tol;
     integer psm[4], imax, jmax;
     extern /* Subroutine */
-    void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+        void
+        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+              doublereal *);
     integer ctot[4];
     extern /* Subroutine */
-    void dscal_(integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *),
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    void dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *),
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -268,11 +290,11 @@ void dlaed2_(integer *k, integer *n, integer *n1, doublereal * d__, doublereal *
     /* Function Body */
     *info = 0;
     pj = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -2;
     }
-    else if (*ldq < fla_max(1,*n))
+    else if(*ldq < fla_max(1, *n))
     {
         *info = -6;
     }
@@ -281,12 +303,12 @@ void dlaed2_(integer *k, integer *n, integer *n1, doublereal * d__, doublereal *
         /* Computing MIN */
         i__1 = 1;
         i__2 = *n / 2; // , expr subst
-        if (fla_min(i__1,i__2) > *n1 || *n / 2 < *n1)
+        if(fla_min(i__1, i__2) > *n1 || *n / 2 < *n1)
         {
             *info = -3;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DLAED2", &i__1, (ftnlen)6);
@@ -294,14 +316,14 @@ void dlaed2_(integer *k, integer *n, integer *n1, doublereal * d__, doublereal *
         return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     n2 = *n - *n1;
     n1p1 = *n1 + 1;
-    if (*rho < 0.)
+    if(*rho < 0.)
     {
         dscal_(&n2, &c_b3, &z__[n1p1], &c__1);
     }
@@ -313,27 +335,21 @@ void dlaed2_(integer *k, integer *n, integer *n1, doublereal * d__, doublereal *
     *rho = (d__1 = *rho * 2., f2c_abs(d__1));
     /* Sort the eigenvalues into increasing order */
     i__1 = *n;
-    for (i__ = n1p1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = n1p1; i__ <= i__1; ++i__)
     {
         indxq[i__] += *n1;
         /* L10: */
     }
     /* re-integrate the deflated parts from the last pass */
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         dlamda[i__] = d__[indxq[i__]];
         /* L20: */
     }
     dlamrg_(n1, &n2, &dlamda[1], &c__1, &c__1, &indxc[1]);
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         indx[i__] = indxq[indxc[i__]];
         /* L30: */
@@ -344,19 +360,17 @@ void dlaed2_(integer *k, integer *n, integer *n1, doublereal * d__, doublereal *
     eps = dlamch_("Epsilon");
     /* Computing MAX */
     d__3 = (d__1 = d__[jmax], f2c_abs(d__1));
-    d__4 = (d__2 = z__[imax], f2c_abs(d__2)) ; // , expr subst
-    tol = eps * 8. * fla_max(d__3,d__4);
+    d__4 = (d__2 = z__[imax], f2c_abs(d__2)); // , expr subst
+    tol = eps * 8. * fla_max(d__3, d__4);
     /* If the rank-1 modifier is small enough, no more needs to be done */
     /* except to reorganize Q so that its columns correspond with the */
     /* elements in D. */
-    if (*rho * (d__1 = z__[imax], f2c_abs(d__1)) <= tol)
+    if(*rho * (d__1 = z__[imax], f2c_abs(d__1)) <= tol)
     {
         *k = 0;
         iq2 = 1;
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__ = indx[j];
             dcopy_(n, &q[i__ * q_dim1 + 1], &c__1, &q2[iq2], &c__1);
@@ -374,17 +388,13 @@ void dlaed2_(integer *k, integer *n, integer *n1, doublereal * d__, doublereal *
     /* the corresponding eigensubspace so that the corresponding */
     /* components of Z are zero in this new basis. */
     i__1 = *n1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         coltyp[i__] = 1;
         /* L50: */
     }
     i__1 = *n;
-    for (i__ = n1p1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = n1p1; i__ <= i__1; ++i__)
     {
         coltyp[i__] = 3;
         /* L60: */
@@ -392,18 +402,16 @@ void dlaed2_(integer *k, integer *n, integer *n1, doublereal * d__, doublereal *
     *k = 0;
     k2 = *n + 1;
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         nj = indx[j];
-        if (*rho * (d__1 = z__[nj], f2c_abs(d__1)) <= tol)
+        if(*rho * (d__1 = z__[nj], f2c_abs(d__1)) <= tol)
         {
             /* Deflate due to small z component. */
             --k2;
             coltyp[nj] = 4;
             indxp[k2] = nj;
-            if (j == *n)
+            if(j == *n)
             {
                 goto L100;
             }
@@ -418,11 +426,11 @@ void dlaed2_(integer *k, integer *n, integer *n1, doublereal * d__, doublereal *
 L80:
     ++j;
     nj = indx[j];
-    if (j > *n)
+    if(j > *n)
     {
         goto L100;
     }
-    if (*rho * (d__1 = z__[nj], f2c_abs(d__1)) <= tol)
+    if(*rho * (d__1 = z__[nj], f2c_abs(d__1)) <= tol)
     {
         /* Deflate due to small z component. */
         --k2;
@@ -440,17 +448,17 @@ L80:
         t = d__[nj] - d__[pj];
         c__ /= tau;
         s = -s / tau;
-        if ((d__1 = t * c__ * s, f2c_abs(d__1)) <= tol)
+        if((d__1 = t * c__ * s, f2c_abs(d__1)) <= tol)
         {
             /* Deflation is possible. */
             z__[nj] = tau;
             z__[pj] = 0.;
-            if (coltyp[nj] != coltyp[pj])
+            if(coltyp[nj] != coltyp[pj])
             {
                 coltyp[nj] = 2;
             }
             coltyp[pj] = 4;
-            drot_(n, &q[pj * q_dim1 + 1], &c__1, &q[nj * q_dim1 + 1], &c__1, & c__, &s);
+            drot_(n, &q[pj * q_dim1 + 1], &c__1, &q[nj * q_dim1 + 1], &c__1, &c__, &s);
             /* Computing 2nd power */
             d__1 = c__;
             /* Computing 2nd power */
@@ -464,10 +472,10 @@ L80:
             d__[pj] = t;
             --k2;
             i__ = 1;
-L90:
-            if (k2 + i__ <= *n)
+        L90:
+            if(k2 + i__ <= *n)
             {
-                if (d__[pj] < d__[indxp[k2 + i__]])
+                if(d__[pj] < d__[indxp[k2 + i__]])
                 {
                     indxp[k2 + i__ - 1] = indxp[k2 + i__];
                     indxp[k2 + i__] = pj;
@@ -504,17 +512,13 @@ L100: /* Record the last eigenvalue. */
     /* form a permutation which positions the four column types into */
     /* four uniform groups (although one or more of these groups may be */
     /* empty). */
-    for (j = 1;
-            j <= 4;
-            ++j)
+    for(j = 1; j <= 4; ++j)
     {
         ctot[j - 1] = 0;
         /* L110: */
     }
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         ct = coltyp[j];
         ++ctot[ct - 1];
@@ -530,9 +534,7 @@ L100: /* Record the last eigenvalue. */
     /* will place all type-1 columns first, all type-2 columns next, */
     /* then all type-3's, and finally all type-4's. */
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         js = indxp[j];
         ct = coltyp[js];
@@ -549,9 +551,7 @@ L100: /* Record the last eigenvalue. */
     iq1 = 1;
     iq2 = (ctot[0] + ctot[1]) * *n1 + 1;
     i__1 = ctot[0];
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         js = indx[i__];
         dcopy_(n1, &q[js * q_dim1 + 1], &c__1, &q2[iq1], &c__1);
@@ -561,9 +561,7 @@ L100: /* Record the last eigenvalue. */
         /* L140: */
     }
     i__1 = ctot[1];
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         js = indx[i__];
         dcopy_(n1, &q[js * q_dim1 + 1], &c__1, &q2[iq1], &c__1);
@@ -575,9 +573,7 @@ L100: /* Record the last eigenvalue. */
         /* L150: */
     }
     i__1 = ctot[2];
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         js = indx[i__];
         dcopy_(&n2, &q[*n1 + 1 + js * q_dim1], &c__1, &q2[iq2], &c__1);
@@ -588,9 +584,7 @@ L100: /* Record the last eigenvalue. */
     }
     iq1 = iq2;
     i__1 = ctot[3];
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         js = indx[i__];
         dcopy_(n, &q[js * q_dim1 + 1], &c__1, &q2[iq2], &c__1);
@@ -601,16 +595,14 @@ L100: /* Record the last eigenvalue. */
     }
     /* The deflated eigenvalues and their corresponding vectors go back */
     /* into the last N - K slots of D and Q respectively. */
-    if (*k < *n)
+    if(*k < *n)
     {
         dlacpy_("A", n, &ctot[3], &q2[iq1], n, &q[(*k + 1) * q_dim1 + 1], ldq);
         i__1 = *n - *k;
         dcopy_(&i__1, &z__[*k + 1], &c__1, &d__[*k + 1], &c__1);
     }
     /* Copy CTOT into COLTYP for referencing in DLAED3. */
-    for (j = 1;
-            j <= 4;
-            ++j)
+    for(j = 1; j <= 4; ++j)
     {
         coltyp[j] = ctot[j - 1];
         /* L180: */

@@ -1,8 +1,10 @@
 #include "FLA_f2c.h" /* Table of constant values */
+#include "FLA_lapack2flame_return_defs.h"
 static integer c__1 = 1;
 static integer c_n1 = -1;
 
-int zgeqp3_check(integer *m, integer *n, dcomplex *a, integer *lda, integer *jpvt, dcomplex *tau, dcomplex *work, integer *lwork, double *rwork, integer *info)
+int zgeqp3_check(integer *m, integer *n, dcomplex *a, integer *lda, integer *jpvt, dcomplex *tau,
+                 dcomplex *work, integer *lwork, double *rwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
@@ -31,14 +33,14 @@ int zgeqp3_check(integer *m, integer *n, dcomplex *a, integer *lda, integer *jpv
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
     if(*info == 0)
     {
-        minmn = fla_min(*m,*n);
-        if (minmn == 0)
+        minmn = fla_min(*m, *n);
+        if(minmn == 0)
         {
             iws = 1;
             lwkopt = 1;

@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b CLADIV performs scomplex division in real arithmetic, avoiding unnecessary overflow. */
+#include "FLA_f2c.h" /* > \brief \b CLADIV performs complex division in real arithmetic, avoiding unnecessary overflow. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -60,7 +60,7 @@
 /* ===================================================================== */
 /* Complex */
 #ifdef FLA_ENABLE_VOID_RETURN_COMPLEX_FUNCTION
-VOID cladiv_(complex * ret_val, complex *x, complex *y)
+VOID cladiv_(complex *ret_val, complex *x, complex *y)
 {
     /* System generated locals */
     real r__1, r__2, r__3, r__4;
@@ -68,44 +68,8 @@ VOID cladiv_(complex * ret_val, complex *x, complex *y)
     /* Local variables */
     real zi, zr;
     extern /* Subroutine */
-    void sladiv_(real *, real *, real *, real *, real *, real *);
-    /* -- LAPACK auxiliary routine (version 3.4.2) -- */
-    /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
-    /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* September 2012 */
-    /* .. Scalar Arguments .. */
-    /* .. */
-    /* ===================================================================== */
-    /* .. Local Scalars .. */
-    /* .. */
-    /* .. External Subroutines .. */
-    /* .. */
-    /* .. Intrinsic Functions .. */
-    /* .. */
-    /* .. Executable Statements .. */
-    r__1 = x->r;
-    r__2 = x->i; 
-    r__3 = y->r;
-    r__4 = y->i; 
-    sladiv_(&r__1, &r__2, &r__3, &r__4, &zr, &zi);
-    q__1.r = zr;
-    q__1.i = zi; // , expr subst
-    ret_val->r = q__1.r, ret_val->i = q__1.i;
-    return ;
-    /* End of CLADIV */
-}
-
-#else
-
-complex cladiv_(complex *x, complex *y)
-{
-    /* System generated locals */
-    real r__1, r__2, r__3, r__4;
-    complex q__1;
-    /* Local variables */
-    real zi, zr;
-    extern /* Subroutine */
-    void sladiv_(real *, real *, real *, real *, real *, real *);
+        void
+        sladiv_(real *, real *, real *, real *, real *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -123,7 +87,45 @@ complex cladiv_(complex *x, complex *y)
     r__1 = x->r;
     r__2 = x->i;
     r__3 = y->r;
-    r__4 = y->i; 
+    r__4 = y->i;
+    sladiv_(&r__1, &r__2, &r__3, &r__4, &zr, &zi);
+    q__1.r = zr;
+    q__1.i = zi; // , expr subst
+    ret_val->r = q__1.r, ret_val->i = q__1.i;
+    return;
+    /* End of CLADIV */
+}
+
+#else
+
+complex cladiv_(complex *x, complex *y)
+{
+    /* System generated locals */
+    real r__1, r__2, r__3, r__4;
+    complex q__1;
+    /* Local variables */
+    real zi, zr;
+    extern /* Subroutine */
+        void
+        sladiv_(real *, real *, real *, real *, real *, real *);
+    /* -- LAPACK auxiliary routine (version 3.4.2) -- */
+    /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
+    /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
+    /* September 2012 */
+    /* .. Scalar Arguments .. */
+    /* .. */
+    /* ===================================================================== */
+    /* .. Local Scalars .. */
+    /* .. */
+    /* .. External Subroutines .. */
+    /* .. */
+    /* .. Intrinsic Functions .. */
+    /* .. */
+    /* .. Executable Statements .. */
+    r__1 = x->r;
+    r__2 = x->i;
+    r__3 = y->r;
+    r__4 = y->i;
     sladiv_(&r__1, &r__2, &r__3, &r__4, &zr, &zi);
     q__1.r = zr;
     q__1.i = zi; // , expr subst

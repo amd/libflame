@@ -122,12 +122,13 @@
 /* > \ingroup realGTsolve */
 /* ===================================================================== */
 /* Subroutine */
-void sgtsv_(integer *n, integer *nrhs, real *dl, real *d__, real *du, real *b, integer *ldb, integer *info)
+void sgtsv_(integer *n, integer *nrhs, real *dl, real *d__, real *du, real *b, integer *ldb,
+            integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sgtsv inputs: n %d, nrhs %d, ldb %d",*n, *nrhs, *ldb);
+    snprintf(buffer, 256, "sgtsv inputs: n %d, nrhs %d, ldb %d", *n, *nrhs, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -137,7 +138,8 @@ void sgtsv_(integer *n, integer *nrhs, real *dl, real *d__, real *du, real *b, i
     aocl_int64_t i__, j;
     real fact, temp;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -173,7 +175,7 @@ void sgtsv_(integer *n, integer *nrhs, real *dl, real *d__, real *du, real *b, i
     {
         *info = -2;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
@@ -194,7 +196,7 @@ void sgtsv_(integer *n, integer *nrhs, real *dl, real *d__, real *du, real *b, i
         i__1 = *n - 2;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if ((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
+            if((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
             {
                 /* No row interchange required */
                 if(d__[i__] != 0.f)
@@ -230,7 +232,7 @@ void sgtsv_(integer *n, integer *nrhs, real *dl, real *d__, real *du, real *b, i
         if(*n > 1)
         {
             i__ = *n - 1;
-            if ((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
+            if((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
             {
                 if(d__[i__] != 0.f)
                 {
@@ -269,7 +271,7 @@ void sgtsv_(integer *n, integer *nrhs, real *dl, real *d__, real *du, real *b, i
         i__1 = *n - 2;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if ((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
+            if((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
             {
                 /* No row interchange required */
                 if(d__[i__] != 0.f)
@@ -315,7 +317,7 @@ void sgtsv_(integer *n, integer *nrhs, real *dl, real *d__, real *du, real *b, i
         if(*n > 1)
         {
             i__ = *n - 1;
-            if ((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
+            if((r__1 = d__[i__], f2c_abs(r__1)) >= (r__2 = dl[i__], f2c_abs(r__2)))
             {
                 if(d__[i__] != 0.f)
                 {

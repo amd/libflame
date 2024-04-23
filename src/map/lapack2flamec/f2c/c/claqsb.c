@@ -74,7 +74,7 @@
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > */
 /* > On exit, if INFO = 0, the triangular factor U or L from the */
@@ -136,15 +136,17 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void claqsb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, real *s, real *scond, real *amax, char *equed)
+void claqsb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, real *s, real *scond,
+             real *amax, char *equed)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"claqsb inputs: uplo %c, n %lld, kd %lld, ldab %lld",*uplo, *n, *kd, *ldab);
+    snprintf(buffer, 256, "claqsb inputs: uplo %c, n %lld, kd %lld, ldab %lld", *uplo, *n, *kd,
+             *ldab);
 #else
-    snprintf(buffer, 256,"claqsb inputs: uplo %c, n %d, kd %d, ldab %d",*uplo, *n, *kd, *ldab);
+    snprintf(buffer, 256, "claqsb inputs: uplo %c, n %d, kd %d, ldab %d", *uplo, *n, *kd, *ldab);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -192,7 +194,7 @@ void claqsb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, re
     /* Initialize LARGE and SMALL. */
     small_val = slamch_("Safe minimum") / slamch_("Precision");
     large = 1.f / small_val;
-    if (*scond >= .1f && *amax >= small_val && *amax <= large)
+    if(*scond >= .1f && *amax >= small_val && *amax <= large)
     {
         /* No equilibration */
         *(unsigned char *)equed = 'N';
@@ -200,7 +202,7 @@ void claqsb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, re
     else
     {
         /* Replace A by diag(S) * A * diag(S). */
-        if (lsame_(uplo, "U", 1, 1))
+        if(lsame_(uplo, "U", 1, 1))
         {
             /* Upper triangle of A is stored in band format. */
             i__1 = *n;
@@ -211,9 +213,7 @@ void claqsb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, re
                 i__2 = 1;
                 i__3 = j - *kd; // , expr subst
                 i__4 = j;
-                for (i__ = fla_max(i__2,i__3);
-                        i__ <= i__4;
-                        ++i__)
+                for(i__ = fla_max(i__2, i__3); i__ <= i__4; ++i__)
                 {
                     i__2 = *kd + 1 + i__ - j + j * ab_dim1;
                     r__1 = cj * s[i__];
@@ -237,10 +237,8 @@ void claqsb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, re
                 /* Computing MIN */
                 i__2 = *n;
                 i__3 = j + *kd; // , expr subst
-                i__4 = fla_min(i__2,i__3);
-                for (i__ = j;
-                        i__ <= i__4;
-                        ++i__)
+                i__4 = fla_min(i__2, i__3);
+                for(i__ = j; i__ <= i__4; ++i__)
                 {
                     i__2 = i__ + 1 - j + j * ab_dim1;
                     r__1 = cj * s[i__];

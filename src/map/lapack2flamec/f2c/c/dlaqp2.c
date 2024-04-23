@@ -3,10 +3,6 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-
- /* Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
-  */
- 
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b DLAQP2 computes a QR factorization with column pivoting of the matrix block. */
@@ -148,10 +144,13 @@ if JPVT(i) = 0, */
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *lda, integer *jpvt, doublereal *tau, doublereal *vn1, doublereal *vn2, doublereal *work)
+void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *lda, integer *jpvt,
+             doublereal *tau, doublereal *vn1, doublereal *vn2, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaqp2 inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS ", lda %" FLA_IS "",*m, *n, *offset, *lda);
+    AOCL_DTL_SNPRINTF("dlaqp2 inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS
+                      ", lda %" FLA_IS "",
+                      *m, *n, *offset, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1, d__2;
@@ -164,13 +163,17 @@ void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *ld
     doublereal temp;
     doublereal temp2, tol3z;
     extern /* Subroutine */
-    void dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+        void
+        dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *);
     integer offpi, itemp;
     extern /* Subroutine */
-    void dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    void dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+        void
+        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern integer fla_idamax(integer *, doublereal *, integer *);
     /* -- LAPACK auxiliary routine (version 3.5.0) -- */
@@ -205,7 +208,7 @@ void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *ld
     /* Function Body */
     /* Computing MIN */
     i__1 = *m - *offset;
-    mn = fla_min(i__1,*n);
+    mn = fla_min(i__1, *n);
     tol3z = sqrt(dlamch_("Epsilon"));
     /* Compute factorization. */
     i__1 = mn;
@@ -227,20 +230,9 @@ void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *ld
 #else
         pvt = i__ - 1 + idamax_(&i__2, &vn1[i__], &c__1);
 #endif
-        if (pvt != i__)
-        {
-            pvt = i__ - 1 + fla_idamax(&i__2, &vn1[i__], &c__1);
-        }
-        else
-        {
-            pvt = i__ - 1 + aocl_blas_idamax(&i__2, &vn1[i__], &c__1);
-        }
-#else
-        pvt = i__ - 1 + aocl_blas_idamax(&i__2, &vn1[i__], &c__1);
-#endif
         if(pvt != i__)
         {
-            aocl_blas_dswap(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
+            dswap_(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
             itemp = jpvt[pvt];
             jpvt[pvt] = jpvt[i__];
             jpvt[i__] = (aocl_int_t)(itemp);
@@ -251,13 +243,12 @@ void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *ld
         if(offpi < *m)
         {
             i__2 = *m - offpi + 1;
-            aocl_lapack_dlarfg(&i__2, &a[offpi + i__ * a_dim1], &a[offpi + 1 + i__ * a_dim1], &c__1,
-                               &tau[i__]);
+            dlarfg_(&i__2, &a[offpi + i__ * a_dim1], &a[offpi + 1 + i__ * a_dim1], &c__1,
+                    &tau[i__]);
         }
         else
         {
-            aocl_lapack_dlarfg(&c__1, &a[*m + i__ * a_dim1], &a[*m + i__ * a_dim1], &c__1,
-                               &tau[i__]);
+            dlarfg_(&c__1, &a[*m + i__ * a_dim1], &a[*m + i__ * a_dim1], &c__1, &tau[i__]);
         }
         if(i__ < *n)
         {
@@ -266,23 +257,22 @@ void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *ld
             a[offpi + i__ * a_dim1] = 1.;
             i__2 = *m - offpi + 1;
             i__3 = *n - i__;
-            aocl_lapack_dlarf("Left", &i__2, &i__3, &a[offpi + i__ * a_dim1], &c__1, &tau[i__],
-                              &a[offpi + (i__ + 1) * a_dim1], lda, &work[1]);
+            dlarf_("Left", &i__2, &i__3, &a[offpi + i__ * a_dim1], &c__1, &tau[i__],
+                   &a[offpi + (i__ + 1) * a_dim1], lda, &work[1]);
             a[offpi + i__ * a_dim1] = aii;
         }
         /* Update partial column norms. */
         i__2 = *n;
         for(j = i__ + 1; j <= i__2; ++j)
         {
-            vn1_j = vn1[j];
-            if(vn1_j != 0.)
+            if(vn1[j] != 0.)
             {
                 /* NOTE: The following 4 lines follow from the analysis in */
                 /* Lapack Working Note 176. */
                 /* Computing 2nd power */
                 d__2 = (d__1 = a[offpi + j * a_dim1], f2c_dabs(d__1)) / vn1[j];
                 temp = 1. - d__2 * d__2;
-                temp = fla_max(temp,0.);
+                temp = fla_max(temp, 0.);
                 /* Computing 2nd power */
                 d__1 = vn1_j / vn2[j];
                 temp2 = temp * (d__1 * d__1);
@@ -291,12 +281,8 @@ void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *ld
                     if(offpi < *m)
                     {
                         i__3 = *m - offpi;
-#if FLA_ENABLE_AMD_OPT
-                        vn1_j = fla_dnrm2_blas_kernel(&i__3, &a[offpi + 1 + j * a_dim1], &c__1);
-#else
-                        vn1_j = aocl_blas_dnrm2(&i__3, &a[offpi + 1 + j * a_dim1], &c__1);
-#endif
-                        vn2[j] = vn1_j;
+                        vn1[j] = dnrm2_(&i__3, &a[offpi + 1 + j * a_dim1], &c__1);
+                        vn2[j] = vn1[j];
                     }
                     else
                     {

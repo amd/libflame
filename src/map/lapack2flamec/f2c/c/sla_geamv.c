@@ -168,7 +168,8 @@
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, integer *lda, real *x, integer *incx, real *beta, real *y, integer *incy)
+void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, integer *lda, real *x,
+                integer *incx, real *beta, real *y, integer *incy)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_sla_geamv(trans, m, n, alpha, a, lda, x, incx, beta, y, incy);
@@ -208,7 +209,8 @@ void aocl_lapack_sla_geamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
     real safe1;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -250,7 +252,7 @@ void aocl_lapack_sla_geamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
     {
         info = 3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         info = 6;
     }

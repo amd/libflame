@@ -169,10 +169,14 @@
 /* > \ingroup complex16GEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zla_geamv_(integer *trans, integer *m, integer *n, doublereal *alpha, doublecomplex *a, integer *lda, doublecomplex *x, integer *incx, doublereal *beta, doublereal *y, integer *incy)
+void zla_geamv_(integer *trans, integer *m, integer *n, doublereal *alpha, doublecomplex *a,
+                integer *lda, doublecomplex *x, integer *incx, doublereal *beta, doublereal *y,
+                integer *incy)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zla_geamv inputs: trans %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "", *trans, *m, *n, *lda, *incx, *incy);
+    AOCL_DTL_SNPRINTF("zla_geamv inputs: trans %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS
+                      ", lda %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",
+                      *trans, *m, *n, *lda, *incx, *incy);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1, d__2;
@@ -188,7 +192,8 @@ void zla_geamv_(integer *trans, integer *m, integer *n, doublereal *alpha, doubl
     doublereal safe1;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -234,7 +239,7 @@ void zla_geamv_(integer *trans, integer *m, integer *n, doublereal *alpha, doubl
     {
         info = 3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         info = 6;
     }
@@ -322,12 +327,16 @@ void zla_geamv_(integer *trans, integer *m, integer *n, doublereal *alpha, doubl
                     for(j = 1; j <= i__2; ++j)
                     {
                         i__3 = i__ + j * a_dim1;
-                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag( &a[i__ + j * a_dim1]), f2c_dabs(d__2));
+                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                               + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2));
                         i__3 = j;
                         symb_zero__
-                            = symb_zero__ && (x[i__3].real == 0. && x[i__3].imag == 0. || temp == 0.);
+                            = symb_zero__ && (x[i__3].r == 0. && x[i__3].i == 0. || temp == 0.);
                         i__3 = j;
-                        y[iy] += *alpha * ((d__1 = x[i__3].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&x[j]), f2c_dabs(d__2))) * temp;
+                        y[iy] += *alpha
+                                 * ((d__1 = x[i__3].r, f2c_dabs(d__1))
+                                    + (d__2 = d_imag(&x[j]), f2c_dabs(d__2)))
+                                 * temp;
                     }
                 }
                 if(!symb_zero__)
@@ -362,12 +371,16 @@ void zla_geamv_(integer *trans, integer *m, integer *n, doublereal *alpha, doubl
                     for(j = 1; j <= i__2; ++j)
                     {
                         i__3 = j + i__ * a_dim1;
-                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag( &a[j + i__ * a_dim1]), f2c_dabs(d__2));
+                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                               + (d__2 = d_imag(&a[j + i__ * a_dim1]), f2c_dabs(d__2));
                         i__3 = j;
                         symb_zero__
-                            = symb_zero__ && (x[i__3].real == 0. && x[i__3].imag == 0. || temp == 0.);
+                            = symb_zero__ && (x[i__3].r == 0. && x[i__3].i == 0. || temp == 0.);
                         i__3 = j;
-                        y[iy] += *alpha * ((d__1 = x[i__3].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&x[j]), f2c_dabs(d__2))) * temp;
+                        y[iy] += *alpha
+                                 * ((d__1 = x[i__3].r, f2c_dabs(d__1))
+                                    + (d__2 = d_imag(&x[j]), f2c_dabs(d__2)))
+                                 * temp;
                     }
                 }
                 if(!symb_zero__)
@@ -406,12 +419,16 @@ void zla_geamv_(integer *trans, integer *m, integer *n, doublereal *alpha, doubl
                     for(j = 1; j <= i__2; ++j)
                     {
                         i__3 = i__ + j * a_dim1;
-                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag( &a[i__ + j * a_dim1]), f2c_dabs(d__2));
+                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                               + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2));
                         i__3 = jx;
                         symb_zero__
-                            = symb_zero__ && (x[i__3].real == 0. && x[i__3].imag == 0. || temp == 0.);
+                            = symb_zero__ && (x[i__3].r == 0. && x[i__3].i == 0. || temp == 0.);
                         i__3 = jx;
-                        y[iy] += *alpha * ((d__1 = x[i__3].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&x[jx]), f2c_dabs(d__2))) * temp;
+                        y[iy] += *alpha
+                                 * ((d__1 = x[i__3].r, f2c_dabs(d__1))
+                                    + (d__2 = d_imag(&x[jx]), f2c_dabs(d__2)))
+                                 * temp;
                         jx += *incx;
                     }
                 }
@@ -448,12 +465,16 @@ void zla_geamv_(integer *trans, integer *m, integer *n, doublereal *alpha, doubl
                     for(j = 1; j <= i__2; ++j)
                     {
                         i__3 = j + i__ * a_dim1;
-                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag( &a[j + i__ * a_dim1]), f2c_dabs(d__2));
+                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                               + (d__2 = d_imag(&a[j + i__ * a_dim1]), f2c_dabs(d__2));
                         i__3 = jx;
                         symb_zero__
-                            = symb_zero__ && (x[i__3].real == 0. && x[i__3].imag == 0. || temp == 0.);
+                            = symb_zero__ && (x[i__3].r == 0. && x[i__3].i == 0. || temp == 0.);
                         i__3 = jx;
-                        y[iy] += *alpha * ((d__1 = x[i__3].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&x[jx]), f2c_dabs(d__2))) * temp;
+                        y[iy] += *alpha
+                                 * ((d__1 = x[i__3].r, f2c_dabs(d__1))
+                                    + (d__2 = d_imag(&x[jx]), f2c_dabs(d__2)))
+                                 * temp;
                         jx += *incx;
                     }
                 }

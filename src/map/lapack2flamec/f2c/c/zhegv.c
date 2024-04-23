@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {1., 0.};
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static doublecomplex c_b1 = {1., 0.};
+static integer c__1 = 1;
+static integer c_n1 = -1;
 /* > \brief \b ZHEGST */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -185,28 +185,42 @@ the routine */
 /* > \ingroup complex16HEeigen */
 /* ===================================================================== */
 /* Subroutine */
-void zhegv_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublereal *w, doublecomplex *work, integer *lwork, doublereal *rwork, integer *info)
+void zhegv_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *a, integer *lda,
+            doublecomplex *b, integer *ldb, doublereal *w, doublecomplex *work, integer *lwork,
+            doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhegv inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*itype, *jobz, *uplo, *n, *lda, *ldb, *lwork);
+    AOCL_DTL_SNPRINTF("zhegv inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS
+                      ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",
+                      *itype, *jobz, *uplo, *n, *lda, *ldb, *lwork);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
     integer nb, neig;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void zheev_(char *, char *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, integer *);
+        void
+        zheev_(char *, char *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *,
+               integer *, doublereal *, integer *);
     char trans[1];
     logical upper, wantz;
     extern /* Subroutine */
-    void ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *, integer *),
+        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    void zhegst_(integer *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zhegst_(integer *, char *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *, integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    void zpotrf_(char *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zpotrf_(char *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -247,11 +261,11 @@ void zhegv_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex *
     {
         *info = -1;
     }
-    else if (! (wantz || lsame_(jobz, "N", 1, 1)))
+    else if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (upper || lsame_(uplo, "L", 1, 1)))
+    else if(!(upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -3;
     }
@@ -259,11 +273,11 @@ void zhegv_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex *
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
@@ -273,13 +287,13 @@ void zhegv_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex *
         /* Computing MAX */
         i__1 = 1;
         i__2 = (nb + 1) * *n; // , expr subst
-        lwkopt = fla_max(i__1,i__2);
-        work[1].r = (doublereal) lwkopt;
+        lwkopt = fla_max(i__1, i__2);
+        work[1].r = (doublereal)lwkopt;
         work[1].i = 0.; // , expr subst
         /* Computing MAX */
         i__1 = 1;
         i__2 = (*n << 1) - 1; // , expr subst
-        if (*lwork < fla_max(i__1,i__2) && ! lquery)
+        if(*lwork < fla_max(i__1, i__2) && !lquery)
         {
             *info = -11;
         }
@@ -288,32 +302,32 @@ void zhegv_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex *
     {
         i__1 = -(*info);
         xerbla_("ZHEGV ", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Form a Cholesky factorization of B. */
-    aocl_lapack_zpotrf(uplo, n, &b[b_offset], ldb, info);
+    zpotrf_(uplo, n, &b[b_offset], ldb, info);
     if(*info != 0)
     {
         *info = *n + *info;
-    AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     zhegst_(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
     zheev_(jobz, uplo, n, &a[a_offset], lda, &w[1], &work[1], lwork, &rwork[1], info);
-    if (wantz)
+    if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */
         neig = *n;
@@ -334,8 +348,8 @@ void zhegv_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex *
             {
                 *(unsigned char *)trans = 'C';
             }
-            aocl_blas_ztrsm("Left", uplo, trans, "Non-unit", n, &neig, &c_b1, &b[b_offset], ldb,
-                            &a[a_offset], lda);
+            ztrsm_("Left", uplo, trans, "Non-unit", n, &neig, &c_b1, &b[b_offset], ldb,
+                   &a[a_offset], lda);
         }
         else if(*itype == 3)
         {
@@ -350,11 +364,11 @@ void zhegv_(integer *itype, char *jobz, char *uplo, integer * n, doublecomplex *
             {
                 *(unsigned char *)trans = 'N';
             }
-            aocl_blas_ztrmm("Left", uplo, trans, "Non-unit", n, &neig, &c_b1, &b[b_offset], ldb,
-                            &a[a_offset], lda);
+            ztrmm_("Left", uplo, trans, "Non-unit", n, &neig, &c_b1, &b[b_offset], ldb,
+                   &a[a_offset], lda);
         }
     }
-    work[1].r = (doublereal) lwkopt;
+    work[1].r = (doublereal)lwkopt;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

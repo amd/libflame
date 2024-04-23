@@ -1,5 +1,8 @@
-/* clarnv.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* clarnv.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CLARNV returns a vector of random numbers from a uniform or normal distribution. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -94,7 +97,8 @@ the array */
 void clarnv_(integer *idist, integer *iseed, integer *n, complex *x)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("clarnv inputs: idist %" FLA_IS ", iseed %" FLA_IS ", n %" FLA_IS "",*idist, *iseed, *n);
+    AOCL_DTL_SNPRINTF("clarnv inputs: idist %" FLA_IS ", iseed %" FLA_IS ", n %" FLA_IS "", *idist,
+                      *iseed, *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3, i__4, i__5;
     real r__1, r__2;
@@ -107,7 +111,8 @@ void clarnv_(integer *idist, integer *iseed, integer *n, complex *x)
     real u[128];
     integer il, iv;
     extern /* Subroutine */
-    void slaruv_(integer *, integer *, real *);
+        void
+        slaruv_(integer *, integer *, real *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -137,11 +142,11 @@ void clarnv_(integer *idist, integer *iseed, integer *n, complex *x)
         /* Computing MIN */
         i__2 = 64;
         i__3 = *n - iv + 1; // , expr subst
-        il = fla_min(i__2,i__3);
+        il = fla_min(i__2, i__3);
         /* Call SLARUV to generate 2*IL real numbers from a uniform (0,1) */
         /* distribution (2*IL <= LV) */
         i__2 = il << 1;
-        aocl_lapack_slaruv(&iseed[1], &i__2, u);
+        slaruv_(&iseed[1], &i__2, u);
         if(*idist == 1)
         {
             /* Copy generated numbers */

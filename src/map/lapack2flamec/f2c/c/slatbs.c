@@ -111,7 +111,7 @@ static real c_b36 = .5f;
 /* > first KD+1 rows of the array. The j-th column of A is stored */
 /* > in the j-th column of the array AB as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > \endverbatim */
 /* > */
@@ -245,7 +245,8 @@ b(i), i=1,..,n}
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slatbs_(char *uplo, char *trans, char *diag, char * normin, integer *n, integer *kd, real *ab, integer *ldab, real *x, real *scale, real *cnorm, integer *info)
+void slatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, integer *kd, real *ab,
+             integer *ldab, real *x, real *scale, real *cnorm, integer *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_slatbs(uplo, trans, diag, normin, n, kd, ab, ldab, x, scale, cnorm, info);
@@ -284,15 +285,19 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
     integer maind;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    void sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     real tscal, uscal;
     aocl_int64_t jlast;
     logical upper;
     extern /* Subroutine */
-    void stbsv_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *);
+        void
+        stbsv_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *),
+        saxpy_(integer *, real *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     logical notran;
     aocl_int64_t jfirst;
@@ -331,19 +336,19 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
     nounit = lsame_(diag, "N", 1, 1);
     tjjs = 0.f;
     /* Test the input parameters. */
-    if (! upper && ! lsame_(uplo, "L", 1, 1))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1) && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
-    else if (! lsame_(normin, "Y", 1, 1) && ! lsame_(normin, "N", 1, 1))
+    else if(!lsame_(normin, "Y", 1, 1) && !lsame_(normin, "N", 1, 1))
     {
         *info = -4;
     }
@@ -374,7 +379,7 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
     smlnum = slamch_("Safe minimum") / slamch_("Precision");
     bignum = 1.f / smlnum;
     *scale = 1.f;
-    if (lsame_(normin, "N", 1, 1))
+    if(lsame_(normin, "N", 1, 1))
     {
         /* Compute the 1-norm of each column, not including the diagonal. */
         if(upper)
@@ -386,8 +391,8 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 /* Computing MIN */
                 i__2 = *kd;
                 i__3 = j - 1; // , expr subst
-                jlen = fla_min(i__2,i__3);
-                cnorm[j] = sasum_(&jlen, &ab[*kd + 1 - jlen + j * ab_dim1], & c__1);
+                jlen = fla_min(i__2, i__3);
+                cnorm[j] = sasum_(&jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1);
                 /* L10: */
             }
         }
@@ -400,8 +405,8 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 /* Computing MIN */
                 i__2 = *kd;
                 i__3 = *n - j; // , expr subst
-                jlen = fla_min(i__2,i__3);
-                if (jlen > 0)
+                jlen = fla_min(i__2, i__3);
+                if(jlen > 0)
                 {
                     cnorm[j] = aocl_blas_sasum(&jlen, &ab[j * ab_dim1 + 2], &c__1);
                 }
@@ -460,7 +465,7 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
             /* Initially, G(0) = max{
             x(i), i=1,...,n}
             . */
-            grow = 1.f / fla_max(xbnd,smlnum);
+            grow = 1.f / fla_max(xbnd, smlnum);
             xbnd = grow;
             i__1 = jlast;
             i__2 = jinc;
@@ -475,9 +480,9 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 tjj = (r__1 = ab[maind + j * ab_dim1], f2c_abs(r__1));
                 /* Computing MIN */
                 r__1 = xbnd;
-                r__2 = fla_min(1.f,tjj) * grow; // , expr subst
-                xbnd = fla_min(r__1,r__2);
-                if (tjj + cnorm[j] >= smlnum)
+                r__2 = fla_min(1.f, tjj) * grow; // , expr subst
+                xbnd = fla_min(r__1, r__2);
+                if(tjj + cnorm[j] >= smlnum)
                 {
                     /* G(j) = G(j-1)*( 1 + CNORM(j) / f2c_abs(A(j,j)) ) */
                     grow *= tjj / (tjj + cnorm[j]);
@@ -499,8 +504,8 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
             . */
             /* Computing MIN */
             r__1 = 1.f;
-            r__2 = 1.f / fla_max(xbnd,smlnum); // , expr subst
-            grow = fla_min(r__1,r__2);
+            r__2 = 1.f / fla_max(xbnd, smlnum); // , expr subst
+            grow = fla_min(r__1, r__2);
             i__2 = jlast;
             i__1 = jinc;
             for(j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1)
@@ -546,7 +551,7 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
             /* Initially, M(0) = max{
             x(i), i=1,...,n}
             . */
-            grow = 1.f / fla_max(xbnd,smlnum);
+            grow = 1.f / fla_max(xbnd, smlnum);
             xbnd = grow;
             i__1 = jlast;
             i__2 = jinc;
@@ -562,16 +567,16 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 /* Computing MIN */
                 r__1 = grow;
                 r__2 = xbnd / xj; // , expr subst
-                grow = fla_min(r__1,r__2);
+                grow = fla_min(r__1, r__2);
                 /* M(j) = M(j-1)*( 1 + CNORM(j) ) / f2c_abs(A(j,j)) */
                 tjj = (r__1 = ab[maind + j * ab_dim1], f2c_abs(r__1));
-                if (xj > tjj)
+                if(xj > tjj)
                 {
                     xbnd *= tjj / xj;
                 }
                 /* L60: */
             }
-            grow = fla_min(grow,xbnd);
+            grow = fla_min(grow, xbnd);
         }
         else
         {
@@ -581,8 +586,8 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
             . */
             /* Computing MIN */
             r__1 = 1.f;
-            r__2 = 1.f / fla_max(xbnd,smlnum); // , expr subst
-            grow = fla_min(r__1,r__2);
+            r__2 = 1.f / fla_max(xbnd, smlnum); // , expr subst
+            grow = fla_min(r__1, r__2);
             i__2 = jlast;
             i__1 = jinc;
             for(j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1)
@@ -626,7 +631,7 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
             {
                 /* Compute x(j) = b(j) / A(j,j), scaling x if necessary. */
                 xj = (r__1 = x[j], f2c_abs(r__1));
-                if (nounit)
+                if(nounit)
                 {
                     tjjs = ab[maind + j * ab_dim1] * tscal;
                 }
@@ -639,10 +644,10 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                     }
                 }
                 tjj = f2c_abs(tjjs);
-                if (tjj > smlnum)
+                if(tjj > smlnum)
                 {
                     /* f2c_abs(A(j,j)) > SMLNUM: */
-                    if (tjj < 1.f)
+                    if(tjj < 1.f)
                     {
                         if(xj > tjj * bignum)
                         {
@@ -659,7 +664,7 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 else if(tjj > 0.f)
                 {
                     /* 0 < f2c_abs(A(j,j)) <= SMLNUM: */
-                    if (xj > tjj * bignum)
+                    if(xj > tjj * bignum)
                     {
                         /* Scale x by (1/f2c_abs(x(j)))*f2c_abs(A(j,j))*BIGNUM */
                         /* to avoid overflow when dividing by A(j,j). */
@@ -721,9 +726,10 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
-                        jlen = fla_min(i__3,i__4);
+                        jlen = fla_min(i__3, i__4);
                         r__1 = -x[j] * tscal;
-                        saxpy_(&jlen, &r__1, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1, &x[j - jlen], &c__1);
+                        saxpy_(&jlen, &r__1, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1, &x[j - jlen],
+                               &c__1);
                         i__3 = j - 1;
                         i__ = isamax_(&i__3, &x[1], &c__1);
                         xmax = (r__1 = x[i__], f2c_abs(r__1));
@@ -737,12 +743,11 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                     /* Computing MIN */
                     i__3 = *kd;
                     i__4 = *n - j; // , expr subst
-                    jlen = fla_min(i__3,i__4);
-                    if (jlen > 0)
+                    jlen = fla_min(i__3, i__4);
+                    if(jlen > 0)
                     {
                         r__1 = -x[j] * tscal;
-                        aocl_blas_saxpy(&jlen, &r__1, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1],
-                                        &c__1);
+                        saxpy_(&jlen, &r__1, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1], &c__1);
                     }
                     i__3 = *n - j;
                     i__ = j + isamax_(&i__3, &x[j + 1], &c__1);
@@ -762,8 +767,8 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 /* k<>j */
                 xj = (r__1 = x[j], f2c_abs(r__1));
                 uscal = tscal;
-                rec = 1.f / fla_max(xmax,1.f);
-                if (cnorm[j] > (bignum - xj) * rec)
+                rec = 1.f / fla_max(xmax, 1.f);
+                if(cnorm[j] > (bignum - xj) * rec)
                 {
                     /* If x(j) could overflow, scale x by 1/(2*XMAX). */
                     rec *= .5f;
@@ -776,13 +781,13 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         tjjs = tscal;
                     }
                     tjj = f2c_abs(tjjs);
-                    if (tjj > 1.f)
+                    if(tjj > 1.f)
                     {
                         /* Divide by A(j,j) when scaling x if A(j,j) > 1. */
                         /* Computing MIN */
                         r__1 = 1.f;
                         r__2 = rec * tjj; // , expr subst
-                        rec = fla_min(r__1,r__2);
+                        rec = fla_min(r__1, r__2);
                         uscal /= tjjs;
                     }
                     if(rec < 1.f)
@@ -802,19 +807,19 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
-                        jlen = fla_min(i__3,i__4);
-                        sumj = sdot_(&jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1, &x[j - jlen], &c__1);
+                        jlen = fla_min(i__3, i__4);
+                        sumj = sdot_(&jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1, &x[j - jlen],
+                                     &c__1);
                     }
                     else
                     {
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = *n - j; // , expr subst
-                        jlen = fla_min(i__3,i__4);
-                        if (jlen > 0)
+                        jlen = fla_min(i__3, i__4);
+                        if(jlen > 0)
                         {
-                            sumj = aocl_blas_sdot(&jlen, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1],
-                                                  &c__1);
+                            sumj = sdot_(&jlen, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1], &c__1);
                         }
                     }
                 }
@@ -826,7 +831,7 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
-                        jlen = fla_min(i__3,i__4);
+                        jlen = fla_min(i__3, i__4);
                         i__3 = jlen;
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
@@ -840,7 +845,7 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         /* Computing MIN */
                         i__3 = *kd;
                         i__4 = *n - j; // , expr subst
-                        jlen = fla_min(i__3,i__4);
+                        jlen = fla_min(i__3, i__4);
                         i__3 = jlen;
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
@@ -855,7 +860,7 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                     /* was not used to scale the dotproduct. */
                     x[j] -= sumj;
                     xj = (r__1 = x[j], f2c_abs(r__1));
-                    if (nounit)
+                    if(nounit)
                     {
                         /* Compute x(j) = x(j) / A(j,j), scaling if necessary. */
                         tjjs = ab[maind + j * ab_dim1] * tscal;
@@ -869,10 +874,10 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                         }
                     }
                     tjj = f2c_abs(tjjs);
-                    if (tjj > smlnum)
+                    if(tjj > smlnum)
                     {
                         /* f2c_abs(A(j,j)) > SMLNUM: */
-                        if (tjj < 1.f)
+                        if(tjj < 1.f)
                         {
                             if(xj > tjj * bignum)
                             {
@@ -888,7 +893,7 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                     else if(tjj > 0.f)
                     {
                         /* 0 < f2c_abs(A(j,j)) <= SMLNUM: */
-                        if (xj > tjj * bignum)
+                        if(xj > tjj * bignum)
                         {
                             /* Scale x by (1/f2c_abs(x(j)))*f2c_abs(A(j,j))*BIGNUM. */
                             rec = tjj * bignum / xj;
@@ -923,7 +928,7 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 /* Computing MAX */
                 r__2 = xmax;
                 r__3 = (r__1 = x[j], f2c_abs(r__1)); // , expr subst
-                xmax = fla_max(r__2,r__3);
+                xmax = fla_max(r__2, r__3);
                 /* L140: */
             }
         }

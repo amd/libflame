@@ -1,6 +1,9 @@
 #include "FLA_f2c.h"
+#include "FLA_lapack2flame_return_defs.h"
 
-int cunm2r_check(char *side, char *trans, integer *m, integer *n, integer *k, scomplex *a, integer *lda, scomplex *tau, scomplex *c__, integer *ldc, scomplex *work, integer *info)
+int cunm2r_check(char *side, char *trans, integer *m, integer *n, integer *k, scomplex *a,
+                 integer *lda, scomplex *tau, scomplex *c__, integer *ldc, scomplex *work,
+                 integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__1;
@@ -32,11 +35,11 @@ int cunm2r_check(char *side, char *trans, integer *m, integer *n, integer *k, sc
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "C", 1, 1))
+    else if(!notran && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
@@ -52,11 +55,11 @@ int cunm2r_check(char *side, char *trans, integer *m, integer *n, integer *k, sc
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,nq))
+    else if(*lda < fla_max(1, nq))
     {
         *info = -7;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -10;
     }

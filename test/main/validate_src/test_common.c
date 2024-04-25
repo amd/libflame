@@ -4881,6 +4881,10 @@ void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, ch
             {
                 for(j = i; j < n; j++)
                 {
+                    if(i == j)
+                    {
+                        continue;
+                    }
                     ((scomplex *)A)[j * lda + i].real = ((scomplex *)A)[i * lda + j].real;
                     ((scomplex *)A)[j * lda + i].imag = conj * ((scomplex *)A)[i * lda + j].imag;
                 }
@@ -4893,6 +4897,10 @@ void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, ch
             {
                 for(j = i; j < n; j++)
                 {
+                    if(i == j)
+                    {
+                        continue;
+                    }
                     ((dcomplex *)A)[j * lda + i].real = ((dcomplex *)A)[i * lda + j].real;
                     ((dcomplex *)A)[j * lda + i].imag = conj * ((dcomplex *)A)[i * lda + j].imag;
                 }

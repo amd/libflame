@@ -84,12 +84,17 @@ LAPACK_trtri(d)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtrtri inputs: uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo,
                       *diag, *n, *ldim_A);
+
     {
         LAPACK_RETURN_CHECK_VAR1(dtrtri_check(uplo, diag, n, buff_A, ldim_A, info), fla_error)
     }
     if(fla_error == LAPACK_SUCCESS)
     {
+#if FLA_ENABLE_AMD_OPT
+        lapack_dtrtri(uplo, diag, n, buff_A, ldim_A, info);
+#else
         LAPACK_trtri_body(d)
+#endif
             /** fla_error set to 0 on LAPACK_SUCCESS */
             fla_error
             = 0;
@@ -166,12 +171,17 @@ LAPACK_trti2(d)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtrti2 inputs: uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo,
                       *diag, *n, *ldim_A);
+
     {
         LAPACK_RETURN_CHECK_VAR1(dtrti2_check(uplo, diag, n, buff_A, ldim_A, info), fla_error)
     }
     if(fla_error == LAPACK_SUCCESS)
     {
+#if FLA_ENABLE_AMD_OPT
+        lapack_dtrti2(uplo, diag, n, buff_A, ldim_A, info);
+#else
         LAPACK_trtri_body(d)
+#endif
             /** fla_error set to 0 on LAPACK_SUCCESS */
             fla_error
             = 0;

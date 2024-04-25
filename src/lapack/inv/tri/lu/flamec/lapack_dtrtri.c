@@ -14,8 +14,9 @@
 
 /* Table of constant values */
 
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static integer c__1 = 1;
+static integer c_n1 = -1;
+static integer c__2 = 2;
 static doublereal c_b18 = 1.;
 static doublereal c_b22 = -1.;
 
@@ -131,17 +132,30 @@ f"> */
 /* > \ingroup doubleOTHERcomputational */
 
 /*  ===================================================================== */
-/* Subroutine */ void lapack_dtrtri(char *uplo, char *diag, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
-                                    aocl_int64_t *info)
+/* Subroutine */ void lapack_dtrtri(char *uplo, char *diag, integer *n, doublereal *a, integer *lda,
+                                    integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__3, i__4, i__5;
-    char ch__1[3] = {0};
+    address a__1[2];
+    integer a_dim1, a_offset, i__1, i__2[2], i__3, i__4, i__5;
+    char ch__1[2];
+
+    /* Builtin functions */
+    /* Subroutine */ int s_cat(char *, char **, integer *, integer *);
 
     /* Local variables */
-    aocl_int64_t j, jb, nb, nn;
-    extern int lsame_(char *, char *, aocl_int64_t a, aocl_int64_t b);
+    integer j, jb, nb, nn;
+    extern logical lsame_(char *, char *);
+    extern /* Subroutine */ int dtrmm_(char *, char *, char *, char *, integer *, integer *,
+                                       doublereal *, doublereal *, integer *, doublereal *,
+                                       integer *),
+        dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *);
     logical upper;
+    extern /* Subroutine */ int dtrti2_(char *, char *, integer *, doublereal *, integer *,
+                                        integer *),
+        xerbla_(char *, integer *);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     logical nounit;
 
     /*  -- LAPACK computational routine -- */
@@ -176,13 +190,13 @@ f"> */
 
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U", 1, 1);
-    nounit = lsame_(diag, "N", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    upper = lsame_(uplo, "U");
+    nounit = lsame_(diag, "N");
+    if(!upper && !lsame_(uplo, "L"))
     {
         *info = -1;
     }
-    else if(!nounit && !lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U"))
     {
         *info = -2;
     }
@@ -197,18 +211,18 @@ f"> */
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DTRTRI", &i__1, (ftnlen)6);
+        xerbla_("DTRTRI", &i__1);
         return;
     }
 
-    /* Quick return if possible */
+    /*     Quick return if possible */
 
     if(*n == 0)
     {
         return;
     }
 
-    /* Check for singularity if non-unit. */
+    /*     Check for singularity if non-unit. */
 
     if(nounit)
     {
@@ -219,64 +233,66 @@ f"> */
             {
                 return;
             }
+            /* L10: */
         }
         *info = 0;
     }
 
-    /* Determine the block size for this environment. */
+    /*     Determine the block size for this environment. */
 
     /* Writing concatenation */
-    ch__1[0] = uplo[0];
-    ch__1[1] = diag[0];
-    ch__1[2] = '\0';
-    nb = aocl_lapack_ilaenv(&c__1, "DTRTRI", ch__1, n, &c_n1, &c_n1, &c_n1);
+    i__2[0] = 1, a__1[0] = uplo;
+    i__2[1] = 1, a__1[1] = diag;
+    s_cat(ch__1, a__1, i__2, &c__2);
+    nb = ilaenv_(&c__1, "DTRTRI", ch__1, n, &c_n1, &c_n1, &c_n1);
     if(nb <= 1 || nb >= *n)
     {
 
-        /* Use unblocked code */
+        /*        Use unblocked code */
 
-        aocl_lapack_dtrti2(uplo, diag, n, &a[a_offset], lda, info);
+        dtrti2_(uplo, diag, n, &a[a_offset], lda, info);
     }
     else
     {
 
-        /* Use blocked code */
+        /*        Use blocked code */
 
         if(upper)
         {
 
-            /* Compute inverse of upper triangular matrix */
+            /*           Compute inverse of upper triangular matrix */
 
             i__1 = *n;
             i__3 = nb;
-            for(j = 1; j <= i__1; j += i__3)
+            for(j = 1; i__3 < 0 ? j >= i__1 : j <= i__1; j += i__3)
             {
                 /* Computing MIN */
                 i__4 = nb, i__5 = *n - j + 1;
                 jb = fla_min(i__4, i__5);
 
-                /* Compute rows 1:j-1 of current block column */
+                /*              Compute rows 1:j-1 of current block column */
 
                 i__4 = j - 1;
-                aocl_blas_dtrmm("Left", "Upper", "No transpose", diag, &i__4, &jb, &c_b18, &a[a_offset], lda,
+                dtrmm_("Left", "Upper", "No transpose", diag, &i__4, &jb, &c_b18, &a[a_offset], lda,
                        &a[j * a_dim1 + 1], lda);
                 i__4 = j - 1;
-                aocl_blas_dtrsm("Right", "Upper", "No transpose", diag, &i__4, &jb, &c_b22,
+                dtrsm_("Right", "Upper", "No transpose", diag, &i__4, &jb, &c_b22,
                        &a[j + j * a_dim1], lda, &a[j * a_dim1 + 1], lda);
 
-                /* Compute inverse of current diagonal block */
+                /*              Compute inverse of current diagonal block */
 
-                aocl_lapack_dtrti2("Upper", diag, &jb, &a[j + j * a_dim1], lda, info);
+                dtrti2_("Upper", diag, &jb, &a[j + j * a_dim1], lda, info);
+                /* L20: */
             }
         }
         else
         {
 
-            /* Compute inverse of lower triangular matrix */
+            /*           Compute inverse of lower triangular matrix */
 
             nn = (*n - 1) / nb * nb + 1;
             i__3 = -nb;
-            for(j = nn; j >= 1; j += i__3)
+            for(j = nn; i__3 < 0 ? j >= 1 : j <= 1; j += i__3)
             {
                 /* Computing MIN */
                 i__1 = nb, i__4 = *n - j + 1;
@@ -284,19 +300,20 @@ f"> */
                 if(j + jb <= *n)
                 {
 
-                    /* Compute rows j+jb:n of current block column */
+                    /*                 Compute rows j+jb:n of current block column */
 
                     i__1 = *n - j - jb + 1;
-                    aocl_blas_dtrmm("Left", "Lower", "No transpose", diag, &i__1, &jb, &c_b18,
+                    dtrmm_("Left", "Lower", "No transpose", diag, &i__1, &jb, &c_b18,
                            &a[j + jb + (j + jb) * a_dim1], lda, &a[j + jb + j * a_dim1], lda);
                     i__1 = *n - j - jb + 1;
-                    aocl_blas_dtrsm("Right", "Lower", "No transpose", diag, &i__1, &jb, &c_b22,
+                    dtrsm_("Right", "Lower", "No transpose", diag, &i__1, &jb, &c_b22,
                            &a[j + j * a_dim1], lda, &a[j + jb + j * a_dim1], lda);
                 }
 
-                /* Compute inverse of current diagonal block */
+                /*              Compute inverse of current diagonal block */
 
-                aocl_lapack_dtrti2("Lower", diag, &jb, &a[j + j * a_dim1], lda, info);
+                dtrti2_("Lower", diag, &jb, &a[j + j * a_dim1], lda, info);
+                /* L30: */
             }
         }
     }

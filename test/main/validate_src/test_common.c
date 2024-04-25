@@ -77,8 +77,6 @@ void create_vector(integer datatype, void **A, integer M)
             break;
         }
     }
-
-    return;
 }
 
 void create_realtype_vector(integer datatype, void **A, integer M)
@@ -89,8 +87,6 @@ void create_realtype_vector(integer datatype, void **A, integer M)
         *A = (float *)fla_mem_alloc(fla_max(1, M) * sizeof(float));
     else
         *A = (double *)fla_mem_alloc(fla_max(1, M) * sizeof(double));
-
-    return;
 }
 /*Assign datatype*/
 void assign_value(integer datatype, void *x, double data_real, double data_imag)
@@ -122,7 +118,6 @@ void assign_value(integer datatype, void *x, double data_real, double data_imag)
             break;
         }
     }
-    return;
 }
 
 /* free vector */
@@ -188,8 +183,6 @@ void reset_vector(integer datatype, void *A, integer M, integer incA)
             break;
         }
     }
-
-    return;
 }
 
 /* Initialize vector with random values */
@@ -234,8 +227,6 @@ void rand_vector(integer datatype, void *A, integer M, integer LDA)
             break;
         }
     }
-
-    return;
 }
 
 /* Copy a vector */
@@ -274,8 +265,6 @@ void copy_vector(integer datatype, integer M, void *A, integer LDA, void *B, int
             break;
         }
     }
-
-    return;
 }
 
 /* copy subvector
@@ -327,8 +316,6 @@ void copy_realtype_vector(integer datatype, integer M, void *A, integer LDA, voi
         scopy_(&M, A, &LDA, B, &LDB);
     else
         dcopy_(&M, A, &LDA, B, &LDB);
-
-    return;
 }
 
 /* create matrix of given datatype*/
@@ -368,8 +355,6 @@ void create_matrix(integer datatype, void **A, integer M, integer N)
             break;
         }
     }
-
-    return;
 }
 
 void create_realtype_matrix(integer datatype, void **A, integer M, integer N)
@@ -380,8 +365,6 @@ void create_realtype_matrix(integer datatype, void **A, integer M, integer N)
         *A = (float *)fla_mem_alloc(fla_max(1, M) * fla_max(1, N) * sizeof(float));
     else
         *A = (double *)fla_mem_alloc(fla_max(1, M) * fla_max(1, N) * sizeof(double));
-
-    return;
 }
 
 void *get_m_ptr(integer datatype, void *A, integer M, integer N, integer LDA)
@@ -483,8 +466,6 @@ void rand_matrix(integer datatype, void *A, integer M, integer N, integer LDA)
             break;
         }
     }
-
-    return;
 }
 
 /* Initialize symmetric matrix with random values */
@@ -548,8 +529,6 @@ void rand_sym_matrix(integer datatype, void *A, integer M, integer N, integer LD
             break;
         }
     }
-
-    return;
 }
 
 /* Copy a matrix */
@@ -595,8 +574,6 @@ void copy_matrix(integer datatype, char *uplo, integer M, integer N, void *A, in
             break;
         }
     }
-
-    return;
 }
 
 void copy_realtype_matrix(integer datatype, char *uplo, integer M, integer N, void *A, integer LDA,
@@ -606,8 +583,6 @@ void copy_realtype_matrix(integer datatype, char *uplo, integer M, integer N, vo
         fla_lapack_slacpy(uplo, &M, &N, A, &LDA, B, &LDB);
     else
         fla_lapack_dlacpy(uplo, &M, &N, A, &LDA, B, &LDB);
-
-    return;
 }
 
 /* Initialize a matrix with zeros */
@@ -654,8 +629,6 @@ void reset_matrix(integer datatype, integer M, integer N, void *A, integer LDA)
             break;
         }
     }
-
-    return;
 }
 
 /* Set a matrix to identity */
@@ -690,8 +663,6 @@ void set_identity_matrix(integer datatype, integer M, integer N, void *A, intege
             break;
         }
     }
-
-    return;
 }
 
 void z_div_t(dcomplex *cp, dcomplex *ap, dcomplex *bp)
@@ -983,8 +954,6 @@ void rand_spd_matrix(integer datatype, char *uplo, void **A, integer m, integer 
     free_matrix(buff_A);
     free_matrix(buff_B);
     free_matrix(a_temp);
-
-    return;
 }
 
 /* Create diagonal matrix by copying elements from vector to matrix */
@@ -1034,7 +1003,6 @@ void diagonalize_vector(integer datatype, void *s, void *sigma, integer m, integ
             break;
         }
     }
-    return;
 }
 
 /* Generate random Hermitian matrix */
@@ -1062,8 +1030,8 @@ void rand_hermitian_matrix(integer datatype, integer n, void **A, integer lda)
         }
     }
     free_matrix(B);
-    return;
 }
+
 /* block diagonal matrix is required for computing eigen decomposition of non symmetric matrix.
    W is a block diagonal matrix, with a 1x1 block for each
    real eigenvalue and a 2x2 block for each complex conjugate
@@ -1421,6 +1389,24 @@ integer get_realtype(integer datatype)
     {
         fprintf(stderr, "Invalid datatype is passed.\n");
         return -1;
+    }
+}
+
+/* Get value from pointer with realtype of given datatype. */
+double get_realtype_value(integer datatype, void *value)
+{
+    if(datatype == FLOAT || datatype == COMPLEX)
+    {
+        return *(float *)value;
+    }
+    else if(datatype == DOUBLE || datatype == DOUBLE_COMPLEX)
+    {
+        return *(double *)value;
+    }
+    else
+    {
+        fprintf(stderr, "Invalid datatype is passed, returning 0.\n");
+        return 0;
     }
 }
 
@@ -2396,8 +2382,6 @@ void pack_matrix_lt(integer datatype, void *A, void *B, integer N, integer lda)
             break;
         }
     }
-
-    return;
 }
 
 /* Convert matrix to upper hessenberg form */
@@ -2898,8 +2882,6 @@ void init_matrix_spec_in(integer datatype, void *A, integer M, integer N, intege
             break;
         }
     }
-
-    return;
 }
 
 /* Intialize matrix with special values in random locations */
@@ -3094,8 +3076,6 @@ void init_matrix_spec_rand_in(integer datatype, void *A, integer M, integer N, i
             break;
         }
     }
-
-    return;
 }
 
 /* Test to check the extreme values propagation in output matrix */
@@ -3307,8 +3287,6 @@ void init_vector_spec_in(integer datatype, void *A, integer M, integer incx, cha
             break;
         }
     }
-
-    return;
 }
 
 /*Intialize matrix according to given input*/
@@ -3357,7 +3335,10 @@ void create_matrix_for_svd(integer datatype, char jobu, char jobvt, char range, 
 
     /* Generating positive singular values according to the ranges */
     if(range == 'V' || range == 'v')
-        rand_realvector_in_range(get_realtype(datatype), s_test, vl, vu, min_m_n);
+    {
+        rand_realvector_in_range(get_realtype(datatype), s_test, get_realtype_value(datatype, vl),
+                                 get_realtype_value(datatype, vu), min_m_n);
+    }
     else
         rand_vector(get_realtype(datatype), s_test, min_m_n, i_one);
 
@@ -3419,7 +3400,6 @@ void create_matrix_for_svd(integer datatype, char jobu, char jobvt, char range, 
     free_vector(s_test);
     free_matrix(sigma);
     free_matrix(Usigma);
-    return;
 }
 
 /* Copying vector between specified ranges
@@ -3581,7 +3561,6 @@ void matrix_difference(integer datatype, integer m, integer n, void *A, integer 
             break;
         }
     }
-    return;
 }
 
 /* Copy tridiagonal matrix */
@@ -3661,42 +3640,28 @@ void rand_realtype_vector(integer datatype, void *A, integer M, integer LDA)
             ((double *)A)[i * LDA] = DRAND();
         }
     }
-    else
-        return;
-
-    return;
 }
 
 /* Initialize real type vector with random values
    between given range (Vl, VU) */
-void rand_realvector_in_range(integer datatype, void *A, void *VL, void *VU, integer M)
+void rand_realvector_in_range(integer datatype, void *A, double VL, double VU, integer M)
 {
     integer i;
 
     if(datatype == FLOAT || datatype == COMPLEX)
     {
-        float vl, vu;
-        vl = *(float *)VL;
-        vu = *(float *)VU;
         for(i = 0; i < M; i++)
         {
-            ((float *)A)[i] = SRAND_IN_RANGE(vl, vu);
+            ((float *)A)[i] = SRAND_IN_RANGE(VL, VU);
         }
     }
     else if(datatype == DOUBLE || datatype == DOUBLE_COMPLEX)
     {
-        double vl, vu;
-        vl = *(double *)VL;
-        vu = *(double *)VU;
         for(i = 0; i < M; i++)
         {
-            ((double *)A)[i] = DRAND_IN_RANGE(vl, vu);
+            ((double *)A)[i] = DRAND_IN_RANGE(VL, VU);
         }
     }
-    else
-        return;
-
-    return;
 }
 
 /* Multiply general m * n matrix with diagonal real type vector
@@ -3768,7 +3733,6 @@ void multiply_matrix_diag_vector(integer datatype, integer m, integer n, void *A
             break;
         }
     }
-    return;
 }
 
 /*
@@ -3933,7 +3897,7 @@ integer compare_realtype_vector(integer datatype, integer vect_len, void *A, int
  *                  eigen vectors as its rows.
  */
 void generate_matrix_from_EVs(integer datatype, char range, integer n, void *A, integer lda,
-                              void *L, void *vl, void *vu)
+                              void *L, double vl, double vu)
 {
     void *X = NULL, *Q = NULL;
     integer realtype, info = 0;
@@ -3960,7 +3924,6 @@ void generate_matrix_from_EVs(integer datatype, char range, integer n, void *A, 
     /* Free up the buffers */
     free_matrix(X);
     free_matrix(Q);
-    return;
 }
 
 /* Get absolute value of a real vector*/

@@ -7,7 +7,7 @@
 #include "test_prototype.h"
 
 #define SYTRF_VU 100.0 // Maximum eigen value for condition number.
-#define SYTRF_VL 0.0001 // Minimum eigen value for condion number.
+#define SYTRF_VL 0.0001 // Minimum eigen value for condition number.
 
 void invoke_sytrf(integer datatype, char *uplo, integer *n, void *a, integer *lda, integer *ipiv,
                   void *work, integer *lwork, integer *info);
@@ -100,7 +100,6 @@ void fla_test_sytrf(integer argc, char **argv, test_params_t *params)
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
     }
-    return;
 }
 
 void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer p_cur,
@@ -108,7 +107,7 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *t, double *residual)
 {
     integer n, lda, lwork = -1, info = 0;
-    void *A = NULL, *A_test = NULL, *ipiv = NULL, *work = NULL, *L = NULL, *VL = NULL, *VU = NULL;
+    void *A = NULL, *A_test = NULL, *ipiv = NULL, *work = NULL, *L = NULL;
     char uplo;
 
     /* Determine the dimensions */
@@ -141,15 +140,9 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
     {
         /* Generating input matrix with condition number < 1000 */
         create_realtype_vector(datatype, &L, n);
-        create_realtype_vector(datatype, &VL, 1);
-        create_realtype_vector(datatype, &VU, 1);
-        assign_value(get_realtype(datatype), VU, SYTRF_VU, d_zero);
-        assign_value(get_realtype(datatype), VL, SYTRF_VL, d_zero);
-        generate_matrix_from_EVs(datatype, 'V', n, A, lda, L, VL, VU);
+        generate_matrix_from_EVs(datatype, 'V', n, A, lda, L, SYTRF_VL, SYTRF_VU);
         form_symmetric_matrix(datatype, n, A, lda, "S");
         free_vector(L);
-        free_vector(VU);
-        free_vector(VL);
     }
 
     /* Save the original matrix */

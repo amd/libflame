@@ -132,7 +132,6 @@ void fla_test_syevx(integer argc, char **argv, test_params_t *params)
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
     }
-    return;
 }
 
 void fla_test_syevx_experiment(test_params_t *params, integer datatype, integer p_cur,
@@ -224,7 +223,8 @@ void fla_test_syevx_experiment(test_params_t *params, integer datatype, integer 
         /*  Creating input matrix A by generating random eigen values.
             When range = V, generate EVs in given range (vl,vu)  */
         create_realtype_vector(datatype, &L, n);
-        generate_matrix_from_EVs(datatype, range, n, A, lda, L, vl, vu);
+        generate_matrix_from_EVs(datatype, range, n, A, lda, L, get_realtype_value(datatype, vl),
+                                 get_realtype_value(datatype, vu));
     }
     /* Make a copy of input matrix A.
        This is required to validate the API functionality.*/

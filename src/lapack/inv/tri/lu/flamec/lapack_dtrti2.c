@@ -14,7 +14,7 @@
 
 /* Table of constant values */
 
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 
 /* > \brief \b DTRTI2 computes the inverse of a triangular matrix (unblocked algorithm). */
 
@@ -129,17 +129,21 @@ f"> */
 /* > \ingroup doubleOTHERcomputational */
 
 /*  ===================================================================== */
-/* Subroutine */ void lapack_dtrti2(char *uplo, char *diag, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
-                                    aocl_int64_t *info)
+/* Subroutine */ void lapack_dtrti2(char *uplo, char *diag, integer *n, doublereal *a, integer *lda,
+                                    integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2;
+    integer a_dim1, a_offset, i__1, i__2;
 
     /* Local variables */
-    aocl_int64_t j;
+    integer j;
     doublereal ajj;
-    extern int lsame_(char *, char *, aocl_int64_t a, aocl_int64_t b);
+    extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, integer *);
+    extern logical lsame_(char *, char *);
     logical upper;
+    extern /* Subroutine */ int dtrmv_(char *, char *, char *, integer *, doublereal *, integer *,
+                                       doublereal *, integer *),
+        xerbla_(char *, integer *);
     logical nounit;
 
     /*  -- LAPACK computational routine -- */
@@ -174,13 +178,13 @@ f"> */
 
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U", 1, 1);
-    nounit = lsame_(diag, "N", 1, 1);
-    if(!upper && !lsame_(uplo, "L", 1, 1))
+    upper = lsame_(uplo, "U");
+    nounit = lsame_(diag, "N");
+    if(!upper && !lsame_(uplo, "L"))
     {
         *info = -1;
     }
-    else if(!nounit && !lsame_(diag, "U", 1, 1))
+    else if(!nounit && !lsame_(diag, "U"))
     {
         *info = -2;
     }
@@ -195,7 +199,7 @@ f"> */
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DTRTI2", &i__1, (ftnlen)6);
+        xerbla_("DTRTI2", &i__1);
         return;
     }
 
@@ -220,10 +224,10 @@ f"> */
             /*           Compute elements 1:j-1 of j-th column. */
 
             i__2 = j - 1;
-            aocl_blas_dtrmv("Upper", "No transpose", diag, &i__2, &a[a_offset], lda, &a[j * a_dim1 + 1],
+            dtrmv_("Upper", "No transpose", diag, &i__2, &a[a_offset], lda, &a[j * a_dim1 + 1],
                    &c__1);
             i__2 = j - 1;
-            aocl_blas_dscal(&i__2, &ajj, &a[j * a_dim1 + 1], &c__1);
+            dscal_(&i__2, &ajj, &a[j * a_dim1 + 1], &c__1);
             /* L10: */
         }
     }
@@ -249,10 +253,10 @@ f"> */
                 /*              Compute elements j+1:n of j-th column. */
 
                 i__1 = *n - j;
-                aocl_blas_dtrmv("Lower", "No transpose", diag, &i__1, &a[j + 1 + (j + 1) * a_dim1], lda,
+                dtrmv_("Lower", "No transpose", diag, &i__1, &a[j + 1 + (j + 1) * a_dim1], lda,
                        &a[j + 1 + j * a_dim1], &c__1);
                 i__1 = *n - j;
-                aocl_blas_dscal(&i__1, &ajj, &a[j + 1 + j * a_dim1], &c__1);
+                dscal_(&i__1, &ajj, &a[j + 1 + j * a_dim1], &c__1);
             }
             /* L20: */
         }

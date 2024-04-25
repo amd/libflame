@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_common.h"
@@ -12,6 +12,9 @@ void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *time_min, double *residual);
 void prepare_potrf_run(char *uplo, integer m, void *A, integer lda, integer datatype,
                        integer n_repeats, double *time_min_, integer *info);
+
+#define POTRF_VL 0.1
+#define POTRF_VU 1000
 
 void fla_test_potrf(integer argc, char **argv, test_params_t *params)
 {
@@ -103,7 +106,7 @@ void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer 
 {
     integer m, lda;
     integer info = 0, vinfo = 0;
-    void *A = NULL, *A_test = NULL;
+    void *A = NULL, *A_test = NULL, *L = NULL;
     char uplo = params->lin_solver_paramslist[pci].Uplo;
     *residual = params->lin_solver_paramslist[pci].solver_threshold;
 
@@ -131,8 +134,13 @@ void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer 
     }
     else
     {
-        /* Initialize input matrix with random numbers */
-        rand_spd_matrix(datatype, &uplo, &A, m, lda);
+        create_realtype_vector(datatype, &L, m);
+        
+        /*  Initialize input matrix A by generating values in given range (VL, VU)
+            using eigen values function. */
+        generate_matrix_from_EVs(datatype, 'V', m, A, lda, L, POTRF_VL, POTRF_VU);
+
+        free_vector(L);
     }
 
     /* Make a copy of input matrix A. This is required to validate the API functionality */

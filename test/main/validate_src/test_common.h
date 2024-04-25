@@ -74,6 +74,7 @@ void create_matrix(integer datatype, void **A, integer M, integer N);
 void create_realtype_matrix(integer datatype, void **A, integer M, integer N);
 integer get_datatype(char stype);
 integer get_realtype(integer datatype);
+double get_realtype_value(integer datatype, void *value);
 void create_block_diagonal_matrix(integer datatype, void *wr, void *wi, void *lambda, integer m,
                                   integer n, integer lda);
 void *get_m_ptr(integer datatype, void *A, integer M, integer N, integer LDA);
@@ -204,7 +205,7 @@ double is_value_zero(integer datatype, void *value, double residual);
 /* Initialize vector with random real type values */
 void rand_realtype_vector(integer datatype, void *A, integer M, integer LDA);
 /* Initialize vector with random real type values between given range (Vl, VU) */
-void rand_realvector_in_range(integer datatype, void *A, void *VL, void *VU, integer M);
+void rand_realvector_in_range(integer datatype, void *A, double VL, double VU, integer M);
 /* Multiply general m * n matrix with diagonal vector (of an n * n diagonal matrix) of size n */
 void multiply_matrix_diag_vector(integer datatype, integer m, integer n, void *A, integer lda,
                                  void *X, integer incx);
@@ -219,7 +220,7 @@ integer compare_realtype_vector(integer datatype, integer vect_len, void *A, int
                                 integer offset_A, void *B, integer incb);
 /* Create input matrix A by randomly generating eigen values(EVs) in given range (vl,vu) */
 void generate_matrix_from_EVs(integer datatype, char range, integer n, void *A, integer lda,
-                              void *L, void *vl, void *vu);
+                              void *L, double vl, double vu);
 /* Initialize band matrix with random values.
 Note: Input buffer A has to be allocated by caller.*/
 void rand_band_matrix(integer datatype, integer M, integer N, integer kl, integer ku, void *A,

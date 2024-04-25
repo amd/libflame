@@ -59,3 +59,5 @@ FLA_Error FLA_Trinv_lu_opc_var4( integer mn_A,
                                  scomplex* A, integer rs_A, integer cs_A );
 FLA_Error FLA_Trinv_lu_opz_var4( integer mn_A,
                                  dcomplex* A, integer rs_A, integer cs_A );
+void lapack_dtrtri(char *uplo, char *diag, integer *n, doublereal *a, integer *lda, integer *info);
+void lapack_dtrti2(char *uplo, char *diag, integer *n, doublereal *a, integer *lda, integer *info);

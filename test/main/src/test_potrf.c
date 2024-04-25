@@ -21,6 +21,8 @@ void fla_test_potrf(integer argc, char **argv, test_params_t *params)
     char *op_str = "Cholesky factorization";
     char *front_str = "POTRF";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char = '\0';
+
     if(argc == 1)
     {
         config_data = 1;
@@ -127,15 +129,24 @@ void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer 
     /* Create input matrix parameters */
     create_matrix(datatype, &A, lda, m);
 
-    if(g_ext_fptr != NULL)
+    if(g_ext_fptr != NULL || (params->imatrix_char))
     {
         /* Initialize input matrix with custom data */
-        init_matrix_from_file(datatype, A, m, m, lda, g_ext_fptr);
+        init_matrix(datatype, A, m, m, lda, g_ext_fptr, params->imatrix_char);
+        if(params->imatrix_char != NULL)
+        {
+            char *type = "C";
+            if(datatype == FLOAT || datatype == DOUBLE)
+            {
+                type = "S";
+            }
+            form_symmetric_matrix(datatype, m, A, lda, type);
+        }
     }
     else
     {
         create_realtype_vector(datatype, &L, m);
-        
+
         /*  Initialize input matrix A by generating values in given range (VL, VU)
             using eigen values function. */
         generate_matrix_from_EVs(datatype, 'V', m, A, lda, L, POTRF_VL, POTRF_VU);
@@ -155,10 +166,17 @@ void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer 
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         *perf *= 4.0;
 
-    if(info == 0)
+    if(!params->imatrix_char && info == 0)
         validate_potrf(&uplo, m, A, A_test, lda, datatype, residual, &vinfo);
-
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        if((!check_extreme_value(datatype, m, m, A_test, lda, params->imatrix_char)))
+        {
+            *residual = DBL_MAX;
+        }
+    }
+    else
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     free_matrix(A);
     free_matrix(A_test);

@@ -20,6 +20,7 @@ void fla_test_gelsd(integer argc, char **argv, test_params_t *params)
     char *op_str = "Linear least squares";
     char *front_str = "GELSD";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char = '\0';
 
     if(argc == 1)
     {
@@ -185,10 +186,19 @@ void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer 
         *perf *= 4.0;
 
     /* Output validation, accuracy test */
-    if(info == 0)
+    if(!params->imatrix_char && info == 0)
         validate_gelsd(m, n, NRHS, A, lda, B, ldb, S, B_save, rcond, &rank, datatype, residual);
-
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    /* check for output matrix when inputs as extreme values */
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        if((!check_extreme_value(datatype, m, n, A_save, lda, params->imatrix_char))
+           && (!check_extreme_value(datatype, m, n, B_save, ldb, params->imatrix_char)))
+        {
+            *residual = DBL_MAX;
+        }
+    }
+    else
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
     free_matrix(A);

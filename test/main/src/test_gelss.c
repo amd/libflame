@@ -21,6 +21,8 @@ void fla_test_gelss(integer argc, char **argv, test_params_t *params)
     char *op_str = "Solves overdetermined or underdetermined systems for GE matrices";
     char *front_str = "GELSS";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char = '\0';
+
     if(argc == 1)
     {
         config_data = 1;
@@ -182,11 +184,19 @@ void fla_test_gelss_experiment(test_params_t *params, integer datatype, integer 
         *perf *= 4.0;
 
     /* Output validataion */
-    if(info == 0)
-    {
+    if(!params->imatrix_char && info == 0)
         validate_gelsd(m, n, nrhs, A, lda, B, ldb, s, B_test, rcond, &rank, datatype, residual);
+    /* check for output matrix when inputs as extreme values */
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        if((!check_extreme_value(datatype, m, n, A_test, lda, params->imatrix_char))
+           && (!check_extreme_value(datatype, m, n, B_test, ldb, params->imatrix_char)))
+        {
+            *residual = DBL_MAX;
+        }
     }
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    else
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up buffers */
     free_matrix(A);

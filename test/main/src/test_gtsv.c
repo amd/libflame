@@ -18,6 +18,7 @@ void fla_test_gtsv(integer argc, char **argv, test_params_t *params)
     char *op_str = "Linear Solve for General Tridiagonal matrix";
     char *front_str = "GTSV";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char = '\0';
 
     if(argc == 1)
     {
@@ -168,11 +169,22 @@ void fla_test_gtsv_experiment(test_params_t *params, integer datatype, integer p
         *perf *= 4.0;
 
     /* Output Validation */
-    if(info == 0)
+    if(!params->imatrix_char && info == 0)
         validate_gtsv(datatype, n, NRHS, B, ldb, B_save, xact, ldb, dl, d, du, dl_save, d_save,
                       du_save, info, residual);
-
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    /* check for output matrix when inputs as extreme values */
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        if((!check_extreme_value(datatype, n, NRHS, dl_save, ldb, params->imatrix_char))
+           && (!check_extreme_value(datatype, n, NRHS, d_save, ldb, params->imatrix_char))
+           && (!check_extreme_value(datatype, n, NRHS, du_save, ldb, params->imatrix_char))
+           && (!check_extreme_value(datatype, n, NRHS, B_save, ldb, params->imatrix_char)))
+        {
+            *residual = DBL_MAX;
+        }
+    }
+    else
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
     free_vector(dl);

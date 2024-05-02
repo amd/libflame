@@ -289,7 +289,8 @@ set(CORNER_TEST_CASES "ggevx sdcz B V V B 0 10 10 10 10 -1 1 --einfo=0"
             "gelsd sdcz 0 10 10 1 10 -1 -1 1 --einfo=0"
             "gelsd sdcz 10 0 10 10 20 -1 -1 1 --einfo=0"
             "gtsv sdcz 0 10 20 1 --einfo=0"
-            "potrf sdcz U 0 10 1 --einfo=0")
+            "potrf sdcz U 0 10 1 --einfo=0"
+            "larfg sdcz 0 1 1 1 1 --einfo=0")
 
 set(MIN_WORK_TEST_CASES "gesvd d S S 3 3 3 3 3 15 1 --einfo=0"
             "gesvd d S S 3 9 3 3 9 18 1 --einfo=0"
@@ -679,7 +680,23 @@ set(EXTREMEVALUE_TEST_CASES "gesv sdcz 4 4 4 4 1 --imatrix=A"
             "potrf sdcz U 430 501 1 --imatrix=N"
             "potrf sdcz L 430 501 1 --imatrix=N"
             "potrf sdcz U 430 501 1 --imatrix=I"
-            "potrf sdcz L 430 501 1 --imatrix=I")
+            "potrf sdcz L 430 501 1 --imatrix=I"
+            "larfg sdcz 10 nan nan 1 1 --imatrix=N"
+            "larfg sdcz 4 nan nan 1 1 --imatrix=N"
+            "larfg sdcz 40 nan nan 1 1 --imatrix=N"
+            "larfg sdcz 100 nan nan 1 1 --imatrix=N"
+            "larfg sdcz 10 inf inf 1 1 --imatrix=I"
+            "larfg sdcz 4 inf inf 1 1 --imatrix=I"
+            "larfg sdcz 40 inf inf 1 1 --imatrix=I"
+            "larfg sdcz 100 inf inf 1 1 --imatrix=I"
+            "larfg sdcz 10 2 2 1 1 --imatrix=A"
+            "larfg sdcz 4 2 2 1 1 --imatrix=A"
+            "larfg sdcz 40 20 20 1 1 --imatrix=A"
+            "larfg sdcz 100 30 30 1 1 --imatrix=A"
+            "larfg sdcz 10 2 2 1 1 --imatrix=F"
+            "larfg sdcz 4 2 2 1 1 --imatrix=F"
+            "larfg sdcz 40 20 20 1 1 --imatrix=F"
+            "larfg sdcz 100 30 30 1 1 --imatrix=F")
 
 set(TEST_NUM 1)
 foreach(neg_test_cases IN LISTS NEGATIVE_TEST_CASES)

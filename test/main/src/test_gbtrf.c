@@ -19,6 +19,7 @@ void fla_test_gbtrf(integer argc, char **argv, test_params_t *params)
     char *op_str = "LU factorization of banded matrix";
     char *front_str = "GBTRF";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char = '\0';
     if(argc == 1)
     {
         config_data = 1;
@@ -164,12 +165,20 @@ void fla_test_gbtrf_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* output validation */
-    if(info == 0)
+    if(!params->imatrix_char && info == 0)
     {
         validate_gbtrf(m, n, kl, ku, AB, AB_test, ldab, IPIV, datatype, residual, &vinfo);
     }
-
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    /* check for output matrix when inputs as extreme values */
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        if(!check_extreme_value(datatype, m, n, AB_test, ldab, params->imatrix_char))
+        {
+            *residual = DBL_MAX;
+        }
+    }
+    else
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
     free_matrix(AB);

@@ -3288,6 +3288,129 @@ void init_vector_spec_in(integer datatype, void *A, integer M, integer incx, cha
         }
     }
 }
+/* Intialize vector with special values in random locations */
+void init_vector_spec_rand_in(integer datatype, void *A, integer M, integer incx, char type)
+{
+    integer rows, span;
+    rand_vector(datatype, A, M, incx);
+    /* when M*N less than 2 there is no need of randomness*/
+    if(M  < 2)
+    {
+        char type_;
+        type_ = (type == 'A') ? 'N' : 'I';
+        init_vector_spec_in(datatype, A, M, incx, type_);
+        return;
+    }
+    /*
+    Add random extreme values:
+    for small size vector, when M  less than 10 adding two extreme value in vector,
+    for medium/large sizes, when M greater than 10 adding 20% of input values as extreme values
+    in vector
+    */
+    if(M > 10)
+    {
+        span = (M) * 0.2;
+    }
+    else
+    {
+        span = 2;
+    }
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            float value = 0.f;
+            if(type == 'F')
+                value = INFINITY;
+            else if(type == 'A')
+                value = NAN;
+            while(span > 0)
+            {
+                rows = rand() % M;
+                /* Replace 20 percent of special values in vector */
+                if(span > 0)
+                {
+                    if(!isnan(((float *)A)[rows * incx]))
+                    {
+                        ((float *)A)[rows * incx] = value;
+                        span = span - 1;
+                    }
+                }
+            }
+            break;
+        }
+        case DOUBLE:
+        {
+            double value = 0.;
+            if(type == 'F')
+                value = INFINITY;
+            else if(type == 'A')
+                value = NAN;
+            while(span > 0)
+            {
+                rows = rand() % M;
+                /* Replace 20 percent of special values in vector */
+                if(span > 0)
+                {
+                    if(!isnan(((double *)A)[rows * incx]))
+                    {
+                        ((double *)A)[rows * incx] = value;
+                        span = span - 1;
+                    }
+                }
+            }
+            break;
+        }
+        case COMPLEX:
+        {
+            float value = 0.f;
+            if(type == 'F')
+                value = INFINITY;
+            else if(type == 'A')
+                value = NAN;
+            while(span > 0)
+            {
+                rows = rand() % M;
+                /* Replace 20 percent of special values in vector */
+                if(span > 0)
+                {
+                    if(!isnan(((scomplex *)A)[rows * incx].real))
+                    {
+                        ((scomplex *)A)[rows * incx].real = value;
+                        ((scomplex *)A)[rows * incx].imag = value;
+                        span = span - 1;
+                    }
+                }
+            }
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            double value = 0.;
+            if(type == 'F')
+                value = INFINITY;
+            else if(type == 'A')
+                value = NAN;
+            while(span > 0)
+            {
+                rows = rand() % M;
+                /* Replace 20 percent of special values in vector */
+                if(span > 0)
+                {
+                    if(!isnan(((dcomplex *)A)[rows * incx].real))
+                    {
+                        ((dcomplex *)A)[rows * incx].real = value;
+                        ((dcomplex *)A)[rows * incx].imag = value;
+                        span = span - 1;
+                    }
+                }
+            }
+            break;
+        }
+    }
+
+    return;
+}
 
 /*Intialize matrix according to given input*/
 void init_matrix(integer datatype, void *A, integer M, integer N, integer LDA, FILE *g_ext_fptr,
@@ -3472,6 +3595,8 @@ void init_vector(integer datatype, void *A, integer M, integer incx, FILE *g_ext
         init_vector_from_file(datatype, A, M, incx, g_ext_fptr);
     else if(ivector_char == 'I' || ivector_char == 'N')
         init_vector_spec_in(datatype, A, M, incx, ivector_char);
+    else if(ivector_char == 'A' || ivector_char == 'F')
+        init_vector_spec_rand_in(datatype, A, M, incx, ivector_char);
     else
         rand_vector(datatype, A, M, incx);
 }

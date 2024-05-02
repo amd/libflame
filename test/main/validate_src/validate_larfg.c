@@ -10,10 +10,16 @@
 void validate_larfg(integer datatype, integer n, integer incx, integer x_length, void *x, void *v,
                     void *tau, double *residual)
 {
-    /* Early return for n < 0, tau = 0.0f */
-    if(n < 0)
+    /* Early return for n <= 0, tau = 0.0f */
+    if(n <= 0)
     {
         *residual = is_value_zero(datatype, tau, *residual);
+        return;
+    }
+    /* return invalid param for incx < 1 */
+    if(incx < 1)
+    {
+        *residual = DBL_MIN;
         return;
     }
 

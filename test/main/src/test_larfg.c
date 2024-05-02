@@ -116,11 +116,6 @@ void fla_test_larfg_experiment(test_params_t *params, integer datatype, integer 
     /* Determine the dimensions */
     n = p_cur;
 
-    if(incx < 1)
-    {
-        *residual = DBL_MIN;
-        return;
-    }
     inc_x = fla_i_abs(&incx);
     x_length = (1 + (n - 2) * inc_x) + inc_x;
     create_vector(datatype, &x, x_length);
@@ -156,9 +151,18 @@ void fla_test_larfg_experiment(test_params_t *params, integer datatype, integer 
         *perf *= 4.0;
     }
     /* Output Validation */
-    validate_larfg(datatype, n, incx, x_length, x, x_test, tau, residual);
-
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!params->imatrix_char)
+        validate_larfg(datatype, n, incx, x_length, x, x_test, tau, residual);
+    /* check for output matrix when inputs as extreme values */
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        if(!check_extreme_value(datatype, n, 1, x_test, incx, params->imatrix_char))
+        {
+            *residual = DBL_MAX;
+        }
+    }
+    else
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
     /* Free up the buffers */
     free_vector(x);
     free_vector(x_test);

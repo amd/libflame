@@ -148,8 +148,10 @@ void zgelqt_(integer *m, integer *n, integer *mb, doublecomplex *a, integer *lda
     /* Local variables */
     integer i__, k, ib, iinfo;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublecomplex *,
                 integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
                 integer *),

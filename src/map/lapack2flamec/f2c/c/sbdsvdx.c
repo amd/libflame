@@ -295,7 +295,7 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
     integer irowz, iifail;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real abstol;

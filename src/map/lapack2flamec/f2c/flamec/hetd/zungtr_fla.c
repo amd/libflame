@@ -134,7 +134,7 @@ void zungtr_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
     integer iinfo;
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwkopt;

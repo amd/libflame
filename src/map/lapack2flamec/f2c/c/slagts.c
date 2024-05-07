@@ -187,7 +187,7 @@ void aocl_lapack_slagts(aocl_int64_t *job, aocl_int64_t *n, real *a, real *b, re
     real ak, eps, temp, pert, absak, sfmin;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */

@@ -151,7 +151,7 @@ void dgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doub
         dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical leftv;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical rightv;
     /* -- LAPACK computational routine (version 3.4.0) -- */

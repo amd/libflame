@@ -241,7 +241,7 @@ void zcposv_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
         zlat2c_(char *, integer *, doublecomplex *, integer *, complex *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal zlanhe_(char *, char *, integer *, doublecomplex *, integer *, doublereal *);
     extern integer izamax_(integer *, doublecomplex *, integer *);

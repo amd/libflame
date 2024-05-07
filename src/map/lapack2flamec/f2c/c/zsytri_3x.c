@@ -195,7 +195,7 @@ void zsytri_3x_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
                doublecomplex *, integer *, doublecomplex *, integer *);
     doublecomplex u01_i_j__, u11_i_j__;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer icount;
     extern /* Subroutine */

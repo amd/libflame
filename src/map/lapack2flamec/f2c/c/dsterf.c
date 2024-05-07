@@ -117,7 +117,7 @@ void dsterf_(integer *n, doublereal *d__, doublereal *e, integer *info)
                 doublereal *, integer *, integer *);
     doublereal oldgam, safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal safmax;
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);

@@ -141,7 +141,7 @@ void zpocon_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
     extern doublereal dlamch_(char *);
     doublereal scalel, scaleu;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     extern integer izamax_(integer *, doublecomplex *, integer *);

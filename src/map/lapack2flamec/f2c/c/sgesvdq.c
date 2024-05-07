@@ -473,8 +473,10 @@ void sgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
     real sconda;
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         sgelqf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *),
         slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
                 integer *, integer *);

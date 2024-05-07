@@ -461,7 +461,7 @@ void cherfsx_(char *uplo, char *equed, integer *n, integer *nrhs, complex *a, in
                 integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaprec_(char *);
     integer ithresh, n_norms__;

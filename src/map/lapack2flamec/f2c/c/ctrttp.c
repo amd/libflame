@@ -120,7 +120,7 @@ void ctrttp_(char *uplo, integer *n, complex *a, integer *lda, complex *ap, inte
     extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

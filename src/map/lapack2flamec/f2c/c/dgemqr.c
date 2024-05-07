@@ -188,7 +188,7 @@ void dgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, double
     extern logical lsame_(char *, char *, integer, integer);
     logical right;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, lquery;
     extern /* Subroutine */

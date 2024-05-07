@@ -167,8 +167,10 @@ void csytrs2_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, i
                integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         csyconv_(char *, char *, integer *, complex *, integer *, integer *, complex *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

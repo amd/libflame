@@ -172,7 +172,7 @@ void sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *
         slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, forwrd;
     /* -- LAPACK computational routine (version 3.4.0) -- */

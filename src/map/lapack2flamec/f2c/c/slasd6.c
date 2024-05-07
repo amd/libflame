@@ -344,8 +344,10 @@ void slasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, real *d__
                 real *, real *, integer *);
     integer isigma;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
                 integer *, integer *),
         slamrg_(integer *, integer *, real *, integer *, integer *, integer *);

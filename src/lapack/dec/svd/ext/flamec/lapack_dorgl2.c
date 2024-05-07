@@ -112,7 +112,7 @@
  /* Local variables */
  integer i__, j, l;
  extern /* Subroutine */
- int  xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+ void  xerbla_(const char *srname, const integer *info, ftnlen srname_len);
  /* -- LAPACK computational routine -- */
  /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
  /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

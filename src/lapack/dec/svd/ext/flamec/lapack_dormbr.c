@@ -204,7 +204,7 @@
  extern logical lsame_(char *, char *, integer, integer);
  integer iinfo;
  extern /* Subroutine */
- int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+ void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
  extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
  extern /* Subroutine */
  int lapack_dormlq(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);

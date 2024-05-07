@@ -167,8 +167,10 @@ void zhpev_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *w
     aocl_int64_t iscale;
     doublereal safmin;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal bignum;
     integer indtau;

@@ -129,7 +129,7 @@ void sptcon_(integer *n, real *d__, real *e, real *anorm, real *rcond, real *wor
     /* Local variables */
     integer i__, ix;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real ainvnm;

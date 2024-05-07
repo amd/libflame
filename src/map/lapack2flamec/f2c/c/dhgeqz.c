@@ -420,7 +420,7 @@ void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *il
         dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal safmax;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal eshift;
     logical ilschr;
@@ -1703,7 +1703,7 @@ void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer 
         dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal safmax;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal eshift;
     logical ilschr;

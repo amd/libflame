@@ -289,8 +289,10 @@ void aocl_lapack_sggev(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
     logical ilascl, ilbscl;
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         sgghrd_(char *, char *, integer *, integer *, integer *, real *, integer *, real *,
                 integer *, real *, integer *, real *, integer *, integer *);
     logical ldumma[1];

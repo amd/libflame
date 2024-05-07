@@ -448,8 +448,10 @@ void cporfsx_(char *uplo, char *equed, integer *n, integer *nrhs, complex *a, in
                        integer *, complex *, real *),
         clanhe_(char *, char *, integer *, complex *, integer *, real *), slamch_(char *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         cpocon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *,
                 integer *);
     extern integer ilaprec_(char *);

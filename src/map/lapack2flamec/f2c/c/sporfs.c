@@ -216,7 +216,7 @@ void sporfs_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real 
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real lstres;
     extern /* Subroutine */

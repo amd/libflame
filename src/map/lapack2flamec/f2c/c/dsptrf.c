@@ -190,7 +190,7 @@ void dsptrf_(char *uplo, integer *n, doublereal *ap, integer *ipiv, integer *inf
     doublereal absakk;
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal colmax, rowmax;
     /* -- LAPACK computational routine (version 3.4.0) -- */

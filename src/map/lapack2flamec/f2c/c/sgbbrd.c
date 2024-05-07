@@ -244,8 +244,10 @@ void aocl_lapack_sgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     aocl_int64_t minmn;
     logical wantq;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         slaset_(char *, integer *, integer *, real *, real *, real *, integer *),
         slartg_(real *, real *, real *, real *, real *),
         slargv_(integer *, real *, integer *, real *, integer *, real *, integer *),

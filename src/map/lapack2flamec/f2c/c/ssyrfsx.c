@@ -439,7 +439,7 @@ void ssyrfsx_(char *uplo, char *equed, integer *n, integer *nrhs, real *a, integ
     logical rcequ;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern real slansy_(char *, char *, integer *, real *, integer *, real *);
     extern /* Subroutine */

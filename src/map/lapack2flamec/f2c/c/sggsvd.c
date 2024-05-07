@@ -392,8 +392,10 @@ void aocl_lapack_sggsvd(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     integer ncycle;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         stgsja_(char *, char *, char *, integer *, integer *, integer *, integer *, integer *,
                 real *, integer *, real *, integer *, real *, real *, real *, real *, real *,
                 integer *, real *, integer *, real *, integer *, real *, integer *, integer *),

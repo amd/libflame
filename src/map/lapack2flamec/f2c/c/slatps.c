@@ -278,7 +278,7 @@ void aocl_lapack_slatps(char *uplo, char *trans, char *diag, char *normin, aocl_
         stpsv_(char *, char *, char *, integer *, real *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     logical notran;

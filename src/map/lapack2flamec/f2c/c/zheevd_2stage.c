@@ -300,7 +300,7 @@ void zheevd_2stage_(char *jobz, char *uplo, integer *n, doublecomplex *a, intege
     integer iscale;
     doublereal safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern doublereal zlanhe_(char *, char *, integer *, doublecomplex *, integer *, doublereal *);

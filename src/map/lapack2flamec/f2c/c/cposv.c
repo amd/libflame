@@ -146,8 +146,10 @@ void cposv_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, com
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         cpotrf_(char *, integer *, complex *, integer *, integer *),
         cpotrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *,
                 integer *);

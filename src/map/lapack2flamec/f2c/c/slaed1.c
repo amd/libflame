@@ -199,8 +199,10 @@ void aocl_lapack_slaed1(aocl_int64_t *n, real *d__, real *q, aocl_int64_t *ldq, 
                 integer *, integer *, real *, real *, integer *);
     integer idlmda;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
     integer coltyp;
     /* -- LAPACK computational routine (version 3.4.2) -- */

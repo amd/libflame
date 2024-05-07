@@ -286,7 +286,7 @@ void claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
         claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real safmax;
     extern /* Subroutine */

@@ -1,6 +1,6 @@
 /******************************************************************************
-* Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
-*******************************************************************************/
+ * Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 
 /*! @file fla_zscal_ix1_avx2.c
  *  @brief ZSCAL scales a vector by a scalar constant using AVX2 intrinsics.
@@ -17,7 +17,7 @@ int fla_zscal_ix1_avx2(integer *n, doublecomplex *alpha, doublecomplex *x)
     integer i__1, i;
     --x;
     i__1 = *n;
-    if (i__1 <= 0)
+    if(i__1 <= 0)
     {
         return 0;
     }
@@ -29,23 +29,23 @@ int fla_zscal_ix1_avx2(integer *n, doublecomplex *alpha, doublecomplex *x)
     __m128d xmm, oxm, xrmm, ximm;
 
     /* load scale factor in 256 bit register */
-    srmm = _mm256_broadcast_sd((double const *) &alpha->r);
-    simm = _mm256_broadcast_sd((double const *) &alpha->i);
+    srmm = _mm256_broadcast_sd((double const *)&alpha->r);
+    simm = _mm256_broadcast_sd((double const *)&alpha->i);
     sirmm = _mm256_shuffle_pd(srmm, simm, 0xA);
     srimm = _mm256_shuffle_pd(simm, srmm, 0x5);
 
     /* load scale factor in 128 bit register */
-    srm = _mm_loaddup_pd((double const *) &alpha->r);
-    sim = _mm_loaddup_pd((double const *) &alpha->i);
+    srm = _mm_loaddup_pd((double const *)&alpha->r);
+    sim = _mm_loaddup_pd((double const *)&alpha->i);
     sirm = _mm_shuffle_pd(srm, sim, 0x2);
     srim = _mm_shuffle_pd(sim, srm, 0x1);
 
     /* Code for increments equal to 1 only */
-    for (i = 1; i <= (i__1 - 3); i += 4)
+    for(i = 1; i <= (i__1 - 3); i += 4)
     {
         /* load complex inputs */
-        xmm0   = _mm256_loadu_pd((double const *) &x[i]);
-        xmm1   = _mm256_loadu_pd((double const *) &x[i + 2]);
+        xmm0 = _mm256_loadu_pd((double const *)&x[i]);
+        xmm1 = _mm256_loadu_pd((double const *)&x[i + 2]);
 
         /* shuffle the loaded inputs */
         xrmm0 = _mm256_movedup_pd(xmm0);
@@ -60,15 +60,15 @@ int fla_zscal_ix1_avx2(integer *n, doublecomplex *alpha, doublecomplex *x)
         oxm1 = _mm256_fmaddsub_pd(sirmm, xrmm1, oxm1);
 
         /* store the results */
-        _mm256_storeu_pd((double *) &x[i], oxm0);
-        _mm256_storeu_pd((double *) &x[i + 2], oxm1);
+        _mm256_storeu_pd((double *)&x[i], oxm0);
+        _mm256_storeu_pd((double *)&x[i + 2], oxm1);
     }
 
     /* remainder iterations */
-    for ( ; i <= i__1; ++i)
+    for(; i <= i__1; ++i)
     {
         /* load inputs */
-        xmm  = _mm_loadu_pd((double const *) &x[i]);
+        xmm = _mm_loadu_pd((double const *)&x[i]);
 
         /* shuffle inputs */
         xrmm = _mm_movedup_pd(xmm);
@@ -79,7 +79,7 @@ int fla_zscal_ix1_avx2(integer *n, doublecomplex *alpha, doublecomplex *x)
         oxm = _mm_fmaddsub_pd(sirm, xrmm, oxm);
 
         /* store result */
-        _mm_storeu_pd((double *) &x[i], oxm);
+        _mm_storeu_pd((double *)&x[i], oxm);
     }
     return 0;
 }

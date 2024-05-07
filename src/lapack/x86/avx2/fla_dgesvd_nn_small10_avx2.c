@@ -1,6 +1,6 @@
 /******************************************************************************
-* Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
-*******************************************************************************/
+ * Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 
 /*! @file fla_dgesvd_nx_small10_avx2.c
  *  @brief DGESVD Small path (Path 10)
@@ -17,14 +17,9 @@ extern void drot_(integer *, doublereal *, integer *, doublereal *,
 #endif
 extern void dlartg_(doublereal *da, doublereal *db, doublereal *c__, doublereal *s, doublereal *r);
 
-void fla_dgesvd_xx_small10_avx2(integer wntus, integer wntvs,
-                                integer *m, integer *n,
-                                doublereal *a, integer *lda,
-                                doublereal *s,
-                                doublereal *u, integer *ldu,
-                                doublereal *vt, integer *ldvt,
-                                doublereal *work,
-                                integer *info)
+void fla_dgesvd_xx_small10_avx2(integer wntus, integer wntvs, integer *m, integer *n, doublereal *a,
+                                integer *lda, doublereal *s, doublereal *u, integer *ldu,
+                                doublereal *vt, integer *ldvt, doublereal *work, integer *info)
 {
     /* Declare and init local variables */
     FLA_GEQRF_INIT_DSMALL();
@@ -90,8 +85,8 @@ void fla_dgesvd_xx_small10_avx2(integer wntus, integer wntvs,
         /* Generate Qr (from bidiag) in vt from work[iu] (a here) */
         if(wntvs)
         {
-            for (i = 1; i <= *n; i++)
-                for (j = 1; j <= *n; j++)
+            for(i = 1; i <= *n; i++)
+                for(j = 1; j <= *n; j++)
                     vt[i + j * *ldvt] = 0.;
             FLA_LARF_VTAPPLY_DSMALL_SQR(n, a, lda, taup, vt, ldvt);
         }
@@ -102,7 +97,7 @@ void fla_dgesvd_xx_small10_avx2(integer wntus, integer wntvs,
             for(i = *n; i >= 1; i--)
             {
                 /* Update current column */
-                stau = - tauq[i];
+                stau = -tauq[i];
                 for(j = i + 1; j <= *m; j++)
                 {
                     u[j + i * *ldu] = stau * a[j + i * *lda];
@@ -167,10 +162,8 @@ void fla_dgesvd_xx_small10_avx2(integer wntus, integer wntvs,
     }
     else
     {
-        lapack_dbdsqr_small("U", n, &ncvt, &nru, &s[1], &e[1],
-                            &vt[1 + *ldvt], ldvt,
-                            &u[1 + *ldu], ldu,
-                            info);
+        lapack_dbdsqr_small("U", n, &ncvt, &nru, &s[1], &e[1], &vt[1 + *ldvt], ldvt, &u[1 + *ldu],
+                            ldu, info);
     }
     return;
 }

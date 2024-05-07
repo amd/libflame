@@ -1,6 +1,6 @@
 /******************************************************************************
-* Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
-*******************************************************************************/
+ * Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 
 /*! @file fla_dgesvd_nn_small1T_avx2_.c
  *  @brief DGESVD Small path (path 1T)
@@ -11,11 +11,8 @@
 
 #ifdef FLA_ENABLE_AMD_OPT
 
-void fla_dgesvd_nn_small1T_avx2(integer *m, integer *n,
-                                doublereal *a, integer *lda,
-                                doublereal *s,
-                                doublereal *work,
-                                integer *info)
+void fla_dgesvd_nn_small1T_avx2(integer *m, integer *n, doublereal *a, integer *lda, doublereal *s,
+                                doublereal *work, integer *info)
 {
     /* Declare and init local variables */
     FLA_GEQRF_INIT_DSMALL();
@@ -50,12 +47,8 @@ void fla_dgesvd_nn_small1T_avx2(integer *m, integer *n,
     FLA_BIDIAGONALIZE_SMALL(*m, *m, a, lda, tauq, taup, s, e);
 
     /* Compute Singular Values */
-    lapack_dbdsqr_small("U", m, &c__0, &c__0, &s[1], &e[1],
-                        NULL, &c__1,
-                        NULL, &c__1,
-                        info);
+    lapack_dbdsqr_small("U", m, &c__0, &c__0, &s[1], &e[1], NULL, &c__1, NULL, &c__1, info);
 
     return;
 }
 #endif
-

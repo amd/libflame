@@ -12,7 +12,8 @@
 #if FLA_ENABLE_AMD_OPT
 
 /* Application of 2x2 Plane Rotation on two vectors */
-int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy, doublereal *c__, doublecomplex *s)
+int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy,
+                  doublereal *c__, doublecomplex *s)
 {
     /* System generated locals */
     integer i__1;
@@ -53,56 +54,55 @@ int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *c
     --cx;
     /* Function Body */
 
-    if (*n <= 0)
+    if(*n <= 0)
     {
         return 0;
     }
-    lc  = *c__;
-    sr  = s->r;
-    si  = s->i;
+    lc = *c__;
+    sr = s->r;
+    si = s->i;
     msi = -si;
 
-    cmm  = _mm256_broadcast_sd((double const *) &lc);
-    srmm = _mm256_broadcast_sd((double const *) &sr);
-    simm = _mm256_broadcast_sd((double const *) &si);
-    sinm = _mm256_broadcast_sd((double const *) &msi);
+    cmm = _mm256_broadcast_sd((double const *)&lc);
+    srmm = _mm256_broadcast_sd((double const *)&sr);
+    simm = _mm256_broadcast_sd((double const *)&si);
+    sinm = _mm256_broadcast_sd((double const *)&msi);
 
-    sirmm = _mm256_shuffle_pd(srmm, simm, 0xA);  
-    srimm = _mm256_shuffle_pd(simm, srmm, 0x5);  
-    msirmm = _mm256_shuffle_pd(srmm, sinm, 0xA); 
-    msrimm = _mm256_shuffle_pd(sinm, srmm, 0x5); 
+    sirmm = _mm256_shuffle_pd(srmm, simm, 0xA);
+    srimm = _mm256_shuffle_pd(simm, srmm, 0x5);
+    msirmm = _mm256_shuffle_pd(srmm, sinm, 0xA);
+    msrimm = _mm256_shuffle_pd(sinm, srmm, 0x5);
 
-    cm  = _mm_loaddup_pd ((double const *) &lc);
-    srm = _mm_loaddup_pd ((double const *) &sr);
-    sim = _mm_loaddup_pd ((double const *) &si);
-    sin = _mm_loaddup_pd ((double const *) &msi);
+    cm = _mm_loaddup_pd((double const *)&lc);
+    srm = _mm_loaddup_pd((double const *)&sr);
+    sim = _mm_loaddup_pd((double const *)&si);
+    sin = _mm_loaddup_pd((double const *)&msi);
 
-    sirm = _mm_shuffle_pd(srm, sim, 0x2); 
+    sirm = _mm_shuffle_pd(srm, sim, 0x2);
     srim = _mm_shuffle_pd(sim, srm, 0x1);
     msirm = _mm_shuffle_pd(srm, sin, 0x2);
     msrim = _mm_shuffle_pd(sin, srm, 0x1);
 
-
-    if (*incx == 1 && *incy == 1)
+    if(*incx == 1 && *incy == 1)
     {
         goto L20;
     }
     /* Code for unequal increments or equal increments not equal to 1 */
     ix = 1;
     iy = 1;
-    if (*incx < 0)
+    if(*incx < 0)
     {
         ix = (-(*n) + 1) * *incx + 1;
     }
-    if (*incy < 0)
+    if(*incy < 0)
     {
         iy = (-(*n) + 1) * *incy + 1;
     }
 
     i__1 = *n;
-    if (*incx != *incy)
+    if(*incx != *incy)
     {
-        for (i__ = 1; i__ <= i__1; ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             z__2.r = lc * cx[ix].r;
             z__2.i = lc * cx[ix].i; // , expr subst
@@ -126,13 +126,13 @@ int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *c
     }
     else
     {
-        for (i__ = 1; i__ <= (i__1 - 1); i__ += 2)
+        for(i__ = 1; i__ <= (i__1 - 1); i__ += 2)
         {
             /* load complex inputs from x & y */
-            xmm0   = _mm256_loadu_pd((double const *) &cx[ix]);
-            hxmm1 = _mm_loadu_pd((double const *) &cx[ix + *incx]);
-            ymm0   = _mm256_loadu_pd((double const *) &cy[ix]);
-            hymm1 = _mm_loadu_pd((double const *) &cy[ix + *incx]);
+            xmm0 = _mm256_loadu_pd((double const *)&cx[ix]);
+            hxmm1 = _mm_loadu_pd((double const *)&cx[ix + *incx]);
+            ymm0 = _mm256_loadu_pd((double const *)&cy[ix]);
+            hymm1 = _mm_loadu_pd((double const *)&cy[ix + *incx]);
 
             /* pack the inputs into 256-bit registers */
             xmm0 = _mm256_insertf128_pd(xmm0, hxmm1, 0x1);
@@ -161,24 +161,24 @@ int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *c
             hymm1 = _mm256_extractf128_pd(oym0, 0x1);
 
             /* store the results */
-            _mm_storeu_pd((double *) &cx[ix], hxmm0);
-            _mm_storeu_pd((double *) &cx[ix + *incx], hxmm1);
-            _mm_storeu_pd((double *) &cy[ix], hymm0);
-            _mm_storeu_pd((double *) &cy[ix + *incx], hymm1);
+            _mm_storeu_pd((double *)&cx[ix], hxmm0);
+            _mm_storeu_pd((double *)&cx[ix + *incx], hxmm1);
+            _mm_storeu_pd((double *)&cy[ix], hymm0);
+            _mm_storeu_pd((double *)&cy[ix + *incx], hymm1);
 
             ix += 2 * *incx;
         }
-        for ( ; i__ <= i__1; ++i__)
+        for(; i__ <= i__1; ++i__)
         {
             /* load complex inputs from x & y */
-            xmm  = _mm_loadu_pd((double const *) &cx[ix]);
-            ymm  = _mm_loadu_pd((double const *) &cy[ix]);
+            xmm = _mm_loadu_pd((double const *)&cx[ix]);
+            ymm = _mm_loadu_pd((double const *)&cy[ix]);
 
             /* shuffle the loaded inputs */
             xrmm = _mm_movedup_pd(xmm);
             ximm = _mm_unpackhi_pd(xmm, xmm);
             yrmm = _mm_movedup_pd(ymm);
-            yimm = _mm_unpackhi_pd(ymm, ymm);   
+            yimm = _mm_unpackhi_pd(ymm, ymm);
 
             /* compute x outputs */
             oxm = _mm_mul_pd(srim, yimm);
@@ -191,8 +191,8 @@ int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *c
             oym = _mm_fmsub_pd(cm, ymm, oym);
 
             /* store the results */
-            _mm_storeu_pd((double *) &cx[ix], oxm);
-            _mm_storeu_pd((double *) &cy[ix], oym);
+            _mm_storeu_pd((double *)&cx[ix], oxm);
+            _mm_storeu_pd((double *)&cy[ix], oym);
 
             ix += *incx;
         }
@@ -201,13 +201,13 @@ int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *c
     /* Code for both increments equal to 1 */
 L20:
     i__1 = *n;
-    for (i__ = 1; i__ <= (i__1 - 3); i__ += 4)
+    for(i__ = 1; i__ <= (i__1 - 3); i__ += 4)
     {
         /* load complex inputs from x & y */
-        xmm0 = _mm256_loadu_pd((double const *) &cx[i__]);
-        ymm0 = _mm256_loadu_pd((double const *) &cy[i__]);
-        xmm1 = _mm256_loadu_pd((double const *) &cx[i__ + 2]);
-        ymm1 = _mm256_loadu_pd((double const *) &cy[i__ + 2]);
+        xmm0 = _mm256_loadu_pd((double const *)&cx[i__]);
+        ymm0 = _mm256_loadu_pd((double const *)&cy[i__]);
+        xmm1 = _mm256_loadu_pd((double const *)&cx[i__ + 2]);
+        ymm1 = _mm256_loadu_pd((double const *)&cy[i__ + 2]);
 
         /* shuffle the loaded inputs */
         xrmm0 = _mm256_movedup_pd(xmm0);
@@ -239,23 +239,23 @@ L20:
         oym1 = _mm256_fmsub_pd(cmm, ymm1, oym1);
 
         /* store the results */
-        _mm256_storeu_pd((double *) &cx[i__], oxm0);
-        _mm256_storeu_pd((double *) &cy[i__], oym0);
-        _mm256_storeu_pd((double *) &cx[i__ + 2], oxm1);
-        _mm256_storeu_pd((double *) &cy[i__ + 2], oym1);
+        _mm256_storeu_pd((double *)&cx[i__], oxm0);
+        _mm256_storeu_pd((double *)&cy[i__], oym0);
+        _mm256_storeu_pd((double *)&cx[i__ + 2], oxm1);
+        _mm256_storeu_pd((double *)&cy[i__ + 2], oym1);
     }
 
-    for ( ; i__ <= i__1; ++i__)
+    for(; i__ <= i__1; ++i__)
     {
         /* load complex inputs from x & y */
-        xmm  = _mm_loadu_pd((double const *) &cx[i__]);
-        ymm  = _mm_loadu_pd((double const *) &cy[i__]);
+        xmm = _mm_loadu_pd((double const *)&cx[i__]);
+        ymm = _mm_loadu_pd((double const *)&cy[i__]);
 
         /* shuffle the loaded inputs */
         xrmm = _mm_movedup_pd(xmm);
         ximm = _mm_unpackhi_pd(xmm, xmm);
         yrmm = _mm_movedup_pd(ymm);
-        yimm = _mm_unpackhi_pd(ymm, ymm);   
+        yimm = _mm_unpackhi_pd(ymm, ymm);
 
         /* compute x outputs */
         oxm = _mm_mul_pd(srim, yimm);
@@ -268,8 +268,8 @@ L20:
         oym = _mm_fmsub_pd(cm, ymm, oym);
 
         /* store the results */
-        _mm_storeu_pd((double *) &cx[i__], oxm);
-        _mm_storeu_pd((double *) &cy[i__], oym);
+        _mm_storeu_pd((double *)&cx[i__], oxm);
+        _mm_storeu_pd((double *)&cy[i__], oym);
     }
 
     return 0;

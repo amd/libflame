@@ -1,6 +1,6 @@
 /******************************************************************************
-* Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
-*******************************************************************************/
+ * Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 
 #include "FLAME.h"
 #include "fla_lapack_avx2_kernels.h"
@@ -12,7 +12,8 @@
  * All the computations are done inline without using
  * corresponding BLAS APIs to reduce function overheads.
  */
-int fla_zgetrf_small_avx512( integer *m, integer *n, dcomplex *a, integer *lda, integer *ipiv, integer *info)
+int fla_zgetrf_small_avx512(integer *m, integer *n, dcomplex *a, integer *lda, integer *ipiv,
+                            integer *info)
 {
     integer mi, ni;
     integer i, j, i_1, i_2, i_3, i_4, i_5, i_6, i_7;
@@ -32,25 +33,25 @@ int fla_zgetrf_small_avx512( integer *m, integer *n, dcomplex *a, integer *lda, 
 
     *info = 0;
 
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
 
-    if (*info != 0)
+    if(*info != 0)
     {
         return 0;
     }
 
-    for( i = 0; i < min_m_n; i++ )
+    for(i = 0; i < min_m_n; i++)
     {
         mi = *m - i;
         ni = *n - i;
@@ -60,10 +61,10 @@ int fla_zgetrf_small_avx512( integer *m, integer *n, dcomplex *a, integer *lda, 
         // Find the pivot element
         max_val = 0;
         p_idx = i;
-        for( i_1 = 0; i_1 < mi; i_1++ )
+        for(i_1 = 0; i_1 < mi; i_1++)
         {
             t_val = f2c_abs(acur[i_1].real) + f2c_abs(acur[i_1].imag);
-            if( t_val > max_val )
+            if(t_val > max_val)
             {
                 max_val = t_val;
                 p_idx = i + i_1;
@@ -75,11 +76,11 @@ int fla_zgetrf_small_avx512( integer *m, integer *n, dcomplex *a, integer *lda, 
         ipiv[i] = p_idx + 1;
 
         // Swap rows
-        if( apiv[*lda * i].real != 0. || apiv[*lda * i].imag != 0. )
+        if(apiv[*lda * i].real != 0. || apiv[*lda * i].imag != 0.)
         {
-            if( p_idx != i )
+            if(p_idx != i)
             {
-                for( i_1 = 0; i_1 < *n ; i_1++ )
+                for(i_1 = 0; i_1 < *n; i_1++)
                 {
                     i_2 = i_1 * *lda;
                     t_val = apiv[i_2].real;
@@ -88,7 +89,7 @@ int fla_zgetrf_small_avx512( integer *m, integer *n, dcomplex *a, integer *lda, 
                     apiv[i_2].imag = asrc[i_2].imag;
                     asrc[i_2].real = t_val;
                     asrc[i_2].imag = z_val;
-                 }
+                }
             }
 
             /*----------------unblocked LU algorithm-------------------------
@@ -117,7 +118,7 @@ int fla_zgetrf_small_avx512( integer *m, integer *n, dcomplex *a, integer *lda, 
             alpha_img = _mm512_set1_pd(z__1.imag);
 
             // Updates 8 rows of trailing matrix per iteration
-            for(i_1 = 1; i_1 < mi - 7; i_1+=8 )
+            for(i_1 = 1; i_1 < mi - 7; i_1 += 8)
             {
                 /*-----------Trailing matrix update for LU factorisation-----------
 
@@ -153,8 +154,8 @@ int fla_zgetrf_small_avx512( integer *m, integer *n, dcomplex *a, integer *lda, 
                 i_2 = i_1 + 4;
 
                 // Load alpha from memory
-                bv[0] = _mm512_loadu_pd((double const *) &acur[i_1].real);
-                bv[1] = _mm512_loadu_pd((double const *) &acur[i_2].real);
+                bv[0] = _mm512_loadu_pd((double const *)&acur[i_1].real);
+                bv[1] = _mm512_loadu_pd((double const *)&acur[i_2].real);
                 bv_p[0] = _mm512_permute_pd(bv[0], 0x55);
                 bv_p[1] = _mm512_permute_pd(bv[1], 0x55);
 
@@ -164,13 +165,13 @@ int fla_zgetrf_small_avx512( integer *m, integer *n, dcomplex *a, integer *lda, 
                 bv[0] = _mm512_fmaddsub_pd(alpha_real, bv[0], bv_p[0]);
                 bv[1] = _mm512_fmaddsub_pd(alpha_real, bv[1], bv_p[1]);
 
-                _mm512_storeu_pd ((double *) &acur[i_1].real, bv[0]);
-                _mm512_storeu_pd ((double *) &acur[i_2].real, bv[1]);
+                _mm512_storeu_pd((double *)&acur[i_1].real, bv[0]);
+                _mm512_storeu_pd((double *)&acur[i_2].real, bv[1]);
 
                 bv_p[0] = _mm512_permute_pd(bv[0], 0x55);
                 bv_p[1] = _mm512_permute_pd(bv[1], 0x55);
 
-                for( j = 1; j < ni - 1; j = j + 2 )
+                for(j = 1; j < ni - 1; j = j + 2)
                 {
                     i_3 = j * *lda;
                     i_2 = i_1 + i_3;
@@ -198,20 +199,20 @@ int fla_zgetrf_small_avx512( integer *m, integer *n, dcomplex *a, integer *lda, 
                     xv1[0] = _mm512_fmaddsub_pd(x_real[1], bv[0], xv1[0]);
                     xv1[1] = _mm512_fmaddsub_pd(x_real[1], bv[1], xv1[1]);
 
-                    yv0[0] = _mm512_loadu_pd((double const *) &acur[i_2].real);
-                    yv0[1] = _mm512_loadu_pd((double const *) &acur[i_6].real);
-                    yv1[0] = _mm512_loadu_pd((double const *) &acur[i_5].real);
-                    yv1[1] = _mm512_loadu_pd((double const *) &acur[i_7].real);
+                    yv0[0] = _mm512_loadu_pd((double const *)&acur[i_2].real);
+                    yv0[1] = _mm512_loadu_pd((double const *)&acur[i_6].real);
+                    yv1[0] = _mm512_loadu_pd((double const *)&acur[i_5].real);
+                    yv1[1] = _mm512_loadu_pd((double const *)&acur[i_7].real);
 
                     yv0[0] = _mm512_sub_pd(yv0[0], xv0[0]);
                     yv0[1] = _mm512_sub_pd(yv0[1], xv0[1]);
                     yv1[0] = _mm512_sub_pd(yv1[0], xv1[0]);
                     yv1[1] = _mm512_sub_pd(yv1[1], xv1[1]);
 
-                    _mm512_storeu_pd ((double *) &acur[i_2].real, yv0[0]);
-                    _mm512_storeu_pd ((double *) &acur[i_6].real, yv0[1]);
-                    _mm512_storeu_pd ((double *) &acur[i_5].real, yv1[0]);
-                    _mm512_storeu_pd ((double *) &acur[i_7].real, yv1[1]);
+                    _mm512_storeu_pd((double *)&acur[i_2].real, yv0[0]);
+                    _mm512_storeu_pd((double *)&acur[i_6].real, yv0[1]);
+                    _mm512_storeu_pd((double *)&acur[i_5].real, yv1[0]);
+                    _mm512_storeu_pd((double *)&acur[i_7].real, yv1[1]);
                 }
                 if(ni - j > 0)
                 {
@@ -230,19 +231,19 @@ int fla_zgetrf_small_avx512( integer *m, integer *n, dcomplex *a, integer *lda, 
                     xv0[0] = _mm512_fmaddsub_pd(x_real[0], bv[0], xv0[0]);
                     xv0[1] = _mm512_fmaddsub_pd(x_real[0], bv[1], xv0[1]);
 
-                    yv0[0] = _mm512_loadu_pd((double const *) &acur[i_2].real);
-                    yv0[1] = _mm512_loadu_pd((double const *) &acur[i_4].real);
+                    yv0[0] = _mm512_loadu_pd((double const *)&acur[i_2].real);
+                    yv0[1] = _mm512_loadu_pd((double const *)&acur[i_4].real);
 
                     yv0[0] = _mm512_sub_pd(yv0[0], xv0[0]);
                     yv0[1] = _mm512_sub_pd(yv0[1], xv0[1]);
 
-                    _mm512_storeu_pd ((double *) &acur[i_2].real, yv0[0]);
-                    _mm512_storeu_pd ((double *) &acur[i_4].real, yv0[1]);
+                    _mm512_storeu_pd((double *)&acur[i_2].real, yv0[0]);
+                    _mm512_storeu_pd((double *)&acur[i_4].real, yv0[1]);
                 }
             }
 
             // Updates 4 rows of trailing matrix per iteration
-            for(; i_1 < mi - 3; i_1+=4 )
+            for(; i_1 < mi - 3; i_1 += 4)
             {
                 /*-----------Trailing matrix update for LU factorisation-----------
 
@@ -279,18 +280,18 @@ int fla_zgetrf_small_avx512( integer *m, integer *n, dcomplex *a, integer *lda, 
                 i_2 = i_1 + 4;
 
                 // Load alpha from memory
-                bv[0] = _mm512_loadu_pd((double const *) &acur[i_1].real);
+                bv[0] = _mm512_loadu_pd((double const *)&acur[i_1].real);
                 bv_p[0] = _mm512_permute_pd(bv[0], 0x55);
 
                 // b := alpha * b
                 bv_p[0] = _mm512_mul_pd(alpha_img, bv_p[0]);
                 bv[0] = _mm512_fmaddsub_pd(alpha_real, bv[0], bv_p[0]);
 
-                _mm512_storeu_pd ((double *) &acur[i_1].real, bv[0]);
+                _mm512_storeu_pd((double *)&acur[i_1].real, bv[0]);
 
                 bv_p[0] = _mm512_permute_pd(bv[0], 0x55);
 
-                for( j = 1; j < ni - 1; j = j + 2 )
+                for(j = 1; j < ni - 1; j = j + 2)
                 {
                     i_3 = j * *lda;
                     i_2 = i_1 + i_3;
@@ -314,14 +315,14 @@ int fla_zgetrf_small_avx512( integer *m, integer *n, dcomplex *a, integer *lda, 
                     xv1[0] = _mm512_mul_pd(x_img[1], bv_p[0]);
                     xv1[0] = _mm512_fmaddsub_pd(x_real[1], bv[0], xv1[0]);
 
-                    yv0[0] = _mm512_loadu_pd((double const *) &acur[i_2].real);
-                    yv1[0] = _mm512_loadu_pd((double const *) &acur[i_5].real);
+                    yv0[0] = _mm512_loadu_pd((double const *)&acur[i_2].real);
+                    yv1[0] = _mm512_loadu_pd((double const *)&acur[i_5].real);
 
                     yv0[0] = _mm512_sub_pd(yv0[0], xv0[0]);
                     yv1[0] = _mm512_sub_pd(yv1[0], xv1[0]);
 
-                    _mm512_storeu_pd ((double *) &acur[i_2].real, yv0[0]);
-                    _mm512_storeu_pd ((double *) &acur[i_5].real, yv1[0]);
+                    _mm512_storeu_pd((double *)&acur[i_2].real, yv0[0]);
+                    _mm512_storeu_pd((double *)&acur[i_5].real, yv1[0]);
                 }
                 if(ni - j > 0)
                 {
@@ -338,16 +339,16 @@ int fla_zgetrf_small_avx512( integer *m, integer *n, dcomplex *a, integer *lda, 
                     xv0[0] = _mm512_mul_pd(x_img[0], bv_p[0]);
                     xv0[0] = _mm512_fmaddsub_pd(x_real[0], bv[0], xv0[0]);
 
-                    yv0[0] = _mm512_loadu_pd((double const *) &acur[i_2].real);
+                    yv0[0] = _mm512_loadu_pd((double const *)&acur[i_2].real);
 
                     yv0[0] = _mm512_sub_pd(yv0[0], xv0[0]);
 
-                    _mm512_storeu_pd ((double *) &acur[i_2].real, yv0[0]);
+                    _mm512_storeu_pd((double *)&acur[i_2].real, yv0[0]);
                 }
             }
 
             // Updates 1 row of trailing matrix per iteration
-            for( ; i_1 < mi; i_1++ )
+            for(; i_1 < mi; i_1++)
             {
                 t_val = acur[i_1].real;
                 acur[i_1].real = (t_val * z__1.real - acur[i_1].imag * z__1.imag);
@@ -356,7 +357,7 @@ int fla_zgetrf_small_avx512( integer *m, integer *n, dcomplex *a, integer *lda, 
                 t_val = acur[i_1].real;
                 z_val = acur[i_1].imag;
 
-                for( j = 1; j < ni - 1; j = j + 2 )
+                for(j = 1; j < ni - 1; j = j + 2)
                 {
                     i_3 = j * *lda;
                     i_2 = i_1 + i_3;
@@ -364,11 +365,15 @@ int fla_zgetrf_small_avx512( integer *m, integer *n, dcomplex *a, integer *lda, 
                     i_4 = (j + 1) * *lda;
                     i_5 = i_1 + i_4;
 
-                    acur[i_2].real = acur[i_2].real - t_val * acur[i_3].real + z_val * acur[i_3].imag;
-                    acur[i_2].imag = acur[i_2].imag - t_val * acur[i_3].imag - z_val * acur[i_3].real;
+                    acur[i_2].real
+                        = acur[i_2].real - t_val * acur[i_3].real + z_val * acur[i_3].imag;
+                    acur[i_2].imag
+                        = acur[i_2].imag - t_val * acur[i_3].imag - z_val * acur[i_3].real;
 
-                    acur[i_5].real = acur[i_5].real - t_val * acur[i_4].real + z_val * acur[i_4].imag;
-                    acur[i_5].imag = acur[i_5].imag - t_val * acur[i_4].imag - z_val * acur[i_4].real;
+                    acur[i_5].real
+                        = acur[i_5].real - t_val * acur[i_4].real + z_val * acur[i_4].imag;
+                    acur[i_5].imag
+                        = acur[i_5].imag - t_val * acur[i_4].imag - z_val * acur[i_4].real;
                 }
 
                 if(ni - j > 0)
@@ -376,14 +381,16 @@ int fla_zgetrf_small_avx512( integer *m, integer *n, dcomplex *a, integer *lda, 
                     i_3 = j * *lda;
                     i_2 = i_1 + i_3;
 
-                    acur[i_2].real = acur[i_2].real - t_val * acur[i_3].real + z_val * acur[i_3].imag;
-                    acur[i_2].imag = acur[i_2].imag - t_val * acur[i_3].imag - z_val * acur[i_3].real;
+                    acur[i_2].real
+                        = acur[i_2].real - t_val * acur[i_3].real + z_val * acur[i_3].imag;
+                    acur[i_2].imag
+                        = acur[i_2].imag - t_val * acur[i_3].imag - z_val * acur[i_3].real;
                 }
             }
         }
         else
         {
-            *info = ( *info == 0 ) ? p_idx + 1 : *info;
+            *info = (*info == 0) ? p_idx + 1 : *info;
         }
     }
     return 0;

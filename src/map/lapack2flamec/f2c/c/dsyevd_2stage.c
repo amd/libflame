@@ -280,7 +280,7 @@ void dsyevd_2stage_(char *jobz, char *uplo, integer *n, doublereal *a, integer *
         dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     integer indtau;

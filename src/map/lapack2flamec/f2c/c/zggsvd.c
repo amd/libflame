@@ -366,7 +366,7 @@ void zggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer
     extern doublereal dlamch_(char *);
     integer ncycle;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *,
                               doublereal *);

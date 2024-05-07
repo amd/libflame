@@ -257,8 +257,10 @@ void dsygvd_(integer *itype, char *jobz, char *uplo, integer *n, doublereal *a, 
                integer *, doublereal *, integer *);
     logical upper, wantz;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dpotrf_(char *, integer *, doublereal *, integer *, integer *);
     integer liwmin;
     extern /* Subroutine */

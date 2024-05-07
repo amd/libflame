@@ -296,8 +296,10 @@ void zgesdd_(char *jobz, integer *m, integer *n, doublecomplex *a, integer *lda,
                 doublereal *, integer *, integer *);
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zgebrd_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
                 doublecomplex *, doublecomplex *, doublecomplex *, integer *, integer *);
     doublereal bignum;

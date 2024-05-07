@@ -229,7 +229,7 @@ void ssyev_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, re
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern /* Subroutine */

@@ -226,7 +226,7 @@ void sstedc_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
                 integer *, real *, integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer finish;

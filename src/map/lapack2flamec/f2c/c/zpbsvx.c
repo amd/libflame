@@ -372,7 +372,7 @@ void zpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, dou
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal zlanhb_(char *, char *, integer *, integer *, doublecomplex *, integer *,
                               doublereal *);

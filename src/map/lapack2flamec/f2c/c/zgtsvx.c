@@ -315,7 +315,7 @@ void zgtsvx_(char *fact, char *trans, integer *n, integer *nrhs, doublecomplex *
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal zlangt_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *);
     logical notran;

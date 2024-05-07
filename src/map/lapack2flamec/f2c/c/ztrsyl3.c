@@ -191,7 +191,7 @@ void ztrsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, d
     doublereal scaloc, scamin;
     extern doublereal dlarmm_(doublereal *, doublereal *, doublereal *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *,

@@ -163,7 +163,7 @@ void dtrcon_(char *norm, char *uplo, char *diag, integer *n, doublereal *a, inte
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal dlantr_(char *, char *, char *, integer *, integer *, doublereal *, integer *,
                               doublereal *);

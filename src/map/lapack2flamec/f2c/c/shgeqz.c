@@ -366,7 +366,7 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
         slarfg_(integer *, real *, real *, integer *, real *);
     real safmax;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real eshift;
     logical ilschr;

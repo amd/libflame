@@ -192,7 +192,7 @@ void ssptrf_(char *uplo, integer *n, real *ap, integer *ipiv, integer *info)
         sswap_(integer *, real *, integer *, real *, integer *);
     real absakk;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real colmax, rowmax;

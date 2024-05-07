@@ -228,8 +228,10 @@ void chegv_(integer *itype, char *jobz, char *uplo, integer *n, complex *a, inte
                 integer *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         cpotrf_(char *, integer *, complex *, integer *, integer *);
     integer lwkopt;
     logical lquery;

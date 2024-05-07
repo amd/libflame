@@ -187,8 +187,10 @@ void dspgv_(integer *itype, char *jobz, char *uplo, integer *n, doublereal *ap, 
         dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
     logical wantz;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dpptrf_(char *, integer *, doublereal *, integer *),
         dspgst_(integer *, char *, integer *, doublereal *, doublereal *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */

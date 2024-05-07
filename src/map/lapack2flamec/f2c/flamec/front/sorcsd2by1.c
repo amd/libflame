@@ -255,8 +255,10 @@ void sorcsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p,
     integer ibbcsd, lbbcsd;
     integer iorbdb, lorbdb;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     integer iorglq;
     extern /* Subroutine */

@@ -265,8 +265,10 @@ void dsygv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, doublerea
     integer lwtrd;
     logical wantz;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dpotrf_(char *, integer *, doublereal *, integer *, integer *),
         dsygst_(integer *, char *, integer *, doublereal *, integer *, doublereal *, integer *,
                 integer *);

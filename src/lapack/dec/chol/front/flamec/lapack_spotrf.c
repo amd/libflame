@@ -24,7 +24,7 @@ static real c_b14 = 1.f;
     integer j, jb, nb;
     logical upper;
 #ifndef FLA_ENABLE_AOCL_BLAS
-	int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+	void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
 	logical lsame_(char *ca, char *cbi, integer a, integer b);
 #endif
 	int lapack_spotf2(char *uplo, integer *n, real *a, integer *lda, integer *info);

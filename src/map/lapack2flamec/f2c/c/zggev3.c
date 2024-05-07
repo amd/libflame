@@ -262,7 +262,7 @@ void zggev3_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *ld
                 integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     logical ilascl, ilbscl;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical ldumma[1];
     char chtemp[1];

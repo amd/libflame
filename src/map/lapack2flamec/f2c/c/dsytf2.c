@@ -221,7 +221,7 @@ void dsytf2_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv,
     doublereal absakk;
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal colmax, rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */

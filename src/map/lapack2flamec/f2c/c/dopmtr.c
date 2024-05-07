@@ -170,7 +170,7 @@ void dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, double
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, forwrd;
     /* -- LAPACK computational routine (version 3.4.0) -- */

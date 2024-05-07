@@ -152,7 +152,7 @@ void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal 
         zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical onenrm;

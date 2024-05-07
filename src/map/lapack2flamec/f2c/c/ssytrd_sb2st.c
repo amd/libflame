@@ -265,7 +265,7 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     logical wantq, upper;
     integer grsiz, ttype, abdpos;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer thgrid, thgrnb, indtau, ofdpos;
     extern /* Subroutine */

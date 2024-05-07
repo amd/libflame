@@ -172,7 +172,7 @@ void aocl_lapack_sgeequb(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t
     real radix, rcmin, rcmax;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum, logrdx, smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */

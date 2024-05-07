@@ -167,8 +167,10 @@ void chetri2x_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, 
     logical upper;
     complex u01_i_j__, u11_i_j__;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         ctrtri_(char *, char *, integer *, complex *, integer *, integer *),
         csyconv_(char *, char *, integer *, complex *, integer *, integer *, complex *, integer *);
     complex u01_ip1_j__, u11_ip1_j__;

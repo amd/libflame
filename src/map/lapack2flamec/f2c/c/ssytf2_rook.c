@@ -229,7 +229,7 @@ void ssytf2_rook_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, 
     real absakk;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real colmax, rowmax;

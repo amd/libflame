@@ -195,7 +195,7 @@ void aocl_lapack_slaed9(aocl_int64_t *k, aocl_int64_t *kstart, aocl_int64_t *kst
         slaed4_(integer *, integer *, real *, real *, real *, real *, real *, integer *);
     extern real slamc3_(real *, real *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

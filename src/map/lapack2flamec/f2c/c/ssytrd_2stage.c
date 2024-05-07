@@ -258,7 +258,7 @@ void ssytrd_2stage_(char *vect, char *uplo, integer *n, real *a, integer *lda, r
     integer abpos, lhmin, lwmin;
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */

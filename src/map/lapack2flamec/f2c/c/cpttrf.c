@@ -110,7 +110,7 @@ void cpttrf_(integer *n, real *d__, complex *e, integer *info)
     aocl_int64_t i__, i4;
     real eii, eir;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

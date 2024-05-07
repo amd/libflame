@@ -236,7 +236,7 @@ void ztpmqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
     extern logical lsame_(char *, char *, integer, integer);
     logical right;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     extern /* Subroutine */

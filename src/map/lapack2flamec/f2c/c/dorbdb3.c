@@ -227,7 +227,7 @@ void dorbdb3_(integer *m, integer *p, integer *q, doublereal *x11, integer *ldx1
                integer *, doublereal *);
     integer ilarf, llarf;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     extern /* Subroutine */

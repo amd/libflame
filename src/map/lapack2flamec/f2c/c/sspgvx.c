@@ -291,8 +291,10 @@ void sspgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, re
         stpsv_(char *, char *, char *, integer *, real *, real *, integer *);
     logical alleig, indeig, valeig;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         spptrf_(char *, integer *, real *, integer *),
         sspgst_(integer *, char *, integer *, real *, real *, integer *),
         sspevx_(char *, char *, char *, integer *, real *, real *, real *, integer *, integer *,

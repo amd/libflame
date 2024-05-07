@@ -161,7 +161,7 @@ void dpbcon_(char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab,
                 doublereal *, doublereal *, doublereal *, integer *);
     doublereal scaleu;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     char normin[1];

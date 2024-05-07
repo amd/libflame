@@ -219,7 +219,7 @@ void zgerfs_(char *trans, integer *n, integer *nrhs, doublecomplex *a, integer *
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     char transn[1], transt[1];

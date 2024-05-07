@@ -168,7 +168,7 @@ void cpbcon_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, re
                 complex *, real *, real *, integer *);
     real scaleu;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     extern /* Subroutine */

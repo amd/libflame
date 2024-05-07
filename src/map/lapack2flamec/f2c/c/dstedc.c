@@ -233,7 +233,7 @@ void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
         dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer finish;
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);

@@ -217,7 +217,7 @@ void dlaed0_(integer *icompq, integer *qsiz, integer *n, doublereal *d__, double
         dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     integer igivcl;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer igivnm, submat, curprb, subpbs, igivpt;

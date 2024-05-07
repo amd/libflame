@@ -574,7 +574,7 @@ void zgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, doublecomplex 
     doublereal colcnd;
     logical nofact;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern /* Subroutine */

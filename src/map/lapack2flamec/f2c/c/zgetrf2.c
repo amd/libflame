@@ -133,7 +133,7 @@ void zgetrf2_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *i
                doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer izamax_(integer *, doublecomplex *, integer *);
     extern /* Subroutine */

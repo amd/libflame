@@ -287,8 +287,10 @@ void ztgsy2_(char *trans, integer *ijob, integer *m, integer *n, doublecomplex *
         zgetc2_(integer *, doublecomplex *, integer *, integer *, integer *, integer *);
     doublereal scaloc;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zlatdf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *,
                 doublereal *, integer *, integer *);
     logical notran;

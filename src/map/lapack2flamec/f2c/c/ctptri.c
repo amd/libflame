@@ -147,7 +147,7 @@ void ctptri_(char *uplo, char *diag, integer *n, complex *ap, integer *info)
         ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer jclast;
     logical nounit;

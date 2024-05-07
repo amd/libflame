@@ -73,7 +73,7 @@
     /* Local variables */
     static TLS_CLASS_SPEC integer i__, j, iinfo;
     static TLS_CLASS_SPEC integer jb, nb;
-    extern /* Subroutine */ int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */ void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *,integer *, integer *);
 #define a_subscr(a_1,a_2) (a_2)*a_dim1 + a_1
 #define a_ref(a_1,a_2) a[a_subscr(a_1,a_2)]

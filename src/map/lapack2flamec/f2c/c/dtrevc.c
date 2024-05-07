@@ -288,7 +288,7 @@ void dtrevc_(char *side, char *howmny, logical *select, integer *n, doublereal *
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical rightv;

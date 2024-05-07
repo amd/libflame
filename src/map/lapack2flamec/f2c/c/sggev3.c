@@ -266,7 +266,7 @@ void sggev3_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *
     logical ilascl, ilbscl;
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical ldumma[1];
     char chtemp[1];

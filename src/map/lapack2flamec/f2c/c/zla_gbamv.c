@@ -204,7 +204,7 @@ void zla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku
     doublereal safe1;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

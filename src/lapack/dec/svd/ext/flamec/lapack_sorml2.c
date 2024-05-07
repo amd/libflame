@@ -155,7 +155,7 @@ int lapack_sorml2(char *side, char *trans, integer *m, integer *n, integer *k, r
     void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
     integer i1, i2, i3, ic, jc, mi, ni, nq;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     real aii;
     /* -- LAPACK computational routine -- */

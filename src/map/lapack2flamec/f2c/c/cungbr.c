@@ -173,8 +173,10 @@ void cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer
     integer iinfo;
     logical wantq;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         cunglq_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
                 integer *, integer *),
         cungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,

@@ -231,7 +231,7 @@ void dsyev_2stage_(char *jobz, char *uplo, integer *n, doublereal *a, integer *l
                 doublereal *, integer *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     integer indtau;

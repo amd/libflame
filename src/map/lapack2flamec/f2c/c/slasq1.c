@@ -137,8 +137,10 @@ void slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
                 integer *, integer *),
         slasrt_(char *, integer *, real *, integer *);

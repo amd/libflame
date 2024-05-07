@@ -161,7 +161,7 @@ void dlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublere
     doublereal cfromc;
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum, smlnum;
     /* -- LAPACK auxiliary routine -- */

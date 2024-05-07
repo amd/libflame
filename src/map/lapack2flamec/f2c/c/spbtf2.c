@@ -168,7 +168,7 @@ void spbtf2_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, integ
         sscal_(integer *, real *, real *, integer *);
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

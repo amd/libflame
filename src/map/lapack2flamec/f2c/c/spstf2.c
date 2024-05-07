@@ -177,7 +177,7 @@ void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
     real sstop;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer smaxloc_(real *, integer *);
     extern logical sisnan_(real *);

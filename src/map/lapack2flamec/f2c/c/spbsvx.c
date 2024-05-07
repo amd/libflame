@@ -374,7 +374,7 @@ void spbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, rea
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern real slansb_(char *, char *, integer *, integer *, real *, integer *, real *);

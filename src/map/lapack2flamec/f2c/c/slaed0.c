@@ -229,7 +229,7 @@ void aocl_lapack_slaed0(aocl_int64_t *icompq, aocl_int64_t *qsiz, aocl_int64_t *
                 integer *, integer *, real *, real *, integer *, integer *);
     integer igivcl;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer igivnm, submat;

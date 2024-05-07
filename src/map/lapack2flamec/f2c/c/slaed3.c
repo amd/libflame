@@ -219,8 +219,10 @@ void aocl_lapack_slaed3(aocl_int64_t *k, aocl_int64_t *n, aocl_int64_t *n1, real
         slaed4_(integer *, integer *, real *, real *, real *, real *, real *, integer *);
     extern real slamc3_(real *, real *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
         slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */

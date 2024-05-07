@@ -318,8 +318,10 @@ void chpgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, co
         ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical wantz, alleig, indeig, valeig;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         chpgst_(integer *, char *, integer *, complex *, complex *, integer *),
         chpevx_(char *, char *, char *, integer *, complex *, real *, real *, integer *, integer *,
                 real *, integer *, real *, complex *, integer *, complex *, real *, integer *,

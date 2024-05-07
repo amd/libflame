@@ -135,7 +135,7 @@ void dtptri_(char *uplo, char *diag, integer *n, doublereal *ap, integer *info)
         dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer jclast;
     logical nounit;

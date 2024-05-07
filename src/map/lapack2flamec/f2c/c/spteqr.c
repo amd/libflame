@@ -170,8 +170,10 @@ void spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
     integer nru;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         slaset_(char *, integer *, integer *, real *, real *, real *, integer *),
         sbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, real *,
                 integer *, real *, integer *, real *, integer *, real *, integer *);

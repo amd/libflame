@@ -507,7 +507,7 @@ void cgbrfsx_(char *trans, char *equed, integer *n, integer *kl, integer *ku, in
                 real *, complex *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical colequ, notran, rowequ;
     extern integer ilaprec_(char *);

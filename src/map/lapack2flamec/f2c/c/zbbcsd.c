@@ -390,7 +390,7 @@ void zbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     extern doublereal dlamch_(char *);
     doublereal sigma11, sigma21;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal thresh, tolmul;
     logical lquery;

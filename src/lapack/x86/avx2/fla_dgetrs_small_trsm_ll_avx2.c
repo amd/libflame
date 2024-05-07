@@ -21,20 +21,15 @@
     b_reg[r_1] = _mm256_permute2f128_pd(t_reg[0], t_reg[1], 0x20);     \
     b_reg[r_3] = _mm256_permute2f128_pd(t_reg[0], t_reg[1], 0x31);
 
-#define TRANSPOSE_8x8()                 \
-    TRANSPOSE_4x4(0, 1, 2, 3)           \
-        TRANSPOSE_4x4(4, 5, 6, 7)       \
-            TRANSPOSE_4x4(8, 9, 10, 11) \
-                TRANSPOSE_4x4(12, 13, 14, 15)
+#define TRANSPOSE_8x8()                                                             \
+    TRANSPOSE_4x4(0, 1, 2, 3) TRANSPOSE_4x4(4, 5, 6, 7) TRANSPOSE_4x4(8, 9, 10, 11) \
+        TRANSPOSE_4x4(12, 13, 14, 15)
 
-static const __m256i mask_reg[6] = {{0, 0, 0, 0},
-                                    {-1, 0, 0, 0},
-                                    {-1, -1, 0, 0},
-                                    {-1, -1, -1, 0},
-                                    {-1, -1, -1, -1},
-                                    {-1, -1, -1, -1}};
+static const __m256i mask_reg[6] = {{0, 0, 0, 0},    {-1, 0, 0, 0},    {-1, -1, 0, 0},
+                                    {-1, -1, -1, 0}, {-1, -1, -1, -1}, {-1, -1, -1, -1}};
 
-static void n_8(integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb, integer *ipiv)
+static void n_8(integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb,
+                integer *ipiv)
 {
     __m256d b_reg[16];
     __m256i mask1, mask2;
@@ -60,7 +55,7 @@ static void n_8(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     /*       -_  _  _  _  _  _  _  _ -       */
     /*                                       */
     /*****************************************/
-    for (i = 0; i < (*nrhs); ++i)
+    for(i = 0; i < (*nrhs); ++i)
     {
         j = (int)(i / 4);
         j *= 4;
@@ -70,8 +65,7 @@ static void n_8(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     /* To vectorize 'left' variants of TRSM, B matrix is required to be */
     /* stored in row major format, to convert it to row major format,   */
     /* B matrix is transposed.                                          */
- 
- 
+
     /*****************************************/
     /* After Transpose the registers are     */
     /* changed to following order.           */
@@ -91,14 +85,18 @@ static void n_8(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     /*****************************************/
     TRANSPOSE_8x8()
 
-    // # REGION - ROW Swap
- 
-    /* After tranpose, B matrix is stored in row major format in the b_reg registers*/
-    /* so in order to swap row, we only need to swap registers                      */
-    /* Swap Row [n] with Row [Ipiv[n]]                                              */
-    t_reg[0] = b_reg[0], t_reg[1] = b_reg[8];                        // store row 0(b_reg[0] and b_reg[8]) into temporary registers
-    b_reg[0] = b_reg[ipiv[0] - 1], b_reg[8] = b_reg[ipiv[0] + 7];    // copy row [ipiv[0]] into row 0 registers
-    b_reg[ipiv[0] - 1] = t_reg[0], b_reg[ipiv[0] + 7] = t_reg[1];    // copy row 0(from temp registers) to row [ipiv[0]]
+        // # REGION - ROW Swap
+
+        /* After tranpose, B matrix is stored in row major format in the b_reg registers*/
+        /* so in order to swap row, we only need to swap registers                      */
+        /* Swap Row [n] with Row [Ipiv[n]]                                              */
+        t_reg[0]
+        = b_reg[0],
+        t_reg[1] = b_reg[8]; // store row 0(b_reg[0] and b_reg[8]) into temporary registers
+    b_reg[0] = b_reg[ipiv[0] - 1],
+    b_reg[8] = b_reg[ipiv[0] + 7]; // copy row [ipiv[0]] into row 0 registers
+    b_reg[ipiv[0] - 1] = t_reg[0], b_reg[ipiv[0] + 7]
+                                   = t_reg[1]; // copy row 0(from temp registers) to row [ipiv[0]]
 
     t_reg[0] = b_reg[1], t_reg[1] = b_reg[9];
     b_reg[1] = b_reg[ipiv[1] - 1], b_reg[9] = b_reg[ipiv[1] + 7];
@@ -128,43 +126,50 @@ static void n_8(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     b_reg[7] = b_reg[ipiv[7] - 1], b_reg[15] = b_reg[ipiv[7] + 7];
     b_reg[ipiv[7] - 1] = t_reg[0], b_reg[ipiv[7] + 7] = t_reg[1];
     // # ENDREGION - ROW Swap
- 
+
     // # REGION - TRSM LLNU
- 
+
     // ROW 0 compute is not needed because diagonal is unit.
     // REGION - TRSM row 1 computation
-    t_reg[2] = _mm256_broadcast_sd((double const *)(a + 1)); // t_reg[2] = [ a[1][0], a[1][0], a[1][0], a[1][0] ]
+    t_reg[2] = _mm256_broadcast_sd(
+        (double const *)(a + 1)); // t_reg[2] = [ a[1][0], a[1][0], a[1][0], a[1][0] ]
     t_reg[0] = _mm256_mul_pd(b_reg[0], t_reg[2]); // t_reg[0] = b_reg[0] * a[1][0]
-    t_reg[1] = _mm256_mul_pd(b_reg[8], t_reg[2]); // t_reg[1] = b_reg[8] * a[1][0]  // row0 * a[1][0]
+    t_reg[1]
+        = _mm256_mul_pd(b_reg[8], t_reg[2]); // t_reg[1] = b_reg[8] * a[1][0]  // row0 * a[1][0]
     b_reg[1] = _mm256_sub_pd(b_reg[1], t_reg[0]); // b_reg[1] -= t_teg[0]
     b_reg[9] = _mm256_sub_pd(b_reg[9], t_reg[1]); // b_reg[9] -= t_teg[1]   //row1 -= row0 * a[1][0]
     // ENDREGION - TRSM row 1 computation
- 
+
     // REGION - TRSM row 2 computation
     t_reg[2] = _mm256_broadcast_sd((double const *)(a + 2));
     t_reg[0] = _mm256_mul_pd(b_reg[0], t_reg[2]);
     t_reg[1] = _mm256_mul_pd(b_reg[8], t_reg[2]); // t_reg[0 to 1] = row0 * a[2][0]
     t_reg[2] = _mm256_broadcast_sd((double const *)(a + 2 + (*lda)));
     t_reg[0] = _mm256_fmadd_pd(b_reg[1], t_reg[2], t_reg[0]);
-    t_reg[1] = _mm256_fmadd_pd(b_reg[9], t_reg[2], t_reg[1]); // t_reg[0 to 1] = row0 * a[2][0] + row1 * a[2][1]
+    t_reg[1] = _mm256_fmadd_pd(b_reg[9], t_reg[2],
+                               t_reg[1]); // t_reg[0 to 1] = row0 * a[2][0] + row1 * a[2][1]
     b_reg[2] = _mm256_sub_pd(b_reg[2], t_reg[0]);
     b_reg[10] = _mm256_sub_pd(b_reg[10], t_reg[1]); // row2 -= row0 * a[2][0] + row1 * a[2][1]
     // ENDREGION - TRSM row 2 computation
- 
+
     // REGION - TRSM row 3 computation
     t_reg[2] = _mm256_broadcast_sd((double const *)(a + 3));
     t_reg[0] = _mm256_mul_pd(b_reg[0], t_reg[2]);
     t_reg[1] = _mm256_mul_pd(b_reg[8], t_reg[2]); // t_reg[0 to 1] = row0 * a[3][0]
     t_reg[2] = _mm256_broadcast_sd((double const *)(a + 3 + (*lda)));
     t_reg[0] = _mm256_fmadd_pd(b_reg[1], t_reg[2], t_reg[0]);
-    t_reg[1] = _mm256_fmadd_pd(b_reg[9], t_reg[2], t_reg[1]); // t_reg[0 to 1] = row0 * a[3][0] + row1 * a[3][1]
+    t_reg[1] = _mm256_fmadd_pd(b_reg[9], t_reg[2],
+                               t_reg[1]); // t_reg[0 to 1] = row0 * a[3][0] + row1 * a[3][1]
     t_reg[2] = _mm256_broadcast_sd((double const *)(a + 3 + (2 * (*lda))));
     t_reg[0] = _mm256_fmadd_pd(b_reg[2], t_reg[2], t_reg[0]);
-    t_reg[1] = _mm256_fmadd_pd(b_reg[10], t_reg[2], t_reg[1]); // t_reg[0 to 1] = row0 * a[3][0] + row1 * a[3][1] + row2 * a[3][2]
+    t_reg[1] = _mm256_fmadd_pd(
+        b_reg[10], t_reg[2],
+        t_reg[1]); // t_reg[0 to 1] = row0 * a[3][0] + row1 * a[3][1] + row2 * a[3][2]
     b_reg[3] = _mm256_sub_pd(b_reg[3], t_reg[0]);
-    b_reg[11] = _mm256_sub_pd(b_reg[11], t_reg[1]); // row3 -= row0 * a[3][0] + row1 * a[3][1] + row2 * a[3][2]
+    b_reg[11] = _mm256_sub_pd(b_reg[11],
+                              t_reg[1]); // row3 -= row0 * a[3][0] + row1 * a[3][1] + row2 * a[3][2]
     // ENDREGION - TRSM row 3 computation
- 
+
     // REGION - TRSM row 4 computation
     t_reg[2] = _mm256_broadcast_sd((double const *)(a + 4));
     t_reg[0] = _mm256_mul_pd(b_reg[0], t_reg[2]);
@@ -179,9 +184,9 @@ static void n_8(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     t_reg[0] = _mm256_fmadd_pd(b_reg[3], t_reg[2], t_reg[0]);
     t_reg[1] = _mm256_fmadd_pd(b_reg[11], t_reg[2], t_reg[1]); // t_reg[0 to 1] += row3 * a[4][3]
     b_reg[4] = _mm256_sub_pd(b_reg[4], t_reg[0]);
-    b_reg[12] = _mm256_sub_pd(b_reg[12], t_reg[1]); //row4 -= t_reg [0 to 1]
+    b_reg[12] = _mm256_sub_pd(b_reg[12], t_reg[1]); // row4 -= t_reg [0 to 1]
     // ENDREGION - TRSM row 4 computation
- 
+
     // REGION - TRSM row 5 computation
 
     t_reg[2] = _mm256_broadcast_sd((double const *)(a + 5));
@@ -202,7 +207,7 @@ static void n_8(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     b_reg[5] = _mm256_sub_pd(b_reg[5], t_reg[0]);
     b_reg[13] = _mm256_sub_pd(b_reg[13], t_reg[1]);
     // ENDREGION - TRSM row 5 computation
- 
+
     // REGION - TRSM row 6 computation
     t_reg[2] = _mm256_broadcast_sd((double const *)(a + 6));
     t_reg[0] = _mm256_mul_pd(b_reg[0], t_reg[2]);
@@ -225,7 +230,7 @@ static void n_8(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     b_reg[6] = _mm256_sub_pd(b_reg[6], t_reg[0]);
     b_reg[14] = _mm256_sub_pd(b_reg[14], t_reg[1]);
     // ENDREGION - TRSM row 6 computation
- 
+
     // REGION - TRSM row 7 computation
     t_reg[2] = _mm256_broadcast_sd((double const *)(a + 7));
     t_reg[0] = _mm256_mul_pd(b_reg[0], t_reg[2]);
@@ -252,17 +257,17 @@ static void n_8(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     b_reg[15] = _mm256_sub_pd(b_reg[15], t_reg[1]);
 
     // ENDREGION - TRSM row 7 computation
- 
+
     // # ENDREGION - TRSM LLNU
- 
+
     // # REGION - TRSM LUNN
- 
+
     // REGION - TRSM row 7 computation
     t_reg[2] = _mm256_broadcast_sd((double const *)(a + 7 + (7 * (*lda))));
     b_reg[7] = _mm256_div_pd(b_reg[7], t_reg[2]);
     b_reg[15] = _mm256_div_pd(b_reg[15], t_reg[2]); // row7 /= a[7][7]
     // ENDREGION - TRSM row 7 computation
- 
+
     // REGION - TRSM row 6 computation
     t_reg[2] = _mm256_broadcast_sd((double const *)(a + 6 + (7 * (*lda))));
     t_reg[0] = _mm256_mul_pd(b_reg[7], t_reg[2]);
@@ -273,7 +278,7 @@ static void n_8(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     b_reg[14] = _mm256_sub_pd(b_reg[14], t_reg[1]); // row6 -= t_reg[0 to 1]
     b_reg[14] = _mm256_div_pd(b_reg[14], t_reg[2]); // row6 /= a[6][6]
     // ENDREGION - TRSM row 6 computation
- 
+
     // REGION - TRSM row 5 computation
     t_reg[2] = _mm256_broadcast_sd((double const *)(a + 5 + (7 * (*lda))));
     t_reg[0] = _mm256_mul_pd(b_reg[7], t_reg[2]);
@@ -287,7 +292,7 @@ static void n_8(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     b_reg[13] = _mm256_sub_pd(b_reg[13], t_reg[1]); // row5 -= t_reg[0 to 1]
     b_reg[13] = _mm256_div_pd(b_reg[13], t_reg[2]); // row5 /= a[5][5]
     // ENDREGION - TRSM row 5 computation
- 
+
     // REGION - TRSM row 4 computation
     t_reg[2] = _mm256_broadcast_sd((double const *)(a + 4 + (7 * (*lda))));
     t_reg[0] = _mm256_mul_pd(b_reg[7], t_reg[2]);
@@ -304,7 +309,7 @@ static void n_8(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     b_reg[12] = _mm256_sub_pd(b_reg[12], t_reg[1]); // row4 -= t_reg[0 to 1]
     b_reg[12] = _mm256_div_pd(b_reg[12], t_reg[2]); // row4 /= a[4][4]
     // ENDREGION - TRSM row 4 computation
- 
+
     // REGION - TRSM row 3 computation
     t_reg[2] = _mm256_broadcast_sd((double const *)(a + 3 + (7 * (*lda))));
     t_reg[0] = _mm256_mul_pd(b_reg[7], t_reg[2]);
@@ -324,7 +329,7 @@ static void n_8(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     b_reg[11] = _mm256_sub_pd(b_reg[11], t_reg[1]);
     b_reg[11] = _mm256_div_pd(b_reg[11], t_reg[2]);
     // ENDREGION - TRSM row 3 computation
- 
+
     // REGION - TRSM row 2 computation
     t_reg[2] = _mm256_broadcast_sd((double const *)(a + 2 + (7 * (*lda))));
     t_reg[0] = _mm256_mul_pd(b_reg[7], t_reg[2]);
@@ -347,7 +352,7 @@ static void n_8(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     b_reg[10] = _mm256_sub_pd(b_reg[10], t_reg[1]);
     b_reg[10] = _mm256_div_pd(b_reg[10], t_reg[2]);
     // ENDREGION - TRSM row 2 computation
- 
+
     // REGION - TRSM row 1 computation
     t_reg[2] = _mm256_broadcast_sd((double const *)(a + 1 + (7 * (*lda))));
     t_reg[0] = _mm256_mul_pd(b_reg[7], t_reg[2]);
@@ -373,7 +378,7 @@ static void n_8(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     b_reg[9] = _mm256_sub_pd(b_reg[9], t_reg[1]);
     b_reg[9] = _mm256_div_pd(b_reg[9], t_reg[2]);
     // ENDREGION - TRSM row 1 computation
- 
+
     // REGION - TRSM row 0 computation
     t_reg[2] = _mm256_broadcast_sd((double const *)(a + (7 * (*lda))));
     t_reg[0] = _mm256_mul_pd(b_reg[7], t_reg[2]);
@@ -403,7 +408,7 @@ static void n_8(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     b_reg[8] = _mm256_div_pd(b_reg[8], t_reg[2]);
     // ENDREGION - TRSM row 0 computation
     // # ENDREGION - TRSM LUNN
- 
+
     // transpose B matrix again to convert it to column major format
     /*****************************************/
     /*Order of registers after transpose     */
@@ -421,8 +426,7 @@ static void n_8(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     /*       -_  _  _  _  _  _  _  _ -       */
     /*                                       */
     /*****************************************/
-    TRANSPOSE_8x8()
-    for (i = 0; i < (*nrhs); ++i)
+    TRANSPOSE_8x8() for(i = 0; i < (*nrhs); ++i)
     {
         j = (int)(i / 4);
         j *= 4;
@@ -431,7 +435,8 @@ static void n_8(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     }
 }
 
-static void n_7(integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb, integer *ipiv)
+static void n_7(integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb,
+                integer *ipiv)
 {
     __m256d b_reg[16];
     __m256i mask1, mask2;
@@ -439,7 +444,7 @@ static void n_7(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     mask1 = mask_reg[4];
     mask2 = mask_reg[3];
     int i, j;
-    for (i = 0; i < (*nrhs); ++i)
+    for(i = 0; i < (*nrhs); ++i)
     {
         j = (int)(i / 4);
         j *= 4;
@@ -447,11 +452,12 @@ static void n_7(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
         b_reg[i + 4 + j] = _mm256_maskload_pd((void const *)(b + (i * (*ldb)) + 4), mask2);
     }
     TRANSPOSE_8x8()
-    /* After tranpose, B matrix is stored in row major format in the b_reg registers*/
-    /* so in order to swap row, we only need to swap registers                      */
-    /* Swap Row [n] with Row [Ipiv[n]]                                              */
-    t_reg[0] = b_reg[0],
-    t_reg[1] = b_reg[8];
+        /* After tranpose, B matrix is stored in row major format in the b_reg registers*/
+        /* so in order to swap row, we only need to swap registers                      */
+        /* Swap Row [n] with Row [Ipiv[n]]                                              */
+        t_reg[0]
+        = b_reg[0],
+        t_reg[1] = b_reg[8];
     b_reg[0] = b_reg[ipiv[0] - 1], b_reg[8] = b_reg[ipiv[0] + 7];
     b_reg[ipiv[0] - 1] = t_reg[0], b_reg[ipiv[0] + 7] = t_reg[1];
 
@@ -663,7 +669,7 @@ static void n_7(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     b_reg[8] = _mm256_sub_pd(b_reg[8], t_reg[1]);
     b_reg[8] = _mm256_div_pd(b_reg[8], t_reg[2]);
 
-    TRANSPOSE_8x8() for (i = 0; i < (*nrhs); ++i)
+    TRANSPOSE_8x8() for(i = 0; i < (*nrhs); ++i)
     {
         j = (int)(i / 4);
         j *= 4;
@@ -672,7 +678,8 @@ static void n_7(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     }
 }
 
-static void n_6(integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb, integer *ipiv)
+static void n_6(integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb,
+                integer *ipiv)
 {
     __m256d b_reg[16];
     __m256i mask1, mask2;
@@ -680,7 +687,7 @@ static void n_6(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     mask1 = mask_reg[4];
     mask2 = mask_reg[2];
     int i, j;
-    for (i = 0; i < (*nrhs); ++i)
+    for(i = 0; i < (*nrhs); ++i)
     {
         j = (int)(i / 4);
         j *= 4;
@@ -688,11 +695,12 @@ static void n_6(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
         b_reg[i + 4 + j] = _mm256_maskload_pd((void const *)(b + (i * (*ldb)) + 4), mask2);
     }
     TRANSPOSE_8x8()
-    /* After tranpose, B matrix is stored in row major format in the b_reg registers*/
-    /* so in order to swap row, we only need to swap registers                      */
-    /* Swap Row [n] with Row [Ipiv[n]]                                              */
-    t_reg[0] = b_reg[0],
-    t_reg[1] = b_reg[8];
+        /* After tranpose, B matrix is stored in row major format in the b_reg registers*/
+        /* so in order to swap row, we only need to swap registers                      */
+        /* Swap Row [n] with Row [Ipiv[n]]                                              */
+        t_reg[0]
+        = b_reg[0],
+        t_reg[1] = b_reg[8];
     b_reg[0] = b_reg[ipiv[0] - 1], b_reg[8] = b_reg[ipiv[0] + 7];
     b_reg[ipiv[0] - 1] = t_reg[0], b_reg[ipiv[0] + 7] = t_reg[1];
 
@@ -855,7 +863,7 @@ static void n_6(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     b_reg[8] = _mm256_sub_pd(b_reg[8], t_reg[1]);
     b_reg[8] = _mm256_div_pd(b_reg[8], t_reg[2]);
 
-    TRANSPOSE_8x8() for (i = 0; i < (*nrhs); ++i)
+    TRANSPOSE_8x8() for(i = 0; i < (*nrhs); ++i)
     {
         j = (int)(i / 4);
         j *= 4;
@@ -864,7 +872,8 @@ static void n_6(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     }
 }
 
-static void n_5(integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb, integer *ipiv)
+static void n_5(integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb,
+                integer *ipiv)
 {
     __m256d b_reg[16];
     __m256i mask1, mask2;
@@ -872,7 +881,7 @@ static void n_5(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     mask1 = mask_reg[4];
     mask2 = mask_reg[1];
     int i, j;
-    for (i = 0; i < (*nrhs); ++i)
+    for(i = 0; i < (*nrhs); ++i)
     {
         j = (int)(i / 4);
         j *= 4;
@@ -891,11 +900,12 @@ static void n_5(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     b_reg[8] = _mm256_maskload_pd((void const *)(b + (4 * (*ldb)) + 0), mask1);
     b_reg[12] = _mm256_maskload_pd((void const *)(b + (4 * (*ldb)) + 4), mask2);
     TRANSPOSE_8x8()
-    /* After tranpose, B matrix is stored in row major format in the b_reg registers*/
-    /* so in order to swap row, we only need to swap registers                      */
-    /* Swap Row [n] with Row [Ipiv[n]]                                              */
-    t_reg[0] = b_reg[0],
-    t_reg[1] = b_reg[8];
+        /* After tranpose, B matrix is stored in row major format in the b_reg registers*/
+        /* so in order to swap row, we only need to swap registers                      */
+        /* Swap Row [n] with Row [Ipiv[n]]                                              */
+        t_reg[0]
+        = b_reg[0],
+        t_reg[1] = b_reg[8];
     b_reg[0] = b_reg[ipiv[0] - 1], b_reg[8] = b_reg[ipiv[0] + 7];
     b_reg[ipiv[0] - 1] = t_reg[0], b_reg[ipiv[0] + 7] = t_reg[1];
 
@@ -1015,7 +1025,7 @@ static void n_5(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     b_reg[8] = _mm256_sub_pd(b_reg[8], t_reg[1]);
     b_reg[8] = _mm256_div_pd(b_reg[8], t_reg[2]);
 
-    TRANSPOSE_8x8() for (i = 0; i < (*nrhs); ++i)
+    TRANSPOSE_8x8() for(i = 0; i < (*nrhs); ++i)
     {
         j = (int)(i / 4);
         j *= 4;
@@ -1024,22 +1034,24 @@ static void n_5(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     }
 }
 
-static void n_4(integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb, integer *ipiv)
+static void n_4(integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb,
+                integer *ipiv)
 {
     int i;
     __m256d b_reg[4];
     __m256i mask1;
     __m256d t_reg[4];
     mask1 = mask_reg[4];
-    for (i = 0; i < (*nrhs); ++i)
+    for(i = 0; i < (*nrhs); ++i)
     {
         b_reg[i] = _mm256_maskload_pd((void const *)(b + (i * (*ldb))), mask1);
     }
     TRANSPOSE_4x4(0, 1, 2, 3)
-    /* After tranpose, B matrix is stored in row major format in the b_reg registers*/
-    /* so in order to swap row, we only need to swap registers                      */
-    /* Swap Row [n] with Row [Ipiv[n]]                                              */
-    t_reg[0] = b_reg[0];
+        /* After tranpose, B matrix is stored in row major format in the b_reg registers*/
+        /* so in order to swap row, we only need to swap registers                      */
+        /* Swap Row [n] with Row [Ipiv[n]]                                              */
+        t_reg[0]
+        = b_reg[0];
     b_reg[0] = b_reg[ipiv[0] - 1];
     b_reg[ipiv[0] - 1] = t_reg[0];
     t_reg[1] = b_reg[1];
@@ -1096,28 +1108,30 @@ static void n_4(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     t_reg[0] = _mm256_fmadd_pd(b_reg[1], t_reg[2], t_reg[0]);
     b_reg[0] = _mm256_sub_pd(b_reg[0], t_reg[0]);
     b_reg[0] = _mm256_div_pd(b_reg[0], t_reg[3]);
-    TRANSPOSE_4x4(0, 1, 2, 3) for (i = 0; i < (*nrhs); ++i)
+    TRANSPOSE_4x4(0, 1, 2, 3) for(i = 0; i < (*nrhs); ++i)
     {
         _mm256_maskstore_pd((b + (i * (*ldb))), mask1, b_reg[i]);
     }
 }
 
-static void n_3(integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb, integer *ipiv)
+static void n_3(integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb,
+                integer *ipiv)
 {
     int i;
     __m256d b_reg[4];
     __m256i mask1;
     __m256d t_reg[4];
     mask1 = mask_reg[3];
-    for (i = 0; i < (*nrhs); ++i)
+    for(i = 0; i < (*nrhs); ++i)
     {
         b_reg[i] = _mm256_maskload_pd((void const *)(b + (i * (*ldb))), mask1);
     }
     TRANSPOSE_4x4(0, 1, 2, 3)
-    /* After tranpose, B matrix is stored in row major format in the b_reg registers*/
-    /* so in order to swap row, we only need to swap registers                      */
-    /* Swap Row [n] with Row [Ipiv[n]]                                              */
-    t_reg[0] = b_reg[0];
+        /* After tranpose, B matrix is stored in row major format in the b_reg registers*/
+        /* so in order to swap row, we only need to swap registers                      */
+        /* Swap Row [n] with Row [Ipiv[n]]                                              */
+        t_reg[0]
+        = b_reg[0];
     b_reg[0] = b_reg[ipiv[0] - 1];
     b_reg[ipiv[0] - 1] = t_reg[0];
     t_reg[1] = b_reg[1];
@@ -1153,17 +1167,20 @@ static void n_3(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     t_reg[2] = _mm256_broadcast_sd((double const *)(a + 0 + (0 * (*lda))));
     b_reg[0] = _mm256_sub_pd(b_reg[0], t_reg[0]);
     b_reg[0] = _mm256_div_pd(b_reg[0], t_reg[2]);
-    TRANSPOSE_4x4(0, 1, 2, 3) for (i = 0; i < (*nrhs); ++i)
+    TRANSPOSE_4x4(0, 1, 2, 3) for(i = 0; i < (*nrhs); ++i)
     {
         _mm256_maskstore_pd((b + (i * (*ldb))), mask1, b_reg[i]);
     }
 }
 
 /* Small DGETRS path (NOTRANS) should only be used for size between 3 to 8 and NRHS <= N */
-int fla_dgetrs_small_trsm_ll_avx2(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipiv, doublereal *b, integer *ldb, integer *info)
+int fla_dgetrs_small_trsm_ll_avx2(char *trans, integer *n, integer *nrhs, doublereal *a,
+                                  integer *lda, integer *ipiv, doublereal *b, integer *ldb,
+                                  integer *info)
 {
     // Array of function pointers
-    void (*fp[6]) (integer *, integer *, doublereal *, integer *,doublereal *, integer *, integer *) = {n_3, n_4, n_5, n_6, n_7, n_8};
+    void (*fp[6])(integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *)
+        = {n_3, n_4, n_5, n_6, n_7, n_8};
     fp[*n - 3](n, nrhs, a, lda, b, ldb, ipiv);
     return 0;
 }

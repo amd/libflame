@@ -1,6 +1,6 @@
 /******************************************************************************
-* Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
-*******************************************************************************/
+ * Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 
 /*! @file fla_dgesvd_small6_avx2_.c
  *  @brief DGESVD Small path (path 6)
@@ -20,15 +20,10 @@ extern void drot_(integer *, doublereal *, integer *, doublereal *,
 /* SVD for small tall-matrices with QR factorization
  * already computed
  */
-void fla_dgesvd_small6_avx2(integer wntus, integer wntvs,
-                            integer *m, integer *n,
-                            doublereal *a, integer *lda,
-                            doublereal *qr, integer *ldqr,
-                            doublereal *s,
-                            doublereal *u, integer *ldu,
-                            doublereal *vt, integer *ldvt,
-                            doublereal *work,
-                            integer *info)
+void fla_dgesvd_small6_avx2(integer wntus, integer wntvs, integer *m, integer *n, doublereal *a,
+                            integer *lda, doublereal *qr, integer *ldqr, doublereal *s,
+                            doublereal *u, integer *ldu, doublereal *vt, integer *ldvt,
+                            doublereal *work, integer *info)
 {
     /* Declare and init local variables */
     FLA_GEQRF_INIT_DSMALL();
@@ -98,8 +93,8 @@ void fla_dgesvd_small6_avx2(integer wntus, integer wntvs,
     if(wntvs)
     {
         ncvt = *n;
-        for (i = 1; i <= *n; i++)
-            for (j = 1; j <= *n; j++)
+        for(i = 1; i <= *n; i++)
+            for(j = 1; j <= *n; j++)
                 vt[i + j * *ldvt] = 0.;
         FLA_LARF_VTAPPLY_DSMALL_SQR(n, au, ldau, taup, vt, ldvt);
     }
@@ -140,10 +135,8 @@ void fla_dgesvd_small6_avx2(integer wntus, integer wntvs,
     }
     else
     {
-        lapack_dbdsqr_small("U", n, &ncvt, &nru, &s[1], &e[1],
-                            &vt[1 + *ldvt], ldvt,
-                            &u[1 + *ldu], ldu,
-                            info);
+        lapack_dbdsqr_small("U", n, &ncvt, &nru, &s[1], &e[1], &vt[1 + *ldvt], ldvt, &u[1 + *ldu],
+                            ldu, info);
     }
 
     /* Compute U by updating U' by applying from the left the Q from QR */
@@ -152,20 +145,20 @@ void fla_dgesvd_small6_avx2(integer wntus, integer wntvs,
         tau = &work[itau - 1];
         /* First Iteration corresponding to HH(n) */
         i = *n;
-        for (j = 1; j <= *n; j++)
+        for(j = 1; j <= *n; j++)
         {
             /* - u[i][j] * tau[i] */
-            d__1 = - u[i + j * *ldu] * tau[i];
+            d__1 = -u[i + j * *ldu] * tau[i];
 
             /* u[n+1:m, j] = d__1 * u[n+1:m, j] */
-            for (k = *n + 1; k <= *m; k++)
+            for(k = *n + 1; k <= *m; k++)
             {
                 u[k + j * *ldu] = d__1 * qr[k + *n * *ldqr];
             }
         }
         /* u[m, 1:m] = u[m, 1:m] * (1 - tau) */
         d__1 = 1 - tau[i];
-        for (j = 1; j <= *n; j++)
+        for(j = 1; j <= *n; j++)
         {
             u[*n + j * *ldu] = u[*n + j * *ldu] * d__1;
         }
@@ -173,7 +166,7 @@ void fla_dgesvd_small6_avx2(integer wntus, integer wntvs,
         /* Second Iteration onwards */
         beta = 0;
         xnorm = 1.;
-        for (i = *n - 1; i >= 1; i--)
+        for(i = *n - 1; i >= 1; i--)
         {
             /* incrementing n by i to compensate for decrement
              * by i done in FLA_LARF_APPLY_DLARGE_COL

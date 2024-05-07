@@ -18,4 +18,3 @@ int fla_dscal_ix1_avx512(integer *n, doublereal *da, doublereal *dx, integer *in
 doublereal fla_get_max_abs_element_vector_avx512(integer m, doublereal *a, integer a_dim);
 
 #endif
-

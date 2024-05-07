@@ -1,6 +1,6 @@
 /******************************************************************************
-* Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
-*******************************************************************************/
+ * Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 
 #include "FLAME.h"
 #include "fla_lapack_avx2_kernels.h"
@@ -13,10 +13,8 @@
  * All the computations are done inline without using
  * corresponding BLAS APIs to reduce function overheads.
  */
-integer fla_dgetrf_small_avx512( integer *m, integer *n,
-                                   doublereal *a, integer *lda,
-                                   integer *ipiv,
-                                   integer *info)
+integer fla_dgetrf_small_avx512(integer *m, integer *n, doublereal *a, integer *lda, integer *ipiv,
+                                integer *info)
 {
     integer mi, ni;
     integer i, j, i_1, lda_t, b_off, y_off;
@@ -28,7 +26,7 @@ integer fla_dgetrf_small_avx512( integer *m, integer *n,
     integer min_m_n = fla_min(*m, *n);
     lda_t = *lda;
 
-    for( i = 0; i < min_m_n; i++ )
+    for(i = 0; i < min_m_n; i++)
     {
         mi = *m - i;
         ni = *n - i;
@@ -38,11 +36,11 @@ integer fla_dgetrf_small_avx512( integer *m, integer *n,
         /* Find the pivot element */
         max_val = 0;
         p_idx = i;
-        for( i_1 = 0; i_1 < mi; i_1++ )
+        for(i_1 = 0; i_1 < mi; i_1++)
         {
             t_val = acur[i_1];
-            t_val = ( t_val < 0.0 ) ? -t_val : t_val;
-            if( t_val > max_val )
+            t_val = (t_val < 0.0) ? -t_val : t_val;
+            if(t_val > max_val)
             {
                 max_val = t_val;
                 p_idx = i + i_1;
@@ -54,12 +52,12 @@ integer fla_dgetrf_small_avx512( integer *m, integer *n,
         ipiv[i] = p_idx + 1;
 
         /* Swap rows and calculate a column of L */
-        if( max_val != 0.0 )
+        if(max_val != 0.0)
         {
             /* Swap entire rows */
-            if( p_idx != i)
+            if(p_idx != i)
             {
-                for( i_1 = 0; i_1 < *n; i_1++ )
+                for(i_1 = 0; i_1 < *n; i_1++)
                 {
                     t_val = apiv[i_1 * lda_t];
                     apiv[i_1 * *lda] = asrc[i_1 * lda_t];
@@ -71,31 +69,31 @@ integer fla_dgetrf_small_avx512( integer *m, integer *n,
             p_val = *acur;
             p_val = 1 / p_val;
             p_val4 = _mm512_set1_pd(p_val);
-            for( i_1 = 1; i_1 < mi-7; i_1+=8 )
+            for(i_1 = 1; i_1 < mi - 7; i_1 += 8)
             {
                 tempx = _mm512_mul_pd(_mm512_loadu_pd(&acur[i_1]), p_val4);
                 _mm512_storeu_pd(&acur[i_1], tempx);
 
-                for( j = 1; j < ni-7; j+=8 )
+                for(j = 1; j < ni - 7; j += 8)
                 {
                     b_off = j * lda_t;
                     y_off = i_1 + j * lda_t;
                     tempb[0] = _mm512_set1_pd(acur[b_off]);
-                    tempb[1] = _mm512_set1_pd(acur[b_off + 1*lda_t]);
-                    tempb[2] = _mm512_set1_pd(acur[b_off + 2*lda_t]);
-                    tempb[3] = _mm512_set1_pd(acur[b_off + 3*lda_t]);
-                    tempb[4] = _mm512_set1_pd(acur[b_off + 4*lda_t]);
-                    tempb[5] = _mm512_set1_pd(acur[b_off + 5*lda_t]);
-                    tempb[6] = _mm512_set1_pd(acur[b_off + 6*lda_t]);
-                    tempb[7] = _mm512_set1_pd(acur[b_off + 7*lda_t]);
+                    tempb[1] = _mm512_set1_pd(acur[b_off + 1 * lda_t]);
+                    tempb[2] = _mm512_set1_pd(acur[b_off + 2 * lda_t]);
+                    tempb[3] = _mm512_set1_pd(acur[b_off + 3 * lda_t]);
+                    tempb[4] = _mm512_set1_pd(acur[b_off + 4 * lda_t]);
+                    tempb[5] = _mm512_set1_pd(acur[b_off + 5 * lda_t]);
+                    tempb[6] = _mm512_set1_pd(acur[b_off + 6 * lda_t]);
+                    tempb[7] = _mm512_set1_pd(acur[b_off + 7 * lda_t]);
                     tempY[0] = _mm512_loadu_pd(&acur[y_off]);
-                    tempY[1] = _mm512_loadu_pd(&acur[y_off + 1*lda_t]);
-                    tempY[2] = _mm512_loadu_pd(&acur[y_off + 2*lda_t]);
-                    tempY[3] = _mm512_loadu_pd(&acur[y_off + 3*lda_t]);
-                    tempY[4] = _mm512_loadu_pd(&acur[y_off + 4*lda_t]);
-                    tempY[5] = _mm512_loadu_pd(&acur[y_off + 5*lda_t]);
-                    tempY[6] = _mm512_loadu_pd(&acur[y_off + 6*lda_t]);
-                    tempY[7] = _mm512_loadu_pd(&acur[y_off + 7*lda_t]);
+                    tempY[1] = _mm512_loadu_pd(&acur[y_off + 1 * lda_t]);
+                    tempY[2] = _mm512_loadu_pd(&acur[y_off + 2 * lda_t]);
+                    tempY[3] = _mm512_loadu_pd(&acur[y_off + 3 * lda_t]);
+                    tempY[4] = _mm512_loadu_pd(&acur[y_off + 4 * lda_t]);
+                    tempY[5] = _mm512_loadu_pd(&acur[y_off + 5 * lda_t]);
+                    tempY[6] = _mm512_loadu_pd(&acur[y_off + 6 * lda_t]);
+                    tempY[7] = _mm512_loadu_pd(&acur[y_off + 7 * lda_t]);
                     /* Y := Y - b * x */
                     result[0] = _mm512_fnmadd_pd(tempb[0], tempx, tempY[0]);
                     result[1] = _mm512_fnmadd_pd(tempb[1], tempx, tempY[1]);
@@ -115,7 +113,7 @@ integer fla_dgetrf_small_avx512( integer *m, integer *n,
                     _mm512_storeu_pd(&acur[y_off + 7 * lda_t], result[7]);
                 }
                 /* remining inner loop updation*/
-                for (; j < ni; j++)
+                for(; j < ni; j++)
                 {
                     b_off = j * lda_t;
                     y_off = i_1 + j * lda_t;
@@ -130,7 +128,7 @@ integer fla_dgetrf_small_avx512( integer *m, integer *n,
         }
         else
         {
-            *info = ( *info == 0 ) ? p_idx + 1 : *info;
+            *info = (*info == 0) ? p_idx + 1 : *info;
         }
     }
     return *info;

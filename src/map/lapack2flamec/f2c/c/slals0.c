@@ -296,7 +296,7 @@ void slals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
         scopy_(integer *, real *, integer *, real *, integer *);
     extern real slamc3_(real *, real *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real dsigjp;
     extern /* Subroutine */

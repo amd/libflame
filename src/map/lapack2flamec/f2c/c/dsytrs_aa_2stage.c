@@ -158,8 +158,10 @@ void dsytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublereal *a, int
                integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dgbtrs_(char *, integer *, integer *, integer *, integer *, doublereal *, integer *,
                 integer *, doublereal *, integer *, integer *),
         dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);

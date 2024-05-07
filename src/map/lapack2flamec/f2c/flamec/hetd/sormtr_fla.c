@@ -192,7 +192,7 @@ void sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, rea
     integer iinfo;
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */

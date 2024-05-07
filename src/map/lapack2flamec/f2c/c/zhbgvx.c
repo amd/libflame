@@ -332,7 +332,7 @@ void zhbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     integer indibl;
     logical valeig;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer indiwk, indisp;
     extern /* Subroutine */

@@ -166,8 +166,10 @@ void zunbdb5_(integer *m1, integer *m2, integer *n, doublecomplex *x1, integer *
     integer i__, j, childinfo;
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zunbdb6_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
                  integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
                  integer *, integer *);

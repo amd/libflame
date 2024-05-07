@@ -193,7 +193,7 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
     extern doublereal dlamch_(char *);
     doublereal scaloc;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *,
                               doublereal *);

@@ -164,7 +164,7 @@ void csytrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv,
         ccopy_(integer *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwkopt;

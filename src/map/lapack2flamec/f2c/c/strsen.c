@@ -360,7 +360,7 @@ void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integ
         slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical wantbh;
     extern /* Subroutine */

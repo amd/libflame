@@ -267,7 +267,7 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical notran;

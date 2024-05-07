@@ -230,7 +230,7 @@ void ctfttp_(char *transr, char *uplo, integer *n, complex *arf, complex *ap, in
     extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     /* -- LAPACK computational routine (version 3.4.2) -- */

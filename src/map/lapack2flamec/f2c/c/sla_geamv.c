@@ -186,7 +186,7 @@ void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, in
     real safe1;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

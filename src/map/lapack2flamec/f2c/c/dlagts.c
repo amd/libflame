@@ -172,7 +172,7 @@ void dlagts_(integer *job, integer *n, doublereal *a, doublereal *b, doublereal 
     doublereal ak, eps, temp, pert, absak, sfmin;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */

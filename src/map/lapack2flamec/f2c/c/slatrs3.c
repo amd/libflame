@@ -254,7 +254,7 @@ void slatrs3_(char *uplo, char *trans, char *diag, char *normin, integer *n, int
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     real scamin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;

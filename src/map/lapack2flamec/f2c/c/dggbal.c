@@ -223,7 +223,7 @@ void dggbal_(char *job, integer *n, doublereal *a, integer *lda, doublereal *b, 
     doublereal pgamma;
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lsfmin, lsfmax;
     /* -- LAPACK computational routine (version 3.7.0) -- */

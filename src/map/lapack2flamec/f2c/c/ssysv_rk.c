@@ -245,7 +245,7 @@ void ssysv_rk_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, rea
                    integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
     logical lquery;

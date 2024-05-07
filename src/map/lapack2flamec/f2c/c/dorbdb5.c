@@ -165,8 +165,10 @@ void dorbdb5_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
     integer i__, j, childinfo;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dorbdb6_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *,
                  doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
                  integer *);

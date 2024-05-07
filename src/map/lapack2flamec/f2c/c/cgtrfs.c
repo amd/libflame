@@ -255,7 +255,7 @@ void cgtrfs_(char *trans, integer *n, integer *nrhs, complex *dl, complex *d__, 
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     char transn[1];

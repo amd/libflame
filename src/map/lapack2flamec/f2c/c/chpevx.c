@@ -291,7 +291,7 @@ void chpevx_(char *jobz, char *range, char *uplo, integer *n, complex *ap, real 
         csscal_(integer *, real *, complex *, integer *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real abstll, bignum;
     integer indiwk, indisp, indtau;

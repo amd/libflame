@@ -195,7 +195,7 @@ void dlaorhr_col_getrfnp2_(integer *m, integer *n, doublereal *a, integer *lda, 
                integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

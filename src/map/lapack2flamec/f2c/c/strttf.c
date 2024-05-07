@@ -200,7 +200,7 @@ void strttf_(char *transr, char *uplo, integer *n, real *a, integer *lda, real *
     extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     /* -- LAPACK computational routine (version 3.4.2) -- */

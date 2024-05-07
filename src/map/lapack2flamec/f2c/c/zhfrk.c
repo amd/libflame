@@ -188,7 +188,7 @@ void zhfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, doubl
     logical lower;
     doublecomplex calpha;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd, notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */

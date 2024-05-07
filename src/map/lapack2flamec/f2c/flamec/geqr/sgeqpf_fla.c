@@ -168,8 +168,10 @@ void sgeqpf_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, re
                 integer *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         slarfg_(integer *, real *, real *, integer *, real *);
     extern integer isamax_(integer *, real *, integer *);
     /* -- LAPACK computational routine -- */

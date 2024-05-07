@@ -501,8 +501,10 @@ void stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
     real dscale, rdscal;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
         stgexc_(logical *, logical *, integer *, real *, integer *, real *, integer *, real *,
                 integer *, real *, integer *, integer *, integer *, real *, integer *, integer *);

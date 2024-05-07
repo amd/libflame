@@ -178,7 +178,7 @@ void cunm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, com
                complex *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */

@@ -186,7 +186,7 @@ void csteqr_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
         claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real safmax;
     extern /* Subroutine */

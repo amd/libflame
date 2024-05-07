@@ -159,7 +159,8 @@
  integer iinfo;
  logical wantq;
  extern /* Subroutine */
- int xerbla_(const char *srname, const integer *info, ftnlen srname_len), lapack_dorglq( integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), lapack_dorgqr( integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
+ void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+ extern int lapack_dorglq( integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), lapack_dorgqr( integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
  integer lwkopt;
  logical lquery;
  /* -- LAPACK computational routine -- */

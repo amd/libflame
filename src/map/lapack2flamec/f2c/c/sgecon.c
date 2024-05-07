@@ -147,7 +147,7 @@ void sgecon_(char *norm, integer *n, real *a, integer *lda, real *anorm, real *r
         slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real ainvnm;

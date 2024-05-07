@@ -370,8 +370,10 @@ void dggsvd_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer
                 doublereal *, integer *, doublereal *, integer *, integer *);
     integer ncycle;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dggsvp_(char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *,
                 doublereal *, integer *, doublereal *, doublereal *, integer *, integer *,
                 doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,

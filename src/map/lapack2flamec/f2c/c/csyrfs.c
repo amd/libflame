@@ -236,7 +236,7 @@ void csyrfs_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, co
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real lstres;
     extern /* Subroutine */

@@ -238,8 +238,10 @@ void cpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, complex *ab, in
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         cpbtrs_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *,
                 integer *);
     real lstres;

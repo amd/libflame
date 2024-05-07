@@ -132,7 +132,7 @@ void csyconv_(char *uplo, char *way, integer *n, complex *a, integer *lda, integ
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical convert;
     /* -- LAPACK computational routine (version 3.7.0) -- */

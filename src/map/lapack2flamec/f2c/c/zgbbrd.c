@@ -236,8 +236,10 @@ void zgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
     integer minmn;
     logical wantq;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
                 integer *),
         zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *),

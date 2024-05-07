@@ -163,7 +163,7 @@ void chetrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv,
         cswap_(integer *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwkopt;

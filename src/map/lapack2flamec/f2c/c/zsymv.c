@@ -168,7 +168,7 @@ void zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, inte
     doublecomplex temp1, temp2;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

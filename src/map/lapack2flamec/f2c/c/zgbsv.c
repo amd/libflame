@@ -172,8 +172,10 @@ void zgbsv_(integer *n, integer *kl, integer *ku, integer *nrhs, doublecomplex *
     integer ab_dim1, ab_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zgbtrf_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *,
                 integer *),
         zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *,

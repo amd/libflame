@@ -236,7 +236,7 @@ void csytf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
     extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real colmax, rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */

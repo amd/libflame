@@ -320,7 +320,7 @@ void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, inte
         slabad_(real *, real *);
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     logical wantbh;

@@ -457,7 +457,7 @@ void csyrfsx_(char *uplo, char *equed, integer *n, integer *nrhs, complex *a, in
                        complex *, integer *, complex *, real *),
         slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern real clansy_(char *, char *, integer *, complex *, integer *, real *);
     extern /* Subroutine */

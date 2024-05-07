@@ -158,7 +158,7 @@ void spbcon_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real 
     extern real slamch_(char *);
     real scaleu;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real ainvnm;

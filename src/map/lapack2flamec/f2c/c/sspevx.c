@@ -274,7 +274,7 @@ void sspevx_(char *jobz, char *range, char *uplo, integer *n, real *ap, real *vl
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real abstll, bignum;
     integer indtau, indisp, indiwo, indwrk;

@@ -388,7 +388,7 @@ void fla_zhgeqz(char *job, char *compq, char *compz, integer *n, integer *ilo, i
     doublecomplex signbc;
     doublereal safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublecomplex eshift;
     logical ilschr;

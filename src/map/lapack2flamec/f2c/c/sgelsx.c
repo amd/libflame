@@ -202,7 +202,7 @@ void sgelsx_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
         slabad_(real *, real *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern /* Subroutine */

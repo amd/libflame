@@ -183,7 +183,7 @@ void dsbev_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, int
                               doublereal *);
     doublereal safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern /* Subroutine */

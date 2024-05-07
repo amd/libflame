@@ -214,7 +214,7 @@ void zptrfs_(char *uplo, integer *n, integer *nrhs, doublereal *d__, doublecompl
     extern integer idamax_(integer *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal lstres;
     extern /* Subroutine */

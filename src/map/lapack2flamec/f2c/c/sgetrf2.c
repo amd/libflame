@@ -130,7 +130,7 @@ void sgetrf2_(integer *m, integer *n, real *a, integer *lda, integer *ipiv, inte
                real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */

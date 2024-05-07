@@ -150,7 +150,7 @@ void cpocon_(char *uplo, integer *n, complex *a, integer *lda, real *anorm, real
     extern real slamch_(char *);
     real scaleu;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     extern /* Subroutine */

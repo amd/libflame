@@ -181,8 +181,10 @@ void claswlq_(integer *m, integer *n, integer *mb, integer *nb, complex *a, inte
     /* Local variables */
     integer i__, ii, kk, ctr;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         cgelqt_(integer *, integer *, integer *, complex *, integer *, complex *, integer *,
                 complex *, integer *),
         ctplqt_(integer *, integer *, integer *, integer *, complex *, integer *, complex *,

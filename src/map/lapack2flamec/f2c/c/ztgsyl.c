@@ -333,7 +333,7 @@ void ztgsyl_(char *trans, integer *ijob, integer *m, integer *n, doublecomplex *
                 doublereal *, integer *);
     doublereal scaloc;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer iround;

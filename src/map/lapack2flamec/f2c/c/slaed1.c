@@ -178,8 +178,10 @@ void slaed1_(integer *n, real *d__, real *q, integer *ldq, integer *indxq, real 
                 integer *, integer *, real *, real *, integer *);
     integer idlmda;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
     integer coltyp;
     /* -- LAPACK computational routine (version 3.4.2) -- */

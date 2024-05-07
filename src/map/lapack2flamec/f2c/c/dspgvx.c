@@ -288,8 +288,10 @@ void dspgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, do
         dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
     logical wantz, alleig, indeig, valeig;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dpptrf_(char *, integer *, doublereal *, integer *),
         dspgst_(integer *, char *, integer *, doublereal *, doublereal *, integer *),
         dspevx_(char *, char *, char *, integer *, doublereal *, doublereal *, doublereal *,

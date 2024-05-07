@@ -231,7 +231,7 @@ void sgghrd_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, r
         srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer icompq;
     extern /* Subroutine */

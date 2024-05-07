@@ -230,7 +230,7 @@ void ssytrf_rook_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, 
     integer nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;

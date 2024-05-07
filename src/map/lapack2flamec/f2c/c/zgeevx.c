@@ -341,7 +341,7 @@ void zgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, do
                 integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     logical select[1];

@@ -374,7 +374,7 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     integer wbegin;
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer inderr, iindwk, indgrs, offset;

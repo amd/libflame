@@ -232,7 +232,7 @@ void csyconvf_(char *uplo, char *way, integer *n, complex *a, integer *lda, comp
         cswap_(integer *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical convert;
     /* -- LAPACK computational routine (version 3.8.0) -- */

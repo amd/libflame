@@ -153,7 +153,7 @@ void zheequb_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal
     doublereal sumsq;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum, smlnum;
     extern /* Subroutine */

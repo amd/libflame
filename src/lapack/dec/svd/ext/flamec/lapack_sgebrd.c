@@ -221,7 +221,7 @@ int lapack_sgebrd(integer *m, integer *n, real *a, integer *lda, real *d__, real
     void slabrd_(integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *, real *, integer *);
     integer ws;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwkopt;
     logical lquery;

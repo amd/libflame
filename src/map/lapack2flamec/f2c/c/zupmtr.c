@@ -175,7 +175,7 @@ void zupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, double
                doublecomplex *, integer *, doublecomplex *);
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, forwrd;
     /* -- LAPACK computational routine (version 3.4.0) -- */

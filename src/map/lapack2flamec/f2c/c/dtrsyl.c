@@ -210,7 +210,7 @@ void dtrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
         dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     doublereal scaloc;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical notrna, notrnb;

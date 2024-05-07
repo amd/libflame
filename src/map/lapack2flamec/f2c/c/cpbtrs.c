@@ -146,7 +146,7 @@ void cpbtrs_(char *uplo, integer *n, integer *kd, integer *nrhs, complex *ab, in
                integer *);
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

@@ -151,7 +151,7 @@ void csptri_(char *uplo, integer *n, complex *ap, integer *ipiv, complex *work, 
                integer *);
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer kcnext;
     /* -- LAPACK computational routine (version 3.4.0) -- */

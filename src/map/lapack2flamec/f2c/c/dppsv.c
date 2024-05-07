@@ -152,8 +152,10 @@ void dppsv_(char *uplo, integer *n, integer *nrhs, doublereal *ap, doublereal *b
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dpptrf_(char *, integer *, doublereal *, integer *),
         dpptrs_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */

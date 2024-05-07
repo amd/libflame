@@ -173,8 +173,10 @@ void dpbsv_(char *uplo, integer *n, integer *kd, integer *nrhs, doublereal *ab, 
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dpbtrf_(char *, integer *, integer *, doublereal *, integer *, integer *),
         dpbtrs_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *,
                 integer *, integer *);

@@ -183,7 +183,7 @@ void zsysv_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *ld
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
     logical lquery;

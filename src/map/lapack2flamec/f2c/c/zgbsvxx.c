@@ -597,8 +597,10 @@ void zgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
     doublereal colcnd;
     logical nofact;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zlaqgb_(integer *, integer *, integer *, integer *, doublecomplex *, integer *,
                 doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, char *);
     doublereal bignum;

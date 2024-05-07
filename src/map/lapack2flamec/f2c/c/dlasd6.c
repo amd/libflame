@@ -346,7 +346,7 @@ void dlasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, doublerea
         dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *);
     integer isigma;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal orgnrm;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */

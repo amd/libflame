@@ -190,7 +190,7 @@ void cgbtrf_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
                 integer *);
     extern integer icamax_(integer *, complex *, integer *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */

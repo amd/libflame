@@ -188,7 +188,7 @@ void cgeqpf_(integer *m, integer *n, complex *a, integer *lda, integer *jpvt, co
         clarfg_(integer *, complex *, complex *, integer *, complex *);
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */

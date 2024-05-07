@@ -157,7 +157,7 @@ void dtpcon_(char *norm, char *uplo, char *diag, integer *n, doublereal *ap, dou
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal dlantp_(char *, char *, char *, integer *, doublereal *, doublereal *);
     doublereal ainvnm;

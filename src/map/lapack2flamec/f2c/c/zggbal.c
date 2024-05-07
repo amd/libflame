@@ -224,8 +224,10 @@ void zggbal_(char *job, integer *n, doublecomplex *a, integer *lda, doublecomple
     extern doublereal dlamch_(char *);
     doublereal pgamma;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     integer lsfmin;
     extern integer izamax_(integer *, doublecomplex *, integer *);

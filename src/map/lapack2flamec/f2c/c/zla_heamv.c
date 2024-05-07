@@ -191,7 +191,7 @@ void zla_heamv_(integer *uplo, integer *n, doublereal *alpha, doublecomplex *a, 
     doublereal temp, safe1;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilauplo_(char *);
     /* -- LAPACK computational routine (version 3.4.2) -- */

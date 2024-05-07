@@ -303,7 +303,7 @@ void cgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, c
         clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
     logical lquery;

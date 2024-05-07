@@ -275,7 +275,7 @@ void slatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
         saxpy_(integer *, real *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern integer isamax_(integer *, real *, integer *);

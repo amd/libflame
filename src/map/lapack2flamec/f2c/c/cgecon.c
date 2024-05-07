@@ -153,7 +153,7 @@ void cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real
     extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     extern /* Subroutine */

@@ -195,7 +195,7 @@ void sgetsls_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integ
         slabad_(real *, real *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer scllen;
     real bignum;

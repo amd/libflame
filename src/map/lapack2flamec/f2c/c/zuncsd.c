@@ -359,7 +359,7 @@ void zuncsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
                 doublereal *, integer *, integer *);
     integer lorgqrworkmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lorglqworkopt;
     extern /* Subroutine */

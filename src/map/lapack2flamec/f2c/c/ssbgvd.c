@@ -258,8 +258,10 @@ void ssbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real 
     logical upper, wantz;
     integer indwk2, llwrk2;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         sstedc_(char *, integer *, real *, real *, real *, integer *, real *, integer *, integer *,
                 integer *, integer *),
         slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);

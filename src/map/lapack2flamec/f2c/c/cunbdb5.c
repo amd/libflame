@@ -176,8 +176,10 @@ void cunbdb5_(integer *m1, integer *m2, integer *n, complex *x1, integer *incx1,
     integer i__, j, childinfo;
     extern real scnrm2_(integer *, complex *, integer *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         cunbdb6_(integer *, integer *, integer *, complex *, integer *, complex *, integer *,
                  complex *, integer *, complex *, integer *, complex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.5.0) -- */

@@ -161,7 +161,7 @@ void ztzrzf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     /* Local variables */
     integer i__, m1, ib, nb, ki, kk, mu, nx, iws, nbmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwkmin, ldwork;

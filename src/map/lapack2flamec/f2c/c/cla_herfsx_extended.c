@@ -475,8 +475,10 @@ void cla_herfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     real normx, normy;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         chetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *,
                 integer *);
     real normdx, hugeval;

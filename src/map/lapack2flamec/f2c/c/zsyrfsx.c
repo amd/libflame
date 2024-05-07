@@ -449,7 +449,7 @@ void zsyrfsx_(char *uplo, char *equed, integer *n, integer *nrhs, doublecomplex 
                        integer *, doublecomplex *, integer *, doublecomplex *, doublereal *),
         dlamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal zlansy_(char *, char *, integer *, doublecomplex *, integer *, doublereal *);
     extern /* Subroutine */

@@ -266,7 +266,7 @@ void chetrd_2stage_(char *vect, char *uplo, integer *n, complex *a, integer *lda
     integer abpos, lhmin, lwmin;
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */

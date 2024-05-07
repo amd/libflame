@@ -259,7 +259,7 @@ void dstevx_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
     logical valeig;
     doublereal safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);

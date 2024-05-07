@@ -177,7 +177,7 @@ void chpev_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *z
         csscal_(integer *, real *, complex *, integer *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer indtau;

@@ -217,7 +217,7 @@ void strsyl3_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, r
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     real scamin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;

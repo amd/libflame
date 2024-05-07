@@ -347,7 +347,7 @@ void dgges3_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, integer *n, 
         dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal safmax;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern /* Subroutine */

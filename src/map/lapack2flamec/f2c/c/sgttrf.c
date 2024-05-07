@@ -136,7 +136,7 @@ void sgttrf_(integer *n, real *dl, real *d__, real *du, real *du2, integer *ipiv
     integer i__;
     real fact, temp;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

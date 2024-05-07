@@ -178,8 +178,10 @@ void chpsv_(char *uplo, integer *n, integer *nrhs, complex *ap, integer *ipiv, c
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         chptrf_(char *, integer *, complex *, integer *, integer *),
         chptrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *,
                 integer *);

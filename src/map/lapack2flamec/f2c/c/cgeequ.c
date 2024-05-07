@@ -157,7 +157,7 @@ void cgeequ_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *
     real rcmin, rcmax;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum, smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */

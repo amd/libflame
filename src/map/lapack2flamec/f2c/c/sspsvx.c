@@ -299,8 +299,10 @@ void sspsvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *ap, real *
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     extern real slansp_(char *, char *, integer *, real *, real *);
     extern /* Subroutine */

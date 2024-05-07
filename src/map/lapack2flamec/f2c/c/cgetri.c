@@ -149,7 +149,7 @@ void cgetri_(integer *n, complex *a, integer *lda, integer *ipiv, complex *work,
                integer *, complex *, integer *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer ldwork;
     extern /* Subroutine */

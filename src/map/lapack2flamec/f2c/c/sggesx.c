@@ -417,7 +417,7 @@ void sggesx_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, char *sense,
                 integer *, real *, integer *, real *, integer *, integer *);
     real safmax;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern /* Subroutine */

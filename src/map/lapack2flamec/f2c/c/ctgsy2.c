@@ -301,7 +301,7 @@ void ctgsy2_(char *trans, integer *ijob, integer *m, integer *n, complex *a, int
                 integer *);
     real scaloc;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */

@@ -280,8 +280,10 @@ void zhsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
     extern doublereal dlamch_(char *);
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zlaein_(logical *, logical *, integer *, doublecomplex *, integer *, doublecomplex *,
                 doublecomplex *, doublecomplex *, integer *, doublereal *, doublereal *,
                 doublereal *, integer *);

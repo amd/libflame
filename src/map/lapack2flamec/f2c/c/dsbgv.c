@@ -193,8 +193,10 @@ void dsbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, double
     integer iinfo;
     logical upper, wantz;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dpbstf_(char *, integer *, integer *, doublereal *, integer *, integer *),
         dsbtrd_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
                 doublereal *, doublereal *, integer *, doublereal *, integer *),

@@ -377,7 +377,7 @@ void dlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
         dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal safmax;
     extern /* Subroutine */

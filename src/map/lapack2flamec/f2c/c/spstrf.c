@@ -184,7 +184,7 @@ void spstrf_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
                 integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *),
         smaxloc_(real *, integer *);

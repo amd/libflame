@@ -216,8 +216,10 @@ void cpprfs_(char *uplo, integer *n, integer *nrhs, complex *ap, complex *afp, c
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         cpptrs_(char *, integer *, integer *, complex *, complex *, integer *, integer *);
     real lstres;
     /* -- LAPACK computational routine (version 3.4.0) -- */

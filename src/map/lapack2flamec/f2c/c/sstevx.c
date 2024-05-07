@@ -262,7 +262,7 @@ void sstevx_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer indisp, indiwo, indwrk;

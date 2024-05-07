@@ -200,8 +200,10 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
         slar2v_(integer *, real *, real *, real *, integer *, real *, real *, integer *);
     integer iqaend;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         slaset_(char *, integer *, integer *, real *, real *, real *, integer *),
         slartg_(real *, real *, real *, real *, real *),
         slargv_(integer *, real *, integer *, real *, integer *, real *, integer *),

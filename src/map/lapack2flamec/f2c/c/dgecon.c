@@ -145,7 +145,7 @@ void dgecon_(char *norm, integer *n, doublereal *a, integer *lda, doublereal *an
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     extern /* Subroutine */

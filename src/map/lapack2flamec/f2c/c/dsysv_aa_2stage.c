@@ -207,7 +207,7 @@ void dsysv_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublereal *a, inte
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
     logical tquery, wquery;

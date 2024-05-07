@@ -282,8 +282,10 @@ void zhbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, doubl
     logical wantz;
     integer indwk2;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dsterf_(integer *, doublereal *, doublereal *, integer *),
         zstedc_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *,
                 doublecomplex *, integer *, doublereal *, integer *, integer *, integer *,

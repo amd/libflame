@@ -156,7 +156,7 @@ void dgeequb_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *r
     doublereal radix, rcmin, rcmax;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum, logrdx, smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */

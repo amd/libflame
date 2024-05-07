@@ -447,7 +447,7 @@ void dsyrfsx_(char *uplo, char *equed, integer *n, integer *nrhs, doublereal *a,
     logical rcequ;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal dlansy_(char *, char *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */

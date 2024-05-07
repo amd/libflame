@@ -350,7 +350,7 @@ void claqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
         clartg_(complex *, complex *, real *, complex *, complex *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real safmax;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);

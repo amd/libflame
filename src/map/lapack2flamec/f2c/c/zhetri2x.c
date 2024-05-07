@@ -161,8 +161,10 @@ void zhetri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                doublecomplex *, integer *, doublecomplex *, integer *);
     doublecomplex u01_i_j__, u11_i_j__;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         ztrtri_(char *, char *, integer *, doublecomplex *, integer *, integer *);
     doublecomplex u01_ip1_j__, u11_ip1_j__;
     extern /* Subroutine */

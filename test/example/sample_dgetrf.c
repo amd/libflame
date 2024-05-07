@@ -7,17 +7,18 @@
     using partial pivoting with row interchanges.
 */
 
-#include <stdio.h>
-#include <stdlib.h>
 #include "FLAME.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+
 /* Generate Random Value */
-#define DRAND()  ( ( double ) rand() / ( ( double ) RAND_MAX / 2.0F ) ) - 1.0F;
+#define DRAND() ((double)rand() / ((double)RAND_MAX / 2.0F)) - 1.0F;
 
 /* Local Function Declaration */
 void rand_matrix(void *A, integer M, integer N, integer LDA);
 
-int main( int argc, char** argv )
+int main(int argc, char **argv)
 {
     /* Intialize input matrix sizes */
     integer M = 10, N = 10, LDA = 10;
@@ -26,12 +27,12 @@ int main( int argc, char** argv )
     integer info;
 
     /* Allocation of memory to matrix*/
-    A = (double  *) malloc(LDA * N * sizeof(double));
-    ipiv  = (integer *) malloc(N * sizeof(double));
+    A = (double *)malloc(LDA * N * sizeof(double));
+    ipiv = (integer *)malloc(N * sizeof(double));
 
     /* Intialize matrix with random values */
     rand_matrix(A, M, N, LDA);
-    
+
     printf("Started execution of DGETRF API \n");
 
     /* Call to the DGETRF API */
@@ -48,9 +49,9 @@ int main( int argc, char** argv )
 void rand_matrix(void *A, integer M, integer N, integer LDA)
 {
     integer i, j;
-    for( i = 0; i < N; i++ )
+    for(i = 0; i < N; i++)
     {
-        for( j = 0; j < M; j++ )
+        for(j = 0; j < M; j++)
         {
             ((double *)A)[i * LDA + j] = DRAND();
         }

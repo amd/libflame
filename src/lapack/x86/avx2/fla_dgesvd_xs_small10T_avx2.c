@@ -1,6 +1,6 @@
 /******************************************************************************
-* Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
-*******************************************************************************/
+ * Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 
 /*! @file fla_dgesvd_small6_avx2_.c
  *  @brief DGESVD Small path (path 6)
@@ -14,13 +14,9 @@
 
 /* SVD for small fat-matrices
  */
-void fla_dgesvd_xs_small10T_avx2(integer *m, integer *n,
-                                 doublereal *a, integer *lda,
-                                 doublereal *s,
-                                 doublereal *u, integer *ldu,
-                                 doublereal *vt, integer *ldvt,
-                                 doublereal *work,
-                                 integer *info)
+void fla_dgesvd_xs_small10T_avx2(integer *m, integer *n, doublereal *a, integer *lda, doublereal *s,
+                                 doublereal *u, integer *ldu, doublereal *vt, integer *ldvt,
+                                 doublereal *work, integer *info)
 {
     /* Declare and init local variables */
     FLA_GEQRF_INIT_DSMALL();
@@ -77,17 +73,17 @@ void fla_dgesvd_xs_small10T_avx2(integer *m, integer *n,
 
     /* Generate Qr (from bidiag) in vt */
     xnorm = 1.0;
-    for (i = *m; i >= 1; i--)
+    for(i = *m; i >= 1; i--)
     {
         /* Update current row */
-        for (j = 1; j <= i - 1; j++)
+        for(j = 1; j <= i - 1; j++)
         {
             vt[i + j * *ldvt] = 0.;
         }
         vt[i + i * *ldvt] = 1 - taup[i];
-        for (j = i + 1; j <= *n; j++)
+        for(j = i + 1; j <= *n; j++)
         {
-            vt[i + j * *ldvt] = - taup[i] * a[i + j * *lda];
+            vt[i + j * *ldvt] = -taup[i] * a[i + j * *lda];
         }
 
         /* Update rows below current row using row-apply */
@@ -101,20 +97,20 @@ void fla_dgesvd_xs_small10T_avx2(integer *m, integer *n,
 
     /* Generate Ql (from bidiag) in u from a */
     u[1 + *ldu] = 1.;
-    if (*m > 2)
+    if(*m > 2)
     {
         /* iteration corresponding to (m - 2) HH(m-2) */
         i = *m - 2;
         stau = tauq[i];
         d__1 = a[*m + i * *lda];
-        dtmp = - (stau * d__1);
+        dtmp = -(stau * d__1);
 
         u[*m - 1 + (*m - 1) * *ldu] = 1.0 - stau; /* 1 - tau */
         u[*m + (*m - 1) * *ldu] = dtmp; /* tau * v2 */
         u[*m - 1 + *m * *ldu] = dtmp; /* tau * v2 */
         u[*m + *m * *ldu] = 1.0 + (dtmp * d__1); /* 1 - tau * v2^2 */
     }
-    else if (*m > 1)
+    else if(*m > 1)
     {
         u[1 + *ldu] = 1.0;
         u[2 + *ldu] = 0;
@@ -126,22 +122,22 @@ void fla_dgesvd_xs_small10T_avx2(integer *m, integer *n,
         u[1 + *ldu] = 1.0;
     }
     /* for HH vectors [m-3:1] */
-    for (i = *m - 3; i >= 1; i--)
+    for(i = *m - 3; i >= 1; i--)
     {
-        stau = - tauq[i];
+        stau = -tauq[i];
         /* scale col (i + 1) by -tau and dlarf for rest of the columns */
-        for (j = i + 2; j <= *m; j++)
+        for(j = i + 2; j <= *m; j++)
         {
             u[j + (i + 1) * *ldu] = stau * a[j + i * *lda];
         }
         /* Columns (i + 2) to m */
-        for (j = i + 2; j <= *m; j++)
+        for(j = i + 2; j <= *m; j++)
         {
             /* GEMV part of dlarf excluding zero first row .
                Store the dot product in u.
             */
             dtmp = 0;
-            for (k = i + 2; k <= *m; k++)
+            for(k = i + 2; k <= *m; k++)
             {
                 dtmp = dtmp + u[k + j * *ldu] * a[k + i * *lda];
             }
@@ -149,19 +145,16 @@ void fla_dgesvd_xs_small10T_avx2(integer *m, integer *n,
         }
         u[i + 1 + (i + 1) * *ldu] = 1.0 + stau;
 
-        for (j = i + 2; j <= *m; j++)
+        for(j = i + 2; j <= *m; j++)
         {
-            for (k = i + 2; k <= *m; k++)
+            for(k = i + 2; k <= *m; k++)
             {
                 u[k + j * *ldu] = u[k + j * *ldu] + a[k + i * *lda] * u[i + 1 + j * *ldu];
             }
         }
     }
 
-    lapack_dbdsqr_small("L", m, n, m, &s[1], &e[1],
-                        &vt[1 + *ldvt], ldvt,
-                        &u[1 + *ldu], ldu,
-                        info);
+    lapack_dbdsqr_small("L", m, n, m, &s[1], &e[1], &vt[1 + *ldvt], ldvt, &u[1 + *ldu], ldu, info);
 
     return;
 }

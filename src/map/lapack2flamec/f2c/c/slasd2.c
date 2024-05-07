@@ -332,8 +332,10 @@ void aocl_lapack_slasd2(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
         scopy_(integer *, real *, integer *, real *, integer *);
     extern real slapy2_(real *, real *), slamch_(char *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
     real hlftol;
     extern /* Subroutine */

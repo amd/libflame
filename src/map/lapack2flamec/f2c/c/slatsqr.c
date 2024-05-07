@@ -174,8 +174,10 @@ void slatsqr_(integer *m, integer *n, integer *mb, integer *nb, real *a, integer
     /* Local variables */
     integer i__, ii, kk, ctr;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         sgeqrt_(integer *, integer *, integer *, real *, integer *, real *, integer *, real *,
                 integer *);
     logical lquery;

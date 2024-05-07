@@ -325,7 +325,7 @@ void zgegv_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
                 integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal salfar, safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal safmax;
     char chtemp[1];

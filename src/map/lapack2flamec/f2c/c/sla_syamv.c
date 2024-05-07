@@ -186,7 +186,7 @@ void sla_syamv_(integer *uplo, integer *n, real *alpha, real *a, integer *lda, r
     real temp, safe1;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilauplo_(char *);
     /* -- LAPACK computational routine (version 3.7.1) -- */

@@ -339,7 +339,7 @@ void zppsvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *a
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     integer infequ;

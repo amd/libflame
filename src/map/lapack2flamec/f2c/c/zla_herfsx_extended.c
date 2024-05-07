@@ -470,7 +470,7 @@ void zla_herfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
         zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal normdx;
     extern /* Subroutine */

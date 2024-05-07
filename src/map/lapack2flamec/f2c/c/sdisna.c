@@ -148,7 +148,7 @@ void aocl_lapack_sdisna(char *job, aocl_int64_t *m, aocl_int64_t *n, real *d__, 
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real newgap, thresh;
     /* -- LAPACK computational routine (version 3.4.0) -- */

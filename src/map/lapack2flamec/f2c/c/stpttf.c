@@ -211,7 +211,7 @@ void aocl_lapack_stpttf(char *transr, char *uplo, aocl_int64_t *n, real *ap, rea
     extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     /* -- LAPACK computational routine (version 3.4.2) -- */

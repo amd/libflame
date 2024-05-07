@@ -145,7 +145,7 @@ void sppcon_(char *uplo, integer *n, real *ap, real *anorm, real *rcond, real *w
     extern real slamch_(char *);
     real scaleu;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real ainvnm;

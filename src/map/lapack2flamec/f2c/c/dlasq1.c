@@ -140,8 +140,10 @@ void dlasq1_(integer *n, doublereal *d__, doublereal *e, doublereal *work, integ
                 doublereal *, integer *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dlasrt_(char *, integer *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

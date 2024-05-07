@@ -199,7 +199,7 @@ void cla_heamv_(integer *uplo, integer *n, real *alpha, complex *a, integer *lda
     real temp, safe1;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilauplo_(char *);
     /* -- LAPACK computational routine (version 3.4.2) -- */

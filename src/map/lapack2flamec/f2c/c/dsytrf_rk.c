@@ -284,7 +284,7 @@ void dsytrf_rk_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
         dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;

@@ -260,7 +260,7 @@ void aocl_lapack_sgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
         srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer icompq;
     extern /* Subroutine */

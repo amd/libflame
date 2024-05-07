@@ -285,7 +285,7 @@ void chbevd_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integ
         clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer indwrk, liwmin;

@@ -209,7 +209,7 @@ void dpprfs_(char *uplo, integer *n, integer *nrhs, doublereal *ap, doublereal *
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal lstres;
     extern /* Subroutine */

@@ -305,7 +305,7 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
     real safemn;
     integer idumma[1];
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer idiscu;

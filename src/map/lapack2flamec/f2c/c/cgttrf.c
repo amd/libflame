@@ -145,7 +145,7 @@ void cgttrf_(integer *n, complex *dl, complex *d__, complex *du, complex *du2, i
     integer i__;
     complex fact, temp;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

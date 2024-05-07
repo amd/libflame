@@ -139,8 +139,10 @@ void zposv_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *ld
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zpotrf_(char *, integer *, doublecomplex *, integer *, integer *),
         zpotrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
                 integer *, integer *);

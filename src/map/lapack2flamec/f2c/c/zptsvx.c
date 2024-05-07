@@ -252,7 +252,7 @@ void zptsvx_(char *fact, integer *n, integer *nrhs, doublereal *d__, doublecompl
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal zlanht_(char *, integer *, doublereal *, doublecomplex *);
     extern /* Subroutine */

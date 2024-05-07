@@ -276,7 +276,7 @@ int lapack_sbdsqr(char *uplo, integer *n, integer *ncvt, integer * nru, integer 
     real sn, mu;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real sminoa;
     extern /* Subroutine */
     void slartg_(real *, real *, real *, real *, real * );

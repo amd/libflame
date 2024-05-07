@@ -149,7 +149,7 @@ void ssyequb_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scon
     real sumsq;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern /* Subroutine */

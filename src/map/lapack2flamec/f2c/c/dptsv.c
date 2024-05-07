@@ -119,8 +119,10 @@ void dptsv_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublerea
     aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dpttrf_(integer *, doublereal *, doublereal *, integer *),
         dpttrs_(integer *, integer *, doublereal *, doublereal *, doublereal *, integer *,
                 integer *);

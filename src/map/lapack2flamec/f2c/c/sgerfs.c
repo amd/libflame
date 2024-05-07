@@ -241,7 +241,7 @@ void aocl_lapack_sgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     extern /* Subroutine */

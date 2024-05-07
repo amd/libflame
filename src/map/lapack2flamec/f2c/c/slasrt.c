@@ -106,7 +106,7 @@ void slasrt_(char *id, integer *n, real *d__, integer *info)
     real dmnmx;
     integer start;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer stkpnt;
     /* -- LAPACK computational routine (version 3.4.2) -- */

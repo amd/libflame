@@ -221,7 +221,7 @@ void dsyconvf_(char *uplo, char *way, integer *n, doublereal *a, integer *lda, d
         dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical convert;
     /* -- LAPACK computational routine (version 3.8.0) -- */

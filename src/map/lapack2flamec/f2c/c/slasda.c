@@ -307,8 +307,10 @@ void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *
                 real *, real *, real *, integer *, real *, real *, real *, integer *, integer *);
     integer nwork1, nwork2;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         slasdq_(char *, integer *, integer *, integer *, integer *, integer *, real *, real *,
                 real *, integer *, real *, integer *, real *, integer *, real *, integer *),
         slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *),

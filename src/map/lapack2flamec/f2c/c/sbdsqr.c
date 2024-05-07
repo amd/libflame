@@ -301,7 +301,7 @@ void sbdsqr_(char *uplo, integer *n, integer *ncvt, integer *nru, integer *ncc, 
         slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real sminoa;
     extern /* Subroutine */

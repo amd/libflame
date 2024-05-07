@@ -235,8 +235,10 @@ void dtpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
     extern logical lsame_(char *, char *, integer, integer);
     logical right;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dtprfb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *,
                 doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
                 doublereal *, integer *, doublereal *, integer *);

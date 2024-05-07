@@ -256,8 +256,10 @@ void cgbrfs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, c
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         cgbtrs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *,
                 complex *, integer *, integer *);
     logical notran;

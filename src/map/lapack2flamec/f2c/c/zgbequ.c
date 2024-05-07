@@ -167,7 +167,7 @@ void zgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
     doublereal rcmin, rcmax;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum, smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */

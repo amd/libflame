@@ -181,8 +181,10 @@ void zgeqpf_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jp
                 doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

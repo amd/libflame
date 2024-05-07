@@ -229,7 +229,7 @@ void zsytf2_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, intege
     extern doublereal dlamch_(char *);
     doublereal absakk;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal colmax;
     doublereal rowmax;

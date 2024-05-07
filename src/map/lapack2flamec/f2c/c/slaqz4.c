@@ -242,7 +242,7 @@ void slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
                 real *, integer *);
     integer nblock;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer ishift;
     extern /* Subroutine */

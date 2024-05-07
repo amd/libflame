@@ -203,8 +203,10 @@ void sorgtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, real *a, in
     real dummy[1] /* was [1][1] */
         ;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     logical lquery;
     integer nblocal, kb_last__;

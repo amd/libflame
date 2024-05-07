@@ -341,7 +341,7 @@ void dtgsyl_(char *trans, integer *ijob, integer *m, integer *n, doublereal *a, 
         dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer iround;
     logical notran;

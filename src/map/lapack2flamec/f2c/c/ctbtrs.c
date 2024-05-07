@@ -174,7 +174,7 @@ void ctbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                integer *);
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */

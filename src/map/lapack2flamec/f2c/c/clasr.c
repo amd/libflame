@@ -219,7 +219,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
     extern logical lsame_(char *, char *, integer, integer);
     real ctemp, stemp;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

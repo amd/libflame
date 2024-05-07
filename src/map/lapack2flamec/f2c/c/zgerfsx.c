@@ -463,7 +463,7 @@ void zgerfsx_(char *trans, char *equed, integer *n, integer *nrhs, doublecomplex
                        integer *, doublecomplex *, integer *, doublecomplex *, doublereal *),
         dlamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *,
                               doublereal *);

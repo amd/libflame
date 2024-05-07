@@ -298,7 +298,7 @@ void aocl_lapack_slaed8(aocl_int64_t *icompq, aocl_int64_t *k, aocl_int64_t *n, 
         scopy_(integer *, real *, integer *, real *, integer *);
     extern real slapy2_(real *, real *), slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */

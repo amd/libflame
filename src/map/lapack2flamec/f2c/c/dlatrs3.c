@@ -255,7 +255,7 @@ void dlatrs3_(char *uplo, char *trans, char *diag, char *normin, integer *n, int
     doublereal scaloc, scamin;
     extern doublereal dlarmm_(doublereal *, doublereal *, doublereal *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     doublereal bignum;

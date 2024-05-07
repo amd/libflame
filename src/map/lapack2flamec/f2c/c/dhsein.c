@@ -306,7 +306,7 @@ void dhsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
     extern doublereal dlanhs_(char *, integer *, doublereal *, integer *, doublereal *);
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical noinit;

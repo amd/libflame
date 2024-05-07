@@ -205,7 +205,7 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     real sfmin1, sfmin2, sfmax1, sfmax2;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     extern logical sisnan_(real *);

@@ -136,8 +136,10 @@ void dgetrf2_(integer *m, integer *n, doublereal *a, integer *lda, integer *ipiv
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
 
     /* -- LAPACK computational routine (version 3.7.0) -- */

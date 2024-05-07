@@ -350,7 +350,7 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
         clartg_(complex *, complex *, real *, complex *, complex *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     complex eshift;
     logical ilschr;

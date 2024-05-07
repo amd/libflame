@@ -176,8 +176,10 @@ void spbsv_(char *uplo, integer *n, integer *kd, integer *nrhs, real *ab, intege
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         spbtrf_(char *, integer *, integer *, real *, integer *, integer *),
         spbtrs_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *,
                 integer *);

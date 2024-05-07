@@ -167,8 +167,10 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
     extern logical lsame_(char *, char *, integer, integer);
     logical wantq;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         slaexc_(logical *, integer *, real *, integer *, real *, integer *, integer *, integer *,
                 integer *, real *, integer *);
     integer nbnext;

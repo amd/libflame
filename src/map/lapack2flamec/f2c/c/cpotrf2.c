@@ -133,7 +133,7 @@ void cpotrf2_(char *uplo, integer *n, complex *a, integer *lda, integer *info)
                integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern logical sisnan_(real *);
     /* -- LAPACK computational routine (version 3.7.0) -- */

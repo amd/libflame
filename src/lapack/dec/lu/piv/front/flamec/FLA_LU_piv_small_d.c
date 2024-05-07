@@ -105,7 +105,7 @@ integer FLA_LU_piv_small_d_var1( integer *m, integer *n,
     /* Local variables */
     integer i__, j, jp;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */ int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */ void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal sfmin;
 
     a_dim1 = *lda;
@@ -197,7 +197,7 @@ integer FLA_LU_piv_small_d_var2( integer *m, integer *n,
     /* Local variables */
     integer i__, j, jb, nb;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */ int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */ void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer iinfo;
 
 #define a_ref(a_1,a_2) a[(a_2)*a_dim1 + a_1]

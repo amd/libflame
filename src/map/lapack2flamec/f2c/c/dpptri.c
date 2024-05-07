@@ -114,8 +114,10 @@ void dpptri_(char *uplo, integer *n, doublereal *ap, integer *info)
         dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dtptri_(char *, char *, integer *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

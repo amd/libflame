@@ -340,7 +340,7 @@ void sppsvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *ap, real *
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer infequ;

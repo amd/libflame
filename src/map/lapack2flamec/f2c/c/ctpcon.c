@@ -163,7 +163,7 @@ void ctpcon_(char *norm, char *uplo, char *diag, integer *n, complex *ap, real *
     real xnorm;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern real clantp_(char *, char *, char *, integer *, complex *, real *);
     extern /* Subroutine */

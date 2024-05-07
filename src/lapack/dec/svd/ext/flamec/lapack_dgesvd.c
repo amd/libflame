@@ -299,7 +299,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
                     integer *, doublereal *, doublereal *, integer *,
                     integer *);
   extern /* Subroutine */
-      int
+      void
       xerbla_(const char *srname, const integer *info, ftnlen srname_len);
   extern integer ilaenv_(integer *, char *, char *, integer *, integer *,
                          integer *, integer *);

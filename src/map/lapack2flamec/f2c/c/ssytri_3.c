@@ -193,7 +193,7 @@ void ssytri_3_(char *uplo, integer *n, real *a, integer *lda, real *e, integer *
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwkopt;

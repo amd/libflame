@@ -291,7 +291,7 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
     scomplex salpha;
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     logical ilcomp;

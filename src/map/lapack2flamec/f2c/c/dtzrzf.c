@@ -159,8 +159,10 @@ void dtzrzf_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *ta
     /* Local variables */
     integer i__, m1, ib, nb, ki, kk, mu, nx, iws, nbmin;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dlarzb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *,
                 doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
                 doublereal *, integer *);

@@ -177,7 +177,7 @@ void cgbtf2_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
         cswap_(integer *, complex *, integer *, complex *, integer *);
     extern integer icamax_(integer *, complex *, integer *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

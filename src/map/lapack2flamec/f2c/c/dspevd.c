@@ -214,7 +214,7 @@ void dspevd_(char *jobz, char *uplo, integer *n, doublereal *ap, doublereal *w, 
                 doublereal *, integer *, integer *, integer *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern doublereal dlansp_(char *, char *, integer *, doublereal *, doublereal *);

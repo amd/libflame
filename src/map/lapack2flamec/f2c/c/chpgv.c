@@ -202,8 +202,10 @@ void chpgv_(integer *itype, char *jobz, char *uplo, integer *n, complex *ap, com
         ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical wantz;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         chpgst_(integer *, char *, integer *, complex *, complex *, integer *),
         cpptrf_(char *, integer *, complex *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */

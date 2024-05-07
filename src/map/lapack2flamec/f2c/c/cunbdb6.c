@@ -180,8 +180,10 @@ void cunbdb6_(integer *m1, integer *m2, integer *n, complex *x1, integer *incx1,
                complex *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         classq_(integer *, complex *, integer *, real *, real *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

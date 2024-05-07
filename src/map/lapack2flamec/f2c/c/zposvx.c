@@ -327,7 +327,7 @@ void zposvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *a
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern doublereal zlanhe_(char *, char *, integer *, doublecomplex *, integer *, doublereal *);

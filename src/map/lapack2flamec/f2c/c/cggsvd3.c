@@ -406,7 +406,7 @@ void cggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, intege
                 integer *, integer *);
     integer ncycle;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
     logical lquery;

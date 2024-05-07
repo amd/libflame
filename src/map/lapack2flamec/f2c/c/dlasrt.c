@@ -102,7 +102,7 @@ void dlasrt_(char *id, integer *n, doublereal *d__, integer *info)
     doublereal dmnmx;
     integer start;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer stkpnt;
     /* -- LAPACK computational routine (version 3.4.2) -- */

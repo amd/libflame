@@ -258,7 +258,7 @@ void clatrs3_(char *uplo, char *trans, char *diag, char *normin, integer *n, int
         csscal_(integer *, real *, complex *, integer *);
     real scamin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;

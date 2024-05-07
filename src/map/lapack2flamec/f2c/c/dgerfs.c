@@ -220,8 +220,10 @@ void dgerfs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dgetrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *,
                 integer *, integer *);
     logical notran;

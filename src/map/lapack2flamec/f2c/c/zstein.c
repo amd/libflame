@@ -215,8 +215,10 @@ void zstein_(integer *n, doublereal *d__, doublereal *e, integer *m, doublereal 
                 doublereal *, integer *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dlagts_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
                 integer *, doublereal *, doublereal *, integer *);
     integer nrmchk;

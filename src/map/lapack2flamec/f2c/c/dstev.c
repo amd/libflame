@@ -140,7 +140,7 @@ void dstev_(char *jobz, integer *n, doublereal *d__, doublereal *e, doublereal *
     aocl_int64_t iscale;
     doublereal safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);

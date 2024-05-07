@@ -266,7 +266,7 @@ void zgsvj0_(char *jobv, integer *m, integer *n, doublecomplex *a, integer *lda,
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer ijblsk, swband, blskip;
     doublereal mxaapq;

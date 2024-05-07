@@ -229,7 +229,7 @@ void csytf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, in
     real absakk;
     extern integer icamax_(integer *, complex *, integer *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real colmax;
     extern logical sisnan_(real *);

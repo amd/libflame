@@ -288,7 +288,7 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
         strsv_(char *, char *, char *, integer *, real *, integer *, real *, integer *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     logical notran;

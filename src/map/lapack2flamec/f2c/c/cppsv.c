@@ -160,8 +160,10 @@ void cppsv_(char *uplo, integer *n, integer *nrhs, complex *ap, complex *b, inte
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         cpptrf_(char *, integer *, complex *, integer *),
         cpptrs_(char *, integer *, integer *, complex *, complex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */

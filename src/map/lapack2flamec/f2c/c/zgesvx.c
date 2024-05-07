@@ -377,7 +377,7 @@ void zgesvx_(char *fact, char *trans, integer *n, integer *nrhs, doublecomplex *
     doublereal colcnd;
     logical nofact;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *,
                               doublereal *);

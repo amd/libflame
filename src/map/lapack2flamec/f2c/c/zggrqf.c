@@ -230,7 +230,7 @@ void zggrqf_(integer *m, integer *p, integer *n, doublecomplex *a, integer *lda,
     /* Local variables */
     integer nb, nb1, nb2, nb3, lopt;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */

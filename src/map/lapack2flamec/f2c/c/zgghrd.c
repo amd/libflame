@@ -237,7 +237,7 @@ void zgghrd_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
     extern logical lsame_(char *, char *, integer, integer);
     doublecomplex ctemp;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer icompq, icompz;
     extern /* Subroutine */

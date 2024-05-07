@@ -390,7 +390,7 @@ void sbbcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     real sigma11, sigma21;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real thresh, tolmul;
     logical lquery;

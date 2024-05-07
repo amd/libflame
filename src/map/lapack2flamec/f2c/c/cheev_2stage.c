@@ -246,7 +246,7 @@ void cheev_2stage_(char *jobz, char *uplo, integer *n, complex *a, integer *lda,
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer indtau, indwrk;

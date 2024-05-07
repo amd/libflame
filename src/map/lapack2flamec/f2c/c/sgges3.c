@@ -331,7 +331,7 @@ void sgges3_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, integer *n, 
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real safmax, bignum;
     extern /* Subroutine */

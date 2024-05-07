@@ -276,7 +276,7 @@ void dsytf2_rk_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
     doublereal absakk;
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal colmax, rowmax;
     /* -- LAPACK computational routine (version 3.7.0) -- */

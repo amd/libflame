@@ -212,7 +212,7 @@ void stprfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     char transt[1];

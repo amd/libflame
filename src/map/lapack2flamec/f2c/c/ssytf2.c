@@ -226,7 +226,7 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
         sswap_(integer *, real *, integer *, real *, integer *);
     real absakk;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real colmax;

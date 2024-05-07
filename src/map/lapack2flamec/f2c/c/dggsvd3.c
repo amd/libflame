@@ -388,7 +388,7 @@ void dggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, intege
                 doublereal *, integer *, doublereal *, integer *, integer *);
     integer ncycle;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
     logical lquery;

@@ -285,7 +285,7 @@ void sgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, r
         strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *);
     char compq2[1], compz2[1];
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */

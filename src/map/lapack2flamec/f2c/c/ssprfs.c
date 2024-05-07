@@ -215,7 +215,7 @@ void ssprfs_(char *uplo, integer *n, integer *nrhs, real *ap, real *afp, integer
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real lstres;
     extern /* Subroutine */

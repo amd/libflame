@@ -181,8 +181,10 @@ void dorbdb6_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
                integer *, doublereal *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

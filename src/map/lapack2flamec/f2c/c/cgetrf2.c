@@ -143,8 +143,10 @@ void cgetrf2_(integer *m, integer *n, complex *a, integer *lda, integer *ipiv, i
     extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
 /* -- LAPACK computational routine (version 3.7.0) -- */
 /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

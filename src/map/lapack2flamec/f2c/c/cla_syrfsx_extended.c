@@ -476,7 +476,7 @@ void cla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     real normx, normy;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real normdx;
     extern /* Subroutine */

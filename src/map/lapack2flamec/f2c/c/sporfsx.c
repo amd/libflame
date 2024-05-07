@@ -430,8 +430,10 @@ void sporfsx_(char *uplo, char *equed, integer *n, integer *nrhs, real *a, integ
     logical rcequ;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         spocon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
     extern real slansy_(char *, char *, integer *, real *, integer *, real *);
     extern integer ilaprec_(char *);

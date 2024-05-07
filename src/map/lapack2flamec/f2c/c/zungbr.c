@@ -174,7 +174,7 @@ void zungbr_(char *vect, integer *m, integer *n, integer *k, doublecomplex *a, i
     integer iinfo;
     logical wantq;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
     logical lquery;

@@ -296,8 +296,10 @@ void zspsvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *a
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
                 integer *);
     extern doublereal zlansp_(char *, char *, integer *, doublecomplex *, doublereal *);

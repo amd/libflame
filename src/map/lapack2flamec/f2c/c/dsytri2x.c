@@ -154,8 +154,10 @@ void dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipi
     logical upper;
     doublereal u01_i_j__, u11_i_j__;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dtrtri_(char *, char *, integer *, doublereal *, integer *, integer *),
         dsyconv_(char *, char *, integer *, doublereal *, integer *, integer *, doublereal *,
                  integer *);

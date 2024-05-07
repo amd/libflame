@@ -280,7 +280,7 @@ void ssytf2_rk_(char *uplo, integer *n, real *a, integer *lda, real *e, integer 
     real absakk;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real colmax, rowmax;

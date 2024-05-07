@@ -162,7 +162,7 @@ void dgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, d
                integer *);
     logical lnoti;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.0) -- */

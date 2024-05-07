@@ -157,8 +157,10 @@ void dsytrs2_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda
                integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dsyconv_(char *, char *, integer *, doublereal *, integer *, integer *, doublereal *,
                  integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */

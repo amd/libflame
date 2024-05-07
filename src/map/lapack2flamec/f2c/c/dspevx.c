@@ -271,7 +271,7 @@ void dspevx_(char *jobz, char *range, char *uplo, integer *n, doublereal *ap, do
     logical valeig;
     doublereal safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal abstll, bignum;
     extern doublereal dlansp_(char *, char *, integer *, doublereal *, doublereal *);

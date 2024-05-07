@@ -212,8 +212,10 @@ void sgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
     integer minmn;
     logical wantq;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         slaset_(char *, integer *, integer *, real *, real *, real *, integer *),
         slartg_(real *, real *, real *, real *, real *),
         slargv_(integer *, real *, integer *, real *, integer *, real *, integer *),

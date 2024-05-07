@@ -185,7 +185,7 @@ void sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, 
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real lstres;

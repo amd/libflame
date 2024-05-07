@@ -190,7 +190,7 @@ void dsytrs_3_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *ld
                integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

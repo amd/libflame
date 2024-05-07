@@ -260,7 +260,7 @@ void zggev_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
                 integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     logical ilascl, ilbscl;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     logical ldumma[1];

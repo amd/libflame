@@ -382,7 +382,7 @@ void ssyevr_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
     real safmin;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real abstll, bignum;
     integer indtau, indisp, indiwo, indwkn, liwmin;

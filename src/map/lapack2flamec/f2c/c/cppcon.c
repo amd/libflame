@@ -149,8 +149,10 @@ void cppcon_(char *uplo, integer *n, complex *ap, real *anorm, real *rcond, comp
     extern real slamch_(char *);
     real scaleu;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         clatps_(char *, char *, char *, char *, integer *, complex *, complex *, real *, real *,
                 integer *);
     real ainvnm;

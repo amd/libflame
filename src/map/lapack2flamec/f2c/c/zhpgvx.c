@@ -304,8 +304,10 @@ void zhpgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, do
         ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical alleig, indeig, valeig;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zhpgst_(integer *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
         zhpevx_(char *, char *, char *, integer *, doublecomplex *, doublereal *, doublereal *,
                 integer *, integer *, doublereal *, integer *, doublereal *, doublecomplex *,

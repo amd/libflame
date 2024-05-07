@@ -172,8 +172,10 @@ void dlaswlq_(integer *m, integer *n, integer *mb, integer *nb, doublereal *a, i
     /* Local variables */
     integer i__, ii, kk, ctr;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dgelqt_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *,
                 doublereal *, integer *),
         dtplqt_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *,

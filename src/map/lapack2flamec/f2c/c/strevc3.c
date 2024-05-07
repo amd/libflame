@@ -313,7 +313,7 @@ void strevc3_(char *side, char *howmny, logical *select, integer *n, real *t, in
         slabad_(real *, real *);
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;

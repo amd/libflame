@@ -165,7 +165,7 @@ void zpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomp
     integer nru;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer icompz;
     extern /* Subroutine */

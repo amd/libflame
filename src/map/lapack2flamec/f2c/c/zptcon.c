@@ -131,7 +131,7 @@ void zptcon_(integer *n, doublereal *d__, doublecomplex *e, doublereal *anorm, d
     integer i__, ix;
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     /* -- LAPACK computational routine (version 3.4.2) -- */

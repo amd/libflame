@@ -343,8 +343,10 @@ void chegvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, co
                 integer *);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         cheevx_(char *, char *, char *, integer *, complex *, integer *, real *, real *, integer *,
                 integer *, real *, integer *, real *, complex *, integer *, complex *, integer *,
                 real *, integer *, integer *, integer *),

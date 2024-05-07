@@ -279,7 +279,7 @@ void ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
     doublecomplex salpha;
     doublereal safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical ilcomp;

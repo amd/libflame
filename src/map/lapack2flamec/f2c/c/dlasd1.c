@@ -235,7 +235,7 @@ void dlasd1_(integer *nl, integer *nr, integer *sqre, doublereal *d__, doublerea
         dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *);
     integer isigma;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal orgnrm;
     integer coltyp;

@@ -453,8 +453,10 @@ void sgerfsx_(char *trans, char *equed, integer *n, integer *nrhs, real *a, inte
     real anorm;
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         sgecon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
     logical colequ, notran, rowequ;
     extern integer ilaprec_(char *);

@@ -209,8 +209,10 @@ void sstein_(integer *n, real *d__, real *e, integer *m, real *w, integer *ibloc
     integer indrv1, indrv2, indrv3, indrv4, indrv5;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         slagtf_(integer *, real *, real *, real *, real *, real *, real *, integer *, integer *);
     integer nrmchk;
     extern integer isamax_(integer *, real *, integer *);

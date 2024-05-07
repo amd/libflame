@@ -224,7 +224,7 @@ void zhesv_rook_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, intege
                      doublecomplex *, integer *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwkopt;

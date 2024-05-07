@@ -193,7 +193,7 @@ void zsptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
         zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     doublereal absakk;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal colmax;
     extern integer izamax_(integer *, doublecomplex *, integer *);

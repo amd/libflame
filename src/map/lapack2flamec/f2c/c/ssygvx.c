@@ -325,7 +325,7 @@ void ssygvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, re
                real *, integer *);
     logical alleig, indeig, valeig;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwkmin;

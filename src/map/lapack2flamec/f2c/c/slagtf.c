@@ -162,7 +162,7 @@ void slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, r
     real tl, eps, piv1, piv2, temp, mult, scale1, scale2;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

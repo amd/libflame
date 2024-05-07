@@ -428,8 +428,10 @@ void stgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
                 real *, real *, real *);
     integer kcycle;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         slapll_(integer *, real *, integer *, real *, integer *, real *),
         slartg_(real *, real *, real *, real *, real *),
         slaset_(char *, integer *, integer *, real *, real *, real *, integer *);

@@ -473,7 +473,7 @@ void ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
     extern doublereal dlamch_(char *);
     doublereal dscale, rdscal, safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer liwmin;
     extern /* Subroutine */

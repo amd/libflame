@@ -73,7 +73,7 @@
 
 #ifndef FLA_ENABLE_AOCL_BLAS
 extern int lsame_(char *, char *, integer a, integer b);
-extern int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+extern void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
 #endif
 extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
 

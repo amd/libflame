@@ -169,7 +169,7 @@ void slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, i
     real ak, eps, temp, pert, absak, sfmin;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */

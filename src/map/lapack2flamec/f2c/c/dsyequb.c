@@ -151,7 +151,7 @@ void dsyequb_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *s
     doublereal sumsq;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern /* Subroutine */

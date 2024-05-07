@@ -225,8 +225,10 @@ void dpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublereal *ab,
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dpbtrs_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *,
                 integer *, integer *);
     doublereal lstres;

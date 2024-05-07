@@ -180,7 +180,7 @@ void zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomp
         dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal safmax;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
     extern /* Subroutine */

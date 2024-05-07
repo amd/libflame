@@ -493,7 +493,7 @@ void zgbrfsx_(char *trans, char *equed, integer *n, integer *kl, integer *ku, in
                        doublecomplex *, doublereal *),
         dlamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal zlangb_(char *, integer *, integer *, integer *, doublecomplex *, integer *,
                               doublereal *);

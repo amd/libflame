@@ -210,8 +210,10 @@ void zungtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, doublecompl
     doublecomplex dummy[1] /* was [1][1] */
         ;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
                 integer *);
     logical lquery;

@@ -160,7 +160,7 @@ void ztrcon_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *a, i
         zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     extern integer izamax_(integer *, doublecomplex *, integer *);

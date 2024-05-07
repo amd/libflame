@@ -286,7 +286,7 @@ void cgegs_(char *jobvsl, char *jobvsr, integer *n, complex *a, integer *lda, co
         claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;

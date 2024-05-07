@@ -197,7 +197,7 @@ void zgetsls_(char *trans, integer *m, integer *n, integer *nrhs, doublecomplex 
         dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer scllen;
     doublereal bignum;

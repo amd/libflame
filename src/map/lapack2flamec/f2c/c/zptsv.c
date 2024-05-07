@@ -121,8 +121,10 @@ void zptsv_(integer *n, integer *nrhs, doublereal *d__, doublecomplex *e, double
     integer b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zpttrf_(integer *, doublereal *, doublecomplex *, integer *),
         zpttrs_(char *, integer *, integer *, doublereal *, doublecomplex *, doublecomplex *,
                 integer *, integer *);

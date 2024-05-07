@@ -323,8 +323,10 @@ void zunbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, doubl
         zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zlacgv_(integer *, doublecomplex *, integer *);
     logical lquery;
     extern /* Subroutine */

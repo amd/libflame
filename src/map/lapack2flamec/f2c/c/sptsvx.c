@@ -248,8 +248,10 @@ void sptsvx_(char *fact, integer *n, integer *nrhs, real *d__, real *e, real *df
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     extern real slanst_(char *, integer *, real *, real *);
     extern /* Subroutine */

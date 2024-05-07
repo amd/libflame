@@ -293,7 +293,7 @@ void dlaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
         dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal safmax;
     extern /* Subroutine */

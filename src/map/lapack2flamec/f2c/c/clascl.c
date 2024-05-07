@@ -161,7 +161,7 @@ void clascl_(char *type__, integer *kl, integer *ku, real *cfrom, real *cto, int
     extern real slamch_(char *);
     real cfromc;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern logical sisnan_(real *);

@@ -123,7 +123,7 @@ void dpotrf2_(char *uplo, integer *n, doublereal *a, integer *lda, integer *info
                doublereal *, doublereal *, integer *);
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

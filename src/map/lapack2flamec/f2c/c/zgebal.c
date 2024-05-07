@@ -186,8 +186,10 @@ void zgebal_(char *job, integer *n, doublecomplex *a, integer *lda, integer *ilo
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_(char *);
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     extern integer izamax_(integer *, doublecomplex *, integer *);
     logical noconv;

@@ -174,8 +174,10 @@ void sspsv_(char *uplo, integer *n, integer *nrhs, real *ap, integer *ipiv, real
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         ssptrf_(char *, integer *, real *, integer *, integer *),
         ssptrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */

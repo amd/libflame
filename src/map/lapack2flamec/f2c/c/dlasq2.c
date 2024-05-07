@@ -155,7 +155,7 @@ void dlasq2_(integer *n, doublereal *z__, integer *info)
     integer iwhila, iwhilb;
     doublereal oldemn, safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */

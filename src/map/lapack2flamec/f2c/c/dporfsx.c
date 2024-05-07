@@ -439,8 +439,10 @@ void dporfsx_(char *uplo, char *equed, integer *n, integer *nrhs, doublereal *a,
     logical rcequ;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dpocon_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *,
                 doublereal *, integer *, integer *);
     extern doublereal dlansy_(char *, char *, integer *, doublereal *, integer *, doublereal *);

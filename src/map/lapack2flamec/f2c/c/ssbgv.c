@@ -197,7 +197,7 @@ void ssbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real *
     integer iinfo;
     logical upper, wantz;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer indwrk;
     extern /* Subroutine */

@@ -170,8 +170,10 @@ void zhpsv_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, integer *i
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zhptrf_(char *, integer *, doublecomplex *, integer *, integer *),
         zhptrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
                 integer *, integer *);

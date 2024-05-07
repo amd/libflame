@@ -212,7 +212,7 @@ void strsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, re
     real scaloc;
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     logical notrna, notrnb;

@@ -288,7 +288,7 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
         slabad_(real *, real *);
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern integer isamax_(integer *, real *, integer *);

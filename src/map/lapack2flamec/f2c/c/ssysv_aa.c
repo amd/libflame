@@ -184,7 +184,7 @@ void ssysv_aa_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, int
     extern logical lsame_(char *, char *, integer, integer);
     integer lwkopt_sytrf__, lwkopt_sytrs__;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
     logical lquery;

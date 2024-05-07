@@ -315,7 +315,7 @@ void zgges3_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, integer *n, 
                 integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     logical ilascl, ilbscl;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *,
                               doublereal *);

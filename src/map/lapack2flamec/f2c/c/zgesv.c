@@ -131,8 +131,10 @@ void zgesv_(integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zgetrf_(integer *, integer *, doublecomplex *, integer *, integer *, integer *),
         zgetrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *,
                 doublecomplex *, integer *, integer *);

@@ -131,7 +131,7 @@ void ddisna_(char *job, integer *m, integer *n, doublereal *d__, doublereal *sep
     extern doublereal dlamch_(char *);
     doublereal oldgap, safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal newgap, thresh;
     /* -- LAPACK computational routine (version 3.4.0) -- */

@@ -245,8 +245,10 @@ void zgtrfs_(char *trans, integer *n, integer *nrhs, doublecomplex *dl, doubleco
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zlagtm_(char *, integer *, integer *, doublereal *, doublecomplex *, doublecomplex *,
                 doublecomplex *, doublecomplex *, integer *, doublereal *, doublecomplex *,
                 integer *);

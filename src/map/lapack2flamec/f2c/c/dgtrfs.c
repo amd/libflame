@@ -244,7 +244,7 @@ void dgtrfs_(char *trans, integer *n, integer *nrhs, doublereal *dl, doublereal 
                 doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     char transn[1];

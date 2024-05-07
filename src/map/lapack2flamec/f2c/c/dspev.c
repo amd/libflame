@@ -160,7 +160,7 @@ void dspev_(char *jobz, char *uplo, integer *n, doublereal *ap, doublereal *w, d
     integer iscale;
     doublereal safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern doublereal dlansp_(char *, char *, integer *, doublereal *, doublereal *);

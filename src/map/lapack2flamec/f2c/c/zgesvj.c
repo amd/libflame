@@ -432,7 +432,7 @@ void zgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublec
                 doublereal *, integer *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer ijblsk, swband;
     extern /* Subroutine */

@@ -361,7 +361,7 @@ void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
     doublecomplex dummy1[1];
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical wantbh, wantdf, somcon;

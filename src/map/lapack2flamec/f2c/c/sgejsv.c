@@ -530,7 +530,7 @@ void sgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     extern real slamch_(char *);
     real aatmax;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical noscal;
     extern /* Subroutine */

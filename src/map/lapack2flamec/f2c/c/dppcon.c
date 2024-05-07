@@ -143,8 +143,10 @@ void dppcon_(char *uplo, integer *n, doublereal *ap, doublereal *anorm, doublere
     extern integer idamax_(integer *, doublereal *, integer *);
     doublereal scaleu;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dlatps_(char *, char *, char *, char *, integer *, doublereal *, doublereal *, doublereal *,
                 doublereal *, integer *);
     doublereal ainvnm;

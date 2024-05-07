@@ -315,7 +315,7 @@ void sgtsvx_(char *fact, char *trans, integer *n, integer *nrhs, real *dl, real 
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern real slangt_(char *, integer *, real *, real *, real *);
     extern /* Subroutine */

@@ -279,8 +279,10 @@ void zhpevx_(char *jobz, char *range, char *uplo, integer *n, doublecomplex *ap,
     logical valeig;
     doublereal safmin;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal abstll, bignum;
     integer indiwk, indisp, indtau;

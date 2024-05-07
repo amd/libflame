@@ -151,8 +151,10 @@ void slasq2_(integer *n, real *z__, integer *info)
     integer iwhila, iwhilb;
     real oldemn, safmin;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         slasrt_(char *, integer *, real *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

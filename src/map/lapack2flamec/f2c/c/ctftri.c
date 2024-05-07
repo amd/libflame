@@ -252,7 +252,7 @@ void ctftri_(char *transr, char *uplo, char *diag, integer *n, complex *a, integ
                integer *, complex *, integer *);
     logical lower;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     extern /* Subroutine */

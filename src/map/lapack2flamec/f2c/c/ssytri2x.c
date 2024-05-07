@@ -159,8 +159,10 @@ void ssytri2x_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, rea
                real *, integer *);
     real u01_i_j__, u11_i_j__;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         strtri_(char *, char *, integer *, real *, integer *, integer *);
     real u01_ip1_j__, u11_ip1_j__;
     extern /* Subroutine */

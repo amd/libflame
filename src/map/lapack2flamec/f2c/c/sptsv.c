@@ -122,8 +122,10 @@ void sptsv_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ldb
     integer b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         spttrf_(integer *, real *, real *, integer *),
         spttrs_(integer *, integer *, real *, real *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */

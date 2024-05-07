@@ -176,7 +176,7 @@ void zlaed0_(integer *qsiz, integer *n, doublereal *d__, doublereal *e, doubleco
                 doublereal *, integer *, integer *);
     integer igivcl;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */

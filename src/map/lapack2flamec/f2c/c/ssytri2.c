@@ -149,7 +149,7 @@ void ssytri2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real
     integer nbmax;
     logical upper;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     logical lquery;

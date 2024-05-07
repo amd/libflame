@@ -364,7 +364,7 @@ void stgevc_(char *side, char *howmny, logical *select, integer *n, real *s, int
     extern real slamch_(char *);
     real salfar, safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real xscale, bignum;
     logical ilcomp, ilcplx;

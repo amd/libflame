@@ -164,8 +164,10 @@ void zpbtf2_(char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ld
     extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zdscal_(integer *, doublereal *, doublecomplex *, integer *),
         zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */

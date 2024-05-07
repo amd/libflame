@@ -225,7 +225,7 @@ void dsyevd_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, do
     doublereal safmin;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     integer indtau;

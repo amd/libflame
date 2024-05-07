@@ -121,7 +121,7 @@ void dpoequ_(integer *n, doublereal *a, integer *lda, doublereal *s, doublereal 
     integer i__;
     doublereal smin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

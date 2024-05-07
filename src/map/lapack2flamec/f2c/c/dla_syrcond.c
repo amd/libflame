@@ -168,7 +168,7 @@ doublereal dla_syrcond_(char *uplo, integer *n, doublereal *a, integer *lda, dou
                 integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     char normin[1];

@@ -212,7 +212,7 @@ void sormbr_fla(char *vect, char *side, char *trans, integer *m, integer *n, int
     extern logical lsame_(char *, char *, integer, integer);
     integer iinfo, i1, i2, nb, mi, ni, nq, nw;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     logical notran, applyq;

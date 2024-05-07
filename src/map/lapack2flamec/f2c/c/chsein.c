@@ -294,7 +294,7 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
                 complex *, integer *, real *, real *, real *, integer *);
     extern real slamch_(char *), clanhs_(char *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern logical sisnan_(real *);
     logical noinit;

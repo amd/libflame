@@ -283,8 +283,10 @@ void chegv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, complex *
     integer lwtrd;
     logical wantz;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         chegst_(integer *, char *, integer *, complex *, integer *, complex *, integer *,
                 integer *),
         cpotrf_(char *, integer *, complex *, integer *, integer *);

@@ -133,7 +133,7 @@ void dgttrf_(integer *n, doublereal *dl, doublereal *d__, doublereal *du, double
     integer i__;
     doublereal fact, temp;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

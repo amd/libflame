@@ -233,7 +233,7 @@ void ssbevd_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer 
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern real slansb_(char *, char *, integer *, integer *, real *, integer *, real *);

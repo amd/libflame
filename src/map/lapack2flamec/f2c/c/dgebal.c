@@ -187,7 +187,7 @@ void dgebal_(char *job, integer *n, doublereal *a, integer *lda, integer *ilo, i
     extern integer idamax_(integer *, doublereal *, integer *);
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical noconv;
     /* -- LAPACK computational routine (version 3.5.0) -- */

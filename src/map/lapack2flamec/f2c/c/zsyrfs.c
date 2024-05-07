@@ -226,7 +226,7 @@ void zsyrfs_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *l
     extern doublereal dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal lstres;
     extern /* Subroutine */

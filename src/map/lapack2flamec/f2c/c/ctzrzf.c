@@ -170,8 +170,10 @@ void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     /* Local variables */
     integer i__, m1, ib, nb, ki, kk, mu, nx, iws, nbmin;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         clarzb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *,
                 complex *, integer *, complex *, integer *, complex *, integer *, complex *,
                 integer *);

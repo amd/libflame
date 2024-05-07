@@ -181,7 +181,7 @@ void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer
     real sfmin1, sfmin2, sfmax1, sfmax2;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     extern logical sisnan_(real *);

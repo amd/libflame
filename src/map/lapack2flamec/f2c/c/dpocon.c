@@ -144,7 +144,7 @@ void dpocon_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *an
     extern integer idamax_(integer *, doublereal *, integer *);
     doublereal scaleu;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     extern /* Subroutine */

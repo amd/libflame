@@ -400,7 +400,7 @@ void zhbevx_2stage_(char *jobz, char *range, char *uplo, integer *n, integer *kd
     extern doublereal zlanhb_(char *, char *, integer *, integer *, doublecomplex *, integer *,
                               doublereal *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal abstll, bignum;
     integer indiwk, indisp;

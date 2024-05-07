@@ -366,7 +366,7 @@ void dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *
         dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal xscale, bignum;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical ilcomp, ilcplx;
     integer ihwmny;

@@ -439,7 +439,7 @@ void stgsna_(char *job, char *howmny, logical *select, integer *n, real *a, inte
     real dummy1[1], alphai, alphar;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical wantbh, wantdf;
     extern /* Subroutine */

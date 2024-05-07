@@ -170,8 +170,10 @@ void dspsv_(char *uplo, integer *n, integer *nrhs, doublereal *ap, integer *ipiv
     /* Local variables */
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         dsptrf_(char *, integer *, doublereal *, integer *, integer *),
         dsptrs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *,
                 integer *);

@@ -247,7 +247,7 @@ void zlaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
     integer nblock;
     doublereal safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal safmax;
     integer ishift, istopb, swidth;

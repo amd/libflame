@@ -203,7 +203,7 @@ void csytri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
     logical upper;
     complex u01_i_j__, u11_i_j__;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer icount;
     extern /* Subroutine */

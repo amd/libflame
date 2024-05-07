@@ -172,8 +172,10 @@ void zlaswlq_(integer *m, integer *n, integer *mb, integer *nb, doublecomplex *a
     /* Local variables */
     integer i__, ii, kk, ctr;
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zgelqt_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
                 integer *, doublecomplex *, integer *);
     logical lquery;

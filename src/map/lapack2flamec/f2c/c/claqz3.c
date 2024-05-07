@@ -243,7 +243,7 @@ void claqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
         clartg_(complex *, complex *, real *, complex *, complex *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real safmax;
     extern /* Subroutine */

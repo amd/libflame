@@ -220,7 +220,7 @@ void sggbal_(char *job, integer *n, real *a, integer *lda, real *b, integer *ldb
     real pgamma;
     extern real slamch_(char *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     integer lsfmin, lsfmax;

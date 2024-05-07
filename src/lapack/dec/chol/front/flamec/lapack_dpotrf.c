@@ -26,7 +26,7 @@ static doublereal c_b14 = 1.;
 
 #ifndef FLA_ENABLE_AOCL_BLAS
 	logical lsame_(char *ca, char *cb, integer a, integer b);
-	int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+	void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
 #endif
 	int lapack_dpotf2(char *uplo, integer *n, doublereal *a, integer *lda, integer *info);
 

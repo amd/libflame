@@ -354,7 +354,7 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     integer nibble, nblock;
     doublereal safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal safmax;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);

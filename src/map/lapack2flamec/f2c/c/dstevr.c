@@ -351,7 +351,7 @@ void dstevr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
     doublereal safmin;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);

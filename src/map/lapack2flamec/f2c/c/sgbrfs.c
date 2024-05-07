@@ -244,7 +244,7 @@ void sgbrfs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, r
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     extern /* Subroutine */

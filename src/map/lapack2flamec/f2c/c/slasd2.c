@@ -298,8 +298,10 @@ void slasd2_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, rea
         scopy_(integer *, real *, integer *, real *, integer *);
     extern real slapy2_(real *, real *), slamch_(char *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
     real hlftol;
     extern /* Subroutine */

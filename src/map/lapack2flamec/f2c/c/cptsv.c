@@ -127,8 +127,10 @@ void cptsv_(integer *n, integer *nrhs, real *d__, complex *e, complex *b, intege
     integer b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         cpttrf_(integer *, real *, complex *, integer *),
         cpttrs_(char *, integer *, integer *, real *, complex *, complex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */

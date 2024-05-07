@@ -138,7 +138,7 @@ void sgtsv_(integer *n, integer *nrhs, real *dl, real *d__, real *du, real *b, i
     integer i__, j;
     real fact, temp;
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

@@ -223,7 +223,7 @@ void zsytf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
     doublereal absakk;
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
-        int
+        void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal colmax;
     extern integer izamax_(integer *, doublecomplex *, integer *);

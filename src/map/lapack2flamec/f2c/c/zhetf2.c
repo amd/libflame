@@ -226,8 +226,10 @@ void zhetf2_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
     doublereal absakk;
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
-        int
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
         zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal colmax;
     extern integer izamax_(integer *, doublecomplex *, integer *);

@@ -11,27 +11,25 @@ static doublereal c_b7 = -1.;
 static aocl_int64_t c__1 = 1;
 static doublereal c_b23 = 1.;
 
+
 #if FLA_ENABLE_AOCL_BLAS
 
 /* This function is an implementation of dgbtrs using AOCL-BLAS compute kernels */
-void dgbtrs_aocl_blas_ver(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
-                          aocl_int64_t *nrhs, doublereal *ab, aocl_int64_t *ldab,
-                          aocl_int_t *ipiv, doublereal *b, aocl_int64_t *ldb, aocl_int64_t *info)
+void dgbtrs_aocl_blas_ver(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, doublereal *ab,
+             integer *ldab, integer *ipiv, doublereal *b, integer *ldb, integer *info)
 {
-    aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, i__1, i__2, i__3;
-    aocl_int64_t i__, j, l, kd, lm;
+    integer ab_dim1, ab_offset, b_dim1, b_offset, i__1, i__2, i__3;
+    integer i__, j, l, kd, lm;
     logical lnoti;
     logical notran;
     doublereal alpha;
     doublereal *x, *y, *r;
 
-    /* Make a copy of AOCL-BLAS framework context. This information is needed to query the
-     * architecture specific details of compute kernel */
-    cntx_t *cntx = bli_gks_query_cntx();
+    /* Make a copy of AOCL-BLAS framework context. This information is needed to query the architecture specific details of compute kernel */
+    cntx_t* cntx = bli_gks_query_cntx();
 
     /* Query names of compute kernel from AOCL-BLAS framework context */
-    dswapv_ker_ft dswap_blas_ptr = bli_cntx_get_l1v_ker_dt(BLIS_DOUBLE, BLIS_SWAPV_KER, cntx);
-    daxpyv_ker_ft daxpy_blas_ptr = bli_cntx_get_l1v_ker_dt(BLIS_DOUBLE, BLIS_AXPYV_KER, cntx);
+    daxpyv_ker_ft daxpy_blas_ptr = bli_cntx_get_l1v_ker_dt(BLIS_DOUBLE, BLIS_AXPYV_KER, cntx );
 
     /* Parameter adjustments */
     ab_dim1 = *ldab;
@@ -41,7 +39,7 @@ void dgbtrs_aocl_blas_ver(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_i
     b_dim1 = *ldb;
     b_offset = 1 + b_dim1;
     b -= b_offset;
-
+    
     /* Function Body */
     *info = 0;
     notran = lsame_(trans, "N", 1, 1);
@@ -76,7 +74,7 @@ void dgbtrs_aocl_blas_ver(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_i
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DGBTRS", &i__1, (ftnlen)6);
+        xerbla_("DGBTRS", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
@@ -98,27 +96,23 @@ void dgbtrs_aocl_blas_ver(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_i
                 i__2 = *kl;
                 i__3 = *n - j; // , expr subst
                 lm = fla_min(i__2, i__3);
-                i__3 = *ldb;
                 l = ipiv[j];
                 if(l != j)
                 {
                     /* dswap_blas_ptr swaps two vectors using AOCL-BLAS */
-                    dswap_blas_ptr((dim_t)*nrhs, &b[l + b_dim1], (dim_t)*ldb, &b[j + b_dim1],
-                                   (dim_t)*ldb, cntx);
+                    bli_dswapv_zen_int8(*nrhs, &b[l + b_dim1], *ldb, &b[j + b_dim1], *ldb, NULL);
                 }
-
                 x = &ab[kd + 1 + j * ab_dim1];
-                y = &b[j + b_dim1];
+                y = &b[ j + b_dim1];
                 r = &b[j + 1 + b_dim1];
 
-                for(aocl_int64_t i = 0; i < *nrhs; i++)
+                for(integer i = 0; i < *nrhs; i++)
                 {
-                    alpha = -y[i * i__3];
+                    alpha = -y[i * (*ldb)];
 
                     if(alpha)
                         /* daxpy_blas_ptr performs the operation y = alpha * x + y */
-                        daxpy_blas_ptr(BLIS_NO_CONJUGATE, (dim_t)lm, &alpha, x, (dim_t)c__1,
-                                       &r[i * i__3], (dim_t)c__1, cntx);
+                        daxpy_blas_ptr(BLIS_NO_CONJUGATE, lm, &alpha, x, c__1, &r[i * i__3], c__1, NULL);
                 }
             }
         }
@@ -127,8 +121,8 @@ void dgbtrs_aocl_blas_ver(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_i
         {
             /* Solve U*X = B, overwriting B with X. */
             i__2 = *kl + *ku;
-            aocl_blas_dtbsv("Upper", "No transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
-                            &b[i__ * b_dim1 + 1], &c__1);
+            dtbsv_("Upper", "No transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
+                   &b[i__ * b_dim1 + 1], &c__1);
             /* L20: */
         }
     }
@@ -140,8 +134,8 @@ void dgbtrs_aocl_blas_ver(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_i
         {
             /* Solve U**T*X = B, overwriting B with X. */
             i__2 = *kl + *ku;
-            aocl_blas_dtbsv("Upper", "Transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
-                            &b[i__ * b_dim1 + 1], &c__1);
+            dtbsv_("Upper", "Transpose", "Non-unit", n, &i__2, &ab[ab_offset], ldab,
+                   &b[i__ * b_dim1 + 1], &c__1);
         }
         /* Solve L**T*X = B, overwriting B with X. */
         if(lnoti)
@@ -152,12 +146,12 @@ void dgbtrs_aocl_blas_ver(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_i
                 i__1 = *kl;
                 i__2 = *n - j; // , expr subst
                 lm = fla_min(i__1, i__2);
-                aocl_blas_dgemv("Transpose", &lm, nrhs, &c_b7, &b[j + 1 + b_dim1], ldb,
-                                &ab[kd + 1 + j * ab_dim1], &c__1, &c_b23, &b[j + b_dim1], ldb);
+                dgemv_("Transpose", &lm, nrhs, &c_b7, &b[j + 1 + b_dim1], ldb,
+                       &ab[kd + 1 + j * ab_dim1], &c__1, &c_b23, &b[j + b_dim1], ldb);
                 l = ipiv[j];
                 if(l != j)
                 {
-                    aocl_blas_dswap(nrhs, &b[l + b_dim1], ldb, &b[j + b_dim1], ldb);
+                    dswap_(nrhs, &b[l + b_dim1], ldb, &b[j + b_dim1], ldb);
                 }
             }
         }
@@ -166,6 +160,7 @@ void dgbtrs_aocl_blas_ver(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_i
 }
 
 #endif
+
 
 /* > \brief \b DGBTRS */
 /* =========== DOCUMENTATION =========== */
@@ -308,6 +303,7 @@ void dgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, d
     aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, i__1, i__2, i__3;
     /* Local variables */
     integer i__, j, l, kd, lm;
+#ifndef FLA_ENABLE_AOCL_BLAS
     extern /* Subroutine */
         void
         dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
@@ -320,10 +316,11 @@ void dgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, d
         dswap_(integer *, doublereal *, integer *, doublereal *, integer *),
         dtbsv_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
                integer *);
-    logical lnoti;
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+#endif
+    logical lnoti;
     logical notran;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

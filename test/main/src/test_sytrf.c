@@ -6,6 +6,9 @@
 #include "test_lapack.h"
 #include "test_prototype.h"
 
+#define SYTRF_VU 100.0 // Maximum eigen value for condition number.
+#define SYTRF_VL 0.0001 // Minimum eigen value for condion number.
+
 void invoke_sytrf(integer datatype, char *uplo, integer *n, void *a, integer *lda, integer *ipiv,
                   void *work, integer *lwork, integer *info);
 void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer p_cur,
@@ -140,8 +143,8 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
         create_realtype_vector(datatype, &L, n);
         create_realtype_vector(datatype, &VL, 1);
         create_realtype_vector(datatype, &VU, 1);
-        assign_value(get_realtype(datatype), VU, MIN_VL, d_zero);
-        assign_value(get_realtype(datatype), VL, MAX_VU, d_zero);
+        assign_value(get_realtype(datatype), VU, SYTRF_VU, d_zero);
+        assign_value(get_realtype(datatype), VL, SYTRF_VL, d_zero);
         generate_matrix_from_EVs(datatype, 'V', n, A, lda, L, VL, VU);
         form_symmetric_matrix(datatype, n, A, lda, "S");
         free_vector(L);

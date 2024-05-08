@@ -44,9 +44,6 @@ extern dcomplex z_zero, z_one, z_n_one;
 #define MAX_FLT_DIFF 0.00001 // Maximum allowed difference for float comparision
 #define MAX_DBL_DIFF 0.0000000001 // Maximum allowed difference for double comparision
 
-#define MAX_VU 100.0 // Maximum eigon value for condition number.
-#define MIN_VL 0.0001 // Minimum eigon value for condion number.
-
 #if defined(FLA_ENABLE_ILP64)
 #ifdef _WIN32
 #define FT_IS "lld"

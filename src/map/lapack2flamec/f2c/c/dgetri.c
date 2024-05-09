@@ -223,7 +223,7 @@ void dgetri_(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal 
     /* and the inverse is not computed. */
     if(*n > 0 && *n <= 16)
     {
-        lapack_getri_small_d(n, a, lda, ipiv, work);
+        lapack_getri_small_d(n, a, lda, ipiv, work, info);
     }
     else
     {

@@ -8,13 +8,23 @@
 #include "FLA_f2c.h"
 #include "fla_lapack_lu_small_kernals_d.h"
 
-void lapack_getri_small_d(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work)
+void lapack_getri_small_d(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work,
+                          integer *info)
 {
     integer a_dim1, i__1, i__2, i__;
     doublereal t_val, *acur, *apiv, *asrc, *ax, *ay;
     integer t, i, j, jp;
 
     a_dim1 = *lda;
+    /* check singularity of triangular input matrix  */
+    for(*info = 1; *info <= *n; ++(*info))
+    {
+        if(a[*info + *info * a_dim1] == 0.)
+        {
+            return;
+        }
+    }
+    *info = 0;
     if(*n == 3)
     {
         LAPACK_GETRI_SMALL_D_3x3(n, a, a_dim1, ipiv, work);

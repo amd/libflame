@@ -133,7 +133,7 @@ endif
 
 # Add AVX and FMA flags for specific  files
 CAVXFLAGS := -mavx2 -mfma
-CAVX512FLAGS := -mavx512f -mfma
+CAVX512FLAGS := -mavx512f -mavx512dq -mfma
 
 # Aggregate all of the flags into two groups: one for optimizable code, and
 # one for code that should not be optimized.

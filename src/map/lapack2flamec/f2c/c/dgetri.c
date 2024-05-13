@@ -128,7 +128,7 @@ void dgetri_(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal 
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, j, jb, nb, jj, jp, nn, iws;
+    integer i__, j, jb, nb=0, jj, jp, nn, iws;
     extern /* Subroutine */
         void
         dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,

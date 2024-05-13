@@ -123,9 +123,10 @@ void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer l
                    void *Xact, integer ldx, void *dl, void *d, void *du, void *dl_save,
                    void *d_save, void *du_save, integer info, double *residual);
 
-void validate_syevx(char *jobz, char *range, integer n, void *A, void *A_test, integer lda,
-                    integer il, integer iu, void *L, void *w, void *ifail, integer datatype,
-                    double *residual);
+void validate_syev(char *jobz, char *range, integer n, void *A, void *A_test, integer lda,
+                   integer il, integer iu, void *L, void *w, void *ifail, integer datatype,
+                   double *residual);
+
 void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, void *A,
                      void *A_test, integer lda, void *vl, void *vu, integer il, integer iu,
                      integer ns, void *s, void *s_test, void *U, integer ldu, void *V, integer ldvt,

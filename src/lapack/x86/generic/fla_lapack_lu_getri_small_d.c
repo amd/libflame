@@ -11,9 +11,9 @@
 void lapack_getri_small_d(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work,
                           integer *info)
 {
-    integer a_dim1, i__1, i__2, i__;
+    integer a_dim1, i__1, i__;
     doublereal t_val, *acur, *apiv, *asrc, *ax, *ay;
-    integer t, i, j, jp;
+    integer i, j, jp;
 
     a_dim1 = *lda;
     /* check singularity of triangular input matrix  */
@@ -41,7 +41,6 @@ void lapack_getri_small_d(integer *n, doublereal *a, integer *lda, integer *ipiv
             a[j * a_dim1] = a[j * a_dim1] * a[0];
             for(i = 1; i < j; ++i)
             {
-                // t = i ;
                 for(i__ = 0; i__ < i; ++i__)
                 {
                     a[i__ + j * a_dim1]

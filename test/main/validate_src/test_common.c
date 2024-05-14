@@ -2969,6 +2969,15 @@ void init_matrix_spec_rand_in(integer datatype, void *A, integer M, integer N, i
         lowspan = 1;
         upspan = 1;
     }
+    /* Skip lowspan if M=1 and upspan if N=1.*/
+    if(M == 1)
+    {
+        lowspan = 0;
+    }
+    else if(N == 1)
+    {
+        upspan = 0;
+    }
     span = lowspan + upspan;
     switch(datatype)
     {
@@ -4995,6 +5004,10 @@ void fla_invoke_gemm(integer datatype, char *transA, char *transB, integer *m, i
 void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, char *type)
 {
     integer i, j, conj = 1;
+    if(lda < n)
+    {
+        return;
+    }
     if(*type == 'C')
     {
         conj = -1;
@@ -5031,6 +5044,10 @@ void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, ch
                 {
                     if(i == j)
                     {
+                        if(*type == 'C')
+                        {
+                            ((scomplex *)A)[i * lda + j].imag = 0.f;
+                        }
                         continue;
                     }
                     ((scomplex *)A)[j * lda + i].real = ((scomplex *)A)[i * lda + j].real;
@@ -5047,6 +5064,10 @@ void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, ch
                 {
                     if(i == j)
                     {
+                        if(*type == 'C')
+                        {
+                            ((dcomplex *)A)[i * lda + j].imag = 0.;
+                        }
                         continue;
                     }
                     ((dcomplex *)A)[j * lda + i].real = ((dcomplex *)A)[i * lda + j].real;

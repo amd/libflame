@@ -47,7 +47,7 @@
     FLA_Obj A, ATL, ATR, ABL, ABR, A1, A2, Ah, T, TL, TR, t;                    \
     FLA_Error init_result;                                                      \
     FLA_Uplo uplo;                                                              \
-    dim_t m_A, n_A, m_t;                                                        \
+    fla_dim_t m_A, n_A, m_t;                                                        \
                                                                                 \
     FLA_Init_safe(&init_result);                                                \
                                                                                 \

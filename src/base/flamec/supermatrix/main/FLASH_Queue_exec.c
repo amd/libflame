@@ -131,7 +131,7 @@ void FLASH_Queue_exec( void )
    integer          n_caches;
    integer          size;
    integer          i;
-   dim_t        block_size = FLASH_Queue_get_block_size();
+   fla_dim_t        block_size = FLASH_Queue_get_block_size();
    double       dtime;
 
    FLA_Lock*    run_lock;
@@ -1233,8 +1233,8 @@ void FLASH_Queue_create_gpu( integer thread, void *arg )
 {
    FLASH_Queue_vars* args = ( FLASH_Queue_vars* ) arg;
    integer i;
-   dim_t gpu_n_blocks     = FLASH_Queue_get_gpu_num_blocks();
-   dim_t block_size       = args->block_size;
+   fla_dim_t gpu_n_blocks     = FLASH_Queue_get_gpu_num_blocks();
+   fla_dim_t block_size       = args->block_size;
    FLA_Datatype datatype  = args->datatype;
 
    // Exit if not using GPU.
@@ -1261,7 +1261,7 @@ void FLASH_Queue_destroy_gpu( integer thread, void *arg )
 {
    FLASH_Queue_vars* args = ( FLASH_Queue_vars* ) arg;
    integer i;
-   dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
+   fla_dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
    FLA_Obj_gpu gpu_obj;
 
    // Exit if not using GPU.
@@ -1552,7 +1552,7 @@ FLA_Bool FLASH_Queue_check_block_gpu( FLA_Obj obj, integer thread, void *arg )
 {
    FLASH_Queue_vars* args = ( FLASH_Queue_vars* ) arg;
    integer k;
-   dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
+   fla_dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
    FLA_Bool r_val = TRUE;
 
 #ifdef FLA_ENABLE_MULTITHREADING
@@ -1704,7 +1704,7 @@ void FLASH_Queue_update_block_gpu( FLA_Obj obj,
 {
    FLASH_Queue_vars* args = ( FLASH_Queue_vars* ) arg;
    integer j, k;
-   dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
+   fla_dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
    FLA_Bool transfer = FALSE;
    FLA_Bool evict = FALSE;
    FLA_Obj_gpu evict_obj;   
@@ -1794,7 +1794,7 @@ void FLASH_Queue_mark_gpu( FLASH_Task *t, void *arg )
    FLASH_Queue_vars* args = ( FLASH_Queue_vars* ) arg;
    integer i, j, k;
    integer thread = t->thread;
-   dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
+   fla_dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
    FLA_Bool duplicate;
    FLA_Obj  obj;
 
@@ -1850,7 +1850,7 @@ void FLASH_Queue_invalidate_block_gpu( FLA_Obj obj, integer thread, void *arg )
 {
    FLASH_Queue_vars* args = ( FLASH_Queue_vars* ) arg;
    integer j, k;
-   dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
+   fla_dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
    FLA_Obj_gpu gpu_obj;
 
 #ifdef FLA_ENABLE_MULTITHREADING
@@ -1899,7 +1899,7 @@ void FLASH_Queue_flush_block_gpu( FLA_Obj obj, integer thread, void *arg )
 {
    FLASH_Queue_vars* args = ( FLASH_Queue_vars* ) arg;
    integer k;
-   dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
+   fla_dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
    FLA_Bool transfer = FALSE;
    FLA_Obj_gpu gpu_obj;
 
@@ -1967,7 +1967,7 @@ void FLASH_Queue_flush_gpu( integer thread, void *arg )
 {
    FLASH_Queue_vars* args = ( FLASH_Queue_vars* ) arg;
    integer i, k;
-   dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
+   fla_dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
    integer n_transfer = 0;
    FLA_Obj_gpu gpu_obj;
    

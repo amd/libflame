@@ -113,7 +113,7 @@ void FLA_Blocksize_free( fla_blocksize_t* bp )
 }
 
 
-dim_t FLA_Blocksize_extract( FLA_Datatype dt, fla_blocksize_t* bp )
+fla_dim_t FLA_Blocksize_extract( FLA_Datatype dt, fla_blocksize_t* bp )
 {
 	fla_dim_t     b = 0;
 	FLA_Error e_val;
@@ -231,7 +231,7 @@ fla_dim_t FLA_Query_blocksize( FLA_Datatype dt, FLA_Dimension dim )
 }
 
 
-dim_t FLA_Determine_blocksize( FLA_Obj A_unproc, FLA_Quadrant to_dir, fla_blocksize_t* bp )
+fla_dim_t FLA_Determine_blocksize( FLA_Obj A_unproc, FLA_Quadrant to_dir, fla_blocksize_t* bp )
 {
 	FLA_Error    e_val;
 	FLA_Datatype datatype;

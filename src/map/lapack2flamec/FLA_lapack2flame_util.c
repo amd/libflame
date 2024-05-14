@@ -90,8 +90,8 @@ void F77_fla_obj_show(char *prefix, integer *m, integer *n, void *buffer, intege
 // Transform tau.
 int FLAME_invert_stau(FLA_Obj t)
 {
-    dim_t m = FLA_Obj_vector_dim(t);
-    dim_t inc = FLA_Obj_vector_inc(t);
+    fla_dim_t m = FLA_Obj_vector_dim(t);
+    fla_dim_t inc = FLA_Obj_vector_inc(t);
     float *buff = FLA_Obj_buffer_at_view(t);
     float one = 1.0F;
     float zero = 0.0F;
@@ -108,8 +108,8 @@ int FLAME_invert_stau(FLA_Obj t)
 }
 int FLAME_invert_dtau(FLA_Obj t)
 {
-    dim_t m = FLA_Obj_vector_dim(t);
-    dim_t inc = FLA_Obj_vector_inc(t);
+    fla_dim_t m = FLA_Obj_vector_dim(t);
+    fla_dim_t inc = FLA_Obj_vector_inc(t);
     double *buff = FLA_Obj_buffer_at_view(t);
     double one = 1.0;
     double zero = 0.0;
@@ -126,8 +126,8 @@ int FLAME_invert_dtau(FLA_Obj t)
 }
 int FLAME_invert_ctau(FLA_Obj t)
 {
-    dim_t m = FLA_Obj_vector_dim(t);
-    dim_t inc = FLA_Obj_vector_inc(t);
+    fla_dim_t m = FLA_Obj_vector_dim(t);
+    fla_dim_t inc = FLA_Obj_vector_inc(t);
     scomplex *buff = FLA_Obj_buffer_at_view(t);
     float one = 1.0F;
     float conjsign = one; // if conjugate -one;
@@ -153,8 +153,8 @@ int FLAME_invert_ctau(FLA_Obj t)
 }
 int FLAME_invert_ztau(FLA_Obj t)
 {
-    dim_t m = FLA_Obj_vector_dim(t);
-    dim_t inc = FLA_Obj_vector_inc(t);
+    fla_dim_t m = FLA_Obj_vector_dim(t);
+    fla_dim_t inc = FLA_Obj_vector_inc(t);
     dcomplex *buff = FLA_Obj_buffer_at_view(t);
     double one = 1.0;
     double conjsign = one; // if conjugate -one;

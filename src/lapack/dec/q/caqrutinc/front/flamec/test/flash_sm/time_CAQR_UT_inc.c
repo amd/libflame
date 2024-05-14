@@ -16,13 +16,13 @@
 
 
 void time_CAQR_UT_inc(
-               integer param_combo, integer type, integer nrepeats, integer m, integer n, dim_t p,
+               integer param_combo, integer type, integer nrepeats, integer m, integer n, fla_dim_t p,
                FLA_Obj A, FLA_Obj ATW, FLA_Obj R, FLA_Obj RTW, FLA_Obj b, FLA_Obj x,
                double *dtime, double *diff, double *gflops );
 
 
 void time_CAQR_UT_inc(
-               integer param_combo, integer type, integer nrepeats, integer m, integer n, dim_t p,
+               integer param_combo, integer type, integer nrepeats, integer m, integer n, fla_dim_t p,
                FLA_Obj A, FLA_Obj ATW, FLA_Obj R, FLA_Obj RTW, FLA_Obj b, FLA_Obj x,
                double *dtime, double *diff, double *gflops )
 {

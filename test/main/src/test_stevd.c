@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_common.h"
@@ -63,8 +63,8 @@ void fla_test_stevd(integer argc, char **argv, test_params_t *params)
                 stype = argv[2][i];
                 datatype = get_datatype(stype);
 
-                /* Check for invalide dataype */
-                if(datatype == INVALID_TYPE)
+                /* Check for invalid dataype */
+                if((datatype != FLOAT) && (datatype != DOUBLE))
                 {
                     invalid_dtype = 1;
                     continue;
@@ -91,19 +91,18 @@ void fla_test_stevd(integer argc, char **argv, test_params_t *params)
     if(tests_not_run)
     {
         printf("Invalid arguments for stevd\n");
-        printf("Usage: ./<EXE> stevd <precisions - sdcz> <JOBZ> <N> <LDZ> <LWORk> <LIWORK> "
+        printf("Usage: ./<EXE> stevd <precisions - sd> <JOBZ> <N> <LDZ> <LWORk> <LIWORK> "
                "<repeats>\n");
     }
     else if(invalid_dtype)
     {
-        printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n");
+        printf("\nInvalid datatypes specified, choose valid datatypes from 'sd'\n");
     }
     if(g_ext_fptr != NULL)
     {
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
     }
-    return;
 }
 
 void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer p_cur,
@@ -122,73 +121,81 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
     ldz = params->eig_sym_paramslist[pci].ldz;
     *residual = params->eig_sym_paramslist[pci].threshold_value;
 
-    if(datatype == FLOAT || datatype == DOUBLE)
+    /* Return if datatype passed is not float/double.*/
+    if((datatype != FLOAT) && (datatype != DOUBLE))
     {
-        n = p_cur;
-        /* If leading dimensions = -1, set them to default value
-           when inputs are from config files */
-        if(config_data)
-        {
-            if(ldz == -1)
-            {
-                ldz = fla_max(1, n);
-            }
-        }
-
-        /* Create input matrix parameters */
-        create_matrix(datatype, &Z, ldz, n);
-        reset_matrix(datatype, n, n, Z, ldz);
-        create_vector(datatype, &D, n);
-        create_vector(datatype, &E, n - 1);
-
-        if(g_ext_fptr != NULL)
-        {
-            /* Initialize input matrix with custom data */
-            init_matrix_from_file(datatype, Z, n, n, ldz, g_ext_fptr);
-        }
-        else
-        {
-            /* input matrix Z with random symmetric numbers and D,E matrix with diagonal and
-             * subdiagonal values */
-            rand_sym_tridiag_matrix(datatype, Z, n, n, ldz);
-        }
-
-        get_diagonal(datatype, Z, n, n, ldz, D);
-        get_subdiagonal(datatype, Z, n, n, ldz, E);
-
-        /* Make a copy of input matrix A. This is required to validate the API functionality.*/
-        create_matrix(datatype, &Z_test, ldz, n);
-        reset_matrix(datatype, n, n, Z_test, ldz);
-        create_vector(datatype, &D_test, n);
-        create_vector(datatype, &E_test, n - 1);
-        copy_vector(datatype, n, D, 1, D_test, 1);
-        copy_vector(datatype, n - 1, E, 1, E_test, 1);
-
-        prepare_stevd_run(&jobz, n, Z_test, ldz, D_test, E_test, datatype, n_repeats, time_min,
-                          &info);
-
-        /* performance computation
-           6 * n^3 + n^2 flops for eigen vectors
-           6 * n^2 flops for eigen values */
-        if(jobz == 'V')
-            *perf = (double)((6.0 * n * n * n) + (n * n)) / *time_min / FLOPS_PER_UNIT_PERF;
-        else
-            *perf = (double)(6.0 * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
-
-        /* output validation */
-        if(info == 0)
-            validate_syevd(&jobz, n, Z, Z_test, ldz, D_test, datatype, residual, &vinfo);
-
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
-
-        /* Free up the buffers */
-        free_matrix(Z);
-        free_vector(D);
-        free_vector(E);
-        free_matrix(Z_test);
-        free_vector(D_test);
-        free_vector(E_test);
+        return;
     }
+
+    n = p_cur;
+    /* If leading dimensions = -1, set them to default value
+        when inputs are from config files */
+    if(config_data)
+    {
+        if(ldz == -1)
+        {
+            ldz = fla_max(1, n);
+        }
+    }
+
+    /* Create input matrix parameters */
+    create_matrix(datatype, &Z, ldz, n);
+    create_vector(datatype, &D, n);
+    create_vector(datatype, &E, n - 1);
+
+    init_matrix(datatype, D, 1, n, 1, g_ext_fptr, params->imatrix_char);
+    init_matrix(datatype, E, 1, n - 1, 1, g_ext_fptr, params->imatrix_char);
+    // Get symmetric tridiagonal matrix from D, E and use for validation.
+    copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
+
+    create_matrix(datatype, &Z_test, ldz, n);
+    create_vector(datatype, &D_test, n);
+    create_vector(datatype, &E_test, n - 1);
+    copy_vector(datatype, n, D, 1, D_test, 1);
+    copy_vector(datatype, n - 1, E, 1, E_test, 1);
+
+    prepare_stevd_run(&jobz, n, Z_test, ldz, D_test, E_test, datatype, n_repeats, time_min, &info);
+
+    /* performance computation
+        6 * n^3 + n^2 flops for eigen vectors
+        6 * n^2 flops for eigen values */
+    if(jobz == 'V')
+        *perf = (double)((6.0 * n * n * n) + (n * n)) / *time_min / FLOPS_PER_UNIT_PERF;
+    else
+        *perf = (double)(6.0 * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
+
+    /* output validation */
+    if(!params->imatrix_char && info == 0)
+    {
+        validate_syevd(&jobz, n, Z, Z_test, ldz, D_test, datatype, residual, &vinfo);
+    }
+    /* Check for output matrix & vectors when inputs are extreme values */
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        if((jobz == 'V')
+           && (!check_extreme_value(datatype, n, n, Z_test, ldz, params->imatrix_char)
+               && !check_extreme_value(datatype, 1, n, D_test, 1, params->imatrix_char)))
+        {
+            *residual = DBL_MAX;
+        }
+        else if((jobz == 'N')
+                && !check_extreme_value(datatype, 1, n, D_test, 1, params->imatrix_char))
+        {
+            *residual = DBL_MAX;
+        }
+    }
+    else
+    {
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    }
+
+    /* Free up the buffers */
+    free_matrix(Z);
+    free_vector(D);
+    free_vector(E);
+    free_matrix(Z_test);
+    free_vector(D_test);
+    free_vector(E_test);
 }
 
 void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, void *E,
@@ -238,6 +245,9 @@ void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, voi
         liwork = g_liwork;
     }
 
+    create_vector(datatype, &work, lwork);
+    create_vector(INTEGER, &iwork, liwork);
+
     *info = 0;
     for(i = 0; i < n_repeats && *info == 0; ++i)
     {
@@ -246,9 +256,8 @@ void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, voi
         copy_matrix(datatype, "full", n, n, Z_save, ldz, Z, ldz);
         copy_vector(datatype, n, D_save, 1, D, 1);
         copy_vector(datatype, n - 1, E_save, 1, E, 1);
-
-        create_vector(datatype, &work, lwork);
-        create_vector(INTEGER, &iwork, liwork);
+        reset_vector(datatype, work, lwork, 1);
+        reset_vector(INTEGER, iwork, liwork, 1);
 
         exe_time = fla_test_clock();
         /* call to API */
@@ -259,8 +268,7 @@ void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, voi
         time_min = fla_min(time_min, exe_time);
 
         /* Free up the output buffers */
-        free_vector(work);
-        free_vector(iwork);
+        
     }
 
     *time_min_ = time_min;
@@ -268,6 +276,8 @@ void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, voi
     free_matrix(Z_save);
     free_matrix(D_save);
     free_matrix(E_save);
+    free_vector(work);
+    free_vector(iwork);
 }
 
 void invoke_stevd(integer datatype, char *jobz, integer *n, void *z, integer *ldz, void *d, void *e,

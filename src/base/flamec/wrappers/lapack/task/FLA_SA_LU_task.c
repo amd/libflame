@@ -11,7 +11,7 @@
 #include "FLAME.h"
 
 FLA_Error FLA_SA_LU_task( FLA_Obj U,
-                          FLA_Obj D, FLA_Obj p, FLA_Obj L, dim_t nb_alg,
+                          FLA_Obj D, FLA_Obj p, FLA_Obj L, fla_dim_t nb_alg,
                                                            fla_lu_t* cntl )
 {
   FLA_Error info;

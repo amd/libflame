@@ -32,7 +32,7 @@ FLA_Error FLA_Bidiag_UT_recover_tau_panel( FLA_Obj T, FLA_Obj t )
           tB,              t1,
                            t2;
 
-  dim_t b_alg, b;
+  fla_dim_t b_alg, b;
 
   b_alg = FLA_Obj_length( T );
 

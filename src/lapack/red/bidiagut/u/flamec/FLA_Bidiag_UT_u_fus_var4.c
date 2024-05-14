@@ -15,7 +15,7 @@ FLA_Error FLA_Bidiag_UT_u_ofu_var4( FLA_Obj A, FLA_Obj TU, FLA_Obj TV )
   FLA_Error    r_val;
   FLA_Obj      Y, Z;
   FLA_Datatype datatype_A;
-  dim_t        m_A, n_A;
+  fla_dim_t        m_A, n_A;
 
   datatype_A = FLA_Obj_datatype( A );
   m_A        = FLA_Obj_length( A );

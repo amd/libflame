@@ -74,13 +74,13 @@ extern int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomple
 #define LAPACK_gesvd_body(prefix)                                                              \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                                     \
     FLA_Datatype dtype_re = PREFIX2FLAME_REALTYPE(prefix);                                     \
-    dim_t min_m_n = fla_min(*m, *n);                                                           \
+    fla_dim_t min_m_n = fla_min(*m, *n);                                                           \
     FLA_Svd_type jobu_fla;                                                                     \
     FLA_Svd_type jobv_fla;                                                                     \
     FLA_Bool create_U;                                                                         \
     FLA_Bool create_V;                                                                         \
-    dim_t m_U, n_U;                                                                            \
-    dim_t m_V, n_V;                                                                            \
+    fla_dim_t m_U, n_U;                                                                            \
+    fla_dim_t m_V, n_V;                                                                            \
     FLA_Obj A, s, U, V;                                                                        \
     FLA_Error e_val, init_result;                                                              \
                                                                                                \

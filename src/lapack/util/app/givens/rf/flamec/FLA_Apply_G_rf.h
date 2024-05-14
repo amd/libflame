@@ -54,7 +54,7 @@ FLA_Error FLA_Apply_G_rf_asz_var1( integer       k_G,
                                    dcomplex* buff_G, integer rs_G, integer cs_G,
                                    dcomplex* buff_A, integer rs_A, integer cs_A );
 
-FLA_Error FLA_Apply_G_rf_blk_var1( FLA_Obj G, FLA_Obj A, dim_t b_alg );
+FLA_Error FLA_Apply_G_rf_blk_var1( FLA_Obj G, FLA_Obj A, fla_dim_t b_alg );
 FLA_Error FLA_Apply_G_rf_bls_var1( integer       k_G,
                                    integer       m_A,
                                    integer       n_A,
@@ -126,7 +126,7 @@ FLA_Error FLA_Apply_G_rf_asz_var2( integer       k_G,
                                    dcomplex* buff_G, integer rs_G, integer cs_G,
                                    dcomplex* buff_A, integer rs_A, integer cs_A );
 
-FLA_Error FLA_Apply_G_rf_blk_var2( FLA_Obj G, FLA_Obj A, dim_t b_alg );
+FLA_Error FLA_Apply_G_rf_blk_var2( FLA_Obj G, FLA_Obj A, fla_dim_t b_alg );
 FLA_Error FLA_Apply_G_rf_bls_var2( integer       k_G,
                                    integer       m_A,
                                    integer       n_A,
@@ -198,7 +198,7 @@ FLA_Error FLA_Apply_G_rf_asz_var3( integer       k_G,
                                    dcomplex* buff_G, integer rs_G, integer cs_G,
                                    dcomplex* buff_A, integer rs_A, integer cs_A );
 
-FLA_Error FLA_Apply_G_rf_blk_var3( FLA_Obj G, FLA_Obj A, dim_t b_alg );
+FLA_Error FLA_Apply_G_rf_blk_var3( FLA_Obj G, FLA_Obj A, fla_dim_t b_alg );
 FLA_Error FLA_Apply_G_rf_bls_var3( integer       k_G,
                                    integer       m_A,
                                    integer       n_A,
@@ -270,7 +270,7 @@ FLA_Error FLA_Apply_G_rf_asz_var4( integer       k_G,
                                    dcomplex* buff_G, integer rs_G, integer cs_G,
                                    dcomplex* buff_A, integer rs_A, integer cs_A );
 
-FLA_Error FLA_Apply_G_rf_blk_var4( FLA_Obj G, FLA_Obj A, dim_t b_alg );
+FLA_Error FLA_Apply_G_rf_blk_var4( FLA_Obj G, FLA_Obj A, fla_dim_t b_alg );
 FLA_Error FLA_Apply_G_rf_bls_var4( integer       k_G,
                                    integer       m_A,
                                    integer       n_A,
@@ -342,7 +342,7 @@ FLA_Error FLA_Apply_G_rf_asz_var5( integer       k_G,
                                    dcomplex* buff_G, integer rs_G, integer cs_G,
                                    dcomplex* buff_A, integer rs_A, integer cs_A );
 
-FLA_Error FLA_Apply_G_rf_blk_var5( FLA_Obj G, FLA_Obj A, dim_t b_alg );
+FLA_Error FLA_Apply_G_rf_blk_var5( FLA_Obj G, FLA_Obj A, fla_dim_t b_alg );
 FLA_Error FLA_Apply_G_rf_bls_var5( integer       k_G,
                                    integer       m_A,
                                    integer       n_A,
@@ -414,7 +414,7 @@ FLA_Error FLA_Apply_G_rf_asz_var6( integer       k_G,
                                    dcomplex* buff_G, integer rs_G, integer cs_G,
                                    dcomplex* buff_A, integer rs_A, integer cs_A );
 
-FLA_Error FLA_Apply_G_rf_blk_var6( FLA_Obj G, FLA_Obj A, dim_t b_alg );
+FLA_Error FLA_Apply_G_rf_blk_var6( FLA_Obj G, FLA_Obj A, fla_dim_t b_alg );
 FLA_Error FLA_Apply_G_rf_bls_var6( integer       k_G,
                                    integer       m_A,
                                    integer       n_A,
@@ -486,7 +486,7 @@ FLA_Error FLA_Apply_G_rf_asz_var7( integer       k_G,
                                    dcomplex* buff_G, integer rs_G, integer cs_G,
                                    dcomplex* buff_A, integer rs_A, integer cs_A );
 
-FLA_Error FLA_Apply_G_rf_blk_var7( FLA_Obj G, FLA_Obj A, dim_t b_alg );
+FLA_Error FLA_Apply_G_rf_blk_var7( FLA_Obj G, FLA_Obj A, fla_dim_t b_alg );
 FLA_Error FLA_Apply_G_rf_bls_var7( integer       k_G,
                                    integer       m_A,
                                    integer       n_A,
@@ -558,7 +558,7 @@ FLA_Error FLA_Apply_G_rf_asz_var8( integer       k_G,
                                    dcomplex* buff_G, integer rs_G, integer cs_G,
                                    dcomplex* buff_A, integer rs_A, integer cs_A );
 
-FLA_Error FLA_Apply_G_rf_blk_var8( FLA_Obj G, FLA_Obj A, dim_t b_alg );
+FLA_Error FLA_Apply_G_rf_blk_var8( FLA_Obj G, FLA_Obj A, fla_dim_t b_alg );
 FLA_Error FLA_Apply_G_rf_bls_var8( integer       k_G,
                                    integer       m_A,
                                    integer       n_A,
@@ -630,7 +630,7 @@ FLA_Error FLA_Apply_G_rf_asz_var9( integer       k_G,
                                    dcomplex* buff_G, integer rs_G, integer cs_G,
                                    dcomplex* buff_A, integer rs_A, integer cs_A );
 
-FLA_Error FLA_Apply_G_rf_blk_var9( FLA_Obj G, FLA_Obj A, dim_t b_alg );
+FLA_Error FLA_Apply_G_rf_blk_var9( FLA_Obj G, FLA_Obj A, fla_dim_t b_alg );
 FLA_Error FLA_Apply_G_rf_bls_var9( integer       k_G,
                                    integer       m_A,
                                    integer       n_A,
@@ -694,7 +694,7 @@ FLA_Error FLA_Apply_G_rf_asz_var3b( integer       k_G,
                                    dcomplex* buff_G, integer rs_G, integer cs_G,
                                    dcomplex* buff_A, integer rs_A, integer cs_A );
 
-FLA_Error FLA_Apply_G_rf_blk_var3b( FLA_Obj G, FLA_Obj A, dim_t b_alg );
+FLA_Error FLA_Apply_G_rf_blk_var3b( FLA_Obj G, FLA_Obj A, fla_dim_t b_alg );
 FLA_Error FLA_Apply_G_rf_bls_var3b( integer       k_G,
                                    integer       m_A,
                                    integer       n_A,
@@ -757,7 +757,7 @@ FLA_Error FLA_Apply_G_rf_asz_var5b( integer       k_G,
                                    dcomplex* buff_G, integer rs_G, integer cs_G,
                                    dcomplex* buff_A, integer rs_A, integer cs_A );
 
-FLA_Error FLA_Apply_G_rf_blk_var5b( FLA_Obj G, FLA_Obj A, dim_t b_alg );
+FLA_Error FLA_Apply_G_rf_blk_var5b( FLA_Obj G, FLA_Obj A, fla_dim_t b_alg );
 FLA_Error FLA_Apply_G_rf_bls_var5b( integer       k_G,
                                    integer       m_A,
                                    integer       n_A,
@@ -820,7 +820,7 @@ FLA_Error FLA_Apply_G_rf_asz_var6b( integer       k_G,
                                    dcomplex* buff_G, integer rs_G, integer cs_G,
                                    dcomplex* buff_A, integer rs_A, integer cs_A );
 
-FLA_Error FLA_Apply_G_rf_blk_var6b( FLA_Obj G, FLA_Obj A, dim_t b_alg );
+FLA_Error FLA_Apply_G_rf_blk_var6b( FLA_Obj G, FLA_Obj A, fla_dim_t b_alg );
 FLA_Error FLA_Apply_G_rf_bls_var6b( integer       k_G,
                                    integer       m_A,
                                    integer       n_A,
@@ -883,7 +883,7 @@ FLA_Error FLA_Apply_G_rf_asz_var8b( integer       k_G,
                                    dcomplex* buff_G, integer rs_G, integer cs_G,
                                    dcomplex* buff_A, integer rs_A, integer cs_A );
 
-FLA_Error FLA_Apply_G_rf_blk_var8b( FLA_Obj G, FLA_Obj A, dim_t b_alg );
+FLA_Error FLA_Apply_G_rf_blk_var8b( FLA_Obj G, FLA_Obj A, fla_dim_t b_alg );
 FLA_Error FLA_Apply_G_rf_bls_var8b( integer       k_G,
                                    integer       m_A,
                                    integer       n_A,
@@ -971,7 +971,7 @@ FLA_Error FLA_Apply_G_rf_asz_var9b( integer       k_G,
                                    dcomplex* buff_G, integer rs_G, integer cs_G,
                                    dcomplex* buff_A, integer rs_A, integer cs_A );
 
-FLA_Error FLA_Apply_G_rf_blk_var9b( FLA_Obj G, FLA_Obj A, dim_t b_alg );
+FLA_Error FLA_Apply_G_rf_blk_var9b( FLA_Obj G, FLA_Obj A, fla_dim_t b_alg );
 FLA_Error FLA_Apply_G_rf_bls_var9b( integer       k_G,
                                    integer       m_A,
                                    integer       n_A,

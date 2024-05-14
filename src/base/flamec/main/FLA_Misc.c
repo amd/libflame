@@ -175,11 +175,11 @@ void FLA_Obj_extract_imag_part( FLA_Obj a, FLA_Obj b )
 
 void FLA_Obj_set_real_part( FLA_Obj alpha, FLA_Obj B )
 {
-  dim_t m_B;
-  dim_t n_B;
-  dim_t rs_B;
-  dim_t cs_B;
-  dim_t i, j;
+  fla_dim_t m_B;
+  fla_dim_t n_B;
+  fla_dim_t rs_B;
+  fla_dim_t cs_B;
+  fla_dim_t i, j;
 
   m_B  = FLA_Obj_length( B );
   n_B  = FLA_Obj_width( B );
@@ -228,11 +228,11 @@ void FLA_Obj_set_real_part( FLA_Obj alpha, FLA_Obj B )
 
 void FLA_Obj_set_imag_part( FLA_Obj alpha, FLA_Obj B )
 {
-  dim_t m_B;
-  dim_t n_B;
-  dim_t rs_B;
-  dim_t cs_B;
-  dim_t i, j;
+  fla_dim_t m_B;
+  fla_dim_t n_B;
+  fla_dim_t rs_B;
+  fla_dim_t cs_B;
+  fla_dim_t i, j;
 
   m_B  = FLA_Obj_length( B );
   n_B  = FLA_Obj_width( B );
@@ -282,8 +282,8 @@ void FLA_Obj_set_imag_part( FLA_Obj alpha, FLA_Obj B )
 FLA_Error FLA_Obj_fshow( FILE* file, char *s1, FLA_Obj A, char *format, char *s2 )
 {
   FLA_Datatype datatype;
-  dim_t        i, j, m, n;
-  dim_t        rs, cs;
+  fla_dim_t        i, j, m, n;
+  fla_dim_t        rs, cs;
 
   if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
     FLA_Obj_fshow_check( file, s1, A, format, s2 );

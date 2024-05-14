@@ -10,7 +10,7 @@
 
 #include "FLAME.h"
 
-FLA_Error FLA_Apply_CAQ_UT_inc_apply_panels( dim_t nb_part, FLA_Obj A, FLA_Obj TW, FLA_Obj W, FLA_Obj B )
+FLA_Error FLA_Apply_CAQ_UT_inc_apply_panels( fla_dim_t nb_part, FLA_Obj A, FLA_Obj TW, FLA_Obj W, FLA_Obj B )
 {
   FLA_Obj AT,              A0, 
           AB,              A1,
@@ -28,7 +28,7 @@ FLA_Error FLA_Apply_CAQ_UT_inc_apply_panels( dim_t nb_part, FLA_Obj A, FLA_Obj T
           BB,              B1,
                            B2;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_2x1( A,    &AT, 
                       &AB,            0, FLA_TOP );

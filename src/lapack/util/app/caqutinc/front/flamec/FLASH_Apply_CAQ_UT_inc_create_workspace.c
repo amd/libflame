@@ -10,13 +10,13 @@
 
 #include "FLAME.h"
 
-FLA_Error FLASH_Apply_CAQ_UT_inc_create_workspace( dim_t p, FLA_Obj TW, FLA_Obj B, FLA_Obj* W )
+FLA_Error FLASH_Apply_CAQ_UT_inc_create_workspace( fla_dim_t p, FLA_Obj TW, FLA_Obj B, FLA_Obj* W )
 {
 	FLA_Datatype datatype;
-	dim_t        depth;
-	dim_t        b_alg;
-	dim_t        b_flash;
-	dim_t        m, n;
+	fla_dim_t        depth;
+	fla_dim_t        b_alg;
+	fla_dim_t        b_flash;
+	fla_dim_t        m, n;
 
 	// Query the depth.
 	depth = FLASH_Obj_depth( TW );

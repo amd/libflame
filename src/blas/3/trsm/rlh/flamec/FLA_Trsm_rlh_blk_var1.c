@@ -20,7 +20,7 @@ FLA_Error FLA_Trsm_rlh_blk_var1( FLA_Diag diagA, FLA_Obj alpha, FLA_Obj A, FLA_O
 
   FLA_Obj BL,    BR,       B0,  B1,  B2;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Scal_internal( alpha, B,
                      FLA_Cntl_sub_scal( cntl ) );

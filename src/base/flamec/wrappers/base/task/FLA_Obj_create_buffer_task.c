@@ -10,7 +10,7 @@
 
 #include "FLAME.h"
 
-FLA_Error FLA_Obj_create_buffer_task( dim_t rs, dim_t cs, FLA_Obj obj, void* cntl )
+FLA_Error FLA_Obj_create_buffer_task( fla_dim_t rs, fla_dim_t cs, FLA_Obj obj, void* cntl )
 {
   FLA_Error r_val;
 

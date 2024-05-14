@@ -13,8 +13,8 @@
 FLA_Error FLA_Max_abs_value_herm( FLA_Uplo uplo, FLA_Obj A, FLA_Obj maxabs )
 {
   FLA_Datatype datatype;
-  dim_t        n_A;
-  dim_t        rs_A, cs_A;
+  fla_dim_t        n_A;
+  fla_dim_t        rs_A, cs_A;
   uplo1_t       blis_uplo;
 
   if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )

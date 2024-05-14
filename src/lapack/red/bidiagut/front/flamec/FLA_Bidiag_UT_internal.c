@@ -39,7 +39,7 @@ FLA_Error FLA_Bidiag_UT_internal( FLA_Obj A, FLA_Obj TU, FLA_Obj TV, fla_bidiagu
           {
             FLA_Obj ATL, ATR,
                     ABL, ABR;
-            dim_t   b;
+            fla_dim_t   b;
 
             FLA_Conjugate( TU );
             FLA_Conjugate( TV );

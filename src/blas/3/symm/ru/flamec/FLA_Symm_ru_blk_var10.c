@@ -22,7 +22,7 @@ FLA_Error FLA_Symm_ru_blk_var10( FLA_Obj alpha, FLA_Obj A, FLA_Obj B, FLA_Obj be
           CB,              C1,
                            C2;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_2x1( B,    &BT, 
                       &BB,            0, FLA_BOTTOM );

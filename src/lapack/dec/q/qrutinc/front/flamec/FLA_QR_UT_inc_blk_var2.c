@@ -22,7 +22,7 @@ FLA_Error FLA_QR_UT_inc_blk_var2( FLA_Obj A, FLA_Obj TW, FLA_Obj U, fla_qrutinc_
 
   FLA_Obj UL,    UR,       U0,  U11,  U2;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_2x2( A,    &ATL, &ATR,
                       &ABL, &ABR,     0, 0, FLA_TL );

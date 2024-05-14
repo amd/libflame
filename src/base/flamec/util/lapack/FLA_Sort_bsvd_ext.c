@@ -71,10 +71,10 @@ FLA_Error FLA_Sort_bsvd_ext( FLA_Direct direct, FLA_Obj s,
                              FLA_Bool apply_C, FLA_Obj C )
 {
     FLA_Datatype datatype;
-    dim_t        m_U, rs_U, cs_U;
-    dim_t        m_V, rs_V, cs_V;
-    dim_t        n_C, rs_C, cs_C;
-    dim_t        m_s, inc_s;
+    fla_dim_t        m_U, rs_U, cs_U;
+    fla_dim_t        m_V, rs_V, cs_V;
+    fla_dim_t        n_C, rs_C, cs_C;
+    fla_dim_t        m_s, inc_s;
 
     //if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
     //	FLA_Sort_bsvd_check( direct, s,

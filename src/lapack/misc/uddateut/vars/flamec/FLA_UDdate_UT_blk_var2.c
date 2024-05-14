@@ -26,7 +26,7 @@ FLA_Error FLA_UDdate_UT_blk_var2( FLA_Obj R,
           TB,              T1,
                            T2;
 
-  dim_t   b_C, b_D, b_T;
+  fla_dim_t   b_C, b_D, b_T;
 
   FLA_Part_2x1( C,    &CT, 
                       &CB,            0, FLA_TOP );

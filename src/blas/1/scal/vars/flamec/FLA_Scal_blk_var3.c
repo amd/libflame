@@ -14,7 +14,7 @@ FLA_Error FLA_Scal_blk_var3( FLA_Obj alpha, FLA_Obj A, fla_scal_t* cntl )
 {
   FLA_Obj AL,    AR,       A0,  A1,  A2;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_1x2( A,    &AL,  &AR,      0, FLA_LEFT );
 

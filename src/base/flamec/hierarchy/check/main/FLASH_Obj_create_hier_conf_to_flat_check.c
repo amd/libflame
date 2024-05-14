@@ -10,7 +10,7 @@
 
 #include "FLAME.h"
 
-FLA_Error FLASH_Obj_create_hier_conf_to_flat_check( FLA_Trans trans, FLA_Obj F, dim_t depth, dim_t* blocksizes, FLA_Obj* H )
+FLA_Error FLASH_Obj_create_hier_conf_to_flat_check( FLA_Trans trans, FLA_Obj F, fla_dim_t depth, fla_dim_t* blocksizes, FLA_Obj* H )
 {
   FLA_Error e_val;
 

@@ -27,7 +27,7 @@ FLA_Error FLA_Apply_Q_UT_lnfr_blk_var3( FLA_Obj A, FLA_Obj TW, FLA_Obj W, FLA_Ob
           BB,              B1,
                            B2;
 
-  dim_t b, m_BR, n_BR;
+  fla_dim_t b, m_BR, n_BR;
 
   // If m < n, then we have to initialize our partitionings carefully so
   // that we begin in the proper location in A and B (since we traverse

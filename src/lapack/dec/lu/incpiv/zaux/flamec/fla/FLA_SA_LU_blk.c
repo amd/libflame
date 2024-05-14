@@ -11,7 +11,7 @@
 #include "FLAME.h"
 
 FLA_Error FLA_SA_LU_blk( FLA_Obj U, 
-                         FLA_Obj D, FLA_Obj p, FLA_Obj L, dim_t nb_alg )
+                         FLA_Obj D, FLA_Obj p, FLA_Obj L, fla_dim_t nb_alg )
 {
   FLA_Obj UTL,   UTR,      U00, U01, U02, 
           UBL,   UBR,      U10, U11, U12,
@@ -29,7 +29,7 @@ FLA_Error FLA_SA_LU_blk( FLA_Obj U,
 
   FLA_Obj L1_sqr, L1_rest;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_2x2( U,    &UTL, &UTR,
                       &UBL, &UBR,     0, 0, FLA_TL );

@@ -90,7 +90,7 @@ void libfla_test_spdinv_experiment( test_params_t params,
                                     double*       t,
                                     double*       residual )
 {
-	dim_t        b_flash    = params.b_flash;
+	fla_dim_t        b_flash    = params.b_flash;
 	double       time_min   = 1e9;
 	double       time;
 	unsigned int i;

@@ -20,7 +20,7 @@ FLA_Error FLA_Gemm_nt_blk_var4( FLA_Obj alpha, FLA_Obj A, FLA_Obj B, FLA_Obj bet
 
   FLA_Obj CL,    CR,       C0,  C1,  C2;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_2x1( B,    &BT, 
                       &BB,            0, FLA_BOTTOM );

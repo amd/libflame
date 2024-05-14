@@ -10,7 +10,7 @@
 
 #include "FLAME.h"
 
-FLA_Error FLASH_Obj_create_hierarchy_check( FLA_Datatype datatype, dim_t m, dim_t n, dim_t depth, dim_t* elem_sizes_m, dim_t* elem_sizes_n, FLA_Obj flat_matrix, FLA_Obj* H, unsigned long id, dim_t depth_overall, dim_t* depth_sizes_m, dim_t* depth_sizes_n, dim_t* m_offsets, dim_t* n_offsets )
+FLA_Error FLASH_Obj_create_hierarchy_check( FLA_Datatype datatype, fla_dim_t m, fla_dim_t n, fla_dim_t depth, fla_dim_t* elem_sizes_m, fla_dim_t* elem_sizes_n, FLA_Obj flat_matrix, FLA_Obj* H, unsigned long id, fla_dim_t depth_overall, fla_dim_t* depth_sizes_m, fla_dim_t* depth_sizes_n, fla_dim_t* m_offsets, fla_dim_t* n_offsets )
 {
   FLA_Error e_val;
 

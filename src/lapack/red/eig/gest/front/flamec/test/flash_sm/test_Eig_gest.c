@@ -35,8 +35,8 @@ int main(int argc, char *argv[])
     i,
     n_param_combos = N_PARAM_COMBOS;
 
-  dim_t b_flash;
-  dim_t n_threads;
+  fla_dim_t b_flash;
+  fla_dim_t n_threads;
 
   FLA_Datatype datatype;
   FLA_Uplo     uplo;

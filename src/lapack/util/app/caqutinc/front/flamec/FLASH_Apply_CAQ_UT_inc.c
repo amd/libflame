@@ -12,12 +12,12 @@
 
 extern TLS_CLASS_SPEC fla_apcaqutinc_t* flash_apcaqutinc_cntl;
 
-FLA_Error FLASH_Apply_CAQ_UT_inc( dim_t p,
+FLA_Error FLASH_Apply_CAQ_UT_inc( fla_dim_t p,
                                   FLA_Side side, FLA_Trans trans, FLA_Direct direct, FLA_Store storev,
                                   FLA_Obj A, FLA_Obj ATW, FLA_Obj R, FLA_Obj RTW, FLA_Obj W, FLA_Obj B )
 {
   FLA_Error r_val;
-  dim_t     nb_part;
+  fla_dim_t     nb_part;
   FLA_Obj   WT, WB;
 
   // Check parameters.

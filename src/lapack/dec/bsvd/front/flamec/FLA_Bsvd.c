@@ -16,9 +16,9 @@ FLA_Error FLA_Bsvd( FLA_Uplo uplo, FLA_Obj d, FLA_Obj e,
                     FLA_Svd_type jobv, FLA_Obj V )
 {
   FLA_Error r_val      = FLA_SUCCESS;
-  dim_t     n_iter_max = 30;
-  dim_t     b_alg      = 512;
-  dim_t     m_d        = FLA_Obj_vector_dim( d );
+  fla_dim_t     n_iter_max = 30;
+  fla_dim_t     b_alg      = 512;
+  fla_dim_t     m_d        = FLA_Obj_vector_dim( d );
   FLA_Obj   C; // dummy variable
 
   // Check parameters.

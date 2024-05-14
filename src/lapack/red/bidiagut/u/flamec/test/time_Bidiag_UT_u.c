@@ -251,7 +251,7 @@ FLA_Obj_show( "TV", TV, "%10.3e", "" );
     FLA_Obj E, EL, ER;
     FLA_Obj F;
     FLA_Obj WU, WWU, WV, WWV;
-    dim_t   m_A, n_A, m_TU, m_TTU;
+    fla_dim_t   m_A, n_A, m_TU, m_TTU;
 
 //FLA_Obj_show( "A_save", A_save, "%10.3e", "" );
 

@@ -17,11 +17,11 @@ FLA_Datatype FLASH_Obj_datatype( FLA_Obj H )
 }
 
 
-dim_t FLASH_Obj_depth( FLA_Obj H )
+fla_dim_t FLASH_Obj_depth( FLA_Obj H )
 {
 	FLA_Elemtype elemtype;
 	FLA_Obj*     buffer_H;
-	dim_t        depth = 0;
+	fla_dim_t        depth = 0;
 
 	// Recurse through the hierarchy to the first leaf node. We initialize
 	// the recursion here:
@@ -46,11 +46,11 @@ dim_t FLASH_Obj_depth( FLA_Obj H )
 }
 
 
-dim_t FLASH_Obj_blocksizes( FLA_Obj H, dim_t* b_m, dim_t* b_n )
+fla_dim_t FLASH_Obj_blocksizes( FLA_Obj H, fla_dim_t* b_m, fla_dim_t* b_n )
 {
 	FLA_Elemtype elemtype;
 	FLA_Obj*     buffer_H;
-	dim_t        depth = 0;
+	fla_dim_t        depth = 0;
 
 	if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
 		FLASH_Obj_blocksizes_check( H, b_m, b_n );
@@ -80,13 +80,13 @@ dim_t FLASH_Obj_blocksizes( FLA_Obj H, dim_t* b_m, dim_t* b_n )
 	return depth;
 }
 
-dim_t FLASH_Obj_base_scalar_length( FLA_Obj H )
+fla_dim_t FLASH_Obj_base_scalar_length( FLA_Obj H )
 {
 	FLA_Obj* buffer;
-	dim_t    m;
-	dim_t    rs, cs;
-	dim_t    i;
-	dim_t    m_base = 0;
+	fla_dim_t    m;
+	fla_dim_t    rs, cs;
+	fla_dim_t    i;
+	fla_dim_t    m_base = 0;
 
 	if ( FLA_Obj_elemtype( H ) == FLA_SCALAR )
 		return FLA_Obj_base_length( H );
@@ -110,13 +110,13 @@ dim_t FLASH_Obj_base_scalar_length( FLA_Obj H )
 	return m_base;
 }
 
-dim_t FLASH_Obj_base_scalar_width( FLA_Obj H )
+fla_dim_t FLASH_Obj_base_scalar_width( FLA_Obj H )
 {
 	FLA_Obj* buffer;
-	dim_t    n;
-	dim_t    rs, cs;
-	dim_t    j;
-	dim_t    n_base = 0;
+	fla_dim_t    n;
+	fla_dim_t    rs, cs;
+	fla_dim_t    j;
+	fla_dim_t    n_base = 0;
 
 	if ( FLA_Obj_elemtype( H ) == FLA_SCALAR )
 		return FLA_Obj_base_width( H );
@@ -140,7 +140,7 @@ dim_t FLASH_Obj_base_scalar_width( FLA_Obj H )
 	return n_base;
 }
 
-FLA_Error FLASH_Obj_create( FLA_Datatype datatype, dim_t m, dim_t n, dim_t depth, dim_t* b_mn, FLA_Obj* H )
+FLA_Error FLASH_Obj_create( FLA_Datatype datatype, fla_dim_t m, fla_dim_t n, fla_dim_t depth, fla_dim_t* b_mn, FLA_Obj* H )
 {
 	FLASH_Obj_create_helper( FALSE, datatype, m, n, depth, b_mn, b_mn, H );
 
@@ -148,7 +148,7 @@ FLA_Error FLASH_Obj_create( FLA_Datatype datatype, dim_t m, dim_t n, dim_t depth
 }
 
 
-FLA_Error FLASH_Obj_create_ext( FLA_Datatype datatype, dim_t m, dim_t n, dim_t depth, dim_t* b_m, dim_t* b_n, FLA_Obj* H )
+FLA_Error FLASH_Obj_create_ext( FLA_Datatype datatype, fla_dim_t m, fla_dim_t n, fla_dim_t depth, fla_dim_t* b_m, fla_dim_t* b_n, FLA_Obj* H )
 {
 	FLASH_Obj_create_helper( FALSE, datatype, m, n, depth, b_m, b_n, H );
 
@@ -156,7 +156,7 @@ FLA_Error FLASH_Obj_create_ext( FLA_Datatype datatype, dim_t m, dim_t n, dim_t d
 }
 
 
-FLA_Error FLASH_Obj_create_without_buffer( FLA_Datatype datatype, dim_t m, dim_t n, dim_t depth, dim_t* b_mn, FLA_Obj* H )
+FLA_Error FLASH_Obj_create_without_buffer( FLA_Datatype datatype, fla_dim_t m, fla_dim_t n, fla_dim_t depth, fla_dim_t* b_mn, FLA_Obj* H )
 {
 	FLASH_Obj_create_helper( TRUE, datatype, m, n, depth, b_mn, b_mn, H );
 
@@ -164,7 +164,7 @@ FLA_Error FLASH_Obj_create_without_buffer( FLA_Datatype datatype, dim_t m, dim_t
 }
 
 
-FLA_Error FLASH_Obj_create_without_buffer_ext( FLA_Datatype datatype, dim_t m, dim_t n, dim_t depth, dim_t* b_m, dim_t* b_n, FLA_Obj* H )
+FLA_Error FLASH_Obj_create_without_buffer_ext( FLA_Datatype datatype, fla_dim_t m, fla_dim_t n, fla_dim_t depth, fla_dim_t* b_m, fla_dim_t* b_n, FLA_Obj* H )
 {
 	FLASH_Obj_create_helper( TRUE, datatype, m, n, depth, b_m, b_n, H );
 
@@ -172,9 +172,9 @@ FLA_Error FLASH_Obj_create_without_buffer_ext( FLA_Datatype datatype, dim_t m, d
 }
 
 
-FLA_Error FLASH_Obj_create_helper( FLA_Bool without_buffer, FLA_Datatype datatype, dim_t m, dim_t n, dim_t depth, dim_t* b_m, dim_t* b_n, FLA_Obj* H )
+FLA_Error FLASH_Obj_create_helper( FLA_Bool without_buffer, FLA_Datatype datatype, fla_dim_t m, fla_dim_t n, fla_dim_t depth, fla_dim_t* b_m, fla_dim_t* b_n, FLA_Obj* H )
 {
-	dim_t     i;
+	fla_dim_t     i;
 	FLA_Obj   flat_matrix;
 
 	if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
@@ -192,12 +192,12 @@ FLA_Error FLASH_Obj_create_helper( FLA_Bool without_buffer, FLA_Datatype datatyp
 	else
 	{
 		// We need temporary arrays the same length as the blocksizes arrays.
-		dim_t* elem_sizes_m  = ( dim_t * ) FLA_malloc( depth * sizeof( dim_t ) );
-		dim_t* elem_sizes_n  = ( dim_t * ) FLA_malloc( depth * sizeof( dim_t ) );
-		dim_t* depth_sizes_m = ( dim_t * ) FLA_malloc( depth * sizeof( dim_t ) );
-		dim_t* depth_sizes_n = ( dim_t * ) FLA_malloc( depth * sizeof( dim_t ) );
-		dim_t* m_offsets     = ( dim_t * ) FLA_malloc( depth * sizeof( dim_t ) );
-		dim_t* n_offsets     = ( dim_t * ) FLA_malloc( depth * sizeof( dim_t ) );
+		fla_dim_t* elem_sizes_m  = ( fla_dim_t * ) FLA_malloc( depth * sizeof( fla_dim_t ) );
+		fla_dim_t* elem_sizes_n  = ( fla_dim_t * ) FLA_malloc( depth * sizeof( fla_dim_t ) );
+		fla_dim_t* depth_sizes_m = ( fla_dim_t * ) FLA_malloc( depth * sizeof( fla_dim_t ) );
+		fla_dim_t* depth_sizes_n = ( fla_dim_t * ) FLA_malloc( depth * sizeof( fla_dim_t ) );
+		fla_dim_t* m_offsets     = ( fla_dim_t * ) FLA_malloc( depth * sizeof( fla_dim_t ) );
+		fla_dim_t* n_offsets     = ( fla_dim_t * ) FLA_malloc( depth * sizeof( fla_dim_t ) );
 		
 		// Fill two sets of arrays: elem_sizes_m/elem_sizes_n and depth_sizes_m/
 		// depth_sizes_n.
@@ -268,14 +268,14 @@ FLA_Error FLASH_Obj_create_helper( FLA_Bool without_buffer, FLA_Datatype datatyp
 }
 
 
-FLA_Error FLASH_Obj_create_hierarchy( FLA_Datatype datatype, dim_t m, dim_t n, dim_t depth, dim_t* elem_sizes_m, dim_t* elem_sizes_n, FLA_Obj flat_matrix, FLA_Obj* H, unsigned long id, dim_t depth_overall, dim_t* depth_sizes_m, dim_t* depth_sizes_n, dim_t* m_offsets, dim_t* n_offsets )
+FLA_Error FLASH_Obj_create_hierarchy( FLA_Datatype datatype, fla_dim_t m, fla_dim_t n, fla_dim_t depth, fla_dim_t* elem_sizes_m, fla_dim_t* elem_sizes_n, FLA_Obj flat_matrix, FLA_Obj* H, unsigned long id, fla_dim_t depth_overall, fla_dim_t* depth_sizes_m, fla_dim_t* depth_sizes_n, fla_dim_t* m_offsets, fla_dim_t* n_offsets )
 {
-	dim_t    i, j, b;
-	dim_t    next_m, next_n;
-	dim_t    num_m, num_n;
-	dim_t    m_inner, n_inner;
-	dim_t    elem_size_m_cur;
-	dim_t    elem_size_n_cur;
+	fla_dim_t    i, j, b;
+	fla_dim_t    next_m, next_n;
+	fla_dim_t    num_m, num_n;
+	fla_dim_t    m_inner, n_inner;
+	fla_dim_t    elem_size_m_cur;
+	fla_dim_t    elem_size_n_cur;
 	FLA_Obj  FL, FR, F0, F1, F2;
 	FLA_Obj* buffer_H;
 
@@ -406,12 +406,12 @@ FLA_Error FLASH_Obj_create_hierarchy( FLA_Datatype datatype, dim_t m, dim_t n, d
 FLA_Error FLASH_Obj_create_conf_to( FLA_Trans trans, FLA_Obj H, FLA_Obj* H_new )
 {
 	FLA_Datatype datatype;
-	dim_t        m_base, n_base;
-	dim_t        m_view, n_view;
-	dim_t        offm_scalar, offn_scalar;
-	dim_t        depth;
-	dim_t*       b_m;
-	dim_t*       b_n;
+	fla_dim_t        m_base, n_base;
+	fla_dim_t        m_view, n_view;
+	fla_dim_t        offm_scalar, offn_scalar;
+	fla_dim_t        depth;
+	fla_dim_t*       b_m;
+	fla_dim_t*       b_n;
 
 	if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
 		FLASH_Obj_create_conf_to_check( trans, H, H_new );
@@ -428,8 +428,8 @@ FLA_Error FLASH_Obj_create_conf_to( FLA_Trans trans, FLA_Obj H, FLA_Obj* H_new )
 
 	// Allocate a pair of temporary arrays for the blocksizes, whose lengths
 	// are equal to the object's hierarchical depth.
-	b_m = ( dim_t* ) FLA_malloc( depth * sizeof( dim_t ) );
-	b_n = ( dim_t* ) FLA_malloc( depth * sizeof( dim_t ) );
+	b_m = ( fla_dim_t* ) FLA_malloc( depth * sizeof( fla_dim_t ) );
+	b_n = ( fla_dim_t* ) FLA_malloc( depth * sizeof( fla_dim_t ) );
 
 	// Accumulate the blocksizes into the blocksize buffer.
 	FLASH_Obj_blocksizes( H, b_m, b_n );
@@ -456,11 +456,11 @@ FLA_Error FLASH_Obj_create_conf_to( FLA_Trans trans, FLA_Obj H, FLA_Obj* H_new )
 }
 
 
-FLA_Error FLASH_Obj_create_hier_conf_to_flat( FLA_Trans trans, FLA_Obj F, dim_t depth, dim_t* b_mn, FLA_Obj* H )
+FLA_Error FLASH_Obj_create_hier_conf_to_flat( FLA_Trans trans, FLA_Obj F, fla_dim_t depth, fla_dim_t* b_mn, FLA_Obj* H )
 {
 	FLA_Datatype datatype;
-	dim_t        m_H, n_H;
-	dim_t        m_F, n_F;
+	fla_dim_t        m_H, n_H;
+	fla_dim_t        m_F, n_F;
 
 	if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
 		FLASH_Obj_create_hier_conf_to_flat_check( trans, F, depth, b_mn, H );
@@ -490,11 +490,11 @@ FLA_Error FLASH_Obj_create_hier_conf_to_flat( FLA_Trans trans, FLA_Obj F, dim_t 
 }
 
 
-FLA_Error FLASH_Obj_create_hier_conf_to_flat_ext( FLA_Trans trans, FLA_Obj F, dim_t depth, dim_t* b_m, dim_t* b_n, FLA_Obj* H )
+FLA_Error FLASH_Obj_create_hier_conf_to_flat_ext( FLA_Trans trans, FLA_Obj F, fla_dim_t depth, fla_dim_t* b_m, fla_dim_t* b_n, FLA_Obj* H )
 {
 	FLA_Datatype datatype;
-	dim_t        m_H, n_H;
-	dim_t        m_F, n_F;
+	fla_dim_t        m_H, n_H;
+	fla_dim_t        m_F, n_F;
 
 	if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
 		FLASH_Obj_create_hier_conf_to_flat_ext_check( trans, F, depth, b_m, b_n, H );
@@ -527,8 +527,8 @@ FLA_Error FLASH_Obj_create_hier_conf_to_flat_ext( FLA_Trans trans, FLA_Obj F, di
 FLA_Error FLASH_Obj_create_flat_conf_to_hier( FLA_Trans trans, FLA_Obj H, FLA_Obj* F )
 {
 	FLA_Datatype datatype;
-	dim_t        m_H, n_H;
-	dim_t        m_F, n_F;
+	fla_dim_t        m_H, n_H;
+	fla_dim_t        m_F, n_F;
 
 	if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
 		FLASH_Obj_create_flat_conf_to_hier_check( trans, H, F );
@@ -588,7 +588,7 @@ FLA_Error FLASH_Obj_create_copy_of( FLA_Trans trans, FLA_Obj H_cur, FLA_Obj* H_n
 }
 
 
-FLA_Error FLASH_Obj_create_hier_copy_of_flat( FLA_Obj F, dim_t depth, dim_t* b_mn, FLA_Obj* H )
+FLA_Error FLASH_Obj_create_hier_copy_of_flat( FLA_Obj F, fla_dim_t depth, fla_dim_t* b_mn, FLA_Obj* H )
 {
 	if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
 		FLASH_Obj_create_hier_copy_of_flat_check( F, depth, b_mn, H );
@@ -604,7 +604,7 @@ FLA_Error FLASH_Obj_create_hier_copy_of_flat( FLA_Obj F, dim_t depth, dim_t* b_m
 }
 
 
-FLA_Error FLASH_Obj_create_hier_copy_of_flat_ext( FLA_Obj F, dim_t depth, dim_t* b_m, dim_t* b_n, FLA_Obj* H )
+FLA_Error FLASH_Obj_create_hier_copy_of_flat_ext( FLA_Obj F, fla_dim_t depth, fla_dim_t* b_m, fla_dim_t* b_n, FLA_Obj* H )
 {
 	if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
 		FLASH_Obj_create_hier_copy_of_flat_ext_check( F, depth, b_m, b_n, H );
@@ -698,9 +698,9 @@ void FLASH_Obj_free_without_buffer( FLA_Obj* H )
 
 void FLASH_Obj_free_hierarchy( FLA_Obj* H )
 {
-	//dim_t    m_H, n_H, rs, cs, i, j;
-	dim_t    i;
-	dim_t    n_elem_alloc;
+	//fla_dim_t    m_H, n_H, rs, cs, i, j;
+	fla_dim_t    i;
+	fla_dim_t    n_elem_alloc;
 	FLA_Obj* buffer_H;
 
 	if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
@@ -778,10 +778,10 @@ FLA_Error FLASH_Obj_hierarchify( FLA_Obj F, FLA_Obj H )
 }
 
 
-FLA_Error FLASH_Obj_attach_buffer( void* buffer, dim_t rs, dim_t cs, FLA_Obj* H )
+FLA_Error FLASH_Obj_attach_buffer( void* buffer, fla_dim_t rs, fla_dim_t cs, FLA_Obj* H )
 {
 	FLA_Obj      flat_matrix;
-	dim_t        m_base, n_base;
+	fla_dim_t        m_base, n_base;
 	FLA_Datatype datatype;
 
 	if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
@@ -826,7 +826,7 @@ FLA_Error FLASH_Obj_attach_buffer_hierarchy( FLA_Obj F, FLA_Obj* H )
 	        H1B,              H11,
 	                          H21;
 
-	dim_t b_m, b_n;
+	fla_dim_t b_m, b_n;
 
 	if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
 		FLASH_Obj_attach_buffer_hierarchy_check( F, H );
@@ -916,7 +916,7 @@ FLA_Error FLASH_Obj_attach_buffer_hierarchy( FLA_Obj F, FLA_Obj* H )
 
 void FLASH_print_struct( FLA_Obj H )
 {
-	dim_t    m_H, n_H, rs, cs, i, j;
+	fla_dim_t    m_H, n_H, rs, cs, i, j;
 	FLA_Obj* buffer_temp;
 
 	m_H = FLA_Obj_length( H );
@@ -943,7 +943,7 @@ void FLASH_print_struct( FLA_Obj H )
 
 void FLASH_print_struct_helper( FLA_Obj H, int indent )
 {
-	dim_t    m_H, n_H, rs, cs, i, j, k;
+	fla_dim_t    m_H, n_H, rs, cs, i, j, k;
 	FLA_Obj* buffer_temp;
 
 	for ( i = 0; i < indent; ++i )

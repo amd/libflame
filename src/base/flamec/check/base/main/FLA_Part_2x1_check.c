@@ -12,7 +12,7 @@
 
 FLA_Error FLA_Part_2x1_check( FLA_Obj A,  FLA_Obj *A1,
                                           FLA_Obj *A2,
-                              dim_t  mb,  FLA_Side side )
+                              fla_dim_t  mb,  FLA_Side side )
 {
   FLA_Error e_val;
 

@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     i,
     n_variants = 1;
 
-  dim_t
+  fla_dim_t
     b_flash,
     b_alg,
     n_threads;

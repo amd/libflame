@@ -27,7 +27,7 @@ FLA_Error FLA_QR_UT_piv_blk_var2( FLA_Obj A, FLA_Obj T, FLA_Obj w, FLA_Obj p, fl
           wB,              w1,
                            w2;
 
-  dim_t   b_alg, b;
+  fla_dim_t   b_alg, b;
 
   // Query the algorithmic blocksize by inspecting the length of T.
   b_alg = FLA_Obj_length( T );

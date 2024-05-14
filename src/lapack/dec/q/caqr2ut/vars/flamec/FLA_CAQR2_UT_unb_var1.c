@@ -33,7 +33,7 @@ FLA_Error FLA_CAQR2_UT_unb_var1( FLA_Obj U,
   FLA_Obj D00T,
           D00B;
 
-  dim_t   m_DT;
+  fla_dim_t   m_DT;
 
   // Begin partitioning diagonally through D with m - n rows above
   // the diagonal.

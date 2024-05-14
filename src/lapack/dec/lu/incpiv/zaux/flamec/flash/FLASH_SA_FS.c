@@ -12,7 +12,7 @@
 
 FLA_Error FLASH_SA_FS( FLA_Obj L,
                        FLA_Obj D, FLA_Obj p, FLA_Obj C,
-                                             FLA_Obj E, dim_t nb_alg, fla_gemm_t* cntl )
+                                             FLA_Obj E, fla_dim_t nb_alg, fla_gemm_t* cntl )
 {
    FLA_Obj CL,    CR,       C0,  C1,  C2;
 

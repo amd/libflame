@@ -56,7 +56,7 @@ void libfla_test_her2k_impl( int         impl,
                              FLA_Obj     beta,
                              FLA_Obj     C );
 void libfla_test_her2k_cntl_create( unsigned int var,
-                                    dim_t        b_alg_flat );
+                                    fla_dim_t        b_alg_flat );
 void libfla_test_her2k_cntl_free( void );
 
 
@@ -130,8 +130,8 @@ void libfla_test_her2k_experiment( test_params_t params,
                                    double*       t,
                                    double*       residual )
 {
-	dim_t        b_flash    = params.b_flash;
-	dim_t        b_alg_flat = params.b_alg_flat;
+	fla_dim_t        b_flash    = params.b_flash;
+	fla_dim_t        b_alg_flat = params.b_alg_flat;
 	double       time_min   = 1e9;
 	double       time;
 	unsigned int i;
@@ -326,7 +326,7 @@ extern LIBFLAME_IMPORT TLS_CLASS_SPEC fla_gemm_t*  fla_gemm_cntl_blas;
 extern LIBFLAME_IMPORT TLS_CLASS_SPEC fla_her2k_t* fla_her2k_cntl_blas;
 
 void libfla_test_her2k_cntl_create( unsigned int var,
-                                    dim_t        b_alg_flat )
+                                    fla_dim_t        b_alg_flat )
 {
 	int var_unb = FLA_UNB_VAR_OFFSET + var;
 	int var_blk = FLA_BLK_VAR_OFFSET + var;

@@ -10,7 +10,7 @@
 
 #include "FLAME.h"
 
-FLA_Error FLA_CAQR_UT_inc_factorize_panels( dim_t nb_part, FLA_Obj A, FLA_Obj TW )
+FLA_Error FLA_CAQR_UT_inc_factorize_panels( fla_dim_t nb_part, FLA_Obj A, FLA_Obj TW )
 {
   FLA_Obj AT,              A0, 
           AB,              A1,
@@ -20,7 +20,7 @@ FLA_Error FLA_CAQR_UT_inc_factorize_panels( dim_t nb_part, FLA_Obj A, FLA_Obj TW
           TWB,             TW1,
                            TW2;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_2x1( A,    &AT, 
                       &AB,            0, FLA_TOP );

@@ -41,7 +41,7 @@
     FLA_Obj t, T, TL, TR;                                             \
     FLA_Error init_result;                                            \
     FLA_Uplo uplo_fla;                                                \
-    dim_t m_d = *m, m_e = (m_d - 1);                                  \
+    fla_dim_t m_d = *m, m_e = (m_d - 1);                                  \
                                                                       \
     FLA_Init_safe(&init_result);                                      \
     FLA_Param_map_netlib_to_flame_uplo(uplo, &uplo_fla);              \

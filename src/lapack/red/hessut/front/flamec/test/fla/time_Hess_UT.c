@@ -81,7 +81,7 @@ void time_Hess_UT(
     FLA_Obj Q, QT, QB;
     FLA_Obj E, ET, EB;
     FLA_Obj F;
-    dim_t   m_A, m_T;
+    fla_dim_t   m_A, m_T;
 
     m_A = FLA_Obj_length( A );
     m_T = FLA_Obj_length( T );

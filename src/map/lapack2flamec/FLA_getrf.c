@@ -271,7 +271,7 @@ extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileNa
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);   \
     FLA_Obj A, p, AH, ph;                                    \
     integer min_m_n = fla_min(*m, *n);                       \
-    dim_t nth, b_flash;                                      \
+    fla_dim_t nth, b_flash;                                      \
     FLA_Error e_val;                                         \
     FLA_Error init_result;                                   \
                                                              \

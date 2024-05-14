@@ -42,7 +42,7 @@ integer RCCE_APP( integer argc, char* argv[] )
       work_stealing = 0,
       data_affinity = 0;
 
-   dim_t
+   fla_dim_t
       size,
       nb_alg;
 

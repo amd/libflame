@@ -18,7 +18,7 @@ FLA_Error FLA_Lyap_h_blk_var3( FLA_Obj isgn, FLA_Obj A, FLA_Obj C, FLA_Obj scale
   FLA_Obj CTL,   CTR,      C00, C01, C02, 
           CBL,   CBR,      C10, C11, C12,
                            C20, C21, C22;
-  dim_t   b;
+  fla_dim_t   b;
 
   FLA_Part_2x2( A,    &ATL, &ATR,
                       &ABL, &ABR,     0, 0, FLA_TL );

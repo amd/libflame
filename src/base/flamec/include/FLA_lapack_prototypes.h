@@ -42,8 +42,8 @@ FLA_Error FLA_LU_nopiv_task( FLA_Obj A, fla_lu_t* cntl );
 FLA_Error FLA_LU_piv_task( FLA_Obj A, FLA_Obj p, fla_lu_t* cntl );
 FLA_Error FLA_LU_piv_copy_task( FLA_Obj A, FLA_Obj p, FLA_Obj U, fla_lu_t* cntl );
 FLA_Error FLA_Trsm_piv_task( FLA_Obj A, FLA_Obj B, FLA_Obj p, fla_trsm_t* cntl );
-FLA_Error FLA_SA_LU_task( FLA_Obj U, FLA_Obj D, FLA_Obj p, FLA_Obj L, dim_t nb_alg, fla_lu_t* cntl );
-FLA_Error FLA_SA_FS_task( FLA_Obj L, FLA_Obj D, FLA_Obj p, FLA_Obj C, FLA_Obj E, dim_t nb_alg, fla_gemm_t* cntl );
+FLA_Error FLA_SA_LU_task( FLA_Obj U, FLA_Obj D, FLA_Obj p, FLA_Obj L, fla_dim_t nb_alg, fla_lu_t* cntl );
+FLA_Error FLA_SA_FS_task( FLA_Obj L, FLA_Obj D, FLA_Obj p, FLA_Obj C, FLA_Obj E, fla_dim_t nb_alg, fla_gemm_t* cntl );
 FLA_Error FLA_Trinv_task( FLA_Uplo uplo, FLA_Diag diag, FLA_Obj A, fla_trinv_t* cntl );
 FLA_Error FLA_Trinv_ln_task( FLA_Obj A, fla_trinv_t* cntl );
 FLA_Error FLA_Trinv_lu_task( FLA_Obj A, fla_trinv_t* cntl );
@@ -270,7 +270,7 @@ FLA_Error FLA_Apply_Q_UT_inc_check( FLA_Side side, FLA_Trans trans, FLA_Direct d
 FLA_Error FLA_Apply_CAQ_UT_inc_check( FLA_Side side, FLA_Trans trans, FLA_Direct direct, FLA_Store storev, FLA_Obj A, FLA_Obj ATW, FLA_Obj R, FLA_Obj RTW, FLA_Obj W1, FLA_Obj B );
 
 FLA_Error FLA_QR_UT_inc_solve_check( FLA_Obj A, FLA_Obj TW, FLA_Obj B, FLA_Obj X );
-FLA_Error FLA_CAQR_UT_inc_solve_check( dim_t p, FLA_Obj A, FLA_Obj ATW, FLA_Obj R, FLA_Obj RTW, FLA_Obj B, FLA_Obj X );
+FLA_Error FLA_CAQR_UT_inc_solve_check( fla_dim_t p, FLA_Obj A, FLA_Obj ATW, FLA_Obj R, FLA_Obj RTW, FLA_Obj B, FLA_Obj X );
 
 FLA_Error FLA_UDdate_UT_check( FLA_Obj R, FLA_Obj C, FLA_Obj D, FLA_Obj T );
 FLA_Error FLA_UDdate_UT_update_rhs_check( FLA_Obj T, FLA_Obj bR, FLA_Obj C, FLA_Obj bC, FLA_Obj D, FLA_Obj bD );
@@ -280,7 +280,7 @@ FLA_Error FLA_UDdate_UT_inc_check( FLA_Obj R, FLA_Obj C, FLA_Obj D, FLA_Obj T, F
 FLA_Error FLA_UDdate_UT_inc_update_rhs_check( FLA_Obj T, FLA_Obj bR, FLA_Obj C, FLA_Obj bC, FLA_Obj D, FLA_Obj bD );
 FLA_Error FLA_UDdate_UT_inc_solve_check( FLA_Obj R, FLA_Obj bR, FLA_Obj x );
 
-FLA_Error FLA_CAQR_UT_inc_check( dim_t p, FLA_Obj A, FLA_Obj ATW, FLA_Obj R, FLA_Obj RTW );
+FLA_Error FLA_CAQR_UT_inc_check( fla_dim_t p, FLA_Obj A, FLA_Obj ATW, FLA_Obj R, FLA_Obj RTW );
 
 FLA_Error FLA_Apply_QUD_UT_inc_check( FLA_Side side, FLA_Trans trans, FLA_Direct direct, FLA_Store storev, FLA_Obj T, FLA_Obj W, FLA_Obj R, FLA_Obj U, FLA_Obj C, FLA_Obj V, FLA_Obj D );
 

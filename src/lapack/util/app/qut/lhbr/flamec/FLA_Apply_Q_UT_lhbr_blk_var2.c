@@ -16,7 +16,7 @@ FLA_Error FLA_Apply_Q_UT_lhbr_blk_var2( FLA_Obj A, FLA_Obj T, FLA_Obj W, FLA_Obj
 
   FLA_Obj WL,    WR,       W0,  W1,  W2;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_1x2( B,    &BL,  &BR,      0, FLA_LEFT );
 

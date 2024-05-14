@@ -39,7 +39,7 @@ integer main( integer argc, char *argv[] )
 
   integer sign;
 
-  dim_t b_flash;
+  fla_dim_t b_flash;
   
   char *colors = "brkgmcbrkg";
   char *ticks  = "o+*xso+*xs";

@@ -564,7 +564,7 @@ void parallel_gemm_kernel(obj_t* alpha, obj_t* a, obj_t* b, obj_t* beta, obj_t* 
     thrinfo_t* thread = NULL;
 
     // Query the thread's id from OpenMP.
-    const dim_t tid = omp_get_thread_num();
+    const fla_dim_t tid = omp_get_thread_num();
 
     // Use the thread id to access the appropriate pool_t* within the array_t
     bli_sba_rntm_set_pool( tid, array, rntm_p );
@@ -603,8 +603,8 @@ int FLA_LU_piv_z_var2_parallel( integer *m, integer *n, dcomplex *a, integer *ld
     obj_t       co     = BLIS_OBJECT_INITIALIZER;
     const num_t dt     = BLIS_DCOMPLEX;
     integer   m0, n0, k0;
-    dim_t       m0_a, n0_a;
-    dim_t       m0_b, n0_b;
+    fla_dim_t       m0_a, n0_a;
+    fla_dim_t       m0_b, n0_b;
     trans_t blis_transa, blis_transb;
     cntx_t* cntx = NULL;
     rntm_t* rntm = NULL;

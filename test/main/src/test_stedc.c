@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -104,7 +104,6 @@ void fla_test_stedc(integer argc, char **argv, test_params_t *params)
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
     }
-    return;
 }
 
 void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer p_cur,
@@ -136,67 +135,51 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
     }
 
     create_matrix(datatype, &A, lda, n);
+    reset_matrix(datatype, lda, n, A, lda);
 
     realtype = get_realtype(datatype);
     create_vector(realtype, &D, n);
     create_vector(realtype, &E, n - 1);
 
-    if(g_ext_fptr != NULL)
+    /* Initialize input matrix with random/custom data */
+    init_matrix(realtype, D, 1, n, 1, g_ext_fptr, params->imatrix_char);
+    init_matrix(realtype, E, 1, n - 1, 1, g_ext_fptr, params->imatrix_char);
+    
+    if(compz == 'I')
     {
-        /* Initialize input matrix with custom data */
-
-        if(compz == 'V')
-        {
-            init_matrix_from_file(datatype, A, n, n, lda, g_ext_fptr);
-        }
-        else
-        {
-            init_vector_from_file(datatype, D, n, 1, g_ext_fptr);
-            init_vector_from_file(datatype, E, n, 1, g_ext_fptr);
-            copy_sym_tridiag_matrix(datatype, D, E, n, n, A, lda);
-        }
+        copy_sym_tridiag_matrix(datatype, D, E, n, n, A, lda);
     }
-    else
+    else if (compz == 'V')
     {
-        /* Create random symmetric/hermitian matrix if compz = V. */
-        if(compz == 'V')
-        {
-            if((datatype == FLOAT) || (datatype == DOUBLE))
-            {
-                rand_sym_matrix(datatype, A, n, n, lda);
-            }
-            else
-            {
-                rand_hermitian_matrix(datatype, n, &A, lda);
-            }
-        }
-        else
-        { /* Create tridiagonal matrix using random Diagonal, subdiagonal elements if compz != V. */
-            rand_vector(realtype, n, D, 1, d_zero, d_zero, 'R');
-            rand_vector(realtype, n - 1, E, 1, d_zero, d_zero, 'R');
-            copy_sym_tridiag_matrix(datatype, D, E, n, n, A, lda);
-        }
+        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+        /* Get the symmetric/hermitian matrix.*/
+        form_symmetric_matrix(datatype, n, A, lda, "C");
     }
 
     ldz = lda;
     create_matrix(datatype, &Z_input, ldz, n);
-    copy_matrix(datatype, "full", n, n, A, lda, Z_input, ldz);
+    if (compz != 'N')
+    {
+        /* Make a copy of input matrices. This is required to validate the API functionality. */
+        copy_matrix(datatype, "full", n, n, A, lda, Z_input, ldz);
+    }
+    create_matrix(datatype, &Z_test, ldz, n);
 
-    /* Call SYTRD(), ORGTR() to get tridiagonal/orthogonal matrix when compz = V. */
-    if(compz == 'V')
+    /* Call SYTRD(), ORGTR() to get tridiagonal, orthogonal/unitary matrix when compz = V. */
+    if((compz == 'V') && (params->imatrix_char == NULL) && (g_ext_fptr == NULL))
     {
         /* Initialize parameter needed for SYTRD() call. */
         uplo = 'U';
-        /* Call SYTRD() orthogonal matrix and tridiagonal elements.
-           invoke_sytrd() internally calls ORGTR() to get orthogonal matrix.*/
+        /* invoke_sytrd() internally calls ORGTR() to get orthogonal matrix.*/
         invoke_sytrd(datatype, &uplo, compz, n, A, lda, D, E, &info);
     }
-    /* Make a copy of input matrices. This is required to validate the API functionality. */
-    create_matrix(datatype, &Z_test, ldz, n);
+
+    /* Copy orthogonal/unitary matrix to Z_test. */
     if(compz == 'V')
     {
         copy_matrix(datatype, "full", n, n, A, lda, Z_test, ldz);
     }
+    
     create_vector(realtype, &D_test, n);
     copy_vector(realtype, n, D, 1, D_test, 1);
     create_vector(realtype, &E_test, n - 1);
@@ -207,7 +190,6 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
 
     /* Execution time. */
     *t = time_min;
-
     /* Performance computation
        (6)n^3 flops for eigen vectors
        (4/3)n^3 flops for eigen values. */
@@ -222,10 +204,23 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Output validation. */
-    if(info == 0)
+    if(!params->imatrix_char && (info == 0))
+    {
         validate_stedc(compz, n, D_test, Z_input, Z_test, ldz, datatype, residual, &vinfo);
-
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    }
+    /* Check for output matrix & vectors when inputs are extreme values */
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        if(!check_extreme_value(datatype, n, n, Z_test, lda, params->imatrix_char)
+           && !check_extreme_value(datatype, n, 1, D_test, 1, params->imatrix_char))
+        {
+            *residual = DBL_MAX;
+        }
+    }
+    else
+    {
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    }
 
     /* Free up buffers. */
     free_matrix(Z_input);
@@ -259,26 +254,35 @@ void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, intege
     copy_vector(realtype, n - 1, E, 1, E_save, 1);
 
     /* Call to STEDC() API to get work buffers size. */
-    if(g_lwork <= 0 || g_liwork <= 0
-       || ((datatype == COMPLEX || datatype == DOUBLE_COMPLEX) && g_lrwork <= 0))
+    if(g_lwork == -1 || g_liwork == -1
+       || ((datatype == COMPLEX || datatype == DOUBLE_COMPLEX) && g_lrwork == -1))
     {
         /* Make a workspace query the first time. This will provide us with
         and ideal workspace size based on internal block size.*/
         create_vector(datatype, &work, 1);
         create_vector(realtype, &rwork, 1);
         create_vector(INTEGER, &iwork, 1);
-        lwork = -1;
-        liwork = -1;
-        lrwork = -1;
+        lwork = g_lwork;
+        liwork = g_liwork;
+        lrwork = g_lrwork;
         invoke_stedc(datatype, compz, &n, D, E_test, Z, &ldz, work, &lwork, rwork, &lrwork, iwork,
                      &liwork, info);
 
         /* Get work buffers size. */
         if(*info == 0)
         {
-            lwork = get_work_value(datatype, work);
-            liwork = get_work_value(INTEGER, iwork);
-            lrwork = get_work_value(realtype, rwork);
+            if(g_lwork == -1)
+            {
+                lwork = get_work_value(datatype, work);
+            }
+            if(g_liwork == -1)
+            {
+                liwork = get_work_value(INTEGER, iwork);
+            }
+            if((datatype == COMPLEX || datatype == DOUBLE_COMPLEX) && g_lrwork == -1)
+            {
+                lrwork = get_work_value(realtype, rwork);
+            }
         }
 
         free_vector(work);

@@ -5820,7 +5820,7 @@ void disna(char* job, integer* m, integer* n, T* d, T* sep, integer* info)
           = 0:  successful exit \n
  
  *  * */
-void lag2d(integer* m, integer* n, float* sa, integer* ldsa, double* a, integer* lda, integer* info)
+inline void lag2d(integer* m, integer* n, float* sa, integer* ldsa, double* a, integer* lda, integer* info)
 {
   slag2d(m, n, sa, ldsa, a, lda, info);
 }
@@ -5867,7 +5867,7 @@ void lag2d(integer* m, integer* n, float* sa, integer* ldsa, double* a, integer*
                 of SA in exit is unspecified. \n
  
  *  * */
-void lag2s(integer*m, integer* n, double* a, integer* lda, float* sa, integer *ldsa, integer* info)
+inline void lag2s(integer*m, integer* n, double* a, integer* lda, float* sa, integer *ldsa, integer* info)
 {
   dlag2s(m, n, a, lda, sa, ldsa, info);
 }
@@ -5909,7 +5909,7 @@ void lag2s(integer*m, integer* n, double* a, integer* lda, float* sa, integer *l
           = 0:  successful exit \n
  
  *  * */
-void lag2z(integer*m, integer* n, scomplex* sa, integer*ldsa, dcomplex* a, integer* lda, integer* info)
+inline void lag2z(integer*m, integer* n, scomplex* sa, integer*ldsa, dcomplex* a, integer* lda, integer* info)
 {
   clag2z(m, n, sa, ldsa, a, lda, info);
 }
@@ -5955,7 +5955,7 @@ void lag2z(integer*m, integer* n, scomplex* sa, integer*ldsa, dcomplex* a, integ
                 of SA in exit is unspecified. \n
  
  *  * */
-void lag2c(integer*m, integer* n, dcomplex* a, integer*lda, scomplex* sa, integer* ldsa, integer* info)
+inline void lag2c(integer*m, integer* n, dcomplex* a, integer*lda, scomplex* sa, integer* ldsa, integer* info)
 {
   zlag2c(m, n, a, lda, sa, ldsa, info);
 }
@@ -10926,7 +10926,7 @@ void gesv(integer* n, integer* nrhs, T* a, integer* lda, integer* ipiv, T* b, in
                 singular, so the solution could not be computed. \n
 
  *  * */
-void sgesv(integer* n, integer* nrhs, double* a, integer* lda, integer* ipiv, double* b, integer* ldb, double* x, integer* ldx, double* work, float* swork, integer* iter, integer* info)
+inline void sgesv(integer* n, integer* nrhs, double* a, integer* lda, integer* ipiv, double* b, integer* ldb, double* x, integer* ldx, double* work, float* swork, integer* iter, integer* info)
 {
   dsgesv_(n, nrhs, a, lda, ipiv, b, ldb, x, ldx, work, swork, iter, info);
 }
@@ -11030,7 +11030,7 @@ void sgesv(integer* n, integer* nrhs, double* a, integer* lda, integer* ipiv, do
                 singular, so the solution could not be computed. \n
 
  *  * */
-void cgesv(integer* n, integer* nrhs, dcomplex* a, integer* lda, integer* ipiv, dcomplex* b, integer* ldb, dcomplex* x, integer* ldx, dcomplex *work, scomplex *swork, double *rwork, integer *iter, integer *info)
+inline void cgesv(integer* n, integer* nrhs, dcomplex* a, integer* lda, integer* ipiv, dcomplex* b, integer* ldb, dcomplex* x, integer* ldx, dcomplex *work, scomplex *swork, double *rwork, integer *iter, integer *info)
 {
   zcgesv_(n, nrhs, a, lda, ipiv, b, ldb, x, ldx, work, swork, rwork, iter, info);
 }
@@ -38065,7 +38065,7 @@ void hetri_rook(char *uplo, integer *n, T *a, integer * lda, integer *ipiv, T *w
     TRANS.
     \endverbatim 
  * */
-void hla_transtype(char *ret_val, integer *trans)
+inline void hla_transtype(char *ret_val, integer *trans)
 {
   chla_transtype_(ret_val, trans);
 } 
@@ -44702,11 +44702,11 @@ void ladiv(T *a, T *b, T *c, T *d, T *p, T *q)
           The complex scalars X and Y. \n
 
  * */
-void cladiv(scomplex *ret_val, scomplex *x, scomplex *y)
+inline void cladiv(scomplex *ret_val, scomplex *x, scomplex *y)
 {
   cladiv_(ret_val, x, y);
 }
-void zladiv(dcomplex *ret_val, dcomplex *x, dcomplex *y)
+inline void zladiv(dcomplex *ret_val, dcomplex *x, dcomplex *y)
 {
   zladiv_(ret_val, x, y);
 }
@@ -53863,11 +53863,11 @@ void lasdq(char *uplo, integer *sqre, integer *n, integer * ncvt, integer *nru, 
           bottom of the tree can be of.  \n
 
  *  * */
-void slasdt(integer *n, integer *lvl, integer *nd, integer * inode, integer *ndiml, integer *ndimr, integer *msub)
+inline void slasdt(integer *n, integer *lvl, integer *nd, integer * inode, integer *ndiml, integer *ndimr, integer *msub)
 {
   slasdt_(n, lvl, nd, inode, ndiml, ndimr, msub); 
 }
-void dlasdt(integer *n, integer *lvl, integer *nd, integer * inode, integer *ndiml, integer *ndimr, integer *msub)
+inline void dlasdt(integer *n, integer *lvl, integer *nd, integer * inode, integer *ndiml, integer *ndimr, integer *msub)
 {
   dlasdt_(n, lvl, nd, inode, ndiml, ndimr, msub); 
 }
@@ -55051,7 +55051,7 @@ void lasyf_rook(char *uplo, integer *n, integer *nb, integer *kb, T *a, integer 
                 of the UPLO part of SA in exit is unspecified.  \n
 
  *  * */
-void dlat2s(char *uplo, integer *n, double *a, integer * lda, float *sa, integer *ldsa, integer *info)
+inline void dlat2s(char *uplo, integer *n, double *a, integer * lda, float *sa, integer *ldsa, integer *info)
 {
   dlat2s_(uplo, n, a, lda, sa, ldsa, info); 
 }
@@ -55100,7 +55100,7 @@ void dlat2s(char *uplo, integer *n, double *a, integer * lda, float *sa, integer
                 of the UPLO part of SA in exit is unspecified.  \n
 
  * */
-void zlat2c(char *uplo, integer *n, dcomplex *a, integer *lda, scomplex *sa, integer *ldsa, integer *info)
+inline void zlat2c(char *uplo, integer *n, dcomplex *a, integer *lda, scomplex *sa, integer *ldsa, integer *info)
 {
   zlat2c_(uplo, n, a, lda, sa, ldsa, info);
 }
@@ -55695,7 +55695,7 @@ void latsqr(integer *m, integer *n, integer *mb, integer *nb, T *a, integer *lda
           The spacing between successive values of CX.  INCX >= 1.  \n
  * @return INTEGER Return value of the function.
  *  * */
-integer icmax1(integer *n, scomplex *cx, integer *incx)
+inline integer icmax1(integer *n, scomplex *cx, integer *incx)
 {
   return icmax1_(n, cx, incx);
 }
@@ -55723,7 +55723,7 @@ integer icmax1(integer *n, scomplex *cx, integer *incx)
 
  * @return INTEGER Return value of the function.
  *  * */
-integer ilaclc(integer *m, integer *n, scomplex *a, integer *lda) 
+inline integer ilaclc(integer *m, integer *n, scomplex *a, integer *lda) 
 {
   return ilaclc_(m, n, a, lda); 
 }
@@ -55751,7 +55751,7 @@ integer ilaclc(integer *m, integer *n, scomplex *a, integer *lda)
 
  * @return INTEGER Return value of the function.
  *  * */
-integer ilaclr(integer *m, integer *n, scomplex *a, integer *lda) 
+inline integer ilaclr(integer *m, integer *n, scomplex *a, integer *lda) 
 {
   return ilaclr_(m, n, a, lda); 
 }
@@ -55776,7 +55776,7 @@ integer ilaclr(integer *m, integer *n, scomplex *a, integer *lda)
 
  * @return INTEGER Return value of the function.
  *  * */  
-integer iladiag(char *diag)
+inline integer iladiag(char *diag)
 {
   return iladiag_(diag); 
 }
@@ -55804,7 +55804,7 @@ integer iladiag(char *diag)
 
  * @return INTEGER Return value of the function.
  *  * */
-integer iladlc(integer *m, integer *n, double *a, integer *lda) 
+inline integer iladlc(integer *m, integer *n, double *a, integer *lda) 
 {
   return iladlc_(m, n, a, lda);
 }
@@ -55832,7 +55832,7 @@ integer iladlc(integer *m, integer *n, double *a, integer *lda)
 
  * @return INTEGER Return value of the function.
  *  * */
-integer iladlr(integer *m, integer *n, double *a, integer *lda)
+inline integer iladlr(integer *m, integer *n, double *a, integer *lda)
 {
   return iladlr_(m, n, a, lda);
 }
@@ -55903,7 +55903,7 @@ integer iladlr(integer *m, integer *n, double *a, integer *lda)
 
  * @return INTEGER Return value of the function.
  *  * */
-integer ilaenv2stage(integer *ispec, char *name, char *opts, integer *n1, integer *n2, integer *n3, integer *n4) 
+inline integer ilaenv2stage(integer *ispec, char *name, char *opts, integer *n1, integer *n2, integer *n3, integer *n4) 
 {
   return ilaenv2stage_(ispec, name, opts, n1, n2, n3, n4); 
 }
@@ -55931,7 +55931,7 @@ integer ilaenv2stage(integer *ispec, char *name, char *opts, integer *n1, intege
 
  * @return INTEGER Return value of the function.
  *  * */
-integer ilaprec(char *prec)
+inline integer ilaprec(char *prec)
 {
   return ilaprec_(prec);
 }
@@ -55959,7 +55959,7 @@ integer ilaprec(char *prec)
 
  * @return INTEGER Return value of the function.
  *  * */
-integer ilaslc(integer *m, integer *n, float *a, integer *lda)
+inline integer ilaslc(integer *m, integer *n, float *a, integer *lda)
 {
   return ilaslc_(m, n, a, lda);
 }
@@ -55987,7 +55987,7 @@ integer ilaslc(integer *m, integer *n, float *a, integer *lda)
 
  * @return INTEGER Return value of the function.
  *  * */
-integer ilaslr(integer *m, integer *n, float *a, integer *lda) 
+inline integer ilaslr(integer *m, integer *n, float *a, integer *lda) 
 {
   return ilaslr_(m, n, a, lda); 
 }
@@ -56013,7 +56013,7 @@ integer ilaslr(integer *m, integer *n, float *a, integer *lda)
 
  * @return INTEGER Return value of the function.
  *  * */
-integer ilatrans(char *trans) 
+inline integer ilatrans(char *trans) 
 {
   return ilatrans_(trans); 
 }
@@ -56039,7 +56039,7 @@ integer ilatrans(char *trans)
 
  * @return INTEGER Return value of the function.
  *  * */
-integer ilauplo(char *uplo) 
+inline integer ilauplo(char *uplo) 
 {
   return ilauplo_(uplo); 
 }
@@ -56063,7 +56063,7 @@ integer ilauplo(char *uplo)
           return the lapack patch version from the minor version \n
 
  * */
-void ilaver(integer *vers_major, integer *vers_minor, integer *vers_patch__) 
+inline void ilaver(integer *vers_major, integer *vers_minor, integer *vers_patch__) 
 {
   ilaver_(vers_major, vers_minor, vers_patch__); 
 }
@@ -56093,7 +56093,7 @@ void ilaver(integer *vers_major, integer *vers_minor, integer *vers_patch__)
 
  * @return INTEGER Return value of the function.
  *  * */
-integer ilazlc(integer *m, integer *n, dcomplex *a, integer *lda) 
+inline integer ilazlc(integer *m, integer *n, dcomplex *a, integer *lda) 
 {
   return ilazlc_(m, n, a, lda); 
 }
@@ -56123,7 +56123,7 @@ integer ilazlc(integer *m, integer *n, dcomplex *a, integer *lda)
 
  * @return INTEGER Return value of the function.
  *  * */
-integer ilazlr(integer *m, integer *n, dcomplex *a, integer *lda) 
+inline integer ilazlr(integer *m, integer *n, dcomplex *a, integer *lda) 
 {
   return ilazlr_(m, n, a, lda); 
 }
@@ -56183,7 +56183,7 @@ integer ilazlr(integer *m, integer *n, dcomplex *a, integer *lda)
 
  * @return INTEGER Return value of the function.
  *  * */
-integer iparam2stage(integer *ispec, char *name, char *opts, integer *ni, integer *nbi, integer *ibi, integer *nxi) 
+inline integer iparam2stage(integer *ispec, char *name, char *opts, integer *ni, integer *nbi, integer *ibi, integer *nxi) 
 {
   return iparam2stage_(ispec, name, opts, ni, nbi, ibi, nxi);
 }
@@ -56212,7 +56212,7 @@ integer iparam2stage(integer *ispec, char *name, char *opts, integer *ni, intege
 
  * @return INTEGER Return value of the function.
  *  * */
-integer izmax1(integer *n, dcomplex *zx, integer *incx)
+inline integer izmax1(integer *n, dcomplex *zx, integer *incx)
 {
   return izmax1_(n, zx, incx);   
 }
@@ -57008,7 +57008,7 @@ void latzm(char* side, integer* m, integer* n, T* v, integer* incv, T* tau, T* c
                 has not been computed. \n
 
  *  * */
-void dsposv(char* uplo, integer* n, integer* nrhs, double* a, integer* lda, double* b, integer* ldb, double* x, integer* ldx, double* work, float* swork, integer* iter, integer* info)
+inline void dsposv(char* uplo, integer* n, integer* nrhs, double* a, integer* lda, double* b, integer* ldb, double* x, integer* ldx, double* work, float* swork, integer* iter, integer* info)
 {
   dsposv_(uplo, n, nrhs, a, lda, b, ldb, x, ldx, work, swork, iter, info);
 }
@@ -57130,7 +57130,7 @@ void dsposv(char* uplo, integer* n, integer* nrhs, double* a, integer* lda, doub
                 has not been computed. \n
 
  * */
-void zcposv(char* uplo, integer* n, integer* nrhs, dcomplex* a, integer* lda, dcomplex* b, integer* ldb, dcomplex* x, integer* ldx, dcomplex* work, scomplex* swork, double* rwork, integer* iter, integer* info)
+inline void zcposv(char* uplo, integer* n, integer* nrhs, dcomplex* a, integer* lda, dcomplex* b, integer* ldb, dcomplex* x, integer* ldx, dcomplex* work, scomplex* swork, double* rwork, integer* iter, integer* info)
 {
   zcposv_(uplo, n, nrhs, a, lda, b, ldb, x, ldx, work, swork, rwork, iter, info);
 }

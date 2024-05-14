@@ -12,7 +12,7 @@
 
 FLA_Error FLASH_FS_incpiv_aux2( FLA_Obj L,
                                 FLA_Obj D, FLA_Obj p, FLA_Obj C,
-                                                      FLA_Obj E, dim_t nb_alg )
+                                                      FLA_Obj E, fla_dim_t nb_alg )
 {
    FLA_Obj LT,              L0,
            LB,              L1,

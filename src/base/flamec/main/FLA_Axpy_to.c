@@ -10,7 +10,7 @@
 
 #include "FLAME.h"
 
-FLA_Error FLA_Axpy_buffer_to_object( FLA_Trans trans, FLA_Obj alpha, dim_t m, dim_t n, void* X_buffer, dim_t rs, dim_t cs, dim_t i, dim_t j, FLA_Obj Y )
+FLA_Error FLA_Axpy_buffer_to_object( FLA_Trans trans, FLA_Obj alpha, fla_dim_t m, fla_dim_t n, void* X_buffer, fla_dim_t rs, fla_dim_t cs, fla_dim_t i, fla_dim_t j, FLA_Obj Y )
 {
   FLA_Obj  X;
   FLA_Obj  YTL, YTR, 
@@ -34,7 +34,7 @@ FLA_Error FLA_Axpy_buffer_to_object( FLA_Trans trans, FLA_Obj alpha, dim_t m, di
 
 
 
-FLA_Error FLA_Axpy_object_to_buffer( FLA_Trans trans, FLA_Obj alpha, dim_t i, dim_t j, FLA_Obj X, dim_t m, dim_t n, void* Y_buffer, dim_t rs, dim_t cs )
+FLA_Error FLA_Axpy_object_to_buffer( FLA_Trans trans, FLA_Obj alpha, fla_dim_t i, fla_dim_t j, FLA_Obj X, fla_dim_t m, fla_dim_t n, void* Y_buffer, fla_dim_t rs, fla_dim_t cs )
 {
   FLA_Obj  Y;
   FLA_Obj  XTL, XTR, 

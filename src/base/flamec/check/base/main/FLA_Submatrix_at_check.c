@@ -10,7 +10,7 @@
 
 #include "FLAME.h"
 
-FLA_Error FLA_Submatrix_at_check( FLA_Datatype datatype, void* buffer, dim_t i, dim_t j, dim_t rs, dim_t cs )
+FLA_Error FLA_Submatrix_at_check( FLA_Datatype datatype, void* buffer, fla_dim_t i, fla_dim_t j, fla_dim_t rs, fla_dim_t cs )
 {
   FLA_Error e_val;
 

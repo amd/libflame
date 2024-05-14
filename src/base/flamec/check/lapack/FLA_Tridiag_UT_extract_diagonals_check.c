@@ -13,7 +13,7 @@
 FLA_Error FLA_Tridiag_UT_extract_diagonals_check( FLA_Uplo uplo, FLA_Obj A, FLA_Obj d, FLA_Obj e )
 {
   FLA_Error e_val;
-  dim_t     m_A;
+  fla_dim_t     m_A;
 
   e_val = FLA_Check_valid_uplo( uplo );
   FLA_Check_error_code( e_val );

@@ -58,9 +58,9 @@ FLA_Elemtype FLA_Obj_elemtype( FLA_Obj obj )
 
 
 
-dim_t FLA_Obj_datatype_size( FLA_Datatype datatype )
+fla_dim_t FLA_Obj_datatype_size( FLA_Datatype datatype )
 {
-  dim_t datatype_size = 0;
+  fla_dim_t datatype_size = 0;
 
   if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
     FLA_Obj_datatype_size_check( datatype );
@@ -92,9 +92,9 @@ dim_t FLA_Obj_datatype_size( FLA_Datatype datatype )
 
 
 
-dim_t FLA_Obj_elem_size( FLA_Obj obj )
+fla_dim_t FLA_Obj_elem_size( FLA_Obj obj )
 {
-  dim_t elem_size = 0;
+  fla_dim_t elem_size = 0;
 
   if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
     FLA_Obj_elem_size_check( obj );
@@ -113,14 +113,14 @@ dim_t FLA_Obj_elem_size( FLA_Obj obj )
 
 
 
-dim_t FLA_Obj_length( FLA_Obj obj )
+fla_dim_t FLA_Obj_length( FLA_Obj obj )
 {
   return obj.m;
 }
 
 
 
-dim_t FLA_Obj_width( FLA_Obj obj )
+fla_dim_t FLA_Obj_width( FLA_Obj obj )
 {
   return obj.n;
 }
@@ -134,7 +134,7 @@ FLA_Uplo FLA_Obj_structure( FLA_Obj obj )
 
 
 
-dim_t FLA_Obj_vector_dim( FLA_Obj obj )
+fla_dim_t FLA_Obj_vector_dim( FLA_Obj obj )
 {
   return ( obj.m == 1 ? obj.n
                       : obj.m );
@@ -142,7 +142,7 @@ dim_t FLA_Obj_vector_dim( FLA_Obj obj )
 
 
 
-dim_t FLA_Obj_vector_inc( FLA_Obj obj )
+fla_dim_t FLA_Obj_vector_inc( FLA_Obj obj )
 {
   return ( obj.m == 1 ? (obj.base)->cs
                       : (obj.base)->rs );
@@ -150,58 +150,58 @@ dim_t FLA_Obj_vector_inc( FLA_Obj obj )
 
 
 
-dim_t FLA_Obj_min_dim( FLA_Obj obj )
+fla_dim_t FLA_Obj_min_dim( FLA_Obj obj )
 {
   return fla_min( obj.m, obj.n );
 }
 
 
 
-dim_t FLA_Obj_max_dim( FLA_Obj obj )
+fla_dim_t FLA_Obj_max_dim( FLA_Obj obj )
 {
   return fla_max( obj.m, obj.n );
 }
 
 
 
-dim_t FLA_Obj_row_stride( FLA_Obj obj )
+fla_dim_t FLA_Obj_row_stride( FLA_Obj obj )
 {
   return (obj.base)->rs;
 }
 
 
 
-dim_t FLA_Obj_col_stride( FLA_Obj obj )
+fla_dim_t FLA_Obj_col_stride( FLA_Obj obj )
 {
   return (obj.base)->cs;
 }
 
 
-dim_t FLA_Obj_row_offset( FLA_Obj obj )
+fla_dim_t FLA_Obj_row_offset( FLA_Obj obj )
 {
 	return obj.offm;
 }
 
 
-dim_t FLA_Obj_col_offset( FLA_Obj obj )
+fla_dim_t FLA_Obj_col_offset( FLA_Obj obj )
 {
 	return obj.offn;
 }
 
 
-dim_t FLA_Obj_base_length( FLA_Obj obj )
+fla_dim_t FLA_Obj_base_length( FLA_Obj obj )
 {
 	return (obj.base)->m;
 }
 
 
-dim_t FLA_Obj_base_width( FLA_Obj obj )
+fla_dim_t FLA_Obj_base_width( FLA_Obj obj )
 {
 	return (obj.base)->n;
 }
 
 
-dim_t FLA_Obj_num_elem_alloc( FLA_Obj obj )
+fla_dim_t FLA_Obj_num_elem_alloc( FLA_Obj obj )
 {
   return (obj.base)->n_elem_alloc;
 }
@@ -509,10 +509,10 @@ FLA_Bool FLA_Obj_equals( FLA_Obj A, FLA_Obj B )
   FLA_Datatype datatype_A;
   FLA_Datatype datatype_B;
   FLA_Datatype datatype;
-  dim_t        m, n;
-  dim_t        rs_A, cs_A;
-  dim_t        rs_B, cs_B;
-  dim_t        i, j;
+  fla_dim_t        m, n;
+  fla_dim_t        rs_A, cs_A;
+  fla_dim_t        rs_B, cs_B;
+  fla_dim_t        i, j;
 
   if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
     FLA_Obj_equals_check( A, B );
@@ -966,7 +966,7 @@ FLA_Bool FLA_Obj_le( FLA_Obj A, FLA_Obj B )
 
 
 
-void* FLA_Submatrix_at( FLA_Datatype datatype, void* buffer, dim_t i, dim_t j, dim_t rs, dim_t cs )
+void* FLA_Submatrix_at( FLA_Datatype datatype, void* buffer, fla_dim_t i, fla_dim_t j, fla_dim_t rs, fla_dim_t cs )
 {
   void* r_val = buffer;
 
@@ -1002,7 +1002,7 @@ void* FLA_Submatrix_at( FLA_Datatype datatype, void* buffer, dim_t i, dim_t j, d
 FLA_Bool FLA_Obj_has_nan( FLA_Obj A )
 {
   FLA_Datatype datatype;
-  dim_t        i, j, m, n, cs, rs;
+  fla_dim_t        i, j, m, n, cs, rs;
   
   if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
     FLA_Obj_has_nan_check( A );

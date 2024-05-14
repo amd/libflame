@@ -13,10 +13,10 @@
 FLA_Error FLASH_Apply_QUD_UT_inc_create_workspace( FLA_Obj T, FLA_Obj R, FLA_Obj* W )
 {
 	FLA_Datatype datatype;
-	dim_t        depth;
-	dim_t        b_alg;
-	dim_t        b_flash;
-	dim_t        m, n;
+	fla_dim_t        depth;
+	fla_dim_t        b_alg;
+	fla_dim_t        b_flash;
+	fla_dim_t        m, n;
 
 	// Query the depth.
 	depth = FLASH_Obj_depth( T );

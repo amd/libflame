@@ -14,7 +14,7 @@ FLA_Error FLA_Fill_with_random_dist( FLA_Obj shift, FLA_Obj max, FLA_Obj x )
 {
 	FLA_Obj      r, y;
 	FLA_Datatype dt_real;
-	dim_t        n_x;
+	fla_dim_t        n_x;
 
 	if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
 		FLA_Fill_with_random_dist_check( shift, max, x );

@@ -94,9 +94,9 @@ typedef int FLA_Svd_type;
 typedef int FLA_Machval;
 typedef int FLA_Diag_off;
 
-#ifndef _DEFINED_DIM_T
-#define _DEFINED_DIM_T
-typedef uinteger dim_t;
+#ifndef _DEFINED_FLA_DIM_T
+#define _DEFINED_FLA_DIM_T
+typedef uinteger fla_dim_t;
 #endif
 
 // --- Intrinsic/assembly definitions ----------------------------------------
@@ -152,17 +152,17 @@ typedef struct FLA_Obj_struct
   // Basic object description fields
   FLA_Datatype  datatype;
   FLA_Elemtype  elemtype;
-  dim_t         m;
-  dim_t         n;
-  dim_t         rs;
-  dim_t         cs;
-  dim_t         m_inner;
-  dim_t         n_inner;
+  fla_dim_t         m;
+  fla_dim_t         n;
+  fla_dim_t         rs;
+  fla_dim_t         cs;
+  fla_dim_t         m_inner;
+  fla_dim_t         n_inner;
   unsigned long id;
-  dim_t         m_index;
-  dim_t         n_index;
+  fla_dim_t         m_index;
+  fla_dim_t         n_index;
 
-  dim_t         n_elem_alloc;
+  fla_dim_t         n_elem_alloc;
   void*         buffer;
   int           buffer_info;
 
@@ -186,12 +186,12 @@ typedef struct FLA_Obj_struct
 typedef struct FLA_Obj_view
 {
   // Basic object view description fields
-  dim_t         offm;
-  dim_t         offn;
-  dim_t         m;
-  dim_t         n;
-  dim_t         m_inner;
-  dim_t         n_inner;
+  fla_dim_t         offm;
+  fla_dim_t         offn;
+  fla_dim_t         m;
+  fla_dim_t         n;
+  fla_dim_t         m_inner;
+  fla_dim_t         n_inner;
 
   FLA_Base_obj* base;
 

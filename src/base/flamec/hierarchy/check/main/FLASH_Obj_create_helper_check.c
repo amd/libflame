@@ -10,7 +10,7 @@
 
 #include "FLAME.h"
 
-FLA_Error FLASH_Obj_create_helper_check( FLA_Bool without_buffer, FLA_Datatype datatype, dim_t m, dim_t n, dim_t depth, dim_t* b_m, dim_t* b_n, FLA_Obj* H )
+FLA_Error FLASH_Obj_create_helper_check( FLA_Bool without_buffer, FLA_Datatype datatype, fla_dim_t m, fla_dim_t n, fla_dim_t depth, fla_dim_t* b_m, fla_dim_t* b_n, FLA_Obj* H )
 {
   FLA_Error e_val;
 

@@ -53,7 +53,7 @@ FLA_Error FLA_Obj_nullify( FLA_Obj *obj )
   return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Obj_create( FLA_Datatype datatype, dim_t m, dim_t n, dim_t rs, dim_t cs, FLA_Obj *obj )
+FLA_Error FLA_Obj_create( FLA_Datatype datatype, fla_dim_t m, fla_dim_t n, fla_dim_t rs, fla_dim_t cs, FLA_Obj *obj )
 {
   FLA_Obj_create_ext( datatype, FLA_SCALAR, m, n, m, n, rs, cs, obj );
 
@@ -62,7 +62,7 @@ FLA_Error FLA_Obj_create( FLA_Datatype datatype, dim_t m, dim_t n, dim_t rs, dim
 
 
 
-FLA_Error FLA_Obj_create_ext( FLA_Datatype datatype, FLA_Elemtype elemtype, dim_t m, dim_t n, dim_t m_inner, dim_t n_inner, dim_t rs, dim_t cs, FLA_Obj *obj )
+FLA_Error FLA_Obj_create_ext( FLA_Datatype datatype, FLA_Elemtype elemtype, fla_dim_t m, fla_dim_t n, fla_dim_t m_inner, fla_dim_t n_inner, fla_dim_t rs, fla_dim_t cs, FLA_Obj *obj )
 {
   size_t buffer_size;
   size_t n_elem;
@@ -132,9 +132,9 @@ FLA_Error FLA_Obj_create_ext( FLA_Datatype datatype, FLA_Elemtype elemtype, dim_
 }
 
 
-dim_t FLA_compute_num_elem( dim_t elem_size, dim_t m, dim_t n, dim_t* rs, dim_t* cs )
+fla_dim_t FLA_compute_num_elem( fla_dim_t elem_size, fla_dim_t m, fla_dim_t n, fla_dim_t* rs, fla_dim_t* cs )
 {
-  dim_t n_elem;
+  fla_dim_t n_elem;
 
   // Determine the amount of space we need to allocate based on the values of
   // the row and column strides.
@@ -209,7 +209,7 @@ dim_t FLA_compute_num_elem( dim_t elem_size, dim_t m, dim_t n, dim_t* rs, dim_t*
 }
 
 
-dim_t FLA_align_ldim( dim_t ldim, dim_t elem_size )
+fla_dim_t FLA_align_ldim( fla_dim_t ldim, fla_dim_t elem_size )
 {
 #ifdef FLA_ENABLE_MEMORY_ALIGNMENT
   #ifdef FLA_ENABLE_LDIM_ALIGNMENT
@@ -226,7 +226,7 @@ dim_t FLA_align_ldim( dim_t ldim, dim_t elem_size )
 }
 
 
-void FLA_adjust_strides( dim_t m, dim_t n, dim_t* rs, dim_t* cs )
+void FLA_adjust_strides( fla_dim_t m, fla_dim_t n, fla_dim_t* rs, fla_dim_t* cs )
 {
   // Check the strides, and modify them if needed.
   if ( *rs == 0 && *cs == 0 )
@@ -288,8 +288,8 @@ FLA_Error FLA_Obj_create_conf_to( FLA_Trans trans, FLA_Obj obj_cur, FLA_Obj *obj
 {
   FLA_Datatype datatype;
   FLA_Elemtype elemtype;
-  dim_t        m, n;
-  dim_t        rs, cs;
+  fla_dim_t        m, n;
+  fla_dim_t        rs, cs;
 
   if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
     FLA_Obj_create_conf_to_check( trans, obj_cur, obj_new );
@@ -360,7 +360,7 @@ FLA_Error FLA_Obj_create_copy_of( FLA_Trans trans, FLA_Obj obj_cur, FLA_Obj *obj
 }
 
 
-FLA_Error FLA_Obj_create_without_buffer( FLA_Datatype datatype, dim_t m, dim_t n, FLA_Obj *obj )
+FLA_Error FLA_Obj_create_without_buffer( FLA_Datatype datatype, fla_dim_t m, fla_dim_t n, FLA_Obj *obj )
 {
   if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
     FLA_Obj_create_without_buffer_check( datatype, m, n, obj );
@@ -528,9 +528,9 @@ FLA_Error FLA_Obj_create_complex_constant( double const_real, double const_imag,
 
 
 
-FLA_Error FLA_Obj_attach_buffer( void *buffer, dim_t rs, dim_t cs, FLA_Obj *obj )
+FLA_Error FLA_Obj_attach_buffer( void *buffer, fla_dim_t rs, fla_dim_t cs, FLA_Obj *obj )
 {
-  dim_t m, n;
+  fla_dim_t m, n;
 
   m = FLA_Obj_length( *obj );
   n = FLA_Obj_width( *obj );
@@ -550,11 +550,11 @@ FLA_Error FLA_Obj_attach_buffer( void *buffer, dim_t rs, dim_t cs, FLA_Obj *obj 
 
 
 
-FLA_Error FLA_Obj_create_buffer( dim_t rs, dim_t cs, FLA_Obj *obj )
+FLA_Error FLA_Obj_create_buffer( fla_dim_t rs, fla_dim_t cs, FLA_Obj *obj )
 {
   size_t buffer_size;
   size_t n_elem;
-  dim_t  m, n;
+  fla_dim_t  m, n;
 
   m = FLA_Obj_length( *obj );
   n = FLA_Obj_width( *obj );
@@ -656,7 +656,7 @@ FLA_Error FLA_Obj_free_buffer( FLA_Obj *obj )
 FLA_Error FLA_Obj_flip_base( FLA_Obj *obj )
 {
   FLA_Error e_val;
-  dim_t temp;
+  fla_dim_t temp;
 
   if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
   {
@@ -678,7 +678,7 @@ FLA_Error FLA_Obj_flip_base( FLA_Obj *obj )
 FLA_Error FLA_Obj_flip_view( FLA_Obj *obj )
 {
   FLA_Error e_val;
-  dim_t temp;
+  fla_dim_t temp;
 
   if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
   {

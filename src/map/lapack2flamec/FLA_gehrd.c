@@ -29,7 +29,7 @@
 
 #define LAPACK_gehrd_body(prefix)                          \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix); \
-    dim_t m_t = (*m - 1);                                  \
+    fla_dim_t m_t = (*m - 1);                                  \
     FLA_Obj A, t, T;                                       \
     FLA_Error init_result;                                 \
                                                            \

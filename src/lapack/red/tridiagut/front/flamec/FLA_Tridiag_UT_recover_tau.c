@@ -20,7 +20,7 @@ FLA_Error FLA_Tridiag_UT_recover_tau( FLA_Obj T, FLA_Obj t )
           tB,              t1,
                            t2;
 
-  dim_t b_alg, b;
+  fla_dim_t b_alg, b;
 
   if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
     FLA_Tridiag_UT_recover_tau_check( T, t );

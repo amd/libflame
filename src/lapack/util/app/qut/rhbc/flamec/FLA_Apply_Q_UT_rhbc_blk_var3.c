@@ -25,7 +25,7 @@ FLA_Error FLA_Apply_Q_UT_rhbc_blk_var3( FLA_Obj A, FLA_Obj TW, FLA_Obj W, FLA_Ob
 
   FLA_Obj BL,    BR,       B0,  B1,  B2;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_2x2( A,    &ATL, &ATR,
                       &ABL, &ABR,     0, 0, FLA_TL );

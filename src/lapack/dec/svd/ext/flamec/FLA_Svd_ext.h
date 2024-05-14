@@ -12,10 +12,10 @@
  */
 
 FLA_Error FLA_Svd_ext_u_unb_var1( FLA_Svd_type jobu, FLA_Svd_type jobv, 
-                                  dim_t n_iter_max,
+                                  fla_dim_t n_iter_max,
                                   FLA_Obj A, FLA_Obj s, FLA_Obj V, FLA_Obj U,
-                                  dim_t k_accum,
-                                  dim_t b_alg );
+                                  fla_dim_t k_accum,
+                                  fla_dim_t b_alg );
 int lapack_dbdsqr(char *uplo, integer *n, integer *ncvt, integer *
 	          nru, integer *ncc, doublereal *d__, doublereal *e, doublereal *vt, 
 	          integer *ldvt, doublereal *u, integer *ldu, doublereal *c__, integer *

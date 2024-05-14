@@ -14,7 +14,7 @@ extern TLS_CLASS_SPEC fla_lu_t* flash_lu_incpiv_cntl;
 
 FLA_Error FLASH_LU_incpiv_opt1( FLA_Obj A, FLA_Obj p, FLA_Obj L )
 {
-  dim_t     nb_alg;
+  fla_dim_t     nb_alg;
   FLA_Error r_val;
   FLA_Obj   U;
 

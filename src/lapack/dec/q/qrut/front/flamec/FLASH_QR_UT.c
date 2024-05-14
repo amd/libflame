@@ -16,7 +16,7 @@ extern TLS_CLASS_SPEC fla_qrut_t*   fla_qrut_cntl_leaf;
 FLA_Error FLASH_QR_UT( FLA_Obj A, FLA_Obj TW )
 {
   FLA_Error r_val;
-  dim_t     b_alg, b_flash;
+  fla_dim_t     b_alg, b_flash;
 
   // Check parameters.
   if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )

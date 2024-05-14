@@ -83,7 +83,7 @@ void time_Bidiag_UT(
     FLA_Obj WU, WV, eye;
     FLA_Obj tvT,
             tvB;
-    dim_t   m_A, n_A, m_TU;
+    fla_dim_t   m_A, n_A, m_TU;
 
 
 //FLA_Obj_show( "A_save", A_save, "%10.3e", "" );

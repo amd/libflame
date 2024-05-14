@@ -1480,12 +1480,12 @@ void fill_string_with_n_spaces( char* str, unsigned int n_spaces )
 
 
 
-void libfla_test_obj_create( FLA_Datatype dt, FLA_Trans trans, char storage, dim_t m, dim_t n, FLA_Obj* A )
+void libfla_test_obj_create( FLA_Datatype dt, FLA_Trans trans, char storage, fla_dim_t m, fla_dim_t n, FLA_Obj* A )
 {
-	dim_t m_trans = m;
-	dim_t n_trans = n;
-	dim_t rs_g;
-	dim_t cs_g;
+	fla_dim_t m_trans = m;
+	fla_dim_t n_trans = n;
+	fla_dim_t rs_g;
+	fla_dim_t cs_g;
 
 	if ( trans == FLA_TRANSPOSE || trans == FLA_CONJ_TRANSPOSE )
 	{

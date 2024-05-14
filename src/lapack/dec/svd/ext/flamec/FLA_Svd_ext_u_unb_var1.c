@@ -11,18 +11,18 @@
 #include "FLAME.h"
 
 FLA_Error FLA_Svd_ext_u_unb_var1(FLA_Svd_type jobu, FLA_Svd_type jobv,
-                                 dim_t n_iter_max,
+                                 fla_dim_t n_iter_max,
                                  FLA_Obj A, FLA_Obj s, FLA_Obj U, FLA_Obj V,
-                                 dim_t k_accum,
-                                 dim_t b_alg)
+                                 fla_dim_t k_accum,
+                                 fla_dim_t b_alg)
 {
     FLA_Error r_val = FLA_SUCCESS;
     FLA_Datatype dt;
     FLA_Datatype dt_real;
     FLA_Datatype dt_comp;
     FLA_Obj scale, T, S, rL, rR, d, e, G, H, C; // C is dummy.
-    dim_t m_A, n_A, min_m_n;
-    dim_t n_GH;
+    fla_dim_t m_A, n_A, min_m_n;
+    fla_dim_t n_GH;
     double crossover_ratio = 17.0 / 9.0;
     FLA_Bool u_is_formed = FALSE,
              v_is_formed = FALSE;

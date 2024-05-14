@@ -13,8 +13,8 @@
 FLA_Error FLA_UDdate_UT_create_T( FLA_Obj R, FLA_Obj* T )
 {
   FLA_Datatype datatype;
-  dim_t        b_alg, k;
-  dim_t        rs_T, cs_T;
+  fla_dim_t        b_alg, k;
+  fla_dim_t        rs_T, cs_T;
 
   // Query the datatype of R.
   datatype = FLA_Obj_datatype( R );

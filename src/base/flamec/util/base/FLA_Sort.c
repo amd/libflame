@@ -19,8 +19,8 @@ FLA_Error FLA_Sort( FLA_Direct direct, FLA_Obj x )
 {
 	FLA_Datatype datatype;
 	FLA_Obj      x_use;
-	dim_t        m_x;
-	dim_t        inc_x;
+	fla_dim_t        m_x;
+	fla_dim_t        inc_x;
 
 	if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
 		FLA_Sort_check( direct, x );

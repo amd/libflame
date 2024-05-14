@@ -13,8 +13,8 @@
 FLA_Error FLA_Add_to_diag( void* diag_value, FLA_Obj A )
 {
   FLA_Datatype datatype;
-  dim_t        j, min_m_n;
-  dim_t        rs, cs;
+  fla_dim_t        j, min_m_n;
+  fla_dim_t        rs, cs;
 
   if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
     FLA_Add_to_diag_check( diag_value, A );

@@ -31,7 +31,7 @@ FLA_Error FLA_Apply_QUD_UT_lhfc_blk_var1( FLA_Obj T, FLA_Obj W,
   FLA_Obj W1TL,  W1TR,
           W1BL,  W1BR;
 
-  dim_t   b_alg, b;
+  fla_dim_t   b_alg, b;
 
   // Query the algorithmic blocksize by inspecting the length of T.
   b_alg = FLA_Obj_length( T );

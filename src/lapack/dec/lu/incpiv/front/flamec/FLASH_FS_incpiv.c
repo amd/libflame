@@ -12,7 +12,7 @@
 
 FLA_Error FLASH_FS_incpiv( FLA_Obj A, FLA_Obj p, FLA_Obj L, FLA_Obj b )
 {
-  dim_t     nb_alg;
+  fla_dim_t     nb_alg;
   FLA_Error r_val;
   FLA_Bool  enable_supermatrix;
 

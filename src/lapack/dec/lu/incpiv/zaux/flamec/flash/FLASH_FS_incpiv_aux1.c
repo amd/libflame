@@ -10,7 +10,7 @@
 
 #include "FLAME.h"
 
-FLA_Error FLASH_FS_incpiv_aux1( FLA_Obj A, FLA_Obj p, FLA_Obj L, FLA_Obj b, dim_t nb_alg )
+FLA_Error FLASH_FS_incpiv_aux1( FLA_Obj A, FLA_Obj p, FLA_Obj L, FLA_Obj b, fla_dim_t nb_alg )
 {
    FLA_Obj ATL,   ATR,      A00, A01, A02,
            ABL,   ABR,      A10, A11, A12,

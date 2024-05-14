@@ -10,7 +10,7 @@
 
 #include "FLAME.h"
 
-FLA_Error FLA_CAQR_UT_inc_solve_check( dim_t p, FLA_Obj A, FLA_Obj ATW, FLA_Obj R, FLA_Obj RTW, FLA_Obj B, FLA_Obj X )
+FLA_Error FLA_CAQR_UT_inc_solve_check( fla_dim_t p, FLA_Obj A, FLA_Obj ATW, FLA_Obj R, FLA_Obj RTW, FLA_Obj B, FLA_Obj X )
 {
   FLA_Error e_val;
 

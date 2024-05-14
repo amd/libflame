@@ -13,7 +13,7 @@
 FLA_Error FLA_Bidiag_UT_form_V_check( FLA_Obj A, FLA_Obj T, FLA_Obj V )
 {
   FLA_Error e_val;
-  dim_t     m_A, n_A;
+  fla_dim_t     m_A, n_A;
 
   e_val = FLA_Check_floating_object( A );
   FLA_Check_error_code( e_val );

@@ -26,7 +26,7 @@ FLA_Error FLA_Eig_gest_nu_blk_var4( FLA_Obj A, FLA_Obj Y, FLA_Obj B, fla_eig_ges
 
   FLA_Obj Y01_l, Y01_r;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_2x2( A,    &ATL, &ATR,
                       &ABL, &ABR,     0, 0, FLA_TL );

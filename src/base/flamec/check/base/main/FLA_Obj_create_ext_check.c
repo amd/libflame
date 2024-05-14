@@ -10,7 +10,7 @@
 
 #include "FLAME.h"
 
-FLA_Error FLA_Obj_create_ext_check( FLA_Datatype datatype, FLA_Elemtype elemtype, dim_t m, dim_t n, dim_t m_inner, dim_t n_inner, dim_t rs, dim_t cs, FLA_Obj *obj )
+FLA_Error FLA_Obj_create_ext_check( FLA_Datatype datatype, FLA_Elemtype elemtype, fla_dim_t m, fla_dim_t n, fla_dim_t m_inner, fla_dim_t n_inner, fla_dim_t rs, fla_dim_t cs, FLA_Obj *obj )
 {
   FLA_Error e_val;
 

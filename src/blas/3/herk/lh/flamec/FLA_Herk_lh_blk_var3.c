@@ -20,7 +20,7 @@ FLA_Error FLA_Herk_lh_blk_var3( FLA_Obj alpha, FLA_Obj A, FLA_Obj beta, FLA_Obj 
           CBL,   CBR,      C10, C11, C12,
                            C20, C21, C22;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_1x2( A,    &AL,  &AR,      0, FLA_RIGHT );
 

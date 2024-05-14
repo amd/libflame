@@ -18,7 +18,7 @@ FLA_Error FLA_Chol_u_blk_var1( FLA_Obj A, fla_chol_t* cntl )
           ABL,   ABR,      A10, A11, A12,
                            A20, A21, A22;
 
-  dim_t b;
+  fla_dim_t b;
 
   int r_val = FLA_SUCCESS;
 

@@ -29,8 +29,8 @@ FLA_Error FLA_CAQR2_UT_blk_var1( FLA_Obj U,
 
   FLA_Obj T1T, T2B;
 
-  dim_t   b_alg, b;
-  dim_t   m_DT;
+  fla_dim_t   b_alg, b;
+  fla_dim_t   m_DT;
 
   // Query the algorithmic blocksize by inspecting the length of T.
   b_alg = FLA_Obj_length( T );

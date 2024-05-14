@@ -110,7 +110,7 @@ typedef struct FLASH_Queue_variables
    FLA_Obj_gpu* gpu_log;
 
    // The size of each block to allocate on GPU.
-   dim_t        block_size;      
+   fla_dim_t        block_size;      
 
    // The datatype of each block to allocate on GPU.
    FLA_Datatype datatype;
@@ -131,7 +131,7 @@ void FLASH_Queue_exec( void )
    integer          n_caches;
    integer          size;
    integer          i;
-   dim_t        block_size = FLASH_Queue_get_block_size();
+   fla_dim_t        block_size = FLASH_Queue_get_block_size();
    double       dtime;
 
    FLA_Lock*    run_lock;
@@ -150,7 +150,7 @@ void FLASH_Queue_exec( void )
    FLA_Obj_gpu* gpu;
    FLA_Obj_gpu* victim;
    FLA_Obj_gpu* gpu_log;
-   dim_t        gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
+   fla_dim_t        gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
 #endif
 
    // All the necessary variables for the SuperMatrix mechanism.
@@ -414,9 +414,9 @@ void FLASH_Queue_init_tasks( void* arg )
    FLA_Obj        obj;
 
 #ifdef FLA_ENABLE_GPU
-   dim_t block_size      = 0;
+   fla_dim_t block_size      = 0;
    FLA_Datatype datatype = FLA_FLOAT;
-   dim_t datatype_size   = FLA_Obj_datatype_size( datatype );
+   fla_dim_t datatype_size   = FLA_Obj_datatype_size( datatype );
 #endif
 
    // Find the 2D factorization of the number of threads.
@@ -498,10 +498,10 @@ void FLASH_Queue_init_tasks( void* arg )
          // Macroblock is used.
          if ( FLA_Obj_elemtype( obj ) == FLA_MATRIX )
          {
-            dim_t    jj, kk;
-            dim_t    m   = FLA_Obj_length( obj );
-            dim_t    n   = FLA_Obj_width( obj );
-            dim_t    cs  = FLA_Obj_col_stride( obj );
+            fla_dim_t    jj, kk;
+            fla_dim_t    m   = FLA_Obj_length( obj );
+            fla_dim_t    n   = FLA_Obj_width( obj );
+            fla_dim_t    cs  = FLA_Obj_col_stride( obj );
             FLA_Obj* buf = FLASH_OBJ_PTR_AT( obj );
             
             // Check each block in macroblock.
@@ -544,10 +544,10 @@ void FLASH_Queue_init_tasks( void* arg )
             // Macroblock is used.
             if ( FLA_Obj_elemtype( obj ) == FLA_MATRIX )
             {
-               dim_t    jj, kk;
-               dim_t    m   = FLA_Obj_length( obj );
-               dim_t    n   = FLA_Obj_width( obj );
-               dim_t    cs  = FLA_Obj_col_stride( obj );
+               fla_dim_t    jj, kk;
+               fla_dim_t    m   = FLA_Obj_length( obj );
+               fla_dim_t    n   = FLA_Obj_width( obj );
+               fla_dim_t    cs  = FLA_Obj_col_stride( obj );
                FLA_Obj* buf = FLASH_OBJ_PTR_AT( obj );
 
                // Check each block in macroblock.
@@ -884,10 +884,10 @@ void FLASH_Queue_update_cache( FLASH_Task* t, void* arg )
          // Macroblock is used.
          if ( FLA_Obj_elemtype( obj ) == FLA_MATRIX )
          {
-            dim_t    jj, kk;
-            dim_t    m    = FLA_Obj_length( obj );
-            dim_t    n    = FLA_Obj_width( obj );
-            dim_t    cs   = FLA_Obj_col_stride( obj );
+            fla_dim_t    jj, kk;
+            fla_dim_t    m    = FLA_Obj_length( obj );
+            fla_dim_t    n    = FLA_Obj_width( obj );
+            fla_dim_t    cs   = FLA_Obj_col_stride( obj );
             FLA_Obj* buf  = FLASH_OBJ_PTR_AT( obj );
 
             // Dependence analysis for each input block in macroblock.
@@ -923,10 +923,10 @@ void FLASH_Queue_update_cache( FLASH_Task* t, void* arg )
          // Macroblock is used.
          if ( FLA_Obj_elemtype( obj ) == FLA_MATRIX )
          {
-            dim_t    jj, kk;
-            dim_t    m    = FLA_Obj_length( obj );
-            dim_t    n    = FLA_Obj_width( obj );
-            dim_t    cs   = FLA_Obj_col_stride( obj );
+            fla_dim_t    jj, kk;
+            fla_dim_t    m    = FLA_Obj_length( obj );
+            fla_dim_t    n    = FLA_Obj_width( obj );
+            fla_dim_t    cs   = FLA_Obj_col_stride( obj );
             FLA_Obj* buf  = FLASH_OBJ_PTR_AT( obj );
 
             // Dependence analysis for each input block in macroblock.
@@ -1233,8 +1233,8 @@ void FLASH_Queue_create_gpu( integer thread, void *arg )
 {
    FLASH_Queue_vars* args = ( FLASH_Queue_vars* ) arg;
    integer i;
-   dim_t gpu_n_blocks     = FLASH_Queue_get_gpu_num_blocks();
-   dim_t block_size       = args->block_size;
+   fla_dim_t gpu_n_blocks     = FLASH_Queue_get_gpu_num_blocks();
+   fla_dim_t block_size       = args->block_size;
    FLA_Datatype datatype  = args->datatype;
 
    // Exit if not using GPU.
@@ -1261,7 +1261,7 @@ void FLASH_Queue_destroy_gpu( integer thread, void *arg )
 {
    FLASH_Queue_vars* args = ( FLASH_Queue_vars* ) arg;
    integer i;
-   dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
+   fla_dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
    FLA_Obj_gpu gpu_obj;
 
    // Exit if not using GPU.
@@ -1380,10 +1380,10 @@ FLA_Bool FLASH_Queue_exec_gpu( FLASH_Task *t, void *arg )
                // Macroblock is used.
                if ( FLA_Obj_elemtype( obj ) == FLA_MATRIX )
                {
-                  dim_t    jj, kk;
-                  dim_t    m    = FLA_Obj_length( obj );
-                  dim_t    n    = FLA_Obj_width( obj );
-                  dim_t    cs   = FLA_Obj_col_stride( obj );
+                  fla_dim_t    jj, kk;
+                  fla_dim_t    m    = FLA_Obj_length( obj );
+                  fla_dim_t    n    = FLA_Obj_width( obj );
+                  fla_dim_t    cs   = FLA_Obj_col_stride( obj );
                   FLA_Obj* buf  = FLASH_OBJ_PTR_AT( obj );
                   
                   // Clear each block in macroblock.
@@ -1501,10 +1501,10 @@ FLA_Bool FLASH_Queue_check_gpu( FLASH_Task *t, void *arg )
          // Macroblock is used.
          if ( FLA_Obj_elemtype( obj ) == FLA_MATRIX )
          {
-            dim_t    jj, kk;
-            dim_t    m    = FLA_Obj_length( obj );
-            dim_t    n    = FLA_Obj_width( obj );
-            dim_t    cs   = FLA_Obj_col_stride( obj );
+            fla_dim_t    jj, kk;
+            fla_dim_t    m    = FLA_Obj_length( obj );
+            fla_dim_t    n    = FLA_Obj_width( obj );
+            fla_dim_t    cs   = FLA_Obj_col_stride( obj );
             FLA_Obj* buf  = FLASH_OBJ_PTR_AT( obj );
             
             // Clear each block in macroblock.
@@ -1552,7 +1552,7 @@ FLA_Bool FLASH_Queue_check_block_gpu( FLA_Obj obj, integer thread, void *arg )
 {
    FLASH_Queue_vars* args = ( FLASH_Queue_vars* ) arg;
    integer k;
-   dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
+   fla_dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
    FLA_Bool r_val = TRUE;
 
 #ifdef FLA_ENABLE_MULTITHREADING
@@ -1704,7 +1704,7 @@ void FLASH_Queue_update_block_gpu( FLA_Obj obj,
 {
    FLASH_Queue_vars* args = ( FLASH_Queue_vars* ) arg;
    integer j, k;
-   dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
+   fla_dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
    FLA_Bool transfer = FALSE;
    FLA_Bool evict = FALSE;
    FLA_Obj_gpu evict_obj;   
@@ -1794,7 +1794,7 @@ void FLASH_Queue_mark_gpu( FLASH_Task *t, void *arg )
    FLASH_Queue_vars* args = ( FLASH_Queue_vars* ) arg;
    integer i, j, k;
    integer thread = t->thread;
-   dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
+   fla_dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
    FLA_Bool duplicate;
    FLA_Obj  obj;
 
@@ -1850,7 +1850,7 @@ void FLASH_Queue_invalidate_block_gpu( FLA_Obj obj, integer thread, void *arg )
 {
    FLASH_Queue_vars* args = ( FLASH_Queue_vars* ) arg;
    integer j, k;
-   dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
+   fla_dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
    FLA_Obj_gpu gpu_obj;
 
 #ifdef FLA_ENABLE_MULTITHREADING
@@ -1899,7 +1899,7 @@ void FLASH_Queue_flush_block_gpu( FLA_Obj obj, integer thread, void *arg )
 {
    FLASH_Queue_vars* args = ( FLASH_Queue_vars* ) arg;
    integer k;
-   dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
+   fla_dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
    FLA_Bool transfer = FALSE;
    FLA_Obj_gpu gpu_obj;
 
@@ -1967,7 +1967,7 @@ void FLASH_Queue_flush_gpu( integer thread, void *arg )
 {
    FLASH_Queue_vars* args = ( FLASH_Queue_vars* ) arg;
    integer i, k;
-   dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
+   fla_dim_t gpu_n_blocks = FLASH_Queue_get_gpu_num_blocks();
    integer n_transfer = 0;
    FLA_Obj_gpu gpu_obj;
    
@@ -2466,10 +2466,10 @@ void FLASH_Task_free_parallel( FLASH_Task* t, void* arg )
       // Macroblock is used.
       if ( FLA_Obj_elemtype( obj ) == FLA_MATRIX )
       {
-         dim_t    jj, kk;
-         dim_t    m    = FLA_Obj_length( obj );
-         dim_t    n    = FLA_Obj_width( obj );
-         dim_t    cs   = FLA_Obj_col_stride( obj );
+         fla_dim_t    jj, kk;
+         fla_dim_t    m    = FLA_Obj_length( obj );
+         fla_dim_t    n    = FLA_Obj_width( obj );
+         fla_dim_t    cs   = FLA_Obj_col_stride( obj );
          FLA_Obj* buf  = FLASH_OBJ_PTR_AT( obj );
          
          // Clear each block in macroblock.
@@ -2491,10 +2491,10 @@ void FLASH_Task_free_parallel( FLASH_Task* t, void* arg )
       // Macroblock is used.
       if ( FLA_Obj_elemtype( obj ) == FLA_MATRIX )
       {
-         dim_t    jj, kk;
-         dim_t    m    = FLA_Obj_length( obj );
-         dim_t    n    = FLA_Obj_width( obj );
-         dim_t    cs   = FLA_Obj_col_stride( obj );
+         fla_dim_t    jj, kk;
+         fla_dim_t    m    = FLA_Obj_length( obj );
+         fla_dim_t    n    = FLA_Obj_width( obj );
+         fla_dim_t    cs   = FLA_Obj_col_stride( obj );
          FLA_Obj* buf  = FLASH_OBJ_PTR_AT( obj );
 
          // Clear each block in macroblock.

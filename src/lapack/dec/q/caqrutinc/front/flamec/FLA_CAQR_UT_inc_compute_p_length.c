@@ -10,11 +10,11 @@
 
 #include "FLAME.h"
 
-dim_t FLA_CAQR_UT_inc_compute_blocks_per_part( dim_t p, FLA_Obj A )
+fla_dim_t FLA_CAQR_UT_inc_compute_blocks_per_part( fla_dim_t p, FLA_Obj A )
 {
-	dim_t nb_part;
-	dim_t nb_left;
-	dim_t num_blocks;
+	fla_dim_t nb_part;
+	fla_dim_t nb_left;
+	fla_dim_t num_blocks;
 
 	// Query the element (not scalar) length of A.
 	num_blocks = FLA_Obj_length( A );

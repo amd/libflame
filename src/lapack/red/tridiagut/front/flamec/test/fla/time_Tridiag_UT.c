@@ -98,7 +98,7 @@ void time_Tridiag_UT(
                EL, ER;
     FLA_Obj F;
     FLA_Obj eye;
-    dim_t   m_A, m_T;
+    fla_dim_t   m_A, m_T;
 
     m_A = FLA_Obj_length( A );
     m_T = FLA_Obj_length( T );

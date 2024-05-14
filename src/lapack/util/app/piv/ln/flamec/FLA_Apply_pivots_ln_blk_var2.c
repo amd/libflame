@@ -20,7 +20,7 @@ FLA_Error FLA_Apply_pivots_ln_blk_var2( FLA_Obj p, FLA_Obj A, fla_appiv_t* cntl 
           pB,              pi1,
                            p2;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_2x1( A,    &AT, 
                       &AB,            0, FLA_TOP );

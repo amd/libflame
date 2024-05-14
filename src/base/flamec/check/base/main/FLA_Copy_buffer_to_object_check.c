@@ -10,7 +10,7 @@
 
 #include "FLAME.h"
 
-FLA_Error FLA_Copy_buffer_to_object_check( FLA_Trans trans, dim_t m, dim_t n, void* A_buffer, dim_t rs, dim_t cs, dim_t i, dim_t j, FLA_Obj B )
+FLA_Error FLA_Copy_buffer_to_object_check( FLA_Trans trans, fla_dim_t m, fla_dim_t n, void* A_buffer, fla_dim_t rs, fla_dim_t cs, fla_dim_t i, fla_dim_t j, FLA_Obj B )
 {
   FLA_Error e_val;
 

@@ -16,10 +16,10 @@
 
 FLA_Error FLA_Part_2x2( FLA_Obj A,  FLA_Obj *A11, FLA_Obj *A12,
                                     FLA_Obj *A21, FLA_Obj *A22, 
-                        dim_t  mb,  dim_t     nb, FLA_Quadrant quadrant )
+                        fla_dim_t  mb,  fla_dim_t     nb, FLA_Quadrant quadrant )
 {
   FLA_Base_obj *base;
-  dim_t         m, n, offm, offn;
+  fla_dim_t         m, n, offm, offn;
 
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )
     FLA_Part_2x2_check( A,    A11, A12,
@@ -75,7 +75,7 @@ FLA_Error FLA_Part_2x2( FLA_Obj A,  FLA_Obj *A11, FLA_Obj *A12,
 
 FLA_Error FLA_Part_2x1( FLA_Obj A,  FLA_Obj *A1, 
                                     FLA_Obj *A2,
-                        dim_t  mb,  FLA_Side side )
+                        fla_dim_t  mb,  FLA_Side side )
 { 
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )
     FLA_Part_2x1_check( A,    A1,
@@ -108,7 +108,7 @@ FLA_Error FLA_Part_2x1( FLA_Obj A,  FLA_Obj *A1,
 //
 
 FLA_Error FLA_Part_1x2( FLA_Obj A,  FLA_Obj *A1, FLA_Obj *A2,
-                                    dim_t    nb, FLA_Side side )
+                                    fla_dim_t    nb, FLA_Side side )
 {
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )
     FLA_Part_1x2_check( A,    A1,  A2,      nb, side );
@@ -142,7 +142,7 @@ FLA_Error FLA_Part_1x2( FLA_Obj A,  FLA_Obj *A1, FLA_Obj *A2,
 FLA_Error FLA_Repart_2x2_to_3x3( FLA_Obj ATL, FLA_Obj ATR,  FLA_Obj *A00, FLA_Obj *A01, FLA_Obj *A02,
                                                             FLA_Obj *A10, FLA_Obj *A11, FLA_Obj *A12,
                                  FLA_Obj ABL, FLA_Obj ABR,  FLA_Obj *A20, FLA_Obj *A21, FLA_Obj *A22,
-                                 dim_t   mb,  dim_t    nb,  FLA_Quadrant quadrant )
+                                 fla_dim_t   mb,  fla_dim_t    nb,  FLA_Quadrant quadrant )
 {
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )
     FLA_Repart_2x2_to_3x3_check( ATL, ATR,       A00, A01, A02,
@@ -226,7 +226,7 @@ FLA_Error FLA_Repart_2x2_to_3x3( FLA_Obj ATL, FLA_Obj ATR,  FLA_Obj *A00, FLA_Ob
 FLA_Error FLA_Repart_2x1_to_3x1( FLA_Obj AT,  FLA_Obj *A0,
                                               FLA_Obj *A1,
                                  FLA_Obj AB,  FLA_Obj *A2,
-                                 dim_t   mb,  FLA_Side side )
+                                 fla_dim_t   mb,  FLA_Side side )
 {
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )
     FLA_Repart_2x1_to_3x1_check( AT,     A0, 
@@ -266,7 +266,7 @@ FLA_Error FLA_Repart_2x1_to_3x1( FLA_Obj AT,  FLA_Obj *A0,
 
 FLA_Error FLA_Repart_1x2_to_1x3( FLA_Obj  AL,              FLA_Obj  AR,
                                  FLA_Obj *A0, FLA_Obj *A1, FLA_Obj *A2,
-                                              dim_t    nb, FLA_Side side )
+                                              fla_dim_t    nb, FLA_Side side )
 {
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )
     FLA_Repart_1x2_to_1x3_check( AL, AR,        A0, A1, A2,

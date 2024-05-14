@@ -13,7 +13,7 @@
 FLA_Error FLA_Bidiag_UT_extract_real_diagonals_check( FLA_Obj A, FLA_Obj d, FLA_Obj e )
 {
   FLA_Error e_val;
-  dim_t     min_m_n;
+  fla_dim_t     min_m_n;
 
   e_val = FLA_Check_floating_object( A );
   FLA_Check_error_code( e_val );

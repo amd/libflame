@@ -19,7 +19,7 @@ FLA_Error FLA_Tridiag_UT_l_blk_var2( FLA_Obj A, FLA_Obj T )
 
   FLA_Obj  T1_tl;
   FLA_Obj  none, none2, none3;
-  dim_t    b_alg, b;
+  fla_dim_t    b_alg, b;
 
   b_alg = FLA_Obj_length( T );
 

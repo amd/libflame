@@ -93,7 +93,7 @@ FLA_Error FLA_Bsvd_find_submatrix_opd( integer       mn_A,
 
 // --- FLA_Bsvd_v_opt_var1() ---------------------------------------------------
 
-FLA_Error FLA_Bsvd_v_opt_var1( dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj H, FLA_Obj U, FLA_Obj V, dim_t b_alg );
+FLA_Error FLA_Bsvd_v_opt_var1( fla_dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj H, FLA_Obj U, FLA_Obj V, fla_dim_t b_alg );
 FLA_Error FLA_Bsvd_v_ops_var1( integer       min_m_n,
                                integer       m_U,
                                integer       m_V,
@@ -145,7 +145,7 @@ FLA_Error FLA_Bsvd_v_opz_var1( integer       min_m_n,
 
 // --- FLA_Bsvd_v_opt_var2() ---------------------------------------------------
 
-FLA_Error FLA_Bsvd_v_opt_var2( dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj H, FLA_Obj RG, FLA_Obj RH, FLA_Obj W, FLA_Obj U, FLA_Obj V, dim_t b_alg );
+FLA_Error FLA_Bsvd_v_opt_var2( fla_dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj H, FLA_Obj RG, FLA_Obj RH, FLA_Obj W, FLA_Obj U, FLA_Obj V, fla_dim_t b_alg );
 FLA_Error FLA_Bsvd_v_ops_var2( integer       min_m_n,
                                integer       m_U,
                                integer       m_V,

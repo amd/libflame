@@ -13,12 +13,12 @@
 FLA_Error FLA_Svd( FLA_Svd_type jobu, FLA_Svd_type jobv, FLA_Obj A, FLA_Obj s, FLA_Obj U, FLA_Obj V )
 {
   FLA_Error r_val      = FLA_SUCCESS;
-  dim_t     n_iter_max = 30;
-  dim_t     k_accum    = 32;
-  dim_t     b_alg      = 512;
-  dim_t     min_m_n    = FLA_Obj_min_dim( A );
-  dim_t     m_A        = FLA_Obj_length( A );
-  dim_t     n_A        = FLA_Obj_width( A );
+  fla_dim_t     n_iter_max = 30;
+  fla_dim_t     k_accum    = 32;
+  fla_dim_t     b_alg      = 512;
+  fla_dim_t     min_m_n    = FLA_Obj_min_dim( A );
+  fla_dim_t     m_A        = FLA_Obj_length( A );
+  fla_dim_t     n_A        = FLA_Obj_width( A );
   FLA_Obj   W;         // Dummy variable for partitioning of matrices.
 
   // Check parameters.

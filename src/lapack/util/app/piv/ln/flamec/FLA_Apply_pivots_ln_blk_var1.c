@@ -14,7 +14,7 @@ FLA_Error FLA_Apply_pivots_ln_blk_var1( FLA_Obj p, FLA_Obj A, fla_appiv_t* cntl 
 {
   FLA_Obj AL,  AR,       A0,  A1,  A2;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_1x2( A,    &AL,  &AR,      0, FLA_LEFT );
 

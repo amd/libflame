@@ -10,15 +10,15 @@
 
 #include "FLAME.h"
 
-FLA_Error FLA_Hevd_lv_unb_var1( dim_t n_iter_max, FLA_Obj A, FLA_Obj l, dim_t k_accum, dim_t b_alg )
+FLA_Error FLA_Hevd_lv_unb_var1( fla_dim_t n_iter_max, FLA_Obj A, FLA_Obj l, fla_dim_t k_accum, fla_dim_t b_alg )
 {
 	FLA_Uplo     uplo = FLA_LOWER_TRIANGULAR;
 	FLA_Datatype dt;
 	FLA_Datatype dt_real;
 	FLA_Datatype dt_comp;
 	FLA_Obj      scale, T, r, d, e, G;
-	dim_t        mn_A;
-	dim_t        n_G = k_accum;
+	fla_dim_t        mn_A;
+	fla_dim_t        n_G = k_accum;
 	FLA_Error    r_val;
 
 	mn_A    = FLA_Obj_length( A );

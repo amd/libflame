@@ -13,9 +13,9 @@
 FLA_Error FLA_Sort_evd( FLA_Direct direct, FLA_Obj l, FLA_Obj V )
 {
 	FLA_Datatype datatype;
-	dim_t        m_A;
-	dim_t        rs_V, cs_V;
-	dim_t        inc_l;
+	fla_dim_t        m_A;
+	fla_dim_t        rs_V, cs_V;
+	fla_dim_t        inc_l;
 
 	if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
 		FLA_Sort_evd_check( direct, l, V );

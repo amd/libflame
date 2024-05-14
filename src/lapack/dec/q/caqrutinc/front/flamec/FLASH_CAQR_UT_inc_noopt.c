@@ -12,10 +12,10 @@
 
 extern TLS_CLASS_SPEC fla_caqrutinc_t* flash_caqrutinc_cntl;
 
-FLA_Error FLASH_CAQR_UT_inc_noopt( dim_t p, FLA_Obj A, FLA_Obj ATW, FLA_Obj R, FLA_Obj RTW )
+FLA_Error FLASH_CAQR_UT_inc_noopt( fla_dim_t p, FLA_Obj A, FLA_Obj ATW, FLA_Obj R, FLA_Obj RTW )
 {
   FLA_Error r_val = FLA_SUCCESS;
-  dim_t     nb_part;
+  fla_dim_t     nb_part;
 
   // Check parameters.
   if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )

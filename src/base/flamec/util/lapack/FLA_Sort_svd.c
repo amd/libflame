@@ -13,10 +13,10 @@
 FLA_Error FLA_Sort_svd( FLA_Direct direct, FLA_Obj s, FLA_Obj U, FLA_Obj V )
 {
 	FLA_Datatype datatype;
-	dim_t        m_U, n_V;
-	dim_t        rs_U, cs_U;
-	dim_t        rs_V, cs_V;
-	dim_t        inc_s;
+	fla_dim_t        m_U, n_V;
+	fla_dim_t        rs_U, cs_U;
+	fla_dim_t        rs_V, cs_V;
+	fla_dim_t        inc_s;
 
 	if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
 		FLA_Sort_svd_check( direct, s, U, V );

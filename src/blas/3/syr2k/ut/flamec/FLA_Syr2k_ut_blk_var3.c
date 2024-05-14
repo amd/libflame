@@ -20,7 +20,7 @@ FLA_Error FLA_Syr2k_ut_blk_var3( FLA_Obj alpha, FLA_Obj A, FLA_Obj B, FLA_Obj be
           CBL,   CBR,      C10, C11, C12,
                            C20, C21, C22;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Scalr_internal( FLA_UPPER_TRIANGULAR, beta, C,
                       FLA_Cntl_sub_scalr( cntl ) );

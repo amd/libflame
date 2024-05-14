@@ -11,7 +11,7 @@
 #include "FLAME.h"
 
 FLA_Error FLASH_SA_LU( FLA_Obj B, FLA_Obj C, 
-                       FLA_Obj D, FLA_Obj E, FLA_Obj p, FLA_Obj L, dim_t nb_alg, fla_lu_t* cntl )
+                       FLA_Obj D, FLA_Obj E, FLA_Obj p, FLA_Obj L, fla_dim_t nb_alg, fla_lu_t* cntl )
 {
    FLA_Obj DT,              D0,
            DB,              D1,

@@ -10,7 +10,7 @@
 
 #include "FLAME.h"
 
-FLA_Error FLA_Obj_create_without_buffer_check( FLA_Datatype datatype, dim_t m, dim_t n, FLA_Obj *obj )
+FLA_Error FLA_Obj_create_without_buffer_check( FLA_Datatype datatype, fla_dim_t m, fla_dim_t n, FLA_Obj *obj )
 {
   FLA_Error e_val;
 

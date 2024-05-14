@@ -51,7 +51,7 @@ extern void sormqr_fla(char *side, char *trans, integer *m, integer *n, integer 
     FLA_Side side_fla;                                                                \
     FLA_Trans trans_fla;                                                              \
     FLA_Error init_result;                                                            \
-    dim_t mq /*, nq */;                                                               \
+    fla_dim_t mq /*, nq */;                                                               \
                                                                                       \
     FLA_Init_safe(&init_result);                                                      \
                                                                                       \

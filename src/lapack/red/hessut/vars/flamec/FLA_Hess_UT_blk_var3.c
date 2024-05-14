@@ -32,8 +32,8 @@ FLA_Error FLA_Hess_UT_blk_var3( FLA_Obj A, FLA_Obj T )
   FLA_Obj  UB_tl,
            UB_bl;
   FLA_Datatype datatype_A;
-  dim_t        m_A;
-  dim_t        b_alg, b, bb;
+  fla_dim_t        m_A;
+  fla_dim_t        b_alg, b, bb;
 
   b_alg      = FLA_Obj_length( T );
 

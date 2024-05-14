@@ -24,7 +24,7 @@ FLA_Error FLA_Accum_T_UT_fc_blk_var2( FLA_Obj A, FLA_Obj t, FLA_Obj T )
 
   FLA_Obj AB1;
 
-  dim_t b_alg, b;
+  fla_dim_t b_alg, b;
 
   b_alg = FLA_Obj_length( T );
 

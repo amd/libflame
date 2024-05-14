@@ -10,11 +10,11 @@
 
 #include "FLAME.h"
 
-void FLA_CAQR_UT_inc_init_structure( dim_t p, dim_t nb_part, FLA_Obj R )
+void FLA_CAQR_UT_inc_init_structure( fla_dim_t p, fla_dim_t nb_part, FLA_Obj R )
 {
-	dim_t    m, n;
-	dim_t    rs, cs;
-	dim_t    i, j, ip;
+	fla_dim_t    m, n;
+	fla_dim_t    rs, cs;
+	fla_dim_t    i, j, ip;
 	FLA_Obj* buff_R;
 
 	m      = FLA_Obj_length( R );

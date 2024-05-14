@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 
   double max_gflops=6.0;
 
-  dim_t b_alg;
+  fla_dim_t b_alg;
 
   double
     dtime,

@@ -15,13 +15,13 @@
 
 FLA_Error REF_LU_incpiv( FLA_Obj A, FLA_Obj p );
 void time_LU(
-              integer pivot_combo, integer type, integer nrepeats, integer m, integer n, dim_t nb_alg, dim_t nb_flash,
+              integer pivot_combo, integer type, integer nrepeats, integer m, integer n, fla_dim_t nb_alg, fla_dim_t nb_flash,
               FLA_Obj A, FLA_Obj p, FLA_Obj x, FLA_Obj b, FLA_Obj norm,
               double *dtime, double *diff, double *gflops );
 
 
 void time_LU(
-              integer pivot_combo, integer type, integer nrepeats, integer m, integer n, dim_t nb_alg, dim_t nb_flash,
+              integer pivot_combo, integer type, integer nrepeats, integer m, integer n, fla_dim_t nb_alg, fla_dim_t nb_flash,
               FLA_Obj A, FLA_Obj p, FLA_Obj x, FLA_Obj b, FLA_Obj norm,
               double *dtime, double *diff, double *gflops )
 {

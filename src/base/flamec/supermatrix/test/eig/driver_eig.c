@@ -33,7 +33,7 @@ integer main( integer argc, char *argv[] )
       work_stealing,
       data_affinity;
 
-   dim_t
+   fla_dim_t
       size,
       nb_alg;
 

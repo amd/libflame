@@ -52,8 +52,8 @@
 #define LAPACK_hetrd_body(prefix)                                  \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);         \
     FLA_Datatype dtype_re = PREFIX2FLAME_REALTYPE(prefix);         \
-    dim_t m_d = *m;                                                \
-    dim_t m_e = m_d - 1;                                           \
+    fla_dim_t m_d = *m;                                                \
+    fla_dim_t m_e = m_d - 1;                                           \
     FLA_Uplo uplo_fla;                                             \
     FLA_Obj A, d, e, t, T;                                         \
     FLA_Error init_result;                                         \

@@ -12,10 +12,10 @@
 
 typedef struct FLA_Blocksize_s
 {
-	dim_t s;
-	dim_t d;
-	dim_t c;
-	dim_t z;
+	fla_dim_t s;
+	fla_dim_t d;
+	fla_dim_t c;
+	fla_dim_t z;
 } fla_blocksize_t;
 
 #define FLA_SUBPROBLEM                  0

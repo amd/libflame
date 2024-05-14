@@ -53,7 +53,7 @@ extern void dgeqpf_fla(integer *m, integer *n, doublereal *a, integer *lda, inte
 #define LAPACK_geqpf_body(prefix)                                            \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                   \
     FLA_Obj A, t, T, w, p, jpiv;                                             \
-    dim_t min_m_n = fla_min(*m, *n);                                         \
+    fla_dim_t min_m_n = fla_min(*m, *n);                                         \
     FLA_Error init_result;                                                   \
                                                                              \
     FLA_Init_safe(&init_result);                                             \

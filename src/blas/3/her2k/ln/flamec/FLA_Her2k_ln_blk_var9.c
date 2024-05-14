@@ -16,7 +16,7 @@ FLA_Error FLA_Her2k_ln_blk_var9( FLA_Obj alpha, FLA_Obj A, FLA_Obj B, FLA_Obj be
 
   FLA_Obj BL,    BR,       B0,  B1,  B2;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Scalr_internal( FLA_LOWER_TRIANGULAR, beta, C,
                       FLA_Cntl_sub_scalr( cntl ) );

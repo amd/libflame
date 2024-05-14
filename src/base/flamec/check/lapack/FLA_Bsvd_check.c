@@ -16,7 +16,7 @@ FLA_Error FLA_Bsvd_check( FLA_Uplo uplo, FLA_Obj d, FLA_Obj e,
                           FLA_Svd_type jobv, FLA_Obj V )
 {
   FLA_Error e_val = FLA_SUCCESS;
-  dim_t     m_d, m_e;
+  fla_dim_t     m_d, m_e;
 
   e_val = FLA_Check_valid_uplo( uplo );
   FLA_Check_error_code( e_val );

@@ -10,7 +10,7 @@
 
 #include "FLAME.h"
 
-FLA_Error FLA_CAQR_UT_inc_copy_triangles( dim_t nb_part, FLA_Obj A, FLA_Obj R )
+FLA_Error FLA_CAQR_UT_inc_copy_triangles( fla_dim_t nb_part, FLA_Obj A, FLA_Obj R )
 {
   FLA_Obj AT,              A0, 
           AB,              A1,
@@ -20,7 +20,7 @@ FLA_Error FLA_CAQR_UT_inc_copy_triangles( dim_t nb_part, FLA_Obj A, FLA_Obj R )
           RB,              R1,
                            R2;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_2x1( A,    &AT, 
                       &AB,            0, FLA_TOP );

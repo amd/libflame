@@ -95,8 +95,8 @@ void libfla_test_apqut_experiment( test_params_t params,
                                    double*       t,
                                    double*       residual )
 {
-	dim_t        b_flash    = params.b_flash;
-	dim_t        b_alg_flat = params.b_alg_flat;
+	fla_dim_t        b_flash    = params.b_flash;
+	fla_dim_t        b_alg_flat = params.b_alg_flat;
 	double       time_min   = 1e9;
 	double       time;
 	unsigned int i;

@@ -53,7 +53,7 @@ void libfla_test_lyap_impl( int         impl,
                             FLA_Obj     C,
                             FLA_Obj     scale );
 void libfla_test_lyap_cntl_create( unsigned int var,
-                                   dim_t        b_alg_flat );
+                                   fla_dim_t        b_alg_flat );
 void libfla_test_lyap_cntl_free( void );
 
 
@@ -127,8 +127,8 @@ void libfla_test_lyap_experiment( test_params_t params,
                                   double*       t,
                                   double*       residual )
 {
-	dim_t        b_flash    = params.b_flash;
-	dim_t        b_alg_flat = params.b_alg_flat;
+	fla_dim_t        b_flash    = params.b_flash;
+	fla_dim_t        b_alg_flat = params.b_alg_flat;
 	double       time_min   = 1e9;
 	double       time;
 	unsigned int i;
@@ -289,7 +289,7 @@ extern LIBFLAME_IMPORT TLS_CLASS_SPEC fla_sylv_t*  fla_sylv_cntl;
 extern LIBFLAME_IMPORT TLS_CLASS_SPEC fla_lyap_t*  fla_lyap_cntl_leaf;
 
 void libfla_test_lyap_cntl_create( unsigned int var,
-                                   dim_t        b_alg_flat )
+                                   fla_dim_t        b_alg_flat )
 {
 	int var_unb  = FLA_UNB_VAR_OFFSET + var;
 	int var_opt  = FLA_OPT_VAR_OFFSET + var;

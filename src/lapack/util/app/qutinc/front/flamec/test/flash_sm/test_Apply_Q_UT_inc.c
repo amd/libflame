@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     i,
     n_param_combos = N_PARAM_COMBOS;
   
-  dim_t
+  fla_dim_t
     nb_flash,
     nb_alg;
 

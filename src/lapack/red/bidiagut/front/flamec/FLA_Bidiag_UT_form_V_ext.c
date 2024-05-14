@@ -30,7 +30,7 @@ FLA_Error FLA_Bidiag_UT_form_V_ext( FLA_Uplo  uplo,  FLA_Obj A, FLA_Obj S,
 
             FLA_Obj SL,  SR;
 
-            dim_t   b = ( FLA_Obj_width( A ) - 1 );
+            fla_dim_t   b = ( FLA_Obj_width( A ) - 1 );
 
             FLA_Part_1x2( S,    &SL,  &SR,     1, FLA_RIGHT );
             FLA_Part_2x2( V,    &VTL, &VTR,

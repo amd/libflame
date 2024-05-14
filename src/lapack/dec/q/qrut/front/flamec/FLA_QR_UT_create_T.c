@@ -13,8 +13,8 @@
 FLA_Error FLA_QR_UT_create_T( FLA_Obj A, FLA_Obj* T )
 {
   FLA_Datatype datatype;
-  dim_t        b_alg, k;
-  dim_t        rs_T, cs_T;
+  fla_dim_t        b_alg, k;
+  fla_dim_t        rs_T, cs_T;
 
   // Query the datatype of A.
   datatype = FLA_Obj_datatype( A );
@@ -23,7 +23,7 @@ FLA_Error FLA_QR_UT_create_T( FLA_Obj A, FLA_Obj* T )
   b_alg = FLA_Query_blocksize( datatype, FLA_DIMENSION_MIN );
 
   // Scale the blocksize by a pre-set global constant.
-  b_alg = ( dim_t )( ( ( double ) b_alg ) * FLA_QR_INNER_TO_OUTER_B_RATIO );
+  b_alg = ( fla_dim_t )( ( ( double ) b_alg ) * FLA_QR_INNER_TO_OUTER_B_RATIO );
 
   // Adjust the blocksize with respect to the min-dim of A.
   b_alg = fla_min(b_alg, FLA_Obj_min_dim( A ));

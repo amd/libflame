@@ -20,7 +20,7 @@ FLA_Error FLA_Copyr_l_blk_var4( FLA_Obj A, FLA_Obj B, fla_copyr_t* cntl )
           BBL,   BBR,      B10, B11, B12,
                            B20, B21, B22;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_2x2( A,    &ATL, &ATR,
                       &ABL, &ABR,     0, 0, FLA_BR );

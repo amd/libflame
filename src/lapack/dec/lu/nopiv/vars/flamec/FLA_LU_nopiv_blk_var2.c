@@ -18,7 +18,7 @@ FLA_Error FLA_LU_nopiv_blk_var2( FLA_Obj A, fla_lu_t* cntl )
           ABL,   ABR,      A10, A11, A12,
                            A20, A21, A22;
 
-  dim_t b;
+  fla_dim_t b;
 
 
   FLA_Part_2x2( A,    &ATL, &ATR,

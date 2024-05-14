@@ -12,7 +12,7 @@
 
 // Note that this operation is designed for tall rectangular matrix A.
 // If m_A < n_A then, U and V should be swapped before entering this function.
-FLA_Error FLA_Bsvd_v_opt_var1(dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj H, FLA_Obj U, FLA_Obj V, dim_t b_alg)
+FLA_Error FLA_Bsvd_v_opt_var1(fla_dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj H, FLA_Obj U, FLA_Obj V, fla_dim_t b_alg)
 {
     FLA_Error r_val = FLA_SUCCESS;
     FLA_Datatype datatype;

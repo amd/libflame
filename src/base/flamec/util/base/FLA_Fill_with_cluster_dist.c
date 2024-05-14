@@ -19,7 +19,7 @@ FLA_Error FLA_Fill_with_cluster_dist( FLA_Obj n_clusters, FLA_Obj cluster_width,
 	             lT_last;
 	FLA_Obj      l, k;
 	FLA_Datatype dt_real;
-	dim_t        n_x;
+	fla_dim_t        n_x;
 	integer          nc;
 	integer          n_regions;
 	integer          region_width;

@@ -40,9 +40,9 @@ static FLASH_Data_aff flash_queue_data_affinity   = FLASH_QUEUE_AFFINITY_NONE;
 static double         flash_queue_total_time      = 0.0;
 static double         flash_queue_parallel_time   = 0.0;
 
-static dim_t          flash_queue_block_size      = 0;
-static dim_t          flash_queue_cache_size      = 2 * 1024 * 1024;
-static dim_t          flash_queue_cache_line_size = 64;
+static fla_dim_t          flash_queue_block_size      = 0;
+static fla_dim_t          flash_queue_cache_size      = 2 * 1024 * 1024;
+static fla_dim_t          flash_queue_cache_line_size = 64;
 
 static integer            flash_queue_cores_per_cache = 1;
 static integer            flash_queue_cores_per_queue = 0;
@@ -458,7 +458,7 @@ void FLASH_Queue_set_parallel_time( double dtime )
 }
 
 
-void FLASH_Queue_set_block_size( dim_t size )
+void FLASH_Queue_set_block_size( fla_dim_t size )
 /*----------------------------------------------------------------------------
 
    FLASH_Queue_set_block_size
@@ -473,7 +473,7 @@ void FLASH_Queue_set_block_size( dim_t size )
 }
 
 
-dim_t FLASH_Queue_get_block_size( void )
+fla_dim_t FLASH_Queue_get_block_size( void )
 /*----------------------------------------------------------------------------
 
    FLASH_Queue_get_block_size
@@ -484,7 +484,7 @@ dim_t FLASH_Queue_get_block_size( void )
 }
 
 
-void FLASH_Queue_set_cache_size( dim_t size )
+void FLASH_Queue_set_cache_size( fla_dim_t size )
 /*----------------------------------------------------------------------------
 
    FLASH_Queue_set_cache_size
@@ -497,7 +497,7 @@ void FLASH_Queue_set_cache_size( dim_t size )
 }
 
 
-dim_t FLASH_Queue_get_cache_size( void )
+fla_dim_t FLASH_Queue_get_cache_size( void )
 /*----------------------------------------------------------------------------
 
    FLASH_Queue_get_cache_size
@@ -508,7 +508,7 @@ dim_t FLASH_Queue_get_cache_size( void )
 }
 
 
-void FLASH_Queue_set_cache_line_size( dim_t size )
+void FLASH_Queue_set_cache_line_size( fla_dim_t size )
 /*----------------------------------------------------------------------------
 
    FLASH_Queue_set_cache_line_size
@@ -521,7 +521,7 @@ void FLASH_Queue_set_cache_line_size( dim_t size )
 }
 
 
-dim_t FLASH_Queue_get_cache_line_size( void )
+fla_dim_t FLASH_Queue_get_cache_line_size( void )
 /*----------------------------------------------------------------------------
 
    FLASH_Queue_get_cache_line_size
@@ -670,10 +670,10 @@ void FLASH_Queue_push( void* func,
       // Macroblock is used.
       if ( FLA_Obj_elemtype( obj ) == FLA_MATRIX )
       {
-         dim_t    jj, kk;
-         dim_t    m    = FLA_Obj_length( obj );
-         dim_t    n    = FLA_Obj_width( obj );
-         dim_t    cs   = FLA_Obj_col_stride( obj );
+         fla_dim_t    jj, kk;
+         fla_dim_t    m    = FLA_Obj_length( obj );
+         fla_dim_t    n    = FLA_Obj_width( obj );
+         fla_dim_t    cs   = FLA_Obj_col_stride( obj );
          FLA_Obj* buf  = FLASH_OBJ_PTR_AT( obj );
 
          // Dependence analysis for each input block in macroblock.
@@ -716,10 +716,10 @@ void FLASH_Queue_push( void* func,
       // Macroblock is used.
       if ( FLA_Obj_elemtype( obj ) == FLA_MATRIX )
       {
-         dim_t    jj, kk;
-         dim_t    m    = FLA_Obj_length( obj );
-         dim_t    n    = FLA_Obj_width( obj );
-         dim_t    cs   = FLA_Obj_col_stride( obj );
+         fla_dim_t    jj, kk;
+         fla_dim_t    m    = FLA_Obj_length( obj );
+         fla_dim_t    n    = FLA_Obj_width( obj );
+         fla_dim_t    cs   = FLA_Obj_col_stride( obj );
          FLA_Obj* buf  = FLASH_OBJ_PTR_AT( obj );
 
          // Dependence analysis for each output block in macroblock.
@@ -1037,10 +1037,10 @@ void FLASH_Task_free( FLASH_Task *t )
       // Macroblock is used.
       if ( FLA_Obj_elemtype( obj ) == FLA_MATRIX )
       {
-         dim_t    jj, kk;
-         dim_t    m    = FLA_Obj_length( obj );
-         dim_t    n    = FLA_Obj_width( obj );
-         dim_t    cs   = FLA_Obj_col_stride( obj );
+         fla_dim_t    jj, kk;
+         fla_dim_t    m    = FLA_Obj_length( obj );
+         fla_dim_t    n    = FLA_Obj_width( obj );
+         fla_dim_t    cs   = FLA_Obj_col_stride( obj );
          FLA_Obj* buf  = FLASH_OBJ_PTR_AT( obj );
          
          // Clear each block in macroblock.
@@ -1062,10 +1062,10 @@ void FLASH_Task_free( FLASH_Task *t )
       // Macroblock is used.
       if ( FLA_Obj_elemtype( obj ) == FLA_MATRIX )
       {
-         dim_t    jj, kk;
-         dim_t    m    = FLA_Obj_length( obj );
-         dim_t    n    = FLA_Obj_width( obj );
-         dim_t    cs   = FLA_Obj_col_stride( obj );
+         fla_dim_t    jj, kk;
+         fla_dim_t    m    = FLA_Obj_length( obj );
+         fla_dim_t    n    = FLA_Obj_width( obj );
+         fla_dim_t    cs   = FLA_Obj_col_stride( obj );
          FLA_Obj* buf  = FLASH_OBJ_PTR_AT( obj );
 
          // Clear each block in macroblock.
@@ -1199,7 +1199,7 @@ void FLASH_Queue_exec_task( FLASH_Task* t )
    typedef FLA_Error(*flash_scalr_p)(FLA_Uplo uplo, FLA_Obj alpha, FLA_Obj A, fla_scalr_t* cntl);
 
    // Base
-   typedef FLA_Error(*flash_obj_create_buffer_p)(dim_t rs, dim_t cs, FLA_Obj A, void* cntl);
+   typedef FLA_Error(*flash_obj_create_buffer_p)(fla_dim_t rs, fla_dim_t cs, FLA_Obj A, void* cntl);
    typedef FLA_Error(*flash_obj_free_buffer_p)(FLA_Obj A, void* cntl);
 
    // Only execute task if it is not NULL.
@@ -1756,8 +1756,8 @@ void FLASH_Queue_exec_task( FLASH_Task* t )
       flash_obj_create_buffer_p func;
       func = (flash_obj_create_buffer_p) t->func;
 
-      func( ( dim_t       ) t->int_arg[0],
-            ( dim_t       ) t->int_arg[1],
+      func( ( fla_dim_t       ) t->int_arg[0],
+            ( fla_dim_t       ) t->int_arg[1],
                             t->output_arg[0],
                             t->cntl );
    }

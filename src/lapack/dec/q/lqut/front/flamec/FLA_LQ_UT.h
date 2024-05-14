@@ -21,7 +21,7 @@ FLA_Error FLA_LQ_UT_recover_tau( FLA_Obj T, FLA_Obj tau );
 FLA_Error FLA_LQ_UT_solve( FLA_Obj A, FLA_Obj T, FLA_Obj B, FLA_Obj X );
 
 FLA_Error FLASH_LQ_UT( FLA_Obj A, FLA_Obj TW );
-FLA_Error FLASH_LQ_UT_create_hier_matrices( FLA_Obj A_flat, dim_t depth, dim_t* b_flash, FLA_Obj* A, FLA_Obj* TW );
+FLA_Error FLASH_LQ_UT_create_hier_matrices( FLA_Obj A_flat, fla_dim_t depth, fla_dim_t* b_flash, FLA_Obj* A, FLA_Obj* TW );
 FLA_Error FLASH_LQ_UT_solve( FLA_Obj A, FLA_Obj T, FLA_Obj B, FLA_Obj X );
 
 FLA_Error FLA_LQ_UT_form_Q( FLA_Obj A, FLA_Obj T, FLA_Obj Q );

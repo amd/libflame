@@ -10,11 +10,11 @@
 
 #include "FLAME.h"
 
-FLA_Error FLASH_QR_UT_inc_create_hier_matrices( FLA_Obj A_flat, dim_t depth, dim_t* b_flash, dim_t b_alg, FLA_Obj* A, FLA_Obj* TW )
+FLA_Error FLASH_QR_UT_inc_create_hier_matrices( FLA_Obj A_flat, fla_dim_t depth, fla_dim_t* b_flash, fla_dim_t b_alg, FLA_Obj* A, FLA_Obj* TW )
 {
 	FLA_Datatype datatype;
-	dim_t        m, n;
-	dim_t        n_last;
+	fla_dim_t        m, n;
+	fla_dim_t        n_last;
 	
 	// *** The current QR_UT_inc algorithm implemented assumes that
 	// the matrix has a hierarchical depth of 1. We check for that here
@@ -106,17 +106,17 @@ FLA_Error FLASH_QR_UT_inc_create_hier_matrices( FLA_Obj A_flat, dim_t depth, dim
 }
 
 
-dim_t FLASH_QR_UT_inc_determine_alg_blocksize( FLA_Obj A )
+fla_dim_t FLASH_QR_UT_inc_determine_alg_blocksize( FLA_Obj A )
 {
-	dim_t b_alg;
-	dim_t b_flash;
+	fla_dim_t b_alg;
+	fla_dim_t b_flash;
 
 	// Acquire the storage blocksize.
 	b_flash = FLA_Obj_length( *FLASH_OBJ_PTR_AT( A ) );
 
 	// Scale the storage blocksize by a pre-defined scalar to arrive at a
 	// reasonable algorithmic blocksize, but make sure it's at least 1.
-	b_alg = ( dim_t ) fla_max( ( double ) b_flash * FLA_QR_INNER_TO_OUTER_B_RATIO, 1 );
+	b_alg = ( fla_dim_t ) fla_max( ( double ) b_flash * FLA_QR_INNER_TO_OUTER_B_RATIO, 1 );
 
 	return b_alg;
 }

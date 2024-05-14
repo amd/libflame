@@ -14,7 +14,7 @@
 #define FLA_ALG_FRONT     1
 
 void time_Apply_QUD_UT_inc(
-                 integer n_repeats, integer mB, integer mC, integer mD, integer n, integer n_rhs, dim_t b_alg,
+                 integer n_repeats, integer mB, integer mC, integer mD, integer n, integer n_rhs, fla_dim_t b_alg,
                  FLA_Obj R_BC, FLA_Obj R_BD, FLA_Obj C, FLA_Obj D, FLA_Obj T, FLA_Obj W,
                  FLA_Obj bR_BC, FLA_Obj bR_BD, FLA_Obj bC, FLA_Obj bD,
                  double *dtime, double *diff, double *gflops );
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     gflops,
     diff;
 
-  dim_t b_alg, b_flash, n_threads;
+  fla_dim_t b_alg, b_flash, n_threads;
 
   FLA_Obj
     R_BD_flat, R_BC_flat, B_flat, C_flat, D_flat,

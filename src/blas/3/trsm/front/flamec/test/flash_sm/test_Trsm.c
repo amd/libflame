@@ -48,7 +48,7 @@ int main(integer argc, char *argv[])
   char m_dim_tag[10];
   char n_dim_tag[10];
 
-  dim_t nb_alg, n_threads;
+  fla_dim_t nb_alg, n_threads;
 
   double max_gflops=6.0;
 

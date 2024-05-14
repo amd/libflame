@@ -300,8 +300,8 @@ FLA_Error FLA_Check_identical_object_precision( FLA_Obj A, FLA_Obj B )
   FLA_Error    e_val = FLA_SUCCESS;
   FLA_Datatype datatype_A;
   FLA_Datatype datatype_B;
-  dim_t        precision_A;
-  dim_t        precision_B;
+  fla_dim_t        precision_A;
+  fla_dim_t        precision_B;
 
   datatype_A = FLA_Obj_datatype( A );
   datatype_B = FLA_Obj_datatype( B );
@@ -417,9 +417,9 @@ FLA_Error FLA_Check_conformal_dims( FLA_Trans trans, FLA_Obj A, FLA_Obj B )
 FLA_Error FLA_Check_matrix_matrix_dims( FLA_Trans transa, FLA_Trans transb, FLA_Obj A, FLA_Obj B, FLA_Obj C )
 {
   FLA_Error e_val = FLA_SUCCESS;
-  dim_t     k_A, k_B;
-  dim_t     m_A, m_C;
-  dim_t     n_B, n_C;
+  fla_dim_t     k_A, k_B;
+  fla_dim_t     m_A, m_C;
+  fla_dim_t     n_B, n_C;
 
   m_A = ( transa == FLA_NO_TRANSPOSE || 
           transa == FLA_CONJ_NO_TRANSPOSE ? FLA_Obj_length( A ) :
@@ -525,7 +525,7 @@ FLA_Error FLA_Check_null_pointer( void* ptr )
   return e_val;
 }
 
-FLA_Error FLA_Check_object_dims( FLA_Trans trans, dim_t m, dim_t n, FLA_Obj A )
+FLA_Error FLA_Check_object_dims( FLA_Trans trans, fla_dim_t m, fla_dim_t n, FLA_Obj A )
 {
   FLA_Error e_val = FLA_SUCCESS;
 
@@ -642,7 +642,7 @@ FLA_Error FLA_Check_adjacent_objects_1x2( FLA_Obj AL, FLA_Obj AR )
   return e_val;
 }
 
-FLA_Error FLA_Check_blocksize_value( dim_t b )
+FLA_Error FLA_Check_blocksize_value( fla_dim_t b )
 {
   FLA_Error e_val = FLA_SUCCESS;
 
@@ -655,7 +655,7 @@ FLA_Error FLA_Check_blocksize_value( dim_t b )
 FLA_Error FLA_Check_blocksize_object( FLA_Datatype datatype, fla_blocksize_t* bp )
 {
   FLA_Error e_val = FLA_SUCCESS;
-  dim_t     b;
+  fla_dim_t     b;
 
   b = FLA_Blocksize_extract( datatype, bp );
   if ( b <= 0 )
@@ -737,7 +737,7 @@ FLA_Error FLA_Check_valid_quadrant( FLA_Quadrant quad )
   return e_val;
 }
 
-FLA_Error FLA_Check_vector_dim_min( FLA_Obj x, dim_t min_dim )
+FLA_Error FLA_Check_vector_dim_min( FLA_Obj x, fla_dim_t min_dim )
 {
   FLA_Error e_val = FLA_SUCCESS;
 
@@ -781,8 +781,8 @@ FLA_Error FLA_Check_valid_isgn_value( FLA_Obj isgn )
 FLA_Error FLA_Check_sylv_matrix_dims( FLA_Obj A, FLA_Obj B, FLA_Obj C )
 {
   FLA_Error e_val = FLA_SUCCESS;
-  dim_t     m_A, m_C;
-  dim_t     n_B, n_C;
+  fla_dim_t     m_A, m_C;
+  fla_dim_t     n_B, n_C;
 
   m_A = FLA_Obj_length( A );
 
@@ -831,10 +831,10 @@ FLA_Error FLA_Check_posix_memalign_failure( int r_val )
   return e_val;
 }
 
-FLA_Error FLA_Check_submatrix_dims_and_offset( dim_t m, dim_t n, dim_t i, dim_t j, FLA_Obj A )
+FLA_Error FLA_Check_submatrix_dims_and_offset( fla_dim_t m, fla_dim_t n, fla_dim_t i, fla_dim_t j, FLA_Obj A )
 {
   FLA_Error e_val = FLA_SUCCESS;
-  dim_t     m_A, n_A;
+  fla_dim_t     m_A, n_A;
 
   if ( FLA_Obj_elemtype( A ) == FLA_MATRIX )
   {
@@ -994,7 +994,7 @@ FLA_Error FLA_Check_identical_object_elemtype( FLA_Obj A, FLA_Obj B )
   return e_val;
 }
 
-FLA_Error FLA_Check_pivot_index_range( FLA_Obj p, dim_t k1, dim_t k2 )
+FLA_Error FLA_Check_pivot_index_range( FLA_Obj p, fla_dim_t k1, fla_dim_t k2 )
 {
   FLA_Error e_val = FLA_SUCCESS;
 
@@ -1023,7 +1023,7 @@ FLA_Error FLA_Check_pivot_index_range( FLA_Obj p, dim_t k1, dim_t k2 )
 FLA_Error FLA_Check_householder_panel_dims( FLA_Obj A, FLA_Obj T )
 {
   FLA_Error e_val = FLA_SUCCESS;
-  dim_t     nb_alg;
+  fla_dim_t     nb_alg;
 
   nb_alg = FLA_Query_blocksize( FLA_Obj_datatype( A ), FLA_DIMENSION_MIN );
 
@@ -1036,7 +1036,7 @@ FLA_Error FLA_Check_householder_panel_dims( FLA_Obj A, FLA_Obj T )
   return e_val;
 }
 
-FLA_Error FLA_Check_object_length_equals( FLA_Obj A, dim_t m )
+FLA_Error FLA_Check_object_length_equals( FLA_Obj A, fla_dim_t m )
 {
   FLA_Error e_val = FLA_SUCCESS;
 
@@ -1046,7 +1046,7 @@ FLA_Error FLA_Check_object_length_equals( FLA_Obj A, dim_t m )
   return e_val;
 }
 
-FLA_Error FLA_Check_object_width_equals( FLA_Obj A, dim_t n )
+FLA_Error FLA_Check_object_width_equals( FLA_Obj A, fla_dim_t n )
 {
   FLA_Error e_val = FLA_SUCCESS;
 
@@ -1056,7 +1056,7 @@ FLA_Error FLA_Check_object_width_equals( FLA_Obj A, dim_t n )
   return e_val;
 }
 
-FLA_Error FLA_Check_object_length_min( FLA_Obj A, dim_t m )
+FLA_Error FLA_Check_object_length_min( FLA_Obj A, fla_dim_t m )
 {
   FLA_Error e_val = FLA_SUCCESS;
 
@@ -1066,7 +1066,7 @@ FLA_Error FLA_Check_object_length_min( FLA_Obj A, dim_t m )
   return e_val;
 }
 
-FLA_Error FLA_Check_object_width_min( FLA_Obj A, dim_t n )
+FLA_Error FLA_Check_object_width_min( FLA_Obj A, fla_dim_t n )
 {
   FLA_Error e_val = FLA_SUCCESS;
 
@@ -1088,7 +1088,7 @@ FLA_Error FLA_Check_valid_error_level(unsigned int level )
   return e_val;
 }
 
-FLA_Error FLA_Check_attempted_repart_2x2( FLA_Obj A_quad, dim_t b_m, dim_t b_n )
+FLA_Error FLA_Check_attempted_repart_2x2( FLA_Obj A_quad, fla_dim_t b_m, fla_dim_t b_n )
 {
   FLA_Error e_val = FLA_SUCCESS;
 
@@ -1101,7 +1101,7 @@ FLA_Error FLA_Check_attempted_repart_2x2( FLA_Obj A_quad, dim_t b_m, dim_t b_n )
   return e_val;
 }
 
-FLA_Error FLA_Check_attempted_repart_2x1( FLA_Obj A_side, dim_t b_m )
+FLA_Error FLA_Check_attempted_repart_2x1( FLA_Obj A_side, fla_dim_t b_m )
 {
   FLA_Error e_val = FLA_SUCCESS;
 
@@ -1111,7 +1111,7 @@ FLA_Error FLA_Check_attempted_repart_2x1( FLA_Obj A_side, dim_t b_m )
   return e_val;
 }
 
-FLA_Error FLA_Check_attempted_repart_1x2( FLA_Obj A_side, dim_t b_n )
+FLA_Error FLA_Check_attempted_repart_1x2( FLA_Obj A_side, fla_dim_t b_n )
 {
   FLA_Error e_val = FLA_SUCCESS;
 
@@ -1143,7 +1143,7 @@ FLA_Error FLA_Check_valid_topbottom_side( FLA_Side side )
   return e_val;
 }
 
-FLA_Error FLA_Check_matrix_strides( dim_t m, dim_t n, dim_t rs, dim_t cs )
+FLA_Error FLA_Check_matrix_strides( fla_dim_t m, fla_dim_t n, fla_dim_t rs, fla_dim_t cs )
 {
   FLA_Error e_val = FLA_SUCCESS;
 
@@ -1210,7 +1210,7 @@ FLA_Error FLA_Check_matrix_strides( dim_t m, dim_t n, dim_t rs, dim_t cs )
   return e_val;
 }
 
-FLA_Error FLA_Check_vector_dim( FLA_Obj x, dim_t expected_length )
+FLA_Error FLA_Check_vector_dim( FLA_Obj x, fla_dim_t expected_length )
 {
   FLA_Error e_val = FLA_SUCCESS;
 

@@ -20,7 +20,7 @@ FLA_Error FLA_Copy_blk_var1( FLA_Obj A, FLA_Obj B, fla_copy_t* cntl )
           BB,              B1,
                            B2;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_2x1( A,    &AT, 
                       &AB,            0, FLA_TOP );

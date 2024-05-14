@@ -21,7 +21,7 @@ FLA_Error FLA_QR2_UT_blk_var2( FLA_Obj U,
           TB,              T1,
                            T2;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_2x1( D,    &DT, 
                       &DB,            0, FLA_TOP );

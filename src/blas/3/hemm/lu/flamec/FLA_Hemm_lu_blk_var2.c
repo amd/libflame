@@ -26,7 +26,7 @@ FLA_Error FLA_Hemm_lu_blk_var2( FLA_Obj alpha, FLA_Obj A, FLA_Obj B, FLA_Obj bet
           CB,              C1,
                            C2;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Scal_internal( beta, C,
                      FLA_Cntl_sub_scal( cntl ) );

@@ -240,7 +240,7 @@ FLA_Obj_show( "T", T, "%10.3e + %10.3e ", "" );
     FLA_Obj E, ET, EB;
     FLA_Obj F;
     FLA_Obj W, WW, eye;
-    dim_t   m_A, n_Q, m_T, m_TT;
+    fla_dim_t   m_A, n_Q, m_T, m_TT;
 
 //FLA_Obj_show( "A", A, "%10.3e", "" );
 //FLA_Obj_show( "T", T, "%10.3e", "" );

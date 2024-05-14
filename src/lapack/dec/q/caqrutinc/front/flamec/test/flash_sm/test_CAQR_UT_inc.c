@@ -19,7 +19,7 @@
 char* pc_str[N_PARAM_COMBOS] = { "" };
 
 void time_CAQR_UT_inc(
-               integer param_combo, integer type, integer nrepeats, integer m, integer n, dim_t n_panels,
+               integer param_combo, integer type, integer nrepeats, integer m, integer n, fla_dim_t n_panels,
                FLA_Obj A, FLA_Obj ATW, FLA_Obj R, FLA_Obj RTW, FLA_Obj b, FLA_Obj x,
                double *dtime, double *diff, double *gflops );
 
@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     i,
     n_param_combos = N_PARAM_COMBOS;
 
-  dim_t
+  fla_dim_t
     n_panels,
     nb_flash,
     nb_alg;

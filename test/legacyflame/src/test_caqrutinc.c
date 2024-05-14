@@ -42,7 +42,7 @@ void libfla_test_caqrutinc_experiment( test_params_t params,
                                        double*       t,
                                        double*       residual );
 void libfla_test_caqrutinc_impl( int     impl,
-                                 dim_t   p,
+                                 fla_dim_t   p,
                                  FLA_Obj A,
                                  FLA_Obj ATW,
                                  FLA_Obj R,
@@ -82,8 +82,8 @@ void libfla_test_caqrutinc_experiment( test_params_t params,
                                        double*       t,
                                        double*       residual )
 {
-	dim_t        b_flash    = params.b_flash;
-	dim_t        b_alg_hier = params.b_alg_hier;
+	fla_dim_t        b_flash    = params.b_flash;
+	fla_dim_t        b_alg_hier = params.b_alg_hier;
 	double       time_min   = 1e9;
 	double       time;
 	unsigned int i;
@@ -180,7 +180,7 @@ void libfla_test_caqrutinc_experiment( test_params_t params,
 
 
 void libfla_test_caqrutinc_impl( int     impl,
-                                 dim_t   p,
+                                 fla_dim_t   p,
                                  FLA_Obj A,
                                  FLA_Obj ATW,
                                  FLA_Obj R,

@@ -10,7 +10,7 @@
 
 #include "FLAME.h"
 
-FLA_Error FLASH_Copy_buffer_to_hier( dim_t m, dim_t n, void* buffer, dim_t rs, dim_t cs, dim_t i, dim_t j, FLA_Obj H )
+FLA_Error FLASH_Copy_buffer_to_hier( fla_dim_t m, fla_dim_t n, void* buffer, fla_dim_t rs, fla_dim_t cs, fla_dim_t i, fla_dim_t j, FLA_Obj H )
 {
 	FLA_Obj      flat_matrix;
 	FLA_Datatype datatype;
@@ -44,7 +44,7 @@ FLA_Error FLASH_Copy_buffer_to_hier( dim_t m, dim_t n, void* buffer, dim_t rs, d
 }
 
 
-FLA_Error FLASH_Copy_hier_to_buffer( dim_t i, dim_t j, FLA_Obj H, dim_t m, dim_t n, void* buffer, dim_t rs, dim_t cs )
+FLA_Error FLASH_Copy_hier_to_buffer( fla_dim_t i, fla_dim_t j, FLA_Obj H, fla_dim_t m, fla_dim_t n, void* buffer, fla_dim_t rs, fla_dim_t cs )
 {
 	FLA_Obj      flat_matrix;
 	FLA_Datatype datatype;
@@ -78,13 +78,13 @@ FLA_Error FLASH_Copy_hier_to_buffer( dim_t i, dim_t j, FLA_Obj H, dim_t m, dim_t
 }
 
 
-FLA_Error FLASH_Copy_flat_to_hier( FLA_Obj F, dim_t i, dim_t j, FLA_Obj H )
+FLA_Error FLASH_Copy_flat_to_hier( FLA_Obj F, fla_dim_t i, fla_dim_t j, FLA_Obj H )
 {
 	FLA_Obj HTL, HTR,
 	        HBL, HBR;
 	FLA_Obj HBR_tl, HBR_tr,
 	        HBR_bl, HBR_br;
-	dim_t   m, n;
+	fla_dim_t   m, n;
 
 	m = FLA_Obj_length( F );
 	n = FLA_Obj_width( F );
@@ -107,13 +107,13 @@ FLA_Error FLASH_Copy_flat_to_hier( FLA_Obj F, dim_t i, dim_t j, FLA_Obj H )
 }
 
 
-FLA_Error FLASH_Copy_hier_to_flat( dim_t i, dim_t j, FLA_Obj H, FLA_Obj F )
+FLA_Error FLASH_Copy_hier_to_flat( fla_dim_t i, fla_dim_t j, FLA_Obj H, FLA_Obj F )
 {
 	FLA_Obj HTL, HTR,
 	        HBL, HBR;
 	FLA_Obj HBR_tl, HBR_tr,
 	        HBR_bl, HBR_br;
-	dim_t   m, n;
+	fla_dim_t   m, n;
 
 	m = FLA_Obj_length( F );
 	n = FLA_Obj_width( F );
@@ -173,8 +173,8 @@ FLA_Error FLASH_Copy_hierarchy( int direction, FLA_Obj F, FLA_Obj* H )
 		        F1B,           F11,
 		                       F21;
 
-		dim_t b_m;
-		dim_t b_n;
+		fla_dim_t b_m;
+		fla_dim_t b_n;
 
 		FLA_Part_1x2( *H,    &HL,  &HR,      0, FLA_LEFT );
 		FLA_Part_1x2(  F,    &FL,  &FR,      0, FLA_LEFT );

@@ -11,7 +11,7 @@
 #include "FLAME.h"
 
 FLA_Error FLA_Part_1x2_check( FLA_Obj A,  FLA_Obj *A1, FLA_Obj *A2,
-                                          dim_t    nb, FLA_Side side )
+                                          fla_dim_t    nb, FLA_Side side )
 {
   FLA_Error e_val;
 

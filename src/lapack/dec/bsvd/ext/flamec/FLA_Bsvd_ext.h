@@ -10,11 +10,11 @@
 
 // --- FLA_Bsvd_ext_opt_var1() ---------------------------------------------------
 
-FLA_Error FLA_Bsvd_ext_opt_var1( dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj H, 
+FLA_Error FLA_Bsvd_ext_opt_var1( fla_dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj H, 
                                  FLA_Svd_type jobu, FLA_Obj U, 
                                  FLA_Svd_type jobv, FLA_Obj V, 
                                  FLA_Bool apply_Uh2C, FLA_Obj C,
-                                 dim_t b_alg );
+                                 fla_dim_t b_alg );
 FLA_Error FLA_Bsvd_ext_ops_var1( integer       m_d,
                                  integer       m_U,
                                  integer       m_V,

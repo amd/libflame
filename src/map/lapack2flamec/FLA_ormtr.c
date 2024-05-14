@@ -47,7 +47,7 @@
     FLA_Side side_fla;                                                               \
     FLA_Uplo uplo_fla;                                                               \
     FLA_Trans trans_fla;                                                             \
-    dim_t m_d, m_e;                                                                  \
+    fla_dim_t m_d, m_e;                                                                  \
     FLA_Obj A, C;                                                                    \
     FLA_Error init_result;                                                           \
                                                                                      \

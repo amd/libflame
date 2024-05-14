@@ -36,8 +36,8 @@ FLA_Error FLA_QR_UT_piv_unb_var1( FLA_Obj A, FLA_Obj T, FLA_Obj w, FLA_Obj p )
           wB,              omega1,
                            w2;
 
-  dim_t   nb  = FLA_Obj_width ( A ) - FLA_Obj_width( T );
-  //dim_t   mb  = FLA_Obj_length( A ) - FLA_Obj_width( T );
+  fla_dim_t   nb  = FLA_Obj_width ( A ) - FLA_Obj_width( T );
+  //fla_dim_t   mb  = FLA_Obj_length( A ) - FLA_Obj_width( T );
 
   FLA_Part_1x2( A,    &AL,  &AR,      nb, FLA_RIGHT );
 

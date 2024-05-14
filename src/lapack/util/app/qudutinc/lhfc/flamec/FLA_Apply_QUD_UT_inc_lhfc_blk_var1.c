@@ -29,7 +29,7 @@ FLA_Error FLA_Apply_QUD_UT_inc_lhfc_blk_var1( FLA_Obj T, FLA_Obj W,
           BB,              B1,
                            B2;
 
-  dim_t   b;
+  fla_dim_t   b;
 
   FLA_Part_1x2( T,    &TL,  &TR,      0, FLA_LEFT );
 

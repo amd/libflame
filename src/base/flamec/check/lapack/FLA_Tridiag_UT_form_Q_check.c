@@ -13,7 +13,7 @@
 FLA_Error FLA_Tridiag_UT_form_Q_check( FLA_Uplo uplo, FLA_Obj A, FLA_Obj T, FLA_Obj Q )
 {
   FLA_Error e_val;
-  dim_t     n_T;
+  fla_dim_t     n_T;
 
   e_val = FLA_Check_valid_uplo( uplo );
   FLA_Check_error_code( e_val );

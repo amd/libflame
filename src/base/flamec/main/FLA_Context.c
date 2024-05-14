@@ -127,7 +127,7 @@ TLS_CLASS_SPEC fla_tl_context_t fla_tl_context = FLA_TL_CONTEXT_INITIALIZER;
 TLS_CLASS_SPEC FLA_Bool fla_tl_context_init = FALSE;
 
 // variable to check if cpu archtecture is explicitly set
-TLS_CLASS_SPEC dim_t __attribute__((unused)) fla_req_id = -1;
+TLS_CLASS_SPEC fla_dim_t __attribute__((unused)) fla_req_id = -1;
 
 // Variable to get the ISA architecture to use
 TLS_CLASS_SPEC fla_arch_t fla_arch_id = -1;

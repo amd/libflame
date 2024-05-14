@@ -57,12 +57,12 @@ typedef struct
 	unsigned int  n_datatypes;
 	char          datatype_char[ MAX_NUM_DATATYPES + 1 ];
 	FLA_Datatype  datatype[ MAX_NUM_DATATYPES + 1 ];
-	dim_t         b_flash;
-	dim_t         b_alg_hier;
-	dim_t         b_alg_flat;
-	dim_t         p_first;
-	dim_t         p_max;
-	dim_t         p_inc;
+	fla_dim_t         b_flash;
+	fla_dim_t         b_alg_hier;
+	fla_dim_t         b_alg_flat;
+	fla_dim_t         p_first;
+	fla_dim_t         p_max;
+	fla_dim_t         p_inc;
 	int           p_nfact;
 	unsigned int  n_threads;
 	char          reaction_to_failure;

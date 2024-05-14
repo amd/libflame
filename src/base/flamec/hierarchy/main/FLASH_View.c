@@ -272,7 +272,7 @@ FLA_Error FLASH_Part_create_2x2( FLA_Obj A,    FLA_Obj* ATL, FLA_Obj* ATR,
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLASH_Obj_adjust_views( FLA_Bool attach_buffer, dim_t offm, dim_t offn, dim_t m, dim_t n, FLA_Obj A, FLA_Obj* S )
+FLA_Error FLASH_Obj_adjust_views( FLA_Bool attach_buffer, fla_dim_t offm, fla_dim_t offn, fla_dim_t m, fla_dim_t n, FLA_Obj A, FLA_Obj* S )
 {
 	
 	FLASH_Obj_adjust_views_hierarchy( attach_buffer, offm, offn, m, n, A, S );
@@ -280,7 +280,7 @@ FLA_Error FLASH_Obj_adjust_views( FLA_Bool attach_buffer, dim_t offm, dim_t offn
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLASH_Obj_adjust_views_hierarchy( FLA_Bool attach_buffer, dim_t offm, dim_t offn, dim_t m, dim_t n, FLA_Obj A, FLA_Obj* S )
+FLA_Error FLASH_Obj_adjust_views_hierarchy( FLA_Bool attach_buffer, fla_dim_t offm, fla_dim_t offn, fla_dim_t m, fla_dim_t n, FLA_Obj A, FLA_Obj* S )
 {
 	FLA_Obj ATL, ATR,
 	        ABL, ABR;
@@ -597,7 +597,7 @@ FLA_Error FLASH_Part_free_2x2( FLA_Obj* ATL, FLA_Obj* ATR,
 	return FLA_SUCCESS;
 }
 
-dim_t FLASH_Obj_scalar_length( FLA_Obj H )
+fla_dim_t FLASH_Obj_scalar_length( FLA_Obj H )
 {
 	FLA_Obj  HT,              H0,
 	         HB,              H1,
@@ -638,7 +638,7 @@ dim_t FLASH_Obj_scalar_length( FLA_Obj H )
 	return b;
 }
 
-dim_t FLASH_Obj_scalar_width( FLA_Obj H )
+fla_dim_t FLASH_Obj_scalar_width( FLA_Obj H )
 {
 	FLA_Obj  HL,    HR,       H0,  H1,  H2;
 	FLA_Obj* H1p;
@@ -690,7 +690,7 @@ fla_dim_t FLASH_Obj_scalar_vector_dim( FLA_Obj H )
 	                                           : FLASH_Obj_scalar_length( H ) );
 }
 
-dim_t FLASH_Obj_scalar_row_offset( FLA_Obj H )
+fla_dim_t FLASH_Obj_scalar_row_offset( FLA_Obj H )
 {
 	if ( FLA_Obj_elemtype( H ) == FLA_SCALAR )
 	{
@@ -705,7 +705,7 @@ dim_t FLASH_Obj_scalar_row_offset( FLA_Obj H )
 	}
 }
 
-dim_t FLASH_Obj_scalar_col_offset( FLA_Obj H )
+fla_dim_t FLASH_Obj_scalar_col_offset( FLA_Obj H )
 {
 	if ( FLA_Obj_elemtype( H ) == FLA_SCALAR )
 	{
@@ -720,7 +720,7 @@ dim_t FLASH_Obj_scalar_col_offset( FLA_Obj H )
 	}
 }
 
-dim_t FLASH_Obj_scalar_length_tl( FLA_Obj H )
+fla_dim_t FLASH_Obj_scalar_length_tl( FLA_Obj H )
 {
 	if ( FLA_Obj_elemtype( H ) == FLA_SCALAR )
 	{
@@ -734,7 +734,7 @@ dim_t FLASH_Obj_scalar_length_tl( FLA_Obj H )
 	}
 }
 
-dim_t FLASH_Obj_scalar_width_tl( FLA_Obj H )
+fla_dim_t FLASH_Obj_scalar_width_tl( FLA_Obj H )
 {
 	if ( FLA_Obj_elemtype( H ) == FLA_SCALAR )
 	{

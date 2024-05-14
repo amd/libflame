@@ -78,7 +78,7 @@ FLA_Error FLASH_Copy_hier_to_buffer( fla_dim_t i, fla_dim_t j, FLA_Obj H, fla_di
 }
 
 
-FLA_Error FLASH_Copy_flat_to_hier( FLA_Obj F, dim_t i, dim_t j, FLA_Obj H )
+FLA_Error FLASH_Copy_flat_to_hier( FLA_Obj F, fla_dim_t i, fla_dim_t j, FLA_Obj H )
 {
 	FLA_Obj HTL, HTR,
 	        HBL, HBR;
@@ -107,7 +107,7 @@ FLA_Error FLASH_Copy_flat_to_hier( FLA_Obj F, dim_t i, dim_t j, FLA_Obj H )
 }
 
 
-FLA_Error FLASH_Copy_hier_to_flat( dim_t i, dim_t j, FLA_Obj H, FLA_Obj F )
+FLA_Error FLASH_Copy_hier_to_flat( fla_dim_t i, fla_dim_t j, FLA_Obj H, FLA_Obj F )
 {
 	FLA_Obj HTL, HTR,
 	        HBL, HBR;

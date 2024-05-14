@@ -10,7 +10,7 @@
 
 #include "FLAME.h"
 
-FLA_Error FLA_Tevd_v_opt_var1(dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj U, dim_t b_alg)
+FLA_Error FLA_Tevd_v_opt_var1(fla_dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj U, fla_dim_t b_alg)
 {
 	FLA_Error r_val = FLA_SUCCESS;
 	FLA_Datatype datatype;

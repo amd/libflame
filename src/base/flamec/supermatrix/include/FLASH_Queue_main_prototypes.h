@@ -51,12 +51,12 @@ void           FLASH_Queue_exec( void );
 // --- helper functions -------------------------------------------------------
 
 void           FLASH_Queue_set_parallel_time( double dtime );
-void           FLASH_Queue_set_block_size( dim_t size );
-dim_t          FLASH_Queue_get_block_size( void );
-void           FLASH_Queue_set_cache_size( dim_t size );
-dim_t          FLASH_Queue_get_cache_size( void );
-void           FLASH_Queue_set_cache_line_size( dim_t size );
-dim_t          FLASH_Queue_get_cache_line_size( void );
+void           FLASH_Queue_set_block_size( fla_dim_t size );
+fla_dim_t          FLASH_Queue_get_block_size( void );
+void           FLASH_Queue_set_cache_size( fla_dim_t size );
+fla_dim_t          FLASH_Queue_get_cache_size( void );
+void           FLASH_Queue_set_cache_line_size( fla_dim_t size );
+fla_dim_t          FLASH_Queue_get_cache_line_size( void );
 void           FLASH_Queue_set_cores_per_cache( integer cores );
 integer            FLASH_Queue_get_cores_per_cache( void );
 void           FLASH_Queue_set_cores_per_queue( integer cores );

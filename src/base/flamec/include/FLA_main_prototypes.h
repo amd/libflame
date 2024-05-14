@@ -10,9 +10,9 @@
 
 // -----------------------------------------------------------------------------
 
-fla_blocksize_t* FLA_Blocksize_create( dim_t b_s, dim_t b_d, dim_t b_c, dim_t b_z );
+fla_blocksize_t* FLA_Blocksize_create( fla_dim_t b_s, fla_dim_t b_d, fla_dim_t b_c, fla_dim_t b_z );
 fla_blocksize_t* FLA_Blocksize_create_copy( fla_blocksize_t* bp );
-void             FLA_Blocksize_set( fla_blocksize_t* bp, dim_t b_s, dim_t b_d, dim_t b_c, dim_t b_z );
+void             FLA_Blocksize_set( fla_blocksize_t* bp, fla_dim_t b_s, fla_dim_t b_d, fla_dim_t b_c, fla_dim_t b_z );
 void             FLA_Blocksize_scale( fla_blocksize_t* bp, double factor );
 void             FLA_Blocksize_free( fla_blocksize_t* bp );
 fla_dim_t            FLA_Blocksize_extract( FLA_Datatype dt, fla_blocksize_t* bp );
@@ -20,8 +20,8 @@ fla_dim_t            FLA_Blocksize_extract( FLA_Datatype dt, fla_blocksize_t* bp
 fla_blocksize_t* FLA_Query_blocksizes( FLA_Dimension dim );
 fla_dim_t            FLA_Query_blocksize( FLA_Datatype dt, FLA_Dimension dim );
 
-dim_t            FLA_Determine_blocksize( FLA_Obj A_unproc, FLA_Quadrant to_dir, fla_blocksize_t* cntl_blocksizes );
-dim_t            FLA_determine_matrix_size( FLA_Obj A_unproc, FLA_Quadrant to_dir );
+fla_dim_t            FLA_Determine_blocksize( FLA_Obj A_unproc, FLA_Quadrant to_dir, fla_blocksize_t* cntl_blocksizes );
+fla_dim_t            FLA_determine_matrix_size( FLA_Obj A_unproc, FLA_Quadrant to_dir );
 
 
 
@@ -230,16 +230,16 @@ void          FLA_shfree( void* ptr );
 FLA_Bool      FLA_is_owner( void );
 #endif
 FLA_Error     FLA_Obj_nullify( FLA_Obj *obj );
-FLA_Error     FLA_Obj_create( FLA_Datatype datatype, dim_t m, dim_t n, dim_t rs, dim_t cs, FLA_Obj *obj );
-FLA_Error     FLA_Obj_create_ext( FLA_Datatype datatype, FLA_Elemtype elemtype, dim_t m, dim_t n, dim_t m_inner, dim_t n_inner, dim_t rs, dim_t cs, FLA_Obj *obj );
+FLA_Error     FLA_Obj_create( FLA_Datatype datatype, fla_dim_t m, fla_dim_t n, fla_dim_t rs, fla_dim_t cs, FLA_Obj *obj );
+FLA_Error     FLA_Obj_create_ext( FLA_Datatype datatype, FLA_Elemtype elemtype, fla_dim_t m, fla_dim_t n, fla_dim_t m_inner, fla_dim_t n_inner, fla_dim_t rs, fla_dim_t cs, FLA_Obj *obj );
 FLA_Error     FLA_Obj_create_conf_to( FLA_Trans trans, FLA_Obj old, FLA_Obj *obj );
 FLA_Error     FLA_Obj_create_copy_of( FLA_Trans trans, FLA_Obj old, FLA_Obj *obj );
-FLA_Error     FLA_Obj_create_without_buffer( FLA_Datatype datatype, dim_t m, dim_t n, FLA_Obj *obj );
+FLA_Error     FLA_Obj_create_without_buffer( FLA_Datatype datatype, fla_dim_t m, fla_dim_t n, FLA_Obj *obj );
 FLA_Error     FLA_Obj_create_constant( double const_real, FLA_Obj *obj );
 FLA_Error     FLA_Obj_create_constant_ext( float const_s, double const_d, FLA_Obj *obj );
 FLA_Error     FLA_Obj_create_complex_constant( double const_real, double const_imag, FLA_Obj *obj );
-FLA_Error     FLA_Obj_attach_buffer( void *buffer, dim_t rs, dim_t cs, FLA_Obj *obj );
-FLA_Error     FLA_Obj_create_buffer( dim_t rs, dim_t cs, FLA_Obj *obj );
+FLA_Error     FLA_Obj_attach_buffer( void *buffer, fla_dim_t rs, fla_dim_t cs, FLA_Obj *obj );
+FLA_Error     FLA_Obj_create_buffer( fla_dim_t rs, fla_dim_t cs, FLA_Obj *obj );
 FLA_Error     FLA_Obj_free( FLA_Obj *obj );
 FLA_Error     FLA_Obj_free_without_buffer( FLA_Obj *obj );
 FLA_Error     FLA_Obj_free_buffer( FLA_Obj *obj );
@@ -272,10 +272,10 @@ FLA_Datatype  FLA_Obj_datatype( FLA_Obj obj );
 FLA_Datatype  FLA_Obj_datatype_proj_to_real( FLA_Obj A );
 FLA_Datatype  FLA_Obj_datatype_proj_to_complex( FLA_Obj A );
 FLA_Elemtype  FLA_Obj_elemtype( FLA_Obj obj );
-dim_t         FLA_Obj_datatype_size( FLA_Datatype datatype );
-dim_t         FLA_Obj_elem_size( FLA_Obj obj );
-dim_t         FLA_Obj_length( FLA_Obj obj );
-dim_t         FLA_Obj_width( FLA_Obj obj );
+fla_dim_t         FLA_Obj_datatype_size( FLA_Datatype datatype );
+fla_dim_t         FLA_Obj_elem_size( FLA_Obj obj );
+fla_dim_t         FLA_Obj_length( FLA_Obj obj );
+fla_dim_t         FLA_Obj_width( FLA_Obj obj );
 FLA_Uplo      FLA_Obj_structure( FLA_Obj obj );
 fla_dim_t         FLA_Obj_vector_dim( FLA_Obj obj );
 fla_dim_t         FLA_Obj_vector_inc( FLA_Obj obj );

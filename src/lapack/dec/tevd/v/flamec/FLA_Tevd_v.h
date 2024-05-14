@@ -71,7 +71,7 @@ FLA_Error FLA_Norm1_tridiag_opd( integer       m_A,
 
 // --- FLA_Tevd_v_opt_var1() ---------------------------------------------------
 
-FLA_Error FLA_Tevd_v_opt_var1( dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj U, dim_t b_alg );
+FLA_Error FLA_Tevd_v_opt_var1( fla_dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj U, fla_dim_t b_alg );
 FLA_Error FLA_Tevd_v_ops_var1( integer       m_A,
                                integer       m_U,
                                integer       n_G,
@@ -111,7 +111,7 @@ FLA_Error FLA_Tevd_v_opz_var1( integer       m_A,
 
 // --- FLA_Tevd_v_opt_var2() ---------------------------------------------------
 
-FLA_Error FLA_Tevd_v_opt_var2( dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj R, FLA_Obj W, FLA_Obj U, dim_t b_alg );
+FLA_Error FLA_Tevd_v_opt_var2( fla_dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj R, FLA_Obj W, FLA_Obj U, fla_dim_t b_alg );
 FLA_Error FLA_Tevd_v_ops_var2( integer       m_A,
                                integer       m_U,
                                integer       n_G,

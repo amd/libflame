@@ -17,7 +17,7 @@ FLA_Datatype FLASH_Obj_datatype( FLA_Obj H )
 }
 
 
-dim_t FLASH_Obj_depth( FLA_Obj H )
+fla_dim_t FLASH_Obj_depth( FLA_Obj H )
 {
 	FLA_Elemtype elemtype;
 	FLA_Obj*     buffer_H;
@@ -80,7 +80,7 @@ fla_dim_t FLASH_Obj_blocksizes( FLA_Obj H, fla_dim_t* b_m, fla_dim_t* b_n )
 	return depth;
 }
 
-dim_t FLASH_Obj_base_scalar_length( FLA_Obj H )
+fla_dim_t FLASH_Obj_base_scalar_length( FLA_Obj H )
 {
 	FLA_Obj* buffer;
 	fla_dim_t    m;
@@ -110,7 +110,7 @@ dim_t FLASH_Obj_base_scalar_length( FLA_Obj H )
 	return m_base;
 }
 
-dim_t FLASH_Obj_base_scalar_width( FLA_Obj H )
+fla_dim_t FLASH_Obj_base_scalar_width( FLA_Obj H )
 {
 	FLA_Obj* buffer;
 	fla_dim_t    n;
@@ -164,7 +164,7 @@ FLA_Error FLASH_Obj_create_without_buffer( FLA_Datatype datatype, fla_dim_t m, f
 }
 
 
-FLA_Error FLASH_Obj_create_without_buffer_ext( FLA_Datatype datatype, dim_t m, dim_t n, dim_t depth, dim_t* b_m, dim_t* b_n, FLA_Obj* H )
+FLA_Error FLASH_Obj_create_without_buffer_ext( FLA_Datatype datatype, fla_dim_t m, fla_dim_t n, fla_dim_t depth, fla_dim_t* b_m, fla_dim_t* b_n, FLA_Obj* H )
 {
 	FLASH_Obj_create_helper( TRUE, datatype, m, n, depth, b_m, b_n, H );
 
@@ -268,7 +268,7 @@ FLA_Error FLASH_Obj_create_helper( FLA_Bool without_buffer, FLA_Datatype datatyp
 }
 
 
-FLA_Error FLASH_Obj_create_hierarchy( FLA_Datatype datatype, dim_t m, dim_t n, dim_t depth, dim_t* elem_sizes_m, dim_t* elem_sizes_n, FLA_Obj flat_matrix, FLA_Obj* H, unsigned long id, dim_t depth_overall, dim_t* depth_sizes_m, dim_t* depth_sizes_n, dim_t* m_offsets, dim_t* n_offsets )
+FLA_Error FLASH_Obj_create_hierarchy( FLA_Datatype datatype, fla_dim_t m, fla_dim_t n, fla_dim_t depth, fla_dim_t* elem_sizes_m, fla_dim_t* elem_sizes_n, FLA_Obj flat_matrix, FLA_Obj* H, unsigned long id, fla_dim_t depth_overall, fla_dim_t* depth_sizes_m, fla_dim_t* depth_sizes_n, fla_dim_t* m_offsets, fla_dim_t* n_offsets )
 {
 	fla_dim_t    i, j, b;
 	fla_dim_t    next_m, next_n;

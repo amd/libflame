@@ -64,7 +64,7 @@ extern void dormbr_fla(char *vect, char *side, char *trans, integer *m, integer 
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                                    \
     FLA_Side side_fla;                                                                        \
     FLA_Trans trans_fla;                                                                      \
-    dim_t nq, /* nw, */ m_t, mm, nn;                                                          \
+    fla_dim_t nq, /* nw, */ m_t, mm, nn;                                                          \
     FLA_Obj A, C, T, W, t;                                                                    \
     FLA_Obj d2, e2, rL, rR;                                                                   \
     FLA_Uplo uplo;                                                                            \

@@ -53,7 +53,7 @@ FLA_Error FLA_Obj_nullify( FLA_Obj *obj )
   return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Obj_create( FLA_Datatype datatype, dim_t m, dim_t n, dim_t rs, dim_t cs, FLA_Obj *obj )
+FLA_Error FLA_Obj_create( FLA_Datatype datatype, fla_dim_t m, fla_dim_t n, fla_dim_t rs, fla_dim_t cs, FLA_Obj *obj )
 {
   FLA_Obj_create_ext( datatype, FLA_SCALAR, m, n, m, n, rs, cs, obj );
 

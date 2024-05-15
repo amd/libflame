@@ -133,7 +133,7 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
     create_matrix(datatype, &A_test, lda, n);
 
     /* Initialize the test matrices */
-    if(g_ext_fptr != NULL  || (params->imatrix_char))
+    if(g_ext_fptr != NULL || (params->imatrix_char))
     {
         init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
         if(params->imatrix_char != NULL)

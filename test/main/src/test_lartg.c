@@ -139,8 +139,8 @@ void fla_test_lartg_experiment(test_params_t *params, integer datatype, integer 
     }
     else
     {
-        rand_vector(datatype, f, 1, 1);
-        rand_vector(datatype, g, 1, 1);
+        rand_vector(datatype, 1, f, 1, d_zero, d_zero, 'R');
+        rand_vector(datatype, 1, g, 1, d_zero, d_zero, 'R');
     }
     /* call to API */
     prepare_lartg_run(datatype, f, g, r, c, s, n_repeats, &time_min);

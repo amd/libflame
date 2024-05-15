@@ -6,6 +6,9 @@
 #include "test_lapack.h"
 #include "test_prototype.h"
 
+#define GELS_VL 0.1
+#define GELS_VU 10
+
 void invoke_gels(integer datatype, char *trans, integer *m, integer *n, integer *nrhs, void *A,
                  integer *lda, void *B, integer *ldb, void *work, integer *lwork, integer *info);
 void fla_test_gels_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
@@ -110,8 +113,8 @@ void fla_test_gels_experiment(test_params_t *params, integer datatype, integer p
                               double *t, double *residual)
 {
     integer m, n, m_b, nrhs, lda, ldb, lwork = -1, info = 0;
-    void *A = NULL, *A_test = NULL, *B = NULL, *B_test = NULL, *work = NULL;
-    char trans;
+    void *A = NULL, *A_test = NULL, *B = NULL, *B_test = NULL, *work = NULL, *s_test = NULL;
+    char trans, range = 'U';
 
     /* Determine the dimensions */
     m = p_cur;
@@ -163,10 +166,21 @@ void fla_test_gels_experiment(test_params_t *params, integer datatype, integer p
     create_matrix(datatype, &A_test, lda, n);
     create_matrix(datatype, &B, ldb, nrhs);
     create_matrix(datatype, &B_test, ldb, nrhs);
+    create_realtype_vector(datatype, &s_test, fla_min(m, n));
 
     /* Initialize the test matrices */
-    init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
     init_matrix(datatype, B, m_b, nrhs, ldb, g_ext_fptr, params->imatrix_char);
+
+    if(params->imatrix_char == NULL && g_ext_fptr == NULL)
+    {
+        /* Generate input matrix with condition number <= 100 */
+        create_svd_matrix(datatype, range, m, n, A, lda, s_test, GELS_VL, GELS_VU, i_zero, i_zero,
+                          '\0', NULL, info);
+    }
+    else
+    {
+        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+    }
 
     /* Save the original matrix */
     copy_matrix(datatype, "full", lda, n, A, lda, A_test, lda);
@@ -208,6 +222,7 @@ void fla_test_gels_experiment(test_params_t *params, integer datatype, integer p
     free_matrix(A_test);
     free_matrix(B);
     free_matrix(B_test);
+    free_vector(s_test);
 }
 
 void prepare_gels_run(integer datatype, char trans, integer m, integer n, integer nrhs, void *A,

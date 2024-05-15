@@ -32,7 +32,7 @@ extern dcomplex z_zero, z_one, z_n_one;
     (float)(lower + (upper - lower) * ((double)rand() / (double)RAND_MAX));
 #define DRAND_IN_RANGE(lower, upper) \
     (double)(lower + (upper - lower) * ((double)rand() / (double)RAND_MAX));
-#define FLA_FABS(x) ((x) >= 0) ? (x) : (-x);
+#define FLA_FABS(x) ((x) >= 0) ? (x) : (-1 * x);
 
 // Datatype
 #define CONSTANT 101
@@ -63,7 +63,13 @@ void create_vector(integer datatype, void **A, integer M);
 void create_realtype_vector(integer datatype, void **A, integer M);
 void free_vector(void *A);
 void reset_vector(integer datatype, void *A, integer M, integer incA);
-void rand_vector(integer datatype, void *A, integer M, integer LDA);
+/* Initialize vector,
+ * if range = V then initialize real type vector with random values between given range (VL, VU)
+ * if range = U then initialize real type vector within specific range with uniform initialization
+ * if range = R initialize vector with random values
+ */
+void rand_vector(integer datatype, integer M, void *A, integer LDA, double VL, double VU,
+                 char range);
 void copy_vector(integer datatype, integer M, void *A, integer LDA, void *B, integer LDB);
 void copy_subvector(integer datatype, integer m, void *A, integer lda, void *B, integer ldb,
                     integer srow, integer scol, integer drow, integer dcol);
@@ -140,7 +146,6 @@ void set_transpose(integer datatype, char *uplo, char *trans_A, char *trans_B);
 /* Create diagonal matrix by copying elements from vector to matrix */
 void diagonalize_realtype_vector(integer datatype, void *s, void *sigma, integer m, integer n,
                                  integer LDA);
-
 /* To calculate matrix multiplication with real and complex datatypes */
 void scgemv(char TRANS, integer real_alpha, integer m, integer n, scomplex *alpha, float *a,
             integer lda, scomplex *v, integer incv, float beta, scomplex *c, integer inc);
@@ -185,8 +190,8 @@ void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, v
 double svd_check_order(integer datatype, void *s, integer m, integer n, double residual);
 /*Generate Matrix for SVD*/
 void create_svd_matrix(integer datatype, char range, integer m, integer n, void *A_input,
-                       integer lda, integer ldu, integer ldvt, void *S, double vl, double vu,
-                       integer il, integer iu, char imatrix, void *scal, integer info);
+                       integer lda, void *S, double vl, double vu, integer il, integer iu,
+                       char imatrix, void *scal, integer info);
 void get_abs_vector_value(integer datatype, void *S, integer M, integer inc);
 /* Intialize matrix with special values*/
 void init_matrix_spec_in(integer datatype, void *A, integer M, integer N, integer LDA, char type);
@@ -205,10 +210,6 @@ void init_vector(integer datatype, void *A, integer M, integer incx, FILE *g_ext
 void init_vector_spec_in(integer datatype, void *A, integer M, integer incx, char type);
 /* Checks whether the value is zero or not */
 double is_value_zero(integer datatype, void *value, double residual);
-/* Initialize vector with random real type values */
-void rand_realtype_vector(integer datatype, void *A, integer M, integer LDA);
-/* Initialize vector with random real type values between given range (Vl, VU) */
-void rand_realvector_in_range(integer datatype, void *A, double VL, double VU, integer M);
 /* Multiply general m * n matrix with diagonal vector (of an n * n diagonal matrix) of size n */
 void multiply_matrix_diag_vector(integer datatype, integer m, integer n, void *A, integer lda,
                                  void *X, integer incx);
@@ -287,4 +288,5 @@ void diagonalize_vector(integer datatype, void *s, void *sigma, integer m, integ
    Ex: input vector {a, 0, -b, 0 ...}
        output vector {a, -a, -b, b, ...} */
 void add_negative_values(integer datatype, void *vect, integer n);
+
 #endif // TEST_COMMON_H

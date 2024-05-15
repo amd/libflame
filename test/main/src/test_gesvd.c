@@ -188,7 +188,7 @@ void fla_test_gesvd_experiment(test_params_t *params, integer datatype, integer 
             create_vector(get_realtype(datatype), &scal, 1);
 
         /* Generate matrix A with singular value */
-        create_svd_matrix(datatype, 'A', m, n, A, lda, m, n, s_test, s_one, s_one, i_one, i_one,
+        create_svd_matrix(datatype, 'A', m, n, A, lda, s_test, s_one, s_one, i_one, i_one,
                           params->imatrix_char, scal, info);
     }
 

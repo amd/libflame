@@ -35,7 +35,7 @@ void validate_sytrf(char *uplo, integer n, integer lda, void *A_res, integer dat
     set_identity_matrix(datatype, n, n, temp, n);
     set_identity_matrix(datatype, n, n, work, n);
 
-    rand_vector(datatype, X, n, 1);
+    rand_vector(datatype, n, X, 1, d_zero, d_zero, 'R');
 
     integer s = 1, k;
 

@@ -140,8 +140,8 @@ void fla_test_rot_experiment(test_params_t *params, integer datatype, integer p_
     create_vector(datatype, &g, 1);
     create_vector(datatype, &r, 1);
 
-    rand_vector(datatype, f, 1, 1);
-    rand_vector(datatype, g, 1, 1);
+    rand_vector(datatype, 1, f, 1, d_zero, d_zero, 'R');
+    rand_vector(datatype, 1, g, 1, d_zero, d_zero, 'R');
 
     /*calling lartg api for getting c and s value for plane rotation*/
     invoke_lartg(datatype, f, g, c, s, r);
@@ -155,8 +155,8 @@ void fla_test_rot_experiment(test_params_t *params, integer datatype, integer p_
     else
     {
         /* Initialize input matrix with random numbers */
-        rand_vector(datatype, cx, 1 + (n - 1) * fla_i_abs(&incx), 1);
-        rand_vector(datatype, cy, 1 + (n - 1) * fla_i_abs(&incy), 1);
+        rand_vector(datatype, 1 + (n - 1) * fla_i_abs(&incx), cx, 1, d_zero, d_zero, 'R');
+        rand_vector(datatype, 1 + (n - 1) * fla_i_abs(&incy), cy, 1, d_zero, d_zero, 'R');
     }
     copy_vector(datatype, 1 + (n - 1) * fla_i_abs(&incx), cx, i_one, cx_test, i_one);
     copy_vector(datatype, 1 + (n - 1) * fla_i_abs(&incy), cy, i_one, cy_test, i_one);

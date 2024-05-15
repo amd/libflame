@@ -42,7 +42,7 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
     create_matrix(datatype, &T, m_A, n_A);
     create_vector(datatype, &work, 2 * m_A);
 
-    rand_vector(datatype, B, m_A, 1);
+    rand_vector(datatype, m_A, B, 1, d_zero, d_zero, 'R');
     copy_vector(datatype, m_A, B, 1, B_test, 1);
 
     /* Lower triangular matrix should be sqare matrix m x m */

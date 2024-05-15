@@ -185,10 +185,16 @@ void reset_vector(integer datatype, void *A, integer M, integer incA)
     }
 }
 
-/* Initialize vector with random values */
-void rand_vector(integer datatype, void *A, integer M, integer LDA)
+/* Initialize vector,
+ * if range = V then initialize real type vector with random values between given range (VL, VU)
+ * if range = U then initialize real type vector within specific range with uniform initialization
+ * if range = R initialize vector with random values
+ */
+void rand_vector(integer datatype, integer M, void *A, integer inc, double VL, double VU,
+                 char range)
 {
     integer i;
+    double step = VU - VL / M;
 
     switch(datatype)
     {
@@ -196,7 +202,19 @@ void rand_vector(integer datatype, void *A, integer M, integer LDA)
         {
             for(i = 0; i < M; i++)
             {
-                ((float *)A)[i * LDA] = SRAND();
+                if(range == 'V' || range == 'v')
+                {
+                    ((float *)A)[i * inc] = SRAND_IN_RANGE(VL, VU);
+                }
+                else if(range == 'U' || range == 'u')
+                {
+                    ((float *)A)[i * inc] = VL;
+                    VL = VL + step;
+                }
+                else
+                {
+                    ((float *)A)[i * inc] = SRAND();
+                }
             }
             break;
         }
@@ -204,7 +222,19 @@ void rand_vector(integer datatype, void *A, integer M, integer LDA)
         {
             for(i = 0; i < M; i++)
             {
-                ((double *)A)[i * LDA] = DRAND();
+                if(range == 'V' || range == 'v')
+                {
+                    ((double *)A)[i * inc] = DRAND_IN_RANGE(VL, VU);
+                }
+                else if(range == 'U' || range == 'u')
+                {
+                    ((double *)A)[i * inc] = VL;
+                    VL = VL + step;
+                }
+                else
+                {
+                    ((double *)A)[i * inc] = DRAND();
+                }
             }
             break;
         }
@@ -212,8 +242,8 @@ void rand_vector(integer datatype, void *A, integer M, integer LDA)
         {
             for(i = 0; i < M; i++)
             {
-                ((scomplex *)A)[i * LDA].real = SRAND();
-                ((scomplex *)A)[i * LDA].imag = SRAND();
+                ((scomplex *)A)[i * inc].real = SRAND();
+                ((scomplex *)A)[i * inc].imag = SRAND();
             }
             break;
         }
@@ -221,8 +251,8 @@ void rand_vector(integer datatype, void *A, integer M, integer LDA)
         {
             for(i = 0; i < M; i++)
             {
-                ((dcomplex *)A)[i * LDA].real = DRAND();
-                ((dcomplex *)A)[i * LDA].imag = DRAND();
+                ((dcomplex *)A)[i * inc].real = DRAND();
+                ((dcomplex *)A)[i * inc].imag = DRAND();
             }
             break;
         }
@@ -3313,7 +3343,7 @@ void init_vector_spec_in(integer datatype, void *A, integer M, integer incx, cha
 void init_vector_spec_rand_in(integer datatype, void *A, integer M, integer incx, char type)
 {
     integer rows, span;
-    rand_vector(datatype, A, M, incx);
+    rand_vector(datatype, M, A, incx, d_zero, d_zero, 'R');
     /* when M*N less than 2 there is no need of randomness*/
     if(M < 2)
     {
@@ -3453,6 +3483,7 @@ void init_matrix(integer datatype, void *A, integer M, integer N, integer LDA, F
  *   A -> All singular values => rand vector
  *   V -> Singular value between (vl, vu) range => vector in range(vl, vu)
  *   I -> Singular value between (il, iu) index
+ *   U -> Singular value between (vl, vu) range with uniformly distributed values
  *               A  = (U * S * V')
  *   where  S  is a diagonal matrix with diagonal elements being
  *   the singular values of input matrix A
@@ -3460,8 +3491,8 @@ void init_matrix(integer datatype, void *A, integer M, integer N, integer LDA, F
  *   V is an N-by-N orthogonal matrix.
  */
 void create_svd_matrix(integer datatype, char range, integer m, integer n, void *A_input,
-                       integer lda, integer ldu, integer ldvt, void *S, double vl, double vu,
-                       integer il, integer iu, char imatrix, void *scal, integer info)
+                       integer lda, void *S, double vl, double vu, integer il, integer iu,
+                       char imatrix, void *scal, integer info)
 {
     if(lda < m)
         return;
@@ -3489,12 +3520,7 @@ void create_svd_matrix(integer datatype, char range, integer m, integer n, void 
     get_orthogonal_matrix_from_QR(datatype, n, B, n, V, n, &info);
 
     /* Generating positive singular values according to the ranges */
-    if(range == 'V' || range == 'v')
-    {
-        rand_realvector_in_range(get_realtype(datatype), s_test, vl, vu, min_m_n);
-    }
-    else
-        rand_vector(get_realtype(datatype), s_test, min_m_n, i_one);
+    rand_vector(get_realtype(datatype), min_m_n, s_test, i_one, vl, vu, range);
 
     /* Sorting singular values in descending order */
     get_abs_vector_value(datatype, s_test, min_m_n, i_one);
@@ -3636,7 +3662,7 @@ void init_vector(integer datatype, void *A, integer M, integer incx, FILE *g_ext
     else if(ivector_char == 'A' || ivector_char == 'F')
         init_vector_spec_rand_in(datatype, A, M, incx, ivector_char);
     else
-        rand_vector(datatype, A, M, incx);
+        rand_vector(datatype, M, A, incx, d_zero, d_zero, 'R');
 }
 
 /* General matrix multiplication of tridiagonal matrix using LAGTM
@@ -3780,49 +3806,6 @@ void copy_tridiag_matrix(integer datatype, void *dl, void *d, void *du, integer 
             zcopy_(&du_size, du, &i_one, du_ptr, &inc);
             zcopy_(&dl_size, dl, &i_one, dl_ptr, &inc);
             break;
-        }
-    }
-}
-
-/* Initialize realtype vector with random values */
-void rand_realtype_vector(integer datatype, void *A, integer M, integer LDA)
-{
-    integer i;
-
-    if(datatype == FLOAT || datatype == COMPLEX)
-    {
-        for(i = 0; i < M; i++)
-        {
-            ((float *)A)[i * LDA] = SRAND();
-        }
-    }
-    else if(datatype == DOUBLE || datatype == DOUBLE_COMPLEX)
-    {
-        for(i = 0; i < M; i++)
-        {
-            ((double *)A)[i * LDA] = DRAND();
-        }
-    }
-}
-
-/* Initialize real type vector with random values
-   between given range (Vl, VU) */
-void rand_realvector_in_range(integer datatype, void *A, double VL, double VU, integer M)
-{
-    integer i;
-
-    if(datatype == FLOAT || datatype == COMPLEX)
-    {
-        for(i = 0; i < M; i++)
-        {
-            ((float *)A)[i] = SRAND_IN_RANGE(VL, VU);
-        }
-    }
-    else if(datatype == DOUBLE || datatype == DOUBLE_COMPLEX)
-    {
-        for(i = 0; i < M; i++)
-        {
-            ((double *)A)[i] = DRAND_IN_RANGE(VL, VU);
         }
     }
 }
@@ -4068,16 +4051,11 @@ void generate_matrix_from_EVs(integer datatype, char range, integer n, void *A, 
     void *X = NULL, *Q = NULL;
     integer realtype, info = 0;
     realtype = get_realtype(datatype);
-    if((range == 'V') || (range == 'v'))
-    {
-        /* Generate random vector of size n with values ranging
-        between (vl, vu) */
-        rand_realvector_in_range(realtype, L, vl, vu, n);
-    }
-    else
-    {
-        rand_realtype_vector(realtype, L, n, 1);
-    }
+
+    /* Generate random vector of size n with values ranging
+    between (vl, vu) */
+    rand_vector(realtype, n, L, i_one, vl, vu, range);
+
     create_matrix(datatype, &X, n, n);
     rand_matrix(datatype, X, n, n, n);
     create_matrix(datatype, &Q, n, n);
@@ -5499,7 +5477,7 @@ void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer
     {
         void *L1 = NULL;
         create_vector(datatype, &L1, n);
-        rand_vector(datatype, L1, n, 1);
+        rand_vector(datatype, n, L1, 1, d_zero, d_zero, 'R');
         diagonalize_vector(datatype, L1, L, n, n, n);
 
         free_vector(L1);

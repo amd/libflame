@@ -144,7 +144,7 @@ void fla_test_larf_experiment(test_params_t *params, integer datatype, integer p
     create_vector(datatype, &v_tmp, v_length);
     create_vector(datatype, &tau, 1);
 
-    rand_vector(datatype, v_tmp, v_num_elements, incv_abs);
+    rand_vector(datatype, v_num_elements, v_tmp, incv_abs, d_zero, d_zero, 'R');
 
     /* Input generation (v_tmp and tau) for larf from larfg
        Increment of v_tmp for larfg must be positive. Hence calling larfg with incv_abs

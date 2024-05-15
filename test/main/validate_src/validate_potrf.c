@@ -39,7 +39,7 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
     create_vector(datatype, &x_test, m);
 
     /* Generate random vector b */
-    rand_vector(datatype, b, m, 1);
+    rand_vector(datatype, m, b, 1, d_zero, d_zero, 'R');
 
     /* Copy lower or upper triangular matrix based on uplo to buff_A, buff_B */
     copy_matrix(datatype, uplo, m, m, A_test, lda, buff_A, m);

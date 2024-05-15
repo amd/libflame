@@ -11,8 +11,10 @@
 
 #if FLA_ENABLE_AMD_OPT
 
+#ifndef FLA_ENABLE_AOCL_BLAS
 extern void drot_(integer *, doublereal *, integer *, doublereal *,
                   integer *, doublereal *, doublereal *);
+#endif
 extern void dlartg_(doublereal *da, doublereal *db, doublereal *c__, doublereal *s, doublereal *r);
 
 void fla_dgesvd_xx_small10_avx2(integer wntus, integer wntvs,

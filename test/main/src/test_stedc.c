@@ -172,8 +172,8 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
         }
         else
         { /* Create tridiagonal matrix using random Diagonal, subdiagonal elements if compz != V. */
-            rand_vector(realtype, D, n, 1);
-            rand_vector(realtype, E, n - 1, 1);
+            rand_vector(realtype, n, D, 1, d_zero, d_zero, 'R');
+            rand_vector(realtype, n - 1, E, 1, d_zero, d_zero, 'R');
             copy_sym_tridiag_matrix(datatype, D, E, n, n, A, lda);
         }
     }

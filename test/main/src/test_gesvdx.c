@@ -209,7 +209,7 @@ void fla_test_gesvdx_experiment(test_params_t *params, integer datatype, integer
     else
     {
         /* Generate A matrix by known singular values */
-        create_svd_matrix(datatype, range, m, n, A, lda, m, n, s_test, d_vl, d_vu, il, iu,
+        create_svd_matrix(datatype, range, m, n, A, lda, s_test, d_vl, d_vu, il, iu,
                           params->imatrix_char, NULL, info);
     }
 

@@ -13,8 +13,10 @@
 
 #if FLA_ENABLE_AMD_OPT
 
+#ifndef FLA_ENABLE_AOCL_BLAS
 extern void drot_(integer *, doublereal *, integer *, doublereal *,
                   integer *, doublereal *, doublereal *);
+#endif
 /* SVD for small tall-matrices with QR factorization
  * already computed
  */

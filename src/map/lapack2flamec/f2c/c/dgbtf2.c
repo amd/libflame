@@ -27,12 +27,14 @@ void dgbtf2_aocl_blas_ver(integer *m, integer *n, integer *kl, integer *ku, doub
     integer i__, j, km, jp, ju, kv;
     doublereal alpha;
     doublereal *x, *y, *r;
+    dim_t index;
 
     /* Make a copy of AOCL-BLAS framework context. This information is needed to query the architecture specific details of compute kernel */
     cntx_t* cntx = bli_gks_query_cntx();
 
     /* Query names of compute kernel from AOCL-BLAS framework context */
     damaxv_ker_ft idamax_blas_ptr = bli_cntx_get_l1v_ker_dt(BLIS_DOUBLE, BLIS_AMAXV_KER, cntx );
+    dswapv_ker_ft dswap_blas_ptr = bli_cntx_get_l1v_ker_dt(BLIS_DOUBLE, BLIS_SWAPV_KER, cntx );
     dscalv_ker_ft dscal_blas_ptr = bli_cntx_get_l1v_ker_dt(BLIS_DOUBLE, BLIS_SCALV_KER, cntx );
     daxpyv_ker_ft daxpy_blas_ptr = bli_cntx_get_l1v_ker_dt(BLIS_DOUBLE, BLIS_AXPYV_KER, cntx );
 
@@ -120,9 +122,9 @@ void dgbtf2_aocl_blas_ver(integer *m, integer *n, integer *kl, integer *ku, doub
         i__2 = km + 1;
 
         /* idamax_blas_ptr finds the index of the first element having maximum absolute value */
-        idamax_blas_ptr(i__2, &ab[kv + 1 + j * ab_dim1], c__1, &jp, NULL);
+        idamax_blas_ptr((dim_t)i__2, &ab[kv + 1 + j * ab_dim1], (dim_t)c__1, &index, cntx);
 
-        jp = jp + 1;
+        jp = (integer)index + 1;
         ipiv[j] = jp + j - 1;
         if (ab[kv + jp + j * ab_dim1] != 0.)
         {
@@ -140,7 +142,7 @@ void dgbtf2_aocl_blas_ver(integer *m, integer *n, integer *kl, integer *ku, doub
                 i__4 = *ldab - 1;
 
                 /* dswap_blas_ptr swaps two vectors using AOCL-BLAS */
-                bli_dswapv_zen_int8(i__2, &ab[kv + jp + j * ab_dim1], i__3, &ab[kv + 1 + j * ab_dim1], i__4, NULL);
+                dswap_blas_ptr((dim_t)i__2, &ab[kv + jp + j * ab_dim1], (dim_t)i__3, &ab[kv + 1 + j * ab_dim1], (dim_t)i__4, cntx);
             }
 
             if (km > 0)
@@ -149,7 +151,7 @@ void dgbtf2_aocl_blas_ver(integer *m, integer *n, integer *kl, integer *ku, doub
                 d__1 = 1. / ab[kv + 1 + j * ab_dim1];
 
                 /* dscal_blas_ptr scales a vector by a constant */
-                dscal_blas_ptr(BLIS_NO_CONJUGATE, km, &d__1, &ab[kv + 2 + j * ab_dim1], c__1, NULL);
+                dscal_blas_ptr(BLIS_NO_CONJUGATE, (dim_t)km, &d__1, &ab[kv + 2 + j * ab_dim1], (dim_t)c__1, cntx);
 
                 /* Update trailing submatrix within the band. */
                 if (ju > j)
@@ -160,13 +162,14 @@ void dgbtf2_aocl_blas_ver(integer *m, integer *n, integer *kl, integer *ku, doub
                     x = &ab[kv + 2 + j * ab_dim1];
                     y = &ab[kv + (j + 1) * ab_dim1];
                     r = &ab[kv + 1 + (j + 1) * ab_dim1];
+
                     for(integer i = 0; i < i__2; i++)
                     {
                         alpha = -y[i * i__4];
 
                         if(alpha)
                             /* daxpy_blas_ptr performs the operation y = alpha * x + y */
-                            daxpy_blas_ptr(BLIS_NO_CONJUGATE, km, &alpha, x, c__1, &r[i * i__3], c__1, NULL);
+                            daxpy_blas_ptr(BLIS_NO_CONJUGATE, (dim_t)km, &alpha, x, (dim_t)c__1, &r[i * i__3], (dim_t)c__1, cntx);
                     }
                 }
             }

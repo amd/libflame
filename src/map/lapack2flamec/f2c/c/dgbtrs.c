@@ -29,6 +29,7 @@ void dgbtrs_aocl_blas_ver(char *trans, integer *n, integer *kl, integer *ku, int
     cntx_t* cntx = bli_gks_query_cntx();
 
     /* Query names of compute kernel from AOCL-BLAS framework context */
+    dswapv_ker_ft dswap_blas_ptr = bli_cntx_get_l1v_ker_dt(BLIS_DOUBLE, BLIS_SWAPV_KER, cntx );
     daxpyv_ker_ft daxpy_blas_ptr = bli_cntx_get_l1v_ker_dt(BLIS_DOUBLE, BLIS_AXPYV_KER, cntx );
 
     /* Parameter adjustments */
@@ -96,23 +97,25 @@ void dgbtrs_aocl_blas_ver(char *trans, integer *n, integer *kl, integer *ku, int
                 i__2 = *kl;
                 i__3 = *n - j; // , expr subst
                 lm = fla_min(i__2, i__3);
+                i__3 = *ldb;
                 l = ipiv[j];
                 if(l != j)
                 {
                     /* dswap_blas_ptr swaps two vectors using AOCL-BLAS */
-                    bli_dswapv_zen_int8(*nrhs, &b[l + b_dim1], *ldb, &b[j + b_dim1], *ldb, NULL);
+                    dswap_blas_ptr((dim_t)*nrhs, &b[l + b_dim1], (dim_t)*ldb, &b[j + b_dim1], (dim_t)*ldb, cntx);
                 }
+
                 x = &ab[kd + 1 + j * ab_dim1];
-                y = &b[ j + b_dim1];
+                y = &b[j + b_dim1];
                 r = &b[j + 1 + b_dim1];
 
                 for(integer i = 0; i < *nrhs; i++)
                 {
-                    alpha = -y[i * (*ldb)];
+                    alpha = -y[i * i__3];
 
                     if(alpha)
                         /* daxpy_blas_ptr performs the operation y = alpha * x + y */
-                        daxpy_blas_ptr(BLIS_NO_CONJUGATE, lm, &alpha, x, c__1, &r[i * i__3], c__1, NULL);
+                        daxpy_blas_ptr(BLIS_NO_CONJUGATE, (dim_t)lm, &alpha, x, (dim_t)c__1, &r[i * i__3], (dim_t)c__1, cntx);
                 }
             }
         }
@@ -320,6 +323,7 @@ void dgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, d
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
 #endif
+    
     logical lnoti;
     logical notran;
     /* -- LAPACK computational routine (version 3.4.0) -- */

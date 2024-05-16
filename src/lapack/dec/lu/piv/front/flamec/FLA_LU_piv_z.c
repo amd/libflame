@@ -325,18 +325,7 @@ int FLA_LU_piv_z_var0(integer *m, integer *n, dcomplex *a, integer *lda, integer
 int FLA_LU_piv_z_parallel( integer *m, integer *n, dcomplex *a, integer *lda, integer *ipiv, integer *info)
 {
 
-#if FLA_ENABLE_AOCL_BLAS
-    if(*m < 3000 || *n < 3000)
-    {
-        FLA_LU_piv_z_var1_parallel( m, n, a, lda, ipiv, info);
-    }
-    else
-    {
-        FLA_LU_piv_z_var2_parallel( m, n, a, lda, ipiv, info);
-    }
-#else
     FLA_LU_piv_z_var1_parallel( m, n, a, lda, ipiv, info);
-#endif
 
     return 0;
 }

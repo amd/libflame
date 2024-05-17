@@ -2138,6 +2138,28 @@ void fla_test_read_aux_params(const char *file_name, test_params_t *params)
         CHECK_LINE_SKIP();
     }
 
+    fscanf(fp, "%s", &line[0]); // The side (either L or R) for larf
+    for(i = 0; i < NUM_SUB_TESTS; i++)
+    {
+        fscanf(fp, "%s", str);
+        params->aux_paramslist[i].side = *str;
+        CHECK_LINE_SKIP();
+    }
+
+    fscanf(fp, "%s", &line[0]); // The increment between elements of V for larf
+    for(i = 0; i < NUM_SUB_TESTS; i++)
+    {
+        fscanf(fp, "%" FT_IS "", &(params->aux_paramslist[i].incv));
+        CHECK_LINE_SKIP();
+    }
+
+    fscanf(fp, "%s", &line[0]); // The leading dimension of the array C for larf
+    for(i = 0; i < NUM_SUB_TESTS; i++)
+    {
+        fscanf(fp, "%" FT_IS "", &(params->aux_paramslist[i].ldc));
+        CHECK_LINE_SKIP();
+    }
+
     fscanf(fp, "%s", &line[0]); // number of repeats
     for(i = 0; i < NUM_SUB_TESTS; i++)
     {

@@ -254,6 +254,11 @@
 #define fla_lapack_clarfg CLARFG_
 #define fla_lapack_zlarfg ZLARFG_
 
+#define fla_lapack_slarf SLARF_
+#define fla_lapack_dlarf DLARF_
+#define fla_lapack_clarf CLARF_
+#define fla_lapack_zlarf ZLARF_
+
 #define fla_lapack_sgtsv SGTSV_
 #define fla_lapack_dgtsv DGTSV_
 #define fla_lapack_cgtsv CGTSV_
@@ -534,6 +539,11 @@
 #define fla_lapack_dlarfg DLARFG
 #define fla_lapack_clarfg CLARFG
 #define fla_lapack_zlarfg ZLARFG
+
+#define fla_lapack_slarf SLARF
+#define fla_lapack_dlarf DLARF
+#define fla_lapack_clarf CLARF
+#define fla_lapack_zlarf ZLARF
 
 #define fla_lapack_sgtsv SGTSV
 #define fla_lapack_dgtsv DGTSV
@@ -816,6 +826,11 @@
 #define fla_lapack_clarfg clarfg
 #define fla_lapack_zlarfg zlarfg
 
+#define fla_lapack_slarf slarf
+#define fla_lapack_dlarf dlarf
+#define fla_lapack_clarf clarf
+#define fla_lapack_zlarf zlarf
+
 #define fla_lapack_sgtsv sgtsv
 #define fla_lapack_dgtsv dgtsv
 #define fla_lapack_cgtsv cgtsv
@@ -1096,6 +1111,11 @@
 #define fla_lapack_dlarfg dlarfg_
 #define fla_lapack_clarfg clarfg_
 #define fla_lapack_zlarfg zlarfg_
+
+#define fla_lapack_slarf slarf_
+#define fla_lapack_dlarf dlarf_
+#define fla_lapack_clarf clarf_
+#define fla_lapack_zlarf zlarf_
 
 #define fla_lapack_sgtsv sgtsv_
 #define fla_lapack_dgtsv dgtsv_

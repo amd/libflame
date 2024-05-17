@@ -416,6 +416,9 @@ typedef struct AUX_paramlist_t
     integer incx_larfg; // The increment between successive values of X in larfg(incx > 0)
     double alpha_real;
     double alpha_imag; // The alpha values for larfg
+    char side; // The side (either L or R) for larf. L means left and R means right
+    integer incv; // The increment between elements of V for larf
+    integer ldc; // The leading dimension of the array C for larf
     integer num_repeats;
     integer num_tests;
     integer num_data_types;

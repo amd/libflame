@@ -1,20 +1,16 @@
 /*
-    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
-#if ENABLE_CPP_TEST
-#include <invoke_common.hh>
-#endif
 
-extern double perf;
-extern double time_min;
 /* Local prototypes */
-void fla_test_larf_experiment(char *tst_api, test_params_t *params, integer datatype, integer p_cur,
-                              integer q_cur, integer pci, integer n_repeats, integer einfo);
+void fla_test_larf_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
+                              integer pci, integer n_repeats, integer einfo, double *perf,
+                              double *t, double *residual);
 void prepare_larf_run(integer datatype, char side, integer m, integer n, void *v, integer incv,
                       void *tau, void *c__, integer ldc__, void *c__out, integer ldc__out,
-                      void *work, integer interfacetype, test_params_t *params);
+                      void *work, integer n_repeats, double *time_min_);
 void invoke_larf(integer datatype, char *side, integer *m, integer *n, void *v, integer *incv,
                  void *tau, void *c__, integer *ldc, void *work);
 void invoke_larfg(integer datatype, integer *n, void *x, integer *incx, integer *abs_incx,
@@ -42,6 +38,7 @@ void fla_test_larf(integer argc, char **argv, test_params_t *params)
         /* Test with parameters from commandline */
         integer i, num_types, M, N;
         integer datatype, n_repeats;
+        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -53,7 +50,6 @@ void fla_test_larf(integer argc, char **argv, test_params_t *params)
         params->aux_paramslist[0].incv = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         params->aux_paramslist[0].ldc = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
-        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -77,7 +73,11 @@ void fla_test_larf(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_larf_experiment(front_str, params, datatype, M, N, 0, n_repeats, einfo);
+                fla_test_larf_experiment(params, datatype, M, N, 0, n_repeats, einfo, &perf,
+                                         &time_min, &residual);
+                /* Print the results */
+                fla_test_print_status(front_str, stype, RECT_INPUT, M, N, residual,
+                                      params->aux_paramslist[0].aux_threshold, time_min, perf);
                 tests_not_run = 0;
             }
         }
@@ -102,37 +102,32 @@ void fla_test_larf(integer argc, char **argv, test_params_t *params)
     return;
 }
 
-void fla_test_larf_experiment(char *tst_api, test_params_t *params, integer datatype, integer p_cur,
-                              integer q_cur, integer pci, integer n_repeats, integer einfo)
+void fla_test_larf_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
+                              integer pci, integer n_repeats, integer einfo, double *perf,
+                              double *t, double *residual)
 {
     integer m, n;
-    void *tau = NULL;
-    integer v_length;
-    void *work = NULL;
-    void *v = NULL;
-    void *v_tmp = NULL;
-    void *c__ = NULL;
-    void *c__out = NULL;
-    double residual, err_thresh;
-    void *filename = NULL;
+    double time_min = 1e9;
+    void *tau;
+    int v_length;
+    void *work;
+    void *v;
+    void *v_tmp;
+    void *c__;
+    void *c__out;
 
     char side = params->aux_paramslist[pci].side;
     integer incv = params->aux_paramslist[pci].incv;
     integer ldc = params->aux_paramslist[pci].ldc;
-    integer interfacetype = params->interfacetype;
 
     m = p_cur;
     n = q_cur;
-    err_thresh = params->aux_paramslist[0].aux_threshold;
 
-    if(m == 0 || n == 0)
-        return;
-
-    integer incv_abs = fla_i_abs(&incv);
+    integer incv_abs = abs(incv);
     integer v_num_elements;
     integer work_num_elements;
 
-    if(same_char(side, 'L'))
+    if(side == 'L')
     {
         v_num_elements = m;
         work_num_elements = n;
@@ -145,116 +140,78 @@ void fla_test_larf_experiment(char *tst_api, test_params_t *params, integer data
 
     v_length = 1 + (v_num_elements - 1) * incv_abs;
     create_vector(datatype, &work, work_num_elements);
+
+    create_vector(datatype, &v_tmp, v_length);
     create_vector(datatype, &tau, 1);
+
+    rand_vector(datatype, v_tmp, v_num_elements, incv_abs);
+
+    /* Input generation (v_tmp and tau) for larf from larfg
+       Increment of v_tmp for larfg must be positive. Hence calling larfg with incv_abs
+       Increment of v for larf could be positive or negative. Hence copying
+       from v_tmp using incv(which could be positive or negative)
+    */
+    invoke_larfg(datatype, &v_num_elements, v_tmp, &incv_abs, &incv_abs, tau);
+    assign_value(datatype, v_tmp, 1, 0);
     create_vector(datatype, &v, v_length);
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &c__, ldc);
+    copy_vector(datatype, v_num_elements, v_tmp, incv_abs, v, incv);
 
-    if(!FLA_BRT_VERIFICATION_RUN)
-    {
-        create_vector(datatype, &v_tmp, v_length);
-        rand_vector(datatype, v_num_elements, v_tmp, incv_abs, d_zero, d_zero, 'R');
+    create_matrix(datatype, &c__, ldc, n);
+    rand_matrix(datatype, c__, m, n, ldc);
 
-        /* Input generation (v_tmp and tau) for larf from larfg
-        Increment of v_tmp for larfg must be positive. Hence calling larfg with incv_abs
-        Increment of v for larf could be positive or negative. Hence copying
-        from v_tmp using incv(which could be positive or negative)
-        */
-        invoke_larfg(datatype, &v_num_elements, v_tmp, &incv_abs, &incv_abs, tau);
-        assign_value(datatype, v_tmp, 1, 0);
-        copy_vector(datatype, v_num_elements, v_tmp, incv_abs, v, incv);
-
-        init_matrix(datatype, c__, m, n, ldc, g_ext_fptr, params->imatrix_char);
-        free_vector(v_tmp);
-    }
-    FLA_BRT_PROCESS_THREE_INPUT(datatype, m, n, c__, ldc, datatype, v_length, 1, v, v_length,
-                                datatype, 1, 1, tau, 1, "cdddd", side, m, n, incv, ldc);
-
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        scale_matrix_underflow_overflow_larf(datatype, m, n, c__, ldc, params->imatrix_char);
-    }
-
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &c__out, ldc);
+    create_matrix(datatype, &c__out, ldc, n);
 
     /* call to API */
-    prepare_larf_run(datatype, side, m, n, v, incv, tau, c__, ldc, c__out, ldc, work, interfacetype,
-                     params);
-
+    prepare_larf_run(datatype, side, m, n, v, incv, tau, c__, ldc, c__out, ldc, work, n_repeats,
+                     &time_min);
     /* execution time */
+    *t = time_min;
     if(time_min == d_zero)
     {
         time_min = 1e-9;
+        *t = time_min;
     }
     /* Performance Computation */
-    perf = (double)(2.0 * m * n) / time_min / FLOPS_PER_UNIT_PERF;
+    *perf = (double)(2.0 * m * n) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
     {
-        perf *= 4.0;
+        *perf *= 4.0;
     }
     /* Output Validation */
-    IF_FLA_BRT_VALIDATION(
-        m, n, store_outputs_base(filename, params, 1, 0, datatype, m, n, c__out, ldc),
-        validate_larf(tst_api, datatype, side, m, n, v, incv, c__, ldc, c__out, ldc, tau,
-                      err_thresh, params),
-        check_reproducibility_base(filename, params, 1, 0, datatype, m, n, c__out, ldc))
-    else if(!FLA_EXTREME_CASE_TEST)
-    {
-        validate_larf(tst_api, datatype, side, m, n, v, incv, c__, ldc, c__out, ldc, tau,
-                      err_thresh, params);
-    }
-    else
-    {
-        if(!check_extreme_value(datatype, m, n, c__out, ldc, params->imatrix_char))
-        {
-            residual = DBL_MAX;
-        }
-        else
-        {
-            residual = err_thresh;
-        }
-        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
-    }
+    validate_larf(datatype, side, m, n, v, incv, c__, ldc, c__out, ldc, tau, residual);
 
     /* Free up the buffers */
-    free_matrix(c__out);
-free_buffers:
-    FLA_FREE_FILENAME(filename)
     free_matrix(c__);
+    free_matrix(c__out);
     free_vector(v);
+    free_vector(v_tmp);
     free_vector(work);
     free_vector(tau);
 }
 
 void prepare_larf_run(integer datatype, char side, integer m, integer n, void *v, integer incv,
                       void *tau, void *c__, integer ldc__, void *c__out, integer ldc__out,
-                      void *work, integer interfacetype, test_params_t *params)
+                      void *work, integer n_repeats, double *time_min_)
 {
-    double exe_time;
+    integer i;
+    double time_min = 1e9, exe_time;
 
-    FLA_EXEC_LOOP_BEGIN
+    for(i = 0; i < n_repeats; ++i)
     {
         copy_matrix(datatype, "full", m, n, c__, ldc__, c__out, ldc__out);
 
-#if ENABLE_CPP_TEST
-        if(interfacetype == LAPACK_CPP_TEST)
-        {
-            exe_time = fla_test_clock();
-            /* Call larf CPP API */
-            invoke_cpp_larf(datatype, &side, &m, &n, v, &incv, tau, c__out, &ldc__out, work);
-            exe_time = fla_test_clock() - exe_time;
-        }
-        else
-#endif
-        {
-            exe_time = fla_test_clock();
-            /* call larf API */
-            invoke_larf(datatype, &side, &m, &n, v, &incv, tau, c__out, &ldc__out, work);
-            exe_time = fla_test_clock() - exe_time;
-        }
+        exe_time = fla_test_clock();
 
-        /* Update ctx and loop conditions */
-        FLA_EXEC_LOOP_UPDATE_NO_INFO
+        /*  call  larf API */
+        invoke_larf(datatype, &side, &m, &n, v, &incv, tau, c__out, &ldc__out, work);
+
+        exe_time = fla_test_clock() - exe_time;
+
+        /* Get the best execution time */
+        time_min = fla_min(time_min, exe_time);
     }
+
+    *time_min_ = time_min;
 }
 
 /* larf API call interface */

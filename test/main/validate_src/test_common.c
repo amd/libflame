@@ -236,11 +236,23 @@ void copy_vector(integer datatype, integer M, void *A, integer LDA, void *B, int
     {
         case INTEGER:
         {
-            integer i;
+            integer i, iA = 0, iB = 0;
+
+            if(LDA < 0)
+            {
+                iA = (-M + 1) * LDA;
+            }
+
+            if(LDB < 0)
+            {
+                iB = (-M + 1) * LDB;
+            }
 
             for(i = 0; i < M; i++)
             {
-                ((integer *)B)[i * LDB] = ((integer *)A)[i * LDA];
+                ((integer *)B)[iB] = ((integer *)A)[iA];
+                iA += LDA;
+                iB += LDB;
             }
             break;
         }
@@ -957,7 +969,8 @@ void rand_spd_matrix(integer datatype, char *uplo, void **A, integer m, integer 
 }
 
 /* Create diagonal matrix by copying elements from a realtype vector to matrix */
-void diagonalize_realtype_vector(integer datatype, void *s, void *sigma, integer m, integer n, integer LDA)
+void diagonalize_realtype_vector(integer datatype, void *s, void *sigma, integer m, integer n,
+                                 integer LDA)
 {
     integer incr, i, j, min_m_n;
 
@@ -5437,24 +5450,24 @@ void create_realtype_block_diagonal_matrix(integer datatype, void *A, integer n,
 
     reset_matrix(datatype, n, n, A, lda);
 
-    if (datatype == FLOAT)
+    if(datatype == FLOAT)
     {
-        for (i = 0; i < n; i+=2)
+        for(i = 0; i < n; i += 2)
         {
-            ((float *)A)[i * lda + i] = ((float *)A)[(i+1) * lda + (i+1)] = SRAND();
-            if (i < n - 1)
+            ((float *)A)[i * lda + i] = ((float *)A)[(i + 1) * lda + (i + 1)] = SRAND();
+            if(i < n - 1)
             {
                 ((float *)A)[i * lda + i + 1] = SRAND();
                 ((float *)A)[(i + 1) * lda + i] = -((float *)A)[i * lda + i + 1];
             }
         }
     }
-    else if (datatype == DOUBLE)
+    else if(datatype == DOUBLE)
     {
-        for (i = 0; i < n ; i+=2)
+        for(i = 0; i < n; i += 2)
         {
-            ((double *)A)[i * lda + i] = ((double *)A)[(i+1) * lda + (i+1)] = DRAND();
-            if (i < n - 1)
+            ((double *)A)[i * lda + i] = ((double *)A)[(i + 1) * lda + (i + 1)] = DRAND();
+            if(i < n - 1)
             {
                 ((double *)A)[i * lda + i + 1] = DRAND();
                 ((double *)A)[(i + 1) * lda + i] = -((double *)A)[i * lda + i + 1];
@@ -5515,7 +5528,7 @@ void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer
  *       lambda is a block diagonal matrix or triangular matrix of size n * n
  */
 void generate_asym_matrix_from_ED(integer datatype, integer n, void *A, integer lda, void *Q,
-                             void *lambda)
+                                  void *lambda)
 {
     void *Qlambda = NULL;
     if(lda < n)
@@ -5560,8 +5573,8 @@ void generate_asym_matrix_from_ED(integer datatype, integer n, void *A, integer 
 
 /* Compare two vectors starting from offset_A in A vector with B vector
    (starting from offset 0 in B) */
-integer compare_vector(integer datatype, integer vect_len, void *A, integer inca,
-                                integer offset_A, void *B, integer incb)
+integer compare_vector(integer datatype, integer vect_len, void *A, integer inca, integer offset_A,
+                       void *B, integer incb)
 {
     integer i;
     switch(datatype)
@@ -5622,7 +5635,6 @@ integer compare_vector(integer datatype, integer vect_len, void *A, integer inca
     return 0;
 }
 
-
 /* Create diagonal matrix by copying elements from a vector to matrix */
 void diagonalize_vector(integer datatype, void *s, void *sigma, integer m, integer n, integer LDA)
 {
@@ -5672,22 +5684,22 @@ void add_negative_values(integer datatype, void *vect, integer n)
     if(datatype == FLOAT)
     {
         float *w = (float *)vect;
-        for(i = 0; i < n-1; i++)
+        for(i = 0; i < n - 1; i++)
         {
             if(i % 2 == 0)
             {
-                w[i+1] = -w[i];
+                w[i + 1] = -w[i];
             }
         }
     }
     else
     {
         double *w = (double *)vect;
-        for(i = 0; i < n-1; i++)
+        for(i = 0; i < n - 1; i++)
         {
             if(i % 2 == 0)
             {
-                w[i+1] = -w[i];
+                w[i + 1] = -w[i];
             }
         }
     }

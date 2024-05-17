@@ -9,6 +9,9 @@ lda -1 300 1400 3000
 incx 1 -1 3 3
 incy 1 -1 -1 3
 incx_larfg 1 2 3 4
+side L R L R
+incv 1 -1 3 4
+ldc 20 300 1600 3000
 Repeats 1 1 1 1
 DataTypes s d c z
 Matrix_Layout 101 102 101 102

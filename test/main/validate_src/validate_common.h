@@ -114,6 +114,9 @@ void validate_gels(char *trans, integer m, integer n, integer nrhs, void *A, int
 
 void validate_larfg(integer datatype, integer n, integer incx, integer x_length, void *x, void *v,
                     void *tau, double *residual);
+void validate_larf(integer datatype, char side, integer m, integer n, void *v, integer incv,
+                   void *c__, integer ldc__, void *c__out, integer ldc__out, void *tau,
+                   double *residual);
 
 void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer ldb, void *X,
                    void *Xact, integer ldx, void *dl, void *d, void *du, void *dl_save,

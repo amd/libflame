@@ -23,6 +23,7 @@ void fla_test_sytrf(integer argc, char **argv, test_params_t *params)
     char *op_str = "LDL**T / U**TDU factorization";
     char *front_str = "SYTRF";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char = '\0';
     if(argc == 1)
     {
         config_data = 1;
@@ -132,9 +133,13 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
     create_matrix(datatype, &A_test, lda, n);
 
     /* Initialize the test matrices */
-    if(g_ext_fptr != NULL)
+    if(g_ext_fptr != NULL  || (params->imatrix_char))
     {
-        init_matrix_from_file(datatype, A, n, n, lda, g_ext_fptr);
+        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+        if(params->imatrix_char != NULL)
+        {
+            form_symmetric_matrix(datatype, n, A, lda, "S");
+        }
     }
     else
     {
@@ -157,12 +162,20 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
         *perf *= 4.0;
 
     /* Output validataion */
-    if(info >= 0)
+    if(!params->imatrix_char && info >= 0)
     {
         validate_sytrf(&uplo, n, lda, A_test, datatype, ipiv, residual, &info, A);
         info = 0;
     }
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        if((!check_extreme_value(datatype, n, n, A_test, lda, params->imatrix_char)))
+        {
+            *residual = DBL_MAX;
+        }
+    }
+    else
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up buffers */
     free_vector(ipiv);
@@ -180,7 +193,7 @@ void prepare_sytrf_run(integer datatype, integer n, void *A, char uplo, integer 
 
     create_matrix(datatype, &A_save, lda, n);
 
-    if(g_lwork <= 0)
+    if(g_lwork == -1)
     {
         lwork = -1;
         create_vector(datatype, &work, 1);

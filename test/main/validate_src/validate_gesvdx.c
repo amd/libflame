@@ -22,7 +22,7 @@ void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, 
     create_matrix(datatype, &U_A, m, n);
     reset_matrix(datatype, m, n, U_A, m);
 
-    diagonalize_vector(datatype, s, sigma, min_m_n, n, min_m_n);
+    diagonalize_realtype_vector(datatype, s, sigma, min_m_n, n, min_m_n);
 
     switch(datatype)
     {

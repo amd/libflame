@@ -1,14 +1,14 @@
-Num_Tests 2
-MRange_start 10 67
-MRange_end   20 99
-MRange_step_size 10 20
-NRange_start 15  89
-NRange_end   35  240
-NRange_step_size 10 100
-lda -1 87
-ldb -1 87
-ldvl -1 87
-ldvr -1 87
+Num_Tests 3
+MRange_start 10 67 100
+MRange_end   20 99 300
+MRange_step_size 10 20 150
+NRange_start 15  89 90
+NRange_end   35  240 300
+NRange_step_size 10 100 150
+lda -1 87 250
+ldb -1 87 250
+ldvl -1 87 250
+ldvr -1 87 250
 Repeats 1 1 1 1
 DataTypes s d c z
 Matrix_Layout 101 102 101 102

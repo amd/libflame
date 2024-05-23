@@ -28,7 +28,7 @@ void validate_syevd(char *jobz, integer n, void *A, void *A_test, integer lda, v
 
         copy_matrix(datatype, "full", n, n, A_test, lda, Z, lda);
 
-        diagonalize_vector(datatype, w, lambda, n, n, n);
+        diagonalize_realtype_vector(datatype, w, lambda, n, n, n);
 
         switch(datatype)
         {

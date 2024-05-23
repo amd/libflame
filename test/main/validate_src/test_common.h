@@ -137,7 +137,7 @@ void scalv(integer datatype, integer n, void *x, integer incx, void *y, integer 
 void set_transpose(integer datatype, char *uplo, char *trans_A, char *trans_B);
 
 /* Create diagonal matrix by copying elements from vector to matrix */
-void diagonalize_vector(integer datatype, void *s, void *sigma, integer m, integer n, integer LDA);
+void diagonalize_realtype_vector(integer datatype, void *s, void *sigma, integer m, integer n, integer LDA);
 
 /* To calculate matrix multiplication with real and complex datatypes */
 void scgemv(char TRANS, integer real_alpha, integer m, integer n, scomplex *alpha, float *a,
@@ -219,7 +219,7 @@ void sort_realtype_vector(integer datatype, char *order, integer vect_len, void 
  * B) */
 integer compare_realtype_vector(integer datatype, integer vect_len, void *A, integer inca,
                                 integer offset_A, void *B, integer incb);
-/* Create input matrix A by randomly generating eigen values(EVs) in given range (vl,vu) */
+/* Create input matrix A(symmetric) by randomly generating eigen values(EVs) in given range (vl,vu) */
 void generate_matrix_from_EVs(integer datatype, char range, integer n, void *A, integer lda,
                               void *L, double vl, double vu);
 /* Initialize band matrix with random values.
@@ -262,4 +262,25 @@ void get_max_from_matrix(integer datatype, void *A, void *max_val, integer m, in
 /* Get the minimum value from the matrix */
 void get_min_from_matrix(integer datatype, void *A, void *min_val, integer m, integer n,
                          integer lda);
+/* Sort the given vector in specified order */
+void sort_vector(integer datatype, char *order, integer vect_len, void *w, integer incw);
+/* Generate a block diagonal matrix with complex conjugate eigen value pairs as
+   2 * 2 blocks along the diagonal. This is used for generating asymmetric matrix */
+void create_realtype_block_diagonal_matrix(integer datatype, void *A, integer n, integer lda);
+/* Create input matrix A(Asymmetric) by randomly generating eigen values(EVs) */
+void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *L);
+/* Generate asymmetric square matrix of size n x n using Eigen decomposition(ED) */
+void generate_asym_matrix_from_ED(integer datatype, integer n, void *A, integer lda, void *Q,
+                             void *lambda);
+/* Compare two vectors starting from offset_A in A vector with B vector */
+integer compare_vector(integer datatype, integer vect_len, void *A, integer inca,
+                                integer offset_A, void *B, integer incb);
+/* Create diagonal matrix by copying elements from a vector to matrix */
+void diagonalize_vector(integer datatype, void *s, void *sigma, integer m, integer n, integer LDA);
+/* Find negative value of each element and store in next location
+   Used to store imaginary parts of complex conjuate pair of eigen values
+   in asymmetric matrix eigen decomposition APIs
+   Ex: input vector {a, 0, -b, 0 ...}
+       output vector {a, -a, -b, b, ...} */
+void add_negative_values(integer datatype, void *vect, integer n);
 #endif // TEST_COMMON_H

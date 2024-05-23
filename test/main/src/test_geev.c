@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_common.h"
@@ -116,7 +116,7 @@ void fla_test_geev_experiment(test_params_t *params, integer datatype, integer p
     integer n, lda, ldvl, ldvr;
     integer info = 0, vinfo = 0;
     void *A = NULL, *wr = NULL, *wi = NULL, *w = NULL, *VL = NULL, *VR = NULL;
-    void *A_test = NULL;
+    void *A_test = NULL, *L = NULL, *wr_in = NULL, *wi_in = NULL;
     char jobvl, jobvr;
 
     /* Get input matrix dimensions.*/
@@ -176,8 +176,29 @@ void fla_test_geev_experiment(test_params_t *params, integer datatype, integer p
         create_vector(datatype, &wr, n);
         create_vector(datatype, &wi, n);
     }
+    if((g_ext_fptr != NULL) || (params->imatrix_char))
+    {
+        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+    }
+    else
+    {
+        /*  Creating input matrix A by generating random eigen values */
+        create_matrix(datatype, &L, n, n);
+        generate_asym_matrix_from_EVs(datatype, n, A, lda, L);
 
-    init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+        /* Diagonal and sub-diagonals(upper and lower sub-diagonal together
+           contains imaginary parts) contain real and imaginary parts
+           of eigen values respectively. Storing them for valiation purpose */
+        create_vector(datatype, &wr_in, n);
+        get_diagonal(datatype, L, n, n, n, wr_in);
+
+        if(datatype == FLOAT || datatype == DOUBLE)
+        {
+            create_vector(datatype, &wi_in, n);
+            reset_vector(datatype, wi_in, n, 1);
+            get_subdiagonal(datatype, L, n, n, n, wi_in);
+        }
+    }
 
     /* Make a copy of input matrix A. This is required to validate the API functionality. */
     create_matrix(datatype, &A_test, lda, n);
@@ -200,7 +221,7 @@ void fla_test_geev_experiment(test_params_t *params, integer datatype, integer p
     /* output validation */
     if(info == 0)
         validate_geev(&jobvl, &jobvr, n, A, A_test, lda, VL, ldvl, VR, ldvr, w, wr, wi, datatype,
-                      residual, &vinfo);
+                      residual, &vinfo, wr_in, wi_in);
 
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
@@ -218,6 +239,16 @@ void fla_test_geev_experiment(test_params_t *params, integer datatype, integer p
         free_vector(wr);
         free_vector(wi);
     }
+    if((g_ext_fptr == NULL) && !(params->imatrix_char))
+    {
+        free_matrix(L);
+        free_vector(wr_in);
+        if(datatype == FLOAT || datatype == DOUBLE)
+        {
+            free_vector(wi_in);
+        }
+    }
+
 }
 
 void prepare_geev_run(char *jobvl, char *jobvr, integer m_A, void *A, integer lda, void *wr,

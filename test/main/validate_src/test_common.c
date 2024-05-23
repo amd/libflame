@@ -956,8 +956,8 @@ void rand_spd_matrix(integer datatype, char *uplo, void **A, integer m, integer 
     free_matrix(a_temp);
 }
 
-/* Create diagonal matrix by copying elements from vector to matrix */
-void diagonalize_vector(integer datatype, void *s, void *sigma, integer m, integer n, integer LDA)
+/* Create diagonal matrix by copying elements from a realtype vector to matrix */
+void diagonalize_realtype_vector(integer datatype, void *s, void *sigma, integer m, integer n, integer LDA)
 {
     integer incr, i, j, min_m_n;
 
@@ -3494,7 +3494,7 @@ void create_svd_matrix(integer datatype, char range, integer m, integer n, void 
     create_matrix(datatype, &sigma, m, n);
 
     /* Diagonalize the singular values for sigma */
-    diagonalize_vector(datatype, s_test, sigma, min_m_n, n, min_m_n);
+    diagonalize_realtype_vector(datatype, s_test, sigma, min_m_n, n, min_m_n);
 
     reset_matrix(datatype, m, n, Usigma, m);
     reset_matrix(datatype, m, n, A_input, lda);
@@ -4003,6 +4003,9 @@ void sort_realtype_vector(integer datatype, char *order, integer vect_len, void 
 integer compare_realtype_vector(integer datatype, integer vect_len, void *A, integer inca,
                                 integer offset_A, void *B, integer incb)
 {
+    if(!A || !B)
+        return 1;
+
     integer i;
     if(datatype == FLOAT || datatype == COMPLEX)
     {
@@ -5169,7 +5172,7 @@ void get_min_from_matrix(integer datatype, void *A, void *min_val, integer m, in
 
         case DOUBLE:
         {
-            double val = ((double *)A)[i * 0 + j * 0];
+            double val = ((double *)A)[0];
             double min_local = FLA_FABS(val);
 
             for(i = 0; i < n; i++)
@@ -5245,6 +5248,447 @@ void get_min_from_matrix(integer datatype, void *A, void *min_val, integer m, in
             }
             *(double *)min_val = fla_min(min_local.real, min_local.imag);
             break;
+        }
+    }
+}
+
+/* Sort the input vector in the given order
+   order = A - Ascending order
+         = D - Descending order */
+void sort_vector(integer datatype, char *order, integer vect_len, void *w, integer incw)
+{
+    if(!w)
+        return;
+
+    integer i, j;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            float temp;
+            float *w_ptr = (float *)w;
+
+            for(i = 0; i < vect_len; i++)
+            {
+                for(j = i + 1; j < vect_len; j++)
+                {
+                    if(*order == 'A')
+                    {
+                        if(*(w_ptr + i * incw) > *(w_ptr + j * incw))
+                        {
+                            temp = *(w_ptr + i * incw);
+                            *(w_ptr + i * incw) = *(w_ptr + j * incw);
+                            *(w_ptr + j * incw) = temp;
+                        }
+                    }
+                    else if(*order == 'D')
+                    {
+                        if(*(w_ptr + i * incw) < *(w_ptr + j * incw))
+                        {
+                            temp = *(w_ptr + i * incw);
+                            *(w_ptr + i * incw) = *(w_ptr + j * incw);
+                            *(w_ptr + j * incw) = temp;
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        case DOUBLE:
+        {
+
+            double temp;
+            double *w_ptr = (double *)w;
+
+            for(i = 0; i < vect_len; i++)
+            {
+                for(j = i + 1; j < vect_len; j++)
+                {
+                    if(*order == 'A')
+                    {
+                        if(*(w_ptr + i * incw) > *(w_ptr + j * incw))
+                        {
+                            temp = *(w_ptr + i * incw);
+                            *(w_ptr + i * incw) = *(w_ptr + j * incw);
+                            *(w_ptr + j * incw) = temp;
+                        }
+                    }
+                    else if(*order == 'D')
+                    {
+                        if(*(w_ptr + i * incw) < *(w_ptr + j * incw))
+                        {
+                            temp = *(w_ptr + i * incw);
+                            *(w_ptr + i * incw) = *(w_ptr + j * incw);
+                            *(w_ptr + j * incw) = temp;
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        case COMPLEX:
+        {
+            scomplex temp;
+            scomplex *w_ptr = (scomplex *)w;
+
+            for(i = 0; i < vect_len; i++)
+            {
+                for(j = i + 1; j < vect_len; j++)
+                {
+                    if(*order == 'A')
+                    {
+                        if((w_ptr + i * incw)->real > (w_ptr + j * incw)->real)
+                        {
+                            temp = *(w_ptr + i * incw);
+                            *(w_ptr + i * incw) = *(w_ptr + j * incw);
+                            *(w_ptr + j * incw) = temp;
+                        }
+                        else if((w_ptr + i * incw)->real == (w_ptr + j * incw)->real)
+                        {
+                            if((w_ptr + i * incw)->imag > (w_ptr + j * incw)->imag)
+                            {
+                                temp = *(w_ptr + i * incw);
+                                *(w_ptr + i * incw) = *(w_ptr + j * incw);
+                                *(w_ptr + j * incw) = temp;
+                            }
+                        }
+                    }
+                    else if(*order == 'D')
+                    {
+                        if((w_ptr + i * incw)->real < (w_ptr + j * incw)->real)
+                        {
+                            temp = *(w_ptr + i * incw);
+                            *(w_ptr + i * incw) = *(w_ptr + j * incw);
+                            *(w_ptr + j * incw) = temp;
+                        }
+                        else if((w_ptr + i * incw)->real == (w_ptr + j * incw)->real)
+                        {
+                            if((w_ptr + i * incw)->imag < (w_ptr + j * incw)->imag)
+                            {
+                                temp = *(w_ptr + i * incw);
+                                *(w_ptr + i * incw) = *(w_ptr + j * incw);
+                                *(w_ptr + j * incw) = temp;
+                            }
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            dcomplex temp;
+            dcomplex *w_ptr = (dcomplex *)w;
+
+            for(i = 0; i < vect_len; i++)
+            {
+                for(j = i + 1; j < vect_len; j++)
+                {
+                    if(*order == 'A')
+                    {
+                        if((w_ptr + i * incw)->real > (w_ptr + j * incw)->real)
+                        {
+                            temp = *(w_ptr + i * incw);
+                            *(w_ptr + i * incw) = *(w_ptr + j * incw);
+                            *(w_ptr + j * incw) = temp;
+                        }
+                        else if((w_ptr + i * incw)->real == (w_ptr + j * incw)->real)
+                        {
+                            if((w_ptr + i * incw)->imag > (w_ptr + j * incw)->imag)
+                            {
+                                temp = *(w_ptr + i * incw);
+                                *(w_ptr + i * incw) = *(w_ptr + j * incw);
+                                *(w_ptr + j * incw) = temp;
+                            }
+                        }
+                    }
+                    else if(*order == 'D')
+                    {
+                        if((w_ptr + i * incw)->real < (w_ptr + j * incw)->real)
+                        {
+                            temp = *(w_ptr + i * incw);
+                            *(w_ptr + i * incw) = *(w_ptr + j * incw);
+                            *(w_ptr + j * incw) = temp;
+                        }
+                        else if((w_ptr + i * incw)->real == (w_ptr + j * incw)->real)
+                        {
+                            if((w_ptr + i * incw)->imag < (w_ptr + j * incw)->imag)
+                            {
+                                temp = *(w_ptr + i * incw);
+                                *(w_ptr + i * incw) = *(w_ptr + j * incw);
+                                *(w_ptr + j * incw) = temp;
+                            }
+                        }
+                    }
+                }
+            }
+            break;
+        }
+    }
+}
+
+/* Generate a block diagonal matrix with complex conjugate eigen value pairs as
+   2 * 2 blocks along the diagonal. This is used for generating asymmetric matrix */
+void create_realtype_block_diagonal_matrix(integer datatype, void *A, integer n, integer lda)
+{
+    integer i;
+    if(lda < n)
+        return;
+
+    reset_matrix(datatype, n, n, A, lda);
+
+    if (datatype == FLOAT)
+    {
+        for (i = 0; i < n; i+=2)
+        {
+            ((float *)A)[i * lda + i] = ((float *)A)[(i+1) * lda + (i+1)] = SRAND();
+            if (i < n - 1)
+            {
+                ((float *)A)[i * lda + i + 1] = SRAND();
+                ((float *)A)[(i + 1) * lda + i] = -((float *)A)[i * lda + i + 1];
+            }
+        }
+    }
+    else if (datatype == DOUBLE)
+    {
+        for (i = 0; i < n ; i+=2)
+        {
+            ((double *)A)[i * lda + i] = ((double *)A)[(i+1) * lda + (i+1)] = DRAND();
+            if (i < n - 1)
+            {
+                ((double *)A)[i * lda + i + 1] = DRAND();
+                ((double *)A)[(i + 1) * lda + i] = -((double *)A)[i * lda + i + 1];
+            }
+        }
+    }
+}
+
+/*
+ *   Create input matrix A by randomly generating eigen values(EVs)
+ *               A  = (Q * lambda * Q')
+ *   where  lambda  is a super diagonal matrix with diagonal, sub diagonal elements being
+ *                  the eigen values of input matrix A
+ *               Q  is an orthogonal matrix with corresponding
+ *                  eigen vectors as its rows.
+ */
+void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *L)
+{
+    void *X = NULL, *Q = NULL;
+    integer info = 0;
+
+    if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+    {
+        void *L1 = NULL;
+        create_vector(datatype, &L1, n);
+        rand_vector(datatype, L1, n, 1);
+        diagonalize_vector(datatype, L1, L, n, n, n);
+
+        free_vector(L1);
+    }
+    else
+    {
+        create_realtype_block_diagonal_matrix(datatype, L, n, n);
+    }
+
+    create_matrix(datatype, &X, n, n);
+    rand_matrix(datatype, X, n, n, n);
+    create_matrix(datatype, &Q, n, n);
+
+    /* Generate random orthogonal matrix(Q) of size n x n */
+    get_orthogonal_matrix_from_QR(datatype, n, X, n, Q, n, &info);
+
+    /* Generate input matrix A using L(Eigen values)
+       and Q(Eigen vectors) obtained above using reverse
+       Eigen decompostion */
+    generate_asym_matrix_from_ED(datatype, n, A, lda, Q, L);
+
+    /* Free up the buffers */
+    free_matrix(X);
+    free_matrix(Q);
+    return;
+}
+
+/*
+ * Generate square matrix of size n x n using Eigen decomposition(ED)
+ *                     A  = (Q * lambda * Q')
+ * where Q is an n x n orthogonal matrix and
+ *       lambda is a block diagonal matrix or triangular matrix of size n * n
+ */
+void generate_asym_matrix_from_ED(integer datatype, integer n, void *A, integer lda, void *Q,
+                             void *lambda)
+{
+    void *Qlambda = NULL;
+    if(lda < n)
+        return;
+
+    create_matrix(datatype, &Qlambda, n, n);
+
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            /* Generate matrix A using eigen decomposition (Q * lambda) * Q' */
+            sgemm_("N", "N", &n, &n, &n, &s_one, Q, &n, lambda, &n, &s_zero, Qlambda, &n);
+            sgemm_("N", "T", &n, &n, &n, &s_one, Qlambda, &n, Q, &n, &s_zero, A, &lda);
+            break;
+        }
+        case DOUBLE:
+        {
+            /* Generate matrix A using eigen decomposition (Q * lambda) * Q' */
+            dgemm_("N", "N", &n, &n, &n, &d_one, Q, &n, lambda, &n, &d_zero, Qlambda, &n);
+            dgemm_("N", "T", &n, &n, &n, &d_one, Qlambda, &n, Q, &n, &d_zero, A, &lda);
+            break;
+        }
+        case COMPLEX:
+        {
+            /* Generate matrix A using eigen decomposition (Q * lambda) * Q' */
+            cgemm_("N", "N", &n, &n, &n, &c_one, Q, &n, lambda, &n, &c_zero, Qlambda, &n);
+            cgemm_("N", "C", &n, &n, &n, &c_one, Qlambda, &n, Q, &n, &c_zero, A, &lda);
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            /* Generate matrix A using eigen decomposition (Q * lambda) * Q' */
+            zgemm_("N", "N", &n, &n, &n, &z_one, Q, &n, lambda, &n, &z_zero, Qlambda, &n);
+            zgemm_("N", "C", &n, &n, &n, &z_one, Qlambda, &n, Q, &n, &z_zero, A, &lda);
+            break;
+        }
+    }
+
+    free_matrix(Qlambda);
+}
+
+/* Compare two vectors starting from offset_A in A vector with B vector
+   (starting from offset 0 in B) */
+integer compare_vector(integer datatype, integer vect_len, void *A, integer inca,
+                                integer offset_A, void *B, integer incb)
+{
+    integer i;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            float *a = (float *)A;
+            float *b = (float *)B;
+            for(i = 0; i < vect_len; i++)
+            {
+                if(f2c_abs(a[(i * inca) + (offset_A - 1)] - b[i * incb]) > MAX_FLT_DIFF)
+                {
+                    return 1;
+                }
+            }
+            break;
+        }
+        case DOUBLE:
+        {
+            double *a = (double *)A;
+            double *b = (double *)B;
+            for(i = 0; i < vect_len; i++)
+            {
+                if(f2c_abs(a[(i * inca) + (offset_A - 1)] - b[i * incb]) > MAX_DBL_DIFF)
+                {
+                    return 1;
+                }
+            }
+            break;
+        }
+        case COMPLEX:
+        {
+            scomplex *a = (scomplex *)A;
+            scomplex *b = (scomplex *)B;
+            for(i = 0; i < vect_len; i++)
+            {
+                if(f2c_abs(a[(i * inca) + (offset_A - 1)].real - b[i * incb].real) > MAX_FLT_DIFF)
+                {
+                    return 1;
+                }
+            }
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            dcomplex *a = (dcomplex *)A;
+            dcomplex *b = (dcomplex *)B;
+            for(i = 0; i < vect_len; i++)
+            {
+                if(f2c_abs(a[(i * inca) + (offset_A - 1)].real - b[i * incb].real) > MAX_DBL_DIFF)
+                {
+                    return 1;
+                }
+            }
+            break;
+        }
+    }
+    return 0;
+}
+
+
+/* Create diagonal matrix by copying elements from a vector to matrix */
+void diagonalize_vector(integer datatype, void *s, void *sigma, integer m, integer n, integer LDA)
+{
+    integer incr, min_m_n;
+
+    incr = m + 1;
+    min_m_n = fla_min(m, n);
+
+    reset_matrix(datatype, m, n, sigma, m);
+
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            scopy_(&min_m_n, s, &i_one, sigma, &incr);
+            break;
+        }
+        case DOUBLE:
+        {
+            dcopy_(&min_m_n, s, &i_one, sigma, &incr);
+            break;
+        }
+        case COMPLEX:
+        {
+            ccopy_(&min_m_n, s, &i_one, sigma, &incr);
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            zcopy_(&min_m_n, s, &i_one, sigma, &incr);
+            break;
+        }
+    }
+}
+
+/* Find negative value of each element and store in next location
+   Used to store imaginary parts of complex conjuate pair of eigen values
+   in asymmetric matrix eigen decomposition APIs
+   Ex: input vector {a, 0, -b, 0 ...}
+       output vector {a, -a, -b, b, ...} */
+void add_negative_values(integer datatype, void *vect, integer n)
+{
+    if(!vect)
+        return;
+
+    integer i;
+    if(datatype == FLOAT)
+    {
+        float *w = (float *)vect;
+        for(i = 0; i < n-1; i++)
+        {
+            if(i % 2 == 0)
+            {
+                w[i+1] = -w[i];
+            }
+        }
+    }
+    else
+    {
+        double *w = (double *)vect;
+        for(i = 0; i < n-1; i++)
+        {
+            if(i % 2 == 0)
+            {
+                w[i+1] = -w[i];
+            }
         }
     }
 }

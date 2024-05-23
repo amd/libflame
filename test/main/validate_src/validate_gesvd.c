@@ -24,7 +24,7 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
     create_matrix(datatype, &Usigma, m, n);
     reset_matrix(datatype, m, n, Usigma, m);
 
-    diagonalize_vector(datatype, s, sigma, m, n, m);
+    diagonalize_realtype_vector(datatype, s, sigma, m, n, m);
     /* If jobu or jobvt is 'O' .The first min(m,n) columns/rows of singular vectors
        are overwritten on A output matrix (A_test).*/
     if(*jobu == 'O')

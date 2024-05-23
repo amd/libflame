@@ -22,7 +22,7 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
     create_matrix(datatype, &Usigma, m, n);
     reset_matrix(datatype, m, n, Usigma, m);
 
-    diagonalize_vector(datatype, s, sigma, m, n, m);
+    diagonalize_realtype_vector(datatype, s, sigma, m, n, m);
 
     switch(datatype)
     {

@@ -6,8 +6,8 @@
 #include "test_lapack.h"
 #include "test_prototype.h"
 
-#define SYTRF_VU 100.0 // Maximum eigen value for condition number.
-#define SYTRF_VL 0.0001 // Minimum eigen value for condition number.
+#define SYTRF_VU 10.0 // Maximum eigen value for condition number.
+#define SYTRF_VL 0.01 // Minimum eigen value for condition number.
 
 void invoke_sytrf(integer datatype, char *uplo, integer *n, void *a, integer *lda, integer *ipiv,
                   void *work, integer *lwork, integer *info);

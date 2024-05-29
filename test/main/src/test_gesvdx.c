@@ -201,10 +201,10 @@ void fla_test_gesvdx_experiment(test_params_t *params, integer datatype, integer
     create_matrix(datatype, &V, ldvt, n);
     create_realtype_vector(datatype, &s, min_m_n);
 
-    if(g_ext_fptr != NULL)
+    if(g_ext_fptr != NULL || (params->imatrix_char))
     {
         /* Initialize input matrix with custom data */
-        init_matrix_from_file(datatype, A, n, n, lda, g_ext_fptr);
+        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
     }
     else
     {
@@ -244,14 +244,25 @@ void fla_test_gesvdx_experiment(test_params_t *params, integer datatype, integer
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         *perf *= 4.0;
 
-    /* Output Validation */
-    if(info == 0)
+    /* output validation */
+    if(!params->imatrix_char && info == 0)
     {
         validate_gesvdx(&jobu, &jobvt, range, m, n, A, A_test, lda, vl, vu, il, iu, ns, s, s_test,
                         U, ldu, V, ldvt, datatype, residual, &info, g_ext_fptr);
     }
-
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    /* check for output matrix when inputs as extreme values */
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        if((!check_extreme_value(datatype, m, n, A_test, lda, params->imatrix_char))
+        && (!check_extreme_value(datatype, min_m_n, i_one, s_test, i_one, params->imatrix_char))
+        && (!check_extreme_value(datatype, m, n, U, ldu, params->imatrix_char))
+        && (!check_extreme_value(datatype, m, n, V, ldvt, params->imatrix_char)))
+        {
+            *residual = DBL_MAX;
+        }
+    }
+    else
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
     free_matrix(A);
@@ -291,7 +302,7 @@ void prepare_gesvdx_run(char *jobu, char *jobvt, char *range, integer m_A, integ
 
     /* Make a workspace query the first time through. This will provide us with and ideal workspace
      * size based on an internal block size. */
-    if(g_lwork <= 0)
+    if(g_lwork == -1)
     {
         lwork = -1;
         create_vector(datatype, &work, 1);

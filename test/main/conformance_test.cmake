@@ -777,7 +777,18 @@ set(OVERFLOW_UNDERFLOW_VALUES_TEST_CASES "gesvd sdcz A A 1 10 1 1 10 -1 1 --imat
             "gerq2 sdcz 100 30 200 1 --imatrix=U"
             "gerq2 sdcz 75 30 200 1 --imatrix=O"
             "gerq2 sdcz 200 100 200 1 --imatrix=O"
-        )
+            "potrf sdcz L 10 10 1 --imatrix=U"
+            "potrf sdcz U 10 10 1 --imatrix=U"
+            "potrf sdcz L 10 10 1 --imatrix=O"
+            "potrf sdcz U 10 10 1 --imatrix=O"
+            "potrf sdcz L 155 500 1 --imatrix=U"
+            "potrf sdcz U 155 500 1 --imatrix=U"
+            "potrf sdcz L 155 500 1 --imatrix=O"
+            "potrf sdcz U 155 500 1 --imatrix=O"
+            "potrf sdcz L 553 600 1 --imatrix=U"
+            "potrf sdcz U 553 600 1 --imatrix=U"
+            "potrf sdcz L 553 600 1 --imatrix=O"
+            "potrf sdcz U 553 600 1 --imatrix=O")
 
 set(TEST_NUM 1)
 foreach(neg_test_cases IN LISTS NEGATIVE_TEST_CASES)

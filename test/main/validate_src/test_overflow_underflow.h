@@ -26,4 +26,8 @@ void compute_ratio(integer datatype, void *scal, float flt_quotient, double dbl_
 /* Scaling matrix with values around overflow underflow for gerq2 */
 void scale_matrix_overflow_underflow_gerq2(integer datatype, integer m, integer n, void *A,
                                            integer lda, char imatrix_char);
+/* Scale matrix with values around overflow underflow for potrf */
+void scale_matrix_overflow_underflow_potrf(integer datatype, integer m, void *A, integer lda,
+                                           char imatrix);
+
 #endif // TEST_OVERFLOW_UNDERFLOW_H

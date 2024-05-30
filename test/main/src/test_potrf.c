@@ -129,7 +129,7 @@ void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer 
     /* Create input matrix parameters */
     create_matrix(datatype, &A, lda, m);
 
-    if(g_ext_fptr != NULL || (params->imatrix_char))
+    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST && !FLA_OVERFLOW_UNDERFLOW_TEST))
     {
         /* Initialize input matrix with custom data */
         init_matrix(datatype, A, m, m, lda, g_ext_fptr, params->imatrix_char);
@@ -148,10 +148,16 @@ void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer 
         create_realtype_vector(datatype, &L, m);
 
         /*  Initialize input matrix A by generating values in given range (VL, VU)
-            using eigen values function. */
+         *  using eigen values function.
+         */
         generate_matrix_from_EVs(datatype, 'V', m, A, lda, L, POTRF_VL, POTRF_VU);
 
         free_vector(L);
+        /* Oveflow or underflow test initialization */
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            scale_matrix_overflow_underflow_potrf(datatype, m, A, lda, params->imatrix_char);
+        }
     }
 
     /* Make a copy of input matrix A. This is required to validate the API functionality */
@@ -166,7 +172,7 @@ void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer 
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         *perf *= 4.0;
 
-    if(!params->imatrix_char && info == 0)
+    if((!FLA_EXTREME_CASE_TEST && FLA_OVERFLOW_UNDERFLOW_TEST) && info == 0)
         validate_potrf(&uplo, m, A, A_test, lda, datatype, residual, &vinfo);
     else if(FLA_EXTREME_CASE_TEST)
     {

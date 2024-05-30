@@ -174,3 +174,76 @@ void scale_matrix_overflow_underflow_gerq2(integer datatype, integer m, integer 
     free_vector(max_min);
     free_vector(scal);
 }
+
+/* Scale matrix with values around overflow underflow for potrf */
+void scale_matrix_overflow_underflow_potrf(integer datatype, integer m, void *A, integer lda,
+                                           char imatrix)
+{
+    float feasible_float = 0.0;
+    double feasible_double = 0.0;
+    void *max_min = NULL, *scal = NULL;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    create_vector(get_realtype(datatype), &scal, 1);
+
+    if(imatrix == 'U')
+    {
+        feasible_float = FLT_MIN;
+        feasible_double = DBL_MIN;
+        get_min_from_matrix(datatype, A, max_min, m, m, lda);
+        {
+            if(get_realtype(datatype) == FLOAT)
+            {
+                *(float *)scal = feasible_float / *(float *)max_min;
+            }
+            else if(get_realtype(datatype) == DOUBLE)
+            {
+                *(double *)scal = feasible_double / *(double *)max_min;
+            }
+        }
+    }
+    else if(imatrix == 'O')
+    {
+        feasible_float = FLT_MAX;
+        feasible_double = DBL_MAX;
+        get_max_from_matrix(datatype, A, max_min, m, m, lda);
+        if(m < 100)
+        {
+            if(get_realtype(datatype) == FLOAT)
+            {
+                *(float *)scal = (feasible_float / *(float *)max_min) / 1.1;
+            }
+            else if(get_realtype(datatype) == DOUBLE)
+            {
+                *(double *)scal = (feasible_double / *(double *)max_min) / 1.1;
+            }
+        }
+        else if(m < 500)
+        {
+            if(get_realtype(datatype) == FLOAT)
+            {
+                *(float *)scal = (feasible_float / *(float *)max_min) / 1.2;
+            }
+            else if(get_realtype(datatype) == DOUBLE)
+            {
+                *(double *)scal = (feasible_double / *(double *)max_min) / 1.2;
+            }
+        }
+        else
+        {
+            if(get_realtype(datatype) == FLOAT)
+            {
+                *(float *)scal = (feasible_float / *(float *)max_min) / 1.3;
+            }
+            else if(get_realtype(datatype) == DOUBLE)
+            {
+                *(double *)scal = (feasible_double / *(double *)max_min) / 1.3;
+            }
+        }
+    }
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, m, m, lda, i_one);
+
+    /* Free vectors */
+    free_vector(max_min);
+    free_vector(scal);
+}

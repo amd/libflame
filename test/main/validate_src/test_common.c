@@ -5165,8 +5165,7 @@ void get_min_from_matrix(integer datatype, void *A, void *min_val, integer m, in
     {
         case FLOAT:
         {
-            float val = ((float *)A)[0];
-            float min_local = FLA_FABS(val);
+            float val, min_local = FLT_MAX;
             for(i = 0; i < n; i++)
             {
                 for(j = 0; j < m; j++)
@@ -5185,9 +5184,7 @@ void get_min_from_matrix(integer datatype, void *A, void *min_val, integer m, in
 
         case DOUBLE:
         {
-            double val = ((double *)A)[0];
-            double min_local = FLA_FABS(val);
-
+            double val, min_local = DBL_MAX;
             for(i = 0; i < n; i++)
             {
                 for(j = 0; j < m; j++)
@@ -5206,9 +5203,9 @@ void get_min_from_matrix(integer datatype, void *A, void *min_val, integer m, in
         case COMPLEX:
         {
             scomplex *ptr = A;
-            scomplex min_local = ptr[0];
-            min_local.real = FLA_FABS(ptr[0].real);
-            min_local.imag = FLA_FABS(ptr[0].imag);
+            scomplex min_local;
+            min_local.real = FLT_MAX;
+            min_local.imag = FLT_MAX;
 
             for(i = 0; i < n; i++)
             {
@@ -5236,9 +5233,9 @@ void get_min_from_matrix(integer datatype, void *A, void *min_val, integer m, in
         case DOUBLE_COMPLEX:
         {
             dcomplex *ptr = A;
-            dcomplex min_local = ptr[0];
-            min_local.real = FLA_FABS(ptr[0].real);
-            min_local.imag = FLA_FABS(ptr[0].imag);
+            dcomplex min_local;
+            min_local.real = DBL_MAX;
+            min_local.imag = DBL_MAX;
 
             for(i = 0; i < n; i++)
             {

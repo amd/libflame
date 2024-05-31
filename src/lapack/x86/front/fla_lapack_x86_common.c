@@ -37,7 +37,11 @@ void fla_dtranspose(integer *m, integer *n, doublereal *a, integer *lda, doubler
 /* 3x3 Householder Rotation */
 int fla_dhrot3(integer *n, doublereal *a, integer *lda, doublereal *v, doublereal *tau)
 {
-    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    if(FLA_IS_ARCH_ID(FLA_ARCH_AVX512))
+    {
+        fla_dhrot3_avx512(n, a, lda, v, tau);
+    }
+    else if(FLA_IS_ARCH_ID(FLA_ARCH_AVX2))
     {
         fla_dhrot3_avx2(n, a, lda, v, tau);
     }
@@ -47,7 +51,11 @@ int fla_dhrot3(integer *n, doublereal *a, integer *lda, doublereal *v, doublerea
 int fla_drot(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer *incy,
              doublereal *c__, doublereal *s)
 {
-    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    if(FLA_IS_ARCH_ID(FLA_ARCH_AVX512))
+    {
+        fla_drot_avx512(n, dx, incx, dy, incy, c__, s);
+    }
+    else if(FLA_IS_ARCH_ID(FLA_ARCH_AVX2))
     {
         fla_drot_avx2(n, dx, incx, dy, incy, c__, s);
     }
@@ -56,9 +64,17 @@ int fla_drot(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer 
 void fla_zrot(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy,
               doublereal *c__, doublecomplex *s)
 {
-    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    if(FLA_IS_ARCH_ID(FLA_ARCH_AVX512))
+    {
+        fla_zrot_avx512(n, cx, incx, cy, incy, c__, s);
+    }
+    else if(FLA_IS_ARCH_ID(FLA_ARCH_AVX2))
     {
         fla_zrot_avx2(n, cx, incx, cy, incy, c__, s);
+    }
+    else
+    {
+        zrot_(n, (dcomplex *)cx, incx, (dcomplex *)cy, incy, c__, (dcomplex *)s);
     }
     return;
 }

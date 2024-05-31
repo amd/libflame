@@ -13,10 +13,6 @@
 
 #if FLA_ENABLE_AMD_OPT
 
-#ifndef FLA_ENABLE_AOCL_BLAS
-extern void drot_(integer *, doublereal *, integer *, doublereal *,
-                  integer *, doublereal *, doublereal *);
-#endif
 /* SVD for small tall-matrices with QR factorization
  * already computed
  */
@@ -130,7 +126,7 @@ void fla_dgesvd_small6_avx2(integer wntus, integer wntvs, integer *m, integer *n
         }
         if(nru > 0)
         {
-            drot_(&nru, &u[1 + *ldu], &c__1, &u[1 + 2 * *ldu], &c__1, &cosl, &sinl);
+            fla_drot_avx2(&nru, &u[1 + *ldu], &c__1, &u[1 + 2 * *ldu], &c__1, &cosl, &sinl);
         }
     }
     else

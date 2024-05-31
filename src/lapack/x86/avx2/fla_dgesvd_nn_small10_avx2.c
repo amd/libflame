@@ -11,10 +11,6 @@
 
 #if FLA_ENABLE_AMD_OPT
 
-#ifndef FLA_ENABLE_AOCL_BLAS
-extern void drot_(integer *, doublereal *, integer *, doublereal *,
-                  integer *, doublereal *, doublereal *);
-#endif
 extern void dlartg_(doublereal *da, doublereal *db, doublereal *c__, doublereal *s, doublereal *r);
 
 void fla_dgesvd_xx_small10_avx2(integer wntus, integer wntvs, integer *m, integer *n, doublereal *a,
@@ -157,7 +153,7 @@ void fla_dgesvd_xx_small10_avx2(integer wntus, integer wntvs, integer *m, intege
         }
         if(nru > 0)
         {
-            drot_(&nru, &u[1 + *ldu], &c__1, &u[1 + 2 * *ldu], &c__1, &cosl, &sinl);
+            fla_drot_avx2(&nru, &u[1 + *ldu], &c__1, &u[1 + 2 * *ldu], &c__1, &cosl, &sinl);
         }
     }
     else

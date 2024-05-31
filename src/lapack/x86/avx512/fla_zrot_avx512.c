@@ -1,19 +1,19 @@
 /******************************************************************************
- * * Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
+ * * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
  * *******************************************************************************/
 
-/*! @file fla_zrot_avx2.c
- *  *  @brief Plane rotations in AVX2.
+/*! @file fla_zrot_avx512.c
+ *  *  @brief Plane rotations in AVX512.
  *   *  */
 
 #include "FLAME.h"
-#include "fla_lapack_avx2_kernels.h"
+#include "fla_lapack_avx512_kernels.h"
 
 #if FLA_ENABLE_AMD_OPT
 
 /* Application of 2x2 Plane Rotation on two vectors */
-int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy,
-                  doublereal *c__, doublecomplex *s)
+int fla_zrot_avx512(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy,
+                    doublereal *c__, doublecomplex *s)
 {
     /* System generated locals */
     integer i__1;
@@ -22,12 +22,18 @@ int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *c
     integer i__, ix, iy;
     doublereal lc, sr, si, msi;
 
+    __m512d vd8_cmm, vd8_srmm, vd8_simm, vd8_sinm;
+    __m512d vd8_sirmm, vd8_srimm, vd8_msirmm, vd8_msrimm;
+    __m512d vd8_xmm0, vd8_ymm0, vd8_xmm1, vd8_ymm1;
+    __m512d vd8_xrmm0, vd8_yrmm0, vd8_ximm0, vd8_yimm0;
+    __m512d vd8_xrmm1, vd8_yrmm1, vd8_ximm1, vd8_yimm1;
+    __m512d vd8_oxm0, vd8_oym0, vd8_oxm1, vd8_oym1;
+
     __m256d vd4_cmm, vd4_srmm, vd4_simm, vd4_sinm;
     __m256d vd4_sirmm, vd4_srimm, vd4_msirmm, vd4_msrimm;
-    __m256d vd4_xmm0, vd4_ymm0, vd4_xmm1, vd4_ymm1;
+    __m256d vd4_xmm0, vd4_ymm0;
     __m256d vd4_xrmm0, vd4_yrmm0, vd4_ximm0, vd4_yimm0;
-    __m256d vd4_xrmm1, vd4_yrmm1, vd4_ximm1, vd4_yimm1;
-    __m256d vd4_oxm0, vd4_oym0, vd4_oxm1, vd4_oym1;
+    __m256d vd4_oxm0, vd4_oym0;
 
     __m128d vd2_cm, vd2_srm, vd2_sim, vd2_sin;
     __m128d vd2_sirm, vd2_srim, vd2_msirm, vd2_msrim;
@@ -82,6 +88,16 @@ int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *c
     vd2_srim = _mm_shuffle_pd(vd2_sim, vd2_srm, 0x1);
     vd2_msirm = _mm_shuffle_pd(vd2_srm, vd2_sin, 0x2);
     vd2_msrim = _mm_shuffle_pd(vd2_sin, vd2_srm, 0x1);
+
+    vd8_cmm = _mm512_broadcastsd_pd(vd2_cm);
+    vd8_srmm = _mm512_broadcastsd_pd(vd2_srm);
+    vd8_simm = _mm512_broadcastsd_pd(vd2_sim);
+    vd8_sinm = _mm512_broadcastsd_pd(vd2_sin);
+
+    vd8_sirmm = _mm512_shuffle_pd(vd8_srmm, vd8_simm, 0xA);
+    vd8_srimm = _mm512_shuffle_pd(vd8_simm, vd8_srmm, 0x5);
+    vd8_msirmm = _mm512_shuffle_pd(vd8_srmm, vd8_sinm, 0xA);
+    vd8_msrimm = _mm512_shuffle_pd(vd8_sinm, vd8_srmm, 0x5);
 
     if(*incx == 1 && *incy == 1)
     {
@@ -201,48 +217,74 @@ int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *c
     /* Code for both increments equal to 1 */
 L20:
     i__1 = *n;
-    for(i__ = 1; i__ <= (i__1 - 3); i__ += 4)
+    for(i__ = 1; i__ <= (i__1 - 7); i__ += 8)
     {
         /* load complex inputs from x & y */
-        vd4_xmm0 = _mm256_loadu_pd((double const *)&cx[i__]);
-        vd4_ymm0 = _mm256_loadu_pd((double const *)&cy[i__]);
-        vd4_xmm1 = _mm256_loadu_pd((double const *)&cx[i__ + 2]);
-        vd4_ymm1 = _mm256_loadu_pd((double const *)&cy[i__ + 2]);
+        vd8_xmm0 = _mm512_loadu_pd((double const *)&cx[i__]);
+        vd8_ymm0 = _mm512_loadu_pd((double const *)&cy[i__]);
+        vd8_xmm1 = _mm512_loadu_pd((double const *)&cx[i__ + 4]);
+        vd8_ymm1 = _mm512_loadu_pd((double const *)&cy[i__ + 4]);
 
         /* shuffle the loaded inputs */
-        vd4_xrmm0 = _mm256_movedup_pd(vd4_xmm0);
-        vd4_ximm0 = _mm256_unpackhi_pd(vd4_xmm0, vd4_xmm0);
-        vd4_yrmm0 = _mm256_movedup_pd(vd4_ymm0);
-        vd4_yimm0 = _mm256_unpackhi_pd(vd4_ymm0, vd4_ymm0);
+        vd8_xrmm0 = _mm512_movedup_pd(vd8_xmm0);
+        vd8_ximm0 = _mm512_unpackhi_pd(vd8_xmm0, vd8_xmm0);
+        vd8_yrmm0 = _mm512_movedup_pd(vd8_ymm0);
+        vd8_yimm0 = _mm512_unpackhi_pd(vd8_ymm0, vd8_ymm0);
 
-        vd4_xrmm1 = _mm256_movedup_pd(vd4_xmm1);
-        vd4_ximm1 = _mm256_unpackhi_pd(vd4_xmm1, vd4_xmm1);
-        vd4_yrmm1 = _mm256_movedup_pd(vd4_ymm1);
-        vd4_yimm1 = _mm256_unpackhi_pd(vd4_ymm1, vd4_ymm1);
+        vd8_xrmm1 = _mm512_movedup_pd(vd8_xmm1);
+        vd8_ximm1 = _mm512_unpackhi_pd(vd8_xmm1, vd8_xmm1);
+        vd8_yrmm1 = _mm512_movedup_pd(vd8_ymm1);
+        vd8_yimm1 = _mm512_unpackhi_pd(vd8_ymm1, vd8_ymm1);
 
         /* compute x outputs */
-        vd4_oxm0 = _mm256_mul_pd(vd4_srimm, vd4_yimm0);
-        vd4_oxm0 = _mm256_fmaddsub_pd(vd4_sirmm, vd4_yrmm0, vd4_oxm0);
-        vd4_oxm0 = _mm256_fmadd_pd(vd4_cmm, vd4_xmm0, vd4_oxm0);
+        vd8_oxm0 = _mm512_mul_pd(vd8_srimm, vd8_yimm0);
+        vd8_oxm0 = _mm512_fmaddsub_pd(vd8_sirmm, vd8_yrmm0, vd8_oxm0);
+        vd8_oxm0 = _mm512_fmadd_pd(vd8_cmm, vd8_xmm0, vd8_oxm0);
 
-        vd4_oxm1 = _mm256_mul_pd(vd4_srimm, vd4_yimm1);
-        vd4_oxm1 = _mm256_fmaddsub_pd(vd4_sirmm, vd4_yrmm1, vd4_oxm1);
-        vd4_oxm1 = _mm256_fmadd_pd(vd4_cmm, vd4_xmm1, vd4_oxm1);
+        vd8_oxm1 = _mm512_mul_pd(vd8_srimm, vd8_yimm1);
+        vd8_oxm1 = _mm512_fmaddsub_pd(vd8_sirmm, vd8_yrmm1, vd8_oxm1);
+        vd8_oxm1 = _mm512_fmadd_pd(vd8_cmm, vd8_xmm1, vd8_oxm1);
 
         /* compute y outputs */
-        vd4_oym0 = _mm256_mul_pd(vd4_msrimm, vd4_ximm0);
-        vd4_oym0 = _mm256_fmaddsub_pd(vd4_msirmm, vd4_xrmm0, vd4_oym0);
-        vd4_oym0 = _mm256_fmsub_pd(vd4_cmm, vd4_ymm0, vd4_oym0);
+        vd8_oym0 = _mm512_mul_pd(vd8_msrimm, vd8_ximm0);
+        vd8_oym0 = _mm512_fmaddsub_pd(vd8_msirmm, vd8_xrmm0, vd8_oym0);
+        vd8_oym0 = _mm512_fmsub_pd(vd8_cmm, vd8_ymm0, vd8_oym0);
 
-        vd4_oym1 = _mm256_mul_pd(vd4_msrimm, vd4_ximm1);
-        vd4_oym1 = _mm256_fmaddsub_pd(vd4_msirmm, vd4_xrmm1, vd4_oym1);
-        vd4_oym1 = _mm256_fmsub_pd(vd4_cmm, vd4_ymm1, vd4_oym1);
+        vd8_oym1 = _mm512_mul_pd(vd8_msrimm, vd8_ximm1);
+        vd8_oym1 = _mm512_fmaddsub_pd(vd8_msirmm, vd8_xrmm1, vd8_oym1);
+        vd8_oym1 = _mm512_fmsub_pd(vd8_cmm, vd8_ymm1, vd8_oym1);
 
         /* store the results */
-        _mm256_storeu_pd((double *)&cx[i__], vd4_oxm0);
-        _mm256_storeu_pd((double *)&cy[i__], vd4_oym0);
-        _mm256_storeu_pd((double *)&cx[i__ + 2], vd4_oxm1);
-        _mm256_storeu_pd((double *)&cy[i__ + 2], vd4_oym1);
+        _mm512_storeu_pd((double *)&cx[i__], vd8_oxm0);
+        _mm512_storeu_pd((double *)&cy[i__], vd8_oym0);
+        _mm512_storeu_pd((double *)&cx[i__ + 4], vd8_oxm1);
+        _mm512_storeu_pd((double *)&cy[i__ + 4], vd8_oym1);
+    }
+    for(; i__ <= (i__1 - 3); i__ += 4)
+    {
+        /* load complex inputs from x & y */
+        vd8_xmm0 = _mm512_loadu_pd((double const *)&cx[i__]);
+        vd8_ymm0 = _mm512_loadu_pd((double const *)&cy[i__]);
+
+        /* shuffle the loaded inputs */
+        vd8_xrmm0 = _mm512_movedup_pd(vd8_xmm0);
+        vd8_ximm0 = _mm512_unpackhi_pd(vd8_xmm0, vd8_xmm0);
+        vd8_yrmm0 = _mm512_movedup_pd(vd8_ymm0);
+        vd8_yimm0 = _mm512_unpackhi_pd(vd8_ymm0, vd8_ymm0);
+
+        /* compute x outputs */
+        vd8_oxm0 = _mm512_mul_pd(vd8_srimm, vd8_yimm0);
+        vd8_oxm0 = _mm512_fmaddsub_pd(vd8_sirmm, vd8_yrmm0, vd8_oxm0);
+        vd8_oxm0 = _mm512_fmadd_pd(vd8_cmm, vd8_xmm0, vd8_oxm0);
+
+        /* compute y outputs */
+        vd8_oym0 = _mm512_mul_pd(vd8_msrimm, vd8_ximm0);
+        vd8_oym0 = _mm512_fmaddsub_pd(vd8_msirmm, vd8_xrmm0, vd8_oym0);
+        vd8_oym0 = _mm512_fmsub_pd(vd8_cmm, vd8_ymm0, vd8_oym0);
+
+        /* store the results */
+        _mm512_storeu_pd((double *)&cx[i__], vd8_oxm0);
+        _mm512_storeu_pd((double *)&cy[i__], vd8_oym0);
     }
 
     for(; i__ <= (i__1 - 1); i__ += 2)

@@ -23,4 +23,7 @@ void calculate_svd_scale_value(integer datatype, integer m, integer n, void *A, 
 /* Finding ratio between two real datatype values */
 void compute_ratio(integer datatype, void *scal, float flt_quotient, double dbl_quotient,
                    void *denominator);
+/* Scaling matrix with values around overflow underflow for gerq2 */
+void scale_matrix_overflow_underflow_gerq2(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char);
 #endif // TEST_OVERFLOW_UNDERFLOW_H

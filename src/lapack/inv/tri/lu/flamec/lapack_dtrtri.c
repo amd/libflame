@@ -16,7 +16,6 @@
 
 static integer c__1 = 1;
 static integer c_n1 = -1;
-static integer c__2 = 2;
 static doublereal c_b18 = 1.;
 static doublereal c_b22 = -1.;
 
@@ -136,12 +135,8 @@ f"> */
                                     integer *info)
 {
     /* System generated locals */
-    address a__1[2];
-    integer a_dim1, a_offset, i__1, i__2[2], i__3, i__4, i__5;
-    char ch__1[2];
-
-    /* Builtin functions */
-    /* Subroutine */ int s_cat(char *, char **, integer *, integer *);
+    integer a_dim1, a_offset, i__1, i__3, i__4, i__5;
+    char ch__1[3] = {0};
 
     /* Local variables */
     integer j, jb, nb, nn;
@@ -241,9 +236,9 @@ f"> */
     /*     Determine the block size for this environment. */
 
     /* Writing concatenation */
-    i__2[0] = 1, a__1[0] = uplo;
-    i__2[1] = 1, a__1[1] = diag;
-    s_cat(ch__1, a__1, i__2, &c__2);
+    ch__1[0] = uplo[0];
+    ch__1[1] = diag[0];
+    ch__1[2] = '\0';
     nb = ilaenv_(&c__1, "DTRTRI", ch__1, n, &c_n1, &c_n1, &c_n1);
     if(nb <= 1 || nb >= *n)
     {

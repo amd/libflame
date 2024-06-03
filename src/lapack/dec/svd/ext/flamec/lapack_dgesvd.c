@@ -915,7 +915,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
           if (*n < 128 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
             i__2 = *m * 3 + *n;
             minwrk = fla_max(i__2, bdspac);
-            maxwrk = (*m << 2) + *m * *m;
+            maxwrk = *m * *m + fla_max(*m * 4, *m * 2 + *n);
           } else {
             /* Compute space needed for DGELQF */
             lwork_dgelqf = *m * FLA_GEQRF_BLOCK_SIZE;
@@ -3393,7 +3393,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
           /* M right singular vectors to be computed in VT and */
           /* M left singular vectors to be computed in U */
 #if FLA_ENABLE_AMD_OPT
-          if (*n < 128 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+          if (*n < 128 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2) && *lwork >= maxwrk) {
             iu = 1;
             ldwrku = *m;
             itau = iu + ldwrku * *m;

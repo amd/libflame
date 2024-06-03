@@ -774,6 +774,9 @@ set(OVERFLOW_UNDERFLOW_VALUES_TEST_CASES "gesvd sdcz A A 1 10 1 1 10 -1 1 --imat
             "gesvd sdcz S S 10 10 10 10 10 -1 1 --imatrix=U"
             "gesvd sdcz N A 150 250 150 150 250 -1 1 --imatrix=U"
             "gesvd sdcz A S 400 200 400 400 400 -1 1 --imatrix=U"
+            "gerq2 sdcz 100 30 200 1 --imatrix=U"
+            "gerq2 sdcz 75 30 200 1 --imatrix=O"
+            "gerq2 sdcz 200 100 200 1 --imatrix=O"
         )
 
 set(TEST_NUM 1)

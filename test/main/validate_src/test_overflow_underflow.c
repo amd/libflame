@@ -114,3 +114,63 @@ void init_matrix_overflow_underflow_svd(integer datatype, integer m, integer n, 
     /* Scaling the matrix A by x scalar */
     scal_matrix(datatype, scal, A, m, n, lda, i_one);
 }
+
+/* Scaling matrix with values around overflow underflow for gerq2 */
+void scale_matrix_overflow_underflow_gerq2(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char)
+{
+    float feasible_float = 0.0;
+    double feasible_double = 0.0;
+    void *max_min = NULL, *scal = NULL;
+    integer max_m_n = fla_max(m, n);
+    create_vector(get_realtype(datatype), &max_min, 1);
+    create_vector(get_realtype(datatype), &scal, 1);
+    if(imatrix_char == 'O')
+    {
+        feasible_float = FLT_MAX;
+        feasible_double = DBL_MAX;
+        get_max_from_matrix(datatype, A, max_min, m, n, lda);
+        if(max_m_n < 100)
+        {
+            if(get_realtype(datatype) == FLOAT)
+            {
+                *(float *)scal = (feasible_float / 8.0 ) / *(float *)max_min;
+            }
+            else if(get_realtype(datatype) == DOUBLE)
+            {
+                *(double *)scal = (feasible_double / 8.0) / *(double *)max_min;
+            }
+        }
+        else
+        {
+            if(get_realtype(datatype) == FLOAT)
+            {
+                *(float *)scal = (feasible_float / 10.0) / *(float *)max_min;
+            }
+            else if(get_realtype(datatype) == DOUBLE)
+            {
+                *(double *)scal = (feasible_double / 10.0) / *(double *)max_min;
+            }
+        }
+    }
+    if(imatrix_char == 'U')
+    {
+        feasible_float = FLT_MIN;
+        feasible_double = DBL_MIN;
+        get_min_from_matrix(datatype, A, max_min, m, n, lda);
+        if(get_realtype(datatype) == FLOAT)
+        {
+            *(float *)scal = feasible_float / *(float *)max_min;
+        }
+        else if(get_realtype(datatype) == DOUBLE)
+        {
+            *(double *)scal = feasible_double / *(double *)max_min;
+        }
+    }
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, m, n, lda, i_one);
+
+    // Free vectors
+    free_vector(max_min);
+    free_vector(scal);
+}

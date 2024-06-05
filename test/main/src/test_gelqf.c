@@ -131,7 +131,10 @@ void fla_test_gelqf_experiment(test_params_t *params, integer datatype, integer 
     create_vector(datatype, &T, fla_min(m, n));
 
     init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
-
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        scale_matrix_underflow_overflow_gelqf(datatype, m, n, A, lda, params->imatrix_char);
+    }
     /* Make a copy of input matrix A. This is required to validate the API functionality. */
     create_matrix(datatype, &A_test, lda, n);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
@@ -154,7 +157,7 @@ void fla_test_gelqf_experiment(test_params_t *params, integer datatype, integer 
         *perf *= 4.0;
 
     /* output validation */
-    if(!params->imatrix_char && info == 0)
+    if((!FLA_EXTREME_CASE_TEST || FLA_OVERFLOW_UNDERFLOW_TEST) && info == 0)
         validate_gelqf(m, n, A, A_test, lda, T, datatype, residual, &vinfo);
     else if(FLA_EXTREME_CASE_TEST)
     {

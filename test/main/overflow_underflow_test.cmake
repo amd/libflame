@@ -28,6 +28,10 @@ set(OVERFLOW_UNDERFLOW_VALUES_TEST_CASES "gesvd sdcz A A 1 10 1 1 10 -1 1 --imat
             "potrf sdcz U 553 600 1 --imatrix=U"
             "potrf sdcz L 553 600 1 --imatrix=O"
             "potrf sdcz U 553 600 1 --imatrix=O"
+            "gelqf sdcz 5 10 10 -1 1 --imatrix=U"
+            "gelqf sdcz 100 79 199 -1 1 --imatrix=U"
+            "gelqf sdcz 100 50 100 -1 1 --imatrix=O"
+            "gelqf sdcz 20 10 20 -1 1 --imatrix=O"
         )
 
 foreach(ou_vals_test_cases IN LISTS OVERFLOW_UNDERFLOW_VALUES_TEST_CASES)

@@ -35,5 +35,7 @@ void scale_matrix_overflow_underflow_gerq2(integer datatype, integer m, integer 
 /* Scale matrix with values around overflow underflow for potrf */
 void scale_matrix_overflow_underflow_potrf(integer datatype, integer m, void *A, integer lda,
                                            char imatrix);
-
+/* Scaling matrix with values around overflow underflow for gelqf */
+void scale_matrix_underflow_overflow_gelqf(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char);
 #endif // TEST_OVERFLOW_UNDERFLOW_H

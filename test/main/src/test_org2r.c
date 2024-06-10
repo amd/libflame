@@ -20,6 +20,7 @@ void fla_test_org2r(integer argc, char **argv, test_params_t *params)
     char *op_str = "QR factorization";
     char *front_str = "ORG2R";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char = '\0';
 
     if(argc == 1)
     {
@@ -195,10 +196,18 @@ void fla_test_org2r_experiment(test_params_t *params, integer datatype, integer 
             *perf *= 4.0;
 
         /* output validation */
-        if(info == 0)
+        if(!params->imatrix_char && info == 0)
             validate_orgqr(m, n, A, lda, Q, R, work_test, datatype, residual, &vinfo);
-
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
+        /* check for output matrix when inputs as extreme values */
+        else if(FLA_EXTREME_CASE_TEST)
+        {
+            if(!check_extreme_value(datatype, m, n, Q, lda, params->imatrix_char))
+            {
+                *residual = DBL_MAX;
+            }
+        }
+        else
+            FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
         /* Free up the buffers */
         free_matrix(A);

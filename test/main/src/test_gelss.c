@@ -6,6 +6,9 @@
 #include "test_lapack.h"
 #include "test_prototype.h"
 
+#define GELSS_VL 0.1
+#define GELSS_VU 10
+
 void invoke_gelss(integer datatype, integer *m, integer *n, integer *nrhs, void *A, integer *lda,
                   void *B, integer *ldb, void *s, void *rcond, integer *rank, void *work,
                   integer *lwork, void *rwork, integer *info);
@@ -113,8 +116,9 @@ void fla_test_gelss_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *t, double *residual)
 {
     integer m, n, nrhs, lda, ldb, lwork = -1, info = 0, rank = 0;
-    void *A = NULL, *A_test = NULL, *B = NULL, *B_test = NULL, *work = NULL, *s = NULL;
-    void *rwork = NULL, *rcond = NULL;
+    void *A = NULL, *A_test = NULL, *B = NULL, *B_test = NULL, *work = NULL, *s = NULL,
+         *rwork = NULL, *rcond = NULL, *s_test = NULL;
+    char range = 'U';
 
     create_realtype_vector(datatype, &rcond, 1);
 
@@ -157,10 +161,20 @@ void fla_test_gelss_experiment(test_params_t *params, integer datatype, integer 
     create_matrix(datatype, &B_test, ldb, nrhs);
     create_realtype_vector(datatype, &s, fla_min(m, n));
     create_realtype_vector(datatype, &rwork, 5 * fla_min(m, n));
+    create_realtype_vector(datatype, &s_test, fla_min(m, n));
 
     /* Initialize the test matrices */
-    init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
     init_matrix(datatype, B, m, nrhs, ldb, g_ext_fptr, params->imatrix_char);
+    if(params->imatrix_char == NULL && g_ext_fptr == NULL)
+    {
+        /* Generate input matrix with condition number <= 100 */
+        create_svd_matrix(datatype, range, m, n, A, lda, s_test, GELSS_VL, GELSS_VU, i_zero, i_zero,
+                          '\0', NULL, info);
+    }
+    else
+    {
+        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+    }
 
     /* Save the original matrix */
     copy_matrix(datatype, "full", lda, n, A, lda, A_test, lda);
@@ -206,6 +220,7 @@ void fla_test_gelss_experiment(test_params_t *params, integer datatype, integer 
     free_vector(rcond);
     free_vector(s);
     free_vector(rwork);
+    free_vector(s_test);
 }
 
 void prepare_gelss_run(integer datatype, integer m, integer n, integer nrhs, void *A, integer lda,

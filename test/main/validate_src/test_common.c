@@ -4574,9 +4574,9 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
                             &((float *)work)[ldwork * (n + nrhs) + fla_min(m, (n + nrhs))], &INFO);
                     norm = 0;
                     /*Compute norm*/
-                    for(int j = n; j <= temp; j++)
+                    for(integer j = n + 1; j < temp; j++)
                     {
-                        for(int i = n; i < fla_min(m, j); i++)
+                        for(integer i = n + 1; i < fla_min(m, j); i++)
                         {
                             temp1 = FLA_FABS(((float *)work)[i + (j - 1) * m]);
                             norm = fla_max(temp1, norm);
@@ -4605,9 +4605,9 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
                     sgelq2_(&ldwork, &n, work, &ldwork, &((float *)work)[ldwork * n],
                             &((float *)work)[ldwork * (n + 1)], &INFO);
                     /*Compute norm*/
-                    for(int j = m + 1; j <= n; j++)
+                    for(integer j = m + 1; j < n; j++)
                     {
-                        for(int i = j; i < ldwork; i++)
+                        for(integer i = j; i < ldwork; i++)
                         {
                             temp1 = FLA_FABS(((float *)work)[i + (j * ldwork)]);
                             norm = fla_max(temp1, norm);
@@ -4652,9 +4652,9 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
                             &((double *)work)[ldwork * (n + nrhs) + fla_min(m, (n + nrhs))], &INFO);
                     norm = 0;
                     /*Compute norm*/
-                    for(int j = n; j <= temp; j++)
+                    for(integer j = n + 1; j < temp; j++)
                     {
-                        for(int i = n; i < fla_min(m, j); i++)
+                        for(integer i = n + 1; i < fla_min(m, j); i++)
                         {
                             temp1 = FLA_FABS(((double *)work)[i + (j - 1) * m]);
                             norm = fla_max(temp1, norm);
@@ -4683,9 +4683,9 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
                     dgelq2_(&ldwork, &n, work, &ldwork, &((double *)work)[ldwork * n],
                             &((double *)work)[ldwork * (n + 1)], &INFO);
                     /*Compute norm*/
-                    for(int j = m + 1; j <= n; j++)
+                    for(integer j = m + 1; j < n; j++)
                     {
-                        for(int i = j; i < ldwork; i++)
+                        for(integer i = j; i < ldwork; i++)
                         {
                             temp1 = FLA_FABS(((double *)work)[i + (j * ldwork)]);
                             norm = fla_max(temp1, norm);
@@ -4730,9 +4730,9 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
                             &INFO);
                     norm = 0;
                     /*Compute norm*/
-                    for(int j = n; j <= temp; j++)
+                    for(integer j = n + 1; j < temp; j++)
                     {
-                        for(int i = n; i < fla_min(m, j); i++)
+                        for(integer i = n + 1; i < fla_min(m, j); i++)
                         {
                             temp1 = FLA_FABS(((scomplex *)work)[i + (j - 1) * m].real);
                             norm = fla_max(temp1, norm);
@@ -4742,9 +4742,9 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
                 else if(*trans == 'N')
                 {
                     /*Copy x into work*/
-                    for(int i = 0; i < n; i++)
+                    for(integer i = 0; i < n; i++)
                     {
-                        for(int j = 0; j < nrhs; j++)
+                        for(integer j = 0; j < nrhs; j++)
                         {
                             ((scomplex *)work)[m + j + (i * ldwork)].real
                                 = ((scomplex *)x)[i + j * ldb].real;
@@ -4764,9 +4764,9 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
                     cgelq2_(&ldwork, &n, work, &ldwork, &((scomplex *)work)[ldwork * n],
                             &((scomplex *)work)[ldwork * (n + 1)], &INFO);
                     /*Compute norm*/
-                    for(int j = m + 1; j <= n; j++)
+                    for(integer j = m + 1; j < n; j++)
                     {
-                        for(int i = j; i < ldwork; i++)
+                        for(integer i = j; i < ldwork; i++)
                         {
                             temp1 = FLA_FABS(((scomplex *)work)[i + (j * ldwork)].real);
                             norm = fla_max(norm, temp1);
@@ -4811,9 +4811,9 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
                             &INFO);
                     norm = 0;
                     /*Compute norm*/
-                    for(integer j = n; j <= temp; j++)
+                    for(integer j = n + 1; j < temp; j++)
                     {
-                        for(integer i = n; i < fla_min(m, j); i++)
+                        for(integer i = n + 1; i < fla_min(m, j); i++)
                         {
                             temp1 = FLA_FABS(((dcomplex *)work)[i + (j - 1) * m].real);
                             norm = fla_max(temp1, norm);
@@ -4844,7 +4844,7 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
                     zgelq2_(&ldwork, &n, work, &ldwork, &((dcomplex *)work)[ldwork * n],
                             &((dcomplex *)work)[ldwork * (n + 1)], &INFO);
                     /*Compute norm*/
-                    for(integer j = m + 1; j <= n; j++)
+                    for(integer j = m + 1; j < n; j++)
                     {
                         for(integer i = j; i < ldwork; i++)
                         {

@@ -106,10 +106,12 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *time_min, double *residual)
 {
-    integer n, ldz, lda, info = 0, vinfo = 0;
+    integer n, ldz, lda, info = 0;
     char compz, uplo;
     void *Z = NULL, *Z_test = NULL, *A = NULL, *Q = NULL;
     void *D = NULL, *D_test = NULL, *E = NULL, *E_test = NULL;
+    void *L = NULL;
+    char *range = "A";
 
     /* Get input matrix dimensions.*/
     compz = params->eig_sym_paramslist[pci].compz;
@@ -117,6 +119,7 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
     uplo = params->eig_sym_paramslist[pci].uplo;
 
     n = p_cur;
+
     ldz = params->eig_sym_paramslist[pci].ldz;
 
     /* If leading dimensions = -1, set them to default value
@@ -125,19 +128,27 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
     {
         if(ldz == -1)
         {
-            ldz = fla_max(1, n);
+            if(compz == 'N')
+            {
+                ldz = 1;
+            }
+            else
+            {
+                ldz = fla_max(1, n);
+            }
         }
     }
-    lda = ldz;
+
+    lda = fla_max(n, ldz);
 
     /* Create input matrix parameters */
     create_matrix(datatype, &Z, ldz, n);
     create_matrix(datatype, &A, lda, n);
-    create_matrix(datatype, &Q, ldz, n);
+    create_matrix(datatype, &Q, lda, n);
 
     reset_matrix(datatype, n, n, Z, ldz);
     reset_matrix(datatype, n, n, A, lda);
-    reset_matrix(datatype, n, n, Q, ldz);
+    reset_matrix(datatype, n, n, Q, lda);
 
     create_vector(get_realtype(datatype), &D, n);
     create_vector(get_realtype(datatype), &E, n - 1);
@@ -149,31 +160,24 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
     }
     else
     {
-        /* input matrix Z with random symmetric numbers and D,E matrix with diagonal and subdiagonal
-         * values */
-        if(datatype == FLOAT || datatype == DOUBLE)
-        {
-            rand_sym_matrix(datatype, A, n, n, lda);
-        }
-        else
-        {
-            rand_hermitian_matrix(datatype, n, &A, lda);
-        }
+        create_realtype_vector(datatype, &L, n);
+        generate_matrix_from_EVs(datatype, *range, n, A, lda, L, NULL, NULL);
     }
 
-    copy_matrix(datatype, "full", n, n, A, lda, Q, ldz);
+    copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
     /* Make a copy of input matrix Z. This is required to validate the API functionality.*/
-    create_matrix(datatype, &Z_test, ldz, n);
-    reset_matrix(datatype, n, n, Z_test, ldz);
+    if(compz != 'N')
+    {
+        create_matrix(datatype, &Z_test, ldz, n);
+        reset_matrix(datatype, n, n, Z_test, ldz);
+    }
 
     invoke_sytrd(datatype, &uplo, compz, n, Q, lda, D, E, &info);
 
     /*form tridiagonal matrix Z by copying from matrix*/
     copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
 
-    if(compz == 'I')
-        set_identity_matrix(datatype, n, n, Z_test, ldz);
-    else
+    if(compz == 'V')
     {
         copy_matrix(datatype, "full", n, n, Q, lda, Z_test, ldz);
         copy_matrix(datatype, "full", n, n, A, lda, Z, ldz);
@@ -199,7 +203,9 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
 
     /* output validation */
     if(info == 0)
-        validate_syevd(&compz, n, Z, Z_test, ldz, D_test, datatype, residual, &vinfo);
+    {
+        validate_syev(&compz, range, n, Z, Z_test, lda, 0, 0, L, D_test, NULL, datatype, residual);
+    }
 
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
@@ -209,9 +215,10 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
     free_vector(E);
     free_matrix(A);
     free_matrix(Q);
-    free_matrix(Z_test);
     free_vector(D_test);
     free_vector(E_test);
+    free_vector(L);
+    free_matrix(Z_test);
 }
 
 void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, void *E,
@@ -223,8 +230,11 @@ void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, vo
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, &Z_save, ldz, n);
-    copy_matrix(datatype, "full", n, n, Z, ldz, Z_save, ldz);
+    if(*compz != 'N')
+    {
+        create_matrix(datatype, &Z_save, ldz, n);
+        copy_matrix(datatype, "full", n, n, Z, ldz, Z_save, ldz);
+    }
 
     create_vector(get_realtype(datatype), &D_save, n);
     create_vector(get_realtype(datatype), &E_save, n - 1);
@@ -236,7 +246,10 @@ void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, vo
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
-        copy_matrix(datatype, "full", n, n, Z_save, ldz, Z, ldz);
+        if(*compz != 'N')
+        {
+            copy_matrix(datatype, "full", n, n, Z_save, ldz, Z, ldz);
+        }
         copy_vector(get_realtype(datatype), n, D_save, 1, D, 1);
         copy_vector(get_realtype(datatype), n - 1, E_save, 1, E, 1);
 
@@ -257,7 +270,10 @@ void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, vo
 
     *time_min_ = time_min;
 
-    free_matrix(Z_save);
+    if(*compz != 'N')
+    {
+        free_matrix(Z_save);
+    }
     free_matrix(D_save);
     free_matrix(E_save);
 }

@@ -2490,7 +2490,7 @@ void get_orthogonal_matrix_from_QR(integer datatype, integer n, void *A, integer
 {
     void *tau = NULL, *work = NULL;
     integer lwork = -1;
-    if((lda < n) || (ldq < n))
+    if(!n || (lda < n) || (ldq < n))
         return;
     /* Intializing matrix for the call to GGHRD */
     create_vector(datatype, &work, 1);
@@ -3893,6 +3893,10 @@ void generate_matrix_from_ED(integer datatype, integer n, void *A, integer lda, 
                              void *lambda)
 {
     void *Qlambda = NULL;
+
+    if(!n)
+        return;
+
     if(lda < n)
         return;
 

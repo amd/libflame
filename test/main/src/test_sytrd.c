@@ -12,6 +12,9 @@ void invoke_sytrd(integer datatype, char *uplo, char compz, integer n, void *A, 
     void *tau = NULL, *work = NULL;
     integer lwork = -1;
 
+    if(!n)
+        return;
+
     create_vector(datatype, &tau, n - 1);
     switch(datatype)
     {

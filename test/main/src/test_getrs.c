@@ -4,6 +4,8 @@
 
 #include "test_lapack.h"
 
+#define GETRS_VL 0.1
+#define GETRS_VU 10
 /* Local prototypes */
 void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer p_cur,
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
@@ -108,7 +110,8 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
 {
     integer n, lda, ldb, NRHS;
     integer info = 0, vinfo = 0;
-    void *IPIV;
+    void *IPIV, *s_test = NULL;
+    char range = 'U';
     void *A, *A_test, *B, *B_save, *X;
     double time_min = 1e9;
     char TRANS = params->lin_solver_paramslist[pci].transr;
@@ -141,8 +144,19 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
     create_matrix(datatype, &B_save, ldb, NRHS);
     create_matrix(datatype, &X, ldb, NRHS);
     create_matrix(datatype, &A_test, lda, n);
+    create_realtype_vector(datatype, &s_test, n);
+
     /* Initialize the test matrices*/
-    init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+    if(params->imatrix_char == NULL && g_ext_fptr == NULL)
+    {
+        /* Generate input matrix with condition number <= 100 */
+        create_svd_matrix(datatype, range, n, n, A, lda, s_test, GETRS_VL, GETRS_VU, i_zero, i_zero,
+                          '\0', NULL, info);
+    }
+    else
+    {
+        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+    }
     init_matrix(datatype, B, n, NRHS, ldb, g_ext_fptr, params->imatrix_char);
 
     /* Save the original matrix*/
@@ -187,6 +201,7 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
     free_matrix(B);
     free_matrix(X);
     free_matrix(B_save);
+    free_vector(s_test);
 }
 
 void prepare_getrs_run(char *TRANS, integer n_A, integer nrhs, void *A, integer lda, void *B,

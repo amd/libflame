@@ -23,10 +23,10 @@ Before running the test suite, we must set BLAS, LAPACK and AOCL-Utils library p
 
 BLAS library and header paths has to be set using 'LIBBLAS' and 'BLAS_HEADER_PATH' flags
 respectively. AOCL-Utils library path has to be set using LIBAOCLUTILS_LIBRARY_PATH flag.
-   $ make BLAS_HEADER_PATH=<path to BLAS API prototypes header file> 
+   $ make BLAS_HEADER_PATH=<path to BLAS API prototypes header file>
           LIBBLAS=<full path to BLAS library including library file>
           LIBAOCLUTILS_LIBRARY_PATH=<full path to AOCL-Utils library including library file>
- 
+
 By default, the make file is programmed to look for libflame.a in `../../lib/
 x86_64-unknown-linux-gnu` directory for LAPACK library. However, if the users
 wish to link different LAPACK library, they must set the envrionment variable `LIB_PATH`
@@ -35,10 +35,12 @@ below.
 
    $ export LIBFLAME=lapack.a LIB_PATH=/usr/local
 
+   NOTE: set LAPACK_INC_PATH=<path to LAPACK include folder>
+
 Alternatively, you may set the `make` variable `LIB_PATH` on the command line as you
 execute `make`:
 
-   $ make LIBFLAME=lapack.a LIB_PATH=/usr/local 
+   $ make LIBFLAME=lapack.a LIB_PATH=/usr/local
 	  BLAS_HEADER_PATH=<path to BLAS API prototypes header file>
           LIBBLAS=<full path to BLAS library including library file>
           LIBAOCLUTILS_LIBRARY_PATH=<full path to AOCL-Utils library including library file>
@@ -48,10 +50,10 @@ After `make` is complete, an executable named `test_lapack.x` is created.
 There are different ways to use the executable to perform different tests as given
 below.
 
-1. Config file based tests 
+1. Config file based tests
 
    In this method, input parameters to APIs are taken from config files present in
-   'config' folder. The APIs to test are selected from the file 
+   'config' folder. The APIs to test are selected from the file
    'input.general.operations'.
 
    ## Selecting APIs for testing
@@ -107,7 +109,7 @@ below.
 
 2. Command line tests
 
-   This method can be used to test a single API with a single set of parameters. To run 
+   This method can be used to test a single API with a single set of parameters. To run
    this mode, name of  the API and corresponding parameters are to be specified as
    command line arguments.
 
@@ -127,6 +129,12 @@ below.
    Command-line options for any supported API can be obtained by giving only the API name
    as the only argument.
 
+   NOTE: Method to pass customised input data:
+         Customised input matrices can be copied to a file and passed(as the last argument)
+         to the API through command line.
+
+      Ex: ./test_lapack.x GGEVX d P N N E 10 10 10 10 10 -1 100 inputdata.txt
+          where inputdata.txt file is in the same location as the test_lapack.x
 
 3. Thread Safety Test
 
@@ -154,7 +162,7 @@ below.
    To execute the test with thread safety, set the environment variable
    FLA_TEST_NUM_THREADS to a value greater than 1.
 
-   For windows system you need to set the environment variable using the set command and 
+   For windows system you need to set the environment variable using the set command and
    then need to execute the script.
 
       > set FLA_TEST_NUM_THREADS=4
@@ -167,9 +175,9 @@ below.
 
 5. Unaligned Memory test
 
-   To enable allocate dynamic memory unaligned we need to set below flags while building main testsuite 
+   To enable allocate dynamic memory unaligned we need to set below flags while building main testsuite
        Windows -- FLA_MEM_UNALIGNED is set, unaligned memory is allocated
-       Linux   -- MEM_UNALN=1 
+       Linux   -- MEM_UNALN=1
 
 ## Enabling non-default API naming convention in testsuite:
 
@@ -177,7 +185,7 @@ below.
     For enabling UPPERCASE w/, w/o underscore and LOWERCASE w/o underscore API naming
     convention, set API_CALLING_CONVENTION to "upper_","upper","lower" strings respectively
     in test/main/Makefile.
-    Testsuite default calling convention is lower_  
+    Testsuite default calling convention is lower_
 
 NOTE:
    To execute test on windows, its recommended to keep the following in same path/folder:
@@ -251,9 +259,9 @@ NOTE:
    Example: If lda = -1 passed(from config file) to test_geev API
             then main test-suite sets lda = fla_max(1,n) before calling lapack API geev.
 
-            If lda = -1 is passed through command line, then -1 will be taken as the given lda 
+            If lda = -1 is passed through command line, then -1 will be taken as the given lda
             without any change.
- 
+
 10. AOCL_FLA_PROGRESS feature test.
 
    Enable a macro 'AOCL_FLA_SET_PROGRESS_ENABLE' for aocl progress and build libflame main test suite for sequential/multithread and run the
@@ -269,9 +277,9 @@ NOTE:
    In AOCL Progress thread  0, at API  DGETRF, progress 40 total threads= 1
    In AOCL Progress thread  0, at API  DGETRF, progress 48 total threads= 1
    In AOCL Progress thread  0, at API  DGETRF, progress 56 total threads= 1
-   
+
    For testing multithread mode: FLA_TEST_NUM_THREADS=4 ./test_lapack.x
-   
+
    output:
    In AOCL Progress thread  1, at API  DGETRF, progress 8 total threads= 4
    In AOCL Progress thread  1, at API  DGETRF, progress 16 total threads= 4

@@ -4,6 +4,9 @@
 
 #include "test_lapack.h"
 
+#define GETRI_VL 0.1
+#define GETRI_VU 10
+
 /* Local prototypes */
 void fla_test_getri_experiment(test_params_t *params, integer datatype, integer p_cur,
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
@@ -105,8 +108,8 @@ void fla_test_getri_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *t, double *residual)
 {
     integer n, lda, info = 0, vinfo = 0;
-    void *IPIV;
-    void *A, *A_test;
+    void *IPIV = NULL, *A = NULL, *A_test = NULL, *s_test = NULL;
+    char range = 'U';
     double time_min = 1e9;
 
     /* Determine the dimensions*/
@@ -127,8 +130,19 @@ void fla_test_getri_experiment(test_params_t *params, integer datatype, integer 
     /* Create the matrices for the current operation*/
     create_matrix(datatype, &A, lda, n);
     create_vector(INTEGER, &IPIV, n);
+    create_realtype_vector(datatype, &s_test, n);
+
     /* Initialize the test matrices*/
-    init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+    if(params->imatrix_char == NULL && g_ext_fptr == NULL)
+    {
+        /* Generate input matrix with condition number <= 10 */
+        create_svd_matrix(datatype, range, n, n, A, lda, s_test, GETRI_VL, GETRI_VU, i_zero, i_zero,
+                          '\0', NULL, info);
+    }
+    else
+    {
+        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+    }
 
     /* Save the original matrix*/
     create_matrix(datatype, &A_test, lda, n);
@@ -165,6 +179,7 @@ void fla_test_getri_experiment(test_params_t *params, integer datatype, integer 
     free_matrix(A);
     free_matrix(A_test);
     free_vector(IPIV);
+    free_vector(s_test);
 }
 
 void prepare_getri_run(integer m_A, integer n_A, void *A, integer lda, integer *IPIV,

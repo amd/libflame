@@ -4,6 +4,9 @@
 
 #include "test_lapack.h"
 
+#define GESV_VL 0.1
+#define GESV_VU 10
+
 /* Local prototypes */
 void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
                               integer pci, integer n_repeats, integer einfo, double *perf,
@@ -16,8 +19,7 @@ void invoke_gesv(integer datatype, integer *nrhs, integer *n, void *a, integer *
 
 void fla_test_gesv(integer argc, char **argv, test_params_t *params)
 {
-    char *op_str = "Linear Solve using LU";
-    char *front_str = "GESV";
+    char *op_str = "Linear Solve using LU", *front_str = "GESV";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
     params->imatrix_char = '\0';
 
@@ -107,11 +109,10 @@ void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p
                               integer pci, integer n_repeats, integer einfo, double *perf,
                               double *t, double *residual)
 {
-    integer n, lda, ldb, NRHS;
-    integer info = 0, vinfo = 0;
-    void *IPIV;
-    void *A, *A_save, *B, *B_save;
+    integer n, lda, ldb, NRHS, info = 0, vinfo = 0;
+    void *IPIV = NULL, *A = NULL, *A_save = NULL, *B = NULL, *B_save = NULL, *s_test = NULL;
     double time_min = 1e9;
+    char range = 'U';
     *residual = params->lin_solver_paramslist[pci].solver_threshold;
     NRHS = params->lin_solver_paramslist[pci].nrhs;
     /* Determine the dimensions*/
@@ -139,9 +140,21 @@ void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p
     create_vector(INTEGER, &IPIV, n);
     create_matrix(datatype, &B, ldb, NRHS);
     create_matrix(datatype, &B_save, ldb, NRHS);
+    create_realtype_vector(datatype, &s_test, n);
+
     /* Initialize the test matrices*/
-    init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+    if(params->imatrix_char == NULL && g_ext_fptr == NULL)
+    {
+        /* Generate input matrix with condition number <= 100 */
+        create_svd_matrix(datatype, range, n, n, A, lda, s_test, GESV_VL, GESV_VU, i_zero, i_zero,
+                          '\0', NULL, info);
+    }
+    else
+    {
+        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+    }
     init_matrix(datatype, B, n, NRHS, ldb, g_ext_fptr, params->imatrix_char);
+
     /* Save the original matrix*/
     copy_matrix(datatype, "full", n, n, A, lda, A_save, lda);
     copy_matrix(datatype, "full", n, NRHS, B, ldb, B_save, ldb);
@@ -179,6 +192,7 @@ void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p
     free_vector(IPIV);
     free_matrix(B);
     free_matrix(B_save);
+    free_vector(s_test);
 }
 
 void prepare_gesv_run(integer n_A, integer nrhs, void *A, integer lda, void *B, integer ldb,

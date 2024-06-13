@@ -5437,9 +5437,10 @@ void create_realtype_block_diagonal_matrix(integer datatype, void *A, integer n,
     {
         for(i = 0; i < n; i += 2)
         {
-            ((float *)A)[i * lda + i] = ((float *)A)[(i + 1) * lda + (i + 1)] = SRAND();
-            if(i < n - 1)
+            ((float *)A)[i * lda + i] = SRAND();
+            if(i < n-1)
             {
+                ((float *)A)[(i + 1) * lda + (i + 1)] = ((float *)A)[i * lda + i];
                 ((float *)A)[i * lda + i + 1] = SRAND();
                 ((float *)A)[(i + 1) * lda + i] = -((float *)A)[i * lda + i + 1];
             }
@@ -5449,9 +5450,10 @@ void create_realtype_block_diagonal_matrix(integer datatype, void *A, integer n,
     {
         for(i = 0; i < n; i += 2)
         {
-            ((double *)A)[i * lda + i] = ((double *)A)[(i + 1) * lda + (i + 1)] = DRAND();
-            if(i < n - 1)
+            ((double *)A)[i * lda + i] = DRAND();
+            if(i < n-1)
             {
+                ((double *)A)[(i + 1) * lda + (i + 1)] = ((double *)A)[i * lda + i];
                 ((double *)A)[i * lda + i + 1] = DRAND();
                 ((double *)A)[(i + 1) * lda + i] = -((double *)A)[i * lda + i + 1];
             }

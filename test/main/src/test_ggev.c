@@ -121,10 +121,8 @@ void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p
     void *alpha = NULL, *alphar = NULL, *alphai = NULL, *beta, *A_test, *B_test;
     double time_min = 1e9;
     *residual = params->eig_non_sym_paramslist[pci].GenNonSymEigProblem_threshold;
-    // char JOBVL = params->eig_non_sym_paramslist[pci].jobvsl;
-    // char JOBVR = params->eig_non_sym_paramslist[pci].jobvsr;
-    char JOBVL = 'V';
-    char JOBVR = 'V';
+    char JOBVL = params->eig_non_sym_paramslist[pci].jobvsl;
+    char JOBVR = params->eig_non_sym_paramslist[pci].jobvsr;
 
     /* Get input matrix dimensions */
     m = p_cur;
@@ -213,7 +211,7 @@ void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p
         *perf *= 4.0;
 
     /* output validation */
-    if(!params->imatrix_char && (JOBVL == 'V' && JOBVR == 'V') && info == 0)
+    if(!params->imatrix_char && (JOBVL == 'V' || JOBVR == 'V') && info == 0)
         validate_ggev(&JOBVL, &JOBVR, m, A, lda, B, ldb, alpha, alphar, alphai, beta, VL, ldvl, VR,
                       ldvr, datatype, residual, &vinfo);
     /* check for output matrix when inputs as extreme values */

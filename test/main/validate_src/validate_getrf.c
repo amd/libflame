@@ -16,14 +16,14 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
     /* System generated locals */
     integer m_n_vector, min_A;
     integer m_L, n_L, m_U, n_U, k;
-    void *L, *U, *T, *work, *B, *B_test, *A_save;
+    void *L, *U, *T, *work, *X, *B, *A_save;
     integer nrhs = 1;
     *info = 0;
 
     m_n_vector = m_A * n_A;
     min_A = fla_min(m_A, n_A);
+    create_vector(datatype, &X, m_A);
     create_vector(datatype, &B, m_A);
-    create_vector(datatype, &B_test, m_A);
     if(m_A > n_A)
     {
         m_L = m_A;
@@ -42,8 +42,7 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
     create_matrix(datatype, &T, m_A, n_A);
     create_vector(datatype, &work, 2 * m_A);
 
-    rand_vector(datatype, m_A, B, 1, d_zero, d_zero, 'R');
-    copy_vector(datatype, m_A, B, 1, B_test, 1);
+    rand_vector(datatype, m_A, X, 1, d_zero, d_zero, 'R');
 
     /* Lower triangular matrix should be sqare matrix m x m */
     /* For m==i OR  m < n OR m > n -->  A(mxn) = L(mxm) * U(mxn) */
@@ -58,20 +57,22 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
     {
         case FLOAT:
         {
-            float norm, norm_A, norm_B, eps, resid1, resid2;
+            float norm, norm_A, norm_X, eps, resid1, resid2;
             eps = fla_lapack_slamch("Epsilon");
             /* Test 1 */
             if(m_A == n_A)
             {
-                norm_B = snrm2_(&m_A, B, &i_one);
-                /* Compute X by passing A and B */
-                fla_lapack_sgetrs("N", &m_A, &nrhs, A_test, &lda, IPIV, B_test, &m_A, info);
+                norm_X = snrm2_(&m_A, X, &i_one);
+                /* B = A * X */
+                sgemv_("N", &m_A, &m_A, &s_one, A, &lda, X, &i_one, &s_zero, B, &i_one);
+                /* Compute X' by passing A_test and B */
+                fla_lapack_sgetrs("N", &m_A, &nrhs, A_test, &lda, IPIV, B, &m_A, info);
                 if(*info < 0)
                     break;
-                /* Compute AX-B */
-                sgemv_("N", &m_A, &m_A, &s_one, A, &lda, B_test, &i_one, &s_n_one, B, &i_one);
-                norm = snrm2_(&m_A, B, &i_one);
-                resid1 = norm / (float)m_A / norm_B / eps;
+                /* Compute X - X' */
+                saxpy_(&m_A, &s_n_one, B, &i_one, X, &i_one);
+                norm = snrm2_(&m_A, X, &i_one);
+                resid1 = norm / (m_A * norm_X * eps);
             }
             else
             {
@@ -91,28 +92,30 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
             /* Compute norm( L*U - A ) / ( N * norm(A) * EPS ) */
             norm = fla_lapack_slange("1", &m_A, &n_A, T, &m_A, work);
 
-            resid2 = norm / (float)n_A / norm_A / eps;
-            *residual = (float)fla_max(resid1, resid2);
+            resid2 = norm / (n_A * norm_A * eps);
+            *residual = (double)fla_max(resid1, resid2);
             break;
         }
 
         case DOUBLE:
         {
-            double norm, norm_A, norm_B, eps, resid1, resid2;
+            double norm, norm_A, norm_X, eps, resid1, resid2;
 
-            eps = fla_lapack_slamch("Epsilon");
+            eps = fla_lapack_dlamch("Epsilon");
             /* Test 1 */
             if(m_A == n_A)
             {
-                norm_B = dnrm2_(&m_A, B, &i_one);
-                /* Compute X by passing A and B */
-                fla_lapack_dgetrs("N", &m_A, &nrhs, A_test, &lda, IPIV, B_test, &m_A, info);
+                norm_X = dnrm2_(&m_A, X, &i_one);
+                /* B = A * X */
+                dgemv_("N", &m_A, &m_A, &d_one, A, &lda, X, &i_one, &d_zero, B, &i_one);
+                /* Compute X' by passing A and X */
+                fla_lapack_dgetrs("N", &m_A, &nrhs, A_test, &lda, IPIV, B, &m_A, info);
                 if(*info < 0)
                     break;
-                /* Compute AX-B */
-                dgemv_("N", &m_A, &m_A, &d_one, A, &lda, B_test, &i_one, &d_n_one, B, &i_one);
-                norm = dnrm2_(&m_A, B, &i_one);
-                resid1 = norm / (double)m_A / norm_B / eps;
+                /* Compute X - X' */
+                daxpy_(&m_A, &d_n_one, B, &i_one, X, &i_one);
+                norm = dnrm2_(&m_A, X, &i_one);
+                resid1 = norm / (m_A * norm_X * eps);
             }
             else
             {
@@ -132,27 +135,29 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
             /* Compute norm( L*U - A ) / ( N * norm(A) * EPS ) */
             norm = fla_lapack_dlange("1", &m_A, &n_A, T, &m_A, work);
 
-            resid2 = norm / (double)n_A / norm_A / eps;
+            resid2 = norm / (n_A * norm_A * eps);
             *residual = (double)fla_max(resid1, resid2);
             break;
         }
         case COMPLEX:
         {
-            float norm, norm_A, norm_B, eps, resid1, resid2;
+            float norm, norm_A, norm_X, eps, resid1, resid2;
 
             eps = fla_lapack_slamch("Epsilon");
             /* Test 1 */
             if(m_A == n_A)
             {
-                norm_B = scnrm2_(&m_A, B, &i_one);
-                /* Compute X by passing A and B */
-                fla_lapack_cgetrs("N", &m_A, &nrhs, A_test, &lda, IPIV, B_test, &m_A, info);
+                norm_X = scnrm2_(&m_A, X, &i_one);
+                /* B = A * X */
+                cgemv_("N", &m_A, &m_A, &c_one, A, &lda, X, &i_one, &c_zero, B, &i_one);
+                /* Compute X' by passing A and X */
+                fla_lapack_cgetrs("N", &m_A, &nrhs, A_test, &lda, IPIV, B, &m_A, info);
                 if(*info < 0)
                     break;
-                /* Compute AX-B */
-                cgemv_("N", &m_A, &m_A, &c_one, A, &lda, B_test, &i_one, &c_n_one, B, &i_one);
-                norm = scnrm2_(&m_A, B, &i_one);
-                resid1 = norm / (float)m_A / norm_B / eps;
+                /* Compute X - X' */
+                caxpy_(&m_A, &c_n_one, B, &i_one, X, &i_one);
+                norm = scnrm2_(&m_A, X, &i_one);
+                resid1 = norm / (m_A * norm_X * eps);
             }
             else
             {
@@ -173,27 +178,29 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
             /* Compute norm( L*U - A ) / ( N * norm(A) * EPS ) */
             norm = fla_lapack_clange("1", &m_A, &n_A, T, &m_A, work);
 
-            resid2 = norm / (float)n_A / norm_A / eps;
-            *residual = (float)fla_max(resid1, resid2);
+            resid2 = norm / (n_A * norm_A * eps);
+            *residual = (double)fla_max(resid1, resid2);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_A, norm_B, eps, resid1, resid2;
+            double norm, norm_A, norm_X, eps, resid1, resid2;
 
-            eps = fla_lapack_slamch("Epsilon");
+            eps = fla_lapack_dlamch("Epsilon");
             /* Test 1 */
             if(m_A == n_A)
             {
-                norm_B = dznrm2_(&m_A, B, &i_one);
-                /* Compute X by passing A and B */
-                fla_lapack_zgetrs("N", &m_A, &nrhs, A_test, &lda, IPIV, B_test, &m_A, info);
+                norm_X = dznrm2_(&m_A, X, &i_one);
+                /* B = A * X */
+                zgemv_("N", &m_A, &m_A, &z_one, A, &lda, X, &i_one, &z_zero, B, &i_one);
+                /* Compute X' by passing A and X */
+                fla_lapack_zgetrs("N", &m_A, &nrhs, A_test, &lda, IPIV, B, &m_A, info);
                 if(*info < 0)
                     break;
-                /* Compute AX-B */
-                zgemv_("N", &m_A, &m_A, &z_one, A, &lda, B_test, &i_one, &z_n_one, B, &i_one);
-                norm = dznrm2_(&m_A, B, &i_one);
-                resid1 = norm / (double)m_A / norm_B / eps;
+                /* Compute X - X' */
+                zaxpy_(&m_A, &z_n_one, B, &i_one, X, &i_one);
+                norm = dznrm2_(&m_A, X, &i_one);
+                resid1 = norm / (m_A * norm_X * eps);
             }
             else
             {
@@ -214,7 +221,7 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
             /* Compute norm( L*U - A ) / ( N * norm(A) * EPS ) */
             norm = fla_lapack_zlange("1", &m_A, &n_A, T, &m_A, work);
 
-            resid2 = norm / (double)n_A / norm_A / eps;
+            resid2 = norm / (n_A * norm_A * eps);
             *residual = (double)fla_max(resid1, resid2);
             break;
         }
@@ -225,7 +232,7 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
     free_matrix(U);
     free_matrix(T);
     free_vector(work);
+    free_vector(X);
     free_vector(B);
-    free_vector(B_test);
     free_vector(A_save);
 }

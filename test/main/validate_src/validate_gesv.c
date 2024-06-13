@@ -22,11 +22,9 @@ void validate_gesv(integer n, integer nrhs, void *A, integer lda, void *B, integ
     {
         case FLOAT:
         {
-            float norm_a, norm_b, norm_x, norm, eps, resid;
+            float norm_x, norm, eps, resid;
 
             /* Test 1 */
-            norm_a = fla_lapack_slange("1", &n, &n, A, &lda, work);
-            norm_b = fla_lapack_slange("1", &n, &nrhs, B, &ldb, work);
             norm_x = fla_lapack_slange("1", &n, &nrhs, X, &ldx, work);
             eps = fla_lapack_slamch("E");
 
@@ -34,18 +32,16 @@ void validate_gesv(integer n, integer nrhs, void *A, integer lda, void *B, integ
             sgemm_("N", "N", &n, &nrhs, &n, &s_one, A, &lda, X, &ldx, &s_n_one, B, &ldb);
             norm = fla_lapack_slange("1", &n, &nrhs, B, &ldb, work);
 
-            resid = norm / (((norm_a * norm_x + norm_b) * (float)n) * eps);
+            resid = norm / (norm_x * n * eps);
 
             *residual = (double)resid;
             break;
         }
         case DOUBLE:
         {
-            double norm_a, norm_b, norm_x, norm, eps, resid;
+            double norm_x, norm, eps, resid;
 
             /* Test 1 */
-            norm_a = fla_lapack_dlange("1", &n, &n, A, &lda, work);
-            norm_b = fla_lapack_dlange("1", &n, &nrhs, B, &ldb, work);
             norm_x = fla_lapack_dlange("1", &n, &nrhs, X, &ldx, work);
             eps = fla_lapack_dlamch("E");
 
@@ -53,18 +49,16 @@ void validate_gesv(integer n, integer nrhs, void *A, integer lda, void *B, integ
             dgemm_("N", "N", &n, &nrhs, &n, &d_one, A, &lda, X, &ldx, &d_n_one, B, &ldb);
             norm = fla_lapack_dlange("1", &n, &nrhs, B, &ldb, work);
 
-            resid = norm / (((norm_a * norm_x + norm_b) * (double)n) * eps);
+            resid = norm / (norm_x * n * eps);
 
             *residual = (double)resid;
             break;
         }
         case COMPLEX:
         {
-            float norm_a, norm_b, norm_x, norm, eps, resid;
+            float norm_x, norm, eps, resid;
 
             /* Test 1 */
-            norm_a = fla_lapack_clange("1", &n, &n, A, &lda, work);
-            norm_b = fla_lapack_clange("1", &n, &nrhs, B, &ldb, work);
             norm_x = fla_lapack_clange("1", &n, &nrhs, X, &ldx, work);
             eps = fla_lapack_slamch("E");
 
@@ -72,18 +66,16 @@ void validate_gesv(integer n, integer nrhs, void *A, integer lda, void *B, integ
             cgemm_("N", "N", &n, &nrhs, &n, &c_one, A, &lda, X, &ldx, &c_n_one, B, &ldb);
             norm = fla_lapack_clange("1", &n, &nrhs, B, &ldb, work);
 
-            resid = norm / (((norm_a * norm_x + norm_b) * (float)n) * eps);
+            resid = norm / (norm_x * n * eps);
 
             *residual = (double)resid;
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm_a, norm_b, norm_x, norm, eps, resid;
+            double norm_x, norm, eps, resid;
 
             /* Test 1 */
-            norm_a = fla_lapack_zlange("1", &n, &n, A, &lda, work);
-            norm_b = fla_lapack_zlange("1", &n, &nrhs, B, &ldb, work);
             norm_x = fla_lapack_zlange("1", &n, &nrhs, X, &ldx, work);
             eps = fla_lapack_dlamch("E");
 
@@ -91,7 +83,7 @@ void validate_gesv(integer n, integer nrhs, void *A, integer lda, void *B, integ
             zgemm_("N", "N", &n, &nrhs, &n, &z_one, A, &lda, X, &ldx, &z_n_one, B, &ldb);
             norm = fla_lapack_zlange("1", &n, &nrhs, B, &ldb, work);
 
-            resid = norm / (((norm_a * norm_x + norm_b) * (double)n) * eps);
+            resid = norm / (norm_x * n * eps);
 
             *residual = (double)resid;
             break;

@@ -4,6 +4,9 @@
 
 #include "test_lapack.h"
 
+#define GELSD_VL 0.1
+#define GELSD_VU 10
+
 /* Local prototypes */
 void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer p_cur,
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
@@ -115,8 +118,10 @@ void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer 
 {
     integer m, n, lda, ldb, NRHS;
     integer info = 0, rank;
-    void *A, *A_save, *B, *B_save, *S, *rcond;
+    void *A = NULL, *A_save = NULL, *B = NULL, *B_save = NULL;
+    void *S = NULL, *rcond = NULL, *s_test = NULL;
     double time_min = 1e9;
+    char range = 'U';
     *residual = params->lin_solver_paramslist[pci].solver_threshold;
     NRHS = params->lin_solver_paramslist[pci].nrhs;
     m = p_cur;
@@ -156,11 +161,20 @@ void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer 
     create_matrix(datatype, &A_save, lda, n);
     create_matrix(datatype, &B, ldb, NRHS);
     create_matrix(datatype, &B_save, ldb, NRHS);
+    create_realtype_vector(datatype, &s_test, fla_min(m, n));
 
-    /* Initialize the test matrices*/
-    init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+    /* Initialize the test matrices */
     init_matrix(datatype, B, m, NRHS, ldb, g_ext_fptr, params->imatrix_char);
-
+    if(params->imatrix_char == NULL && g_ext_fptr == NULL)
+    {
+        /* Generate input matrix with condition number <= 100 */
+        create_svd_matrix(datatype, range, m, n, A, lda, s_test, GELSD_VL, GELSD_VU, i_zero, i_zero,
+                          '\0', NULL, info);
+    }
+    else
+    {
+        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+    }
     /* Save the original matrix*/
     copy_matrix(datatype, "full", m, n, A, lda, A_save, lda);
     copy_matrix(datatype, "full", m, NRHS, B, ldb, B_save, ldb);
@@ -207,6 +221,7 @@ void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer 
     free_matrix(B_save);
     free_vector(S);
     free_vector(rcond);
+    free_vector(s_test);
 }
 
 void prepare_gelsd_run(integer m_A, integer n_A, integer nrhs, void *A, integer lda, void *B,

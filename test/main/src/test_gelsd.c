@@ -20,6 +20,7 @@ void invoke_gelsd(integer datatype, integer *m, integer *n, integer *nrhs, void 
 
 void fla_test_gelsd(integer argc, char **argv, test_params_t *params)
 {
+    srand(1);
     char *op_str = "Linear least squares";
     char *front_str = "GELSD";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
@@ -84,7 +85,7 @@ void fla_test_gelsd(integer argc, char **argv, test_params_t *params)
                 fla_test_gelsd_experiment(params, datatype, M, N, 0, n_repeats, einfo, &perf,
                                           &time_min, &residual);
                 /* Print the results */
-                fla_test_print_status(front_str, stype, SQUARE_INPUT, M, N, residual,
+                fla_test_print_status(front_str, stype, RECT_INPUT, M, N, residual,
                                       params->lin_solver_paramslist[0].solver_threshold, time_min,
                                       perf);
                 tests_not_run = 0;
@@ -108,7 +109,6 @@ void fla_test_gelsd(integer argc, char **argv, test_params_t *params)
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
     }
-
     return;
 }
 
@@ -175,6 +175,7 @@ void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer 
     {
         init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
     }
+
     /* Save the original matrix*/
     copy_matrix(datatype, "full", m, n, A, lda, A_save, lda);
     copy_matrix(datatype, "full", m, NRHS, B, ldb, B_save, ldb);

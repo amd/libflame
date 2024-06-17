@@ -19,6 +19,7 @@ void prepare_gels_run(integer datatype, char trans, integer m, integer n, intege
                       integer n_repeats, double *time_min_, integer *info);
 void fla_test_gels(integer argc, char **argv, test_params_t *params)
 {
+    srand(4);
     char *op_str = "Solves overdetermined or underdetermined systems for GE matrices";
     char *front_str = "GELS";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;

@@ -21,6 +21,7 @@ void prepare_gelss_run(integer datatype, integer m, integer n, integer nrhs, voi
                        integer *info);
 void fla_test_gelss(integer argc, char **argv, test_params_t *params)
 {
+    srand(45);
     char *op_str = "Solves overdetermined or underdetermined systems for GE matrices";
     char *front_str = "GELSS";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;

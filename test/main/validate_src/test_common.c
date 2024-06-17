@@ -194,7 +194,7 @@ void rand_vector(integer datatype, integer M, void *A, integer inc, double VL, d
                  char range)
 {
     integer i;
-    double step = VU - VL / M;
+    double step = (VU - VL) / M;
 
     switch(datatype)
     {
@@ -4599,9 +4599,9 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
                 else if(*trans == 'N')
                 {
                     /*Copy x into work*/
-                    for(int i = 0; i < n; i++)
+                    for(integer i = 0; i < n; i++)
                     {
-                        for(int j = 0; j < nrhs; j++)
+                        for(integer j = 0; j < nrhs; j++)
                         {
                             ((float *)work)[m + j + (i * ldwork)] = ((float *)x)[i + j * ldb];
                         }
@@ -4677,9 +4677,9 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
                 else if(*trans == 'N')
                 {
                     /*Copy x into work*/
-                    for(int i = 0; i < n; i++)
+                    for(integer i = 0; i < n; i++)
                     {
-                        for(int j = 0; j < nrhs; j++)
+                        for(integer j = 0; j < nrhs; j++)
                         {
                             ((double *)work)[m + j + (i * ldwork)] = ((double *)x)[i + j * ldb];
                         }

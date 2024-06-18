@@ -10,6 +10,30 @@
 #       TAG += value [value, ...]
 # Values that contain spaces should be placed between quotes (" ")
 
+# To generate the doxygen: doxygen Doxyfile
+
+# To follow general group manner 
+
+#-----------------------------------#
+# /** @defgroup grp grp_name        #
+# *  @{                             #
+# */ // description                 #
+# /** @} */ // end of group1        #
+#-----------------------------------#
+
+# To group it under one group
+
+#-----------------------------------#
+# /** @defgroup head_grp grp_name   #
+# *  @{                             #
+# /** @defgroup grp grp_name        #
+# *  @{                             #
+# *  @ingroup head_grp              #
+# */  //description                 #
+# /** @} */ // end of grp           #
+# /** @} */ // end of head_grp      #
+#-----------------------------------#
+
 #---------------------------------------------------------------------------
 # Project related configuration options
 #---------------------------------------------------------------------------
@@ -574,7 +598,7 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
-INPUT                  = "src"
+INPUT                  = "src/src_cpp/libflame_interface.hh"
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is
@@ -704,7 +728,7 @@ SOURCE_BROWSER         = NO
 # Setting the INLINE_SOURCES tag to YES will include the body
 # of functions and classes directly in the documentation.
 
-INLINE_SOURCES         = YES
+INLINE_SOURCES         = NO
 
 # Setting the STRIP_CODE_COMMENTS tag to YES (the default) will instruct
 # doxygen to hide any special comment blocks from generated source code
@@ -722,7 +746,7 @@ REFERENCED_BY_RELATION = YES
 # then for each documented function all documented entities
 # called/used by that function will be listed.
 
-REFERENCES_RELATION    = YES
+REFERENCES_RELATION    = NO
 
 # If the REFERENCES_LINK_SOURCE tag is set to YES (the default)
 # and SOURCE_BROWSER tag is set to YES, then the hyperlinks from
@@ -992,6 +1016,8 @@ GENERATE_TREEVIEW      = NO
 
 USE_INLINE_TREES       = NO
 
+INLINE_SIMPLE_METHODS = NO
+
 # If the treeview is enabled (see GENERATE_TREEVIEW) then this tag can be
 # used to set the initial width (in pixels) of the frame in which the tree
 # is shown.
@@ -1180,7 +1206,7 @@ MAN_LINKS              = NO
 # generate an XML file that captures the structure of
 # the code including all documentation.
 
-GENERATE_XML           = NO
+GENERATE_XML           = YES
 
 # The XML_OUTPUT tag is used to specify where the XML pages will be put.
 # If a relative path is entered the value of OUTPUT_DIRECTORY will be

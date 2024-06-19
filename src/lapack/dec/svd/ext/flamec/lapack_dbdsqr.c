@@ -636,6 +636,7 @@
  /* Save cosines and sines for later singular vector updates */
  cs = 1.;
  oldcs = 1.;
+ oldsn = 0.;
  i__1 = m - 1;
  for (i__ = ll;
  i__ <= i__1;

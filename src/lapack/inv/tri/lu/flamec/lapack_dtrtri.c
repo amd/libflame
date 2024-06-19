@@ -140,7 +140,7 @@ f"> */
 
     /* Local variables */
     integer j, jb, nb, nn;
-    extern logical lsame_(char *, char *);
+    extern int lsame_(char *, char *, integer a, integer b);
     extern /* Subroutine */ int dtrmm_(char *, char *, char *, char *, integer *, integer *,
                                        doublereal *, doublereal *, integer *, doublereal *,
                                        integer *),
@@ -149,7 +149,7 @@ f"> */
     logical upper;
     extern /* Subroutine */ int dtrti2_(char *, char *, integer *, doublereal *, integer *,
                                         integer *),
-        xerbla_(char *, integer *);
+        xerbla_(char *, integer *, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     logical nounit;
 
@@ -185,13 +185,13 @@ f"> */
 
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    nounit = lsame_(diag, "N");
-    if(!upper && !lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    nounit = lsame_(diag, "N", 1, 1);
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if(!nounit && !lsame_(diag, "U"))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -2;
     }
@@ -206,18 +206,18 @@ f"> */
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DTRTRI", &i__1);
+        xerbla_("DTRTRI", &i__1, (ftnlen)6);
         return;
     }
 
-    /*     Quick return if possible */
+    /* Quick return if possible */
 
     if(*n == 0)
     {
         return;
     }
 
-    /*     Check for singularity if non-unit. */
+    /* Check for singularity if non-unit. */
 
     if(nounit)
     {
@@ -228,12 +228,11 @@ f"> */
             {
                 return;
             }
-            /* L10: */
         }
         *info = 0;
     }
 
-    /*     Determine the block size for this environment. */
+    /* Determine the block size for this environment. */
 
     /* Writing concatenation */
     ch__1[0] = uplo[0];
@@ -243,29 +242,29 @@ f"> */
     if(nb <= 1 || nb >= *n)
     {
 
-        /*        Use unblocked code */
+        /* Use unblocked code */
 
         dtrti2_(uplo, diag, n, &a[a_offset], lda, info);
     }
     else
     {
 
-        /*        Use blocked code */
+        /* Use blocked code */
 
         if(upper)
         {
 
-            /*           Compute inverse of upper triangular matrix */
+            /* Compute inverse of upper triangular matrix */
 
             i__1 = *n;
             i__3 = nb;
-            for(j = 1; i__3 < 0 ? j >= i__1 : j <= i__1; j += i__3)
+            for(j = 1; j <= i__1; j += i__3)
             {
                 /* Computing MIN */
                 i__4 = nb, i__5 = *n - j + 1;
                 jb = fla_min(i__4, i__5);
 
-                /*              Compute rows 1:j-1 of current block column */
+                /* Compute rows 1:j-1 of current block column */
 
                 i__4 = j - 1;
                 dtrmm_("Left", "Upper", "No transpose", diag, &i__4, &jb, &c_b18, &a[a_offset], lda,
@@ -274,20 +273,19 @@ f"> */
                 dtrsm_("Right", "Upper", "No transpose", diag, &i__4, &jb, &c_b22,
                        &a[j + j * a_dim1], lda, &a[j * a_dim1 + 1], lda);
 
-                /*              Compute inverse of current diagonal block */
+                /* Compute inverse of current diagonal block */
 
                 dtrti2_("Upper", diag, &jb, &a[j + j * a_dim1], lda, info);
-                /* L20: */
             }
         }
         else
         {
 
-            /*           Compute inverse of lower triangular matrix */
+            /* Compute inverse of lower triangular matrix */
 
             nn = (*n - 1) / nb * nb + 1;
             i__3 = -nb;
-            for(j = nn; i__3 < 0 ? j >= 1 : j <= 1; j += i__3)
+            for(j = nn; j >= 1; j += i__3)
             {
                 /* Computing MIN */
                 i__1 = nb, i__4 = *n - j + 1;
@@ -295,7 +293,7 @@ f"> */
                 if(j + jb <= *n)
                 {
 
-                    /*                 Compute rows j+jb:n of current block column */
+                    /* Compute rows j+jb:n of current block column */
 
                     i__1 = *n - j - jb + 1;
                     dtrmm_("Left", "Lower", "No transpose", diag, &i__1, &jb, &c_b18,
@@ -305,10 +303,9 @@ f"> */
                            &a[j + j * a_dim1], lda, &a[j + jb + j * a_dim1], lda);
                 }
 
-                /*              Compute inverse of current diagonal block */
+                /* Compute inverse of current diagonal block */
 
                 dtrti2_("Lower", diag, &jb, &a[j + j * a_dim1], lda, info);
-                /* L30: */
             }
         }
     }

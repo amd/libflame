@@ -25,6 +25,7 @@ void fla_test_syevx(integer argc, char **argv, test_params_t *params)
     char *op_str = "Eigen Values and Vectors in specified range";
     char *front_str = "SYEVX";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char = '\0';
 
     if(argc == 1)
     {
@@ -214,18 +215,18 @@ void fla_test_syevx_experiment(test_params_t *params, integer datatype, integer 
     /* Create input matrix parameters */
     create_matrix(datatype, &A, lda, n);
     create_realtype_vector(datatype, &w, n);
-    if(g_ext_fptr != NULL)
-    {
-        /* Initialize input matrix with custom data */
-        init_matrix_from_file(datatype, A, n, n, lda, g_ext_fptr);
-    }
-    else
+    if((!FLA_EXTREME_CASE_TEST) && (g_ext_fptr == NULL))
     {
         /*  Creating input matrix A by generating random eigen values.
             When range = V, generate EVs in given range (vl,vu)  */
         create_realtype_vector(datatype, &L, n);
         generate_matrix_from_EVs(datatype, range, n, A, lda, L, get_realtype_value(datatype, vl),
                                  get_realtype_value(datatype, vu));
+    }
+    else
+    {
+        /* Initialize input matrix with custom data */
+        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
     }
     /* Make a copy of input matrix A.
        This is required to validate the API functionality.*/
@@ -248,13 +249,20 @@ void fla_test_syevx_experiment(test_params_t *params, integer datatype, integer 
         *perf *= 4.0;
 
     /* output validation */
-    if(info == 0)
-    {
+    if((info == 0) && (!FLA_EXTREME_CASE_TEST))
         validate_syev(&jobz, &range, n, A, A_test, lda, il, iu, L, w,
                        ifail, datatype, residual);
+    /* check for output matrix when inputs as extreme values */
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        if((!check_extreme_value(datatype, n, n, A_test, lda, params->imatrix_char))
+        && (!check_extreme_value(datatype, n, i_one, w, i_one, params->imatrix_char)))
+        {
+            *residual = DBL_MAX;
+        }
     }
-
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    else
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
     free_vector(vl);

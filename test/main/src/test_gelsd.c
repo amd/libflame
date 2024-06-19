@@ -165,7 +165,7 @@ void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer 
 
     /* Initialize the test matrices */
     init_matrix(datatype, B, m, NRHS, ldb, g_ext_fptr, params->imatrix_char);
-    if(params->imatrix_char == NULL && g_ext_fptr == NULL)
+    if((!FLA_EXTREME_CASE_TEST) && (g_ext_fptr == NULL))
     {
         /* Generate input matrix with condition number <= 100 */
         create_svd_matrix(datatype, range, m, n, A, lda, s_test, GELSD_VL, GELSD_VU, i_zero, i_zero,
@@ -207,7 +207,7 @@ void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer 
     else if(FLA_EXTREME_CASE_TEST)
     {
         if((!check_extreme_value(datatype, m, n, A_save, lda, params->imatrix_char))
-           && (!check_extreme_value(datatype, m, n, B_save, ldb, params->imatrix_char)))
+           && (!check_extreme_value(datatype, m, NRHS, B_save, ldb, params->imatrix_char)))
         {
             *residual = DBL_MAX;
         }

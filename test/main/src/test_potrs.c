@@ -145,13 +145,7 @@ void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer 
 
     /* Initialize input symmetric positive definite matrix A */
     reset_matrix(datatype, n, n, A, lda);
-    if(g_ext_fptr != NULL)
-    {
-        /* Initialize input matrix with custom data */
-        init_matrix_from_file(datatype, A, n, n, lda, g_ext_fptr);
-        init_matrix_from_file(datatype, B, n, nrhs, ldb, g_ext_fptr);
-    }
-    else
+    if((!FLA_EXTREME_CASE_TEST) && (g_ext_fptr == NULL))
     {
         /* Initialize input matrix with random numbers */
         rand_matrix(datatype, B, n, nrhs, ldb);
@@ -161,8 +155,14 @@ void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer 
         /*  Initialize input matrix A by generating values in given range (VL, VU)
             using eigen values function. */
         generate_matrix_from_EVs(datatype, 'V', n, A, lda, L, POTRS_VL, POTRS_VU);
-        
+
         free_vector(L);
+    }
+    else
+    {
+        /* Initialize input matrix with custom data */
+        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+        init_matrix(datatype, B, n, nrhs, ldb, g_ext_fptr, params->imatrix_char);
     }
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
     /* cholesky factorisation of A as input to potrs */
@@ -183,7 +183,7 @@ void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer 
         *perf *= 4.0;
 
     /* Validate potrs call by computing Ax-b */
-    if(info == 0)
+    if((info == 0) && (!FLA_EXTREME_CASE_TEST))
         validate_potrs(n, nrhs, A_test, lda, X, B, ldb, datatype, residual, &vinfo);
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)

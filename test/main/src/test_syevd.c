@@ -142,18 +142,18 @@ void fla_test_syevd_experiment(test_params_t *params, integer datatype, integer 
     /* Create input matrix parameters */
     create_matrix(datatype, &A, lda, n);
     create_realtype_vector(datatype, &w, n);
-    if(g_ext_fptr != NULL)
-    {
-        /* Initialize input matrix with custom data */
-        init_matrix_from_file(datatype, A, n, n, lda, g_ext_fptr);
-    }
-    else
+    if((!FLA_EXTREME_CASE_TEST) && (g_ext_fptr == NULL))
     {
         /* input matrix A with random symmetric numbers or complex hermitian matrix */
         if(datatype == FLOAT || datatype == DOUBLE)
             rand_sym_matrix(datatype, A, n, n, lda);
         else
             rand_hermitian_matrix(datatype, n, &A, lda);
+    }
+    else
+    {
+        /* Initialize input matrix with custom data */
+        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
     }
     /* Make a copy of input matrix A. This is required to validate the API functionality.*/
     create_matrix(datatype, &A_test, lda, n);
@@ -172,7 +172,7 @@ void fla_test_syevd_experiment(test_params_t *params, integer datatype, integer 
         *perf *= 4.0;
 
     /* output validation */
-    if(info == 0)
+    if((info == 0) && (!FLA_EXTREME_CASE_TEST))
         validate_syevd(&jobz, n, A, A_test, lda, w, datatype, residual, &vinfo);
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)

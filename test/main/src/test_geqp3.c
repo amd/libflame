@@ -158,7 +158,7 @@ void fla_test_geqp3_experiment(test_params_t *params, integer datatype, integer 
         *perf *= 4.0;
 
     /* output validation */
-    if(info == 0)
+    if((info == 0) && (!FLA_EXTREME_CASE_TEST))
         validate_geqp3(m, n, A, A_test, lda, jpvt, T, datatype, residual, &vinfo);
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)

@@ -75,7 +75,8 @@ set(OVERFLOW_UNDERFLOW_VALUES_TEST_CASES "gesvd sdcz A A 1 10 1 1 10 -1 1 --imat
 
 foreach(ou_vals_test_cases IN LISTS OVERFLOW_UNDERFLOW_VALUES_TEST_CASES)
     string(REPLACE " " ";" COMMANDLINE_PARAMS ${ou_vals_test_cases})
-    set(TEST_NAME OVERFLOW_UNDERFLOW_VALUES_TEST_CASE_${TEST_NUM} )
+    string(REGEX MATCH "^([^ ]+)" TEST_NAME ${ou_vals_test_cases})
+    set(TEST_NAME OVERFLOW_UNDERFLOW_VALUES_TEST_CASE_${TEST_NUM}_${TEST_NAME})
     add_test(${TEST_NAME} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME} ${COMMANDLINE_PARAMS})
     set_tests_properties(${TEST_NAME} PROPERTIES FAIL_REGULAR_EXPRESSION "FAIL;No test was run, give valid arguments")
 MATH(EXPR TEST_NUM "${TEST_NUM}+1")

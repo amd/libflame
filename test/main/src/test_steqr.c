@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_common.h"
@@ -106,12 +106,14 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *time_min, double *residual)
 {
-    integer n, ldz, lda, info = 0;
+    integer n, ldz, lda, info = 0, realtype;
     char compz, uplo;
     void *Z = NULL, *Z_test = NULL, *A = NULL, *Q = NULL;
     void *D = NULL, *D_test = NULL, *E = NULL, *E_test = NULL;
     void *L = NULL;
     char *range = "A";
+    double resid;
+    bool ext_flag;
 
     /* Get input matrix dimensions.*/
     compz = params->eig_sym_paramslist[pci].compz;
@@ -140,52 +142,82 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
     }
 
     lda = fla_max(n, ldz);
+    realtype = get_realtype(datatype);
 
     /* Create input matrix parameters */
     create_matrix(datatype, &Z, ldz, n);
     create_matrix(datatype, &A, lda, n);
     create_matrix(datatype, &Q, lda, n);
+    create_matrix(datatype, &Z_test, ldz, n);
 
     reset_matrix(datatype, n, n, Z, ldz);
     reset_matrix(datatype, n, n, A, lda);
     reset_matrix(datatype, n, n, Q, lda);
 
-    create_vector(get_realtype(datatype), &D, n);
-    create_vector(get_realtype(datatype), &E, n - 1);
+    create_vector(realtype, &D, n);
+    create_vector(realtype, &E, n - 1);
 
-    if(g_ext_fptr != NULL)
+    if((g_ext_fptr != NULL) || FLA_EXTREME_CASE_TEST)
     {
         /* Initialize input matrix with custom data */
-        init_matrix_from_file(datatype, A, n, n, lda, g_ext_fptr);
+        init_matrix(realtype, D, 1, n, 1, g_ext_fptr, params->imatrix_char);
+        init_matrix(realtype, E, 1, n - 1, 1, g_ext_fptr, params->imatrix_char);
+        if(compz == 'V')
+        {
+            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+            if(g_ext_fptr != NULL)
+            {
+                copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
+                resid = check_orthogonality(datatype, Q, n, n, lda);
+                if(resid < *residual)
+                {
+                    /* Input matrix is orthogonal matrix for file inputs.
+                       So get the symmetric/hermitian matrix using:
+                       A = Q * T * (Q**T) */
+                    /* Form tridiagonal matrix Z by copying from matrix.*/
+                    copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
+                    fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, Q, &lda, Z, &ldz, Z_test, &ldz);
+                    fla_invoke_gemm(datatype, "N", "T", &n, &n, &n, Z_test, &ldz, Q, &lda, A, &lda);
+                }
+                else
+                {
+                    *residual = DBL_MAX;
+                    printf("Orthogonality check failed for input matrix Q.\n");
+                    return;
+                }
+            }
+            else if(FLA_EXTREME_CASE_TEST)
+            {
+                /* Get the symmetric/hermitian matrix.*/
+                form_symmetric_matrix(datatype, n, A, lda, "C");
+                /* Initialize Q matrix. */
+                init_matrix(datatype, Q, n, n, lda, g_ext_fptr, params->imatrix_char);
+            }
+        }
     }
     else
     {
         create_realtype_vector(datatype, &L, n);
         generate_matrix_from_EVs(datatype, *range, n, A, lda, L, NULL, NULL);
+        copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
+        invoke_sytrd(datatype, &uplo, compz, n, Q, lda, D, E, &info);
     }
-
-    copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
-    /* Make a copy of input matrix Z. This is required to validate the API functionality.*/
-    if(compz != 'N')
+    if(compz == 'I')
     {
-        create_matrix(datatype, &Z_test, ldz, n);
-        reset_matrix(datatype, n, n, Z_test, ldz);
+        set_identity_matrix(datatype, n, n, Z_test, ldz);
+        /* Form tridiagonal matrix Z by copying from D, E.*/
+        copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
     }
-
-    invoke_sytrd(datatype, &uplo, compz, n, Q, lda, D, E, &info);
-
-    /*form tridiagonal matrix Z by copying from matrix*/
-    copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
-
-    if(compz == 'V')
+    else if(compz == 'V')
     {
-        copy_matrix(datatype, "full", n, n, Q, lda, Z_test, ldz);
         copy_matrix(datatype, "full", n, n, A, lda, Z, ldz);
+        copy_matrix(datatype, "full", n, n, Q, lda, Z_test, ldz);
     }
-    create_vector(get_realtype(datatype), &D_test, n);
-    create_vector(get_realtype(datatype), &E_test, n - 1);
-    copy_vector(get_realtype(datatype), n, D, 1, D_test, 1);
-    copy_vector(get_realtype(datatype), n - 1, E, 1, E_test, 1);
+
+    create_vector(realtype, &D_test, n);
+    create_vector(realtype, &E_test, n - 1);
+    copy_vector(realtype, n, D, 1, D_test, 1);
+    copy_vector(realtype, n - 1, E, 1, E_test, 1);
 
     prepare_steqr_run(&compz, n, Z_test, ldz, D_test, E_test, datatype, n_repeats, time_min, &info);
 
@@ -201,13 +233,29 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         *perf = (double)(14.0 * n * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
 
-    /* output validation */
-    if(info == 0)
+    /* Output validation */
+    if((info == 0) && !FLA_EXTREME_CASE_TEST)
     {
         validate_syev(&compz, range, n, Z, Z_test, lda, 0, 0, L, D_test, NULL, datatype, residual);
     }
-
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    /* Check for output matrix & vectors when inputs are extreme values */
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        ext_flag = check_extreme_value(datatype, n, 1, D_test, 1, params->imatrix_char);
+        if((compz == 'N') && !ext_flag)
+        {
+            *residual = DBL_MAX;
+        }
+        else if(!check_extreme_value(datatype, n, n, Z_test, lda, params->imatrix_char)
+               && !ext_flag)
+        {
+            *residual = DBL_MAX;
+        }
+    }
+    else
+    {
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    }
 
     /* Free up the buffers */
     free_matrix(Z);
@@ -217,7 +265,10 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
     free_matrix(Q);
     free_vector(D_test);
     free_vector(E_test);
-    free_vector(L);
+    if(L != NULL)
+    {
+        free_vector(L);
+    }
     free_matrix(Z_test);
 }
 
@@ -225,7 +276,7 @@ void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, vo
                        integer datatype, integer n_repeats, double *time_min_, integer *info)
 {
     void *Z_save = NULL, *D_save = NULL, *E_save = NULL, *work = NULL;
-    integer i;
+    integer i, realtype;
     double time_min = 1e9, exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
@@ -235,11 +286,11 @@ void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, vo
         create_matrix(datatype, &Z_save, ldz, n);
         copy_matrix(datatype, "full", n, n, Z, ldz, Z_save, ldz);
     }
-
-    create_vector(get_realtype(datatype), &D_save, n);
-    create_vector(get_realtype(datatype), &E_save, n - 1);
-    copy_vector(get_realtype(datatype), n, D, 1, D_save, 1);
-    copy_vector(get_realtype(datatype), n - 1, E, 1, E_save, 1);
+    realtype = get_realtype(datatype);
+    create_vector(realtype, &D_save, n);
+    create_vector(realtype, &E_save, n - 1);
+    copy_vector(realtype, n, D, 1, D_save, 1);
+    copy_vector(realtype, n - 1, E, 1, E_save, 1);
 
     *info = 0;
     for(i = 0; i < n_repeats && *info == 0; ++i)
@@ -250,10 +301,10 @@ void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, vo
         {
             copy_matrix(datatype, "full", n, n, Z_save, ldz, Z, ldz);
         }
-        copy_vector(get_realtype(datatype), n, D_save, 1, D, 1);
-        copy_vector(get_realtype(datatype), n - 1, E_save, 1, E, 1);
+        copy_vector(realtype, n, D_save, 1, D, 1);
+        copy_vector(realtype, n - 1, E_save, 1, E, 1);
 
-        create_vector(get_realtype(datatype), &work, 2 * (n - 1));
+        create_vector(realtype, &work, 2 * (n - 1));
         exe_time = fla_test_clock();
 
         /* call to API */

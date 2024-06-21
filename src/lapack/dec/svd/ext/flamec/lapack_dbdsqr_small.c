@@ -7,6 +7,9 @@
  *  Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
  */
 #include "FLAME.h"
+#if FLA_ENABLE_AOCL_BLAS
+#include "blis.h"
+#endif
 #include "FLA_f2c.h" /* Table of constant values */
 #include "fla_dgeqrf_small_avx2.h"
 
@@ -275,12 +278,14 @@ int lapack_dbdsqr_small(char *uplo, integer *n, integer *ncvt, integer *nru,
     doublereal cosl;
     integer isub, iter;
     doublereal unfl, sinl, cosr, smin, smax, sinr;
+#ifndef FLA_ENABLE_AOCL_BLAS
     extern /* Subroutine */
         void
         drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
               doublereal *),
         dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     extern logical lsame_(char *, char *, integer a, integer b);
+#endif
     doublereal oldcs;
     integer oldll;
     doublereal shift, sigmn, oldsn;

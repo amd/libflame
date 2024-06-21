@@ -21,6 +21,7 @@ void invoke_syevx(integer datatype, char *jobz, char *range, char *uplo, integer
 
 void fla_test_syevx(integer argc, char **argv, test_params_t *params)
 {
+    srand(1); /* Setting the seed for random input generation values */
     char *op_str = "Eigen Values and Vectors in specified range";
     char *front_str = "SYEVX";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;

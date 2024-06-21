@@ -30,8 +30,8 @@ gghrd_threshold 10.0 10.0 10.0 10.0
 ggbal_threshold 10.0 10.0 10.0 10.0
 GNSEP_threshold 5.0 10.0 20.0 30.0
 side_tgevc L R B B
-jobvsl N V V V
-jobvsr V N V V
+jobvsl N V N V
+jobvsr V N N V
 sort_gges N N N N
 sense_ggsex N N N N
 balance_ggevx N P S B

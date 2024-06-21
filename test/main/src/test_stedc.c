@@ -48,7 +48,7 @@ void fla_test_stedc(integer argc, char **argv, test_params_t *params)
         num_types = strlen(argv[2]);
         params->eig_sym_paramslist[0].compz = argv[3][0];
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
-        params->eig_sym_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+        params->eig_sym_paramslist[0].ldz = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
 
         g_lwork = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         g_liwork = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
@@ -110,76 +110,113 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *t, double *residual)
 {
-    integer n, info = 0, realtype, lda, ldz, vinfo = 0;
+    integer n, info = 0, realtype, lda, ldz;
     void *D = NULL, *D_test = NULL, *E = NULL, *E_test = NULL, *Z_test = NULL;
-    void *Z_input = NULL, *A = NULL;
+    void *Z = NULL, *A = NULL, *L = NULL, *Q = NULL;
     double time_min = 1e9;
     char compz, uplo;
+    char *range = "A";
+    double resid;
 
     /* Get input matrix dimensions. */
     n = q_cur;
 
     /* Initialize parameter needed for STEDC() call. */
     compz = params->eig_sym_paramslist[pci].compz;
-    lda = params->eig_sym_paramslist[pci].lda;
+    ldz = params->eig_sym_paramslist[pci].ldz;
     *residual = params->eig_sym_paramslist[pci].threshold_value;
+    
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
     if(config_data)
     {
-        if(lda == -1)
+        if(ldz == -1)
         {
-            lda = fla_max(1, n);
+            if(compz == 'N')
+            {
+                ldz = 1;
+            }
+            else
+            {
+                ldz = fla_max(1, n);
+            }
         }
     }
 
+    lda = fla_max(ldz, n);
+
     create_matrix(datatype, &A, lda, n);
+    create_matrix(datatype, &Z, ldz, n);
+    create_matrix(datatype, &Z_test, ldz, n);
+    create_matrix(datatype, &Q, lda, n);
+
     reset_matrix(datatype, lda, n, A, lda);
+    reset_matrix(datatype, ldz, n, Z, ldz);
+    reset_matrix(datatype, ldz, n, Z_test, ldz);
+    reset_matrix(datatype, lda, n, Q, lda);
 
     realtype = get_realtype(datatype);
     create_vector(realtype, &D, n);
     create_vector(realtype, &E, n - 1);
 
-    /* Initialize input matrix with random/custom data */
-    init_matrix(realtype, D, 1, n, 1, g_ext_fptr, params->imatrix_char);
-    init_matrix(realtype, E, 1, n - 1, 1, g_ext_fptr, params->imatrix_char);
-    
+    if(g_ext_fptr || params->imatrix_char)
+    {
+        /* Initialize input matrix with random/custom data */
+        init_matrix(realtype, D, 1, n, 1, g_ext_fptr, params->imatrix_char);
+        init_matrix(realtype, E, 1, n - 1, 1, g_ext_fptr, params->imatrix_char);
+
+        if(compz == 'V')
+        {
+            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+            if(g_ext_fptr)
+            {
+                copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
+                resid = check_orthogonality(datatype, Q, n, n, lda);
+                if(resid < *residual)
+                {
+                    /* Input matrix is orthogonal matrix for file inputs.
+                       So get the symmetric/hermitian matrix using:
+                       A = Q * T * (Q**T) */
+                    copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
+                    fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, Q, &lda, Z, &ldz, Z_test, &ldz);
+                    fla_invoke_gemm(datatype, "N", "T", &n, &n, &n, Z_test, &ldz, Q, &lda, A, &lda);
+                }
+                else
+                {
+                    printf("Error: Input matrix A is not orthogonal\n");
+                    *residual = DBL_MAX;
+                    return;
+                }
+            }
+            else if(FLA_EXTREME_CASE_TEST)
+            {
+                /* Get the symmetric/hermitian matrix.*/
+                form_symmetric_matrix(datatype, n, A, lda, "C");
+                /* Initialize Q matrix */
+                init_matrix(datatype, Q, n, n, lda, g_ext_fptr, params->imatrix_char);
+            }
+        }
+    }
+    else
+    {
+        create_realtype_vector(datatype, &L, n);
+        generate_matrix_from_EVs(datatype, *range, n, A, lda, L, NULL, NULL);
+        copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
+        uplo = 'U';
+        invoke_sytrd(datatype, &uplo, compz, n, Q, lda, D, E, &info);
+    }
     if(compz == 'I')
     {
-        copy_sym_tridiag_matrix(datatype, D, E, n, n, A, lda);
+        set_identity_matrix(datatype, n, n, Z_test, ldz);
+        copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
     }
-    else if (compz == 'V')
+    else if(compz == 'V')
     {
-        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
-        /* Get the symmetric/hermitian matrix.*/
-        form_symmetric_matrix(datatype, n, A, lda, "C");
+        copy_matrix(datatype, "full", n, n, Q, lda, Z_test, ldz);
+        copy_matrix(datatype, "full", n, n, A, lda, Z, ldz);
     }
 
-    ldz = lda;
-    create_matrix(datatype, &Z_input, ldz, n);
-    if (compz != 'N')
-    {
-        /* Make a copy of input matrices. This is required to validate the API functionality. */
-        copy_matrix(datatype, "full", n, n, A, lda, Z_input, ldz);
-    }
-    create_matrix(datatype, &Z_test, ldz, n);
-
-    /* Call SYTRD(), ORGTR() to get tridiagonal, orthogonal/unitary matrix when compz = V. */
-    if((compz == 'V') && (params->imatrix_char == NULL) && (g_ext_fptr == NULL))
-    {
-        /* Initialize parameter needed for SYTRD() call. */
-        uplo = 'U';
-        /* invoke_sytrd() internally calls ORGTR() to get orthogonal matrix.*/
-        invoke_sytrd(datatype, &uplo, compz, n, A, lda, D, E, &info);
-    }
-
-    /* Copy orthogonal/unitary matrix to Z_test. */
-    if(compz == 'V')
-    {
-        copy_matrix(datatype, "full", n, n, A, lda, Z_test, ldz);
-    }
-    
     create_vector(realtype, &D_test, n);
     copy_vector(realtype, n, D, 1, D_test, 1);
     create_vector(realtype, &E_test, n - 1);
@@ -204,17 +241,27 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Output validation. */
-    if(!params->imatrix_char && (info == 0))
+    if(!FLA_EXTREME_CASE_TEST && (info == 0))
     {
-        validate_stedc(compz, n, D_test, Z_input, Z_test, ldz, datatype, residual, &vinfo);
+        validate_syev(&compz, range, n, Z, Z_test, ldz, 0, 0, L, D_test, NULL, datatype, residual);
     }
     /* Check for output matrix & vectors when inputs are extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {
-        if(!check_extreme_value(datatype, n, n, Z_test, lda, params->imatrix_char)
-           && !check_extreme_value(datatype, n, 1, D_test, 1, params->imatrix_char))
+        if(compz == 'N')
         {
-            *residual = DBL_MAX;
+            if(!check_extreme_value(datatype, n, 1, D_test, 1, params->imatrix_char))
+            {
+                *residual = DBL_MAX;
+            }
+        }
+        else
+        {
+            if(!check_extreme_value(datatype, n, n, Z_test, lda, params->imatrix_char)
+               && !check_extreme_value(datatype, n, 1, D_test, 1, params->imatrix_char))
+            {
+                *residual = DBL_MAX;
+            }
         }
     }
     else
@@ -223,13 +270,15 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Free up buffers. */
-    free_matrix(Z_input);
+    free_matrix(Z);
     free_matrix(Z_test);
     free_vector(D_test);
     free_vector(E_test);
     free_matrix(A);
     free_vector(D);
     free_vector(E);
+    free_vector(L);
+    free_matrix(Q);
 }
 
 void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, integer ldz,

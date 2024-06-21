@@ -42,6 +42,7 @@ void validate_syev(char* jobz, char* range, integer n, void* A, void* A_test,
 {
     if(n == 0)
         return;
+    *residual = 0;
 
     sort_realtype_vector(datatype, "A", n, L, 1);
 

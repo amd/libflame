@@ -440,3 +440,95 @@ void validate_ggev(char *jobvl, char *jobvr, integer n, void *A, integer lda, vo
         }
     }
 }
+/* Test case to check if the given set of alpha, beta and alpha_copy, beta_copy are same or not */
+void validate_ggev_EVs(integer m, void *alpha, void *alphar, void *alphai, void *beta,
+                       void *alpha_copy, void *alphar_copy, void *alphai_copy, void *beta_copy,
+                       integer datatype, double *residual)
+{
+    void *work = NULL;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            float norm, norm_a, norm_b, eps, resid1, resid2, resid3;
+            eps = fla_lapack_slamch("P");
+
+            norm_a = fla_lapack_slange("1", &m, &i_one, alphar_copy, &i_one, work);
+            saxpy_(&m, &s_n_one, alphar, &i_one, alphar_copy, &i_one);
+            norm = fla_lapack_slange("1", &m, &i_one, alphar_copy, &i_one, work);
+            resid1 = norm / (eps * norm_a * m);
+
+            norm_a = fla_lapack_slange("1", &m, &i_one, alphai_copy, &i_one, work);
+            saxpy_(&m, &s_n_one, alphai, &i_one, alphai_copy, &i_one);
+            norm = fla_lapack_slange("1", &m, &i_one, alphai_copy, &i_one, work);
+            resid2 = norm / (eps * norm_a * m);
+
+            norm_b = fla_lapack_slange("1", &m, &i_one, beta_copy, &i_one, work);
+            saxpy_(&m, &s_n_one, beta, &i_one, beta_copy, &i_one);
+            norm = fla_lapack_slange("1", &m, &i_one, beta_copy, &i_one, work);
+            resid3 = norm / (eps * norm_b * m);
+
+            *residual = fla_max(resid3, fla_max(resid1, resid2));
+            break;
+        }
+        case DOUBLE:
+        {
+            double norm, norm_a, norm_b, eps, resid1, resid2, resid3;
+            eps = fla_lapack_dlamch("P");
+
+            norm_a = fla_lapack_dlange("1", &m, &i_one, alphar_copy, &i_one, work);
+            daxpy_(&m, &d_n_one, alphar, &i_one, alphar_copy, &i_one);
+            norm = fla_lapack_dlange("1", &m, &i_one, alphar_copy, &i_one, work);
+            resid1 = norm / (eps * norm_a * m);
+
+            norm_a = fla_lapack_dlange("1", &m, &i_one, alphai_copy, &i_one, work);
+            daxpy_(&m, &d_n_one, alphai, &i_one, alphai_copy, &i_one);
+            norm = fla_lapack_dlange("1", &m, &i_one, alphai_copy, &i_one, work);
+            resid2 = norm / (eps * norm_a * m);
+
+            norm_b = fla_lapack_dlange("1", &m, &i_one, beta_copy, &i_one, work);
+            daxpy_(&m, &d_n_one, beta, &i_one, beta_copy, &i_one);
+            norm = fla_lapack_dlange("1", &m, &i_one, beta_copy, &i_one, work);
+            resid3 = norm / (eps * norm_b * m);
+
+            *residual = fla_max(resid3, fla_max(resid1, resid2));
+            break;
+        }
+        case COMPLEX:
+        {
+            float norm, norm_a, norm_b, eps, resid1, resid2;
+            eps = fla_lapack_slamch("P");
+
+            norm_a = fla_lapack_slange("1", &m, &i_one, alpha_copy, &i_one, work);
+            saxpy_(&m, &s_n_one, alpha, &i_one, alpha_copy, &i_one);
+            norm = fla_lapack_slange("1", &m, &i_one, alpha_copy, &i_one, work);
+            resid1 = norm / (eps * norm_a * m);
+
+            norm_b = fla_lapack_slange("1", &m, &i_one, beta_copy, &i_one, work);
+            saxpy_(&m, &s_n_one, beta, &i_one, beta_copy, &i_one);
+            norm = fla_lapack_slange("1", &m, &i_one, beta_copy, &i_one, work);
+            resid2 = norm / (eps * norm_b * m);
+
+            *residual = (double)fla_max(resid1, resid2);
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            double norm, norm_a, norm_b, eps, resid1, resid2;
+            eps = fla_lapack_dlamch("P");
+
+            norm_a = fla_lapack_dlange("1", &m, &i_one, alpha_copy, &i_one, work);
+            daxpy_(&m, &d_n_one, alpha, &i_one, alpha_copy, &i_one);
+            norm = fla_lapack_dlange("1", &m, &i_one, alpha_copy, &i_one, work);
+            resid1 = norm / (eps * norm_a * m);
+
+            norm_b = fla_lapack_dlange("1", &m, &i_one, beta_copy, &i_one, work);
+            daxpy_(&m, &d_n_one, beta, &i_one, beta_copy, &i_one);
+            norm = fla_lapack_dlange("1", &m, &i_one, beta_copy, &i_one, work);
+            resid2 = norm / (eps * norm_b * m);
+
+            *residual = fla_max(resid1, resid2);
+            break;
+        }
+    }
+}

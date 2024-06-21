@@ -211,9 +211,65 @@ void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p
         *perf *= 4.0;
 
     /* output validation */
-    if(!params->imatrix_char && (JOBVL == 'V' || JOBVR == 'V') && info == 0)
-        validate_ggev(&JOBVL, &JOBVR, m, A, lda, B, ldb, alpha, alphar, alphai, beta, VL, ldvl, VR,
-                      ldvr, datatype, residual, &vinfo);
+    if(!params->imatrix_char && info == 0)
+    {
+        if(JOBVL == 'V' || JOBVR == 'V')
+        {
+            validate_ggev(&JOBVL, &JOBVR, m, A, lda, B, ldb, alpha, alphar, alphai, beta, VL, ldvl,
+                          VR, ldvr, datatype, residual, &vinfo);
+        }
+        else
+        { /* For JOBVL = JOBVR = N, eigen values are validated by comparing them with
+             the eigen values generated from JOBVL = V, JOBVR = N case */
+            if(JOBVL == 'N' && JOBVR == 'N')
+            {
+                void *A_copy = NULL, *B_copy = NULL, *beta_copy = NULL, *VL_copy = NULL;
+                void *alphar_copy = NULL, *alphai_copy = NULL, *alpha_copy = NULL;
+                double time_min_copy = 1e9;
+
+                g_lwork = -1;
+                create_matrix(datatype, &VL_copy, m, m);
+                create_matrix(datatype, &A_copy, lda, m);
+                create_matrix(datatype, &B_copy, ldb, m);
+                if(datatype == FLOAT || datatype == DOUBLE)
+                {
+                    create_vector(datatype, &alphar_copy, m);
+                    create_vector(datatype, &alphai_copy, m);
+                }
+                else
+                {
+                    create_vector(datatype, &alpha_copy, m);
+                }
+                create_vector(datatype, &beta_copy, m);
+                copy_matrix(datatype, "full", m, m, A, lda, A_copy, lda);
+                copy_matrix(datatype, "full", m, m, B, ldb, B_copy, ldb);
+
+                prepare_ggev_run("V", &JOBVR, m, A_copy, lda, B_copy, ldb, alpha_copy, alphar_copy,
+                                 alphai_copy, beta_copy, VL_copy, m, NULL, ldvr, datatype,
+                                 n_repeats, &time_min_copy, &info);
+                /* Valdiate eigen values from both the runs
+                  (JOBVL = JOBVR = N with that of JOBVL = V and JOBVR = N)*/
+                if(info == 0)
+                {
+                    validate_ggev_EVs(m, alpha, alphar, alphai, beta, alpha_copy, alphar_copy,
+                                      alphai_copy, beta_copy, datatype, residual);
+                }
+                free_matrix(VL_copy);
+                free_matrix(A_copy);
+                free_matrix(B_copy);
+                if(datatype == FLOAT || datatype == DOUBLE)
+                {
+                    free_vector(alphar_copy);
+                    free_vector(alphai_copy);
+                }
+                else
+                {
+                    free_vector(alpha_copy);
+                }
+                free_vector(beta_copy);
+            }
+        }
+    }
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {

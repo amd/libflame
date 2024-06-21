@@ -109,12 +109,15 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *time_min, double *residual)
 {
-    integer n, ldz;
-    integer info = 0, vinfo = 0;
+    integer n, ldz, lda;
+    integer info = 0;
     char jobz;
     void *Z = NULL, *Z_test = NULL;
     void *D = NULL, *D_test = NULL;
     void *E = NULL, *E_test = NULL;
+    void *Q = NULL, *A = NULL, *L = NULL;
+    char *range = "A";
+    char uplo = 'U';
 
     /* Get input matrix dimensions.*/
     jobz = params->eig_sym_paramslist[pci].jobz;
@@ -134,17 +137,42 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
     {
         if(ldz == -1)
         {
-            ldz = fla_max(1, n);
+            if(jobz == 'N')
+            {
+                ldz = 1;
+            }
+            else
+            {
+                ldz = fla_max(1, n);
+            }
         }
     }
+
+    lda = fla_max(n, ldz);
 
     /* Create input matrix parameters */
     create_matrix(datatype, &Z, ldz, n);
     create_vector(datatype, &D, n);
     create_vector(datatype, &E, n - 1);
 
-    init_matrix(datatype, D, 1, n, 1, g_ext_fptr, params->imatrix_char);
-    init_matrix(datatype, E, 1, n - 1, 1, g_ext_fptr, params->imatrix_char);
+    create_matrix(datatype, &Q, lda, n);
+    reset_matrix(datatype, n, n, Q, lda);
+    create_matrix(datatype, &A, lda, n);
+    reset_matrix(datatype, n, n, A, lda);
+
+    if(g_ext_fptr != NULL || params->imatrix_char)
+    {
+        init_matrix(datatype, D, 1, n, 1, g_ext_fptr, params->imatrix_char);
+        init_matrix(datatype, E, 1, n - 1, 1, g_ext_fptr, params->imatrix_char);
+    }
+    else
+    {
+        /* Generate input from known eigen values */
+        create_realtype_vector(datatype, &L, n);
+        generate_matrix_from_EVs(datatype, *range, n, A, lda, L, NULL, NULL);
+        copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
+        invoke_sytrd(datatype, &uplo, jobz, n, Q, lda, D, E, &info);
+    }
     // Get symmetric tridiagonal matrix from D, E and use for validation.
     copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
 
@@ -167,7 +195,7 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
     /* output validation */
     if(!params->imatrix_char && info == 0)
     {
-        validate_syevd(&jobz, n, Z, Z_test, ldz, D_test, datatype, residual, &vinfo);
+        validate_syev(&jobz, range, n, Z, Z_test, ldz, 0, 0, L, D_test, NULL, datatype, residual);
     }
     /* Check for output matrix & vectors when inputs are extreme values */
     else if(FLA_EXTREME_CASE_TEST)

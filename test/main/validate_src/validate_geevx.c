@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
 /*! @file validate_geevx.c
@@ -12,7 +12,8 @@
 void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer m, void *A,
                     void *A_test, integer lda, void *VL, integer ldvl, void *VR, integer ldvr,
                     void *w, void *wr, void *wi, void *scale, void *abnrm, void *rconde,
-                    void *rcondv, integer datatype, double *residual, integer *info)
+                    void *rcondv, integer datatype, double *residual, integer *info,
+                    void *wr_in, void *wi_in)
 {
     if(m == 0)
         return;
@@ -25,17 +26,23 @@ void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer
 
     reset_matrix(datatype, m, m, lambda, m);
     reset_matrix(datatype, m, m, Vlambda, m);
+    sort_vector(datatype, "A", m, wr_in, 1);
 
     if(datatype == FLOAT || datatype == DOUBLE)
     {
         create_block_diagonal_matrix(datatype, wr, wi, lambda, m, m, m);
+        sort_vector(datatype, "A", m, wr, 1);
+        sort_vector(datatype, "A", m, wi, 1);
+
+        add_negative_values(datatype, wi_in, m);
+        sort_vector(datatype, "A", m, wi_in, 1);
     }
 
     switch(datatype)
     {
         case FLOAT:
         {
-            float norm, norm_A, eps, resid1, resid2;
+            float norm, norm_A, norm_W, resid1, resid2, eps;
             eps = fla_lapack_slamch("P");
             if(*jobvl == 'V' && *jobvr == 'V')
             {
@@ -78,11 +85,26 @@ void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer
                 resid1 = norm / (eps * norm_A * (float)m);
                 *residual = (double)resid1;
             }
+            if(wr_in != NULL && wi_in != NULL)
+            {
+                /* Test 3: In case of specific input generation, compare input and
+                           output eigen values */
+                norm_W = fla_lapack_slange("1", &m, &i_one, wr_in, &i_one, work);
+                saxpy_(&m, &s_n_one, wr, &i_one, wr_in, &i_one);
+                norm = fla_lapack_slange("1", &m, &i_one, wr_in, &i_one, work);
+                resid1 = norm / (eps * norm_W * m);
+
+                norm_W = fla_lapack_slange("1", &m, &i_one, wi_in, &i_one, work);
+                saxpy_(&m, &s_n_one, wi, &i_one, wi_in, &i_one);
+                norm = fla_lapack_slange("1", &m, &i_one, wi_in, &i_one, work);
+                resid2 = norm / (eps * norm_W * m);
+                *residual = (double)fla_max(*residual, (double)fla_max(resid1, resid2));
+            }
             break;
         }
         case DOUBLE:
         {
-            double norm, norm_A, eps, resid1, resid2;
+            double norm, norm_A, norm_W, eps, resid1, resid2;
             eps = fla_lapack_dlamch("P");
 
             if(*jobvl == 'V' && *jobvr == 'V')
@@ -126,11 +148,26 @@ void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer
                 resid2 = norm / (eps * norm_A * (double)m);
                 *residual = (double)resid2;
             }
+            if(wr_in != NULL && wi_in != NULL)
+            {
+                /* Test 3: In case of specific input generation, compare input and
+                           output eigen values */
+                norm_W = fla_lapack_dlange("1", &m, &i_one, wr_in, &i_one, work);
+                daxpy_(&m, &d_n_one, wr, &i_one, wr_in, &i_one);
+                norm = fla_lapack_dlange("1", &m, &i_one, wr_in, &i_one, work);
+                resid1 = norm / (eps * norm_W * m);
+
+                norm_W = fla_lapack_dlange("1", &m, &i_one, wi_in, &i_one, work);
+                daxpy_(&m, &d_n_one, wi, &i_one, wi_in, &i_one);
+                norm = fla_lapack_dlange("1", &m, &i_one, wi_in, &i_one, work);
+                resid2 = norm / (eps * norm_W * m);
+                *residual = fla_max(*residual, fla_max(resid1, resid2));
+            }
             break;
         }
         case COMPLEX:
         {
-            float norm, norm_A, eps, resid1, resid2;
+            float norm, norm_A, norm_W, eps, resid1, resid2, resid3;
             integer incr;
             incr = m + 1;
             eps = fla_lapack_slamch("P");
@@ -177,11 +214,22 @@ void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer
                 resid2 = norm / (eps * norm_A * (float)m);
                 *residual = (double)resid2;
             }
+            if(wr_in != NULL)
+            {
+                /* Test 3: In case of specific input generation, compare input and
+                           output eigen values (A-B = 0) */
+                sort_vector(datatype, "A", m, w, 1);
+                norm_W = fla_lapack_clange("1", &m, &i_one, wr_in, &i_one, work);
+                caxpy_(&m, &c_n_one, w, &i_one, wr_in, &i_one);
+                norm = fla_lapack_clange("1", &m, &i_one, wr_in, &i_one, work);
+                resid3 = norm / (eps * norm_W * m);
+                *residual = (double)fla_max(*residual, resid3);
+            }
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_A, eps, resid1, resid2;
+            double norm, norm_A, norm_W, eps, resid1, resid2, resid3;
             integer incr;
             incr = m + 1;
             eps = fla_lapack_dlamch("P");
@@ -227,6 +275,17 @@ void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer
                 norm = fla_lapack_zlange("1", &m, &m, Vlambda, &m, work);
                 resid2 = norm / (eps * norm_A * (double)m);
                 *residual = (double)resid2;
+            }
+            if(wr_in != NULL)
+            {
+                /* Test 3: In case of specific input generation, compare input and
+                           output eigen values (A-B = 0) */
+                sort_vector(datatype, "A", m, w, 1);
+                norm_W = fla_lapack_zlange("1", &m, &i_one, wr_in, &i_one, work);
+                zaxpy_(&m, &z_n_one, w, &i_one, wr_in, &i_one);
+                norm = fla_lapack_zlange("1", &m, &i_one, wr_in, &i_one, work);
+                resid3 = norm / (eps * norm_W * m);
+                *residual = fla_max(*residual, resid3);
             }
             break;
         }

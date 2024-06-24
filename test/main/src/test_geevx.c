@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_common.h"
@@ -23,9 +23,11 @@ void invoke_geevx(integer datatype, char *balanc, char *jobvl, char *jobvr, char
 
 void fla_test_geevx(integer argc, char **argv, test_params_t *params)
 {
+    srand(1); /* Setting the seed for random input genetation values */
     char *op_str = "Eigen Decomposition of non symmetric matrix";
     char *front_str = "GEEVX";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char = '\0';
 
     if(argc == 1)
     {
@@ -124,7 +126,7 @@ void fla_test_geevx_experiment(test_params_t *params, integer datatype, integer 
     integer ilo, ihi;
     void *A = NULL, *wr = NULL, *wi = NULL, *w = NULL, *VL = NULL, *VR = NULL;
     void *scale = NULL, *abnrm = NULL, *rconde = NULL, *rcondv = NULL;
-    void *A_test = NULL;
+    void *A_test = NULL, *L = NULL, *wr_in = NULL, *wi_in = NULL, *scal = NULL;
     char balanc, jobvl, jobvr, sense;
 
     /* Get input matrix dimensions.*/
@@ -197,7 +199,29 @@ void fla_test_geevx_experiment(test_params_t *params, integer datatype, integer 
         create_vector(datatype, &wi, m);
     }
 
-    init_matrix(datatype, A, m, m, lda, g_ext_fptr, params->imatrix_char);
+    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+    {
+        init_matrix(datatype, A, m, m, lda, g_ext_fptr, params->imatrix_char);
+    }
+    else
+    {
+        /*  Creating input matrix A by generating random eigen values */
+        create_matrix(datatype, &L, m, m);
+        generate_asym_matrix_from_EVs(datatype, m, A, lda, L, params->imatrix_char, scal);
+
+        /* Diagonal and sub-diagonals(upper and lower sub-diagonal together
+           contains imaginary parts) contain real and imaginary parts
+           of eigen values respectively. Storing them for valiation purpose */
+        create_vector(datatype, &wr_in, m);
+        get_diagonal(datatype, L, m, m, m, wr_in);
+
+        if(datatype == FLOAT || datatype == DOUBLE)
+        {
+            create_vector(datatype, &wi_in, m);
+            reset_vector(datatype, wi_in, m, 1);
+            get_subdiagonal(datatype, L, m, m, m, wi_in);
+        }
+    }
 
     /* Make a copy of input matrix A. This is required to validate the API functionality. */
     create_matrix(datatype, &A_test, lda, m);
@@ -220,8 +244,8 @@ void fla_test_geevx_experiment(test_params_t *params, integer datatype, integer 
     /* output validation */
     if(info == 0)
         validate_geevx(&jobvl, &jobvr, &sense, &balanc, m, A, A_test, lda, VL, ldvl, VR, ldvr, w,
-                       wr, wi, scale, abnrm, rconde, rcondv, datatype, residual, &vinfo);
-
+                       wr, wi, scale, abnrm, rconde, rcondv, datatype, residual, &vinfo,
+                       wr_in, wi_in);
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
@@ -241,6 +265,16 @@ void fla_test_geevx_experiment(test_params_t *params, integer datatype, integer 
     {
         free_vector(wr);
         free_vector(wi);
+    }
+
+    if((g_ext_fptr == NULL) && !(FLA_EXTREME_CASE_TEST))
+    {
+        free_matrix(L);
+        free_vector(wr_in);
+        if(datatype == FLOAT || datatype == DOUBLE)
+        {
+            free_vector(wi_in);
+        }
     }
 }
 

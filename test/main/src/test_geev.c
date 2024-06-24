@@ -19,6 +19,7 @@ void invoke_geev(integer datatype, char *jobvl, char *jobvr, integer *n, void *a
 
 void fla_test_geev(integer argc, char **argv, test_params_t *params)
 {
+    srand(1); /* Setting the seed for random input genetation values */
     char *op_str = "Eigen Decomposition of non symmetric matrix";
     char *front_str = "GEEV";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;

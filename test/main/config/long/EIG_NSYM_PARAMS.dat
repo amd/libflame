@@ -26,8 +26,8 @@ trana_complex N T C T
 tranb_real N T T N
 tranb_complex N T T C
 isgn 1 -1 -1 1
-gghrd_threshold 10.0 10.0 10.0 10.0
-ggbal_threshold 10.0 10.0 10.0 10.0
+gghrd_threshold 10.0 10.0 20.0 30.0
+ggbal_threshold 10.0 10.0 20.0 30.0
 GNSEP_threshold 5.0 10.0 20.0 30.0
 side_tgevc L R B B
 jobvsl N V N V

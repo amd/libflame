@@ -131,7 +131,8 @@ void validate_syev(char *jobz, char *range, integer n, void *A, void *A_test, in
 void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, void *A,
                      void *A_test, integer lda, void *vl, void *vu, integer il, integer iu,
                      integer ns, void *s, void *s_test, void *U, integer ldu, void *V, integer ldvt,
-                     integer datatype, double *residual, integer *info, FILE *g_ext_fptr);
+                     integer datatype, double *residual, integer *info, FILE *g_ext_fptr,
+                     void *scal, char imatrix);
 /* This function validates LU factorization output by reconstructing into input band storage
    matrix.*/
 void validate_gbtrf(integer m_A, integer n_A, integer kl, integer ku, void *AB, void *AB_test,

@@ -9,7 +9,8 @@
 #include "test_common.h"
 
 void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
-                    integer lda, integer *IPIV, integer datatype, double *residual, integer *info)
+                    integer lda, integer *IPIV, integer datatype, double *residual, integer *info,
+                    char imatrix)
 {
     if(m_A == 0 || n_A == 0)
         return;
@@ -57,7 +58,7 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
     {
         case FLOAT:
         {
-            float norm, norm_A, norm_X, eps, resid1, resid2;
+            float norm = 0, norm_A = 0, norm_X = 0, eps, resid1, resid2;
             eps = fla_lapack_slamch("Epsilon");
             /* Test 1 */
             if(m_A == n_A)
@@ -72,7 +73,7 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
                 /* Compute X - X' */
                 saxpy_(&m_A, &s_n_one, B, &i_one, X, &i_one);
                 norm = snrm2_(&m_A, X, &i_one);
-                resid1 = norm / (m_A * norm_X * eps);
+                resid1 = (norm / norm_X) / (m_A * eps);
             }
             else
             {
@@ -82,7 +83,20 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
             /* Test 2 */
             /* Unity diagonal elements to Lower triangular matrix */
             fla_lapack_slaset("U", &m_L, &n_L, &s_zero, &s_one, L, &m_L);
-            norm_A = fla_lapack_slange("1", &m_A, &n_A, A, &lda, work);
+            if(imatrix == 'O')
+            {
+                for(int i = 0; i < n_A; i++)
+                {
+                    /* To handle large size values nrm2 is used */
+                    float *vector = (float *)A + i * lda;
+                    norm_A = fla_max(norm_A, snrm2_(&m_A, vector, &i_one));
+                }
+            }
+            else
+            {
+                norm_A = fla_lapack_slange("F", &m_A, &n_A, A, &lda, work);
+            }
+
             /* T = L * U  */
             sgemm_("N", "N", &m_A, &n_A, &k, &s_one, L, &m_L, U, &m_U, &s_zero, T, &m_A);
             /*  Row interchanges based on IPIV values */
@@ -90,16 +104,27 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
             /* T - A --> L*U - A */
             saxpy_(&m_n_vector, &s_n_one, A_save, &i_one, T, &i_one);
             /* Compute norm( L*U - A ) / ( N * norm(A) * EPS ) */
-            norm = fla_lapack_slange("1", &m_A, &n_A, T, &m_A, work);
-
-            resid2 = norm / (n_A * norm_A * eps);
+            if(imatrix == 'O')
+            {
+                for(int i = 0; i < n_A; i++)
+                {
+                    /* To handle large size values nrm2 is used */
+                    float *vector = (float *)T + i * m_A;
+                    norm = fla_max(norm, snrm2_(&m_A, vector, &i_one));
+                }
+            }
+            else
+            {
+                norm = fla_lapack_slange("F", &m_A, &n_A, T, &m_A, work);
+            }
+            resid2 = (norm / norm_A) / (n_A * eps);
             *residual = (double)fla_max(resid1, resid2);
             break;
         }
 
         case DOUBLE:
         {
-            double norm, norm_A, norm_X, eps, resid1, resid2;
+            double norm = 0, norm_A = 0, norm_X, eps, resid1, resid2;
 
             eps = fla_lapack_dlamch("Epsilon");
             /* Test 1 */
@@ -115,7 +140,7 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
                 /* Compute X - X' */
                 daxpy_(&m_A, &d_n_one, B, &i_one, X, &i_one);
                 norm = dnrm2_(&m_A, X, &i_one);
-                resid1 = norm / (m_A * norm_X * eps);
+                resid1 = (norm / norm_X) / (m_A * eps);
             }
             else
             {
@@ -125,7 +150,19 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
             /* Test 2 */
             /* Unity diagonal elements to Lower triangular matrix */
             fla_lapack_dlaset("U", &m_L, &n_L, &d_zero, &d_one, L, &m_L);
-            norm_A = fla_lapack_dlange("1", &m_A, &n_A, A, &lda, work);
+            if(imatrix == 'O')
+            {
+                for(int i = 0; i < n_A; i++)
+                {
+                    /* To handle large size values nrm2 is used */
+                    double *vector = (double *)A + i * lda;
+                    norm_A = fla_max(norm_A, dnrm2_(&m_A, vector, &i_one));
+                }
+            }
+            else
+            {
+                norm_A = fla_lapack_dlange("F", &m_A, &n_A, A, &lda, work);
+            }
             /* T = L * U  */
             dgemm_("N", "N", &m_A, &n_A, &k, &d_one, L, &m_L, U, &m_U, &d_zero, T, &m_A);
             /*  Row interchanges based on IPIV values*/
@@ -133,15 +170,26 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
             /* T - A --> L*U - A */
             daxpy_(&m_n_vector, &d_n_one, A_save, &i_one, T, &i_one);
             /* Compute norm( L*U - A ) / ( N * norm(A) * EPS ) */
-            norm = fla_lapack_dlange("1", &m_A, &n_A, T, &m_A, work);
-
-            resid2 = norm / (n_A * norm_A * eps);
+            if(imatrix == 'O')
+            {
+                for(int i = 0; i < n_A; i++)
+                {
+                    /* To handle large size values nrm2 is used */
+                    double *vector = (double *)T + i * m_A;
+                    norm = fla_max(norm, dnrm2_(&m_A, vector, &i_one));
+                }
+            }
+            else
+            {
+                norm = fla_lapack_dlange("F", &m_A, &n_A, T, &m_A, work);
+            }
+            resid2 = (norm / norm_A) / (n_A * eps);
             *residual = (double)fla_max(resid1, resid2);
             break;
         }
         case COMPLEX:
         {
-            float norm, norm_A, norm_X, eps, resid1, resid2;
+            float norm = 0, norm_A = 0, norm_X = 0, eps, resid1, resid2;
 
             eps = fla_lapack_slamch("Epsilon");
             /* Test 1 */
@@ -157,7 +205,7 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
                 /* Compute X - X' */
                 caxpy_(&m_A, &c_n_one, B, &i_one, X, &i_one);
                 norm = scnrm2_(&m_A, X, &i_one);
-                resid1 = norm / (m_A * norm_X * eps);
+                resid1 = (norm / norm_X) / (m_A * eps);
             }
             else
             {
@@ -167,8 +215,19 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
             /* Test 2 */
             /* Unity diagonal elements to Lower triangular matrix */
             fla_lapack_claset("U", &m_L, &n_L, &c_zero, &c_one, L, &m_L);
-
-            norm_A = fla_lapack_clange("1", &m_A, &n_A, A, &lda, work);
+            if(imatrix == 'O')
+            {
+                for(int i = 0; i < n_A; i++)
+                {
+                    /* To handle large size values nrm2 is used */
+                    scomplex *vector = (scomplex *)A + i * lda;
+                    norm_A = fla_max(norm_A, scnrm2_(&m_A, vector, &i_one));
+                }
+            }
+            else
+            {
+                norm_A = fla_lapack_clange("F", &m_A, &n_A, A, &lda, work);
+            }
             /* T = L * U  */
             cgemm_("N", "N", &m_A, &n_A, &k, &c_one, L, &m_L, U, &m_U, &c_zero, T, &m_A);
             /*  Row interchanges based on IPIV values*/
@@ -176,15 +235,26 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
             /* T - A --> L*U - A */
             caxpy_(&m_n_vector, &c_n_one, A_save, &i_one, T, &i_one);
             /* Compute norm( L*U - A ) / ( N * norm(A) * EPS ) */
-            norm = fla_lapack_clange("1", &m_A, &n_A, T, &m_A, work);
-
-            resid2 = norm / (n_A * norm_A * eps);
+            if(imatrix == 'O')
+            {
+                for(int i = 0; i < n_A; i++)
+                {
+                    /* To handle large size values nrm2 is used */
+                    scomplex *vector = (scomplex *)T + i * m_A;
+                    norm = fla_max(norm, scnrm2_(&m_A, vector, &i_one));
+                }
+            }
+            else
+            {
+                norm = fla_lapack_clange("F", &m_A, &n_A, T, &m_A, work);
+            }
+            resid2 = (norm / norm_A) / (n_A * eps);
             *residual = (double)fla_max(resid1, resid2);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_A, norm_X, eps, resid1, resid2;
+            double norm = 0, norm_A = 0, norm_X = 0, eps, resid1, resid2;
 
             eps = fla_lapack_dlamch("Epsilon");
             /* Test 1 */
@@ -200,7 +270,7 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
                 /* Compute X - X' */
                 zaxpy_(&m_A, &z_n_one, B, &i_one, X, &i_one);
                 norm = dznrm2_(&m_A, X, &i_one);
-                resid1 = norm / (m_A * norm_X * eps);
+                resid1 = (norm / norm_X) / (m_A * eps);
             }
             else
             {
@@ -210,8 +280,19 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
             /* Test 2 */
             /* Unity diagonal elements to Lower triangular matrix */
             fla_lapack_zlaset("U", &m_L, &n_L, &z_zero, &z_one, L, &m_L);
-
-            norm_A = fla_lapack_zlange("1", &m_A, &n_A, A, &lda, work);
+            if(imatrix == 'O')
+            {
+                for(int i = 0; i < n_A; i++)
+                {
+                    /* To handle large size values nrm2 is used */
+                    dcomplex *vector = (dcomplex *)A + i * lda;
+                    norm_A = fla_max(norm_A, dznrm2_(&m_A, vector, &i_one));
+                }
+            }
+            else
+            {
+                norm_A = fla_lapack_zlange("F", &m_A, &n_A, A, &lda, work);
+            }
             /* T = L * U  */
             zgemm_("N", "N", &m_A, &n_A, &k, &z_one, L, &m_L, U, &m_U, &z_zero, T, &m_A);
             /*  Row interchanges based on IPIV values*/
@@ -219,9 +300,20 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
             /* T - A --> L*U - A */
             zaxpy_(&m_n_vector, &z_n_one, A_save, &i_one, T, &i_one);
             /* Compute norm( L*U - A ) / ( N * norm(A) * EPS ) */
-            norm = fla_lapack_zlange("1", &m_A, &n_A, T, &m_A, work);
-
-            resid2 = norm / (n_A * norm_A * eps);
+            if(imatrix == 'O')
+            {
+                for(int i = 0; i < n_A; i++)
+                {
+                    /* To handle large size values nrm2 is used */
+                    dcomplex *vector = (dcomplex *)T + i * m_A;
+                    norm = fla_max(norm, dznrm2_(&m_A, vector, &i_one));
+                }
+            }
+            else
+            {
+                norm = fla_lapack_zlange("F", &m_A, &n_A, T, &m_A, work);
+            }
+            resid2 = (norm / norm_A) / (n_A * eps);
             *residual = (double)fla_max(resid1, resid2);
             break;
         }

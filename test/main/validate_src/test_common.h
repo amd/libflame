@@ -26,13 +26,13 @@ extern double d_zero, d_one, d_n_one;
 extern scomplex c_zero, c_one, c_n_one;
 extern dcomplex z_zero, z_one, z_n_one;
 
-#define DRAND() ((double)rand() / ((double)RAND_MAX / 2.0F)) - 1.0F;
-#define SRAND() (float)((double)rand() / ((double)RAND_MAX / 2.0F)) - 1.0F;
+#define DRAND() ((double)rand() / ((double)RAND_MAX / 2.0F)) - 1.0F
+#define SRAND() (float)((double)rand() / ((double)RAND_MAX / 2.0F)) - 1.0F
 #define SRAND_IN_RANGE(lower, upper) \
-    (float)(lower + (upper - lower) * ((double)rand() / (double)RAND_MAX));
+    (float)(lower + (upper - lower) * ((double)rand() / (double)RAND_MAX))
 #define DRAND_IN_RANGE(lower, upper) \
-    (double)(lower + (upper - lower) * ((double)rand() / (double)RAND_MAX));
-#define FLA_FABS(x) ((x) >= 0) ? (x) : (-1 * x);
+    (double)(lower + (upper - lower) * ((double)rand() / (double)RAND_MAX))
+#define FLA_FABS(x) ((x) >= 0) ? (x) : (-1 * x)
 
 // Datatype
 #define CONSTANT 101

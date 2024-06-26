@@ -124,7 +124,7 @@ void fla_test_gesvdx_experiment(test_params_t *params, integer datatype, integer
     float d_vl, d_vu;
     integer il, iu, ns, ldu, ldvt;
     integer info = 0;
-    void *A = NULL, *U = NULL, *V = NULL, *s = NULL, *A_test = NULL, *s_test = NULL;
+    void *A = NULL, *U = NULL, *V = NULL, *s = NULL, *A_test = NULL, *s_test = NULL, *scal = NULL;
     /* Get input matrix dimensions. */
     jobu = params->svd_paramslist[pci].jobu_gesvdx;
     jobvt = params->svd_paramslist[pci].jobvt_gesvdx;
@@ -201,17 +201,26 @@ void fla_test_gesvdx_experiment(test_params_t *params, integer datatype, integer
     create_matrix(datatype, &V, ldvt, n);
     create_realtype_vector(datatype, &s, min_m_n);
 
-    if(g_ext_fptr != NULL || (params->imatrix_char))
+    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
     {
         /* Initialize input matrix with custom data */
         init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
     }
     else
     {
-        /* Generate A matrix by known singular values */
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            create_vector(get_realtype(datatype), &scal, 1);
+           /* Range 'V' treated as 'A' only in case of overflow and underflow */
+            if(range == 'V' || range == 'v')
+                range = 'A';
+        }
+
+        /* Generate matrix A by known singular value */
         create_svd_matrix(datatype, range, m, n, A, lda, s_test, d_vl, d_vu, il, iu,
-                          params->imatrix_char, NULL, info);
+                          params->imatrix_char, scal, info); 
     }
+    
 
     /* Make a copy of input matrix A. This is required to validate the API functionality. */
     create_matrix(datatype, &A_test, lda, n);
@@ -244,11 +253,12 @@ void fla_test_gesvdx_experiment(test_params_t *params, integer datatype, integer
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         *perf *= 4.0;
 
-    /* output validation */
-    if(!params->imatrix_char && info == 0)
+    /* Output Validation */
+    if(info == 0 && (!FLA_EXTREME_CASE_TEST))
     {
         validate_gesvdx(&jobu, &jobvt, range, m, n, A, A_test, lda, vl, vu, il, iu, ns, s, s_test,
-                        U, ldu, V, ldvt, datatype, residual, &info, g_ext_fptr);
+                        U, ldu, V, ldvt, datatype, residual, &info, g_ext_fptr, scal,
+                        params->imatrix_char);
     }
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
@@ -273,6 +283,8 @@ void fla_test_gesvdx_experiment(test_params_t *params, integer datatype, integer
     free_matrix(U);
     free_matrix(V);
     free_vector(s_test);
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        free_vector(scal);
 }
 
 void prepare_gesvdx_run(char *jobu, char *jobvt, char *range, integer m_A, integer n_A, void *A,

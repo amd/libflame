@@ -5138,29 +5138,96 @@ void scal_matrix(integer datatype, void *x, void *A, integer m, integer n, integ
 void get_max_from_matrix(integer datatype, void *A, void *max_val, integer m, integer n,
                          integer lda)
 {
-    void *work = NULL;
+    integer i, j;
     switch(datatype)
     {
         case FLOAT:
         {
-            *(float *)max_val = fla_lapack_slange("M", &m, &n, A, &lda, work);
+            float max_local = FLT_MIN;
+            for(i = 0; i < n; i++)
+            {
+                for(j = 0; j < m; j++)
+                {
+                    float val = FLA_FABS(((float *)A)[i * lda + j]);
+                    if(val != s_zero && max_local < val)
+                    {
+                        max_local = val;
+                    }
+                }
+            }
+
+            *(float *)max_val = max_local;
             break;
         }
-
         case DOUBLE:
         {
-            *(double *)max_val = fla_lapack_dlange("M", &m, &n, A, &lda, work);
+            double max_local = DBL_MIN;
+            for(i = 0; i < n; i++)
+            {
+                for(j = 0; j < m; j++)
+                {
+                    double val = FLA_FABS(((double *)A)[i * lda + j]);
+                    if(val != d_zero && max_local < val)
+                    {
+                        max_local = val;
+                    }
+                }
+            }
+            *(double *)max_val = max_local;
             break;
         }
         case COMPLEX:
         {
-            *(float *)max_val = fla_lapack_clange("M", &m, &n, A, &lda, work);
+            scomplex *ptr = A;
+            float max_local = FLT_MIN;
+
+            for(i = 0; i < n; i++)
+            {
+                for(j = 0; j < m; j++)
+                {
+                    float real, imag;
+                    real = FLA_FABS(ptr[i * lda + j].real);
+                    imag = FLA_FABS(ptr[i * lda + j].imag);
+                    /* Compare real part */
+                    if(real != s_zero && real > max_local)
+                    {
+                        max_local = real;
+                    }
+                    /* Compare imaginary part */
+                    if(imag != s_zero && imag > max_local)
+                    {
+                        max_local = imag;
+                    }
+                }
+            }
+            *(float *)max_val = max_local;
             break;
         }
-
         case DOUBLE_COMPLEX:
         {
-            *(double *)max_val = fla_lapack_zlange("M", &m, &n, A, &lda, work);
+            dcomplex *ptr = A;
+            double max_local = DBL_MIN;
+
+            for(i = 0; i < n; i++)
+            {
+                for(j = 0; j < m; j++)
+                {
+                    double real, imag;
+                    real = FLA_FABS(ptr[i * lda + j].real);
+                    imag = FLA_FABS(ptr[i * lda + j].imag);
+                    /* Compare real part */
+                    if(real != s_zero && real > max_local)
+                    {
+                        max_local = real;
+                    }
+                    /* Compare imaginary part */
+                    if(imag != s_zero && imag > max_local)
+                    {
+                        max_local = imag;
+                    }
+                }
+            }
+            *(double *)max_val = max_local;
             break;
         }
     }
@@ -5509,7 +5576,7 @@ void create_realtype_block_diagonal_matrix(integer datatype, void *A, integer n,
         for(i = 0; i < n; i += 2)
         {
             ((float *)A)[i * lda + i] = SRAND();
-            if(i < n-1)
+            if(i < n - 1)
             {
                 ((float *)A)[(i + 1) * lda + (i + 1)] = ((float *)A)[i * lda + i];
                 ((float *)A)[i * lda + i + 1] = SRAND();
@@ -5522,7 +5589,7 @@ void create_realtype_block_diagonal_matrix(integer datatype, void *A, integer n,
         for(i = 0; i < n; i += 2)
         {
             ((double *)A)[i * lda + i] = DRAND();
-            if(i < n-1)
+            if(i < n - 1)
             {
                 ((double *)A)[(i + 1) * lda + (i + 1)] = ((double *)A)[i * lda + i];
                 ((double *)A)[i * lda + i + 1] = DRAND();

@@ -164,6 +164,12 @@ extern FILE *g_ext_fptr;
             func_str = "UNG2R";                               \
     }
 
+/* Macro to skip complex and double complex tests of not supported APIs */
+#define FLA_SKIP_TEST(datatype_char, func_str)                                               \
+    (((datatype_char == 'c') || (datatype_char == 'z')) && (strcmp(func_str, "STEVD") == 0)) \
+        ? TRUE                                                                               \
+        : FALSE
+
 typedef struct Lin_solver_paramlist_t
 {
     integer num_ranges; // number of ranges to run

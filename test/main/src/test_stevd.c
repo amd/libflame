@@ -218,12 +218,18 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Free up the buffers */
+    free_matrix(Q);
+    free_matrix(A);
     free_matrix(Z);
     free_vector(D);
     free_vector(E);
     free_matrix(Z_test);
     free_vector(D_test);
     free_vector(E_test);
+    if(!(g_ext_fptr != NULL || params->imatrix_char))
+    {
+        free_vector(L);
+    }
 }
 
 void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, void *E,

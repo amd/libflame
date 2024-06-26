@@ -2552,35 +2552,38 @@ void fla_test_op_driver(char *func_str, integer sqr_inp, test_params_t *params, 
         {
             datatype = params->datatype[dt];
             datatype_char = params->datatype_char[dt];
-
-            /* Loop over the requested problem sizes */
-            for(p_cur = p_first, q_cur = q_first; (p_cur <= p_max && q_cur <= q_max);
-                p_cur += p_inc, q_cur += q_inc)
+            /* Skip complex and double complex tests of not supported APIs */
+            if(!FLA_SKIP_TEST(datatype_char, func_str))
             {
-                if(n_threads > 1)
+                /* Loop over the requested problem sizes */
+                for(p_cur = p_first, q_cur = q_first; (p_cur <= p_max && q_cur <= q_max);
+                    p_cur += p_inc, q_cur += q_inc)
                 {
+                    if(n_threads > 1)
+                    {
 #pragma omp parallel num_threads(n_threads)
 #pragma omp for
-                    for(ith = 0; ith < n_threads; ith++)
+                        for(ith = 0; ith < n_threads; ith++)
+                        {
+                            f_exp(params, datatype, p_cur, q_cur, range_loop_counter, n_repeats,
+                                  einfo, (perf + ith), (time + ith), (residual + ith));
+                        }
+
+                        get_max_from_array(DOUBLE, (void *)residual, (void *)&residual_max_val,
+                                           n_threads);
+                        get_min_from_array(DOUBLE, (void *)time, (void *)&time_min_val, n_threads);
+                        get_max_from_array(DOUBLE, (void *)perf, (void *)&perf_max_val, n_threads);
+
+                        fla_test_print_status(func_str, datatype_char, sqr_inp, p_cur, q_cur,
+                                              residual_max_val, thresh, time_min_val, perf_max_val);
+                    }
+                    else
                     {
                         f_exp(params, datatype, p_cur, q_cur, range_loop_counter, n_repeats, einfo,
-                              (perf + ith), (time + ith), (residual + ith));
+                              perf, time, residual);
+                        fla_test_print_status(func_str, datatype_char, sqr_inp, p_cur, q_cur,
+                                              *residual, thresh, *time, *perf);
                     }
-
-                    get_max_from_array(DOUBLE, (void *)residual, (void *)&residual_max_val,
-                                       n_threads);
-                    get_min_from_array(DOUBLE, (void *)time, (void *)&time_min_val, n_threads);
-                    get_max_from_array(DOUBLE, (void *)perf, (void *)&perf_max_val, n_threads);
-
-                    fla_test_print_status(func_str, datatype_char, sqr_inp, p_cur, q_cur,
-                                          residual_max_val, thresh, time_min_val, perf_max_val);
-                }
-                else
-                {
-                    f_exp(params, datatype, p_cur, q_cur, range_loop_counter, n_repeats, einfo,
-                          perf, time, residual);
-                    fla_test_print_status(func_str, datatype_char, sqr_inp, p_cur, q_cur, *residual,
-                                          thresh, *time, *perf);
                 }
             }
         }

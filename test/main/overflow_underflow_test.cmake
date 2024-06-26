@@ -32,6 +32,22 @@ set(OVERFLOW_UNDERFLOW_VALUES_TEST_CASES "gesvd sdcz A A 1 10 1 1 10 -1 1 --imat
             "gelqf sdcz 100 79 199 -1 1 --imatrix=U"
             "gelqf sdcz 100 50 100 -1 1 --imatrix=O"
             "gelqf sdcz 20 10 20 -1 1 --imatrix=O"
+            "gesvdx sdcz V V A 1 10 1 1 1 1 1 1 10 -1 1 --imatrix=O"
+            "gesvdx sdcz V N A 10 10 10 1 1 1 1 10 10 -1 1 --imatrix=O"
+            "gesvdx sdcz N V A 150 250 150 1 1 1 1 150 250 -1 1 --imatrix=O"
+            "gesvdx sdcz N N A 400 200 400 1 1 1 1 400 200 -1 1 --imatrix=O"
+            "gesvdx sdcz V V I 1 10 1 1 1 1 1 1 10 -1 1 --imatrix=O"
+            "gesvdx sdcz V N I 10 10 10 1 1 3 7 10 10 -1 1 --imatrix=O"
+            "gesvdx sdcz N V I 150 250 150 1 1 27 98 150 250 -1 1 --imatrix=O"
+            "gesvdx sdcz N N I 400 200 400 1 1 10 172 400 200 -1 1 --imatrix=O"
+            "gesvdx sdcz V V A 1 10 1 1 1 1 1 1 10 -1 1 --imatrix=U"
+            "gesvdx sdcz V N A 10 10 10 1 1 1 1 10 10 -1 1 --imatrix=U"
+            "gesvdx sdcz N V A 150 250 150 1 1 1 1 150 250 -1 1 --imatrix=U"
+            "gesvdx sdcz N N A 400 200 400 1 1 1 1 400 200 -1 1 --imatrix=U"
+            "gesvdx sdcz V V I 1 10 1 1 1 1 1 1 10 -1 1 --imatrix=U"
+            "gesvdx sdcz V N I 10 10 10 1 1 3 7 10 10 -1 1 --imatrix=U"
+            "gesvdx sdcz N V I 150 250 150 1 1 27 98 150 250 -1 1 --imatrix=U"
+            "gesvdx sdcz N N I 400 200 400 1 1 10 172 400 200 -1 1 --imatrix=U"
         )
 
 foreach(ou_vals_test_cases IN LISTS OVERFLOW_UNDERFLOW_VALUES_TEST_CASES)

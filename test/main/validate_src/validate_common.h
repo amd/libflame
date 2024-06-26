@@ -32,7 +32,7 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
                     char imatrix, void *scal);
 
 void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, integer lda, integer *IPIV,
-                    integer datatype, double *residual, integer *info);
+                    integer datatype, double *residual, integer *info, char imatrix);
 
 void validate_getri(integer m_A, integer n_A, void *A, void *A_inv, integer lda, integer *IPIV,
                     integer datatype, double *residual, integer *info);
@@ -146,7 +146,7 @@ void validate_sytrf(char *uplo, integer n, integer lda, void *A_res, integer dat
                     integer *ipiv, double *residual, integer *info, void *A);
 
 /* GGEV API validate case for JOBVL= JOBVR = N */
-void validate_ggev_EVs(integer m, void *alpha,void *alphar,void *alphai,void *beta,
-                       void *alpha_copy,void *alphar_copy, void *alphai_copy,void *beta_copy,
+void validate_ggev_EVs(integer m, void *alpha, void *alphar, void *alphai, void *beta,
+                       void *alpha_copy, void *alphar_copy, void *alphai_copy, void *beta_copy,
                        integer datatype, double *residual);
 #endif // VALIDATE_COMMON_H

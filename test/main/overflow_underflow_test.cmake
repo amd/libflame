@@ -61,7 +61,17 @@ set(OVERFLOW_UNDERFLOW_VALUES_TEST_CASES "gesvd sdcz A A 1 10 1 1 10 -1 1 --imat
             "larfg sdcz 500 10 10 1 1 --imatrix=U"
             "larfg sdcz 10 1 1 1 1 --imatrix=O"
             "larfg sdcz 100 3 3 1 1 --imatrix=O"
-            "larfg sdcz 500 10 10 1 1 --imatrix=O")
+            "larfg sdcz 500 10 10 1 1 --imatrix=O"
+            "getrf sdcz 10 15 20 1 --imatrix=U"
+            "getrf sdcz 13 15 20 1 --imatrix=O"
+            "getrf sdcz 65 65 70 1 --imatrix=O"
+            "getrf sdcz 100 95 100 1 --imatrix=U"
+            "getrf sdcz 100 90 100 1 --imatrix=O"
+            "getrf sdcz 650 500 650 1 --imatrix=U"
+            "getrf sdcz 650 500 650 1 --imatrix=O"
+            "getrf sdcz 1500 1600 1600 1 --imatrix=U"
+            "getrf sdcz 1500 1500 1600 1 --imatrix=O"
+        )
 
 foreach(ou_vals_test_cases IN LISTS OVERFLOW_UNDERFLOW_VALUES_TEST_CASES)
     string(REPLACE " " ";" COMMANDLINE_PARAMS ${ou_vals_test_cases})

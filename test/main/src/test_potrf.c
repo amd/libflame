@@ -172,7 +172,7 @@ void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer 
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         *perf *= 4.0;
 
-    if((!FLA_EXTREME_CASE_TEST && FLA_OVERFLOW_UNDERFLOW_TEST) && info == 0)
+    if((!FLA_EXTREME_CASE_TEST) && info == 0)
         validate_potrf(&uplo, m, A, A_test, lda, datatype, residual, &vinfo);
     else if(FLA_EXTREME_CASE_TEST)
     {

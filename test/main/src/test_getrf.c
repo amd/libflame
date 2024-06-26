@@ -133,11 +133,15 @@ void fla_test_getrf_experiment(test_params_t *params, integer datatype, integer 
     create_realtype_vector(datatype, &s_test, fla_min(m, n));
 
     /* Initialize the test matrices*/
-    if(params->imatrix_char == NULL && g_ext_fptr == NULL)
+    if((FLA_OVERFLOW_UNDERFLOW_TEST && !FLA_EXTREME_CASE_TEST) && g_ext_fptr == NULL)
     {
         /* Generate input matrix with condition number <= 10 */
         create_svd_matrix(datatype, range, m, n, A, lda, s_test, GETRF_VL, GETRF_VU, i_zero, i_zero,
                           '\0', NULL, info);
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            scale_matrix_underflow_overflow_getrf(datatype, m, n, A, lda, params->imatrix_char);
+        }
     }
     else
     {
@@ -170,8 +174,11 @@ void fla_test_getrf_experiment(test_params_t *params, integer datatype, integer 
         *perf *= 4.0;
 
     /* output validation */
-    if(!params->imatrix_char && info == 0)
-        validate_getrf(m, n, A, A_test, lda, IPIV, datatype, residual, &vinfo);
+    if((!FLA_EXTREME_CASE_TEST) && info == 0)
+    {
+        validate_getrf(m, n, A, A_test, lda, IPIV, datatype, residual, &vinfo,
+                       params->imatrix_char);
+    }
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {

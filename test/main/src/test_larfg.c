@@ -123,6 +123,10 @@ void fla_test_larfg_experiment(test_params_t *params, integer datatype, integer 
 
     /* Initializing input values for vector */
     init_vector(datatype, x, n, inc_x, g_ext_fptr, params->imatrix_char);
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        scale_matrix_underflow_overflow_larfg(datatype, n, 1, x, incx, params->imatrix_char);
+    }
 
     create_vector(datatype, &x_test, x_length);
     reset_vector(datatype, x_test, x_length, 1);
@@ -151,7 +155,7 @@ void fla_test_larfg_experiment(test_params_t *params, integer datatype, integer 
         *perf *= 4.0;
     }
     /* Output Validation */
-    if(!params->imatrix_char)
+    if((!FLA_EXTREME_CASE_TEST || FLA_OVERFLOW_UNDERFLOW_TEST))
         validate_larfg(datatype, n, incx, x_length, x, x_test, tau, residual);
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)

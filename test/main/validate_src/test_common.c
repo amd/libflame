@@ -3607,14 +3607,14 @@ void copy_realtype_subvector(integer datatype, integer m, void *A, void *B, inte
         float *float_A, *float_B;
         float_A = (float *)A + index;
         float_B = (float *)B;
-        copy_vector(datatype, m, float_A, 1, float_B, 1);
+        copy_vector(get_realtype(datatype), m, float_A, 1, float_B, 1);
     }
     else if(datatype == DOUBLE || datatype == DOUBLE_COMPLEX)
     {
         double *double_A, *double_B;
         double_A = (double *)A + index;
         double_B = (double *)B;
-        copy_vector(datatype, m, double_A, 1, double_B, 1);
+        copy_vector(get_realtype(datatype), m, double_A, 1, double_B, 1);
     }
 }
 
@@ -5351,14 +5351,28 @@ void sort_vector(integer datatype, char *order, integer vect_len, void *w, integ
         {
             scomplex temp;
             scomplex *w_ptr = (scomplex *)w;
+            float absa, absb;
 
             for(i = 0; i < vect_len; i++)
             {
                 for(j = i + 1; j < vect_len; j++)
                 {
+                    absa = (w_ptr + i * incw)->real * (w_ptr + i * incw)->real
+                           + (w_ptr + i * incw)->imag * (w_ptr + i * incw)->imag;
+                    absb = (w_ptr + j * incw)->real * (w_ptr + j * incw)->real
+                           + (w_ptr + j * incw)->imag * (w_ptr + j * incw)->imag;
                     if(*order == 'A')
                     {
-                        if((w_ptr + i * incw)->real > (w_ptr + j * incw)->real)
+                        if(absa != absb)
+                        {
+                            if(absa > absb)
+                            {
+                                temp = *(w_ptr + i * incw);
+                                *(w_ptr + i * incw) = *(w_ptr + j * incw);
+                                *(w_ptr + j * incw) = temp;
+                            }
+                        }
+                        else if((w_ptr + i * incw)->real > (w_ptr + j * incw)->real)
                         {
                             temp = *(w_ptr + i * incw);
                             *(w_ptr + i * incw) = *(w_ptr + j * incw);
@@ -5376,7 +5390,16 @@ void sort_vector(integer datatype, char *order, integer vect_len, void *w, integ
                     }
                     else if(*order == 'D')
                     {
-                        if((w_ptr + i * incw)->real < (w_ptr + j * incw)->real)
+                        if(absa != absb)
+                        {
+                            if(absa < absb)
+                            {
+                                temp = *(w_ptr + i * incw);
+                                *(w_ptr + i * incw) = *(w_ptr + j * incw);
+                                *(w_ptr + j * incw) = temp;
+                            }
+                        }
+                        else if((w_ptr + i * incw)->real < (w_ptr + j * incw)->real)
                         {
                             temp = *(w_ptr + i * incw);
                             *(w_ptr + i * incw) = *(w_ptr + j * incw);
@@ -5400,14 +5423,28 @@ void sort_vector(integer datatype, char *order, integer vect_len, void *w, integ
         {
             dcomplex temp;
             dcomplex *w_ptr = (dcomplex *)w;
+            double absa, absb;
 
             for(i = 0; i < vect_len; i++)
             {
                 for(j = i + 1; j < vect_len; j++)
                 {
+                    absa = (w_ptr + i * incw)->real * (w_ptr + i * incw)->real
+                           + (w_ptr + i * incw)->imag * (w_ptr + i * incw)->imag;
+                    absb = (w_ptr + j * incw)->real * (w_ptr + j * incw)->real
+                           + (w_ptr + j * incw)->imag * (w_ptr + j * incw)->imag;
                     if(*order == 'A')
                     {
-                        if((w_ptr + i * incw)->real > (w_ptr + j * incw)->real)
+                        if(absa != absb)
+                        {
+                            if(absa > absb)
+                            {
+                                temp = *(w_ptr + i * incw);
+                                *(w_ptr + i * incw) = *(w_ptr + j * incw);
+                                *(w_ptr + j * incw) = temp;
+                            }
+                        }
+                        else if((w_ptr + i * incw)->real > (w_ptr + j * incw)->real)
                         {
                             temp = *(w_ptr + i * incw);
                             *(w_ptr + i * incw) = *(w_ptr + j * incw);
@@ -5425,7 +5462,16 @@ void sort_vector(integer datatype, char *order, integer vect_len, void *w, integ
                     }
                     else if(*order == 'D')
                     {
-                        if((w_ptr + i * incw)->real < (w_ptr + j * incw)->real)
+                        if(absa != absb)
+                        {
+                            if(absa < absb)
+                            {
+                                temp = *(w_ptr + i * incw);
+                                *(w_ptr + i * incw) = *(w_ptr + j * incw);
+                                *(w_ptr + j * incw) = temp;
+                            }
+                        }
+                        else if((w_ptr + i * incw)->real < (w_ptr + j * incw)->real)
                         {
                             temp = *(w_ptr + i * incw);
                             *(w_ptr + i * incw) = *(w_ptr + j * incw);

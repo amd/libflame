@@ -122,7 +122,7 @@ void validate_larf(integer datatype, char side, integer m, integer n, void *v, i
 
 void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer ldb, void *X,
                    void *Xact, integer ldx, void *dl, void *d, void *du, void *dl_save,
-                   void *d_save, void *du_save, integer info, double *residual);
+                   void *d_save, void *du_save, integer info, void *scal, char imatrix, double *residual);
 
 void validate_syev(char *jobz, char *range, integer n, void *A, void *A_test, integer lda,
                    integer il, integer iu, void *L, void *w, void *ifail, integer datatype,

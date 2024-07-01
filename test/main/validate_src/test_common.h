@@ -126,6 +126,8 @@ void copy_sym_tridiag_matrix(integer datatype, void *D, void *E, integer M, inte
                              integer LDA);
 void copy_tridiag_matrix(integer datatype, void *dl, void *d, void *du, integer M, integer N,
                          void *A, integer LDA);
+void copy_tridiag_vector(integer datatype, void *dl, void *d, void *du, integer M, integer N,
+                         void *A, integer LDA);
 void tridiag_matrix_multiply(integer datatype, integer n, integer nrhs, void *dl, void *d, void *du,
                              void *B, integer ldb, void *C, integer ldc);
 void copy_sym_tridiag_matrix(integer datatype, void *D, void *E, integer M, integer N, void *B,

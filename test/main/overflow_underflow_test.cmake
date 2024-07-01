@@ -97,7 +97,21 @@ set(OVERFLOW_UNDERFLOW_VALUES_TEST_CASES "gesvd sdcz A A 1 10 1 1 10 -1 1 --imat
             "ung2r cz 10 8 10  1 --imatrix=O"
             "ung2r cz 150 50 150  1 --imatrix=O"
             "ung2r cz 300 250 300  1 --imatrix=O"
-        )
+            "gtsv sdcz 1 1 2 1 --imatrix=O"
+            "gtsv sdcz 23 2 25 1 --imatrix=O"
+            "gtsv sdcz 85 4 90 1 --imatrix=O"
+            "gtsv sdcz 145 3 160 1 --imatrix=O"
+            "gtsv sdcz 210 5 260 1 --imatrix=O"
+            "gtsv sdcz 436 5 510 1 --imatrix=O"
+            "gtsv sdcz 550 5 586 1 --imatrix=O"
+            "gtsv sdcz 1 2 4 1 --imatrix=U"
+            "gtsv sdcz 31 2 40 1 --imatrix=U"
+            "gtsv sdcz 74 4 90 1 --imatrix=U"
+            "gtsv sdcz 156 3 160 1 --imatrix=U"
+            "gtsv sdcz 287 5 320 1 --imatrix=U"
+            "gtsv sdcz 412 5 489 1 --imatrix=U"
+            "gtsv sdcz 540 5 590 1 --imatrix=U"
+)
 
 foreach(ou_vals_test_cases IN LISTS OVERFLOW_UNDERFLOW_VALUES_TEST_CASES)
     string(REPLACE " " ";" COMMANDLINE_PARAMS ${ou_vals_test_cases})

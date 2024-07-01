@@ -52,4 +52,21 @@ void scale_matrix_overflow_underflow_sytrf(integer datatype, integer m, void *A,
 /* Scale matrix with values around overflow underflow for org2r */
 void scale_matrix_underflow_overflow_org2r(integer datatype, integer m, integer n, void *A,
                                            integer lda, char imatrix_char);
+/* Scaling matrix with values around overflow underflow for geqrf */
+void scale_matrix_underflow_overflow_geqrf(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char);
+/* Scaling matrix with values around overflow underflow for larfg */
+void scale_matrix_underflow_overflow_larfg(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char);
+void scale_matrix_underflow_overflow_getrf(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char);
+/* Scale matrix with values around overflow underflow for sytrf */
+void scale_matrix_overflow_underflow_sytrf(integer datatype, integer m, void *A, integer lda,
+                                           char imatrix);
+/* Scale matrix with values around overflow underflow for org2r */
+void scale_matrix_underflow_overflow_org2r(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char);
+/* Scaling matrix with values around overflow underflow for gtsv */
+void init_matrix_overflow_underflow_gtsv(integer datatype, integer m, integer n, void *A,
+                                        integer lda, char imatrix, void *scal);
 #endif // TEST_OVERFLOW_UNDERFLOW_H

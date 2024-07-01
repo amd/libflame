@@ -550,3 +550,105 @@ void scale_matrix_underflow_overflow_org2r(integer datatype, integer m, integer 
     free_vector(max_min);
     free_vector(scal);
 }
+
+/* Calculating the scaling value with respect to max and min for gtsv */
+void calculate_gtsvA_scale_value(integer datatype, integer m, integer n, void *A, integer lda,
+                               char imatrix, void *scal)
+{
+    float flt_ratio;
+    double dbl_ratio;
+
+    if(imatrix == 'O')
+    {
+        /*Intialize the ratios with maximum of datatype value*/
+        flt_ratio = FLT_MAX;
+        dbl_ratio = DBL_MAX;
+        void *max;
+        create_vector(get_realtype(datatype), &max, 1);
+        get_max_from_matrix(datatype, A, max, m, n, lda);
+        /* The ratio is modified w.r.t dimension, to avoid inf in output */
+        if(fla_max(m, n) <= 25)
+        {
+            flt_ratio = flt_ratio / 100.0;
+            dbl_ratio = dbl_ratio / 110.0;
+        }
+        else if(fla_max(m, n) <= 50)
+        {
+            flt_ratio = flt_ratio / 150.00;
+            dbl_ratio = dbl_ratio / 160.00;
+        }
+        else if(fla_max(m, n) <= 75)
+        {
+            flt_ratio = flt_ratio /200.00;
+            dbl_ratio = dbl_ratio /210.00;
+        }
+        else if(fla_max(m, n) <= 100)
+        {
+            flt_ratio = flt_ratio /250.00;
+            dbl_ratio = dbl_ratio /260.00;
+        }
+        else if(fla_max(m, n) <= 150)
+        {
+            flt_ratio = flt_ratio /300.00;
+            dbl_ratio = dbl_ratio /310.00;
+        }
+        else if(fla_max(m, n) <= 200)
+        {
+            flt_ratio = flt_ratio /340.00;
+            dbl_ratio = dbl_ratio /350.00;
+        }
+        else if(fla_max(m, n) <= 300)
+        {
+            flt_ratio = flt_ratio /430.00;
+            dbl_ratio = dbl_ratio /440.00;
+        }
+        else if(fla_max(m, n) <= 400)
+        {
+            flt_ratio = flt_ratio /510.00;
+            dbl_ratio = dbl_ratio /520.00;
+        }
+        else if(fla_max(m, n) <= 500)
+        {
+            flt_ratio = flt_ratio /560.00;
+            dbl_ratio = dbl_ratio /570.00;
+        }
+        else if(fla_max(m, n) <= 750)
+        {
+            flt_ratio = flt_ratio / 650.00;
+            dbl_ratio = dbl_ratio / 660.00;
+        }
+        else if(fla_max(m, n) <= 1000)
+        {
+            flt_ratio = flt_ratio / 740.00;
+            dbl_ratio = dbl_ratio / 750.00;
+        }
+        else
+        {
+            flt_ratio = flt_ratio / 800.00;
+            dbl_ratio = dbl_ratio / 810.00;
+        }
+        compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, max);
+        free_vector(max);
+    }
+    else if(imatrix == 'U')
+    {
+        void *min;
+        create_vector(get_realtype(datatype), &min, 1);
+        /* Get minimum value from matrix */
+        get_min_from_matrix(datatype, A, min, m, n, lda);
+        /* Intialize with minimum of datatype value */
+        flt_ratio = FLT_MIN;
+        dbl_ratio = DBL_MIN;
+        compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, min);
+        free_vector(min);
+    }
+}
+
+/* Scaling matrix with values around overflow/underflow for gtsv */
+void init_matrix_overflow_underflow_gtsv(integer datatype, integer m, integer n, void *A,
+                                        integer lda, char imatrix, void *scal)
+{
+    calculate_gtsvA_scale_value(datatype, m, n, A, lda, imatrix, scal);
+    /* Scaling the matrix A by x scalar */
+    scal_matrix(datatype, scal, A, m, n, lda, i_one);
+}

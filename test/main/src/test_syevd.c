@@ -117,9 +117,9 @@ void fla_test_syevd_experiment(test_params_t *params, integer datatype, integer 
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *time_min, double *residual)
 {
-    integer n, lda, info = 0, vinfo = 0;
-    char jobz, uplo;
-    void *A = NULL, *w = NULL, *A_test = NULL;
+    integer n, lda, info = 0;
+    char jobz, uplo, *range = "A";
+    void *A = NULL, *w = NULL, *A_test = NULL, *L = NULL;
 
     /* Get input matrix dimensions.*/
     jobz = params->eig_sym_paramslist[pci].jobz;
@@ -142,18 +142,18 @@ void fla_test_syevd_experiment(test_params_t *params, integer datatype, integer 
     /* Create input matrix parameters */
     create_matrix(datatype, &A, lda, n);
     create_realtype_vector(datatype, &w, n);
-    if((!FLA_EXTREME_CASE_TEST) && (g_ext_fptr == NULL))
-    {
-        /* input matrix A with random symmetric numbers or complex hermitian matrix */
-        if(datatype == FLOAT || datatype == DOUBLE)
-            rand_sym_matrix(datatype, A, n, n, lda);
-        else
-            rand_hermitian_matrix(datatype, n, &A, lda);
-    }
-    else
+
+    if(g_ext_fptr != NULL || (params->imatrix_char))
     {
         /* Initialize input matrix with custom data */
         init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+    }
+    else
+    {
+        /*  Creating input matrix A by generating random eigen values.
+            When range = V, generate EVs in given range (vl,vu)  */
+        create_realtype_vector(datatype, &L, n);
+        generate_matrix_from_EVs(datatype, *range, n, A, lda, L, NULL, NULL);
     }
     /* Make a copy of input matrix A. This is required to validate the API functionality.*/
     create_matrix(datatype, &A_test, lda, n);
@@ -173,7 +173,8 @@ void fla_test_syevd_experiment(test_params_t *params, integer datatype, integer 
 
     /* output validation */
     if((info == 0) && (!FLA_EXTREME_CASE_TEST))
-        validate_syevd(&jobz, n, A, A_test, lda, w, datatype, residual, &vinfo);
+        validate_syev(&jobz, range, n, A, A_test, lda, 0, 0, L, w,
+                      NULL, datatype, residual);
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {
@@ -189,6 +190,8 @@ void fla_test_syevd_experiment(test_params_t *params, integer datatype, integer 
     free_matrix(A);
     free_matrix(A_test);
     free_vector(w);
+    if((g_ext_fptr == NULL) && !(params->imatrix_char))
+        free_vector(L);
 }
 
 void prepare_syevd_run(char *jobz, char *uplo, integer n, void *A, integer lda, void *w,

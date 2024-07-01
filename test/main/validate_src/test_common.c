@@ -3800,6 +3800,62 @@ void copy_tridiag_matrix(integer datatype, void *dl, void *d, void *du, integer 
     }
 }
 
+/* Copy tridiagonal vector from tridiagonal matrix */
+void copy_tridiag_vector(integer datatype, void *dl, void *d, void *du, integer M, integer N,
+                         void *A, integer LDA)
+{
+    if(LDA < M)
+        return;
+    integer inc = LDA + 1;
+    integer min_m_n, dl_size, du_size;
+    min_m_n = fla_min(M, N);
+    dl_size = N - 1, du_size = N - 1;
+    
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            float *d_ptr = ((float *)A);
+            float *du_ptr = ((float *)A + LDA);
+            float *dl_ptr = ((float *)A + 1);
+            scopy_(&min_m_n, d_ptr, &inc, d, &i_one);
+            scopy_(&du_size, du_ptr, &inc, du, &i_one);
+            scopy_(&dl_size, dl_ptr, &inc, dl, &i_one);
+            break;
+        }
+        case DOUBLE:
+        {
+            double *d_ptr = ((double *)A);
+            double *du_ptr = ((double *)A + LDA);
+            double *dl_ptr = ((double *)A + 1);
+            dcopy_(&min_m_n, d_ptr, &inc, d, &i_one);
+            dcopy_(&du_size, du_ptr, &inc, du, &i_one);
+            dcopy_(&dl_size, dl_ptr, &inc, dl, &i_one);
+            break;
+        }
+        case COMPLEX:
+        {
+            scomplex *d_ptr = ((scomplex *)A);
+            scomplex *du_ptr = ((scomplex *)A + LDA);
+            scomplex *dl_ptr = ((scomplex *)A + 1);
+            ccopy_(&min_m_n, d_ptr, &inc, d, &i_one);
+            ccopy_(&du_size, du_ptr, &inc, du, &i_one);
+            ccopy_(&dl_size, dl_ptr, &inc, dl, &i_one);
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            dcomplex *d_ptr = ((dcomplex *)A);
+            dcomplex *du_ptr = ((dcomplex *)A + LDA);
+            dcomplex *dl_ptr = ((dcomplex *)A + 1);
+            zcopy_(&min_m_n, d_ptr, &inc, d, &i_one);
+            zcopy_(&du_size, du_ptr, &inc, du, &i_one);
+            zcopy_(&dl_size, dl_ptr, &inc, dl, &i_one);
+            break;
+        }
+    }
+}
+
 /* Multiply general m * n matrix with diagonal real type vector
    (of an n * n diagonal matrix) of size n
    NOTE: General matrix by vector multiplication can be done by scaling each

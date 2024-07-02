@@ -133,7 +133,7 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
     create_matrix(datatype, &A_test, lda, n);
 
     /* Initialize the test matrices */
-    if(g_ext_fptr != NULL || (params->imatrix_char))
+    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST && !FLA_OVERFLOW_UNDERFLOW_TEST))
     {
         init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
         if(params->imatrix_char != NULL)
@@ -148,6 +148,11 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
         generate_matrix_from_EVs(datatype, 'V', n, A, lda, L, SYTRF_VL, SYTRF_VU);
         form_symmetric_matrix(datatype, n, A, lda, "S");
         free_vector(L);
+        /* Oveflow or underflow test initialization */
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            scale_matrix_overflow_underflow_sytrf(datatype, n, A, lda, params->imatrix_char);
+        }
     }
 
     /* Save the original matrix */
@@ -162,7 +167,7 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
         *perf *= 4.0;
 
     /* Output validataion */
-    if(!params->imatrix_char && info >= 0)
+    if((!FLA_EXTREME_CASE_TEST && FLA_OVERFLOW_UNDERFLOW_TEST) && info >= 0)
     {
         validate_sytrf(&uplo, n, lda, A_test, datatype, ipiv, residual, &info, A);
         info = 0;

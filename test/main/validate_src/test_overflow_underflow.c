@@ -476,3 +476,40 @@ void scale_matrix_underflow_overflow_larfg(integer datatype, integer m, integer 
     free_vector(max_min);
     free_vector(scal);
 }
+
+/* Scale matrix with values around overflow underflow for sytrf */
+void scale_matrix_overflow_underflow_sytrf(integer datatype, integer m, void *A, integer lda,
+                                           char imatrix_char)
+{
+    void *max_min = NULL, *scal = NULL;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    create_vector(get_realtype(datatype), &scal, 1);
+
+    if(imatrix_char == 'U')
+    {
+        get_min_from_matrix(datatype, A, max_min, m, m, lda);
+        calculate_scale_value(datatype, scal, max_min, 1.0, imatrix_char);
+    }
+    else if(imatrix_char == 'O')
+    {
+        get_max_from_matrix(datatype, A, max_min, m, m, lda);
+        if(m < 100)
+        {
+            calculate_scale_value(datatype, scal, max_min, 2, imatrix_char);
+        }
+        else if(m < 500)
+        {
+            calculate_scale_value(datatype, scal, max_min, 2.1, imatrix_char);
+        }
+        else
+        {
+            calculate_scale_value(datatype, scal, max_min, 2.2, imatrix_char);
+        }
+    }
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, m, m, lda, i_one);
+
+    /* Free vectors */
+    free_vector(max_min);
+    free_vector(scal);
+}

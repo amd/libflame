@@ -46,4 +46,7 @@ void scale_matrix_underflow_overflow_larfg(integer datatype, integer m, integer 
                                            integer lda, char imatrix_char);
 void scale_matrix_underflow_overflow_getrf(integer datatype, integer m, integer n, void *A,
                                            integer lda, char imatrix_char);
+/* Scale matrix with values around overflow underflow for sytrf */
+void scale_matrix_overflow_underflow_sytrf(integer datatype, integer m, void *A, integer lda,
+                                           char imatrix);
 #endif // TEST_OVERFLOW_UNDERFLOW_H

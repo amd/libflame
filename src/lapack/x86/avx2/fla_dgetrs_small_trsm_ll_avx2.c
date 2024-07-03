@@ -889,16 +889,6 @@ static void n_5(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
         b_reg[i + 4 + j] = _mm256_maskload_pd((void const *)(b + (i * (*ldb)) + 4), mask2);
     }
 
-    b_reg[0] = _mm256_maskload_pd((void const *)(b + (0 * (*ldb)) + 0), mask1);
-    b_reg[4] = _mm256_maskload_pd((void const *)(b + (0 * (*ldb)) + 4), mask2);
-    b_reg[1] = _mm256_maskload_pd((void const *)(b + (1 * (*ldb)) + 0), mask1);
-    b_reg[5] = _mm256_maskload_pd((void const *)(b + (1 * (*ldb)) + 4), mask2);
-    b_reg[2] = _mm256_maskload_pd((void const *)(b + (2 * (*ldb)) + 0), mask1);
-    b_reg[6] = _mm256_maskload_pd((void const *)(b + (2 * (*ldb)) + 4), mask2);
-    b_reg[3] = _mm256_maskload_pd((void const *)(b + (3 * (*ldb)) + 0), mask1);
-    b_reg[7] = _mm256_maskload_pd((void const *)(b + (3 * (*ldb)) + 4), mask2);
-    b_reg[8] = _mm256_maskload_pd((void const *)(b + (4 * (*ldb)) + 0), mask1);
-    b_reg[12] = _mm256_maskload_pd((void const *)(b + (4 * (*ldb)) + 4), mask2);
     TRANSPOSE_8x8()
         /* After tranpose, B matrix is stored in row major format in the b_reg registers*/
         /* so in order to swap row, we only need to swap registers                      */

@@ -167,7 +167,7 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
         *perf *= 4.0;
 
     /* Output validataion */
-    if((!FLA_EXTREME_CASE_TEST && FLA_OVERFLOW_UNDERFLOW_TEST) && info >= 0)
+    if((!FLA_EXTREME_CASE_TEST) && info >= 0)
     {
         validate_sytrf(&uplo, n, lda, A_test, datatype, ipiv, residual, &info, A);
         info = 0;

@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
 /*! @file validate_hgeqz.c
@@ -13,7 +13,7 @@ void validate_hgeqz(char *job, char *compq, char *compz, integer n, void *H, voi
                     void *Q_A, integer ldq, void *Z, void *Z_test, void *Z_A, integer ldz,
                     integer datatype, double *residual, integer *info)
 {
-    if(*job == 'E' || *compz == 'N' || *compq == 'N')
+    if((*job == 'E') || (*compz == 'N') || (*compq == 'N') || (n <= 0))
         return;
 
     void *work = NULL, *lambda = NULL, *alambda = NULL, *h_input = NULL, *t_input = NULL,

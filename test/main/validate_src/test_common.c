@@ -2080,11 +2080,13 @@ void init_vector_from_file(integer datatype, void *A, integer m, integer inc, FI
 void get_generic_triangular_matrix(integer datatype, integer N, void *A, integer LDA, integer ilo,
                                    integer ihi)
 {
+    integer i;
+
     if(LDA < N)
         return;
+
     /* Intialize matrix with random values */
     rand_matrix(datatype, A, N, N, LDA);
-    integer i;
 
     switch(datatype)
     {
@@ -2163,12 +2165,14 @@ void get_hessenberg_matrix(integer datatype, integer n, void *A, integer lda, vo
     void *A_save = NULL;
     void *tau = NULL, *work = NULL;
     integer lwork;
+
     if((lda < n) || (ldz < n))
         return;
+
     create_matrix(datatype, &A_save, lda, n);
     create_vector(datatype, &tau, n - 1);
 
-    /* Convert matrix according to ILO and IHI values */
+    /* Initialize random matrix & convert matrix according to ILO and IHI values. */
     get_generic_triangular_matrix(datatype, n, A, lda, *ilo, *ihi);
 
     switch(datatype)
@@ -2685,8 +2689,8 @@ void print_matrix(char *desc, char *order, integer datatype, integer M, integer 
 /* Get upper triangular matrix or lower triangular matrix based on UPLO */
 void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, void *A, integer lda)
 {
-    rand_matrix(datatype, A, m, n, lda);
     integer i;
+    rand_matrix(datatype, A, m, n, lda);
 
     switch(datatype)
     {
@@ -2700,7 +2704,7 @@ void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, v
                     reset_vector(datatype, (void *)p, m - i - 1, 1);
                 }
             }
-            if(*uplo == 'L')
+            else if(*uplo == 'L')
             {
                 for(i = 0; i < n; i++)
                 {
@@ -2720,7 +2724,7 @@ void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, v
                     reset_vector(datatype, (void *)p, m - i - 1, 1);
                 }
             }
-            if(*uplo == 'L')
+            else if(*uplo == 'L')
             {
                 for(i = 0; i < n; i++)
                 {
@@ -2740,7 +2744,7 @@ void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, v
                     reset_vector(datatype, (void *)p, m - i - 1, 1);
                 }
             }
-            if(*uplo == 'L')
+            else if(*uplo == 'L')
             {
                 for(i = 0; i < n; i++)
                 {
@@ -2760,7 +2764,7 @@ void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, v
                     reset_vector(datatype, (void *)p, m - i - 1, 1);
                 }
             }
-            if(*uplo == 'L')
+            else if(*uplo == 'L')
             {
                 for(i = 0; i < n; i++)
                 {

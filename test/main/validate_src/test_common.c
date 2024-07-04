@@ -5831,3 +5831,88 @@ void add_negative_values(integer datatype, void *vect, integer n)
         }
     }
 }
+
+/* Convert the given matrix from column major layout to row major layout and vice versa */
+void convert_matrix_layout(integer matrix_layout, integer datatype, integer m, integer n, void *a,
+                           integer lda, integer *lda_t)
+{
+    integer i, j, cs, rs;
+    void *a_t = NULL;
+
+    if(matrix_layout == LAPACK_COL_MAJOR)
+    {
+        cs = n;
+        rs = m;
+    }
+    else if(matrix_layout == LAPACK_ROW_MAJOR)
+    {
+        cs = m;
+        rs = n;
+    }
+    else
+    {
+        /* invalid input layout */
+        printf("\n Invalid matrix layout for matrix_transpose");
+        return;
+    }
+    *lda_t = cs;
+
+    create_matrix(datatype, &a_t, lda, *lda_t);
+
+    if(a == NULL || a_t == NULL)
+        return;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            for(i = 0; i < fla_min(rs, lda); i++)
+            {
+                for(j = 0; j < cs; j++)
+                {
+                    ((float *)a_t)[i * (*lda_t) + j] = ((float *)a)[j * lda + i];
+                }
+            }
+            break;
+        }
+        case DOUBLE:
+        {
+            for(i = 0; i < fla_min(rs, lda); i++)
+            {
+                for(j = 0; j < cs; j++)
+                {
+                    ((double *)a_t)[i * (*lda_t) + j] = ((double *)a)[i + j * lda];
+                }
+            }
+            break;
+        }
+        case COMPLEX:
+        {
+            for(i = 0; i < fla_min(rs, lda); i++)
+            {
+                for(j = 0; j < cs; j++)
+                {
+                    ((scomplex *)a_t)[i * (*lda_t) + j].real = ((scomplex *)a)[i + j * lda].real;
+                    ((scomplex *)a_t)[i * (*lda_t) + j].imag = ((scomplex *)a)[i + j * lda].imag;
+                }
+            }
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            for(i = 0; i < fla_min(rs, lda); i++)
+            {
+                for(j = 0; j < cs; j++)
+                {
+                    ((dcomplex *)a_t)[i * (*lda_t) + j].real = ((dcomplex *)a)[i + j * lda].real;
+                    ((dcomplex *)a_t)[i * (*lda_t) + j].imag = ((dcomplex *)a)[i + j * lda].imag;
+                }
+            }
+            break;
+        }
+    }
+    reset_matrix(datatype, lda, n, a, lda);
+    copy_matrix(datatype, "full", *lda_t, rs, a_t, *lda_t, a, *lda_t);
+
+    free_matrix(a_t);
+    return;
+}

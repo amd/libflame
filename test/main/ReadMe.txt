@@ -9,7 +9,9 @@ This wiki explains how to use the test suite included with libFLAME.
 The test suite directory has (test/main) the following contents,
    1. config - This folder contains config files to control the input combinations to
       test different set of APIs. See ReadMe under this folder for more information.
-   2. input.global.operations - This file controls the list of APIs to be tested.
+   2. input.global.operations - This file controls the list of LAPACK APIs to be tested.
+      input.global.operations.lapacke - This file controls the list of LAPACKE APIs
+      to be tested.
    3. Makefile - Controls how the test suite executable is compiled and linked.
    4. obj - The object files upon being built are placed in this folder.
    5. src - This folder contains the source code.
@@ -290,3 +292,24 @@ NOTE:
    In AOCL Progress thread  3, at API  DGETRF, progress 8 total threads= 4
    In AOCL Progress thread  2, at API  DGETRF, progress 24 total threads= 4
    In AOCL Progress thread  0, at API  DGETRF, progress 8 total threads= 4
+
+11. LAPACKE interface support:
+    Test suite supports testing of LAPACKE interface. LAPACKE API testing
+    can be enabled by passing "--lapacke=<matrix layout>" option along with
+    test executable.
+
+   Example: ./test_lapack.x --lapacke=row_major    --> for Row major layout
+            ./test_lapack.x --lapacke=column_major --> for column major layout
+
+   ### `input.global.operations.lapacke`
+
+      For LAPACKE API testing, `input.global.operations.lapacke` file should be used
+      instead of input.global.operations file for enabling/disabling single or
+      a group of APIs.
+
+   Note :
+   1) Default layout is set to Column_major. In case user specifies
+      anything other than row_major/column_major, matrix layout is
+      considered to be column_major.
+   2) LAPACKE interface testing is only added for GESV API.
+

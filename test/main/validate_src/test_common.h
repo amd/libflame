@@ -19,6 +19,9 @@
 #include <stdlib.h>
 #include <limits.h>
 
+#define LAPACK_ROW_MAJOR 101
+#define LAPACK_COL_MAJOR 102
+
 // global variables
 extern integer i_zero, i_one, i_n_one;
 extern float s_zero, s_one, s_n_one;
@@ -288,5 +291,7 @@ void diagonalize_vector(integer datatype, void *s, void *sigma, integer m, integ
    Ex: input vector {a, 0, -b, 0 ...}
        output vector {a, -a, -b, b, ...} */
 void add_negative_values(integer datatype, void *vect, integer n);
-
+/* Convert the given matrix from column major layout to row major layout and vice versa */
+void convert_matrix_layout(integer matrix_layout, integer datatype, integer m, integer n, void *a,
+                           integer lda, integer *lda_t);
 #endif // TEST_COMMON_H

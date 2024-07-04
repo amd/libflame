@@ -89,6 +89,7 @@ int main(int argc, char **argv)
 {
     test_params_t params;
     integer vers_major, vers_minor, vers_patch;
+    integer arg_count = argc;
 
     ilaver_(&vers_major, &vers_minor, &vers_patch);
 
@@ -111,13 +112,16 @@ int main(int argc, char **argv)
 
     params.imatrix_char = '\0'; // Initialize imatrix_char to NULL
 
+    /* Check for LAPACKE interface testing */
+    fla_check_lapacke_interface(&arg_count, argv, &params);
+
     /* Checking for the cmd option or config file option */
-    int cmd_option = fla_check_cmd_config_dir(argc, argv);
+    int cmd_option = fla_check_cmd_config_dir(arg_count, argv);
 
     /* Check for Command line requests */
     if(cmd_option == 1)
     {
-        fla_test_execute_cli_api(argc, argv, &params);
+        fla_test_execute_cli_api(arg_count, argv, &params);
     }
     else if(cmd_option == 0)
     {
@@ -143,8 +147,11 @@ int main(int argc, char **argv)
         aocl_fla_set_progress(test_progress);
 #endif
 
-        /* Test the LAPACK-level operations. */
-        fla_test_lapack_suite(OPERATIONS_FILENAME, &params);
+        if(params.test_lapacke_interface == 1)
+            fla_test_lapack_suite(LAPACKE_OPERATIONS_FILENAME, &params);
+        else
+            /* Test the LAPACK-level operations. */
+            fla_test_lapack_suite(LAPACK_OPERATIONS_FILENAME, &params);
 
         if(LINEAR_PARAMETERS_FILENAME)
             free(LINEAR_PARAMETERS_FILENAME);
@@ -165,8 +172,52 @@ int main(int argc, char **argv)
     return 0;
 }
 
+/* Function to configure LAPACKE interface testing */
+void fla_check_lapacke_interface(integer *arg_count, char **argv, test_params_t *params)
+{
+    char *lapacke_test = "--lapacke=";
+    char *row_major = "row_major";
+    char *column_major = "column_major";
+    char *major = NULL;
+    integer lapacke_major = LAPACK_COL_MAJOR;
+    integer enable_lapacke = 0;
+    integer len_lapacke_test = strlen(lapacke_test);
+    integer len_row_major = strlen(row_major);
+    integer len_column_major = strlen(column_major);
+    integer index;
+
+    /* check all the input args excluding first argument test_lapack.x
+       for '--lapacke=' string */
+    for(index = 1; index < *arg_count; index++)
+    {
+        if(!(strncmp(argv[index], lapacke_test, len_lapacke_test)))
+        {
+            enable_lapacke = 1;
+            major = argv[index] + len_lapacke_test;
+
+            /* Check user input is row/column major*/
+            if(!(strncmp(major, row_major, len_row_major)))
+                lapacke_major = LAPACK_ROW_MAJOR;
+            else if(!(strncmp(major, column_major, len_column_major)))
+                lapacke_major = LAPACK_COL_MAJOR;
+            else /* assign default value as column major */
+            {
+                printf("\nWarning: Matrix layout '%s' is invalid,", major);
+                printf(" assigning default layout: Column_major\n\n");
+                lapacke_major = LAPACK_COL_MAJOR;
+            }
+            /* Decrement argument count to fall back to exisiting design of
+               checking input filename or get config file data*/
+            *arg_count = *arg_count - 1;
+            break;
+        }
+    }
+    params->test_lapacke_interface = enable_lapacke;
+    params->matrix_major = lapacke_major;
+}
+
 /* Function for checking cmd option or config file directory */
-int fla_check_cmd_config_dir(int argc, char **argv)
+int fla_check_cmd_config_dir(int arg_count, char **argv)
 {
     integer len_lin_file, len_eig_file, len_svd_file, len_eig_nsy_file, len_aux_file;
     int cmd_test_option = 0;
@@ -183,7 +234,7 @@ int fla_check_cmd_config_dir(int argc, char **argv)
     bool dir = 0;
 
     /*for default config*/
-    if(argc == 1)
+    if(arg_count == 1)
     {
         lin_file = "config/short/LIN_SLVR.dat";
         eig_file = "config/short/EIG_PARAMS.dat";
@@ -215,7 +266,7 @@ int fla_check_cmd_config_dir(int argc, char **argv)
 
         return 0;
     }
-    else if(argc == 2 && strlen(argv[1]) > len_config_opt)
+    else if(arg_count == 2 && strlen(argv[1]) > len_config_opt)
     {
         /*checking config dir option or cmd*/
         if(!(strncmp(argv[1], config_opt, len_config_opt)))
@@ -331,7 +382,10 @@ void fla_test_lapack_suite(char *input_filename, test_params_t *params)
     test_group_count = sizeof(API_test_group) / sizeof(API_test_group[0]);
 
     fla_test_output_info("\n");
-    fla_test_output_info("--- LAPACK-level operation tests ---------------------\n");
+    if((params->test_lapacke_interface == 1))
+        fla_test_output_info("--- LAPACKE-level operation tests ---------------------\n");
+    else
+        fla_test_output_info("--- LAPACK-level operation tests ---------------------\n");
     fla_test_output_info("\n");
 
     // Attempt to open input file corresponding to input_filename as
@@ -2360,7 +2414,7 @@ char *fla_test_get_string_for_result(double residual, integer datatype, double t
     {
         if(residual == DBL_MIN)
             r_val = fla_test_invalid_string;
-        else if(residual > thresh)
+        else if((residual > thresh) || (isnan(residual)))
             r_val = fla_test_fail_string;
         else
             r_val = fla_test_pass_string;
@@ -2369,7 +2423,7 @@ char *fla_test_get_string_for_result(double residual, integer datatype, double t
     {
         if(residual == DBL_MIN)
             r_val = fla_test_invalid_string;
-        else if(residual > thresh)
+        else if((residual > thresh) || (isnan(residual)))
             r_val = fla_test_fail_string;
         else
             r_val = fla_test_pass_string;
@@ -2378,7 +2432,7 @@ char *fla_test_get_string_for_result(double residual, integer datatype, double t
     {
         if(residual == DBL_MIN)
             r_val = fla_test_invalid_string;
-        else if(residual > thresh)
+        else if((residual > thresh) || (isnan(residual)))
             r_val = fla_test_fail_string;
         else
             r_val = fla_test_pass_string;
@@ -2387,7 +2441,7 @@ char *fla_test_get_string_for_result(double residual, integer datatype, double t
     {
         if(residual == DBL_MIN)
             r_val = fla_test_invalid_string;
-        else if(residual > thresh)
+        else if((residual > thresh) || (isnan(residual)))
             r_val = fla_test_fail_string;
         else
             r_val = fla_test_pass_string;

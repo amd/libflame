@@ -1,0 +1,7 @@
+#   Enable/Disable group of API's
+0   LIN     for testing all LIN API's                     (0 = disable; 1 = enable)
+0   EIG     for testing all Eigen API's                   (0 = disable; 1 = enable)
+0   SVD     for testing all SVD API's                     (0 = disable; 1 = enable)
+0   AUX     for testing all auxiliary API's               (0 = disable; 1 = enable)
+#   Enable/Disable individual API's
+1   gesv    Linear Solve using LU                         (0 = disable; 1 = enable; 2 = enable only this)

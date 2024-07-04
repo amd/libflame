@@ -62,7 +62,7 @@ void validate_geqp3(integer m_A, integer n_A, void *A, void *A_test, integer lda
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = (float)check_orthogonality(datatype, Q, m_A, n_A, m_A);
+            resid2 = (float)check_orthogonality(datatype, Q, m_A, m_A, m_A);
 
             *residual = (double)fla_max(resid1, resid2);
             break;
@@ -98,7 +98,7 @@ void validate_geqp3(integer m_A, integer n_A, void *A, void *A_test, integer lda
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = check_orthogonality(datatype, Q, m_A, n_A, m_A);
+            resid2 = check_orthogonality(datatype, Q, m_A, m_A, m_A);
 
             *residual = (double)fla_max(resid1, resid2);
             break;
@@ -135,7 +135,7 @@ void validate_geqp3(integer m_A, integer n_A, void *A, void *A_test, integer lda
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = (float)check_orthogonality(datatype, Q, m_A, n_A, m_A);
+            resid2 = (float)check_orthogonality(datatype, Q, m_A, m_A, m_A);
 
             *residual = (double)fla_max(resid1, resid2);
             break;
@@ -172,7 +172,7 @@ void validate_geqp3(integer m_A, integer n_A, void *A, void *A_test, integer lda
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = check_orthogonality(datatype, Q, m_A, n_A, m_A);
+            resid2 = check_orthogonality(datatype, Q, m_A, m_A, m_A);
 
             *residual = (double)fla_max(resid1, resid2);
             break;

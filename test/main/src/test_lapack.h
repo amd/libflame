@@ -23,7 +23,8 @@
 #endif
 #include "test_common.h"
 
-#define OPERATIONS_FILENAME "input.global.operations"
+#define LAPACK_OPERATIONS_FILENAME "input.global.operations"
+#define LAPACKE_OPERATIONS_FILENAME "input.global.operations.lapacke"
 
 #define COMMENT_CHAR '#'
 #define MAX_BINARY_NAME_LENGTH 256
@@ -447,6 +448,8 @@ typedef struct
     integer p_inc;
     integer p_nfact;
     char imatrix_char;
+    integer test_lapacke_interface;
+    integer matrix_major;
 
     struct SVD_paramlist_t svd_paramslist[NUM_SUB_TESTS];
     struct EIG_Non_symmetric_paramlist_t eig_non_sym_paramslist[NUM_SUB_TESTS];
@@ -523,5 +526,6 @@ void fill_string_with_n_spaces(char *str, integer n_spaces);
 double fla_test_clock(void);
 void fla_test_get_time_unit(char *scale, double *time);
 integer fla_test_get_group_id(char *buffer);
+void fla_check_lapacke_interface(integer *arg_count, char **argv, test_params_t *params);
 
 #endif // TEST_LAPACK_H

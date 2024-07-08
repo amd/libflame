@@ -242,8 +242,16 @@ void rand_vector(integer datatype, integer M, void *A, integer inc, double VL, d
         {
             for(i = 0; i < M; i++)
             {
-                ((scomplex *)A)[i * inc].real = SRAND();
-                ((scomplex *)A)[i * inc].imag = SRAND();
+                if(range == 'V' || range == 'v')
+                {
+                    ((scomplex *)A)[i * inc].real = SRAND_IN_RANGE(VL, VU);
+                    ((scomplex *)A)[i * inc].imag = SRAND_IN_RANGE(VL, VU);
+                }
+                else
+                {
+                    ((scomplex *)A)[i * inc].real = SRAND();
+                    ((scomplex *)A)[i * inc].imag = SRAND();
+                }
             }
             break;
         }
@@ -251,8 +259,16 @@ void rand_vector(integer datatype, integer M, void *A, integer inc, double VL, d
         {
             for(i = 0; i < M; i++)
             {
-                ((dcomplex *)A)[i * inc].real = DRAND();
-                ((dcomplex *)A)[i * inc].imag = DRAND();
+                if(range == 'V' || range == 'v')
+                {
+                    ((dcomplex *)A)[i * inc].real = DRAND_IN_RANGE(VL, VU);
+                    ((dcomplex *)A)[i * inc].imag = DRAND_IN_RANGE(VL, VU);
+                }
+                else
+                {
+                    ((dcomplex *)A)[i * inc].real = DRAND();
+                    ((dcomplex *)A)[i * inc].imag = DRAND();
+                }
             }
             break;
         }
@@ -930,72 +946,33 @@ void set_transpose(integer datatype, char *uplo, char *trans_A, char *trans_B)
     }
 }
 
-void rand_spd_matrix(integer datatype, char *uplo, void **A, integer m, integer lda)
+#define RSPD_VL 10
+#define RSPD_VU 1000
+
+void rand_spd_matrix(integer datatype, char *uplo, void *A, integer m, integer lda)
 {
-    void *sample = NULL;
-    void *buff_A = NULL, *buff_B = NULL;
-    void *a_temp = NULL;
-    char trans_A, trans_B;
-    if(lda < m)
-        return;
+    void *L = NULL;
+    char *type = "C";
 
-    create_matrix(datatype, &sample, lda, m);
-    create_matrix(datatype, &buff_A, lda, m);
-    create_matrix(datatype, &buff_B, lda, m);
+    /* Create vector required for EVs */
+    create_realtype_vector(datatype, &L, m);
 
-    reset_matrix(datatype, m, m, buff_A, lda);
-    reset_matrix(datatype, m, m, buff_B, lda);
+    /*  Initialize input matrix A by generating values in given range (VL, VU)
+     *  using eigen values function.
+     */
+    generate_matrix_from_EVs(datatype, 'V', m, A, lda, L, RSPD_VL, RSPD_VU);
 
-    create_matrix(datatype, &a_temp, lda, m);
-    set_identity_matrix(datatype, m, m, a_temp, lda);
-
-    /* Generate random symmetric matrix */
-    rand_sym_matrix(datatype, sample, m, m, lda);
-
-    /* Based on uplo set the transpose flag */
-    set_transpose(datatype, uplo, &trans_A, &trans_B);
-
-    copy_matrix(datatype, uplo, m, m, sample, lda, buff_A, lda);
-    copy_matrix(datatype, uplo, m, m, sample, lda, buff_B, lda);
-
-    switch(datatype)
+    /* Force the matrix to be exactly symmetric
+     * by copying lower half to upper half or vice versa
+     */
+    if(datatype == FLOAT || datatype == DOUBLE)
     {
-        case FLOAT:
-        {
-            float beta = m;
-            sgemm_(&trans_A, &trans_B, &m, &m, &m, &s_one, buff_A, &lda, buff_B, &lda, &beta,
-                   a_temp, &lda);
-            break;
-        }
-        case DOUBLE:
-        {
-            double beta = m;
-            dgemm_(&trans_A, &trans_B, &m, &m, &m, &d_one, buff_A, &lda, buff_B, &lda, &beta,
-                   a_temp, &lda);
-            break;
-        }
-        case COMPLEX:
-        {
-            scomplex beta = {m, 0};
-            cgemm_(&trans_A, &trans_B, &m, &m, &m, &c_one, buff_A, &lda, buff_B, &lda, &beta,
-                   a_temp, &lda);
-            break;
-        }
-        case DOUBLE_COMPLEX:
-        {
-            dcomplex beta = {m, 0};
-            zgemm_(&trans_A, &trans_B, &m, &m, &m, &z_one, buff_A, &lda, buff_B, &lda, &beta,
-                   a_temp, &lda);
-            break;
-        }
+        type = "S";
     }
-    copy_matrix(datatype, "full", m, m, a_temp, lda, *A, lda);
+    form_symmetric_matrix(datatype, m, A, lda, type);
 
-    /* free buffers */
-    free_matrix(sample);
-    free_matrix(buff_A);
-    free_matrix(buff_B);
-    free_matrix(a_temp);
+
+    free_vector(L);
 }
 
 /* Create diagonal matrix by copying elements from a realtype vector to matrix */
@@ -5611,6 +5588,8 @@ void create_realtype_block_diagonal_matrix(integer datatype, void *A, integer n,
  *               Q  is an orthogonal matrix with corresponding
  *                  eigen vectors as its rows.
  */
+#define ASYM_EV_VL 1
+#define ASYM_EV_VU 1000
 void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *L,
                                    char imatrix, void *scal)
 {
@@ -5621,7 +5600,7 @@ void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer
     {
         void *L1 = NULL;
         create_vector(datatype, &L1, n);
-        rand_vector(datatype, n, L1, 1, d_zero, d_zero, 'R');
+        rand_vector(datatype, n, L1, 1, ASYM_EV_VL, ASYM_EV_VU, 'V');
         diagonalize_vector(datatype, L1, L, n, n, n);
 
         free_vector(L1);

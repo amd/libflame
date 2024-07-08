@@ -38,7 +38,7 @@ mv_jesvj 10  25  90  100
 ctol_jesvj 1.5 2.0 2.0 1.0
 jobu_gesvdx N V V V
 jobvt_gesvdx  V N V V
-range_gesvdx  A V I A
+range_gesvdx  A V V A
 il 01 10  32 40
 iu 05 20  65 76
 vl 0.1  0.6  0.7  0.0

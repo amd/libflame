@@ -49,4 +49,7 @@ void scale_matrix_underflow_overflow_getrf(integer datatype, integer m, integer 
 /* Scale matrix with values around overflow underflow for sytrf */
 void scale_matrix_overflow_underflow_sytrf(integer datatype, integer m, void *A, integer lda,
                                            char imatrix);
+/* Scale matrix with values around overflow underflow for org2r */
+void scale_matrix_underflow_overflow_org2r(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char);
 #endif // TEST_OVERFLOW_UNDERFLOW_H

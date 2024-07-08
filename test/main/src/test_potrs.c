@@ -13,9 +13,6 @@ void prepare_potrs_run(char *uplo, integer m, integer nrhs, void *A, integer lda
 void invoke_potrs(char *uplo, integer datatype, integer *m, void *A, integer *lda, integer *nrhs,
                   void *b, integer *ldb, integer *info);
 
-#define POTRS_VL 0.1
-#define POTRS_VU 1000
-
 void fla_test_potrs(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Cholesky factorization";
@@ -112,7 +109,7 @@ void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer 
     integer n, info = 0, nrhs, lda, ldb, vinfo = 0;
     void *A = NULL, *A_test = NULL;
     void *B = NULL, *X = NULL;
-    void *B_test = NULL, *L = NULL;
+    void *B_test = NULL;
     double time_min = 1e9;
     char uplo = params->lin_solver_paramslist[pci].Uplo;
     nrhs = params->lin_solver_paramslist[pci].nrhs;
@@ -147,16 +144,10 @@ void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer 
     reset_matrix(datatype, n, n, A, lda);
     if((!FLA_EXTREME_CASE_TEST) && (g_ext_fptr == NULL))
     {
+        rand_spd_matrix(datatype, &uplo, A, n, lda);
         /* Initialize input matrix with random numbers */
         rand_matrix(datatype, B, n, nrhs, ldb);
 
-        create_realtype_vector(datatype, &L, n);
-
-        /*  Initialize input matrix A by generating values in given range (VL, VU)
-            using eigen values function. */
-        generate_matrix_from_EVs(datatype, 'V', n, A, lda, L, POTRS_VL, POTRS_VU);
-
-        free_vector(L);
     }
     else
     {

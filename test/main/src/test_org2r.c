@@ -141,6 +141,10 @@ void fla_test_org2r_experiment(test_params_t *params, integer datatype, integer 
         create_vector(datatype, &T_test, fla_min(m, n));
 
         init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            scale_matrix_underflow_overflow_org2r(datatype, m, n, A, lda, params->imatrix_char);
+        }
 
         /* Make a copy of input matrix A.
            This is required to validate the API functionality.*/
@@ -196,7 +200,7 @@ void fla_test_org2r_experiment(test_params_t *params, integer datatype, integer 
             *perf *= 4.0;
 
         /* output validation */
-        if(!params->imatrix_char && info == 0)
+        if((!FLA_EXTREME_CASE_TEST || FLA_OVERFLOW_UNDERFLOW_TEST) && info == 0)
             validate_orgqr(m, n, A, lda, Q, R, work_test, datatype, residual, &vinfo);
         /* check for output matrix when inputs as extreme values */
         else if(FLA_EXTREME_CASE_TEST)

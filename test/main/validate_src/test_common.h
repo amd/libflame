@@ -92,7 +92,7 @@ void *get_m_ptr(integer datatype, void *A, integer M, integer N, integer LDA);
 void free_matrix(void *A);
 void rand_matrix(integer datatype, void *A, integer M, integer N, integer LDA);
 void rand_sym_matrix(integer datatype, void *A, integer M, integer N, integer LDA);
-void rand_spd_matrix(integer datatype, char *uplo, void **A, integer m, integer lda);
+void rand_spd_matrix(integer datatype, char *uplo, void *A, integer m, integer lda);
 void rand_hermitian_matrix(integer datatype, integer n, void **A, integer lda);
 void copy_matrix(integer datatype, char *uplo, integer M, integer N, void *A, integer LDA, void *B,
                  integer LDB);

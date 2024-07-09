@@ -55,8 +55,8 @@ void validate_syevd(char *jobz, integer n, void *A, void *A_test, integer lda, v
 void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer m, void *A,
                     void *A_test, integer lda, void *VL, integer ldvl, void *VR, integer ldvr,
                     void *w, void *wr, void *wi, void *scale, void *abnrm, void *rconde,
-                    void *rcondv, integer datatype, double *residual, integer *info,
-                    void *wr_in, void *wi_in);
+                    void *rcondv, integer datatype, double *residual, integer *info, void *wr_in,
+                    void *wi_in);
 
 void validate_geev(char *jobvl, char *jobvr, integer m, void *A, void *A_test, integer lda,
                    void *VL, integer ldvt, void *VR, integer ldvr, void *w, void *wr, void *wi,
@@ -90,7 +90,9 @@ void validate_hgeqz(char *job, char *compq, char *compz, integer n, void *H, voi
                     integer datatype, double *residual, integer *info);
 
 void validate_hseqr(char *job, char *compz, integer n, void *H, void *H_test, integer ldh, void *Z,
-                    void *Z_test, integer ldz, integer datatype, double *residual, integer *info);
+                    void *Z_test, integer ldz, void *wr, void *wr_in, void *wi, void *wi_in,
+                    void *w, integer datatype, double *residual, integer *info, integer *ilo,
+                    integer *ihi);
 
 void validate_spffrt2(integer n, integer ncolm, void *A, void *AP, integer datatype,
                       double *residual);

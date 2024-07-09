@@ -135,7 +135,7 @@ void fla_test_gehrd_experiment(test_params_t *params, integer datatype, integer 
     else
     {
         /* Intialize matrix H with ILO and IHI conditions to generate hessenberg matrix */
-        get_generic_triangular_matrix(datatype, n, A, lda, ilo, ihi);
+        get_generic_triangular_matrix(datatype, n, A, lda, ilo, ihi, false);
     }
 
     /* Make copy of matrix A. This is required to validate the API functionality */

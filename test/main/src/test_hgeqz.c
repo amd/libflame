@@ -202,7 +202,7 @@ void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer 
     else
     {
         /* Convert matrix according to ILO and IHI values */
-        get_generic_triangular_matrix(datatype, n, A, ldh, ilo, ihi);
+        get_generic_triangular_matrix(datatype, n, A, ldh, ilo, ihi, false);
         /* Initialize matrix with random values */
         rand_matrix(datatype, B, n, n, ldt);
         /* Decompose matrix B in to QR and store orthogonal matrix in Q and R in B */

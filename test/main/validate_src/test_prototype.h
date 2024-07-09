@@ -1216,6 +1216,7 @@ extern void invoke_potrf(char *uplo, integer datatype, integer *m, void *a, inte
                          integer *info);
 extern void invoke_geqrf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
                          void *work, integer *lwork, integer *info);
+extern void invoke_geev(integer datatype, char *jobvl, char *jobvr, integer *n, void *a, integer *lda, void *wr, void *wi, void *w, void *vl, integer *ldvl, void *vr, integer *ldvr, void *work, integer *lwork, void *rwork, integer *info);
 /* Generates Orthogonal matrix from ORGTR() after SYTRD() call. */
 extern void invoke_sytrd(integer datatype, char *uplo, char compz, integer n, void *A, integer lda,
                          void *D, void *E, integer *info);

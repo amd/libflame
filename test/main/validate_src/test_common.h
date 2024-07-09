@@ -14,10 +14,10 @@
 #include "validate_common.h"
 #include "test_overflow_underflow.h"
 
+#include <limits.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <limits.h>
 
 #define LAPACK_ROW_MAJOR 101
 #define LAPACK_COL_MAJOR 102
@@ -170,7 +170,11 @@ void init_vector_spec_in(integer datatype, void *A, integer M, integer incx, cha
 char *fla_mem_alloc(size_t size);
 /* Generate Hessenberg matrix */
 void get_hessenberg_matrix(integer datatype, integer n, void *A, integer lda, void *Z, integer ldz,
-                           integer *ilo, integer *ihi, void *scale, integer *info);
+                           integer *ilo, integer *ihi, integer *info, bool AInitialized);
+/* Generate Hessenberg matrix from eigen values */
+void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *Z,
+                                    integer ldz, integer *ilo, integer *ihi, integer *info,
+                                    bool AInitialized, void *wr_in, void *wi_in);
 /* Convert matrix to upper hessenberg form */
 void convert_upper_hessenberg(integer datatype, integer n, void *A, integer lda);
 /* Pack a symmetric matrix in column first order */
@@ -179,7 +183,7 @@ void pack_matrix_lt(integer datatype, void *A, void *B, integer N, integer lda);
 void extract_upper_hessenberg_matrix(integer datatype, integer n, void *A, integer lda);
 /* Convert matrix according to ILO and IHI values */
 void get_generic_triangular_matrix(integer datatype, integer N, void *A, integer LDA, integer ilo,
-                                   integer ihi);
+                                   integer ihi, bool AInitialized);
 /* Decompose matrix A in to QR and store orthogonal matrix in Q and R in A*/
 void get_orthogonal_matrix_from_QR(integer datatype, integer n, void *A, integer lda, void *Q,
                                    integer ldq, integer *info);
@@ -301,6 +305,7 @@ void diagonalize_vector(integer datatype, void *s, void *sigma, integer m, integ
    Ex: input vector {a, 0, -b, 0 ...}
        output vector {a, -a, -b, b, ...} */
 void add_negative_values(integer datatype, void *vect, integer n);
+void add_negative_values_ilo_ihi(integer datatype, void *vect, integer ilo, integer ihi);
 /* Convert the given matrix from column major layout to row major layout and vice versa */
 void convert_matrix_layout(integer matrix_layout, integer datatype, integer m, integer n, void *a,
                            integer lda, integer *lda_t);

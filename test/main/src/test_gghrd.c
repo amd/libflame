@@ -187,7 +187,7 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
         get_orthogonal_matrix_from_QR(datatype, n, B, ldb, Q, ldq, &info);
         if(compq == 'I')
             set_identity_matrix(datatype, n, n, Q, ldq);
-        get_generic_triangular_matrix(datatype, n, A, lda, ilo, ihi);
+        get_generic_triangular_matrix(datatype, n, A, lda, ilo, ihi, false);
         set_identity_matrix(datatype, n, n, Z, ldz);
     }
 

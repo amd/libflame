@@ -109,12 +109,14 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
 {
     integer n, ldz, ldh;
     integer ilo, ihi, info = 0, vinfo = 0;
-    void *H = NULL, *w = NULL, *wr = NULL, *wi = NULL, *Z = NULL, *H_test = NULL, *Z_Test = NULL;
-    void *scale = NULL;
-    char compz, job;
+    void *H = NULL, *w = NULL, *wr = NULL, *wi = NULL, *Z = NULL, *H_test = NULL, *Z_Test = NULL,
+         *wr_in = NULL, *wi_in = NULL, *wr_sub_in = NULL, *wi_sub_in = NULL;
+    char job;
+    char compz;
 
     /* Get input matrix dimensions. */
     n = p_cur;
+
     ldz = params->eig_sym_paramslist[pci].ldz;
     ldh = params->eig_sym_paramslist[pci].lda;
 
@@ -151,7 +153,6 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
     /* Create input matrix parameters*/
     create_matrix(datatype, &H, ldh, n);
     create_matrix(datatype, &Z, ldz, n);
-    create_vector(datatype, &scale, n);
 
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
     {
@@ -170,8 +171,15 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
     }
     else
     {
-        /* Generate Hessenberg matrix H */
-        get_hessenberg_matrix(datatype, n, H, ldh, Z, ldz, &ilo, &ihi, scale, &info);
+        create_vector(datatype, &wr_in, n);
+        if(datatype == FLOAT || datatype == DOUBLE)
+        {
+            create_vector(datatype, &wi_in, n);
+            reset_vector(datatype, wi_in, n, 1);
+        }
+
+        get_hessenberg_matrix_from_EVs(datatype, n, H, ldh, Z, ldz, &ilo, &ihi, &info, true, wr_in,
+                                       wi_in);
         if(compz == 'I')
             set_identity_matrix(datatype, n, n, Z, ldz);
     }
@@ -217,18 +225,20 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
 
     /* Output Validation */
     if(info == 0)
-        validate_hseqr(&job, &compz, n, H, H_test, ldh, Z, Z_Test, ldz, datatype, residual, &vinfo);
+        validate_hseqr(&job, &compz, n, H, H_test, ldh, Z, Z_Test, ldz, wr, wr_in, wi, wi_in, w,
+                       datatype, residual, &vinfo, &ilo, &ihi);
 
     /* test info only for negative test cases */
     if(info < 0)
         FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
-    free_vector(scale);
     free_matrix(H);
     free_matrix(Z);
     free_matrix(H_test);
     free_matrix(Z_Test);
+    free_vector(wr_in);
+    free_vector(wr_sub_in);
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
     {
         free_vector(w);
@@ -237,6 +247,8 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
     {
         free_vector(wr);
         free_vector(wi);
+        free_vector(wi_in);
+        free_vector(wi_sub_in);
     }
 }
 

@@ -2055,7 +2055,7 @@ void init_vector_from_file(integer datatype, void *A, integer m, integer inc, FI
 
 /* Convert matrix according to ILO and IHI values */
 void get_generic_triangular_matrix(integer datatype, integer N, void *A, integer LDA, integer ilo,
-                                   integer ihi)
+                                   integer ihi, bool AInitialized)
 {
     integer i;
 
@@ -2063,7 +2063,10 @@ void get_generic_triangular_matrix(integer datatype, integer N, void *A, integer
         return;
 
     /* Intialize matrix with random values */
-    rand_matrix(datatype, A, N, N, LDA);
+    if(!AInitialized)
+    {
+        rand_matrix(datatype, A, N, N, LDA);
+    }
 
     switch(datatype)
     {
@@ -2134,23 +2137,77 @@ void get_generic_triangular_matrix(integer datatype, integer N, void *A, integer
     }
 }
 
+void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *Z,
+                                    integer ldz, integer *ilo, integer *ihi, integer *info,
+                                    bool AInitialized, void *wr_in, void *wi_in)
+{
+    void *A_sub = NULL, *L = NULL, *wr_sub_in = NULL, *wi_sub_in = NULL;
+
+    /* Initialize A with random values */
+    rand_matrix(datatype, A, n, n, lda);
+
+    /* Get diagonal elements of A into wr_in as initial eigen values */
+    get_diagonal(datatype, A, n, n, lda, wr_in);
+
+    /* Generate a square matrix A_sub of size *ihi-*ilo+1 with known eigen values in L */
+    create_matrix(datatype, &A_sub, *ihi - *ilo + 1, *ihi - *ilo + 1);
+    create_matrix(datatype, &L, *ihi - *ilo + 1, *ihi - *ilo + 1);
+    generate_asym_matrix_from_EVs(datatype, *ihi - *ilo + 1, A_sub, *ihi - *ilo + 1, L, '\0', NULL);
+
+    /* Get the diagonal elements of L into wr_sub_in and copy them into wr_in */
+    create_vector(datatype, &wr_sub_in, *ihi - *ilo + 1);
+    get_diagonal(datatype, L, *ihi - *ilo + 1, *ihi - *ilo + 1, *ihi - *ilo + 1, wr_sub_in);
+    if(*ilo >= 1 && *ilo <= n && *ihi >= *ilo && *ihi <= n)
+    {
+        copy_subvector(datatype, *ihi - *ilo + 1, wr_sub_in, 1, wr_in, 1, 0, 0, 0, *ilo - 1);
+    }
+
+    /*If datatype = float or double, get the sub diagonal elements of L into wi_sub_in.
+     * and copy them into wi_in */
+    if(datatype == FLOAT || datatype == DOUBLE)
+    {
+        create_vector(datatype, &wi_sub_in, *ihi - *ilo + 1);
+        reset_vector(datatype, wi_sub_in, *ihi - *ilo + 1, 1);
+        get_subdiagonal(datatype, L, *ihi - *ilo + 1, *ihi - *ilo + 1, *ihi - *ilo + 1, wi_sub_in);
+        if(*ilo >= 1 && *ilo <= n && *ihi >= *ilo && *ihi <= n)
+        {
+            copy_subvector(datatype, *ihi - *ilo + 1, wi_sub_in, 1, wi_in, 1, 0, 0, 0, *ilo - 1);
+        }
+    }
+
+    /* Copy the submatrix A_sub into A */
+    if(n >= 0)
+    {
+        copy_submatrix(datatype, *ihi - *ilo + 1, *ihi - *ilo + 1, A_sub, *ihi - *ilo + 1, A, lda,
+                       0, 0, *ilo - 1, *ilo - 1);
+    }
+
+    /* Generate Hessenberg matrix */
+    get_hessenberg_matrix(datatype, n, A, lda, Z, ldz, ilo, ihi, info, true);
+
+    free_matrix(A_sub);
+    free_matrix(L);
+    free_vector(wr_sub_in);
+    free_vector(wi_sub_in);
+}
+
 /* Generate Hessenberg matrix */
 void get_hessenberg_matrix(integer datatype, integer n, void *A, integer lda, void *Z, integer ldz,
-                           integer *ilo, integer *ihi, void *scale, integer *info)
+                           integer *ilo, integer *ihi, integer *info, bool AInitialized)
 {
     static integer g_lwork;
     void *A_save = NULL;
     void *tau = NULL, *work = NULL;
     integer lwork;
 
-    if((lda < n) || (ldz < n))
+    if(lda < n)
         return;
 
     create_matrix(datatype, &A_save, lda, n);
     create_vector(datatype, &tau, n - 1);
 
     /* Initialize random matrix & convert matrix according to ILO and IHI values. */
-    get_generic_triangular_matrix(datatype, n, A, lda, *ilo, *ihi);
+    get_generic_triangular_matrix(datatype, n, A, lda, *ilo, *ihi, AInitialized);
 
     switch(datatype)
     {
@@ -5735,6 +5792,9 @@ void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer
     void *X = NULL, *Q = NULL;
     integer info = 0;
 
+    if(n == 0)
+        return;
+
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
     {
         void *L1 = NULL;
@@ -5915,6 +5975,32 @@ void diagonalize_vector(integer datatype, void *s, void *sigma, integer m, integ
         {
             zcopy_(&min_m_n, s, &i_one, sigma, &incr);
             break;
+        }
+    }
+}
+
+/* Find negative value of every 2nd element (starting from ilo-1 till ihi-2) and store in   next
+ * location. Used to store imaginary parts of complex conjuate pair of eigen values */
+void add_negative_values_ilo_ihi(integer datatype, void *vect, integer ilo, integer ihi)
+{
+    if(!vect)
+        return;
+    integer i;
+
+    if(datatype == FLOAT)
+    {
+        float *w = (float *)vect;
+        for(i = ilo - 1; i < ihi - 1; i += 2)
+        {
+            w[i + 1] = -w[i];
+        }
+    }
+    else
+    {
+        double *w = (double *)vect;
+        for(i = ilo - 1; i < ihi - 1; i += 2)
+        {
+            w[i + 1] = -w[i];
         }
     }
 }

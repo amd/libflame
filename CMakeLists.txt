@@ -153,11 +153,6 @@ if(WIN32)
 endif()
 set(AOCL_ROOT "" CACHE STRING "AOCL-BLAS installation path")
 
-if (ENABLE_AOCL_BLAS)
-       message(STATUS "AOCL-BLAS library linking option selected")
-       include(cmake/find_aocl-blas.cmake)
-endif()
-
 
 message(STATUS "checking SIMD  ")
 if(WIN32)
@@ -500,6 +495,13 @@ if(ENABLE_ILP64)
 	set(FLA_ENABLE_ILP64 TRUE)
 	add_definitions(-DFLA_ENABLE_ILP64=1)
 	message(STATUS "Enabled FLA_ENABLE_ILP64 : ${ENABLE_ILP64} ")
+endif()
+
+# AOCL-BLAS library linking option. If ENABLE_AOCL_BLAS is set, then the AOCL-BLAS library will be linked.
+# Note: This block has to come after the FLA_ENABLE_ILP64 block, as that decides the type of AOCL-BLAS library thats linked.
+if (ENABLE_AOCL_BLAS)
+       message(STATUS "AOCL-BLAS library linking option selected")
+       include(cmake/find_aocl-blas.cmake)
 endif()
 
 if(ENABLE_AMD_OPT)

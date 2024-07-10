@@ -32,9 +32,24 @@ function(aocl_libs)
 
   IF(WIN32)
     SET(CMAKE_FIND_LIBRARY_PREFIXES "")
-    SET(CMAKE_FIND_LIBRARY_SUFFIXES ".lib") 
+    SET(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
+    
+    if(FLA_OPENMP_MULTITHREADING)
+      IF(BUILD_SHARED_LIBS)
+        SET(BLAS_LIB_NAME "AOCL-LibBlis-Win-MT-dll")
+      ELSE(BUILD_SHARED_LIBS)
+        SET(BLAS_LIB_NAME "AOCL-LibBlis-Win-MT")
+      ENDIF(BUILD_SHARED_LIBS)
+    ELSE(FLA_OPENMP_MULTITHREADING)
+      IF(BUILD_SHARED_LIBS)
+        SET(BLAS_LIB_NAME "AOCL-LibBlis-Win-dll")
+      ELSE(BUILD_SHARED_LIBS)
+        SET(BLAS_LIB_NAME "AOCL-LibBlis-Win")
+      ENDIF(BUILD_SHARED_LIBS)
+    ENDIF(FLA_OPENMP_MULTITHREADING)
+
     find_library(AOCL_BLAS_LIB
-    NAMES AOCL-LibBlis-Win-MT AOCL-LibBlis-Win-MT-dll AOCL-LibBlis-Win AOCL-LibBlis-Win-dll
+    NAMES ${BLAS_LIB_NAME}
     HINTS ${AOCL_ROOT}/blis ${AOCL_ROOT}/amd-blis ${AOCL_ROOT}
     PATH_SUFFIXES "lib/${ILP_DIR}" "lib_${ILP_DIR}" "lib"
     DOC "AOCL-BLAS library"
@@ -56,8 +71,14 @@ function(aocl_libs)
       SET(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
     ENDIF(BUILD_SHARED_LIBS) 
 
+    IF(FLA_OPENMP_MULTITHREADING)
+      SET(BLAS_LIB_NAME "blis-mt")
+    ELSE(FLA_OPENMP_MULTITHREADING)
+      SET(BLAS_LIB_NAME "blis")
+    ENDIF(FLA_OPENMP_MULTITHREADING)
+
     find_library(AOCL_BLAS_LIB
-    NAMES blis-mt blis
+    NAMES ${BLAS_LIB_NAME}
     HINTS ${AOCL_ROOT}/blis ${AOCL_ROOT}/amd-blis ${AOCL_ROOT}
     PATH_SUFFIXES "lib/${ILP_DIR}" "lib_${ILP_DIR}" "lib"
     DOC "AOCL-BLAS library"

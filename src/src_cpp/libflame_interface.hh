@@ -2345,7 +2345,7 @@ namespace libflame
     }
     /** @}*/ // end of ptts2
 
-    /** @defgroup  ptrtfs ptrfs
+    /** @defgroup  ptrfs ptrfs
      * @{
      * @ingroup Cholesky Cholesky
      */
@@ -12731,7 +12731,7 @@ normwise error bounds \endverbatim
     {
         lasyf_aa(uplo, j1, m, nb, a, lda, ipiv, h, ldh, work);
     }
-    /** @}*/ // end of ;lasyf_aa
+    /** @}*/ // end of lasyf_aa
 
     /** @defgroup sytrs_aa sytrs_aa
      * @ingroup LDL_computation LDL_computation
@@ -12794,82 +12794,6 @@ normwise error bounds \endverbatim
         sytrs_aa(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info);
     }
     /** @}*/ // end of sytrs_aa
-
-    /** @defgroup sytrf_aa sytrf_aa
-     * @ingroup LDL_computation LDL_computation
-     * @{
-     */
-    /*! @brief SYTRF_AA computes the factorization of a real symmetric matrix A using the Aasen's
- algorithm
-
- * @details
- * \b Purpose:
-    \verbatim
-     SYTRF_AA computes the factorization of a real symmetric matrix A
-     using the Aasen's algorithm.  The form of the factorization is
-
-        A = U**T*T*U  or  A = L*T*L**T
-
-     where U (or L) is a product of permutation and unit upper (lower)
-     triangular matrices, and T is a symmetric tridiagonal matrix.
-
-     This is the blocked version of the algorithm, calling Level 3 BLAS.
-    \endverbatim
-
- * @param[in] UPLO
-          UPLO is CHARACTER*1 \n
-          = 'U':  Upper triangle of A is stored; \n
-          = 'L':  Lower triangle of A is stored. \n
- * @param[in] N
-          N is INTEGER \n
-          The order of the matrix A.  N >= 0. \n
- * @param[in,out] A
-          A is REAL array, dimension (LDA,N) \n
-          On entry, the symmetric matrix A.  If UPLO = 'U', the leading
-          N-by-N upper triangular part of A contains the upper
-          triangular part of the matrix A, and the strictly lower
-          triangular part of A is not referenced.  If UPLO = 'L', the
-          leading N-by-N lower triangular part of A contains the lower
-          triangular part of the matrix A, and the strictly upper
-          triangular part of A is not referenced. \n
- \n
-          On exit, the tridiagonal matrix is stored in the diagonals
-          and the subdiagonals of A just below (or above) the diagonals,
-          and L is stored below (or above) the subdiaonals, when UPLO
-          is 'L' (or 'U'). \n
- * @param[in] LDA
-          LDA is INTEGER \n
-          The leading dimension of the array A.  LDA >= fla_max(1,N). \n
- * @param[out] IPIV
-          IPIV is INTEGER array, dimension (N) \n
-          On exit, it contains the details of the interchanges, i.e.,
-          the row and column k of A were interchanged with the
-          row and column IPIV(k). \n
- * @param[out]	WORK
-          WORK is REAL array, dimension (MAX(1,LWORK)) \n
-          On exit, if INFO = 0, WORK(1) returns the optimal LWORK. \n
- * @param[in]	LWORK
-          LWORK is INTEGER \n
-          The length of WORK.  LWORK >= MAX(1,2*N). For optimum performance
-          LWORK >= N*(1+NB), where NB is the optimal blocksize. \n
- \n
-          If LWORK = -1, then a workspace query is assumed; the routine
-          only calculates the optimal size of the WORK array, returns
-          this value as the first entry of the WORK array, and no error
-          message related to LWORK is issued by XERBLA. \n
- * @param[out]	INFO
-          INFO is INTEGER \n
-          = 0:  successful exit \n
-          < 0:  if INFO = -i, the i-th argument had an illegal value. \n
-
- *  * */
-    template <typename T>
-    void sytrf_aa(char *uplo, integer *n, T *a, integer *lda, integer *ipiv, T *work,
-                  integer *lwork, integer *info)
-    {
-        sytrf_aa(uplo, n, a, lda, ipiv, work, lwork, info);
-    }
-    /** @}*/ // end of sytrf_aa
 
     /** @defgroup hetrf_aa hetrf_aa
      * @ingroup LDL_computation LDL_computation
@@ -12944,81 +12868,6 @@ normwise error bounds \endverbatim
         hetrf_aa(uplo, n, a, lda, ipiv, work, lwork, info);
     }
     /** @}*/ // end of hetrf_aa
-
-    /** @defgroup lasyf_aa lasyf_aa
-     * @ingroup LDL_computation LDL_computation
-     * @{
-     */
-    /*! @brief LASYF_AA factorizes a panel of a real symmetric matrix A using the Aasen's algorithm
-
- * @details
- * \b Purpose:
-    \verbatim
-    LASYF_AA factorizes a panel of a real symmetric matrix A using
-    the Aasen's algorithm. The panel consists of a set of NB rows of A
-    when UPLO is U, or a set of NB columns when UPLO is L.
-
-    In order to factorize the panel, the Aasen's algorithm requires the
-    last row, or column, of the previous panel. The first row, or column,
-    of A is set to be the first row, or column, of an identity matrix,
-    which is used to factorize the first panel.
-
-    The resulting J-th row of U, or J-th column of L, is stored in the
-    (J-1)-th row, or column, of A (without the unit diagonals), while
-    the diagonal and subdiagonal of A are overwritten by those of T.
-    \endverbatim
-
-  * @param[in] UPLO
-           UPLO is CHARACTER*1 \n
-           = 'U':  Upper triangle of A is stored; \n
-           = 'L':  Lower triangle of A is stored. \n
-  * @param[in] J1
-           J1 is INTEGER \n
-           The location of the first row, or column, of the panel
-           within the submatrix of A, passed to this routine, e.g.,
-           when called by SSYTRF_AA, for the first panel, J1 is 1,
-           while for the remaining panels, J1 is 2. \n
-  * @param[in] M
-           M is INTEGER \n
-           The dimension of the submatrix. M >= 0. \n
-  * @param[in] NB
-           NB is INTEGER \n
-           The dimension of the panel to be facotorized. \n
-  * @param[in,out] A
-           A is REAL array, dimension (LDA,M) for \n
-           the first panel, while dimension (LDA,M+1) for the
-           remaining panels. \n
-  \n
-           On entry, A contains the last row, or column, of
-           the previous panel, and the trailing submatrix of A
-           to be factorized, except for the first panel, only
-           the panel is passed.
-  \n
-           On exit, the leading panel is factorized. \n
-  * @param[in] LDA
-           LDA is INTEGER \n
-           The leading dimension of the array A.  LDA >= fla_max(1,M). \n
-  * @param[out] IPIV
-           IPIV is INTEGER array, dimension (M) \n
-           Details of the row and column interchanges,
-           the row and column k were interchanged with the row and
-           column IPIV(k). \n
-  * @param[in,out] H
-           H is REAL workspace, dimension (LDH,NB). \n
-  * @param[in] LDH
-           LDH is INTEGER \n
-           The leading dimension of the workspace H. LDH >= fla_max(1,M). \n
-  * @param[out] WORK
-           WORK is REAL workspace, dimension (M).  \n
-
- *  * */
-    template <typename T>
-    void lasyf_aa(char *uplo, integer *j1, integer *m, integer *nb, T *a, integer *lda,
-                  integer *ipiv, T *h, integer *ldh, T *work)
-    {
-        lasyf_aa(uplo, j1, m, nb, a, lda, ipiv, h, ldh, work);
-    }
-    /** @}*/ // end of lasyf_aa
 
     /** @defgroup lahef_aa lahef_aa
      * @ingroup LDL_computation LDL_computation
@@ -13096,67 +12945,6 @@ normwise error bounds \endverbatim
     }
     /** @}*/ // end of lahef_aa
 
-    /** @defgroup sytrs_aa sytrs_aa
-     * @ingroup LDL_computation LDL_computation
-     * @{
-     */
-    /*! @brief SYTRS_AA solves a system of linear equations A*X = B with a real  \n
-     symmetric matrix A
- * @details
- * \b Purpose:
-    \verbatim
-     SYTRS_AA solves a system of linear equations A*X = B with a real
-     symmetric matrix A using the factorization A = U**T*T*U or
-     A = L*T*L**T computed by SYTRF_AA.
-    \endverbatim
-
- * @param[in] UPLO
-          UPLO is CHARACTER*1 \n
-          Specifies whether the details of the factorization are stored
-          as an upper or lower triangular matrix. \n
-          = 'U':  Upper triangular, form is A = U**T*T*U; \n
-          = 'L':  Lower triangular, form is A = L*T*L**T. \n
- * @param[in] N
-          N is INTEGER \n
-          The order of the matrix A.  N >= 0. \n
- * @param[in] NRHS
-          NRHS is INTEGER \n
-          The number of right hand sides, i.e., the number of columns
-          of the matrix B.  NRHS >= 0. \n
- * @param[in] A
-          A is REAL array, dimension (LDA,N) \n
-          Details of factors computed by SSYTRF_AA. \n
- * @param[in] LDA
-          LDA is INTEGER \n
-          The leading dimension of the array A.  LDA >= fla_max(1,N). \n
- * @param[in] IPIV
-          IPIV is INTEGER array, dimension (N) \n
-          Details of the interchanges as computed by SSYTRF_AA. \n
- * @param[in,out] B
-          B is REAL array, dimension (LDB,NRHS) \n
-          On entry, the right hand side matrix B.
-          On exit, the solution matrix X. \n
- * @param[in] LDB
-          LDB is INTEGER \n
-          The leading dimension of the array B.  LDB >= fla_max(1,N). \n
- * @param[out]	WORK
-          WORK is REAL array, dimension (MAX(1,LWORK)) \n
- * @param[in]	LWORK
-          LWORK is INTEGER \n
-          The dimension of the array WORK. LWORK >= fla_max(1,3*N-2). \n
- * @param[out]	INFO
-          INFO is INTEGER \n
-          = 0:  successful exit \n
-          < 0:  if INFO = -i, the i-th argument had an illegal value \n
-
- *  * */
-    template <typename T>
-    void sytrs_aa(char *uplo, integer *n, integer *nrhs, T *a, integer *lda, integer *ipiv, T *b,
-                  integer *ldb, T *work, integer *lwork, integer *info)
-    {
-        sytrs_aa(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info);
-    }
-    /** @}*/ // end of sytrs_aa
 
     /** @defgroup hetrs_aa hetrs_aa
      * @ingroup LDL_computation LDL_computation
@@ -13545,7 +13333,7 @@ normwise error bounds \endverbatim
     }
     /** @}*/ // end of hetrf_aa_2stage
 
-    /** @}*/ // end of LDL_compuatation
+    /** @}*/ // end of LDL_computation
 
     /** @defgroup Triangular Triangular Computational
      * @ingroup LinearSolve
@@ -19257,7 +19045,7 @@ normwise error bounds \endverbatim
     }
     /** @}*/ // end of unmbr
 
-    /** @defgroup gesvj gesvj
+    /** @defgroup gesvj0 gesvj0
      * @ingroup SVD
      * @{
      */
@@ -19627,7 +19415,7 @@ normwise error bounds \endverbatim
     }
     /** @}*/ // end of lasv2
 
-    /** @defgroup lartg lartg
+    /** @defgroup lartg_svd lartg
      * @ingroup SVD
      * @{
      */
@@ -19682,7 +19470,7 @@ normwise error bounds \endverbatim
     {
         lartg(f, g, cs, sn, r__);
     }
-    /** @}*/ // end of lartg
+    /** @}*/ // end of lartg_svd
 
     /** @defgroup ggsvp3 ggsvp3
      * @ingroup SVD
@@ -35613,7 +35401,7 @@ eigenvectors for OTHER matrices
     * @param[in] ldb
               ldb is integer* \n
               The leading dimension of the array b.  ldb >= fla_max(1,n). \n
-    * @param[out]	INFO	
+    * @param[out]	INFO
               INFO is INTEGER \n
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
@@ -40597,7 +40385,7 @@ factorization formed by ?geqrt.
     {
         unhr_col(m, n, nb, a, lda, t, ldt, d, info);
     }
-    /** @} */ // end of
+    /** @} */ // end of orhr_col
 
     /** @defgroup launhr_col_getrfnp launhr_col_getrfnp
      * @ingroup QR
@@ -45129,7 +44917,7 @@ determined by sgerqf
     }
     /** @}*/ // end of orbdb1
 
-    /** @defgroup orbdb1 {un,or}bdb1
+    /** @defgroup orbdb2 {un,or}bdb2
      * @ingroup CS
      * @{
      */
@@ -45234,7 +45022,7 @@ determined by sgerqf
         unbdb2(m, p, q, x11, ldx11, x21, ldx21, theta, phi, taup1, taup2, tauq1, work, lwork, info);
     }
 
-    /** @}*/ // end of
+    /** @}*/ // end of orbdb2
 
     /** @defgroup orbdb3 {un,or}bdb3
      * @ingroup CS
@@ -46204,11 +45992,11 @@ determined by sgerqf
     /** @}*/ // end of larft
     /** @}*/ // end of HH
 
-    /** @defgroup Jacob Givens/Jacobi plane routations
+    /** @defgroup Jacob Givens/Jacobi plane rotations
      * @ingroup Orthogonal
      * @{
      */
-    /** @defgroup lartg lartg
+    /** @defgroup lartg_jacobi lartg
      * @ingroup Jacobi
      * @{
      */
@@ -46263,7 +46051,7 @@ determined by sgerqf
     {
         lartg(f, g, cs, sn, r__);
     }
-    /** @}*/ // end of lartg
+    /** @}*/ // end of lartg_jacobi
 
     /** @defgroup lartgp lartgp
      * @ingroup Jacobi
@@ -46973,36 +46761,6 @@ determined by sgerqf
     }
     /**@} */ // end of ilaprec
 
-    /** @defgroup iladiag iladiag
-     * @ingroup Parameters
-     * @{
-     */
-    /*! @brief ILADIAG translated from a character string specifying if a matrix   \n
-     has unit diagonal or not to the relevant BLAST-specified integer constant
- * @details
- * \b Purpose:
-    \verbatim
-    This subroutine translated from a character string specifying if a
-    matrix has unit diagonal or not to the relevant BLAST-specified
-    integer constant.
-
-    ILADIAG   returns an INTEGER. If ILADIAG < 0, then the input is not a
-    character indicating a unit or non-unit diagonal. Otherwise ILADIAG
-    returns the constant value corresponding to DIAG.
-    \endverbatim
- * @param[in] diag
-          DIAG is character pointer. \n
-          = N means non-unit diagonal. \n
-          = U means unit diagonal. \n
-
- * @return INTEGER Return value of the function.
- *  * */
-    inline integer iladiag(char *diag)
-    {
-        return iladiag_(diag);
-    }
-    /**@} */ // end of iladiag
-
     /** @defgroup ilaenv2stage ilaenv2stage
      * @ingroup Parameters
      * @{
@@ -47136,7 +46894,7 @@ determined by sgerqf
     }
     /**@} */ // end of latrans
     /**@} */ // end of Parameters
-    /**@} */ // end of Aux
+    /**@} */ // end of Auxs
 
     /** @defgroup BLAS BLAS-like
      * @ingroup AOCL_LAPACK

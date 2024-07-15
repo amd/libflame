@@ -1,4 +1,4 @@
-..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -24,10 +24,13 @@
 ..  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 ..  POSSIBILITY OF SUCH DAMAGE.
 
-############
+============
 AOCL-LAPACK
-############
+============
 
+
+Overview
+`````````
 AOCL-LAPACK is a high performant implementation of Linear Algebra PACKage (LAPACK).
 LAPACK provides routines for solving systems of linear equations, least-squares problems,
 eigenvalue problems, singular value problems, and the associated matrix factorizations. It is
@@ -44,37 +47,40 @@ libflame. The upstream libFLAME repository is available on `GitHub <https://gith
 libflame>`_. AMD is actively optimizing key routines in libFLAME as a part of the AOCL-LAPACK
 library, for AMD “Zen”-based architectures in the "amd" fork of libFLAME hosted on AMD GitHub.
 
-From AOCL 5.1, AOCL-LAPACK is compatible with LAPACK 3.12.0 specification. In combination
+From AOCL 4.1, AOCL-LAPACK is compatible with LAPACK 3.11.0 specification. In combination
 with the AOCL-BLAS library, which includes optimizations for the AMD “Zen”-based processors,
 AOCL-LAPACK enables running high performing LAPACK functionalities on AMD platforms.
 
 
-AOCL-LAPACK supports C, Fortran, and C++ template interfaces for the LAPACK APIs.
+Installation
+============
+
+AOCL-LAPACK library installable package is available `here <https://www.amd.com/en/developer/aocl/dense.html#lapack>`_.
+Linux & Windows installer pacakges are available for download.
+
+
+AOCL-LAPACK API GUIDE
+``````````````````````
+
+* :ref:`apiGuide`
+   * :ref:`fortranInterfaces`
+   * :ref:`lapackeInterfaces`
+   * :ref:`cppInterfaces`
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 3
+   :hidden:
+   :caption: Contents:
 
-   fortranInterfaces.rst
+   self
+   API_Guide.rst
 
-AOCL-LAPACK provides standard Fortran LAPACK APIs.
-Please refer to `Netlib documentation <https://www.netlib.org/lapack/>`_ to see the API definitions.
 
-.. toctree::
-   :maxdepth: 1
-   
-   lapackeInterfaces.rst
+Contacts
+`````````
 
-AOCL-LAPACK provides standard C Interface to LAPACK APIs.
-Please refer to `LAPACKE Netlib documentation <https://github.com/Reference-LAPACK/lapack/tree/master/LAPACKE>`_
-to see the API definitions.
+AOCL-LAPACK is developed and maintained by AMD. For support, send an email to toolchainsupport@amd.com.
 
-.. toctree::
-   :maxdepth: 1
 
-   cppInterfaces.rst
 
-AOCL-LAPACK provides standard C++ Interface to LAPACK APIs. Please refer :ref:`CPP Interface documentation <cppInterfaces>`.
 
-|
-
-*AOCL-LAPACK is developed and maintained by AMD. For support, send an email to* toolchainsupport@amd.com.

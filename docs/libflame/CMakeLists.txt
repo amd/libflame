@@ -1,5 +1,5 @@
 # ##############################################################################
-# Copyright (c) 2024-2025 Advanced Micro Devices, Inc.
+# Copyright (c) 2024 Advanced Micro Devices, Inc.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -31,11 +31,11 @@
 #
 
 
-cmake_minimum_required(VERSION 3.26.0)
+cmake_minimum_required(VERSION 3.15.0)
 
 project(aocllapack-doc)
 
-find_package(Doxygen 1.9.1)
+find_package(Doxygen 1.9.6)
 
 set(W_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 
@@ -51,22 +51,22 @@ endif()
 
 function(check_rocm_docs_version)
 
-    execute_process(COMMAND ${Python_EXECUTABLE} -m pip list
-        RESULT_VARIABLE     PIP_EXIT_CODE
-        OUTPUT_VARIABLE     PIP_LIST
-        ERROR_VARIABLE      PIP_ERROR)
+    execute_process(COMMAND python3 -m pip list
+        RESULT_VARIABLE     PIP3_EXIT_CODE
+        OUTPUT_VARIABLE     PIP3_LIST
+        ERROR_VARIABLE      PIP3_ERROR)
 
-    if(PIP_EXIT_CODE)
+    if(PIP3_EXIT_CODE)
         if(WIN32)
-            find_program(PIP_EXECUTABLE pip)
-            if(NOT PIP_EXECUTABLE)
-                message(FATAL_ERROR "pip not found")
+            find_program(PIP3_EXECUTABLE pip3)
+            if(NOT PIP3_EXECUTABLE)
+                message(FATAL_ERROR "pip3 not found")
             endif()
         endif()
-        message(FATAL_ERROR "${PIP_ERROR}")
+        message(FATAL_ERROR "${PIP3_ERROR}")
     endif()
-    # Filter rocm-docs-core among list of python libraries
-    string(REGEX MATCH "rocm-docs-core[ \t\r]*[0-9]+[\.]?[0-9]*[\.]?[0-9]*" ROCM_DOCS_CORE_FILTERED "${PIP_LIST}")
+    # Filter rocm-docs-core among list of python3 libraries
+    string(REGEX MATCH "rocm-docs-core[ \t\r]*[0-9]+[\.]?[0-9]*[\.]?[0-9]*" ROCM_DOCS_CORE_FILTERED "${PIP3_LIST}")
     # Extract version of rocm-docs-core and save it in ROCM_DOCS_VERSION
     string(REGEX REPLACE "rocm-docs-core[ \t\r]*" "" ROCM_DOCS_VERSION "${ROCM_DOCS_CORE_FILTERED}")
 
@@ -90,45 +90,40 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/doxygen/html/index.html)
 # - Sphinx
 # - rocm-docs-core
 # - breathe
-    if(WIN32)
-        find_package(Python REQUIRED COMPONENTS Interpreter)
-    else()
-        find_package(Python3 REQUIRED COMPONENTS Interpreter)
-        set(Python_EXECUTABLE ${Python3_EXECUTABLE})
-    endif()
 
+    find_package(Python3 REQUIRED COMPONENTS Interpreter)
     execute_process(
-      COMMAND ${Python_EXECUTABLE} -c "import sphinx"
+      COMMAND ${Python3_EXECUTABLE} -c "import sphinx"
       RESULT_VARIABLE EXIT_CODE
       OUTPUT_QUIET)
     if(NOT ${EXIT_CODE} EQUAL 0)
       message(
         FATAL_ERROR
-          "Python package sphinx is required to build the documentation\n   Use: ${Python_EXECUTABLE} -m pip install sphinx"
+          "Python3 package sphinx is required to build the documentation\n   Use: ${Python3_EXECUTABLE} -m pip3 install sphinx"
       )
     endif()
     execute_process(
-      COMMAND ${Python_EXECUTABLE} -c "from rocm_docs import ROCmDocs"
+      COMMAND ${Python3_EXECUTABLE} -c "from rocm_docs import ROCmDocs"
       RESULT_VARIABLE EXIT_CODE
       OUTPUT_QUIET)
     if(NOT ${EXIT_CODE} EQUAL 0)
       message(
         FATAL_ERROR
-          "Python package rocm_docs is required to build the documentation\n   Use: ${Python_EXECUTABLE} -m pip install rocm-docs-core"
+          "Python3 package rocm_docs is required to build the documentation\n   Use: ${Python3_EXECUTABLE} -m pip3 install rocm-docs-core==0.30.0"
       )
     endif()
 
     # checks rocm-docs-core version is in between 0.19.0 & 0.32.0
-    #check_rocm_docs_version()
+    check_rocm_docs_version()
 
     execute_process(
-      COMMAND ${Python_EXECUTABLE} -c "import breathe"
+      COMMAND ${Python3_EXECUTABLE} -c "import breathe"
       RESULT_VARIABLE EXIT_CODE
       OUTPUT_QUIET)
     if(NOT ${EXIT_CODE} EQUAL 0)
       message(
         FATAL_ERROR
-          "Python package breathe is required to build the documentation\n   Use: ${Python_EXECUTABLE} -m pip install breathe"
+          "Python3 package breathe is required to build the documentation\n   Use: ${Python3_EXECUTABLE} -m pip3 install breathe"
       )
     endif()
 
@@ -158,8 +153,8 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/doxygen/html/index.html)
       )
     else()
       message(STATUS "Sphinx generated successfully at ${W_DIR}/sphinx/html")
-      #file(REMOVE_RECURSE ${W_DIR}/doxygen/xml)
-      #file(REMOVE_RECURSE ${W_DIR}/sphinx/doctrees)
+      file(REMOVE_RECURSE ${W_DIR}/doxygen/xml)
+      file(REMOVE_RECURSE ${W_DIR}/sphinx/doctrees)
     endif()
 else() # !(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/docs/html/index.html)
     message(STATUS "Doxygen document generation failed.")

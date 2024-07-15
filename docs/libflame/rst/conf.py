@@ -1,5 +1,5 @@
 # ##############################################################################
-# Copyright (C) 2024-2026, Advanced Micro Devices. All rights reserved.
+# Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -31,15 +31,16 @@
 import os
 
 project = 'AOCL-LAPACK'
-copyright = '2024-2026, AMD'
+copyright = '2024, AMD'
 author = 'AMD'
-release = '5.2'
+release = '5.0'
 
 # Integrating doxygen generated xml files
 extensions = ['breathe']
 pwd = os.path.dirname(os.path.abspath(__file__))
 pwd = os.path.join(pwd, './../doxygen/xml/')
-breathe_projects = { "lapack": pwd }
+breathe_projects = { "aocl-lapack": pwd }
+breathe_default_project = "aocl-lapack"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_template']

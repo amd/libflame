@@ -242,11 +242,20 @@ void fla_test_geevx_experiment(test_params_t *params, integer datatype, integer 
         *perf *= 4.0;
 
     /* output validation */
-    if(info == 0)
+    if(!params->imatrix_char && info == 0)
         validate_geevx(&jobvl, &jobvr, &sense, &balanc, m, A, A_test, lda, VL, ldvl, VR, ldvr, w,
-                       wr, wi, scale, abnrm, rconde, rcondv, datatype, residual, &vinfo,
-                       wr_in, wi_in);
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+                       wr, wi, scale, abnrm, rconde, rcondv, datatype, residual, &vinfo, wr_in,
+                       wi_in);
+    /* check for output matrix when inputs as extreme values */
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        if(!check_extreme_value(datatype, m, m, A_test, lda, params->imatrix_char))
+        {
+            *residual = DBL_MAX;
+        }
+    }
+    else
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
     free_matrix(A);

@@ -259,6 +259,7 @@ set(NEGATIVE_TEST_CASES "ggevx sdcz A V V B 10 10 10 10 10 -1 1 --einfo=-1"
             "ung2r cz 1 1 -1 1 --einfo=-5")
 
 set(CORNER_TEST_CASES "ggevx sdcz B V V B 0 10 10 10 10 -1 1 --einfo=0"
+            "geevx sdcz B V V B 0 2 2 2 -1 1 --einfo=0"
             "geqrf sdcz 0 0 2 1 1 --einfo=0"
             "geqrf sdcz 1 0 2 1 1 --einfo=0"
             "geqrf sdcz 0 1 2 1 1 --einfo=0"

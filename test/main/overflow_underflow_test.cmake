@@ -111,6 +111,14 @@ set(OVERFLOW_UNDERFLOW_VALUES_TEST_CASES "gesvd sdcz A A 1 10 1 1 10 -1 1 --imat
             "gtsv sdcz 287 5 320 1 --imatrix=U"
             "gtsv sdcz 412 5 489 1 --imatrix=U"
             "gtsv sdcz 540 5 590 1 --imatrix=U"
+            "gels sdcz N 100 50 1 100 100 -1 1 --imatrix=O"
+            "gels sdcz N 100 50 1 100 100 -1 1 --imatrix=U"
+            "gels sdcz N 50 100 1 50 100 -1 1 --imatrix=O"
+            "gels sdcz N 50 100 1 50 100 -1 1 --imatrix=U"
+            "gels sdcz T 100 50 1 100 100 -1 1 --imatrix=O"
+            "gels sdcz T 100 50 1 100 100 -1 1 --imatrix=U"
+            "gels sdcz T 50 100 1 50 100 -1 1 --imatrix=O"
+            "gels sdcz T 50 100 1 50 100 -1 1 --imatrix=U"
 )
 
 foreach(ou_vals_test_cases IN LISTS OVERFLOW_UNDERFLOW_VALUES_TEST_CASES)

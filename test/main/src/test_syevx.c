@@ -164,29 +164,29 @@ void fla_test_syevx_experiment(test_params_t *params, integer datatype, integer 
 
     if(datatype == FLOAT || datatype == COMPLEX)
     {
-        *(real *)vl = params->eig_sym_paramslist[pci].VL;
-        *(real *)vu = params->eig_sym_paramslist[pci].VU;
-        *(real *)abstol = params->eig_sym_paramslist[pci].abstol;
+        *(float *)vl = params->eig_sym_paramslist[pci].VL;
+        *(float *)vu = params->eig_sym_paramslist[pci].VU;
+        *(float *)abstol = params->eig_sym_paramslist[pci].abstol;
 
         /* When abstol value is set to -1, assign default value.
            NOTE: Eigenvalues will be computed most accurately
                  when ABSTOL is set to twice the underflow
                  threshold 2*SLAMCH('S') */
-        if(*(real *)abstol == -1)
-            *(real *)abstol = 2 * slamch_("S");
+        if(*(float *)abstol == -1)
+            *(float *)abstol = 2 * slamch_("S");
     }
     else
     {
-        *(doublereal *)vl = params->eig_sym_paramslist[pci].VL;
-        *(doublereal *)vu = params->eig_sym_paramslist[pci].VU;
-        *(doublereal *)abstol = params->eig_sym_paramslist[pci].abstol;
+        *(double *)vl = params->eig_sym_paramslist[pci].VL;
+        *(double *)vu = params->eig_sym_paramslist[pci].VU;
+        *(double *)abstol = params->eig_sym_paramslist[pci].abstol;
 
         /* When abstol value is set to -1, assign default value.
            NOTE: Eigenvalues will be computed most accurately
                  when ABSTOL is set to twice the underflow
                  threshold 2*DLAMCH('S') */
-        if(*(doublereal *)abstol == -1)
-            *(doublereal *)abstol = 2 * dlamch_("S");
+        if(*(double *)abstol == -1)
+            *(double *)abstol = 2 * dlamch_("S");
     }
 
     /* If leading dimensions = -1, set them to default value

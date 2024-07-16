@@ -254,6 +254,14 @@ void reconstruct_band_storage_matrix(integer datatype, integer m, integer n, int
 /* Test for checking whether solution x of Ax = B from least square api belongs to row space of A*/
 void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer n, integer nrhs,
                               void *A, integer lda, void *x, integer ldb, void *resid);
+/* Compute norm for matrix/vectors
+ * Choose 2-norm or 1-norm based on type of test:
+ *     Overflow/Underflow vs Normal.
+ * ntype: Choose norm type for normal tests (refer lange API).
+ * imatrix if 'U', 2-norm is computed.
+ */
+void compute_matrix_norm(integer datatype, char ntype, integer m, integer n, void *A, integer lda,
+                         void *nrm2, char imatrix, void *work);
 /* To calculate the resudial sum of squares of solution for solution x of Ax = b and m < n*/
 void residual_sum_of_squares(int datatype, integer m, integer n, integer nrhs, void *x, integer ldx,
                              double *resid);

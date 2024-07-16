@@ -4911,6 +4911,89 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
     free_vector(work);
 }
 
+/* Compute norm for matrix/vectors
+ * Choose 2-norm or 1-norm based on type of test:
+ *     Overflow/Underflow vs Normal.
+ * ntype: Choose norm type for normal tests (refer lange API).
+ * imatrix if 'U', 2-norm is computed.
+ */
+void compute_matrix_norm(integer datatype, char ntype, integer m, integer n, void *A, integer lda,
+                         void *nrm2, char imatrix, void *work)
+{
+    integer i;
+    void *col;
+
+    if(imatrix != 'O')
+    {
+        switch(datatype)
+        {
+            case FLOAT:
+                *((float *)nrm2) = fla_lapack_slange(&ntype, &m, &n, A, &lda, work);
+                break;
+            case DOUBLE:
+                *((double *)nrm2) = fla_lapack_dlange(&ntype, &m, &n, A, &lda, work);
+                break;
+            case COMPLEX:
+                *((float *)nrm2) = fla_lapack_clange(&ntype, &m, &n, A, &lda, work);
+                break;
+            case DOUBLE_COMPLEX:
+                *((double *)nrm2) = fla_lapack_zlange(&ntype, &m, &n, A, &lda, work);
+                break;
+        }
+    }
+    else
+    {
+        switch(datatype)
+        {
+            case FLOAT:
+            {
+                float norm = 0;
+                for(i = 0; i < n; i++)
+                {
+                    col = (void *)((float *) A + i * lda);
+                    norm = fla_max(norm, snrm2_(&m, col, &i_one));
+                }
+                *((float *)nrm2) = norm;
+                break;
+            }
+            case DOUBLE:
+            {
+                double norm = 0;
+                for(i = 0; i < n; i++)
+                {
+                    col = (void *)((double *) A + i * lda);
+                    norm = fla_max(norm, dnrm2_(&m, col, &i_one));
+                }
+                *((double *)nrm2) = norm;
+                break;
+            }
+            case COMPLEX:
+            {
+                float norm = 0;
+                for(i = 0; i < n; i++)
+                {
+                    col = (void *)((scomplex *) A + i * lda);
+                    norm = fla_max(norm, scnrm2_(&m, col, &i_one));
+                }
+                *((float *)nrm2) = norm;
+                break;
+            }
+            case DOUBLE_COMPLEX:
+            {
+                double norm = 0;
+                for(i = 0; i < n; i++)
+                {
+                    col = (void *)((dcomplex *) A + i * lda);
+                    norm = fla_max(norm, dznrm2_(&m, col, &i_one));
+                }
+                *((double *)nrm2) = norm;
+                break;
+            }
+        }
+    }
+
+    return;
+}
 /* To calculate the resudial sum of squares of solution for solution x of Ax = b and m < n
  */
 void residual_sum_of_squares(int datatype, integer m, integer n, integer nrhs, void *x, integer ldx,

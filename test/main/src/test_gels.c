@@ -172,15 +172,19 @@ void fla_test_gels_experiment(test_params_t *params, integer datatype, integer p
     /* Initialize the test matrices */
     init_matrix(datatype, B, m_b, nrhs, ldb, g_ext_fptr, params->imatrix_char);
 
-    if(params->imatrix_char == NULL && g_ext_fptr == NULL)
+    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+    {
+        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+    }
+    else
     {
         /* Generate input matrix with condition number <= 100 */
         create_svd_matrix(datatype, range, m, n, A, lda, s_test, GELS_VL, GELS_VU, i_zero, i_zero,
                           '\0', NULL, info);
-    }
-    else
-    {
-        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            scale_matrix_underflow_overflow_gels(datatype, &trans, m, n, A, lda, params->imatrix_char, 1);
+        }
     }
 
     /* Save the original matrix */
@@ -204,8 +208,11 @@ void fla_test_gels_experiment(test_params_t *params, integer datatype, integer p
         *perf *= 4.0;
 
     /* Output validataion */
-    if(!params->imatrix_char && info == 0)
-        validate_gels(&trans, m, n, nrhs, A, lda, B, ldb, B_test, datatype, residual, &info);
+    if(info == 0 && !FLA_EXTREME_CASE_TEST)
+    {
+        validate_gels(&trans, m, n, nrhs, A, lda, B, ldb, B_test, datatype, residual, &info,
+                      params->imatrix_char);
+    }
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {

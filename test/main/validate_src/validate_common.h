@@ -112,7 +112,8 @@ void validate_lartg(integer datatype, void *f, void *g, void *r, void *c, void *
                     double *residual);
 
 void validate_gels(char *trans, integer m, integer n, integer nrhs, void *A, integer lda, void *B,
-                   integer ldb, void *x, integer datatype, double *residual, integer *info);
+                   integer ldb, void *x, integer datatype, double *residual, integer *info,
+                   char imatrix);
 
 void validate_larfg(integer datatype, integer n, integer incx, integer x_length, void *x, void *v,
                     void *tau, double *residual);

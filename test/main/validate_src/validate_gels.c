@@ -9,7 +9,8 @@
 #include "test_common.h"
 
 void validate_gels(char *trans, integer m, integer n, integer nrhs, void *A, integer lda, void *B,
-                   integer ldb, void *x, integer datatype, double *residual, integer *info)
+                   integer ldb, void *x, integer datatype, double *residual, integer *info,
+                   char imatrix)
 {
     integer m1 = m, n1 = n, ldc = fla_max(m, fla_max(n, nrhs));
     char NORM = '1';
@@ -53,19 +54,19 @@ void validate_gels(char *trans, integer m, integer n, integer nrhs, void *A, int
                 /* Test - 1
                  * Compute norm(B - A*x) / (max(m, n) * norm(A) * norm(x) * eps)
                  */
-                norm_a = fla_lapack_slange(&NORM, &m, &n, A, &lda, work);
-                norm_b = fla_lapack_slange(&NORM, &m1, &nrhs, B, &ldb, work);
-                norm_x = fla_lapack_slange(&NORM, &n1, &nrhs, x, &i_one, work);
+                compute_matrix_norm(datatype, NORM, m, n, A, lda, &norm_a, imatrix, work);
+                compute_matrix_norm(datatype, NORM, m1, nrhs, B, ldb, &norm_b, imatrix, work);
+                compute_matrix_norm(datatype, NORM, n1, nrhs, x, i_one, &norm_x, imatrix, work);
                 sgemm_(trans, "N", &m1, &nrhs, &n1, &s_n_one, A, &lda, x, &ldb, &s_one, B, &ldb);
-                norm = fla_lapack_slange(&NORM, &m1, &i_one, B, &ldb, work);
-                resid1 = norm / (fla_max(m1, n1) * norm_a * norm_x * eps);
+                compute_matrix_norm(datatype, NORM, m1, i_one, B, ldb, &norm, imatrix, work);
+                resid1 = (norm / norm_a) / (fla_max(m1, n1) * norm_x * eps);
 
                 /* Test - 2
                  * Compute norm(B - A*x)**T * A / (max(m, n, nrhs) * norm(A) * norm(B) * eps)
                  */
                 sgemm_("T", trans, &nrhs, &n1, &m1, &s_one, B, &ldb, A, &lda, &s_zero, C, &ldc);
-                norm = fla_lapack_slange("1", &nrhs, &n1, C, &ldc, work);
-                resid2 = norm / (fla_max(m1, fla_max(n1, nrhs)) * norm_a * norm_b * eps);
+                compute_matrix_norm(datatype, NORM, nrhs, n1, C, ldc, &norm, imatrix, work);
+                resid2 = (norm / norm_a)  / (fla_max(m1, fla_max(n1, nrhs)) * norm_b * eps);
 
                 /* Test - 3
                  * checks whether X is in the row space of A or A'.  It does so
@@ -74,6 +75,7 @@ void validate_gels(char *trans, integer m, integer n, integer nrhs, void *A, int
                  * (if TRANS = 'T') or an LQ factorization of [A',X]' (if TRANS = 'N'),
                  * and returning the norm of the trailing triangle, scaled by
                  * MAX(M,N,NRHS)*eps.
+                 * Currently disabled because of random failures: TODO.
                  */
                 check_vector_in_rowspace(datatype, trans, m, n, nrhs, A, lda, x, ldb, resid);
                 *residual = (double)fla_max(resid1, fla_max(resid2, resid3));
@@ -100,19 +102,19 @@ void validate_gels(char *trans, integer m, integer n, integer nrhs, void *A, int
                 /* Test - 1
                  * Compute norm(B - A*x) / (max(m, n) * norm(A) * norm(x) * eps)
                  */
-                norm_a = fla_lapack_dlange(&NORM, &m, &n, A, &lda, work);
-                norm_b = fla_lapack_dlange(&NORM, &m1, &nrhs, B, &ldb, work);
-                norm_x = fla_lapack_dlange(&NORM, &n1, &nrhs, x, &i_one, work);
+                compute_matrix_norm(datatype, NORM, m, n, A, lda, &norm_a, imatrix, work);
+                compute_matrix_norm(datatype, NORM, m1, nrhs, B, ldb, &norm_b, imatrix, work);
+                compute_matrix_norm(datatype, NORM, n1, nrhs, x, i_one, &norm_x, imatrix, work);
                 dgemm_(trans, "N", &m1, &nrhs, &n1, &d_n_one, A, &lda, x, &ldb, &d_one, B, &ldb);
-                norm = fla_lapack_dlange(&NORM, &m1, &i_one, B, &ldb, work);
-                resid1 = norm / (fla_max(m1, n1) * norm_a * norm_x * eps);
+                compute_matrix_norm(datatype, NORM, m1, i_one, B, ldb, &norm, imatrix, work);
+                resid1 = (norm / norm_a) / (fla_max(m1, n1) * norm_x * eps);
 
                 /* Test - 2
                  * Compute norm(B - A*x)**T * A / (max(m, n, nrhs) * norm(A) * norm(B) * eps)
                  */
                 dgemm_("T", trans, &nrhs, &n1, &m1, &d_one, B, &ldb, A, &lda, &d_zero, C, &ldc);
-                norm = fla_lapack_dlange("1", &nrhs, &n1, C, &ldc, work);
-                resid2 = norm / (fla_max(m1, fla_max(n1, nrhs)) * norm_a * norm_b * eps);
+                compute_matrix_norm(datatype, NORM, nrhs, n1, C, ldc, &norm, imatrix, work);
+                resid2 = (norm / norm_a)  / (fla_max(m1, fla_max(n1, nrhs)) * norm_b * eps);
 
                 /* Test - 3
                  * checks whether X is in the row space of A or A'.  It does so
@@ -121,6 +123,7 @@ void validate_gels(char *trans, integer m, integer n, integer nrhs, void *A, int
                  * (if TRANS = 'T') or an LQ factorization of [A',X]' (if TRANS = 'N'),
                  * and returning the norm of the trailing triangle, scaled by
                  * MAX(M,N,NRHS)*eps.
+                 * Currently disabled because of random failures: TODO.
                  */
                 check_vector_in_rowspace(datatype, trans, m, n, nrhs, A, lda, x, ldb, resid);
                 *residual = (double)fla_max(resid1, fla_max(resid2, resid3));
@@ -147,20 +150,19 @@ void validate_gels(char *trans, integer m, integer n, integer nrhs, void *A, int
                 /* Test - 1
                  * Compute norm(B - A*x) / (max(m, n) * norm(A) * norm(x) * eps)
                  */
-                norm_a = fla_lapack_clange(&NORM, &m, &n, A, &lda, work);
-                norm_b = fla_lapack_clange(&NORM, &m1, &nrhs, B, &ldb, work);
-                norm_x = fla_lapack_clange(&NORM, &n1, &nrhs, x, &i_one, work);
+                compute_matrix_norm(datatype, NORM, m, n, A, lda, &norm_a, imatrix, work);
+                compute_matrix_norm(datatype, NORM, m1, nrhs, B, ldb, &norm_b, imatrix, work);
+                compute_matrix_norm(datatype, NORM, n1, nrhs, x, i_one, &norm_x, imatrix, work);
                 cgemm_(trans, "N", &m1, &nrhs, &n1, &c_n_one, A, &lda, x, &ldb, &c_one, B, &ldb);
-                norm = fla_lapack_clange(&NORM, &m1, &i_one, B, &ldb, work);
-                resid1 = norm / (fla_max(m1, n1) * norm_a * norm_x * eps);
-                *residual = (double)resid1;
+                compute_matrix_norm(datatype, NORM, m1, i_one, B, ldb, &norm, imatrix, work);
+                resid1 = (norm / norm_a) / (fla_max(m1, n1) * norm_x * eps);
 
                 /* Test - 2
                  * Compute norm(B - A*x)**T * A / (max(m, n, nrhs) * norm(A) * norm(B) * eps)
                  */
                 cgemm_("T", trans, &nrhs, &n1, &m1, &c_one, B, &ldb, A, &lda, &c_zero, C, &ldc);
-                norm = fla_lapack_clange("1", &nrhs, &n1, C, &ldc, work);
-                resid2 = norm / (fla_max(m1, fla_max(n1, nrhs)) * norm_a * norm_b * eps);
+                compute_matrix_norm(datatype, NORM, nrhs, n1, C, ldc, &norm, imatrix, work);
+                resid2 = (norm / norm_a)  / (fla_max(m1, fla_max(n1, nrhs)) * norm_b * eps);
 
                 /* Test - 3
                  * checks whether X is in the row space of A or A'.  It does so
@@ -169,6 +171,7 @@ void validate_gels(char *trans, integer m, integer n, integer nrhs, void *A, int
                  * (if TRANS = 'T') or an LQ factorization of [A',X]' (if TRANS = 'N'),
                  * and returning the norm of the trailing triangle, scaled by
                  * MAX(M,N,NRHS)*eps.
+                 * Currently disabled because of random failures: TODO.
                  */
                 check_vector_in_rowspace(datatype, trans, m, n, nrhs, A, lda, x, ldb, resid);
                 *residual = (double)fla_max(resid1, fla_max(resid2, resid3));
@@ -196,20 +199,19 @@ void validate_gels(char *trans, integer m, integer n, integer nrhs, void *A, int
                 /* Test - 1
                  * Compute norm(B - A*x) / (max(m, n) * norm(A) * norm(x) * eps)
                  */
-                norm_a = fla_lapack_zlange(&NORM, &m, &n, A, &lda, work);
-                norm_b = fla_lapack_zlange(&NORM, &m1, &nrhs, B, &ldb, work);
-                norm_x = fla_lapack_zlange(&NORM, &n1, &nrhs, x, &i_one, work);
+                compute_matrix_norm(datatype, NORM, m, n, A, lda, &norm_a, imatrix, work);
+                compute_matrix_norm(datatype, NORM, m1, nrhs, B, ldb, &norm_b, imatrix, work);
+                compute_matrix_norm(datatype, NORM, n1, nrhs, x, i_one, &norm_x, imatrix, work);
                 zgemm_(trans, "N", &m1, &nrhs, &n1, &z_n_one, A, &lda, x, &ldb, &z_one, B, &ldb);
-                norm = fla_lapack_zlange(&NORM, &m1, &i_one, B, &ldb, work);
-                resid1 = norm / (fla_max(m1, n1) * norm_a * norm_x * eps);
-                *residual = (double)resid1;
+                compute_matrix_norm(datatype, NORM, m1, i_one, B, ldb, &norm, imatrix, work);
+                resid1 = (norm / norm_a) / (fla_max(m1, n1) * norm_x * eps);
 
                 /* Test - 2
                  * Compute norm(B - A*x)**T * A / (max(m, n, nrhs) * norm(A) * norm(B) * eps)
                  */
                 zgemm_("T", trans, &nrhs, &n1, &m1, &z_one, B, &ldb, A, &lda, &z_zero, C, &ldc);
-                norm = fla_lapack_zlange("1", &nrhs, &n1, C, &ldc, work);
-                resid2 = norm / (fla_max(m1, fla_max(n1, nrhs)) * norm_a * norm_b * eps);
+                compute_matrix_norm(datatype, NORM, nrhs, n1, C, ldc, &norm, imatrix, work);
+                resid2 = (norm / norm_a)  / (fla_max(m1, fla_max(n1, nrhs)) * norm_b * eps);
 
                 /* Test - 3
                  * checks whether X is in the row space of A or A'.  It does so
@@ -218,6 +220,7 @@ void validate_gels(char *trans, integer m, integer n, integer nrhs, void *A, int
                  * (if TRANS = 'T') or an LQ factorization of [A',X]' (if TRANS = 'N'),
                  * and returning the norm of the trailing triangle, scaled by
                  * MAX(M,N,NRHS)*eps.
+                 * Currently disabled because of random failures: TODO.
                  */
                 check_vector_in_rowspace(datatype, trans, m, n, nrhs, A, lda, x, ldb, resid);
                 *residual = (double)fla_max(resid1, fla_max(resid2, resid3));

@@ -15,6 +15,9 @@ void prepare_syev_run(char *jobz, char *uplo, integer n, void *A, integer lda, v
 void invoke_syev(integer datatype, char *jobz, char *uplo, integer *n, void *a, integer *lda,
                  void *w, void *work, integer *lwork, void *rwork, integer *info);
 
+#define SYEV_VL 0.1
+#define SYEV_VU 1000
+
 void fla_test_syev(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Eigen Values and Vectors";
@@ -107,8 +110,8 @@ void fla_test_syev_experiment(test_params_t *params, integer datatype, integer p
                               double *time_min, double *residual)
 {
     integer n, lda, info = 0;
-    char jobz, uplo, *range = "A";
-    void *A = NULL, *w = NULL, *A_test = NULL, *L = NULL;
+    char jobz, uplo, range = 'V';
+    void *A = NULL, *w = NULL, *A_test = NULL, *L = NULL, *scal = NULL;
 
     /* Get input matrix dimensions.*/
     jobz = params->eig_sym_paramslist[pci].jobz;
@@ -141,7 +144,12 @@ void fla_test_syev_experiment(test_params_t *params, integer datatype, integer p
         /*  Creating input matrix A by generating random eigen values.
             When range = V, generate EVs in given range (vl,vu)  */
         create_realtype_vector(datatype, &L, n);
-        generate_matrix_from_EVs(datatype, *range, n, A, lda, L, NULL, NULL);
+        generate_matrix_from_EVs(datatype, range, n, A, lda, L, SYEV_VL, SYEV_VU);
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            create_realtype_vector(get_datatype(datatype), &scal, n);
+            scale_matrix_underflow_overflow_syev(datatype, n, A, lda, &params->imatrix_char, scal);
+        }
     }
     /* Make a copy of input matrix A. This is required to validate the API functionality.*/
     create_matrix(datatype, matrix_layout, n, n, &A_test, lda);
@@ -160,18 +168,28 @@ void fla_test_syev_experiment(test_params_t *params, integer datatype, integer p
         *perf *= 4.0;
 
     /* output validation */
-    if (info == 0)
-        validate_syev(&jobz, range, n, A, A_test, lda, 0, 0, L, w,
-                      NULL, datatype, residual);
-
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(info == 0)
+    {
+        validate_syev(&jobz, &range, n, A, A_test, lda, 0, 0, L, w, NULL, datatype, residual,
+                      params->imatrix_char, scal);
+    }
+    else
+    {
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    }
 
     /* Free up the buffers */
     free_matrix(A);
     free_matrix(A_test);
     free_vector(w);
-    if (g_ext_fptr == NULL)
+    if(g_ext_fptr == NULL)
+    {
         free_vector(L);
+    }
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        free_vector(scal);
+    }
 }
 
 void prepare_syev_run(char *jobz, char *uplo, integer n, void *A, integer lda, void *w,

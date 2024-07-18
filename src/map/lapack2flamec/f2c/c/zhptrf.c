@@ -3,6 +3,11 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+
+/*
+*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+*/
+
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZHPTRF */
@@ -235,6 +240,7 @@ void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
     upper = lsame_(uplo, "U", 1, 1);
     imax = 0;
     jmax = 0;
+    kpc = 0;
     if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
@@ -323,7 +329,6 @@ void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
                         i__2 = kx;
                         rowmax = (d__1 = ap[i__2].r, f2c_dabs(d__1))
                                  + (d__2 = d_imag(&ap[kx]), f2c_dabs(d__2));
-                        jmax = j;
                     }
                     kx += j;
                     /* L20: */
@@ -635,7 +640,6 @@ void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
                         i__2 = kx;
                         rowmax = (d__1 = ap[i__2].r, f2c_dabs(d__1))
                                  + (d__2 = d_imag(&ap[kx]), f2c_dabs(d__2));
-                        jmax = j;
                     }
                     kx = kx + *n - j;
                     /* L70: */

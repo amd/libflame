@@ -232,8 +232,8 @@ FLA_Error FLA_Fused_UZhu_ZUhu_opd_var1( integer m_U,
 
   for ( i = 0; i < n_run; ++i )
   {
-    double    rho_z1u;
-    double    rho_z2u;
+    double    rho_z1u = 0.;
+    double    rho_z2u = 0.;
     double    rho_u1u;
     double    rho_u2u;
 

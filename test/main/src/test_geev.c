@@ -189,7 +189,7 @@ void fla_test_geev_experiment(test_params_t *params, integer datatype, integer p
             create_vector(get_realtype(datatype), &scal, 1);
          /*  Creating input matrix A by generating random eigen values */
         create_matrix(datatype, matrix_layout, n, n, &L, n);
-        generate_asym_matrix_from_EVs(datatype, n, A, lda, L, params->imatrix_char, scal);
+        generate_asym_matrix_from_EVs(datatype, n, A, lda, L, &params->imatrix_char, scal);
 
         /* Diagonal and sub-diagonals(upper and lower sub-diagonal together
            contains imaginary parts) contain real and imaginary parts

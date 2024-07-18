@@ -293,7 +293,7 @@ void sort_vector(integer datatype, char *order, integer vect_len, void *w, integ
 void create_realtype_block_diagonal_matrix(integer datatype, void *A, integer n, integer lda);
 /* Create input matrix A(Asymmetric) by randomly generating eigen values(EVs) */
 void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *L,
-                                   char imatrix, void *scal);
+                                   char *imatrix, void *scal);
 /* Generate asymmetric square matrix of size n x n using Eigen decomposition(ED) */
 void generate_asym_matrix_from_ED(integer datatype, integer n, void *A, integer lda, void *Q,
                                   void *lambda);

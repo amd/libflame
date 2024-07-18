@@ -234,9 +234,8 @@ void fla_test_syevx_experiment(test_params_t *params, integer datatype, integer 
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
     create_vector(INTEGER, &ifail, n);
 
-    prepare_syevx_run(&jobz, &range, &uplo, n, A_test, lda, vl, vu, il, iu,
-                      abstol, w, ldz, ifail, datatype, n_repeats, time_min,
-                      &info);
+    prepare_syevx_run(&jobz, &range, &uplo, n, A_test, lda, vl, vu, il, iu, abstol, w, ldz, ifail,
+                      datatype, n_repeats, time_min, &info);
 
     /* performance computation
        (8/3)n^3 flops for eigen vectors
@@ -250,20 +249,23 @@ void fla_test_syevx_experiment(test_params_t *params, integer datatype, integer 
 
     /* output validation */
     if((info == 0) && (!FLA_EXTREME_CASE_TEST))
-        validate_syev(&jobz, &range, n, A, A_test, lda, il, iu, L, w,
-                       ifail, datatype, residual);
+    {
+        validate_syev(&jobz, &range, n, A, A_test, lda, il, iu, L, w, ifail, datatype, residual,
+                      params->imatrix_char, NULL);
+    }
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {
         if((!check_extreme_value(datatype, n, n, A_test, lda, params->imatrix_char))
-        && (!check_extreme_value(datatype, n, i_one, w, i_one, params->imatrix_char)))
+           && (!check_extreme_value(datatype, n, i_one, w, i_one, params->imatrix_char)))
         {
             *residual = DBL_MAX;
         }
     }
     else
+    {
         FLA_TEST_CHECK_EINFO(residual, info, einfo);
-
+    }
     /* Free up the buffers */
     free_vector(vl);
     free_vector(vu);
@@ -272,7 +274,7 @@ void fla_test_syevx_experiment(test_params_t *params, integer datatype, integer 
     free_matrix(A);
     free_matrix(A_test);
     free_vector(w);
-    if (g_ext_fptr == NULL)
+    if(g_ext_fptr == NULL)
         free_vector(L);
 }
 

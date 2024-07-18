@@ -118,7 +118,7 @@ void fla_test_syevd_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *time_min, double *residual)
 {
     integer n, lda, info = 0;
-    char jobz, uplo, *range = "A";
+    char jobz, uplo, range = 'R';
     void *A = NULL, *w = NULL, *A_test = NULL, *L = NULL;
 
     /* Get input matrix dimensions.*/
@@ -153,7 +153,7 @@ void fla_test_syevd_experiment(test_params_t *params, integer datatype, integer 
         /*  Creating input matrix A by generating random eigen values.
             When range = V, generate EVs in given range (vl,vu)  */
         create_realtype_vector(datatype, &L, n);
-        generate_matrix_from_EVs(datatype, *range, n, A, lda, L, NULL, NULL);
+        generate_matrix_from_EVs(datatype, range, n, A, lda, L, 0.0, 0.0);
     }
     /* Make a copy of input matrix A. This is required to validate the API functionality.*/
     create_matrix(datatype, matrix_layout, n, n, &A_test, lda);
@@ -173,8 +173,10 @@ void fla_test_syevd_experiment(test_params_t *params, integer datatype, integer 
 
     /* output validation */
     if((info == 0) && (!FLA_EXTREME_CASE_TEST))
-        validate_syev(&jobz, range, n, A, A_test, lda, 0, 0, L, w,
-                      NULL, datatype, residual);
+    {
+        validate_syev(&jobz, &range, n, A, A_test, lda, 0, 0, L, w, NULL, datatype, residual,
+                      params->imatrix_char, NULL);
+    }
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {
@@ -184,8 +186,9 @@ void fla_test_syevd_experiment(test_params_t *params, integer datatype, integer 
         }
     }
     else
+    {
         FLA_TEST_CHECK_EINFO(residual, info, einfo);
-
+    }
     /* Free up the buffers */
     free_matrix(A);
     free_matrix(A_test);

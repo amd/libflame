@@ -462,7 +462,7 @@ void scale_matrix_underflow_overflow_larfg(integer datatype, integer m, integer 
         {
             calculate_scale_value(datatype, scal, max_min, 5.0, imatrix_char);
         }
-        else if (m <= 200)
+        else if(m <= 200)
         {
             calculate_scale_value(datatype, scal, max_min, 9.0, imatrix_char);
         }
@@ -561,7 +561,7 @@ void scale_matrix_underflow_overflow_org2r(integer datatype, integer m, integer 
 
 /* Calculating the scaling value with respect to max and min for gtsv */
 void calculate_gtsvA_scale_value(integer datatype, integer m, integer n, void *A, integer lda,
-                               char imatrix, void *scal)
+                                 char imatrix, void *scal)
 {
     float flt_ratio;
     double dbl_ratio;
@@ -587,38 +587,38 @@ void calculate_gtsvA_scale_value(integer datatype, integer m, integer n, void *A
         }
         else if(fla_max(m, n) <= 75)
         {
-            flt_ratio = flt_ratio /200.00;
-            dbl_ratio = dbl_ratio /210.00;
+            flt_ratio = flt_ratio / 200.00;
+            dbl_ratio = dbl_ratio / 210.00;
         }
         else if(fla_max(m, n) <= 100)
         {
-            flt_ratio = flt_ratio /250.00;
-            dbl_ratio = dbl_ratio /260.00;
+            flt_ratio = flt_ratio / 250.00;
+            dbl_ratio = dbl_ratio / 260.00;
         }
         else if(fla_max(m, n) <= 150)
         {
-            flt_ratio = flt_ratio /300.00;
-            dbl_ratio = dbl_ratio /310.00;
+            flt_ratio = flt_ratio / 300.00;
+            dbl_ratio = dbl_ratio / 310.00;
         }
         else if(fla_max(m, n) <= 200)
         {
-            flt_ratio = flt_ratio /340.00;
-            dbl_ratio = dbl_ratio /350.00;
+            flt_ratio = flt_ratio / 340.00;
+            dbl_ratio = dbl_ratio / 350.00;
         }
         else if(fla_max(m, n) <= 300)
         {
-            flt_ratio = flt_ratio /430.00;
-            dbl_ratio = dbl_ratio /440.00;
+            flt_ratio = flt_ratio / 430.00;
+            dbl_ratio = dbl_ratio / 440.00;
         }
         else if(fla_max(m, n) <= 400)
         {
-            flt_ratio = flt_ratio /510.00;
-            dbl_ratio = dbl_ratio /520.00;
+            flt_ratio = flt_ratio / 510.00;
+            dbl_ratio = dbl_ratio / 520.00;
         }
         else if(fla_max(m, n) <= 500)
         {
-            flt_ratio = flt_ratio /560.00;
-            dbl_ratio = dbl_ratio /570.00;
+            flt_ratio = flt_ratio / 560.00;
+            dbl_ratio = dbl_ratio / 570.00;
         }
         else if(fla_max(m, n) <= 750)
         {
@@ -654,7 +654,7 @@ void calculate_gtsvA_scale_value(integer datatype, integer m, integer n, void *A
 
 /* Scaling matrix with values around overflow/underflow for gtsv */
 void init_matrix_overflow_underflow_gtsv(integer datatype, integer m, integer n, void *A,
-                                        integer lda, char imatrix, void *scal)
+                                         integer lda, char imatrix, void *scal)
 {
     calculate_gtsvA_scale_value(datatype, m, n, A, lda, imatrix, scal);
     /* Scaling the matrix A by x scalar */
@@ -663,8 +663,7 @@ void init_matrix_overflow_underflow_gtsv(integer datatype, integer m, integer n,
 
 /* Scaling matrix with values around overflow underflow for gels */
 void scale_matrix_underflow_overflow_gels(integer datatype, char *trans, integer m, integer n,
-                                          void *A, integer lda, char imatrix_char,
-                                          integer sysmat)
+                                          void *A, integer lda, char imatrix_char, integer sysmat)
 {
     void *max_min = NULL, *scal = NULL;
     double tuning_val = 1.0;
@@ -677,7 +676,7 @@ void scale_matrix_underflow_overflow_gels(integer datatype, char *trans, integer
         if(imatrix_char == 'O')
         {
             get_max_from_matrix(datatype, A, max_min, m, n, lda);
-            if((*trans == 'T'|| *trans == 'C') && m >= n)
+            if((*trans == 'T' || *trans == 'C') && m >= n)
             {
                 if(datatype > DOUBLE)
                 {
@@ -733,9 +732,8 @@ void scale_matrix_underflow_overflow_gels(integer datatype, char *trans, integer
     free_vector(scal);
 }
 
-/* Scaling matrix with values around overflow underflow for gelsd */
-void scale_matrix_overflow_underflow_gelsd(integer datatype, integer m, integer n, integer nrhs, void *A,
-                                           integer lda, char imatrix_char)
+void scale_matrix_overflow_underflow_gelsd(integer datatype, integer m, integer n, integer nrhs,
+                                           void *A, integer lda, char imatrix_char)
 {
     void *max_min = NULL, *scal = NULL;
     double tuning_val;
@@ -933,4 +931,276 @@ void scale_matrix_overflow_underflow_gelss(integer datatype, integer m, integer 
     // Free vectors
     free_vector(max_min);
     free_vector(scal);
+}
+
+/* Scaling matrix with values around overflow, underflow for STEDC */
+void scale_matrix_underflow_overflow_stedc(integer datatype, integer n, void *A, integer lda,
+                                           char *imatrix_char, char *scal)
+{
+    float flt_ratio;
+    double dbl_ratio;
+
+    if((imatrix_char == NULL) || (scal == NULL))
+    {
+        return;
+    }
+    if(n == 1)
+    {
+        assign_value(datatype, A, d_one, d_one);
+    }
+    if(*imatrix_char == 'O')
+    {
+        /*Intialize the ratios with maximum of datatype value*/
+        flt_ratio = FLT_MAX;
+        dbl_ratio = DBL_MAX;
+        void *max;
+        create_vector(get_realtype(datatype), &max, 1);
+        get_max_from_matrix(datatype, A, max, n, n, lda);
+        /* The ratio is modified w.r.t dimension, to avoid inf in output */
+        if(n <= 50)
+        {
+            flt_ratio = FLT_MAX / 5.0;
+            dbl_ratio = DBL_MAX / 5.0;
+        }
+        else if(n <= 100)
+        {
+            flt_ratio = flt_ratio / 6.0;
+            dbl_ratio = dbl_ratio / 6.0;
+        }
+        else if(n <= 500)
+        {
+            flt_ratio = flt_ratio / 12.0;
+            dbl_ratio = dbl_ratio / 12.0;
+        }
+        else if(n <= 1000)
+        {
+            flt_ratio = flt_ratio / 15.0;
+            dbl_ratio = dbl_ratio / 15.0;
+        }
+        else
+        {
+            flt_ratio = flt_ratio / 1000.0;
+            dbl_ratio = dbl_ratio / 1000.0;
+        }
+        compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, max);
+        free_vector(max);
+    }
+    else if(*imatrix_char == 'U')
+    {
+        void *min;
+        create_vector(get_realtype(datatype), &min, 1);
+        /* Get minimum value from matrix */
+        get_min_from_matrix(datatype, A, min, n, n, lda);
+        /* Intialize with minimum of datatype value */
+        flt_ratio = FLT_MIN;
+        dbl_ratio = DBL_MIN;
+        compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, min);
+        free_vector(min);
+    }
+    /* Scaling the matrix A by X scalar */
+    scal_matrix(datatype, scal, A, n, n, lda, i_one);
+}
+
+/* Scaling matrix with values around overflow, underflow for STEVD */
+void scale_matrix_underflow_overflow_stevd(integer datatype, integer n, void *A, integer lda,
+                                           char *imatrix_char, char *scal)
+{
+    float flt_ratio;
+    double dbl_ratio;
+
+    if((imatrix_char == NULL) || (scal == NULL))
+    {
+        return;
+    }
+    if(n == 1)
+    {
+        assign_value(datatype, A, d_one, d_one);
+    }
+    if(*imatrix_char == 'O')
+    {
+        /*Intialize the ratios with maximum of datatype value*/
+        flt_ratio = FLT_MAX;
+        dbl_ratio = DBL_MAX;
+        void *max;
+        create_vector(get_realtype(datatype), &max, 1);
+        get_max_from_matrix(datatype, A, max, n, n, lda);
+        /* The ratio is modified w.r.t dimension, to avoid inf in output */
+        if(n <= 50)
+        {
+            flt_ratio = FLT_MAX / 4.0;
+            dbl_ratio = DBL_MAX / 4.0;
+        }
+        else if(n <= 100)
+        {
+            flt_ratio = flt_ratio / 4.0;
+            dbl_ratio = dbl_ratio / 4.5;
+        }
+        else if(n <= 500)
+        {
+            flt_ratio = flt_ratio / 9.0;
+            dbl_ratio = dbl_ratio / 9.0;
+        }
+        else if(n <= 1000)
+        {
+            flt_ratio = flt_ratio / 12.0;
+            dbl_ratio = dbl_ratio / 12.0;
+        }
+        else
+        {
+            flt_ratio = flt_ratio / 1000.0;
+            dbl_ratio = dbl_ratio / 1000.0;
+        }
+        compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, max);
+        free_vector(max);
+    }
+    else if(*imatrix_char == 'U')
+    {
+        void *min;
+        create_vector(get_realtype(datatype), &min, 1);
+        /* Get minimum value from matrix */
+        get_min_from_matrix(datatype, A, min, n, n, lda);
+        /* Intialize with minimum of datatype value */
+        flt_ratio = FLT_MIN;
+        dbl_ratio = DBL_MIN;
+        compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, min);
+        free_vector(min);
+    }
+    /* Scaling the matrix A by X scalar */
+    scal_matrix(datatype, scal, A, n, n, lda, i_one);
+}
+
+/* Scaling matrix with values around overflow, underflow for SYEV/HEEV */
+void scale_matrix_underflow_overflow_syev(integer datatype, integer n, void *A, integer lda,
+                                          char *imatrix_char, char *scal)
+{
+    float flt_ratio;
+    double dbl_ratio;
+
+    if((imatrix_char == NULL) || (scal == NULL))
+    {
+        return;
+    }
+    if(n == 1)
+    {
+        assign_value(datatype, A, d_one, d_one);
+    }
+    if(*imatrix_char == 'O')
+    {
+        /*Intialize the ratios with maximum of datatype value*/
+        flt_ratio = FLT_MAX;
+        dbl_ratio = DBL_MAX;
+        void *max;
+        create_vector(get_realtype(datatype), &max, 1);
+        get_max_from_matrix(datatype, A, max, n, n, lda);
+        /* The ratio is modified w.r.t dimension, to avoid inf in output */
+        if(n <= 50)
+        {
+            flt_ratio = FLT_MAX / 4.5;
+            dbl_ratio = DBL_MAX / 5.0;
+        }
+        else if(n <= 100)
+        {
+            flt_ratio = flt_ratio / 6.0;
+            dbl_ratio = dbl_ratio / 6.0;
+        }
+        else if(n <= 500)
+        {
+            flt_ratio = flt_ratio / 12.0;
+            dbl_ratio = dbl_ratio / 12.0;
+        }
+        else if(n <= 1000)
+        {
+            flt_ratio = flt_ratio / 16.0;
+            dbl_ratio = dbl_ratio / 16.0;
+        }
+        else
+        {
+            flt_ratio = flt_ratio / 1000.0;
+            dbl_ratio = dbl_ratio / 1000.0;
+        }
+        compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, max);
+        free_vector(max);
+    }
+    else if(*imatrix_char == 'U')
+    {
+        void *min;
+        create_vector(get_realtype(datatype), &min, 1);
+        /* Get minimum value from matrix */
+        get_min_from_matrix(datatype, A, min, n, n, lda);
+        /* Intialize with minimum of datatype value */
+        flt_ratio = FLT_MIN;
+        dbl_ratio = DBL_MIN;
+        compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, min);
+        free_vector(min);
+    }
+    /* Scaling the matrix A by X scalar */
+    scal_matrix(datatype, scal, A, n, n, lda, i_one);
+}
+
+/* Scaling matrix with values around overflow, underflow for STEQR */
+void scale_matrix_underflow_overflow_steqr(integer datatype, integer n, void *A, integer lda,
+                                           char *imatrix_char, char *scal)
+{
+    float flt_ratio;
+    double dbl_ratio;
+
+    if((imatrix_char == NULL) || (scal == NULL))
+    {
+        return;
+    }
+    if(n == 1)
+    {
+        assign_value(datatype, A, d_one, d_one);
+    }
+    if(*imatrix_char == 'O')
+    {
+        /*Intialize the ratios with maximum of datatype value*/
+        flt_ratio = FLT_MAX;
+        dbl_ratio = DBL_MAX;
+        void *max;
+        create_vector(get_realtype(datatype), &max, 1);
+        get_max_from_matrix(datatype, A, max, n, n, lda);
+        /* The ratio is modified w.r.t dimension, to avoid inf in output */
+        if(n <= 50)
+        {
+            flt_ratio = FLT_MAX / 6.0;
+            dbl_ratio = DBL_MAX / 6.0;
+        }
+        else if(n <= 100)
+        {
+            flt_ratio = flt_ratio / 7.0;
+            dbl_ratio = dbl_ratio / 7.0;
+        }
+        else if(n <= 500)
+        {
+            flt_ratio = flt_ratio / 13.0;
+            dbl_ratio = dbl_ratio / 13.5;
+        }
+        else if(n <= 1000)
+        {
+            flt_ratio = flt_ratio / 16.0;
+            dbl_ratio = dbl_ratio / 17.0;
+        }
+        else
+        {
+            flt_ratio = flt_ratio / 1000.0;
+            dbl_ratio = dbl_ratio / 1000.0;
+        }
+        compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, max);
+        free_vector(max);
+    }
+    else if(*imatrix_char == 'U')
+    {
+        void *min;
+        create_vector(get_realtype(datatype), &min, 1);
+        /* Get minimum value from matrix */
+        get_min_from_matrix(datatype, A, min, n, n, lda);
+        /* Intialize with minimum of datatype value */
+        flt_ratio = FLT_MIN;
+        dbl_ratio = DBL_MIN;
+        compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, min);
+        free_vector(min);
+    }
+    /* Scaling the matrix A by X scalar */
+    scal_matrix(datatype, scal, A, n, n, lda, i_one);
 }

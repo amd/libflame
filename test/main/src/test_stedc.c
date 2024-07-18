@@ -14,6 +14,9 @@ void invoke_stedc(integer datatype, char *compz, integer *n, void *D, void *E, v
                   integer *ldz, void *work, integer *lwork, void *rwork, integer *lrwork,
                   integer *iwork, integer *liwork, integer *info);
 
+#define STEDC_VL 0.1
+#define STEDC_VU 1000
+
 void fla_test_stedc(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Eigenvalues/eigenvectors of symmetric tridiagonal matrix";
@@ -35,7 +38,7 @@ void fla_test_stedc(integer argc, char **argv, test_params_t *params)
     {
         FLA_TEST_PARSE_LAST_ARG(argv[10]);
     }
-    if(argc >= 10 && argc <= 11)
+    if((argc == 10) || (argc == 11))
     {
         /* Test with parameters from commandline */
         integer i, num_types, N;
@@ -112,10 +115,9 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
 {
     integer n, info = 0, realtype, lda, ldz;
     void *D = NULL, *D_test = NULL, *E = NULL, *E_test = NULL, *Z_test = NULL;
-    void *Z = NULL, *A = NULL, *L = NULL, *Q = NULL;
+    void *Z = NULL, *A = NULL, *L = NULL, *Q = NULL, *scal = NULL;
     double time_min = 1e9;
-    char compz, uplo;
-    char *range = "A";
+    char compz, uplo, range = 'V';
     double resid;
 
     /* Get input matrix dimensions. */
@@ -125,7 +127,6 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
     compz = params->eig_sym_paramslist[pci].compz;
     ldz = params->eig_sym_paramslist[pci].ldz;
     *residual = params->eig_sym_paramslist[pci].threshold_value;
-
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
@@ -160,7 +161,7 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
     create_vector(realtype, &D, n);
     create_vector(realtype, &E, n - 1);
 
-    if(g_ext_fptr || params->imatrix_char)
+    if(g_ext_fptr || FLA_EXTREME_CASE_TEST)
     {
         /* Initialize input matrix with random/custom data */
         init_matrix(realtype, D, 1, n, 1, g_ext_fptr, params->imatrix_char);
@@ -201,7 +202,12 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
     else
     {
         create_realtype_vector(datatype, &L, n);
-        generate_matrix_from_EVs(datatype, *range, n, A, lda, L, NULL, NULL);
+        generate_matrix_from_EVs(datatype, range, n, A, lda, L, STEDC_VL, STEDC_VU);
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            create_realtype_vector(get_datatype(datatype), &scal, n);
+            scale_matrix_underflow_overflow_stedc(datatype, n, A, lda, &params->imatrix_char, scal);
+        }
         copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
         uplo = 'U';
         invoke_sytrd(datatype, &uplo, compz, n, Q, lda, D, E, &info);
@@ -243,7 +249,8 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
     /* Output validation. */
     if(!FLA_EXTREME_CASE_TEST && (info == 0))
     {
-        validate_syev(&compz, range, n, Z, Z_test, ldz, 0, 0, L, D_test, NULL, datatype, residual);
+        validate_syev(&compz, &range, n, Z, Z_test, ldz, 0, 0, L, D_test, NULL, datatype, residual,
+                      params->imatrix_char, scal);
     }
     /* Check for output matrix & vectors when inputs are extreme values */
     else if(FLA_EXTREME_CASE_TEST)
@@ -277,8 +284,15 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
     free_matrix(A);
     free_vector(D);
     free_vector(E);
-    free_vector(L);
+    if(L != NULL)
+    {
+        free_vector(L);
+    }
     free_matrix(Q);
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        free_vector(scal);
+    }
 }
 
 void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, integer ldz,

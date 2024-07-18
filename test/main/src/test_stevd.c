@@ -15,6 +15,9 @@ void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, voi
 void invoke_stevd(integer datatype, char *jobz, integer *n, void *z, integer *ldz, void *d, void *e,
                   void *work, integer *lwork, void *iwork, integer *liwork, integer *info);
 
+#define STEVD_VL 0.1
+#define STEVD_VU 1000
+
 void fla_test_stevd(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Eigen Decomposition of symmetrix tridiagonal matrix";
@@ -35,7 +38,7 @@ void fla_test_stevd(integer argc, char **argv, test_params_t *params)
     {
         FLA_TEST_PARSE_LAST_ARG(argv[9]);
     }
-    if(argc >= 9 && argc <= 10)
+    if((argc == 9) || (argc == 10))
     {
         /* Test with parameters from commandline */
         integer i, num_types, N;
@@ -115,9 +118,8 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
     void *Z = NULL, *Z_test = NULL;
     void *D = NULL, *D_test = NULL;
     void *E = NULL, *E_test = NULL;
-    void *Q = NULL, *A = NULL, *L = NULL;
-    char *range = "A";
-    char uplo = 'U';
+    void *Q = NULL, *A = NULL, *L = NULL, *scal = NULL;
+    char range = 'V', uplo = 'U';
 
     /* Get input matrix dimensions.*/
     jobz = params->eig_sym_paramslist[pci].jobz;
@@ -160,7 +162,7 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
     create_matrix(datatype, matrix_layout, n, n, &A, lda);
     reset_matrix(datatype, n, n, A, lda);
 
-    if(g_ext_fptr != NULL || params->imatrix_char)
+    if(g_ext_fptr != NULL || FLA_EXTREME_CASE_TEST)
     {
         init_matrix(datatype, D, 1, n, 1, g_ext_fptr, params->imatrix_char);
         init_matrix(datatype, E, 1, n - 1, 1, g_ext_fptr, params->imatrix_char);
@@ -169,11 +171,16 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
     {
         /* Generate input from known eigen values */
         create_realtype_vector(datatype, &L, n);
-        generate_matrix_from_EVs(datatype, *range, n, A, lda, L, NULL, NULL);
+        generate_matrix_from_EVs(datatype, range, n, A, lda, L, STEVD_VL, STEVD_VU);
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            create_realtype_vector(get_datatype(datatype), &scal, n);
+            scale_matrix_underflow_overflow_stevd(datatype, n, A, lda, &params->imatrix_char, scal);
+        }
         copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
         invoke_sytrd(datatype, &uplo, jobz, n, Q, lda, D, E, &info);
     }
-    // Get symmetric tridiagonal matrix from D, E and use for validation.
+    /* Get symmetric tridiagonal matrix from D, E and use for validation.*/
     copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
 
     create_matrix(datatype, matrix_layout, n, n, &Z_test, ldz);
@@ -193,9 +200,10 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
         *perf = (double)(6.0 * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
 
     /* output validation */
-    if(!params->imatrix_char && info == 0)
+    if(!FLA_EXTREME_CASE_TEST && (info == 0))
     {
-        validate_syev(&jobz, range, n, Z, Z_test, ldz, 0, 0, L, D_test, NULL, datatype, residual);
+        validate_syev(&jobz, &range, n, Z, Z_test, ldz, 0, 0, L, D_test, NULL, datatype, residual,
+                      params->imatrix_char, scal);
     }
     /* Check for output matrix & vectors when inputs are extreme values */
     else if(FLA_EXTREME_CASE_TEST)
@@ -226,9 +234,13 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
     free_matrix(Z_test);
     free_vector(D_test);
     free_vector(E_test);
-    if(!(g_ext_fptr != NULL || params->imatrix_char))
+    if(L != NULL)
     {
         free_vector(L);
+    }
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        free_vector(scal);
     }
 }
 
@@ -285,8 +297,7 @@ void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, voi
     *info = 0;
     for(i = 0; i < n_repeats && *info == 0; ++i)
     {
-        /* Restore input matrix A value and allocate memory to output buffers
-           for each iteration*/
+        /* Restore/reset input matrices for each iteration*/
         copy_matrix(datatype, "full", n, n, Z_save, ldz, Z, ldz);
         copy_vector(datatype, n, D_save, 1, D, 1);
         copy_vector(datatype, n - 1, E_save, 1, E, 1);
@@ -304,7 +315,7 @@ void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, voi
 
     *time_min_ = time_min;
 
-    /* Free up the output buffers */
+    /* Free up the buffers */
     free_matrix(Z_save);
     free_matrix(D_save);
     free_matrix(E_save);

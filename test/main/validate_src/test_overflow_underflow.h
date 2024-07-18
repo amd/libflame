@@ -68,7 +68,7 @@ void scale_matrix_underflow_overflow_org2r(integer datatype, integer m, integer 
                                            integer lda, char imatrix_char);
 /* Scaling matrix with values around overflow underflow for gtsv */
 void init_matrix_overflow_underflow_gtsv(integer datatype, integer m, integer n, void *A,
-                                        integer lda, char imatrix, void *scal);
+                                         integer lda, char imatrix, void *scal);
 /* Scaling matrix with values around overflow underflow for gels */
 void scale_matrix_underflow_overflow_gels(integer datatype, char *trans, integer m, integer n,
                                           void *A, integer lda, char imatrix_char,
@@ -87,4 +87,16 @@ void scale_matrix_underflow_overflow_gbtrs(integer datatype, integer m, integer 
 void scale_matrix_overflow_underflow_gelss(integer datatype, integer m, integer n,
                                            integer nrhs, void *A, integer lda,
                                            char imatrix_char);
+/* Scaling matrix with values around overflow, underflow for STEDC */
+void scale_matrix_underflow_overflow_stedc(integer datatype, integer n, void *A,
+                                           integer lda, char *imatrix_char, char *scal);
+/* Scaling matrix with values around overflow, underflow for STEVD */
+void scale_matrix_underflow_overflow_stevd(integer datatype, integer n, void *A,
+                                           integer lda, char *imatrix_char, char *scal);
+/* Scaling matrix with values around overflow, underflow for SYEV/HEEV */
+void scale_matrix_underflow_overflow_syev(integer datatype, integer n, void *A,
+                                           integer lda, char *imatrix_char, char *scal);
+/* Scaling matrix with values around overflow, underflow for STEQR */
+void scale_matrix_underflow_overflow_steqr(integer datatype, integer n, void *A,
+                                           integer lda, char *imatrix_char, char *scal);
 #endif // TEST_OVERFLOW_UNDERFLOW_H

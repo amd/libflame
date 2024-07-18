@@ -15,6 +15,9 @@ void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, vo
 void invoke_steqr(integer datatype, char *compz, integer *n, void *z, integer *ldz, void *d,
                   void *e, void *work, integer *info);
 
+#define STEQR_VL 0.1
+#define STEQR_VU 1000
+
 void fla_test_steqr(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Eigen Decomposition of symmetrix tridiagonal matrix";
@@ -107,13 +110,11 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *time_min, double *residual)
 {
     integer n, ldz, lda, info = 0, realtype;
-    char compz, uplo;
+    char compz, uplo, range = 'V';
     void *Z = NULL, *Z_test = NULL, *A = NULL, *Q = NULL;
     void *D = NULL, *D_test = NULL, *E = NULL, *E_test = NULL;
-    void *L = NULL;
-    char *range = "A";
+    void *L = NULL, *scal = NULL;
     double resid;
-    bool ext_flag;
 
     /* Get input matrix dimensions.*/
     compz = params->eig_sym_paramslist[pci].compz;
@@ -157,7 +158,7 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
     create_vector(realtype, &D, n);
     create_vector(realtype, &E, n - 1);
 
-    if((g_ext_fptr != NULL) || FLA_EXTREME_CASE_TEST)
+    if(g_ext_fptr != NULL)
     {
         /* Initialize input matrix with custom data */
         init_matrix(realtype, D, 1, n, 1, g_ext_fptr, params->imatrix_char);
@@ -165,40 +166,35 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
         if(compz == 'V')
         {
             init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
-            if(g_ext_fptr != NULL)
+            copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
+            resid = check_orthogonality(datatype, Q, n, n, lda);
+            if(resid < *residual)
             {
-                copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
-                resid = check_orthogonality(datatype, Q, n, n, lda);
-                if(resid < *residual)
-                {
-                    /* Input matrix is orthogonal matrix for file inputs.
-                       So get the symmetric/hermitian matrix using:
-                       A = Q * T * (Q**T) */
-                    /* Form tridiagonal matrix Z by copying from matrix.*/
-                    copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
-                    fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, Q, &lda, Z, &ldz, Z_test, &ldz);
-                    fla_invoke_gemm(datatype, "N", "T", &n, &n, &n, Z_test, &ldz, Q, &lda, A, &lda);
-                }
-                else
-                {
-                    *residual = DBL_MAX;
-                    printf("Orthogonality check failed for input matrix Q.\n");
-                    return;
-                }
+                /* Input matrix is orthogonal matrix for file inputs.
+                    So get the symmetric/hermitian matrix using:
+                    A = Q * T * (Q**T) */
+                /* Form tridiagonal matrix Z by copying from matrix.*/
+                copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
+                fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, Q, &lda, Z, &ldz, Z_test, &ldz);
+                fla_invoke_gemm(datatype, "N", "T", &n, &n, &n, Z_test, &ldz, Q, &lda, A, &lda);
             }
-            else if(FLA_EXTREME_CASE_TEST)
+            else
             {
-                /* Get the symmetric/hermitian matrix.*/
-                form_symmetric_matrix(datatype, n, A, lda, "C");
-                /* Initialize Q matrix. */
-                init_matrix(datatype, Q, n, n, lda, g_ext_fptr, params->imatrix_char);
+                *residual = DBL_MAX;
+                printf("Orthogonality check failed for input matrix Q.\n");
+                return;
             }
         }
     }
     else
     {
         create_realtype_vector(datatype, &L, n);
-        generate_matrix_from_EVs(datatype, *range, n, A, lda, L, NULL, NULL);
+        generate_matrix_from_EVs(datatype, range, n, A, lda, L, STEQR_VL, STEQR_VU);
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            create_realtype_vector(get_datatype(datatype), &scal, n);
+            scale_matrix_underflow_overflow_steqr(datatype, n, A, lda, &params->imatrix_char, scal);
+        }
         copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
         invoke_sytrd(datatype, &uplo, compz, n, Q, lda, D, E, &info);
     }
@@ -234,23 +230,10 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
         *perf = (double)(14.0 * n * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
 
     /* Output validation */
-    if((info == 0) && !FLA_EXTREME_CASE_TEST)
+    if(info == 0)
     {
-        validate_syev(&compz, range, n, Z, Z_test, lda, 0, 0, L, D_test, NULL, datatype, residual);
-    }
-    /* Check for output matrix & vectors when inputs are extreme values */
-    else if(FLA_EXTREME_CASE_TEST)
-    {
-        ext_flag = check_extreme_value(datatype, n, 1, D_test, 1, params->imatrix_char);
-        if((compz == 'N') && !ext_flag)
-        {
-            *residual = DBL_MAX;
-        }
-        else if(!check_extreme_value(datatype, n, n, Z_test, lda, params->imatrix_char)
-               && !ext_flag)
-        {
-            *residual = DBL_MAX;
-        }
+        validate_syev(&compz, &range, n, Z, Z_test, lda, 0, 0, L, D_test, NULL, datatype, residual,
+                      params->imatrix_char, scal);
     }
     else
     {
@@ -270,6 +253,10 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
         free_vector(L);
     }
     free_matrix(Z_test);
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        free_vector(scal);
+    }
 }
 
 void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, void *E,

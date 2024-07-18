@@ -207,7 +207,7 @@ void fla_test_geevx_experiment(test_params_t *params, integer datatype, integer 
     {
         /*  Creating input matrix A by generating random eigen values */
         create_matrix(datatype, matrix_layout, m, m, &L, m);
-        generate_asym_matrix_from_EVs(datatype, m, A, lda, L, params->imatrix_char, scal);
+        generate_asym_matrix_from_EVs(datatype, m, A, lda, L, &params->imatrix_char, scal);
 
         /* Diagonal and sub-diagonals(upper and lower sub-diagonal together
            contains imaginary parts) contain real and imaginary parts

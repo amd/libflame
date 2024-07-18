@@ -7264,13 +7264,13 @@ inline void la_wwaddw(integer *n, dcomplex *x, dcomplex *y, dcomplex *w)
 }
 
 // --- takes as input the values computed by LAMCH for underflow and overflow, and returns the square root of each of these values ---
-inline void labad(float *small, float *large)
+inline void labad(float *small_val, float *large)
 {
-  slabad_( small, large);
+  slabad_( small_val, large);
 }
-inline void labad(double *small, double *large)
+inline void labad(double *small_val, double *large)
 {
-  dlabad_( small, large);
+  dlabad_( small_val, large);
 }
 
 // --- reduces the first nb rows and columns of a general matrix to a bidiagonal form ---

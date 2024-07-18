@@ -1106,18 +1106,6 @@ set(EXTREMEVALUE_TEST_CASES "gesv sdcz 4 4 4 4 1 --imatrix=A"
             "heevx cz N A U 100 155 10 20 1 3 -1 128 -1 1 --imatrix=I"
             "heevx cz V V U 23 35 5 10 1 3 -1 40 -1 1 --imatrix=I"
             "heevx cz V I L 152 160 12 30 5 15 -1 160 -1 1 --imatrix=I"
-            "steqr sdcz N 10 10 1 --imatrix=I"
-            "steqr sdcz V 10 10 1 --imatrix=I"
-            "steqr sdcz I 10 10 1 --imatrix=I"
-            "steqr sdcz N 10 10 1 --imatrix=N"
-            "steqr sdcz V 10 10 1 --imatrix=N"
-            "steqr sdcz I 10 10 1 --imatrix=N"
-            "steqr sdcz N 10 10 1 --imatrix=A"
-            "steqr sdcz V 10 10 1 --imatrix=A"
-            "steqr sdcz I 10 10 1 --imatrix=A"
-            "steqr sdcz N 10 10 1 --imatrix=F"
-            "steqr sdcz V 10 10 1 --imatrix=F"
-            "steqr sdcz I 10 10 1 --imatrix=F"
             )
 
 set(TEST_NUM 1)

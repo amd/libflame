@@ -2164,7 +2164,7 @@ void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, intege
     /* Generate a square matrix A_sub of size *ihi-*ilo+1 with known eigen values in L */
     create_matrix(datatype, matrix_layout, *ihi - *ilo + 1, *ihi - *ilo + 1, &A_sub, *ihi - *ilo + 1);
     create_matrix(datatype, matrix_layout, *ihi - *ilo + 1, *ihi - *ilo + 1, &L, *ihi - *ilo + 1);
-    generate_asym_matrix_from_EVs(datatype, *ihi - *ilo + 1, A_sub, *ihi - *ilo + 1, L, '\0', NULL);
+    generate_asym_matrix_from_EVs(datatype, *ihi - *ilo + 1, A_sub, *ihi - *ilo + 1, L, NULL, NULL);
 
     /* Get the diagonal elements of L into wr_sub_in and copy them into wr_in */
     create_vector(datatype, &wr_sub_in, *ihi - *ilo + 1);
@@ -4178,6 +4178,7 @@ void generate_matrix_from_EVs(integer datatype, char range, integer n, void *A, 
        and Q(Eigen vectors) obtained above using reverse
        Eigen decompostion */
     generate_matrix_from_ED(datatype, n, A, lda, Q, L);
+
     /* Free up the buffers */
     free_matrix(X);
     free_matrix(Q);
@@ -5793,7 +5794,7 @@ void create_realtype_block_diagonal_matrix(integer datatype, void *A, integer n,
 #define ASYM_EV_VL 1
 #define ASYM_EV_VU 1000
 void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *L,
-                                   char imatrix, void *scal)
+                                   char *imatrix, void *scal)
 {
     void *X = NULL, *Q = NULL;
     integer info = 0;
@@ -5827,13 +5828,14 @@ void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer
        Eigen decompostion */
     generate_asym_matrix_from_ED(datatype, n, A, lda, Q, L);
 
-    if(imatrix == 'O' || imatrix == 'U')
-        init_matrix_overflow_underflow_asym(datatype, n, n, A, lda, imatrix, scal);
+    if((imatrix != NULL) && (*imatrix == 'O' || *imatrix == 'U'))
+    {
+        init_matrix_overflow_underflow_asym(datatype, n, n, A, lda, *imatrix, scal);
+    }
 
     /* Free up the buffers */
     free_matrix(X);
     free_matrix(Q);
-    return;
 }
 
 /*

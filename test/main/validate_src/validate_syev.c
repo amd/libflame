@@ -1,6 +1,6 @@
 /******************************************************************************
-* Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
-*******************************************************************************/
+ * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 
 /* > \brief \b validate_syev.c                                              */
 /* =========== DOCUMENTATION ===========                                     */
@@ -36,21 +36,24 @@
 
 #include "test_common.h"
 
-void validate_syev(char* jobz, char* range, integer n, void* A, void* A_test,
-                   integer lda, integer il, integer iu, void *L, void* lambda,
-                   void* ifail, integer datatype, double* residual)
+void validate_syev(char *jobz, char *range, integer n, void *A, void *A_test, integer lda,
+                   integer il, integer iu, void *L, void *lambda, void *ifail, integer datatype,
+                   double *residual, char imatrix, void *scal)
 {
     if(n == 0)
         return;
     *residual = 0;
 
-    sort_realtype_vector(datatype, "A", n, L, 1);
+    if(L != NULL)
+    {
+        sort_realtype_vector(datatype, "A", n, L, 1);
+    }
 
-    if ((*range == 'I') || (*range == 'i'))
+    if((*range == 'I') || (*range == 'i'))
     {
         /* Test I range
            check if output EVs matches the input EVs in given index range */
-        if (compare_realtype_vector(datatype, (iu-il+1), L, 1, il, lambda, 1))
+        if((L != NULL) && compare_realtype_vector(datatype, (iu - il + 1), L, 1, il, lambda, 1))
         {
             *residual = DBL_MAX;
         }
@@ -85,10 +88,9 @@ void validate_syev(char* jobz, char* range, integer n, void* A, void* A_test,
                        compute norm(A - ((Q * lambda) * Q')) /
                                     (n * norm(A) * EPS)      */
                     norm_A = fla_lapack_slange("1", &n, &n, A, &lda, work);
-                    sgemm_("N", "T", &n, &n, &n, &s_one, Q, &lda, Z, &lda,
-                           &s_n_one, A, &lda);
+                    sgemm_("N", "T", &n, &n, &n, &s_one, Q, &lda, Z, &lda, &s_n_one, A, &lda);
                     norm = fla_lapack_slange("1", &n, &n, A, &lda, work);
-                    resid1 = norm/(eps * norm_A * (float)n);
+                    resid1 = norm / (eps * norm_A * (float)n);
 
                     /* Test 2
                        compute norm(I - Z'*Z) / (N * EPS)  */
@@ -107,10 +109,9 @@ void validate_syev(char* jobz, char* range, integer n, void* A, void* A_test,
                        compute norm(A - (Q * lambda * Q')) /
                                      (n * norm(A) * EPS)       */
                     norm_A = fla_lapack_dlange("1", &n, &n, A, &lda, work);
-                    dgemm_("N", "T", &n, &n, &n, &d_one, Q, &lda, Z, &lda,
-                           &d_n_one, A, &lda);
+                    dgemm_("N", "T", &n, &n, &n, &d_one, Q, &lda, Z, &lda, &d_n_one, A, &lda);
                     norm = fla_lapack_dlange("1", &n, &n, A, &lda, work);
-                    resid1 = norm/(eps * norm_A * (double)n);
+                    resid1 = norm / (eps * norm_A * (double)n);
 
                     /* Test 2
                        compute norm(I - Z'*Z) / (N * EPS)*/
@@ -129,10 +130,9 @@ void validate_syev(char* jobz, char* range, integer n, void* A, void* A_test,
                        compute norm(A - (Q * lambda * Q')) /
                                        (n * norm(A) * EPS)   */
                     norm_A = fla_lapack_clange("1", &n, &n, A, &lda, work);
-                    cgemm_("N", "C", &n, &n, &n, &c_one, Q, &lda, Z, &lda,
-                           &c_n_one, A, &lda);
+                    cgemm_("N", "C", &n, &n, &n, &c_one, Q, &lda, Z, &lda, &c_n_one, A, &lda);
                     norm = fla_lapack_clange("1", &n, &n, A, &lda, work);
-                    resid1 = norm/(eps * norm_A * (float)n);
+                    resid1 = norm / (eps * norm_A * (float)n);
 
                     /* Test 2
                        compute norm(I - Z'*Z) / (N * EPS)*/
@@ -151,10 +151,9 @@ void validate_syev(char* jobz, char* range, integer n, void* A, void* A_test,
                        compute norm(A - (Q * lambda * Q')) /
                                     (n * norm(A) * EPS)      */
                     norm_A = fla_lapack_zlange("1", &n, &n, A, &lda, work);
-                    zgemm_("N", "C", &n, &n, &n, &z_one, Q, &lda, Z, &lda,
-                           &z_n_one, A, &lda);
+                    zgemm_("N", "C", &n, &n, &n, &z_one, Q, &lda, Z, &lda, &z_n_one, A, &lda);
                     norm = fla_lapack_zlange("1", &n, &n, A, &lda, work);
-                    resid1 = norm/(eps * norm_A * (double)n);
+                    resid1 = norm / (eps * norm_A * (double)n);
 
                     /* Test 2
                        compute norm(I - Z'*Z) / (N * EPS)*/
@@ -185,10 +184,15 @@ void validate_syev(char* jobz, char* range, integer n, void* A, void* A_test,
         if(L != NULL)
         {
             void *work = NULL;
-            if (get_realtype(datatype) == FLOAT)
+            if(get_realtype(datatype) == FLOAT)
             {
                 float norm, norm_L, eps, resid3;
                 eps = fla_lapack_slamch("P");
+
+                if((imatrix == 'O' || imatrix == 'U') && (scal != NULL))
+                {
+                    sscal_(&n, scal, L, &i_one);
+                }
 
                 norm_L = fla_lapack_slange("1", &n, &i_one, L, &i_one, work);
                 saxpy_(&n, &s_n_one, lambda, &i_one, L, &i_one);
@@ -202,6 +206,10 @@ void validate_syev(char* jobz, char* range, integer n, void* A, void* A_test,
                 double norm, norm_L, eps, resid3;
                 eps = fla_lapack_dlamch("P");
 
+                if((imatrix == 'O' || imatrix == 'U') && (scal != NULL))
+                {
+                    dscal_(&n, scal, L, &i_one);
+                }
                 norm_L = fla_lapack_dlange("1", &n, &i_one, L, &i_one, work);
                 daxpy_(&n, &d_n_one, lambda, &i_one, L, &i_one);
                 norm = fla_lapack_dlange("1", &n, &i_one, L, &i_one, work);

@@ -8,6 +8,10 @@
 
 */
 
+/*
+*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+*/
+
 #include "FLAME.h"
 
 #ifdef FLA_ENABLE_LAPACK2FLAME
@@ -52,10 +56,11 @@
 #define LAPACK_hetrd_body(prefix)                                  \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);         \
     FLA_Datatype dtype_re = PREFIX2FLAME_REALTYPE(prefix);         \
-    fla_dim_t m_d = *m;                                                \
-    fla_dim_t m_e = m_d - 1;                                           \
+    fla_dim_t m_d = *m;                                            \
+    fla_dim_t m_e = m_d - 1;                                       \
     FLA_Uplo uplo_fla;                                             \
-    FLA_Obj A, d, e, t, T;                                         \
+    /* Initializing e to avoid warnings*/                          \
+    FLA_Obj A, d, e = {0}, t, T;                                   \
     FLA_Error init_result;                                         \
                                                                    \
     FLA_Init_safe(&init_result);                                   \
@@ -196,6 +201,7 @@ LAPACK_hetrd(d, sy)
             return;
         }
     }
+#if !FLA_ENABLE_AMD_OPT // Code below is unreachable if FLA_ENABLE_AMD_OPT is true
     {
         LAPACK_RETURN_CHECK_VAR1(
             dsytrd_check(uplo, m, buff_A, ldim_A, buff_d, buff_e, buff_t, buff_w, lwork, info),
@@ -210,6 +216,7 @@ LAPACK_hetrd(d, sy)
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;
+#endif
 }
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX

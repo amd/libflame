@@ -8,6 +8,10 @@
 
 */
 
+/*
+*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+*/
+
 #include "FLAME.h"
 
 FLA_Error FLA_Apply_pivots_unb_external( FLA_Side side, FLA_Trans trans, FLA_Obj p, FLA_Obj A )
@@ -50,6 +54,10 @@ FLA_Error FLA_Apply_pivots_unb_external( FLA_Side side, FLA_Trans trans, FLA_Obj
 #else
   pivots_lapack = ( integer * ) malloc( m_p * sizeof( integer ) );
 #endif
+
+  // Check if memory is allocated properly
+  if(pivots_lapack == NULL)
+    return FLA_MALLOC_RETURNED_NULL_POINTER;
 
   for ( i = 0; i < m_p; i++ )
   {
@@ -111,6 +119,9 @@ FLA_Error FLA_Apply_pivots_unb_external( FLA_Side side, FLA_Trans trans, FLA_Obj
   }
 
   }
+
+  // Free temporary pivots_lapack array allocated earlier
+  free(pivots_lapack);
 #else
   FLA_Check_error_code( FLA_EXTERNAL_LAPACK_NOT_IMPLEMENTED );
 #endif

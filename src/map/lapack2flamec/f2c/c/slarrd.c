@@ -3,6 +3,11 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+
+/*
+*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+*/
+
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -361,7 +366,7 @@ void slarrd_(char *range, char *order, integer *n, real *vl, real *vu, integer *
     real wkill, rtoli, uflow, tnorm;
     integer ibegin, irange, idiscl;
     extern real slamch_(char *);
-    integer idumma[1];
+    integer idumma[1] = {0};
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer idiscu;
     extern /* Subroutine */

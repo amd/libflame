@@ -46765,8 +46765,8 @@ determined by sgerqf
     the exponent range, as is found on a Cray.
     \endverbatim
 
- * @param[in,out] SMALL
-          SMALL is REAL \n
+ * @param[in,out] SMALL_VAL
+          SMALL_VAL is REAL \n
           On entry, the underflow threshold as computed by SLAMCH.
           On exit, if LOG10(LARGE) is sufficiently large, the square
           root of SMALL, otherwise unchanged. \n
@@ -46778,9 +46778,9 @@ determined by sgerqf
 
  * */
     template <typename T>
-    void labad(T *small, T *large)
+    void labad(T *small_val, T *large)
     {
-        labad(small, large);
+        labad(small_val, large);
     }
     /**@} */ // end of labad
 

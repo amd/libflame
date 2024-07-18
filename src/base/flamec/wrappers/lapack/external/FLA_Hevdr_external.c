@@ -29,7 +29,7 @@ FLA_Error FLA_Hevdr_external( FLA_Evd_type jobz, FLA_Uplo uplo, FLA_Obj A, FLA_O
   integer          i;
 
   char         blas_range = 'A';
-  integer          il, iu;
+  integer          il = 0, iu = 0;
   integer          eigs_found;
 
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )

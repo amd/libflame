@@ -24,7 +24,7 @@ VOID s_cat(char *lp, char *rpp[], ftnint rnp[], ftnint *np)
     ll = strlen(lp);
 
 #ifndef NO_OVERWRITE
-    lp0 = 0;
+    lp0 = NULL;
     lp1 = lp;
     L = ll;
     i = 0;

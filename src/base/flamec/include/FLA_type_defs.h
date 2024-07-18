@@ -8,6 +8,10 @@
 
 */
 
+/*
+*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+*/
+
 #ifndef FLA_TYPE_DEFS_H
 #define FLA_TYPE_DEFS_H
 
@@ -190,6 +194,13 @@ typedef struct FLA_Obj_view
   fla_dim_t         offn;
   fla_dim_t         m;
   fla_dim_t         n;
+  /* Following fields are used for hierarchical
+     matrix objects (FLASH APIs). They represent
+     total number of rows and columns stored at
+     that level, whereas m & n represent the nunber
+     of blocks (heirchical child matix object) at
+     that level.
+   */
   fla_dim_t         m_inner;
   fla_dim_t         n_inner;
 

@@ -8,6 +8,10 @@
 
 */
 
+/*
+*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+*/
+
 #include "FLAME.h"
 
 FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opt_var1(FLA_Obj delta, FLA_Obj U, FLA_Obj Y, FLA_Obj Z, FLA_Obj t, FLA_Obj u, FLA_Obj y, FLA_Obj z)
@@ -251,9 +255,9 @@ FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opd_var1(integer m_U,
   double *restrict z1;
   double *restrict tau1;
 
-  double alpha;
-  double beta;
-  double gamma;
+  double alpha = 0.;
+  double beta = 0.;
+  double gamma = 0.;
 
   integer i;
 
@@ -415,9 +419,9 @@ FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opz_var1(integer m_U,
   dcomplex *restrict z1;
   dcomplex *restrict tau1;
 
-  dcomplex alpha;
-  dcomplex beta;
-  dcomplex gamma;
+  dcomplex alpha = (dcomplex){.real = 0., .imag = 0.};
+  dcomplex beta = (dcomplex){.real = 0., .imag = 0.};
+  dcomplex gamma = (dcomplex){.real = 0., .imag = 0.};
 
   integer i;
 

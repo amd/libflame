@@ -3,6 +3,11 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+
+/*
+*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+*/
+
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b36 = .5f;
@@ -334,6 +339,9 @@ void clatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
     --ap;
     /* Function Body */
     *info = 0;
+    // initializing as {1, 0} because it is
+    // used as divisor
+    tjjs = (complex){.r = 1.f, .i = 0.f};
     upper = lsame_(uplo, "U", 1, 1);
     notran = lsame_(trans, "N", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);

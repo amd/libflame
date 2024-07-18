@@ -3,6 +3,11 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+
+/*
+*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+*/
+
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b CHPTRF */
@@ -241,6 +246,7 @@ void chptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
     *info = 0;
     imax = 0;
     jmax = 0;
+    kpc = 0;
     upper = lsame_(uplo, "U", 1, 1);
     if(!upper && !lsame_(uplo, "L", 1, 1))
     {
@@ -318,7 +324,7 @@ void chptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value */
                 rowmax = 0.f;
-                jmax = imax;
+                /* jmax = imax; */
                 kx = imax * (imax + 1) / 2 + imax;
                 i__1 = k;
                 for(j = imax + 1; j <= i__1; ++j)
@@ -330,7 +336,7 @@ void chptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
                         i__2 = kx;
                         rowmax = (r__1 = ap[i__2].r, f2c_abs(r__1))
                                  + (r__2 = r_imag(&ap[kx]), f2c_abs(r__2));
-                        jmax = j;
+                        /* jmax = j; */
                     }
                     kx += j;
                     /* L20: */
@@ -641,7 +647,7 @@ void chptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
                         i__2 = kx;
                         rowmax = (r__1 = ap[i__2].r, f2c_abs(r__1))
                                  + (r__2 = r_imag(&ap[kx]), f2c_abs(r__2));
-                        jmax = j;
+                        /* jmax = j; */
                     }
                     kx = kx + *n - j;
                     /* L70: */

@@ -1,4 +1,9 @@
 /* ../netlib/sbdsqr.f -- translated by f2c (version 20000121). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
+
+/*
+*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+*/
+
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b15 = -.125;
 static integer c__1 = 1;
@@ -321,6 +326,7 @@ int lapack_sbdsqr(char *uplo, integer *n, integer *ncvt, integer * nru, integer 
     --work;
     /* Function Body */
     *info = 0;
+    oldsn = 0.f;
     lower = lsame_(uplo, "L", 1, 1);
     if (! lsame_(uplo, "U", 1, 1) && ! lower)
     {

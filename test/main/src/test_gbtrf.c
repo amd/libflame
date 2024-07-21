@@ -137,7 +137,7 @@ void fla_test_gbtrf_experiment(test_params_t *params, integer datatype, integer 
     reset_vector(INTEGER, IPIV, fla_min(m, n), 1);
 
     /* Initialize the test matrices*/
-    if((g_ext_fptr != NULL) || (params->imatrix_char != NULL))
+    if((g_ext_fptr != NULL) || (FLA_EXTREME_CASE_TEST && !FLA_OVERFLOW_UNDERFLOW_TEST))
     {
         /* Initialize input matrix with custom data from file */
         init_matrix(datatype, AB, ldab, n, ldab, g_ext_fptr, params->imatrix_char);
@@ -146,6 +146,11 @@ void fla_test_gbtrf_experiment(test_params_t *params, integer datatype, integer 
     {
         /* Initialize & convert random band matrix into band storage as per API need */
         rand_band_storage_matrix(datatype, m, n, kl, ku, AB, ldab);
+        /* Oveflow or underflow test initialization */
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            scale_matrix_underflow_overflow_gbtrf(datatype, m, n, AB, ldab, params->imatrix_char);
+        }
     }
 
     /* Save the original matrix*/
@@ -165,7 +170,7 @@ void fla_test_gbtrf_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* output validation */
-    if(!params->imatrix_char && info == 0)
+    if((!FLA_EXTREME_CASE_TEST) && info == 0)
     {
         validate_gbtrf(m, n, kl, ku, AB, AB_test, ldab, IPIV, datatype, residual, &vinfo);
     }

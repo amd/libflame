@@ -77,4 +77,10 @@ void scale_matrix_underflow_overflow_gels(integer datatype, char *trans, integer
 void scale_matrix_overflow_underflow_gelsd(integer datatype, integer m, integer n,
                                            integer nrhs, void *A, integer lda,
                                            char imatrix_char);
+/* Scaling matrix with values around overflow underflow for gbtrf */
+void scale_matrix_underflow_overflow_gbtrf(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char);
+/* Scaling matrix with values around overflow underflow for gbtrs */
+void scale_matrix_underflow_overflow_gbtrs(integer datatype, integer m, integer nrhs, void *A,
+                                           integer lda, char imatrix_char);
 #endif // TEST_OVERFLOW_UNDERFLOW_H

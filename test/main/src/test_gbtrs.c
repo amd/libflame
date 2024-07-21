@@ -22,6 +22,7 @@ void fla_test_gbtrs(integer argc, char **argv, test_params_t *params)
     char *op_str = "Linear solver of banded matrix";
     char *front_str = "GBTRS";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char = '\0';
     if(argc == 1)
     {
         config_data = 1;
@@ -150,7 +151,7 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
     create_matrix(datatype, matrix_layout, n, nrhs, &X, ldb);
 
     /* Initialize the test matrices*/
-    if(g_ext_fptr != NULL)
+    if(g_ext_fptr != NULL || FLA_EXTREME_CASE_TEST)
     {
         /* Initialize input matrix with custom data from file */
         init_matrix(datatype, AB, n, n, ldab, g_ext_fptr, params->imatrix_char);
@@ -167,6 +168,12 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
 
         /* Initialize random B matrix */
         rand_matrix(datatype, B, n, nrhs, ldb);
+
+        /* Oveflow or underflow test initialization */
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            scale_matrix_underflow_overflow_gbtrs(datatype, n, nrhs, B, ldb, params->imatrix_char);
+        }
 
         /* Save the original matrix AB */
         copy_matrix(datatype, "full", ldab, n, AB, ldab, AB_test, ldab);
@@ -190,7 +197,7 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
         *perf *= 4.0;
     }
     /* output validation */
-    if(info == 0)
+    if((!FLA_EXTREME_CASE_TEST) && info == 0)
     {
         create_matrix(datatype, matrix_layout, n, n, &A, n);
         reset_matrix(datatype, n, n, A, n);

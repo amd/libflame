@@ -205,6 +205,9 @@ void fla_test_geevx_experiment(test_params_t *params, integer datatype, integer 
     }
     else
     {
+        /* Initialize the scaling factor only for overflow/underflow test */
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            create_vector(get_realtype(datatype), &scal, 1);
         /*  Creating input matrix A by generating random eigen values */
         create_matrix(datatype, matrix_layout, m, m, &L, m);
         generate_asym_matrix_from_EVs(datatype, m, A, lda, L, &params->imatrix_char, scal);
@@ -242,10 +245,10 @@ void fla_test_geevx_experiment(test_params_t *params, integer datatype, integer 
         *perf *= 4.0;
 
     /* output validation */
-    if(!params->imatrix_char && info == 0)
+    if(info == 0 && (FLA_OVERFLOW_UNDERFLOW_TEST || (!FLA_EXTREME_CASE_TEST)))
         validate_geevx(&jobvl, &jobvr, &sense, &balanc, m, A, A_test, lda, VL, ldvl, VR, ldvr, w,
-                       wr, wi, scale, abnrm, rconde, rcondv, datatype, residual, &vinfo, wr_in,
-                       wi_in);
+                       wr, wi, scale, abnrm, rconde, rcondv, datatype, params->imatrix_char, scal,
+                       residual, &vinfo, wr_in, wi_in);
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {
@@ -285,6 +288,8 @@ void fla_test_geevx_experiment(test_params_t *params, integer datatype, integer 
             free_vector(wi_in);
         }
     }
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        free_vector(scal);
 }
 
 void prepare_geevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, integer m_A, void *A,

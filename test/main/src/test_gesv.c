@@ -116,7 +116,8 @@ void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p
                               double *t, double *residual)
 {
     integer n, lda, ldb, NRHS, info = 0, vinfo = 0;
-    void *IPIV = NULL, *A = NULL, *A_save = NULL, *B = NULL, *B_save = NULL, *s_test = NULL, *scal = NULL;
+    void *IPIV = NULL, *A = NULL, *A_save = NULL, *B = NULL, *B_save = NULL, *s_test = NULL,
+         *scal = NULL;
     double time_min = 1e9;
     char range = 'U';
     integer test_lapacke_interface = params->test_lapacke_interface;
@@ -188,7 +189,8 @@ void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p
 
     /* output validation */
     if(FLA_OVERFLOW_UNDERFLOW_TEST && info == 0)
-        validate_gesv(n, NRHS, A, lda, B, ldb, B_save, datatype, residual, &vinfo, params->imatrix_char, scal);
+        validate_gesv(n, NRHS, A, lda, B, ldb, B_save, datatype, residual, &vinfo,
+                      params->imatrix_char, scal);
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {
@@ -236,8 +238,8 @@ void prepare_gesv_run(integer n_A, integer nrhs, void *A, integer lda, void *B, 
         /* Check if LAPACKE interface is enabled */
         if(test_lapacke_interface == 1)
         {
-            exe_time = prepare_lapacke_gesv_run(datatype, layout, n_A, nrhs, A_test, lda,
-                                                B_test, ldb, IPIV, info);
+            exe_time = prepare_lapacke_gesv_run(datatype, layout, n_A, nrhs, A_test, lda, B_test,
+                                                ldb, IPIV, info);
         }
         else
         {

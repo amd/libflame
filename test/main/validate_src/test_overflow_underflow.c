@@ -846,7 +846,7 @@ void scale_matrix_underflow_overflow_gbtrs(integer datatype, integer m, integer 
         {
             tuning_val = 700.0;
         }
-        else if (m < 1000)
+        else if(m < 1000)
         {
             tuning_val = 1000.0;
         }
@@ -871,8 +871,8 @@ void scale_matrix_underflow_overflow_gbtrs(integer datatype, integer m, integer 
 }
 
 /* Scaling matrix with values around overflow underflow for gelss */
-void scale_matrix_overflow_underflow_gelss(integer datatype, integer m, integer n, integer nrhs, void *A,
-                                           integer lda, char imatrix_char)
+void scale_matrix_overflow_underflow_gelss(integer datatype, integer m, integer n, integer nrhs,
+                                           void *A, integer lda, char imatrix_char)
 {
     void *max_min = NULL, *scal = NULL;
     double tuning_val;
@@ -1206,7 +1206,7 @@ void scale_matrix_underflow_overflow_steqr(integer datatype, integer n, void *A,
 }
 /* Scale matrix with values around overflow underflow for ggev */
 void scale_matrix_overflow_underflow_ggev(integer datatype, integer m, void *A, integer lda,
-                                           char imatrix_char)
+                                          char imatrix_char)
 {
     void *max_min = NULL, *scal = NULL;
     create_vector(get_realtype(datatype), &max_min, 1);
@@ -1319,7 +1319,7 @@ void scale_matrix_underflow_overflow_syevx(integer datatype, integer n, void *A,
 }
 /* Scaling matrix with values around overflow underflow for gesv */
 void scale_matrix_underflow_overflow_gesv(integer datatype, integer n, void *A, integer lda,
-                                           char imatrix_char, void *scal)
+                                          char imatrix_char, void *scal)
 {
     void *max_min = NULL;
     double tuning_val = 1.0;

@@ -55,8 +55,8 @@ void validate_syevd(char *jobz, integer n, void *A, void *A_test, integer lda, v
 void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer m, void *A,
                     void *A_test, integer lda, void *VL, integer ldvl, void *VR, integer ldvr,
                     void *w, void *wr, void *wi, void *scale, void *abnrm, void *rconde,
-                    void *rcondv, integer datatype, double *residual, integer *info, void *wr_in,
-                    void *wi_in);
+                    void *rcondv, integer datatype, char imatrix, void *scal, double *residual,
+                    integer *info, void *wr_in, void *wi_in);
 
 void validate_geev(char *jobvl, char *jobvr, integer m, void *A, void *A_test, integer lda,
                    void *VL, integer ldvt, void *VR, integer ldvr, void *w, void *wr, void *wi,

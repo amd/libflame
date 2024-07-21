@@ -29,9 +29,9 @@ void validate_gesv(integer n, integer nrhs, void *A, integer lda, void *B, integ
             /* Compute AX-B */
             sgemm_("N", "N", &n, &nrhs, &n, &s_one, A, &lda, X, &ldx, &s_n_one, B, &ldb);
             if((imatrix == 'O' || imatrix == 'U') && (scal != NULL))
-                {
-                    sscal_(&n, scal, X, &i_one);
-                }
+            {
+                sscal_(&n, scal, X, &i_one);
+            }
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_x, imatrix, work);
             eps = fla_lapack_slamch("E");
@@ -49,9 +49,9 @@ void validate_gesv(integer n, integer nrhs, void *A, integer lda, void *B, integ
             /* Compute AX-B */
             dgemm_("N", "N", &n, &nrhs, &n, &d_one, A, &lda, X, &ldx, &d_n_one, B, &ldb);
             if((imatrix == 'O' || imatrix == 'U') && (scal != NULL))
-                {
-                    dscal_(&n, scal, X, &i_one);
-                }
+            {
+                dscal_(&n, scal, X, &i_one);
+            }
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_x, imatrix, work);
             eps = fla_lapack_dlamch("E");
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
@@ -69,9 +69,9 @@ void validate_gesv(integer n, integer nrhs, void *A, integer lda, void *B, integ
             /* Compute AX-B */
             cgemm_("N", "N", &n, &nrhs, &n, &c_one, A, &lda, X, &ldx, &c_n_one, B, &ldb);
             if((imatrix == 'O' || imatrix == 'U') && (scal != NULL))
-                {
-                    cscal_(&n, scal, X, &i_one);
-                }
+            {
+                cscal_(&n, scal, X, &i_one);
+            }
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_x, imatrix, work);
             eps = fla_lapack_slamch("E");
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
@@ -89,9 +89,9 @@ void validate_gesv(integer n, integer nrhs, void *A, integer lda, void *B, integ
             /* Compute AX-B */
             zgemm_("N", "N", &n, &nrhs, &n, &z_one, A, &lda, X, &ldx, &z_n_one, B, &ldb);
             if((imatrix == 'O' || imatrix == 'U') && (scal != NULL))
-                {
-                    zscal_(&n, scal, X, &i_one);
-                }
+            {
+                zscal_(&n, scal, X, &i_one);
+            }
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_x, imatrix, work);
             eps = fla_lapack_dlamch("E");
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);

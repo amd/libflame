@@ -212,16 +212,19 @@ void fla_test_gesvdx_experiment(test_params_t *params, integer datatype, integer
         if(FLA_OVERFLOW_UNDERFLOW_TEST)
         {
             create_vector(get_realtype(datatype), &scal, 1);
-           /* Range 'V' treated as 'A' only in case of overflow and underflow */
+            /* Range 'V' treated as 'A' only in case of overflow and underflow */
             if(range == 'V' || range == 'v')
                 range = 'A';
         }
 
         /* Generate matrix A by known singular value */
-        create_svd_matrix(datatype, range, m, n, A, lda, s_test, d_vl, d_vu, il, iu,
-                          params->imatrix_char, scal, info);
+        create_svd_matrix(datatype, range, m, n, A, lda, s_test, d_vl, d_vu, il, iu, info);
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            /* Initializing matrix with values around overflow underflow */
+            init_matrix_overflow_underflow_svd(datatype, m, n, A, lda, params->imatrix_char, scal);
+        }
     }
-
 
     /* Make a copy of input matrix A. This is required to validate the API functionality. */
     create_matrix(datatype, &A_test, lda, n);
@@ -265,9 +268,9 @@ void fla_test_gesvdx_experiment(test_params_t *params, integer datatype, integer
     else if(FLA_EXTREME_CASE_TEST)
     {
         if((!check_extreme_value(datatype, m, n, A_test, lda, params->imatrix_char))
-        && (!check_extreme_value(datatype, min_m_n, i_one, s_test, i_one, params->imatrix_char))
-        && (!check_extreme_value(datatype, m, n, U, ldu, params->imatrix_char))
-        && (!check_extreme_value(datatype, m, n, V, ldvt, params->imatrix_char)))
+           && (!check_extreme_value(datatype, min_m_n, i_one, s_test, i_one, params->imatrix_char))
+           && (!check_extreme_value(datatype, m, n, U, ldu, params->imatrix_char))
+           && (!check_extreme_value(datatype, m, n, V, ldvt, params->imatrix_char)))
         {
             *residual = DBL_MAX;
         }

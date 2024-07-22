@@ -180,10 +180,11 @@ void fla_test_gels_experiment(test_params_t *params, integer datatype, integer p
     {
         /* Generate input matrix with condition number <= 100 */
         create_svd_matrix(datatype, range, m, n, A, lda, s_test, GELS_VL, GELS_VU, i_zero, i_zero,
-                          '\0', NULL, info);
+                          info);
         if(FLA_OVERFLOW_UNDERFLOW_TEST)
         {
-            scale_matrix_underflow_overflow_gels(datatype, &trans, m, n, A, lda, params->imatrix_char, 1);
+            scale_matrix_underflow_overflow_gels(datatype, &trans, m, n, A, lda,
+                                                 params->imatrix_char, 1);
         }
     }
 

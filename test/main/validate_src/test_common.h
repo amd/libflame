@@ -200,7 +200,7 @@ double svd_check_order(integer datatype, void *s, integer m, integer n, double r
 /*Generate Matrix for SVD*/
 void create_svd_matrix(integer datatype, char range, integer m, integer n, void *A_input,
                        integer lda, void *S, double vl, double vu, integer il, integer iu,
-                       char imatrix, void *scal, integer info);
+                       integer info);
 void get_abs_vector_value(integer datatype, void *S, integer M, integer inc);
 /* Intialize matrix with special values*/
 void init_matrix_spec_in(integer datatype, void *A, integer M, integer N, integer LDA, char type);

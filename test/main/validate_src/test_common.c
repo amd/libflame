@@ -971,7 +971,6 @@ void rand_spd_matrix(integer datatype, char *uplo, void *A, integer m, integer l
     }
     form_symmetric_matrix(datatype, m, A, lda, type);
 
-
     free_vector(L);
 }
 
@@ -3539,7 +3538,7 @@ void init_matrix(integer datatype, void *A, integer M, integer N, integer LDA, F
  */
 void create_svd_matrix(integer datatype, char range, integer m, integer n, void *A_input,
                        integer lda, void *S, double vl, double vu, integer il, integer iu,
-                       char imatrix, void *scal, integer info)
+                       integer info)
 {
     if(lda < m)
         return;
@@ -3619,12 +3618,6 @@ void create_svd_matrix(integer datatype, char range, integer m, integer n, void 
             zgemm_("N", "N", &m, &n, &n, &z_one, Usigma, &m, V, &n, &z_zero, A_input, &lda);
             break;
         }
-    }
-
-    if(imatrix == 'O' || imatrix == 'U')
-    {
-        /* Initializing matrix with values around overflow underflow */
-        init_matrix_overflow_underflow_svd(datatype, m, n, A_input, lda, imatrix, scal);
     }
 
     free_matrix(A);
@@ -3867,7 +3860,7 @@ void copy_tridiag_vector(integer datatype, void *dl, void *d, void *du, integer 
     integer min_m_n, dl_size, du_size;
     min_m_n = fla_min(M, N);
     dl_size = N - 1, du_size = N - 1;
-    
+
     switch(datatype)
     {
         case FLOAT:
@@ -5007,7 +5000,7 @@ void compute_matrix_norm(integer datatype, char ntype, integer m, integer n, voi
                 float norm = 0;
                 for(i = 0; i < n; i++)
                 {
-                    col = (void *)((float *) A + i * lda);
+                    col = (void *)((float *)A + i * lda);
                     norm = fla_max(norm, snrm2_(&m, col, &i_one));
                 }
                 *((float *)nrm2) = norm;
@@ -5018,7 +5011,7 @@ void compute_matrix_norm(integer datatype, char ntype, integer m, integer n, voi
                 double norm = 0;
                 for(i = 0; i < n; i++)
                 {
-                    col = (void *)((double *) A + i * lda);
+                    col = (void *)((double *)A + i * lda);
                     norm = fla_max(norm, dnrm2_(&m, col, &i_one));
                 }
                 *((double *)nrm2) = norm;
@@ -5029,7 +5022,7 @@ void compute_matrix_norm(integer datatype, char ntype, integer m, integer n, voi
                 float norm = 0;
                 for(i = 0; i < n; i++)
                 {
-                    col = (void *)((scomplex *) A + i * lda);
+                    col = (void *)((scomplex *)A + i * lda);
                     norm = fla_max(norm, scnrm2_(&m, col, &i_one));
                 }
                 *((float *)nrm2) = norm;
@@ -5040,7 +5033,7 @@ void compute_matrix_norm(integer datatype, char ntype, integer m, integer n, voi
                 double norm = 0;
                 for(i = 0; i < n; i++)
                 {
-                    col = (void *)((dcomplex *) A + i * lda);
+                    col = (void *)((dcomplex *)A + i * lda);
                     norm = fla_max(norm, dznrm2_(&m, col, &i_one));
                 }
                 *((double *)nrm2) = norm;

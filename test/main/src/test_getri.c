@@ -137,7 +137,7 @@ void fla_test_getri_experiment(test_params_t *params, integer datatype, integer 
     {
         /* Generate input matrix with condition number <= 10 */
         create_svd_matrix(datatype, range, n, n, A, lda, s_test, GETRI_VL, GETRI_VU, i_zero, i_zero,
-                          '\0', NULL, info);
+                          info);
     }
     else
     {

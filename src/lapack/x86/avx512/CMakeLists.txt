@@ -10,6 +10,7 @@ add_library(FLA_LAPACK_AVX512
      ${CMAKE_CURRENT_SOURCE_DIR}/fla_drot_avx512.c
      ${CMAKE_CURRENT_SOURCE_DIR}/fla_zrot_avx512.c
      ${CMAKE_CURRENT_SOURCE_DIR}/fla_dhrot3_avx512.c
+     ${CMAKE_CURRENT_SOURCE_DIR}/fla_sscal_ix1_avx512.c
 )
 
 if(WIN32)

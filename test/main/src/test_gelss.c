@@ -200,7 +200,7 @@ void fla_test_gelss_experiment(test_params_t *params, integer datatype, integer 
 
     /* Output validataion */
     if(!params->imatrix_char && info == 0)
-        validate_gelsd(m, n, nrhs, A, lda, B, ldb, s, B_test, rcond, &rank, datatype, residual);
+        validate_gelsd(m, n, nrhs, A, lda, B, ldb, s, B_test, rcond, &rank, datatype, residual, params->imatrix_char);
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {

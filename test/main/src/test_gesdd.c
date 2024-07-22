@@ -116,22 +116,14 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
     integer m, n, lda, ldu, ldvt;
     integer info = 0, vinfo = 0;
     char jobz;
-    void *A = NULL, *U = NULL, *V = NULL, *s = NULL, *A_test = NULL;
+    void *A = NULL, *U = NULL, *V = NULL, *s = NULL, *A_test = NULL, *s_in = NULL;
 
     /* Get input matrix dimensions.*/
     jobz = params->svd_paramslist[pci].jobu_gesvd;
     *residual = params->svd_paramslist[pci].svd_threshold;
 
-    if(jobz == 'S' || jobz == 'O')
-    {
-        m = p_cur;
-        n = p_cur;
-    }
-    else
-    {
-        m = p_cur;
-        n = q_cur;
-    }
+    m = p_cur;
+    n = q_cur;
 
     lda = params->svd_paramslist[pci].lda;
     ldu = params->svd_paramslist[pci].ldu;
@@ -184,7 +176,16 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
     create_matrix(datatype, matrix_layout, n, n, &V, ldvt);
     create_realtype_vector(datatype, &s, fla_min(m, n));
 
-    init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+    {
+        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+    }
+    else
+    {
+        create_realtype_vector(datatype, &s_in, fla_min(m, n));
+        /* Generate matrix A from known singular values */
+        create_svd_matrix(datatype, 'A', m, n, A, lda, s_in, s_one, s_one, i_one, i_one, info);
+    }
 
     /* Make a copy of input matrix A. This is required to validate the API functionality.*/
     create_matrix(datatype, matrix_layout, m, n, &A_test, lda);
@@ -204,7 +205,8 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
 
     /* output validation */
     if(!params->imatrix_char && (jobz == 'A' || jobz == 'S' || jobz == 'O') && info == 0)
-        validate_gesdd(&jobz, m, n, A, A_test, lda, s, U, ldu, V, ldvt, datatype, residual, &vinfo);
+        validate_gesdd(&jobz, m, n, A, A_test, lda, s, s_in, U, ldu, V, ldvt, datatype,
+                       residual, &vinfo);
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {
@@ -222,6 +224,8 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
     free_matrix(U);
     free_matrix(V);
     free_vector(s);
+    if((g_ext_fptr == NULL) && !(params->imatrix_char))
+        free_vector(s_in);
 }
 
 void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer lda, void *s, void *U,

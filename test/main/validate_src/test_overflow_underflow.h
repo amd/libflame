@@ -73,4 +73,8 @@ void init_matrix_overflow_underflow_gtsv(integer datatype, integer m, integer n,
 void scale_matrix_underflow_overflow_gels(integer datatype, char *trans, integer m, integer n,
                                           void *A, integer lda, char imatrix_char,
                                           integer sysmat);
+/* Scaling matrix with values around overflow underflow for gelsd */
+void scale_matrix_overflow_underflow_gelsd(integer datatype, integer m, integer n,
+                                           integer nrhs, void *A, integer lda,
+                                           char imatrix_char);
 #endif // TEST_OVERFLOW_UNDERFLOW_H

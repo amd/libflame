@@ -165,15 +165,20 @@ void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer 
 
     /* Initialize the test matrices */
     init_matrix(datatype, B, m, NRHS, ldb, g_ext_fptr, params->imatrix_char);
-    if((!FLA_EXTREME_CASE_TEST) && (g_ext_fptr == NULL))
+    if(FLA_EXTREME_CASE_TEST || (g_ext_fptr != NULL))
+    {
+        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+    }
+    else
     {
         /* Generate input matrix with condition number <= 100 */
         create_svd_matrix(datatype, range, m, n, A, lda, s_test, GELSD_VL, GELSD_VU, i_zero, i_zero,
                           info);
-    }
-    else
-    {
-        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+        /* Overflow or underflow test initialization */
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            scale_matrix_overflow_underflow_gelsd(datatype, m, n, NRHS, A, lda, params->imatrix_char);
+        }
     }
 
     /* Save the original matrix*/
@@ -201,8 +206,8 @@ void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer 
         *perf *= 4.0;
 
     /* Output validation, accuracy test */
-    if(!params->imatrix_char && info == 0)
-        validate_gelsd(m, n, NRHS, A, lda, B, ldb, S, B_save, rcond, &rank, datatype, residual);
+    if(!FLA_EXTREME_CASE_TEST && (info == 0))
+        validate_gelsd(m, n, NRHS, A, lda, B, ldb, S, B_save, rcond, &rank, datatype, residual, params->imatrix_char);
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {

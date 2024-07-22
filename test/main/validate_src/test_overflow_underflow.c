@@ -732,3 +732,65 @@ void scale_matrix_underflow_overflow_gels(integer datatype, char *trans, integer
     free_vector(max_min);
     free_vector(scal);
 }
+
+void scale_matrix_overflow_underflow_gelsd(integer datatype, integer m, integer n, integer nrhs, void *A,
+                                           integer lda, char imatrix_char)
+{
+    void *max_min = NULL, *scal = NULL;
+    double tuning_val;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    create_vector(get_realtype(datatype), &scal, 1);
+    if(imatrix_char == 'O')
+    {
+        get_max_from_matrix(datatype, A, max_min, m, n, lda);
+
+        if((m < 10) && (n < 10))
+        {
+            tuning_val = 25.0;
+        }
+        else if((m < 20) && (n < 20))
+        {
+            tuning_val = 40.0;
+        }
+        else if((m < 40) && (n < 40))
+        {
+            tuning_val = 48.0;
+        }
+        else if((m < 50) && (n < 50))
+        {
+            tuning_val = 55.0;
+        }
+        else if((m < 80) && (n < 80))
+        {
+            tuning_val = 70.0;
+        }
+        else if((m < 100) && (n < 100))
+        {
+            tuning_val = 78.0;
+        }
+        else if((m < 150) && (n < 150))
+        {
+            tuning_val = 98.0;
+        }
+        else if((m < 200) && (n < 200))
+        {
+            tuning_val = 120.0;
+        }
+        else
+        {
+            tuning_val = 180.0;
+        }
+        calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+    }
+    if(imatrix_char == 'U')
+    {
+        get_min_from_matrix(datatype, A, max_min, m, n, lda);
+        calculate_scale_value(datatype, scal, max_min, 1.0, imatrix_char);
+    }
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, m, n, lda, i_one);
+
+    // Free vectors
+    free_vector(max_min);
+    free_vector(scal);
+}

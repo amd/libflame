@@ -151,7 +151,7 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
     {
         /* Generate input matrix with condition number <= 100 */
         create_svd_matrix(datatype, range, n, n, A, lda, s_test, GETRS_VL, GETRS_VU, i_zero, i_zero,
-                          '\0', NULL, info);
+                          info);
     }
     else
     {

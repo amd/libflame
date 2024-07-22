@@ -155,7 +155,7 @@ void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p
     {
         /* Generate input matrix with condition number <= 100 */
         create_svd_matrix(datatype, range, n, n, A, lda, s_test, GESV_VL, GESV_VU, i_zero, i_zero,
-                          '\0', NULL, info);
+                          info);
     }
     else
     {

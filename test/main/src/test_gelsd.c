@@ -169,7 +169,7 @@ void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer 
     {
         /* Generate input matrix with condition number <= 100 */
         create_svd_matrix(datatype, range, m, n, A, lda, s_test, GELSD_VL, GELSD_VU, i_zero, i_zero,
-                          '\0', NULL, info);
+                          info);
     }
     else
     {

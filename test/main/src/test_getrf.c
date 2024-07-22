@@ -141,7 +141,7 @@ void fla_test_getrf_experiment(test_params_t *params, integer datatype, integer 
     {
         /* Generate input matrix with condition number <= 100 */
         create_svd_matrix(datatype, range, m, n, A, lda, s_test, GETRF_VL, GETRF_VU, i_zero, i_zero,
-                          '\0', NULL, info);
+                          info);
         if(FLA_OVERFLOW_UNDERFLOW_TEST)
         {
             scale_matrix_underflow_overflow_getrf(datatype, m, n, A, lda, params->imatrix_char);

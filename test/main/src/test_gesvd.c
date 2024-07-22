@@ -188,8 +188,12 @@ void fla_test_gesvd_experiment(test_params_t *params, integer datatype, integer 
             create_vector(get_realtype(datatype), &scal, 1);
 
         /* Generate matrix A with singular value */
-        create_svd_matrix(datatype, 'A', m, n, A, lda, s_test, s_one, s_one, i_one, i_one,
-                          params->imatrix_char, scal, info);
+        create_svd_matrix(datatype, 'A', m, n, A, lda, s_test, s_one, s_one, i_one, i_one, info);
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            /* Initializing matrix with values around overflow underflow */
+            init_matrix_overflow_underflow_svd(datatype, m, n, A, lda, params->imatrix_char, scal);
+        }
     }
 
     /* Make a copy of input matrix A. This is required to validate the API functionality. */

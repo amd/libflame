@@ -335,29 +335,9 @@ void scale_matrix_underflow_overflow_getrf(integer datatype, integer m, integer 
     if(imatrix_char == 'O')
     {
         get_max_from_matrix(datatype, A, max_min, m, n, lda);
-        if(m == n && m < 100)
+        if((m == 1) && (n == 1))
         {
-            tuning_val = 50.0;
-        }
-        else if(m == n && m < 450)
-        {
-            tuning_val = 150.0;
-        }
-        else if(m == n && m < 800)
-        {
-            tuning_val = 250.0;
-        }
-        else if(m == n && m < 900)
-        {
-            tuning_val = 300.0;
-        }
-        else if(m == n && m < 1100)
-        {
-            tuning_val = 350.0;
-        }
-        else if(m == n && m <= 1500)
-        {
-            tuning_val = 450.0;
+            tuning_val = 14.0;
         }
         else if((m == 1 && n < 10) || (n == 1 && m < 10))
         {
@@ -369,11 +349,39 @@ void scale_matrix_underflow_overflow_getrf(integer datatype, integer m, integer 
         }
         else if((m == 1 && n < 500) || (n == 1 && m < 500))
         {
-            tuning_val = 100.0;
+            tuning_val = 150.0;
         }
-        else if((m == 1) || (n == 1))
+        else if(m == n && m < 30)
+        {
+            tuning_val = 5.0;
+        }
+        else if(m == n && m < 50)
+        {
+            tuning_val = 9.0;
+        }
+        else if(m == n && m < 100)
+        {
+            tuning_val = 13.0;
+        }
+        else if(m == n && m < 450)
+        {
+            tuning_val = 50.0;
+        }
+        else if(m == n && m < 800)
+        {
+            tuning_val = 80.0;
+        }
+        else if(m == n && m < 900)
+        {
+            tuning_val = 120.0;
+        }
+        else if(m == n && m < 1100)
         {
             tuning_val = 150.0;
+        }
+        else if(m == n)
+        {
+            tuning_val = 400.0;
         }
         else if(m <= 10 && n <= 10)
         {
@@ -381,15 +389,15 @@ void scale_matrix_underflow_overflow_getrf(integer datatype, integer m, integer 
         }
         else if(m <= 300 && n <= 300)
         {
-            tuning_val = 30.0;
+            tuning_val = 40.0;
         }
         else if(m <= 1000 && n <= 1000)
         {
-            tuning_val = 50.0;
+            tuning_val = 55.0;
         }
         else
         {
-            tuning_val = 75.0;
+            tuning_val = 80.0;
         }
     }
     if(imatrix_char == 'U')

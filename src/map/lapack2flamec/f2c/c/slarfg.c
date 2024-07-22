@@ -124,6 +124,10 @@ void slarfg_(integer *n, real *alpha, real *x, integer *incx, real *tau)
     real xnorm;
     extern real slapy2_(real *, real *), slamch_(char *);
     real safmin, rsafmn;
+#if FLA_ENABLE_AMD_OPT
+    void fla_sscal(integer *n, real *alpha, real *x, integer *incx);
+#endif
+
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -175,7 +179,12 @@ void slarfg_(integer *n, real *alpha, real *x, integer *incx, real *tau)
         L10:
             ++knt;
             i__1 = *n - 1;
+#if FLA_ENABLE_AMD_OPT
+            /* Inline SSCAL for small sizes */
+            fla_sscal(&i__1, &rsafmn, &x[1], incx);
+#else
             sscal_(&i__1, &rsafmn, &x[1], incx);
+#endif
             beta *= rsafmn;
             *alpha *= rsafmn;
             if(f2c_abs(beta) < safmin && knt < 20)
@@ -191,7 +200,12 @@ void slarfg_(integer *n, real *alpha, real *x, integer *incx, real *tau)
         *tau = (beta - *alpha) / beta;
         i__1 = *n - 1;
         r__1 = 1.f / (*alpha - beta);
+#if FLA_ENABLE_AMD_OPT
+        /* Inline SSCAL for small sizes */
+        fla_sscal(&i__1, &r__1, &x[1], incx);
+#else
         sscal_(&i__1, &r__1, &x[1], incx);
+#endif
         /* If ALPHA is subnormal, it may lose relative accuracy */
         i__1 = knt;
         for(j = 1; j <= i__1; ++j)

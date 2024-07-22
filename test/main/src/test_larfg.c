@@ -21,6 +21,7 @@ void fla_test_larfg(integer argc, char **argv, test_params_t *params)
 
     if(argc == 1)
     {
+        config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, AUX, fla_test_larfg_experiment);

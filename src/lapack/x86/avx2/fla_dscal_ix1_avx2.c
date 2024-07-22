@@ -13,58 +13,67 @@
 
 int fla_dscal_ix1_avx2(integer *n, doublereal *da, doublereal *dx, integer *incx)
 {
-    /* Parameter adjustments */
-    --dx;
+    integer i, i__1;
+    __m256d alpha256, xv256[2], pv256[2];
+    __m128d alpha128, xv128, pv128;
+
+    i__1 = *n;
+
     /* Function Body */
-    if(*n <= 0)
+    if(i__1 <= 0)
     {
         return 0;
     }
 
-    integer i, i__1;
-    doublereal *d__1;
-    i__1 = *n;
-    d__1 = da;
-
     /* Load scaling factor alpha*/
-    __m128d alpha128 = _mm_set_pd1(*d__1);
-    __m256d alpha256 = _mm256_broadcastsd_pd(alpha128);
+    alpha128 = _mm_set_pd1(*da);
+    alpha256 = _mm256_broadcastsd_pd(alpha128);
+
     /* Process 8 elements at a time */
-    for(i = 1; i <= (i__1 - 7); i += 8)
+    for(i = 0; i < (i__1 - 7); i += 8)
     {
         /* Load the input values */
-        __m256d x0v = _mm256_loadu_pd((double const *)&dx[i]);
-        __m256d x1v = _mm256_loadu_pd((double const *)&dx[i + 4]);
+        xv256[0] = _mm256_loadu_pd((double const *)&dx[i]);
+        xv256[1] = _mm256_loadu_pd((double const *)&dx[i + 4]);
+
         /* perform alpha * x  */
-        x0v = _mm256_mul_pd(alpha256, x0v);
-        x1v = _mm256_mul_pd(alpha256, x1v);
+        pv256[0] = _mm256_mul_pd(alpha256, xv256[0]);
+        pv256[1] = _mm256_mul_pd(alpha256, xv256[1]);
+
         /* Store the output */
-        _mm256_storeu_pd((double *)&dx[i], x0v);
-        _mm256_storeu_pd((double *)&dx[i + 4], x1v);
+        _mm256_storeu_pd((double *)&dx[i], pv256[0]);
+        _mm256_storeu_pd((double *)&dx[i + 4], pv256[1]);
     }
-    /* Remainder iterations */
-    if((i__1 - i) >= 3)
+
+    /* Process 4 elements at a time */
+    for(; i < (i__1 - 3); i += 4)
     {
-        __m256d x0v = _mm256_loadu_pd((double const *)&dx[i]);
-        x0v = _mm256_mul_pd(alpha256, x0v);
-        _mm256_storeu_pd((double *)&dx[i], x0v);
-        i += 4;
+        /* Load the input values */
+        xv256[0] = _mm256_loadu_pd((double const *)&dx[i]);
+
+        /* perform alpha * x  */
+        pv256[0] = _mm256_mul_pd(alpha256, xv256[0]);
+
+        /* Store the output */
+        _mm256_storeu_pd((double *)&dx[i], pv256[0]);
     }
-    /* last two iterations */
-    if(i__1 > i)
+
+    /* Process 2 elements at a time */
+    for(; i < (i__1 - 1); i += 2)
     {
-        __m128d x0v128 = _mm_loadu_pd((double const *)&dx[i]);
-        x0v128 = _mm_mul_pd(alpha128, x0v128);
-        _mm_storeu_pd((double *)&dx[i], x0v128);
-        i += 2;
+        xv128 = _mm_loadu_pd((double const *)&dx[i]);
+        pv128 = _mm_mul_pd(alpha128, xv128);
+        _mm_storeu_pd((double *)&dx[i], pv128);
     }
+
     /* last iteration */
-    if(i__1 == i)
+    if(i < i__1)
     {
-        __m128d x1v128 = _mm_load1_pd((double const *)&dx[i]);
-        x1v128 = _mm_mul_pd(alpha128, x1v128);
-        _mm_storel_pd((double *)&dx[i], x1v128);
+        xv128 = _mm_load1_pd((double const *)&dx[i]);
+        pv128 = _mm_mul_pd(alpha128, xv128);
+        _mm_storel_pd((double *)&dx[i], pv128);
     }
     return 0;
 }
+
 #endif

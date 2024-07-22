@@ -99,10 +99,17 @@ void fla_dscal(integer *n, doublereal *da, doublereal *dx, integer *incx)
 {
     /* Initialize global context data */
     aocl_fla_init();
-    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2) && *incx == 1 && *da != 0 && *n >= 1
-       && *n <= FLA_DSCAL_INLINE_SMALL)
+
+    if(*incx == 1 && *da != 0 && *n >= 1 && *n <= FLA_DSCAL_INLINE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
-        fla_dscal_ix1_avx2(n, da, dx, incx);
+        if(FLA_IS_ARCH_ID(FLA_ARCH_AVX512))
+        {
+           fla_dscal_ix1_avx512(n, da, dx, incx);
+        }
+        else
+        {
+           fla_dscal_ix1_avx2(n, da, dx, incx);
+        }
     }
     else
     {
@@ -148,10 +155,20 @@ int fla_dgelqf_small(integer *m, integer *n, doublereal *a, integer *lda, double
 /* real vector scaling when increment is 1 */
 void fla_sscal(integer *n, real *alpha, real *x, integer *incx)
 {
+    /* Initialize global context data */
+    aocl_fla_init();
+
     /* Take AVX path only for increment equal to 1 */
-    if(*incx == 1 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    if(*incx == 1 &&  *alpha != 0 && *n >= 1 && *n <= FLA_SSCAL_INLINE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
-        fla_sscal_ix1_avx2(n, alpha, x);
+        if(FLA_IS_ARCH_ID(FLA_ARCH_AVX512))
+        {
+            fla_sscal_ix1_avx512(n, alpha, x);
+        }
+        else
+        {
+            fla_sscal_ix1_avx2(n, alpha, x);
+        }
     }
     else
     {

@@ -183,10 +183,10 @@ void fla_test_ggevx_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create input matrix parameters */
-    create_matrix(datatype, &A, lda, n);
-    create_matrix(datatype, &B, ldb, n);
-    create_matrix(datatype, &VL, ldvl, n);
-    create_matrix(datatype, &VR, ldvr, n);
+    create_matrix(datatype, matrix_layout, n, n, &A, lda);
+    create_matrix(datatype, matrix_layout, n, n, &B, ldb);
+    create_matrix(datatype, matrix_layout, n, n, &VL, ldvl);
+    create_matrix(datatype, matrix_layout, n, n, &VR, ldvr);
     create_vector(datatype, &beta, n);
 
     if(datatype == FLOAT || datatype == DOUBLE)
@@ -210,8 +210,8 @@ void fla_test_ggevx_experiment(test_params_t *params, integer datatype, integer 
     init_matrix(datatype, B, n, n, ldb, g_ext_fptr, params->imatrix_char);
 
     /* Make a copy of input matrix A. This is required to validate the API functionality */
-    create_matrix(datatype, &A_test, lda, n);
-    create_matrix(datatype, &B_test, ldb, n);
+    create_matrix(datatype, matrix_layout, n, n, &A_test, lda);
+    create_matrix(datatype, matrix_layout, n, n, &B_test, ldb);
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
     copy_matrix(datatype, "full", n, n, B, ldb, B_test, ldb);
 
@@ -277,8 +277,8 @@ void prepare_ggevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, &A_save, lda, n_A);
-    create_matrix(datatype, &B_save, ldb, n_A);
+    create_matrix(datatype, matrix_layout, n_A, n_A, &A_save, lda);
+    create_matrix(datatype, matrix_layout, n_A, n_A, &B_save, ldb);
     copy_matrix(datatype, "full", n_A, n_A, A, lda, A_save, lda);
     copy_matrix(datatype, "full", n_A, n_A, B, ldb, B_save, ldb);
 

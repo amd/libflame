@@ -16,8 +16,8 @@ void validate_gehrd(integer n, integer ilo, integer ihi, void *A, void *A_test, 
     void *Q = NULL, *work = NULL, *lambda = NULL;
     integer lwork = -1;
     *info = 0;
-    create_matrix(datatype, &Q, lda, n);
-    create_matrix(datatype, &lambda, n, n);
+    create_matrix(datatype, matrix_layout, n, n, &Q, lda);
+    create_matrix(datatype, matrix_layout, n, n, &lambda, n);
     copy_matrix(datatype, "full", n, n, A_test, lda, Q, lda);
     create_vector(datatype, &work, 1);
 

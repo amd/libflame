@@ -143,11 +143,11 @@ void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p
     }
 
     /* Create the matrices for the current operation*/
-    create_matrix(datatype, &A, lda, n);
-    create_matrix(datatype, &A_save, lda, n);
+    create_matrix(datatype, matrix_layout, n, n, &A, lda);
+    create_matrix(datatype, matrix_layout, n, n, &A_save, lda);
     create_vector(INTEGER, &IPIV, n);
-    create_matrix(datatype, &B, fla_max(n, ldb), NRHS);
-    create_matrix(datatype, &B_save, fla_max(n, ldb), NRHS);
+    create_matrix(datatype, matrix_layout, n, NRHS, &B, ldb);
+    create_matrix(datatype, matrix_layout, n, NRHS, &B_save, ldb);
     create_realtype_vector(datatype, &s_test, n);
 
     /* Initialize the test matrices*/
@@ -213,8 +213,8 @@ void prepare_gesv_run(integer n_A, integer nrhs, void *A, integer lda, void *B, 
     double time_min = 1e9, exe_time;
 
     /* Save the original matrix */
-    create_matrix(datatype, &A_test, lda, n_A);
-    create_matrix(datatype, &B_test, fla_max(n_A, ldb), nrhs);
+    create_matrix(datatype, matrix_layout, n_A, n_A, &A_test, lda);
+    create_matrix(datatype, matrix_layout, n_A, nrhs, &B_test, ldb);
 
     *info = 0;
     for(i = 0; i < n_repeats && *info == 0; ++i)

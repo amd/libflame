@@ -125,7 +125,7 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
     compz = params->eig_sym_paramslist[pci].compz;
     ldz = params->eig_sym_paramslist[pci].ldz;
     *residual = params->eig_sym_paramslist[pci].threshold_value;
-    
+
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
@@ -146,10 +146,10 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
 
     lda = fla_max(ldz, n);
 
-    create_matrix(datatype, &A, lda, n);
-    create_matrix(datatype, &Z, ldz, n);
-    create_matrix(datatype, &Z_test, ldz, n);
-    create_matrix(datatype, &Q, lda, n);
+    create_matrix(datatype, matrix_layout, n, n, &A, lda);
+    create_matrix(datatype, matrix_layout, n, n, &Z, ldz);
+    create_matrix(datatype, matrix_layout, n, n, &Z_test, ldz);
+    create_matrix(datatype, matrix_layout, n, n, &Q, lda);
 
     reset_matrix(datatype, lda, n, A, lda);
     reset_matrix(datatype, ldz, n, Z, ldz);
@@ -293,7 +293,7 @@ void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, intege
        each itertaion.*/
     if(*compz == 'V')
     {
-        create_matrix(datatype, &Z_save, ldz, n);
+        create_matrix(datatype, matrix_layout, n, n, &Z_save, ldz);
         copy_matrix(datatype, "full", n, n, Z, ldz, Z_save, ldz);
     }
     realtype = get_realtype(datatype);

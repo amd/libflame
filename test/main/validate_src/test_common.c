@@ -11,6 +11,7 @@ float s_zero = 0, s_one = 1, s_n_one = -1;
 double d_zero = 0, d_one = 1, d_n_one = -1;
 scomplex c_zero = {0, 0}, c_one = {1, 0}, c_n_one = {-1, 0};
 dcomplex z_zero = {0, 0}, z_one = {1, 0}, z_n_one = {-1, 0};
+integer matrix_layout = LAPACK_COL_MAJOR;
 
 /* Integer absolute function */
 integer fla_i_abs(integer *x)
@@ -376,40 +377,52 @@ void copy_realtype_vector(integer datatype, integer M, void *A, integer LDA, voi
         dcopy_(&M, A, &LDA, B, &LDB);
 }
 
-/* create matrix of given datatype*/
-void create_matrix(integer datatype, void **A, integer M, integer N)
+/* create matrix of given datatype */
+void create_matrix(integer datatype, integer matrix_layout, integer M, integer N, void **A,
+                   integer lda)
 {
+    integer rs, cs;
     *A = NULL;
+    if(matrix_layout == LAPACK_ROW_MAJOR)
+    {
+        rs = M;
+        cs = fla_max(1, lda);
+    }
+    else
+    {
+        rs = fla_max(1, lda);
+        cs = N;
+    }
 
     switch(datatype)
     {
         case INTEGER:
         {
-            *A = (integer *)fla_mem_alloc(fla_max(1, M) * fla_max(1, N) * sizeof(integer));
+            *A = (integer *)fla_mem_alloc(fla_max(1, rs) * fla_max(1, cs) * sizeof(integer));
             break;
         }
 
         case FLOAT:
         {
-            *A = (float *)fla_mem_alloc(fla_max(1, M) * fla_max(1, N) * sizeof(float));
+            *A = (float *)fla_mem_alloc(fla_max(1, rs) * fla_max(1, cs) * sizeof(float));
             break;
         }
 
         case DOUBLE:
         {
-            *A = (double *)fla_mem_alloc(fla_max(1, M) * fla_max(1, N) * sizeof(double));
+            *A = (double *)fla_mem_alloc(fla_max(1, rs) * fla_max(1, cs) * sizeof(double));
             break;
         }
 
         case COMPLEX:
         {
-            *A = (scomplex *)fla_mem_alloc(fla_max(1, M) * fla_max(1, N) * sizeof(scomplex));
+            *A = (scomplex *)fla_mem_alloc(fla_max(1, rs) * fla_max(1, cs) * sizeof(scomplex));
             break;
         }
 
         case DOUBLE_COMPLEX:
         {
-            *A = (dcomplex *)fla_mem_alloc(fla_max(1, M) * fla_max(1, N) * sizeof(dcomplex));
+            *A = (dcomplex *)fla_mem_alloc(fla_max(1, rs) * fla_max(1, cs) * sizeof(dcomplex));
             break;
         }
     }
@@ -1031,7 +1044,7 @@ void rand_hermitian_matrix(integer datatype, integer n, void **A, integer lda)
     if(lda < n)
         return;
 
-    create_matrix(datatype, &B, n, n);
+    create_matrix(datatype, matrix_layout, n, n, &B, n);
     reset_matrix(datatype, n, n, B, n);
     rand_matrix(datatype, B, n, n, n);
 
@@ -1120,7 +1133,7 @@ double check_orthogonal_matrix(char trn, integer datatype, void *A, integer m, i
     void *a_temp = NULL, *work = NULL;
     double resid = 0.;
     /* Create Identity matrix to validate orthogonal property of matrix A*/
-    create_matrix(datatype, &a_temp, k, k);
+    create_matrix(datatype, matrix_layout, k, k, &a_temp, k);
 
     switch(datatype)
     {
@@ -1209,12 +1222,12 @@ double check_orthogonality(integer datatype, void *A, integer m, integer n, inte
     /* Create Identity matrix to validate orthogonal property of matrix A*/
     if(m <= n)
     {
-        create_matrix(datatype, &a_temp, m, m);
+        create_matrix(datatype, matrix_layout, m, m, &a_temp, m);
         k = m;
     }
     else
     {
-        create_matrix(datatype, &a_temp, n, n);
+        create_matrix(datatype, matrix_layout, n, n, &a_temp, n);
         k = n;
     }
     switch(datatype)
@@ -1318,7 +1331,7 @@ void scgemv(char TRANS, integer real_alpha, integer m, integer n, scomplex *alph
     float alphar;
     void *A = NULL;
 
-    create_matrix(FLOAT, &A, lda, n);
+    create_matrix(FLOAT, matrix_layout, m, n, &A, lda);
 
     if(TRANS == 'T')
     {
@@ -2149,8 +2162,8 @@ void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, intege
     get_diagonal(datatype, A, n, n, lda, wr_in);
 
     /* Generate a square matrix A_sub of size *ihi-*ilo+1 with known eigen values in L */
-    create_matrix(datatype, &A_sub, *ihi - *ilo + 1, *ihi - *ilo + 1);
-    create_matrix(datatype, &L, *ihi - *ilo + 1, *ihi - *ilo + 1);
+    create_matrix(datatype, matrix_layout, *ihi - *ilo + 1, *ihi - *ilo + 1, &A_sub, *ihi - *ilo + 1);
+    create_matrix(datatype, matrix_layout, *ihi - *ilo + 1, *ihi - *ilo + 1, &L, *ihi - *ilo + 1);
     generate_asym_matrix_from_EVs(datatype, *ihi - *ilo + 1, A_sub, *ihi - *ilo + 1, L, '\0', NULL);
 
     /* Get the diagonal elements of L into wr_sub_in and copy them into wr_in */
@@ -2202,7 +2215,7 @@ void get_hessenberg_matrix(integer datatype, integer n, void *A, integer lda, vo
     if(lda < n)
         return;
 
-    create_matrix(datatype, &A_save, lda, n);
+    create_matrix(datatype, matrix_layout, n, n, &A_save, lda);
     create_vector(datatype, &tau, n - 1);
 
     /* Initialize random matrix & convert matrix according to ILO and IHI values. */
@@ -3549,11 +3562,11 @@ void create_svd_matrix(integer datatype, char range, integer m, integer n, void 
     void *A, *B, *U, *V, *sigma, *Usigma, *s_test;
     integer min_m_n = fla_min(m, n);
 
-    create_matrix(datatype, &A, m, m);
-    create_matrix(datatype, &B, n, n);
+    create_matrix(datatype, matrix_layout, m, m, &A, m);
+    create_matrix(datatype, matrix_layout, n, n, &B, n);
     /* Orthogonal matrix U and V */
-    create_matrix(datatype, &U, m, m);
-    create_matrix(datatype, &V, n, n);
+    create_matrix(datatype, matrix_layout, m, m, &U, m);
+    create_matrix(datatype, matrix_layout, n, n, &V, n);
     /* Singular values array s_test */
     create_realtype_vector(datatype, &s_test, min_m_n);
 
@@ -3583,8 +3596,8 @@ void create_svd_matrix(integer datatype, char range, integer m, integer n, void 
     }
 
     /* Generating A matrix by A = (U * Sigma * VT) */
-    create_matrix(datatype, &Usigma, m, n);
-    create_matrix(datatype, &sigma, m, n);
+    create_matrix(datatype, matrix_layout, m, n, &Usigma, m);
+    create_matrix(datatype, matrix_layout, m, n, &sigma, m);
 
     /* Diagonalize the singular values for sigma */
     diagonalize_realtype_vector(datatype, s_test, sigma, min_m_n, n, min_m_n);
@@ -3996,7 +4009,7 @@ void generate_matrix_from_ED(integer datatype, integer n, void *A, integer lda, 
     if(lda < n)
         return;
 
-    create_matrix(datatype, &Qlambda, n, n);
+    create_matrix(datatype, matrix_layout, n, n, &Qlambda, n);
     copy_matrix(datatype, "full", n, n, Q, n, Qlambda, n);
 
     /* Perform Q * lambda */
@@ -4156,9 +4169,9 @@ void generate_matrix_from_EVs(integer datatype, char range, integer n, void *A, 
     between (vl, vu) */
     rand_vector(realtype, n, L, i_one, vl, vu, range);
 
-    create_matrix(datatype, &X, n, n);
+    create_matrix(datatype, matrix_layout, n, n, &X, n);
     rand_matrix(datatype, X, n, n, n);
-    create_matrix(datatype, &Q, n, n);
+    create_matrix(datatype, matrix_layout, n, n, &Q, n);
     /* Generate random orthogonal matrix(Q) of size n x n */
     get_orthogonal_matrix_from_QR(datatype, n, X, n, Q, n, &info);
     /* Generate input matrix A using L(Eigen values)
@@ -4416,7 +4429,7 @@ void rand_band_storage_matrix(integer datatype, integer M, integer N, integer kl
     void *A;
 
     /* Allocate matrix A */
-    create_matrix(datatype, &A, M, N);
+    create_matrix(datatype, matrix_layout, M, N, &A, M);
 
     /* Initialize rand band matrix */
     rand_band_matrix(datatype, M, N, kl, ku, A, M);
@@ -4438,7 +4451,7 @@ void reconstruct_band_storage_matrix(integer datatype, integer m, integer n, int
     integer il, ip, iw;
 
     /* Copy factorized banded storage matrix */
-    create_matrix(datatype, &ABfac, ldab, n);
+    create_matrix(datatype, matrix_layout, m, n, &ABfac, ldab);
     copy_matrix(datatype, "full", ldab, n, AB, ldab, ABfac, ldab);
 
     /* Reset matrix A to store reconstructed band matrix*/
@@ -5802,9 +5815,9 @@ void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer
         create_realtype_block_diagonal_matrix(datatype, L, n, n);
     }
 
-    create_matrix(datatype, &X, n, n);
+    create_matrix(datatype, matrix_layout, n, n, &X, n);
     rand_matrix(datatype, X, n, n, n);
-    create_matrix(datatype, &Q, n, n);
+    create_matrix(datatype, matrix_layout, n, n, &Q, n);
 
     /* Generate random orthogonal matrix(Q) of size n x n */
     get_orthogonal_matrix_from_QR(datatype, n, X, n, Q, n, &info);
@@ -5836,7 +5849,7 @@ void generate_asym_matrix_from_ED(integer datatype, integer n, void *A, integer 
     if(lda < n)
         return;
 
-    create_matrix(datatype, &Qlambda, n, n);
+    create_matrix(datatype, matrix_layout, n, n, &Qlambda, n);
 
     switch(datatype)
     {
@@ -6057,8 +6070,14 @@ void convert_matrix_layout(integer matrix_layout, integer datatype, integer m, i
         return;
     }
     *lda_t = cs;
-
-    create_matrix(datatype, &a_t, lda, *lda_t);
+    if(matrix_layout == LAPACK_ROW_MAJOR)
+    {
+        create_matrix(datatype, matrix_layout, rs, cs, &a_t, *lda_t);
+    }
+    else
+    {
+        create_matrix(datatype, matrix_layout, rs, cs, &a_t, lda);
+    }
 
     if(a == NULL || a_t == NULL)
         return;
